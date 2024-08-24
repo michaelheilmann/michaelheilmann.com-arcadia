@@ -1,0 +1,46 @@
+/* Copyright (c) 2024 Michael Heilmann. All rights reserved. */
+@media not print {
+  :root {
+    --black: rgb(3,3,3);
+    --white: rgb(252,252,252);
+    --blue: #0044CC; 
+  }
+}
+@media print {
+  :root {
+    --black: black;
+    --white: white;
+    --blue: #0044CC;
+  }  
+}
+
+a {
+  color: var(--blue);
+}
+
+/* default font (if font style "normal" is used) */
+@font-face {
+  font-family: 'my-default-font';
+  src: url('https://michaelheilmann.com/assets/noto-sans-variable-font/normal-wdth-wght.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* default font (if font style "italic" is used) */
+@font-face {
+  font-family: 'my-default-font';
+  src: url('https://michaelheilmann.com/assets/noto-sans-variable-font/italic-wdth-wght.ttf');
+  font-weight: normal;
+  font-style: italic;
+}
+
+html.my-theme-1 {
+  font-family: 'my-default-font'; 
+}
+
+*, html, body {
+  margin: 0;
+  padding: 0;
+  color: var(--black);
+  background-color: var(--white);
+}

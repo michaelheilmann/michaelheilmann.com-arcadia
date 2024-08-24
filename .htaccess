@@ -1,0 +1,14 @@
+RewriteEngine On
+
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+<Files ".generator">  
+  Require all denied
+</Files>
+
+# Do not reveal information to potential attackers.
+ErrorDocument 500 /error.html
+ErrorDocument 403 /error.html
+
+ErrorDocument 404 /error.html

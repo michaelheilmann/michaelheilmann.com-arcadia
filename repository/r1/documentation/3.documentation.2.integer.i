@@ -1,0 +1,49 @@
+  <h3>Integer Type</h3>
+  <p>
+  R provides a two's complement integer number types.
+  </p>
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_Integer<my-mv>Suffix</my-mv>Value
+  </code></p>
+  <p>
+  where <my-mv>Suffix</my-mv> denotes the number of Bits of the two's complement integer and can be one of
+  <code>8</code>, <code>16</code>, <code>32</code>, or <code>64</code>.
+  </p>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBits <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bits of the type. The value is always equal to the value of the respective <my-mv>Suffix</my-mv>.</p>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBytes <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bytes of the type which is usually <code>R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBits</code> divided by 8.</p>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_Minimum <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the least value (in terms of its magnitude) representable by a the <code>R_Integer<my-mv>Suffix</my-mv>Value</code> type.
+  The following table denotes the value of the constant for the respective <my-mv>Suffix</my-mv>
+  </p>
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+  <tr><td>8                    </td><td>-128</td></tr>
+  <tr><td>16                   </td><td>-32768</td></tr>
+  <tr><td>32                   </td><td>-2147483648</td></tr>
+  <tr><td>64                   </td><td>-9223372036854775808</td></tr>
+  </table>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_Maximum <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the greatest value (in terms of its magnitude) representable by a the <code>R_Integer<my-mv>Suffix</my-mv>Value</code> type.
+  The following table denotes the value of the constant for the respective <my-mv>Suffix</my-mv>
+  </p>
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+  <tr><td>8                    </td><td>127</td></tr>
+  <tr><td>16                   </td><td>32767</td></tr>
+  <tr><td>32                   </td><td>2147483647</td></tr>
+  <tr><td>64                   </td><td>9223372036854775807</td></tr>
+  </table>

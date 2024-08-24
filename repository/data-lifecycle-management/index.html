@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Data Lifecycle Management</title>
+    <link rel="icon" type="image/x-icon" href="https://michaelheilmann.com/assets/favicon/512x512.svg">
+    <link rel="mask-icon" href="https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg" color="#000000"> <!-- Safari crap. Single color with transparent background. -->
+    <link rel="apple-touch-icon" href="https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png" > <!-- iOS crap. 180 * 180px. color attribute is obsolete. -->
+    <style>
+    body {
+      margin: 16px;
+    }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+  <h1>Data Lifecycle Management</h1>
+  <p>
+  An organization manages its data through the data lifecycle. This document describes a possible data Lifecycle
+  model.</p>
+  <p>
+  This document is based on <a href="#source-1">[1]</a> and deviates from [1] for the purpose of brevity, clarity, and generality.
+  </p>
+  
+  <h2>Data Lifecycle Phases</h2>
+  <p>
+  The phases of the data lifecycle considered by this document are <em>Identify</em>, <em>Use</em>, <em>Maintain</em>, and <em>Dispose</em>.
+  Not all data lifecycle phases occur for every datum.
+  </p>
+  <ul>
+    <li><b>Identify</b>:
+      The organization identifies datums.
+    </li>
+    <li><b>Use</b>:
+      The organization accesses, views, shares, and modifies datums.
+      New datums may be created by aggregation or disaggregration of existing datums.
+      Datums may also be repurposed.
+    </li>
+    <li><b>Maintain</b>:
+      The organization preserves datums over time.
+      This may include converting datums to different formats or representations as technologies change so it will continue to be usable.
+    </li>
+    <li><b>Dispose</b>:
+      The organization disposes a datum at the end of its data lifeccle.
+      The datum that is no longer needed or is required to be disposed is destroyed or otherwise made unavailable to unauthorized parties.
+    </li>
+  </ul>
+  
+  <h2>Structured, Semi-Structured, and Unstructured Data</h2>
+  <p><em>Structured data</em> has a known model that determine access and interpretation of the data.
+  The opposite is <em>unstructured data</em> which has no known model associated that determines access or interpretation of the data.
+  Between unstructured and structured data resides <em>semi-structured data</em> which has a known model associated which allows a certain
+  degree of access and interpretation - however, the model associated that allows full access or interpretation is not known.</p>
+  
+  <h2>Sources</h2>
+  <ul>
+    <li><b>[1]</b>: Data Classification Concepts and Considerations for Improving Data Collection; <a href="https://csrc.nist.gov/pubs/ir/8496/ipd">https://csrc.nist.gov/pubs/ir/8496/ipd</a></li>
+  </ul>
+  </body>
+  <footer style="border-top-style: solid; border-top-width: 1px; margin-top: 16px; padding-top: 16px;">
+    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 22 August 2024.</span>
+  </footer>
+</html>

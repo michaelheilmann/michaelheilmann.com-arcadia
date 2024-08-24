@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Michael Heilmann's Runtime Mark 1</title>
+    <link rel="icon" type="image/x-icon" href="https://michaelheilmann.com/assets/favicon/512x512.svg">
+    <link rel="mask-icon" href="https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg" color="#000000"> <!-- Safari crap. Single color with transparent background. -->
+    <link rel="apple-touch-icon" href="https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png" > <!-- iOS crap. 180 * 180px. color attribute is obsolete. -->
+    <style>
+    body {
+      margin: 16px;
+    }
+
+    /* variable */
+    my-v {
+      display: inline;
+      font-family: monospace;
+    }
+
+    /* meta variable */
+    my-mv {
+      display: inline;
+      font-family: monospace;
+    }
+    my-mv::before {
+      content: "<";
+    }
+    my-mv::after {
+      content: ">";
+    }
+
+    /* meta variable */
+    .meta {
+      font-family: monospace;
+    }
+    .meta::before {
+      content: "<";
+    }
+    .meta::after {
+      content: ">";
+    }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+  <h1>Michael Heilmann's Runtime Mark 1</h1>
+  <p>
+  This is the documentation for Michael  Heilmann's Runtime Mark 1,
+  henceforth R1. R1 facilates the creation of C programs - in particular interpreters - that are portable,
+  maintainable, as well as safe. R1 is available at <a href="https://michaelheilmann.com/repository/r1">michaelheilmann.com/repository/r1</a>.
+  <h2>Files</h2>
+  <p>You can download/view the sources files of R1 here</p>
+  <ul>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/boolean.h">sources/arcadia/boolean.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/integer16.h">sources/arcadia/integer16.h</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/integer32.h">sources/arcadia/integer32.h</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/integer64.h">sources/arcadia/integer64.h</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/integer8.h">sources/arcadia/integer8.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/jumptarget.c">sources/arcadia/jumptarget.c</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/jumptarget.h">sources/arcadia/jumptarget.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/maximum.h">sources/arcadia/maximum.h</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/minimum.h">sources/arcadia/minimum.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/natural16.h">sources/arcadia/natural16.h</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/natural32.h">sources/arcadia/natural32.h</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/natural64.h">sources/arcadia/natural64.h</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/natural8.h">sources/arcadia/natural8.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/r1.c">sources/arcadia/r1.c</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/r1.h">sources/arcadia/r1.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/void.h">sources/arcadia/size.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/status.c">sources/arcadia/status.c</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/status.h">sources/arcadia/status.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/arcadia/void.h">sources/arcadia/void.h</a></li>
+
+    <li><a href="https://michaelheilmann.com/repository/r1/sources/CMakeLists.txt">sources/CMakeLists.txt</a></li>
+  </ul>
+  <h2>Further references</h2>
+  <p>There is a demo available showing-off how to use R1</p>
+  <ul>
+    <li><a href="https://michaelheilmann.com/repository/r1/demos/helloworld/configure.h.i">demos/r1/demos/helloworld/configure.h.i</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/demos/helloworld/main.c">demos/r1/demos/helloworld/main.c</a></li>
+    <li><a href="https://michaelheilmann.com/repository/r1/demos/helloworld/CMakeLists.txt">demos/r1/demos/helloworld/CMakeLists.txt</a></li>
+  </ul>
+  <p>
+  which compiles and runs under various platforms (including but not restricted to Windows, Linux, and many more).
+  To build the demo, simply download the files of the demo to some directory (called the demo directory).
+  Download the files of <a href="https://michaelheilmann.com/repository/arms1">ARMS1</a> to a directory (called the ARMS1 directory).
+  Download the files of R1 to a directory (called the R1 directory).
+  Invoke from the demo directory</p>
+  <p><code>
+  cmake -R1-Source-Dir=<my-mv>r1 source directory</my-mv> -DArms1-Source-Dir=<my-mv>arms1 source directory</my-mv> .
+  </code></p>
+  <p>where</p>
+  <ul>
+    <li><my-mv>r1 source directory</my-mv> is the path to the R1 directory</li>
+    <li><my-mv>arms1 source directory</my-mv> is the path to a the ARMS1 directory</li>
+  </ul>
+  <p>Note that relative paths are interpreted relative to <code>${CMAKE_CURRENT_BINARY_DIR}</code>.</p>
+  <h2>Documentation</h2>
+  <h3>Boolean Type</h3>
+  <p>
+  R1 provides a boolean type.
+  </p>
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_BooleanValue
+  </code></p>
+
+  <p><code>
+  #define R_BooleanValue_True <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>is a value of the type denoting logically <code>true</code>. It converts to <code>1</code> in arithmetic expressions.</p>
+
+  <p><code>
+  #define R_BooleanValue_False <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>is a value of the type denoting logically <code>false</code>. It converts to <code>0</code> in arithmetic expressions.</p>
+  <h3>Integer Type</h3>
+  <p>
+  R provides a two's complement integer number types.
+  </p>
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_Integer<my-mv>Suffix</my-mv>Value
+  </code></p>
+  <p>
+  where <my-mv>Suffix</my-mv> denotes the number of Bits of the two's complement integer and can be one of
+  <code>8</code>, <code>16</code>, <code>32</code>, or <code>64</code>.
+  </p>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBits <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bits of the type. The value is always equal to the value of the respective <my-mv>Suffix</my-mv>.</p>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBytes <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bytes of the type which is usually <code>R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBits</code> divided by 8.</p>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_Minimum <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the least value (in terms of its magnitude) representable by a the <code>R_Integer<my-mv>Suffix</my-mv>Value</code> type.
+  The following table denotes the value of the constant for the respective <my-mv>Suffix</my-mv>
+  </p>
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+  <tr><td>8                    </td><td>-128</td></tr>
+  <tr><td>16                   </td><td>-32768</td></tr>
+  <tr><td>32                   </td><td>-2147483648</td></tr>
+  <tr><td>64                   </td><td>-9223372036854775808</td></tr>
+  </table>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_Maximum <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the greatest value (in terms of its magnitude) representable by a the <code>R_Integer<my-mv>Suffix</my-mv>Value</code> type.
+  The following table denotes the value of the constant for the respective <my-mv>Suffix</my-mv>
+  </p>
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+  <tr><td>8                    </td><td>127</td></tr>
+  <tr><td>16                   </td><td>32767</td></tr>
+  <tr><td>32                   </td><td>2147483647</td></tr>
+  <tr><td>64                   </td><td>9223372036854775807</td></tr>
+  </table>
+  <h3>Natural Type</h3>
+  <p>
+  R provides natural number types.
+  </p>
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_Natural<my-mv>Suffix</my-mv>Value
+  </code></p>
+  <p>
+  where <my-mv>Suffix</my-mv> denotes the number of Bits of the integer and can be one of
+  <code>8</code>, <code>16</code>, <code>32</code>, or <code>64</code>.
+  </p>
+
+  <p><code>
+  #define R_Natural<my-mv>Suffix</my-mv>Value_NumberOfBits <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bits of the type. The value is always equal to the value of the respective <my-mv>Suffix</my-mv>.</p>
+
+  <p><code>
+  #define R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBytes <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bytes of the type which is usually <code>R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBits</code> divided by 8.</p>
+
+  <p><code>
+  #define R_Natural<my-mv>Suffix</my-mv>Value_Minimum <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the least value (in terms of its magnitude) representable by a the <code>R_Natural<my-mv>Suffix</my-mv>Value</code> type.
+  The following table denotes the value of the constant for the respective <code><my-mv>Suffix</my-mv></code>
+  </p>
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+  <tr><td>8                    </td><td>0</td></tr>
+  <tr><td>16                   </td><td>0</td></tr>
+  <tr><td>32                   </td><td>0</td></tr>
+  <tr><td>64                   </td><td>0</td></tr>
+  </table>
+
+  <p><code>
+  #define R_Natural<my-mv>Suffix</my-mv>Value_Maximum <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the greatest value (in terms of its magnitude) representable by a the <code>R_Natural<span>Suffix</span>Value</code> type.
+  The following table denotes the value of the constant for the respective <code><span>Suffix</span></code>
+  </p>
+  <table>
+  <tr><td><code><span>Constant</span></code></td><td>Value</td></tr>
+  <tr><td>8                                  </td><td>255</td></tr>
+  <tr><td>16                                 </td><td>65535</td></tr>
+  <tr><td>32                                 </td><td>4294967295</td></tr>
+  <tr><td>64                                 </td><td>18446744073709551615</td></tr>
+  </table>
+  <h3>Size Type</h3>
+  <p>
+  R provides an alias for builtin <code>size_t</code> type.
+  </p>
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_SizeValue
+  </code></p>
+
+  <p><code>
+  #define R_SizeValue_NumberOfBits <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>
+  denotes the number of Bits of the type.
+  <b>
+  This number must one of 32 or 64, otherwise the environment is not supported by R.
+  This restriction may be relaxed in future versions of R.
+  </b></p>
+
+  <p><code>
+  #define R_SizeValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bytes of the type which is usually <code>R_SizeValue_NumberOfBits</code> divided by 8.</p>
+
+  <p><code>
+  #define R_SizeValue_Minimum <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the least value (in terms of its magnitude) representable by a the <code>R_Size</code> type.</p>
+  <h3>Void Type</h3>
+  <p>
+  R provides a void type.
+  </p>
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_VoidValue
+  </code></p>
+  <p>
+  The only value of this type is <code>R_VoidValue_Void</code>.
+  R_VoidValue is an unsigned integral type.
+  </p>
+  
+  <p><code>
+  #define R_VoidValue_Void <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>The single value of the type.</p>
+
+  <p><code>
+  #define R_VoidValue_NumberOfBits <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bits of the type.</p>
+
+  <p><code>
+  #define R_VoidValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+  </code><p>
+  <p>denotes the number of Bytes of the type which is usually <code>R_VoidValue_NumberOfBits</code> divided by 8.</p>
+  <h3>Status Codes</h3>
+  <p>
+  R provides a status type and symbolic constants for its values. That type denotes success or failure of program (or a part of it)
+  as well as information on the reason for the failure.</p>
+
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_Status
+  </code></p>
+  <p>
+  <code>R_Status</code> is a natural number type of a width of 32 Bit.</p>
+
+  <p><code>
+  #definer R_Status_Success <my-mv>implementation detail</my-mv>
+  </code></p>
+  <p>is the symbolic constant of the type <code>R_Status</code> has the value <code>((R_Status)0)</code>.
+  It denotes success and is guaranteed to be defined to the value <code>0</code> of the underlaying natural number
+  type of R_Status as well as to be the only symbolic constant starting with <code>R_Status_</code> having
+  defined to that value.</p>
+
+  <p>
+  Symbolic constants of the form
+  </p>
+  <p><code>
+  #definer R_Status_<my-mv>Name</my-mv> <my-mv>implementation detail</my-mv>
+  </code></p>
+  <p>where <my-mv>Name</my-mv> is not <code>Success</code> provide information on failure of a program (or a part of it).
+  The following table denotes the value of the constant for the respective <my-mv>Name</my-mv>
+  </p>
+  <table>
+  <tr><td><code><span>Name</span></code>        </td><td>Value</td></tr>
+  <tr><td><code>AllocationFailed</code>         </td><td>An allocation failed.</td></tr>
+  <tr><td><code>ArgumentTypeInvalid</code>      </td><td>The type of an argument is invalid.</td></tr>
+  <tr><td><code>ArgumentValueInvalid</code>     </td><td>The value of an argument is invalid.</td></tr>
+  <tr><td><code>FileSystemOperationFailed</code></td><td>A file system operation failed.</td></tr>  
+  
+  
+  <tr><td><code>Initialized</code>              </td><td>Something was initialized (but should not have been initialized).</td></tr>
+  <tr><td><code>NumberOfArgumentsInvalid</code> </td><td>The number of arguments is invalid.</td></tr>
+  <tr><td><code>OperationInvalid</code>         </td><td>An operation is invalid.</td></tr>
+  <tr><td><code>TestFailed</code>               </td><td>A test failed. This is used by the built-in tests that ensure correctness.</td></tr>
+  <tr><td><code>Uninitialized</code>            </td><td>Something was uninitialized (but should have been initialized).</td></tr>
+  </table>
+  <h3>Status Variable</h3>
+  <p>R provides a global status variable.</p>
+
+  <p><code>
+  R_Status
+  R_getStatus
+    (
+    );
+  </code></p>
+  <p>gets the value of the status variable. The initial value of the status variable is <code>R_Status_Success</code>.</p>
+
+  <p><code>
+  void
+  R_setStatus
+    (
+      R_Status status
+    );
+  </code></p>
+  <p>sets the value of the status variable to the value <code>status</code>.</p>
+  <h3>Jumps and Jump Targets</h3>
+  <p>R provides non-local jumps by allowing to save and restore the C program state.</p>
+
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_JumpTarget;
+  </code></p>
+  <p>is a type of which its values are stack allocated.</p>
+
+  <p><code>
+  void R_pushJumpTarget(R_JumpTarget* jumpTarget);
+  </code></p>
+  <p>
+  Push a jump target on top of the jump target stack.
+  Initially, the jump target stack is empty.
+  </p>
+
+  <p><code>
+  void R_popJumpTarget();
+  </code></p>
+  <p>
+  Pop the jump target on top of the jump target stack.
+  The jump target stack must not be empty.
+  </p>
+
+  <p><code>
+  void R_jump();
+  </code></p>
+  <p>
+  Jump to the jump target on top of the jump target stack.
+  The jump target stack must not be empty.
+  </p>
+  
+  <p><code>
+  #define R_JumpTarget_save(jumpTarget) <my-mv>implementation detail</my-mv>
+  </code></p>
+  <p>Macro to save the current C program state into a jump target.</p>
+  
+  <p>The canonical way of using <code>R_pushJumpTarget</code>, <code>R_popJumpTarget</code>, and
+  <code>R_jump</code> is the following.</p>
+  <p><code>
+  R_pushJumpTarget(&jumpTarget);<br>
+  if (R_JumpTarget_save(&jumpTarget)) {<br>
+    &nbsp;<my-mv>(1)</my-mv><br>
+    &nbsp;R_popJumpTarget();<my-mv>(2)</my-mv><br>
+  } else {<br>
+    &nbsp;R_popJumpTarget();<my-mv>(3)</my-mv><br>
+    &nbsp;<my-mv>(4)</my-mv><br>
+  }<br>
+  <my-mv>(5)</my-mv>
+  </code></p>
+  <p>
+  The    if-branch is always entered at first as the <code>R_JumpTarget_save()</code>       at
+  its first invocation returns logically true. If the program at <my-mv>(1)</my-mv> does   not
+  jump to the jump target (using <code>R_jump()</code>),  then <code>R_popJumpTarget();<my-mv>
+  (2)</my-mv></code> and <my-mv>(5)</my-mv> are executed. If the program at <my-mv>(1)</my-mv>
+  jumps to the jump target, then <code>R_JumpTarget_save()</code> is re-evaluated and  returns
+  logically false and <code>R_popJumpTarget();<my-mv>(2)</my-mv></code> and <my-mv>(4)</my-mv>
+  is executed.
+  </p>
+  
+  <p>One usage example is the implementation of the <code>R_safeExecute</code> function.</p> 
+  <p><code>
+  void R_safeExecute(void (*f)()) {<br>
+  &nbsp;R_JumpTarget jumpTarget;<br>
+  &nbsp;R_pushJumpTarget(&jumpTarget);<br>
+  &nbsp;if (R_JumpTarget_save(&jumpTarget)) {<br>
+  &nbsp;&nbsp;f();<br>
+  &nbsp;&nbsp;R_popJumpTarget();<br>
+  &nbsp;}<br>
+  }
+  </code></p>
+  <h3>Numeric functions</h3>
+  <p>R provides functions returning the maximum of two values.</p>
+  <p><code>
+  &lt;Type&gt; R_maximum_&lt;Suffix&gt;(&lt;Type&gt; x, &lt;Type&gt;)
+  </code></p>
+  <p>The following table lists the combinations of <code>&lt;Type&gt;</code> and <code>&lt;Suffix&gt;</code> for which the above functions are defined</p>
+
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+  <tr><td><code>i8</code>      </td><td><code>R_Integer8Value</code></td></tr>
+  <tr><td><code>i16</code>     </td><td><code>R_Integer16Value</code></td></tr>
+  <tr><td><code>i32</code>     </td><td><code>R_Integer32Value</code></td></tr>
+  <tr><td><code>i64</code>     </td><td><code>R_Integer64Value</code></td></tr>
+  <tr><td><code>n8</code>      </td><td><code>R_Natural8Value</code></td></tr>
+  <tr><td><code>n16</code>     </td><td><code>R_Natural16Value</code></td></tr>
+  <tr><td><code>n32</code>     </td><td><code>R_Natural32Value</code></td></tr>
+  <tr><td><code>n64</code>     </td><td><code>R_Natural64Value</code></td></tr>
+  <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
+  </table>
+
+  <p>R provides functions returning the minimum of two values.</p>
+  <p><code>
+  <my-mv>Type</my-mv> R_minimum_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x, <my-mv>Type</my-mv> y)
+  </code></p>
+  <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+  <tr><td><code>i8</code>      </td><td><code>R_Integer8Value</code></td></tr>
+  <tr><td><code>i16</code>     </td><td><code>R_Integer16Value</code></td></tr>
+  <tr><td><code>i32</code>     </td><td><code>R_Integer32Value</code></td></tr>
+  <tr><td><code>i64</code>     </td><td><code>R_Integer64Value</code></td></tr>
+  <tr><td><code>n8</code>      </td><td><code>R_Natural8Value</code></td></tr>
+  <tr><td><code>n16</code>     </td><td><code>R_Natural16Value</code></td></tr>
+  <tr><td><code>n32</code>     </td><td><code>R_Natural32Value</code></td></tr>
+  <tr><td><code>n64</code>     </td><td><code>R_Natural64Value</code></td></tr>
+  <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
+  </table>
+  <footer style="border-top-style: solid; border-top-width: 1px; margin-top: 16px; padding-top: 16px;">
+    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 24 August 2024.</span>
+  </footer>
+  </body>
+</html>
