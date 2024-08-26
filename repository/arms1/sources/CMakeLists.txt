@@ -13,15 +13,25 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+# Last modified: 2024-08-29
+
 cmake_minimum_required(VERSION 3.29)
 
 set(MyProjectName "Arcadia")
 
+set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../)
+include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+
 project(${MyProjectName} LANGUAGES C)
 
-set(MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/arms1.c
-              ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/arms1.h
-              )
+# Create a library.
+add_library(${MyProjectName}.Arms)
+BeginProduct(${MyProjectName}.Arms)
 
-add_library(${MyProjectName}.Arms ${MySources})
-target_include_directories(${MyProjectName}.Arms PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/arms1/configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/arms1/configure.h @ONLY)
+
+list(APPEND ${MyProjectName}.Arms.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/arms1.c)
+list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/arms1.h)
+list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/arms1/configure.h)
+
+EndProduct(${MyProjectName}.Arms library)

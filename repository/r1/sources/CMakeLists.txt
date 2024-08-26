@@ -13,52 +13,75 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+# Last modified: 2024-08-29
+
 cmake_minimum_required(VERSION 3.29)
 
 set(MyProjectName "Arcadia")
 
+set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../)
+include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+
 include(FetchContent)
 
-FetchContent_Declare(
-  "arms1"
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/../../arms1/arms1.zip
-  )
+set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/arms1/sources" CACHE STRING "path to the ARMS1 source directory")
+get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
+                       REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+message(STATUS "fetching ${Arms1-Source-Dir}")
+FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
 FetchContent_MakeAvailable("arms1")
                                                                           
-
 project(${MyProjectName} LANGUAGES C)
 
-# Create executable.
-set(MySources "")
+# Create library.
+add_library(${MyProjectName}.R)
+BeginProduct(${MyProjectName}.R)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/boolean.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/r/configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/r/configure.h @ONLY)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/integer16.h)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/integer32.h)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/integer64.h)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/integer8.h)
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_BINARY_DIR}/r/configure.h)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/jumptarget.c)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/jumptarget.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/boolean.h)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/r1.c)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/r1.h)
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/bytebuffer.c)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/bytebuffer.h)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/maximum.h)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/minimum.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/integer16.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/integer32.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/integer64.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/integer8.h)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/natural16.h)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/natural32.h)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/natural64.h)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/natural8.h)
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/jumptarget.c)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/jumptarget.h)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/size.h)
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/r.c)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r.h)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/status.c)
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/status.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/clamp.h)
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/countleadingzeroes.c)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/countleadingzeroes.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/maximum.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/minimum.h)
 
-list(APPEND MySources ${CMAKE_CURRENT_SOURCE_DIR}/arcadia/void.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/natural16.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/natural32.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/natural64.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/natural8.h)
 
-add_library(${MyProjectName}.R ${MySources})
-target_include_directories(${MyProjectName}.R PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/object.c)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/object.h)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/objectreference.h)
+
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/size.h)
+
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/status.c)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/status.h)
+
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/value.c)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/value.h)
+
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/r/void.h)
+
 target_link_libraries(${MyProjectName}.R Arcadia.Arms)
+
+EndProduct(${MyProjectName}.R library)

@@ -1,14 +1,22 @@
 RewriteEngine On
 
+# rewrite http to https
 RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NC]
+
+# rewrite www to non-www
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1%{REQUEST_URI} [L,R=301,NC]
 
 <Files ".generator">  
+  Require all denied
+</Files>
+
+<Files ".git">  
   Require all denied
 </Files>
 
 # Do not reveal information to potential attackers.
 ErrorDocument 500 /error.html
 ErrorDocument 403 /error.html
-
 ErrorDocument 404 /error.html

@@ -17,37 +17,7 @@
 
 #include <string.h>
 
-#include "arcadia/arms1.h"
-#include "arcadia/r1.h"
-
-static void registerType(char const* name, size_t nameLength, Arms_VisitCallbackFunction* visit, Arms_FinalizeCallbackFunction* finalize);
-
 static void StringBuffer_finalize(StringBuffer* w);
-
-static void registerType(char const* name, size_t nameLength, Arms_VisitCallbackFunction* visit, Arms_FinalizeCallbackFunction* finalize) {
-  Arms_Status status;
-  status = Arms_registerType(name, nameLength, visit, finalize);
-  switch (status) {
-    case Arms_Status_Success: {
-      return;
-    } break;
-    case Arms_Status_AllocationFailed: {
-      R_setStatus(R_Status_AllocationFailed);
-    } break;
-    case Arms_Status_ArgumentValueInvalid: {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-    } break;
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_TypeExists: {
-      R_setStatus(Arms_Status_OperationInvalid);
-    } break;
-    case Arms_Status_TypeNotExists:
-    default: {
-      // This should not happen.
-      R_setStatus(Arms_Status_OperationInvalid);
-    } break;
-  };
-}
 
 static void StringBuffer_finalize(StringBuffer* w) {
   if (w->p) {
@@ -57,7 +27,7 @@ static void StringBuffer_finalize(StringBuffer* w) {
 }
 
 void _StringBuffer_registerType() {
-  registerType("StringBuffer", sizeof("StringBuffer") - 1, NULL, (Arms_FinalizeCallbackFunction*)&StringBuffer_finalize);
+  R_registerObjectType("StringBuffer", sizeof("StringBuffer") - 1, NULL, (Arms_FinalizeCallbackFunction*)&StringBuffer_finalize);
 }
 
 StringBuffer*
@@ -118,6 +88,60 @@ StringBuffer_append_pn
     size_t numberOfBytes
   )
 {
+  if (!numberOfBytes) {
+    return;
+  }
+  for (size_t i = 0, n = numberOfBytes; i < n; ) {
+    if (bytes[i] <= 0x7F) {
+      // Fast path for the most frequent case.
+      while (i < n && bytes[i] <= 0x7F) {
+        i++;
+      }
+    } else {
+      // Slow path for the less frequent cases.
+      char byte = bytes[i];
+      if (byte <= 0x7FF) {
+        if (n - i < 2) {
+          R_setStatus(R_Status_EncodingInvalid);
+          R_jump();
+        }
+        for (size_t j = i + 1, m = i + 1; j <= m; ++j) {
+          if (0x80 != bytes[j] & 0xC0) {
+            R_setStatus(R_Status_EncodingInvalid);
+            R_jump();
+          }
+        }
+        i += 2;
+      } else if (byte <= 0xFFFF) {
+        if (n - i < 3) {
+          R_setStatus(R_Status_EncodingInvalid);
+          R_jump();
+        }
+        for (size_t j = i + 1, m = i + 2; j <= m; ++j) {
+          if (0x80 != bytes[j] & 0xC0) {
+            R_setStatus(R_Status_EncodingInvalid);
+            R_jump();
+          }
+        }
+        i += 3;
+      } else if (byte <= 0x10FFFF) {
+        if (n - i < 4) {
+          R_setStatus(R_Status_EncodingInvalid);
+          R_jump();
+        }
+        for (size_t j = i + 1, m = i + 3; j <= m; ++j) {
+          if (0x80 != bytes[j] & 0xC0) {
+            R_setStatus(R_Status_EncodingInvalid);
+            R_jump();
+          }
+        }
+        i += 4;
+      } else {
+        R_setStatus(R_Status_EncodingInvalid);
+        R_jump();
+      }
+    }
+  }
   size_t freeCp = w->cp - w->sz;
   if (freeCp < numberOfBytes) {
     size_t additionalCp = numberOfBytes - freeCp;

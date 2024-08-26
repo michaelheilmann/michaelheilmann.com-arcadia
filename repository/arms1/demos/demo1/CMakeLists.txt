@@ -13,9 +13,14 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+# Last modified: 2024-08-29
+
 cmake_minimum_required(VERSION 3.29)
 
 set(MyProjectName "Arcadia")
+
+set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../)
+include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
 
 include(FetchContent)
 
@@ -28,8 +33,12 @@ FetchContent_MakeAvailable("arms1")
 
 project(${MyProjectName} LANGUAGES C)
 
-set(MySources ${CMAKE_CURRENT_SOURCE_DIR}/main.c
-              )
-add_executable(${MyProjectName}.Arms.Demo1 ${MySources})
-target_include_directories(${MyProjectName}.Arms.Demo1 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+# Create an executable.
+add_executable(${MyProjectName}.Arms.Demo1)
+BeginProduct(${MyProjectName}.Arms.Demo1)
+
+list(APPEND ${MyProjectName}.Arms.Demo1.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/main.c)
+
 target_link_libraries(${MyProjectName}.Arms.Demo1 ${MyProjectName}.Arms)
+
+EndProduct(${MyProjectName}.Arms.Demo1 executable)

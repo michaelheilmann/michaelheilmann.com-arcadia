@@ -13,11 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+// Last modified: 2024-08-29
+
 #include "file.h"
+
 #include "stringbuffer.h"
 
-#include "arcadia/arms1.h"
-#include "arcadia/r1.h"
+#include "arms1.h"
+#include "r.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -26,7 +29,30 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-static void g_create_directory(StringBuffer* path) {
+/// @todo This code fails if an UTF-8 Byte sequence is split between to read operations.
+static StringBuffer* File_getFileContents(StringBuffer* path) {
+  R_FileHandle* file = R_FileHandle_create();
+  R_FileHandle_openForReading(file, path->p);
+  StringBuffer* w = StringBuffer_create();
+  char p[5012]; size_t n;
+  do {
+    R_FileHandle_read(file, p, 5012, &n);
+    if (n > 0) {
+      StringBuffer_append_pn(w, p, n);
+    }
+  } while (n);
+  R_FileHandle_close(file);
+  return w;   
+}
+
+static void R_SetFileContents(StringBuffer* path, StringBuffer* contents) {
+  R_FileHandle* file = R_FileHandle_create();
+  R_FileHandle_openForWriting(file, path->p);
+  R_FileHandle_write(file, contents->p, contents->sz);
+  R_FileHandle_close(file);
+}
+
+static void R_CreateDirectory(StringBuffer* path) {
   if (!CreateDirectory(path->p, NULL)) {
     R_setStatus(R_Status_FileSystemOperationFailed);
     R_jump();
@@ -130,6 +156,8 @@ static void g_write_index_html() {
   EMIT("<head>");
   EMIT("<meta charset='utf-8'>");
   EMIT("<meta name='viewport' content='width=device-width, initial-scale=1'>");
+  EMIT("<link rel='canonical' href='https://michaelheilmann.com/' />");
+
   EMIT("<link rel='icon' type='image/x-icon' href='https://michaelheilmann.com/assets/favicon/512x512.svg'>");
 
   // Crap specific to Safari. SVG must be single color with transparent background.
@@ -168,15 +196,11 @@ static void g_write_index_html() {
   EMIT("</html>");
 
 #undef EMIT
-  File* file = File_create();
-  file->fd = fopen(fn->p, "wb");
-  if (!file->fd) {
-    R_setStatus(R_Status_FileSystemOperationFailed);
-    R_jump();
-  }
+  R_FileHandle* file = R_FileHandle_create();
+  R_FileHandle_openForWriting(file, fn->p);
   fwrite(contents->p, 1, contents->sz, file->fd);
-  fclose(file->fd);
-  file->fd = NULL;
+  R_FileHandle_close(file);
+  file = NULL;
 }
 
 static void g_write_error_html() {
@@ -223,74 +247,42 @@ static void g_write_error_html() {
   EMIT("</html>");
 
 #undef EMIT
-  File* file = File_create();
-  file->fd = fopen(fn->p, "wb");
-  if (!file->fd) {
-    R_setStatus(R_Status_FileSystemOperationFailed);
-    R_jump();
-  }
+  R_FileHandle* file = R_FileHandle_create();
+  R_FileHandle_openForWriting(file, fn->p);
   fwrite(contents->p, 1, contents->sz, file->fd);
-  fclose(file->fd);
-  file->fd = NULL;
+  R_FileHandle_close(file);
+  file = NULL;
 }
 
-static void g_main(int argc, char** argv) {
+static void main1(int argc, char** argv) {
   test1();
   g_write_index_html();
   g_write_error_html();
 }
 
-static void registerType(char const* name, size_t nameLength, Arms_VisitCallbackFunction* visit, Arms_FinalizeCallbackFunction* finalize) {
-  Arms_Status status;
-  status = Arms_registerType(name, nameLength, visit, finalize);
-  switch (status) {
-    case Arms_Status_Success: {
-      return;
-    } break;
-    case Arms_Status_AllocationFailed: {
-      R_setStatus(R_Status_AllocationFailed);
-    } break;
-    case Arms_Status_ArgumentValueInvalid: {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-    } break;
-    case Arms_Status_OperationInvalid: 
-    case Arms_Status_TypeExists: {
-      R_setStatus(Arms_Status_OperationInvalid);
-    } break;
-    case Arms_Status_TypeNotExists:
-    default: {
-      // This should not happen.
-      R_setStatus(Arms_Status_OperationInvalid);
-    } break;
-  };
-}
-
 static void registerTypes() {
-  _File_registerType();
+  _R_FileHandle_registerType();
+  _R_ByteBuffer_registerType();
   _StringBuffer_registerType();
 }
 
 int main(int argc, char** argv) {
-  Arms_Status armsStatus = Arms_startup();
-  if (Arms_Status_Success != armsStatus) {
+  R_Status status[2];
+  status[0] = R_startup();
+  if (status[0]) {
     return EXIT_FAILURE;
   }
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
     registerTypes();
-    g_main(argc, argv);
+    main1(argc, argv);
     R_popJumpTarget();
   }
-  R_Status status = R_getStatus();
-  armsStatus = Arms_run();
-  if (Arms_Status_Success != armsStatus) {
-    Arms_shutdown();
+  status[0] = R_getStatus();
+  status[1] = R_shutdown();
+  if (status[1] || status[0]) {
     return EXIT_FAILURE;
   }
-  armsStatus = Arms_shutdown();
-  if (Arms_Status_Success != armsStatus) {
-    return EXIT_FAILURE;
-  }
-  return status ? EXIT_FAILURE : EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

@@ -17,7 +17,7 @@
 #define GENERATOR_STRINGBUFFER_H_INCLUDED
 
 #include "configure.h"
-#include "arcadia/r1.h"
+#include "r.h"
 
 #include <stddef.h>
 
@@ -84,6 +84,8 @@ StringBuffer_startsWith_pn
  * @param w A pointer to the string buffer.
  * @param bytes A pointer to the array of Bytes.
  * @param numberOfBytes The number of Bytes in the array pointed to by @a bytes.
+ * @error R_Status_ArgumentValueInvalid @a bytes is a null pointer
+ * @error R_Status_EncodingInvalid The Bytes are not an UTF-8 Byte sequence.
  */
 void
 StringBuffer_append_pn
