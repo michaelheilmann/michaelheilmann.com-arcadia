@@ -21,9 +21,15 @@ include(${CMAKE_CURRENT_LIST_DIR}/detect_instruction_set_architecture.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_operating_system.cmake)
 
 # Begin a library or an executable.
+# The following variables are defined
+# - ${target}.SourceFiles List of C/C++ source files
+# - ${target}.HeaderFiles List of C/C++ header files
+# - ${target}.AssetFiles  List of asset files
+#   The files are all copied (without their folder) to the binary output directories.
 macro(BeginProduct target)
   set(${target}.SourceFiles "")
   set(${target}.HeaderFiles "")
+  set(${target}.AssetFiles "")
   DetectCompilerC(${target})
   DetectOperatingSystem(${target})
   DetectInstructionSetArchitecture(${target})
@@ -40,4 +46,5 @@ macro(EndProduct target type)
     target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
     target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   endif()
+
 endmacro()
