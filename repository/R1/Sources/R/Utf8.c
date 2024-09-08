@@ -144,12 +144,12 @@ R_Utf8Reader_next
   }
   R_Natural32Value codePoint;
   R_Natural8Value x = R_ByteBuffer_getAt(self->source, self->index);
-  if (x <= 0x7f) {
+  if (x <= 0b01111111) {
     codePoint = x;
     self->index += 1;
     self->codePoint = codePoint;
-  } else if (x <= 0x7ff) {
-    codePoint = x;
+  } else if (x <= 0b11011111) {
+    codePoint = x & 0b00011111;
     if (n - self->index < 2) {
       R_setStatus(R_Status_EncodingInvalid);
       R_jump();
@@ -160,13 +160,13 @@ R_Utf8Reader_next
         R_setStatus(R_Status_EncodingInvalid);
         R_jump();
       }
-      codePoint <<= 8;
+      codePoint <<= 6;
       codePoint |= x;
     }
     self->index += 2;
     self->codePoint = codePoint;
-  } else if (x <= 0xffff) {
-    codePoint = x;
+  } else if (x <= 0b11101111) {
+    codePoint = x & 0b00001111;
     if (n - self->index < 3) {
       R_setStatus(R_Status_EncodingInvalid);
       R_jump();
@@ -177,13 +177,13 @@ R_Utf8Reader_next
         R_setStatus(R_Status_EncodingInvalid);
         R_jump();
       }
-      codePoint <<= 8;
-      codePoint |= x;
+      codePoint <<= 6;
+      codePoint |= x & 0b00111111;
     }
     self->index += 3;
     self->codePoint = codePoint;
-  } else if (x <= 0x10ffff) {
-    codePoint = x;
+  } else if (x <= 0b11110111) {
+    codePoint = x & 0b00000111;
     if (n - self->index < 4) {
       R_setStatus(R_Status_EncodingInvalid);
       R_jump();
@@ -194,7 +194,7 @@ R_Utf8Reader_next
         R_setStatus(R_Status_EncodingInvalid);
         R_jump();
       }
-      codePoint <<= 8;
+      codePoint <<= 6;
       codePoint |= x;
     }
     self->index += 4;

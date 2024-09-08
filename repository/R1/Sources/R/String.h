@@ -80,4 +80,13 @@ R_String_getAt
     R_SizeValue index
   );
 
+// https://michaelheilmann.com/repository/R1/#r-string-isequalto-pn
+R_BooleanValue
+R_String_isEqualTo_pn
+  (
+    R_String const* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
+  );
+
 #endif // R_STRING_H_INCLUDED

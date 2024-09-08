@@ -53,7 +53,6 @@ R_BooleanValue R_ByteBuffer_endsWith_pn(R_ByteBuffer const* self, void const* by
 <code>R_BooleanValue_False</code> otherwise.
 </p>
 
-
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <h5 id="r-bytebuffer-startswith-pn">startsWith_pn</h5>
@@ -73,6 +72,29 @@ R_BooleanValue R_ByteBuffer_startsWith_pn(R_ByteBuffer const* self, void const* 
 <h6><b>Return Value</b></h6>
 <p>
 <code>R_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-bytebuffer-isequalto-pn">isEqualTo_pn</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_isEqualTo_pn(R_ByteBuffer const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is this Byte buffer's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
 <code>R_BooleanValue_False</code> otherwise.
 </p>
 
@@ -146,7 +168,7 @@ void R_ByteBuffer_insert_pn(R_ByteBuffer* self, R_SizeValue index, void const* p
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-bytebuffer-isequalto">isEqualTo</h5>
 <p><code>
-void R_ByteBuffer_isEqualTo(R_ByteBuffer const* self, R_ByteBuffer const* other)
+R_BooleanValue R_ByteBuffer_isEqualTo(R_ByteBuffer const* self, R_ByteBuffer const* other)
 </code></p>
 
 <p>Compare this Byte buffer with another Byte buffer for equality.</p>
@@ -201,3 +223,44 @@ R_Natural8Value R_ByteBuffer_getAt(R_ByteBuffer const* self, R_SizeValue index)
 
 <h6><b>Remarks</b></h6>
 <p> The size of a Byte buffer is the length of the Byte sequence it contains.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-isempty">isEmpty</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_isEmpty(R_ByteBuffer* self)
+</code></p>
+
+<p>Get if this Byte buffer is empty.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p><code>R_BooleanValue_True</code> if this Byte buffer is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-swap">swap</h5>
+<p><code>
+void R_ByteBuffer_swap(R_ByteBuffer* self, R_ByteBuffer* other)
+</code></p>
+
+<p>Swap the contents of this Byte buffer with the contents of another Byte buffer.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to the other Byte buffer.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>other</code> is a null pointer.</td></tr>
+</table>

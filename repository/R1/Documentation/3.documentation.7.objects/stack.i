@@ -25,6 +25,20 @@ R_Stack* R_Stack_create()
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
+<h5 id="r-stack-clear">clear</h5>
+<p><code>
+void R_Stack_clear(R_Stack* self)
+</code></p>
+
+<p>Clear this stack.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
 <h5 id="r-stack-getsize">getSize</h5>
 <p><code>
 R_SizeValue R_Stack_getSize(R_Stack const* self)
@@ -41,27 +55,12 @@ R_SizeValue R_Stack_getSize(R_Stack const* self)
 <p>The size of this stack.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<h5 id="r-stack-clear">clear</h5>
+<h5 id="r-stack-isempty">isEmpty</h5>
 <p><code>
-void R_Stack_clear(R_Stack* self)
+R_BooleanValue R_Stack_isEmpty(R_Stack* self)
 </code></p>
 
-<p>Clear this stack.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
-</table>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<h5 id="r-stack-clear">getSize</h5>
-<p><code>
-R_SizeValue R_Stack_getSize(R_Stack const* self)
-</code></p>
-
-<p>Get the size of this stack.</p>
+<p>Get if this stack is empty.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -69,22 +68,29 @@ R_SizeValue R_Stack_getSize(R_Stack const* self)
 </table>
 
 <h6><b>Return Value</b></h6>
-<p>The size of this stack.</p>
+<p><code>R_BooleanValue_True</code> if this stack is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+</table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<h5 id="r-stack-push">push</h5>
+<h5 id="r-stack-peek">peek</h5>
 <p><code>
-void R_Stack_push(R_Stack* self, R_Value value)
+R_Value R_Stack_peek(R_Stack* self)
 </code></p>
 
-<p>Push a value on the top of this stack.</p>
+<p>Peek at the value on top of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_Stack* self            </td><td>A pointer to this stack.</td></tr>
-  <tr><td>R_Value value            </td><td>The value to push.</td></tr>
+  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
 </table>
+
+<h6><b>Return Value</b></h6>
+<p>The value.</p>
+
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-stack-pop">pop</h5>
@@ -103,17 +109,16 @@ R_Value R_Stack_pop(R_Stack* self)
 <p>The value.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-stack-peek">peek</h5>
+
+<h5 id="r-stack-push">push</h5>
 <p><code>
-R_Value R_Stack_peek(R_Stack* self)
+void R_Stack_push(R_Stack* self, R_Value value)
 </code></p>
 
-<p>Peek at the value on top of this stack.</p>
+<p>Push a value on the top of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
+  <tr><td>R_Stack* self            </td><td>A pointer to this stack.</td></tr>
+  <tr><td>R_Value value            </td><td>The value to push.</td></tr>
 </table>
-
-<h6><b>Return Value</b></h6>
-<p>The value.</p>

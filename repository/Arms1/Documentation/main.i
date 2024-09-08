@@ -1,3 +1,4 @@
+@{include("header.i")}
   <h1>Michael Heilmann's Automatic Resource Management System Mark 1</h1>
   <p>
   This is the documentation for Michael  Heilmann's Automatic Resource Management System Mark 1,
@@ -33,7 +34,7 @@
   The reachable objects are called <em>live objects</em> \(L \subseteq U\).
   All other objects are called <em>dead objects</em> \(D\). \(L\) and \(D\) are disjoint and partition the universe in such that \(U = L \cup D\)
   (also note that \(R \subseteq L\) and \(R \cap D = \emptyset\)).
-  ARMS1 removes all dead objects \(D\) from the universe \(U\) such that \(U@new = U@old - D\) and destroys them.
+  ARMS1 removes all dead objects \(D\) from the universe \(U\) such that \(U@@new = U@@old - D\) and destroys them.
   </p>
   <h2>Starting up and shutting down</h2>
   <p>To use the services of ARMS1, a user must acquire an handle to ARMS1. The user acquires a handle by a succesfull call to <code>Arms_Status Arms_startup()</code>.
@@ -172,7 +173,7 @@
   
   <h2>Freeing resources</h2>
   <p>To relinqish resources, the user invokes <code>Arms_Status Arms_run()</code> which destroys dead objects \(D\) such that the new universe
-  only contains live objects, in other terms \(U@new = U@old - D\) or equivalently \(U@new = L\) holds.</p>
+  only contains live objects, in other terms \(U@@new = U@@old - D\) or equivalently \(U@@new = L\) holds.</p>
   
   <p><code>Arms_run</code> always succeeds.</p>
   
@@ -205,3 +206,5 @@
     <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>object</code> is a null pointer</td></tr>
     <tr><td><code>Arms_Status_OperationInvalid</code></td><td>the lock count would underflow</td></tr>
   </table>
+@{include("unmanaged-memory.i")}
+@{include("footer.i")}

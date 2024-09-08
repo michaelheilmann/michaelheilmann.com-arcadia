@@ -13,25 +13,30 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-08-29
+# Last modified: 2024-09-09
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyProjectName "Arcadia")
+if (NOT MyProjectIsDefined)
+  if (NOT DEFINED MyProjectName)
+    set(MyProjectName "Arcadia")
+  endif()
+  project(${MyProjectName})
+  enable_testing()
+  include(FetchContent)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  set(MyProjectIsDefined)
+endif()
 
-set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../)
-include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
-
-include(FetchContent)
-
-set(Arms1-Source-Dir "${CMAKE_CURRENT_SOURCE_DIR}/../../../arms1/sources" CACHE STRING "path to the ARMS1 source directory")
-get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-message(STATUS "fetching ${Arms1-Source-Dir}")
-FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
-FetchContent_MakeAvailable("arms1")
-
-project(${MyProjectName} LANGUAGES C)
+if (NOT TARGET ${MyProjectName}.Arms)
+  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
+  get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
+                         REALPATH BASE_DIR "${REPOSITORY_SOURCE_DIR}")
+  message(STATUS "fetching ${Arms1-Source-Dir}")
+  FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
+  FetchContent_MakeAvailable(arms1)
+endif()
 
 # Create an executable.
 add_executable(${MyProjectName}.Arms.Demo1)

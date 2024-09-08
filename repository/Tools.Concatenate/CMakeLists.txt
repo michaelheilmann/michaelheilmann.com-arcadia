@@ -13,10 +13,20 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-08-31
+# Last modified: 2024-09-09
 
 cmake_minimum_required(VERSION 3.20)
 
-project(Arcadia)
+if (NOT MyProjectIsDefined)
+  if (NOT DEFINED MyProjectName)
+    set(MyProjectName "Arcadia")
+  endif()
+  project(${MyProjectName})
+  enable_testing()
+  include(FetchContent)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
+  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  set(MyProjectIsDefined)
+endif()
 
 add_subdirectory(Tool/Sources)

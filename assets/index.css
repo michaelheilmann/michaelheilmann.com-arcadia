@@ -36,11 +36,6 @@ a {
 
 html.my-theme-1 {
   font-family: 'my-default-font'; 
-}
-
-*, html, body {
-  margin: 0;
-  padding: 0;
   color: var(--black);
   background-color: var(--white);
 }

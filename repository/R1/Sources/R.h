@@ -28,6 +28,7 @@
 #include "R/countLeadingZeroes.h"
 
 #include "R/FileHandle.h"
+#include "R/FilePath.h"
 #include "R/FileSystem.h"
 
 #include "R/Integer16.h"

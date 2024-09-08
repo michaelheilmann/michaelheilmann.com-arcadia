@@ -1,46 +1,29 @@
   <h2>Files</h2>
-  <p>You can download/view the Sources files of R1 here</p>
+  <p>
+  You can find the sources of R1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
+  The subdirectory of R1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1</a>.</p>
+  </p>
+  
   <ul>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Boolean.h">Sources/R/Boolean.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/ByteBuffer.c">Sources/R/ByteBuffer.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/ByteBuffer.h">Sources/R/ByteBuffer.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/clamp.h">Sources/R/clamp.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/FileHandle.c">Sources/R/FileHandle.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/FileHandle.h">Sources/R/FileHandle.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Integer16.h">Sources/R/Integer16.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Integer32.h">Sources/R/Integer32.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Integer64.h">Sources/R/Integer64.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Integer8.h">Sources/R/Integer8.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/JumpTarget.c">Sources/R/JumpTarget.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/JumpTarget.h">Sources/R/JumpTarget.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/maximum.h">Sources/R/maximum.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/minimum.h">Sources/R/minimum.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Natural16.h">Sources/R/Natural16.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Natural32.h">Sources/R/Natural32.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Natural64.h">Sources/R/Natural64.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Natural8.h">Sources/R/Natural8.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/ObjectReference.h">Sources/R/ObjectReference.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R.c">Sources/R.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R.h">Sources/R.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Size.h">Sources/R/Size.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Status.c">Sources/R/Status.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Status.h">Sources/R/Status.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Value.c">Sources/R/Value.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Value.h">Sources/R/Value.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Void.h">Sources/R/Void.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/CMakeLists.txt">Sources/CMakeLists.txt</a></li>
+    <li>The (sources of the) library resides in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources</a>
+    </li>
+    <li>The (sources of) tests reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests</a>
+    </li>
+    <li>The (sources of) demos reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Demos">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Demos</a>
+    </li>
+    <li>The (sources of this very documentation you are reading) documentation reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation</a>
+    </li>
   </ul>
+  
+  <p>You can compile and run these under various platforms (including but not restricted to Windows, Linux, and many more),
+  however, we currently only officially support Windows. To build and run all these, simply checkout the repository and
+  outside of the repository directory create a build folder.
+  Invoke from the the build folder</p>
+  <p><code>
+  cmake <my-mv>r1 source directory</my-mv>
+  </code></p>
+  <p>where <my-mv>r1 source directory</my-mv> is the path to the R1 directory in the checkout directory (usually <code>repository/R1</code></li>

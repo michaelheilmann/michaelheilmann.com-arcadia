@@ -51,7 +51,7 @@ R_ByteBuffer*
 R_FileSystem_getFileContents
   (
     R_FileSystem* self,
-    char const* path
+    R_FilePath* path
   )
 {
   R_FileHandle* fileHandle = R_FileHandle_create();
@@ -73,7 +73,7 @@ void
 R_FileSystem_setFileContents
   (
     R_FileSystem* self,
-    char const* path,
+    R_FilePath* path,
     R_ByteBuffer * contents
   )
 {
@@ -105,16 +105,18 @@ void
 R_FileSystem_createDirectory
   (
     R_FileSystem* self,
-    char const* path
+    R_FilePath* path
   )
 {
 #if R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Windows
-  if (FALSE == CreateDirectory(path, NULL)) {
+  R_String* nativePath = R_FilePath_toNative(path);
+  if (FALSE == CreateDirectory(nativePath->p, NULL)) {
     R_setStatus(R_Status_FileSystemOperationFailed);
     R_jump();
   }
 #elif R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Linux
-  if (-1 == mkdir(pathp, 0777)) {
+  R_String* nativePath = R_FilePath_toNative(path);
+  if (-1 == mkdir(nativePath->p, 0777)) {
     R_setStatus(R_Status_FileSystemOperationFailed);
     R_jump();
   }

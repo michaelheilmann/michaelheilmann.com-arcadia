@@ -74,7 +74,7 @@ R_BooleanValue R_String_startsWith_pn(R_String const* self, void const* bytes, R
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-string-isequalto">isEqualTo</h5>
 <p><code>
-void R_String_isEqualTo(R_String const* self, R_String const* other)
+R_BooleanValue R_String_isEqualTo(R_String const* self, R_String const* other)
 </code></p>
 
 <p>Compare this string with another string for equality.</p>
@@ -88,6 +88,27 @@ void R_String_isEqualTo(R_String const* self, R_String const* other)
 <h6><b>Return Value</b></h6>
 <p>
 <code>R_BooleanValue_True</code> if this string is equal to the other string.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-isequalto_pn">isEqualTo_pn</h5>
+<p><code>
+R_BooleanValue R_String_isEqualTo_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is this string's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is this string's sequence of Bytes.
 <code>R_BooleanValue_False</code> otherwise.
 </p>
 

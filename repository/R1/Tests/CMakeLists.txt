@@ -13,18 +13,26 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+# Last modified: 2024-09-09
+
 cmake_minimum_required(VERSION 3.29)
 
-set(MyProjectName "Arcadia")
-project(${MyProjectName} LANGUAGES C)
-
-set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../)
-include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
-
-include(FetchContent)
-enable_testing()
+if (NOT MyProjectIsDefined)
+  if (NOT DEFINED MyProjectName)
+    set(MyProjectName "Arcadia")
+  endif()
+  project(${MyProjectName})
+  enable_testing()
+  include(FetchContent)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  set(MyProjectIsDefined)
+endif()
 
 add_subdirectory(clamp)
 add_subdirectory(countLeadingZeroes)
+add_subdirectory(FilePath)
+add_subdirectory(List)
 add_subdirectory(maximum)
 add_subdirectory(minimum)
+add_subdirectory(Utf8.Reader)

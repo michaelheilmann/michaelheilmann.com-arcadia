@@ -17,59 +17,70 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyProjectName "Arcadia")
+if (NOT MyProjectIsDefined)
+  if (NOT DEFINED MyProjectName)
+    set(MyProjectName "Arcadia")
+  endif()
+  project(${MyProjectName})
+  enable_testing()
+  include(FetchContent)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../repository)
+  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  set(MyProjectIsDefined)
+endif()
 
-set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../repository)
-get_filename_component(REPOSITORY_SOURCE_DIR "${REPOSITORY_SOURCE_DIR}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-message(STATUS "repository source dir : ${REPOSITORY_SOURCE_DIR}")
-include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
-                                                                          
-project(${MyProjectName} LANGUAGES C)
+if (NOT TARGET ${MyProjectName}.Arms)
+  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
+  get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
+                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+  message(STATUS "fetching ${Arms1-Source-Dir}")
+  FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
+  FetchContent_MakeAvailable(arms1)
+endif()
 
-include(FetchContent)
+if (NOT TARGET Tools.TemplateEngineLibrary)
+  set(Tools.TemplateEngineLibrary.SourceDir "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library" CACHE STRING "path to the Tools.TemplateEngineLibrary source directory")
+  get_filename_component(Tools.TemplateEngineLibrary.SourceDir "${Tools.TemplateEngineLibrary.SourceDir}"
+                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+  message(STATUS "fetching ${Tools.TemplateEngineLibrary.SourceDir}")
+  FetchContent_Declare(Tools.TemplateEngineLibrary SOURCE_DIR ${Tools.TemplateEngineLibrary.SourceDir})
+  FetchContent_MakeAvailable(Tools.TemplateEngineLibrary)
+endif()
 
-set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
-get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-message(STATUS "fetching ${Arms1-Source-Dir}")
-FetchContent_Declare(Arms1 SOURCE_DIR ${Arms1-Source-Dir})
-FetchContent_MakeAvailable(Arms1)
-
-set(R1-Source-Dir "${REPOSITORY_SOURCE_DIR}/R1/Sources" CACHE STRING "path to the R1 source directory")
-get_filename_component(R1-Source-Dir "${R1-Source-Dir}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-FetchContent_Declare(R1 SOURCE_DIR ${R1-Source-Dir})
-FetchContent_MakeAvailable(R1) 
+if (NOT TARGET ${MyProjectName}.R)
+  set(R1-Source-Dir "${REPOSITORY_SOURCE_DIR}/R1/Sources" CACHE STRING "path to the R1 source directory")
+  get_filename_component(R1-Source-Dir "${R1-Source-Dir}"
+                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+  FetchContent_Declare(r1 SOURCE_DIR ${R1-Source-Dir})
+  FetchContent_MakeAvailable(r1)
+endif()
 
 set(Tools.Concatenate-Source-Dir "${REPOSITORY_SOURCE_DIR}/Tools.Concatenate/Tool/Sources" CACHE STRING "path to the Tools.Concatenate source directory")
 get_filename_component(Tools.Concatenate-Source-Dir "${Tools.Concatenate-Source-Dir}"
                        REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 FetchContent_Declare(Tools.Concatenate SOURCE_DIR ${Tools.Concatenate-Source-Dir})
-FetchContent_MakeAvailable(Tools.Concatenate) 
+FetchContent_MakeAvailable(Tools.Concatenate)
+
+set(Tools.TemplateEngine-Source-Dir "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" CACHE STRING "path to the Tools.TemplateEngine source directory")
+get_filename_component(Tools.TemplateEngine-Source-Dir "${Tools.TemplateEngine-Source-Dir}"
+                       REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+FetchContent_Declare(Tools.TemplateEngine SOURCE_DIR ${Tools.TemplateEngine-Source-Dir})
+FetchContent_MakeAvailable(Tools.TemplateEngine)
 
 # Build "index.html".
-set(DOCUMENTATION_SOURCE_FILES "")
-list(APPEND DOCUMENTATION_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/index.i)
-
 set(DOCUMENT_TARGET_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../index.html")
 add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:Tools.Concatenate> ${DOCUMENTATION_SOURCE_FILES} ${DOCUMENT_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${CMAKE_CURRENT_SOURCE_DIR}/../index.html
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "concatenating files"
-                   DEPENDS Tools.Concatenate ${DOCUMENTATION_SOURCE_FILES})
-
+                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/index.i => ${CMAKE_CURRENT_SOURCE_DIR}/../index.html"
+                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
 add_custom_target(BuildIndexDocument ALL DEPENDS ${DOCUMENT_TARGET_FILE})
 
 # Build "error.html".
-set(DOCUMENTATION_SOURCE_FILES "")
-list(APPEND DOCUMENTATION_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/error.i)
-
 set(DOCUMENT_TARGET_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../error.html")
 add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:Tools.Concatenate> ${DOCUMENTATION_SOURCE_FILES} ${DOCUMENT_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/error.i ${CMAKE_CURRENT_SOURCE_DIR}/../error.html
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "concatenating files"
-                   DEPENDS Tools.Concatenate ${DOCUMENTATION_SOURCE_FILES})
-
+                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/error.i => ${CMAKE_CURRENT_SOURCE_DIR}/../error.html"
+                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
 add_custom_target(BuildErrorDocument ALL DEPENDS ${DOCUMENT_TARGET_FILE})

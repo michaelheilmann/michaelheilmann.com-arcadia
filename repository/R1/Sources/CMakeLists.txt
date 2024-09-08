@@ -13,25 +13,30 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-08-29
+# Last modified: 2024-09-09
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyProjectName "Arcadia")
+if (NOT MyProjectIsDefined)
+  if (NOT DEFINED MyProjectName)
+    set(MyProjectName "Arcadia")
+  endif()
+  project(${MyProjectName})
+  enable_testing()
+  include(FetchContent)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  set(MyProjectIsDefined)
+endif()
 
-set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../)
-include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
-
-include(FetchContent)
-
-set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
-get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-message(STATUS "fetching ${Arms1-Source-Dir}")
-FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
-FetchContent_MakeAvailable("arms1")
-                                                                          
-project(${MyProjectName} LANGUAGES C)
+if (NOT TARGET ${MyProjectName}.Arms)
+  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
+  get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
+                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+  message(STATUS "fetching ${Arms1-Source-Dir}")
+  FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
+  FetchContent_MakeAvailable(arms1)
+endif()
 
 # Create library.
 add_library(${MyProjectName}.R)
@@ -48,6 +53,8 @@ list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/ByteBuf
 
 list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/FileHandle.c)
 list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/FileHandle.h)
+list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/FilePath.c)
+list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/FilePath.h)
 list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/FileSystem.c)
 list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/FileSystem.h)
 
@@ -87,6 +94,7 @@ list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Stack.c
 list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Stack.h)
 
 list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/swap.h)
+
 list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Size.h)
 
 list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/String.c)

@@ -28,23 +28,27 @@ struct R_List {
   R_SizeValue capacity;
 };
 
+// https://michaelheilmann.com/repository/R1/#r-list-clear
 void
 R_List_clear
   (
     R_List* self
   );
 
+// https://michaelheilmann.com/repository/R1/#r-list-create
 R_List*
 R_List_create
   (
   );
 
+// https://michaelheilmann.com/repository/R1/#r-list-getsize
 R_SizeValue
 R_List_getSize
   (
     R_List* self
   );
 
+// https://michaelheilmann.com/repository/R1/#r-list-append
 void
 R_List_append
   (
@@ -52,6 +56,7 @@ R_List_append
     R_Value value
   );
 
+// https://michaelheilmann.com/repository/R1/#r-list-prepend
 void
 R_List_prepend
   (
@@ -59,6 +64,7 @@ R_List_prepend
     R_Value value
   );
 
+// https://michaelheilmann.com/repository/R1/#r-list-insertat
 void
 R_List_insertAt
   (
@@ -67,12 +73,32 @@ R_List_insertAt
     R_Value value
   );
 
+// https://michaelheilmann.com/repository/R1/#r-list-getat
 R_Value
 R_List_getAt
   (
     R_List* self,
     R_SizeValue index
   );
+
+// https://michaelheilmann.com/repository/R1/#r-list-remove
+void
+R_List_remove
+  (
+    R_List* self,
+    R_SizeValue index,
+    R_SizeValue count
+  );
+
+// https://michaelheilmann.com/repository/R1/#r-list-isempty
+static inline R_BooleanValue
+R_List_isEmpty
+  (
+    R_List* self
+  )
+{
+  return R_SizeValue_Literal(0) == R_List_getSize(self);
+}
 
 #define Define(Suffix, Prefix) \
   void \
@@ -121,6 +147,7 @@ Define(Natural8, natural8)
 Define(Natural16, natural16)
 Define(Natural32, natural32)
 Define(Natural64, natural64)
+Define(ObjectReference, objectReference)
 Define(Size, size)
 Define(Void, void)
 

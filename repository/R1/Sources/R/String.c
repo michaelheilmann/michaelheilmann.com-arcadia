@@ -130,3 +130,18 @@ R_String_getAt
   }
   return *(self->p + index);
 }
+
+R_BooleanValue
+R_String_isEqualTo_pn
+  (
+    R_String const* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
+  )
+{
+  if (self->sz == numberOfBytes) {
+    return !memcmp(self->p, bytes, numberOfBytes);
+  } else {
+    return R_BooleanValue_False;
+  }
+}

@@ -76,8 +76,7 @@ R_List_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  if (Arms_reallocateUnmanaged(&self->elements, sizeof(R_Value) * newCapacity)) {
-    R_setStatus(R_Status_AllocationFailed);
+  if (!R_UnmanagedMemory_reallocate_nojump(&self->elements, sizeof(R_Value) * newCapacity)) {
     R_jump();
   }
   self->capacity = newCapacity;
@@ -109,7 +108,7 @@ R_List_finalize
   )
 {
   if (self->elements) {
-    Arms_deallocateUnmanaged(self->elements);
+    R_UnmanagedMemory_deallocate_nojump(self->elements);
     self->elements = NULL;
   }
 }
@@ -153,8 +152,7 @@ R_List_create
   self->capacity = 0;
   self->size = 0;
   self->capacity = g_minimumCapacity;
-  if (Arms_allocateUnmanaged(&self->elements, sizeof(R_Value) * self->capacity)) {
-    R_setStatus(R_Status_AllocationFailed);
+  if (!R_UnmanagedMemory_allocate_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
     R_jump();
   }
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
@@ -228,6 +226,34 @@ R_List_getAt
   return self->elements[index];
 }
 
+void
+R_List_remove
+  (
+    R_List* self,
+    R_SizeValue index,
+    R_SizeValue count
+  )
+{
+  if (!self) {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  if ((R_SizeValue_Maximum - count) < index) {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  if ((index + count) > self->size) {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  R_SizeValue tailLength = (self->size - index) - count;
+  if (tailLength) {
+    R_SizeValue tailStart = index + count;
+    memmove(self->elements + index, self->elements + tailStart, tailLength * sizeof(R_Value));
+  }
+  self->size -= count;
+}
+
 #define Define(Suffix, Prefix) \
   void \
   R_List_append##Suffix##Value \
@@ -264,11 +290,11 @@ R_List_getAt
       R_setStatus(R_Status_ArgumentValueInvalid); \
       R_jump(); \
     } \
-    return R_Value_is##Suffix##Value(self->elements + self->size - index - 1); \
+    return R_Value_is##Suffix##Value(self->elements + index); \
   } \
 \
   R_##Suffix##Value \
-  R_List_get##Suffix##Value \
+  R_List_get##Suffix##ValueAt \
     ( \
       R_List* self, \
       R_SizeValue index \
@@ -278,7 +304,7 @@ R_List_getAt
       R_setStatus(R_Status_ArgumentValueInvalid); \
       R_jump(); \
     } \
-    R_Value* element = self->elements + self->size - index - 1; \
+    R_Value* element = self->elements + index; \
     if (!R_Value_is##Suffix##Value(element)) { \
       R_setStatus(R_Status_ArgumentValueInvalid); \
       R_jump(); \
@@ -296,6 +322,7 @@ Define(Natural8, natural8)
 Define(Natural16, natural16)
 Define(Natural32, natural32)
 Define(Natural64, natural64)
+Define(ObjectReference, objectReference)
 Define(Size, size)
 Define(Void, void)
 

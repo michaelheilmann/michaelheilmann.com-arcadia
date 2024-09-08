@@ -151,8 +151,21 @@ R_startup
 
     R_pushJumpTarget(&jumpTarget);
     if (R_JumpTarget_save(&jumpTarget)) {
+      R_registerBooleanType("R.Boolean", sizeof("R.Boolean") - 1);
+      R_registerIntegerType("R.Integer8", sizeof("R.Integer8") - 1);
+      R_registerIntegerType("R.Integer16", sizeof("R.Integer16") - 1);
+      R_registerIntegerType("R.Integer32", sizeof("R.Integer32") - 1);
+      R_registerIntegerType("R.Integer64", sizeof("R.Integer64") - 1);
+      R_registerNaturalType("R.Natural8", sizeof("R.Natural8") - 1);
+      R_registerNaturalType("R.Natural16", sizeof("R.Natural16") - 1);
+      R_registerNaturalType("R.Natural32", sizeof("R.Natural32") - 1);
+      R_registerNaturalType("R.Natural64", sizeof("R.Natural64") - 1);
+      R_registerSizeType("R.Size", sizeof("R.Size") - 1);
+      R_registerVoidType("R.Void", sizeof("R.Void") - 1);
+
       _R_ByteBuffer_registerType();
       _R_FileHandle_registerType();
+      _R_FilePath_registerType();
       _R_FileSystem_registerType();
       _R_List_registerType();
       _R_Stack_registerType();

@@ -23,6 +23,7 @@
 #include "R/ByteBuffer.h"
 #include "R/Natural8.h"
 #include "R/Size.h"
+typedef struct R_FilePath R_FilePath;
 
 #include <stdio.h>
 
@@ -81,7 +82,7 @@ void
 R_FileHandle_openForReading
   (
     R_FileHandle* self,
-    char const* path
+    R_FilePath* path
   );
 
 // https://michaelheilmann.com/repository/R1/#r-filehandle-openforwriting
@@ -89,7 +90,7 @@ void
 R_FileHandle_openForWriting
   (
     R_FileHandle* self,
-    char const* path
+    R_FilePath* path
   );
 
 // https://michaelheilmann.com/repository/R1/#r-filehandle-read

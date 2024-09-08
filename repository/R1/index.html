@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html class='my-theme-1' lang='en'>
+<head>
+
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <link rel='icon' type='image/x-icon' href='https://michaelheilmann.com/assets/favicon/512x512.svg'>
+
+  <!-- Crap specific to Safari. SVG must be single color with transparent background. -->
+  <link rel='mask-icon' href='https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg' color = '#000000'>
+
+  <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
+  <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
+
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css'>
     <title>Michael Heilmann's Runtime Mark 1</title>
-    <link rel="canonical" href="https://michaelheilmann.com/repository/r1/" />
-    <link rel="icon" type="image/x-icon" href="https://michaelheilmann.com/assets/favicon/512x512.svg">
-    <link rel="mask-icon" href="https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg" color="#000000"> <!-- Safari crap. Single color with transparent background. -->
-    <link rel="apple-touch-icon" href="https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png" > <!-- iOS crap. 180 * 180px. color attribute is obsolete. -->
+    <link rel="canonical" href="https://michaelheilmann.com/repository/R1/" />
     <style>
     body {
       margin: 16px;
@@ -49,76 +57,41 @@
   <p>
   This is the documentation for Michael  Heilmann's Runtime Mark 1,
   henceforth R1. R1 facilates the creation of C programs - in particular interpreters - that are portable,
-  maintainable, as well as safe. R1 is available at <a href="https://michaelheilmann.com/repository/r1">michaelheilmann.com/repository/r1</a>.
+  maintainable, as well as safe. R1 is available at <a href="https://michaelheilmann.com/repository/R1">michaelheilmann.com/repository/R1</a>.
+
   <h2>Files</h2>
-  <p>You can download/view the Sources files of R1 here</p>
-  <ul>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Boolean.h">Sources/R/Boolean.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/ByteBuffer.c">Sources/R/ByteBuffer.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/ByteBuffer.h">Sources/R/ByteBuffer.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/clamp.h">Sources/R/clamp.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/FileHandle.c">Sources/R/FileHandle.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/FileHandle.h">Sources/R/FileHandle.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Integer16.h">Sources/R/Integer16.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Integer32.h">Sources/R/Integer32.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Integer64.h">Sources/R/Integer64.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Integer8.h">Sources/R/Integer8.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/JumpTarget.c">Sources/R/JumpTarget.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/JumpTarget.h">Sources/R/JumpTarget.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/maximum.h">Sources/R/maximum.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/minimum.h">Sources/R/minimum.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Natural16.h">Sources/R/Natural16.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Natural32.h">Sources/R/Natural32.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Natural64.h">Sources/R/Natural64.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Natural8.h">Sources/R/Natural8.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/ObjectReference.h">Sources/R/ObjectReference.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R.c">Sources/R.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R.h">Sources/R.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Size.h">Sources/R/Size.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Status.c">Sources/R/Status.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Status.h">Sources/R/Status.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Value.c">Sources/R/Value.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Value.h">Sources/R/Value.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/R/Void.h">Sources/R/Void.h</a></li>
-
-    <li><a href="https://michaelheilmann.com/repository/R1/Sources/CMakeLists.txt">Sources/CMakeLists.txt</a></li>
-  </ul>
-  <h2>Further references</h2>
-  <p>There is a demo available showing-off how to use R1</p>
-  <ul>
-    <li><a href="https://michaelheilmann.com/repository/r1/demos/helloworld/configure.h.i">demos/r1/demos/helloworld/configure.h.i</a></li>
-    <li><a href="https://michaelheilmann.com/repository/r1/demos/helloworld/main.c">demos/r1/demos/helloworld/main.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/r1/demos/helloworld/CMakeLists.txt">demos/r1/demos/helloworld/CMakeLists.txt</a></li>
-  </ul>
   <p>
-  which compiles and runs under various platforms (including but not restricted to Windows, Linux, and many more).
-  To build the demo, simply download the files of the demo to some directory (called the demo directory).
-  Download the files of <a href="https://michaelheilmann.com/repository/arms1">ARMS1</a> to a directory (called the ARMS1 directory).
-  Download the files of R1 to a directory (called the R1 directory).
-  Invoke from the demo directory</p>
-  <p><code>
-  cmake -R1-Source-Dir=<my-mv>r1 source directory</my-mv> -DArms1-Source-Dir=<my-mv>arms1 source directory</my-mv> .
-  </code></p>
-  <p>where</p>
+  You can find the sources of R1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
+  The subdirectory of R1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1</a>.</p>
+  </p>
+  
   <ul>
-    <li><my-mv>r1 source directory</my-mv> is the path to the R1 directory</li>
-    <li><my-mv>arms1 source directory</my-mv> is the path to a the ARMS1 directory</li>
+    <li>The (sources of the) library resides in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources</a>
+    </li>
+    <li>The (sources of) tests reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests</a>
+    </li>
+    <li>The (sources of) demos reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Demos">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Demos</a>
+    </li>
+    <li>The (sources of this very documentation you are reading) documentation reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation</a>
+    </li>
   </ul>
-  <p>Note that relative paths are interpreted relative to <code>${CMAKE_CURRENT_BINARY_DIR}</code>.</p>
+  
+  <p>You can compile and run these under various platforms (including but not restricted to Windows, Linux, and many more),
+  however, we currently only officially support Windows. To build and run all these, simply checkout the repository and
+  outside of the repository directory create a build folder.
+  Invoke from the the build folder</p>
+  <p><code>
+  cmake <my-mv>r1 source directory</my-mv>
+  </code></p>
+  <p>where <my-mv>r1 source directory</my-mv> is the path to the R1 directory in the checkout directory (usually <code>repository/R1</code></li>
+
+
   <h2>Documentation</h2>
+
 <h3 id="boolean-type">Boolean Type</h3>
 <p>
 R1 provides a boolean type.
@@ -136,6 +109,7 @@ typedef <my-mv>implementation detail</my-mv> R_BooleanValue
 #define R_BooleanValue_False <my-mv>implementation detail</my-mv>
 </code><p>
 <p>is a value of the type denoting logically <code>false</code>. It converts to <code>0</code> in arithmetic expressions.</p>
+
 <h3 id="foreignfunctionreference-type">Foreign Function Reference Type</h3>
 <p>
 R provides the <scode>R_ForeignFunctionReferenceValue</code> type.
@@ -163,6 +137,7 @@ A valid value of the <code>R_ForeignFunctionReferenceValue</code> is the null va
 #define R_ForeignFunctionReferenceValue_NumberOfBytes <my-mv>implementation detail</my-mv>
 </code><p>
 <p>denotes the number of Bytes of the type which is usually <code>R_ForeignFunctionReferenceValue_NumberOfBits</code> divided by 8.</p>
+
 <h3 id="integer-types">Integer Types</h3>
 <p>
 R provides a two's complement integer number types.
@@ -229,6 +204,7 @@ The following table denotes  the expansions of the macro:
 <tr><td>32                   </td><td>x</td></tr>
 <tr><td>64                   </td><td>x##LL</td></tr>
 </table>
+
 <h3 id="natural-types">Natural Types</h3>
 <p>
 R provides natural number types.
@@ -295,6 +271,7 @@ The following table denotes  the expansions of the macro:
 <tr><td>32                   </td><td>x##U</td></tr>
 <tr><td>64                   </td><td>x##ULL</td></tr>
 </table>
+
 <h3 id="object-reference-type">Object Reference Type</h3>
 <p>
 R provides a ObjectReference type.
@@ -322,6 +299,7 @@ A valid value of the <code>R_ObjectReferenceValue</code> is the null reference
 #define R_ObjectReferenceValue_NumberOfBytes <my-mv>implementation detail</my-mv>
 </code><p>
 <p>denotes the number of Bytes of the type which is usually <code>R_ObjectReferenceValue_NumberOfBits</code> divided by 8.</p>
+
 <h3 id="size-type">Size Type</h3>
 <p>
 R provides an alias for builtin <code>size_t</code> type.
@@ -354,6 +332,7 @@ This restriction may be relaxed in future versions of R.
 #define R_SizeValue_Literal(x) <my-mv>implementation detail</my-mv>
 </code><p>
 <p>is used to write a literal of type <code>R_SizeValue</code> in C source code.</p>
+
 <h3 id="void-type">Void Type</h3>
 <p>
 R provides a void type.
@@ -380,6 +359,7 @@ R_VoidValue is an unsigned integral type.
 #define R_VoidValue_NumberOfBytes <my-mv>implementation detail</my-mv>
 </code><p>
 <p>denotes the number of Bytes of the type which is usually <code>R_VoidValue_NumberOfBits</code> divided by 8.</p>
+
 <h3 id="value-type">Value Type</h3>
 <p>
 <code>R_Value</code> is a tagged union of values supported by the
@@ -449,6 +429,7 @@ a value of the type corresponding to <my-mv>Suffix</my-mv>.</p>
 the <code>R_Value</code>. The behavior of <code>R_Value_set<my-mv>Suffix
 </my-mv></code> is undefined if the value does not store a value of  the
 type corresponding to <my-mv>Suffix</my-mv>.</p>
+
   <h3 id="status-codes">Status Codes</h3>
   <p>
   R provides a status type and symbolic constants for its values. That type denotes success or failure of program (or a part of it)
@@ -497,6 +478,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
   <tr><td><code>TypeExists</code>               </td><td>A type exists (but should not).</td></tr>
   <tr><td><code>TypeNotExists</code>            </td><td>A type does not exist (but should).</td></tr>
   </table>
+
   <h3 id="status-variable">Status Variable</h3>
   <p>R provides a global status variable.</p>
 
@@ -516,6 +498,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
     );
   </code></p>
   <p>sets the value of the status variable to the value <code>status</code>.</p>
+
   <h3>Jumps and Jump Targets</h3>
   <p>R provides non-local jumps by allowing to save and restore the C program state.</p>
 
@@ -587,7 +570,9 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
   &nbsp;}<br>
   }
   </code></p>
+
 <h3>Numeric functions</h3>
+
 <h4>R_clamp</h4>
 <p>R provides functions clamping values to a value range.</p>
 <p><code>
@@ -610,6 +595,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
 
 <p>This function returns the value <code>value</code> clamped to the range <code>[lower, upper]</code>.
 If <code>lower &gt; upper</code> then this function sets the status variable to <code>R_Status_ArgumentValueInvalid</code> and jumps.</p>
+
 <h4>R_countLeadingZeroes</h4>
 <p>R provides functions counting the leading zeroes of the binary representations of integer type values, natural type values, and size type values.</p>
 <p><code>
@@ -631,6 +617,7 @@ R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value
 </table>
 
 <p>This function returns the number of leading zeroes of the binary representation of <code>value</code>.</p>
+
 <h4>R_maximum</h4>
 <p>R provides functions returning the maximum of two values.</p>
 <p><code>
@@ -650,6 +637,7 @@ R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value
 <tr><td><code>n64</code>     </td><td><code>R_Natural64Value</code></td></tr>
 <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
 </table>
+
 <h4>R_minimum</h4>
 <p>R provides functions returning the minimum of two values.</p>
 <p><code>
@@ -669,7 +657,9 @@ R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value
 <tr><td><code>n64</code>     </td><td><code>R_Natural64Value</code></td></tr>
 <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
 </table>
+
 <h3>Objects</h3>
+
 <h4 id="r-bytebuffer">Byte Buffer</h4>
 <p>
 <code>R_ByteBuffer</code> represents a mutable sequence of Bytes.
@@ -725,7 +715,6 @@ R_BooleanValue R_ByteBuffer_endsWith_pn(R_ByteBuffer const* self, void const* by
 <code>R_BooleanValue_False</code> otherwise.
 </p>
 
-
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <h5 id="r-bytebuffer-startswith-pn">startsWith_pn</h5>
@@ -745,6 +734,29 @@ R_BooleanValue R_ByteBuffer_startsWith_pn(R_ByteBuffer const* self, void const* 
 <h6><b>Return Value</b></h6>
 <p>
 <code>R_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-bytebuffer-isequalto-pn">isEqualTo_pn</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_isEqualTo_pn(R_ByteBuffer const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is this Byte buffer's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
 <code>R_BooleanValue_False</code> otherwise.
 </p>
 
@@ -818,7 +830,7 @@ void R_ByteBuffer_insert_pn(R_ByteBuffer* self, R_SizeValue index, void const* p
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-bytebuffer-isequalto">isEqualTo</h5>
 <p><code>
-void R_ByteBuffer_isEqualTo(R_ByteBuffer const* self, R_ByteBuffer const* other)
+R_BooleanValue R_ByteBuffer_isEqualTo(R_ByteBuffer const* self, R_ByteBuffer const* other)
 </code></p>
 
 <p>Compare this Byte buffer with another Byte buffer for equality.</p>
@@ -873,6 +885,48 @@ R_Natural8Value R_ByteBuffer_getAt(R_ByteBuffer const* self, R_SizeValue index)
 
 <h6><b>Remarks</b></h6>
 <p> The size of a Byte buffer is the length of the Byte sequence it contains.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-isempty">isEmpty</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_isEmpty(R_ByteBuffer* self)
+</code></p>
+
+<p>Get if this Byte buffer is empty.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p><code>R_BooleanValue_True</code> if this Byte buffer is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-swap">swap</h5>
+<p><code>
+void R_ByteBuffer_swap(R_ByteBuffer* self, R_ByteBuffer* other)
+</code></p>
+
+<p>Swap the contents of this Byte buffer with the contents of another Byte buffer.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to the other Byte buffer.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>other</code> is a null pointer.</td></tr>
+</table>
+
 <h4 id="r-filehandle">File Handle</h4>
 <p>
 <code>R_FileHandle</code> represents a operating system file handle.
@@ -909,7 +963,7 @@ void R_FileHandle_close(R_FileHandle* self)
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-filehandle-openforreading">openForReading</h5>
 <p><code>
-void R_FileHandle_openForReading(R_FileHandle* self, char const *path)
+void R_FileHandle_openForReading(R_FileHandle* self, R_FilePath* path)
 </code></p>
 
 <p>Open a file for reading. If the file is open, it is closed before trying to re-open it.</p>
@@ -917,7 +971,7 @@ void R_FileHandle_openForReading(R_FileHandle* self, char const *path)
 <h6><b>Parameters</b></h6>
 <table>
   <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>char const* path  </td><td>A pointer to a C string denoting the path to the file to read from.</td></tr>
+  <tr><td>R_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -930,7 +984,7 @@ void R_FileHandle_openForReading(R_FileHandle* self, char const *path)
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-filehandle-openforwriting">openForWriting</h5>
 <p><code>
-void R_FileHandle_openForWriting(R_FileHandle* self, char const* path)
+void R_FileHandle_openForWriting(R_FileHandle* self, R_FilePath* path)
 </code></p>
 
 <p>Open a file for writing. If the file is open, it is closed before trying to re-open it.</p>
@@ -938,7 +992,7 @@ void R_FileHandle_openForWriting(R_FileHandle* self, char const* path)
 <h6><b>Parameters</b></h6>
 <table>
   <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>char const* path  </td><td>A pointer to C string denoting the path to the file to write to.</td></tr>
+  <tr><td>R_FilePath* path  </td><td>The file path of the file to write to.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -1059,6 +1113,94 @@ The number of Bytes read is 0 if the end of the file was reached.
   <tr><td>R_Status_OperationInvalid         </td><td>The file is not opened for writing.</td></tr>
   <tr><td>R_Status_FileSystemOperationFailed</td><td>Writing failed.</td></tr>
 </table>
+
+<h4 id="r-filepath">File Path</h4>
+<p>
+<code>R_FilePath</code> represents a file path.
+This type is allocated on the heap and values of this type are referenced by <code>R_FilePath</code> pointers.
+A <code>R_FilePath</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_FilePath</code> value can be safely cast into a <code>R_FilePath</code> pointer.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-create">create</h5>
+
+<p><code>
+R_FilePath* R_Path_create()
+</code></p>
+
+<p>Create the empty file path.</p>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file path.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-parsewindowsfilepath">parseWindowsFilePath</h5>
+<p><code>
+R_FilePath* R_FilePath_parseWindowsFilePath(void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Parse a file path in the Windows format.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
+  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file path.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-parseunixfilepath">parseUnixFilePath</h5>
+<p><code>
+R_FilePath* R_FilePath_parseUnixFilePath(void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Parse a file path in the Unix format.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
+  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file path.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-parsenativefilepath">parseNativeFilePath</h5>
+<p><code>
+R_FilePath* R_FilePath_parseNativeFilePath(void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Parse a file path in the native format.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
+  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file path.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-tonative">toNative</h5>
+<p><code>
+R_String* R_FilePath_toNative(R_FilePath* self)
+</code></p>
+
+<p>Convert a file path to the native format.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>self</td><td>A pointer to this file path.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the string.</p>
+
 <h4 id="r-filesystem">FileSystem</h4>
 <p>
 <code>R_FileSystem</code> provides access to the file system.
@@ -1084,14 +1226,14 @@ R_FileSystem* R_FileSystem_create()
 
 <h5 id="r-filesystem-getfilecontents">getFileContents</h5>
 <p><code>
-R_ByteBuffer* R_ByteBuffer_getFileContents(char const *path)
+R_ByteBuffer* R_ByteBuffer_getFileContents(R_FilePath *path)
 </code></p>
 
 <p>Get the contents of a file.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>char const* path  </td><td>A pointer to a C string denoting the path to the file.</td></tr>
+  <tr><td><a href="#">R_FilePath</a>* path</td><td>The file path of the file.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1101,7 +1243,7 @@ A pointer to a <code>R_ByteBuffer</code> object with the file contents.
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
+  <tr><td><a href="#">R_Status_ArgumentValueInvalid</a></td><td><code>path</code> is a null pointer.</td></tr>
   <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
 </table>
 
@@ -1109,14 +1251,14 @@ A pointer to a <code>R_ByteBuffer</code> object with the file contents.
 
 <h5 id="r-filesystem-setfilecontents">setFileContents</h5>
 <p><code>
-void R_FileSystem_setFileContents(char const* path, R_ByteBuffer* contents)
+void R_FileSystem_setFileContents(R_FilePath* path, R_ByteBuffer* contents)
 </code></p>
 
 <p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>char const* path  </td><td>A pointer to a C string denoting the path to the file.</td></tr>
+  <tr><td>R_FilePath* path</td><td>The file path of the file.</td></tr>
   <tr><td>R_ByteBuffer const* byteBuffer</td><td>A poiner to the Byte buffer with the file contents.</td></tr>
 </table>
 
@@ -1126,9 +1268,10 @@ void R_FileSystem_setFileContents(char const* path, R_ByteBuffer* contents)
   <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>contents</code> is a null pointer.</td></tr>
   <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.                </td></tr>
 </table>
+
 <h4 id="r-list">List</h4>
 <p>
-<code>R_String</code> represents a list of <code>R_Value</code> objects.
+<code>R_List</code> represents a list of <code>R_Value</code> objects.
 This type is allocated on the heap and values of this type are referenced by <code>R_List</code> pointers.
 A <code>R_List</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
 An <code>R_ObjectReferenceValue</code> pointing to a <code>R_List</code> value can be safely cast into a <code>R_List</code> pointer.
@@ -1159,20 +1302,18 @@ R_List* R_List_create()
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-list-getsize">getSize</h5>
+<h5 id="r-list-append">append</h5>
 <p><code>
-R_SizeValue R_List_getSize(R_List const* self)
+void R_List_append(R_List* self, R_Value value)
 </code></p>
 
-<p>Get the size of this list.</p>
+<p>Append a <code>R_Value</code> to a list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td>R_List* self           </td><td>A pointer to this list.</td></tr>
+  <tr><td>R_Value value          </td><td>The value to append.</td></tr>
 </table>
-
-<h6><b>Return Value</b></h6>
-<p>The size of this list.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
@@ -1189,18 +1330,73 @@ void R_List_clear(R_List* self)
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<h5 id="r-list-append">append</h5>
+<h5 id="r-list-getat">getAt</h5>
 <p><code>
-void R_List_append(R_List* self, R_Value value)
+R_Value R_List_getAt(R_List* self, R_SizeValue index)
 </code></p>
 
-<p>Append a <code>R_Value</code> to a list.</p>
+<p>Get the value at the specifie index in this list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self           </td><td>A pointer to this list.</td></tr>
-  <tr><td>R_Value value          </td><td>The value to append.</td></tr>
+  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The value.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-list-getsize">getSize</h5>
+<p><code>
+R_SizeValue R_List_getSize(R_List const* self)
+</code></p>
+
+<p>Get the size of this list.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The size of this list.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-list-insertat">insert</h5>
+<p><code>
+void R_List_insertAt(R_List* self, R_SizeValue index, R_Value value)
+</code></p>
+
+<p>Compare this string with another string for equality.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self      </td><td>A pointer to this list.</td></tr>
+  <tr><td>R_SizeValue index </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
+  <tr><td>R_Value value     </td><td>The value to insert.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-list-isempty">isEmpty</h5>
+<p><code>
+R_BooleanValue R_List_isEmpty(R_List* self)
+</code></p>
+
+<p>Get if this list is empty.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p><code>R_BooleanValue_True</code> if this list is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -1221,36 +1417,26 @@ void R_List_prepend(R_List* self, R_Value value)
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-list-insertat">insert</h5>
+<h5 id="r-list-remove">remove</h5>
 <p><code>
-void R_List_insertAt(R_List* self, R_SizeValue index, R_Value value)
+void R_List_remove(R_List* self, R_SizeValue index, R_SizeValue count)
 </code></p>
 
-<p>Compare this string with another string for equality.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_List* self      </td><td>A pointer to this list.</td></tr>
-  <tr><td>R_SizeValue index </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
-  <tr><td>R_Value value     </td><td>The value to insert.</td></tr>
-</table>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-list-getat">getat</h5>
-<p><code>
-R_Value R_List_getAt(R_List* self, R_SizeValue index)
-</code></p>
-
-<p>Get the value at the specifie index in this list.</p>
+<p>Remove <code>length</code> elements starting with element at index <code>index</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
   <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
-  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
+  <tr><td>R_SizeValue index</td><td>The index of the first element to remove.</td></tr>
+  <tr><td>R_SizeValue length</td><td>The number of elements to remove.</td></tr>
 </table>
 
-<h6><b>Return Value</b></h6>
-<p>The value.</p>
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>index + count > n</code> where <code>n</code> is the length of the list.</td></tr>
+</table>
+
 <h4 id="r-stack">Stack</h4>
 <p>
 <code>R_Stack</code> represents a stack of <code>R_Value</code> objects.
@@ -1278,6 +1464,20 @@ R_Stack* R_Stack_create()
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
+<h5 id="r-stack-clear">clear</h5>
+<p><code>
+void R_Stack_clear(R_Stack* self)
+</code></p>
+
+<p>Clear this stack.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
 <h5 id="r-stack-getsize">getSize</h5>
 <p><code>
 R_SizeValue R_Stack_getSize(R_Stack const* self)
@@ -1294,27 +1494,12 @@ R_SizeValue R_Stack_getSize(R_Stack const* self)
 <p>The size of this stack.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<h5 id="r-stack-clear">clear</h5>
+<h5 id="r-stack-isempty">isEmpty</h5>
 <p><code>
-void R_Stack_clear(R_Stack* self)
+R_BooleanValue R_Stack_isEmpty(R_Stack* self)
 </code></p>
 
-<p>Clear this stack.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
-</table>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<h5 id="r-stack-clear">getSize</h5>
-<p><code>
-R_SizeValue R_Stack_getSize(R_Stack const* self)
-</code></p>
-
-<p>Get the size of this stack.</p>
+<p>Get if this stack is empty.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -1322,22 +1507,29 @@ R_SizeValue R_Stack_getSize(R_Stack const* self)
 </table>
 
 <h6><b>Return Value</b></h6>
-<p>The size of this stack.</p>
+<p><code>R_BooleanValue_True</code> if this stack is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+</table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<h5 id="r-stack-push">push</h5>
+<h5 id="r-stack-peek">peek</h5>
 <p><code>
-void R_Stack_push(R_Stack* self, R_Value value)
+R_Value R_Stack_peek(R_Stack* self)
 </code></p>
 
-<p>Push a value on the top of this stack.</p>
+<p>Peek at the value on top of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_Stack* self            </td><td>A pointer to this stack.</td></tr>
-  <tr><td>R_Value value            </td><td>The value to push.</td></tr>
+  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
 </table>
+
+<h6><b>Return Value</b></h6>
+<p>The value.</p>
+
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-stack-pop">pop</h5>
@@ -1356,20 +1548,20 @@ R_Value R_Stack_pop(R_Stack* self)
 <p>The value.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-stack-peek">peek</h5>
+
+<h5 id="r-stack-push">push</h5>
 <p><code>
-R_Value R_Stack_peek(R_Stack* self)
+void R_Stack_push(R_Stack* self, R_Value value)
 </code></p>
 
-<p>Peek at the value on top of this stack.</p>
+<p>Push a value on the top of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
+  <tr><td>R_Stack* self            </td><td>A pointer to this stack.</td></tr>
+  <tr><td>R_Value value            </td><td>The value to push.</td></tr>
 </table>
 
-<h6><b>Return Value</b></h6>
-<p>The value.</p>
 <h4 id="r-string">String</h4>
 <p>
 <code>R_String</code> represents an Unicode string encoded as UTF-8-NO-BOM.
@@ -1446,7 +1638,7 @@ R_BooleanValue R_String_startsWith_pn(R_String const* self, void const* bytes, R
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-string-isequalto">isEqualTo</h5>
 <p><code>
-void R_String_isEqualTo(R_String const* self, R_String const* other)
+R_BooleanValue R_String_isEqualTo(R_String const* self, R_String const* other)
 </code></p>
 
 <p>Compare this string with another string for equality.</p>
@@ -1460,6 +1652,27 @@ void R_String_isEqualTo(R_String const* self, R_String const* other)
 <h6><b>Return Value</b></h6>
 <p>
 <code>R_BooleanValue_True</code> if this string is equal to the other string.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-isequalto_pn">isEqualTo_pn</h5>
+<p><code>
+R_BooleanValue R_String_isEqualTo_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is this string's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is this string's sequence of Bytes.
 <code>R_BooleanValue_False</code> otherwise.
 </p>
 
@@ -1501,8 +1714,10 @@ R_Natural8Value R_String_getAt(R_String const* self, R_SizeValue index)
 
 <h6><b>Remarks</b></h6>
 <p> The size of a string is the length of the Byte sequence it contains.</p>
+
   <footer style="border-top-style: solid; border-top-width: 1px; margin-top: 16px; padding-top: 16px;">
-    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 27 August 2024.</span>
+    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 9 September 2024.</span>
   </footer>
   </body>
 </html>
+

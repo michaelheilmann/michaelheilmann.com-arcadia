@@ -16,6 +16,8 @@
 // Last modified: 2024-08-31
 
 #include "R.h"
+
+#include <string.h>
 #include <stdlib.h>
 
 static void main1(int argc, char** argv) {
@@ -26,7 +28,7 @@ static void main1(int argc, char** argv) {
   R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
   R_FileHandle* fileHandle = R_FileHandle_create();
   for (int argi = 1; argi < argc - 1; ++argi) {
-    R_FileHandle_openForReading(fileHandle, argv[argi]);
+    R_FileHandle_openForReading(fileHandle, R_FilePath_parseNative(argv[argi], strlen(argv[argi])));
     char bytes[5012];
     R_SizeValue bytesToRead = 5012;
     R_SizeValue bytesRead = 0;
@@ -36,7 +38,7 @@ static void main1(int argc, char** argv) {
     } while (bytesRead > 0);
     R_FileHandle_close(fileHandle);
   }
-  R_FileHandle_openForWriting(fileHandle, argv[argc - 1]);
+  R_FileHandle_openForWriting(fileHandle, R_FilePath_parseNative(argv[argc - 1], strlen(argv[argc - 1])));
   R_SizeValue bytesWritten;
   R_FileHandle_write(fileHandle, byteBuffer->p, byteBuffer->sz, &bytesWritten);
   R_FileHandle_close(fileHandle);

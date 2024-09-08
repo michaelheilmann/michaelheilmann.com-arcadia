@@ -93,6 +93,15 @@ R_ByteBuffer_isEqualTo
     R_ByteBuffer const* other
   );
 
+// https://michaelheilmann.com/repository/R1/#r-bytebuffer-isequalto-pn
+R_BooleanValue
+R_ByteBuffer_isEqualTo_pn
+  (
+    R_ByteBuffer const* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
+  );
+
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-clear
 void
 R_ByteBuffer_clear
@@ -114,5 +123,17 @@ R_ByteBuffer_getAt
     R_ByteBuffer const* self,
     R_SizeValue index
   );
+
+static inline void
+R_ByteBuffer_swap
+  (
+    R_ByteBuffer* self,
+    R_ByteBuffer* other
+  )
+{
+  R_swap_p(&self->p, &other->p);
+  R_swap_s(&self->sz, &other->sz);
+  R_swap_s(&self->cp, &other->cp);
+}
 
 #endif // R_BYTEBUFFER_H_INCLUDED

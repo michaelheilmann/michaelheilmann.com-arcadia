@@ -21,47 +21,6 @@
 
 #include <stdlib.h>
 
-// replace '/' by '\'
-// replace '\\' by '\'
-void g_fs_normalize(StringBuffer* path) {
-  StringBuffer*temporary = StringBuffer_create();
-  char const* start = path->p;
-  char const* end = path->p + path->sz;
-  char const* p = start;
-  char const* q = start;
-  while (q != end) {
-    if (*q <= 0x80) {
-      // replace '/' by '\'.
-      // replace '\\' by '\'.
-      if ('\\' == *q || '/' == *q) {
-        if (p != q) {
-          StringBuffer_append_pn(temporary, p, q - p);
-          p = q;
-        }
-        char y = '\\';
-        StringBuffer_append_pn(temporary, &y, 1);
-        do {
-          q++;
-        } while (q != end && ('\\' == *q || '/' == *q));
-        p = q;
-      } else {
-        q++;
-      }
-    } else {
-      // only utf8 strings with unicode symbols encoded in one byte are currently supported.
-      R_setStatus(R_Status_ArgumentValueInvalid);
-      R_jump();
-    }
-  }
-  if (p != q) {
-    StringBuffer_append_pn(temporary, p, q - p);
-    p = q;
-  }
-  R_swap_p(&path->p, &temporary->p);
-  R_swap_sz(&path->sz, &temporary->sz);
-  R_swap_sz(&path->cp, &temporary->cp);
-}
-
 void test1() {
   StringBuffer* received = StringBuffer_create();
   StringBuffer* expected = StringBuffer_create();

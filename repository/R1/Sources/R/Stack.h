@@ -28,23 +28,27 @@ struct R_Stack {
   R_SizeValue capacity;
 };
 
+// https://michaelheilmann.com/repository/R1/#r-stack-clear
 void
 R_Stack_clear
   (
     R_Stack* self
   );
 
+// https://michaelheilmann.com/repository/R1/#r-stack-create
 R_Stack*
 R_Stack_create
   (
   );
 
+// https://michaelheilmann.com/repository/R1/#r-stack-getsize
 R_SizeValue
 R_Stack_getSize
   (
     R_Stack* self
   );
 
+// https://michaelheilmann.com/repository/R1/#r-stack-push
 void
 R_Stack_push
   (
@@ -52,17 +56,24 @@ R_Stack_push
     R_Value value
   );
 
+// https://michaelheilmann.com/repository/R1/#r-stack-ppop
 void
 R_Stack_pop
   (
     R_Stack* self
   );
 
+// https://michaelheilmann.com/repository/R1/#r-stack-peek
 R_Value
 R_Stack_peek
   (
     R_Stack* self
   );
+
+// https://michaelheilmann.com/repository/R1/#r-stack-isempty
+static inline R_BooleanValue R_Stack_isEmpty(R_Stack* self) {
+  return R_SizeValue_Literal(0) == R_Stack_getSize(self);
+}
 
 #define Define(Suffix, Prefix) \
   void \
@@ -96,6 +107,7 @@ Define(Natural8, natural8)
 Define(Natural16, natural16)
 Define(Natural32, natural32)
 Define(Natural64, natural64)
+Define(ObjectReference, objectReference)
 Define(Size, size)
 Define(Void, void)
 

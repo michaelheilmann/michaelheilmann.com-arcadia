@@ -13,22 +13,28 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+# Last modified: 2024-09-09
+
 cmake_minimum_required(VERSION 3.29)
 
-set(Arms1-Source-Dir "${CMAKE_CURRENT_SOURCE_DIR}/../../../arms1/sources" CACHE STRING "path to the ARMS1 source directory")
-get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-message(STATUS "fetching ${Arms1-Source-Dir}")
-FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
-FetchContent_MakeAvailable("arms1")
+if (NOT TARGET ${MyProjectName}.Arms)
+  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
+  get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
+                         REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+  message(STATUS "fetching ${Arms1-Source-Dir}")
+  FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
+  FetchContent_MakeAvailable(arms1)
+endif()
 
-set(R1-Source-Dir "${REPOSITORY_SOURCE_DIR}/r1/sources" CACHE STRING "path to the R1 source directory")
-get_filename_component(R1-Source-Dir "${R1-Source-Dir}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-FetchContent_Declare(r1 SOURCE_DIR ${R1-Source-Dir})
-FetchContent_MakeAvailable("r1") 
+if (NOT TARGET ${MyProjectName}.R)
+  set(R1-Source-Dir "${REPOSITORY_SOURCE_DIR}/R1/Sources" CACHE STRING "path to the R1 source directory")
+  get_filename_component(R1-Source-Dir "${R1-Source-Dir}"
+                         REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+  FetchContent_Declare(r1 SOURCE_DIR ${R1-Source-Dir})
+  FetchContent_MakeAvailable(r1)
+endif()
 
-set(MyTestName ${MyProjectName}.R1.Tests.CountLeadingZeroes) 
+set(MyTestName ${MyProjectName}.R.Tests.CountLeadingZeroes) 
 
 # Create test executable.
 add_executable(${MyTestName})

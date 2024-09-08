@@ -13,16 +13,21 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-08-29
+# Last modified: 2024-09-09
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyProjectName "Arcadia")
-
-set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../)
-include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
-
-project(${MyProjectName} LANGUAGES C)
+if (NOT MyProjectIsDefined)
+  if (NOT DEFINED MyProjectName)
+    set(MyProjectName "Arcadia")
+  endif()
+  project(${MyProjectName})
+  enable_testing()
+  include(FetchContent)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  set(MyProjectIsDefined)
+endif()
 
 # Create a library.
 add_library(${MyProjectName}.Arms)

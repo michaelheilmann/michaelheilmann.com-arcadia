@@ -73,8 +73,7 @@ R_Stack_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  if (Arms_reallocateUnmanaged(&self->elements, sizeof(R_Value) * newCapacity)) {
-    R_setStatus(R_Status_AllocationFailed);
+  if (!R_UnmanagedMemory_reallocate_nojump(&self->elements, sizeof(R_Value) * newCapacity)) {
     R_jump();
   }
   self->capacity = newCapacity;
@@ -106,7 +105,7 @@ R_Stack_finalize
   )
 {
   if (self->elements) {
-    Arms_deallocateUnmanaged(self->elements);
+    R_UnmanagedMemory_deallocate_nojump(self->elements);
     self->elements = NULL;
   }
 }
@@ -146,8 +145,7 @@ R_Stack_create
   self->capacity = 0;
   self->size = 0;
   self->capacity = g_minimumCapacity;
-  if (Arms_allocateUnmanaged(&self->elements, sizeof(R_Value) * self->capacity)) {
-    R_setStatus(R_Status_AllocationFailed);
+  if (!R_UnmanagedMemory_allocate_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
     R_jump();
   }
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
@@ -258,6 +256,7 @@ Define(Natural8, natural8)
 Define(Natural16, natural16)
 Define(Natural32, natural32)
 Define(Natural64, natural64)
+Define(ObjectReference, objectReference)
 Define(Size, size)
 Define(Void, void)
 

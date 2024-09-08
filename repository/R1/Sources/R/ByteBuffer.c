@@ -165,6 +165,25 @@ R_ByteBuffer_isEqualTo
   }
 }
 
+R_BooleanValue
+R_ByteBuffer_isEqualTo_pn
+  (
+    R_ByteBuffer const* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
+  )
+{
+  if (!self || !bytes) {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  if (self->sz == numberOfBytes) {
+    return !memcmp(self->p, bytes, numberOfBytes);
+  } else {
+    return R_BooleanValue_False;
+  }
+}
+
 void
 R_ByteBuffer_clear
   (

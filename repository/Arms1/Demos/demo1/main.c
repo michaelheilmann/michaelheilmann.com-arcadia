@@ -18,7 +18,7 @@
 // strlen
 #include <string.h>
 
-#include "arms1.h"
+#include "Arms.h"
 
 typedef struct Sender {
   char* name;

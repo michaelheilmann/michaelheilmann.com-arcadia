@@ -34,7 +34,7 @@ void R_FileHandle_close(R_FileHandle* self)
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-filehandle-openforreading">openForReading</h5>
 <p><code>
-void R_FileHandle_openForReading(R_FileHandle* self, char const *path)
+void R_FileHandle_openForReading(R_FileHandle* self, R_FilePath* path)
 </code></p>
 
 <p>Open a file for reading. If the file is open, it is closed before trying to re-open it.</p>
@@ -42,7 +42,7 @@ void R_FileHandle_openForReading(R_FileHandle* self, char const *path)
 <h6><b>Parameters</b></h6>
 <table>
   <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>char const* path  </td><td>A pointer to a C string denoting the path to the file to read from.</td></tr>
+  <tr><td>R_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -55,7 +55,7 @@ void R_FileHandle_openForReading(R_FileHandle* self, char const *path)
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-filehandle-openforwriting">openForWriting</h5>
 <p><code>
-void R_FileHandle_openForWriting(R_FileHandle* self, char const* path)
+void R_FileHandle_openForWriting(R_FileHandle* self, R_FilePath* path)
 </code></p>
 
 <p>Open a file for writing. If the file is open, it is closed before trying to re-open it.</p>
@@ -63,7 +63,7 @@ void R_FileHandle_openForWriting(R_FileHandle* self, char const* path)
 <h6><b>Parameters</b></h6>
 <table>
   <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>char const* path  </td><td>A pointer to C string denoting the path to the file to write to.</td></tr>
+  <tr><td>R_FilePath* path  </td><td>The file path of the file to write to.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>

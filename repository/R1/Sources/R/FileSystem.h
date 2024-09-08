@@ -23,6 +23,8 @@
 #include "R/ByteBuffer.h"
 #include "R/Natural8.h"
 #include "R/Size.h"
+typedef struct R_FileHandle R_FileHandle;
+typedef struct R_FilePath R_FilePath;
 
 #include <stdio.h>
 
@@ -45,7 +47,7 @@ R_ByteBuffer*
 R_FileSystem_getFileContents
   (
     R_FileSystem* self,
-    char const* path
+    R_FilePath* path
   );
 
 // https://michaelheilmann.com/repository/R1/#r-filesystem-setfilecontents
@@ -53,7 +55,7 @@ void
 R_FileSystem_setFileContents
   (
     R_FileSystem* self,
-    char const* path,
+    R_FilePath* path,
     R_ByteBuffer * contents
   );
 
@@ -62,7 +64,7 @@ void
 R_FileSystem_createDirectory
   (
     R_FileSystem* self,
-    char const* path
+    R_FilePath* path
   );
 
 #endif // R_FILESYSTEM_H_INCLUDED

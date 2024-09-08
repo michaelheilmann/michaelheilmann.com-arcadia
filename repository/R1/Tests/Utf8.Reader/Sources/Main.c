@@ -34,6 +34,8 @@ static void utf8ReaderTest1() {
     'y',
     'z',
     0xCF, 0x80, // "GREEK SMALL LETTER PI"/U+03C0/https://www.fileformat.info/info/unicode/char/03c0/index.htm
+    0xE2, 0x80, 0x93, // "EN DASH"/U+2013/https://www.fileformat.info/info/unicode/char/2013/index.htm
+    
   };
   size_t numberOfSourceBytes = sizeof(sourceBytes) / sizeof(uint8_t);
   for (uint8_t i = 0, n = numberOfSourceBytes; i < n; ++i) {
@@ -45,7 +47,8 @@ static void utf8ReaderTest1() {
     'b',
     'y',
     'z',
-    (0xcf << 8 | 0x80), // "GREEK SMALL LETTER PI"/U+03C0/https://www.fileformat.info/info/unicode/char/03c0/index.htm
+    0x3c0, // "GREEK SMALL LETTER PI"/U+03C0/https://www.fileformat.info/info/unicode/char/03c0/index.htm
+    0x2013, // "EN DASH"/U+2013/https://www.fileformat.info/info/unicode/char/2013/index.htm
   };
   size_t numberOfExpectedCodePoints = sizeof(expectedCodePoints) / sizeof(uint32_t);
 

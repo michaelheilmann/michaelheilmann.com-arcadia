@@ -88,9 +88,10 @@ R_BooleanValue R_FileHandle_isOpenedForWriting(R_FileHandle const* self) {
   return Flags_OpenWrite == (Flags_OpenWrite & self->flags);
 }
 
-void R_FileHandle_openForReading(R_FileHandle* self, char const* path) {
+void R_FileHandle_openForReading(R_FileHandle* self, R_FilePath* path) {
   R_FileHandle_close(self);
-  self->fd = fopen(path, "rb");
+  R_String* nativePathString = R_FilePath_toNative(path);
+  self->fd = fopen(nativePathString->p, "rb");
   if (!self->fd) {
     R_setStatus(R_Status_FileSystemOperationFailed);
     R_jump();
@@ -98,9 +99,10 @@ void R_FileHandle_openForReading(R_FileHandle* self, char const* path) {
   self->flags |= Flags_OpenRead;
 }
 
-void R_FileHandle_openForWriting(R_FileHandle* self, char const* path) {
+void R_FileHandle_openForWriting(R_FileHandle* self, R_FilePath* path) {
   R_FileHandle_close(self);
-  self->fd = fopen(path, "wb");
+  R_String* nativePathString = R_FilePath_toNative(path);
+  self->fd = fopen(nativePathString->p, "wb");
   if (!self->fd) {
     R_setStatus(R_Status_FileSystemOperationFailed);
     R_jump();

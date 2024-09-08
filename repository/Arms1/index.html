@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html class='my-theme-1' lang='en'>
+<head>
+
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <link rel='icon' type='image/x-icon' href='https://michaelheilmann.com/assets/favicon/512x512.svg'>
+
+  <!-- Crap specific to Safari. SVG must be single color with transparent background. -->
+  <link rel='mask-icon' href='https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg' color = '#000000'>
+
+  <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
+  <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
+
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css'>
+    <link rel="canonical" href="https://michaelheilmann.com/repository/Arms1/" />
     <title>Michael Heilmann's Automatic Resource Management System Mark 1</title>
-    <link rel="canonical" href="https://michaelheilmann.com/repository/arms1/" />
-    <link rel="icon" type="image/x-icon" href="https://michaelheilmann.com/assets/favicon/512x512.svg">
-    <link rel="mask-icon" href="https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg" color="#000000"> <!-- Safari crap. Single color with transparent background. -->
-    <link rel="apple-touch-icon" href="https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png" > <!-- iOS crap. 180 * 180px. color attribute is obsolete. -->
     <style>
     body {
       margin: 16px;
@@ -16,6 +24,7 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
+
   <h1>Michael Heilmann's Automatic Resource Management System Mark 1</h1>
   <p>
   This is the documentation for Michael  Heilmann's Automatic Resource Management System Mark 1,
@@ -300,8 +309,10 @@ The memory block pointed to by <code>p</code> was deallocated.
 The environment is not observably changed.
 This function fails only if <code>p</code> is a null pointer. In that case, it returns <code>Arms_Status_ArgumentValueInvalid</code>.
 </p>
+
   <footer style="border-top-style: solid; border-top-width: 1px; margin-top: 16px; padding-top: 16px;">
     <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 25 August 2024.</span>
   </footer>
   </body>
 </html>
+

@@ -23,14 +23,14 @@ R_FileSystem* R_FileSystem_create()
 
 <h5 id="r-filesystem-getfilecontents">getFileContents</h5>
 <p><code>
-R_ByteBuffer* R_ByteBuffer_getFileContents(char const *path)
+R_ByteBuffer* R_ByteBuffer_getFileContents(R_FilePath *path)
 </code></p>
 
 <p>Get the contents of a file.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>char const* path  </td><td>A pointer to a C string denoting the path to the file.</td></tr>
+  <tr><td><a href="#">R_FilePath</a>* path</td><td>The file path of the file.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -40,7 +40,7 @@ A pointer to a <code>R_ByteBuffer</code> object with the file contents.
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
+  <tr><td><a href="#">R_Status_ArgumentValueInvalid</a></td><td><code>path</code> is a null pointer.</td></tr>
   <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
 </table>
 
@@ -48,14 +48,14 @@ A pointer to a <code>R_ByteBuffer</code> object with the file contents.
 
 <h5 id="r-filesystem-setfilecontents">setFileContents</h5>
 <p><code>
-void R_FileSystem_setFileContents(char const* path, R_ByteBuffer* contents)
+void R_FileSystem_setFileContents(R_FilePath* path, R_ByteBuffer* contents)
 </code></p>
 
 <p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>char const* path  </td><td>A pointer to a C string denoting the path to the file.</td></tr>
+  <tr><td>R_FilePath* path</td><td>The file path of the file.</td></tr>
   <tr><td>R_ByteBuffer const* byteBuffer</td><td>A poiner to the Byte buffer with the file contents.</td></tr>
 </table>
 
