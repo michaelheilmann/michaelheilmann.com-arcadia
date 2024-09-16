@@ -22,14 +22,16 @@
 
 #include "R/ByteBuffer.h"
 
-#include "R/ForeignFunctionReference.h"
-
 #include "R/clamp.h"
 #include "R/countLeadingZeroes.h"
+
+#include "R/ForeignFunctionReference.h"
 
 #include "R/FileHandle.h"
 #include "R/FilePath.h"
 #include "R/FileSystem.h"
+
+#include "R/getTickCount.h"
 
 #include "R/Integer16.h"
 #include "R/Integer32.h"
@@ -48,6 +50,8 @@
 #include "R/Natural64.h"
 #include "R/Natural8.h"
 
+#include "R/nextPowerOfTwoGt.h"
+
 #include "r/Object.h"
 
 #include "R/Stack.h"
@@ -61,6 +65,7 @@
 #include "R/String.h"
 
 #include "R/Utf8.h"
+#include "R/Utf8Reader.h"
 
 #include "R/Value.h"
 

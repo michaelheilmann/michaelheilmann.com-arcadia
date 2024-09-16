@@ -1,5 +1,5 @@
 <h4>R_maximum</h4>
-<p>R provides functions returning the maximum of two values.</p>
+<p>Return the maximum of two values.</p>
 <p><code>
 &lt;Type&gt; R_maximum_&lt;Suffix&gt;(&lt;Type&gt; x, &lt;Type&gt;)
 </code></p>
@@ -17,3 +17,12 @@
 <tr><td><code>n64</code>     </td><td><code>R_Natural64Value</code></td></tr>
 <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
 </table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The first value.</td></tr>
+  <tr><td><my-mv>Type</my-mv> y</td><td>The second value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the maximum of <code>x</code> and <code>y</code>.</p>

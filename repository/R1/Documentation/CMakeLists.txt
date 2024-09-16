@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-09
+# Last modified: 2024-09-16
 
 cmake_minimum_required(VERSION 3.29)
 
@@ -29,22 +29,8 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-if (NOT TARGET ${MyProjectName}.Arms)
-  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
-  get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
-                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-  message(STATUS "fetching ${Arms1-Source-Dir}")
-  FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
-  FetchContent_MakeAvailable(arms1)
-endif()
-
-if (NOT TARGET ${MyProjectName}.R)
-  set(R1-Source-Dir "${REPOSITORY_SOURCE_DIR}/R1/Sources" CACHE STRING "path to the R1 source directory")
-  get_filename_component(R1-Source-Dir "${R1-Source-Dir}"
-                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-  FetchContent_Declare(r1 SOURCE_DIR ${R1-Source-Dir})
-  FetchContent_MakeAvailable(r1)
-endif()
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
+FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
 
 if (NOT TARGET Tools.TemplateEngineLibrary)
   set(Tools.TemplateEngineLibrary.SourceDir "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library" CACHE STRING "path to the Tools.TemplateEngineLibrary source directory")

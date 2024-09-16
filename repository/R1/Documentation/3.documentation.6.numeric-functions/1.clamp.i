@@ -1,5 +1,5 @@
 <h4>R_clamp</h4>
-<p>R provides functions clamping values to a value range.</p>
+<p>Clamp a value to a range.</p>
 <p><code>
 <my-mv>Type</my-mv> R_clamp_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value, <my-mv>Type</my-mv> lower, <my-mv>Type</my-mv> upper)
 </code></p>
@@ -18,5 +18,20 @@
 <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
 </table>
 
-<p>This function returns the value <code>value</code> clamped to the range <code>[lower, upper]</code>.
-If <code>lower &gt; upper</code> then this function sets the status variable to <code>R_Status_ArgumentValueInvalid</code> and jumps.</p>
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> value</td><td>The value to clamp.</td></tr>
+  <tr><td><my-mv>Type</my-mv> lower</td><td>The lower bound (inclusive).</td></tr>
+  <tr><td><my-mv>Type</my-mv> upper</td><td>The upper bound (inclusive).</td></tr>
+</table>
+
+<p>This function returns the value <code>value</code> clamped to the range <code>[lower, upper]</code>.</p>
+
+<h5><b>Errors</b></h5>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>lower &gt; upper</code></td></tr>
+  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>The value <code>value</code> clamped to the range <code>[lower, upper]</code>.</p>

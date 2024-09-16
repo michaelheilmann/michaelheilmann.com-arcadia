@@ -280,8 +280,10 @@ Arms_allocate
 Arms_Status
 Arms_run
   (
+    Arms_RunStatistics* statistics
   )
 {
+  size_t destroyed = 0;
   // Premark phase:
   // Add all locked objects to the gray list.
   // Also remove locks with a lock count of 0.
@@ -324,6 +326,7 @@ Arms_run
       if (deadObject->type->finalize) {
         deadObject->type->finalize(deadObject + 1);
       }
+      destroyed++;
       free(deadObject);
     } else {
       Arms_Tag_setWhite(currentObject);
@@ -331,6 +334,7 @@ Arms_run
       currentObject = currentObject->universeNext;
     }
   }
+  statistics->destroyed = destroyed;
   return Arms_Status_Success;
 }
 

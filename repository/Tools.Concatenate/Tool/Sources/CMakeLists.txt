@@ -29,31 +29,19 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-if (NOT TARGET ${MyProjectName}.Arms)
-  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
-  get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
-                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-  message(STATUS "fetching ${Arms1-Source-Dir}")
-  FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
-  FetchContent_MakeAvailable(arms1)
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
+FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
+
+if (NOT TARGET Tools.Concatenate)
+    add_executable(Tools.Concatenate)
+    BeginProduct(Tools.Concatenate)
+
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/Concatenate/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h @ONLY)
+
+    list(APPEND Tools.Concatenate.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/Concatenate/Main.c)
+    list(APPEND Tools.Concatenate.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h)
+
+    target_link_libraries(Tools.Concatenate Arcadia.R Arcadia.Arms)
+
+    EndProduct(Tools.Concatenate executable)
 endif()
-
-if (NOT TARGET ${MyProjectName}.R)
-  set(R1-Source-Dir "${REPOSITORY_SOURCE_DIR}/R1/Sources" CACHE STRING "path to the R1 source directory")
-  get_filename_component(R1-Source-Dir "${R1-Source-Dir}"
-                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-  FetchContent_Declare(r1 SOURCE_DIR ${R1-Source-Dir})
-  FetchContent_MakeAvailable(r1)
-endif()
-
-add_executable(Tools.Concatenate)
-BeginProduct(Tools.Concatenate)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/Concatenate/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h @ONLY)
-
-list(APPEND Tools.Concatenate.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/Concatenate/Main.c)
-list(APPEND Tools.Concatenate.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h)
-
-target_link_libraries(Tools.Concatenate Arcadia.R Arcadia.Arms)
-
-EndProduct(Tools.Concatenate executable)

@@ -36,11 +36,11 @@ static void R_FileHandle_finalize(R_FileHandle* self) {
 }
 
 void _R_FileHandle_registerType() {
-  R_registerObjectType("R.FileHandle", sizeof("R.FileHandle") - 1, sizeof(R_FileHandle), NULL, &R_FileHandle_finalize);
+  R_registerObjectType("R.FileHandle", sizeof("R.FileHandle") - 1, sizeof(R_FileHandle), NULL, NULL, &R_FileHandle_finalize);
 }
 
 R_FileHandle* R_FileHandle_create() {
-  R_FileHandle* self = R_allocateObject("R.FileHandle", sizeof("R.FileHandle") - 1, sizeof(R_FileHandle));
+  R_FileHandle* self = R_allocateObject(R_getObjectType("R.FileHandle", sizeof("R.FileHandle") - 1));
   self->fd = NULL;
   self->flags = 0;
   return self;

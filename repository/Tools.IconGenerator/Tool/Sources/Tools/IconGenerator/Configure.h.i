@@ -15,33 +15,7 @@
 
 // Last modified: 2024-09-01
 
-#include "R.h"
+#if !defined(TOOLS_TEMPLATEENGINE_CONFIGURE_H_INCLUDED)
+#define TOOLS_TEMPLATEENGINE_CONFIGURE_H_INCLUDED
 
-#include "stringbuffer.h"
-
-#include <stdlib.h>
-
-void test1() {
-  StringBuffer* received = StringBuffer_create();
-  StringBuffer* expected = StringBuffer_create();
-
-#define TEST(RECEIVED, EXPECTED) \
-  { \
-    StringBuffer_clear(received); \
-    StringBuffer_clear(expected); \
-    StringBuffer_append_pn(received, RECEIVED, sizeof(RECEIVED) - 1); \
-    StringBuffer_append_pn(expected, EXPECTED, sizeof(EXPECTED) - 1); \
-    g_fs_normalize(received); \
-    if (!StringBuffer_areEqual(received, expected)) { \
-      R_setStatus(R_Status_ArgumentValueInvalid); /*@todo Add and use R_Status_TestFailed);*/\
-      R_jump(); \
-    } \
-  }
-
-  TEST("", "");
-  TEST("\\", "\\");
-  TEST("/", "\\");
-  TEST("a\\b\\\\c/\\d", "a\\b\\c\\d");
-
-#undef TEST
-}
+#endif // TOOLS_TEMPLATEENGINE_CONFIGURE_H_INCLUDED

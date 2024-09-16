@@ -38,6 +38,7 @@
   
   
   <tr><td><code>Initialized</code>              </td><td>Something was initialized (but should not have been initialized).</td></tr>
+  <tr><td><code>NotExists</code>                </td><td>Something does not exist.</td></tr>
   <tr><td><code>NumberOfArgumentsInvalid</code> </td><td>The number of arguments is invalid.</td></tr>
   <tr><td><code>OperationInvalid</code>         </td><td>An operation is invalid.</td></tr>
   <tr><td><code>TestFailed</code>               </td><td>A test failed. This is used by the built-in tests that ensure correctness.</td></tr>

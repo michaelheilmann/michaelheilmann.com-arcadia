@@ -96,142 +96,6 @@ R_isUtf8
 }
 
 static void
-R_Utf8Reader_visit
-  (
-    R_Utf8Reader* self
-  )
-{
-  if (self->source) {
-    Arms_visit(self->source);
-  }
-}
-
-void
-_R_Utf8Reader_registerType
-  (
-  )
-{
-  R_registerObjectType("R.Utf8Reader", sizeof("R.Utf8Reader") - 1, sizeof(R_Utf8Reader), &R_Utf8Reader_visit, NULL);
-}
-
-R_Utf8Reader*
-R_Utf8Reader_create
-  (
-    R_ByteBuffer* source
-  )
-{
-  R_Utf8Reader* self = R_allocateObject("R.Utf8Reader", sizeof("R.Utf8Reader") - 1, sizeof(R_Utf8Reader));
-  self->source = source;
-  self->index = 0;
-  self->codePoint = CodePoint_Start;
-  return self;
-}
-
-void
-R_Utf8Reader_next
-  (
-    R_Utf8Reader* self
-  )
-{
-  if (self->codePoint == CodePoint_End) {
-    R_setStatus(R_Status_OperationInvalid);
-    R_jump();
-  }
-  R_SizeValue n = R_ByteBuffer_getSize(self->source);
-  if (self->index == n) {
-    self->codePoint = CodePoint_End;
-    return;
-  }
-  R_Natural32Value codePoint;
-  R_Natural8Value x = R_ByteBuffer_getAt(self->source, self->index);
-  if (x <= 0b01111111) {
-    codePoint = x;
-    self->index += 1;
-    self->codePoint = codePoint;
-  } else if (x <= 0b11011111) {
-    codePoint = x & 0b00011111;
-    if (n - self->index < 2) {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
-    }
-    for (size_t i = 1; i < 2; ++i) {
-      x = R_ByteBuffer_getAt(self->source, self->index + i);
-      if (0x80 != x & 0xc0) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
-      }
-      codePoint <<= 6;
-      codePoint |= x;
-    }
-    self->index += 2;
-    self->codePoint = codePoint;
-  } else if (x <= 0b11101111) {
-    codePoint = x & 0b00001111;
-    if (n - self->index < 3) {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
-    }
-    for (size_t i = 1; i < 3; ++i) {
-      x = R_ByteBuffer_getAt(self->source, self->index + i);
-      if (0x80 != x & 0xc0) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
-      }
-      codePoint <<= 6;
-      codePoint |= x & 0b00111111;
-    }
-    self->index += 3;
-    self->codePoint = codePoint;
-  } else if (x <= 0b11110111) {
-    codePoint = x & 0b00000111;
-    if (n - self->index < 4) {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
-     }
-    for (size_t i = 1; i < 4; ++i) {
-      x = R_ByteBuffer_getAt(self->source, self->index + i);
-      if (0x80 != x & 0xc0) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
-      }
-      codePoint <<= 6;
-      codePoint |= x;
-    }
-    self->index += 4;
-    self->codePoint = codePoint;
-  } else {
-    R_setStatus(R_Status_EncodingInvalid);
-    R_jump();
-  }
-}
-
-R_Natural32Value
-R_Utf8Reader_getCodePoint
-  (
-    R_Utf8Reader* self
-  )
-{
-  if (self->codePoint == CodePoint_Start || self->codePoint == CodePoint_End) {
-    R_setStatus(R_Status_OperationInvalid);
-    R_jump();
-  }
-  return self->codePoint;
-}
-
-R_BooleanValue 
-R_Utf8Reader_hasCodePoint
-  (
-    R_Utf8Reader* self
-  )
-{
-  if (self->codePoint == CodePoint_Start) {
-    R_Utf8Reader_next(self);
-  }
-  return CodePoint_End != self->codePoint;
-}
-
-
-static void
 R_Utf8Writer_visit
   (
     R_Utf8Writer* self
@@ -247,7 +111,7 @@ _R_Utf8Writer_registerType
   (
   )
 {
-  R_registerObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1, sizeof(R_Utf8Writer), &R_Utf8Writer_visit, NULL);
+  R_registerObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1, sizeof(R_Utf8Writer), NULL, &R_Utf8Writer_visit, NULL);
 }
 
 R_Utf8Writer*
@@ -256,7 +120,7 @@ R_Utf8Writer_create
     R_ByteBuffer* target
   )
 {
-  R_Utf8Writer* self = R_allocateObject("R.Utf8Writer", sizeof("R.Utf8Writer") - 1, sizeof(R_Utf8Writer));
+  R_Utf8Writer* self = R_allocateObject(R_getObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1));
   self->target = target;
   return self;
 }

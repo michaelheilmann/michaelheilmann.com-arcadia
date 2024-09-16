@@ -29,5 +29,7 @@ R_Value_visit
     if (self->objectReferenceValue) {
       Arms_visit(self->objectReferenceValue);
     }
+  } else if (self->tag == R_ValueTag_Atom) {
+    R_Atom_visit(self->atomValue);
   }
 }

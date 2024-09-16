@@ -32,7 +32,7 @@ static void R_ByteBuffer_finalize(R_ByteBuffer* self) {
 }
 
 void _R_ByteBuffer_registerType() {
-  R_registerObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1, sizeof(R_ByteBuffer), NULL, &R_ByteBuffer_finalize);
+  R_registerObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1, sizeof(R_ByteBuffer), NULL, NULL, &R_ByteBuffer_finalize);
 }
 
 R_ByteBuffer*
@@ -40,7 +40,7 @@ R_ByteBuffer_create
   (
   )
 {
-  R_ByteBuffer* self = R_allocateObject("R.ByteBuffer", sizeof("R.ByteBuffer") - 1, sizeof(R_ByteBuffer));
+  R_ByteBuffer* self = R_allocateObject(R_getObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1));
   self->p = NULL;
   self->sz = 0;
   self->cp = 0;

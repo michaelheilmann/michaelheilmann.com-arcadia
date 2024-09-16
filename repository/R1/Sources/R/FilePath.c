@@ -226,7 +226,7 @@ _R_FilePath_registerType
   (
   )
 {
-  R_registerObjectType("R.FilePath", sizeof("R.FilePath") - 1, sizeof(R_FilePath), &R_FilePath_visit, &R_FilePath_finalize);
+  R_registerObjectType("R.FilePath", sizeof("R.FilePath") - 1, sizeof(R_FilePath), NULL, &R_FilePath_visit, &R_FilePath_finalize);
 }
 
 R_FilePath*
@@ -234,7 +234,7 @@ R_FilePath_create
   (
   )
 {
-  R_FilePath* self = R_allocateObject("R.FilePath", sizeof("R.FilePath") - 1, sizeof(R_FilePath));
+  R_FilePath* self = R_allocateObject(R_getObjectType("R.FilePath", sizeof("R.FilePath") - 1));
   self->fileNames = NULL;
   self->relative = R_BooleanValue_False;
   self->root = NULL;
@@ -249,7 +249,7 @@ R_FilePath_parseWindowsFilePath
     R_SizeValue numberOfBytes
   )
 {
-  R_FilePath* self = R_allocateObject("R.FilePath", sizeof("R.FilePath") - 1, sizeof(R_FilePath));
+  R_FilePath* self = R_allocateObject(R_getObjectType("R.FilePath", sizeof("R.FilePath") - 1));
   self->fileNames = NULL;
   self->relative = R_BooleanValue_False;
   self->root = NULL;
@@ -268,7 +268,7 @@ R_FilePath_parseUnixFilePath
     R_SizeValue numberOfBytes
   )
 {
-  R_FilePath* self = R_allocateObject("R.FilePath", sizeof("R.FilePath") - 1, sizeof(R_FilePath));
+  R_FilePath* self = R_allocateObject(R_getObjectType("R.FilePath", sizeof("R.FilePath") - 1));
   self->fileNames = NULL;
   self->relative = R_BooleanValue_False;
   self->root = NULL;

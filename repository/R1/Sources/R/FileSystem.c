@@ -19,22 +19,38 @@
 
 #include "R.h" 
 
-#define Flags_OpenRead (1)
+static void
+R_FileSystem_visit
+  (
+    R_FileSystem* self
+  );
 
-#define Flags_OpenWrite (2)
+static void
+R_FileSystem_finalize
+  (
+    R_FileSystem* self
+  );
 
-static void R_FileSystem_visit(R_FileSystem* self);
-
-static void R_FileSystem_finalize(R_FileSystem* self);
-
-static void R_FileSystem_visit(R_FileSystem* self)
+static void
+R_FileSystem_visit
+  (
+    R_FileSystem* self
+  )
 {/*Intentionally empty.*/}
 
-static void R_FileSystem_finalize(R_FileSystem* self)
+static void
+R_FileSystem_finalize
+  (
+    R_FileSystem* self
+  )
 {/*Intentionally empty.*/}
 
-void _R_FileSystem_registerType() {
-  R_registerObjectType("R.FileSystem", sizeof("R.FileSystem") - 1, sizeof(R_FileSystem), &R_FileSystem_visit, &R_FileSystem_finalize);
+void
+_R_FileSystem_registerType
+  (
+  )
+{
+  R_registerObjectType("R.FileSystem", sizeof("R.FileSystem") - 1, sizeof(R_FileSystem), NULL, &R_FileSystem_visit, &R_FileSystem_finalize);
 }
 
 R_FileSystem*
@@ -42,7 +58,7 @@ R_FileSystem_create
   (
   )
 {
-  R_FileSystem* self = R_allocateObject("R.FileSystem", sizeof("R.FileSystem") - 1, sizeof(R_FileSystem));
+  R_FileSystem* self = R_allocateObject(R_getObjectType("R.FileSystem", sizeof("R.FileSystem") - 1));
   self->dummy = 0;
   return self;
 }

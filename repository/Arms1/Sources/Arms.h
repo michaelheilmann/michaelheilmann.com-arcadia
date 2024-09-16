@@ -64,9 +64,15 @@ Arms_allocate
     size_t size
   );
 
+typedef struct Arms_RunStatistics {
+  /// The number of objects destroyed in this run.
+  size_t destroyed;
+} Arms_RunStatistics;
+
 Arms_Status
 Arms_run
   (
+    Arms_RunStatistics* statistics
   );
 
 void

@@ -470,6 +470,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
   
   
   <tr><td><code>Initialized</code>              </td><td>Something was initialized (but should not have been initialized).</td></tr>
+  <tr><td><code>NotExists</code>                </td><td>Something does not exist.</td></tr>
   <tr><td><code>NumberOfArgumentsInvalid</code> </td><td>The number of arguments is invalid.</td></tr>
   <tr><td><code>OperationInvalid</code>         </td><td>An operation is invalid.</td></tr>
   <tr><td><code>TestFailed</code>               </td><td>A test failed. This is used by the built-in tests that ensure correctness.</td></tr>
@@ -574,7 +575,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
 <h3>Numeric functions</h3>
 
 <h4>R_clamp</h4>
-<p>R provides functions clamping values to a value range.</p>
+<p>Clamp a value to a range.</p>
 <p><code>
 <my-mv>Type</my-mv> R_clamp_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value, <my-mv>Type</my-mv> lower, <my-mv>Type</my-mv> upper)
 </code></p>
@@ -593,11 +594,26 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
 <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
 </table>
 
-<p>This function returns the value <code>value</code> clamped to the range <code>[lower, upper]</code>.
-If <code>lower &gt; upper</code> then this function sets the status variable to <code>R_Status_ArgumentValueInvalid</code> and jumps.</p>
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> value</td><td>The value to clamp.</td></tr>
+  <tr><td><my-mv>Type</my-mv> lower</td><td>The lower bound (inclusive).</td></tr>
+  <tr><td><my-mv>Type</my-mv> upper</td><td>The upper bound (inclusive).</td></tr>
+</table>
+
+<p>This function returns the value <code>value</code> clamped to the range <code>[lower, upper]</code>.</p>
+
+<h5><b>Errors</b></h5>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>lower &gt; upper</code></td></tr>
+  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>The value <code>value</code> clamped to the range <code>[lower, upper]</code>.</p>
 
 <h4>R_countLeadingZeroes</h4>
-<p>R provides functions counting the leading zeroes of the binary representations of integer type values, natural type values, and size type values.</p>
+<p>Return the number of leadin gzeroes of the binary representation of a value.</p>
 <p><code>
 R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value)
 </code></p>
@@ -618,8 +634,11 @@ R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value
 
 <p>This function returns the number of leading zeroes of the binary representation of <code>value</code>.</p>
 
+<h5>Return value</h5>
+<p>The number of leading zeroes.</p>
+
 <h4>R_maximum</h4>
-<p>R provides functions returning the maximum of two values.</p>
+<p>Return the maximum of two values.</p>
 <p><code>
 &lt;Type&gt; R_maximum_&lt;Suffix&gt;(&lt;Type&gt; x, &lt;Type&gt;)
 </code></p>
@@ -638,8 +657,17 @@ R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value
 <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
 </table>
 
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The first value.</td></tr>
+  <tr><td><my-mv>Type</my-mv> y</td><td>The second value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the maximum of <code>x</code> and <code>y</code>.</p>
+
 <h4>R_minimum</h4>
-<p>R provides functions returning the minimum of two values.</p>
+<p>Return the minimum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv> R_minimum_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x, <my-mv>Type</my-mv> y)
 </code></p>
@@ -657,6 +685,24 @@ R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value
 <tr><td><code>n64</code>     </td><td><code>R_Natural64Value</code></td></tr>
 <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
 </table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The first value.</td></tr>
+  <tr><td><my-mv>Type</my-mv> y</td><td>The second value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the minimum of <code>x</code> and <code>y</code>.</p>
+
+<h4>R_getTickCount</h4>
+<p>Get the time, in milliseconds, since the start of the process.</p>
+<p><code>
+R_Natural64Value R_getTickCount()
+</code></p>
+
+<h5>Return value</h5>
+<p>The time, in milliseconds, since the start of the process.</p>
 
 <h3>Objects</h3>
 

@@ -18,6 +18,8 @@
 #if !defined(R_VALUE_H_INCLUDED)
 #define R_VALUE_H_INCLUDED
 
+#include "R/Atoms.h"
+
 #include "R/Boolean.h"
 
 #include "R/ForeignFunctionReference.h"
@@ -38,23 +40,25 @@
 
 #include "R/Void.h"
 
-#define R_ValueTag_Boolean (1)
+#define R_ValueTag_Atom (1)
 
-#define R_ValueTag_ForeignFunctionReference (2)
+#define R_ValueTag_Boolean (2)
 
-#define R_ValueTag_Integer16 (3)
-#define R_ValueTag_Integer32 (4)
-#define R_ValueTag_Integer64 (5)
-#define R_ValueTag_Integer8 (6)
+#define R_ValueTag_ForeignFunctionReference (3)
 
-#define R_ValueTag_Natural16 (7)
-#define R_ValueTag_Natural32 (8)
-#define R_ValueTag_Natural64 (9)
-#define R_ValueTag_Natural8 (10)
+#define R_ValueTag_Integer16 (4)
+#define R_ValueTag_Integer32 (5)
+#define R_ValueTag_Integer64 (6)
+#define R_ValueTag_Integer8 (7)
 
-#define R_ValueTag_ObjectReference (11)
+#define R_ValueTag_Natural16 (8)
+#define R_ValueTag_Natural32 (9)
+#define R_ValueTag_Natural64 (10)
+#define R_ValueTag_Natural8 (11)
 
-#define R_ValueTag_Size (12)
+#define R_ValueTag_ObjectReference (12)
+
+#define R_ValueTag_Size (13)
 
 // The tag for type "Void" must be 0.
 #define R_ValueTag_Void (0)
@@ -65,6 +69,8 @@ typedef struct R_Value{
 
   #define Define(Suffix,  Prefix) \
     R_##Suffix##Value Prefix##Value;
+
+    Define(Atom, atom)
 
     Define(Boolean, boolean)
 
@@ -122,6 +128,8 @@ R_Value_getTag
     value->tag = R_ValueTag_##Suffix; \
     value->Prefix##Value = Prefix##Value; \
   }
+
+Define(Atom, atom)
 
 Define(Boolean, boolean)
 

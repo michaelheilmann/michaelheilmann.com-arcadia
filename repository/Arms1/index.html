@@ -134,7 +134,8 @@
   &nbsp;Arms_allocate(&file, "File", strlen("File"), sizeof(struct File));<br>
   &nbsp;file->fn = NULL;<br>
   &nbsp;Arms_lock(file);<br>
-  &nbsp;Arms_run();<br>
+  &nbsp;Arms_RunStatistics statistics = { .destroyed = 0 };<br>
+  &nbsp;Arms_run(&statistics);<br>
   &nbsp;Arms_shutdown();<br>
   &nbsp;return EXIT_SUCCESS;<br>
   }
@@ -169,7 +170,8 @@
   &nbsp;struct File* file;<br>
   &nbsp;Arms_allocate(&file, "File", strlen("File"), sizeof(struct File));<br>
   &nbsp;file->fd = fopen(...);<br>
-  &nbsp;Arms_run();<br>
+  &nbsp;Arms_RunStatistics statistics = { .destroyed = 0 };<br>
+  &nbsp;Arms_run(&statistics);<br>
   &nbsp;Arms_shutdown();<br>
   &nbsp;return EXIT_SUCCESS;<br>
   }

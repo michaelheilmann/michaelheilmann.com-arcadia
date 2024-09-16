@@ -30,13 +30,15 @@ if (NOT MyProjectIsDefined)
 endif()
 
 # Create a library.
-add_library(${MyProjectName}.Arms)
-BeginProduct(${MyProjectName}.Arms)
+if (NOT TARGET ${MyProjectName}.Arms)
+    add_library(${MyProjectName}.Arms)
+    BeginProduct(${MyProjectName}.Arms)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Arms/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Arms/Configure.h @ONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Arms/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Arms/Configure.h @ONLY)
 
-list(APPEND ${MyProjectName}.Arms.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Arms.c)
-list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Arms.h)
-list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Arms/Configure.h)
+    list(APPEND ${MyProjectName}.Arms.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Arms.c)
+    list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Arms.h)
+    list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Arms/Configure.h)
 
-EndProduct(${MyProjectName}.Arms library)
+    EndProduct(${MyProjectName}.Arms library)
+endif()

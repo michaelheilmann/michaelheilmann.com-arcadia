@@ -36,6 +36,8 @@
 #define R_Status_TypeExists (11)
 #define R_Status_TypeNotExists (12)
 
+#define R_Status_NotExists (13)
+
 typedef uint32_t R_Status;
 
 R_Status

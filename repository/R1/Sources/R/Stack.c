@@ -16,6 +16,7 @@
 #include "Stack.h"
 
 #include "R.h"
+#include "R/ArmsIntegration.h"
 
 static R_BooleanValue g_initialized = R_BooleanValue_False;
 
@@ -73,7 +74,7 @@ R_Stack_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  if (!R_UnmanagedMemory_reallocate_nojump(&self->elements, sizeof(R_Value) * newCapacity)) {
+  if (!R_Arms_reallocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * newCapacity)) {
     R_jump();
   }
   self->capacity = newCapacity;
@@ -105,7 +106,7 @@ R_Stack_finalize
   )
 {
   if (self->elements) {
-    R_UnmanagedMemory_deallocate_nojump(self->elements);
+    R_Arms_deallocateUnmanaged_nojump(self->elements);
     self->elements = NULL;
   }
 }
@@ -124,7 +125,7 @@ R_Stack_visit
 }
 
 void _R_Stack_registerType() {
-  R_registerObjectType("R.Stack", sizeof("R.Stack") - 1, sizeof(R_Stack), &R_Stack_visit, &R_Stack_finalize);
+  R_registerObjectType("R.Stack", sizeof("R.Stack") - 1, sizeof(R_Stack), NULL, &R_Stack_visit, &R_Stack_finalize);
 }
 
 void
@@ -140,12 +141,12 @@ R_Stack_create
   )
 {
   R_Stack_ensureInitialized();
-  R_Stack* self = R_allocateObject("R.Stack", sizeof("R.Stack") - 1, sizeof(R_Stack));
+  R_Stack* self = R_allocateObject(R_getObjectType("R.Stack", sizeof("R.Stack") - 1));
   self->elements = NULL;
   self->capacity = 0;
   self->size = 0;
   self->capacity = g_minimumCapacity;
-  if (!R_UnmanagedMemory_allocate_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
+  if (!R_Arms_allocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
     R_jump();
   }
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {

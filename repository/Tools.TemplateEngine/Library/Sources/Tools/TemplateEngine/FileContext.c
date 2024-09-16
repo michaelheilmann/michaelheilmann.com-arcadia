@@ -262,7 +262,7 @@ FileContext_registerType
   (
   )
 {
-  R_registerObjectType("Tools.TemplateEngine.FileContext", sizeof("Tools.TemplateEngine.FileContext") - 1, sizeof(FileContext), &FileContext_visit, &FileContext_finalize);
+  R_registerObjectType("Tools.TemplateEngine.FileContext", sizeof("Tools.TemplateEngine.FileContext") - 1, sizeof(FileContext), NULL, &FileContext_visit, &FileContext_finalize);
 }
 
 FileContext*
@@ -272,7 +272,7 @@ FileContext_create
     R_FilePath* sourceFilePath
   )
 {
-  FileContext* self = R_allocateObject("Tools.TemplateEngine.FileContext", sizeof("Tools.TemplateEngine.FileContext") - 1, sizeof(FileContext));
+  FileContext* self = R_allocateObject(R_getObjectType("Tools.TemplateEngine.FileContext", sizeof("Tools.TemplateEngine.FileContext") - 1));
   self->context = context;
   self->sourceFilePath = sourceFilePath;
   self->source = NULL;

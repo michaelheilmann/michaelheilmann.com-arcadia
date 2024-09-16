@@ -19,7 +19,7 @@
 
 #include "R/Object.h"
 
-#include "Arms.h"
+#include "R/ArmsIntegration.h"
 #include "R/TypeNames.h"
 #include "R.h"
 #include <string.h>
@@ -27,63 +27,6 @@
 #define TypeNodeName "R.Internal.TypeNode"
 
 #define ObjectTypeName "R.Object"
-
-static R_Status
-allocateArms
-  (
-    void **p,
-    char const* name,
-    size_t nameLength,
-    size_t size
-  )
-{
-  void* q = NULL;
-  Arms_Status status = Arms_allocate(&q, name, nameLength, size);
-  switch (status) {
-    case Arms_Status_Success: {
-      *p = q;
-      return R_Status_Success;
-    } break;
-    case Arms_Status_AllocationFailed: {
-      return R_Status_AllocationFailed;
-    } break;
-    case Arms_Status_TypeNotExists: {
-      // @todo Add and use R_Status_TypeNotExists.
-      return R_Status_OperationInvalid;
-    } break;
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_TypeExists:
-    default: {
-      // This should not happen.
-      return R_Status_OperationInvalid;
-    } break;
-  };
-}
-
-static R_Status
-runArms
-  (
-  )
-{
-  Arms_Status status = Arms_run();
-  switch (status) {
-    case Arms_Status_Success: {
-      return R_Status_Success;
-    } break;
-    case Arms_Status_AllocationFailed:
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_TypeExists:
-    case Arms_Status_TypeNotExists:
-    default: {
-      // This should not happen.
-      // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
-      // Suggestion is R_Status_EnvironmentInvalid.
-      return R_Status_OperationInvalid;
-    } break;
-  };
-}
 
 typedef struct TypeNode TypeNode;
 
@@ -94,9 +37,9 @@ static void TypeNode_finalize(TypeNode* typeNode);
 struct TypeNode {
   TypeNode* next;
 
-  _TypeName* typeName;
+  R_TypeNameValue typeName;
   R_TypeKind kind;
-  TypeNode* parent;
+  TypeNode* parentObjectType;
   R_SizeValue valueSize;
   R_Object_VisitCallbackFunction* visit;
   R_Object_DestructCallbackFunction* destruct;
@@ -115,7 +58,6 @@ TypeNode_finalize
     TypeNode* typeNode
   )
 {
-  _TypeNames_destroyTypeName(typeNode->typeName);
   typeNode->typeName = NULL;
 }
 
@@ -162,7 +104,7 @@ _R_startupTypes
       R_jump();
     } break;
   };
-  _R_TypeNames_startup();
+  R_TypeNames_startup();
   g_typeNodes = NULL;
   g_registered = false;
 }
@@ -177,7 +119,7 @@ _R_shutdownTypes
     // At each iteration, remove the leaves of the type tree.
     TypeNode** previous = &g_typeNodes;
     TypeNode* current = g_typeNodes;
-    if (!current->parent) {
+    if (!current->parentObjectType) {
       TypeNode* node = current;
       *previous = current->next;
       current = current->next;
@@ -187,14 +129,21 @@ _R_shutdownTypes
       current = current->next;
     }
   }
-  R_Status status = runArms();
+  R_Status status = R_Arms_run();
   if (status) {
     R_setStatus(status);
     R_jump();
   }
   // TODO: Make this re-entrant.
-  _R_TypeNames_shutdown();
+  R_TypeNames_shutdown();
 }
+
+R_TypeKind
+R_Type_getKind
+  (
+    R_Type const* self
+  )
+{ return ((TypeNode*)self)->kind; }
 
 void
 R_registerBooleanType
@@ -203,37 +152,20 @@ R_registerBooleanType
     size_t nameLength
   )
 {
-  _TypeName* typeName = _TypeNames_createTypeName(name, nameLength);
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-      if (TypeNames_areTypeNamesEqual(typeNode->typeName, typeName)) {
-        R_popJumpTarget();
-        _TypeNames_destroyTypeName(typeName);
-        typeName = NULL;
-        R_setStatus(R_Status_TypeExists);
-        R_jump();
-      }
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
     }
-    R_popJumpTarget();
-  } else {
-    R_popJumpTarget();
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_jump();
   }
   TypeNode* typeNode = NULL;
-  R_Status status = allocateArms(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
-  if (status) {
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_setStatus(status);
+  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Boolean;
   typeNode->typeName = typeName;
-  typeNode->parent = NULL;
+  typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->visit = NULL;
   typeNode->destruct = NULL;
@@ -251,37 +183,20 @@ R_registerIntegerType
     size_t nameLength
   )
 {
-  _TypeName* typeName = _TypeNames_createTypeName(name, nameLength);
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-      if (TypeNames_areTypeNamesEqual(typeNode->typeName, typeName)) {
-        R_popJumpTarget();
-        _TypeNames_destroyTypeName(typeName);
-        typeName = NULL;
-        R_setStatus(R_Status_TypeExists);
-        R_jump();
-      }
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
     }
-    R_popJumpTarget();
-  } else {
-    R_popJumpTarget();
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_jump();
   }
   TypeNode* typeNode = NULL;
-  R_Status status = allocateArms(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
-  if (status) {
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_setStatus(status);
+  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Integer;
   typeNode->typeName = typeName;
-  typeNode->parent = NULL;
+  typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->visit = NULL;
   typeNode->destruct = NULL;
@@ -299,37 +214,20 @@ R_registerNaturalType
     size_t nameLength
   )
 {
-  _TypeName* typeName = _TypeNames_createTypeName(name, nameLength);
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-      if (TypeNames_areTypeNamesEqual(typeNode->typeName, typeName)) {
-        R_popJumpTarget();
-        _TypeNames_destroyTypeName(typeName);
-        typeName = NULL;
-        R_setStatus(R_Status_TypeExists);
-        R_jump();
-      }
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
     }
-    R_popJumpTarget();
-  } else {
-    R_popJumpTarget();
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_jump();
   }
   TypeNode* typeNode = NULL;
-  R_Status status = allocateArms(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
-  if (status) {
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_setStatus(status);
+  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Natural;
   typeNode->typeName = typeName;
-  typeNode->parent = NULL;
+  typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->visit = NULL;
   typeNode->destruct = NULL;
@@ -346,41 +244,25 @@ R_registerObjectType
     char const* name,
     size_t nameLength,
     size_t valueSize,
+    R_Type* parentObjectType,
     R_Object_VisitCallbackFunction* visit,
     R_Object_DestructCallbackFunction* destruct
   )
 {
-  _TypeName* typeName = _TypeNames_createTypeName(name, nameLength);
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-      if (TypeNames_areTypeNamesEqual(typeNode->typeName, typeName)) {
-        R_popJumpTarget();
-        _TypeNames_destroyTypeName(typeName);
-        typeName = NULL;
-        R_setStatus(R_Status_TypeExists);
-        R_jump();
-      }
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
     }
-    R_popJumpTarget();
-  } else {
-    R_popJumpTarget();
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_jump();
   }
-  TypeNode *typeNode = NULL;
-  R_Status status = allocateArms(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
-  if (status) {
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_setStatus(status);
+  TypeNode* typeNode = NULL;
+  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Object;
   typeNode->typeName = typeName;
-  typeNode->parent = NULL;
+  typeNode->parentObjectType = parentObjectType;
   typeNode->valueSize = valueSize;
   typeNode->visit = visit;
   typeNode->destruct = destruct;
@@ -398,37 +280,20 @@ R_registerSizeType
     size_t nameLength
   )
 {
-  _TypeName* typeName = _TypeNames_createTypeName(name, nameLength);
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-      if (TypeNames_areTypeNamesEqual(typeNode->typeName, typeName)) {
-        R_popJumpTarget();
-        _TypeNames_destroyTypeName(typeName);
-        typeName = NULL;
-        R_setStatus(R_Status_TypeExists);
-        R_jump();
-      }
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
     }
-    R_popJumpTarget();
-  } else {
-    R_popJumpTarget();
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_jump();
   }
   TypeNode* typeNode = NULL;
-  R_Status status = allocateArms(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
-  if (status) {
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_setStatus(status);
+  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Size;
   typeNode->typeName = typeName;
-  typeNode->parent = NULL;
+  typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->visit = NULL;
   typeNode->destruct = NULL;
@@ -446,37 +311,20 @@ R_registerVoidType
     size_t nameLength
   )
 {
-  _TypeName* typeName = _TypeNames_createTypeName(name, nameLength);
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-      if (TypeNames_areTypeNamesEqual(typeNode->typeName, typeName)) {
-        R_popJumpTarget();
-        _TypeNames_destroyTypeName(typeName);
-        typeName = NULL;
-        R_setStatus(R_Status_TypeExists);
-        R_jump();
-      }
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
     }
-    R_popJumpTarget();
-  } else {
-    R_popJumpTarget();
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_jump();
   }
   TypeNode* typeNode = NULL;
-  R_Status status = allocateArms(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
-  if (status) {
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_setStatus(status);
+  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Void;
   typeNode->typeName = typeName;
-  typeNode->parent = NULL;
+  typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->visit = NULL;
   typeNode->destruct = NULL;
@@ -487,6 +335,25 @@ R_registerVoidType
   Arms_lock(typeNode);
 }
 
+R_BooleanValue
+R_Type_isSubType
+  (
+    R_Type const* self,
+    R_Type const* other
+  )
+{
+  TypeNode* self1 = (TypeNode*)self;
+  TypeNode* other1 = (TypeNode*)other;
+  if (self1->kind != R_TypeKind_Object || other1->kind != R_TypeKind_Object) {
+    return R_BooleanValue_False;
+  }
+  do {  
+    if (self1 == other1) return R_BooleanValue_True;
+    self1 = self1->parentObjectType;
+  } while (NULL != self1);
+  return R_BooleanValue_False;
+}
+
 R_Type*
 R_getObjectType
   (
@@ -494,29 +361,14 @@ R_getObjectType
     size_t nameLength
   )
 {
-  _TypeName* typeName = _TypeNames_createTypeName(name, nameLength);
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-      if (TypeNames_areTypeNamesEqual(typeNode->typeName, typeName)) {
-        R_popJumpTarget();
-        _TypeNames_destroyTypeName(typeName);
-        typeName = NULL;
-        return typeNode;
-      }
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      return typeNode;
     }
-    R_popJumpTarget();
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_setStatus(R_Status_TypeNotExists);
-    R_jump();
-  } else {
-    R_popJumpTarget();
-    _TypeNames_destroyTypeName(typeName);
-    typeName = NULL;
-    R_jump();
   }
+  R_setStatus(R_Status_TypeNotExists);
+  R_jump();
 }
 
 static void
@@ -531,7 +383,7 @@ onVisitObject
     if (type->visit) {
       type->visit(((ObjectTag*)p) + 1);
     }
-    type = type->parent;
+    type = type->parentObjectType;
   }
 }
 
@@ -547,7 +399,7 @@ onFinalizeObject
     if (type->destruct) {
       type->destruct(((ObjectTag*)p) + 1);
     }
-    type = type->parent;
+    type = type->parentObjectType;
     objectTag->type = type;
   }
 }
@@ -555,9 +407,7 @@ onFinalizeObject
 void*
 R_allocateObject
   (
-    char const* name,
-    size_t nameLength,
-    size_t size
+    R_Type *type
   )
 {
   if (!g_registered) {
@@ -588,105 +438,44 @@ R_allocateObject
       } break;
     };
   }
-  R_Type* type = R_getObjectType(name, nameLength);
+  if (!type) {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  if (!R_Type_isObjectKind(type)) {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  TypeNode* typeNode = (TypeNode*)type;
   ObjectTag* tag = NULL;
-  if (SIZE_MAX - sizeof(ObjectTag) < size) {
+  if (SIZE_MAX - sizeof(ObjectTag) < typeNode->valueSize) {
     R_setStatus(R_Status_AllocationFailed);
     R_jump();
   }
-  Arms_Status status = Arms_allocate(&tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + size);
-  switch (status) {
-    case Arms_Status_Success: {
-      tag->type = type;
-      return (void*)(tag + 1);
-    } break;
-    case Arms_Status_AllocationFailed: {
-      R_setStatus(R_Status_AllocationFailed);
-      R_jump();
-    } break;
-    case Arms_Status_TypeNotExists: {
-      // @todo Add and use R_Status_TypeNotExists.
-      R_setStatus(Arms_Status_OperationInvalid);
-      R_jump();
-    } break;
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_TypeExists:
-    default: {
-      // This should not happen.
-      R_setStatus(Arms_Status_OperationInvalid);
-      R_jump();
-    } break;
-  };
+  if (!R_Arms_allocate_nojump(&tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + typeNode->valueSize)) {
+    R_jump();
+  }
+  tag->type = type;
+  return (void*)(tag + 1);
 }
 
 void
 R_Object_visit
   (
-    void* p
+    void* object
   )
 {
-  if (p) {
-    Arms_visit(p);
+  if (object) {
+    Arms_visit(object);
   }
 }
 
-R_BooleanValue
-R_UnmanagedMemory_allocate_nojump
+R_Type*
+R_Object_getType
   (
-    void** p,
-    R_SizeValue n
+    void* object
   )
 {
-  Arms_Status status = Arms_allocateUnmanaged(p, n);
-  if (status) {
-    if (status == Arms_Status_ArgumentValueInvalid) {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-    } else if (status == Arms_Status_AllocationFailed) {
-      R_setStatus(R_Status_AllocationFailed);
-    } else {
-      R_setStatus(R_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use R_Status_EnvironmentInvalid.*/
-    }
-    return R_BooleanValue_False;
-  }
-  return R_BooleanValue_True;
-}
-
-R_BooleanValue
-R_UnmanagedMemory_deallocate_nojump
-  (
-    void* p
-  )
-{
-  Arms_Status status = Arms_deallocateUnmanaged(p);
-  if (status) {
-    if (status == Arms_Status_ArgumentValueInvalid) {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-    } else {
-      R_setStatus(R_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use R_Status_EnvironmentInvalid.*/
-    }
-    return R_BooleanValue_False;
-  }
-  return R_BooleanValue_True;
-}
-
-R_BooleanValue
-R_UnmanagedMemory_reallocate_nojump
-  (
-    void** p,
-    R_SizeValue n
-  )
-{
-  Arms_Status status = Arms_reallocateUnmanaged(p, n);
-  if (status) {
-    if (status == Arms_Status_ArgumentValueInvalid) {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-    } else if (status == Arms_Status_AllocationFailed) {
-      R_setStatus(R_Status_AllocationFailed);
-    } else {
-      R_setStatus(R_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use R_Status_EnvironmentInvalid.*/
-    }
-    return R_BooleanValue_False;
-  }
-  return R_BooleanValue_True;
+  ObjectTag* objectTag = ((ObjectTag*)object) - 1;
+  return objectTag->type;
 }

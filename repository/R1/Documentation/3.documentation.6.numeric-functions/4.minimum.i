@@ -1,5 +1,5 @@
 <h4>R_minimum</h4>
-<p>R provides functions returning the minimum of two values.</p>
+<p>Return the minimum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv> R_minimum_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x, <my-mv>Type</my-mv> y)
 </code></p>
@@ -17,3 +17,12 @@
 <tr><td><code>n64</code>     </td><td><code>R_Natural64Value</code></td></tr>
 <tr><td><code>sz</code>      </td><td><code>R_Size</code></td></tr>
 </table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The first value.</td></tr>
+  <tr><td><my-mv>Type</my-mv> y</td><td>The second value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the minimum of <code>x</code> and <code>y</code>.</p>

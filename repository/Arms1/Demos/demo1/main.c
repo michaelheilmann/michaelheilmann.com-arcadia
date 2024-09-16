@@ -77,38 +77,44 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
   if (Arms_registerType("Sender", strlen("Sender"), (Arms_VisitCallbackFunction*)&Sender_visit, (Arms_FinalizeCallbackFunction*)&Sender_finalize)) {
-    Arms_run();
+    Arms_RunStatistics statistics = { .destroyed = 0 };
+    Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
   if (Arms_registerType("Message", strlen("Message"), (Arms_VisitCallbackFunction*) & Message_visit, (Arms_FinalizeCallbackFunction*) & Message_finalize)) {
-    Arms_run();
+    Arms_RunStatistics statistics = { .destroyed = 0 };
+    Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
   Sender* sender = NULL;
   if (Arms_allocate(&sender, "Sender", strlen("Sender"), sizeof(Sender))) {
-    Arms_run();
+    Arms_RunStatistics statistics = { .destroyed = 0 };
+    Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
   Message* message = NULL;
   if (Arms_allocate(&message, "Message", strlen("Message"), sizeof(Message))) {
-    Arms_run();
+    Arms_RunStatistics statistics = { .destroyed = 0 };
+    Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
   message->text = strdup("Hello, World!\n");
   if (!message->text) {
-    Arms_run();
+    Arms_RunStatistics statistics = { .destroyed = 0 };
+    Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
   message->sender = sender;
   Arms_lock(message);
-  Arms_run();
+  Arms_RunStatistics statistics = { .destroyed = 0 };
+  Arms_run(&statistics);
   Arms_unlock(message);
-  Arms_run();
+  Arms_run(&statistics);
   Arms_shutdown();
   return EXIT_SUCCESS;
 }

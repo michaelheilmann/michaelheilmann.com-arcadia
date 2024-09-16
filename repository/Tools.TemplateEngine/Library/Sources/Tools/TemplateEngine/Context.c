@@ -43,7 +43,7 @@ Context_registerType
   (
   )
 {
-  R_registerObjectType("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1, sizeof(Context), &Context_visit, &Context_finalize);
+  R_registerObjectType("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1, sizeof(Context), NULL, &Context_visit, &Context_finalize);
 }
 
 Context*
@@ -51,7 +51,7 @@ Context_create
   (
   )
 {
-  Context* self = R_allocateObject("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1, sizeof(Context));
+  Context* self = R_allocateObject(R_getObjectType("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1));
   self->target = NULL;
   self->stack = NULL;
   self->temporary = NULL;

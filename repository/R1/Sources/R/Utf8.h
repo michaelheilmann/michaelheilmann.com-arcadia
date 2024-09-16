@@ -21,30 +21,15 @@
 #include "R/ByteBuffer.h"
 #include "R/Natural32.h"
 
+#define CodePoint_Start (0xfffffff1)
+#define CodePoint_End (0xfffffff2)
+
 R_BooleanValue
 R_isUtf8
   (
     void const* bytes,
     R_SizeValue numberOfBytes
   );
-
-typedef struct R_Utf8Reader R_Utf8Reader;
-
-void _R_Utf8Reader_registerType();
-
-struct R_Utf8Reader {
-  R_ByteBuffer* source;
-  R_SizeValue index;
-  R_Natural32Value codePoint;
-};
-
-R_Utf8Reader* R_Utf8Reader_create(R_ByteBuffer* source);
-
-void R_Utf8Reader_next(R_Utf8Reader* self);
-
-R_Natural32Value R_Utf8Reader_getCodePoint(R_Utf8Reader* self);
-
-R_BooleanValue R_Utf8Reader_hasCodePoint(R_Utf8Reader* self);
 
 typedef struct R_Utf8Writer R_Utf8Writer;
 

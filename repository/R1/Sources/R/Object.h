@@ -65,6 +65,17 @@ R_Type_getKind
     R_Type const* self
   );
 
+/// @brief Get if this type is a subtype of another type.
+/// @param self A pointer to this type.
+/// @param other A pointer to the other type.
+/// @return R_BooleanValue_True if this type is a subtype of the othe type. R_BooleanValue_False otherwise.
+R_BooleanValue
+R_Type_isSubType
+  (
+    R_Type const* self,
+    R_Type const* other
+  );
+
 /// @brief Get if this type is of the kind of type "boolean".
 /// @param self A pointer to this type.
 /// @return #R_BooleanValue_True if the type is of the kind of type "boolean". #R_BooleanValue_False otherwise.
@@ -156,6 +167,7 @@ R_registerObjectType
     char const* name,
     size_t nameLength,
     size_t valueSize,
+    R_Type* parentObjectType,
     R_Object_VisitCallbackFunction* visit,
     R_Object_DestructCallbackFunction* destruct
   );
@@ -176,45 +188,29 @@ R_registerVoidType
     size_t nameLength
   );
 
-
-
 /* R_Status_ArgumentValueInvalid, R_Status_TypeNotExists */
-R_Type* R_getObjectType(char const* name, size_t nameLength);
-
-/* R_Status_AllocationFailed */
-void* R_allocateObject(char const* name, size_t nameLength, size_t size);
-
-void R_Object_visit(void* p);
-
-/// @return #R_BooleanValue_True on success. #R_BooleanValue_False on failure.
-/// @remarks This function sets the status variable on failure. However, it does not invoke R_jump(),
-/// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
-/// If the allocation failed, then #R_Status_AllocationFailed is assigned.
-R_BooleanValue
-R_UnmanagedMemory_allocate_nojump
+R_Type*
+R_getObjectType
   (
-    void **p,
-    R_SizeValue n
-  );
-/// @return #R_BooleanValue_True on success. #R_BooleanValue_False on failure.
-/// @remarks This function sets the status variable on failure. However, it does not invoke R_jump(),
-/// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
-/// If the allocation failed, then #R_Status_AllocationFailed is assigned.
-R_BooleanValue
-R_UnmanagedMemory_deallocate_nojump
-  (
-    void *p
+    char const* name,
+    size_t nameLength
   );
 
-/// @return #R_BooleanValue_True on success. #R_BooleanValue_False on failure.
-/// @remarks This function sets the status variable on failure. However, it does not invoke R_jump(),
-/// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
-/// If the allocation failed, then #R_Status_AllocationFailed is assigned.
-R_BooleanValue
-R_UnmanagedMemory_reallocate_nojump
+/* R_ArgumentValueInvalid, R_Status_AllocationFailed */
+void*
+R_allocateObject
   (
-    void** p,
-    R_SizeValue n
+    R_Type* type
   );
+
+/// @brief Visit an object.
+/// @param o A pointer to the object.
+void R_Object_visit(void* o);
+
+/// @brief Get the type of an object.
+/// @param o A pointer to the object.
+/// @return The type of an object.
+R_Type* R_Object_getType(void* o);
+
 
 #endif // R_OBJECT_H_INCLUDED

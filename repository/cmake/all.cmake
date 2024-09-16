@@ -48,3 +48,14 @@ macro(EndProduct target type)
   endif()
 
 endmacro()
+
+macro(FetchProduct target directory help)
+  if (NOT TARGET ${target})
+      set(__${target}.SourceDir "${directory}" CACHE STRING ${help})
+      get_filename_component(__${target}.SourceDir "${__${target}.SourceDir}"
+                              REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+      message(STATUS "fetching ${__${target}.SourceDir}")
+      FetchContent_Declare(__${target} SOURCE_DIR ${__${target}.SourceDir})
+      FetchContent_MakeAvailable(__${target})
+  endif()
+endmacro()

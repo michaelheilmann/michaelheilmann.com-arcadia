@@ -1,5 +1,5 @@
 <h4>R_countLeadingZeroes</h4>
-<p>R provides functions counting the leading zeroes of the binary representations of integer type values, natural type values, and size type values.</p>
+<p>Return the number of leadin gzeroes of the binary representation of a value.</p>
 <p><code>
 R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value)
 </code></p>
@@ -19,3 +19,6 @@ R_SizeValue R_countLeadingZeroes_<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value
 </table>
 
 <p>This function returns the number of leading zeroes of the binary representation of <code>value</code>.</p>
+
+<h5>Return value</h5>
+<p>The number of leading zeroes.</p>

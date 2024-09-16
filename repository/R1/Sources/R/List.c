@@ -16,6 +16,7 @@
 #include "List.h"
 
 #include "R.h"
+#include "R/ArmsIntegration.h"
 
 // memmove
 #include <string.h>
@@ -76,7 +77,7 @@ R_List_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  if (!R_UnmanagedMemory_reallocate_nojump(&self->elements, sizeof(R_Value) * newCapacity)) {
+  if (!R_Arms_reallocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * newCapacity)) {
     R_jump();
   }
   self->capacity = newCapacity;
@@ -108,7 +109,7 @@ R_List_finalize
   )
 {
   if (self->elements) {
-    R_UnmanagedMemory_deallocate_nojump(self->elements);
+    R_Arms_deallocateUnmanaged_nojump(self->elements);
     self->elements = NULL;
   }
 }
@@ -131,7 +132,7 @@ _R_List_registerType
   (
   )
 {
-  R_registerObjectType("R.List", sizeof("R.List") - 1, sizeof(R_List), &R_List_visit, &R_List_finalize);
+  R_registerObjectType("R.List", sizeof("R.List") - 1, sizeof(R_List), NULL, &R_List_visit, &R_List_finalize);
 }
 
 void
@@ -147,12 +148,12 @@ R_List_create
   )
 {
   R_List_ensureInitialized();
-  R_List* self = R_allocateObject("R.List", sizeof("R.List") - 1, sizeof(R_List));
+  R_List* self = R_allocateObject(R_getObjectType("R.List", sizeof("R.List") - 1));
   self->elements = NULL;
   self->capacity = 0;
   self->size = 0;
   self->capacity = g_minimumCapacity;
-  if (!R_UnmanagedMemory_allocate_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
+  if (!R_Arms_allocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
     R_jump();
   }
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {

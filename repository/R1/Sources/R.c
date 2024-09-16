@@ -18,6 +18,7 @@
 #include "R.h"
 
 #include "Arms.h"
+#include "R/Atoms.h"
 #include "R/Object.internal.h"
 // For registering the types.
 #include "R/ByteBuffer.h"
@@ -25,104 +26,17 @@
 #include "R/List.h"
 #include "R/Stack.h"
 #include "R/String.h"
+#include "R/TypeNames.h"
 #include "R/Utf8.h"
+
+#include "R/ArmsIntegration.h"
+
 
 typedef uint32_t ReferenceCount;
 #define ReferenceCount_Minimum (UINT32_C(0))
 #define ReferenceCount_Maximum (UINT32_MAX)
 
 static ReferenceCount g_referenceCount = 0;
-
-static R_Status
-startupArms
-  (
-  );
-
-static R_Status
-shutdownArms
-  (
-  );
-
-static R_Status
-runArms
-  (
-  );
-
-static R_Status
-startupArms
-  (
-  )
-{
-  Arms_Status status = Arms_startup();
-  switch (status) {
-    case Arms_Status_Success: {
-      return R_Status_Success;
-    } break;
-    case Arms_Status_AllocationFailed: {
-      return R_Status_AllocationFailed;
-    } break;
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_TypeExists:
-    case Arms_Status_TypeNotExists:
-    default: {
-      // This should not happen.
-      // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
-      // Suggestion is R_Status_EnvironmentInvalid.
-      return R_Status_OperationInvalid;
-    } break;
-  };
-}
-
-static R_Status
-shutdownArms
-  (
-  )
-{
-  Arms_Status status = Arms_shutdown();
-  switch (status) {
-    case Arms_Status_Success: {
-      return R_Status_Success;
-    } break;
-    case Arms_Status_AllocationFailed: {
-      return R_Status_AllocationFailed;
-    } break;
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_TypeExists:
-    case Arms_Status_TypeNotExists:
-    default: {
-      // This should not happen.
-      // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
-      // Suggestion is R_Status_EnvironmentInvalid.
-      return R_Status_OperationInvalid;
-    } break;
-  };
-}
-
-static R_Status
-runArms
-  ( 
-  )
-{
-  Arms_Status status = Arms_run();
-  switch (status) {
-    case Arms_Status_Success: {
-      return R_Status_Success;
-    } break;
-    case Arms_Status_AllocationFailed:
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_TypeExists:
-    case Arms_Status_TypeNotExists:
-    default: {
-      // This should not happen.
-      // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
-      // Suggestion is R_Status_EnvironmentInvalid.
-      return R_Status_OperationInvalid;
-    } break;
-  };
-}
 
 R_Status
 R_startup
@@ -133,18 +47,33 @@ R_startup
     return R_Status_OperationInvalid;
   }
   if (!g_referenceCount) {
-    R_Status status = startupArms();
+    R_Status status = R_Arms_startup();
     if (status) {
       return status;
     }
     R_JumpTarget jumpTarget;
+
+    R_pushJumpTarget(&jumpTarget);
+    if (R_JumpTarget_save(&jumpTarget)) {
+      R_TypeNames_startup();
+      R_popJumpTarget();
+    } else {
+      R_popJumpTarget();
+      R_Arms_run();
+      Arms_shutdown();
+      return R_getStatus();
+    }
+
     R_pushJumpTarget(&jumpTarget);
     if (R_JumpTarget_save(&jumpTarget)) {
       _R_startupTypes();
       R_popJumpTarget();
     } else {
       R_popJumpTarget();
-      Arms_run();
+      R_TypeNames_onPreMark();
+      R_Arms_run();
+      R_TypeNames_onPostFinalize(true);
+      R_TypeNames_shutdown();
       Arms_shutdown();
       return R_getStatus();
     }
@@ -175,9 +104,18 @@ R_startup
       R_popJumpTarget();
     } else {
       R_popJumpTarget();
-      Arms_run();
+
       _R_shutdownTypes();
-      Arms_shutdown();
+
+      R_TypeNames_onPreMark();
+      R_Arms_run();
+      R_TypeNames_onPostFinalize(true);
+      R_TypeNames_shutdown();
+
+      R_Arms_run();
+
+      R_Arms_shutdown();
+
       return R_getStatus();
     }
   }
@@ -194,20 +132,16 @@ R_shutdown
     return R_Status_OperationInvalid;
   }
   if (1 == g_referenceCount) {
-    R_Status status;
-    status = runArms();
-    if (status) {
-      return status;
-    }
     _R_shutdownTypes();
-    status = runArms();
-    if (status) {
-      return status;
-    }
-    status = shutdownArms();
-    if (status) {
-      return status;
-    }
+
+    R_TypeNames_onPreMark();
+    R_Arms_run();
+    R_TypeNames_onPostFinalize(true);
+    R_TypeNames_shutdown();
+
+    R_Arms_run();
+
+    R_Arms_shutdown();
   }
   g_referenceCount--;
   return R_Status_Success;
