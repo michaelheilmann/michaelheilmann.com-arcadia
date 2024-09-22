@@ -143,7 +143,7 @@ startup1
   //
   if (ImageWriterParameters_hasPath(parameters)) {
     R_ByteBuffer* b = R_ByteBuffer_create();
-    R_ByteBuffer_append_pn(b, ImageWriterParameters_getPath(parameters)->p, ImageWriterParameters_getPath(parameters)->sz);
+    R_ByteBuffer_append_pn(b, ImageWriterParameters_getPath(parameters)->p, ImageWriterParameters_getPath(parameters)->numberOfBytes);
     R_ByteBuffer_append_pn(b, "", 1);
     wchar_t* targetPathW = multiByteToWideChar(b->p);
     if (!targetPathW) {
@@ -483,7 +483,7 @@ typedef struct ICONDIRENTRY {
 void writeIconToPath(R_List* sourcePixelBuffers, R_String* targetPath) {
   R_ByteBuffer* targetByteBuffer = R_ByteBuffer_create();
   writeIconToByteBuffer(sourcePixelBuffers, targetByteBuffer);
-  R_FileSystem_setFileContents(R_FileSystem_create(), R_FilePath_parseUnixFilePath(targetPath->p, targetPath->sz), targetByteBuffer);
+  R_FileSystem_setFileContents(R_FileSystem_create(), R_FilePath_parseUnixFilePath(targetPath->p, targetPath->numberOfBytes), targetByteBuffer);
 }
 
 void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer) {

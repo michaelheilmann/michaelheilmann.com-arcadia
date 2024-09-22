@@ -40,7 +40,7 @@ if (NOT TARGET Tools.TemplateEngine)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h @ONLY)
 
     list(APPEND Tools.TemplateEngine.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Main.c)
-    list(APPEND Tools.TemplateEngine.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h)
+    list(APPEND Tools.TemplateEngine.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h)
 
     target_link_libraries(Tools.TemplateEngine Tools.TemplateEngineLibrary Arcadia.R Arcadia.Arms)
 

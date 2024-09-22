@@ -17,18 +17,10 @@
 
 #include "R.h"
 
-#include "Arms.h"
 #include "R/Atoms.h"
 #include "R/Object.internal.h"
 // For registering the types.
-#include "R/ByteBuffer.h"
-#include "R/FileHandle.h"
-#include "R/List.h"
-#include "R/Stack.h"
-#include "R/String.h"
 #include "R/TypeNames.h"
-#include "R/Utf8.h"
-
 #include "R/ArmsIntegration.h"
 
 
@@ -60,7 +52,7 @@ R_startup
     } else {
       R_popJumpTarget();
       R_Arms_run();
-      Arms_shutdown();
+      R_Arms_shutdown();
       return R_getStatus();
     }
 
@@ -74,7 +66,7 @@ R_startup
       R_Arms_run();
       R_TypeNames_onPostFinalize(true);
       R_TypeNames_shutdown();
-      Arms_shutdown();
+      R_Arms_shutdown();
       return R_getStatus();
     }
 
@@ -100,6 +92,9 @@ R_startup
       _R_Stack_registerType();
       _R_Utf8Reader_registerType();
       _R_Utf8Writer_registerType();
+      _R_Utf8ByteBufferReader_registerType();
+      _R_Utf8ByteBufferWriter_registerType();
+      _R_Utf8StringReader_registerType();
       _R_String_registerType();
       R_popJumpTarget();
     } else {

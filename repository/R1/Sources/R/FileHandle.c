@@ -23,9 +23,9 @@
 
 #define Flags_OpenWrite (2)
 
-static void R_FileHandle_finalize(R_FileHandle* self);
+static void R_FileHandle_destruct(R_FileHandle* self);
 
-static void R_FileHandle_finalize(R_FileHandle* self) {
+static void R_FileHandle_destruct(R_FileHandle* self) {
   if (self->fd) {
     if (self->fd != stdin && self->fd != stderr && self->fd != stdout) {
       fclose(self->fd);
@@ -36,7 +36,7 @@ static void R_FileHandle_finalize(R_FileHandle* self) {
 }
 
 void _R_FileHandle_registerType() {
-  R_registerObjectType("R.FileHandle", sizeof("R.FileHandle") - 1, sizeof(R_FileHandle), NULL, NULL, &R_FileHandle_finalize);
+  R_registerObjectType("R.FileHandle", sizeof("R.FileHandle") - 1, sizeof(R_FileHandle), NULL, NULL, &R_FileHandle_destruct);
 }
 
 R_FileHandle* R_FileHandle_create() {

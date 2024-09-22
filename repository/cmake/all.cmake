@@ -29,6 +29,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/detect_operating_system.cmake)
 macro(BeginProduct target)
   set(${target}.SourceFiles "")
   set(${target}.HeaderFiles "")
+  set(${target}.ConfigurationFiles "")
   set(${target}.AssetFiles "")
   DetectCompilerC(${target})
   DetectOperatingSystem(${target})
@@ -37,7 +38,13 @@ endmacro()
 
 macro(EndProduct target type)
   ConfigureWarningsAndErrors(${target})
-  target_sources(${target} PRIVATE ${${target}.SourceFiles} ${${target}.HeaderFiles})
+
+  target_sources(${target} PRIVATE ${${target}.ConfigurationFiles} ${${target}.SourceFiles} ${${target}.HeaderFiles})
+
+  source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${${target}.ConfigurationFiles})
+  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.HeaderFiles})
+  source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.SourceFiles})
+
   if (${type} STREQUAL library)
     target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
     target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})

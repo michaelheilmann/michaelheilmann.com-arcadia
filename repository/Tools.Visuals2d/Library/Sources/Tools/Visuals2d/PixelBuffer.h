@@ -74,6 +74,15 @@ PixelBuffer_createOpaqueRed
     uint8_t pixelFormat
   );
 
+PixelBuffer*
+PixelBuffer_createOpaqueBlack
+  (
+    R_SizeValue linePadding,
+    R_SizeValue width,
+    R_SizeValue height,
+    uint8_t pixelFormat
+  );
+
 /// @brief Get the width of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The width of this pixel buffer.

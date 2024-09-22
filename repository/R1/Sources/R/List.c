@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "List.h"
+#include "R/List.h"
 
 #include "R.h"
 #include "R/ArmsIntegration.h"
@@ -39,7 +39,7 @@ R_List_ensureInitialized
   );
 
 static void
-R_List_finalize
+R_List_destruct
   (
     R_List* self
   );
@@ -103,7 +103,7 @@ R_List_ensureInitialized
 }
 
 static void
-R_List_finalize
+R_List_destruct
   (
     R_List* self
   )
@@ -132,7 +132,7 @@ _R_List_registerType
   (
   )
 {
-  R_registerObjectType("R.List", sizeof("R.List") - 1, sizeof(R_List), NULL, &R_List_visit, &R_List_finalize);
+  R_registerObjectType("R.List", sizeof("R.List") - 1, sizeof(R_List), NULL, &R_List_visit, &R_List_destruct);
 }
 
 void

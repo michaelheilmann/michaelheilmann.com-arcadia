@@ -20,23 +20,53 @@
 #include <string.h>
 #include "R/ArmsIntegration.h"
 #include "R.h"
-#include "R/Utf8.h"
 
 static void
-R_StringBuffer_finalize
+R_StringBuffer_destruct
   (
     R_StringBuffer* self
   );
 
 static void
-R_StringBuffer_finalize
+ensureFreeCapacityBytes
+  (
+    R_StringBuffer* self,
+    R_SizeValue requiredFreeCapacity
+  );
+
+static void
+R_StringBuffer_destruct
   (
     R_StringBuffer* self
   )
 {
-  if (self->p) {
-    R_Arms_deallocateUnmanaged_nojump(self->p);
-    self->p = NULL;
+  if (self->elements) {
+    R_Arms_deallocateUnmanaged_nojump(self->elements);
+    self->elements = NULL;
+  }
+}
+
+static void
+ensureFreeCapacityBytes
+  (
+    R_StringBuffer* self,
+    R_SizeValue requiredFreeCapacity
+  )
+{
+  R_SizeValue availableFreeCapacity = self->capacity - self->size;
+  if (availableFreeCapacity < requiredFreeCapacity) {
+    R_SizeValue additionalCapacity = requiredFreeCapacity - availableFreeCapacity;
+    R_SizeValue oldCapacity = self->capacity;
+    if (SIZE_MAX - oldCapacity < additionalCapacity) {
+      R_setStatus(R_Status_AllocationFailed);
+      R_jump();
+    }
+    R_SizeValue newCapacity = oldCapacity + additionalCapacity;
+    if (!R_Arms_reallocateUnmanaged_nojump(&self->elements, newCapacity)) {
+      R_setStatus(R_Status_AllocationFailed);
+      R_jump();
+    }
+    self->capacity = newCapacity;
   }
 }
 
@@ -45,7 +75,7 @@ _R_StringBuffer_registerType
   (
   )
 {
-  R_registerObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1, sizeof(R_StringBuffer), NULL, NULL, &R_StringBuffer_finalize);
+  R_registerObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1, sizeof(R_StringBuffer), NULL, NULL, &R_StringBuffer_destruct);
 }
 
 R_StringBuffer*
@@ -54,10 +84,10 @@ R_StringBuffer_create
   )
 {
   R_StringBuffer* self = R_allocateObject(R_getObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1));
-  self->p = NULL;
-  self->sz = 0;
-  self->cp = 0;
-  if (!R_Arms_allocateUnmanaged_nojump(&self->p, 0)) {
+  self->elements = NULL;
+  self->size = 0;
+  self->capacity = 0;
+  if (!R_Arms_allocateUnmanaged_nojump(&self->elements, 0)) {
     R_jump();
   }
   return self;
@@ -71,11 +101,11 @@ R_StringBuffer_endsWith_pn
     R_SizeValue numberOfBytes
   )
 {
-  if (self->sz < numberOfBytes) {
+  if (self->size < numberOfBytes) {
     return R_BooleanValue_False;
   }
-  R_SizeValue d = self->sz - numberOfBytes;
-  return !memcmp(self->p + d, bytes, numberOfBytes);
+  R_SizeValue d = self->size - numberOfBytes;
+  return !memcmp(self->elements + d, bytes, numberOfBytes);
 }
 
 R_BooleanValue
@@ -86,10 +116,10 @@ R_StringBuffer_startsWith_pn
     R_SizeValue numberOfBytes
   )
 {
-  if (self->sz < numberOfBytes) {
+  if (self->size < numberOfBytes) {
     return R_BooleanValue_False;
   }
-  return !memcmp(self->p, bytes, numberOfBytes);
+  return !memcmp(self->elements, bytes, numberOfBytes);
 }
 
 void
@@ -97,34 +127,59 @@ R_StringBuffer_append_pn
   (
     R_StringBuffer* self,
     void const* bytes,
-    size_t numberOfBytes
+    R_SizeValue numberOfBytes
   )
 {
   if (!bytes) {
     R_setStatus(R_Status_ArgumentValueInvalid);
     R_jump();
   }
-  if (!R_isUtf8(bytes, numberOfBytes)) {
+  if (!R_isUtf8(bytes, numberOfBytes, NULL)) {
     R_setStatus(R_Status_EncodingInvalid);
     R_jump();
   }
-  size_t freeCapacity = self->cp - self->sz;
-  if (freeCapacity < numberOfBytes) {
-    size_t additionalCapacity = numberOfBytes - freeCapacity;
-    size_t oldCapacity = self->cp;
-    if (SIZE_MAX - oldCapacity < additionalCapacity) {
-      R_setStatus(R_Status_AllocationFailed);
-      R_jump();
-    }
-    size_t newCapacity = oldCapacity + additionalCapacity;
-    if (!R_Arms_reallocateUnmanaged_nojump(&self->p, newCapacity)) {
-      R_setStatus(R_Status_AllocationFailed);
-      R_jump();
-    }
-    self->cp = newCapacity;
+  ensureFreeCapacityBytes(self, numberOfBytes);
+  memcpy(self->elements + self->size, bytes, numberOfBytes);
+  self->size += numberOfBytes;
+}
+
+void
+R_StringBuffer_append
+  (
+    R_StringBuffer* self,
+    R_Value value
+  )
+{
+  if (!R_Value_isObjectReferenceValue(&value)) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
   }
-  memcpy(self->p + self->sz, bytes, numberOfBytes);
-  self->sz += numberOfBytes;
+  R_ObjectReferenceValue referenceValue = R_Value_getObjectReferenceValue(&value);
+  if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1))) {
+    R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
+    if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
+      R_setStatus(R_Status_EncodingInvalid);
+      R_jump();
+    }
+    ensureFreeCapacityBytes(self, R_ByteBuffer_getNumberOfBytes(object));
+    memcpy(self->elements + self->size, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
+    self->size += R_ByteBuffer_getNumberOfBytes(object);
+  } else if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.String", sizeof("R.String") - 1))) {
+    R_String* object = (R_String*)referenceValue;
+    // The Byte sequence of R.String is guaranteed to be an UTF8 Byte sequence.
+    ensureFreeCapacityBytes(self, R_String_getNumberOfBytes(object));
+    memcpy(self->elements + self->size, R_String_getBytes(object), R_String_getNumberOfBytes(object));
+    self->size += R_String_getNumberOfBytes(object);
+  } else if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1))) {
+    R_StringBuffer* object = (R_StringBuffer*)referenceValue;
+    // The Byte sequence of R.StringBuffer is guaranteed to be an UTF8 Byte sequence.
+    ensureFreeCapacityBytes(self, R_StringBuffer_getNumberOfBytes(object));
+    memcpy(self->elements + self->size, R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
+    self->size += R_StringBuffer_getNumberOfBytes(object);
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
 }
 
 R_BooleanValue
@@ -137,8 +192,8 @@ R_StringBuffer_isEqualTo
   if (self == other) {
     return R_BooleanValue_True;
   }
-  if (self->sz == other->sz) {
-    return !memcmp(self->p, other->p, self->sz);
+  if (self->size == other->size) {
+    return !memcmp(self->elements, other->elements, self->size);
   } else {
     return R_BooleanValue_False;
   }
@@ -150,5 +205,19 @@ R_StringBuffer_clear
     R_StringBuffer* self
   )
 {
-  self->sz = 0;
+  self->size = 0;
 }
+
+R_SizeValue
+R_StringBuffer_getNumberOfBytes
+  (
+    R_StringBuffer const* self
+  )
+{ return self->size; }
+
+R_Natural8Value const*
+R_StringBuffer_getBytes
+  (
+    R_StringBuffer const* self
+  )
+{ return self->elements; }

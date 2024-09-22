@@ -38,8 +38,10 @@ BeginProduct(Tools.IconGenerator)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/IconGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/IconGenerator/Configure.h @ONLY)
 
 list(APPEND Tools.IconGenerator.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/IconGenerator/Main.c)
-list(APPEND Tools.IconGenerator.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/IconGenerator/Configure.h)
+list(APPEND Tools.IconGenerator.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/IconGenerator/Configure.h)
 
 target_link_libraries(Tools.IconGenerator Tools.Visuals2d Arcadia.R Arcadia.Arms)
+
+set_target_properties(Tools.IconGenerator PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.ico\"")
 
 EndProduct(Tools.IconGenerator executable)

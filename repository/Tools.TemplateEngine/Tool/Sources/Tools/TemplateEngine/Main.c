@@ -34,14 +34,16 @@ main1
   R_FileSystem* fileSystem = R_FileSystem_create();
   Context* context = Context_create();
   context->stack = R_Stack_create();
-  context->target = R_Utf8Writer_create(R_ByteBuffer_create());
-  context->temporary = R_Utf8Writer_create(R_ByteBuffer_create());
+  context->targetBuffer = R_ByteBuffer_create();
+  context->target = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(context->targetBuffer);
+  context->temporaryBuffer = R_ByteBuffer_create();
+  context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(context->temporaryBuffer);
   R_FilePath* filePath = R_FilePath_parseNative(argv[1], strlen(argv[1]));
   R_Value filePathValue;
   R_Value_setObjectReferenceValue(&filePathValue, filePath);
   R_Stack_push(context->stack, filePathValue);
   Context_onRun(context);
-  R_FileSystem_setFileContents(fileSystem, R_FilePath_parseNative(argv[2], strlen(argv[2])), context->target->target);
+  R_FileSystem_setFileContents(fileSystem, R_FilePath_parseNative(argv[2], strlen(argv[2])), context->targetBuffer);
 }
 
 int main(int argc, char** argv) {

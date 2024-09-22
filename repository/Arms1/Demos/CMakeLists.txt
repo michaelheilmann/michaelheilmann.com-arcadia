@@ -17,20 +17,17 @@
 
 cmake_minimum_required(VERSION 3.29)
 
+if (NOT MyProjectIsDefined)
+  if (NOT DEFINED MyProjectName)
+    set(MyProjectName "Arcadia")
+  endif()
+  project(${MyProjectName})
+  enable_testing()
+  include(FetchContent)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  set(MyProjectIsDefined)
+endif()
 set(MyProjectName "Arcadia")
 
-set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../)
-include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
-
-include(FetchContent)
-
-if (NOT TARGET ${MyProjectName}.Arms)
-  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
-  get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
-                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-  message(STATUS "fetching ${Arms1-Source-Dir}")
-  FetchContent_Declare(arms1 SOURCE_DIR ${Arms1-Source-Dir})
-  FetchContent_MakeAvailable(arms1)
-endif()
-
-add_subdirectory(demo1)
+add_subdirectory(Demo1)

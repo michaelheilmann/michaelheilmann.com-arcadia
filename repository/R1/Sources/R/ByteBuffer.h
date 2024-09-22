@@ -116,6 +116,18 @@ R_ByteBuffer_getSize
     R_ByteBuffer const* self
   );
 
+R_SizeValue
+R_ByteBuffer_getNumberOfBytes
+  (
+    R_ByteBuffer const* self
+  );
+
+R_Natural8Value const*
+R_ByteBuffer_getBytes
+  (
+    R_ByteBuffer const* self
+  );
+
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-getat
 R_Natural8Value
 R_ByteBuffer_getAt

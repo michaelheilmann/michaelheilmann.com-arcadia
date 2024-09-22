@@ -35,8 +35,10 @@ FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "pat
 add_executable(${MyProjectName}.Arms.Demo1)
 BeginProduct(${MyProjectName}.Arms.Demo1)
 
-list(APPEND ${MyProjectName}.Arms.Demo1.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/main.c)
+list(APPEND ${MyProjectName}.Arms.Demo1.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Main.c)
 
 target_link_libraries(${MyProjectName}.Arms.Demo1 ${MyProjectName}.Arms)
+
+set_target_properties(${MyProjectName}.Arms.Demo1 PROPERTIES FOLDER "Arms")
 
 EndProduct(${MyProjectName}.Arms.Demo1 executable)

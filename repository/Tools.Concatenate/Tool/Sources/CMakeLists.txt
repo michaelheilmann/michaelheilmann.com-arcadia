@@ -39,7 +39,7 @@ if (NOT TARGET Tools.Concatenate)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/Concatenate/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h @ONLY)
 
     list(APPEND Tools.Concatenate.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/Concatenate/Main.c)
-    list(APPEND Tools.Concatenate.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h)
+    list(APPEND Tools.Concatenate.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h)
 
     target_link_libraries(Tools.Concatenate Arcadia.R Arcadia.Arms)
 

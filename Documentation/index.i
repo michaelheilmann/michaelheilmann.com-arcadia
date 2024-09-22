@@ -15,17 +15,30 @@
     <div style='flex-grow:0;'></div>
   </header>
   <main style='flex-grow: 1; display: flex; flex-direction: row;'>
+    <div style='flex-grow:0; padding-left: 2rem; padding-bottom: 2rem;'>
+      <div style='display: flex; flex-direction: row'>
+        <span style="margin-right: 2rem; font-size: small; text-decoration: none">Projects</span>
+        <a style='margin-right: 2rem; font-size: small; text-decoration: none;' href = 'https://michaelheilmann.com/repository/Arms1'>ARMS</a>
+        <a style='font-size: small; text-decoration: none;' href = 'https://michaelheilmann.com/repository/R1'>R</a>
+      </div>
+    </div>
+    
+    <div style='flex-grow:1;'></div>
+    
+    <div style='flex-grow:0; padding-right: 2rem; padding-bottom: 2rem;'>
+    </div>
   </main>
   <!-- flex-direction: row ~ from left to right -->
   <footer style='flex-grow: 0; display: flex; flex-direction: row;'>
     <div style='flex-grow:0; padding-left: 2rem; padding-bottom: 2rem;'>
-    <div style='display: flex; flex-direction: row'>
-    <a style='margin-right: 2rem; font-size: small; text-decoration: none;' href = 'https://michaelheilmann.com/repository/Arms1'>ARMS</a>
-    <a style='font-size: small; text-decoration: none;' href = 'https://michaelheilmann.com/repository/R1'>R</a>
+      <div style='display: flex; flex-direction: row'>
+
+      </div>
     </div>
-    </div>
+    
     <div style='flex-grow:1;'></div>
-    <div style='flex-grow:0; padding-right: 2rem; padding-bottom: 2rem;'><a style='text-decoration: none;' href='mailto:contact@@michaelheilmann.com'>contact@@michaelheilmann.com</a></div>
+    
+    <div style='flex-grow:0; padding-right: 2rem; padding-bottom: 2rem;'><a style='font-size: small; text-decoration: none;' href='mailto:contact@@michaelheilmann.com'>contact@@michaelheilmann.com</a></div>
   </footer>
 </body>
 </html>

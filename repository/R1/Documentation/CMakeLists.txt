@@ -23,6 +23,7 @@ if (NOT MyProjectIsDefined)
   endif()
   project(${MyProjectName})
   enable_testing()
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
   include(FetchContent)
   set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
@@ -62,3 +63,5 @@ add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
                    DEPENDS Tools.TemplateEngine ${CMAKE_CURRENT_SOURCE_DIR}/index.i)
 
 add_custom_target(${MyProjectName}.R.BuildDocs ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../index.html)
+
+set_target_properties(${MyProjectName}.R.BuildDocs PROPERTIES FOLDER "R")

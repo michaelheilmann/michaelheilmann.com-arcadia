@@ -29,7 +29,11 @@ Context_registerType
 
 struct Context {
   R_Utf8Writer* target;
+  R_ByteBuffer* targetBuffer;
+
   R_Utf8Writer* temporary;
+  R_ByteBuffer* temporaryBuffer;
+
   R_Stack* stack;
   R_List* files;
 };

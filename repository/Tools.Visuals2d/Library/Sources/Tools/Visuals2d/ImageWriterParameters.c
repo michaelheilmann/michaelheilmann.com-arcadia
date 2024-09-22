@@ -33,7 +33,7 @@ ImageWriterParameters_visit
 }
 
 static void
-ImageWriterParameters_finalize
+ImageWriterParameters_destruct
   (
     ImageWriterParameters* self
   )
@@ -44,7 +44,7 @@ _ImageWriterParameters_registerType
   (
   )
 {
-  R_registerObjectType("ImageWriterParameters", sizeof("ImageWriterParameters") - 1, sizeof(ImageWriterParameters), NULL, &ImageWriterParameters_visit, &ImageWriterParameters_finalize);
+  R_registerObjectType("ImageWriterParameters", sizeof("ImageWriterParameters") - 1, sizeof(ImageWriterParameters), NULL, &ImageWriterParameters_visit, &ImageWriterParameters_destruct);
 }
 
 ImageWriterParameters*

@@ -32,8 +32,12 @@ Context_visit
     Context* self
   )
 {
+  R_Object_visit(self->targetBuffer);
   R_Object_visit(self->target);
+
+  R_Object_visit(self->temporaryBuffer);
   R_Object_visit(self->temporary);
+
   R_Object_visit(self->stack);
   R_Object_visit(self->files);
 }
@@ -52,9 +56,11 @@ Context_create
   )
 {
   Context* self = R_allocateObject(R_getObjectType("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1));
+  self->targetBuffer = NULL;
   self->target = NULL;
-  self->stack = NULL;
+  self->temporaryBuffer = NULL;
   self->temporary = NULL;
+  self->stack = NULL;
   self->files = R_List_create();
   return self;
 }
@@ -84,7 +90,7 @@ Context_onRun
     R_FilePath* filePath = (R_FilePath*)R_Value_getObjectReferenceValue(&elementValue);
     FileContext* fileContext = FileContext_create(context, filePath);
     R_ByteBuffer* sourceByteBuffer = R_FileSystem_getFileContents(fileSystem, fileContext->sourceFilePath);
-    fileContext->source = R_Utf8Reader_create(sourceByteBuffer);
+    fileContext->source = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(sourceByteBuffer);
     recursionGuard(context, filePath);
     FileContext_execute(fileContext);
     R_List_remove(context->files, R_List_getSize(context->files) - 1, 1);

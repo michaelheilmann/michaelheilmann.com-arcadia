@@ -20,7 +20,8 @@
 #include "R.h"
 
 typedef struct Context {
-  R_Utf8Writer* temporary;
+  R_Utf8Writer* temporaryWriter;
+  R_ByteBuffer* temporaryBuffer;
   R_Utf8Reader* reader;
   R_FilePath* target;
 } Context;
@@ -31,7 +32,7 @@ static void next(Context* context) {
 
 static void saveAndNext(Context* context) {
   R_Natural32Value codePoint = R_Utf8Reader_getCodePoint(context->reader);
-  R_Utf8Writer_writeCodePoints(context->temporary, &codePoint, 1);
+  R_Utf8Writer_writeCodePoints(context->temporaryWriter, &codePoint, 1);
   next(context);
 }
 
@@ -83,8 +84,9 @@ parseWindowsFilePath
   )
 {
   Context context;
-  context.reader = R_Utf8Reader_create(source);
-  context.temporary = R_Utf8Writer_create(R_ByteBuffer_create());
+  context.reader = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(source);
+  context.temporaryBuffer = R_ByteBuffer_create();
+  context.temporaryWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(context.temporaryBuffer);
   context.target = target;
   
   target->relative = R_BooleanValue_False;
@@ -99,23 +101,28 @@ parseWindowsFilePath
         // absolute.
         context.target->relative = R_BooleanValue_False;
         next(&context);
-        context.target->root = R_String_create(context.temporary->target->p, context.temporary->target->sz);
-        R_ByteBuffer_clear(context.temporary->target);
+        R_Value temporaryValue;
+        R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)context.temporaryBuffer);
+        context.target->root = R_String_create(temporaryValue);
+        R_ByteBuffer_clear(context.temporaryBuffer);
       } else {
         // relative to "root" drive and the diretory on the drive
         context.target->relative = R_BooleanValue_True;
-        context.target->root = R_String_create(context.temporary->target->p, context.temporary->target->sz);
-        R_ByteBuffer_clear(context.temporary->target);
+        R_Value temporaryValue;
+        R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)context.temporaryBuffer);
+        context.target->root = R_String_create(temporaryValue);
+        R_ByteBuffer_clear(context.temporaryBuffer);
       }
     } else {
       while (!isEnd(&context) && !isDirectorySeparator(&context)) {
         saveAndNext(&context);
       }
-      if (context.temporary->target->sz) {
+      if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
         R_Value temporary;
-        R_Value_setObjectReferenceValue(&temporary, R_String_create(context.temporary->target->p, context.temporary->target->sz));
+        R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
+        R_Value_setObjectReferenceValue(&temporary, R_String_create(temporary));
         R_List_append(context.target->fileNames, temporary);
-        R_ByteBuffer_clear(context.temporary->target);
+        R_ByteBuffer_clear(context.temporaryBuffer);
       }
     }
   } else if (isDirectorySeparator(&context)) {
@@ -126,25 +133,27 @@ parseWindowsFilePath
     context.target->relative = R_BooleanValue_True;
   } 
   // read the remaining directories
-  R_ByteBuffer_clear(context.temporary->target);
+  R_ByteBuffer_clear(context.temporaryBuffer);
   while (!isEnd(&context)) {
     if (isDirectorySeparator(&context)) {
       next(&context);
-      if (context.temporary->target->sz) {
+      if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
         R_Value temporary;
-        R_Value_setObjectReferenceValue(&temporary, R_String_create(context.temporary->target->p, context.temporary->target->sz));
+        R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
+        R_Value_setObjectReferenceValue(&temporary, R_String_create(temporary));
         R_List_append(context.target->fileNames, temporary);
-        R_ByteBuffer_clear(context.temporary->target);
+        R_ByteBuffer_clear(context.temporaryBuffer);
       }
     } else {
       saveAndNext(&context);
     }
   }
-  if (context.temporary->target->sz) {
+  if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
     R_Value temporary;
-    R_Value_setObjectReferenceValue(&temporary, R_String_create(context.temporary->target->p, context.temporary->target->sz));
+    R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
+    R_Value_setObjectReferenceValue(&temporary, R_String_create(temporary));
     R_List_append(context.target->fileNames, temporary);
-    R_ByteBuffer_clear(context.temporary->target);
+    R_ByteBuffer_clear(context.temporaryBuffer);
   }
 }
 
@@ -156,8 +165,9 @@ parseUnixFilePath
   )
 {
   Context context;
-  context.reader = R_Utf8Reader_create(source);
-  context.temporary = R_Utf8Writer_create(R_ByteBuffer_create());
+  context.reader = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(source);
+  context.temporaryBuffer = R_ByteBuffer_create();
+  context.temporaryWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(context.temporaryBuffer);
   context.target = target;
 
   target->relative = R_BooleanValue_True;
@@ -166,34 +176,36 @@ parseUnixFilePath
 
   if (isSlash(&context)) {
     target->relative = R_BooleanValue_False;
-    target->root = R_String_create("/", sizeof("/") - 1);
+    target->root = R_String_create_pn("/", sizeof("/") - 1);
     next(&context);
   }
   // read the remaining directories
-  R_ByteBuffer_clear(context.temporary->target);
+  R_ByteBuffer_clear(context.temporaryBuffer);
   while (!isEnd(&context)) {
     if (isDirectorySeparator(&context)) {
       next(&context);
-      if (context.temporary->target->sz) {
+      if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
         R_Value temporary;
-        R_Value_setObjectReferenceValue(&temporary, R_String_create(context.temporary->target->p, context.temporary->target->sz));
+        R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
+        R_Value_setObjectReferenceValue(&temporary, R_String_create(temporary));
         R_List_append(context.target->fileNames, temporary);
-        R_ByteBuffer_clear(context.temporary->target);
+        R_ByteBuffer_clear(context.temporaryBuffer);
       }
     } else {
       saveAndNext(&context);
     }
   }
-  if (context.temporary->target->sz) {
+  if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
     R_Value temporary;
-    R_Value_setObjectReferenceValue(&temporary, R_String_create(context.temporary->target->p, context.temporary->target->sz));
+    R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
+    R_Value_setObjectReferenceValue(&temporary, R_String_create(temporary));
     R_List_append(context.target->fileNames, temporary);
-    R_ByteBuffer_clear(context.temporary->target);
+    R_ByteBuffer_clear(context.temporaryBuffer);
   }
 }
 
 static void
-R_FilePath_finalize
+R_FilePath_destruct
   (
     R_FilePath* self
   );
@@ -205,7 +217,7 @@ R_FilePath_visit
   );
 
 static void
-R_FilePath_finalize
+R_FilePath_destruct
   (
     R_FilePath* self
   )
@@ -226,7 +238,7 @@ _R_FilePath_registerType
   (
   )
 {
-  R_registerObjectType("R.FilePath", sizeof("R.FilePath") - 1, sizeof(R_FilePath), NULL, &R_FilePath_visit, &R_FilePath_finalize);
+  R_registerObjectType("R.FilePath", sizeof("R.FilePath") - 1, sizeof(R_FilePath), NULL, &R_FilePath_visit, &R_FilePath_destruct);
 }
 
 R_FilePath*
@@ -324,7 +336,7 @@ normalize
   }
   if (!self->root && R_List_isEmpty(self->fileNames)) {
     // If the path is empty, then the path is `.`.
-    R_List_appendObjectReferenceValue(self->fileNames, (R_ObjectReferenceValue)R_String_create(".", sizeof(".") - 1));
+    R_List_appendObjectReferenceValue(self->fileNames, (R_ObjectReferenceValue)R_String_create_pn(".", sizeof(".") - 1));
   }
 }
 
@@ -335,11 +347,12 @@ R_FilePath_toNative
   )
 {
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
-  R_Utf8Writer* temporary = R_Utf8Writer_create(R_ByteBuffer_create());
+  R_ByteBuffer* temporaryBuffer = R_ByteBuffer_create();
+  R_Utf8Writer* temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(temporaryBuffer);
   R_SizeValue i = 0, n = R_List_getSize(self->fileNames);
 
   if (self->root) {
-    R_Utf8Writer_writeBytes(temporary, self->root->p, self->root->sz);
+    R_Utf8Writer_writeBytes(temporary, self->root->p, self->root->numberOfBytes);
     R_Natural32Value x;
     x = ':';
     R_Utf8Writer_writeCodePoints(temporary, &x, 1);
@@ -353,7 +366,7 @@ R_FilePath_toNative
   if (n > 0) {
     R_Value e = R_List_getAt(self->fileNames, 0);
     R_String* fileName = (R_String*)R_Value_getObjectReferenceValue(&e);
-    R_Utf8Writer_writeBytes(temporary, fileName->p, fileName->sz);
+    R_Utf8Writer_writeBytes(temporary, fileName->p, fileName->numberOfBytes);
     i++;
 
     for (; i < n; ++i) {
@@ -363,18 +376,21 @@ R_FilePath_toNative
 
       R_Value e = R_List_getAt(self->fileNames, i);
       R_String* fileName = (R_String*)R_Value_getObjectReferenceValue(&e);
-      R_Utf8Writer_writeBytes(temporary, fileName->p, fileName->sz);
+      R_Utf8Writer_writeBytes(temporary, fileName->p, fileName->numberOfBytes);
     }
   }
   R_Natural32Value x = '\0';
   R_Utf8Writer_writeCodePoints(temporary, &x, 1);
-  return R_String_create(temporary->target->p, temporary->target->sz);
+  R_Value temporaryValue;
+  R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)temporaryBuffer);
+  return R_String_create(temporaryValue);
 #elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
   if (self->root) {
     R_setStatus(R_Status_ArgumentValueInvalid);
     R_jump();
   }
-  R_Utf8Writer* temporary = R_Utf8Writer_create(R_ByteBuffer_create());
+  R_ByteBuffer* temporaryBuffer = R_ByteBuffer_create();
+  R_Utf8Writer* temporary = R_Utf8Writer_create(temporaryBuffer);
   R_SizeValue i = 0, n = R_List_getSize(self->fileNames);
   if (self->relative) {
     R_Natural32Value x;
@@ -399,7 +415,7 @@ R_FilePath_toNative
   }
   R_Natural32Value x = '\0';
   R_Utf8Writer_writeCodePoints(temporary, &x, 1);
-  return R_String_create(temporary->target->p, temporary->target->sz);
+  return R_String_create_pn(temporaryBuffer->p, temporaryBuffer->sz);
 #else
   #error("operating system not yet supported")
 #endif

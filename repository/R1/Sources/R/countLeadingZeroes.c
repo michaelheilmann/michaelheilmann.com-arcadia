@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-29
+// Last modified: 2024-09-28
 
 #include "R/countLeadingZeroes.h"
 
@@ -21,26 +21,52 @@
 #include <intrin.h>
 #endif
 
-R_SizeValue R_countLeadingZeroes_i8(R_Integer8Value x) {
+R_SizeValue
+R_countLeadingZeroesInteger8Value
+  (
+    R_Integer8Value x
+  )
+{
   // Cast is defined behavior: Two's complete cast signed to unsigned is Bit reinterpretation when 2-complement.
-  return R_countLeadingZeroes_n8((R_Natural8Value)x);
+  return R_countLeadingZeroesNatural8Value((R_Natural8Value)x);
 }
 
-R_SizeValue R_countLeadingZeroes_i16(R_Integer16Value x) {
+R_SizeValue
+R_countLeadingZeroesInteger16Value
+  (
+    R_Integer16Value x
+  )
+{
   // Cast is defined behavior: Two's complete cast signed to unsigned is Bit reinterpretation when 2-complement.
-  return R_countLeadingZeroes_n16((R_Natural16Value)x);
+  return R_countLeadingZeroesNatural16Value((R_Natural16Value)x);
 }
 
-R_SizeValue R_countLeadingZeroes_i32(R_Integer32Value x) {
+R_SizeValue
+R_countLeadingZeroesInteger32Value
+  (
+    R_Integer32Value x
+  )
+{
   // Cast is defined behavior: Two's complete cast signed to unsigned is Bit reinterpretation when 2-complement.
-  return R_countLeadingZeroes_n32((R_Natural32Value)x);
+  return R_countLeadingZeroesNatural32Value((R_Natural32Value)x);
 }
 
-R_SizeValue R_countLeadingZeroes_i64(R_Integer64Value x) {
+R_SizeValue
+R_countLeadingZeroesInteger64Value
+  (
+    R_Integer64Value x
+  )
+{
   // Cast is defined behavior: Two's complete cast signed to unsigned is Bit reinterpretation when 2-complement.
-  return R_countLeadingZeroes_n64((R_Natural64Value)x);
+  return R_countLeadingZeroesNatural64Value((R_Natural64Value)x);
 }
-R_SizeValue R_countLeadingZeroes_n8(R_Natural8Value x) {
+
+R_SizeValue
+R_countLeadingZeroesNatural8Value
+  (
+    R_Natural8Value x
+  )
+{
   // Maps a value from 0000 (0x0) to 1111 (0xf) the value's number of leading zero bits.
   static const short lookup[16] = {
     4, //  0: 0000
@@ -65,15 +91,25 @@ R_SizeValue R_countLeadingZeroes_n8(R_Natural8Value x) {
   return upper ? lookup[upper] : 4 + lookup[lower];
 }
 
-R_SizeValue R_countLeadingZeroes_n16(R_Natural16Value x) {
+R_SizeValue
+R_countLeadingZeroesNatural16Value
+  (
+    R_Natural16Value x
+  )
+{
   R_Natural16Value t;
   t = (x & 0xff00) >> 8;
-  if (t) return R_countLeadingZeroes_n8((R_Natural8Value)t);
+  if (t) return R_countLeadingZeroesNatural8Value((R_Natural8Value)t);
   t = (x & 0x00ff) >> 0;
-  return 8 + R_countLeadingZeroes_n8((R_Natural8Value)t);
+  return 8 + R_countLeadingZeroesNatural8Value((R_Natural8Value)t);
 }
 
-R_SizeValue R_countLeadingZeroes_n32(R_Natural32Value x) {
+R_SizeValue
+R_countLeadingZeroesNatural32Value
+  (
+    R_Natural32Value x
+  )
+{
 #if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
   unsigned long n;
   if (_BitScanReverse(&n, x)) {
@@ -86,27 +122,37 @@ R_SizeValue R_countLeadingZeroes_n32(R_Natural32Value x) {
 #else
   R_Natural32Value t;
   t = (x & 0xffff0000) >> 16;
-  if (!t) return R_countLeadingZeroes_n16((R_Natural16Value)t);
+  if (!t) return R_countLeadingZeroesNatural16Value((R_Natural16Value)t);
   t = (x & 0x0000ffff) >> 0;
-  return 16 + R_countLeadingZeroes_n16((R_Natural16Value)t);
+  return 16 + R_countLeadingZeroesNatural16Value((R_Natural16Value)t);
 #endif
 }
 
-R_SizeValue R_countLeadingZeroes_n64(R_Natural64Value x) {
+R_SizeValue
+R_countLeadingZeroesNatural64Value
+  (
+    R_Natural64Value x
+  )
+{
   R_Natural32Value hi = (x & 0xffffffff00000000) >> 32;
   R_Natural32Value lo = (x & 0x00000000ffffffff) >> 0;
   if (hi) {
-    return R_countLeadingZeroes_n32(hi);
+    return R_countLeadingZeroesNatural32Value(hi);
   } else {
-    return 32 + R_countLeadingZeroes_n32(lo);
+    return 32 + R_countLeadingZeroesNatural32Value(lo);
   }
 }
 
-R_SizeValue R_countLeadingZeroes_s(R_SizeValue x) {
+R_SizeValue
+R_countLeadingZeroesSizeValue
+  (
+    R_SizeValue x
+  )
+{
 #if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X64
-  return R_countLeadingZeroes_n64(x);
+  return R_countLeadingZeroesNatural64Value(x);
 #elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X86
-  return R_countLeadingZeroes_n32(x);
+  return R_countLeadingZeroesNatural32Value(x);
 #else
   #error("environment not (yet) supported")
 #endif

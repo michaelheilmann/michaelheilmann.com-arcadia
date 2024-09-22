@@ -36,6 +36,9 @@
 
 #include "R/ObjectReference.h"
 
+#include "R/Real32.h"
+#include "R/Real64.h"
+
 #include "R/Size.h"
 
 #include "R/Void.h"
@@ -58,7 +61,10 @@
 
 #define R_ValueTag_ObjectReference (12)
 
-#define R_ValueTag_Size (13)
+#define R_ValueTag_Real32 (13)
+#define R_ValueTag_Real64 (14)
+
+#define R_ValueTag_Size (15)
 
 // The tag for type "Void" must be 0.
 #define R_ValueTag_Void (0)
@@ -87,6 +93,9 @@ typedef struct R_Value{
     Define(Natural8, natural8)
 
     Define(ObjectReference, objectReference)
+
+    Define(Real32, real32)
+    Define(Real64, real64)
 
     Define(Size, size)
     
@@ -146,6 +155,9 @@ Define(Natural64, natural64)
 Define(Natural8, natural8)
 
 Define(ObjectReference, objectReference)
+
+Define(Real32, real32)
+Define(Real64, real64)
 
 Define(Size, size)
 

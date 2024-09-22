@@ -13,25 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-01
+// Last modified: 2024-09-22
 
 #if !defined(R_OBJECT_INTERNAL_H_INCLUDED)
 #define R_OBJECT_INTERNAL_H_INCLUDED
 
-#include "R/Configure.h"
-
-// Startup the type system
-// WARNING: Internal function.
-void
-_R_startupTypes
-  (
-  );
-
-// Shutdown the type system.
-// WARNING: Internal function.
-void
-_R_shutdownTypes
-  (
-  );
+#include "R/Types.internal.h"
 
 #endif // R_OBJECT_INTERNAL_H_INCLUDED

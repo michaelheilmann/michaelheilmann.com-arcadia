@@ -8,20 +8,24 @@ This repository contains
 - the C source code of support libraries for the tools
 
 ### Roadmap
-- **Milestone 4: Tooling for generating icons and banners (Windows only) | Tools.BannerGenerator**: Percentage done: 0% @ Week 3 September 2024
+- **Milestone 5: Maintain roadmap on website**: Percentage done: 0% @ Week 1 October 2024
+The roadmap shall be maintained on the website.
+
+- **Milestone 4: Tooling for generating icons and banners (Windows only) | Tools.BannerGenerator**: Percentage done: 100% @ Week 4 September 2024
 Certain operating systems (in particular Windows) require banners for application installers.
 We require a tool to generate those.
 \
-The banner generator generates a "BMP" file.
-As parameters, it at least takes the width and the height of the banner.
-It will generate a black background width a single white symbol on it.
+The banner generator generates a "PNG" file.
+As parameters, it takes the width and the height of the banner and the path of the "PNG" file.
+The generated "PNG" file is an opaque black banner.
 
 - **Milestone 3: Tooling for generating icons (Windows only) | Tools.IconGenerator**: Percentage done: 100% @ Week 3 September 2024
 Certain operating systems (in particular Windows) require Icons for application windows and application installers.
 We require a tool to generate those.
 \
 The icon generator generates an "ICO" file.
-That file contains a black icon of the size 8x8, 16x16, 24x24, 32x32, 48x48, 64x64, 96x96, 128x128, 256x256.
+As parameter, it takes the path of the "ICO" file.
+The generated "ICO" file contains opaque black black icons of the sizes 8x8, 16x16, 24x24, 32x32, 48x48, 64x64, 96x96, 128x128, and 256x256.
 
 - **Milestone 2: Tooling for building the website | Tools.TemplateEngine**: Percentage done: 100% @ Week 2 September 2024
 The source code of the website consists of multiple `.t` files. A tool called *Tools.TemplateEngine* shall be created in this milestone. The tool reads `.t` files and creates the output `.html`  files.

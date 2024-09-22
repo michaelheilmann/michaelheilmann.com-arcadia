@@ -19,7 +19,6 @@
 #define R_TYPENAMES_H_INCLUDED
 
 #include "R/Configure.h"
-#include "Arms.h"
 #include "R/Atoms.h"
 #include "R/Boolean.h"
 #include "R/Natural64.h"

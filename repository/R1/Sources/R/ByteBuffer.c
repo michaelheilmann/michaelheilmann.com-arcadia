@@ -18,22 +18,32 @@
 #include "ByteBuffer.h"
 
 #include <string.h>
-
-#include "Arms.h"
 #include "R.h"
+#include "R/ArmsIntegration.h"
 
-static void R_ByteBuffer_finalize(R_ByteBuffer* self);
+static void
+R_ByteBuffer_finalize
+  (
+    R_ByteBuffer* self
+  );
 
-static void R_ByteBuffer_finalize(R_ByteBuffer* self) {
+static void
+R_ByteBuffer_finalize
+  (
+    R_ByteBuffer* self
+  )
+{
   if (self->p) {
-    Arms_deallocateUnmanaged(self->p);
+    R_Arms_deallocateUnmanaged_nojump(self->p);
     self->p = NULL;
   }
 }
 
-void _R_ByteBuffer_registerType() {
-  R_registerObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1, sizeof(R_ByteBuffer), NULL, NULL, &R_ByteBuffer_finalize);
-}
+void
+_R_ByteBuffer_registerType
+  (
+  )
+{ R_registerObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1, sizeof(R_ByteBuffer), NULL, NULL, &R_ByteBuffer_finalize); }
 
 R_ByteBuffer*
 R_ByteBuffer_create
@@ -44,8 +54,7 @@ R_ByteBuffer_create
   self->p = NULL;
   self->sz = 0;
   self->cp = 0;
-  if (Arms_allocateUnmanaged(&self->p, 1)) {
-    R_setStatus(R_Status_AllocationFailed);
+  if (!R_Arms_allocateUnmanaged_nojump(&self->p, 1)) {
     R_jump();
   }
   return self;
@@ -126,20 +135,19 @@ R_ByteBuffer_insert_pn
   if (!numberOfBytes) {
     return;
   }
-  R_SizeValue freeCp = self->cp - self->sz;
-  if (freeCp < numberOfBytes) {
-    R_SizeValue additionalCp = numberOfBytes - freeCp;
-    R_SizeValue oldCp = self->cp;
-    if (SIZE_MAX - oldCp < additionalCp) {
+  R_SizeValue freeCapacity = self->cp - self->sz;
+  if (freeCapacity < numberOfBytes) {
+    R_SizeValue additionalCapacity = numberOfBytes - freeCapacity;
+    R_SizeValue oldCapacity = self->cp;
+    if (SIZE_MAX - oldCapacity < additionalCapacity) {
       R_setStatus(R_Status_AllocationFailed);
       R_jump();
     }
-    R_SizeValue newCp = oldCp + additionalCp;
-    if (Arms_reallocateUnmanaged(&self->p, newCp)) {
-      R_setStatus(R_Status_AllocationFailed);
+    R_SizeValue newCapacity = oldCapacity + additionalCapacity;
+    if (!R_Arms_reallocateUnmanaged_nojump(&self->p, newCapacity)) {
       R_jump();
     }
-    self->cp = newCp;
+    self->cp = newCapacity;
   }
   if (index < self->sz) {
     memmove(self->p + index, self->p + index + numberOfBytes, self->sz - index);
@@ -201,6 +209,20 @@ R_ByteBuffer_getSize
 {
   return self->sz;
 }
+
+R_SizeValue
+R_ByteBuffer_getNumberOfBytes
+  (
+    R_ByteBuffer const* self
+  )
+{ return self->sz; }
+
+R_Natural8Value const*
+R_ByteBuffer_getBytes
+  (
+    R_ByteBuffer const* self
+  )
+{ return self->p; }
 
 R_Natural8Value
 R_ByteBuffer_getAt

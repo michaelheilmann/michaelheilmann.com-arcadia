@@ -38,7 +38,9 @@ if (NOT TARGET ${MyProjectName}.Arms)
 
     list(APPEND ${MyProjectName}.Arms.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Arms.c)
     list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Arms.h)
-    list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Arms/Configure.h)
+    list(APPEND ${MyProjectName}.Arms.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Arms/Configure.h)
+
+    set_target_properties(${MyProjectName}.Arms PROPERTIES FOLDER "Arms")
 
     EndProduct(${MyProjectName}.Arms library)
 endif()

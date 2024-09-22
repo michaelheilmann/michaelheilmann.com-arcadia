@@ -21,6 +21,38 @@
 #include <string.h>
 #include <malloc.h>
 
+static void inline
+ENCODE_ARGB
+  (
+    uint32_t* p,
+    uint8_t r,
+    uint8_t g,
+    uint8_t b,
+    uint8_t a
+  )
+{
+  (*p) =  ((uint32_t)a) << 24
+       |  ((uint32_t)r) << 16
+       |  ((uint32_t)g) <<  8
+       |  ((uint32_t)b) <<  0;
+}
+
+static void inline
+ENCODE_RGBA
+  (
+    uint32_t* p,
+    uint8_t r,
+    uint8_t g,
+    uint8_t b,
+    uint8_t a
+  )
+{
+  (*p) = ((uint32_t)g) << 24
+       | ((uint32_t)r) << 16
+       | ((uint32_t)b) << 8
+       | ((uint32_t)a) << 0;
+}
+
 static void
 PixelBuffer_finalize
   (
@@ -135,12 +167,62 @@ PixelBuffer_createOpaqueRed
   self->width = width;
   self->height = height;
   self->linePadding = linePadding;
+  uint32_t pixelValue;
+  ENCODE_ARGB(&pixelValue, 255, 0, 0, 255);
   size_t lineStride = self->width * bytesPerPixel + self->linePadding;
   for (size_t y = 0; y < self->height; ++y) {
     uint32_t* p = (uint32_t*)(self->bytes + y * lineStride);
     for (size_t x = 0; x < self->width; ++x) {
       // ARGB
-      p[x] = 0xffff0000;
+      p[x] = pixelValue;
+    }
+  }
+  return self;
+}
+
+PixelBuffer*
+PixelBuffer_createOpaqueBlack
+  (
+    size_t linePadding,
+    size_t width,
+    size_t height,
+    uint8_t pixelFormat
+  )
+{
+  PixelBuffer* self = R_allocateObject(R_getObjectType("PixelBuffer", sizeof("PixelBuffer") - 1));
+  self->bytes = NULL;
+  self->height = 0;
+  self->linePadding = 0;
+  self->pixelFormat = 0;
+  self->width = 0;
+  size_t bytesPerPixel = 0;
+  switch (pixelFormat) {
+    case PixelFormat_An8Rn8Gn8Bn8: {
+      bytesPerPixel = 4;
+    } break;
+    case PixelFormat_Rn8Gn8Bn8: {
+      bytesPerPixel = 3;
+    } break;
+    default: {
+      R_setStatus(R_Status_ArgumentValueInvalid);
+      R_jump();
+    } break;
+  }
+  if (!R_Arms_allocateUnmanaged_nojump(&self->bytes, (width * bytesPerPixel + linePadding) * height)) {
+    R_jump();
+  }
+  self->pixelFormat = pixelFormat;
+  self->width = width;
+  self->height = height;
+  self->linePadding = linePadding;
+  uint32_t pixelValue;
+  ENCODE_ARGB(&pixelValue, 0, 0, 0, 255);
+  size_t lineStride = self->width * bytesPerPixel + self->linePadding;
+  for (size_t y = 0; y < self->height; ++y) {
+    uint32_t* p = (uint32_t*)(self->bytes + y * lineStride);
+    for (size_t x = 0; x < self->width; ++x) {
+      // ARGB
+      p[x] = pixelValue;
     }
   }
   return self;

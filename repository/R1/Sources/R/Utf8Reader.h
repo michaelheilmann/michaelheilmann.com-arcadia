@@ -18,29 +18,50 @@
 #if !defined(R_UTF8READER_H_INCLUDED)
 #define R_UTF8READER_H_INCLUDED
 
-#include "R/ByteBuffer.h"
+#include "R/Boolean.h"
 #include "R/Natural32.h"
+#include "R/Size.h"
 
 #define R_UTF8READER(x) ((R_Utf8Reader*)(x))
 typedef struct R_Utf8Reader R_Utf8Reader;
 void _R_Utf8Reader_registerType();
 
 struct R_Utf8Reader {
-  R_ByteBuffer* source;
-  R_SizeValue index;
-  R_Natural32Value codePoint;
-
   void (*next)(R_Utf8Reader* self);
   R_Natural32Value (*getCodePoint)(R_Utf8Reader* self);
   R_BooleanValue (*hasCodePoint)(R_Utf8Reader* self);
+  R_SizeValue (*getByteIndex)(R_Utf8Reader* self);
 };
 
-R_Utf8Reader* R_Utf8Reader_create(R_ByteBuffer* source);
+void
+R_Utf8Reader_construct
+  (
+    R_Utf8Reader* self
+  );
 
-void R_Utf8Reader_next(R_Utf8Reader* self);
+void
+R_Utf8Reader_next
+  (
+    R_Utf8Reader* self
+  );
 
-R_Natural32Value R_Utf8Reader_getCodePoint(R_Utf8Reader* self);
+R_Natural32Value
+R_Utf8Reader_getCodePoint
+  (
+    R_Utf8Reader* self
+  );
 
-R_BooleanValue R_Utf8Reader_hasCodePoint(R_Utf8Reader* self);
+R_BooleanValue
+R_Utf8Reader_hasCodePoint
+  (
+    R_Utf8Reader* self
+  );
+
+/// @return The index of the current Byte.
+R_SizeValue
+R_Utf8Reader_getByteIndex
+  (
+    R_Utf8Reader* self
+  );
 
 #endif // R_UTF8READER_H_INCLUDED

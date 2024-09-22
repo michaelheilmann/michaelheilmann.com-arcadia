@@ -122,6 +122,70 @@ R_Arms_run
   return R_Status_Success;
 }
 
+void
+R_Arms_visit
+  (
+    void* object
+  )
+{
+  if (object) {
+    Arms_visit(object);
+  }
+}
+
+void
+R_Arms_lock
+  (
+    void* object
+  )
+{
+  Arms_lock(object);
+}
+
+void
+R_Arms_unlock
+  (
+    void* object
+  )
+{
+  Arms_unlock(object);
+}
+
+R_BooleanValue
+R_Arms_registerType_nojump
+  (
+    void const* name,
+    R_SizeValue nameLength,
+    void (*typeRemoved)(uint8_t const*, size_t),
+    void (*visit)(void*),
+    void (*finalize)(void*)
+  )
+{
+  Arms_Status status = Arms_addType(name, nameLength, typeRemoved, visit, finalize);
+  if (status) {
+    switch (status) {
+      case Arms_Status_AllocationFailed: {
+        R_setStatus(R_Status_AllocationFailed);
+      } break;
+      case Arms_Status_ArgumentValueInvalid: {
+        R_setStatus(R_Status_ArgumentValueInvalid);
+      } break;
+      case Arms_Status_OperationInvalid: {
+        R_setStatus(R_Status_OperationInvalid);
+      } break;
+      case Arms_Status_TypeExists: {
+        R_setStatus(R_Status_OperationInvalid);
+      } break;
+      default: {
+        R_setStatus(R_Status_OperationInvalid);
+      } break;
+    };
+    return R_BooleanValue_False;
+  } else {
+    return R_BooleanValue_True;
+  }
+}
+
 R_BooleanValue
 R_Arms_allocate_nojump
   (

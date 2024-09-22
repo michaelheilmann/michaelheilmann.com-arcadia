@@ -13,11 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-27
+// Last modified: 2024-00-22
 
 #include "R/Value.h"
 
-#include "Arms.h"
+#include "R.h"
 
 void
 R_Value_visit
@@ -26,9 +26,7 @@ R_Value_visit
   )
 {
   if (self->tag == R_ValueTag_ObjectReference) {
-    if (self->objectReferenceValue) {
-      Arms_visit(self->objectReferenceValue);
-    }
+    R_Object_visit(self->objectReferenceValue);
   } else if (self->tag == R_ValueTag_Atom) {
     R_Atom_visit(self->atomValue);
   }

@@ -23,8 +23,10 @@
 #include <string.h>
 // uint8_t
 #include <stdint.h>
-// bool
+// bool, true, false
 #include <stdbool.h>
+// assert()
+#include <assert.h>
 
 #if defined(Arms_Configuration_WithLocks) && 1 == Arms_Configuration_WithLocks
 
@@ -45,8 +47,9 @@ typedef struct Arms_Lock Arms_Lock;
 
 struct Arms_Type {
   Arms_Type* next;
-  char* name;
+  uint8_t* name;
   size_t nameLength;
+  Arms_TypeRemovedCallbackFunction* typeRemoved;
   Arms_VisitCallbackFunction* visit;
   Arms_FinalizeCallbackFunction* finalize;
 };
@@ -85,9 +88,9 @@ struct Arms_Lock {
 
 #endif
 
-#define REFERENCECOUNT_MINIMUM (UINT32_C(0))
-#define REFERENCECOUNT_MAXIMUM (INT32_MAX)
-static int32_t g_referenceCount = 0;
+#define REFERENCECOUNT_MINIMUM (Arms_Size_Minimum)
+#define REFERENCECOUNT_MAXIMUM (Arms_Size_Maximum)
+static Arms_Size g_referenceCount = 0;
 
 static Arms_Type* g_types = NULL;
 static Arms_Tag* g_universe = NULL;
@@ -186,6 +189,9 @@ Arms_shutdown
     while (g_types) {
       Arms_Type* type = g_types;
       g_types = type->next;
+      if (type->typeRemoved) {
+        type->typeRemoved(type->name, type->nameLength);
+      }
       free(type->name);
       type->name = NULL;
       free(type);
@@ -197,10 +203,11 @@ Arms_shutdown
 }
 
 Arms_Status
-Arms_registerType
+Arms_addType
   (
-    char const* name,
-    size_t nameLength,
+    Arms_Natural8 const* name,
+    Arms_Size nameLength,
+    Arms_TypeRemovedCallbackFunction* typeRemoved,
     Arms_VisitCallbackFunction* visit,
     Arms_FinalizeCallbackFunction* finalize
   )
@@ -228,6 +235,7 @@ Arms_registerType
   }
   memcpy(type->name, name, nameLength);
   
+  type->typeRemoved = typeRemoved;
   type->visit = visit;
   type->finalize = finalize;
   
@@ -241,9 +249,9 @@ Arms_Status
 Arms_allocate
   (
     void** pObject,
-    char const* name,
-    size_t nameLength,
-    size_t size
+    Arms_Natural8 const* name,
+    Arms_Size nameLength,
+    Arms_Size size
   )
 {
   if (!pObject || !name) {
@@ -274,8 +282,6 @@ Arms_allocate
   *pObject = object + 1;
   return Arms_Status_Success;
 }
-
-#include <assert.h>
 
 Arms_Status
 Arms_run
@@ -410,7 +416,7 @@ Arms_Status
 Arms_allocateUnmanaged
   (
     void** p,
-    size_t n
+    Arms_Size n
   )
 {
   if (!p) {
@@ -428,7 +434,7 @@ Arms_Status
 Arms_reallocateUnmanaged
   (
     void** p,
-    size_t n
+    Arms_Size n
   )
 {
   if (!p) {

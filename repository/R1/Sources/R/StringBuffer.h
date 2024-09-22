@@ -18,17 +18,15 @@
 #if !defined(R_STRINGBUFFER_H_INCLUDED)
 #define R_STRINGBUFFER_H_INCLUDED
 
-#include "R/Boolean.h"
-#include "R/Natural8.h"
-#include "R/Size.h"
+#include "R/Value.h"
 
 typedef struct R_StringBuffer R_StringBuffer;
 void _R_StringBuffer_registerType();
 
 struct R_StringBuffer {
-  char* p;
-  size_t sz;
-  size_t cp;
+  R_Natural8Value* elements;
+  R_SizeValue size;
+  R_SizeValue capacity;
 };
 
 /// @brief Create a string buffer.
@@ -80,7 +78,17 @@ R_StringBuffer_append_pn
   (
     R_StringBuffer* self,
     void const* bytes,
-    size_t numberOfBytes
+    R_SizeValue numberOfBytes
+  );
+
+/// @brief Append Bytes to this string buffer.
+/// @param value The Bytes.
+/// Either R.ByteBuffer, R.StringBuffer, or R.String.
+void
+R_StringBuffer_append
+  (
+    R_StringBuffer* self,
+    R_Value value
   );
 
 /// @brief
@@ -105,6 +113,18 @@ void
 R_StringBuffer_clear
   (
     R_StringBuffer* self
+  );
+
+R_SizeValue
+R_StringBuffer_getNumberOfBytes
+  (
+    R_StringBuffer const* self
+  );
+
+R_Natural8Value const*
+R_StringBuffer_getBytes
+  (
+    R_StringBuffer const* self
   );
 
 #endif // R_STRINGBUFFER_H_INCLUDED

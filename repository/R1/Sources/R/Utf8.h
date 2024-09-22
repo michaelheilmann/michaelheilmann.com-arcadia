@@ -21,28 +21,15 @@
 #include "R/ByteBuffer.h"
 #include "R/Natural32.h"
 
-#define CodePoint_Start (0xfffffff1)
-#define CodePoint_End (0xfffffff2)
+#define R_Utf8CodePoint_Last (0x0010ffff)
+static_assert(R_Utf8CodePoint_Last <= R_Natural32Value_Maximum - 3, "<internal error>");
 
 R_BooleanValue
 R_isUtf8
   (
     void const* bytes,
-    R_SizeValue numberOfBytes
+    R_SizeValue numberOfBytes,
+    R_SizeValue* numberOfSymbols
   );
-
-typedef struct R_Utf8Writer R_Utf8Writer;
-
-void _R_Utf8Writer_registerType();
-
-struct R_Utf8Writer {
-  R_ByteBuffer* target;
-};
-
-R_Utf8Writer* R_Utf8Writer_create(R_ByteBuffer* target);
-
-void R_Utf8Writer_writeBytes(R_Utf8Writer* self, const void* bytes, R_SizeValue numberOfBytes);
-
-void R_Utf8Writer_writeCodePoints(R_Utf8Writer* self, const R_Natural32Value* codePoints, R_SizeValue numberOfCodePoints);
 
 #endif // R_UTF8_H_INCLUDED

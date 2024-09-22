@@ -176,9 +176,9 @@ onIncludeDirective
     R_jump();
   }
   R_Utf8Reader_next(context->source);
-  R_ByteBuffer_clear(context->context->temporary->target);
+  R_ByteBuffer_clear(context->context->temporaryBuffer);
   onString(context);
-  R_FilePath* filePath = R_FilePath_parseWindowsFilePath(context->context->temporary->target->p, context->context->temporary->target->sz);
+  R_FilePath* filePath = R_FilePath_parseWindowsFilePath(context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz);
   R_Value value;
   R_Value_setObjectReferenceValue(&value, filePath);
   R_Stack_push(context->context->stack, value);
@@ -195,9 +195,9 @@ onStatement
     FileContext* context
   )
 {
-  R_ByteBuffer_clear(context->context->temporary->target);
+  R_ByteBuffer_clear(context->context->temporaryBuffer);
   onIdentifier(context);
-  if (R_ByteBuffer_isEqualTo_pn(context->context->temporary->target, "include", sizeof("include") - 1)) {
+  if (R_ByteBuffer_isEqualTo_pn(context->context->temporaryBuffer, "include", sizeof("include") - 1)) {
     onIncludeDirective(context);
     Context_onRun(context->context);
   } else {

@@ -40,6 +40,34 @@ R_Arms_run
   (
   );
 
+void
+R_Arms_visit
+  (
+    void* object
+  );
+
+void
+R_Arms_lock
+  (
+    void* object
+  );
+
+void
+R_Arms_unlock
+  (
+    void* object
+  );
+
+R_BooleanValue
+R_Arms_registerType_nojump
+  (
+    void const* name,
+    R_SizeValue nameLength,
+    void (*typeRemoved)(uint8_t const*, size_t),
+    void (*visit)(void*),
+    void (*finalize)(void*)
+  );
+
 /// @brief Allocate managed memory.
 /// @param p A pointer to a <code>void*</code> variable.
 /// @param name A pointer to an array of Bytes.

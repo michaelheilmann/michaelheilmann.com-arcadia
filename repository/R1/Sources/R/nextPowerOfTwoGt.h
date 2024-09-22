@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-15
+// Last modified: 2024-09-28
 
 #if !defined(R_NEXTPOWEROFTWOGT_H_INCLUDED)
 #define R_NEXTPOWEROFTWOGT_H_INCLUDED
@@ -30,24 +30,24 @@
 
 #include "R/Size.h"
 
-#define Define(Type, Suffix) \
+#define Define(Type) \
   R_##Type##Value \
-  R_nextPowerOfTwoGt_##Suffix \
+  R_nextPowerOfTwoGt##Type##Value \
     ( \
       R_##Type##Value x \
     ); 
 
-Define(Integer16, i16)
-Define(Integer32, i32)
-Define(Integer64, i64)
-Define(Integer8, i8)
+Define(Integer16)
+Define(Integer32)
+Define(Integer64)
+Define(Integer8)
 
-Define(Natural16, n16)
-Define(Natural32, n32)
-Define(Natural64, n64)
-Define(Natural8, n8)
+Define(Natural16)
+Define(Natural32)
+Define(Natural64)
+Define(Natural8)
 
-Define(Size, s)
+Define(Size)
 
 #undef Define
 

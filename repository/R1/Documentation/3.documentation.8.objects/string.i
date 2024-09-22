@@ -7,9 +7,9 @@ An <code>R_ObjectReferenceValue</code> pointing to a <code>R_String</code> value
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-create">R_String_create</h5>
+<h5 id="r-string-create-pn">R_String_create_pn</h5>
 <p><code>
-R_String* R_String_create(void const* bytes, R_SizeValue numberOfBytes)
+R_String* R_String_create_pn(void const* bytes, R_SizeValue numberOfBytes)
 </code></p>
 
 <p>Create a string from a sequence of Bytes.</p>
@@ -20,10 +20,59 @@ R_String* R_String_create(void const* bytes, R_SizeValue numberOfBytes)
   <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code>.</td></tr>
 </table>
 
+<h6><b>Return value</b></h6>
+<p>A pointer to the string.</p>
+
 <h6><b>Errors</b></h6>
 <table>
   <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
   <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-create">R_String_create</h5>
+<p><code>
+R_String* R_String_create_pn(R_Value value)
+</code></p>
+
+<p>
+Create a string from a value.
+</p>
+
+<p>
+The specified value may contain a R_ByteBuffer object.
+In that case, the string is created from the Bytes of the Byte buffer object.
+A <code>R_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>R_ByteBuffer</code> object is not a UTF8 Byte sequence.
+</p>
+
+<p>
+The specified value may contain a R_String object.
+In that case, the string is created from the R_String object.
+</p>
+
+<p>
+The specified value may contain a R_StringBuffer object.
+In that case, the string is created from the R_StringBuffer object.
+</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>value        </td><td>The value.</td></tr>
+</table>
+
+<h6><b>Return value</b></h6>
+<p>A pointer to the string. </p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>The value does not contain either a <code>R_ByteBuffer</code> object, a <code>R_String</code> object, or a <code>R_StringBuffer</code> object.</td>
+  </tr>
+  <tr>
+    <td>R_Status_EncodingInvalid    </td>
+    <td>The value contains a <code>R_ByteBuffer</code> object. However, the Byte sequence of that <code>R_ByteBuffer</code> object is not a UTF8 Byte sequence.</td>
+  </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -113,12 +162,12 @@ R_BooleanValue R_String_isEqualTo_pn(R_String const* self, void const* bytes, R_
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-getsize">getSize</h5>
+<h5 id="r-string-getnumberofbytes">getNumberOfBytes</h5>
 <p><code>
-R_SizeValue R_String_getSize(R_String const* self)
+R_SizeValue R_String_getNumberOfBytes(R_String const* self)
 </code></p>
 
-<p>Get the size of this string.</p>
+<p>Get the size, in Bytes, of this string.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -126,15 +175,12 @@ R_SizeValue R_String_getSize(R_String const* self)
 </table>
 
 <h6><b>Return Value</b></h6>
-<p>The size of this string.</p>
-
-<h6><b>Remarks</b></h6>
-<p> The size of a string is the length of the Byte sequence it contains.</p>
+<p>The size, in Bytes, of this string.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-getat">getat</h5>
+<h5 id="r-string-getbyteat">getByteAt</h5>
 <p><code>
-R_Natural8Value R_String_getAt(R_String const* self, R_SizeValue index)
+R_Natural8Value R_String_getByteAt(R_String const* self, R_SizeValue index)
 </code></p>
 
 <p>Get the Byte value at the specified index.</p>
@@ -142,11 +188,233 @@ R_Natural8Value R_String_getAt(R_String const* self, R_SizeValue index)
 <h6><b>Parameters</b></h6>
 <table>
   <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
-  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this string.</td></tr>
+  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size, in Bytes, of this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>The Byte value.</p>
 
-<h6><b>Remarks</b></h6>
-<p> The size of a string is the length of the Byte sequence it contains.</p>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tointeger8">toInteger8</h5>
+<p><code>
+R_Integer8Value R_String_toInteger8(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer8Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer8Value</code>.</td>
+  </tr>
+</table>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tointeger16">toInteger16</h5>
+<p><code>
+R_Integer16Value R_String_toInteger16(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer16Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer16Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tointeger32">toInteger32</h5>
+<p><code>
+R_Integer32Value R_String_toInteger32(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer32Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer32Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tointeger64">toInteger64</h5>
+<p><code>
+R_Integer64Value R_String_toInteger64(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer64Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer64Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural8">toNatural8</h5>
+<p><code>
+R_Natural8Value R_String_toNatural8(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural8Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural8Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural16">toNatural16</h5>
+<p><code>
+R_Natural16Value R_String_toNatural16(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural16Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural16Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural32">toNatural32</h5>
+<p><code>
+R_Natural32Value R_String_toNatural16(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural32Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural32Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural64">toNatural64</h5>
+<p><code>
+R_Natural64Value R_String_toNatural16(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural64Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural64Value</code>.</td>
+  </tr>
+</table>

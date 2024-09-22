@@ -63,12 +63,12 @@
   
   <h2>Creating types</h2>
   <p>The user adds a type to the ARMS1 by invoking <code>Arms_Status Arms_registerType(char const* name, size_t nameLength, 
-  Arms_VisitCallbackFunction *visit, Arms_FinalizeCallbackFunction* finalize)</code>. The first argument <code>name</code> is
+  Arms_TypeRemovedCallbackFunction* typeRemoved, Arms_VisitCallbackFunction *visit, Arms_FinalizeCallbackFunction* finalize)</code>. The first argument <code>name</code> is
   a pointer to an array of <code>nameLength</code> Bytes denoting the type name. No two types of the same name can be
   registered and this function fails with <code>Arms_Status_TypeExists</code> if an attempt is made to do so. <code>visit</code>
   must point to a <code>Arms_VisitCallbackFunction</code> or must be a null pointer. <code>finalize</code> must point to a
-  <code>Arms_FinalizeCallbackFunction</code> or must be a null pointer. If this function fails it returns a value different from
-  <code>Arms_Status_Success</code>. The following table lists the possible values returned in case of failure
+  <code>Arms_FinalizeCallbackFunction</code> or must be a null pointer. <code>typeRemoved</code> must point to a <code>Arms_TypeRemovedCallbackFunction</code>
+  or must be a null pointer. If this function fails it returns a value different from <code>Arms_Status_Success</code>. The following table lists the possible values returned in case of failure
   </p>
   <table>
     <tr><td>Value</td><td>Description</td></tr>
@@ -78,80 +78,10 @@
     <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>size</code> exceeds limits</td></tr>
     <tr><td><code>Arms_Status_AllocationFailed</code></td><td>an allocation failed</td></tr>
   </table>
-  <h3>Visit callback function</h3>
-  <p>
-  A visit function is a function of the signature <code>void Arms_VisitCallbackFunction(void *object)</code>.
-  The visit callback function is supplied to a type when a type is created and is passed a pointer To
-  objects of that type (or any other type where it supplied to). The visit function shall invoke
-  <code>void Arms_visit(void* object)</code> on any object directly reachable from the specified object.
-  In the following example, <code>File_visit</code> is implemented to visit the field <code>fn</code>
-  of struct <code>File</code> if it was not null.
-  </p>
-  <p>
-  <code>
-  struct File {<br>
-  &nbsp;void* fn;<br>
-  &nbsp;...<br>
-  };<br>
-  ...<br>
-  void File_visit(File* file) {<br>
-  &nbsp;if (file->fn) {<br>
-  &nbsp;&nbsp;Arms_visit(file->fn);<br>
-  &nbsp;&nbsp;file->fn = NULL;<br>
-  &nbsp;}<br>
-  }<br>
-  ...<br>
-  int main(int argc, char**argv) {<br>
-  &nbsp;Arms_startup();<br>
-  &nbsp;Arms_registerType("File", strlen("File"), &visitFile, NULL);<br>
-  &nbsp;struct File* file;<br>
-  &nbsp;Arms_allocate(&file, "File", strlen("File"), sizeof(struct File));<br>
-  &nbsp;file->fn = NULL;<br>
-  &nbsp;Arms_lock(file);<br>
-  &nbsp;Arms_RunStatistics statistics = { .destroyed = 0 };<br>
-  &nbsp;Arms_run(&statistics);<br>
-  &nbsp;Arms_shutdown();<br>
-  &nbsp;return EXIT_SUCCESS;<br>
-  }
-  </code>
-  </p> 
-  <p>Note that types can be created with a null pointer for the visit function.</p>
-
-  <h3>Finalize callback function</h3>
-  <p>
-  A finalize function is a function of the signature <code>void Arms_FinalizeCallbackFunction(void *object)</code>.
-  The finalize callback function is supplied to a type when a type is created and is passed a pointer To
-  objects of that type (or any other type where it supplied to). The finalize function shall perform cleanup
-  of unmanaged resources like unmanaged memory, file handles, etc. In the following example, <code>File_finalize</code>
-  is implemented to invoke `fclose` on the field <code>fd</code> of struct <code>File</code> if it was not null.
-  </p>
-  <p>
-  <code>
-  struct File {<br>
-  &nbsp;FILE* fd;<br>
-  };<br>
-  ...<br>
-  void File_finalize(File* file) {<br>
-  &nbsp;if (file->fd) {<br>
-  &nbsp;&nbsp;fclose(file->fd);<br>
-  &nbsp;&nbsp;file->fd = NULL;<br>
-  &nbsp;}<br>
-  }<br>
-  ...<br>
-  int main(int argc, char**argv) {<br>
-  &nbsp;Arms_startup();<br>
-  &nbsp;Arms_registerType("File", strlen("File"), NULL, &finalizeFile);<br>
-  &nbsp;struct File* file;<br>
-  &nbsp;Arms_allocate(&file, "File", strlen("File"), sizeof(struct File));<br>
-  &nbsp;file->fd = fopen(...);<br>
-  &nbsp;Arms_RunStatistics statistics = { .destroyed = 0 };<br>
-  &nbsp;Arms_run(&statistics);<br>
-  &nbsp;Arms_shutdown();<br>
-  &nbsp;return EXIT_SUCCESS;<br>
-  }
-  </code>
-  </p> 
-  <p>Note that types can be created with a null pointer for the finalize function.</p>
+  
+  @{include("type-removed-callback-function.i")}
+  @{include("visit-callback-function.i")}
+  @{include("finalize-callback-function.i")}
 
   <h2>Creating objects</h2>
   <p>

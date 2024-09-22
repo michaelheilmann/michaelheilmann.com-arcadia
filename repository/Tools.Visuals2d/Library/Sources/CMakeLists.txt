@@ -46,7 +46,7 @@ if (NOT TARGET Tools.Visuals2d)
     list(APPEND Tools.Visuals2d.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/Visuals2d/ImageWriterParameters.h)
     list(APPEND Tools.Visuals2d.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/Visuals2d/ImageWriter.c)
     list(APPEND Tools.Visuals2d.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/Visuals2d/ImageWriter.h)
-    list(APPEND Tools.Visuals2d.HeaderFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/Visuals2d/Configure.h)
+    list(APPEND Tools.Visuals2d.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/Visuals2d/Configure.h)
 
     target_link_libraries(Tools.Visuals2d Arcadia.R Arcadia.Arms)
 

@@ -23,6 +23,7 @@
 #include "R/ByteBuffer.h"
 
 #include "R/clamp.h"
+#include "R/CommandLine/Include.h"
 #include "R/countLeadingZeroes.h"
 
 #include "R/ForeignFunctionReference.h"
@@ -63,9 +64,14 @@
 #include "R/Status.h"
 
 #include "R/String.h"
+#include "R/StringBuffer.h"
 
 #include "R/Utf8.h"
 #include "R/Utf8Reader.h"
+#include "R/Utf8ByteBufferReader.h"
+#include "R/Utf8ByteBufferWriter.h"
+#include "R/Utf8StringReader.h"
+#include "R/Utf8Writer.h"
 
 #include "R/Value.h"
 

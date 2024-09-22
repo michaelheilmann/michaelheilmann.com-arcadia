@@ -15,8 +15,8 @@
 
 #include "Stack.h"
 
-#include "R.h"
 #include "R/ArmsIntegration.h"
+#include "R.h"
 
 static R_BooleanValue g_initialized = R_BooleanValue_False;
 
@@ -36,7 +36,7 @@ R_Stack_ensureInitialized
   );
 
 static void
-R_Stack_finalize
+R_Stack_destruct
   (
     R_Stack* self
   );
@@ -100,7 +100,7 @@ R_Stack_ensureInitialized
 }
 
 static void
-R_Stack_finalize
+R_Stack_destruct
   (
     R_Stack* self
   )
@@ -125,7 +125,7 @@ R_Stack_visit
 }
 
 void _R_Stack_registerType() {
-  R_registerObjectType("R.Stack", sizeof("R.Stack") - 1, sizeof(R_Stack), NULL, &R_Stack_visit, &R_Stack_finalize);
+  R_registerObjectType("R.Stack", sizeof("R.Stack") - 1, sizeof(R_Stack), NULL, &R_Stack_visit, &R_Stack_destruct);
 }
 
 void

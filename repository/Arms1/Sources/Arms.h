@@ -22,6 +22,35 @@
 
 // size_t
 #include <stddef.h>
+// uint8_t
+#include <stdint.h>
+
+/// Alias for
+#define Arms_SizeOf(x) sizeof(x)
+#define Arms_AlignOf(x) _Alignof(x)
+#define Arms_OffsetOf(x) offsetof(x)
+
+// An unsigned binary integer of a width of 8 Bits.
+typedef uint8_t Arms_Natural8;
+
+/// The minimum value of Arms_Natural8.
+/// Guaranteed to be @a 0.
+#define Arms_Natural8_Minimum (UINT8_C(0))
+
+/// The maximum value of Arms_Natural8.
+#define Arms_Natural8_Maximum (UINT8_MAX)
+
+// A non-negative binary integer.
+// Its width, in Bits, is at least 16.
+// It is large enough to fit the result of Arms_SizeOf, Arms_AlignOf, and Arms_OffsetOf.
+typedef size_t Arms_Size;
+
+/// The minimum value of Arms_Size.
+/// Guaranteed to be @a 0.
+#define Arms_Size_Minimum ((Arms_Size)0)
+
+/// The maximum value of Arms_Size.
+#define Arms_Size_Maximum (UINT8_MAX)
 
 typedef enum Arms_Status {
   Arms_Status_Success = 0,
@@ -31,6 +60,8 @@ typedef enum Arms_Status {
   Arms_Status_TypeNotExists = 4,
   Arms_Status_OperationInvalid = 5,
 } Arms_Status;
+
+typedef void (Arms_TypeRemovedCallbackFunction)(Arms_Natural8 const* name, Arms_Size nameLength);
 
 typedef void (Arms_VisitCallbackFunction)(void*);
 
@@ -47,10 +78,11 @@ Arms_shutdown
   );
 
 Arms_Status
-Arms_registerType
+Arms_addType
   (
-    char const* name,
-    size_t nameLength,
+    Arms_Natural8 const* name,
+    Arms_Size nameLength,
+    Arms_TypeRemovedCallbackFunction* typeRemoved,
     Arms_VisitCallbackFunction* visit,
     Arms_FinalizeCallbackFunction* finalize
   );
@@ -59,14 +91,14 @@ Arms_Status
 Arms_allocate
   (
     void** pObject,
-    char const* name,
-    size_t nameLength,
-    size_t size
+    Arms_Natural8 const* name,
+    Arms_Size nameLength,
+    Arms_Size size
   );
 
 typedef struct Arms_RunStatistics {
   /// The number of objects destroyed in this run.
-  size_t destroyed;
+  Arms_Size destroyed;
 } Arms_RunStatistics;
 
 Arms_Status
@@ -101,14 +133,14 @@ Arms_Status
 Arms_allocateUnmanaged
   (
     void** p,
-    size_t n
+    Arms_Size n
   );
 
 Arms_Status
 Arms_reallocateUnmanaged
   (
     void** p,
-    size_t n
+    Arms_Size n
   );
 
 Arms_Status

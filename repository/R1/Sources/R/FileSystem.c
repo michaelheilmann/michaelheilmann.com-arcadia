@@ -26,7 +26,7 @@ R_FileSystem_visit
   );
 
 static void
-R_FileSystem_finalize
+R_FileSystem_destruct
   (
     R_FileSystem* self
   );
@@ -39,7 +39,7 @@ R_FileSystem_visit
 {/*Intentionally empty.*/}
 
 static void
-R_FileSystem_finalize
+R_FileSystem_destruct
   (
     R_FileSystem* self
   )
@@ -50,7 +50,7 @@ _R_FileSystem_registerType
   (
   )
 {
-  R_registerObjectType("R.FileSystem", sizeof("R.FileSystem") - 1, sizeof(R_FileSystem), NULL, &R_FileSystem_visit, &R_FileSystem_finalize);
+  R_registerObjectType("R.FileSystem", sizeof("R.FileSystem") - 1, sizeof(R_FileSystem), NULL, &R_FileSystem_visit, &R_FileSystem_destruct);
 }
 
 R_FileSystem*
