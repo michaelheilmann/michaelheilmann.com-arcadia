@@ -80,6 +80,9 @@ if (NOT TARGET ${MyProjectName}.R)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Integer64.h)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Integer8.h)
 
+  list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/isPowerOfTwo.c)
+  list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/isPowerOfTwo.h)
+
   list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/JumpTarget.c)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/JumpTarget.h)
 
@@ -99,6 +102,8 @@ if (NOT TARGET ${MyProjectName}.R)
 
   list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/nextPowerOfTwoGt.c)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/nextPowerOfTwoGt.h)
+  list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/nextPowerOfTwoGte.c)
+  list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/nextPowerOfTwoGte.h)
 
   list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Object.c)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Object.h)
@@ -145,6 +150,8 @@ if (NOT TARGET ${MyProjectName}.R)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Utf8Writer.h)
   list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Utf8ByteBufferWriter.c)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Utf8ByteBufferWriter.h)
+  list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Utf8/EncodeCodePoints.c)
+  list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Utf8/EncodeCodePoints.h)
 
   list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Value.c)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Value.h)

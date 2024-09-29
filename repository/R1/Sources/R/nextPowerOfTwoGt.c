@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-28
+// Last modified: 2024-09-29
 
 #include "R/nextPowerOfTwoGt.h"
 
@@ -22,27 +22,21 @@
 #include "R/Status.h"
 
 #define Define(Type, Bits) \
-  R_##Type##Value \
-  R_nextPowerOfTwoGt##Type##Value \
-    ( \
-      R_##Type##Value x \
-    ) \
-  { \
-  static R_##Type##Value const greatestPowerOfTwo = R_##Type##Value_Literal(1) << (Bits - 1); \
-  if (x < R_##Type##Value_Literal(1)) { \
-    return R_##Type##Value_Literal(1); \
-  } \
-  if (x >= greatestPowerOfTwo) { \
+R_##Type##Value \
+R_nextPowerOfTwoGt##Type##Value \
+  ( \
+    R_##Type##Value x \
+  ) \
+{ \
+  /* i is Bits is x is 0. i is Bits - 1 if x is 1. i is Bits - 2 if x is 2 or 3. ... i is 0 if x >= greatestPowerOfTwo. Consequently the shift is Bits - i.*/ \
+  R_SizeValue numberOfLeadingZeroes = R_countLeadingZeroes##Type##Value(x); \
+  if (!numberOfLeadingZeroes) { \
     R_setStatus(R_Status_NotExists); \
     R_jump(); \
   } \
-  R_SizeValue i = R_countLeadingZeroes##Type##Value(x); \
-  R_##Type##Value t = R_##Type##Value_Literal(1) << (Bits - i); \
-  if (i == R_##Type##Value_Literal(0) && t != x) { \
-    R_setStatus(R_Status_NotExists); \
-    R_jump(); \
-  } \
-  return i; \
+  R_SizeValue shift = Bits - numberOfLeadingZeroes; \
+  R_##Type##Value t = R_##Type##Value_Literal(1) << shift; \
+  return t; \
 }
 
 Define(Natural8, R_Natural8Value_NumberOfBits)

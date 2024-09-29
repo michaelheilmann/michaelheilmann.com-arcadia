@@ -17,6 +17,7 @@
 
 #include "R/Utf8ByteBufferWriter.h"
 
+#include "R/Utf8/EncodeCodePoints.h"
 #include <string.h>
 #include "R.h"
 
@@ -35,9 +36,9 @@ R_Utf8ByteBufferWriter_writeBytesImpl
   );
 
 static void
-R_Utf8ByteBufferrWriter_writeCodePointsImpl
+R_Utf8ByteBufferWriter_writeCodePointsImpl
   (
-    R_Utf8Writer* self,
+    R_Utf8ByteBufferWriter* self,
     R_Natural32Value const* codePoints,
     R_SizeValue numberOfCodePoints
   );
@@ -127,65 +128,7 @@ R_Utf8ByteBufferWriter_writeCodePointsImpl
     R_SizeValue numberOfCodePoints
   )
 {
-  if (!numberOfCodePoints) {
-    return;
-  }
-  for (R_SizeValue i = 0, n = numberOfCodePoints; i < n; ++i) {
-    R_Natural32Value codePoint = codePoints[i];
-    if (codePoint <= 0x7f) {
-      uint8_t x[1];
-      x[0] = (codePoint & 0b1111111);
-      R_ByteBuffer_append_pn(self->target, &x[0], 1);
-    } else if (/*0x80 <=*/ codePoint <= 0x7ff) {
-      // This CP uses the lower 11 bit of the 32 Bit number.
-      // The first 5 of these bits are stored in the first Byte.
-      // The last 6 of these bits are stored in the second Byte.
-      uint8_t x[2];
-      x[0] = (codePoint & 0b11111000000) >> 6;
-      x[1] = (codePoint & 0b00000111111) >> 0;
-      // OR in 1100.0000.
-      x[0] |= 0b11000000;
-      // OR in 1000.0000.
-      x[1] |= 0b10000000;
-      R_ByteBuffer_append_pn(self->target, &x[0], 2);
-    } else if (/*0x800 <=*/ codePoint <= 0xffff) {
-      // This CP uses the lower 16 bit of the 32 Bit number.
-      // The first 4 of these bits are stored in the first Byte.
-      // The next 6 of these bits are stored in the second Byte.
-      // The last 6 of these bits are stored in teh third Byte.
-      uint8_t x[3];
-      x[0] = (codePoint & 0b1111000000000000) >> 12;
-      x[1] = (codePoint & 0b0000111111000000) >> 6;
-      x[2] = (codePoint & 0b0000000000111111) >> 0;
-      // OR in 1110.0000.
-      x[0] |= 0b11100000;
-      // OR in 1000.0000.
-      x[1] |= 0b10000000;
-      x[2] |= 0b10000000;
-      R_ByteBuffer_append_pn(self->target, &x[0], 3);
-    } else if (/*0x10000 <=*/ codePoint <= 0x10FFFF) {
-      // This CP uses the lower 21 Bit of the code point.
-      // The first 3 are stored in the first Byte.
-      // The next 6 are stored in the second Byte.
-      // The next 6 are stored in the third Byte.
-      // The last 6 are stored in the fourth Byte.
-      uint8_t x[4];
-      x[0] = (codePoint & 0b111000000000000000000) >> 18;
-      x[1] = (codePoint & 0b000111111000000000000) >> 12;
-      x[2] = (codePoint & 0b000000000111111000000) >> 6;
-      x[3] = (codePoint & 0b000000000000000111111) >> 0;
-      // OR in 1111.0000.
-      x[0] |= 0b1110000;
-      // OR in 1000.0000.
-      x[1] |= 0b10000000;
-      x[2] |= 0b10000000;
-      x[3] |= 0b10000000;
-      R_ByteBuffer_append_pn(self->target, &x[0], 4);
-    } else {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
-    }
-  }
+  R_Utf8_encodeCodePoints(codePoints, numberOfCodePoints, self->target, (void (*)(void*, R_Natural8Value const*, R_SizeValue)) & R_ByteBuffer_append_pn);
 }
 
 void

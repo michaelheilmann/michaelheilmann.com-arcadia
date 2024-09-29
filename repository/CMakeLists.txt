@@ -32,8 +32,11 @@ endif()
 
 add_subdirectory(Arms1)
 add_subdirectory(R1)
+
+add_subdirectory(Tools.Cilc)
 add_subdirectory(Tools.Concatenate)
 add_subdirectory(Tools.TemplateEngine)
+
 add_subdirectory(Tools.Visuals2d)
 add_subdirectory(Tools.IconGenerator)
 add_subdirectory(Tools.BannerGenerator)

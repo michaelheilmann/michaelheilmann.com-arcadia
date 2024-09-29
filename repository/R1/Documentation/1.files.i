@@ -20,10 +20,9 @@
   </ul>
   
   <p>You can compile and run these under various platforms (including but not restricted to Windows, Linux, and many more),
-  however, we currently only officially support Windows. To build and run all these, simply checkout the repository and
-  outside of the repository directory create a build folder.
+  however, we currently only officially support Windows. To build and run all these, simply checkout the repository to the
+  and outside of the repository directory create a build folder.
   Invoke from the the build folder</p>
   <p><code>
-  cmake <my-mv>r1 source directory</my-mv>
+  cmake <my-mv>path-to-repository-directory</my-mv>
   </code></p>
-  <p>where <my-mv>r1 source directory</my-mv> is the path to the R1 directory in the checkout directory (usually <code>repository/R1</code></li>

@@ -4,7 +4,7 @@
   <link rel='canonical' href='https://michaelheilmann.com/' />
   <title>Michael Heilmann Contact Information</title>
 </head>
-<body style='font-size: 2rem; display: flex; flex-direction: column; min-width: max(64rem, 100vw); min-height: max(32rem, 100vh); width: max(64rem, 100vw); height: max(32rem, 100vh);'>
+<body class="my-index-page-1">
 <!-- flex-direction: row ~ from left to right -->
   <header style='flex-grow: 0; display: flex; flex-direction: row;'>
     <div style='flex-grow:0; display: flex; flex-direction: column; padding-left: 2rem; padding-top: 2rem;'>

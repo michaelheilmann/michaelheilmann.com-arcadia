@@ -199,6 +199,19 @@ R_String_getByteAt
 }
 
 R_SizeValue
+R_String_getHash
+  (
+    R_String const* self
+  )
+{
+  R_SizeValue hash = self->numberOfBytes;
+  for (R_SizeValue i = 0, n = self->numberOfBytes; i < n; ++i) {
+    hash = hash * 37 + self->p[i];
+  }
+  return hash;
+}
+
+R_SizeValue
 R_String_getNumberOfSymbols
   (
     R_String const* self

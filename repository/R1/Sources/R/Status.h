@@ -28,18 +28,21 @@
 #define R_Status_EncodingInvalid (4)
 #define R_Status_FileSystemOperationFailed (5)
 #define R_Status_Initialized (6)
-#define R_Status_NumberOfArgumentsInvalid (7)
-#define R_Status_OperationInvalid (8)
-#define R_Status_ConversionFailed (9)
+#define R_Status_Uninitialized (7)
+#define R_Status_NumberOfArgumentsInvalid (8)
+#define R_Status_OperationInvalid (9)
+#define R_Status_ConversionFailed (10)
 
-#define R_Status_TestFailed (10)
-
-#define R_Status_Uninitialized (11)
+#define R_Status_TestFailed (11)
 
 #define R_Status_TypeExists (12)
 #define R_Status_TypeNotExists (13)
 
 #define R_Status_NotExists (15)
+
+#define R_Status_LexicalError (1001)
+#define R_Status_SyntacticalError (1002)
+#define R_Status_SemanticalError (1003)
 
 typedef uint32_t R_Status;
 

@@ -14,10 +14,13 @@
 @{include("3.documentation.4.status-variable.i")}
 @{include("3.documentation.5.jumps-and-jump-targets.i")}
 @{include("3.documentation.6.numeric-functions.i")}
-@{include("3.documentation.6.numeric-functions/1.clamp.i")}
-@{include("3.documentation.6.numeric-functions/2.countLeadingZeroes.i")}
-@{include("3.documentation.6.numeric-functions/3.maximum.i")}
-@{include("3.documentation.6.numeric-functions/4.minimum.i")}
+@{include("3.documentation.6.numeric-functions/clamp.i")}
+@{include("3.documentation.6.numeric-functions/countLeadingZeroes.i")}
+@{include("3.documentation.6.numeric-functions/hash.i")}
+@{include("3.documentation.6.numeric-functions/maximum.i")}
+@{include("3.documentation.6.numeric-functions/minimum.i")}
+@{include("3.documentation.6.numeric-functions/nextPowerOfTwoGt.i")}
+@{include("3.documentation.6.numeric-functions/nextPowerOfTwoGte.i")}
 @{include("3.documentation.7.time-and-date-functions/1.getTickCount.i")}
 @{include("3.documentation.8.objects.i")}
 @{include("3.documentation.8.objects/bytebuffer.i")}

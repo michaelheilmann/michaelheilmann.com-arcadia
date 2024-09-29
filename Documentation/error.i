@@ -4,7 +4,7 @@
   <link rel='canonical' href='https://michaelheilmann.com/error.html' />
   <title>Something went wrong ...</title>
 </head>
-<body style='font-size: 2rem; display: flex; flex-direction: column; min-width: max(64rem, 100vw); min-height: max(32rem, 100vh); width: max(64rem, 100vw); height: max(32rem, 100vh);'>
+<body class="my-error-page-1">
   <!-- flex-direction: row ~ from left to right -->
   <header style='flex-grow: 0; display: flex; flex-direction: row;'>
   </header>

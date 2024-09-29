@@ -90,6 +90,7 @@ R_startup
       _R_FileSystem_registerType();
       _R_List_registerType();
       _R_Stack_registerType();
+      _R_StringBuffer_registerType();
       _R_Utf8Reader_registerType();
       _R_Utf8Writer_registerType();
       _R_Utf8ByteBufferReader_registerType();

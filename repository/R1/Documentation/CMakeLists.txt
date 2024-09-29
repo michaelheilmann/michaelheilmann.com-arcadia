@@ -32,36 +32,18 @@ endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
-
-if (NOT TARGET Tools.TemplateEngineLibrary)
-  set(Tools.TemplateEngineLibrary.SourceDir "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library" CACHE STRING "path to the Tools.TemplateEngineLibrary source directory")
-  get_filename_component(Tools.TemplateEngineLibrary.SourceDir "${Tools.TemplateEngineLibrary.SourceDir}"
-                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-  message(STATUS "fetching ${Tools.TemplateEngineLibrary.SourceDir}")
-  FetchContent_Declare(Tools.TemplateEngineLibrary SOURCE_DIR ${Tools.TemplateEngineLibrary.SourceDir})
-  FetchContent_MakeAvailable(Tools.TemplateEngineLibrary)
-endif()
-
-set(Tools.Concatenate-Source-Dir "${REPOSITORY_SOURCE_DIR}/Tools.Concatenate/Tool/Sources" CACHE STRING "path to the Tools.Concatenate source directory")
-get_filename_component(Tools.Concatenate-Source-Dir "${Tools.Concatenate-Source-Dir}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-FetchContent_Declare(Tools.Concatenate SOURCE_DIR ${Tools.Concatenate-Source-Dir})
-FetchContent_MakeAvailable(Tools.Concatenate)
-
-set(Tools.TemplateEngine-Source-Dir "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" CACHE STRING "path to the Tools.TemplateEngine source directory")
-get_filename_component(Tools.TemplateEngine-Source-Dir "${Tools.TemplateEngine-Source-Dir}"
-                       REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-FetchContent_Declare(Tools.TemplateEngine SOURCE_DIR ${Tools.TemplateEngine-Source-Dir})
-FetchContent_MakeAvailable(Tools.TemplateEngine)
+FetchProduct(${MyProjectName}.Concatenate "${REPOSITORY_SOURCE_DIR}/Tools.Concatenate/Tool/Sources" "path to the Tools.Concatenate source directory")
+FetchProduct(${MyProjectName}.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library/sources" "path to the Tools.TemplateEngine Library source directory")
+FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Tools.TemplateEngine Tool source directory")
 
 # Build the documentation.
-set(DOCUMENT_TARGET_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../index.html")
+set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/repository/R1/index.html")
 add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${CMAKE_CURRENT_SOURCE_DIR}/../index.html
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${DOCUMENT_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/index.i => ${CMAKE_CURRENT_SOURCE_DIR}/../index.html"
+                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/index.i => ${DOCUMENT_TARGET_FILE}"
                    DEPENDS Tools.TemplateEngine ${CMAKE_CURRENT_SOURCE_DIR}/index.i)
 
-add_custom_target(${MyProjectName}.R.BuildDocs ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../index.html)
+add_custom_target(${MyProjectName}.R.BuildDocs ALL DEPENDS ${DOCUMENT_TARGET_FILE})
 
 set_target_properties(${MyProjectName}.R.BuildDocs PROPERTIES FOLDER "R")

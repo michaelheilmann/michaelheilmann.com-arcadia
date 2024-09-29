@@ -39,6 +39,8 @@
 #include "R/Integer64.h"
 #include "R/Integer8.h"
 
+#include "R/isPowerOfTwo.h"
+
 #include "R/JumpTarget.h"
 
 #include "R/List.h"
@@ -52,6 +54,7 @@
 #include "R/Natural8.h"
 
 #include "R/nextPowerOfTwoGt.h"
+#include "R/nextPowerOfTwoGte.h"
 
 #include "r/Object.h"
 

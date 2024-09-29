@@ -5,26 +5,29 @@
   henceforth ARMS1. ARMS1 is a precise stop the world garbage collector to be used for programs
   written in C. ARMS1 is available at <a href="https://michaelheilmann.com/repository/arms1">michaelheilmann.com/repository/arms1</a>. 
   <h2>Files</h2>
-  <p>You can download/view the source files of which ARMS1 consists of here</p>
-  <ul>
-    <li><a href="https://michaelheilmann.com/repository/arms1/sources/arms1/configure.u.i">Sources/arms1/configure.h.i</a></li>
-    <li><a href="https://michaelheilmann.com/repository/arms1/sources/arms1.c">Sources/arms1.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/arms1/sources/arms1.h">Sources/arms1.h</a></li>
-    <li><a href="https://michaelheilmann.com/repository/arms1/sources/CMakeLists.txt">Sources/CMakeLists.txt</a></li>
-  </ul>
-  <h2>Further references</h2>
-  <p>There is a demo available showing-off how to use ARMS1</p>
-  <ul>
-    <li><a href="https://michaelheilmann.com/repository/arms1/demos/demo1/main.c">demos/arms1/demos/demo1/main.c</a></li>
-    <li><a href="https://michaelheilmann.com/repository/arms1/demos/demo1/CMakeLists.txt">demos/arms1/demos/demo1/CMakeLists.txt</a></li>
-  </ul>
   <p>
-  which compiles and runs under various platforms (including but not restricted to Windows, Linux, and many more).
-  To build the demo, simply download the files of the demo to some directory (called the demo directory)
-  and download the files of ARMS1 to some other directory (called the ARMS1 directory).
-  Invoke from the demo directory <code>cmake -DArms1-Source-Dir=<my-mv>arms1 source directory</my-mv> .</code>
-  where <my-mv>arms1 source directory</my-mv> is the path to a the ARMS1 sourcedirectory.
-  Note that relative paths are interpreted relative to <code>${CMAKE_CURRENT_BINARY_DIR}</code>.</p>
+  You can find the sources of ARMS1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
+  The subdirectory of Arms1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1</a>.</p>
+
+  <ul>
+    <li>The (sources of the) library resides in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1/Sources</a>
+    </li>
+    <li>The (sources of) demos reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1/Demos">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1/Demos</a>
+    </li>
+    <li>The (sources of this very documentation you are reading) documentation reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms/Documentation</a>
+    </li>
+  </ul>
+  <p>You can compile and run these under various platforms (including but not restricted to Windows, Linux, and many more),
+  however, we currently only officially support Windows. To build and run all these, simply checkout the repository to the
+  and outside of the repository directory create a build folder.
+  Invoke from the the build folder</p>
+  <p><code>
+  cmake <my-mv>path-to-repository-directory</my-mv>
+  </code></p>
+
   <h2>How a ARMS1 works</h2>
   <p>
   ARMS1 allows for the creation of objects and maintains a set of these created objects called the <em>universe</em> \(U\).

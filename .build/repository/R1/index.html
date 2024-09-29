@@ -1,0 +1,2131 @@
+    <!DOCTYPE html>
+<html class='my-theme-1' lang='en'>
+<head>
+
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <link rel='icon' type='image/x-icon' href='https://michaelheilmann.com/assets/favicon/512x512.svg'>
+
+  <!-- Crap specific to Safari. SVG must be single color with transparent background. -->
+  <link rel='mask-icon' href='https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg' color = '#000000'>
+
+  <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
+  <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
+
+    <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css'>
+    <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css'>
+    <link rel="canonical" href="https://michaelheilmann.com/repository/R1/" />
+    <title>Michael Heilmann's Runtime Mark 1</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+    /* variable */
+    my-v {
+      font-family: my-code-font;
+      font-size: 0.9rem;
+    }
+
+    /* meta variable */
+    my-mv {
+      display: inline;
+      font-family: my-code-font;
+      font-size: 0.9rem;
+    }
+    my-mv::before {
+      content: "<";
+    }
+    my-mv::after {
+      content: ">";
+    }
+
+    /* meta variable */
+    .meta {
+      font-family: my-code-font;
+      font-size: 0.9rem;
+    }
+    .meta::before {
+      content: "<";
+    }
+    .meta::after {
+      content: ">";
+    }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body class="my-content-page-1">
+  <h1>Michael Heilmann's Runtime Mark 1</h1>
+  <p>
+  This is the documentation for Michael  Heilmann's Runtime Mark 1,
+  henceforth R1. R1 facilates the creation of C programs - in particular interpreters - that are portable,
+  maintainable, as well as safe. R1 is available at <a href="https://michaelheilmann.com/repository/R1">michaelheilmann.com/repository/R1</a>.
+
+  <h2>Files</h2>
+  <p>
+  You can find the sources of R1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
+  The subdirectory of R1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1</a>.</p>
+  </p>
+  
+  <ul>
+    <li>The (sources of the) library resides in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources</a>
+    </li>
+    <li>The (sources of) tests reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests</a>
+    </li>
+    <li>The (sources of) demos reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Demos">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Demos</a>
+    </li>
+    <li>The (sources of this very documentation you are reading) documentation reside in the directory
+    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation</a>
+    </li>
+  </ul>
+  
+  <p>You can compile and run these under various platforms (including but not restricted to Windows, Linux, and many more),
+  however, we currently only officially support Windows. To build and run all these, simply checkout the repository to the
+  and outside of the repository directory create a build folder.
+  Invoke from the the build folder</p>
+  <p><code>
+  cmake <my-mv>path-to-repository-directory</my-mv>
+  </code></p>
+
+
+  <h2>Documentation</h2>
+
+<h3 id="boolean-type">Boolean Type</h3>
+<p>
+R1 provides a boolean type.
+</p>
+<p><code>
+typedef <my-mv>implementation detail</my-mv> R_BooleanValue
+</code></p>
+
+<p><code>
+#define R_BooleanValue_True <my-mv>implementation detail</my-mv>
+</code><p>
+<p>is a value of the type denoting logically <code>true</code>. It converts to <code>1</code> in arithmetic expressions.</p>
+
+<p><code>
+#define R_BooleanValue_False <my-mv>implementation detail</my-mv>
+</code><p>
+<p>is a value of the type denoting logically <code>false</code>. It converts to <code>0</code> in arithmetic expressions.</p>
+
+<h3 id="foreignfunctionreference-type">Foreign Function Reference Type</h3>
+<p>
+R provides the <scode>R_ForeignFunctionReferenceValue</code> type.
+</p>
+<p><code>
+typedef <my-mv>implementation detail</my-mv> R_ForeignFunctionReferenceValue;
+</code></p>
+<p>
+which is a pointer to a function adhering to the calling conventions for C functions of the runtime.
+</p>
+
+<p>
+A valid value of the <code>R_ForeignFunctionReferenceValue</code> is the null value
+</p>
+<p><code>
+#define R_ForeignFunctionReferenceValue_Null <my-mv>implementation detail</my-mv>
+</code></p>
+
+<p><code>
+#define R_ForeignFunctionReferenceValue_NumberOfBits <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bits of the type.</p>
+
+<p><code>
+#define R_ForeignFunctionReferenceValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bytes of the type which is usually <code>R_ForeignFunctionReferenceValue_NumberOfBits</code> divided by 8.</p>
+
+<h3 id="integer-types">Integer Types</h3>
+<p>
+R provides a two's complement integer number types.
+</p>
+<p><code>
+typedef <my-mv>implementation detail</my-mv> R_Integer<my-mv>Suffix</my-mv>Value
+</code></p>
+<p>
+where <my-mv>Suffix</my-mv> denotes the number of Bits of the two's complement integer and can be one of
+<code>8</code>, <code>16</code>, <code>32</code>, or <code>64</code>.
+</p>
+
+<p>The macros in this section all include the <my-mv>Suffix</my-mv> metavariable and are defined for the
+values <code>8</code>, <code>16</code>, <code>32</code>, and <code>64</code> of that meta variable.</p>
+
+<p><code>
+#define R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBits <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bits of the type. The value is always equal to the value of the respective <my-mv>Suffix</my-mv>.</p>
+
+<p><code>
+#define R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBytes <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bytes of the type which is usually <code>R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBits</code> divided by 8.</p>
+
+<p><code>
+#define R_Integer<my-mv>Suffix</my-mv>Value_Minimum <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the least value (in terms of its magnitude) representable by a the <code>R_Integer<my-mv>Suffix</my-mv>Value</code> type.
+The following table denotes the value of the constant for the respective <my-mv>Suffix</my-mv>
+</p>
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+<tr><td>8                    </td><td>-128</td></tr>
+<tr><td>16                   </td><td>-32768</td></tr>
+<tr><td>32                   </td><td>-2147483648</td></tr>
+<tr><td>64                   </td><td>-9223372036854775808</td></tr>
+</table>
+
+<p><code>
+#define R_Integer<my-mv>Suffix</my-mv>Value_Maximum <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the greatest value (in terms of its magnitude) representable by a the <code>R_Integer<my-mv>Suffix</my-mv>Value</code> type.
+The following table denotes the value of the constant for the respective <my-mv>Suffix</my-mv>
+</p>
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+<tr><td>8                    </td><td>127</td></tr>
+<tr><td>16                   </td><td>32767</td></tr>
+<tr><td>32                   </td><td>2147483647</td></tr>
+<tr><td>64                   </td><td>9223372036854775807</td></tr>
+</table>
+
+<p><code>
+#define R_Integer<my-mv>Suffix</my-mv>Value_Literal(x) <my-mv>implementation detail</my-mv>
+</code><p>
+<p>is used to write a literal of the type <code>R_Integer<my-mv>Suffix</my-mv></code> in C source code.
+The following table denotes  the expansions of the macro:
+</p>
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+<tr><td>8                    </td><td>x</td></tr>
+<tr><td>16                   </td><td>x</td></tr>
+<tr><td>32                   </td><td>x</td></tr>
+<tr><td>64                   </td><td>x##LL</td></tr>
+</table>
+
+<h3 id="natural-types">Natural Types</h3>
+<p>
+R provides natural number types.
+</p>
+<p><code>
+typedef <my-mv>implementation detail</my-mv> R_Natural<my-mv>Suffix</my-mv>Value
+</code></p>
+<p>
+where <my-mv>Suffix</my-mv> denotes the number of Bits of the integer and can be one of
+<code>8</code>, <code>16</code>, <code>32</code>, or <code>64</code>.
+</p>
+
+<p>The macros in this section all include the <my-mv>Suffix</my-mv> metavariable and are defined for the
+values <code>8</code>, <code>16</code>, <code>32</code>, and <code>64</code> of that meta variable.</p>
+
+<p><code>
+#define R_Natural<my-mv>Suffix</my-mv>Value_NumberOfBits <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bits of the type. The value is always equal to the value of the respective <my-mv>Suffix</my-mv>.</p>
+
+<p><code>
+#define R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBytes <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bytes of the type which is usually <code>R_Integer<my-mv>Suffix</my-mv>Value_NumberOfBits</code> divided by 8.</p>
+
+<p><code>
+#define R_Natural<my-mv>Suffix</my-mv>Value_Minimum <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the least value (in terms of its magnitude) representable by a the <code>R_Natural<my-mv>Suffix</my-mv>Value</code> type.
+The following table denotes the value of the constant for the respective <code><my-mv>Suffix</my-mv></code>
+</p>
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+<tr><td>8                    </td><td>0</td></tr>
+<tr><td>16                   </td><td>0</td></tr>
+<tr><td>32                   </td><td>0</td></tr>
+<tr><td>64                   </td><td>0</td></tr>
+</table>
+
+<p><code>
+#define R_Natural<my-mv>Suffix</my-mv>Value_Maximum <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the greatest value (in terms of its magnitude) representable by a the <code>R_Natural<span>Suffix</span>Value</code> type.
+The following table denotes the value of the constant for the respective <code><span>Suffix</span></code>
+</p>
+<table>
+<tr><td><code><span>Constant</span></code></td><td>Value</td></tr>
+<tr><td>8                                  </td><td>255</td></tr>
+<tr><td>16                                 </td><td>65535</td></tr>
+<tr><td>32                                 </td><td>4294967295</td></tr>
+<tr><td>64                                 </td><td>18446744073709551615</td></tr>
+</table>
+
+<p><code>
+#define R_Natual<my-mv>Suffix</my-mv>Value_Literal(x) <my-mv>implementation detail</my-mv>
+</code><p>
+<p>is used to write a literal of the type <code>R_Natural<my-mv>Suffix</my-mv></code> in C source code.
+The following table denotes  the expansions of the macro:
+</p>
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+<tr><td>8                    </td><td>x</td></tr>
+<tr><td>16                   </td><td>x</td></tr>
+<tr><td>32                   </td><td>x##U</td></tr>
+<tr><td>64                   </td><td>x##ULL</td></tr>
+</table>
+
+<h3 id="object-reference-type">Object Reference Type</h3>
+<p>
+R provides a ObjectReference type.
+</p>
+<p><code>
+typedef <my-mv>implementation detail</my-mv> R_ObjectReferenceValue
+</code></p>
+<p>
+The <code>R_ObjectReferenceValue</code> type is a pointer.
+</p>
+
+<p>
+A valid value of the <code>R_ObjectReferenceValue</code> is the null reference
+</p>
+<p><code>
+#define R_ObjectReferenceValue_Null <my-mv>implementation detail</my-mv>
+</code></p>
+
+<p><code>
+#define R_ObjectReferenceValue_NumberOfBits <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bits of the type.</p>
+
+<p><code>
+#define R_ObjectReferenceValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bytes of the type which is usually <code>R_ObjectReferenceValue_NumberOfBits</code> divided by 8.</p>
+
+<h3 id="size-type">Size Type</h3>
+<p>
+R provides an alias for builtin <code>size_t</code> type.
+</p>
+<p><code>
+typedef <my-mv>implementation detail</my-mv> R_SizeValue
+</code></p>
+
+<p><code>
+#define R_SizeValue_NumberOfBits <my-mv>implementation detail</my-mv>
+</code><p>
+<p>
+denotes the number of Bits of the type.
+<b>
+This number must one of 32 or 64, otherwise the environment is not supported by R.
+This restriction may be relaxed in future versions of R.
+</b></p>
+
+<p><code>
+#define R_SizeValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bytes of the type which is usually <code>R_SizeValue_NumberOfBits</code> divided by 8.</p>
+
+<p><code>
+#define R_SizeValue_Minimum <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the least value (in terms of its magnitude) representable by a the <code>R_Size</code> type.</p>
+
+<p><code>
+#define R_SizeValue_Literal(x) <my-mv>implementation detail</my-mv>
+</code><p>
+<p>is used to write a literal of type <code>R_SizeValue</code> in C source code.</p>
+
+<h3 id="void-type">Void Type</h3>
+<p>
+R provides a void type.
+</p>
+<p><code>
+typedef <my-mv>implementation detail</my-mv> R_VoidValue
+</code></p>
+<p>
+The only value of this type is <code>R_VoidValue_Void</code>.
+R_VoidValue is an unsigned integral type.
+</p>
+
+<p><code>
+#define R_VoidValue_Void <my-mv>implementation detail</my-mv>
+</code><p>
+<p>The single value of the type.</p>
+
+<p><code>
+#define R_VoidValue_NumberOfBits <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bits of the type.</p>
+
+<p><code>
+#define R_VoidValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+</code><p>
+<p>denotes the number of Bytes of the type which is usually <code>R_VoidValue_NumberOfBits</code> divided by 8.</p>
+
+<h3 id="value-type">Value Type</h3>
+<p>
+<code>R_Value</code> is a tagged union of values supported by the
+runtime. It consists of a tag indicating the value stored in the
+union and the union of the values. The following table lists all
+possible tags and their corresponding type.
+</p>
+<table>
+  <tr><td>Tag                       </td><td>Type                  </td></tr>
+
+  <tr><td>R_ValueTag_Boolean        </td><td>R_BooleanValue        </td></tr>
+
+  <tr><td>R_ValueTag_Integer16      </td><td>R_Integer16Value      </td></tr>
+  <tr><td>R_ValueTag_Integer32      </td><td>R_Integer32Value      </td></tr>
+  <tr><td>R_ValueTag_Integer64      </td><td>R_Integer64Value      </td></tr>
+  <tr><td>R_ValueTag_Integer8       </td><td>R_Integer8Value       </td></tr>
+
+  <tr><td>R_ValueTag_Natural16      </td><td>R_Natural16Value      </td></tr>
+  <tr><td>R_ValueTag_Natural32      </td><td>R_Natural32Value      </td></tr>
+  <tr><td>R_ValueTag_Natural64      </td><td>R_Natural64Value      </td></tr>
+  <tr><td>R_ValueTag_Natural8       </td><td>R_Natural8Value       </td></tr>
+
+  <tr><td>R_ValueTag_ObjectReference</td><td>R_ObjectReferenceValue</td></tr>
+
+  <tr><td>R_ValueTag_Size           </td><td>R_SizeValue           </td></tr>
+
+  <tr><td>R_ValueTag_Void           </td><td>R_VoidValue           </td></tr>
+</table>
+
+<p>
+For each type, <code>R_Value</code> has three functions associated:
+</p>
+<p><code>
+<my-mv>Type</my-mv> R_Value_get<my-mv>Suffix</my-mv>(R_Value const* value)<br>
+bool R_Value_is<my-mv>Suffix</my-mv>(R_Value const* value)<br>
+void R_Value_set<my-mv>Suffix</my-mv>(R_Value* value, R_<my-mv>Suffix</my-mv>Value <my-mv>Variable</my-mv>Value)
+</code></p>
+<p>The following table lists the valid combinations of <my-mv>Suffix</my-mv> and <my-mv>Variable</my-mv></p>
+
+<table>
+  <tr><td>Boolean        </td><td>boolean        </td></tr>
+
+  <tr><td>Integer16      </td><td>integer16      </td></tr>
+  <tr><td>Integer32      </td><td>integer32      </td></tr>
+  <tr><td>Integer64      </td><td>integer64      </td></tr>
+  <tr><td>Integer8       </td><td>integer8       </td></tr>
+
+  <tr><td>Natural16      </td><td>natural16      </td></tr>
+  <tr><td>Natural32      </td><td>natural32      </td></tr>
+  <tr><td>Natural64      </td><td>natural64      </td></tr>
+  <tr><td>Natural8       </td><td>natural8       </td></tr>
+  
+  <tr><td>ObjectReference</td><td>objectReference</td></tr>
+
+  <tr><td>Size           </td><td>size           </td></tr>
+
+  <tr><td>Void           </td><td>void           </td></tr>
+</table>
+
+<p><code>R_Value_is<my-mv>Suffix</my-mv></code> returns <code>true</code> if
+the <code>R_Value</code> stores a value of the type corresponding to <my-mv>Suffix</my-mv>. Otherwise it returns <code>false</code>.</p>
+
+<p><code>R_Value_set<my-mv>Suffix</my-mv></code> assigns the <code>R_Value</code>
+a value of the type corresponding to <my-mv>Suffix</my-mv>.</p>
+
+<p><code>R_Value_get<my-mv>Type</my-mv></code> get the value stored   in
+the <code>R_Value</code>. The behavior of <code>R_Value_set<my-mv>Suffix
+</my-mv></code> is undefined if the value does not store a value of  the
+type corresponding to <my-mv>Suffix</my-mv>.</p>
+
+  <h3 id="status-codes">Status Codes</h3>
+  <p>
+  R provides a status type and symbolic constants for its values. That type denotes success or failure of program (or a part of it)
+  as well as information on the reason for the failure.</p>
+
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_Status
+  </code></p>
+  <p>
+  <code>R_Status</code> is a natural number type of a width of 32 Bit.</p>
+
+  <p><code>
+  #definer R_Status_Success <my-mv>implementation detail</my-mv>
+  </code></p>
+  <p>is the symbolic constant of the type <code>R_Status</code> has the value <code>((R_Status)0)</code>.
+  It denotes success and is guaranteed to be defined to the value <code>0</code> of the underlaying natural number
+  type of R_Status as well as to be the only symbolic constant starting with <code>R_Status_</code> having
+  defined to that value.</p>
+
+  <p>
+  Symbolic constants of the form
+  </p>
+  <p><code>
+  #definer R_Status_<my-mv>Name</my-mv> <my-mv>implementation detail</my-mv>
+  </code></p>
+  <p>where <my-mv>Name</my-mv> is not <code>Success</code> provide information on failure of a program (or a part of it).
+  The following table denotes the value of the constant for the respective <my-mv>Name</my-mv>
+  </p>
+  <table>
+  <tr><td><code><span>Name</span></code>        </td><td>Value</td></tr>
+  <tr><td><code>AllocationFailed</code>         </td><td>An allocation failed.</td></tr>
+  <tr><td><code>ArgumentTypeInvalid</code>      </td><td>The type of an argument is invalid.</td></tr>
+  <tr><td><code>ArgumentValueInvalid</code>     </td><td>The value of an argument is invalid.</td></tr>
+  
+  <tr><td><code>EncodingInvalid</code>          </td><td>An encoding is invalid.</td></tr>
+  
+  <tr><td><code>FileSystemOperationFailed</code></td><td>A file system operation failed.</td></tr>  
+  
+  
+  <tr><td><code>Initialized</code>              </td><td>Something was initialized (but should not have been initialized).</td></tr>
+  <tr><td><code>NotExists</code>                </td><td>Something does not exist.</td></tr>
+  <tr><td><code>NumberOfArgumentsInvalid</code> </td><td>The number of arguments is invalid.</td></tr>
+  <tr><td><code>OperationInvalid</code>         </td><td>An operation is invalid.</td></tr>
+  <tr><td><code>TestFailed</code>               </td><td>A test failed. This is used by the built-in tests that ensure correctness.</td></tr>
+  <tr><td><code>Uninitialized</code>            </td><td>Something was uninitialized (but should have been initialized).</td></tr>
+  
+  <tr><td><code>TypeExists</code>               </td><td>A type exists (but should not).</td></tr>
+  <tr><td><code>TypeNotExists</code>            </td><td>A type does not exist (but should).</td></tr>
+  </table>
+
+  <h3 id="status-variable">Status Variable</h3>
+  <p>R provides a global status variable.</p>
+
+  <p><code>
+  R_Status
+  R_getStatus
+    (
+    );
+  </code></p>
+  <p>gets the value of the status variable. The initial value of the status variable is <code>R_Status_Success</code>.</p>
+
+  <p><code>
+  void
+  R_setStatus
+    (
+      R_Status status
+    );
+  </code></p>
+  <p>sets the value of the status variable to the value <code>status</code>.</p>
+
+  <h3>Jumps and Jump Targets</h3>
+  <p>R provides non-local jumps by allowing to save and restore the C program state.</p>
+
+  <p><code>
+  typedef <my-mv>implementation detail</my-mv> R_JumpTarget;
+  </code></p>
+  <p>is a type of which its values are stack allocated.</p>
+
+  <p><code>
+  void R_pushJumpTarget(R_JumpTarget* jumpTarget);
+  </code></p>
+  <p>
+  Push a jump target on top of the jump target stack.
+  Initially, the jump target stack is empty.
+  </p>
+
+  <p><code>
+  void R_popJumpTarget();
+  </code></p>
+  <p>
+  Pop the jump target on top of the jump target stack.
+  The jump target stack must not be empty.
+  </p>
+
+  <p><code>
+  void R_jump();
+  </code></p>
+  <p>
+  Jump to the jump target on top of the jump target stack.
+  The jump target stack must not be empty.
+  </p>
+  
+  <p><code>
+  #define R_JumpTarget_save(jumpTarget) <my-mv>implementation detail</my-mv>
+  </code></p>
+  <p>Macro to save the current C program state into a jump target.</p>
+  
+  <p>The canonical way of using <code>R_pushJumpTarget</code>, <code>R_popJumpTarget</code>, and
+  <code>R_jump</code> is the following.</p>
+  <p><code>
+  R_pushJumpTarget(&jumpTarget);<br>
+  if (R_JumpTarget_save(&jumpTarget)) {<br>
+    &nbsp;<my-mv>(1)</my-mv><br>
+    &nbsp;R_popJumpTarget();<my-mv>(2)</my-mv><br>
+  } else {<br>
+    &nbsp;R_popJumpTarget();<my-mv>(3)</my-mv><br>
+    &nbsp;<my-mv>(4)</my-mv><br>
+  }<br>
+  <my-mv>(5)</my-mv>
+  </code></p>
+  <p>
+  The    if-branch is always entered at first as the <code>R_JumpTarget_save()</code>       at
+  its first invocation returns logically true. If the program at <my-mv>(1)</my-mv> does   not
+  jump to the jump target (using <code>R_jump()</code>),  then <code>R_popJumpTarget();<my-mv>
+  (2)</my-mv></code> and <my-mv>(5)</my-mv> are executed. If the program at <my-mv>(1)</my-mv>
+  jumps to the jump target, then <code>R_JumpTarget_save()</code> is re-evaluated and  returns
+  logically false and <code>R_popJumpTarget();<my-mv>(2)</my-mv></code> and <my-mv>(4)</my-mv>
+  is executed.
+  </p>
+  
+  <p>One usage example is the implementation of the <code>R_safeExecute</code> function.</p> 
+  <p><code>
+  void R_safeExecute(void (*f)()) {<br>
+  &nbsp;R_JumpTarget jumpTarget;<br>
+  &nbsp;R_pushJumpTarget(&jumpTarget);<br>
+  &nbsp;if (R_JumpTarget_save(&jumpTarget)) {<br>
+  &nbsp;&nbsp;f();<br>
+  &nbsp;&nbsp;R_popJumpTarget();<br>
+  &nbsp;}<br>
+  }
+  </code></p>
+
+<h3>Numeric functions</h3>
+
+<h4 id="r-clamp">R_clamp</h4>
+<p>Clamp a value to a range.</p>
+<p><code>
+<my-mv>Type</my-mv> R_clamp<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value, <my-mv>Type</my-mv> lower, <my-mv>Type</my-mv> upper)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Integer8Value</code>  </td><td><code>R_Integer8Value</code></td></tr>
+<tr><td><code>Integer16Value</code> </td><td><code>R_Integer16Value</code></td></tr>
+<tr><td><code>Integer32Value</code> </td><td><code>R_Integer32Value</code></td></tr>
+<tr><td><code>Integer64Value</code> </td><td><code>R_Integer64Value</code></td></tr>
+<tr><td><code>Natural8Value</code>  </td><td><code>R_Natural8Value</code></td></tr>
+<tr><td><code>Natural16Value</code> </td><td><code>R_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code> </td><td><code>R_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code> </td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>SizeValue</code>      </td><td><code>R_SizeValue</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> value</td><td>The value to clamp.</td></tr>
+  <tr><td><my-mv>Type</my-mv> lower</td><td>The lower bound (inclusive).</td></tr>
+  <tr><td><my-mv>Type</my-mv> upper</td><td>The upper bound (inclusive).</td></tr>
+</table>
+
+<p>This function returns the value <code>value</code> clamped to the range <code>[lower, upper]</code>.</p>
+
+<h5><b>Errors</b></h5>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>lower &gt; upper</code></td></tr>
+  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>The value <code>value</code> clamped to the range <code>[lower, upper]</code>.</p>
+
+<h4 id="r-countleadingzeroes">R_countLeadingZeroes</h4>
+<p>Return the number of leadin gzeroes of the binary representation of a value.</p>
+<p><code>
+R_SizeValue R_countLeadingZeroes<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Integer8Value</code>  </td><td><code>R_Integer8Value</code></td></tr>
+<tr><td><code>Integer16Value</code> </td><td><code>R_Integer16Value</code></td></tr>
+<tr><td><code>Integer32Value</code> </td><td><code>R_Integer32Value</code></td></tr>
+<tr><td><code>Integer64Value</code> </td><td><code>R_Integer64Value</code></td></tr>
+<tr><td><code>Natural8Value</code>  </td><td><code>R_Natural8Value</code></td></tr>
+<tr><td><code>Natural16Value</code> </td><td><code>R_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code> </td><td><code>R_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code> </td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>SizeValue</code>      </td><td><code>R_SizeValue</code></td></tr>
+</table>
+
+<p>This function returns the number of leading zeroes of the binary representation of <code>value</code>.</p>
+
+<h5>Return value</h5>
+<p>The number of leading zeroes.</p>
+
+<h4 id="r-hash">R_hash</h4>
+<p>Return the hash of a value.</p>
+<p><code>
+R_SizeValue R_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Integer8Value</code>  </td><td><code>R_Integer8Value</code></td></tr>
+<tr><td><code>Integer16Value</code> </td><td><code>R_Integer16Value</code></td></tr>
+<tr><td><code>Integer32Value</code> </td><td><code>R_Integer32Value</code></td></tr>
+<tr><td><code>Integer64Value</code> </td><td><code>R_Integer64Value</code></td></tr>
+<tr><td><code>Natural8Value</code>  </td><td><code>R_Natural8Value</code></td></tr>
+<tr><td><code>Natural16Value</code> </td><td><code>R_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code> </td><td><code>R_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code> </td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>SizeValue</code>      </td><td><code>R_SizeValue</code></td></tr>
+<tr><td><code>VoidValue</code>      </td><td><code>R_VoidValue</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return hash of  <code>x</code>.</p>
+
+<h4 id="r-maximum">R_maximum</h4>
+<p>Return the maximum of two values.</p>
+<p><code>
+<my-mv>Type</my-mv> R_maximum<my-mv>Suffix</my-mv>(<my-mv>Type<my-mv> x, <my-mv>Type<my->mv> y)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td> <td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Integer8Value</code></td><td><code>R_Integer8Value</code></td></tr>
+<tr><td><code>Integer16Value</code></td><td><code>R_Integer16Value</code></td></tr>
+<tr><td><code>Integer32Value</code></td><td><code>R_Integer32Value</code></td></tr>
+<tr><td><code>Integer64Value</code></td><td><code>R_Integer64Value</code></td></tr>
+<tr><td><code>Natural8Value</code></td><td><code>R_Natural8Value</code></td></tr>
+<tr><td><code>Natural16Value</code></td><td><code>R_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code></td><td><code>R_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code></td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>SizeValue</code></td><td><code>R_SizeValue</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The first value.</td></tr>
+  <tr><td><my-mv>Type</my-mv> y</td><td>The second value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the maximum of <code>x</code> and <code>y</code>.</p>
+
+<h4 id="r-minimum">R_minimum</h4>
+<p>Return the minimum of two values.</p>
+<p><code>
+<my-mv>Type</my-mv> R_minimum<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x, <my-mv>Type</my-mv> y)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Integer8Value</code></td><td><code>R_Integer8Value</code></td></tr>
+<tr><td><code>Integer16Value</code></td><td><code>R_Integer16Value</code></td></tr>
+<tr><td><code>Integer32Value</code></td><td><code>R_Integer32Value</code></td></tr>
+<tr><td><code>Integer64Value</code></td><td><code>R_Integer64Value</code></td></tr>
+<tr><td><code>Natural8Value</code></td><td><code>R_Natural8Value</code></td></tr>
+<tr><td><code>Natural16Value</code></td><td><code>R_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code></td><td><code>R_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code></td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>SizeValue</code></td><td><code>R_SizeValue</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The first value.</td></tr>
+  <tr><td><my-mv>Type</my-mv> y</td><td>The second value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the minimum of <code>x</code> and <code>y</code>.</p>
+
+<h4 id="r-nextpoweroftwogt">R_nextPowerOfTwoGt</h4>
+<p>R provides functions returning the next power of two greater than a value.</p>
+<p><code>
+<my-mv>Type</my-mv> R_nextPowerOfTwoGt<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Integer8Value</code>  </td><td><code>R_Integer8Value</code></td></tr>
+<tr><td><code>Integer16Value</code> </td><td><code>R_Integer16Value</code></td></tr>
+<tr><td><code>Integer32Value</code> </td><td><code>R_Integer32Value</code></td></tr>
+<tr><td><code>Integer64Value</code> </td><td><code>R_Integer64Value</code></td></tr>
+<tr><td><code>Natural8Value</code>  </td><td><code>R_Natural8Value</code></td></tr>
+<tr><td><code>Natural16Value</code> </td><td><code>R_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code> </td><td><code>R_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code> </td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>SizeValue</code>      </td><td><code>R_SizeValue</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The value.</td></tr>
+</table>
+
+<h5><b>Errors</b></h5>
+<table>
+  <tr><td>R_Status_NotExists</td><td>The next power of two greater than <code>x</code> is not representable by the type <my-mv>Type</my-mv></td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the next power of two greater than <code>x</code>.</p>
+
+<h4 id="r-nextpoweroftwogte">R_nextPowerOfTwoGte</h4>
+<p>R provides functions returning the next power of two greater or equal to a value.</p>
+<p><code>
+<my-mv>Type</my-mv> R_nextPowerOfTwoGte<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Integer8Value</code>  </td><td><code>R_Integer8Value</code></td></tr>
+<tr><td><code>Integer16Value</code> </td><td><code>R_Integer16Value</code></td></tr>
+<tr><td><code>Integer32Value</code> </td><td><code>R_Integer32Value</code></td></tr>
+<tr><td><code>Integer64Value</code> </td><td><code>R_Integer64Value</code></td></tr>
+<tr><td><code>Natural8Value</code>  </td><td><code>R_Natural8Value</code></td></tr>
+<tr><td><code>Natural16Value</code> </td><td><code>R_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code> </td><td><code>R_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code> </td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>SizeValue</code>      </td><td><code>R_SizeValue</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The value.</td></tr>
+</table>
+
+<h5><b>Errors</b></h5>
+<table>
+  <tr><td>R_Status_NotExists</td><td>The next power of two greater greater than or equal to <code>x</code> is not representable by the type <my-mv>Type</my-mv></td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the next power of two greater than or equal to <code>x</code>.</p>
+
+<h4>R_getTickCount</h4>
+<p>Get the time, in milliseconds, since the start of the process.</p>
+<p><code>
+R_Natural64Value R_getTickCount()
+</code></p>
+
+<h5>Return value</h5>
+<p>The time, in milliseconds, since the start of the process.</p>
+
+<h3>Objects</h3>
+
+<h4 id="r-bytebuffer">Byte Buffer</h4>
+<p>
+<code>R_ByteBuffer</code> represents a mutable sequence of Bytes.
+This type is allocated on the heap and values of this type are referenced by <code>R_ByteBuffer</code> pointers.
+A <code>R_ByteBuffer</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_ByteBuffer</code> value can be safely cast into a <code>R_ByteBuffer</code> pointer.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-create">create</h5>
+
+<p><code>
+R_ByteBuffer* R_ByteBuffer_create()
+</code></p>
+
+<p>Create an empty Byte buffer.</p>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the Byte buffer.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-clear">clear</h5>
+<p><code>
+void R_ByteBuffer_clear(R_ByteBuffer* self)
+</code></p>
+
+<p>Set the number of elements of this Byte buffer to zero.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-bytebuffer-endswith-pn">endsWith_pn</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_endsWith_pn(R_ByteBuffer const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is a suffix of this Byte buffer's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is a suffix of this byte buffer's sequence of Bytes.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-bytebuffer-startswith-pn">startsWith_pn</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_startsWith_pn(R_ByteBuffer const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is a prefix of this Byte buffer's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-bytebuffer-isequalto-pn">isEqualTo_pn</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_isEqualTo_pn(R_ByteBuffer const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is this Byte buffer's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-append-pn">append_pn</h5>
+<p><code>
+void R_ByteBuffer_append_pn(R_ByteBuffer* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Append Bytes to this Byte buffer.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-prepend-pn">prepend_pn</h5>
+<p><code>
+void R_ByteBuffer_prepend_pn(R_ByteBuffer* self, void const* p, R_SizeValue n)
+</code></p>
+
+<p>Prepend Bytes to this Byte buffer.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* p     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue n     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-insert-pn">insert_pn</h5>
+<p><code>
+void R_ByteBuffer_insert_pn(R_ByteBuffer* self, R_SizeValue index, void const* p, R_SizeValue n)
+</code></p>
+
+<p>Insert Bytes into this Byte buffer.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>R_SizeValue index </td><td>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
+  <tr><td>void const* p     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue n     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-isequalto">isEqualTo</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_isEqualTo(R_ByteBuffer const* self, R_ByteBuffer const* other)
+</code></p>
+
+<p>Compare this Byte buffer with another Byte buffer for equality.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer const* self </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>R_ByteBuffer const* other</td><td>A pointer to the other Byte buffer.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if this Byte buffer is equal to the other Byte buffer.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-getsize">getSize</h5>
+<p><code>
+R_SizeValue R_ByteBuffer_getSize(R_ByteBuffer const* self)
+</code></p>
+
+<p>Get the size of this Byte buffer.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The size of this Byte buffer.</p>
+
+<h6><b>Remarks</b></h6>
+<p> The size of a Byte buffer is the length of the Byte sequence it contains.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-getat">getat</h5>
+<p><code>
+R_Natural8Value R_ByteBuffer_getAt(R_ByteBuffer const* self, R_SizeValue index)
+</code></p>
+
+<p>Get the Byte value at the specified index.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The Byte value.</p>
+
+<h6><b>Remarks</b></h6>
+<p> The size of a Byte buffer is the length of the Byte sequence it contains.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-isempty">isEmpty</h5>
+<p><code>
+R_BooleanValue R_ByteBuffer_isEmpty(R_ByteBuffer* self)
+</code></p>
+
+<p>Get if this Byte buffer is empty.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p><code>R_BooleanValue_True</code> if this Byte buffer is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-bytebuffer-swap">swap</h5>
+<p><code>
+void R_ByteBuffer_swap(R_ByteBuffer* self, R_ByteBuffer* other)
+</code></p>
+
+<p>Swap the contents of this Byte buffer with the contents of another Byte buffer.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>R_ByteBuffer* self</td><td>A pointer to the other Byte buffer.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>other</code> is a null pointer.</td></tr>
+</table>
+
+<h4 id="r-filehandle">File Handle</h4>
+<p>
+<code>R_FileHandle</code> represents a operating system file handle.
+This type is allocated on the heap and values of this type are referenced by <code>R_FileHandle</code> pointers.
+A <code>R_FileHandle</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_FileHandle</code> value can be safely cast into a <code>R_FileHandle</code> pointer.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-create">create</h5>
+
+<p><code>
+R_FileHandle* R_FileHandle_create()
+</code></p>
+
+<p>Create a file handle. The file handle is closed.</p>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file handle.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-close">close</h5>
+<p><code>
+void R_FileHandle_close(R_FileHandle* self)
+</code></p>
+
+<p>Close this file handle.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-openforreading">openForReading</h5>
+<p><code>
+void R_FileHandle_openForReading(R_FileHandle* self, R_FilePath* path)
+</code></p>
+
+<p>Open a file for reading. If the file is open, it is closed before trying to re-open it.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
+  <tr><td>R_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-openforwriting">openForWriting</h5>
+<p><code>
+void R_FileHandle_openForWriting(R_FileHandle* self, R_FilePath* path)
+</code></p>
+
+<p>Open a file for writing. If the file is open, it is closed before trying to re-open it.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
+  <tr><td>R_FilePath* path  </td><td>The file path of the file to write to.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-isclosed">isClosed</h5>
+<p><code>
+R_BooleanValue R_FileHandle_isClosed(R_FileHandle const* self)
+</code></p>
+
+<p>Get if this file handle is closed.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-isopened">isOpened</h5>
+<p><code>
+R_BooleanValue R_FileHandle_isOpened(R_FileHandle const* self)
+</code></p>
+
+<p>Get if this file handle is opened.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-isopenedforreading">isOpenedForReading</h5>
+<p><code>
+R_BooleanValue R_FileHandle_isOpenedForReading(R_FileHandle const* self)
+</code></p>
+
+<p>Get if this file handle is opened for reading.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-isopenedforwriting">isOpenedForWriting</h5>
+<p><code>
+R_BooleanValue R_FileHandle_isOpenedForWriting(R_FileHandle const* self)
+</code></p>
+
+<p>Get if this file handle is opened for writing.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-write">write</h5>
+<p><code>
+void R_FileHandle_write(R_FileHandle* self, void const* p, R_SizeValue bytesToWrite)
+</code></p>
+
+<p>Write Bytes to this file handle.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle* self       </td><td>A pointer to this file handle.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>bytesToWrite</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue bytesToWrite </td><td>The number of Bytes in the array pointed to by <code>bytes</code>.</td></tr>
+  <tr><td>R_SizeValue* bytesWritten</td><td>A pointer to a <code>R_SizeValue</code> variable.</td></tr>
+</table>
+
+<h6><b>Success</b></h6>
+<p>
+On success <code>*bytesWritten</code> is assigned the actual number of Bytes written.
+</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer. </td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_OperationInvalid         </td><td>The file is not opened for writing.</td></tr>
+  <tr><td>R_Status_FileSystemOperationFailed</td><td>Writing failed.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filehandle-read">read</h5>
+<p><code>
+void R_FileHandle_read(R_FileHandle* self, void const* bytes, R_SizeValue bytesToRead, R_SizeValue* bytesRead)
+</code></p>
+
+<p>Read Bytes from this file handle.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileHandle* self      </td><td>A pointer to this file handle.</td></tr>
+  <tr><td>void const* bytes       </td><td>A pointer to an array of <code>bytesToWrite</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue bytesToRead </td><td>The number of Bytes to read from the the array pointed to by <code>bytes</code>.</td></tr>
+  <tr><td>R_SizeValue* bytesRead  </td><td>A pointer to a <code>R_SizeValue</code> variable.</td></tr>
+</table>
+
+<h6><b>Success</b></h6>
+<p>
+On success <code>*bytesRead</code> is assigned the actual number of Bytes read.
+The number of Bytes read is 0 if the end of the file was reached.
+</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytesRead</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_OperationInvalid         </td><td>The file is not opened for writing.</td></tr>
+  <tr><td>R_Status_FileSystemOperationFailed</td><td>Writing failed.</td></tr>
+</table>
+
+<h4 id="r-filepath">File Path</h4>
+<p>
+<code>R_FilePath</code> represents a file path.
+This type is allocated on the heap and values of this type are referenced by <code>R_FilePath</code> pointers.
+A <code>R_FilePath</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_FilePath</code> value can be safely cast into a <code>R_FilePath</code> pointer.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-create">create</h5>
+
+<p><code>
+R_FilePath* R_Path_create()
+</code></p>
+
+<p>Create the empty file path.</p>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file path.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-parsewindowsfilepath">parseWindowsFilePath</h5>
+<p><code>
+R_FilePath* R_FilePath_parseWindowsFilePath(void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Parse a file path in the Windows format.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
+  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file path.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-parseunixfilepath">parseUnixFilePath</h5>
+<p><code>
+R_FilePath* R_FilePath_parseUnixFilePath(void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Parse a file path in the Unix format.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
+  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file path.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-parsenativefilepath">parseNativeFilePath</h5>
+<p><code>
+R_FilePath* R_FilePath_parseNativeFilePath(void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Parse a file path in the native format.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
+  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the file path.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filepath-tonative">toNative</h5>
+<p><code>
+R_String* R_FilePath_toNative(R_FilePath* self)
+</code></p>
+
+<p>Convert a file path to the native format.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>self</td><td>A pointer to this file path.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>A pointer to the string.</p>
+
+<h4 id="r-filesystem">FileSystem</h4>
+<p>
+<code>R_FileSystem</code> provides access to the file system.
+This type is allocated on the heap and values of this type are referenced by <code>R_String</code> pointers.
+A <code>R_FileSystem</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_String</code> value can be safely cast into a <code>R_String</code> pointer.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-filesystem-create">R_FileSystem_create</h5>
+<p><code>
+R_FileSystem* R_FileSystem_create()
+</code></p>
+
+<p>Create a file system.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-filesystem-getfilecontents">getFileContents</h5>
+<p><code>
+R_ByteBuffer* R_ByteBuffer_getFileContents(R_FilePath *path)
+</code></p>
+
+<p>Get the contents of a file.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">R_FilePath</a>* path</td><td>The file path of the file.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+A pointer to a <code>R_ByteBuffer</code> object with the file contents.
+</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td><a href="#">R_Status_ArgumentValueInvalid</a></td><td><code>path</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-filesystem-setfilecontents">setFileContents</h5>
+<p><code>
+void R_FileSystem_setFileContents(R_FilePath* path, R_ByteBuffer* contents)
+</code></p>
+
+<p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FilePath* path</td><td>The file path of the file.</td></tr>
+  <tr><td>R_ByteBuffer const* byteBuffer</td><td>A poiner to the Byte buffer with the file contents.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.    </td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>contents</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.                </td></tr>
+</table>
+
+<h4 id="r-list">List</h4>
+<p>
+<code>R_List</code> represents a list of <code>R_Value</code> objects.
+This type is allocated on the heap and values of this type are referenced by <code>R_List</code> pointers.
+A <code>R_List</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_List</code> value can be safely cast into a <code>R_List</code> pointer.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-list-create">R_List_create</h5>
+<p><code>
+R_List* R_List_create()
+</code></p>
+
+<p>Create a list.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>bytes        </td><td>A pointer to an array of Bytes.</td></tr>
+  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code>.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+</table>
+
+<h6><b>Return value</b></h6>
+<p>A pointer to the <code>R_List</code> value.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-list-append">append</h5>
+<p><code>
+void R_List_append(R_List* self, R_Value value)
+</code></p>
+
+<p>Append a <code>R_Value</code> to a list.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self           </td><td>A pointer to this list.</td></tr>
+  <tr><td>R_Value value          </td><td>The value to append.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-list-clear">clear</h5>
+<p><code>
+void R_List_clear(R_List* self)
+</code></p>
+
+<p>Clear this list.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-list-getat">getAt</h5>
+<p><code>
+R_Value R_List_getAt(R_List* self, R_SizeValue index)
+</code></p>
+
+<p>Get the value at the specifie index in this list.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The value.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-list-getsize">getSize</h5>
+<p><code>
+R_SizeValue R_List_getSize(R_List const* self)
+</code></p>
+
+<p>Get the size of this list.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The size of this list.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-list-insertat">insert</h5>
+<p><code>
+void R_List_insertAt(R_List* self, R_SizeValue index, R_Value value)
+</code></p>
+
+<p>Compare this string with another string for equality.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self      </td><td>A pointer to this list.</td></tr>
+  <tr><td>R_SizeValue index </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
+  <tr><td>R_Value value     </td><td>The value to insert.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-list-isempty">isEmpty</h5>
+<p><code>
+R_BooleanValue R_List_isEmpty(R_List* self)
+</code></p>
+
+<p>Get if this list is empty.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p><code>R_BooleanValue_True</code> if this list is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-list-prepend">prepend</h5>
+<p><code>
+void R_List_prepend(R_List* self, R_Value value)
+</code></p>
+
+<p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
+
+<p>Prepend a <code>R_Value</code> to a list.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self           </td><td>A pointer to this list.</td></tr>
+  <tr><td>R_Value value          </td><td>The value to prepend.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-list-remove">remove</h5>
+<p><code>
+void R_List_remove(R_List* self, R_SizeValue index, R_SizeValue count)
+</code></p>
+
+<p>Remove <code>length</code> elements starting with element at index <code>index</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td>R_SizeValue index</td><td>The index of the first element to remove.</td></tr>
+  <tr><td>R_SizeValue length</td><td>The number of elements to remove.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>index + count > n</code> where <code>n</code> is the length of the list.</td></tr>
+</table>
+
+<h4 id="r-stack">Stack</h4>
+<p>
+<code>R_Stack</code> represents a stack of <code>R_Value</code> objects.
+This type is allocated on the heap and values of this type are referenced by <code>R_Stack</code> pointers.
+A <code>R_Stack</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_Stack</code> value can be safely cast into a <code>R_Stack</code> pointer.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-stack-create">R_Stack_create</h5>
+<p><code>
+R_Stack* R_Stack_create()
+</code></p>
+
+<p>Create a stack.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+</table>
+
+<h6><b>Return value</b></h6>
+<p>A pointer to the <code>R_Stack</code> value.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-stack-clear">clear</h5>
+<p><code>
+void R_Stack_clear(R_Stack* self)
+</code></p>
+
+<p>Clear this stack.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-stack-getsize">getSize</h5>
+<p><code>
+R_SizeValue R_Stack_getSize(R_Stack const* self)
+</code></p>
+
+<p>Get the size of this stack.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The size of this stack.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-stack-isempty">isEmpty</h5>
+<p><code>
+R_BooleanValue R_Stack_isEmpty(R_Stack* self)
+</code></p>
+
+<p>Get if this stack is empty.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p><code>R_BooleanValue_True</code> if this stack is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-stack-peek">peek</h5>
+<p><code>
+R_Value R_Stack_peek(R_Stack* self)
+</code></p>
+
+<p>Peek at the value on top of this stack.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The value.</p>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-stack-pop">pop</h5>
+<p><code>
+R_Value R_Stack_pop(R_Stack* self)
+</code></p>
+
+<p>Pop the value from the top of this stack.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The value.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-stack-push">push</h5>
+<p><code>
+void R_Stack_push(R_Stack* self, R_Value value)
+</code></p>
+
+<p>Push a value on the top of this stack.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_Stack* self            </td><td>A pointer to this stack.</td></tr>
+  <tr><td>R_Value value            </td><td>The value to push.</td></tr>
+</table>
+
+<h4 id="r-string">String</h4>
+<p>
+<code>R_String</code> represents an Unicode string encoded as UTF-8-NO-BOM.
+This type is allocated on the heap and values of this type are referenced by <code>R_String</code> pointers.
+A <code>R_String</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_String</code> value can be safely cast into a <code>R_String</code> pointer.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-create-pn">R_String_create_pn</h5>
+<p><code>
+R_String* R_String_create_pn(void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Create a string from a sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>bytes        </td><td>A pointer to an array of Bytes.</td></tr>
+  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code>.</td></tr>
+</table>
+
+<h6><b>Return value</b></h6>
+<p>A pointer to the string.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-create">R_String_create</h5>
+<p><code>
+R_String* R_String_create_pn(R_Value value)
+</code></p>
+
+<p>
+Create a string from a value.
+</p>
+
+<p>
+The specified value may contain a R_ByteBuffer object.
+In that case, the string is created from the Bytes of the Byte buffer object.
+A <code>R_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>R_ByteBuffer</code> object is not a UTF8 Byte sequence.
+</p>
+
+<p>
+The specified value may contain a R_String object.
+In that case, the string is created from the R_String object.
+</p>
+
+<p>
+The specified value may contain a R_StringBuffer object.
+In that case, the string is created from the R_StringBuffer object.
+</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>value        </td><td>The value.</td></tr>
+</table>
+
+<h6><b>Return value</b></h6>
+<p>A pointer to the string. </p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>The value does not contain either a <code>R_ByteBuffer</code> object, a <code>R_String</code> object, or a <code>R_StringBuffer</code> object.</td>
+  </tr>
+  <tr>
+    <td>R_Status_EncodingInvalid    </td>
+    <td>The value contains a <code>R_ByteBuffer</code> object. However, the Byte sequence of that <code>R_ByteBuffer</code> object is not a UTF8 Byte sequence.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-string-endswith-pn">endsWith_pn</h5>
+<p><code>
+R_BooleanValue R_String_endsWith_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is a suffix of this string's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is a suffix of this string's sequence of Bytes.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="r-string-startswith-pn">startsWith_pn</h5>
+<p><code>
+R_BooleanValue R_String_startsWith_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is a prefix of this string's sequence of Bytes.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-isequalto">isEqualTo</h5>
+<p><code>
+R_BooleanValue R_String_isEqualTo(R_String const* self, R_String const* other)
+</code></p>
+
+<p>Compare this string with another string for equality.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String const* self </td><td>A pointer to this string.</td></tr>
+  <tr><td>R_String const* other</td><td>A pointer to the other string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if this string is equal to the other string.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-isequalto_pn">isEqualTo_pn</h5>
+<p><code>
+R_BooleanValue R_String_isEqualTo_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+</code></p>
+
+<p>Get if a sequence of Bytes is this string's sequence of Bytes.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>R_BooleanValue_True</code> if the sequence of Bytes is this string's sequence of Bytes.
+<code>R_BooleanValue_False</code> otherwise.
+</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-getnumberofbytes">getNumberOfBytes</h5>
+<p><code>
+R_SizeValue R_String_getNumberOfBytes(R_String const* self)
+</code></p>
+
+<p>Get the size, in Bytes, of this string.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The size, in Bytes, of this string.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-getbyteat">getByteAt</h5>
+<p><code>
+R_Natural8Value R_String_getByteAt(R_String const* self, R_SizeValue index)
+</code></p>
+
+<p>Get the Byte value at the specified index.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size, in Bytes, of this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The Byte value.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tointeger8">toInteger8</h5>
+<p><code>
+R_Integer8Value R_String_toInteger8(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer8Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer8Value</code>.</td>
+  </tr>
+</table>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tointeger16">toInteger16</h5>
+<p><code>
+R_Integer16Value R_String_toInteger16(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer16Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer16Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tointeger32">toInteger32</h5>
+<p><code>
+R_Integer32Value R_String_toInteger32(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer32Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer32Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tointeger64">toInteger64</h5>
+<p><code>
+R_Integer64Value R_String_toInteger64(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer64Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer64Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural8">toNatural8</h5>
+<p><code>
+R_Natural8Value R_String_toNatural8(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural8Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural8Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural16">toNatural16</h5>
+<p><code>
+R_Natural16Value R_String_toNatural16(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural16Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural16Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural32">toNatural32</h5>
+<p><code>
+R_Natural32Value R_String_toNatural16(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural32Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural32Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural64">toNatural64</h5>
+<p><code>
+R_Natural64Value R_String_toNatural16(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural64Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural64Value</code>.</td>
+  </tr>
+</table>
+
+  <footer>
+    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 6 October 2024.</span>
+  </footer>
+  </body>
+</html>
+

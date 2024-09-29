@@ -7,7 +7,16 @@ This repository contains
 - the C source code of tools to build the website from its source
 - the C source code of support libraries for the tools
 
+### Build status
+[![Build status](https://ci.appveyor.com/api/projects/status/og37g8g7t984xtt2/branch/main?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com/branch/main)
+[![Build status](https://ci.appveyor.com/api/projects/status/og37g8g7t984xtt2/branch/develop?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com/branch/develop)
+
 ### Roadmap
+- **Milestone 6: Maintain roadmap on website**: Percentage done: 0% @ Week 1 October 2024
+Separate website sources from its products.
+Instead of generating the website in the folders of the repository, the website shall be generated in a dedicated `.build` folder of the repository. 
+This will result in reduces sizes of the uploads to webhosts.
+
 - **Milestone 5: Maintain roadmap on website**: Percentage done: 0% @ Week 1 October 2024
 The roadmap shall be maintained on the website.
 

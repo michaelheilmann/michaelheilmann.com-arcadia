@@ -91,6 +91,14 @@ R_StringBuffer_append
     R_Value value
   );
 
+void
+R_StringBuffer_appendCodePoints
+  (
+    R_StringBuffer* self,
+    R_Natural32Value const* codePoints,
+    R_SizeValue numberOfCodePoints
+  );
+
 /// @brief
 /// Compare the contents of two string buffer for lexicographic equivalence.
 /// @param self

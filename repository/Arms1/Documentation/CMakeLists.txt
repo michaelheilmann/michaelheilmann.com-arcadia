@@ -23,6 +23,7 @@ if (NOT MyProjectIsDefined)
   endif()
   project(${MyProjectName})
   enable_testing()
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
   include(FetchContent)
   set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
@@ -35,16 +36,14 @@ FetchProduct(${MyProjectName}.Concatenate "${REPOSITORY_SOURCE_DIR}/Tools.Concat
 FetchProduct(${MyProjectName}.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library/sources" "path to the Tools.TemplateEngine Library source directory")
 FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Tools.TemplateEngine Tool source directory")
 
-
-
-
 # Build the documentation.
-add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../index.html
-                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/main.i ${CMAKE_CURRENT_SOURCE_DIR}/../index.html
+set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/repository/Arms1/index.html")
+add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/main.i ${DOCUMENT_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/main.i => ${CMAKE_CURRENT_SOURCE_DIR}/../index.html"
+                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/main.i => ${DOCUMENT_TARGET_FILE}"
                    DEPENDS Tools.TemplateEngine ${CMAKE_CURRENT_SOURCE_DIR}/main.i)
 
-add_custom_target(${MyProjectName}.Arms.BuildDocs ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../index.html)
+add_custom_target(${MyProjectName}.Arms.BuildDocs ALL DEPENDS ${DOCUMENT_TARGET_FILE})
 
 set_target_properties(${MyProjectName}.Arms.BuildDocs PROPERTIES FOLDER "Arms")

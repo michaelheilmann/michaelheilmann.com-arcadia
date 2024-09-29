@@ -17,6 +17,7 @@
 
 #include "R/StringBuffer.h"
 
+#include "R/Utf8/EncodeCodePoints.h"
 #include <string.h>
 #include "R/ArmsIntegration.h"
 #include "R.h"
@@ -32,6 +33,15 @@ ensureFreeCapacityBytes
   (
     R_StringBuffer* self,
     R_SizeValue requiredFreeCapacity
+  );
+
+// Warning: This function does not validate parameters.
+static void
+appendBytesInternal
+  (
+    R_StringBuffer* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
   );
 
 static void
@@ -68,6 +78,19 @@ ensureFreeCapacityBytes
     }
     self->capacity = newCapacity;
   }
+}
+
+static void
+appendBytesInternal
+  (
+    R_StringBuffer* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
+  )
+{
+  ensureFreeCapacityBytes(self, numberOfBytes);
+  memcpy(self->elements + self->size, bytes, numberOfBytes);
+  self->size += numberOfBytes;
 }
 
 void
@@ -180,6 +203,17 @@ R_StringBuffer_append
     R_setStatus(R_Status_ArgumentTypeInvalid);
     R_jump();
   }
+}
+
+void
+R_StringBuffer_appendCodePoints
+  (
+    R_StringBuffer* self,
+    R_Natural32Value const* codePoints,
+    R_SizeValue numberOfCodePoints
+  )
+{
+  R_Utf8_encodeCodePoints(codePoints, numberOfCodePoints, self, (void (*)(void*, R_Natural8Value const*, R_SizeValue))&appendBytesInternal);
 }
 
 R_BooleanValue

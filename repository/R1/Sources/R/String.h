@@ -91,6 +91,12 @@ R_String_getByteAt
     R_SizeValue index
   );
 
+R_SizeValue
+R_String_getHash
+  (
+    R_String const* self
+  );
+
 // https://michaelheilmann.com/repository/R1/#r-string-getnumberofsymbols
 R_SizeValue
 R_String_getNumberOfSymbols
