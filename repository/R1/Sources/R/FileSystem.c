@@ -13,11 +13,16 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-01
+// Last modified: 2024-10-07
 
 #include "R/FileSystem.h"
 
-#include "R.h" 
+#include "R/FileHandle.h"
+#include "R/FilePath.h"
+#include "R/JumpTarget.h"
+#include "R/Object.h"
+#include "R/Status.h"
+#include "R/String.h"
 
 static void
 R_FileSystem_visit
@@ -50,7 +55,19 @@ _R_FileSystem_registerType
   (
   )
 {
-  R_registerObjectType("R.FileSystem", sizeof("R.FileSystem") - 1, sizeof(R_FileSystem), NULL, &R_FileSystem_visit, &R_FileSystem_destruct);
+  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof("R.Object") - 1);
+  R_registerObjectType(u8"R.FileSystem", sizeof(u8"R.FileSystem") - 1, sizeof(R_FileSystem), parentType, NULL, &R_FileSystem_visit, &R_FileSystem_destruct);
+}
+
+void
+R_FileSystem_construct
+  (
+    R_FileSystem* self
+  )
+{
+  R_Type* _type = R_getObjectType(u8"R.FileSystem", sizeof(u8"R.FileSystem") - 1);
+  R_Object_construct((R_Object*)self);
+  R_Object_setType((R_Object*)self, _type);
 }
 
 R_FileSystem*
@@ -58,8 +75,8 @@ R_FileSystem_create
   (
   )
 {
-  R_FileSystem* self = R_allocateObject(R_getObjectType("R.FileSystem", sizeof("R.FileSystem") - 1));
-  self->dummy = 0;
+  R_FileSystem* self = R_allocateObject(R_getObjectType(u8"R.FileSystem", sizeof(u8"R.FileSystem") - 1));
+  R_FileSystem_construct(self);
   return self;
 }
 

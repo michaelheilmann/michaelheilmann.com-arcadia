@@ -18,6 +18,10 @@
 #if !defined(R_UTF8_ENCODECODEPOINTS_H_INCLUDED)
 #define R_UTF8_ENCODECODEPOINTS_H_INCLUDED
 
+#if defined(R_EXPORTED_INCLUDE)
+  #error("R/Utf8/EncodeCodePoints.h must not be included from public header")
+#endif
+
 #include "R/Natural8.h"
 #include "R/Natural32.h"
 #include "R/Size.h"

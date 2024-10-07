@@ -13,11 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-20
+// Last modified: 2024-10-07
 
 #include "R/Utf8ByteBufferReader.h"
 
-#include "R.h"
+#include "R/JumpTarget.h"
+#include "R/Object.h"
+#include "R/Status.h"
+#include "R/Utf8.h"
 
 #define CodePoint_Start (R_Utf8CodePoint_Last + 1)
 #define CodePoint_End (R_Utf8CodePoint_Last + 2)
@@ -172,7 +175,7 @@ _R_Utf8ByteBufferReader_registerType
   )
 {
   R_Type* parentObjectType = R_getObjectType("R.Utf8Reader", sizeof("R.Utf8Reader") - 1);
-  R_registerObjectType("R.Utf8ByteBufferReader", sizeof("R.Utf8ByteBufferReader") - 1, sizeof(R_Utf8ByteBufferReader), parentObjectType, &R_Utf8ByteBufferReader_visit, NULL);
+  R_registerObjectType("R.Utf8ByteBufferReader", sizeof("R.Utf8ByteBufferReader") - 1, sizeof(R_Utf8ByteBufferReader), parentObjectType, NULL, &R_Utf8ByteBufferReader_visit, NULL);
 }
 
 void

@@ -13,13 +13,15 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-16
+// Last modified: 2024-10-07
 
 #include "Tools/Visuals2d/PixelBuffer.h"
 
-#include "R/ArmsIntegration.h"
+#include "R.h"
+// memcmp, memcpy, memmove
 #include <string.h>
-#include <malloc.h>
+// fprintf, stderr
+#include <stdio.h>
 
 static void inline
 ENCODE_ARGB
@@ -66,7 +68,7 @@ PixelBuffer_finalize
   )
 {
   if (self->bytes) {
-    R_Arms_deallocateUnmanaged_nojump(self->bytes);
+    R_deallocateUnmanaged_nojump(self->bytes);
     self->bytes = NULL;
   }
 }
@@ -75,7 +77,7 @@ void
 _PixelBuffer_registerType
   (
   )
-{ R_registerObjectType("PixelBuffer", sizeof("PixelBuffer") - 1, sizeof(PixelBuffer), NULL, NULL, &PixelBuffer_finalize); }
+{ R_registerObjectType("PixelBuffer", sizeof("PixelBuffer") - 1, sizeof(PixelBuffer), NULL, NULL, NULL, &PixelBuffer_finalize); }
 
 uint8_t
 PixelBuffer_getFormat
@@ -111,7 +113,7 @@ PixelBuffer_setLinePadding
     size_t newLinePadding = linePadding;
     uint8_t* oldBytes = self->bytes;
     uint8_t* newBytes = NULL;
-    if (!R_Arms_allocateUnmanaged_nojump(&newBytes, (self->width * bytesPerPixel + newLinePadding) * self->height)) {
+    if (!R_allocateUnmanaged_nojump(&newBytes, (self->width * bytesPerPixel + newLinePadding) * self->height)) {
       R_jump();
     }
     for (size_t y = 0; y < self->height; ++y) {
@@ -119,7 +121,7 @@ PixelBuffer_setLinePadding
       uint8_t* newLine = newBytes + y * (self->width * bytesPerPixel + newLinePadding);
       memcpy(newLine, oldLine, self->width * bytesPerPixel);
     }
-    R_Arms_deallocateUnmanaged_nojump(oldBytes);
+    R_deallocateUnmanaged_nojump(oldBytes);
     self->bytes = newBytes;
     self->linePadding = linePadding;
   }
@@ -160,7 +162,7 @@ PixelBuffer_createOpaqueRed
       R_jump();
     } break;
   }
-  if (!R_Arms_allocateUnmanaged_nojump(&self->bytes, (width * bytesPerPixel + linePadding) * height)) {
+  if (!R_allocateUnmanaged_nojump(&self->bytes, (width * bytesPerPixel + linePadding) * height)) {
     R_jump();
   }
   self->pixelFormat = pixelFormat;
@@ -208,7 +210,7 @@ PixelBuffer_createOpaqueBlack
       R_jump();
     } break;
   }
-  if (!R_Arms_allocateUnmanaged_nojump(&self->bytes, (width * bytesPerPixel + linePadding) * height)) {
+  if (!R_allocateUnmanaged_nojump(&self->bytes, (width * bytesPerPixel + linePadding) * height)) {
     R_jump();
   }
   self->pixelFormat = pixelFormat;

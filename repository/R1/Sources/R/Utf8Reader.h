@@ -20,6 +20,7 @@
 
 #include "R/Boolean.h"
 #include "R/Natural32.h"
+#include "R/Object.h"
 #include "R/Size.h"
 
 #define R_UTF8READER(x) ((R_Utf8Reader*)(x))
@@ -27,6 +28,7 @@ typedef struct R_Utf8Reader R_Utf8Reader;
 void _R_Utf8Reader_registerType();
 
 struct R_Utf8Reader {
+  R_Object _parent;
   void (*next)(R_Utf8Reader* self);
   R_Natural32Value (*getCodePoint)(R_Utf8Reader* self);
   R_BooleanValue (*hasCodePoint)(R_Utf8Reader* self);

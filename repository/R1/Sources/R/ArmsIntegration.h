@@ -20,6 +20,10 @@
 #include "R/Size.h"
 #include "R/Status.h"
 
+#if defined(R_EXPORTED_INCLUDE)
+  #error("R/ArmsIntegration.h must not be included from public header")
+#endif
+
 R_Status
 R_Arms_startup
   (

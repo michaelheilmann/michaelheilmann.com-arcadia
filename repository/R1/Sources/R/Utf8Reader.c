@@ -13,20 +13,25 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-20
+// Last modified: 2024-10-07
 
 #include "R/Utf8Reader.h"
 
-#include <string.h>
+#include "R/Object.h"
 #include "R/Utf8.h"
-#include "R.h"
+
+// memcmp, memcpy, memmove
+#include <string.h>
+// fprintf, stderr
+#include <stdio.h>
 
 void
 _R_Utf8Reader_registerType
   (
   )
 {
-  R_registerObjectType("R.Utf8Reader", sizeof("R.Utf8Reader") - 1, sizeof(R_Utf8Reader), NULL, NULL, NULL);
+  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_registerObjectType("R.Utf8Reader", sizeof("R.Utf8Reader") - 1, sizeof(R_Utf8Reader), parentType, NULL, NULL, NULL);
 }
 
 void
@@ -35,6 +40,7 @@ R_Utf8Reader_construct
     R_Utf8Reader* self
   )
 {
+  R_Object_construct((R_Object*)self);
   self->getCodePoint = NULL;
   self->hasCodePoint = NULL;
   self->next = NULL;

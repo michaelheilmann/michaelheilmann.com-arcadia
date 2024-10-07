@@ -55,6 +55,11 @@ typedef enum Cil_TokenType {
   /// "concatenate"
   Cil_TokenType_concatenate,
 
+  /// A single line comment.
+  Cil_TokenType_SingleLineComment,
+  /// A multi line comment.
+  Cil_TokenType_MultiLineComment,
+
 } Cil_TokenType;
 
 #endif // CIL_TOKENTYPE_H_INCLUDED

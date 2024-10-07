@@ -20,6 +20,19 @@
 
 #include "R/Types.h"
 
+typedef struct R_Object R_Object;
+void _R_Object_registerType();
+
+struct R_Object {
+  int dummy;
+};
+
+void
+R_Object_construct
+  (
+    R_Object* self
+  );
+
 /* R_ArgumentValueInvalid, R_Status_AllocationFailed */
 void*
 R_allocateObject

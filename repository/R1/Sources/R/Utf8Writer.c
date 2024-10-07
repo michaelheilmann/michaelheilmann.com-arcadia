@@ -13,19 +13,23 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-22
+// Last modified: 2024-10-07
 
 #include "R/Utf8Writer.h"
 
+#include "R/Object.h"
+
+// memcmp, memcpy, memmove
 #include <string.h>
-#include "R.h"
+// fprintf, stderr
+#include <stdio.h>
 
 void
 _R_Utf8Writer_registerType
   (
   )
 {
-  R_registerObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1, sizeof(R_Utf8Writer), NULL, NULL, NULL);
+  R_registerObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1, sizeof(R_Utf8Writer), NULL, NULL, NULL, NULL);
 }
 
 void

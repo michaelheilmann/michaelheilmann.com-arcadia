@@ -24,17 +24,21 @@
 #include "R/List.h"
 #include "R/String.h"
 
-#include <stdio.h>
-
 typedef struct R_FilePath R_FilePath;
-
 void _R_FilePath_registerType();
 
 struct R_FilePath {
+  R_Object _parent;
   R_List* fileNames;
   R_BooleanValue relative;
   R_String* root;
 };
+
+void
+R_FilePath_construct
+  (
+    R_FilePath* self
+  );
 
 // Create an empty file path.
 R_FilePath*

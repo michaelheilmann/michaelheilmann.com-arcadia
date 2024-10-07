@@ -13,12 +13,17 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-01
+// Last modified: 2024-10-07
 
 #include "R/Utf8.h"
 
+#include "R/JumpTarget.h"
+#include "R/Status.h"
+
+// memcmp, memcpy, memmove
 #include <string.h>
-#include "R.h"
+// fprintf, stderr
+#include <stdio.h>
 
 R_BooleanValue
 R_isUtf8

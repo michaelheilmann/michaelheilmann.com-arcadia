@@ -3,7 +3,7 @@
   :root {
     --black: rgb(3,3,3);
     --white: rgb(252,252,252);
-    --blue: #0044CC; 
+    --blue: #0044CC;
   }
 }
 @media print {
@@ -11,7 +11,7 @@
     --black: black;
     --white: white;
     --blue: #0044CC;
-  }  
+  }
 }
 
 a {
@@ -256,7 +256,7 @@ default code font
 
 
 html.my-theme-1 {
-  font-family: 'my-default-font'; 
+  font-family: 'my-default-font';
   color: var(--black);
   background-color: var(--white);
 }

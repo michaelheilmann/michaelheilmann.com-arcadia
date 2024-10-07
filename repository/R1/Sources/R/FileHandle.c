@@ -13,11 +13,15 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-29
+// Last modified: 2024-10-07
 
 #include "R/FileHandle.h"
 
-#include "R.h" 
+#include "R/FilePath.h"
+#include "R/JumpTarget.h"
+#include "R/Object.h"
+#include "R/Status.h"
+#include "R/String.h"
 
 #define Flags_OpenRead (1)
 
@@ -35,14 +39,35 @@ static void R_FileHandle_destruct(R_FileHandle* self) {
   }
 }
 
-void _R_FileHandle_registerType() {
-  R_registerObjectType("R.FileHandle", sizeof("R.FileHandle") - 1, sizeof(R_FileHandle), NULL, NULL, &R_FileHandle_destruct);
+void
+_R_FileHandle_registerType
+  (
+  )
+{
+  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_registerObjectType(u8"R.FileHandle", sizeof(u8"R.FileHandle") - 1, sizeof(R_FileHandle), parentType, NULL, NULL, &R_FileHandle_destruct);
 }
 
-R_FileHandle* R_FileHandle_create() {
-  R_FileHandle* self = R_allocateObject(R_getObjectType("R.FileHandle", sizeof("R.FileHandle") - 1));
+void
+R_FileHandle_construct
+  (
+    R_FileHandle* self
+  )
+{
+  R_Type* _type = R_getObjectType(u8"R.FileHandle", sizeof(u8"R.FileHandle") - 1);
+  R_Object_construct((R_Object*)self);
   self->fd = NULL;
   self->flags = 0;
+  R_Object_setType((R_Object*)self, _type);
+}
+
+R_FileHandle*
+R_FileHandle_create
+  (
+  )
+{
+  R_FileHandle* self = R_allocateObject(R_getObjectType(u8"R.FileHandle", sizeof(u8"R.FileHandle") - 1));
+  R_FileHandle_construct(self);
   return self;
 }
 

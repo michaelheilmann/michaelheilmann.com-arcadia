@@ -15,9 +15,15 @@
 
 #include "R/TypeNames.h"
 
-#include "R.h"
 #include "R/ArmsIntegration.h"
+#include "R/getTickCount.h"
+#include "R/Integer32.h"
+#include "R/JumpTarget.h"
+
+// memcmp, memcpy, memmove
 #include <string.h>
+// fprintf, stderr
+#include <stdio.h>
 
 typedef struct Singleton {
   R_Natural64Value referenceCount;

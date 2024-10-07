@@ -15,50 +15,48 @@
 
 // Last modified: 2024-09-22
 
-#if !defined(CIL_SCANNER_H_INCLUDED)
-#define CIL_SCANNER_H_INCLUDED
+#if !defined(CIL_PARSER_H_INCLUDED)
+#define CIL_PARSER_H_INCLUDED
 
-#include "Tools/Cilc/TokenType.h"
+#include "R.h"
+
+typedef enum Cil_AstType {
+  // A program.
+  Cil_AstType_Program,
+  // A statement.
+  Cil_AstType_Statement,
+} Cil_AstType;
 
 /// @code
-/// class Cil.Scanner
+/// class Cil.Parser
 /// @endcode
-typedef struct Cil_Scanner Cil_Scanner;
-void _Cil_Scanner_registerType();
+typedef struct Cil_Parser Cil_Parser;
+void _Cil_Parser_registerType();
 
-/// @brief Create a CIL scanner.
-/// @return A pointer to this CIL scanner.
-Cil_Scanner*
-Cil_Scanner_create
+/// @brief Create a CIL parser.
+/// @return A pointer to this CIL parser.
+Cil_Parser*
+Cil_Parser_create
   (
   );
 
-/// @brief Get the token type.
-/// @param self A pointer to this CIL scanner.
-/// @return The CIL token type.
-R_Natural32Value
-Cil_Scanner_getType
-  (
-    Cil_Scanner* self
-  );
-  
-/// @brief Move to next token.
-/// @param self A pointer to this CIL scanner.
+/// @brief Translate the token stream into an AST.
+/// @param self A pointer to this CIL parser. 
 void
-Cil_Scanner_step
+Cil_Parser_run
   (
-    Cil_Scanner* self
+    Cil_Parser* self
   );
 
 /// @brief Set the input.
-/// @param self A pointer to this CIL scanner.
+/// @param self A pointer to this CIL parser.
 /// @param input A pointer to the UTF8 reader.
 void
-Cil_Scanner_setInput
+Cil_Parser_setInput
   (
-    Cil_Scanner* self,
+    Cil_Parser* self,
     R_Utf8Reader* input
   );
 
-#endif // CIL_SCANNER_H_INCLUDED
+#endif // CIL_PARSER_H_INCLUDED
 

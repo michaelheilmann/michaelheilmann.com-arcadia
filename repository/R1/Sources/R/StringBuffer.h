@@ -18,16 +18,24 @@
 #if !defined(R_STRINGBUFFER_H_INCLUDED)
 #define R_STRINGBUFFER_H_INCLUDED
 
+#include "R/Object.h"
 #include "R/Value.h"
 
 typedef struct R_StringBuffer R_StringBuffer;
 void _R_StringBuffer_registerType();
 
 struct R_StringBuffer {
+  R_Object _parent;
   R_Natural8Value* elements;
   R_SizeValue size;
   R_SizeValue capacity;
 };
+
+void
+R_StringBuffer_construct
+  (
+    R_StringBuffer* self
+  );
 
 /// @brief Create a string buffer.
 /// @return The string buffer.

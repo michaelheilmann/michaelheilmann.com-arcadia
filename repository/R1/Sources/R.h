@@ -13,81 +13,15 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-29
+// Last modified: 2024-10-07
 
 #if !defined(R_H_INCLUDED)
 #define R_H_INCLUDED
 
-#include "R/Boolean.h"
+#if !defined(R_EXPORTED_INCLUDE)
+#define R_EXPORTED_INCLUDE
+#endif
 
-#include "R/ByteBuffer.h"
-
-#include "R/clamp.h"
-#include "R/CommandLine/Include.h"
-#include "R/countLeadingZeroes.h"
-
-#include "R/ForeignFunctionReference.h"
-
-#include "R/FileHandle.h"
-#include "R/FilePath.h"
-#include "R/FileSystem.h"
-
-#include "R/getTickCount.h"
-
-#include "R/Integer16.h"
-#include "R/Integer32.h"
-#include "R/Integer64.h"
-#include "R/Integer8.h"
-
-#include "R/isPowerOfTwo.h"
-
-#include "R/JumpTarget.h"
-
-#include "R/List.h"
-
-#include "R/maximum.h"
-#include "R/minimum.h"
-
-#include "R/Natural16.h"
-#include "R/Natural32.h"
-#include "R/Natural64.h"
-#include "R/Natural8.h"
-
-#include "R/nextPowerOfTwoGt.h"
-#include "R/nextPowerOfTwoGte.h"
-
-#include "r/Object.h"
-
-#include "R/Stack.h"
-
-#include "R/swap.h"
-
-#include "R/Size.h"
-
-#include "R/Status.h"
-
-#include "R/String.h"
-#include "R/StringBuffer.h"
-
-#include "R/Utf8.h"
-#include "R/Utf8Reader.h"
-#include "R/Utf8ByteBufferReader.h"
-#include "R/Utf8ByteBufferWriter.h"
-#include "R/Utf8StringReader.h"
-#include "R/Utf8Writer.h"
-
-#include "R/Value.h"
-
-#include "R/Void.h"
-
-R_Status
-R_startup
-  (
-  );
-
-R_Status
-R_shutdown
-  (
-  );
+#include "R/R.h"
 
 #endif // R_H_INCLUDED

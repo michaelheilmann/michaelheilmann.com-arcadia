@@ -22,9 +22,11 @@
 #include "R/Boolean.h"
 #include "R/ByteBuffer.h"
 #include "R/Natural8.h"
+#include "R/Object.h"
 #include "R/Size.h"
 typedef struct R_FilePath R_FilePath;
 
+// FILE
 #include <stdio.h>
 
 typedef struct R_FileHandle R_FileHandle;
@@ -32,9 +34,16 @@ typedef struct R_FileHandle R_FileHandle;
 void _R_FileHandle_registerType();
 
 struct R_FileHandle {
+  R_Object _parent;
   R_Natural8Value flags;
   FILE* fd;
 };
+
+void
+R_FileHandle_construct
+  (
+    R_FileHandle* self
+  );
 
 // https://michaelheilmann.com/repository/R1/#r-filehandle-create
 R_FileHandle*

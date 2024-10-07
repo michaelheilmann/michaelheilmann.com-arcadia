@@ -44,6 +44,8 @@ macro(EndProduct target type)
   source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${${target}.ConfigurationFiles})
   source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.HeaderFiles})
   source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.SourceFiles})
+  
+  set_property(TARGET ${target} PROPERTY C_STANDARD 17)
 
   if (${type} STREQUAL library)
     target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

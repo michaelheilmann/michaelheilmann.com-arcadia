@@ -18,6 +18,9 @@
 #if !defined(R_TYPES_INTERNAL_H_INCLUDED)
 #define R_TYPES_INTERNAL_H_INCLUDED
 
+#if defined(R_EXPORTED_INCLUDE)
+  #error("R/Types.internal.h must not be included from public header")
+#endif
 #include "R/Configure.h"
 
 // Startup the type system

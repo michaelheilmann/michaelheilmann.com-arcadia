@@ -44,7 +44,7 @@ _ImageWriterParameters_registerType
   (
   )
 {
-  R_registerObjectType("ImageWriterParameters", sizeof("ImageWriterParameters") - 1, sizeof(ImageWriterParameters), NULL, &ImageWriterParameters_visit, &ImageWriterParameters_destruct);
+  R_registerObjectType("ImageWriterParameters", sizeof("ImageWriterParameters") - 1, sizeof(ImageWriterParameters), NULL, NULL, &ImageWriterParameters_visit, &ImageWriterParameters_destruct);
 }
 
 ImageWriterParameters*

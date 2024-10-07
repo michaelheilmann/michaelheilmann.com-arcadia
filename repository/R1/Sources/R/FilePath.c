@@ -13,11 +13,16 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-08
+// Last modified: 2024-10-07
 
 #include "R/FilePath.h"
 
-#include "R.h"
+#include "R/ByteBuffer.h"
+#include "R/JumpTarget.h"
+#include "R/Object.h"
+#include "R/Status.h"
+#include "R/Utf8ByteBufferReader.h"
+#include "R/Utf8ByteBufferWriter.h"
 
 typedef struct Context {
   R_Utf8Writer* temporaryWriter;
@@ -238,7 +243,23 @@ _R_FilePath_registerType
   (
   )
 {
-  R_registerObjectType("R.FilePath", sizeof("R.FilePath") - 1, sizeof(R_FilePath), NULL, &R_FilePath_visit, &R_FilePath_destruct);
+  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_registerObjectType(u8"R.FilePath", sizeof(u8"R.FilePath") - 1, sizeof(R_FilePath), parentType, NULL, &R_FilePath_visit, &R_FilePath_destruct);
+}
+
+void
+R_FilePath_construct
+  ( 
+    R_FilePath* self
+  )
+{
+  R_Type* _type = R_getObjectType(u8"R.FilePath", sizeof(u8"R.FilePath") - 1);
+  R_Object_construct((R_Object*)self);
+  self->fileNames = NULL;
+  self->relative = R_BooleanValue_False;
+  self->root = NULL;
+  self->fileNames = R_List_create();
+  R_Object_setType((R_Object*)self, _type);
 }
 
 R_FilePath*
@@ -246,11 +267,8 @@ R_FilePath_create
   (
   )
 {
-  R_FilePath* self = R_allocateObject(R_getObjectType("R.FilePath", sizeof("R.FilePath") - 1));
-  self->fileNames = NULL;
-  self->relative = R_BooleanValue_False;
-  self->root = NULL;
-  self->fileNames = R_List_create(); 
+  R_FilePath* self = R_allocateObject(R_getObjectType(u8"R.FilePath", sizeof(u8"R.FilePath") - 1));
+  R_FilePath_construct(self);
   return self;
 }
 

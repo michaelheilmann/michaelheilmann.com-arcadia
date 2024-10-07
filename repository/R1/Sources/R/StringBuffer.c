@@ -98,7 +98,25 @@ _R_StringBuffer_registerType
   (
   )
 {
-  R_registerObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1, sizeof(R_StringBuffer), NULL, NULL, &R_StringBuffer_destruct);
+  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_registerObjectType(u8"R.StringBuffer", sizeof(u8"R.StringBuffer") - 1, sizeof(R_StringBuffer), parentType, NULL, NULL, &R_StringBuffer_destruct);
+}
+
+void
+R_StringBuffer_construct
+  (
+    R_StringBuffer* self
+  )
+{
+  R_Type* _type = R_getObjectType(u8"R.StringBuffer", sizeof(u8"R.StringBuffer") - 1);
+  R_Object_construct((R_Object*)self);
+  self->elements = NULL;
+  self->size = 0;
+  self->capacity = 0;
+  if (!R_Arms_allocateUnmanaged_nojump(&self->elements, 0)) {
+    R_jump();
+  }
+  R_Object_setType((R_Object*)self, _type);
 }
 
 R_StringBuffer*
@@ -106,13 +124,9 @@ R_StringBuffer_create
   (
   )
 {
-  R_StringBuffer* self = R_allocateObject(R_getObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1));
-  self->elements = NULL;
-  self->size = 0;
-  self->capacity = 0;
-  if (!R_Arms_allocateUnmanaged_nojump(&self->elements, 0)) {
-    R_jump();
-  }
+  R_Type* _type = R_getObjectType(u8"R.StringBuffer", sizeof(u8"R.StringBuffer") - 1);
+  R_StringBuffer* self = R_allocateObject(_type);
+  R_StringBuffer_construct(self);
   return self;
 }
 

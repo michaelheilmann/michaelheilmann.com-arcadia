@@ -15,7 +15,9 @@
 
 // Last modified: 2024-09-22
 
-#include "Tools/Cilc/Scanner.h"
+#include "Cilc/Scanner.h"
+
+#include "Cilc/StringTable.h"
 
 // This scanner maintains a tuple (i,n,s):
 // i is the zero-based index of the Byte at which the current UTF8 symbol starts in the input stream.
@@ -35,7 +37,9 @@
 // - there is no next symbol (that is, the end of the input was reached)
 //   i is not incremented, n is assigned the size, in Bytes, of the EDN symbol, and s is assigned the END symbol.
 //
-// The scanner can write to an output buffer an arbitrary UTF8 string, and UTF8 symbol, or the range of Bytes of (i,n,s) if s is not START, END, or ERROR.
+// The scanner writes the lexeme to a string buffer.
+// This allows for efficient creation of strings (see R_String_create).
+// Furthermore, it avoids to create a string twice by using a string table (see Cil_StringTable).
 #include <string.h>
 #include "R.h"
 
@@ -44,14 +48,11 @@
 #define CodePoint_Error (R_Utf8CodePoint_Last + 3)
 
 struct Cil_Scanner {
-  // The index of the Byte in the input stream at which the current symbol starts.
-  R_SizeValue i;
-  // The length, in Bytes, of the current symbol "s".
-  R_SizeValue n;
   // The current symbol "s".
   R_Natural32Value symbol;
   // The input stream.
   R_Utf8Reader* input;
+  Cil_StringTable* stringTable;
   struct {
     /// The text of the token.
     R_StringBuffer* text;
@@ -131,6 +132,7 @@ Cil_Scanner_visit
 {
   R_Object_visit(self->input);
   R_Object_visit(self->token.text);
+  R_Object_visit(self->stringTable);
 }
 
 static void
@@ -208,7 +210,7 @@ _Cil_Scanner_registerType
   (
   )
 {
-  R_registerObjectType("Cil.Scanner", sizeof("Cil.Scanner") - 1, sizeof(Cil_Scanner), NULL, &Cil_Scanner_visit, &Cil_Scanner_destruct);
+  R_registerObjectType("Cil.Scanner", sizeof("Cil.Scanner") - 1, sizeof(Cil_Scanner), NULL, NULL, &Cil_Scanner_visit, &Cil_Scanner_destruct);
 }
 
 Cil_Scanner*
@@ -216,20 +218,57 @@ Cil_Scanner_create
   (
   )
 {
-  Cil_Scanner* self = R_allocateObject(R_getObjectType("Cil.Scanner", sizeof("Cil.Scanner") - 1));
-  self->input = (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn("", sizeof("") - 1));
-  self->symbol = CodePoint_Start;
+  Cil_Scanner* self = R_allocateObject(R_getObjectType(u8"Cil.Scanner", sizeof(u8"Cil.Scanner") - 1));
+  
+  //
   self->token.type = Cil_TokenType_StartOfInput;
+  self->token.text = NULL;
+  self->stringTable = NULL;
+  self->input = NULL;
+  self->symbol = CodePoint_Start;
+  
+  //
+  self->token.type = Cil_TokenType_StartOfInput;
+  self->stringTable = Cil_StringTable_create();
+  self->input = (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn("", sizeof("") - 1));
   self->token.text = R_StringBuffer_create();
+
+  //
+  R_StringBuffer_append_pn(self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  
   return self;
 }
 
+R_String*
+Cil_Scanner_getTokenText
+  (
+    Cil_Scanner* self
+  )
+{ return Cil_StringTable_getOrCreateString(self->stringTable, self->token.text); }
+
 R_Natural32Value
-Cil_Scanner_getType
+Cil_Scanner_getTokenType
   (
     Cil_Scanner* self
   )
 { return self->token.type; }
+
+static void onEndOfLine(Cil_Scanner* self) {
+  if ('\r' == self->symbol) {
+    next(self);
+    if ('\n' == self->symbol) {
+      next(self);
+    }
+    onEndToken(self, Cil_TokenType_LineTerminator);
+    R_StringBuffer_append_pn(self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    return;
+  } else if ('\n' == self->symbol) {
+    next(self);
+    onEndToken(self, Cil_TokenType_LineTerminator);
+    R_StringBuffer_append_pn(self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    return;
+  }
+}
 
 void
 Cil_Scanner_step
@@ -275,9 +314,8 @@ Cil_Scanner_step
   }
   if ('=' == self->symbol) {
     // <assign>
-    next(self);
+    saveAndNext(self);
     onEndToken(self, Cil_TokenType_Assign);
-    R_StringBuffer_append_pn(self->token.text, u8"<assign>", sizeof(u8"<assign>") - 1);
     return;
   } else if ('"' == self->symbol) {
     // <string>    
@@ -356,6 +394,44 @@ Cil_Scanner_step
       }
     }
     onEndToken(self, Cil_TokenType_NumberLiteral);
+  } else if ('/' == self->symbol) {
+    next(self);
+    if ('*' == self->symbol) {
+      // multi line comment
+      next(self);
+      while (true) {
+        if (CodePoint_End == self->symbol) {
+          R_setStatus(R_Status_LexicalError);
+          R_jump();
+        } else if ('\n' == self->symbol) {
+          next(self);
+        } else if ('\r' == self->symbol) {
+          next(self);
+          if ('\n' == self->symbol) {
+            next(self);
+          }
+        } else if ('*' == self->symbol) {
+          next(self);
+          if ('/' == self->symbol) {
+            next(self);
+            break;
+          } else {
+            write(self, '*');
+          }
+        }
+      }
+      onEndToken(self, Cil_TokenType_MultiLineComment);
+    } else if ('/' == self->symbol) {
+      // single line comment
+      next(self);
+      while (CodePoint_End != self->symbol && '\n' != self->symbol && '\r' != self->symbol) {
+        saveAndNext(self);
+      }
+      onEndToken(self, Cil_TokenType_SingleLineComment);
+    } else {
+      R_setStatus(R_Status_LexicalError);
+      R_jump();
+    }
   } else {
     R_setStatus(R_Status_LexicalError);
     R_jump();
@@ -372,4 +448,6 @@ Cil_Scanner_setInput
   self->input = input;
   self->symbol = CodePoint_Start;
   self->token.type = Cil_TokenType_StartOfInput;
+  R_StringBuffer_clear(self->token.text);
+  R_StringBuffer_append_pn(self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
 }

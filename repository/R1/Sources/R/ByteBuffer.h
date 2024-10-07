@@ -20,18 +20,25 @@
 
 #include "R/Boolean.h"
 #include "R/Natural8.h"
+#include "R/Object.h"
 #include "R/swap.h"
 #include "R/Size.h"
 
 typedef struct R_ByteBuffer R_ByteBuffer;
-
 void _R_ByteBuffer_registerType();
 
 struct R_ByteBuffer {
+  R_Object _parent;
   char* p;
   R_SizeValue sz;
   R_SizeValue cp;
 };
+
+void
+R_ByteBuffer_construct
+  (
+    R_ByteBuffer* self
+  );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-create
 R_ByteBuffer*

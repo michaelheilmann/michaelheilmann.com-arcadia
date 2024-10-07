@@ -13,13 +13,20 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-22
+// Last modified: 2024-10-07
 
 #include "R/Utf8ByteBufferWriter.h"
 
+#include "R/ByteBuffer.h"
+#include "R/JumpTarget.h"
+#include "R/Object.h"
+#include "R/Status.h"
 #include "R/Utf8/EncodeCodePoints.h"
+
+// memcmp, memcpy, memmove
 #include <string.h>
-#include "R.h"
+// fprintf, stderr
+#include <stdio.h>
 
 static void
 R_Utf8ByteBufferWriter_visit
@@ -137,7 +144,7 @@ _R_Utf8ByteBufferWriter_registerType
   )
 {
   R_Type* parentType = R_getObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1);
-  R_registerObjectType("R.Utf8ByteBufferWriter", sizeof("R.Utf8ByteBufferWriter") - 1, sizeof(R_Utf8ByteBufferWriter), parentType, &R_Utf8ByteBufferWriter_visit, NULL);
+  R_registerObjectType("R.Utf8ByteBufferWriter", sizeof("R.Utf8ByteBufferWriter") - 1, sizeof(R_Utf8ByteBufferWriter), parentType, NULL, &R_Utf8ByteBufferWriter_visit, NULL);
 }
 
 void

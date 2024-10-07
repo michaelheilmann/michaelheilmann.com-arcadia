@@ -39,10 +39,10 @@ FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.Tem
 # Build the documentation.
 set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/repository/Arms1/index.html")
 add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/main.i ${DOCUMENT_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${DOCUMENT_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/main.i => ${DOCUMENT_TARGET_FILE}"
-                   DEPENDS Tools.TemplateEngine ${CMAKE_CURRENT_SOURCE_DIR}/main.i)
+                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/index.i => ${DOCUMENT_TARGET_FILE}"
+                   DEPENDS Tools.TemplateEngine ${CMAKE_CURRENT_SOURCE_DIR}/index.i)
 
 add_custom_target(${MyProjectName}.Arms.BuildDocs ALL DEPENDS ${DOCUMENT_TARGET_FILE})
 

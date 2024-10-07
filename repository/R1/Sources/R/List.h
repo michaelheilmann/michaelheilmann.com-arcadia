@@ -16,21 +16,21 @@
 #if !defined(R_LIST_H_INCLUDED)
 #define R_LIST_H_INCLUDED
 
+#include "R/Object.h"
 #include "R/Value.h"
 
 typedef struct R_List R_List;
-
 void _R_List_registerType();
 
 struct R_List {
+  R_Object _parent;
   R_Value* elements;
   R_SizeValue size;
   R_SizeValue capacity;
 };
 
-// https://michaelheilmann.com/repository/R1/#r-list-clear
 void
-R_List_clear
+R_List_construct
   (
     R_List* self
   );
@@ -39,6 +39,13 @@ R_List_clear
 R_List*
 R_List_create
   (
+  );
+
+// https://michaelheilmann.com/repository/R1/#r-list-clear
+void
+R_List_clear
+  (
+    R_List* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-list-getsize

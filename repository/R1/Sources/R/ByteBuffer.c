@@ -13,13 +13,17 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-01
+// Last modified: 2024-10-07
 
 #include "ByteBuffer.h"
 
-#include <string.h>
-#include "R.h"
 #include "R/ArmsIntegration.h"
+#include "R/JumpTarget.h"
+#include "R/Object.h"
+// memcmp, memcpy, memmove
+#include <string.h>
+// fprintf, stderr
+#include <stdio.h>
 
 static void
 R_ByteBuffer_finalize
@@ -43,20 +47,35 @@ void
 _R_ByteBuffer_registerType
   (
   )
-{ R_registerObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1, sizeof(R_ByteBuffer), NULL, NULL, &R_ByteBuffer_finalize); }
+{
+  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_registerObjectType(u8"R.ByteBuffer", sizeof(u8"R.ByteBuffer") - 1, sizeof(R_ByteBuffer), parentType, NULL, NULL, &R_ByteBuffer_finalize);
+}
+
+void
+R_ByteBuffer_construct
+  (
+    R_ByteBuffer* self
+  )
+{
+  R_Type* _type = R_getObjectType(u8"R.ByteBuffer", sizeof(u8"R.ByteBuffer") - 1);
+  R_Object_construct((R_Object*)self);
+  self->p = NULL;
+  self->sz = 0;
+  self->cp = 0;
+  if (!R_Arms_allocateUnmanaged_nojump(&self->p, 0)) {
+    R_jump();
+  }
+  R_Object_setType((R_Object*)self, _type);
+}
 
 R_ByteBuffer*
 R_ByteBuffer_create
   (
   )
 {
-  R_ByteBuffer* self = R_allocateObject(R_getObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1));
-  self->p = NULL;
-  self->sz = 0;
-  self->cp = 0;
-  if (!R_Arms_allocateUnmanaged_nojump(&self->p, 1)) {
-    R_jump();
-  }
+  R_ByteBuffer* self = R_allocateObject(R_getObjectType(u8"R.ByteBuffer", sizeof(u8"R.ByteBuffer") - 1));
+  R_ByteBuffer_construct(self);
   return self;
 }
 

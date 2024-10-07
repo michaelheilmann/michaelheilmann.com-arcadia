@@ -16,21 +16,21 @@
 #if !defined(R_STACK_H_INCLUDED)
 #define R_STACK_H_INCLUDED
 
+#include "R/Object.h"
 #include "R/Value.h"
 
 typedef struct R_Stack R_Stack;
-
 void _R_Stack_registerType();
 
 struct R_Stack {
+  R_Object _parent;
   R_Value* elements;
   R_SizeValue size;
   R_SizeValue capacity;
 };
 
-// https://michaelheilmann.com/repository/R1/#r-stack-clear
 void
-R_Stack_clear
+R_Stack_construct
   (
     R_Stack* self
   );
@@ -39,6 +39,13 @@ R_Stack_clear
 R_Stack*
 R_Stack_create
   (
+  );
+
+// https://michaelheilmann.com/repository/R1/#r-stack-clear
+void
+R_Stack_clear
+  (
+    R_Stack* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-stack-getsize

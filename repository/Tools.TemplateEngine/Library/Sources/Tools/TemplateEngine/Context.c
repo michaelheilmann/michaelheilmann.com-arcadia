@@ -47,7 +47,7 @@ Context_registerType
   (
   )
 {
-  R_registerObjectType("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1, sizeof(Context), NULL, &Context_visit, &Context_finalize);
+  R_registerObjectType("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1, sizeof(Context), NULL, NULL, &Context_visit, &Context_finalize);
 }
 
 Context*

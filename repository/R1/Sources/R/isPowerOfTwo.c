@@ -17,11 +17,11 @@
 
 #include "R/isPowerOfTwo.h"
 
+#include "R/Boolean.h"
 #include "R/countLeadingZeroes.h"
 #include "R/nextPowerOfTwoGt.h"
 #include "R/JumpTarget.h"
 #include "R/Status.h"
-#include "R/Boolean.h"
 
 R_BooleanValue
 R_isPowerOfTwoInteger8Value

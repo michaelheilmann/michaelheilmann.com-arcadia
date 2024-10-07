@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Stack.h"
+#include "R/Stack.h"
 
 #include "R/ArmsIntegration.h"
 #include "R.h"
@@ -124,24 +124,24 @@ R_Stack_visit
   }
 }
 
-void _R_Stack_registerType() {
-  R_registerObjectType("R.Stack", sizeof("R.Stack") - 1, sizeof(R_Stack), NULL, &R_Stack_visit, &R_Stack_destruct);
-}
-
 void
-R_Stack_clear
-  (
-    R_Stack* self
-  )
-{ self->size = 0; }
-
-R_Stack*
-R_Stack_create
+_R_Stack_registerType
   (
   )
 {
+  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_registerObjectType(u8"R.Stack", sizeof(u8"R.Stack") - 1, sizeof(R_Stack), parentType, NULL, &R_Stack_visit, &R_Stack_destruct);
+}
+
+void
+R_Stack_construct
+  (
+    R_Stack* self
+  )
+{
   R_Stack_ensureInitialized();
-  R_Stack* self = R_allocateObject(R_getObjectType("R.Stack", sizeof("R.Stack") - 1));
+  R_Type* _type = R_getObjectType("R.Stack", sizeof("R.Stack") - 1);
+  R_Object_construct((R_Object*)self);
   self->elements = NULL;
   self->capacity = 0;
   self->size = 0;
@@ -152,8 +152,25 @@ R_Stack_create
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     R_Value_setVoidValue(self->elements + i, R_VoidValue_Void);
   }
+  R_Object_setType((R_Object*)self, _type);
+}
+
+R_Stack*
+R_Stack_create
+  (
+  )
+{
+  R_Stack* self = R_allocateObject(R_getObjectType("R.Stack", sizeof("R.Stack") - 1));
+  R_Stack_construct(self);
   return self;
 }
+
+void
+R_Stack_clear
+  (
+    R_Stack* self
+  )
+{ self->size = 0; }
 
 R_SizeValue
 R_Stack_getSize

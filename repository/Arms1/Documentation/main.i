@@ -1,4 +1,3 @@
-@{include("header.i")}
   <h1>Michael Heilmann's Automatic Resource Management System Mark 1</h1>
   <p>
   This is the documentation for Michael  Heilmann's Automatic Resource Management System Mark 1,
@@ -142,4 +141,3 @@
     <tr><td><code>Arms_Status_OperationInvalid</code></td><td>the lock count would underflow</td></tr>
   </table>
 @{include("unmanaged-memory.i")}
-@{include("footer.i")}

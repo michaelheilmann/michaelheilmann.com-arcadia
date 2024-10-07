@@ -262,7 +262,7 @@ FileContext_registerType
   (
   )
 {
-  R_registerObjectType("Tools.TemplateEngine.FileContext", sizeof("Tools.TemplateEngine.FileContext") - 1, sizeof(FileContext), NULL, &FileContext_visit, &FileContext_finalize);
+  R_registerObjectType("Tools.TemplateEngine.FileContext", sizeof("Tools.TemplateEngine.FileContext") - 1, sizeof(FileContext), NULL, NULL, &FileContext_visit, &FileContext_finalize);
 }
 
 FileContext*

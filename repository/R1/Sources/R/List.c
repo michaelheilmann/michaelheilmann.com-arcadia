@@ -13,13 +13,18 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+// Last modified: 2024-10-07
+
 #include "R/List.h"
 
-#include "R.h"
 #include "R/ArmsIntegration.h"
+#include "R/JumpTarget.h"
+#include "R/Object.h"
 
-// memmove
+// memcmp, memcpy, memmove
 #include <string.h>
+// fprintf, stderr
+#include <stdio.h>
 
 static R_BooleanValue g_initialized = R_BooleanValue_False;
 
@@ -132,23 +137,19 @@ _R_List_registerType
   (
   )
 {
-  R_registerObjectType("R.List", sizeof("R.List") - 1, sizeof(R_List), NULL, &R_List_visit, &R_List_destruct);
+  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_registerObjectType(u8"R.List", sizeof(u8"R.List") - 1, sizeof(R_List), parentType, NULL, &R_List_visit, &R_List_destruct);
 }
 
 void
-R_List_clear
+R_List_construct
   (
     R_List* self
   )
-{ self->size = 0; }
-
-R_List*
-R_List_create
-  (
-  )
 {
+  R_Type* _type = R_getObjectType(u8"R.List", sizeof(u8"R.List") - 1);
   R_List_ensureInitialized();
-  R_List* self = R_allocateObject(R_getObjectType("R.List", sizeof("R.List") - 1));
+  R_Object_construct((R_Object*)self);
   self->elements = NULL;
   self->capacity = 0;
   self->size = 0;
@@ -159,8 +160,26 @@ R_List_create
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     R_Value_setVoidValue(self->elements + i, R_VoidValue_Void);
   }
+  R_Object_setType((R_Object*)self, _type);
+}
+
+R_List*
+R_List_create
+  (
+  )
+{
+  R_List_ensureInitialized();
+  R_List* self = R_allocateObject(R_getObjectType("R.List", sizeof("R.List") - 1));
+  R_List_construct(self);
   return self;
 }
+
+void
+R_List_clear
+  (
+    R_List* self
+  )
+{ self->size = 0; }
 
 R_SizeValue
 R_List_getSize

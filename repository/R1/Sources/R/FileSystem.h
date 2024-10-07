@@ -26,15 +26,19 @@
 typedef struct R_FileHandle R_FileHandle;
 typedef struct R_FilePath R_FilePath;
 
-#include <stdio.h>
-
 typedef struct R_FileSystem R_FileSystem;
 
 void _R_FileSystem_registerType();
 
 struct R_FileSystem {
-  int dummy;
+  R_Object _parent;
 };
+
+void
+R_FileSystem_construct
+  (
+    R_FileSystem* self
+  );
 
 // https://michaelheilmann.com/repository/R1/#r-filesystem-create
 R_FileSystem*

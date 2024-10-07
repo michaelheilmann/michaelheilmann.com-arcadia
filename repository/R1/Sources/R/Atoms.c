@@ -17,11 +17,16 @@
 
 #include "R/Atoms.h"
 
-#include "R.h"
-#include "ArmsIntegration.h"
+#include "R/ArmsIntegration.h"
+#include "R/getTickCount.h"
+#include "R/Integer32.h"
+#include "R/JumpTarget.h"
+#include "R/Natural64.h"
 
-// memcpy, memcmp
+// memcmp, memcpy, memmove
 #include <string.h>
+// fprintf, stderr
+#include <stdio.h>
 
 typedef struct Singleton Singleton;
 

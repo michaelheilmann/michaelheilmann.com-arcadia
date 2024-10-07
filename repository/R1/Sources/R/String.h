@@ -18,6 +18,7 @@
 #if !defined(R_STRING_H_INCLUDED)
 #define R_STRING_H_INCLUDED
 
+#include "R/Object.h"
 #include "R/Value.h"
 
 typedef struct R_String R_String;
@@ -25,9 +26,20 @@ typedef struct R_String R_String;
 void _R_String_registerType();
 
 struct R_String {
-  uint8_t* p;
+  R_Object _parent;
+  R_Natural8Value* p;
   R_SizeValue numberOfBytes;
+  // We could compute this lazily if we had the "mutable" keyword in C.
+  R_SizeValue hash;
 };
+
+void
+R_String_construct_pn
+  (
+    R_String* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
+  );
 
 // https://michaelheilmann.com/repository/R1/#r-string-create-pn
 R_String*
@@ -35,6 +47,13 @@ R_String_create_pn
   (
     void const* bytes,
     R_SizeValue numberOfBytes
+  );
+
+void
+R_String_construct
+  (
+    R_String* self,
+    R_Value value
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-create
