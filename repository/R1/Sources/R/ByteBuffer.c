@@ -43,14 +43,7 @@ R_ByteBuffer_finalize
   }
 }
 
-void
-_R_ByteBuffer_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_registerObjectType(u8"R.ByteBuffer", sizeof(u8"R.ByteBuffer") - 1, sizeof(R_ByteBuffer), parentType, NULL, NULL, &R_ByteBuffer_finalize);
-}
+Rex_defineObjectType("R.ByteBuffer", R_ByteBuffer, "R.Object", R_Object, NULL, &R_ByteBuffer_finalize);
 
 void
 R_ByteBuffer_construct
@@ -58,7 +51,7 @@ R_ByteBuffer_construct
     R_ByteBuffer* self
   )
 {
-  R_Type* _type = R_getObjectType(u8"R.ByteBuffer", sizeof(u8"R.ByteBuffer") - 1);
+  R_Type* _type = _R_ByteBuffer_getType();
   R_Object_construct((R_Object*)self);
   self->p = NULL;
   self->sz = 0;
@@ -74,7 +67,7 @@ R_ByteBuffer_create
   (
   )
 {
-  R_ByteBuffer* self = R_allocateObject(R_getObjectType(u8"R.ByteBuffer", sizeof(u8"R.ByteBuffer") - 1));
+  R_ByteBuffer* self = R_allocateObject(_R_ByteBuffer_getType());
   R_ByteBuffer_construct(self);
   return self;
 }

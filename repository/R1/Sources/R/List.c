@@ -132,14 +132,7 @@ R_List_visit
   }
 }
 
-void
-_R_List_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_registerObjectType(u8"R.List", sizeof(u8"R.List") - 1, sizeof(R_List), parentType, NULL, &R_List_visit, &R_List_destruct);
-}
+Rex_defineObjectType("R.List", R_List, "R.Object", R_Object, &R_List_visit, &R_List_destruct);
 
 void
 R_List_construct
@@ -147,7 +140,7 @@ R_List_construct
     R_List* self
   )
 {
-  R_Type* _type = R_getObjectType(u8"R.List", sizeof(u8"R.List") - 1);
+  R_Type* _type = _R_List_getType();
   R_List_ensureInitialized();
   R_Object_construct((R_Object*)self);
   self->elements = NULL;
@@ -169,7 +162,7 @@ R_List_create
   )
 {
   R_List_ensureInitialized();
-  R_List* self = R_allocateObject(R_getObjectType("R.List", sizeof("R.List") - 1));
+  R_List* self = R_allocateObject(_R_List_getType());
   R_List_construct(self);
   return self;
 }

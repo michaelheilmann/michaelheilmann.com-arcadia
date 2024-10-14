@@ -124,14 +124,7 @@ R_Stack_visit
   }
 }
 
-void
-_R_Stack_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_registerObjectType(u8"R.Stack", sizeof(u8"R.Stack") - 1, sizeof(R_Stack), parentType, NULL, &R_Stack_visit, &R_Stack_destruct);
-}
+Rex_defineObjectType("R.Stack", R_Stack, "R.Object", R_Object, &R_Stack_visit, &R_Stack_destruct);
 
 void
 R_Stack_construct
@@ -140,7 +133,7 @@ R_Stack_construct
   )
 {
   R_Stack_ensureInitialized();
-  R_Type* _type = R_getObjectType("R.Stack", sizeof("R.Stack") - 1);
+  R_Type* _type = _R_Stack_getType();
   R_Object_construct((R_Object*)self);
   self->elements = NULL;
   self->capacity = 0;
@@ -160,7 +153,7 @@ R_Stack_create
   (
   )
 {
-  R_Stack* self = R_allocateObject(R_getObjectType("R.Stack", sizeof("R.Stack") - 1));
+  R_Stack* self = R_allocateObject(_R_Stack_getType());
   R_Stack_construct(self);
   return self;
 }

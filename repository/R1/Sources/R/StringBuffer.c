@@ -93,14 +93,7 @@ appendBytesInternal
   self->size += numberOfBytes;
 }
 
-void
-_R_StringBuffer_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_registerObjectType(u8"R.StringBuffer", sizeof(u8"R.StringBuffer") - 1, sizeof(R_StringBuffer), parentType, NULL, NULL, &R_StringBuffer_destruct);
-}
+Rex_defineObjectType("R.StringBuffer", R_StringBuffer, "R.Object", R_Object, NULL, &R_StringBuffer_destruct);
 
 void
 R_StringBuffer_construct
@@ -108,7 +101,7 @@ R_StringBuffer_construct
     R_StringBuffer* self
   )
 {
-  R_Type* _type = R_getObjectType(u8"R.StringBuffer", sizeof(u8"R.StringBuffer") - 1);
+  R_Type* _type = _R_StringBuffer_getType();
   R_Object_construct((R_Object*)self);
   self->elements = NULL;
   self->size = 0;
@@ -124,7 +117,7 @@ R_StringBuffer_create
   (
   )
 {
-  R_Type* _type = R_getObjectType(u8"R.StringBuffer", sizeof(u8"R.StringBuffer") - 1);
+  R_Type* _type = _R_StringBuffer_getType();
   R_StringBuffer* self = R_allocateObject(_type);
   R_StringBuffer_construct(self);
   return self;
@@ -192,7 +185,7 @@ R_StringBuffer_append
     R_jump();
   }
   R_ObjectReferenceValue referenceValue = R_Value_getObjectReferenceValue(&value);
-  if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1))) {
+  if (R_Type_isSubType(R_Object_getType(referenceValue), _R_ByteBuffer_getType())) {
     R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
     if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
       R_setStatus(R_Status_EncodingInvalid);
@@ -201,13 +194,13 @@ R_StringBuffer_append
     ensureFreeCapacityBytes(self, R_ByteBuffer_getNumberOfBytes(object));
     memcpy(self->elements + self->size, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
     self->size += R_ByteBuffer_getNumberOfBytes(object);
-  } else if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.String", sizeof("R.String") - 1))) {
+  } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_String_getType())) {
     R_String* object = (R_String*)referenceValue;
     // The Byte sequence of R.String is guaranteed to be an UTF8 Byte sequence.
     ensureFreeCapacityBytes(self, R_String_getNumberOfBytes(object));
     memcpy(self->elements + self->size, R_String_getBytes(object), R_String_getNumberOfBytes(object));
     self->size += R_String_getNumberOfBytes(object);
-  } else if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1))) {
+  } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_StringBuffer_getType())) {
     R_StringBuffer* object = (R_StringBuffer*)referenceValue;
     // The Byte sequence of R.StringBuffer is guaranteed to be an UTF8 Byte sequence.
     ensureFreeCapacityBytes(self, R_StringBuffer_getNumberOfBytes(object));

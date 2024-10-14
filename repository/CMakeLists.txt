@@ -33,7 +33,7 @@ endif()
 add_subdirectory(Arms1)
 add_subdirectory(R1)
 
-add_subdirectory(Cilc)
+add_subdirectory(Cil)
 add_subdirectory(Tools.Concatenate)
 add_subdirectory(Tools.TemplateEngine)
 

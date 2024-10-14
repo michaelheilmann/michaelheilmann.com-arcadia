@@ -128,6 +128,7 @@ TypeNodes_destroy
       TypeNode* node = current;
       *previous = current->next;
       current = current->next;
+      node->typeDestructing(NULL);
       R_Arms_unlock(node);
     } else {
       previous = &current->next;

@@ -21,11 +21,61 @@
 #include "R/Types.h"
 
 typedef struct R_Object R_Object;
-void _R_Object_registerType();
+R_Type* \
+_R_Object_getType
+  (
+  );
 
 struct R_Object {
   int dummy;
 };
+
+// R(untime) ex(tension) macro.
+#define Rex_declareObjectType(cilName, cName, cilParentName) \
+  typedef struct cName cName; \
+  R_Type* \
+  _##cName##_getType \
+    ( \
+    );
+
+// R(untime) ex(tension) macro.
+// TODO: FIXME: If _getObjectType fails then _type is still null althought _registerObjectType was successful.
+#define Rex_defineObjectType(cilName, cName, cilParentName, cParentName, cVisitFunctionPointer, cDestructFunctionPointer) \
+  static R_Type* g_##cName##_type = NULL; \
+  \
+  static void \
+  _##cName##_typeDestructing \
+    ( \
+      void *context \
+    ) \
+  { \
+    g_##cName##_type = NULL; \
+  } \
+  \
+  R_Type* \
+  _##cName##_getType \
+    ( \
+    ) \
+  { \
+    if (!g_##cName##_type) { \
+      R_Type* parentType = _##cParentName##_getType(); \
+      R_registerObjectType(u8##cilName, sizeof(u8##cilName) - 1, sizeof(cName), parentType, &_##cName##_typeDestructing, cVisitFunctionPointer, cDestructFunctionPointer); \
+      g_##cName##_type = R_getObjectType(u8##cilName, sizeof(u8##cilName) - 1); \
+    } \
+    return g_##cName##_type; \
+  } \
+  \
+  void \
+  _##cName##_ensureTypeIsRegistered \
+    ( \
+    ) \
+  { \
+    if (!g_##cName##_type) { \
+      R_Type* parentType = R_getObjectType(u8##cilParentName, sizeof(u8##cilParentName) - 1); \
+      R_registerObjectType(u8##cilName, sizeof(u8##cilName) - 1, sizeof(cName), parentType, &_##cName##_typeDestructing, cVisitFunctionPointer, cDestructFunctionPointer); \
+      g_##cName##_type = R_getObjectType(u8##cilName, sizeof(u8##cilName) - 1); \
+    } \
+  }
 
 void
 R_Object_construct

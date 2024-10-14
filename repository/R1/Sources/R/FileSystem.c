@@ -50,14 +50,7 @@ R_FileSystem_destruct
   )
 {/*Intentionally empty.*/}
 
-void
-_R_FileSystem_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof("R.Object") - 1);
-  R_registerObjectType(u8"R.FileSystem", sizeof(u8"R.FileSystem") - 1, sizeof(R_FileSystem), parentType, NULL, &R_FileSystem_visit, &R_FileSystem_destruct);
-}
+Rex_defineObjectType("R.FileSystem", R_FileSystem, "R.Object", R_Object, &R_FileSystem_visit, &R_FileSystem_destruct);
 
 void
 R_FileSystem_construct
@@ -65,7 +58,7 @@ R_FileSystem_construct
     R_FileSystem* self
   )
 {
-  R_Type* _type = R_getObjectType(u8"R.FileSystem", sizeof(u8"R.FileSystem") - 1);
+  R_Type* _type = _R_FileSystem_getType();
   R_Object_construct((R_Object*)self);
   R_Object_setType((R_Object*)self, _type);
 }
@@ -75,7 +68,7 @@ R_FileSystem_create
   (
   )
 {
-  R_FileSystem* self = R_allocateObject(R_getObjectType(u8"R.FileSystem", sizeof(u8"R.FileSystem") - 1));
+  R_FileSystem* self = R_allocateObject(_R_FileSystem_getType());
   R_FileSystem_construct(self);
   return self;
 }

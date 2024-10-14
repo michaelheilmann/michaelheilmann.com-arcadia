@@ -27,9 +27,18 @@
 
 #define Flags_OpenWrite (2)
 
-static void R_FileHandle_destruct(R_FileHandle* self);
+static void
+R_FileHandle_destruct
+  (
+    R_FileHandle* self
+  );
 
-static void R_FileHandle_destruct(R_FileHandle* self) {
+static void
+R_FileHandle_destruct
+  (
+    R_FileHandle* self
+  )
+{
   if (self->fd) {
     if (self->fd != stdin && self->fd != stderr && self->fd != stdout) {
       fclose(self->fd);
@@ -39,14 +48,7 @@ static void R_FileHandle_destruct(R_FileHandle* self) {
   }
 }
 
-void
-_R_FileHandle_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_registerObjectType(u8"R.FileHandle", sizeof(u8"R.FileHandle") - 1, sizeof(R_FileHandle), parentType, NULL, NULL, &R_FileHandle_destruct);
-}
+Rex_defineObjectType("R.FileHandle", R_FileHandle, "R.Object", R_Object, NULL, &R_FileHandle_destruct);
 
 void
 R_FileHandle_construct
@@ -54,7 +56,7 @@ R_FileHandle_construct
     R_FileHandle* self
   )
 {
-  R_Type* _type = R_getObjectType(u8"R.FileHandle", sizeof(u8"R.FileHandle") - 1);
+  R_Type* _type = _R_FileHandle_getType();
   R_Object_construct((R_Object*)self);
   self->fd = NULL;
   self->flags = 0;
@@ -66,7 +68,7 @@ R_FileHandle_create
   (
   )
 {
-  R_FileHandle* self = R_allocateObject(R_getObjectType(u8"R.FileHandle", sizeof(u8"R.FileHandle") - 1));
+  R_FileHandle* self = R_allocateObject(_R_FileHandle_getType());
   R_FileHandle_construct(self);
   return self;
 }

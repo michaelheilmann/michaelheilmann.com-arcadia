@@ -170,15 +170,7 @@ R_Utf8StringReader_getByteIndexImpl
   )
 { return self->byteIndex; }
 
-void
-_R_Utf8StringReader_registerType
-  (
-  )
-{
-  R_Type* parentObjectType = R_getObjectType("R.Utf8Reader", sizeof("R.Utf8Reader") - 1);
-  R_registerObjectType("R.Utf8StringReader", sizeof("R.Utf8StringReader") - 1, sizeof(R_Utf8StringReader), parentObjectType, NULL, &R_Utf8StringReader_visit, NULL);
-}
-
+Rex_defineObjectType("R.Utf8StringReader", R_Utf8StringReader, "R.Utf8Reader", R_Utf8Reader, &R_Utf8StringReader_visit, NULL);
 
 void
 R_Utf8StringReader_construct
@@ -187,6 +179,7 @@ R_Utf8StringReader_construct
     R_String* source
   )
 {
+  R_Type* _type = _R_Utf8StringReader_getType();
   R_Utf8Reader_construct(R_UTF8READER(self));
   self->source = source;
   self->byteIndex = 0;
@@ -195,7 +188,7 @@ R_Utf8StringReader_construct
   R_UTF8READER(self)->getCodePoint = (R_Natural32Value (*)(R_Utf8Reader*)) & R_Utf8StringReader_getCodePointImpl;
   R_UTF8READER(self)->hasCodePoint = (R_BooleanValue (*)(R_Utf8Reader*)) &R_Utf8StringReader_hasCodePointImpl;
   R_UTF8READER(self)->next = (void (*)(R_Utf8Reader*)) &R_Utf8StringReader_nextImpl;
-  R_Object_setType(self, R_getObjectType("R.Utf8StringReader", sizeof("R.Utf8StringReader") - 1));
+  R_Object_setType(self, _type);
 }
 
 R_Utf8StringReader*
@@ -204,7 +197,7 @@ R_Utf8StringReader_create
     R_String* source
   )
 {
-  R_Utf8StringReader* self = R_allocateObject(R_getObjectType("R.Utf8StringReader", sizeof("R.Utf8StringReader") - 1));
+  R_Utf8StringReader* self = R_allocateObject(_R_Utf8StringReader_getType());
   R_Utf8StringReader_construct(self, source);
   return self;
 }

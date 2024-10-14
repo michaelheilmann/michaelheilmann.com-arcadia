@@ -238,14 +238,7 @@ R_FilePath_visit
   R_Object_visit(self->root);
 }
 
-void
-_R_FilePath_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_registerObjectType(u8"R.FilePath", sizeof(u8"R.FilePath") - 1, sizeof(R_FilePath), parentType, NULL, &R_FilePath_visit, &R_FilePath_destruct);
-}
+Rex_defineObjectType("R.FilePath", R_FilePath, "R.Object", R_Object, &R_FilePath_visit, &R_FilePath_destruct);
 
 void
 R_FilePath_construct
@@ -253,7 +246,7 @@ R_FilePath_construct
     R_FilePath* self
   )
 {
-  R_Type* _type = R_getObjectType(u8"R.FilePath", sizeof(u8"R.FilePath") - 1);
+  R_Type* _type = _R_FilePath_getType();
   R_Object_construct((R_Object*)self);
   self->fileNames = NULL;
   self->relative = R_BooleanValue_False;
@@ -267,7 +260,7 @@ R_FilePath_create
   (
   )
 {
-  R_FilePath* self = R_allocateObject(R_getObjectType(u8"R.FilePath", sizeof(u8"R.FilePath") - 1));
+  R_FilePath* self = R_allocateObject(_R_FilePath_getType());
   R_FilePath_construct(self);
   return self;
 }
@@ -279,7 +272,8 @@ R_FilePath_parseWindowsFilePath
     R_SizeValue numberOfBytes
   )
 {
-  R_FilePath* self = R_allocateObject(R_getObjectType("R.FilePath", sizeof("R.FilePath") - 1));
+  R_Type* _type = _R_FilePath_getType();
+  R_FilePath* self = R_allocateObject(_type);
   self->fileNames = NULL;
   self->relative = R_BooleanValue_False;
   self->root = NULL;
@@ -288,6 +282,7 @@ R_FilePath_parseWindowsFilePath
   R_ByteBuffer_append_pn(byteBuffer, bytes, numberOfBytes);
   parseWindowsFilePath(self, byteBuffer);
   normalize(self);
+  R_Object_setType((R_Object*)self, _type);
   return self;
 }
 
@@ -298,7 +293,8 @@ R_FilePath_parseUnixFilePath
     R_SizeValue numberOfBytes
   )
 {
-  R_FilePath* self = R_allocateObject(R_getObjectType("R.FilePath", sizeof("R.FilePath") - 1));
+  R_Type* _type = _R_FilePath_getType();
+  R_FilePath* self = R_allocateObject(_type);
   self->fileNames = NULL;
   self->relative = R_BooleanValue_False;
   self->root = NULL;
@@ -307,6 +303,7 @@ R_FilePath_parseUnixFilePath
   R_ByteBuffer_append_pn(byteBuffer, bytes, numberOfBytes);
   parseUnixFilePath(self, byteBuffer);
   normalize(self);
+  R_Object_setType((R_Object*)self, _type);
   return self;
 }
 

@@ -18,6 +18,7 @@
 #include "Tools/Visuals2d/ImageWriterParameters.h"
 
 struct ImageWriterParameters {
+  R_Object _parent;
   ImageWriterFormat format;
   // "object" either refers to a "R.ByteBuffer" object (if target is ImageWriter_Target_Memory) or a "R.String" object (if target is ImageWriter_Target_File).
   R_ObjectReferenceValue object;
@@ -39,12 +40,21 @@ ImageWriterParameters_destruct
   )
 {/*Intentionally empty.*/}
 
+Rex_defineObjectType("ImageWriterParameters", ImageWriterParameters, "R.Object", R_Object, &ImageWriterParameters_visit, &ImageWriterParameters_destruct);
+
 void
-_ImageWriterParameters_registerType
+ImageWriterParameters_constructFile
   (
+    ImageWriterParameters* self,
+    R_String* path,
+    ImageWriterFormat format
   )
 {
-  R_registerObjectType("ImageWriterParameters", sizeof("ImageWriterParameters") - 1, sizeof(ImageWriterParameters), NULL, NULL, &ImageWriterParameters_visit, &ImageWriterParameters_destruct);
+  R_Type* _type = _ImageWriterParameters_getType();
+  R_Object_construct((R_Object*)self);
+  self->object = (R_ObjectReferenceValue)path;
+  self->format = format;
+  R_Object_setType((R_Object*)self, _type);
 }
 
 ImageWriterParameters*
@@ -54,10 +64,24 @@ ImageWriterParameters_createFile
     ImageWriterFormat format
   )
 {
-  ImageWriterParameters* self = R_allocateObject(R_getObjectType("ImageWriterParameters", sizeof("ImageWriterParameters") - 1));
-  self->object = (R_ObjectReferenceValue)path;
-  self->format = format;
+  ImageWriterParameters* self = R_allocateObject(_ImageWriterParameters_getType());
+  ImageWriterParameters_constructFile(self, path, format);
   return self;
+}
+
+void
+ImageWriterParameters_constructByteBuffer
+  (
+    ImageWriterParameters* self,
+    R_ByteBuffer* byteBuffer,
+    ImageWriterFormat format
+  )
+{
+  R_Type* _type = _ImageWriterParameters_getType();
+  R_Object_construct((R_Object*)self);
+  self->object = (R_ObjectReferenceValue)byteBuffer;
+  self->format = format;
+  R_Object_setType((R_Object*)self, _type);
 }
 
 ImageWriterParameters*
@@ -67,9 +91,8 @@ ImageWriterParameters_createByteBuffer
     ImageWriterFormat format
   )
 {
-  ImageWriterParameters* self = R_allocateObject(R_getObjectType("ImageWriterParameters", sizeof("ImageWriterParameters") - 1));
-  self->object = (R_ObjectReferenceValue)byteBuffer;
-  self->format = format;
+  ImageWriterParameters* self = R_allocateObject(_ImageWriterParameters_getType());
+  ImageWriterParameters_constructByteBuffer(self, byteBuffer, format);
   return self;
 }
 
@@ -80,7 +103,7 @@ ImageWriterParameters_hasPath
   )
 {
   R_Type* type = R_Object_getType(self->object);
-  return R_Type_isSubType(type, R_getObjectType("R.String", sizeof("R.String") - 1));
+  return R_Type_isSubType(type, _R_String_getType());
 }
 
 R_String*
@@ -103,7 +126,7 @@ ImageWriterParameters_hasByteBuffer
   )
 {
   R_Type* type = R_Object_getType(self->object);
-  return R_Type_isSubType(type, R_getObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1));
+  return R_Type_isSubType(type, _R_ByteBuffer_getType());
 }
 
 R_ByteBuffer*

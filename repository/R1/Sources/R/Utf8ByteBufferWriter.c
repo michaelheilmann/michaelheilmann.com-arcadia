@@ -138,14 +138,7 @@ R_Utf8ByteBufferWriter_writeCodePointsImpl
   R_Utf8_encodeCodePoints(codePoints, numberOfCodePoints, self->target, (void (*)(void*, R_Natural8Value const*, R_SizeValue)) & R_ByteBuffer_append_pn);
 }
 
-void
-_R_Utf8ByteBufferWriter_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1);
-  R_registerObjectType("R.Utf8ByteBufferWriter", sizeof("R.Utf8ByteBufferWriter") - 1, sizeof(R_Utf8ByteBufferWriter), parentType, NULL, &R_Utf8ByteBufferWriter_visit, NULL);
-}
+Rex_defineObjectType("R.Utf8ByteBufferWriter", R_Utf8ByteBufferWriter, "R.Utf8Writer", R_Utf8Writer, &R_Utf8ByteBufferWriter_visit, NULL);
 
 void
 R_Utf8ByteBufferWriter_construct
@@ -154,11 +147,12 @@ R_Utf8ByteBufferWriter_construct
     R_ByteBuffer* target
   )
 {
+  R_Type* _type = _R_Utf8ByteBufferWriter_getType();
   R_Utf8Writer_construct(R_UTF8WRITER(self));
   self->target = target;
   R_UTF8WRITER(self)->writeBytes = (void (*)(R_Utf8Writer*, void const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeBytesImpl;
   R_UTF8WRITER(self)->writeCodePoints = (void (*)(R_Utf8Writer*, R_Natural32Value const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeCodePointsImpl;
-  R_Object_setType(self, R_getObjectType("R.Utf8ByteBufferWriter", sizeof("R.Utf8ByteBufferWriter") - 1));
+  R_Object_setType(self, _type);
 }
 
 R_Utf8ByteBufferWriter*
@@ -167,9 +161,7 @@ R_Utf8ByteBufferWriter_create
     R_ByteBuffer* target
   )
 {
-  R_Utf8ByteBufferWriter* self = R_allocateObject(R_getObjectType("R.Utf8ByteBufferWriter", sizeof("R.Utf8ByteBufferWriter") - 1));
-  self->target = target;
-  R_UTF8WRITER(self)->writeBytes = (void (*)(R_Utf8Writer*, void const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeBytesImpl;
-  R_UTF8WRITER(self)->writeCodePoints = (void (*)(R_Utf8Writer*, R_Natural32Value const*, R_SizeValue)) &R_Utf8ByteBufferWriter_writeCodePointsImpl;
+  R_Utf8ByteBufferWriter* self = R_allocateObject(_R_Utf8ByteBufferWriter_getType());
+  R_Utf8ByteBufferWriter_construct(self, target);
   return self;
 }

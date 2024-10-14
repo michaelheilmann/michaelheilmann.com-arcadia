@@ -6,8 +6,7 @@
 typedef struct R_String R_String;
 
 #define R_UTF8STRINGREADER(x) ((R_Utf8StringReader*)(x))
-typedef struct R_Utf8StringReader R_Utf8StringReader;
-void _R_Utf8StringReader_registerType();
+Rex_declareObjectType("R.Utf8StringReader", R_Utf8StringReader, "R.Utf8Reader");
 
 struct R_Utf8StringReader {
   R_Utf8Reader parent;

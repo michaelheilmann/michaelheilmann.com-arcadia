@@ -94,7 +94,6 @@ isRightParenthesis
   return is(context, ')');
 }
 
-
 static void
 onIdentifier
   (
@@ -257,12 +256,22 @@ FileContext_visit
   R_Object_visit(self->source);
 }
 
+Rex_defineObjectType("Tools.TemplateEngine.FileContext", FileContext, "R.Object", R_Object, &FileContext_visit, &FileContext_finalize);
+
 void
-FileContext_registerType
+FileContext_construct
   (
+    FileContext* self,
+    Context* context,
+    R_FilePath* sourceFilePath
   )
 {
-  R_registerObjectType("Tools.TemplateEngine.FileContext", sizeof("Tools.TemplateEngine.FileContext") - 1, sizeof(FileContext), NULL, NULL, &FileContext_visit, &FileContext_finalize);
+  R_Type* _type = _FileContext_getType();
+  R_Object_construct((R_Object*)self);
+  self->context = context;
+  self->sourceFilePath = sourceFilePath;
+  self->source = NULL;
+  R_Object_setType((R_Object*)self, _type);
 }
 
 FileContext*
@@ -272,10 +281,8 @@ FileContext_create
     R_FilePath* sourceFilePath
   )
 {
-  FileContext* self = R_allocateObject(R_getObjectType("Tools.TemplateEngine.FileContext", sizeof("Tools.TemplateEngine.FileContext") - 1));
-  self->context = context;
-  self->sourceFilePath = sourceFilePath;
-  self->source = NULL;
+  FileContext* self = R_allocateObject(_FileContext_getType());
+  FileContext_construct(self, context, sourceFilePath);
   return self;
 }
 

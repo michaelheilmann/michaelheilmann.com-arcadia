@@ -24,8 +24,7 @@
 #include "R/List.h"
 #include "R/String.h"
 
-typedef struct R_FilePath R_FilePath;
-void _R_FilePath_registerType();
+Rex_declareObjectType("R.FilePath", R_FilePath, "R.Object");
 
 struct R_FilePath {
   R_Object _parent;

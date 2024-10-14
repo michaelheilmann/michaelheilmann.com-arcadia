@@ -24,13 +24,7 @@
 // fprintf, stderr
 #include <stdio.h>
 
-void
-_R_Utf8Writer_registerType
-  (
-  )
-{
-  R_registerObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1, sizeof(R_Utf8Writer), NULL, NULL, NULL, NULL);
-}
+Rex_defineObjectType("R.Utf8Writer", R_Utf8Writer, "R.Object", R_Object, NULL, NULL);
 
 void
 R_Utf8Writer_construct
@@ -38,9 +32,11 @@ R_Utf8Writer_construct
     R_Utf8Writer* self
   )
 {
+  R_Type* _type = _R_Utf8Writer_getType();
+  R_Object_construct((R_Object*)self);
   self->writeBytes = NULL;
   self->writeCodePoints = NULL;
-  R_Object_setType(self, R_getObjectType("R.Utf8Writer", sizeof("R.Utf8Writer") - 1));
+  R_Object_setType(self, _type);
 }
 
 void

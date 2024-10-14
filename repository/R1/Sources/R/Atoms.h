@@ -66,6 +66,18 @@ R_Atom_visit
     R_AtomValue self
   );
 
+void const*
+R_Atom_getBytes
+  (
+    R_AtomValue self
+  );
+
+R_SizeValue
+R_Atom_getNumberOfBytes
+  (
+    R_AtomValue self
+  );
+
 /// @brief Get the hash value of this atom.
 /// @param self The atom.
 /// @return The hash value.

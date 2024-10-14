@@ -21,9 +21,7 @@
 #include "R/Object.h"
 #include "R/Value.h"
 
-typedef struct R_String R_String;
-
-void _R_String_registerType();
+Rex_declareObjectType("R.String", R_String, "R.Object");
 
 struct R_String {
   R_Object _parent;

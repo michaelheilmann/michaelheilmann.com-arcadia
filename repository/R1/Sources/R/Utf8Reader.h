@@ -24,8 +24,7 @@
 #include "R/Size.h"
 
 #define R_UTF8READER(x) ((R_Utf8Reader*)(x))
-typedef struct R_Utf8Reader R_Utf8Reader;
-void _R_Utf8Reader_registerType();
+Rex_declareObjectType("R.Utf8Reader", R_Utf8Reader, "R.Object");
 
 struct R_Utf8Reader {
   R_Object _parent;

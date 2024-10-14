@@ -60,14 +60,7 @@ hash
   return hash;
 }
 
-void
-_R_String_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_registerObjectType(u8"R.String", sizeof(u8"R.String") - 1, sizeof(R_String), parentType, NULL, NULL, &R_String_destruct);
-}
+Rex_defineObjectType("R.String", R_String, "R.Object", R_Object, NULL, &R_String_destruct);
 
 void
 R_String_construct_pn
@@ -77,7 +70,7 @@ R_String_construct_pn
     R_SizeValue numberOfBytes
   )
 {
-  R_Type* _type = R_getObjectType(u8"R.String", sizeof(u8"R.String") - 1);
+  R_Type* _type = _R_String_getType();
   if (!bytes) {
     R_setStatus(R_Status_EncodingInvalid);
     R_jump();
@@ -107,7 +100,7 @@ R_String_create_pn
     R_SizeValue numberOfBytes
   )
 {
-  R_String* self = R_allocateObject(R_getObjectType(u8"R.String", sizeof(u8"R.String") - 1));
+  R_String* self = R_allocateObject(_R_String_getType());
   R_String_construct_pn(self, bytes, numberOfBytes);
   return self;
 }
@@ -123,10 +116,10 @@ R_String_construct
     R_setStatus(R_Status_ArgumentTypeInvalid);
     R_jump();
   }
-  R_Type* _type = R_getObjectType(u8"R.String", sizeof(u8"R.String") - 1);
+  R_Type* _type = _R_String_getType();
   R_Object_construct((R_Object*)self);
   R_ObjectReferenceValue referenceValue = R_Value_getObjectReferenceValue(&value);
-  if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1))) {
+  if (R_Type_isSubType(R_Object_getType(referenceValue), _R_ByteBuffer_getType())) {
     R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
     if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
       R_setStatus(R_Status_EncodingInvalid);
@@ -141,7 +134,7 @@ R_String_construct
     memcpy(self->p, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
     self->numberOfBytes = R_ByteBuffer_getNumberOfBytes(object);
     self->hash = hash(self->p, self->numberOfBytes);
-  } else if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.String", sizeof("R.String") - 1))) {
+  } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_String_getType())) {
     R_String* object = (R_String*)referenceValue;
     self->p = NULL;
     self->hash = 0;
@@ -152,7 +145,7 @@ R_String_construct
     memcpy(self->p, R_String_getBytes(object), R_String_getNumberOfBytes(object));
     self->numberOfBytes = object->numberOfBytes;
     self->hash = object->hash;
-  } else if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1))) {
+  } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_StringBuffer_getType())) {
     R_StringBuffer* object = (R_StringBuffer*)referenceValue;
     self->p = NULL;
     self->hash = 0;
@@ -176,53 +169,9 @@ R_String_create
     R_Value value
   )
 {
-  R_String* self = R_allocateObject(R_getObjectType(u8"R.String", sizeof(u8"R.String") - 1));
+  R_String* self = R_allocateObject(_R_String_getType());
   R_String_construct(self, value);
   return self;
-#if 0
-  if (!R_Value_isObjectReferenceValue(&value)) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  R_ObjectReferenceValue referenceValue = R_Value_getObjectReferenceValue(&value);
-  if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.ByteBuffer", sizeof("R.ByteBuffer") - 1))) {
-    R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
-    if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
-    }
-    R_String* self = R_allocateObject(R_getObjectType("R.String", sizeof("R.String") - 1));
-    self->p = NULL;
-    self->hash = 0;
-    self->numberOfBytes = 0;
-    if (!R_Arms_allocateUnmanaged_nojump(&self->p, R_ByteBuffer_getNumberOfBytes(object))) {
-      R_jump();
-    }
-    memcpy(self->p, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
-    self->numberOfBytes = R_ByteBuffer_getNumberOfBytes(object);
-    self->hash = hash(self->p, self->numberOfBytes);
-    return self;
-  } else if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.String", sizeof("R.String") - 1))) {
-    // Strings are immutable. Instead of creating a new string, simply return the existing string.
-    return (R_String*)referenceValue;
-  } else if (R_Type_isSubType(R_Object_getType(referenceValue), R_getObjectType("R.StringBuffer", sizeof("R.StringBuffer") - 1))) {
-    R_StringBuffer* object = (R_StringBuffer*)referenceValue;
-    R_String* self = R_allocateObject(R_getObjectType("R.String", sizeof("R.String") - 1));
-    self->p = NULL;
-    self->hash = 0;
-    self->numberOfBytes = 0;
-    if (!R_Arms_allocateUnmanaged_nojump(&self->p, R_StringBuffer_getNumberOfBytes(object))) {
-      R_jump();
-    }
-    memcpy(self->p, R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
-    self->numberOfBytes = R_StringBuffer_getNumberOfBytes(object);
-    self->hash = hash(self->p, self->numberOfBytes);
-    return self;
-  } else {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-#endif
 }
 
 R_BooleanValue

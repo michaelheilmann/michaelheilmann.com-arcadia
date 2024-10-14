@@ -73,13 +73,9 @@ PixelBuffer_finalize
   }
 }
 
-void
-_PixelBuffer_registerType
-  (
-  )
-{ R_registerObjectType("PixelBuffer", sizeof("PixelBuffer") - 1, sizeof(PixelBuffer), NULL, NULL, NULL, &PixelBuffer_finalize); }
+Rex_defineObjectType("PixelBuffer", PixelBuffer, "R.Object", R_Object, NULL, &PixelBuffer_finalize);
 
-uint8_t
+R_Natural8Value
 PixelBuffer_getFormat
   (
     PixelBuffer* self
@@ -111,14 +107,14 @@ PixelBuffer_setLinePadding
     }
     size_t oldLinePadding = self->linePadding;
     size_t newLinePadding = linePadding;
-    uint8_t* oldBytes = self->bytes;
-    uint8_t* newBytes = NULL;
+    R_Natural8Value* oldBytes = self->bytes;
+    R_Natural8Value* newBytes = NULL;
     if (!R_allocateUnmanaged_nojump(&newBytes, (self->width * bytesPerPixel + newLinePadding) * self->height)) {
       R_jump();
     }
     for (size_t y = 0; y < self->height; ++y) {
-      uint8_t* oldLine = oldBytes + y * (self->width * bytesPerPixel + oldLinePadding);
-      uint8_t* newLine = newBytes + y * (self->width * bytesPerPixel + newLinePadding);
+      R_Natural8Value* oldLine = oldBytes + y * (self->width * bytesPerPixel + oldLinePadding);
+      R_Natural8Value* newLine = newBytes + y * (self->width * bytesPerPixel + newLinePadding);
       memcpy(newLine, oldLine, self->width * bytesPerPixel);
     }
     R_deallocateUnmanaged_nojump(oldBytes);
@@ -134,16 +130,18 @@ PixelBuffer_getLinePadding
   )
 { return self->linePadding; }
 
-PixelBuffer*
-PixelBuffer_createOpaqueRed
+void
+PixelBuffer_constructOpaqueRed
   (
-    size_t linePadding,
-    size_t width,
-    size_t height,
-    uint8_t pixelFormat
+    PixelBuffer* self,
+    R_SizeValue linePadding,
+    R_SizeValue width,
+    R_SizeValue height,
+    R_Natural8Value pixelFormat
   )
 {
-  PixelBuffer* self = R_allocateObject(R_getObjectType("PixelBuffer", sizeof("PixelBuffer") - 1));
+  R_Type* _type = _PixelBuffer_getType();
+  R_Object_construct((R_Object*)self);
   self->bytes = NULL;
   self->height = 0;
   self->linePadding = 0;
@@ -179,19 +177,35 @@ PixelBuffer_createOpaqueRed
       p[x] = pixelValue;
     }
   }
-  return self;
+  R_Object_setType((R_Object*)self, _type);
 }
 
 PixelBuffer*
-PixelBuffer_createOpaqueBlack
+PixelBuffer_createOpaqueRed
   (
-    size_t linePadding,
-    size_t width,
-    size_t height,
-    uint8_t pixelFormat
+    R_SizeValue linePadding,
+    R_SizeValue width,
+    R_SizeValue height,
+    R_Natural8Value pixelFormat
   )
 {
-  PixelBuffer* self = R_allocateObject(R_getObjectType("PixelBuffer", sizeof("PixelBuffer") - 1));
+  PixelBuffer* self = R_allocateObject(_PixelBuffer_getType());
+  PixelBuffer_constructOpaqueRed(self, linePadding, width, height, pixelFormat);
+  return self;
+}
+
+void
+PixelBuffer_constructOpaqueBlack
+  (
+    PixelBuffer* self,
+    R_SizeValue linePadding,
+    R_SizeValue width,
+    R_SizeValue height,
+    R_Natural8Value pixelFormat
+  )
+{
+  R_Type* _type = _PixelBuffer_getType();
+  R_Object_construct((R_Object*)self);
   self->bytes = NULL;
   self->height = 0;
   self->linePadding = 0;
@@ -227,6 +241,20 @@ PixelBuffer_createOpaqueBlack
       p[x] = pixelValue;
     }
   }
+  R_Object_setType((R_Object*)self, _type);
+}
+
+PixelBuffer*
+PixelBuffer_createOpaqueBlack
+  (
+    R_SizeValue linePadding,
+    R_SizeValue width,
+    R_SizeValue height,
+    R_Natural8Value pixelFormat
+  )
+{
+  PixelBuffer* self = R_allocateObject(_PixelBuffer_getType());
+  PixelBuffer_constructOpaqueBlack(self, linePadding, width, height, pixelFormat);
   return self;
 }
 

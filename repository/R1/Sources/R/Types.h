@@ -25,16 +25,16 @@
 /// @brief Type of a visti callback function.
 /// Each object type may have its own visit callback function.
 /// For an object of type A1 <: A2 <: ... <: An the callback functions are invoked from the bottom most to the top most type.
-typedef void (R_Type_VisitObjectCallbackFunction)(void *);
+typedef void (R_Type_VisitObjectCallbackFunction)(void* object);
 
 /// @brief Type of a destruct callback function.
 /// Each object type may have its own destruct callback function.
 /// For an object of type A1 <: A2 <: ... <: An the callback functions are invoked from the bottom most to the top most type.
-typedef void (R_Type_DestructObjectCallbackFunction)(void*);
+typedef void (R_Type_DestructObjectCallbackFunction)(void* object);
 
 /// @brief Type of a type destructing callback function.
 /// Invoked when the type is destructing.
-typedef void (R_Type_TypeDestructingCallbackFunction)(void*);
+typedef void (R_Type_TypeDestructingCallbackFunction)(void* context);
 
 typedef void R_Type;
 

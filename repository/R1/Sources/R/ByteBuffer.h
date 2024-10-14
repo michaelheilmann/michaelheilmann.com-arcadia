@@ -24,8 +24,7 @@
 #include "R/swap.h"
 #include "R/Size.h"
 
-typedef struct R_ByteBuffer R_ByteBuffer;
-void _R_ByteBuffer_registerType();
+Rex_declareObjectType("R.ByteBuffer", R_ByteBuffer, "R.Object");
 
 struct R_ByteBuffer {
   R_Object _parent;

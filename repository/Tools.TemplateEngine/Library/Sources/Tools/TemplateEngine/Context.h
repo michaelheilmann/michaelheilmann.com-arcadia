@@ -20,14 +20,10 @@
 
 #include "R.h"
 
-typedef struct Context Context;
-
-void
-Context_registerType
-  (
-  );
+Rex_declareObjectType("Tools.TemplateEngine.Context", Context, "R.Object");
 
 struct Context {
+  R_Object _parent;
   R_Utf8Writer* target;
   R_ByteBuffer* targetBuffer;
 
@@ -37,6 +33,12 @@ struct Context {
   R_Stack* stack;
   R_List* files;
 };
+
+void
+Context_construct
+  (
+    Context* self
+  );
 
 Context*
 Context_create

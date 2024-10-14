@@ -21,20 +21,24 @@
 #include "R.h"
 #include "Tools/TemplateEngine/Context.h"
 
-typedef struct FileContext FileContext;
-
-void
-FileContext_registerType
-  (
-  );
+Rex_declareObjectType("Tools.TemplateEngine.FileContext", FileContext, "R.Object");
 
 struct FileContext {
+  R_Object _parent;
   /// The underlaying context.
   Context* context;
   /// The path to the source file.
   R_FilePath* sourceFilePath;
   R_Utf8Reader* source;
 };
+
+void
+FileContext_construct
+  (
+    FileContext* self,
+    Context* context,
+    R_FilePath* sourceFilePath
+  );
 
 FileContext*
 FileContext_create

@@ -28,14 +28,28 @@ typedef enum ImageWriterFormat {
   ImageWriterFormat_Bmp,
 } ImageWriterFormat;
 
-typedef struct ImageWriterParameters ImageWriterParameters;
+Rex_declareObjectType("ImageWriterParameters", ImageWriterParameters, "R.Object");
 
-void _ImageWriterParameters_registerType();
+void
+ImageWriterParameters_constructFile
+  (
+    ImageWriterParameters* self,
+    R_String* path,
+    ImageWriterFormat format
+  );
 
 ImageWriterParameters*
 ImageWriterParameters_createFile
   (
     R_String* path,
+    ImageWriterFormat format
+  );
+
+void
+ImageWriterParameters_constructByteBuffer
+  (
+    ImageWriterParameters* self,
+    R_ByteBuffer* byteBuffer,
     ImageWriterFormat format
   );
 

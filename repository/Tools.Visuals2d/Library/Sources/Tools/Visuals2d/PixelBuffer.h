@@ -29,19 +29,18 @@
 /// - line padding: The number of Bytes after the last Byte of a line.
 /// - line stride: The number of Bytes between the first Bytes of two consecutive lines.
 ///                width * bytesPerPixel + linePadding
-typedef struct PixelBuffer PixelBuffer;
-
-void _PixelBuffer_registerType();
+Rex_declareObjectType("PixelBuffer", PixelBuffer, "R.Object");
 
 struct PixelBuffer {
-  uint8_t* bytes;
-  uint8_t pixelFormat;
+  R_Object _parent;
+  R_Natural8Value* bytes;
+  R_Natural8Value pixelFormat;
   R_SizeValue width;
   R_SizeValue height;
   R_SizeValue linePadding;
 };
 
-uint8_t
+R_Natural8Value
 PixelBuffer_getFormat
   (
     PixelBuffer* self
@@ -56,7 +55,7 @@ void
 PixelBuffer_setLinePadding
   (
     PixelBuffer* self,
-    size_t linePadding
+    R_SizeValue linePadding
   );
 
 R_SizeValue
@@ -71,7 +70,7 @@ PixelBuffer_createOpaqueRed
     R_SizeValue linePadding,
     R_SizeValue width,
     R_SizeValue height,
-    uint8_t pixelFormat
+    R_Natural8Value pixelFormat
   );
 
 PixelBuffer*
@@ -80,7 +79,7 @@ PixelBuffer_createOpaqueBlack
     R_SizeValue linePadding,
     R_SizeValue width,
     R_SizeValue height,
-    uint8_t pixelFormat
+    R_Natural8Value pixelFormat
   );
 
 /// @brief Get the width of this pixel buffer.

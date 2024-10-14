@@ -25,14 +25,7 @@
 // fprintf, stderr
 #include <stdio.h>
 
-void
-_R_Utf8Reader_registerType
-  (
-  )
-{
-  R_Type* parentType = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_registerObjectType("R.Utf8Reader", sizeof("R.Utf8Reader") - 1, sizeof(R_Utf8Reader), parentType, NULL, NULL, NULL);
-}
+Rex_defineObjectType("R.Utf8Reader", R_Utf8Reader, "R.Object", R_Object, NULL, NULL);
 
 void
 R_Utf8Reader_construct
@@ -40,11 +33,12 @@ R_Utf8Reader_construct
     R_Utf8Reader* self
   )
 {
+  R_Type* _type = _R_Utf8Reader_getType();
   R_Object_construct((R_Object*)self);
   self->getCodePoint = NULL;
   self->hasCodePoint = NULL;
   self->next = NULL;
-  R_Object_setType(self, R_getObjectType("R.Utf8Reader", sizeof("R.Utf8Reader") - 1));
+  R_Object_setType(self, _type);
 }
 
 void

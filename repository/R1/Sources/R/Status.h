@@ -44,6 +44,8 @@
 #define R_Status_SyntacticalError (1002)
 #define R_Status_SemanticalError (1003)
 
+#define R_Status_Exists (1004)
+
 typedef uint32_t R_Status;
 
 R_Status

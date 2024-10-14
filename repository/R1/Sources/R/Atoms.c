@@ -275,6 +275,20 @@ R_Atom_visit
   self->visited = R_BooleanValue_True;
 }
 
+void const*
+R_Atom_getBytes
+  (
+    R_AtomValue self
+  )
+{ return self->bytes; }
+
+R_SizeValue
+R_Atom_getNumberOfBytes
+  (
+    R_AtomValue self
+  )
+{ return self->numberOfBytes; }
+
 R_SizeValue
 R_Atom_getHashValue
   (

@@ -169,14 +169,7 @@ R_Utf8ByteBufferReader_getByteIndexImpl
   )
 { return self->byteIndex; }
 
-void
-_R_Utf8ByteBufferReader_registerType
-  (
-  )
-{
-  R_Type* parentObjectType = R_getObjectType("R.Utf8Reader", sizeof("R.Utf8Reader") - 1);
-  R_registerObjectType("R.Utf8ByteBufferReader", sizeof("R.Utf8ByteBufferReader") - 1, sizeof(R_Utf8ByteBufferReader), parentObjectType, NULL, &R_Utf8ByteBufferReader_visit, NULL);
-}
+Rex_defineObjectType("R.Utf8ByteBufferReader", R_Utf8ByteBufferReader, "R.Utf8Reader", R_Utf8Reader, &R_Utf8ByteBufferReader_visit, NULL);
 
 void
 R_Utf8ByteBufferReader_construct
@@ -185,6 +178,7 @@ R_Utf8ByteBufferReader_construct
     R_ByteBuffer* source
   )
 {
+  R_Type* _type = _R_Utf8ByteBufferReader_getType();
   R_Utf8Reader_construct(R_UTF8READER(self));
   self->source = source;
   self->byteIndex = 0;
@@ -193,7 +187,7 @@ R_Utf8ByteBufferReader_construct
   R_UTF8READER(self)->getCodePoint = (R_Natural32Value (*)(R_Utf8Reader*)) & R_Utf8ByteBufferReader_getCodePointImpl;
   R_UTF8READER(self)->hasCodePoint = (R_BooleanValue (*)(R_Utf8Reader*)) &R_Utf8ByteBufferReader_hasCodePointImpl;
   R_UTF8READER(self)->next = (void (*)(R_Utf8Reader*)) &R_Utf8ByteBufferReader_nextImpl;
-  R_Object_setType(self, R_getObjectType("R.Utf8ByteBufferReader", sizeof("R.Utf8ByteBufferReader") - 1));
+  R_Object_setType(self, _type);
 }
 
 R_Utf8ByteBufferReader*
@@ -202,7 +196,7 @@ R_Utf8ByteBufferReader_create
     R_ByteBuffer* source
   )
 {
-  R_Utf8ByteBufferReader* self = R_allocateObject(R_getObjectType("R.Utf8ByteBufferReader", sizeof("R.Utf8ByteBufferReader") - 1));
+  R_Utf8ByteBufferReader* self = R_allocateObject(_R_Utf8ByteBufferReader_getType());
   R_Utf8ByteBufferReader_construct(self, source);
   return self;
 }

@@ -109,8 +109,17 @@ R_allocateObject
   return (void*)(tag + 1);
 }
 
-void
-_R_Object_registerType
+static R_Type* g__R_Object_type = NULL;
+
+static void
+_R_Object_typeDestructing
+  (
+    void* context
+  )
+{ g__R_Object_type = NULL; }
+
+R_Type*
+_R_Object_getType
   (
   )
 {
@@ -120,7 +129,11 @@ _R_Object_registerType
     }
     g_objectRegistered = R_BooleanValue_True;
   }
-  R_registerObjectType("R.Object", sizeof("R.Object") - 1, sizeof(R_Object), NULL, NULL, NULL, NULL);
+  if (!g__R_Object_type) {
+    R_registerObjectType(u8"R.Object", sizeof(u8"R.Object") - 1, sizeof(R_Object), NULL, &_R_Object_typeDestructing, NULL, NULL);
+    g__R_Object_type = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  }
+  return g__R_Object_type;
 }
 
 void

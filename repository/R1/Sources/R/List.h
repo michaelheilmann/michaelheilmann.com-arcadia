@@ -19,8 +19,7 @@
 #include "R/Object.h"
 #include "R/Value.h"
 
-typedef struct R_List R_List;
-void _R_List_registerType();
+Rex_declareObjectType("R.List", R_List, "R.Object");
 
 struct R_List {
   R_Object _parent;

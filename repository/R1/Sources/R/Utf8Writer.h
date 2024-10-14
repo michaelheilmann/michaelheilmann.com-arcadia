@@ -20,17 +20,17 @@
 
 #include "R/Boolean.h"
 #include "R/Natural32.h"
+#include "R/Object.h"
 #include "R/Size.h"
 typedef struct R_ByteBuffer R_ByteBuffer;
 
 #define R_UTF8WRITER(x) ((R_Utf8Writer*)(x))
-typedef struct R_Utf8Writer R_Utf8Writer;
-void _R_Utf8Writer_registerType();
+Rex_declareObjectType("R.Utf8Writer", R_Utf8Writer, "R.Object");
 
 struct R_Utf8Writer {
+  R_Object _parent;
   void (*writeBytes)(R_Utf8Writer* self, const void* bytes, R_SizeValue numberOfBytes);
   void (*writeCodePoints)(R_Utf8Writer* self, R_Natural32Value const* codePoints, R_SizeValue numberOfCodePoints);
-  
 };
 
 void

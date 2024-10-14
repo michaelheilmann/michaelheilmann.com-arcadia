@@ -19,8 +19,7 @@
 #include "R/Object.h"
 #include "R/Value.h"
 
-typedef struct R_Stack R_Stack;
-void _R_Stack_registerType();
+Rex_declareObjectType("R.Stack", R_Stack, "R.Object");
 
 struct R_Stack {
   R_Object _parent;

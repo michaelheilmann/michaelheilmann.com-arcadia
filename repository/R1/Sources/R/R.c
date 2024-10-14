@@ -30,6 +30,54 @@ typedef uint32_t ReferenceCount;
 
 static ReferenceCount g_referenceCount = 0;
 
+#define On(Category, cilName, cName) \
+    static R_Type* g_##cName##_type = NULL; \
+    static void \
+    _##cName##_typeDestructing \
+      ( \
+        void* context \
+      ) \
+    { \
+      g_##cName##_type = NULL; \
+    }
+
+On(Boolean, "R.Boolean", R_BooleanValue);
+On(Integer, "R.Integer8", R_Integer8Value);
+On(Integer, "R.Integer16", R_Integer16Value);
+On(Integer, "R.Integer32", R_Integer32Value);
+On(Integer, "R.Integer64", R_Integer64Value);
+On(Natural, "R.Natural8", R_Natural8Value);
+On(Natural, "R.Natural16", R_Natural16Value);
+On(Natural, "R.Natural32", R_Natural32Value);
+On(Natural, "R.Natural64", R_Natural64Value);
+On(Size, "R.Size", R_SizeValue);
+On(Void, "R.Void", R_VoidValue);
+
+#undef On
+
+static void
+registerTypes
+  (
+  )
+{ 
+  #define On(Category, cilName, cName) \
+    R_register##Category##Type(cilName, sizeof(cilName) - 1, _##cName##_typeDestructing);
+
+  On(Boolean, "R.Boolean", R_BooleanValue);
+  On(Integer, "R.Integer8", R_Integer8Value);
+  On(Integer, "R.Integer16", R_Integer16Value);
+  On(Integer, "R.Integer32", R_Integer32Value);
+  On(Integer, "R.Integer64", R_Integer64Value);
+  On(Natural, "R.Natural8", R_Natural8Value);
+  On(Natural, "R.Natural16", R_Natural16Value);
+  On(Natural, "R.Natural32", R_Natural32Value);
+  On(Natural, "R.Natural64", R_Natural64Value);
+  On(Size, "R.Size", R_SizeValue);
+  On(Void, "R.Void", R_VoidValue);
+
+#undef On
+}
+
 R_Status
 R_startup
   (
@@ -72,33 +120,8 @@ R_startup
 
     R_pushJumpTarget(&jumpTarget);
     if (R_JumpTarget_save(&jumpTarget)) {
-      R_registerBooleanType("R.Boolean", sizeof("R.Boolean") - 1, NULL);
-      R_registerIntegerType("R.Integer8", sizeof("R.Integer8") - 1, NULL);
-      R_registerIntegerType("R.Integer16", sizeof("R.Integer16") - 1, NULL);
-      R_registerIntegerType("R.Integer32", sizeof("R.Integer32") - 1, NULL);
-      R_registerIntegerType("R.Integer64", sizeof("R.Integer64") - 1, NULL);
-      R_registerNaturalType("R.Natural8", sizeof("R.Natural8") - 1, NULL);
-      R_registerNaturalType("R.Natural16", sizeof("R.Natural16") - 1, NULL);
-      R_registerNaturalType("R.Natural32", sizeof("R.Natural32") - 1, NULL);
-      R_registerNaturalType("R.Natural64", sizeof("R.Natural64") - 1, NULL);
-      R_registerSizeType("R.Size", sizeof("R.Size") - 1, NULL);
-      R_registerVoidType("R.Void", sizeof("R.Void") - 1, NULL);
-
-      _R_Object_registerType();
-
-      _R_ByteBuffer_registerType();
-      _R_FileHandle_registerType();
-      _R_FilePath_registerType();
-      _R_FileSystem_registerType();
-      _R_List_registerType();
-      _R_Stack_registerType();
-      _R_StringBuffer_registerType();
-      _R_Utf8Reader_registerType();
-      _R_Utf8Writer_registerType();
-      _R_Utf8ByteBufferReader_registerType();
-      _R_Utf8ByteBufferWriter_registerType();
-      _R_Utf8StringReader_registerType();
-      _R_String_registerType();
+      registerTypes();
+      _R_Object_getType();
       R_popJumpTarget();
     } else {
       R_popJumpTarget();

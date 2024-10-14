@@ -42,12 +42,23 @@ Context_visit
   R_Object_visit(self->files);
 }
 
+Rex_defineObjectType("Tools.TemplateEngine.Context", Context, "R.Object", R_Object, &Context_visit, &Context_finalize);
+
 void
-Context_registerType
+Context_construct
   (
+    Context* self
   )
 {
-  R_registerObjectType("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1, sizeof(Context), NULL, NULL, &Context_visit, &Context_finalize);
+  R_Type* _type = _Context_getType();
+  R_Object_construct((R_Object*)self);
+  self->targetBuffer = NULL;
+  self->target = NULL;
+  self->temporaryBuffer = NULL;
+  self->temporary = NULL;
+  self->stack = NULL;
+  self->files = R_List_create();
+  R_Object_setType((R_Object*)self, _type);
 }
 
 Context*
@@ -55,13 +66,8 @@ Context_create
   (
   )
 {
-  Context* self = R_allocateObject(R_getObjectType("Tools.TemplateEngine.Context", sizeof("Tools.TemplateEngine.Context") - 1));
-  self->targetBuffer = NULL;
-  self->target = NULL;
-  self->temporaryBuffer = NULL;
-  self->temporary = NULL;
-  self->stack = NULL;
-  self->files = R_List_create();
+  Context* self = R_allocateObject(_Context_getType());
+  Context_construct(self);
   return self;
 }
 

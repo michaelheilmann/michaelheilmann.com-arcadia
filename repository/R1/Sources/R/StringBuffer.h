@@ -21,8 +21,7 @@
 #include "R/Object.h"
 #include "R/Value.h"
 
-typedef struct R_StringBuffer R_StringBuffer;
-void _R_StringBuffer_registerType();
+Rex_declareObjectType("R.StringBuffer", R_StringBuffer, "R.Object");
 
 struct R_StringBuffer {
   R_Object _parent;

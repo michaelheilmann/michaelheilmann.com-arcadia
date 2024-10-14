@@ -29,9 +29,7 @@ typedef struct R_FilePath R_FilePath;
 // FILE
 #include <stdio.h>
 
-typedef struct R_FileHandle R_FileHandle;
-
-void _R_FileHandle_registerType();
+Rex_declareObjectType("R.FileHandle", R_FileHandle, "R.Object");
 
 struct R_FileHandle {
   R_Object _parent;

@@ -95,8 +95,8 @@ main
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    _PixelBuffer_registerType();
-    _ImageWriterParameters_registerType();
+    _PixelBuffer_getType();
+    _ImageWriterParameters_getType();
     main1(argc, argv);
     R_popJumpTarget();
   }

@@ -109,7 +109,13 @@ recursiveInclude2
   }
 }
 
-int main(int argc, char** argv) {
+int 
+main
+  (
+    int argc,
+    char** argv
+  )
+{
   R_Status status[2];
   status[0] = R_startup();
   if (status[0]) {
@@ -118,8 +124,8 @@ int main(int argc, char** argv) {
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    Context_registerType();
-    FileContext_registerType();
+    _Context_getType();
+    _FileContext_getType();
     main1(argc, argv);
     recursiveInclude1(argc, argv);
     recursiveInclude2(argc, argv);
