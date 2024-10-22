@@ -13,12 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-27
+// Last modified: 2024-10-27
 
 #if !defined(R_INTEGER32VALUE_H_INCLUDED)
 #define R_INTEGER32VALUE_H_INCLUDED
 
 #include <inttypes.h>
+typedef void R_Type;
 
 typedef int32_t R_Integer32Value;
 
@@ -33,5 +34,10 @@ static_assert(R_Integer32Value_NumberOfBytes == 4, "R.Integer32Value.NumberOfByt
 #define R_Integer32Value_NumberOfBits (R_Integer32Value_NumberOfBytes * 8)
 
 #define R_Integer32Value_Literal(x) INT32_C(x)
+
+R_Type*
+_R_Integer32Value_getType
+  (
+  );
 
 #endif // R_INTEGER32VALUE_H_INCLUDED

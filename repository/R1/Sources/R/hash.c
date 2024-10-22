@@ -25,6 +25,15 @@ R_hashBooleanValue
 { return x ? 1231 : 1237; }
 
 R_SizeValue
+R_hashForeignProcedureValue
+  (
+    R_ForeignProcedureValue x
+  )
+{
+  return (R_SizeValue)(uintptr_t)x;
+}
+
+R_SizeValue
 R_hashInteger16Value
   (
     R_Integer16Value x

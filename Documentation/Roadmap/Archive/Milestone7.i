@@ -1,5 +1,5 @@
 <h2>Milestone 7: 1st iteration of a parser for the L1 language</h2>
-<p>Percentage done: 100&percnt;, Due date: Week 2 October 2024</p>
+<p>Percentage done: 100&percnt;, Due date: Week 3 October 2024</p>
 <p>
 A 1st iteration of the parser for the L1 language,
 a language for interfacing with the
@@ -10,12 +10,18 @@ That 1st iteration shall add support for the following features:
 <ul>
   <li>
   boolean literals,
-  number (integer and real) literals,
+  number literals (integer literal/ real literal),
   string literals, and
   void literals
   </li>
   <li>
   arithmetic operations (add, subtract, multiply, divide)
+  </li>
+  <li>
+  arithmetic operations / logical operations (not)
+  </li>
+  <li>
+  logical operations (and, or)
   </li>
   <li>
   list operations (concatenate)

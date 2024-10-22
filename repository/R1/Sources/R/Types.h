@@ -21,6 +21,7 @@
 #include "R/Configure.h"
 #include "R/Boolean.h"
 #include "R/Size.h"
+#include "R/TypeNames.h"
 
 /// @brief Type of a visti callback function.
 /// Each object type may have its own visit callback function.
@@ -42,8 +43,12 @@ typedef void R_Type;
 typedef enum R_TypeKind {
 
   /// The boolean type kind.
-  /// <code>R.Boolean</code> is of this type.
+  /// <code>R.Boolean</code> is an example of this type kind.
   R_TypeKind_Boolean,
+
+  /// The foreign pricedure type kind.
+  /// <code>R.ForeignProcedure</code> is an example of this type kind.
+  R_TypeKind_ForeignProcedure,
 
   /// The integer type kind.
   /// <code>R.Integer(8|16|32|64)</code> are examples for this type kind.
@@ -53,10 +58,13 @@ typedef enum R_TypeKind {
   /// <code>R.Natural(8|16|32|64)</code> are examples for this type kind.
   R_TypeKind_Natural,
 
-  /// An object type.
+  /// An object type kind.
   R_TypeKind_Object,
 
-  /// The size type.
+  /// The real type kind.
+  R_TypeKind_Real,
+
+  /// The size type kind.
   /// <code>R.Size</code> is an example of this type kind.
   R_TypeKind_Size,
 
@@ -141,6 +149,16 @@ R_Type_isBooleanKind
   )
 { return R_TypeKind_Boolean == R_Type_getKind(self); }
 
+/// @brief Get if this type is of the kind of type "foreign procedure".
+/// @param self A pointer to this type.
+/// @return #R_BooleanValue_True if the type is of the kind of type "foreign procedure". #R_BooleanValue_False otherwise.
+static inline R_BooleanValue
+R_Type_isForeignProcedureKind
+  (
+    R_Type const* self
+  )
+{ return R_TypeKind_ForeignProcedure == R_Type_getKind(self); }
+
 /// @brief Get if this type is of the kind of type "integer".
 /// @param self A pointer to this type.
 /// @return #R_BooleanValue_True if the type is of the kind of type "integer". #R_BooleanValue_False otherwise.
@@ -171,6 +189,16 @@ R_Type_isObjectKind
   )
 { return R_TypeKind_Object == R_Type_getKind(self); }
 
+/// @brief Get if this type is of the kind of type "reak".
+/// @param self A pointer to this type.
+/// @return #R_BooleanValue_True if the type is of the kind of type "real". #R_BooleanValue_False otherwise.
+static inline R_BooleanValue
+R_Type_isRealKind
+  (
+    R_Type const* self
+  )
+{ return R_TypeKind_Real == R_Type_getKind(self); }
+
 /// @brief Get if this type is of the kind of type "size".
 /// @param self A pointer to this type.
 /// @return #R_BooleanValue_True if the type is of the kind of type "size". #R_BooleanValue_False otherwise.
@@ -194,6 +222,15 @@ R_Type_isVoidKind
 /* R_Status_ArgumentValueInvalid, R_Status_AllocationFailed, R_Status_TypeExists */
 void
 R_registerBooleanType
+  (
+    char const* name,
+    size_t nameLength,
+    R_Type_TypeDestructingCallbackFunction* typeDestructing
+  );
+
+/* R_Status_ArgumentValueInvalid, R_Status_AllocationFailed, R_Status_TypeExists */
+void
+R_registerForeignProcedureType
   (
     char const* name,
     size_t nameLength,
@@ -233,6 +270,15 @@ R_registerObjectType
 
 /* R_Status_ArgumentValueInvalid, R_Status_AllocationFailed, R_Status_TypeExists */
 void
+R_registerRealType
+  (
+    char const* name,
+    size_t nameLength,
+    R_Type_TypeDestructingCallbackFunction* typeDestructing
+  );
+
+/* R_Status_ArgumentValueInvalid, R_Status_AllocationFailed, R_Status_TypeExists */
+void
 R_registerSizeType
   (
     char const* name,
@@ -251,10 +297,16 @@ R_registerVoidType
 
 /* R_Status_ArgumentValueInvalid, R_Status_TypeNotExists */
 R_Type*
-R_getObjectType
+R_getType
   (
     char const* name,
     size_t nameLength
+  );
+
+R_TypeNameValue
+R_Type_getName
+  (
+    R_Type* type
   );
 
 #endif // R_TYPES_H_INCLUDED

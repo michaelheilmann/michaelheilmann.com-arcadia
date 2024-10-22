@@ -126,6 +126,32 @@ R_FileSystem_setFileContents
   #error("operating system not (yet) supported")
 #endif
 
+R_BooleanValue
+R_FileSystem_regularFileExists
+  (
+    R_FileSystem* self,
+    R_FilePath* path
+  )
+{
+  R_String* nativePathString = R_FilePath_toNative(path);
+  DWORD dwFileAttributes = GetFileAttributes(nativePathString->p);
+
+  return (dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
+         !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
+}
+
+R_BooleanValue
+R_FileSystem_directoryFileExists
+  (
+    R_FileSystem* self,
+    R_FilePath* path
+  )
+{
+  R_String* nativePathString = R_FilePath_toNative(path);
+  DWORD dwFileAttributes = GetFileAttributes(nativePathString->p);
+
+  return (dwFileAttributes != INVALID_FILE_ATTRIBUTES);
+}
 
 void
 R_FileSystem_createDirectory

@@ -17,12 +17,13 @@
 
 #include "R/Atoms.h"
 
-#include "R/ArmsIntegration.h"
 #include "R/getTickCount.h"
 #include "R/Integer32.h"
 #include "R/JumpTarget.h"
 #include "R/Natural64.h"
-
+#include "R/Object.h"
+#include "R/Status.h"
+#include "R/UnmanagedMemory.h"
 // memcmp, memcpy, memmove
 #include <string.h>
 // fprintf, stderr
@@ -104,7 +105,7 @@ resize
     }
     R_Atom** oldBuckets = g_singleton->buckets;
     R_Atom** newBuckets = NULL;
-    if (!R_Arms_allocateUnmanaged_nojump((void**)&newBuckets, newCapacity * sizeof(R_Atom*))) {
+    if (!R_allocateUnmanaged_nojump((void**)&newBuckets, newCapacity * sizeof(R_Atom*))) {
       R_jump();
     }
     for (R_SizeValue i = 0, n = newCapacity; i < n; ++i) {
@@ -119,7 +120,7 @@ resize
         newBuckets[j] = node;
       }
     }
-    R_Arms_deallocateUnmanaged_nojump(oldBuckets);
+    R_deallocateUnmanaged_nojump(oldBuckets);
     g_singleton->buckets = newBuckets;
     g_singleton->capacity = newCapacity;
   }
@@ -131,7 +132,7 @@ R_Atoms_startup
   )
 {
   if (!g_singleton) {
-    if (!R_Arms_allocateUnmanaged_nojump((void**)&g_singleton, sizeof(Singleton))) {
+    if (!R_allocateUnmanaged_nojump((void**)&g_singleton, sizeof(Singleton))) {
       R_jump();
     }
     g_singleton->minimumCapacity = 8;
@@ -143,8 +144,8 @@ R_Atoms_startup
       R_setStatus(R_Status_ArgumentValueInvalid);
       R_jump();
     }
-    if (!R_Arms_allocateUnmanaged_nojump((void**)&g_singleton->buckets, 8 * sizeof(R_Atom*))) {
-      R_Arms_deallocateUnmanaged_nojump(g_singleton);
+    if (!R_allocateUnmanaged_nojump((void**)&g_singleton->buckets, 8 * sizeof(R_Atom*))) {
+      R_deallocateUnmanaged_nojump(g_singleton);
       g_singleton = NULL;
       R_jump();
     }
@@ -181,9 +182,9 @@ R_Atoms_shutdown
     if (g_singleton->size > 0) {
       fprintf(stderr, "%s:%d warning: atoms not empty\n", __FILE__, __LINE__);
     }
-    R_Arms_deallocateUnmanaged_nojump(g_singleton->buckets);
+    R_deallocateUnmanaged_nojump(g_singleton->buckets);
     g_singleton->buckets = NULL;
-    R_Arms_deallocateUnmanaged_nojump(g_singleton);
+    R_deallocateUnmanaged_nojump(g_singleton);
     g_singleton = NULL;
   }
 }
@@ -219,7 +220,7 @@ R_Atoms_onPostFinalize
         R_Atom* node = current;
         *previous = current->next;
         current = current->next;
-        R_Arms_deallocateUnmanaged_nojump(node); 
+        R_deallocateUnmanaged_nojump(node); 
         g_singleton->size--;
       } else {
         previous = &current->next;
@@ -250,7 +251,7 @@ R_Atoms_getOrCreateAtom
     }
   }
   R_Atom* atom = NULL;
-  if (!R_Arms_allocateUnmanaged_nojump(&atom, sizeof(R_Atom) + numberOfBytes)) {
+  if (!R_allocateUnmanaged_nojump(&atom, sizeof(R_Atom) + numberOfBytes)) {
     R_jump();
   }
   memcpy(atom->bytes, bytes, numberOfBytes);
@@ -290,8 +291,16 @@ R_Atom_getNumberOfBytes
 { return self->numberOfBytes; }
 
 R_SizeValue
-R_Atom_getHashValue
+R_Atom_getHash
   (
     R_AtomValue self
   )
 { return self->hash; }
+
+R_BooleanValue
+R_Atom_isEqualTo
+  (
+    R_AtomValue self,
+    R_AtomValue other
+  )
+{ return self == other; }

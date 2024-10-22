@@ -15,7 +15,7 @@
 
 // Last modified: 2024-08-27
 
-#if !defined(R_TYPENAMEW_H_INCLUDED)
+#if !defined(R_TYPENAMES_H_INCLUDED)
 #define R_TYPENAMES_H_INCLUDED
 
 #include "R/Configure.h"
@@ -26,7 +26,7 @@
 
 // An type name is a a string of the form
 // <code>
-// key : &lt;name&gt;('.'&lt;name&gt;)
+// typeName : &lt;name&gt;('.'&lt;name&gt;)
 // </code>
 // where
 // <code>
@@ -86,5 +86,10 @@ R_TypeName_visit
   (
     R_TypeNameValue typeNameValue
   );  
+
+R_SizeValue
+R_TypeNames_getSize
+  (
+  );
 
 #endif // R_TYPENAME_H_INCLUDED

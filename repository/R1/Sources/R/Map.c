@@ -17,10 +17,10 @@
 
 #include "R/Map.h"
 
-#include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/Object.h"
-
+#include "R/Status.h"
+#include "R/UnmanagedMemory.h"
 // memcmp, memcpy, memmove
 #include <string.h>
 // fprintf, stderr
@@ -100,7 +100,7 @@ R_Map_ensureFreeCapacity
   }
   Node** oldBuckets = self->buckets;
   Node** newBuckets = NULL;
-  if (!R_Arms_allocateUnmanaged_nojump((void**)&newBuckets, sizeof(Node*) * newCapacity)) {
+  if (!R_allocateUnmanaged_nojump((void**)&newBuckets, sizeof(Node*) * newCapacity)) {
     R_jump();
   }
   for (R_SizeValue i = 0, n = newCapacity; i < n; ++i) {
@@ -115,7 +115,7 @@ R_Map_ensureFreeCapacity
       newBuckets[j] = node;
     }
   }
-  R_Arms_deallocateUnmanaged_nojump(oldBuckets);
+  R_deallocateUnmanaged_nojump(oldBuckets);
   self->buckets = newBuckets;
   self->capacity = newCapacity;
 }
@@ -149,12 +149,12 @@ R_Map_destruct
     while (self->buckets[i]) {
       Node* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      R_Arms_deallocateUnmanaged_nojump(node);
+      R_deallocateUnmanaged_nojump(node);
       node = NULL;
     }
   }
   if (self->buckets) {
-    R_Arms_deallocateUnmanaged_nojump(self->buckets);
+    R_deallocateUnmanaged_nojump(self->buckets);
     self->buckets = NULL;
   }
 }
@@ -192,7 +192,7 @@ R_Map_construct
   self->capacity = 0;
   self->size = 0;
   self->capacity = g_minimumCapacity;
-  if (!R_Arms_allocateUnmanaged_nojump((void**)&self->buckets, sizeof(Node*) * self->capacity)) {
+  if (!R_allocateUnmanaged_nojump((void**)&self->buckets, sizeof(Node*) * self->capacity)) {
     R_jump();
   }
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
@@ -221,7 +221,7 @@ R_Map_clear
     while (self->buckets[i]) {
       Node* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      R_Arms_deallocateUnmanaged_nojump(node);
+      R_deallocateUnmanaged_nojump(node);
       node = NULL;
     }
   }

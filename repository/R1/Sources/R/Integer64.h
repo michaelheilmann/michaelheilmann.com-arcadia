@@ -13,12 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-27
+// Last modified: 2024-10-27
 
 #if !defined(R_INTEGER64VALUE_H_INCLUDED)
 #define R_INTEGER64VALUE_H_INCLUDED
 
 #include <inttypes.h>
+typedef void R_Type;
 
 typedef int64_t R_Integer64Value;
 
@@ -33,5 +34,10 @@ static_assert(R_Integer64Value_NumberOfBytes == 8, "R.Integer64Value.NumberOfBye
 #define R_Integer64Value_NumberOfBits (R_Integer64Value_NumberOfBytes * 8)
 
 #define R_Integer64Value_Literal(x) INT64_C(x)
+
+R_Type*
+_R_Integer64Value_getType
+  (
+  );
 
 #endif // R_INTEGER64VALUE_H_INCLUDED

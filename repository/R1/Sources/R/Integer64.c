@@ -13,6 +13,29 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-22
+// Last modified: 2024-10-27
 
-#include "Cilc/TokenType.h"
+#include "R/Integer64.h"
+
+#include "R/Types.h"
+
+static R_Type* g_type = NULL;
+
+static void
+typeDestructing
+  (
+    void* context
+  )
+{ g_type = NULL; }
+
+R_Type*
+_R_Integer64Value_getType
+  (
+  )
+{
+  if (!g_type) {
+    R_registerIntegerType(u8"R.Integer64", sizeof("R.Integer64") - 1, &typeDestructing);
+    g_type = R_getType(u8"R.Integer64", sizeof("R.Integer64") - 1);
+  }
+  return g_type;
+}

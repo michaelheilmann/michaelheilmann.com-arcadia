@@ -15,7 +15,7 @@
 
 // Last modified: 2024-10-14
 
-#include "Cilc/StringTable.h"
+#include "Cil/StringTable.h"
 
 // memcmp, memcpy, memmove
 #include <string.h>
@@ -95,7 +95,7 @@ Cil_StringTable_visit
 }
 
 static void
-Cil_StringTable_finalize
+Cil_StringTable_destruct
   (
     Cil_StringTable* self
   )
@@ -109,7 +109,7 @@ Cil_StringTable_finalize
   }
 }
 
-Rex_defineObjectType("Cil.StringTable", Cil_StringTable, "R.Object", R_Object, &Cil_StringTable_visit, &Cil_StringTable_finalize);
+Rex_defineObjectType("Cil.StringTable", Cil_StringTable, "R.Object", R_Object, &Cil_StringTable_visit, &Cil_StringTable_destruct);
 
 void
 Cil_StringTable_construct

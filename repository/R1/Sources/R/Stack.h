@@ -104,7 +104,7 @@ static inline R_BooleanValue R_Stack_isEmpty(R_Stack* self) {
     );
 
 Define(Boolean, boolean)
-Define(ForeignFunctionReference, foreignFunctionReference)
+Define(ForeignProcedure, foreignProcedure)
 Define(Integer8, integer8)
 Define(Integer16, integer16)
 Define(Integer32, integer32)

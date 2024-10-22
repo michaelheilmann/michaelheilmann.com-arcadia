@@ -13,25 +13,32 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-06
+// Last modified: 2024-10-27
 
-#if !defined(R_FOREIGNFUNCTION_H_INCLUDED)
-#define R_FOREIGNFUNCTION_H_INCLUDED
+#if !defined(R_FOREIGNPROCEDURE_H_INCLUDED)
+#define R_FOREIGNPROCEDURE_H_INCLUDED
 
-typedef void (*R_ForeignFunctionReferenceValue)();
+typedef void R_Type;
 
-#define R_ForeignFunctionReferenceValue_Null (NULL)
+typedef void (*R_ForeignProcedureValue)();
 
-#define R_ForeignFunctionReferenceValue_NumberOfBytes (sizeof(void*))
+#define R_ForeignProcedureValue_Null (NULL)
+
+#define R_ForeignProcedureValue_NumberOfBytes (sizeof(void*))
 
 #if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X64
-static_assert(R_ForeignFunctionReferenceValue_NumberOfBytes == 8, "R.ForeignFunctionReferenceValue.NumberOfBytes must be 8");
+  static_assert(R_ForeignProcedureValue_NumberOfBytes == 8, "R.ForeignProcedureValue.NumberOfBytes must be 8");
 #elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X86
-static_assert(R_ForeignFunctionReferenceValue_NumberOfBytes == 4, "R.ForeignFunctionReferenceValue.NumberOfBytes must be 4");
+  static_assert(R_ForeignProcedureValue_NumberOfBytes == 4, "R.ForeignProcedureValue.NumberOfBytes must be 4");
 #else
-#error("invalid/unknown value for R_Configuration_InstructionSetArchitecture")
+  #error("invalid/unknown value for R_Configuration_InstructionSetArchitecture")
 #endif
 
-#define R_ForeignFunctionReferenceValue_NumberOfBits (R_ForeignFunctionReferenceValue_NumberOfBytes * 8)
+#define R_ForeignProcedureValue_NumberOfBits (R_ForeignProcedureValue_NumberOfBytes * 8)
 
-#endif // R_FOREIGNFUNCTION_H_INCLUDED
+R_Type*
+_R_ForeignProcedureValue_getType
+  (
+  );
+
+#endif // R_FOREIGNPROCEDURE_H_INCLUDED

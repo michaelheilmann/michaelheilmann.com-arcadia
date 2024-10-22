@@ -13,12 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-25
+// Last modified: 2024-10-27
 
 #if !defined(R_INTEGER8VALUE_H_INCLUDED)
 #define R_INTEGER8VALUE_H_INCLUDED
 
 #include <inttypes.h>
+typedef void R_Type;
 
 typedef int8_t R_Integer8Value;
 
@@ -33,5 +34,10 @@ static_assert(R_Integer8Value_NumberOfBytes == 1, "R.Integer8Value.NumberOfBytes
 #define R_Integer8Value_NumberOfBits (R_Integer8Value_NumberOfBytes * 8)
 
 #define R_Integer8Value_Literal(x) INT8_C(x)
+
+R_Type*
+_R_Integer8Value_getType
+  (
+  );
 
 #endif // R_INTEGER8VALUE_H_INCLUDED

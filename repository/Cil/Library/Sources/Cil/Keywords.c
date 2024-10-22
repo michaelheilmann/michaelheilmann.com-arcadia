@@ -15,7 +15,7 @@
 
 // Last modified: 2024-09-22
 
-#include "Cilc/Keywords.h"
+#include "Cil/Keywords.h"
 
 typedef struct Keyword Keyword;
 

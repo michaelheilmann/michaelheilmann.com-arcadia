@@ -69,4 +69,24 @@ R_FileSystem_createDirectory
     R_FilePath* path
   );
 
+R_BooleanValue
+R_FileSystem_regularFileExists
+  (
+    R_FileSystem* self,
+    R_FilePath* path
+  );
+
+R_BooleanValue
+R_FileSystem_directoryFileExists
+  (
+    R_FileSystem* self,
+    R_FilePath* path
+  );
+
+R_FilePath*
+R_FileSystem_getWorkingDirectory
+  (
+    R_FileSystem* self
+  );
+
 #endif // R_FILESYSTEM_H_INCLUDED

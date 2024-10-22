@@ -18,18 +18,53 @@
 #include <stdlib.h>
 #include <string.h>
 #include "R.h"
-#include "Cilc/Keywords.h"
-#include "Cilc/StringTable.h"
-#include "Cilc/Scanner.h"
-#include "Cilc/Parser.h"
-#include "Cilc/Ast.h"
+#include "Cil/Parser.h"
+#include "Cil/Ast.h"
 
 static void
-testParser1
+testProcedureDefinitions
   (
   )
 {
   static const char* input =
+    u8"procedure MyProcedure {\n"
+    u8"}\n"
+    u8"procedure MyProcedure (a, b) {\n"
+    u8"}\n"
+    ;
+  Cil_Parser* parser = Cil_Parser_create();
+  Cil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
+  Cil_Parser_run(parser);
+}
+
+static void
+testClassDefinitions
+(
+) {
+  static const char* input =
+    u8"class MyClassB extends MyClassA {\n"
+    u8"  constructor {\n"
+    u8"  }\n"
+    u8"  constructor(a,b) {\n"
+    u8"  }\n"
+    u8"  method MyMethodA {\n"
+    u8"  }\n"
+    u8"  method MyMethodB(a, b) {\n"
+    u8"  }\n"
+    u8"}\n"
+    ;
+  Cil_Parser* parser = Cil_Parser_create();
+  Cil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
+  Cil_Parser_run(parser);
+}
+
+static void
+testStatements
+  (
+  )
+{
+  static const char* input =
+    u8"procedure hello {\n"
     u8"a = \"Hello, \"\n"
     u8"b = \"World!\n\"\n"
     u8"c = concatenate a, b\n"
@@ -59,11 +94,35 @@ testParser1
     u8"c = divide a, b\n"
     u8"c = divide 7, b\n"
     u8"c = divide a, 7\n"
+    u8"\n"
+    u8"a = 7\n"
+    u8"c = negate a\n"
+    u8"c = negate 7\n"
+    u8"c = negate 5\n"
+    u8"\n"
+    u8"a = true\n"
+    u8"b = false\n"
+    u8"c = and a, b\n"
+    u8"c = and true, b\n"
+    u8"c = and b, false\n"
+    u8"\n"
+    u8"a = true\n"
+    u8"b = false\n"
+    u8"c = or a, b\n"
+    u8"c = or true, b\n"
+    u8"c = or b, false\n"
+    u8"\n"
+    u8"a = true\n"
+    u8"c = not a\n"
+    u8"c = not true\n"
+    u8"c = not false\n"
+    u8"\n"
+    u8"return c\n"
+    u8"}\n"
     ;
   Cil_Parser* parser = Cil_Parser_create();
   Cil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
   Cil_Parser_run(parser);
-
 }
 
 void
@@ -73,7 +132,9 @@ main1
     char** argv
   )
 {
-  testParser1();
+  testProcedureDefinitions();
+  testClassDefinitions();
+  testStatements();
 }
 
 int

@@ -22,7 +22,7 @@
 
 #include "R/Boolean.h"
 
-#include "R/ForeignFunctionReference.h"
+#include "R/ForeignProcedure.h"
 
 #include "R/Integer16.h"
 #include "R/Integer32.h"
@@ -43,11 +43,9 @@
 
 #include "R/Void.h"
 
-#define R_ValueTag_Atom (1)
-
 #define R_ValueTag_Boolean (2)
 
-#define R_ValueTag_ForeignFunctionReference (3)
+#define R_ValueTag_ForeignProcedure (3)
 
 #define R_ValueTag_Integer16 (4)
 #define R_ValueTag_Integer32 (5)
@@ -69,18 +67,16 @@
 // The tag for type "Void" must be 0.
 #define R_ValueTag_Void (0)
 
-typedef struct R_Value{
+typedef struct R_Value {
   uint8_t tag;
   union {
 
   #define Define(Suffix,  Prefix) \
     R_##Suffix##Value Prefix##Value;
 
-    Define(Atom, atom)
-
     Define(Boolean, boolean)
 
-    Define(ForeignFunctionReference, foreignFunctionReference)
+    Define(ForeignProcedure, foreignProcedure)
     
     Define(Integer16, integer16)
     Define(Integer32, integer32)
@@ -138,11 +134,9 @@ R_Value_getTag
     value->Prefix##Value = Prefix##Value; \
   }
 
-Define(Atom, atom)
-
 Define(Boolean, boolean)
 
-Define(ForeignFunctionReference, foreignFunctionReference)
+Define(ForeignProcedure, foreignProcedure)
 
 Define(Integer16, integer16)
 Define(Integer32, integer32)
@@ -169,6 +163,25 @@ void
 R_Value_visit
   (
     R_Value* self
+  );
+
+R_Type*
+R_Value_getType
+  (
+    R_Value const* self
+  );
+
+R_BooleanValue
+R_Value_isEqualTo
+  (
+    R_Value const* self,
+    R_Value const* other
+  );
+
+R_SizeValue
+R_Value_hash
+  (
+    R_Value const* self
   );
 
 #endif // R_VALUE_H_INCLUDED

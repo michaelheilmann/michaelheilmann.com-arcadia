@@ -18,9 +18,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "R.h"
-#include "Cilc/StringTable.h"
-#include "Cilc/Scanner.h"
-#include "Cilc/Parser.h"
+#include "Cil/StringTable.h"
+#include "Cil/Scanner.h"
+#include "Cil/Parser.h"
 
 void
 main1
@@ -46,9 +46,6 @@ main
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    _Cil_Scanner_getType();
-    _Cil_StringTable_getType();
-    _Cil_Parser_getType();
     main1(argc, argv);
     R_popJumpTarget();
   }

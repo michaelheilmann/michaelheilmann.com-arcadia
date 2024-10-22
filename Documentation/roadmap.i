@@ -8,19 +8,14 @@
   <header></header>
   <main>
     <h1>Roadmap</h1>
+    @{include("./Roadmap/Milestone10.i")}
     @{include("./Roadmap/Milestone9.i")}
     @{include("./Roadmap/Milestone8.i")}
-    @{include("./Roadmap/Milestone7.i")}
-    @{include("./Roadmap/Milestone6.i")}
-    @{include("./Roadmap/Milestone5.i")}
-    @{include("./Roadmap/Milestone4.i")}
-    @{include("./Roadmap/Milestone3.i")}
-    @{include("./Roadmap/Milestone2.i")}
-    @{include("./Roadmap/Milestone1.i")}
-
+    <h2>Archive of completed milestones</h2>
+    <p>You can review completed milestones in the <a href="https://michaelheilmann.com/roadmap-archive">roadmap archive</a>.</p>
   </main>
   <footer>
-    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 6 October 2024.</span>
+    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 20 October 2024.</span>
   </footer>
 </body>
 </html>

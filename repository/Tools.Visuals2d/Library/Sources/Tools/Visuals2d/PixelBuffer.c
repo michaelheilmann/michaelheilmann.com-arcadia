@@ -56,13 +56,13 @@ ENCODE_RGBA
 }
 
 static void
-PixelBuffer_finalize
+PixelBuffer_destruct
   (
     PixelBuffer* self
   );
 
 static void
-PixelBuffer_finalize
+PixelBuffer_destruct
   (
     PixelBuffer* self
   )
@@ -73,7 +73,7 @@ PixelBuffer_finalize
   }
 }
 
-Rex_defineObjectType("PixelBuffer", PixelBuffer, "R.Object", R_Object, NULL, &PixelBuffer_finalize);
+Rex_defineObjectType("PixelBuffer", PixelBuffer, "R.Object", R_Object, NULL, &PixelBuffer_destruct);
 
 R_Natural8Value
 PixelBuffer_getFormat

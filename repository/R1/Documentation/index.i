@@ -3,7 +3,7 @@
 @{include("2.further-references.i")}
 @{include("3.documentation.i")}
 @{include("3.documentation.1.types-and-values.1.boolean.i")}
-@{include("3.documentation.1.types-and-values.2.foreignfunctionreference.i")}
+@{include("3.documentation.1.types-and-values.2.foreignprocedure.i")}
 @{include("3.documentation.1.types-and-values.3.integer.i")}
 @{include("3.documentation.1.types-and-values.4.natural.i")}
 @{include("3.documentation.1.types-and-values.5.objectreference.i")}

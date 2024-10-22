@@ -239,7 +239,7 @@ onDirective
 }
 
 static void
-FileContext_finalize
+FileContext_destruct
   (
     FileContext* self
   )
@@ -256,7 +256,7 @@ FileContext_visit
   R_Object_visit(self->source);
 }
 
-Rex_defineObjectType("Tools.TemplateEngine.FileContext", FileContext, "R.Object", R_Object, &FileContext_visit, &FileContext_finalize);
+Rex_defineObjectType("Tools.TemplateEngine.FileContext", FileContext, "R.Object", R_Object, &FileContext_visit, &FileContext_destruct);
 
 void
 FileContext_construct

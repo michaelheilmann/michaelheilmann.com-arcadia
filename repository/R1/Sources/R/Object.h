@@ -19,6 +19,7 @@
 #define R_OBJECT_H_INCLUDED
 
 #include "R/Types.h"
+typedef struct R_Value R_Value;
 
 typedef struct R_Object R_Object;
 R_Type* \
@@ -60,21 +61,9 @@ struct R_Object {
     if (!g_##cName##_type) { \
       R_Type* parentType = _##cParentName##_getType(); \
       R_registerObjectType(u8##cilName, sizeof(u8##cilName) - 1, sizeof(cName), parentType, &_##cName##_typeDestructing, cVisitFunctionPointer, cDestructFunctionPointer); \
-      g_##cName##_type = R_getObjectType(u8##cilName, sizeof(u8##cilName) - 1); \
+      g_##cName##_type = R_getType(u8##cilName, sizeof(u8##cilName) - 1); \
     } \
     return g_##cName##_type; \
-  } \
-  \
-  void \
-  _##cName##_ensureTypeIsRegistered \
-    ( \
-    ) \
-  { \
-    if (!g_##cName##_type) { \
-      R_Type* parentType = R_getObjectType(u8##cilParentName, sizeof(u8##cilParentName) - 1); \
-      R_registerObjectType(u8##cilName, sizeof(u8##cilName) - 1, sizeof(cName), parentType, &_##cName##_typeDestructing, cVisitFunctionPointer, cDestructFunctionPointer); \
-      g_##cName##_type = R_getObjectType(u8##cilName, sizeof(u8##cilName) - 1); \
-    } \
   }
 
 void
@@ -112,6 +101,19 @@ R_Type*
 R_Object_getType
   (
     void* self
+  );
+
+R_SizeValue
+R_Object_getHash
+  (
+    R_Object* self
+  );
+
+R_BooleanValue
+R_Object_isEqualTo
+  (
+    R_Object* self,
+    R_Value const* other
   );
 
 #endif // R_OBJECT_H_INCLUDED

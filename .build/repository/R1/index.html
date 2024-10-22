@@ -109,33 +109,33 @@ typedef <my-mv>implementation detail</my-mv> R_BooleanValue
 </code><p>
 <p>is a value of the type denoting logically <code>false</code>. It converts to <code>0</code> in arithmetic expressions.</p>
 
-<h3 id="foreignfunctionreference-type">Foreign Function Reference Type</h3>
+<h3 id="foreignprocedure-type">Foreign Procedure Type</h3>
 <p>
-R provides the <scode>R_ForeignFunctionReferenceValue</code> type.
+R provides the <scode>R_ForeignProcedureValue</code> type.
 </p>
 <p><code>
-typedef <my-mv>implementation detail</my-mv> R_ForeignFunctionReferenceValue;
+typedef <my-mv>implementation detail</my-mv> R_ForeignProcedureValue;
 </code></p>
 <p>
 which is a pointer to a function adhering to the calling conventions for C functions of the runtime.
 </p>
 
 <p>
-A valid value of the <code>R_ForeignFunctionReferenceValue</code> is the null value
+A valid value of the <code>R_ForeignProcedureValue</code> is the null value
 </p>
 <p><code>
-#define R_ForeignFunctionReferenceValue_Null <my-mv>implementation detail</my-mv>
+#define R_ForeignProcedureValue_Null <my-mv>implementation detail</my-mv>
 </code></p>
 
 <p><code>
-#define R_ForeignFunctionReferenceValue_NumberOfBits <my-mv>implementation detail</my-mv>
+#define R_ForeignProcedureValue_NumberOfBits <my-mv>implementation detail</my-mv>
 </code><p>
 <p>denotes the number of Bits of the type.</p>
 
 <p><code>
-#define R_ForeignFunctionReferenceValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+#define R_ForeignProcedureValue_NumberOfBytes <my-mv>implementation detail</my-mv>
 </code><p>
-<p>denotes the number of Bytes of the type which is usually <code>R_ForeignFunctionReferenceValue_NumberOfBits</code> divided by 8.</p>
+<p>denotes the number of Bytes of the type which is usually <code>R_ForeignProcedureValue_NumberOfBits</code> divided by 8.</p>
 
 <h3 id="integer-types">Integer Types</h3>
 <p>
@@ -645,6 +645,8 @@ R_SizeValue R_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 
 <table>
 <tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>BooleanValue</code>  </td><td><code>R_BooleanValue</code></td></tr>
+<tr><td><code>ForeignProcedureValue</code>  </td><td><code>R_ForeignProcedureValue</code></td></tr>
 <tr><td><code>Integer8Value</code>  </td><td><code>R_Integer8Value</code></td></tr>
 <tr><td><code>Integer16Value</code> </td><td><code>R_Integer16Value</code></td></tr>
 <tr><td><code>Integer32Value</code> </td><td><code>R_Integer32Value</code></td></tr>
@@ -653,6 +655,8 @@ R_SizeValue R_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 <tr><td><code>Natural16Value</code> </td><td><code>R_Natural16Value</code></td></tr>
 <tr><td><code>Natural32Value</code> </td><td><code>R_Natural32Value</code></td></tr>
 <tr><td><code>Natural64Value</code> </td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>Real32Value</code>    </td><td><code>R_Real32Value</code></td></tr>
+<tr><td><code>Real64Value</code>    </td><td><code>R_Real64Value</code></td></tr>
 <tr><td><code>SizeValue</code>      </td><td><code>R_SizeValue</code></td></tr>
 <tr><td><code>VoidValue</code>      </td><td><code>R_VoidValue</code></td></tr>
 </table>

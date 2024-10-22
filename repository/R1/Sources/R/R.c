@@ -30,54 +30,6 @@ typedef uint32_t ReferenceCount;
 
 static ReferenceCount g_referenceCount = 0;
 
-#define On(Category, cilName, cName) \
-    static R_Type* g_##cName##_type = NULL; \
-    static void \
-    _##cName##_typeDestructing \
-      ( \
-        void* context \
-      ) \
-    { \
-      g_##cName##_type = NULL; \
-    }
-
-On(Boolean, "R.Boolean", R_BooleanValue);
-On(Integer, "R.Integer8", R_Integer8Value);
-On(Integer, "R.Integer16", R_Integer16Value);
-On(Integer, "R.Integer32", R_Integer32Value);
-On(Integer, "R.Integer64", R_Integer64Value);
-On(Natural, "R.Natural8", R_Natural8Value);
-On(Natural, "R.Natural16", R_Natural16Value);
-On(Natural, "R.Natural32", R_Natural32Value);
-On(Natural, "R.Natural64", R_Natural64Value);
-On(Size, "R.Size", R_SizeValue);
-On(Void, "R.Void", R_VoidValue);
-
-#undef On
-
-static void
-registerTypes
-  (
-  )
-{ 
-  #define On(Category, cilName, cName) \
-    R_register##Category##Type(cilName, sizeof(cilName) - 1, _##cName##_typeDestructing);
-
-  On(Boolean, "R.Boolean", R_BooleanValue);
-  On(Integer, "R.Integer8", R_Integer8Value);
-  On(Integer, "R.Integer16", R_Integer16Value);
-  On(Integer, "R.Integer32", R_Integer32Value);
-  On(Integer, "R.Integer64", R_Integer64Value);
-  On(Natural, "R.Natural8", R_Natural8Value);
-  On(Natural, "R.Natural16", R_Natural16Value);
-  On(Natural, "R.Natural32", R_Natural32Value);
-  On(Natural, "R.Natural64", R_Natural64Value);
-  On(Size, "R.Size", R_SizeValue);
-  On(Void, "R.Void", R_VoidValue);
-
-#undef On
-}
-
 R_Status
 R_startup
   (
@@ -120,7 +72,6 @@ R_startup
 
     R_pushJumpTarget(&jumpTarget);
     if (R_JumpTarget_save(&jumpTarget)) {
-      registerTypes();
       _R_Object_getType();
       R_popJumpTarget();
     } else {

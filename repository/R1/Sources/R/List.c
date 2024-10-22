@@ -17,10 +17,10 @@
 
 #include "R/List.h"
 
-#include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/Object.h"
-
+#include "R/Status.h"
+#include "R/UnmanagedMemory.h"
 // memcmp, memcpy, memmove
 #include <string.h>
 // fprintf, stderr
@@ -82,7 +82,7 @@ R_List_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  if (!R_Arms_reallocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * newCapacity)) {
+  if (!R_reallocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * newCapacity)) {
     R_jump();
   }
   self->capacity = newCapacity;
@@ -114,7 +114,7 @@ R_List_destruct
   )
 {
   if (self->elements) {
-    R_Arms_deallocateUnmanaged_nojump(self->elements);
+    R_deallocateUnmanaged_nojump(self->elements);
     self->elements = NULL;
   }
 }
@@ -147,7 +147,7 @@ R_List_construct
   self->capacity = 0;
   self->size = 0;
   self->capacity = g_minimumCapacity;
-  if (!R_Arms_allocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
+  if (!R_allocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
     R_jump();
   }
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
@@ -326,7 +326,7 @@ R_List_remove
   }
 
 Define(Boolean, boolean)
-Define(ForeignFunctionReference, foreignFunctionReference)
+Define(ForeignProcedure, foreignProcedure)
 Define(Integer8, integer8)
 Define(Integer16, integer16)
 Define(Integer32, integer32)

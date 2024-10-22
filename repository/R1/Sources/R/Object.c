@@ -26,6 +26,7 @@
 #include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/TypeNames.h"
+#include "R/Value.h"
 
 #define ObjectTypeName "R.Object"
 
@@ -131,7 +132,7 @@ _R_Object_getType
   }
   if (!g__R_Object_type) {
     R_registerObjectType(u8"R.Object", sizeof(u8"R.Object") - 1, sizeof(R_Object), NULL, &_R_Object_typeDestructing, NULL, NULL);
-    g__R_Object_type = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+    g__R_Object_type = R_getType(u8"R.Object", sizeof(u8"R.Object") - 1);
   }
   return g__R_Object_type;
 }
@@ -142,7 +143,7 @@ R_Object_construct
     R_Object* self
   )
 { 
-  R_Type* type = R_getObjectType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_Type* type = R_getType(u8"R.Object", sizeof(u8"R.Object") - 1);
   R_Object_setType(self, type);
 }
 
@@ -174,4 +175,25 @@ R_Object_getType
 {
   ObjectTag* objectTag = ((ObjectTag*)self) - 1;
   return objectTag->type;
+}
+
+R_SizeValue
+R_Object_getHash
+  ( 
+    R_Object* self
+  )
+{ return (R_SizeValue)(uintptr_t)self; }
+
+R_BooleanValue
+R_Object_isEqualTo
+  (
+    R_Object* self,
+    R_Value const* other
+  )
+{
+  if (R_ValueTag_ObjectReference == other->tag) {
+    return self == other->objectReferenceValue;
+  } else {
+    return R_BooleanValue_False;
+  }
 }

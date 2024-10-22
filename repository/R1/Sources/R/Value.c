@@ -17,7 +17,13 @@
 
 #include "R/Value.h"
 
+#include "R/hash.h"
 #include "R/Object.h"
+// exit, EXIT_FAILURE
+#include <stdlib.h>
+// fprintf, stderr
+#include <stdio.h>
+
 
 void
 R_Value_visit
@@ -27,7 +33,183 @@ R_Value_visit
 {
   if (self->tag == R_ValueTag_ObjectReference) {
     R_Object_visit(self->objectReferenceValue);
-  } else if (self->tag == R_ValueTag_Atom) {
-    R_Atom_visit(self->atomValue);
   }
+}
+
+R_Type*
+R_Value_getType
+  (
+    R_Value const* self
+  )
+{ 
+  switch (self->tag) {
+    case R_ValueTag_Boolean: {
+      return _R_BooleanValue_getType();
+    } break;
+    case R_ValueTag_ForeignProcedure: {
+      return _R_ForeignProcedureValue_getType();
+    } break;
+    case R_ValueTag_Integer16: {
+      return _R_Integer16Value_getType();
+    } break;
+    case R_ValueTag_Integer32: {
+      return _R_Integer32Value_getType();
+    } break;
+    case R_ValueTag_Integer64: {
+      return _R_Integer64Value_getType();
+    } break;
+    case R_ValueTag_Integer8: {
+      return _R_Integer8Value_getType();
+    } break;
+    case R_ValueTag_Natural16: {
+      return _R_Natural16Value_getType();
+    } break;
+    case R_ValueTag_Natural32: {
+      return _R_Natural32Value_getType();
+    } break;
+    case R_ValueTag_Natural64: {
+      return _R_Natural64Value_getType();
+    } break;
+    case R_ValueTag_Natural8: {
+      return _R_Natural8Value_getType();
+    } break;
+    case R_ValueTag_ObjectReference: {
+      return R_Object_getType(self->objectReferenceValue);
+    } break;
+    case R_ValueTag_Real32: {
+      return _R_Real32Value_getType();
+    } break;
+    case R_ValueTag_Real64: {
+      return _R_Natural64Value_getType();
+    } break;
+    case R_ValueTag_Size: {
+      return _R_SizeValue_getType();
+    } break;
+    case R_ValueTag_Void: {
+      return _R_VoidValue_getType();
+    } break;
+    default: {
+      fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
+}
+
+R_BooleanValue
+R_Value_isEqualTo
+  (
+    R_Value const* self,
+    R_Value const* other 
+  )
+{
+  switch (self->tag) {
+    case R_ValueTag_Boolean: {
+      return R_hashBooleanValue(self->booleanValue);
+    } break;
+    case R_ValueTag_ForeignProcedure: {
+      return R_hashForeignProcedureValue(self->foreignProcedureValue);
+    } break;
+    case R_ValueTag_Integer16: {
+      return R_hashInteger16Value(self->integer16Value);
+    } break;
+    case R_ValueTag_Integer32: {
+      return R_hashInteger32Value(self->integer32Value);
+    } break;
+    case R_ValueTag_Integer64: {
+      return R_hashInteger64Value(self->integer64Value);
+    } break;
+    case R_ValueTag_Integer8: {
+      return R_hashInteger8Value(self->integer8Value);
+    } break;
+    case R_ValueTag_Natural16: {
+      return R_hashNatural16Value(self->natural16Value);
+    } break;
+    case R_ValueTag_Natural32: {
+      return R_hashNatural32Value(self->natural32Value);
+    } break;
+    case R_ValueTag_Natural64: {
+      return R_hashNatural64Value(self->natural64Value);
+    } break;
+    case R_ValueTag_Natural8: {
+      return R_hashNatural8Value(self->natural8Value);
+    } break;
+    case R_ValueTag_ObjectReference: {
+      return R_Object_getHash(self->objectReferenceValue);
+    } break;
+    case R_ValueTag_Real32: {
+      return R_hashReal32Value(self->real32Value);
+    } break;
+    case R_ValueTag_Real64: {
+      return R_hashReal64Value(self->real64Value);
+    } break;
+    case R_ValueTag_Size: {
+      return R_hashSizeValue(self->sizeValue);
+    } break;
+    case R_ValueTag_Void: {
+      return R_hashVoidValue(self->voidValue);
+    } break;
+    default: {
+      fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
+}
+
+R_SizeValue
+R_Value_hash
+  (
+    R_Value const* self
+  )
+{
+  switch (self->tag) {
+    case R_ValueTag_Boolean: {
+      return R_hashBooleanValue(self->booleanValue);
+    } break;
+    case R_ValueTag_ForeignProcedure: {
+      return R_hashForeignProcedureValue(self->foreignProcedureValue);
+    } break;
+    case R_ValueTag_Integer16: {
+      return R_hashInteger16Value(self->integer16Value);
+    } break;
+    case R_ValueTag_Integer32: {
+      return R_hashInteger32Value(self->integer32Value);
+    } break;
+    case R_ValueTag_Integer64: {
+      return R_hashInteger64Value(self->integer64Value);
+    } break;
+    case R_ValueTag_Integer8: {
+      return R_hashInteger8Value(self->integer8Value);
+    } break;
+    case R_ValueTag_Natural16: {
+      return R_hashNatural16Value(self->natural16Value);
+    } break;
+    case R_ValueTag_Natural32: {
+      return R_hashNatural32Value(self->natural32Value);
+    } break;
+    case R_ValueTag_Natural64: {
+      return R_hashNatural64Value(self->natural64Value);
+    } break;
+    case R_ValueTag_Natural8: {
+      return R_hashNatural8Value(self->natural8Value);
+    } break;
+    case R_ValueTag_ObjectReference: {
+      return R_Object_getHash(self->objectReferenceValue);
+    } break;
+    case R_ValueTag_Real32: {
+      return R_hashReal32Value(self->real32Value);
+    } break;
+    case R_ValueTag_Real64: {
+      return R_hashReal64Value(self->real64Value);
+    } break;
+    case R_ValueTag_Size: {
+      return R_hashSizeValue(self->sizeValue);
+    } break;
+    case R_ValueTag_Void: {
+      return R_hashVoidValue(self->voidValue);
+    } break;
+    default: {
+      fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
 }

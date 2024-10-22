@@ -13,12 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-25
+// Last modified: 2024-10-27
 
 #if !defined(R_VOIDVALUE_H_INCLUDED)
 #define R_VOIDVALUE_H_INCLUDED
 
-#include <stddef.h>
+#include <inttypes.h>
+typedef void R_Type;
 
 typedef uint8_t R_VoidValue;
 
@@ -27,5 +28,10 @@ typedef uint8_t R_VoidValue;
 #define R_VoidValue_NumberOfBytes (sizeof(uint8_t))
 
 #define R_VoidValue_NumberOfBits (R_VoidValue_NumberOfBytes * 8)
+
+R_Type*
+_R_VoidValue_getType
+  (
+  );
 
 #endif // R_VOIDVALUE_H_INCLUDED

@@ -18,7 +18,7 @@
 #if !defined(CIL_SCANNER_H_INCLUDED)
 #define CIL_SCANNER_H_INCLUDED
 
-#include "Cilc/TokenType.h"
+#include "Cil/TokenType.h"
 
 /// @code
 /// class Cil.Scanner

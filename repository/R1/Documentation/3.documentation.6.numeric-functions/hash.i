@@ -7,6 +7,8 @@ R_SizeValue R_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 
 <table>
 <tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>BooleanValue</code>  </td><td><code>R_BooleanValue</code></td></tr>
+<tr><td><code>ForeignProcedureValue</code>  </td><td><code>R_ForeignProcedureValue</code></td></tr>
 <tr><td><code>Integer8Value</code>  </td><td><code>R_Integer8Value</code></td></tr>
 <tr><td><code>Integer16Value</code> </td><td><code>R_Integer16Value</code></td></tr>
 <tr><td><code>Integer32Value</code> </td><td><code>R_Integer32Value</code></td></tr>
@@ -15,6 +17,8 @@ R_SizeValue R_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 <tr><td><code>Natural16Value</code> </td><td><code>R_Natural16Value</code></td></tr>
 <tr><td><code>Natural32Value</code> </td><td><code>R_Natural32Value</code></td></tr>
 <tr><td><code>Natural64Value</code> </td><td><code>R_Natural64Value</code></td></tr>
+<tr><td><code>Real32Value</code>    </td><td><code>R_Real32Value</code></td></tr>
+<tr><td><code>Real64Value</code>    </td><td><code>R_Real64Value</code></td></tr>
 <tr><td><code>SizeValue</code>      </td><td><code>R_SizeValue</code></td></tr>
 <tr><td><code>VoidValue</code>      </td><td><code>R_VoidValue</code></td></tr>
 </table>

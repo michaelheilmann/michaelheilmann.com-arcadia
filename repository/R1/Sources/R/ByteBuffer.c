@@ -17,33 +17,34 @@
 
 #include "ByteBuffer.h"
 
-#include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/Object.h"
+#include "R/Status.h"
+#include "R/UnmanagedMemory.h"
 // memcmp, memcpy, memmove
 #include <string.h>
 // fprintf, stderr
 #include <stdio.h>
 
 static void
-R_ByteBuffer_finalize
+R_ByteBuffer_destruct
   (
     R_ByteBuffer* self
   );
 
 static void
-R_ByteBuffer_finalize
+R_ByteBuffer_destruct
   (
     R_ByteBuffer* self
   )
 {
   if (self->p) {
-    R_Arms_deallocateUnmanaged_nojump(self->p);
+    R_deallocateUnmanaged_nojump(self->p);
     self->p = NULL;
   }
 }
 
-Rex_defineObjectType("R.ByteBuffer", R_ByteBuffer, "R.Object", R_Object, NULL, &R_ByteBuffer_finalize);
+Rex_defineObjectType("R.ByteBuffer", R_ByteBuffer, "R.Object", R_Object, NULL, &R_ByteBuffer_destruct);
 
 void
 R_ByteBuffer_construct
@@ -56,7 +57,7 @@ R_ByteBuffer_construct
   self->p = NULL;
   self->sz = 0;
   self->cp = 0;
-  if (!R_Arms_allocateUnmanaged_nojump(&self->p, 0)) {
+  if (!R_allocateUnmanaged_nojump(&self->p, 0)) {
     R_jump();
   }
   R_Object_setType((R_Object*)self, _type);
@@ -156,7 +157,7 @@ R_ByteBuffer_insert_pn
       R_jump();
     }
     R_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    if (!R_Arms_reallocateUnmanaged_nojump(&self->p, newCapacity)) {
+    if (!R_reallocateUnmanaged_nojump(&self->p, newCapacity)) {
       R_jump();
     }
     self->cp = newCapacity;

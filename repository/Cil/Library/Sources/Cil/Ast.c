@@ -15,7 +15,7 @@
 
 // Last modified: 2024-10-04
 
-#include "Cilc/Ast.h"
+#include "Cil/Ast.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -474,6 +474,305 @@ Cil_LabelStatementAst_create
 {
   Cil_LabelStatementAst* self = R_allocateObject(_Cil_LabelStatementAst_getType());
   Cil_LabelStatementAst_construct(self, labelName);
+  return self;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static void
+Cil_ReturnStatementAst_visit
+  (
+    Cil_ReturnStatementAst* self
+  )
+{
+  R_Object_visit(self->operand);
+}
+
+Rex_defineObjectType("Cil.ReturnStatementAst", Cil_ReturnStatementAst, "Cil.StatementAst", Cil_StatementAst, &Cil_ReturnStatementAst_visit, NULL);
+
+void
+Cil_ReturnStatementAst_construct
+  (
+    Cil_ReturnStatementAst* self,
+    Cil_OperandAst* operand
+  )
+{
+  R_Type* _type = _Cil_ReturnStatementAst_getType();
+  Cil_StatementAst_construct((Cil_StatementAst*)self);
+  self->operand = operand;
+  R_Object_setType(self, _type);
+}
+
+Cil_ReturnStatementAst*
+Cil_ReturnStatementAst_create
+  (
+    Cil_OperandAst* operand
+  )
+{
+  Cil_ReturnStatementAst* self = R_allocateObject(_Cil_ReturnStatementAst_getType());
+  Cil_ReturnStatementAst_construct(self, operand);
+  return self;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+Rex_defineObjectType("Cil.DefinitionAst", Cil_DefinitionAst, "R.Object", R_Object, NULL, NULL);
+
+void
+Cil_DefinitionAst_construct
+  (
+    Cil_DefinitionAst* self
+  )
+{
+  R_Type* _type = _Cil_DefinitionAst_getType();
+  R_Object_construct((R_Object*)self);
+  R_Object_setType(self, _type);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static void
+Cil_ProcedureDefinitionAst_visit
+  (
+    Cil_ProcedureDefinitionAst* self
+  )
+{
+  if (self->nativeName) {
+    R_Object_visit(self->nativeName);
+  }
+  R_Object_visit(self->procedureName);
+  R_Object_visit(self->procedureParameters);
+  if (self->procedureBody) {
+    R_Object_visit(self->procedureBody);
+  }
+}
+
+Rex_defineObjectType("Cil.ProcedureDefinitionAst", Cil_ProcedureDefinitionAst, "Cil.DefinitionAst", Cil_DefinitionAst, &Cil_ProcedureDefinitionAst_visit, NULL);
+
+void
+Cil_ProcedureDefinitionAst_construct
+  (
+    Cil_ProcedureDefinitionAst* self,
+    R_String* nativeName,
+    R_String* procedureName,
+    R_List* procedureParameters,
+    R_List* procedureBody
+  )
+{
+  R_Type* _type = _Cil_ProcedureDefinitionAst_getType();
+  Cil_DefinitionAst_construct((Cil_DefinitionAst*)self);
+  self->nativeName = nativeName;
+  self->procedureName = procedureName;
+  self->procedureParameters = procedureParameters;
+  self->procedureBody = procedureBody;
+  R_Object_setType(self, _type);
+}
+
+Cil_ProcedureDefinitionAst*
+Cil_ProcedureDefinitionAst_create
+  (
+    R_String* nativeName,
+    R_String* procedureName,
+    R_List* procedureParameters,
+    R_List* procedureBody
+  )
+{
+  Cil_ProcedureDefinitionAst* self = R_allocateObject(_Cil_ProcedureDefinitionAst_getType());
+  Cil_ProcedureDefinitionAst_construct(self, nativeName, procedureName, procedureParameters, procedureBody);
+  return self;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static void
+Cil_ClassDefinitionAst_visit
+  (
+    Cil_ClassDefinitionAst* self
+  )
+{
+  R_Object_visit(self->className);
+  if (self->extendedClassName) {
+    R_Object_visit(self->extendedClassName);
+  }
+  if (self->classBody) {
+    R_Object_visit(self->classBody);
+  }
+}
+
+Rex_defineObjectType("Cil.ClassDefinitionAst", Cil_ClassDefinitionAst, "Cil.DefinitionAst", Cil_DefinitionAst, &Cil_ClassDefinitionAst_visit, NULL);
+
+void
+Cil_ClassDefinitionAst_construct
+  (
+    Cil_ClassDefinitionAst* self,
+    R_String* className,
+    R_String* extendedClassName,
+    R_List* classBody
+  )
+{
+  R_Type* _type = _Cil_ClassDefinitionAst_getType();
+  Cil_DefinitionAst_construct((Cil_DefinitionAst*)self);
+  self->className = className;
+  self->extendedClassName = extendedClassName;
+  self->classBody = classBody;
+  R_Object_setType(self, _type);
+}
+
+Cil_ClassDefinitionAst*
+Cil_ClassDefinitionAst_create
+  (
+    R_String* className,
+    R_String* extendedClassName,
+    R_List* classBody
+  )
+{
+  Cil_ClassDefinitionAst* self = R_allocateObject(_Cil_ClassDefinitionAst_getType());
+  Cil_ClassDefinitionAst_construct(self, className, extendedClassName, classBody);
+  return self;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static void
+Cil_ClassMemberDefinitionAst_visit
+  (
+    Cil_ClassMemberDefinitionAst* self
+  )
+{/*Intentionally empty.*/}
+
+Rex_defineObjectType("Cil.ClassMemberDefinitionAst", Cil_ClassMemberDefinitionAst, "Cil.DefinitionAst", Cil_DefinitionAst, &Cil_ClassMemberDefinitionAst_visit, NULL);
+
+void
+Cil_ClassMemberDefinitionAst_construct
+  (
+    Cil_ClassMemberDefinitionAst* self
+  )
+{
+  R_Type* _type = _Cil_ClassMemberDefinitionAst_getType();
+  Cil_DefinitionAst_construct((Cil_DefinitionAst*)self);
+  R_Object_setType(self, _type);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static void
+Cil_MethodDefinitionAst_visit
+  (
+    Cil_MethodDefinitionAst* self
+  )
+{
+  R_Object_visit(self->methodName);
+  R_Object_visit(self->methodParameters);
+  R_Object_visit(self->methodBody);
+}
+
+Rex_defineObjectType("Cil.MethodDefinitionAst", Cil_MethodDefinitionAst, "Cil.ClassMemberDefinitionAst", Cil_ClassMemberDefinitionAst, &Cil_MethodDefinitionAst_visit, NULL);
+
+void
+Cil_MethodDefinitionAst_construct
+  (
+    Cil_MethodDefinitionAst* self,
+    R_String* methodName,
+    R_List* methodParameters,
+    R_List* methodBody
+  )
+{
+  R_Type* _type = _Cil_MethodDefinitionAst_getType();
+  Cil_ClassMemberDefinitionAst_construct((Cil_ClassMemberDefinitionAst*)self);
+  self->methodName = methodName;
+  self->methodParameters = methodParameters;
+  self->methodBody = methodBody;
+  R_Object_setType(self, _type);
+}
+
+Cil_MethodDefinitionAst*
+Cil_MethodDefinitionAst_create
+  (
+    R_String* methodName,
+    R_List* methodParameters,
+    R_List* methodBody
+  )
+{
+  Cil_MethodDefinitionAst* self = R_allocateObject(_Cil_MethodDefinitionAst_getType());
+  Cil_MethodDefinitionAst_construct(self, methodName, methodParameters, methodBody);
+  return self;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static void
+Cil_ConstructorDefinitionAst_visit
+  (
+    Cil_ConstructorDefinitionAst* self
+  )
+{
+  R_Object_visit(self->constructorParameters);
+  R_Object_visit(self->constructorBody);
+}
+
+Rex_defineObjectType("Cil.ConstructorDefinitionAst", Cil_ConstructorDefinitionAst, "Cil.ClassMemberDefinitionAst", Cil_ClassMemberDefinitionAst, &Cil_ConstructorDefinitionAst_visit, NULL);
+
+void
+Cil_ConstructorDefinitionAst_construct
+  (
+    Cil_ConstructorDefinitionAst* self,
+    R_List* constructorParameters,
+    R_List* constructorBody
+  )
+{
+  R_Type* _type = _Cil_ConstructorDefinitionAst_getType();
+  Cil_ClassMemberDefinitionAst_construct((Cil_ClassMemberDefinitionAst*)self);
+  self->constructorParameters = constructorParameters;
+  self->constructorBody = constructorBody;
+  R_Object_setType(self, _type);
+}
+
+Cil_ConstructorDefinitionAst*
+Cil_ConstructorDefinitionAst_create
+  (
+    R_List* constructorParameters,
+    R_List* constructorBody
+  )
+{
+  Cil_ConstructorDefinitionAst* self = R_allocateObject(_Cil_ConstructorDefinitionAst_getType());
+  Cil_ConstructorDefinitionAst_construct(self, constructorParameters, constructorBody);
+  return self;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static void
+Cil_VariableDefinitionAst_visit
+  (
+    Cil_VariableDefinitionAst* self
+  )
+{
+  R_Object_visit(self->variableName);
+}
+
+Rex_defineObjectType("Cil.VariableDefinitionAst", Cil_VariableDefinitionAst, "Cil.ClassMemberDefinitionAst", Cil_ClassMemberDefinitionAst, &Cil_VariableDefinitionAst_visit, NULL);
+
+void
+Cil_VariableDefinitionAst_construct
+  (
+    Cil_VariableDefinitionAst* self,
+    R_String* variableName
+  )
+{
+  R_Type* _type = _Cil_VariableDefinitionAst_getType();
+  Cil_ClassMemberDefinitionAst_construct((Cil_ClassMemberDefinitionAst*)self);
+  self->variableName = variableName;
+  R_Object_setType(self, _type);
+}
+
+Cil_VariableDefinitionAst*
+Cil_VariableDefinitionAst_create
+  (
+    R_String* variableName
+  )
+{
+  Cil_VariableDefinitionAst* self = R_allocateObject(_Cil_VariableDefinitionAst_getType());
+  Cil_VariableDefinitionAst_construct(self, variableName);
   return self;
 }
 

@@ -51,7 +51,7 @@ R_StringBuffer_destruct
   )
 {
   if (self->elements) {
-    R_Arms_deallocateUnmanaged_nojump(self->elements);
+    R_deallocateUnmanaged_nojump(self->elements);
     self->elements = NULL;
   }
 }
@@ -106,7 +106,7 @@ R_StringBuffer_construct
   self->elements = NULL;
   self->size = 0;
   self->capacity = 0;
-  if (!R_Arms_allocateUnmanaged_nojump(&self->elements, 0)) {
+  if (!R_allocateUnmanaged_nojump(&self->elements, 0)) {
     R_jump();
   }
   R_Object_setType((R_Object*)self, _type);

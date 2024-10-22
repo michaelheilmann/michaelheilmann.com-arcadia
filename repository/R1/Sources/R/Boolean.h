@@ -13,17 +13,23 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-29
+// Last modified: 2024-10-27
 
 #if !defined(R_BOOLEANVALUE_H_INCLUDED)
 #define R_BOOLEANVALUE_H_INCLUDED
 
 #include <stdbool.h>
+typedef void R_Type;
 
 typedef bool R_BooleanValue;
 
 #define R_BooleanValue_True (true)
 
 #define R_BooleanValue_False (false)
+
+R_Type*
+_R_BooleanValue_getType
+  (
+  );
 
 #endif // R_BOOLEANVALUE_H_INCLUDED

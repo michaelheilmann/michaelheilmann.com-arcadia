@@ -15,10 +15,10 @@
 
 // Last modified: 2024-09-22
 
-#include "Cilc/Scanner.h"
+#include "Cil/Scanner.h"
 
-#include "Cilc/Keywords.h"
-#include "Cilc/StringTable.h"
+#include "Cil/Keywords.h"
+#include "Cil/StringTable.h"
 
 // This scanner maintains a tuple (i,n,s):
 // i is the zero-based index of the Byte at which the current UTF8 symbol starts in the input stream.
@@ -246,13 +246,34 @@ Cil_Scanner_construct
     R_StringBuffer_append_pn(temporary, text, sizeof(text) - 1); \
     Cil_Keywords_add(self->keywords, Cil_StringTable_getOrCreateString(self->stringTable, temporary), Cil_TokenType_##type); \
   }
+  //
+  On(u8"class", Class);
+  On(u8"constructor", Constructor);
+  On(u8"extends", Extends);
+  On(u8"implements", Implements);
+  On(u8"method", Method);
+  On(u8"procedure", Procedure);
+  //
+  On(u8"native", Native);
+  //
+  On(u8"return", Return);
+  //
+  On(u8"variable", Variable);
+
+  // arithmetic operations
   On(u8"add", Add);
   On(u8"subtract", Subtract);
   On(u8"multiply", Multiply);
   On(u8"divide", Divide);
+  // arithmetic operations/logical operations
   On(u8"negate", Negate);
+  // logcial operations
   On(u8"not", Not);
+  On(u8"and", And);
+  On(u8"or", Or);
+  // list operations
   On(u8"concatenate", Concatenate);
+  // literals
   On(u8"void", VoidLiteral);
   On(u8"true", BooleanLiteral);
   On(u8"false", BooleanLiteral);
@@ -314,15 +335,14 @@ Cil_Scanner_step
   )
 {
   R_StringBuffer_clear(self->token.text);
+  if (CodePoint_Start == self->symbol) {
+    next(self);
+  }
   if (CodePoint_End == self->symbol) {
     onEndToken(self, Cil_TokenType_EndOfInput);
     R_StringBuffer_append_pn(self->token.text, u8"<end of input>", sizeof(u8"<end of input>") - 1);
     return;
-  }
-  if (CodePoint_Start == self->symbol) {
-    next(self);
-  }
- 
+  } 
   // Whitespace :  <Whitespace> | <Tabulator>
   if (' ' == self->symbol || '\t' == self->symbol) {
     do {
@@ -363,6 +383,26 @@ Cil_Scanner_step
      // <comma>
     saveAndNext(self);
     onEndToken(self, Cil_TokenType_Comma);
+    return;
+  } else if ('{' == self->symbol) {
+     // <left curly bracket>
+    saveAndNext(self);
+    onEndToken(self, Cil_TokenType_LeftCurlyBracket);
+    return;
+  } else if ('}' == self->symbol) {
+     // <right curly bracket>
+    saveAndNext(self);
+    onEndToken(self, Cil_TokenType_RightCurlyBracket);
+    return;
+  } else if ('(' == self->symbol) {
+     // <left parenthesis>
+    saveAndNext(self);
+    onEndToken(self, Cil_TokenType_LeftParenthesis);
+    return;
+  } else if (')' == self->symbol) {
+     // <right parenthesis>
+    saveAndNext(self);
+    onEndToken(self, Cil_TokenType_RightParenthesis);
     return;
   } else if ('"' == self->symbol) {
     // <string>    

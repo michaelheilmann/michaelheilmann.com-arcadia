@@ -32,7 +32,7 @@ endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
-FetchProduct(${MyProjectName}.Concatenate "${REPOSITORY_SOURCE_DIR}/Tools.Concatenate/Tool/Sources" "path to the Tools.Concatenate source directory")
+FetchProduct(${MyProjectName}.ConcatenateFiles "${REPOSITORY_SOURCE_DIR}/Tools.ConcatenateFiles/Tool/Sources" "path to the Tools.ConcatenateFiles source directory")
 FetchProduct(${MyProjectName}.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library/sources" "path to the Tools.TemplateEngine Library source directory")
 FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Tools.TemplateEngine Tool source directory")
 
@@ -56,7 +56,7 @@ add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
                    DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
 add_custom_target(Website.ErrorPage ALL DEPENDS ${DOCUMENT_TARGET_FILE})
 
-# Build "error.html".
+# Build "roadmap.html".
 set(DOCUMENTATION_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
 set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/roadmap.html")
 add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
@@ -65,3 +65,13 @@ add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
                    COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i => ${DOCUMENT_TARGET_FILE}"
                    DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
 add_custom_target(Website.RoadmapPage ALL DEPENDS ${DOCUMENT_TARGET_FILE})
+
+# Build "roadmap-archive.html".
+set(DOCUMENTATION_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
+set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/roadmap-archive.html")
+add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i ${DOCUMENT_TARGET_FILE}
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i => ${DOCUMENT_TARGET_FILE}"
+                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
+add_custom_target(Website.RoadmapArchivePage ALL DEPENDS ${DOCUMENT_TARGET_FILE})

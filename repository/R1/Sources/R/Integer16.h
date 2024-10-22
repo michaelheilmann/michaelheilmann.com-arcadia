@@ -13,12 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-25
+// Last modified: 2024-10-25
 
 #if !defined(R_INTEGER16VALUE_H_INCLUDED)
 #define R_INTEGER16VALUE_H_INCLUDED
 
 #include <inttypes.h>
+typedef void R_Type;
 
 typedef int16_t R_Integer16Value;
 
@@ -33,5 +34,10 @@ static_assert(R_Integer16Value_NumberOfBytes == 2, "R.Integer16Value.NumberOfByt
 #define R_Integer16Value_NumberOfBits (R_Integer16Value_NumberOfBytes * 8)
 
 #define R_Integer16Value_Literal(x) INT16_C(x)
+
+R_Type*
+_R_Integer16Value_getType
+  (
+  );
 
 #endif // R_INTEGER16VALUE_H_INCLUDED

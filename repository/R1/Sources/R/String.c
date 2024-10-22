@@ -17,9 +17,16 @@
 
 #include "R/String.h"
 
+#include "R/JumpTarget.h"
+#include "R/Object.h"
+#include "R/Status.h"
+#include "R/StringBuffer.h"
+#include "R/UnmanagedMemory.h"
+#include "R/Utf8.h"
+// memcmp, memcpy, memmove
 #include <string.h>
-#include "R/ArmsIntegration.h"
-#include "R.h"
+// fprintf, stderr
+#include <stdio.h>
 
 static void
 R_String_destruct
@@ -41,7 +48,7 @@ R_String_destruct
   )
 {
   if (self->p) {
-    R_Arms_deallocateUnmanaged_nojump(self->p);
+    R_deallocateUnmanaged_nojump(self->p);
     self->p = NULL;
   }
 }
@@ -84,7 +91,7 @@ R_String_construct_pn
   self->p = NULL;
   self->hash = 0;
   self->numberOfBytes = 0;
-  if (!R_Arms_allocateUnmanaged_nojump(&self->p, numberOfBytes)) {
+  if (!R_allocateUnmanaged_nojump(&self->p, numberOfBytes)) {
     R_jump();
   }
   memcpy(self->p, bytes, numberOfBytes);
@@ -128,7 +135,7 @@ R_String_construct
     self->p = NULL;
     self->hash = 0;
     self->numberOfBytes = 0;
-    if (!R_Arms_allocateUnmanaged_nojump(&self->p, R_ByteBuffer_getNumberOfBytes(object))) {
+    if (!R_allocateUnmanaged_nojump(&self->p, R_ByteBuffer_getNumberOfBytes(object))) {
       R_jump();
     }
     memcpy(self->p, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
@@ -139,7 +146,7 @@ R_String_construct
     self->p = NULL;
     self->hash = 0;
     self->numberOfBytes = 0;
-    if (!R_Arms_allocateUnmanaged_nojump(&self->p, R_String_getNumberOfBytes(object))) {
+    if (!R_allocateUnmanaged_nojump(&self->p, R_String_getNumberOfBytes(object))) {
       R_jump();
     }
     memcpy(self->p, R_String_getBytes(object), R_String_getNumberOfBytes(object));
@@ -150,7 +157,7 @@ R_String_construct
     self->p = NULL;
     self->hash = 0;
     self->numberOfBytes = 0;
-    if (!R_Arms_allocateUnmanaged_nojump(&self->p, R_StringBuffer_getNumberOfBytes(object))) {
+    if (!R_allocateUnmanaged_nojump(&self->p, R_StringBuffer_getNumberOfBytes(object))) {
       R_jump();
     }
     memcpy(self->p, R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));

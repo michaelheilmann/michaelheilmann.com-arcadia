@@ -13,12 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-27
+// Last modified: 2024-10-27
 
 #if !defined(R_NATURAL8VALUE_H_INCLUDED)
 #define R_NATURAL8VALUE_H_INCLUDED
 
 #include <inttypes.h>
+typedef void R_Type;
 
 typedef uint8_t R_Natural8Value;
 
@@ -33,5 +34,10 @@ static_assert(R_Natural8Value_NumberOfBytes == 1, "R.Natural8Value.NumberOfBytes
 #define R_Natural8Value_NumberOfBits (R_Natural8Value_NumberOfBytes * 8)
 
 #define R_Natural8Value_Literal(x) UINT8_C(x)
+
+R_Type*
+_R_Natural8Value_getType
+  (
+  );
 
 #endif // R_NATURAL8VALUE_H_INCLUDED

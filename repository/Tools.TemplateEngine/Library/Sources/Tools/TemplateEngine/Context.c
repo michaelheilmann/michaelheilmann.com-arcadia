@@ -20,7 +20,7 @@
 #include "Tools/TemplateEngine/FileContext.h"
 
 static void
-Context_finalize
+Context_destruct
   (
     Context* self
   )
@@ -42,7 +42,7 @@ Context_visit
   R_Object_visit(self->files);
 }
 
-Rex_defineObjectType("Tools.TemplateEngine.Context", Context, "R.Object", R_Object, &Context_visit, &Context_finalize);
+Rex_defineObjectType("Tools.TemplateEngine.Context", Context, "R.Object", R_Object, &Context_visit, &Context_destruct);
 
 void
 Context_construct

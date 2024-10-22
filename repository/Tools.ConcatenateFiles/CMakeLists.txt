@@ -24,24 +24,9 @@ if (NOT MyProjectIsDefined)
   project(${MyProjectName})
   enable_testing()
   include(FetchContent)
-  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
-
-if (NOT TARGET Tools.Concatenate)
-    add_executable(Tools.Concatenate)
-    BeginProduct(Tools.Concatenate)
-
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/Concatenate/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h @ONLY)
-
-    list(APPEND Tools.Concatenate.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/Concatenate/Main.c)
-    list(APPEND Tools.Concatenate.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/Concatenate/Configure.h)
-
-    target_link_libraries(Tools.Concatenate Arcadia.R Arcadia.Arms)
-
-    EndProduct(Tools.Concatenate executable)
-endif()
+add_subdirectory(Tool/Sources)

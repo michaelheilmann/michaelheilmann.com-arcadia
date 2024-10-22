@@ -260,6 +260,39 @@ R_registerBooleanType
 }
 
 void
+R_registerForeignProcedureType
+  (
+    char const* name,
+    size_t nameLength,
+    R_Type_TypeDestructingCallbackFunction* typeDestructing
+  )
+{
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
+    }
+  }
+  TypeNode* typeNode = NULL;
+  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+    R_jump();
+  }
+  typeNode->kind = R_TypeKind_ForeignProcedure;
+  typeNode->typeName = typeName;
+  typeNode->parentObjectType = NULL;
+  typeNode->valueSize = 0;
+  typeNode->typeDestructing = typeDestructing;
+  typeNode->visitObject = NULL;
+  typeNode->destructObject = NULL;
+
+  typeNode->next = g_typeNodes->typeNodes;
+  g_typeNodes->typeNodes = typeNode;
+
+  R_Arms_lock(typeNode);
+}
+
+void
 R_registerIntegerType
   (
     char const* name,
@@ -363,6 +396,39 @@ R_registerObjectType
 }
 
 void
+R_registerRealType
+  (
+    char const* name,
+    size_t nameLength,
+    R_Type_TypeDestructingCallbackFunction* typeDestructing
+  )
+{
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
+    }
+  }
+  TypeNode* typeNode = NULL;
+  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+    R_jump();
+  }
+  typeNode->kind = R_TypeKind_Real;
+  typeNode->typeName = typeName;
+  typeNode->parentObjectType = NULL;
+  typeNode->valueSize = 0;
+  typeNode->typeDestructing = typeDestructing;
+  typeNode->visitObject = NULL;
+  typeNode->destructObject = NULL;
+
+  typeNode->next = g_typeNodes->typeNodes;
+  g_typeNodes->typeNodes = typeNode;
+
+  R_Arms_lock(typeNode);
+}
+
+void
 R_registerSizeType
   (
     char const* name,
@@ -450,7 +516,7 @@ R_Type_isSubType
 }
 
 R_Type*
-R_getObjectType
+R_getType
   (
     char const* name,
     size_t nameLength
@@ -468,4 +534,14 @@ R_getObjectType
   fwrite("\n", 1, sizeof("\n") - 1, stderr);
   R_setStatus(R_Status_TypeNotExists);
   R_jump();
+}
+
+R_TypeNameValue
+R_Type_getName
+  (
+    R_Type* type
+  )
+{
+  TypeNode* typeNode = (TypeNode*)type;
+  return typeNode->typeName;
 }

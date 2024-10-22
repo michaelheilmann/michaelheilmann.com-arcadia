@@ -13,12 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-26
+// Last modified: 2024-10-27
 
 #if !defined(R_REAL64VALUE_H_INCLUDED)
 #define R_REAL64VALUE_H_INCLUDED
 
-#include <inttypes.h>
+#include <limits.h>
+typedef void R_Type;
 
 typedef double R_Real64Value;
 
@@ -33,5 +34,10 @@ static_assert(R_Real64Value_NumberOfBytes == 8, "R.Real64Value.NumberOfBytes mus
 #define R_Real64Value_NumberOfBits (R_Real64Value_NumberOfBytes * 8)
 
 #define R_Real64Value_Literal(x) (x)
+
+R_Type*
+_R_Real64Value_getType
+  (
+  );
 
 #endif // R_REAL64VALUE_H_INCLUDED

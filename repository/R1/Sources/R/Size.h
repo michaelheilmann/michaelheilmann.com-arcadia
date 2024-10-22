@@ -13,12 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-27
+// Last modified: 2024-10-27
 
 #if !defined(R_SIZEVALUE_H_INCLUDED)
 #define R_SIZEVALUE_H_INCLUDED
 
 #include <stddef.h>
+typedef void R_Type;
 
 typedef size_t R_SizeValue;
 
@@ -32,5 +33,10 @@ static_assert(R_SizeValue_NumberOfBytes == 4 || R_SizeValue_NumberOfBytes == 8, 
 #define R_SizeValue_NumberOfBits (R_SizeValue_NumberOfBytes * 8)
 
 #define R_SizeValue_Literal(x) ((size_t)x)
+
+R_Type*
+_R_SizeValue_getType
+  (
+  );
 
 #endif // R_SIZEVALUE_H_INCLUDED

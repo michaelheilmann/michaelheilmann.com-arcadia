@@ -15,10 +15,11 @@
 
 #include "R/TypeNames.h"
 
-#include "R/ArmsIntegration.h"
 #include "R/getTickCount.h"
 #include "R/Integer32.h"
 #include "R/JumpTarget.h"
+#include "R/Status.h"
+#include "R/UnmanagedMemory.h"
 
 // memcmp, memcpy, memmove
 #include <string.h>
@@ -63,7 +64,7 @@ resize
     }
     R_TypeName** oldBuckets = g_singleton->buckets;
     R_TypeName** newBuckets = NULL;
-    if (!R_Arms_allocateUnmanaged_nojump((void**)&newBuckets, newCapacity * sizeof(R_TypeName*))) {
+    if (!R_allocateUnmanaged_nojump((void**)&newBuckets, newCapacity * sizeof(R_TypeName*))) {
       R_jump();
     }
     for (R_SizeValue i = 0, n = newCapacity; i < n; ++i) {
@@ -73,12 +74,12 @@ resize
       while (oldBuckets[i]) {
         R_TypeName* node = oldBuckets[i];
         oldBuckets[i] = oldBuckets[i]->next;
-        R_SizeValue j = R_Atom_getHashValue(node->atomValue) % newCapacity;
+        R_SizeValue j = R_Atom_getHash(node->atomValue) % newCapacity;
         node->next = newBuckets[j];
         newBuckets[j] = node;
       }
     }
-    R_Arms_deallocateUnmanaged_nojump(oldBuckets);
+    R_deallocateUnmanaged_nojump(oldBuckets);
     g_singleton->buckets = newBuckets;
     g_singleton->capacity = newCapacity;
   }
@@ -196,7 +197,7 @@ R_TypeNames_getOrCreateTypeName
     R_jump();
   }
   R_AtomValue atomValue = R_Atoms_getOrCreateAtom(bytes, numberOfBytes);
-  R_SizeValue hash = R_Atom_getHashValue(atomValue);
+  R_SizeValue hash = R_Atom_getHash(atomValue);
   R_SizeValue index = hash % g_singleton->capacity;
   for (R_TypeNameValue typeName = g_singleton->buckets[index]; NULL != typeName; typeName = typeName->next) {
     if (typeName->atomValue == atomValue) {
@@ -204,7 +205,7 @@ R_TypeNames_getOrCreateTypeName
     }
   }
   R_TypeNameValue typeNameValue = NULL;
-  if (!R_Arms_allocateUnmanaged_nojump(&typeNameValue, sizeof(R_TypeName))) {
+  if (!R_allocateUnmanaged_nojump(&typeNameValue, sizeof(R_TypeName))) {
     R_jump();
   }
   typeNameValue->atomValue = atomValue;
@@ -224,7 +225,7 @@ R_TypeNames_startup
 {
   if (!g_singleton) {
     R_Atoms_startup();
-    if (!R_Arms_allocateUnmanaged_nojump((void**)&g_singleton, sizeof(Singleton))) {
+    if (!R_allocateUnmanaged_nojump((void**)&g_singleton, sizeof(Singleton))) {
       R_Atoms_shutdown();
       R_jump();
     }
@@ -237,8 +238,8 @@ R_TypeNames_startup
       R_setStatus(R_Status_ArgumentValueInvalid);
       R_jump();
     }
-    if (!R_Arms_allocateUnmanaged_nojump((void**)&g_singleton->buckets, 8 * sizeof(R_Atom*))) {
-      R_Arms_deallocateUnmanaged_nojump(g_singleton);
+    if (!R_allocateUnmanaged_nojump((void**)&g_singleton->buckets, 8 * sizeof(R_Atom*))) {
+      R_deallocateUnmanaged_nojump(g_singleton);
       g_singleton = NULL;
       R_jump();
     }
@@ -274,9 +275,9 @@ R_TypeNames_shutdown
     if (g_singleton->size > 0) {
       fprintf(stderr, "%s:%d warning: type names not empty\n", __FILE__, __LINE__);
     }
-    R_Arms_deallocateUnmanaged_nojump(g_singleton->buckets);
+    R_deallocateUnmanaged_nojump(g_singleton->buckets);
     g_singleton->buckets = NULL;
-    R_Arms_deallocateUnmanaged_nojump(g_singleton);
+    R_deallocateUnmanaged_nojump(g_singleton);
     g_singleton = NULL;
     R_Atoms_shutdown();
   }
@@ -315,7 +316,7 @@ R_TypeNames_onPostFinalize
         R_TypeName* node = current;
         *previous = current->next;
         current = current->next;
-        R_Arms_deallocateUnmanaged_nojump(node);
+        R_deallocateUnmanaged_nojump(node);
         g_singleton->size--;
       } else {
         previous = &current->next;
@@ -336,4 +337,12 @@ R_TypeName_visit
   typeNameValue->lastVisited = R_getTickCount();
   typeNameValue->visited = R_BooleanValue_True;
   R_Atom_visit(typeNameValue->atomValue);
+}
+
+R_SizeValue
+R_TypeNames_getSize
+  (
+  )
+{
+  return g_singleton->size;
 }

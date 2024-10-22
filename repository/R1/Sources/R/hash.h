@@ -20,6 +20,8 @@
 
 #include "R/Boolean.h"
 
+#include "R/ForeignProcedure.h"
+
 #include "R/Integer16.h"
 #include "R/Integer32.h"
 #include "R/Integer64.h"
@@ -42,6 +44,13 @@ R_SizeValue
 R_hashBooleanValue
   (
     R_BooleanValue x
+  );
+
+// https://michaelheilmann.com/repository/R1/#r-hash
+R_SizeValue
+R_hashForeignProcedureValue
+  (
+    R_ForeignProcedureValue x
   );
 
 // https://michaelheilmann.com/repository/R1/#r-hash
