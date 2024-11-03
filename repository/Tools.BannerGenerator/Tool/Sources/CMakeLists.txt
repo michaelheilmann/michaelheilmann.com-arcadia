@@ -41,7 +41,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/BannerGenerator/Configure.h.i $
 list(APPEND Tools.BannerGenerator.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/BannerGenerator/Main.c)
 list(APPEND Tools.BannerGenerator.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/BannerGenerator/Configure.h)
 
-target_link_libraries(Tools.BannerGenerator Tools.Visuals2d Arcadia.R Arcadia.Arms)
+target_link_libraries(Tools.BannerGenerator Module.Visuals Arcadia.R Arcadia.Arms)
 
 set_target_properties(Tools.BannerGenerator PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.png\" --width=320 --height=240")
 

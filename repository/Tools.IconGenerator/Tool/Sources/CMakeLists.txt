@@ -23,6 +23,7 @@ if (NOT MyProjectIsDefined)
   endif()
   project(${MyProjectName})
   enable_testing()
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
   include(FetchContent)
   set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
@@ -40,7 +41,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/IconGenerator/Configure.h.i ${C
 list(APPEND Tools.IconGenerator.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/IconGenerator/Main.c)
 list(APPEND Tools.IconGenerator.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/IconGenerator/Configure.h)
 
-target_link_libraries(Tools.IconGenerator Tools.Visuals2d Arcadia.R Arcadia.Arms)
+target_link_libraries(Tools.IconGenerator Module.Visuals Arcadia.R Arcadia.Arms)
 
 set_target_properties(Tools.IconGenerator PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.ico\"")
 

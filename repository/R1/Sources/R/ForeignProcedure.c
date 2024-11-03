@@ -17,7 +17,92 @@
 
 #include "R/ForeignProcedure.h"
 
+#include "R/JumpTarget.h"
+#include "R/Status.h"
 #include "R/Types.h"
+#include "R/Value.h"
+
+static void
+equalTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+hash
+  (
+    R_Value* target,
+    R_Value const* self
+  );
+
+static void
+notEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static const R_Type_Operations typeOperations = {
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = &equalTo,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = &hash,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = &notEqualTo,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+static void
+equalTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isForeignProcedureValue(other)) {
+    R_Value_setBooleanValue(target, R_Value_getForeignProcedureValue(self) == R_Value_getForeignProcedureValue(other));
+  } else {
+    R_Value_setBooleanValue(target, R_BooleanValue_False);
+  }
+}
+
+static void
+hash
+  (
+    R_Value* target,
+    R_Value const* self
+  )
+{
+  R_Value_setSizeValue(target, (R_SizeValue)(uintptr_t)R_Value_getForeignProcedureValue(self));
+}
+
+static void
+notEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isForeignProcedureValue(other)) {
+    R_Value_setBooleanValue(target, R_Value_getForeignProcedureValue(self) != R_Value_getForeignProcedureValue(other));
+  } else {
+    R_Value_setBooleanValue(target, R_BooleanValue_True);
+  }
+}
 
 static R_Type* g_type = NULL;
 
@@ -34,7 +119,7 @@ _R_ForeignProcedureValue_getType
   )
 {
   if (!g_type) {
-    R_registerForeignProcedureType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1, &typeDestructing);
+    R_registerForeignProcedureType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1, &typeOperations, &typeDestructing);
     g_type = R_getType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1);
   }
   return g_type;

@@ -22,6 +22,27 @@
 #include "R/Boolean.h"
 #include "R/Size.h"
 #include "R/TypeNames.h"
+typedef struct R_Value R_Value;
+
+/// This struct provides information on the implementations of operations for a type.
+typedef struct R_Type_Operations {
+  void (*add)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*and)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*concatenate)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*divide)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*equalTo)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*greaterThan)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*greaterThanOrEqualTo)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*hash)(R_Value* target, R_Value const* self);
+  void (*lowerThan)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*lowerThanOrEqualTo)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*multiply)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*negate)(R_Value* target, R_Value const* self);
+  void (*not)(R_Value* target, R_Value const* self);
+  void (*notEqualTo)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*or )(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*subtract)(R_Value* target, R_Value const* self, R_Value const* other);
+} R_Type_Operations;
 
 /// @brief Type of a visti callback function.
 /// Each object type may have its own visit callback function.
@@ -225,6 +246,7 @@ R_registerBooleanType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
@@ -234,6 +256,7 @@ R_registerForeignProcedureType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
@@ -243,6 +266,7 @@ R_registerIntegerType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
@@ -252,6 +276,7 @@ R_registerNaturalType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
@@ -263,6 +288,7 @@ R_registerObjectType
     size_t nameLength,
     size_t valueSize,
     R_Type* parentObjectType,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing,
     R_Type_VisitObjectCallbackFunction* visit,
     R_Type_DestructObjectCallbackFunction* destruct
@@ -274,6 +300,7 @@ R_registerRealType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
@@ -283,6 +310,7 @@ R_registerSizeType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
@@ -292,6 +320,7 @@ R_registerVoidType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
@@ -305,6 +334,12 @@ R_getType
 
 R_TypeNameValue
 R_Type_getName
+  (
+    R_Type* type
+  );
+
+R_Type_Operations const*
+R_Type_getOperations
   (
     R_Type* type
   );

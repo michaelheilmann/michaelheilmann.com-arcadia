@@ -60,7 +60,7 @@ struct R_Object {
   { \
     if (!g_##cName##_type) { \
       R_Type* parentType = _##cParentName##_getType(); \
-      R_registerObjectType(u8##cilName, sizeof(u8##cilName) - 1, sizeof(cName), parentType, &_##cName##_typeDestructing, cVisitFunctionPointer, cDestructFunctionPointer); \
+      R_registerObjectType(u8##cilName, sizeof(u8##cilName) - 1, sizeof(cName), parentType, NULL, &_##cName##_typeDestructing, cVisitFunctionPointer, cDestructFunctionPointer); \
       g_##cName##_type = R_getType(u8##cilName, sizeof(u8##cilName) - 1); \
     } \
     return g_##cName##_type; \
@@ -110,7 +110,7 @@ R_Object_getHash
   );
 
 R_BooleanValue
-R_Object_isEqualTo
+R_Object_equalTo
   (
     R_Object* self,
     R_Value const* other

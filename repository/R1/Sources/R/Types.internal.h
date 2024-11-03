@@ -22,18 +22,34 @@
   #error("R/Types.internal.h must not be included from public header")
 #endif
 #include "R/Configure.h"
+#include "R/Types.h"
+
+typedef struct TypeNode TypeNode;
+
+struct TypeNode {
+  TypeNode* next;
+
+  R_TypeNameValue typeName;
+  R_TypeKind kind;
+  TypeNode* parentObjectType;
+  R_SizeValue valueSize;
+  R_Type_Operations const* typeOperations;
+  R_Type_TypeDestructingCallbackFunction* typeDestructing;
+  R_Type_VisitObjectCallbackFunction* visitObject;
+  R_Type_DestructObjectCallbackFunction* destructObject;
+};
 
 // Startup the type system
 // WARNING: Internal function.
 void
-_R_startupTypes
+_R_Types_startup
   (
   );
 
 // Shutdown the type system.
 // WARNING: Internal function.
 void
-_R_shutdownTypes
+_R_Types_shutdown
   (
   );
 

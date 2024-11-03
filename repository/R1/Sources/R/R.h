@@ -26,6 +26,8 @@
 #include "R/CommandLine/Include.h"
 #include "R/countLeadingZeroes.h"
 
+#include "R/execute.h"
+
 #include "R/ForeignProcedure.h"
 
 #include "R/FileHandle.h"

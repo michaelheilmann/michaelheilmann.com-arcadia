@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "R.h"
-#include "Tools/Visuals2d/Include.h"
+#include "Module/Visuals/Include.h"
 
 void
 main1
@@ -74,7 +74,7 @@ main1
     256,
   };
   for (R_SizeValue i = 0, n = sizeof(sizes) / sizeof(size_t); i < n; ++i) {
-    PixelBuffer* pixelBuffer = PixelBuffer_createOpaqueBlack(0, sizes[i], sizes[i], PixelFormat_An8Rn8Gn8Bn8);
+    PixelBuffer* pixelBuffer = PixelBuffer_create(0, sizes[i], sizes[i], PixelFormat_An8Rn8Gn8Bn8);
     R_List_appendObjectReferenceValue(pixelBufferList, (R_ObjectReferenceValue)pixelBuffer);
   }
   writeIconToPath(pixelBufferList, R_Value_getObjectReferenceValue(&target));

@@ -17,7 +17,377 @@
 
 #include "R/Integer64.h"
 
+#include "R/JumpTarget.h"
+#include "R/Status.h"
 #include "R/Types.h"
+#include "R/Value.h"
+
+static void
+add
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+divide
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+equalTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+greaterThan
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+greaterThanOrEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+hash
+  (
+    R_Value* target,
+    R_Value const* self
+  );
+
+static void
+lowerThan
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+lowerThanOrEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+multiply
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+negate
+  (
+    R_Value* target,
+    R_Value const* self
+  );
+
+static void
+notEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+subtract
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static const R_Type_Operations typeOperations = {
+  .add = &add,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = &divide,
+  .equalTo = &equalTo,
+  .greaterThan = &greaterThan,
+  .greaterThanOrEqualTo = &greaterThanOrEqualTo,
+  .hash = &hash,
+  .lowerThan = &lowerThan,
+  .lowerThanOrEqualTo = &lowerThanOrEqualTo,
+  .multiply = &multiply,
+  .negate = &negate,
+  .not = NULL,
+  .notEqualTo = &notEqualTo,
+  .or = NULL,
+  .subtract = &subtract,
+};
+
+static void
+add
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) + (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) + (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) + (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) + R_Value_getInteger64Value(other));
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+
+static void
+divide
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    if (R_Value_getInteger8Value(other)) {
+      R_setStatus(R_Status_DivisionByZero);
+      R_jump();
+    }
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) / (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    if (R_Value_getInteger16Value(other)) {
+      R_setStatus(R_Status_DivisionByZero);
+      R_jump();
+    }
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) / (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    if (R_Value_getInteger32Value(other)) {
+      R_setStatus(R_Status_DivisionByZero);
+      R_jump();
+    }
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) / (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    if (R_Value_getInteger64Value(other)) {
+      R_setStatus(R_Status_DivisionByZero);
+      R_jump();
+    }
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) / R_Value_getInteger64Value(other));
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+
+static void
+equalTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) == (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) == (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) == (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) == R_Value_getInteger64Value(other));
+  } else {
+    R_Value_setBooleanValue(target, R_BooleanValue_False);
+  }
+}
+
+static void
+greaterThan
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) > (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) > (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) > (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger32Value(self) > R_Value_getInteger64Value(other));
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+
+static void
+greaterThanOrEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) >= (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) >= (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) >= (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) >= R_Value_getInteger64Value(other));
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+
+static void
+hash
+  (
+    R_Value* target,
+    R_Value const* self
+  )
+{
+  R_Value_setSizeValue(target, (R_SizeValue)R_Value_getInteger64Value(self));
+}
+
+static void
+lowerThan
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) < (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) < (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) < (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) < R_Value_getInteger64Value(other));
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+
+static void
+lowerThanOrEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger32Value(self) <= (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger32Value(self) <= (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger32Value(self) <= (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) <= R_Value_getInteger64Value(other));
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+
+static void
+multiply
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) * (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) * (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) * (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger32Value(self) * R_Value_getInteger64Value(other));
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+
+static void
+negate
+  (
+    R_Value* target,
+    R_Value const* self
+  )
+{
+  R_Value_setInteger64Value(target, -R_Value_getInteger64Value(self));
+}
+
+static void
+notEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) != (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) != (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) != (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setBooleanValue(target, R_Value_getInteger64Value(self) != R_Value_getInteger64Value(other));
+  } else {
+    R_Value_setBooleanValue(target, R_BooleanValue_True);
+  }
+}
+
+static void
+subtract
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isInteger8Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) - (R_Integer64Value)R_Value_getInteger8Value(other));
+  } else if (R_Value_isInteger16Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) - (R_Integer64Value)R_Value_getInteger16Value(other));
+  } else if (R_Value_isInteger32Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) - (R_Integer64Value)R_Value_getInteger32Value(other));
+  } else if (R_Value_isInteger64Value(other)) {
+    R_Value_setInteger64Value(target, R_Value_getInteger64Value(self) - R_Value_getInteger64Value(other));
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
 
 static R_Type* g_type = NULL;
 
@@ -34,7 +404,7 @@ _R_Integer64Value_getType
   )
 {
   if (!g_type) {
-    R_registerIntegerType(u8"R.Integer64", sizeof("R.Integer64") - 1, &typeDestructing);
+    R_registerIntegerType(u8"R.Integer64", sizeof("R.Integer64") - 1, &typeOperations, &typeDestructing);
     g_type = R_getType(u8"R.Integer64", sizeof("R.Integer64") - 1);
   }
   return g_type;

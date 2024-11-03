@@ -15,7 +15,7 @@
 
 // Last modified: 2024-10-07
 
-#include "R/Types.h"
+#include "R/Types.internal.h"
 
 #include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
@@ -54,18 +54,6 @@ TypeNode_visitCallback
 typedef struct TypeNodes TypeNodes;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-struct TypeNode {
-  TypeNode* next;
-
-  R_TypeNameValue typeName;
-  R_TypeKind kind;
-  TypeNode* parentObjectType;
-  R_SizeValue valueSize;
-  R_Type_TypeDestructingCallbackFunction* typeDestructing;
-  R_Type_VisitObjectCallbackFunction* visitObject;
-  R_Type_DestructObjectCallbackFunction* destructObject;
-};
 
 struct TypeNodes {
   TypeNode* typeNodes;
@@ -138,7 +126,7 @@ TypeNodes_destroy
 }
 
 void
-_R_startupTypes
+_R_Types_startup
   (
   )
 {
@@ -204,7 +192,7 @@ R_Type_hasChildren
 }
 
 void
-_R_shutdownTypes
+_R_Types_shutdown
   (
   )
 {
@@ -231,6 +219,7 @@ R_registerBooleanType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
@@ -247,6 +236,7 @@ R_registerBooleanType
   }
   typeNode->kind = R_TypeKind_Boolean;
   typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
@@ -264,6 +254,7 @@ R_registerForeignProcedureType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
@@ -280,6 +271,7 @@ R_registerForeignProcedureType
   }
   typeNode->kind = R_TypeKind_ForeignProcedure;
   typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
@@ -297,6 +289,7 @@ R_registerIntegerType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
@@ -313,6 +306,7 @@ R_registerIntegerType
   }
   typeNode->kind = R_TypeKind_Integer;
   typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
@@ -330,6 +324,7 @@ R_registerNaturalType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
@@ -346,6 +341,7 @@ R_registerNaturalType
   }
   typeNode->kind = R_TypeKind_Natural;
   typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
@@ -365,6 +361,7 @@ R_registerObjectType
     size_t nameLength,
     size_t valueSize,
     R_Type* parentObjectType,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing,
     R_Type_VisitObjectCallbackFunction* visit,
     R_Type_DestructObjectCallbackFunction* destruct
@@ -383,6 +380,7 @@ R_registerObjectType
   }
   typeNode->kind = R_TypeKind_Object;
   typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = parentObjectType;
   typeNode->valueSize = valueSize;
   typeNode->typeDestructing = typeDestructing;
@@ -400,6 +398,7 @@ R_registerRealType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
@@ -416,6 +415,7 @@ R_registerRealType
   }
   typeNode->kind = R_TypeKind_Real;
   typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
@@ -433,6 +433,7 @@ R_registerSizeType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
@@ -449,6 +450,7 @@ R_registerSizeType
   }
   typeNode->kind = R_TypeKind_Size;
   typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
@@ -466,6 +468,7 @@ R_registerVoidType
   (
     char const* name,
     size_t nameLength,
+    R_Type_Operations const* typeOperations,
     R_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
@@ -482,6 +485,7 @@ R_registerVoidType
   }
   typeNode->kind = R_TypeKind_Void;
   typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
@@ -544,4 +548,14 @@ R_Type_getName
 {
   TypeNode* typeNode = (TypeNode*)type;
   return typeNode->typeName;
+}
+
+R_Type_Operations const*
+R_Type_getOperations
+  (
+    R_Type* type
+  )
+{
+  TypeNode* typeNode = (TypeNode*)type;
+  return typeNode->typeOperations;
 }

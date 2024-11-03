@@ -33,11 +33,10 @@ endif()
 add_subdirectory(Arms1)
 add_subdirectory(R1)
 
-add_subdirectory(Cil)
 add_subdirectory(Tools.ConcatenateFiles)
 add_subdirectory(Tools.CompareFiles)
 add_subdirectory(Tools.TemplateEngine)
 
-add_subdirectory(Tools.Visuals2d)
+add_subdirectory(Module.Visuals)
 add_subdirectory(Tools.IconGenerator)
 add_subdirectory(Tools.BannerGenerator)

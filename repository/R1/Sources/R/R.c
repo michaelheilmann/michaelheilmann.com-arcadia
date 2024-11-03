@@ -58,7 +58,7 @@ R_startup
 
     R_pushJumpTarget(&jumpTarget);
     if (R_JumpTarget_save(&jumpTarget)) {
-      _R_startupTypes();
+      _R_Types_startup();
       R_popJumpTarget();
     } else {
       R_popJumpTarget();
@@ -77,7 +77,7 @@ R_startup
     } else {
       R_popJumpTarget();
 
-      _R_shutdownTypes();
+      _R_Types_shutdown();
 
       R_TypeNames_onPreMark();
       R_Arms_run();
@@ -104,7 +104,7 @@ R_shutdown
     return R_Status_OperationInvalid;
   }
   if (1 == g_referenceCount) {
-    _R_shutdownTypes();
+    _R_Types_shutdown();
 
     R_TypeNames_onPreMark();
     R_Arms_run();

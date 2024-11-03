@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "R.h"
-#include "Tools/Visuals2d/Include.h"
+#include "Module/Visuals/Include.h"
 
 void
 main1
@@ -91,12 +91,12 @@ main1
     R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(u8"target", sizeof(u8"target") - 1));
   }
   if (R_Value_isVoidValue(&width)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(u8"target", sizeof(u8"target") - 1));
+    R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(u8"width", sizeof(u8"width") - 1));
   }
   if (R_Value_isVoidValue(&height)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(u8"target", sizeof(u8"target") - 1));
+    R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(u8"height", sizeof(u8"height") - 1));
   }
-  PixelBuffer* pixelBuffer = PixelBuffer_createOpaqueBlack(0, R_Value_getInteger32Value(&width), R_Value_getInteger32Value(&height), PixelFormat_An8Rn8Gn8Bn8);
+  PixelBuffer* pixelBuffer = PixelBuffer_create(0, R_Value_getInteger32Value(&width), R_Value_getInteger32Value(&height), PixelFormat_An8Rn8Gn8Bn8);
 #if 0
   writeBmpToPath(pixelBuffer, R_String_create(u8"test.bmp", sizeof("u8test.bmp") - 1));
 #endif

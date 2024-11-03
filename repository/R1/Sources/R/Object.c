@@ -28,6 +28,93 @@
 #include "R/TypeNames.h"
 #include "R/Value.h"
 
+#include "R/JumpTarget.h"
+#include "R/Status.h"
+#include "R/Types.h"
+#include "R/Value.h"
+
+static void
+equalTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+hash
+  (
+    R_Value* target,
+    R_Value const* self
+  );
+
+static void
+notEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static const R_Type_Operations typeOperations = {
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = &equalTo,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = &hash,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = &notEqualTo,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+static void
+equalTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (!R_Value_isObjectReferenceValue(other)) {
+    R_Value_setBooleanValue(target, R_Value_getObjectReferenceValue(self) == R_Value_getObjectReferenceValue(other));
+  } else {
+    R_Value_setBooleanValue(target, R_BooleanValue_False);
+  }
+}
+
+static void
+hash
+  (
+    R_Value* target,
+    R_Value const* self
+  )
+{
+  R_Value_setSizeValue(target, (R_SizeValue)(uintptr_t)R_Value_getObjectReferenceValue(self));
+}
+
+static void
+notEqualTo
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (!R_Value_isObjectReferenceValue(other)) {
+    R_Value_setBooleanValue(target, R_Value_getObjectReferenceValue(self) != R_Value_getObjectReferenceValue(other));
+  } else {
+    R_Value_setBooleanValue(target, R_BooleanValue_True);
+  }
+}
+
 #define ObjectTypeName "R.Object"
 
 typedef struct ObjectTag ObjectTag;
@@ -35,7 +122,6 @@ typedef struct ObjectTag ObjectTag;
 struct ObjectTag {
   R_Type* type;
 };
-
 
 static bool g_objectRegistered = false;
 
@@ -113,7 +199,7 @@ R_allocateObject
 static R_Type* g__R_Object_type = NULL;
 
 static void
-_R_Object_typeDestructing
+typeDestructing
   (
     void* context
   )
@@ -131,7 +217,7 @@ _R_Object_getType
     g_objectRegistered = R_BooleanValue_True;
   }
   if (!g__R_Object_type) {
-    R_registerObjectType(u8"R.Object", sizeof(u8"R.Object") - 1, sizeof(R_Object), NULL, &_R_Object_typeDestructing, NULL, NULL);
+    R_registerObjectType(u8"R.Object", sizeof(u8"R.Object") - 1, sizeof(R_Object), NULL, &typeOperations, &typeDestructing, NULL, NULL);
     g__R_Object_type = R_getType(u8"R.Object", sizeof(u8"R.Object") - 1);
   }
   return g__R_Object_type;
@@ -185,7 +271,7 @@ R_Object_getHash
 { return (R_SizeValue)(uintptr_t)self; }
 
 R_BooleanValue
-R_Object_isEqualTo
+R_Object_equalTo
   (
     R_Object* self,
     R_Value const* other
