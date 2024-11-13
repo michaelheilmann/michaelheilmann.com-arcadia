@@ -271,9 +271,7 @@ R_StringBuffer_clear
   (
     R_StringBuffer* self
   )
-{
-  self->size = 0;
-}
+{ self->size = 0; }
 
 R_SizeValue
 R_StringBuffer_getNumberOfBytes

@@ -1,12 +1,12 @@
 /* Copyright (c) 2024 Michael Heilmann. All rights reserved. */
-@media not print {
+@@media not print {
   :root {
     --black: rgb(3,3,3);
     --white: rgb(252,252,252);
     --blue: #0044CC;
   }
 }
-@media print {
+@@media print {
   :root {
     --black: black;
     --white: white;
@@ -20,45 +20,45 @@ a {
 
 /*
 landing page font (if font style "normal" is used)
-https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
+https://developer.mozilla.org/en-US/docs/Web/CSS/@@font-face/font-weight
 */
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Thin.ttf');
   font-weight: 100;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-ExtraLight.ttf');
   font-weight: 200;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Light.ttf');
   font-weight: 300;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Regular.ttf');
   font-weight: 400;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Medium.ttf');
   font-weight: 500;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-SemiBold.ttf');
   font-weight: 600;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Bold.ttf');
   font-weight: 700;
@@ -67,45 +67,45 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
 
 /*
 landing page font (if font style "italic" is used)
-https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
+https://developer.mozilla.org/en-US/docs/Web/CSS/@@font-face/font-weight
 */
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-ThinItalicItalic.ttf');
   font-weight: 100;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-ExtraLightItalic.ttf');
   font-weight: 200;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-LightItalic.ttf');
   font-weight: 300;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-RegularItalic.ttf');
   font-weight: 400;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-MediumItalic.ttf');
   font-weight: 500;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-SemiBoldItalic.ttf');
   font-weight: 600;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-landing-page-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-BoldItalic.ttf');
   font-weight: 700;
@@ -114,45 +114,45 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
 
 /*
 default font (if font style "normal" is used)
-https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
+https://developer.mozilla.org/en-US/docs/Web/CSS/@@font-face/font-weight
 */
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Thin.ttf');
   font-weight: 100;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-ExtraLight.ttf');
   font-weight: 200;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Light.ttf');
   font-weight: 300;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Regular.ttf');
   font-weight: 400;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Medium.ttf');
   font-weight: 500;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-SemiBold.ttf');
   font-weight: 600;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Bold.ttf');
   font-weight: 700;
@@ -161,46 +161,46 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
 
 /*
 default font (if font style "italic" is used)
-https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
+https://developer.mozilla.org/en-US/docs/Web/CSS/@@font-face/font-weight
 */
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-ThinItalicItalic.ttf');
   font-weight: 100;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-ExtraLightItalic.ttf');
   font-weight: 200;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-LightItalic.ttf');
   font-weight: 300;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   /* Unsure why there is no "RegularItalic". */
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-MediumItalic.ttf');
   font-weight: 400;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-MediumItalic.ttf');
   font-weight: 500;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-SemiBoldItalic.ttf');
   font-weight: 600;
   font-style: italic;
 }
-@font-face {
+@@font-face {
   font-family: 'my-default-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-BoldItalic.ttf');
   font-weight: 700;
@@ -210,43 +210,43 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
 /*
 default code font
 */
-@font-face {
+@@font-face {
   font-family: 'my-code-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-ThinItalic.ttf');
   font-weight: 100;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-code-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-ExtraLight.ttf');
   font-weight: 200;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-code-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-Light.ttf');
   font-weight: 300;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-code-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-Regular.ttf');
   font-weight: 400;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-code-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-Medium.ttf');
   font-weight: 500;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-code-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-SemiBold.ttf');
   font-weight: 600;
   font-style: normal;
 }
-@font-face {
+@@font-face {
   font-family: 'my-code-font';
   src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-Bold.ttf');
   font-weight: 700;

@@ -37,41 +37,61 @@ FetchProduct(${MyProjectName}.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/To
 FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Tools.TemplateEngine Tool source directory")
 
 # Build "index.html".
-set(DOCUMENTATION_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/index.i)
-set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/index.html")
-add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${DOCUMENT_TARGET_FILE}
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/index.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/index.html")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/index.i => ${DOCUMENT_TARGET_FILE}"
-                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
-add_custom_target(Website.IndexPage ALL DEPENDS ${DOCUMENT_TARGET_FILE})
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
+                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+add_custom_target(Website.IndexPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "error.html".
-set(DOCUMENTATION_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/error.i)
-set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/error.html")
-add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/error.i ${DOCUMENT_TARGET_FILE}
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/error.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/error.html")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/error.i => ${DOCUMENT_TARGET_FILE}"
-                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
-add_custom_target(Website.ErrorPage ALL DEPENDS ${DOCUMENT_TARGET_FILE})
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
+                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+add_custom_target(Website.ErrorPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "roadmap.html".
-set(DOCUMENTATION_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
-set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/roadmap.html")
-add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i ${DOCUMENT_TARGET_FILE}
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/roadmap.html")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i => ${DOCUMENT_TARGET_FILE}"
+                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
-add_custom_target(Website.RoadmapPage ALL DEPENDS ${DOCUMENT_TARGET_FILE})
+add_custom_target(Website.RoadmapPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "roadmap-archive.html".
-set(DOCUMENTATION_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
-set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/roadmap-archive.html")
-add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i ${DOCUMENT_TARGET_FILE}
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/roadmap-archive.html")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i => ${DOCUMENT_TARGET_FILE}"
+                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
-add_custom_target(Website.RoadmapArchivePage ALL DEPENDS ${DOCUMENT_TARGET_FILE})
+add_custom_target(Website.RoadmapArchivePage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+
+# Build "assets/index.css".
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/index.css.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/assets/index.css")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
+                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+add_custom_target(Website.IndexCss ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+
+# Build "assets/reset.css".
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/reset.css.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/assets/reset.css")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENT_TARGET_FILE}"
+                   DEPENDS Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
+add_custom_target(Website.ResetCss ALL DEPENDS ${DOCUMENT_TARGET_FILE})
