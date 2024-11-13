@@ -45,7 +45,8 @@ notEqualTo
     R_Value const* other
   );
 
-static const R_Type_Operations typeOperations = {
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = NULL,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -119,7 +120,7 @@ _R_ForeignProcedureValue_getType
   )
 {
   if (!g_type) {
-    R_registerForeignProcedureType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1, &typeOperations, &typeDestructing);
+    R_registerForeignProcedureType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1, &_typeOperations, &typeDestructing);
     g_type = R_getType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1);
   }
   return g_type;

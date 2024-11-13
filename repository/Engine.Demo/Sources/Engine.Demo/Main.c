@@ -18,6 +18,8 @@
 #include <stdlib.h>
 
 #include "R.h"
+#include "Module/Audials/Include.h"
+#include "Module/Visuals/Include.h"
 
 void
 main1
@@ -25,7 +27,47 @@ main1
     int argc,
     char **argv
   )
-{ }
+{ 
+  // (1) Initialize Audials.
+  Audials_startup();
+  
+  // (2) Play sine wave.
+  Audials_playSine();
+
+  // (3) Create a window.
+  NativeWindowsWindow* window = NativeWindowsWindow_create();
+
+  // (4) Ensure the window is opened.
+  NativeWindowsWindow_open(window);
+  
+  R_Integer32Value width, height;
+  NativeWindowsIcon* icon;
+
+  // (5) Set the big icon.
+  NativeWindowsWindow_getRequiredBigIconSize(window, &width, &height);
+  icon = NativeWindowsIcon_create(width, height, 47, 47, 47);
+  NativeWindowsWindow_setBigIcon(window, icon);
+  
+  // (6) Set the small icon.
+  NativeWindowsWindow_getRequiredSmallIconSize(window, &width, &height);
+  icon = NativeWindowsIcon_create(width, height, 47, 47, 47);
+  NativeWindowsWindow_setSmallIcon(window, icon);
+
+  // (7) Set the title.
+  NativeWindowsWindow_setTitle(window, R_String_create_pn("Michael Heilmann's Liminality", sizeof("Michael Heilmann's Liminality") - 1));
+
+  // (8) Enter the message loop.
+  while (!NativeWindowsWindow_getQuitRequested(window)) {
+    NativeWindowsWindow_update(window);
+  }
+
+  // (9) Ensure the window is closed.
+  NativeWindowsWindow_close(window);
+
+  // (10) Shutdown audials.
+  // TODO: Causes a leak if not invoked.
+  Audials_shutdown();
+}
 
 int
 main

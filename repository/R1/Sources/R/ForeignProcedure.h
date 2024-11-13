@@ -18,6 +18,8 @@
 #if !defined(R_FOREIGNPROCEDURE_H_INCLUDED)
 #define R_FOREIGNPROCEDURE_H_INCLUDED
 
+#include "R/Configure.h"
+
 typedef void R_Type;
 
 typedef void (*R_ForeignProcedureValue)();

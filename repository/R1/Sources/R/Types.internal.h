@@ -35,8 +35,6 @@ struct TypeNode {
   R_SizeValue valueSize;
   R_Type_Operations const* typeOperations;
   R_Type_TypeDestructingCallbackFunction* typeDestructing;
-  R_Type_VisitObjectCallbackFunction* visitObject;
-  R_Type_DestructObjectCallbackFunction* destructObject;
 };
 
 // Startup the type system

@@ -116,7 +116,14 @@ subtract
     R_Value const* other
   );
 
-static const R_Type_Operations typeOperations = {
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
   .add = &add,
   .and = NULL,
   .concatenate = NULL,
@@ -404,7 +411,7 @@ _R_Natural16Value_getType
   )
 {
   if (!g_type) {
-    R_registerNaturalType(u8"R.Natural16", sizeof("R.Natural16") - 1, &typeOperations, &typeDestructing);
+    R_registerNaturalType(u8"R.Natural16", sizeof("R.Natural16") - 1, &_typeOperations, &typeDestructing);
     g_type = R_getType(u8"R.Natural16", sizeof("R.Natural16") - 1);
   }
   return g_type;

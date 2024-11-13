@@ -540,3 +540,42 @@ void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteB
     offset += R_ByteBuffer_getSize(temporary);
   }
 }
+
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("NativeWindowsImageWriter", NativeWindowsImageWriter, "R.Object", R_Object, &_typeOperations);
+
+void
+NativeWindowsImageWriter_construct
+  (
+    NativeWindowsImageWriter* self
+  )
+{
+  R_Type* _type = _NativeWindowsImageWriter_getType();
+  R_Object_construct((R_Object*)self);
+  R_Object_setType((R_Object*)self, _type);
+}

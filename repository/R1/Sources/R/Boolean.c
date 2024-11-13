@@ -68,7 +68,8 @@ or
     R_Value const* other
   );
 
-static const R_Type_Operations typeOperations = {
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = NULL,
   .add = NULL,
   .and = &and,
   .concatenate = NULL,
@@ -182,7 +183,7 @@ _R_BooleanValue_getType
   )
 {
   if (!g_type) {
-    R_registerBooleanType(u8"R.Boolean", sizeof("R.Boolean") - 1, &typeOperations, &typeDestructing);
+    R_registerBooleanType(u8"R.Boolean", sizeof("R.Boolean") - 1, &_typeOperations, &typeDestructing);
     g_type = R_getType(u8"R.Boolean", sizeof("R.Boolean") - 1);
   }
   return g_type;

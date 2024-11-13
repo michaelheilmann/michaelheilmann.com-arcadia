@@ -21,6 +21,8 @@
 #include "R/JumpTarget.h"
 #include "R/TypeNames.h"
 
+// debug assert
+#include <assert.h>
 // memcmp, memcpy, memmove
 #include <string.h>
 // fprintf, stderr
@@ -163,14 +165,28 @@ R_Type_getVisitObjectCallbackFunction
   (
     R_Type const* self
   )
-{ return ((TypeNode const*)self)->visitObject; }
+{
+  TypeNode const* typeNode = (TypeNode const*)self;
+  if (!typeNode->typeOperations->objectTypeOperations) {
+    R_setStatus(R_Status_OperationInvalid);
+    R_jump();
+  }
+  return typeNode->typeOperations->objectTypeOperations->visit;
+}
 
 R_Type_DestructObjectCallbackFunction*
 R_Type_getDestructObjectCallbackFunction
   (
     R_Type const* self
   )
-{ return ((TypeNode const*)self)->destructObject; }
+{
+  TypeNode const* typeNode = (TypeNode const*)self;
+  if (!typeNode->typeOperations->objectTypeOperations) {
+    R_setStatus(R_Status_OperationInvalid);
+    R_jump();
+  }
+  return typeNode->typeOperations->objectTypeOperations->destruct;
+}
 
 R_BooleanValue
 R_Type_hasChildren
@@ -240,8 +256,9 @@ R_registerBooleanType
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
-  typeNode->visitObject = NULL;
-  typeNode->destructObject = NULL;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
@@ -275,8 +292,9 @@ R_registerForeignProcedureType
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
-  typeNode->visitObject = NULL;
-  typeNode->destructObject = NULL;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
@@ -310,8 +328,9 @@ R_registerIntegerType
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
-  typeNode->visitObject = NULL;
-  typeNode->destructObject = NULL;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
@@ -345,8 +364,9 @@ R_registerNaturalType
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
-  typeNode->visitObject = NULL;
-  typeNode->destructObject = NULL;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
@@ -362,9 +382,7 @@ R_registerObjectType
     size_t valueSize,
     R_Type* parentObjectType,
     R_Type_Operations const* typeOperations,
-    R_Type_TypeDestructingCallbackFunction* typeDestructing,
-    R_Type_VisitObjectCallbackFunction* visit,
-    R_Type_DestructObjectCallbackFunction* destruct
+    R_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
   R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
@@ -384,8 +402,9 @@ R_registerObjectType
   typeNode->parentObjectType = parentObjectType;
   typeNode->valueSize = valueSize;
   typeNode->typeDestructing = typeDestructing;
-  typeNode->visitObject = visit;
-  typeNode->destructObject = destruct;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL != typeNode->typeOperations->objectTypeOperations);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
@@ -419,8 +438,9 @@ R_registerRealType
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
-  typeNode->visitObject = NULL;
-  typeNode->destructObject = NULL;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
@@ -454,8 +474,9 @@ R_registerSizeType
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
-  typeNode->visitObject = NULL;
-  typeNode->destructObject = NULL;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
@@ -489,8 +510,9 @@ R_registerVoidType
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
-  typeNode->visitObject = NULL;
-  typeNode->destructObject = NULL;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;

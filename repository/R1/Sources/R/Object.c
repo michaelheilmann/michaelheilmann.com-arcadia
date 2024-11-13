@@ -56,7 +56,14 @@ notEqualTo
     R_Value const* other
   );
 
-static const R_Type_Operations typeOperations = {
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -217,7 +224,7 @@ _R_Object_getType
     g_objectRegistered = R_BooleanValue_True;
   }
   if (!g__R_Object_type) {
-    R_registerObjectType(u8"R.Object", sizeof(u8"R.Object") - 1, sizeof(R_Object), NULL, &typeOperations, &typeDestructing, NULL, NULL);
+    R_registerObjectType(u8"R.Object", sizeof(u8"R.Object") - 1, sizeof(R_Object), NULL, &_typeOperations, &typeDestructing);
     g__R_Object_type = R_getType(u8"R.Object", sizeof(u8"R.Object") - 1);
   }
   return g__R_Object_type;

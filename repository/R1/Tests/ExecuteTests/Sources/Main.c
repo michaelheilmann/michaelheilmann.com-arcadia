@@ -64,7 +64,7 @@ execute1
     R_jump();
   }
   uint8_t codeBytes[] = {
-    R_Opcode_Idle,  
+    R_Machine_Code_Opcode_Idle,  
   };
   R_Machine_Code_append(code, codeBytes, 1);
   R_JumpTarget jumpTarget;
@@ -105,13 +105,11 @@ execute2
     constants = NULL;
     R_jump();
   }
-  uint8_t codeBytes[] = {
-    R_Opcode_Add,
-    0 | 2,
-    1 << 6 | 0,
-    1 << 6 | 1,
-  };
-  R_Machine_Code_append(code, codeBytes, 4);
+  uint8_t opcode = R_Machine_Code_Opcode_Add;
+  R_Machine_Code_append(code, &opcode, 1);
+  R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Register, 2);
+  R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 0);
+  R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 1);
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {

@@ -61,8 +61,6 @@ main
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    _Context_getType();
-    _FileContext_getType();
     main1(argc, argv);
     R_popJumpTarget();
   }

@@ -24,8 +24,18 @@
 #include "R/TypeNames.h"
 typedef struct R_Value R_Value;
 
-/// This struct provides information on the implementations of operations for a type.
+/// Type operations for object types.
+typedef struct R_ObjectType_Operations {
+  void (*constructor)(R_Value* self, R_SizeValue numberOfArguments, R_Value* arguments);
+  void (*destruct)(void* self);
+  void (*visit)(void* self);
+} R_ObjectType_Operations;
+
+/// Type operations for all types.
 typedef struct R_Type_Operations {
+  /// Pointer to the object type operations if the type is an object type.
+  /// The null pointer otherwise.
+  R_ObjectType_Operations const* objectTypeOperations;
   void (*add)(R_Value* target, R_Value const* self, R_Value const* other);
   void (*and)(R_Value* target, R_Value const* self, R_Value const* other);
   void (*concatenate)(R_Value* target, R_Value const* self, R_Value const* other);
@@ -289,9 +299,7 @@ R_registerObjectType
     size_t valueSize,
     R_Type* parentObjectType,
     R_Type_Operations const* typeOperations,
-    R_Type_TypeDestructingCallbackFunction* typeDestructing,
-    R_Type_VisitObjectCallbackFunction* visit,
-    R_Type_DestructObjectCallbackFunction* destruct
+    R_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
 /* R_Status_ArgumentValueInvalid, R_Status_AllocationFailed, R_Status_TypeExists */

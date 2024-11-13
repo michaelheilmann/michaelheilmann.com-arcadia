@@ -1,4 +1,21 @@
-#include "Module/Visuals/IconWindows.h"
+// The author of this software is Michael Heilmann (contact@michaelheilmann.com).
+//
+// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+// Last modified: 2024-11-13
+
+#include "Module/Visuals/NativeWindowsIcon.h"
 
 // EXIT_FAILURE, EXIT_SUCCESS
 #include <stdlib.h>
@@ -10,17 +27,43 @@
 #include <malloc.h>
 
 static void
-IconWindows_destruct
+NativeWindowsIcon_destruct
   (
-    IconWindows* self
+    NativeWindowsIcon* self
   );
 
-Rex_defineObjectType("IconWindows", IconWindows, "R.Object", R_Object, NULL, &IconWindows_destruct)
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = &NativeWindowsIcon_destruct,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("NativeWindowsIcon", NativeWindowsIcon, "R.Object", R_Object, &_typeOperations);
 
 static void
-IconWindows_destruct
+NativeWindowsIcon_destruct
   (
-    IconWindows* self
+    NativeWindowsIcon* self
   )
 {
   if (self->hIcon) {
@@ -30,14 +73,17 @@ IconWindows_destruct
 }
 
 void
-IconWindows_construct
+NativeWindowsIcon_construct
   (
-    IconWindows* self,
-    int width,
-    int height
+    NativeWindowsIcon* self,
+    R_Integer32Value width,
+    R_Integer32Value height,
+    R_Natural8Value red,
+    R_Natural8Value green,
+    R_Natural8Value blue
   )
 {
-  R_Type* _type = _IconWindows_getType();
+  R_Type* _type = _NativeWindowsIcon_getType();
   R_Object_construct((R_Object*)self);
 
   HDC hMemDC;
@@ -127,9 +173,13 @@ IconWindows_construct
   for (x = 0; x < width; x++) {
     for (y = 0; y < height; y++) {
       // Clear the alpha bits
-      *lpdwPixel &= 0x00FFFFFF;
+      uint32_t pixel = 0x000000000;
       // Set the alpha bits to 0x9F (semi-transparent) or 0xFF000000 (opaque).
-      *lpdwPixel |= /*0x9F000000*/0xFF000000;
+      pixel |= /*0x9F000000*/0xFF000000;
+      pixel |= red << 16;
+      pixel |= green << 8;
+      pixel |= blue << 0;
+      *lpdwPixel = pixel;
       lpdwPixel++;
     }
   }
@@ -157,4 +207,19 @@ IconWindows_construct
 
   self->hIcon = hIcon;
   R_Object_setType((R_Object*)self, _type);
+}
+
+NativeWindowsIcon*
+NativeWindowsIcon_create
+  (
+    R_Integer32Value width,
+    R_Integer32Value height,
+    R_Natural8Value red,
+    R_Natural8Value green,  
+    R_Natural8Value blue
+  )
+{
+  NativeWindowsIcon* self = R_allocateObject(_NativeWindowsIcon_getType());
+  NativeWindowsIcon_construct(self, width, height, red, green, blue);
+  return self;
 }

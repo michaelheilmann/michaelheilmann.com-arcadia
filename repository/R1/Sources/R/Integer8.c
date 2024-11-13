@@ -116,7 +116,8 @@ subtract
     R_Value const* other
   );
 
-static const R_Type_Operations typeOperations = {
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = NULL,
   .add = &add,
   .and = NULL,
   .concatenate = NULL,
@@ -404,7 +405,7 @@ _R_Integer8Value_getType
   )
 {
   if (!g_type) {
-    R_registerIntegerType(u8"R.Integer8", sizeof("R.Integer8") - 1, &typeOperations, &typeDestructing);
+    R_registerIntegerType(u8"R.Integer8", sizeof("R.Integer8") - 1, &_typeOperations, &typeDestructing);
     g_type = R_getType(u8"R.Integer8", sizeof("R.Integer8") - 1);
   }
   return g_type;

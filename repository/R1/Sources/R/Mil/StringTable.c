@@ -109,7 +109,33 @@ R_Mil_StringTable_destruct
   }
 }
 
-Rex_defineObjectType("Cil.StringTable", R_Mil_StringTable, "R.Object", R_Object, &R_Mil_StringTable_visit, &R_Mil_StringTable_destruct);
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = &R_Mil_StringTable_destruct,
+  .visit = &R_Mil_StringTable_visit,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("Cil.StringTable", R_Mil_StringTable, "R.Object", R_Object, &_typeOperations);
 
 void
 R_Mil_StringTable_construct

@@ -42,7 +42,33 @@ Context_visit
   R_Object_visit(self->files);
 }
 
-Rex_defineObjectType("Tools.TemplateEngine.Context", Context, "R.Object", R_Object, &Context_visit, &Context_destruct);
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = &Context_destruct,
+  .visit = &Context_visit,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  . and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  . or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("Tools.TemplateEngine.Context", Context, "R.Object", R_Object, &_typeOperations);
 
 void
 Context_construct

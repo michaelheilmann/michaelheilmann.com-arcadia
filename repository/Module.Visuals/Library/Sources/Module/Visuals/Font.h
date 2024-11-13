@@ -15,64 +15,21 @@
 
 // Last modified: 2024-11-11
 
-#if !defined(TOOLS_VISUALS2D_FONT_H_INCLUDED)
-#define TOOLS_VISUALS2D_FONT_H_INCLUDED
+#if !defined(MODULE_VISUALS_FONT_H_INCLUDED)
+#define MODULE_VISUALS_FONT_H_INCLUDED
 
 #include "R.h"
+#include "Module/Visuals/NativeWindowsBitmap.h"
 #include "Module/Visuals/PixelBuffer.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-Rex_declareObjectType("BitmapWindows", BitmapWindows, "R.Object");
-
-struct BitmapWindows {
-  R_Object _parent;
-  HDC hDeviceContext;
-  HBITMAP hBitmap;
-  R_Integer32Value width;
-  R_Integer32Value height;
-  R_Integer32Value lineStride;
-  R_Integer32Value linePadding;
-  R_Integer32Value numberOfBitsPerPixel;
-  R_Natural8Value pixelFormat;
-};
-
-void
-BitmapWindows_construct
-  (
-    BitmapWindows* self,
-    int width,
-    int height
-  );
-
-BitmapWindows*
-BitmapWindows_create
-  (
-    int width,
-    int height
-  );
-
-void
-BitmapWindows_fill
-  (
-    BitmapWindows* self,
-    uint8_t r,
-    uint8_t g,
-    uint8_t b
-  );
-
-PixelBuffer*
-BitmapWindows_toPixelBuffer
-  (
-    BitmapWindows* self
-  );
-
 Rex_declareObjectType("TextureFontWindows", TextureFontWindows, "R.Object");
 
 struct TextureFontWindows {
   R_Object _parent;
-  BitmapWindows* bitmap;
+  NativeWindowsBitmap* bitmap;
   HFONT hFont;
   HDC hDeviceContext;
   R_Natural32Value codePoint;
@@ -103,4 +60,4 @@ TextureFontWindows_getPixelBuffer
     TextureFontWindows* self
   );
 
-#endif // TOOLS_VISUALS2D_FONT_H_INCLUDED
+#endif // MODULE_VISUALS_FONT_H_INCLUDED

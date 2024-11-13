@@ -15,11 +15,28 @@
 
 // Last modified: 2024-09-19
 
-#if !defined(TOOLS_VISUALS2D_IMAGEWRITER_H_INCLUDED)
-#define TOOLS_VISUALS2D_IMAGEWRITER_H_INCLUDED
+#if !defined(MODULE_VISUALS_IMAGEWRITER_H_INCLUDED)
+#define MODULE_VISUALS_IMAGEWRITER_H_INCLUDED
 
 #include "R.h"
 #include "Module/Visuals/PixelBuffer.h"
+
+Rex_declareObjectType("NativeWindowsImageWriter", NativeWindowsImageWriter, "R.Object");
+
+struct NativeWindowsImageWriter {
+  R_Object _parent;
+};
+
+void
+NativeWindowsImageWriter_construct
+  (
+    NativeWindowsImageWriter* self
+  );
+
+NativeWindowsImageWriter*
+NativeWindowsImageWriter_create
+  (
+  );
 
 void writePngToPath(PixelBuffer* sourcePixelBuffer, R_String* targetPath);
 
@@ -42,4 +59,4 @@ void writeIconToPath(R_List* sourcePixelBuffers, R_String* targetPath);
 
 void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer);
 
-#endif // TOOLS_VISUALS2D_IMAGEWRITER_H_INCLUDED
+#endif // MODULE_VISUALS_IMAGEWRITER_H_INCLUDED

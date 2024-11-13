@@ -211,7 +211,33 @@ isDigit
   return ('0' <= self->symbol && self->symbol <= '9');
 }
 
-Rex_defineObjectType("Cil.Scanner", R_Mil_Scanner, "R.Object", R_Object, &R_Mil_Scanner_visit, &R_Mil_Scanner_destruct);
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = &R_Mil_Scanner_destruct,
+  .visit = &R_Mil_Scanner_visit,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("Cil.Scanner", R_Mil_Scanner, "R.Object", R_Object, &_typeOperations);
 
 void
 R_Mil_Scanner_construct

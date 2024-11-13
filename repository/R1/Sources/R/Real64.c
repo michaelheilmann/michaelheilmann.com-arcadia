@@ -120,6 +120,7 @@ subtract
   );
 
 static const R_Type_Operations typeOperations = {
+  .objectTypeOperations = NULL,
   .add = &add,
   .and = NULL,
   .concatenate = NULL,

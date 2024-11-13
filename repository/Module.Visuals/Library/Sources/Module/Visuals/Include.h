@@ -15,12 +15,14 @@
 
 // Last modified: 2024-09-16
 
-#if !defined(TOOLS_VISUALS2D_INCLUDE_H_INCLUDED)
-#define TOOLS_VISUALS2D_INCLUDE_H_INCLUDED
+#if !defined(MODULE_VISUALS_INCLUDE_H_INCLUDED)
+#define MODULE_VISUALS_INCLUDE_H_INCLUDED
 
 #include "Module/Visuals/Font.h"
 #include "Module/Visuals/ImageWriter.h"
 #include "Module/Visuals/ImageWriterParameters.h"
 #include "Module/Visuals/PixelBuffer.h"
+#include "Module/Visuals/NativeWindowsIcon.h"
+#include "Module/Visuals/NativeWindowsWindow.h"
 
-#endif // TOOLS_VISUALS2D_INCLUDE_H_INCLUDED
+#endif // MODULE_VISUALS_INCLUDE_H_INCLUDED

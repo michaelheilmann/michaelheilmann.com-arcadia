@@ -26,7 +26,33 @@ R_Mil_ProgramAst_visit
   )
 { R_Object_visit(self->statements); }
 
-Rex_defineObjectType("R.Mil.ProgramAst", R_Mil_ProgramAst, "R.Object", R_Object, &R_Mil_ProgramAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_ProgramAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_ProgramAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_ProgramAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_ProgramAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.ProgramAst", R_Mil_ProgramAst, "R.Object", R_Object, &_R_Mil_ProgramAst_typeOperations);
 
 void
 R_Mil_ProgramAst_construct
@@ -62,7 +88,33 @@ R_Mil_ProgramAst_append
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_defineObjectType("R.Mil.OperandAst", R_Mil_OperandAst, "R.Object", R_Object, NULL, NULL);
+static const R_ObjectType_Operations _R_Mil_OperandAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _R_Mil_OperandAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_OperandAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.OperandAst", R_Mil_OperandAst, "R.Object", R_Object, &_R_Mil_OperandAst_typeOperations);
 
 void
 R_Mil_OperandAst_construct
@@ -84,7 +136,33 @@ R_Mil_BooleanLiteralOperandAst_visit
   )
 { R_Object_visit(self->value); }
 
-Rex_defineObjectType("R.Mil.BooleanLiteralOperandAst", R_Mil_BooleanLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &R_Mil_BooleanLiteralOperandAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_BooleanLiteralOperandAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_BooleanLiteralOperandAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_BooleanLiteralOperandAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_BooleanLiteralOperandAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.BooleanLiteralOperandAst", R_Mil_BooleanLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_BooleanLiteralOperandAst_typeOperations);
 
 void
 R_Mil_BooleanLiteralOperandAst_construct
@@ -119,7 +197,33 @@ R_Mil_NumberLiteralOperandAst_visit
   )
 { R_Object_visit(self->value); }
 
-Rex_defineObjectType("R.Mil.NumberLiteralOperandAst", R_Mil_NumberLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &R_Mil_NumberLiteralOperandAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_NumberLiteralOperandAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_NumberLiteralOperandAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_NumberLiteralOperandAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_NumberLiteralOperandAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.NumberLiteralOperandAst", R_Mil_NumberLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_NumberLiteralOperandAst_typeOperations);
 
 void
 R_Mil_NumberLiteralOperandAst_construct
@@ -154,7 +258,33 @@ R_Mil_StringLiteralOperandAst_visit
   )
 { R_Object_visit(self->value); }
 
-Rex_defineObjectType("R.Mil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &R_Mil_StringLiteralOperandAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_StringLiteralOperandAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_StringLiteralOperandAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_StringLiteralOperandAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_StringLiteralOperandAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_StringLiteralOperandAst_typeOperations);
 
 void
 R_Mil_StringLiteralOperandAst_construct
@@ -189,7 +319,33 @@ R_Mil_VariableOperandAst_visit
   )
 { R_Object_visit(self->value); }
 
-Rex_defineObjectType("R.Mil.VariableOperandAst", R_Mil_VariableOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &R_Mil_VariableOperandAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_VariableOperandAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_VariableOperandAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_VariableOperandAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_VariableOperandAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.VariableOperandAst", R_Mil_VariableOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_VariableOperandAst_typeOperations);
 
 void
 R_Mil_VariableOperandAst_construct
@@ -224,7 +380,33 @@ R_Mil_VoidLiteralOperandAst_visit
   )
 { R_Object_visit(self->value); }
 
-Rex_defineObjectType("R.Mil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &R_Mil_VoidLiteralOperandAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_VoidLiteralOperandAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_VoidLiteralOperandAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_VoidLiteralOperandAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_VoidLiteralOperandAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_VoidLiteralOperandAst_typeOperations);
 
 void
 R_Mil_VoidLiteralOperandAst_construct
@@ -252,7 +434,33 @@ R_Mil_VoidLiteralOperandAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_defineObjectType("R.Mil.ExpressionAst", R_Mil_ExpressionAst, "R.Object", R_Object, NULL, NULL);
+static const R_ObjectType_Operations _R_Mil_ExpressionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _R_Mil_ExpressionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_ExpressionAst_objectTypeOperations,
+  .add = NULL,
+  . and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  . or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.ExpressionAst", R_Mil_ExpressionAst, "R.Object", R_Object, &_R_Mil_ExpressionAst_typeOperations);
 
 void
 R_Mil_ExpressionAst_construct
@@ -274,7 +482,33 @@ R_Mil_UnaryExpressionAst_visit
   )
 { R_Object_visit(self->operand1); }
 
-Rex_defineObjectType("R.Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &R_Mil_UnaryExpressionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_UnaryExpressionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_UnaryExpressionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_UnaryExpressionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_UnaryExpressionAst_objectTypeOperations,
+  .add = NULL,
+  . and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  . or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_UnaryExpressionAst_typeOperations);
 
 void
 R_Mil_UnaryExpressionAst_construct
@@ -315,7 +549,33 @@ R_Mil_BinaryExpressionAst_visit
   R_Object_visit(self->operand2);
 }
 
-Rex_defineObjectType("R.Mil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &R_Mil_BinaryExpressionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_BinaryExpressionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_BinaryExpressionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_BinaryExpressionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_BinaryExpressionAst_objectTypeOperations,
+  .add = NULL,
+  . and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  . or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_BinaryExpressionAst_typeOperations);
 
 void
 R_Mil_BinaryExpressionAst_construct
@@ -358,7 +618,33 @@ R_Mil_LoadExpressionAst_visit
   R_Object_visit(self->operand);
 }
 
-Rex_defineObjectType("R.Mil.LoadExpressionAst", R_Mil_LoadExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &R_Mil_LoadExpressionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_LoadExpressionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_LoadExpressionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_LoadExpressionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_LoadExpressionAst_objectTypeOperations,
+  .add = NULL,
+  . and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  . or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.LoadExpressionAst", R_Mil_LoadExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_LoadExpressionAst_typeOperations);
 
 void
 R_Mil_LoadExpressionAst_construct
@@ -386,7 +672,33 @@ R_Mil_LoadExpressionAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_defineObjectType("R.Mil.StatementAst", R_Mil_StatementAst, "R.Object", R_Object, NULL, NULL);
+static const R_ObjectType_Operations _R_Mil_StatementAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _R_Mil_StatementAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_StatementAst_objectTypeOperations,
+  .add = NULL,
+  . and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  . or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.StatementAst", R_Mil_StatementAst, "R.Object", R_Object, &_R_Mil_StatementAst_typeOperations);
 
 void
 R_Mil_StatementAst_construct
@@ -411,7 +723,33 @@ R_Mil_ExpressionStatementAst_visit
   R_Object_visit(self->expression);
 }
 
-Rex_defineObjectType("R.Mil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, "R.Mil.StatementAst", R_Mil_StatementAst, &R_Mil_ExpressionStatementAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_ExpressionStatementAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_ExpressionStatementAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_ExpressionStatementAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_ExpressionStatementAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, "R.Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_ExpressionStatementAst_typeOperations);
 
 void
 R_Mil_ExpressionStatementAst_construct
@@ -451,7 +789,33 @@ R_Mil_LabelStatementAst_visit
   R_Object_visit(self->labelName);
 }
 
-Rex_defineObjectType("R.Mil.LabelStatementAst", R_Mil_LabelStatementAst, "R.Mil.StatementAst", R_Mil_StatementAst, &R_Mil_LabelStatementAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_LabelStatementAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_LabelStatementAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_LabelStatementAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_LabelStatementAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.LabelStatementAst", R_Mil_LabelStatementAst, "R.Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_LabelStatementAst_typeOperations);
 
 void
 R_Mil_LabelStatementAst_construct
@@ -488,7 +852,33 @@ R_Mil_ReturnStatementAst_visit
   R_Object_visit(self->operand);
 }
 
-Rex_defineObjectType("R.Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, "R.Mil.StatementAst", R_Mil_StatementAst, &R_Mil_ReturnStatementAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_ReturnStatementAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_ReturnStatementAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_ReturnStatementAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_ReturnStatementAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, "R.Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_ReturnStatementAst_typeOperations);
 
 void
 R_Mil_ReturnStatementAst_construct
@@ -516,7 +906,33 @@ R_Mil_ReturnStatementAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_defineObjectType("R.Mil.DefinitionAst", R_Mil_DefinitionAst, "R.Object", R_Object, NULL, NULL);
+static const R_ObjectType_Operations _R_Mil_DefinitionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _R_Mil_DefinitionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_DefinitionAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.DefinitionAst", R_Mil_DefinitionAst, "R.Object", R_Object, &_R_Mil_DefinitionAst_typeOperations);
 
 void
 R_Mil_DefinitionAst_construct
@@ -547,7 +963,33 @@ R_Mil_ProcedureDefinitionAst_visit
   }
 }
 
-Rex_defineObjectType("R.Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &R_Mil_ProcedureDefinitionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_ProcedureDefinitionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_ProcedureDefinitionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_ProcedureDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_ProcedureDefinitionAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ProcedureDefinitionAst_typeOperations);
 
 void
 R_Mil_ProcedureDefinitionAst_construct
@@ -599,7 +1041,33 @@ R_Mil_ClassDefinitionAst_visit
   }
 }
 
-Rex_defineObjectType("R.Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &R_Mil_ClassDefinitionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_ClassDefinitionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_ClassDefinitionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_ClassDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_ClassDefinitionAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ClassDefinitionAst_typeOperations);
 
 void
 R_Mil_ClassDefinitionAst_construct
@@ -640,7 +1108,33 @@ R_Mil_ClassMemberDefinitionAst_visit
   )
 {/*Intentionally empty.*/}
 
-Rex_defineObjectType("R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &R_Mil_ClassMemberDefinitionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_ClassMemberDefinitionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_ClassMemberDefinitionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_ClassMemberDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_ClassMemberDefinitionAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ClassMemberDefinitionAst_typeOperations);
 
 void
 R_Mil_ClassMemberDefinitionAst_construct
@@ -666,7 +1160,33 @@ R_Mil_MethodDefinitionAst_visit
   R_Object_visit(self->methodBody);
 }
 
-Rex_defineObjectType("R.Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &R_Mil_MethodDefinitionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_MethodDefinitionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_MethodDefinitionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_MethodDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_MethodDefinitionAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_MethodDefinitionAst_typeOperations);
 
 void
 R_Mil_MethodDefinitionAst_construct
@@ -710,7 +1230,33 @@ R_Mil_ConstructorDefinitionAst_visit
   R_Object_visit(self->constructorBody);
 }
 
-Rex_defineObjectType("R.Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &R_Mil_ConstructorDefinitionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_ConstructorDefinitionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_ConstructorDefinitionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_ConstructorDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_ConstructorDefinitionAst_objectTypeOperations,
+  .add = NULL,
+  . and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  . or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_ConstructorDefinitionAst_typeOperations);
 
 void
 R_Mil_ConstructorDefinitionAst_construct
@@ -750,7 +1296,33 @@ R_Mil_VariableDefinitionAst_visit
   R_Object_visit(self->variableName);
 }
 
-Rex_defineObjectType("R.Mil.VariableDefinitionAst", R_Mil_VariableDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &R_Mil_VariableDefinitionAst_visit, NULL);
+static const R_ObjectType_Operations _R_Mil_VariableDefinitionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_VariableDefinitionAst_visit,
+};
+
+static const R_Type_Operations _R_Mil_VariableDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_VariableDefinitionAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.VariableDefinitionAst", R_Mil_VariableDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_VariableDefinitionAst_typeOperations);
 
 void
 R_Mil_VariableDefinitionAst_construct

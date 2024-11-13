@@ -18,170 +18,6 @@
 #include "Module/Visuals/Font.h"
 
 static void
-BitmapWindows_destruct
-  (
-    BitmapWindows* self
-  )
-{
-  if (NULL != self->hBitmap) {
-    DeleteObject(self->hBitmap);
-    self->hBitmap = NULL;
-  }
-  if (NULL != self->hDeviceContext) {
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
-  }
-}
-
-Rex_defineObjectType("BitmapWindows", BitmapWindows, "R.Object", R_Object, NULL, &BitmapWindows_destruct);
-
-void
-BitmapWindows_construct
-  (
-    BitmapWindows* self,
-    int width,
-    int height
-  )
-{
-  R_Type* _type = _BitmapWindows_getType();
-  R_Object_construct((R_Object*)self);
-  self->hBitmap = NULL;
-  self->hDeviceContext = NULL;
-
-  HDC hScreenDeviceContext = GetDC(NULL);
-  if (!hScreenDeviceContext) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  self->hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
-  if (!self->hDeviceContext) {
-    ReleaseDC(NULL, hScreenDeviceContext);
-    hScreenDeviceContext = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  ReleaseDC(NULL, hScreenDeviceContext);
-  hScreenDeviceContext = NULL;
-
-  BITMAPINFO bmi;
-  bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = width;
-  bmi.bmiHeader.biHeight = height;
-  bmi.bmiHeader.biPlanes = 1;
-  bmi.bmiHeader.biBitCount = 24;
-  bmi.bmiHeader.biCompression = BI_RGB;
-  bmi.bmiHeader.biSizeImage = (width * height) * 3;
-
-  self->hBitmap = CreateDIBSection(self->hDeviceContext, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
-  if (!self->hBitmap) {
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  if (bmi.bmiHeader.biBitCount != 24) {
-    DeleteObject(self->hBitmap);
-    self->hBitmap = NULL;
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  self->width = width;
-  self->height = height;
-  DWORD lineStride = ((((bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) + 31) & ~31) >> 3);
-  DWORD linePadding = lineStride - ((bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) >> 3);
-  if (lineStride > INT32_MAX) {
-    DeleteObject(self->hBitmap);
-    self->hBitmap = NULL;
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  self->lineStride = (int32_t)lineStride;
-  self->linePadding = (uint32_t)linePadding;
-  self->numberOfBitsPerPixel = 24;
-  self->pixelFormat = PixelFormat_Bn8Gn8Rn8;
-
-  HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
-  if (!hBrush) {
-    DeleteObject(self->hBitmap);
-    self->hBitmap = NULL;
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  SelectObject(self->hDeviceContext, self->hBitmap);
-  RECT fillRetc = { .left = 0, .top = 0, .right = self->width, .bottom = self->height };
-  FillRect(self->hDeviceContext, &fillRetc, hBrush);
-  DeleteObject(hBrush);
-  hBrush = NULL;
-
-  R_Object_setType(self, _type);
-}
-
-BitmapWindows*
-BitmapWindows_create
-  (
-    int width,
-    int height
-  )
-{
-  BitmapWindows* self = R_allocateObject(_BitmapWindows_getType());
-  BitmapWindows_construct(self, width, height);
-  return self;
-}
-
-void
-BitmapWindows_fill
-  (
-    BitmapWindows* self,
-    uint8_t r,
-    uint8_t g,
-    uint8_t b
-  )
-{
-  HBRUSH hBrush = CreateSolidBrush(RGB(r, g, b));
-  if (!hBrush) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  SelectObject(self->hDeviceContext, self->hBitmap);
-  RECT fillRetc = { .left = 0, .top = 0, .right = self->width, .bottom = self->height };
-  FillRect(self->hDeviceContext, &fillRetc, hBrush);
-  DeleteObject(hBrush);
-  hBrush = NULL;
-}
-
-PixelBuffer*
-BitmapWindows_toPixelBuffer
-  (
-    BitmapWindows* self
-  )
-{
-  DIBSECTION dibSection;
-  if (!GetObject(self->hBitmap, sizeof(DIBSECTION), &dibSection)) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  uint8_t* sourceBytes = dibSection.dsBm.bmBits;
-  // Currently, we assume that BitmapWindows is BGR format.
-  PixelBuffer* pixelBuffer = PixelBuffer_create(0, self->width, self->height, PixelFormat_An8Rn8Gn8Bn8);
-  for (int32_t y = 0; y < self->height; ++y) {
-    for (int32_t x = 0; x < self->width; ++x) {
-      int32_t sourceOffset = self->lineStride * y + (x * self->numberOfBitsPerPixel) / 8;
-      int32_t targetOffset = PixelBuffer_getLineStride(pixelBuffer) * y + x * PixelBuffer_getBytesPerPixel(pixelBuffer);
-      uint8_t* source = sourceBytes + sourceOffset;
-      PixelBuffer_setPixelRgba(pixelBuffer, x, y, source[2], source[1], source[0], 255);
-    }
-  }
-  PixelBuffer_reflectHorizontally(pixelBuffer);
-  return pixelBuffer;
-}
-
-static void
 TextureFontWindows_destruct
   (
     TextureFontWindows* self
@@ -193,7 +29,33 @@ TextureFontWindows_destruct
   }
 }
 
-Rex_defineObjectType("TextureFontWindows", TextureFontWindows, "R.Object", R_Object, NULL, &TextureFontWindows_destruct);
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = &TextureFontWindows_destruct,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("TextureFontWindows", TextureFontWindows, "R.Object", R_Object, &_typeOperations);
 
 void
 TextureFontWindows_construct
@@ -230,7 +92,7 @@ TextureFontWindows_construct
   DeleteDC(hDeviceContext);
   hDeviceContext = NULL;
   // Create a bitmap of that size. Draw the symbol to the bitmap.
-  self->bitmap = BitmapWindows_create(width, height);
+  self->bitmap = NativeWindowsBitmap_create(width, height);
   DrawTextA(self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   //
   R_Object_setType(self, _type);
@@ -280,7 +142,7 @@ TextureFontWindows_setCodePoint
     DeleteDC(hDeviceContext);
     hDeviceContext = NULL;
     // Create a bitmap of that size. Draw the symbol to the bitmap.
-    self->bitmap = BitmapWindows_create(width, height);
+    self->bitmap = NativeWindowsBitmap_create(width, height);
     DrawTextA(self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   }
 }
@@ -291,5 +153,5 @@ TextureFontWindows_getPixelBuffer
     TextureFontWindows* self
   )
 {
-  return BitmapWindows_toPixelBuffer(self->bitmap);
+  return NativeWindowsBitmap_toPixelBuffer(self->bitmap);
 }

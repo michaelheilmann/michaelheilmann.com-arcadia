@@ -34,6 +34,8 @@ set(MyDemoName ${MyProjectName}.Engine.Demo)
 
 FetchProduct(${MyDemoName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
 FetchProduct(${MyDemoName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
+FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Module.Audials/Library/Sources" "path to the Audials module source directory")
+FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Module.Visuals/Library/Sources" "path to the Visuals module source directory")
 
 if (NOT TARGET ${MyDemoName})
   add_executable(${MyDemoName})
@@ -44,7 +46,7 @@ if (NOT TARGET ${MyDemoName})
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Engine.Demo/Main.c)
   list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Engine.Demo/Configure.h)
 
-  target_link_libraries(${MyDemoName} Module.Visuals Arcadia.R Arcadia.Arms)
+  target_link_libraries(${MyDemoName} Module.Audials Module.Visuals Arcadia.R Arcadia.Arms)
 
   EndProduct(${MyDemoName} executable)
 endif()

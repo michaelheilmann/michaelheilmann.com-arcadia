@@ -44,7 +44,33 @@ R_ByteBuffer_destruct
   }
 }
 
-Rex_defineObjectType("R.ByteBuffer", R_ByteBuffer, "R.Object", R_Object, NULL, &R_ByteBuffer_destruct);
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = &R_ByteBuffer_destruct,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.ByteBuffer", R_ByteBuffer, "R.Object", R_Object, &_typeOperations);
 
 void
 R_ByteBuffer_construct

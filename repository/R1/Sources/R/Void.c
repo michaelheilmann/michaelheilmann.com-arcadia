@@ -46,6 +46,7 @@ notEqualTo
   );
 
 static const R_Type_Operations typeOperations = {
+  .objectTypeOperations = NULL,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
