@@ -19,10 +19,12 @@
 #define R_FOREIGNPROCEDURE_H_INCLUDED
 
 #include "R/Configure.h"
+#include "R/Size.h"
 
 typedef void R_Type;
+typedef struct R_Value R_Value;
 
-typedef void (*R_ForeignProcedureValue)();
+typedef void (*R_ForeignProcedureValue)(R_Value* targetValue, R_SizeValue numberOfArgumentValues, R_Value const* argumentValues);
 
 #define R_ForeignProcedureValue_Null (NULL)
 

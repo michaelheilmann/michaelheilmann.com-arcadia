@@ -55,11 +55,18 @@ struct _RegisterFrame {
 };
 
 struct R_ThreadState {
+  struct {
+    R_CallState* elements;
+    R_SizeValue size;
+    R_SizeValue capacity; 
+  } calls;
+#if 0
   _RegisterStack  registerStack;
   // List of unused register frame objects for being re-used.
   _RegisterFrame* unusedRegisterFrames;
   // Stack fo register frames.
   _RegisterFrame* registerFrameStack;
+#endif
   R_Value* registers;
   R_SizeValue numberOfRegisters;
 };

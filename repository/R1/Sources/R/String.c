@@ -23,6 +23,7 @@
 #include "R/StringBuffer.h"
 #include "R/UnmanagedMemory.h"
 #include "R/Utf8.h"
+#include "R/ToNumber/Include.h"
 // memcmp, memcpy, memmove
 #include <string.h>
 // fprintf, stderr
@@ -34,11 +35,27 @@ R_String_destruct
     R_String* self
   );
 
-static R_SizeValue
-hash
+static void
+equalToImpl
   (
-    R_Natural8Value const* bytes,
-    R_SizeValue numberOfBytes
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
+
+static void
+hashImpl
+  (
+    R_Value* target,
+    R_Value const* self
+  );
+
+static void
+notEqualToImpl
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
   );
 
 static void
@@ -79,16 +96,16 @@ static const R_Type_Operations _typeOperations = {
   .and = NULL,
   .concatenate = NULL,
   .divide = NULL,
-  .equalTo = NULL,
+  .equalTo = &equalToImpl,
   .greaterThan = NULL,
   .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
+  .hash = &hashImpl,
   .lowerThan = NULL,
   .lowerThanOrEqualTo = NULL,
   .multiply = NULL,
   .negate = NULL,
   .not = NULL,
-  .notEqualTo = NULL,
+  .notEqualTo = &notEqualToImpl,
   .or = NULL,
   .subtract = NULL,
 };
@@ -236,21 +253,58 @@ R_String_startsWith_pn
   return !memcmp(self->p, bytes, numberOfBytes);
 }
 
-R_BooleanValue
-R_String_isEqualTo
+static void
+equalToImpl
   (
-    R_String const* self,
-    R_String const* other
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
   )
 {
-  if (self == other) {
-    return R_BooleanValue_True;
+  R_String* self1 = (R_String*)R_Value_getObjectReferenceValue(self);
+  if (!R_Value_isObjectReferenceValue(other)) {
+    R_Value_setBooleanValue(target, R_BooleanValue_False);
+    return;
   }
-  if (self->numberOfBytes == other->numberOfBytes) {
-    return !memcmp(self->p, other->p, self->numberOfBytes);
+  R_Object* other1 = R_Value_getObjectReferenceValue(other);
+  if ((R_Object*)self1 == other1) {
+    R_Value_setBooleanValue(target, R_BooleanValue_True);
+    return;
+  }
+  if (!R_Type_isSubType(R_Object_getType(other1), _R_String_getType())) {
+    R_Value_setBooleanValue(target, R_BooleanValue_False);
+    return;
+  }
+  R_String* otherString1 = (R_String*)other1;
+  if (self1->numberOfBytes == otherString1->numberOfBytes) {
+    R_Value_setBooleanValue(target, !memcmp(self1->p, otherString1->p, self1->numberOfBytes));
+    return;
   } else {
-    return R_BooleanValue_False;
+    R_Value_setBooleanValue(target, R_BooleanValue_False);
+    return;
   }
+}
+
+static void
+hashImpl
+  (
+    R_Value* target,
+    R_Value const* self
+  )
+{
+  R_String* self1 = (R_String*)R_Value_getObjectReferenceValue(self);
+  R_Value_setSizeValue(target, self1->hash);
+}
+
+static void
+notEqualToImpl
+  (
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  equalToImpl(target, self, other);
 }
 
 R_SizeValue
@@ -283,15 +337,6 @@ R_String_getByteAt
     R_jump();
   }
   return *(self->p + index);
-}
-
-R_SizeValue
-R_String_getHash
-  (
-    R_String const* self
-  )
-{
-  return self->hash;
 }
 
 R_SizeValue
@@ -520,8 +565,6 @@ R_String_isEqualTo_pn
     return R_BooleanValue_False;
   }
 }
-
-#include "R/ToNumber/Include.h"
 
 R_Integer8Value
 R_String_toInteger8

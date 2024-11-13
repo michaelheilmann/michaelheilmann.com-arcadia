@@ -1,7 +1,7 @@
   @{include("./Commons/header-common.i")}
-  <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css'>
-  <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css'>
-  <link rel='canonical' href='https://michaelheilmann.com/error.html' />
+  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/index.css'>
+  <link rel='canonical' href='@{siteAddress}/error.html'>
   <title>Something went wrong ...</title>
 </head>
 <body class="my-error-page-1">

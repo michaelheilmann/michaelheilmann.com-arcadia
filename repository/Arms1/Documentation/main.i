@@ -1,8 +1,9 @@
+<main>
   <h1>Michael Heilmann's Automatic Resource Management System Mark 1</h1>
   <p>
   This is the documentation for Michael  Heilmann's Automatic Resource Management System Mark 1,
   henceforth ARMS1. ARMS1 is a precise stop the world garbage collector to be used for programs
-  written in C. ARMS1 is available at <a href="https://michaelheilmann.com/repository/arms1">michaelheilmann.com/repository/arms1</a>. 
+  written in C. ARMS1 is available at <a href="@{siteAddress}/repository/arms1">michaelheilmann.com/repository/arms1</a>. 
   <h2>Files</h2>
   <p>
   You can find the sources of ARMS1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
@@ -141,3 +142,4 @@
     <tr><td><code>Arms_Status_OperationInvalid</code></td><td>the lock count would underflow</td></tr>
   </table>
 @{include("unmanaged-memory.i")}
+</main>

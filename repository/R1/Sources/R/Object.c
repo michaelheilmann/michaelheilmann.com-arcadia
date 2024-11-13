@@ -275,7 +275,15 @@ R_Object_getHash
   ( 
     R_Object* self
   )
-{ return (R_SizeValue)(uintptr_t)self; }
+{
+  R_Type* type = R_Object_getType(self);
+  R_Type_Operations const* operations = R_Type_getOperations(type);
+  R_Value selfValue;
+  R_Value resultValue;
+  R_Value_setObjectReferenceValue(&selfValue, (R_ObjectReferenceValue)self);
+  operations->hash(&resultValue, &selfValue);
+  return R_Value_getSizeValue(&resultValue);
+}
 
 R_BooleanValue
 R_Object_equalTo
@@ -284,9 +292,27 @@ R_Object_equalTo
     R_Value const* other
   )
 {
-  if (R_ValueTag_ObjectReference == other->tag) {
-    return self == other->objectReferenceValue;
-  } else {
-    return R_BooleanValue_False;
-  }
+  R_Type* type = R_Object_getType(self);
+  R_Type_Operations const* operations = R_Type_getOperations(type);
+  R_Value selfValue;
+  R_Value_setObjectReferenceValue(&selfValue, (R_ObjectReferenceValue)self);
+  R_Value resultValue;
+  operations->equalTo(&resultValue, &selfValue, other);
+  return R_Value_getBooleanValue(&resultValue);
+}
+
+R_BooleanValue
+R_Object_notEqualTo
+  (
+    R_Object* self,
+    R_Value const* other
+  )
+{
+  R_Type* type = R_Object_getType(self);
+  R_Type_Operations const* operations = R_Type_getOperations(type);
+  R_Value selfValue;
+  R_Value_setObjectReferenceValue(&selfValue, (R_ObjectReferenceValue)self);
+  R_Value resultValue;
+  operations->notEqualTo(&resultValue, &selfValue, other);
+  return R_Value_getBooleanValue(&resultValue);
 }

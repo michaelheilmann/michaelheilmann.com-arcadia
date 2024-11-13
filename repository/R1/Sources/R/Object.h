@@ -116,4 +116,11 @@ R_Object_equalTo
     R_Value const* other
   );
 
+R_BooleanValue
+R_Object_notEqualTo
+  (
+    R_Object* self,
+    R_Value const* other
+  );
+
 #endif // R_OBJECT_H_INCLUDED

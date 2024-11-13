@@ -5,7 +5,6 @@
 #include "R/Size.h"
 typedef struct R_ByteBuffer R_ByteBuffer;
 
-#define R_UTF8BYTEBUFFERREADER(x) ((R_Utf8ByteBufferReader*)(x))
 Rex_declareObjectType("R.Utf8ByteBufferReader", R_Utf8ByteBufferReader, "R.Utf8Reader");
 
 struct R_Utf8ByteBufferReader {

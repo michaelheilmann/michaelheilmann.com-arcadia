@@ -19,6 +19,8 @@
 #define R_THREADSTATE_H_INCLUDED
 
 #include "R/Value.h"
+typedef struct R_Machine_Code R_Machine_Code;
+typedef struct R_Procedure R_Procedure;
 
 /// The thread state consists
 /// - registers (at least 256)
@@ -28,11 +30,13 @@ typedef struct R_ThreadState R_ThreadState;
 
 // @private
 // @brief Create a thread state.
+// @param procedure A pointer to the procedure to execute.
 // @return A pointer to the thread state.
 // @error #R_Status_AllocationFailed an allocation failed
 R_ThreadState*
 R_ThreadState_create
   (
+    R_Procedure* procedure
   );
 
 // @private
@@ -82,26 +86,47 @@ R_ThreadState_getRegisterAt
     R_SizeValue registerIndex
   );
 
-/// @private
-/// @brief Push a register frame.
-/// @param start The register index of the first register to push.
-/// @param length The number of registers to push.
-/// @error #R_Status_ArgumentValueInvalid if <code>start + length > n</code> where <code>n</code> is the number of registers. 
-void
-R_ThreadState_pushRegisterFrame
+typedef struct R_CallState R_CallState;
+
+/*#define R_CallState_Flags_Interpreter (1)*/
+#define R_CallState_Flags_Procedure (1)
+#define R_CallState_Flags_ForeignProcedure (2)
+
+struct R_CallState {
+  R_CallState* previous;
+  R_Natural8Value flags;
+  /// The current instruction index of this call.
+  R_Natural32Value instructionIndex;
+  union {
+    /// Pointer to the procedure to be called.
+    R_Procedure* procedure;
+    /// Pointer to the foreign procedure to be called.
+    R_ForeignProcedureValue foreignProcedure;
+  };
+};
+
+///
+R_CallState*
+R_ThreadState_beginForeignProcedureCall
   (
     R_ThreadState* threadState,
-    R_SizeValue start,
-    R_SizeValue length
+    R_Natural32Value instructionIndex,
+    R_ForeignProcedureValue foreignProcedure
   );
 
-/// @private
-/// @brief Pop the top most register frame.
-/// @error #R_Status_StackIsEmpty The register frame stack is empty.
+R_CallState*
+R_ThreadState_beginProcedureCall
+  (
+    R_ThreadState* threadState,
+    R_Natural32Value instructionIndex,
+    R_Procedure* procedure
+  );
+
+/// calls@new = [...] and calls@old = [x,...]
 void
-R_ThreadState_popRegisterFrame
+R_ThreadState_endCall
   (
     R_ThreadState* threadState
-  ); 
+  );
 
 #endif // R_THREADSTATE_H_INCLUDED

@@ -26,81 +26,6 @@
 
 #include "R/Machine/Code/Include.h"
 
-static void
-decodeIndex
-(
-  uint8_t** current,
-  uint8_t const* start,
-  uint8_t const* end,
-  R_Machine_Code_IndexKind* indexKind,
-  R_Natural32Value* indexValue
-) {
-  uint8_t* p = *current;
-  switch ((*p) & 0b11000000) {
-    case R_Machine_Code_ConstantIndexFlag: {
-      *indexKind = R_Machine_Code_IndexKind_Constant;
-    } break;
-    case R_Machine_Code_InvalidIndexFlag: {
-      *indexKind = R_Machine_Code_IndexKind_Invalid;
-    } break;
-    case R_Machine_Code_RegisterIndexFlag: {
-      *indexKind = R_Machine_Code_IndexKind_Register;
-    } break;
-    case R_Machine_Code_ReservedIndexFlag: {
-      *indexKind = R_Machine_Code_IndexKind_Reserved;
-    } break;
-    default: {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-      R_jump();
-    } break;
-  };
-  uint8_t a = (*p) & (~0b11000000);
-  if ((a & 0x20/*0b00100000*/) == 0x00/*0b00000000*/) {
-    // 5 bits in total, fit into an uint8_t.
-    uint8_t x0 = a & ~0x20;
-    p++;
-    uint32_t v = x0;
-    *indexValue = v;
-  } else if ((a & 0x38/*0b00111000*/) == 0x30/*0b00110000*/) {
-    uint8_t x0 = a & ~0x38;
-    p++;
-    uint8_t x1 = (*p) & ~0xC0;
-    p++;
-    uint32_t v = x0 << 6
-      | x1 << 0
-      ;
-    *indexValue = v;
-  } else if ((a & 0x3C/*0b00111100*/) == 0x38/*0b00111000*/) {
-    uint8_t x0 = a & ~0x3C;
-    p++;
-    uint8_t x1 = (*p) & ~0xC0;
-    p++;
-    uint8_t x2 = (*p) & ~0xC0;
-    p++;
-    uint32_t v = x0 << 12
-               | x1 << 6
-               | x2 << 0;
-  } else if (a & 0x3E/*0b00111110*/ == 0x3C/*00111100*/) {
-    uint8_t x0 = a & ~0x3E;
-    p++;
-    uint8_t x1 = (*p) & ~0xC0;
-    p++;
-    uint8_t x2 = (*p) & ~0xC0;
-    p++;
-    uint8_t x3 = (*p) & ~0xC0;
-    p++;
-    uint32_t v = x0 << 18
-               | x1 << 12
-               | x2 << 6
-               | x3 << 0;
-    *indexValue = v;
-  } else {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
-  }
-  *current = p;
-}
-
 void
 R_Instructions_add
   (
@@ -111,18 +36,18 @@ R_Instructions_add
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->add) {
@@ -142,18 +67,18 @@ R_Instructions_and
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->and) {
@@ -173,18 +98,18 @@ R_Instructions_concatenate
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->concatenate) {
@@ -204,18 +129,18 @@ R_Instructions_divide
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->divide) {
@@ -235,18 +160,18 @@ R_Instructions_equalTo
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->equalTo) {
@@ -266,18 +191,18 @@ R_Instructions_greaterThan
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->greaterThan) {
@@ -297,18 +222,18 @@ R_Instructions_greaterThanOrEqualTo
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->greaterThanOrEqualTo) {
@@ -328,6 +253,75 @@ R_Instructions_idle
   interpreterState->ipCurrent++;
 }
 
+#if 0
+void
+R_Instructions_invoke 
+  (
+    R_InterpreterStateArgument* interpreterState
+  )
+{
+  assert(R_Machine_Code_Opcode_Invoke == *interpreterState->ipCurrent);
+  interpreterState->ipCurrent++;
+  // target index
+  R_Machine_Code_IndexKind targetIndexKind;
+  R_Natural32Value targetIndex;
+  R_Value* targetValue = NULL;
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
+  if (targetIndexKind == R_Machine_Code_IndexKind_Constant) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  } else {
+    targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
+  }
+  // callee
+  R_Machine_Code_IndexKind calleeIndexKind;
+  R_Natural32Value calleeIndex;
+  R_Value calleeValue;
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &calleeIndexKind, &calleeIndex);
+  if (calleeIndexKind == R_Machine_Code_IndexKind_Constant) {
+    calleeValue = interpreterState->constants[calleeIndex];
+  } else {
+    calleeValue = *R_ThreadState_getRegisterAt(interpreterState->threadState, calleeIndex);
+  }
+  // number of arguments
+  R_Natural32Value count;
+  R_Machine_Code_decodeCount(interpreterState->code, &interpreterState->ipCurrent, &count);
+  if (count > R_Machine_Code_NumberOfArguments_Maximum) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  R_Value argumentValues[R_Machine_Code_NumberOfArguments_Maximum];
+  for (R_Natural32Value i = 0, n = count; i < n; ++i) {
+    R_Machine_Code_IndexKind argumentIndexKind;
+    R_Natural32Value argumentIndex;
+    R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &argumentIndexKind, &argumentIndex);
+    if (argumentIndexKind == R_Machine_Code_IndexKind_Constant) {
+      argumentValues[i] = interpreterState->constants[argumentIndex];
+    } else {
+      argumentValues[i] = *R_ThreadState_getRegisterAt(interpreterState->threadState, argumentIndex);
+    }
+  }
+  if (R_Value_isForeignProcedureValue(&calleeValue)) {
+    R_ForeignProcedureValue foreignProcedureValue = R_Value_getForeignProcedureValue(&calleeValue);
+    R_CallState* callState = R_ThreadState_beginForeignProcedureCall(interpreterState->threadState, foreignProcedureValue);
+    R_JumpTarget jumpTarget;
+    R_pushJumpTarget(&jumpTarget);
+    if (R_JumpTarget_save(&jumpTarget)) {
+      (*foreignProcedureValue)(targetValue, count, &(argumentValues[0]));
+      R_popJumpTarget();
+      R_ThreadState_endCall(interpreterState->threadState); // Must not fail.
+    } else {
+      R_popJumpTarget();
+      R_ThreadState_endCall(interpreterState->threadState); // Must not fail.
+      R_jump();
+    }
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+#endif
+
 void
 R_Instructions_lowerThan
   (
@@ -338,18 +332,18 @@ R_Instructions_lowerThan
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->lowerThan) {
@@ -369,18 +363,18 @@ R_Instructions_lowerThanOrEqualTo
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->lowerThanOrEqualTo) {
@@ -400,18 +394,18 @@ R_Instructions_multiply
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->multiply) {
@@ -431,13 +425,13 @@ R_Instructions_negate
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind operandIndexKind;
   R_Natural32Value operandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &operandIndexKind, &operandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &operandIndexKind, &operandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* operandValue = operandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                &(interpreterState->constants[operandIndex]) : &(interpreterState->registers[operandIndex]);
+                                &(interpreterState->constants[operandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, operandIndex);
   R_Type* operandType = R_Value_getType(operandValue);
   R_Type_Operations const* operations = R_Type_getOperations(operandType);
   if (!operations->negate) {
@@ -457,13 +451,13 @@ R_Instructions_not
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind operandIndexKind;
   R_Natural32Value operandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &operandIndexKind, &operandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &operandIndexKind, &operandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const*operandValue = operandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                               &(interpreterState->constants[operandIndex]) : &(interpreterState->registers[operandIndex]);
+                               &(interpreterState->constants[operandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, operandIndex);
   R_Type* operandType = R_Value_getType(operandValue);
   R_Type_Operations const* operations = R_Type_getOperations(operandType);
   if (!operations->not) {
@@ -483,18 +477,18 @@ R_Instructions_notEqualTo
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent,  &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->notEqualTo) {
@@ -514,25 +508,25 @@ R_Instructions_or
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations-> or ) {
     R_setStatus(R_Status_ArgumentValueInvalid);
     R_jump();
   }
-  operations-> or (targetValue, firstOperandValue, secondOperandValue);
+  operations->or(targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
@@ -545,18 +539,18 @@ R_Instructions_subtract
   interpreterState->ipCurrent++;
   R_Machine_Code_IndexKind targetIndexKind;
   R_Natural32Value targetIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &targetIndexKind, &targetIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &targetIndexKind, &targetIndex);
   R_Machine_Code_IndexKind firstOperandIndexKind;
   R_Natural32Value firstOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &firstOperandIndexKind, &firstOperandIndex);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &firstOperandIndexKind, &firstOperandIndex);
   R_Machine_Code_IndexKind secondOperandIndexKind;
   R_Natural32Value secondOperandIndex;
-  decodeIndex(&interpreterState->ipCurrent, interpreterState->ipStart, interpreterState->ipEnd, &secondOperandIndexKind, &secondOperandIndex);
-  R_Value* targetValue = &(interpreterState->registers[targetIndex]);
+  R_Machine_Code_decodeIndex(interpreterState->code, &interpreterState->ipCurrent, &secondOperandIndexKind, &secondOperandIndex);
+  R_Value* targetValue = R_ThreadState_getRegisterAt(interpreterState->threadState, targetIndex);
   R_Value const* firstOperandValue = firstOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                     &(interpreterState->constants[firstOperandIndex]) : &(interpreterState->registers[firstOperandIndex]);
+                                     &(interpreterState->constants[firstOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, firstOperandIndex);
   R_Value const* secondOperandValue = secondOperandIndexKind == R_Machine_Code_IndexKind_Constant ?
-                                      &(interpreterState->constants[secondOperandIndex]) : &(interpreterState->registers[secondOperandIndex]);
+                                      &(interpreterState->constants[secondOperandIndex]) : R_ThreadState_getRegisterAt(interpreterState->threadState, secondOperandIndex);
   R_Type* firstOperandType = R_Value_getType(firstOperandValue);
   R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
   if (!operations->subtract) {
@@ -639,69 +633,6 @@ R_Machine_Code_create
   return self;
 }
 
-// Compute the new capacity
-// - <new capacity> = 2 * <n> * <capacity> if <capacit> > 0
-// - <new capacity> = 2 * <n> * 1 otherwise
-// such that <n> is minimal and <new capacity> - <size> >= <required free capacity>
-// If <new capacity> exists, return true and assign it to *new_cp.
-// Otherwise return false.
-static bool growCapacity1(R_SizeValue size, R_SizeValue capacity, R_SizeValue requiredFreeCapacity, R_SizeValue *newCapacity) {
-  static const R_SizeValue maximalCapacity = SIZE_MAX / sizeof(uint8_t);
-  R_SizeValue currentNewCapacity = capacity ? capacity : 1;
-  R_SizeValue availableFreeCapacity = currentNewCapacity - size;
-  while (availableFreeCapacity < requiredFreeCapacity && currentNewCapacity <= maximalCapacity / 2) {
-    currentNewCapacity *= 2;
-    availableFreeCapacity = currentNewCapacity - size;
-  }
-  if (availableFreeCapacity < requiredFreeCapacity) {
-    return false;
-  }
-  *newCapacity = currentNewCapacity;
-  return true;
-}
-
-// Compute the new capacity
-// <new capacity> = <maximal capacity>
-// such that <new capacity> - <size> >= <required free capacity>.
-// If such a new capacity exists, return true and assign it to *new_cp.
-// Otherwise return false.*
-static bool growCapacity2(R_SizeValue size, R_SizeValue capacity, R_SizeValue requiredFreeCapacity, R_SizeValue *newCapacity) {
-  static const R_SizeValue maximalCapacity = SIZE_MAX / sizeof(uint8_t);
-  R_SizeValue currentNewCapacity = maximalCapacity;
-  R_SizeValue availableFreeCapacity = currentNewCapacity - size;
-  if (requiredFreeCapacity > availableFreeCapacity) {
-    return false;
-  }
-  *newCapacity = currentNewCapacity;
-  return true;
-}
-
-static bool growCapacity(R_SizeValue size, R_SizeValue capacity, R_SizeValue requiredFreeCapacity, R_SizeValue* newCapacity) {
-  if (growCapacity1(size, capacity, requiredFreeCapacity, newCapacity)) {
-    return true;
-  }
-  if (growCapacity2(size, capacity, requiredFreeCapacity, newCapacity)) {
-    return true;
-  }
-  return false;
-}
-
-static void ensureFreeCapacity(R_Machine_Code* self, R_SizeValue requiredFreeCapacity) {
-  R_SizeValue actualFreeCapacity = self->cp - self->sz;
-  if (actualFreeCapacity < requiredFreeCapacity) {
-    R_SizeValue newCapacity;
-    if (!growCapacity(self->sz, self->cp, requiredFreeCapacity, &newCapacity)) {
-      R_setStatus(R_Status_AllocationFailed);
-      R_jump();
-    }
-    if (!R_reallocateUnmanaged_nojump(&self->p, newCapacity)) {
-      R_setStatus(R_Status_AllocationFailed);
-      R_jump();
-    }
-    self->cp = newCapacity;
-  }
-}
-
 void
 R_Machine_Code_append
   (
@@ -710,7 +641,7 @@ R_Machine_Code_append
     R_SizeValue numberOfBytes
   )
 {
-  ensureFreeCapacity(self, numberOfBytes);
+  R_DynamicArrayUtilities_ensureFreeCapacity2(&self->p, sizeof(R_Natural8Value), self->sz, &self->cp, numberOfBytes);
   memcpy(self->p + self->sz, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }
@@ -815,4 +746,135 @@ R_Machine_Code_appendIndexNatural32
     R_setStatus(R_Status_ArgumentValueInvalid);
     R_jump();
   }
+}
+
+void
+R_Machine_Code_appendCountNatural8
+  (
+    R_Machine_Code* self,
+    R_Natural8Value countValue
+  )
+{
+  R_Machine_Code_appendCountNatural32(self, countValue);
+}
+
+void
+R_Machine_Code_appendCountNatural16
+  (
+    R_Machine_Code* self,
+    R_Natural16Value countValue
+  )
+{
+  R_Machine_Code_appendCountNatural32(self, countValue);
+}
+
+void
+R_Machine_Code_appendCountNatural32
+  (
+    R_Machine_Code* self,
+    R_Natural32Value countValue
+  )
+{
+  R_Machine_Code_append(self, (R_Natural8Value const*)&countValue, sizeof(R_Natural32Value));
+}
+
+void
+R_Machine_Code_decodeCount
+  (
+    R_Machine_Code* self,
+    uint8_t** current,
+    R_Natural32Value* countValue
+  )
+{
+  uint8_t* p = *current;
+  if ((self->p + self->sz) - p < 4) {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  *countValue = 0;
+
+  *countValue = *p;
+  p++;
+  *countValue |= ((R_Natural32Value)(*p)) << 8;
+  p++;
+  *countValue |= ((R_Natural32Value)(*p)) << 16;
+  p++;
+  *countValue |= ((R_Natural32Value)(*p)) << 24;
+  p++;
+  (*current) += 4;
+}
+
+void
+R_Machine_Code_decodeIndex
+  (
+    R_Machine_Code* self,
+    uint8_t** current,
+    R_Machine_Code_IndexKind* indexKind,
+    R_Natural32Value* indexValue
+  )
+{
+  uint8_t* p = *current;
+  switch ((*p) & 0b11000000) {
+    case R_Machine_Code_ConstantIndexFlag: {
+      *indexKind = R_Machine_Code_IndexKind_Constant;
+    } break;
+    case R_Machine_Code_InvalidIndexFlag: {
+      *indexKind = R_Machine_Code_IndexKind_Invalid;
+    } break;
+    case R_Machine_Code_RegisterIndexFlag: {
+      *indexKind = R_Machine_Code_IndexKind_Register;
+    } break;
+    case R_Machine_Code_ReservedIndexFlag: {
+      *indexKind = R_Machine_Code_IndexKind_Reserved;
+    } break;
+    default: {
+      R_setStatus(R_Status_ArgumentValueInvalid);
+      R_jump();
+    } break;
+  };
+  uint8_t a = (*p) & (~0b11000000);
+  if ((a & 0x20/*0b00100000*/) == 0x00/*0b00000000*/) {
+    // 5 bits in total, fit into an uint8_t.
+    uint8_t x0 = a & ~0x20;
+    p++;
+    uint32_t v = x0;
+    *indexValue = v;
+  } else if ((a & 0x38/*0b00111000*/) == 0x30/*0b00110000*/) {
+    uint8_t x0 = a & ~0x38;
+    p++;
+    uint8_t x1 = (*p) & ~0xC0;
+    p++;
+    uint32_t v = x0 << 6
+      | x1 << 0
+      ;
+    *indexValue = v;
+  } else if ((a & 0x3C/*0b00111100*/) == 0x38/*0b00111000*/) {
+    uint8_t x0 = a & ~0x3C;
+    p++;
+    uint8_t x1 = (*p) & ~0xC0;
+    p++;
+    uint8_t x2 = (*p) & ~0xC0;
+    p++;
+    uint32_t v = x0 << 12
+      | x1 << 6
+      | x2 << 0;
+  } else if (a & 0x3E/*0b00111110*/ == 0x3C/*00111100*/) {
+    uint8_t x0 = a & ~0x3E;
+    p++;
+    uint8_t x1 = (*p) & ~0xC0;
+    p++;
+    uint8_t x2 = (*p) & ~0xC0;
+    p++;
+    uint8_t x3 = (*p) & ~0xC0;
+    p++;
+    uint32_t v = x0 << 18
+      | x1 << 12
+      | x2 << 6
+      | x3 << 0;
+    *indexValue = v;
+  } else {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  *current = p;
 }

@@ -200,8 +200,20 @@ onStatement
     onIncludeDirective(context);
     Context_onRun(context->context);
   } else {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    R_Value t;
+    R_Value_setObjectReferenceValue(&t, (R_ObjectReferenceValue)context->context->temporaryBuffer);
+    R_Value_setObjectReferenceValue(&t, (R_ObjectReferenceValue)R_String_create(t));
+    t = R_Map_get(context->environment, t);
+    if (!R_Value_isObjectReferenceValue(&t)) {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
+      R_jump();
+    }
+    R_Object* object = R_Value_getObjectReferenceValue(&t);
+    if (!R_Type_isSubType(R_Object_getType(object), _R_String_getType())) {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
+      R_jump();
+    }
+    R_ByteBuffer_append_pn( context->context->targetBuffer, R_String_getBytes((R_String*)object), R_String_getNumberOfBytes((R_String*)object));
   }
 }
 
@@ -254,6 +266,7 @@ FileContext_visit
   R_Object_visit(self->context);
   R_Object_visit(self->sourceFilePath);
   R_Object_visit(self->source);
+  R_Object_visit(self->environment);
 }
 
 static const R_ObjectType_Operations _objectTypeOperations = {
@@ -297,6 +310,11 @@ FileContext_construct
   self->context = context;
   self->sourceFilePath = sourceFilePath;
   self->source = NULL;
+  self->environment = R_Map_create();
+  R_Value k, v;
+  R_Value_setObjectReferenceValue(&k, (R_ObjectReferenceValue)R_String_create_pn("siteAddress", sizeof("siteAddress") - 1));
+  R_Value_setObjectReferenceValue(&v, (R_ObjectReferenceValue)R_String_create_pn("https://michaelheilmann.com", sizeof("https://michaelheilmann.com") - 1));
+  R_Map_set(self->environment, k, v);
   R_Object_setType((R_Object*)self, _type);
 }
 

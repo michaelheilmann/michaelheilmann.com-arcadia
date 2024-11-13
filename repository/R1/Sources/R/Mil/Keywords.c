@@ -141,10 +141,12 @@ R_Mil_Keywords_add
     R_Natural32Value type
   )
 {
-  R_SizeValue hash = R_String_getHash(string);
+  R_SizeValue hash = R_Object_getHash((R_ObjectReferenceValue)string);
   R_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
-    if (R_String_isEqualTo(keyword->string, string)) {
+    R_Value t;
+    R_Value_setObjectReferenceValue(&t, (R_ObjectReferenceValue)string);
+    if (R_Object_equalTo((R_Object*)keyword->string, &t)) {
       R_setStatus(R_Status_Exists);
       R_jump();
     }
@@ -168,10 +170,12 @@ R_Mil_Keywords_scan
     R_Natural32Value* tokenType
   )
 {
-  R_SizeValue hash = R_String_getHash(string);
+  R_Value stringValue;
+  R_Value_setObjectReferenceValue(&stringValue, string);
+  R_SizeValue hash = R_Object_getHash((R_ObjectReferenceValue)string);
   R_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
-    if (R_String_isEqualTo(keyword->string, string)) {
+    if (R_Object_equalTo((R_ObjectReferenceValue)keyword->string, &stringValue)) {
       *tokenType = keyword->type;
       return R_BooleanValue_True;
     }

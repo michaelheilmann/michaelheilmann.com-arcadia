@@ -47,6 +47,8 @@
 
 #include "R/List.h"
 
+#include "R/Map.h"
+
 #include "R/maximum.h"
 #include "R/minimum.h"
 
@@ -58,7 +60,9 @@
 #include "R/nextPowerOfTwoGt.h"
 #include "R/nextPowerOfTwoGte.h"
 
-#include "r/Object.h"
+#include "R/Object.h"
+
+#include "R/Procedure.h"
 
 #include "R/Stack.h"
 

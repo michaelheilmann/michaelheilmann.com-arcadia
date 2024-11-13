@@ -53,7 +53,7 @@ R_Mil_StringTable_maybeResize_nojump
       while (oldBuckets[i]) {
         R_Mil_StringTable_Node* node = oldBuckets[i];
         oldBuckets[i] = oldBuckets[i]->next;
-        R_SizeValue hash = R_String_getHash(node->string);
+        R_SizeValue hash = R_Object_getHash((R_ObjectReferenceValue)node->string);
         R_SizeValue index = hash % newCapacity;
         node->next = newBuckets[i];
         newBuckets[i] = node;
@@ -179,7 +179,7 @@ R_Mil_StringTable_getOrCreateString
   R_SizeValue hash = R_Mil_StringTable_hashBytes(R_StringBuffer_getBytes(stringBuffer), R_StringBuffer_getNumberOfBytes(stringBuffer));
   R_SizeValue index = hash % self->capacity;
   for (R_Mil_StringTable_Node* node = self->buckets[index]; NULL != node; node = node->next) {
-    if (R_String_getHash(node->string) == hash && R_String_getNumberOfBytes(node->string)) {
+    if (R_Object_getHash((R_ObjectReferenceValue)node->string) == hash && R_String_getNumberOfBytes(node->string)) {
       if (!memcmp(R_String_getBytes(node->string), R_StringBuffer_getBytes(stringBuffer), R_String_getNumberOfBytes(node->string))) {
         return node->string;
       }

@@ -75,6 +75,9 @@ typedef enum R_Mil_TokenType {
   // "method"
   R_Mil_TokenType_Method,
 
+  // "invoke"
+  R_Mil_TokenType_Invoke,
+
   // "native"
   R_Mil_TokenType_Native,
   // "return"

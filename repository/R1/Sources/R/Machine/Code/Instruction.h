@@ -19,14 +19,20 @@
 #define R_INSTRUCTIONS_INSTRUCTION_H_INCLUDED
 
 #include "R/Value.h"
+#include "R/Object.h"
+#include "R/ThreadState.h"
+typedef struct R_Machine_Code R_Machine_Code;
 
 typedef struct R_InterpreterStateArgument {
   R_Value const* constants;
-  R_Value* registers;
+  R_ThreadState* threadState;
+  /// @brief The code to execute.
+  /// @todo Should be part of the thread state.
+  R_Machine_Code* code;
   R_Natural8Value const* ipCurrent;
-  R_Natural8Value const* ipStart;
-  R_Natural8Value const* ipEnd;
 } R_InterpreterStateArgument;
+
+#define R_Machine_Code_NumberOfArguments_Maximum (32)
 
 typedef enum R_Machine_Code_IndexKind {
   R_Machine_Code_IndexKind_Register = 1,
@@ -88,6 +94,10 @@ typedef enum R_Machine_Code_Opcode {
   // subtract <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Subtract,
 
+  // invoke <target> <number of arguments>
+  // <argument 1> <argument 2> ... <argument n>
+  R_Machine_Code_Opcode_Invoke,
+
 } R_Machine_Code_Opcode;
 
 #define R_Machine_Code_InvalidIndexFlag  (0b00000000)
@@ -95,6 +105,7 @@ typedef enum R_Machine_Code_Opcode {
 #define R_Machine_Code_ConstantIndexFlag (0b10000000)
 #define R_Machine_Code_ReservedIndexFlag (0b11000000)
 
+// INDICES
 // An index in an instruction is a multi-byte sequuence.
 // 
 // The first Byte of the sequence is of one of the following four forms.
@@ -135,6 +146,9 @@ typedef enum R_Machine_Code_Opcode {
 //   [0 * 262144 + 4 * 4096 + 64 * 0 + 0, 1 * 262144 + 63 * 4096 + 64 * 63 + 63] = [16 384, 524 287] in decimal.
 //
 // A program with more than 524 287 constants or more than 524 287 registers is rejected.
+//
+// COUNTS
+// A count is a value between R_Natural32Value_Minimum and R_Natural32Value_Maximum.
 
 void
 R_Instructions_add
@@ -184,6 +198,14 @@ R_Instructions_idle
     R_InterpreterStateArgument* interpreterState
   );
 
+#if 0
+void
+R_Instructions_invoke
+  (
+    R_InterpreterStateArgument* interpreterState
+  );
+#endif
+
 void
 R_Instructions_lowerThan
   (
@@ -232,8 +254,6 @@ R_Instructions_subtract
     R_InterpreterStateArgument* interpreterState
   );
 
-#include "R/Object.h"
-
 Rex_declareObjectType("R.Machine.Code", R_Machine_Code, R_Object);
 
 struct R_Machine_Code {
@@ -278,6 +298,44 @@ R_Machine_Code_appendIndexNatural32
     R_Machine_Code* self,
     R_Machine_Code_IndexKind indexKind,
     R_Natural16Value indexValue
+  );
+
+void
+R_Machine_Code_appendCountNatural8
+  (
+    R_Machine_Code* self,
+    R_Natural8Value countValue
+  );
+
+void
+R_Machine_Code_appendCountNatural16
+  (
+    R_Machine_Code* self,
+    R_Natural16Value countValue
+  );
+
+void
+R_Machine_Code_appendCountNatural32
+  (
+    R_Machine_Code* self,
+    R_Natural32Value countValue
+  );
+
+void
+R_Machine_Code_decodeCount
+  (
+    R_Machine_Code* self,
+    uint8_t** current,
+    R_Natural32Value* countValue
+  );
+
+void
+R_Machine_Code_decodeIndex
+  (
+    R_Machine_Code* self,
+    uint8_t** current,
+    R_Machine_Code_IndexKind* indexKind,
+    R_Natural32Value* indexValue
   );
 
 #endif // R_INSTRUCTIONS_INSTRUCTION_H_INCLUDED

@@ -273,10 +273,65 @@ onOperand
   };
 }
 
+static R_Mil_InvokeExpressionAst*
+onInvokeExpression
+  (
+    R_Mil_Parser* self
+  )
+{
+  next(self);
+  if (!is(self, R_Mil_TokenType_Name)) {
+    R_setStatus(R_Status_SyntacticalError);
+    R_jump();
+  }
+  if (is(self, R_Mil_TokenType_LineTerminator)) {
+    next(self);
+  }
+  R_Mil_VariableOperandAst* calleeAst = R_Mil_VariableOperandAst_create(getText(self));
+  if (is(self, R_Mil_TokenType_LineTerminator)) {
+    next(self);
+  }
+  if (is(self, R_Mil_TokenType_LineTerminator)) {
+    next(self);
+  }
+  if (!is(self, R_Mil_TokenType_LeftParenthesis)) {
+    R_setStatus(R_Status_SyntacticalError);
+    R_jump();
+  }
+  next(self);
+  if (is(self, R_Mil_TokenType_LineTerminator)) {
+    next(self);
+  }
+  R_List* operands = R_List_create();
+  if (!is(self, R_Mil_TokenType_EndOfInput) && !is(self, R_Mil_TokenType_RightParenthesis)) {
+    R_Mil_OperandAst* operand = onOperand(self);
+    R_List_appendObjectReferenceValue(operands, (R_ObjectReferenceValue)operand);
+    while (is(self, R_Mil_TokenType_Comma) || is(self, R_Mil_TokenType_LineTerminator)) {
+      if (is(self, R_Mil_TokenType_LineTerminator)) {
+        continue;
+      }
+      next(self);
+      operand = onOperand(self);
+      R_List_appendObjectReferenceValue(operands, (R_ObjectReferenceValue)operand);
+    }
+  }
+  if (!is(self, R_Mil_TokenType_RightParenthesis)) {
+    R_setStatus(R_Status_SyntacticalError);
+    R_jump();
+  }
+  next(self);
+  R_Mil_InvokeExpressionAst* invokeExpressionAst = R_Mil_InvokeExpressionAst_create(calleeAst, operands);
+  return invokeExpressionAst;
+}
+
 // expression :
 //   unaryExpression
 //   binaryExpression
-//   
+//   invokeExpression
+// 
+// invokeExpression :
+//  'invoke' variableOperand '(' ( operand (',' operand)* )? ')'
+// 
 // binaryExpression :
 //   'add' <op1>, <op2>
 //   'and' <op1>, <op2>
@@ -394,6 +449,9 @@ onExpression
       next(self);
       R_Mil_OperandAst* operand = onOperand(self);
       return (R_Mil_ExpressionAst*)R_Mil_UnaryExpressionAst_create(R_Mil_UnaryExpressionAstType_Not, operand);
+    } break;
+    case R_Mil_TokenType_Invoke: {
+      return (R_Mil_ExpressionAst*)onInvokeExpression(self);
     } break;
     default: {
       R_setStatus(R_Status_SyntacticalError);
@@ -658,7 +716,17 @@ onVariableDefinition
     R_Mil_Parser* self
   )
 {
-  return NULL;
+  if (R_Mil_TokenType_Variable != getType(self)) {
+    R_setStatus(R_Status_SyntacticalError);
+    R_jump();
+  }
+  next(self);
+  if (R_Mil_TokenType_Name != getType(self)) {
+    R_setStatus(R_Status_SyntacticalError);
+    R_jump();
+  }
+  R_Mil_VariableDefinitionAst* variableDefinitionAst = R_Mil_VariableDefinitionAst_create(getText(self));
+  return variableDefinitionAst;
 }
 
 // classBodyDefinition : classMemberDefinition

@@ -1,7 +1,7 @@
 @{include("./Commons/header-common.i")}
-  <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css'>
-  <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css'>
-  <link rel='canonical' href='https://michaelheilmann.com/' />
+  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/index.css'>
+  <link rel='canonical' href='@{siteAddress}/'>
   <title>Michael Heilmann Contact Information</title>
   <style>
     body.my-index-page-1 div.topic div.header {
@@ -39,9 +39,9 @@
             <span>Projects</span>
           </div>
           <div class="body" style="display: flex; flex-direction: row;">
-            <a href = 'https://michaelheilmann.com/repository/Arms1'>ARMS</a>
-            <a href = 'https://michaelheilmann.com/repository/R1'>R</a>
-            <a href = 'https://michaelheilmann.com/roadmap'>Roadmap</a>
+            <a href = '@{siteAddress}/repository/Arms1'>ARMS</a>
+            <a href = '@{siteAddress}/repository/R1'>R</a>
+            <a href = '@{siteAddress}/roadmap'>Roadmap</a>
           </div>
         </div>
       </div>

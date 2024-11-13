@@ -79,14 +79,6 @@ R_String_startsWith_pn
     R_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/R1/#r-string-isequalto
-R_BooleanValue
-R_String_isEqualTo
-  (
-    R_String const* self,
-    R_String const* other
-  );
-
 // https://michaelheilmann.com/repository/R1/#r-string-getnumberofbytes
 R_SizeValue
 R_String_getNumberOfBytes
@@ -106,12 +98,6 @@ R_String_getByteAt
   (
     R_String const* self,
     R_SizeValue index
-  );
-
-R_SizeValue
-R_String_getHash
-  (
-    R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-getnumberofsymbols

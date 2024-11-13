@@ -4,12 +4,10 @@
 #include "R/Machine/Code/Include.h"
 
 void
-R_execute
+R_executeProcedure
   (
     R_Value const* constants,
-    R_Value* registers,
-    void const* instructions,
-    R_SizeValue numberOfInstructions
+    R_Procedure* procedure
   );
 
-#endif // R_CI_H_INCLUDED
+#endif // R_EXECUTE_H_INCLUDED

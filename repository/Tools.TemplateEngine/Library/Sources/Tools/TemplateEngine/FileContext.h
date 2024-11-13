@@ -29,7 +29,10 @@ struct FileContext {
   Context* context;
   /// The path to the source file.
   R_FilePath* sourceFilePath;
+  /// UTF8 reader for the source file.
   R_Utf8Reader* source;
+  /// Map from strings to strings.
+  R_Map* environment;
 };
 
 void

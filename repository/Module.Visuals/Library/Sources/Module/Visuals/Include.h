@@ -19,7 +19,7 @@
 #define MODULE_VISUALS_INCLUDE_H_INCLUDED
 
 #include "Module/Visuals/Font.h"
-#include "Module/Visuals/ImageWriter.h"
+#include "Module/Visuals/NativeWindowsImageWriter.h"
 #include "Module/Visuals/ImageWriterParameters.h"
 #include "Module/Visuals/PixelBuffer.h"
 #include "Module/Visuals/NativeWindowsIcon.h"

@@ -261,3 +261,64 @@ R_Map_getSize
     R_Map const* self
   )
 { return self->size; }
+
+void
+R_Map_set
+  (
+    R_Map* self,
+    R_Value key,
+    R_Value value
+  )
+{ 
+  if (R_Value_isVoidValue(&key)) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_SizeValue hash = R_Value_hash(&key);
+  R_SizeValue index = hash % self->capacity;
+  for (Node* node = self->buckets[index]; NULL != node; node = node->next) {
+    if (hash == node->hash) {
+      if (R_Value_isEqualTo(&key, &node->key)) {
+        node->key = key;
+        node->value = value;
+        return;
+      }
+    }
+  }
+  Node* node = NULL;
+  if (!R_allocateUnmanaged_nojump(&node, sizeof(Node))) {
+    R_jump();
+  }
+  node->value = value;
+  node->key = key;
+  node->hash = hash;
+  node->next = self->buckets[index];
+  self->buckets[index] = node;
+  self->size++;
+}
+
+R_Value
+R_Map_get
+  (
+    R_Map const* self,
+    R_Value key
+  )
+{ 
+  if (R_Value_isVoidValue(&key)) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_SizeValue hash = R_Value_hash(&key);
+  R_SizeValue index = hash % self->capacity;
+
+  for (Node* node = self->buckets[index]; NULL != node; node = node->next) {
+    if (hash == node->hash) {
+      if (R_Value_isEqualTo(&key, &node->key)) {
+        return node->value;
+      }
+    }
+  }
+  R_Value temporary;
+  R_Value_setVoidValue(&temporary, R_VoidValue_Void);
+  return temporary;
+}

@@ -216,6 +216,38 @@ R_Mil_ExpressionAst_construct
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+/// @code
+/// class Cil.UnaryExpressionAst extends Cil.ExpressionAst
+/// @endcode
+/// Represents an unary epxression like
+//// @code
+/// invoke variableOperand '(' (operand (',' operand)*)? ')'
+/// @endcode
+Rex_declareObjectType("Cil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, "Cil.ExpressionAst");
+
+struct R_Mil_InvokeExpressionAst {
+  R_Mil_ExpressionAst parent;
+  R_Mil_VariableOperandAst* callee;
+  R_List* operands;
+};
+
+void
+R_Mil_InvokeExpressionAst_construct
+  (
+    R_Mil_InvokeExpressionAst* self,
+    R_Mil_VariableOperandAst* callee,
+    R_List* operands
+  );
+
+R_Mil_InvokeExpressionAst*
+R_Mil_InvokeExpressionAst_create
+  (
+    R_Mil_VariableOperandAst* callee,
+    R_List* operands
+  );
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 typedef enum R_Mil_UnaryExpressionAstType R_Mil_UnaryExpressionAstType;
 
 enum R_Mil_UnaryExpressionAstType {

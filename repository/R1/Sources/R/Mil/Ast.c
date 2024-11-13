@@ -476,6 +476,73 @@ R_Mil_ExpressionAst_construct
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 static void
+R_Mil_InvokeExpressionAstt_visit
+  (
+    R_Mil_InvokeExpressionAst* self
+  )
+{
+  R_Object_visit(self->callee);
+  R_Object_visit(self->operands);
+}
+
+static const R_ObjectType_Operations _R_Mil_InvokeExpressionAst_objectTypeOperations = {
+  .constructor = NULL,
+  .destruct = NULL,
+  .visit = &R_Mil_InvokeExpressionAstt_visit,
+};
+
+static const R_Type_Operations _R_Mil_InvokeExpressionAst_typeOperations = {
+  .objectTypeOperations = &_R_Mil_InvokeExpressionAst_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Mil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, "R.Object", R_Object, &_R_Mil_InvokeExpressionAst_typeOperations);
+
+void
+R_Mil_InvokeExpressionAst_construct
+  (
+    R_Mil_InvokeExpressionAst* self,
+    R_Mil_VariableOperandAst* callee,
+    R_List* operands
+  )
+{
+  R_Type* _type = _R_Mil_InvokeExpressionAst_getType();
+  R_Mil_ExpressionAst_construct((R_Mil_ExpressionAst*)self);
+  self->callee = callee;
+  self->operands = operands;
+  R_Object_setType(self, _type);
+}
+
+R_Mil_InvokeExpressionAst*
+R_Mil_InvokeExpressionAst_create
+  (
+    R_Mil_VariableOperandAst* callee,
+    R_List* operands
+  )
+{
+  R_Mil_InvokeExpressionAst* self = R_allocateObject(_R_Mil_InvokeExpressionAst_getType());
+  R_Mil_InvokeExpressionAst_construct(self, callee, operands);
+  return self;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static void
 R_Mil_UnaryExpressionAst_visit
   (
     R_Mil_UnaryExpressionAst* self

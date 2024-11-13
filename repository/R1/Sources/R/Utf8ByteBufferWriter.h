@@ -21,7 +21,6 @@
 #include "R/Utf8Writer.h"
 typedef struct R_ByteBuffer R_ByteBuffer;
 
-#define R_UTF8BYTEBUFFERWRITER(x) ((R_Utf8ByteBufferWriter*)(x))
 Rex_declareObjectType("R.Utf8ByteBufferWriter", R_Utf8ByteBufferWriter, "R.Utf8Writer");
 
 struct R_Utf8ByteBufferWriter {

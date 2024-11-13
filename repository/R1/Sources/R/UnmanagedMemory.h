@@ -51,4 +51,46 @@ R_reallocateUnmanaged_nojump
     R_SizeValue n
   );
 
+// Grow the array such that there is room for at least required free capacity elements.
+// availableFreeCapacity = capacity@old - size
+// capacity@new = capacity@old + (requiredFreeCapacity - availableFreeCapacity) if requiredFreeCapacity > availableFreeCapacity
+// capacity@new = capacity@old otherwise
+void
+R_DynamicArrayUtilities_ensureFreeCapacity1
+  (
+    void** elements,
+    R_SizeValue elementSize,
+    R_SizeValue size,
+    R_SizeValue* capacity,
+    R_SizeValue requiredFreeCapacity
+  );
+
+// Grow the array such there is room for at least required free capacity elements.
+// There are two attempts made.
+// 
+// The first attempt made is:
+// Compute a new capacity
+// - <new capacity> = 2^<n> * 1 if <capacit> > 0
+// - <new capacity> = 2^<n> * <capacity> otherwise
+// such that
+// - <n> is minimal and
+// - <new capacity> - <size> >= <required free capacity>
+//
+// If such a capacity does not exist, attempt two is made.
+// The second attempt is:
+// // <new capacity> = <maximal capacity>
+// such that
+// <new capacity> - <size> >= <required free capacity>.
+// 
+// If such a capacity does not exist, fail.
+void
+R_DynamicArrayUtilities_ensureFreeCapacity2
+  (
+    void** elements,
+    R_SizeValue elementSize,
+    R_SizeValue size,
+    R_SizeValue* capacity,
+    R_SizeValue requiredFreeCapacity
+  );
+
 #endif // R_UNMANAGEDMEMORY_H_INCLUDED

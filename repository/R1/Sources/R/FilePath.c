@@ -510,9 +510,9 @@ R_FilePath_isEqualTo
     return R_BooleanValue_False;
   }
   for (R_SizeValue i = 0, n = R_List_getSize(self->fileNames); i < n; ++i) {
-    R_String* x = (R_String*)R_List_getObjectReferenceValueAt(self->fileNames, i);
-    R_String* y = (R_String*)R_List_getObjectReferenceValueAt(other->fileNames, i);
-    if (!R_String_isEqualTo(x, y)) {
+    R_Object* x = R_List_getObjectReferenceValueAt(self->fileNames, i);
+    R_Value y = R_List_getAt(other->fileNames, i);
+    if (!R_Object_equalTo(x, &y)) {
       return R_BooleanValue_False;
     }
   }
@@ -520,7 +520,9 @@ R_FilePath_isEqualTo
     return R_BooleanValue_False;
   } 
   if (self->root != NULL) {
-    if (!R_String_isEqualTo(self->root, other->root)) {
+    R_Value t;
+    R_Value_setObjectReferenceValue(&t, other->root);
+    if (!R_Object_equalTo((R_Object*)self->root, &t)) {
       return R_BooleanValue_False;
     }
   }

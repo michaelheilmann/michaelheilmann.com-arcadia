@@ -1,7 +1,7 @@
     @{include("./../../../../Documentation/Commons/header-common.i")}
-    <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css'>
-    <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css'>
-    <link rel="canonical" href="https://michaelheilmann.com/repository/R1/" />
+    <link rel='stylesheet' href='@{siteAddress}/assets/reset.css'>
+    <link rel='stylesheet' href='@{siteAddress}/assets/index.css'>
+    <link rel='canonical' href='@{siteAddress}/repository/R1/'>
     <title>Michael Heilmann's Runtime Mark 1</title>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@3/es5/tex-mml-chtml.js"></script>
     <style>
@@ -39,8 +39,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body class="my-content-page-1">
+  <header>
+  </header>
+  <main>
   <h1>Michael Heilmann's Runtime Mark 1</h1>
   <p>
   This is the documentation for Michael  Heilmann's Runtime Mark 1,
   henceforth R1. R1 facilates the creation of C programs - in particular interpreters - that are portable,
-  maintainable, as well as safe. R1 is available at <a href="https://michaelheilmann.com/repository/R1">michaelheilmann.com/repository/R1</a>.
+  maintainable, as well as safe. R1 is available at <a href="@{siteAddress}/repository/R1">michaelheilmann.com/repository/R1</a>.

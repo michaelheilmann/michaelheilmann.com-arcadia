@@ -51,7 +51,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
 static const R_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
-  . and = NULL,
+  .and = NULL,
   .concatenate = NULL,
   .divide = NULL,
   .equalTo = NULL,
@@ -64,7 +64,7 @@ static const R_Type_Operations _typeOperations = {
   .negate = NULL,
   .not = NULL,
   .notEqualTo = NULL,
-  . or = NULL,
+  .or = NULL,
   .subtract = NULL,
 };
 
