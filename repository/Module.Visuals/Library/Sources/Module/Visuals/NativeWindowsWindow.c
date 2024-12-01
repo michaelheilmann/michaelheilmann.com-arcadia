@@ -43,16 +43,15 @@ NativeWindowsWindow_setTitleHelper
   (
     HWND windowHandle,
     R_String* title
-  )
-{
-  R_StringBuffer* stringBuffer = R_StringBuffer_create();
-  R_Value value;
-  R_Value_setObjectReferenceValue(&value, (R_ObjectReferenceValue)title);
-  R_StringBuffer_append(stringBuffer, value);
-  R_Value_setObjectReferenceValue(&value, (R_ObjectReferenceValue)R_String_create_pn("", 1));
-  R_StringBuffer_append(stringBuffer, value);
-  SendMessage(windowHandle, WM_SETTEXT, 0, (LPARAM)R_StringBuffer_getBytes(stringBuffer));
-}
+  );
+
+static void
+NativeWindowsWindow_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static const char g_title[] = "Liminality";
 
@@ -61,7 +60,7 @@ static const char g_className[] = "Liminality Window Class";
 static R_BooleanValue g_quitRequested = R_BooleanValue_False;
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &NativeWindowsWindow_constructImpl,
   .destruct = &NativeWindowsWindow_destruct,
   .visit = NULL,
 };
@@ -148,20 +147,42 @@ NativeWindowsWindow_visit
   }
 }
 
-void
-NativeWindowsWindow_construct
+static void
+NativeWindowsWindow_setTitleHelper
   (
-    NativeWindowsWindow* self
+    HWND windowHandle,
+    R_String* title
   )
 {
+  R_StringBuffer* stringBuffer = R_StringBuffer_create();
+  R_Value value;
+  R_Value_setObjectReferenceValue(&value, (R_ObjectReferenceValue)title);
+  R_StringBuffer_append(stringBuffer, value);
+  R_Value_setObjectReferenceValue(&value, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("", 1)));
+  R_StringBuffer_append(stringBuffer, value);
+  SendMessage(windowHandle, WM_SETTEXT, 0, (LPARAM)R_StringBuffer_getBytes(stringBuffer));
+}
+
+static void
+NativeWindowsWindow_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  NativeWindowsWindow* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _NativeWindowsWindow_getType();
-  R_Object_construct((R_Object*)self);
-  self->instanceHandle = NULL;
-  self->windowHandle = NULL;
-  self->title = R_String_create_pn(g_title, sizeof(g_title) - 1);
-  self->bigIcon = NULL;
-  self->smallIcon = NULL;
-  R_Object_setType(self, _type);
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->instanceHandle = NULL;
+  _self->windowHandle = NULL;
+  _self->title = R_String_create_pn(R_ImmutableByteArray_create(g_title, sizeof(g_title) - 1));
+  _self->bigIcon = NULL;
+  _self->smallIcon = NULL;
+  R_Object_setType(_self, _type);
 }
 
 NativeWindowsWindow*
@@ -169,8 +190,10 @@ NativeWindowsWindow_create
   (
   )
 {
-  NativeWindowsWindow* self = R_allocateObject(_NativeWindowsWindow_getType());
-  NativeWindowsWindow_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  NativeWindowsWindow* self = R_allocateObject(_NativeWindowsWindow_getType(), 0, &argumentValues[0]);
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = self };
+  NativeWindowsWindow_constructImpl(&selfValue, 0, &argumentValues[0]);
   return self;
 }
 

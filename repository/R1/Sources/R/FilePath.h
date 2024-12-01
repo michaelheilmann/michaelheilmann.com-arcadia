@@ -33,12 +33,6 @@ struct R_FilePath {
   R_String* root;
 };
 
-void
-R_FilePath_construct
-  (
-    R_FilePath* self
-  );
-
 // Create an empty file path.
 R_FilePath*
 R_FilePath_create

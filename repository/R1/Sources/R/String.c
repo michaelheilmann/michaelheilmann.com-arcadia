@@ -24,15 +24,21 @@
 #include "R/UnmanagedMemory.h"
 #include "R/Utf8.h"
 #include "R/ToNumber/Include.h"
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/cstdlib.h"
 
 static void
-R_String_destruct
+R_String_constructImpl
   (
-    R_String* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static R_SizeValue
+hash
+  (
+    R_Natural8Value const* bytes,
+    R_SizeValue numberOfBytes
   );
 
 static void
@@ -59,35 +65,26 @@ notEqualToImpl
   );
 
 static void
-R_String_destruct
+R_String_visit
   (
-    R_String* self
-  )
-{
-  if (self->p) {
-    R_deallocateUnmanaged_nojump(self->p);
-    self->p = NULL;
-  }
-}
+    R_String* string 
+  );
 
-static R_SizeValue
-hash
+static void
+getByteRange
   (
-    R_Natural8Value const* bytes,
-    R_SizeValue numberOfBytes
-  )
-{
-  R_SizeValue hash = numberOfBytes;
-  for (R_SizeValue i = 0, n = numberOfBytes; i < n; ++i) {
-    hash = hash * 37 + bytes[i];
-  }
-  return hash;
-}
+    R_SizeValue symbolIndex,
+    R_SizeValue symbolLength,
+    R_SizeValue* byteIndex,
+    R_SizeValue* byteLength,
+    uint8_t const* p,
+    R_SizeValue l
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
-  .destruct = &R_String_destruct,
-  .visit = NULL,
+  .construct = &R_String_constructImpl,
+  .destruct = NULL,
+  .visit = &R_String_visit,
 };
 
 static const R_Type_Operations _typeOperations = {
@@ -112,145 +109,74 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.String", R_String, "R.Object", R_Object, &_typeOperations);
 
-void
-R_String_construct_pn
+static void
+R_String_constructImpl
   (
-    R_String* self,
-    void const* bytes,
-    R_SizeValue numberOfBytes
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  if (1 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  R_String* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _R_String_getType();
-  if (!bytes) {
-    R_setStatus(R_Status_EncodingInvalid);
-    R_jump();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
   }
-  R_SizeValue numberOfSymbols;
-  if (!R_isUtf8(bytes, numberOfBytes, &numberOfSymbols)) {
-    R_setStatus(R_Status_EncodingInvalid);
-    R_jump();
-  }
-  R_Object_construct((R_Object*)self);
-  self->p = NULL;
-  self->hash = 0;
-  self->numberOfBytes = 0;
-  if (!R_allocateUnmanaged_nojump(&self->p, numberOfBytes)) {
-    R_jump();
-  }
-  memcpy(self->p, bytes, numberOfBytes);
-  self->numberOfBytes = numberOfBytes;
-  self->hash = hash(self->p, self->numberOfBytes);
-  R_Object_setType((R_Object*)self, _type);
-}
-
-R_String*
-R_String_create_pn
-  (
-    void const* bytes,
-    R_SizeValue numberOfBytes
-  )
-{
-  R_String* self = R_allocateObject(_R_String_getType());
-  R_String_construct_pn(self, bytes, numberOfBytes);
-  return self;
-}
-
-void
-R_String_construct
-  (
-    R_String* self,
-    R_Value value
-  )
-{
-  if (!R_Value_isObjectReferenceValue(&value)) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  R_Type* _type = _R_String_getType();
-  R_Object_construct((R_Object*)self);
-  R_ObjectReferenceValue referenceValue = R_Value_getObjectReferenceValue(&value);
-  if (R_Type_isSubType(R_Object_getType(referenceValue), _R_ByteBuffer_getType())) {
-    R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
-    if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
+  if (R_Value_isImmutableByteArrayValue(&argumentValues[0])) {
+    R_SizeValue numberOfSymbols;
+    R_ImmutableByteArray* immutableByteArray = R_Value_getImmutableByteArrayValue(&argumentValues[0]);
+    if (!R_isUtf8(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray), &numberOfSymbols)) {
       R_setStatus(R_Status_EncodingInvalid);
       R_jump();
     }
-    self->p = NULL;
-    self->hash = 0;
-    self->numberOfBytes = 0;
-    if (!R_allocateUnmanaged_nojump(&self->p, R_ByteBuffer_getNumberOfBytes(object))) {
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } else if (R_Value_isObjectReferenceValue(&argumentValues[0])) {
+    R_ObjectReferenceValue referenceValue = R_Value_getObjectReferenceValue(&argumentValues[0]);
+    if (R_Type_isSubType(R_Object_getType(referenceValue), _R_ByteBuffer_getType())) {
+      R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
+      if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
+        R_setStatus(R_Status_EncodingInvalid);
+        R_jump();
+      }
+      _self->immutableByteArray = R_ImmutableByteArray_create(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
+      _self->hash = hash(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
+    } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_String_getType())) {
+      R_String* object = (R_String*)referenceValue;
+      _self->immutableByteArray = object->immutableByteArray;
+      _self->hash = object->hash;
+    } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_StringBuffer_getType())) {
+      R_StringBuffer* object = (R_StringBuffer*)referenceValue;
+      _self->immutableByteArray = R_ImmutableByteArray_create(R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
+      _self->hash = hash(R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
+    } else {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
       R_jump();
     }
-    memcpy(self->p, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
-    self->numberOfBytes = R_ByteBuffer_getNumberOfBytes(object);
-    self->hash = hash(self->p, self->numberOfBytes);
-  } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_String_getType())) {
-    R_String* object = (R_String*)referenceValue;
-    self->p = NULL;
-    self->hash = 0;
-    self->numberOfBytes = 0;
-    if (!R_allocateUnmanaged_nojump(&self->p, R_String_getNumberOfBytes(object))) {
-      R_jump();
-    }
-    memcpy(self->p, R_String_getBytes(object), R_String_getNumberOfBytes(object));
-    self->numberOfBytes = object->numberOfBytes;
-    self->hash = object->hash;
-  } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_StringBuffer_getType())) {
-    R_StringBuffer* object = (R_StringBuffer*)referenceValue;
-    self->p = NULL;
-    self->hash = 0;
-    self->numberOfBytes = 0;
-    if (!R_allocateUnmanaged_nojump(&self->p, R_StringBuffer_getNumberOfBytes(object))) {
-      R_jump();
-    }
-    memcpy(self->p, R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
-    self->numberOfBytes = R_StringBuffer_getNumberOfBytes(object);
-    self->hash = hash(self->p, self->numberOfBytes);
   } else {
     R_setStatus(R_Status_ArgumentTypeInvalid);
     R_jump();
   }
-  R_Object_setType((R_Object*)self, _type);
+  R_Object_setType((R_Object*)_self, _type);
 }
 
-R_String*
-R_String_create
+static R_SizeValue
+hash
   (
-    R_Value value
-  )
-{
-  R_String* self = R_allocateObject(_R_String_getType());
-  R_String_construct(self, value);
-  return self;
-}
-
-R_BooleanValue
-R_String_endsWith_pn
-  (
-    R_String const* self,
-    void const* bytes,
+    R_Natural8Value const* bytes,
     R_SizeValue numberOfBytes
   )
 {
-  if (self->numberOfBytes < numberOfBytes) {
-    return R_BooleanValue_False;
+  R_SizeValue hash = numberOfBytes;
+  for (R_SizeValue i = 0, n = numberOfBytes; i < n; ++i) {
+    hash = hash * 37 + bytes[i];
   }
-  R_SizeValue d = self->numberOfBytes - numberOfBytes;
-  return !memcmp(self->p + d, bytes, numberOfBytes);
-}
-
-R_BooleanValue
-R_String_startsWith_pn
-  (
-    R_String const* self,
-    void const* bytes,
-    R_SizeValue numberOfBytes
-  )
-{
-  if (self->numberOfBytes < numberOfBytes) {
-    return R_BooleanValue_False;
-  }
-  return !memcmp(self->p, bytes, numberOfBytes);
+  return hash;
 }
 
 static void
@@ -276,12 +202,12 @@ equalToImpl
     return;
   }
   R_String* otherString1 = (R_String*)other1;
-  if (self1->numberOfBytes == otherString1->numberOfBytes) {
-    R_Value_setBooleanValue(target, !memcmp(self1->p, otherString1->p, self1->numberOfBytes));
-    return;
+  if (R_ImmutableByteArray_getNumberOfBytes(self1->immutableByteArray) == R_ImmutableByteArray_getNumberOfBytes(otherString1->immutableByteArray)) {
+    R_Value_setBooleanValue(target, !c_memcmp(R_ImmutableByteArray_getBytes(self1->immutableByteArray), 
+                                              R_ImmutableByteArray_getBytes(otherString1->immutableByteArray), 
+                                              R_ImmutableByteArray_getNumberOfBytes(self1->immutableByteArray)));
   } else {
     R_Value_setBooleanValue(target, R_BooleanValue_False);
-    return;
   }
 }
 
@@ -307,47 +233,13 @@ notEqualToImpl
   equalToImpl(target, self, other);
 }
 
-R_SizeValue
-R_String_getNumberOfBytes
+static void
+R_String_visit
   (
-    R_String const* self
+    R_String* string
   )
-{
-  return self->numberOfBytes;
-}
-
-R_Natural8Value const*
-R_String_getBytes
-  (
-    R_String const* self
-  )
-{
-  return self->p;
-}
-
-R_Natural8Value
-R_String_getByteAt
-  (
-    R_String const* self,
-    R_SizeValue index
-  )
-{
-  if (index >= self->numberOfBytes) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
-  }
-  return *(self->p + index);
-}
-
-R_SizeValue
-R_String_getNumberOfSymbols
-  (
-    R_String const* self
-  )
-{
-  R_SizeValue numberOfSymbols;
-  R_isUtf8(self->p, self->numberOfBytes, &numberOfSymbols);
-  return numberOfSymbols;
+{ 
+  R_ImmutableByteArray_visit(string->immutableByteArray);
 }
 
 static void
@@ -391,7 +283,7 @@ getByteRange
       for (R_SizeValue i = 1; i < 2; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           R_setStatus(R_Status_EncodingInvalid);
           R_jump();
         }
@@ -412,7 +304,7 @@ getByteRange
       for (R_SizeValue i = 1; i < 3; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           R_setStatus(R_Status_EncodingInvalid);
           R_jump();
         }
@@ -433,7 +325,7 @@ getByteRange
       for (R_SizeValue i = 1; i < 4; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           R_setStatus(R_Status_EncodingInvalid);
           R_jump();
         }
@@ -473,7 +365,7 @@ getByteRange
       for (R_SizeValue i = 1; i < 2; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           R_setStatus(R_Status_EncodingInvalid);
           R_jump();
         }
@@ -493,7 +385,7 @@ getByteRange
       for (R_SizeValue i = 1; i < 3; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           R_setStatus(R_Status_EncodingInvalid);
           R_jump();
         }
@@ -513,7 +405,7 @@ getByteRange
       for (R_SizeValue i = 1; i < 4; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           R_setStatus(R_Status_EncodingInvalid);
           R_jump();
         }
@@ -539,6 +431,100 @@ getByteRange
 }
 
 R_String*
+R_String_create_pn
+  (
+    R_ImmutableByteArray* immutableByteArray
+  )
+{
+  R_Value argumentValues[] = { { .tag = R_ValueTag_ImmutableByteArray, .immutableByteArrayValue = immutableByteArray } };
+  R_String* self = R_allocateObject(_R_String_getType(), 1, &argumentValues[0]);
+  return self;
+}
+
+R_String*
+R_String_create
+  (
+    R_Value value
+  )
+{ 
+  R_Value argumentValues[] = { value };
+  R_String* self = R_allocateObject(_R_String_getType(), 1, &argumentValues[0]);
+  return self;
+}
+
+R_BooleanValue
+R_String_endsWith_pn
+  (
+    R_String const* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
+  )
+{
+  if (R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) < numberOfBytes) {
+    return R_BooleanValue_False;
+  }
+  R_SizeValue d = R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) - numberOfBytes;
+  return !c_memcmp(R_ImmutableByteArray_getBytes(self->immutableByteArray) + d, bytes, numberOfBytes);
+}
+
+R_BooleanValue
+R_String_startsWith_pn
+  (
+    R_String const* self,
+    void const* bytes,
+    R_SizeValue numberOfBytes
+  )
+{
+  if (R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) < numberOfBytes) {
+    return R_BooleanValue_False;
+  }
+  return !c_memcmp(R_ImmutableByteArray_getBytes(self->immutableByteArray), bytes, numberOfBytes);
+}
+
+R_SizeValue
+R_String_getNumberOfBytes
+  (
+    R_String const* self
+  )
+{
+  return R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray);
+}
+
+R_Natural8Value const*
+R_String_getBytes
+  (
+    R_String const* self
+  )
+{
+  return R_ImmutableByteArray_getBytes(self->immutableByteArray);
+}
+
+R_Natural8Value
+R_String_getByteAt
+  (
+    R_String const* self,
+    R_SizeValue index
+  )
+{
+  if (index >= R_String_getNumberOfBytes(self)) {
+    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_jump();
+  }
+  return *(R_String_getBytes(self) + index);
+}
+
+R_SizeValue
+R_String_getNumberOfSymbols
+  (
+    R_String const* self
+  )
+{
+  R_SizeValue numberOfSymbols;
+  R_isUtf8(R_String_getBytes(self), R_String_getNumberOfBytes(self), &numberOfSymbols);
+  return numberOfSymbols;
+}
+
+R_String*
 R_String_getSubString
   (
     R_String const* self,
@@ -547,7 +533,7 @@ R_String_getSubString
   )
 {
   R_SizeValue byteIndex, byteLength;
-  getByteRange(index, length, &byteIndex, &byteLength, self->p, self->numberOfBytes);
+  getByteRange(index, length, &byteIndex, &byteLength, R_ImmutableByteArray_getBytes(self->immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray));
   return NULL;
 }
 
@@ -559,8 +545,8 @@ R_String_isEqualTo_pn
     R_SizeValue numberOfBytes
   )
 {
-  if (self->numberOfBytes == numberOfBytes) {
-    return !memcmp(self->p, bytes, numberOfBytes);
+  if (R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) == numberOfBytes) {
+    return !c_memcmp(R_ImmutableByteArray_getBytes(self->immutableByteArray), bytes, numberOfBytes);
   } else {
     return R_BooleanValue_False;
   }

@@ -41,12 +41,6 @@ struct NativeWindowsWindow {
   NativeWindowsIcon* bigIcon;
 };
 
-void
-NativeWindowsWindow_construct
-  (
-    NativeWindowsWindow* self
-  );
-
 NativeWindowsWindow*
 NativeWindowsWindow_create
   (

@@ -25,6 +25,12 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
+/// @copde
+/// class TextureFontWindows {
+///   /* The default code point is "Latin Capital Letter A" / "U+0041". */
+///   construct()
+/// }
+/// @endcode
 Rex_declareObjectType("TextureFontWindows", TextureFontWindows, "R.Object");
 
 struct TextureFontWindows {
@@ -34,13 +40,6 @@ struct TextureFontWindows {
   HDC hDeviceContext;
   R_Natural32Value codePoint;
 };
-
-/// @brief The default code point is "Latin Capital Letter A" / "U+0041".
-void
-TextureFontWindows_construct
-  (
-    TextureFontWindows* self
-  );
 
 TextureFontWindows*
 TextureFontWindows_create

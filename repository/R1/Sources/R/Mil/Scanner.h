@@ -25,12 +25,6 @@
 /// @endcode
 Rex_declareObjectType("Cil.Scanner", R_Mil_Scanner, "R.Object");
 
-void
-R_Mil_Scanner_construct
-  (
-    R_Mil_Scanner* self
-  );
-
 /// @brief Create a CIL scanner.
 /// @return A pointer to this CIL scanner.
 R_Mil_Scanner*

@@ -125,7 +125,7 @@ R_CommandLine_raiseRequiredArgumentMissingError
   )
 {
   fwrite(u8"required command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
-  fwrite(key->p, 1, key->numberOfBytes, stdout);
+  fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
   fwrite(u8"` not specified", 1, sizeof(u8"` not specified") - 1, stdout);
   R_setStatus(R_Status_ArgumentValueInvalid);
   R_jump();
@@ -139,7 +139,7 @@ R_CommandLine_raiseUnknownArgumentError
   )
 {
   fwrite(u8"unknown command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
-  fwrite(key->p, 1, key->numberOfBytes, stdout);
+  fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
   fwrite(u8"`", 1, sizeof(u8"`") - 1, stdout);
   R_setStatus(R_Status_ArgumentValueInvalid);
   R_jump();
@@ -152,7 +152,7 @@ R_CommandLine_raiseNoValueError
   )
 {
   fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
-  fwrite(key->p, 1, key->numberOfBytes, stdout);
+  fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
   fwrite(u8"` is not valid", 1, sizeof(u8"` is not valid") - 1, stdout);
   R_setStatus(R_Status_ArgumentValueInvalid);
   R_jump();
@@ -166,7 +166,7 @@ R_CommandLine_raiseValueInvalidError
   )
 {
   fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
-  fwrite(key->p, 1, key->numberOfBytes, stdout);
+  fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
   fwrite(u8"` is not valid", 1, sizeof(u8"` is not valid") - 1, stdout);
   R_setStatus(R_Status_ArgumentValueInvalid);
   R_jump();

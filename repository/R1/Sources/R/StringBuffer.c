@@ -18,9 +18,17 @@
 #include "R/StringBuffer.h"
 
 #include "R/Utf8/EncodeCodePoints.h"
-#include <string.h>
+#include "R/cstdlib.h"
 #include "R/ArmsIntegration.h"
 #include "R.h"
+
+static void
+R_StringBuffer_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static void
 R_StringBuffer_destruct
@@ -43,6 +51,57 @@ appendBytesInternal
     void const* bytes,
     R_SizeValue numberOfBytes
   );
+
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .construct = &R_StringBuffer_constructImpl,
+  .destruct = &R_StringBuffer_destruct,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.StringBuffer", R_StringBuffer, "R.Object", R_Object, &_typeOperations);
+
+static void
+R_StringBuffer_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_StringBuffer* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_StringBuffer_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->elements = NULL;
+  _self->size = 0;
+  _self->capacity = 0;
+  if (!R_allocateUnmanaged_nojump(&_self->elements, 0)) {
+    R_jump();
+  }
+  R_Object_setType((R_Object*)_self, _type);
+}
 
 static void
 R_StringBuffer_destruct
@@ -89,53 +148,8 @@ appendBytesInternal
   )
 {
   ensureFreeCapacityBytes(self, numberOfBytes);
-  memcpy(self->elements + self->size, bytes, numberOfBytes);
+  c_memcpy(self->elements + self->size, bytes, numberOfBytes);
   self->size += numberOfBytes;
-}
-
-static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
-  .destruct = &R_StringBuffer_destruct,
-  .visit = NULL,
-};
-
-static const R_Type_Operations _typeOperations = {
-  .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
-};
-
-Rex_defineObjectType("R.StringBuffer", R_StringBuffer, "R.Object", R_Object, &_typeOperations);
-
-void
-R_StringBuffer_construct
-  (
-    R_StringBuffer* self
-  )
-{
-  R_Type* _type = _R_StringBuffer_getType();
-  R_Object_construct((R_Object*)self);
-  self->elements = NULL;
-  self->size = 0;
-  self->capacity = 0;
-  if (!R_allocateUnmanaged_nojump(&self->elements, 0)) {
-    R_jump();
-  }
-  R_Object_setType((R_Object*)self, _type);
 }
 
 R_StringBuffer*
@@ -143,9 +157,8 @@ R_StringBuffer_create
   (
   )
 {
-  R_Type* _type = _R_StringBuffer_getType();
-  R_StringBuffer* self = R_allocateObject(_type);
-  R_StringBuffer_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_StringBuffer* self = R_allocateObject(_R_StringBuffer_getType(), 0, &argumentValues[0]);
   return self;
 }
 
@@ -161,7 +174,7 @@ R_StringBuffer_endsWith_pn
     return R_BooleanValue_False;
   }
   R_SizeValue d = self->size - numberOfBytes;
-  return !memcmp(self->elements + d, bytes, numberOfBytes);
+  return !c_memcmp(self->elements + d, bytes, numberOfBytes);
 }
 
 R_BooleanValue
@@ -175,7 +188,7 @@ R_StringBuffer_startsWith_pn
   if (self->size < numberOfBytes) {
     return R_BooleanValue_False;
   }
-  return !memcmp(self->elements, bytes, numberOfBytes);
+  return !c_memcmp(self->elements, bytes, numberOfBytes);
 }
 
 void
@@ -195,7 +208,7 @@ R_StringBuffer_append_pn
     R_jump();
   }
   ensureFreeCapacityBytes(self, numberOfBytes);
-  memcpy(self->elements + self->size, bytes, numberOfBytes);
+  c_memcpy(self->elements + self->size, bytes, numberOfBytes);
   self->size += numberOfBytes;
 }
 
@@ -218,19 +231,19 @@ R_StringBuffer_append
       R_jump();
     }
     ensureFreeCapacityBytes(self, R_ByteBuffer_getNumberOfBytes(object));
-    memcpy(self->elements + self->size, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
+    c_memcpy(self->elements + self->size, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
     self->size += R_ByteBuffer_getNumberOfBytes(object);
   } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_String_getType())) {
     R_String* object = (R_String*)referenceValue;
     // The Byte sequence of R.String is guaranteed to be an UTF8 Byte sequence.
     ensureFreeCapacityBytes(self, R_String_getNumberOfBytes(object));
-    memcpy(self->elements + self->size, R_String_getBytes(object), R_String_getNumberOfBytes(object));
+    c_memcpy(self->elements + self->size, R_String_getBytes(object), R_String_getNumberOfBytes(object));
     self->size += R_String_getNumberOfBytes(object);
   } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_StringBuffer_getType())) {
     R_StringBuffer* object = (R_StringBuffer*)referenceValue;
     // The Byte sequence of R.StringBuffer is guaranteed to be an UTF8 Byte sequence.
     ensureFreeCapacityBytes(self, R_StringBuffer_getNumberOfBytes(object));
-    memcpy(self->elements + self->size, R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
+    c_memcpy(self->elements + self->size, R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
     self->size += R_StringBuffer_getNumberOfBytes(object);
   } else {
     R_setStatus(R_Status_ArgumentTypeInvalid);
@@ -260,7 +273,7 @@ R_StringBuffer_isEqualTo
     return R_BooleanValue_True;
   }
   if (self->size == other->size) {
-    return !memcmp(self->elements, other->elements, self->size);
+    return !c_memcmp(self->elements, other->elements, self->size);
   } else {
     return R_BooleanValue_False;
   }

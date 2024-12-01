@@ -32,11 +32,11 @@
 static void mapTest1() {
   R_Map* m = R_Map_create();
   R_Value k, v;
-  R_Value_setObjectReferenceValue(&k, (R_ObjectReferenceValue)R_String_create_pn("siteAddress", sizeof("siteAddress") - 1));
-  R_Value_setObjectReferenceValue(&v, (R_ObjectReferenceValue)R_String_create_pn("https://michaelheilmann.com", sizeof("https://michaelheilmann.com") - 1));
+  R_Value_setObjectReferenceValue(&k, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("siteAddress", sizeof("siteAddress") - 1)));
+  R_Value_setObjectReferenceValue(&v, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("https://michaelheilmann.com", sizeof("https://michaelheilmann.com") - 1)));
   R_Map_set(m, k, v);
   R_Value k2, v2;
-  R_Value_setObjectReferenceValue(&k2, (R_ObjectReferenceValue)R_String_create_pn("siteAddress", sizeof("siteAddress") - 1));
+  R_Value_setObjectReferenceValue(&k2, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("siteAddress", sizeof("siteAddress") - 1)));
   v2 = R_Map_get(m, k2);
 }
 

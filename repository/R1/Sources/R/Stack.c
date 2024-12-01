@@ -36,6 +36,14 @@ R_Stack_ensureInitialized
   );
 
 static void
+R_Stack_constructorImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 R_Stack_destruct
   (
     R_Stack* self
@@ -103,29 +111,24 @@ static void
 R_Stack_destruct
   (
     R_Stack* self
-  )
-{
-  if (self->elements) {
-    R_deallocateUnmanaged_nojump(self->elements);
-    self->elements = NULL;
-  }
-}
+  );
 
 static void
 R_Stack_visit
   (
     R_Stack* self
-  )
-{
-  if (self->elements) {
-    for (R_SizeValue i = 0, n = self->size; i < n; ++i) {
-      R_Value_visit(self->elements + i);
-    }
-  }
-}
+  );
+
+static void
+R_Stack_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_Stack_constructImpl,
   .destruct = &R_Stack_destruct,
   .visit = &R_Stack_visit,
 };
@@ -152,26 +155,57 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.Stack", R_Stack, "R.Object", R_Object, &_typeOperations);
 
-void
-R_Stack_construct
+static void
+R_Stack_destruct
   (
     R_Stack* self
   )
 {
+  if (self->elements) {
+    R_deallocateUnmanaged_nojump(self->elements);
+    self->elements = NULL;
+  }
+}
+
+static void
+R_Stack_visit
+  (
+    R_Stack* self
+  )
+{
+  if (self->elements) {
+    for (R_SizeValue i = 0, n = self->size; i < n; ++i) {
+      R_Value_visit(self->elements + i);
+    }
+  }
+}
+
+static void
+R_Stack_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_Stack* _self = R_Value_getObjectReferenceValue(self);
   R_Stack_ensureInitialized();
   R_Type* _type = _R_Stack_getType();
-  R_Object_construct((R_Object*)self);
-  self->elements = NULL;
-  self->capacity = 0;
-  self->size = 0;
-  self->capacity = g_minimumCapacity;
-  if (!R_allocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->elements = NULL;
+  _self->capacity = 0;
+  _self->size = 0;
+  _self->capacity = g_minimumCapacity;
+  if (!R_allocateUnmanaged_nojump(&_self->elements, sizeof(R_Value) * _self->capacity)) {
     R_jump();
   }
-  for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    R_Value_setVoidValue(self->elements + i, R_VoidValue_Void);
+  for (R_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
+    R_Value_setVoidValue(_self->elements + i, R_VoidValue_Void);
   }
-  R_Object_setType((R_Object*)self, _type);
+  R_Object_setType((R_Object*)_self, _type);
 }
 
 R_Stack*
@@ -179,8 +213,8 @@ R_Stack_create
   (
   )
 {
-  R_Stack* self = R_allocateObject(_R_Stack_getType());
-  R_Stack_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_Stack* self = R_allocateObject(_R_Stack_getType(), 0, &argumentValues[0]);
   return self;
 }
 

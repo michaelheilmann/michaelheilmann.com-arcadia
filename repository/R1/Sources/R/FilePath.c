@@ -181,7 +181,7 @@ parseUnixFilePath
 
   if (isSlash(&context)) {
     target->relative = R_BooleanValue_False;
-    target->root = R_String_create_pn("/", sizeof("/") - 1);
+    target->root = R_String_create_pn(R_ImmutableByteArray_create("/", sizeof("/") - 1));
     next(&context);
   }
   // read the remaining directories
@@ -210,6 +210,14 @@ parseUnixFilePath
 }
 
 static void
+R_FilePath_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 R_FilePath_destruct
   (
     R_FilePath* self
@@ -220,26 +228,9 @@ R_FilePath_visit
   (
     R_FilePath* self
   );
-
-static void
-R_FilePath_destruct
-  (
-    R_FilePath* self
-  )
-{/*Intentionally empty.*/}
-
-static void
-R_FilePath_visit
-  (
-    R_FilePath* self
-  )
-{
-  R_Object_visit(self->fileNames);
-  R_Object_visit(self->root);
-}
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_FilePath_constructImpl,
   .destruct = &R_FilePath_destruct,
   .visit = &R_FilePath_visit,
 };
@@ -266,19 +257,46 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.FilePath", R_FilePath, "R.Object", R_Object, &_typeOperations);
 
-void
-R_FilePath_construct
-  ( 
+static void
+R_FilePath_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_FilePath* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_FilePath_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  if (0 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  _self->fileNames = NULL;
+  _self->relative = R_BooleanValue_False;
+  _self->root = NULL;
+  _self->fileNames = R_List_create();
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+static void
+R_FilePath_destruct
+  (
+    R_FilePath* self
+  )
+{/*Intentionally empty.*/}
+
+static void
+R_FilePath_visit
+  (
     R_FilePath* self
   )
 {
-  R_Type* _type = _R_FilePath_getType();
-  R_Object_construct((R_Object*)self);
-  self->fileNames = NULL;
-  self->relative = R_BooleanValue_False;
-  self->root = NULL;
-  self->fileNames = R_List_create();
-  R_Object_setType((R_Object*)self, _type);
+  R_Object_visit(self->fileNames);
+  R_Object_visit(self->root);
 }
 
 R_FilePath*
@@ -286,8 +304,10 @@ R_FilePath_create
   (
   )
 {
-  R_FilePath* self = R_allocateObject(_R_FilePath_getType());
-  R_FilePath_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_FilePath* self = R_allocateObject(_R_FilePath_getType(), 0, &argumentValues[0]);
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)self };
+  R_FilePath_constructImpl(&selfValue, 0, &argumentValues[0]);
   return self;
 }
 
@@ -299,7 +319,8 @@ R_FilePath_parseWindowsFilePath
   )
 {
   R_Type* _type = _R_FilePath_getType();
-  R_FilePath* self = R_allocateObject(_type);
+  R_Value argumentValues[] = { { .tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_FilePath* self = R_allocateObject(_type, 0, &argumentValues[0]);
   self->fileNames = NULL;
   self->relative = R_BooleanValue_False;
   self->root = NULL;
@@ -320,7 +341,8 @@ R_FilePath_parseUnixFilePath
   )
 {
   R_Type* _type = _R_FilePath_getType();
-  R_FilePath* self = R_allocateObject(_type);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_FilePath* self = R_allocateObject(_type, 0, &argumentValues[0]);
   self->fileNames = NULL;
   self->relative = R_BooleanValue_False;
   self->root = NULL;
@@ -377,7 +399,7 @@ normalize
   }
   if (!self->root && R_List_isEmpty(self->fileNames)) {
     // If the path is empty, then the path is `.`.
-    R_List_appendObjectReferenceValue(self->fileNames, (R_ObjectReferenceValue)R_String_create_pn(".", sizeof(".") - 1));
+    R_List_appendObjectReferenceValue(self->fileNames, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create(".", sizeof(".") - 1)));
   }
 }
 
@@ -393,7 +415,7 @@ R_FilePath_toNative
   R_SizeValue i = 0, n = R_List_getSize(self->fileNames);
 
   if (self->root) {
-    R_Utf8Writer_writeBytes(temporary, self->root->p, self->root->numberOfBytes);
+    R_Utf8Writer_writeBytes(temporary, R_String_getBytes(self->root), R_String_getNumberOfBytes(self->root));
     R_Natural32Value x;
     x = ':';
     R_Utf8Writer_writeCodePoints(temporary, &x, 1);
@@ -407,7 +429,7 @@ R_FilePath_toNative
   if (n > 0) {
     R_Value e = R_List_getAt(self->fileNames, 0);
     R_String* fileName = (R_String*)R_Value_getObjectReferenceValue(&e);
-    R_Utf8Writer_writeBytes(temporary, fileName->p, fileName->numberOfBytes);
+    R_Utf8Writer_writeBytes(temporary, R_String_getBytes(fileName), R_String_getNumberOfBytes(fileName));
     i++;
 
     for (; i < n; ++i) {
@@ -417,7 +439,7 @@ R_FilePath_toNative
 
       R_Value e = R_List_getAt(self->fileNames, i);
       R_String* fileName = (R_String*)R_Value_getObjectReferenceValue(&e);
-      R_Utf8Writer_writeBytes(temporary, fileName->p, fileName->numberOfBytes);
+      R_Utf8Writer_writeBytes(temporary, R_String_getBytes(fileName), R_String_getNumberOfBytes(fileName));
     }
   }
   R_Natural32Value x = '\0';
@@ -477,7 +499,7 @@ R_FilePath_getFullPath
 #define BUFFER_LENGTH (4096)
   R_String* s = R_FilePath_toNative(self);
   char buffer[BUFFER_LENGTH];
-  DWORD result = GetFullPathName(s->p, BUFFER_LENGTH, buffer, NULL);
+  DWORD result = GetFullPathName(R_String_getBytes(s), BUFFER_LENGTH, buffer, NULL);
   if (!result) {
     R_setStatus(R_Status_ArgumentValueInvalid);
     R_jump();

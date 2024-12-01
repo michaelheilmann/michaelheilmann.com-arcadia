@@ -14,13 +14,6 @@ struct R_Utf8ByteBufferReader {
   R_Natural32Value codePoint;
 };
 
-void
-R_Utf8ByteBufferReader_construct
-  (
-    R_Utf8ByteBufferReader* self,
-    R_ByteBuffer* source
-  );
-
 R_Utf8ByteBufferReader*
 R_Utf8ByteBufferReader_create
   (

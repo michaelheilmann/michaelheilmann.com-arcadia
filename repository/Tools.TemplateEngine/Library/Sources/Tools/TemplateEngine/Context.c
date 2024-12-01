@@ -20,30 +20,27 @@
 #include "Tools/TemplateEngine/FileContext.h"
 
 static void
+Context_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );  
+
+static void
 Context_destruct
   (
     Context* self
-  )
-{/*Intentionally empty.*/}
+  );
 
 static void
 Context_visit
   (
     Context* self
-  )
-{
-  R_Object_visit(self->targetBuffer);
-  R_Object_visit(self->target);
-
-  R_Object_visit(self->temporaryBuffer);
-  R_Object_visit(self->temporary);
-
-  R_Object_visit(self->stack);
-  R_Object_visit(self->files);
-}
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &Context_constructImpl,
   .destruct = &Context_destruct,
   .visit = &Context_visit,
 };
@@ -71,20 +68,49 @@ static const R_Type_Operations _typeOperations = {
 Rex_defineObjectType("Tools.TemplateEngine.Context", Context, "R.Object", R_Object, &_typeOperations);
 
 void
-Context_construct
+Context_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  Context* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _Context_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->targetBuffer = NULL;
+  _self->target = NULL;
+  _self->temporaryBuffer = NULL;
+  _self->temporary = NULL;
+  _self->stack = NULL;
+  _self->files = R_List_create();
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+static void
+Context_destruct
+  (
+    Context* self
+  )
+{/*Intentionally empty.*/}
+
+static void
+Context_visit
   (
     Context* self
   )
 {
-  R_Type* _type = _Context_getType();
-  R_Object_construct((R_Object*)self);
-  self->targetBuffer = NULL;
-  self->target = NULL;
-  self->temporaryBuffer = NULL;
-  self->temporary = NULL;
-  self->stack = NULL;
-  self->files = R_List_create();
-  R_Object_setType((R_Object*)self, _type);
+  R_Object_visit(self->targetBuffer);
+  R_Object_visit(self->target);
+
+  R_Object_visit(self->temporaryBuffer);
+  R_Object_visit(self->temporary);
+
+  R_Object_visit(self->stack);
+  R_Object_visit(self->files);
 }
 
 Context*
@@ -92,8 +118,8 @@ Context_create
   (
   )
 {
-  Context* self = R_allocateObject(_Context_getType());
-  Context_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  Context* self = R_allocateObject(_Context_getType(), 0, &argumentValues[0]);
   return self;
 }
 

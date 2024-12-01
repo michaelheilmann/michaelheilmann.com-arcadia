@@ -18,14 +18,19 @@
 #include "R/Utf8Writer.h"
 
 #include "R/Object.h"
+#include "R/Value.h"
+#include "R/cstdlib.h"
 
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+static void
+R_Utf8Writer_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_Utf8Writer_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -52,17 +57,23 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.Utf8Writer", R_Utf8Writer, "R.Object", R_Object, &_typeOperations);
 
-void
-R_Utf8Writer_construct
+static void
+R_Utf8Writer_constructImpl
   (
-    R_Utf8Writer* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  R_Utf8Writer* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _R_Utf8Writer_getType();
-  R_Object_construct((R_Object*)self);
-  self->writeBytes = NULL;
-  self->writeCodePoints = NULL;
-  R_Object_setType(self, _type);
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->writeBytes = NULL;
+  _self->writeCodePoints = NULL;
+  R_Object_setType(_self, _type);
 }
 
 void

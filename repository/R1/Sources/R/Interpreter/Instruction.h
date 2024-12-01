@@ -15,22 +15,15 @@
 
 // Last modified: 2024-10-28
 
-#if !defined(R_INSTRUCTIONS_INSTRUCTION_H_INCLUDED)
-#define R_INSTRUCTIONS_INSTRUCTION_H_INCLUDED
+#if !defined(R_INTERPRETER_INSTRUCTION_H_INCLUDED)
+#define R_INTERPRETER_INSTRUCTION_H_INCLUDED
 
 #include "R/Value.h"
 #include "R/Object.h"
-#include "R/ThreadState.h"
-typedef struct R_Machine_Code R_Machine_Code;
-
-typedef struct R_InterpreterStateArgument {
-  R_Value const* constants;
-  R_ThreadState* threadState;
-  /// @brief The code to execute.
-  /// @todo Should be part of the thread state.
-  R_Machine_Code* code;
-  R_Natural8Value const* ipCurrent;
-} R_InterpreterStateArgument;
+typedef struct R_Interpreter_Code_Constants R_Interpreter_Code_Constants;
+typedef struct R_Interpreter_ProcessState R_Interpreter_ProcessState;
+typedef struct R_Interpreter_ThreadState R_Interpreter_ThreadState;
+typedef struct R_Interpreter_Code R_Interpreter_Code;
 
 #define R_Machine_Code_NumberOfArguments_Maximum (32)
 
@@ -153,189 +146,97 @@ typedef enum R_Machine_Code_Opcode {
 void
 R_Instructions_add
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_and
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_concatenate
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_divide
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_equalTo
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_greaterThan
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_greaterThanOrEqualTo
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_idle
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
-
-#if 0
-void
-R_Instructions_invoke
-  (
-    R_InterpreterStateArgument* interpreterState
-  );
-#endif
 
 void
 R_Instructions_lowerThan
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_lowerThanOrEqualTo
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_multiply
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_negate
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_not
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_notEqualTo
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_or
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
 void
 R_Instructions_subtract
   (
-    R_InterpreterStateArgument* interpreterState
+    R_Interpreter_ProcessState* process
   );
 
-Rex_declareObjectType("R.Machine.Code", R_Machine_Code, R_Object);
-
-struct R_Machine_Code {
-  R_Object _parent;
-  R_Natural8Value* p;
-  R_SizeValue sz, cp;
-};
-
-R_Machine_Code*
-R_Machine_Code_create
-  (
-  );
-
-void
-R_Machine_Code_append
-  (
-    R_Machine_Code* self,
-    R_Natural8Value const* bytes,
-    R_SizeValue numberOfBytes
-  );
-
-void
-R_Machine_Code_appendIndexNatural8
-  (
-    R_Machine_Code* self,
-    R_Machine_Code_IndexKind indexKind,
-    R_Natural8Value indexValue
-  );
-
-void
-R_Machine_Code_appendIndexNatural16
-  (
-    R_Machine_Code* self,
-    R_Machine_Code_IndexKind indexKind,
-    R_Natural16Value indexValue
-  );
-
-// index must be smaller than 52.4287.
-void
-R_Machine_Code_appendIndexNatural32
-  (
-    R_Machine_Code* self,
-    R_Machine_Code_IndexKind indexKind,
-    R_Natural16Value indexValue
-  );
-
-void
-R_Machine_Code_appendCountNatural8
-  (
-    R_Machine_Code* self,
-    R_Natural8Value countValue
-  );
-
-void
-R_Machine_Code_appendCountNatural16
-  (
-    R_Machine_Code* self,
-    R_Natural16Value countValue
-  );
-
-void
-R_Machine_Code_appendCountNatural32
-  (
-    R_Machine_Code* self,
-    R_Natural32Value countValue
-  );
-
-void
-R_Machine_Code_decodeCount
-  (
-    R_Machine_Code* self,
-    uint8_t** current,
-    R_Natural32Value* countValue
-  );
-
-void
-R_Machine_Code_decodeIndex
-  (
-    R_Machine_Code* self,
-    uint8_t** current,
-    R_Machine_Code_IndexKind* indexKind,
-    R_Natural32Value* indexValue
-  );
-
-#endif // R_INSTRUCTIONS_INSTRUCTION_H_INCLUDED
+#endif // R_INTERPRETER_INSTRUCTION_H_INCLUDED

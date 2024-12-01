@@ -28,12 +28,6 @@ struct R_Stack {
   R_SizeValue capacity;
 };
 
-void
-R_Stack_construct
-  (
-    R_Stack* self
-  );
-
 // https://michaelheilmann.com/repository/R1/#r-stack-create
 R_Stack*
 R_Stack_create

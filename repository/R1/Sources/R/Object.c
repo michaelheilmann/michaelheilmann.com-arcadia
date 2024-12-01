@@ -22,7 +22,7 @@
 
 #include "R/Object.h"
 
-#include <string.h>
+#include "R/cstdlib.h"
 #include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/TypeNames.h"
@@ -57,7 +57,7 @@ notEqualTo
   );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_Object_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -180,7 +180,9 @@ onFinalizeObject
 void*
 R_allocateObject
   (
-    R_Type *type
+    R_Type *type,
+    R_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   if (!type) {
@@ -200,6 +202,8 @@ R_allocateObject
     R_jump();
   }
   tag->type = type;
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)(R_Object*)(tag + 1) };
+  R_Type_getOperations(type)->objectTypeOperations->construct(&selfValue, numberOfArgumentValues, &argumentValues[0]);
   return (void*)(tag + 1);
 }
 
@@ -231,13 +235,16 @@ _R_Object_getType
 }
 
 void
-R_Object_construct
+R_Object_constructImpl
   (
-    R_Object* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
-{ 
-  R_Type* type = R_getType(u8"R.Object", sizeof(u8"R.Object") - 1);
-  R_Object_setType(self, type);
+{
+  R_Object* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = R_getType(u8"R.Object", sizeof(u8"R.Object") - 1);
+  R_Object_setType(_self, _type);
 }
 
 void
@@ -257,7 +264,33 @@ R_Object_visit
     void* self
   )
 {
-  R_Arms_visit(self);
+  R_Arms_visit(((ObjectTag*)self) - 1);
+}
+
+void
+R_Object_lock
+  (
+    void* self
+  )
+{
+  R_Status status = R_Arms_lock(((ObjectTag*)self) - 1);
+  if (status) {
+    R_setStatus(status);
+    R_jump();
+  }
+}
+
+void
+R_Object_unlock
+  (
+    void* self
+  )
+{
+  R_Status status = R_Arms_unlock(((ObjectTag*)self) - 1);
+  if (status) {
+    R_setStatus(status);
+    R_jump();
+  }
 }
 
 R_Type*

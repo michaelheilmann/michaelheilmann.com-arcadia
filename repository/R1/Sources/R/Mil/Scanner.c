@@ -41,7 +41,7 @@
 // The scanner writes the lexeme to a string buffer.
 // This allows for efficient creation of strings (see R_String_create).
 // Furthermore, it avoids to create a string twice by using a string table (see R_Mil_StringTable).
-#include <string.h>
+#include "R/cstdlib.h"
 #include "R.h"
 
 #define CodePoint_Start (R_Utf8CodePoint_Last + 1)
@@ -65,6 +65,14 @@ struct R_Mil_Scanner {
     R_Natural32Value type;
   } token;
 };
+
+static void
+R_Mil_Scanner_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static void
 R_Mil_Scanner_destruct
@@ -121,6 +129,110 @@ isDigit
   (
     R_Mil_Scanner* self
   );
+
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .construct = &R_Mil_Scanner_constructImpl,
+  .destruct = &R_Mil_Scanner_destruct,
+  .visit = &R_Mil_Scanner_visit,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("Cil.Scanner", R_Mil_Scanner, "R.Object", R_Object, &_typeOperations);
+
+static void
+R_Mil_Scanner_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_Mil_Scanner* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_Mil_Scanner_getType();
+  //
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  //
+  _self->token.type = R_Mil_TokenType_StartOfInput;
+  _self->token.text = NULL;
+  _self->stringTable = NULL;
+  _self->keywords = NULL;
+  _self->input = NULL;
+  _self->symbol = CodePoint_Start;
+  //
+  _self->keywords = R_Mil_Keywords_create();
+  //
+  _self->token.type = R_Mil_TokenType_StartOfInput;
+  _self->stringTable = R_Mil_StringTable_create();
+  _self->input = (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create("", sizeof("") - 1)));
+  _self->token.text = R_StringBuffer_create();
+  //
+  R_StringBuffer_append_pn(_self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  //
+  R_StringBuffer* temporary = R_StringBuffer_create();
+#define On(text, type) \
+  { \
+    R_StringBuffer_clear(temporary); \
+    R_StringBuffer_append_pn(temporary, text, sizeof(text) - 1); \
+    R_Mil_Keywords_add(_self->keywords, R_Mil_StringTable_getOrCreateString(_self->stringTable, temporary), R_Mil_TokenType_##type); \
+  }
+  //
+  On(u8"class", Class);
+  On(u8"constructor", Constructor);
+  On(u8"entry", Entry)
+  On(u8"extends", Extends);
+  On(u8"implements", Implements);
+  On(u8"method", Method);
+  On(u8"procedure", Procedure);
+  //
+  On(u8"native", Native);
+  //
+  On(u8"return", Return);
+  //
+  On(u8"variable", Variable);
+
+  // arithmetic operations
+  On(u8"add", Add);
+  On(u8"subtract", Subtract);
+  On(u8"multiply", Multiply);
+  On(u8"divide", Divide);
+  // arithmetic operations/logical operations
+  On(u8"negate", Negate);
+  // logcial operations
+  On(u8"not", Not);
+  On(u8"and", And);
+  On(u8"or", Or);
+  // list operations
+  On(u8"concatenate", Concatenate);
+  // literals
+  On(u8"void", VoidLiteral);
+  On(u8"true", BooleanLiteral);
+  On(u8"false", BooleanLiteral);
+#undef On
+  //
+  R_Object_setType((R_Object*)_self, _type);
+}
 
 static void
 R_Mil_Scanner_destruct
@@ -211,110 +323,13 @@ isDigit
   return ('0' <= self->symbol && self->symbol <= '9');
 }
 
-static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
-  .destruct = &R_Mil_Scanner_destruct,
-  .visit = &R_Mil_Scanner_visit,
-};
-
-static const R_Type_Operations _typeOperations = {
-  .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
-};
-
-Rex_defineObjectType("Cil.Scanner", R_Mil_Scanner, "R.Object", R_Object, &_typeOperations);
-
-void
-R_Mil_Scanner_construct
-  (
-    R_Mil_Scanner* self
-  )
-{
-  R_Type* _type = _R_Mil_Scanner_getType();
-  //
-  R_Object_construct((R_Object*)self);
-  //
-  self->token.type = R_Mil_TokenType_StartOfInput;
-  self->token.text = NULL;
-  self->stringTable = NULL;
-  self->keywords = NULL;
-  self->input = NULL;
-  self->symbol = CodePoint_Start;
-  //
-  self->keywords = R_Mil_Keywords_create();
-  //
-  self->token.type = R_Mil_TokenType_StartOfInput;
-  self->stringTable = R_Mil_StringTable_create();
-  self->input = (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn("", sizeof("") - 1));
-  self->token.text = R_StringBuffer_create();
-  //
-  R_StringBuffer_append_pn(self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
-  //
-  R_StringBuffer* temporary = R_StringBuffer_create();
-#define On(text, type) \
-  { \
-    R_StringBuffer_clear(temporary); \
-    R_StringBuffer_append_pn(temporary, text, sizeof(text) - 1); \
-    R_Mil_Keywords_add(self->keywords, R_Mil_StringTable_getOrCreateString(self->stringTable, temporary), R_Mil_TokenType_##type); \
-  }
-  //
-  On(u8"class", Class);
-  On(u8"constructor", Constructor);
-  On(u8"extends", Extends);
-  On(u8"implements", Implements);
-  On(u8"method", Method);
-  On(u8"procedure", Procedure);
-  //
-  On(u8"native", Native);
-  //
-  On(u8"return", Return);
-  //
-  On(u8"variable", Variable);
-
-  // arithmetic operations
-  On(u8"add", Add);
-  On(u8"subtract", Subtract);
-  On(u8"multiply", Multiply);
-  On(u8"divide", Divide);
-  // arithmetic operations/logical operations
-  On(u8"negate", Negate);
-  // logcial operations
-  On(u8"not", Not);
-  On(u8"and", And);
-  On(u8"or", Or);
-  // list operations
-  On(u8"concatenate", Concatenate);
-  // literals
-  On(u8"void", VoidLiteral);
-  On(u8"true", BooleanLiteral);
-  On(u8"false", BooleanLiteral);
-#undef On
-  //
-  R_Object_setType((R_Object*)self, _type);
-}
-
 R_Mil_Scanner*
 R_Mil_Scanner_create
   (
   )
 {
-  R_Mil_Scanner* self = R_allocateObject(_R_Mil_Scanner_getType());
-  R_Mil_Scanner_construct(self); 
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_Mil_Scanner* self = R_allocateObject(_R_Mil_Scanner_getType(), 0, &argumentValues[0]);
   return self;
 }
 

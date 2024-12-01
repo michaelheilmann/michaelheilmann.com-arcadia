@@ -21,10 +21,16 @@
 #include "R/Object.h"
 #include "R/Status.h"
 #include "R/UnmanagedMemory.h"
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/Interpreter/Code.h"
+#include "R/cstdlib.h"
+
+static void
+R_Procedure_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static void
 R_Procedure_visit
@@ -32,17 +38,8 @@ R_Procedure_visit
     R_Procedure* self
   );
 
-static void
-R_Procedure_visit
-  (
-    R_Procedure* self
-  )
-{
-  R_Object_visit(self->code);
-}
-
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_Procedure_constructImpl,
   .destruct = NULL,
   .visit = &R_Procedure_visit,
 };
@@ -69,31 +66,53 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.Procedure", R_Procedure, "R.Object", R_Object, &_typeOperations);
 
-void
-R_Procedure_construct
+static void
+R_Procedure_constructImpl
   (
-    R_Procedure* self,
-    R_Machine_Code* code
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  R_Procedure* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _R_Procedure_getType();
-  R_Object_construct((R_Object*)self);
-  self->code = code;
-  R_Object_setType((R_Object*)self, _type);
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  if (1 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_Interpreter_Code_getType())) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  _self->code = R_Value_getObjectReferenceValue(&argumentValues[0]);
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+static void
+R_Procedure_visit
+  (
+    R_Procedure* self
+  )
+{
+  R_Object_visit(self->code);
 }
 
 R_Procedure*
 R_Procedure_create
   (
-    R_Machine_Code* code
+    R_Interpreter_Code* code
   )
 {
-  R_Procedure* self = R_allocateObject(_R_Procedure_getType());
-  R_Procedure_construct(self, code);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = code } };
+  R_Procedure* self = R_allocateObject(_R_Procedure_getType(), 1, &argumentValues[0]);
   return self;
 }
 
-R_Machine_Code*
+R_Interpreter_Code*
 R_Procedure_getCode
   (
     R_Procedure* self

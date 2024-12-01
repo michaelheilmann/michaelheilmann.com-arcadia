@@ -28,12 +28,6 @@ struct R_List {
   R_SizeValue capacity;
 };
 
-void
-R_List_construct
-  (
-    R_List* self
-  );
-
 // https://michaelheilmann.com/repository/R1/#r-list-create
 R_List*
 R_List_create

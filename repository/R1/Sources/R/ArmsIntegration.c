@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "R/ArmsIntegration.h"
+#include "R/ArmsIntegration.private.h"
 
 #include "Arms.h"
 
@@ -133,22 +133,58 @@ R_Arms_visit
   }
 }
 
-void
+R_Status
 R_Arms_lock
   (
     void* object
   )
 {
-  Arms_lock(object);
+  Arms_Status status = Arms_lock(object);
+  switch (status) {
+    case Arms_Status_Success: {
+      return R_Status_Success;
+    } break;
+    case Arms_Status_AllocationFailed: {
+      return R_Status_AllocationFailed;
+    } break;
+    case Arms_Status_OperationInvalid: {
+      return R_Status_OperationInvalid;
+    } break;
+    case Arms_Status_ArgumentValueInvalid: {
+      return R_Status_ArgumentValueInvalid;
+    } break;
+    default: {
+      // This should not happen.
+      return R_Status_ArgumentValueInvalid;
+    } break;
+  };
 }
 
-void
+R_Status
 R_Arms_unlock
   (
     void* object
   )
 {
-  Arms_unlock(object);
+  Arms_Status status = Arms_unlock(object);
+  switch (status) {
+    case Arms_Status_Success: {
+      return R_Status_Success;
+    } break;
+    case Arms_Status_AllocationFailed: {
+      return R_Status_AllocationFailed;
+    } break;
+    case Arms_Status_OperationInvalid: {
+      return R_Status_OperationInvalid;
+    } break;
+    case Arms_Status_ArgumentValueInvalid: {
+      return R_Status_ArgumentValueInvalid;
+    } break;
+    default: {
+      // This should not happen.
+      return R_Status_ArgumentValueInvalid;
+    } break;
+  };
 }
 
 R_BooleanValue

@@ -35,14 +35,6 @@ struct FileContext {
   R_Map* environment;
 };
 
-void
-FileContext_construct
-  (
-    FileContext* self,
-    Context* context,
-    R_FilePath* sourceFilePath
-  );
-
 FileContext*
 FileContext_create
   (

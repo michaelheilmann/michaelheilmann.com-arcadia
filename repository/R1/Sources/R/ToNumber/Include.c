@@ -20,8 +20,7 @@
 #include "R/JumpTarget.h"
 #include "R/Status.h"
 #include "R/Utf8.h"
-
-#include <assert.h>
+#include "R/cstdlib.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

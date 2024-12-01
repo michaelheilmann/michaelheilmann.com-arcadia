@@ -21,10 +21,7 @@
 #include "R/Object.h"
 #include "R/Status.h"
 #include "R/UnmanagedMemory.h"
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/cstdlib.h"
 
 static R_BooleanValue g_initialized = R_BooleanValue_False;
 
@@ -60,6 +57,14 @@ R_Map_ensureInitialized
   );
 
 static void
+R_Map_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 R_Map_destruct
   (
     R_Map* self
@@ -70,6 +75,34 @@ R_Map_visit
   (
     R_Map* self
   );
+
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .construct = &R_Map_constructImpl,
+  .destruct = &R_Map_destruct,
+  .visit = &R_Map_visit,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Map", R_Map, "R.Object", R_Object, &_typeOperations);
 
 static void
 R_Map_ensureFreeCapacity
@@ -177,54 +210,32 @@ R_Map_visit
   }
 }
 
-static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
-  .destruct = &R_Map_destruct,
-  .visit = &R_Map_visit,
-};
-
-static const R_Type_Operations _typeOperations = {
-  .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
-};
-
-Rex_defineObjectType("R.Map", R_Map, "R.Object", R_Object, &_typeOperations);
-
-void
-R_Map_construct
+static void
+R_Map_constructImpl
   (
-    R_Map* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  R_Map* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _R_Map_getType();
   R_Map_ensureInitialized();
-  R_Object_construct((R_Object*)self);
-  self->buckets = NULL;
-  self->capacity = 0;
-  self->size = 0;
-  self->capacity = g_minimumCapacity;
-  if (!R_allocateUnmanaged_nojump((void**)&self->buckets, sizeof(Node*) * self->capacity)) {
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->buckets = NULL;
+  _self->capacity = 0;
+  _self->size = 0;
+  _self->capacity = g_minimumCapacity;
+  if (!R_allocateUnmanaged_nojump((void**)&_self->buckets, sizeof(Node*) * _self->capacity)) {
     R_jump();
   }
-  for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    self->buckets[i] = NULL;
+  for (R_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
+    _self->buckets[i] = NULL;
   }
-  R_Object_setType((R_Object*)self, _type);
+  R_Object_setType((R_Object*)_self, _type);
 }
 
 R_Map*
@@ -232,8 +243,10 @@ R_Map_create
   (
   )
 {
-  R_Map* self = R_allocateObject(_R_Map_getType());
-  R_Map_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_Map* self = R_allocateObject(_R_Map_getType(), 0, &argumentValues[0]);
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)self };
+  R_Map_constructImpl(&selfValue, 0, &argumentValues[0]);
   return self;
 }
 

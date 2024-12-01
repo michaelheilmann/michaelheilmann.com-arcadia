@@ -25,23 +25,27 @@ struct ImageWriterParameters {
 };
 
 static void
+ImageWriterParameters_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 ImageWriterParameters_visit
   (
     ImageWriterParameters* self
-  )
-{
-  R_Object_visit(self->object);
-}
+  );
 
 static void
 ImageWriterParameters_destruct
   (
     ImageWriterParameters* self
-  )
-{/*Intentionally empty.*/}
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &ImageWriterParameters_constructImpl,
   .destruct = &ImageWriterParameters_destruct,
   .visit = &ImageWriterParameters_visit,
 };
@@ -68,20 +72,50 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("ImageWriterParameters", ImageWriterParameters, "R.Object", R_Object, &_typeOperations);
 
-void
-ImageWriterParameters_constructFile
+static void
+ImageWriterParameters_constructImpl
   (
-    ImageWriterParameters* self,
-    R_String* path,
-    ImageWriterFormat format
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  ImageWriterParameters* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _ImageWriterParameters_getType();
-  R_Object_construct((R_Object*)self);
-  self->object = (R_ObjectReferenceValue)path;
-  self->format = format;
-  R_Object_setType((R_Object*)self, _type);
+  if (2 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
+  }
+  if (R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_String_getType())) {
+    _self->object = (R_ObjectReferenceValue)R_Value_getObjectReferenceValue(&argumentValues[0]);
+    _self->format = R_Value_getInteger32Value(&argumentValues[1]);
+  } else if (R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_ByteBuffer_getType())) {
+    _self->object = (R_ObjectReferenceValue)R_Value_getObjectReferenceValue(&argumentValues[0]);
+    _self->format = R_Value_getInteger32Value(&argumentValues[1]);
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_Object_setType((R_Object*)_self, _type);
 }
+
+static void
+ImageWriterParameters_visit
+  (
+    ImageWriterParameters* self
+  )
+{ R_Object_visit(self->object); }
+
+static void
+ImageWriterParameters_destruct
+  (
+    ImageWriterParameters* self
+  )
+{/*Intentionally empty.*/}
 
 ImageWriterParameters*
 ImageWriterParameters_createFile
@@ -90,24 +124,10 @@ ImageWriterParameters_createFile
     ImageWriterFormat format
   )
 {
-  ImageWriterParameters* self = R_allocateObject(_ImageWriterParameters_getType());
-  ImageWriterParameters_constructFile(self, path, format);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = path },
+                               {.tag = R_ValueTag_Integer32, .integer32Value = format }, };
+  ImageWriterParameters* self = R_allocateObject(_ImageWriterParameters_getType(), 2, &argumentValues[0]);
   return self;
-}
-
-void
-ImageWriterParameters_constructByteBuffer
-  (
-    ImageWriterParameters* self,
-    R_ByteBuffer* byteBuffer,
-    ImageWriterFormat format
-  )
-{
-  R_Type* _type = _ImageWriterParameters_getType();
-  R_Object_construct((R_Object*)self);
-  self->object = (R_ObjectReferenceValue)byteBuffer;
-  self->format = format;
-  R_Object_setType((R_Object*)self, _type);
 }
 
 ImageWriterParameters*
@@ -117,8 +137,9 @@ ImageWriterParameters_createByteBuffer
     ImageWriterFormat format
   )
 {
-  ImageWriterParameters* self = R_allocateObject(_ImageWriterParameters_getType());
-  ImageWriterParameters_constructByteBuffer(self, byteBuffer, format);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = byteBuffer },
+                               {.tag = R_ValueTag_Integer32, .integer32Value = format }, };
+  ImageWriterParameters* self = R_allocateObject(_ImageWriterParameters_getType(), 2, &argumentValues[0]);
   return self;
 }
 

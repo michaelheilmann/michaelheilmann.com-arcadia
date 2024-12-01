@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-16
+# Last modified: 2024-12-02
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -31,18 +31,21 @@ endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
-FetchProduct(Tools.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library/Sources" "path to the Tools.TemplateEngineLibrary source directory")
+FetchProduct(${MyProjectName}.Tools.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library/Sources" "path to the Tools.TemplateEngineLibrary source directory")
 
-if (NOT TARGET Tools.TemplateEngine)
-    add_executable(Tools.TemplateEngine)
-    BeginProduct(Tools.TemplateEngine)
+set(MyExecutableName ${MyProjectName}.Tools.TemplateEngine)
+if (NOT TARGET ${MyExecutableName})
+    add_executable(${MyExecutableName})
+    BeginProduct(${MyExecutableName})
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h @ONLY)
 
-    list(APPEND Tools.TemplateEngine.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Main.c)
-    list(APPEND Tools.TemplateEngine.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h)
+    list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Main.c)
+    list(APPEND ${MyExecutableName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h)
 
-    target_link_libraries(Tools.TemplateEngine Tools.TemplateEngineLibrary Arcadia.R Arcadia.Arms)
+    target_link_libraries(${MyExecutableName} ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.R ${MyProjectName}.Arms)
 
-    EndProduct(Tools.TemplateEngine executable)
+    set_target_properties(${MyExecutableName} PROPERTIES FOLDER "Tools/TemplateEngine")
+
+    EndProduct(${MyExecutableName} executable)
 endif()

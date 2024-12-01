@@ -19,11 +19,7 @@
 
 #include "R/JumpTarget.h"
 #include "R/Status.h"
-
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/cstdlib.h"
 
 R_BooleanValue
 R_isUtf8
@@ -50,46 +46,40 @@ R_isUtf8
       for (R_SizeValue i = 1; i < 2; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           return R_BooleanValue_False;
-          R_jump();
         }
       }
       current++;
       numberOfSymbols1++;
     } else if (x <= 0xffff) {
       if (end - current < 3) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        return R_BooleanValue_False;
       }
       for (R_SizeValue i = 1; i < 3; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           return R_BooleanValue_False;
-          R_jump();
         }
       }
       current++;
       numberOfSymbols1++;
     } else if (x <= 0x10ffff) {
       if (end - current < 4) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        return R_BooleanValue_False;
       }
       for (R_SizeValue i = 1; i < 4; ++i) {
         current++;
         x = *current;
-        if (0x80 != x & 0xc0) {
+        if (0x80 != (x & 0xc0)) {
           return R_BooleanValue_False;
-          R_jump();
         }
       }
       current++;
       numberOfSymbols1++;
     } else {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
+      return R_BooleanValue_False;
     }
   }
   if (numberOfSymbols) {

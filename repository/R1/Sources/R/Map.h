@@ -23,12 +23,6 @@
 
 Rex_declareObjectType("R.Map", R_Map, "R.Object");
 
-void
-R_Map_construct
-  (
-    R_Map* self
-  );
-
 R_Map*
 R_Map_create
   (

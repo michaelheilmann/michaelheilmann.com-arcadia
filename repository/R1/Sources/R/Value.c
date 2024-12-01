@@ -49,6 +49,9 @@ R_Value_getType
     case R_ValueTag_ForeignProcedure: {
       return _R_ForeignProcedureValue_getType();
     } break;
+    case R_ValueTag_ImmutableByteArray: {
+      return _R_ImmutableByteArray_getType();
+    } break;
     case R_ValueTag_Integer16: {
       return _R_Integer16Value_getType();
     } break;
@@ -104,49 +107,88 @@ R_Value_isEqualTo
 {
   switch (self->tag) {
     case R_ValueTag_Boolean: {
-      return R_hashBooleanValue(self->booleanValue);
+      if (!R_Value_isBooleanValue(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->booleanValue == other->booleanValue;
     } break;
     case R_ValueTag_ForeignProcedure: {
-      return R_hashForeignProcedureValue(self->foreignProcedureValue);
+      if (!R_Value_isForeignProcedureValue(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->foreignProcedureValue == other->foreignProcedureValue;
     } break;
     case R_ValueTag_Integer16: {
-      return R_hashInteger16Value(self->integer16Value);
+      if (!R_Value_isInteger16Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->integer16Value == other->integer16Value;
     } break;
     case R_ValueTag_Integer32: {
-      return R_hashInteger32Value(self->integer32Value);
+      if (!R_Value_isInteger32Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->integer32Value == other->integer32Value;
     } break;
     case R_ValueTag_Integer64: {
-      return R_hashInteger64Value(self->integer64Value);
+      if (!R_Value_isInteger64Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->integer64Value == other->integer64Value;
     } break;
     case R_ValueTag_Integer8: {
-      return R_hashInteger8Value(self->integer8Value);
+      if (!R_Value_isInteger8Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->natural8Value == other->natural8Value;
     } break;
     case R_ValueTag_Natural16: {
-      return R_hashNatural16Value(self->natural16Value);
+      if (!R_Value_isNatural16Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->natural16Value == other->natural16Value;
     } break;
     case R_ValueTag_Natural32: {
-      return R_hashNatural32Value(self->natural32Value);
+      if (!R_Value_isNatural32Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->natural32Value == other->natural32Value;
     } break;
     case R_ValueTag_Natural64: {
-      return R_hashNatural64Value(self->natural64Value);
+      if (!R_Value_isNatural64Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->natural64Value == other->natural64Value;
     } break;
-    case R_ValueTag_Natural8: {
-      return R_hashNatural8Value(self->natural8Value);
+    case R_ValueTag_Natural8: 
+      if (!R_Value_isNatural8Value(other)) {
+        return R_BooleanValue_False;
+      } {
+        return self->natural8Value == other->natural8Value;
     } break;
     case R_ValueTag_ObjectReference: {
-      return R_Object_getHash(self->objectReferenceValue);
+      return R_Object_equalTo(self->objectReferenceValue, other);
     } break;
     case R_ValueTag_Real32: {
-      return R_hashReal32Value(self->real32Value);
+      if (!R_Value_isReal32Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->real32Value == other->real32Value;
     } break;
     case R_ValueTag_Real64: {
-      return R_hashReal64Value(self->real64Value);
+      if (!R_Value_isReal64Value(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->real64Value == other->real64Value;
     } break;
     case R_ValueTag_Size: {
-      return R_hashSizeValue(self->sizeValue);
+      if (!R_Value_isSizeValue(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->sizeValue == other->sizeValue;
     } break;
     case R_ValueTag_Void: {
-      return R_hashVoidValue(self->voidValue);
+      return R_Value_isVoidValue(other);
     } break;
     default: {
       fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);

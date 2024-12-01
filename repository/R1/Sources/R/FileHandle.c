@@ -28,28 +28,21 @@
 #define Flags_OpenWrite (2)
 
 static void
-R_FileHandle_destruct
+R_FileHandle_constructImpl
   (
-    R_FileHandle* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   );
 
 static void
 R_FileHandle_destruct
   (
     R_FileHandle* self
-  )
-{
-  if (self->fd) {
-    if (self->fd != stdin && self->fd != stderr && self->fd != stdout) {
-      fclose(self->fd);
-    }
-    self->fd = NULL;
-    self->flags = 0;
-  }
-}
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_FileHandle_constructImpl,
   .destruct = &R_FileHandle_destruct,
   .visit = NULL,
 };
@@ -76,17 +69,38 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.FileHandle", R_FileHandle, "R.Object", R_Object, &_typeOperations);
 
-void
-R_FileHandle_construct
+static void
+R_FileHandle_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_FileHandle* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_FileHandle_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->fd = NULL;
+  _self->flags = 0;
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+static void
+R_FileHandle_destruct
   (
     R_FileHandle* self
   )
 {
-  R_Type* _type = _R_FileHandle_getType();
-  R_Object_construct((R_Object*)self);
-  self->fd = NULL;
-  self->flags = 0;
-  R_Object_setType((R_Object*)self, _type);
+  if (self->fd) {
+    if (self->fd != stdin && self->fd != stderr && self->fd != stdout) {
+      fclose(self->fd);
+    }
+    self->fd = NULL;
+    self->flags = 0;
+  }
 }
 
 R_FileHandle*
@@ -94,8 +108,8 @@ R_FileHandle_create
   (
   )
 {
-  R_FileHandle* self = R_allocateObject(_R_FileHandle_getType());
-  R_FileHandle_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_FileHandle* self = R_allocateObject(_R_FileHandle_getType(), 0, &argumentValues[0]);
   return self;
 }
 
@@ -144,7 +158,7 @@ R_BooleanValue R_FileHandle_isOpenedForWriting(R_FileHandle const* self) {
 void R_FileHandle_openForReading(R_FileHandle* self, R_FilePath* path) {
   R_FileHandle_close(self);
   R_String* nativePathString = R_FilePath_toNative(path);
-  self->fd = fopen(nativePathString->p, "rb");
+  self->fd = fopen(R_String_getBytes(nativePathString), "rb");
   if (!self->fd) {
     R_setStatus(R_Status_FileSystemOperationFailed);
     R_jump();
@@ -155,7 +169,7 @@ void R_FileHandle_openForReading(R_FileHandle* self, R_FilePath* path) {
 void R_FileHandle_openForWriting(R_FileHandle* self, R_FilePath* path) {
   R_FileHandle_close(self);
   R_String* nativePathString = R_FilePath_toNative(path);
-  self->fd = fopen(nativePathString->p, "wb");
+  self->fd = fopen(R_String_getBytes(nativePathString), "wb");
   if (!self->fd) {
     R_setStatus(R_Status_FileSystemOperationFailed);
     R_jump();

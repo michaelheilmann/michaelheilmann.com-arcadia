@@ -1,11 +1,14 @@
   @{include("./Commons/header-common.i")}
-  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css'>
-  <link rel='stylesheet' href='@{siteAddress}/assets/index.css'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=3'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=3'>
   <link rel='canonical' href='@{siteAddress}/roadmap.html'>
   <title>Roadmap</title>
 </head>
 <body class="my-content-page-1">
   <header>
+  <div>
+  <a href="@{siteAddress}/">Home</a>
+  </div>
   </header>
   <main>
     <h1>Roadmap</h1>

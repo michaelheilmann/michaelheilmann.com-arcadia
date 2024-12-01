@@ -20,76 +20,71 @@
 
 #include "R.h"
 
+typedef struct R_Mil_DefinitionAst R_Mil_DefinitionAst;
 typedef struct R_Mil_StatementAst R_Mil_StatementAst;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.ProgramAst
+/// class R.Mil.ModuleAst
 /// @endcode
 /// @code
-/// program : statement*
+/// module : definition*
 /// @endcode
-Rex_declareObjectType("Cil.ProgramAst", R_Mil_ProgramAst, "R.Object");
+Rex_declareObjectType("Mil.ModuleAst", R_Mil_ModuleAst, "R.Object");
 
-struct R_Mil_ProgramAst {
+struct R_Mil_ModuleAst {
   R_Object _parent;
-  R_List* statements;
+  R_List* definitions;
 };
 
-void
-R_Mil_ProgramAst_construct
-  (
-    R_Mil_ProgramAst* self
-  );
-
-R_Mil_ProgramAst*
-R_Mil_ProgramAst_create
+R_Mil_ModuleAst*
+R_Mil_ModuleAst_create
   (
   );
 
 void
-R_Mil_ProgramAst_append
+R_Mil_ModuleAst_appendDefinition
   (
-    R_Mil_ProgramAst* self,
-    R_Mil_StatementAst* statement
+    R_Mil_ModuleAst* self,
+    R_Mil_DefinitionAst* definition
+  );
+
+R_SizeValue
+R_Mil_ModuleAst_getNumberOfDefinitions
+  (
+    R_Mil_ModuleAst* self
+  );
+
+R_Mil_DefinitionAst*
+R_Mil_ModuleAst_getDefinitionAt
+  (
+    R_Mil_ModuleAst* self,
+    R_SizeValue index
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.OperandAst
+/// class Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Cil.OperandAst", R_Mil_OperandAst, "R.Object");
+Rex_declareObjectType("Mil.OperandAst", R_Mil_OperandAst, "R.Object");
 
 struct R_Mil_OperandAst {
   R_Object _parent;
 };
 
-void
-R_Mil_OperandAst_construct
-  (
-    R_Mil_OperandAst* self
-  );
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.BooleanLiteralOperandAst extends Cil.OperandAst
+/// class Mil.BooleanLiteralOperandAst extends Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Cil.BooleanConstantOperandAst", R_Mil_BooleanLiteralOperandAst, "Cil.OperandAst");
+Rex_declareObjectType("Mil.BooleanConstantOperandAst", R_Mil_BooleanLiteralOperandAst, "Mil.OperandAst");
 
 struct R_Mil_BooleanLiteralOperandAst {
   R_Mil_OperandAst parent;
   R_String* value;
 };
-
-void
-R_Mil_BooleanLiteralOperandAst_construct
-  (
-    R_Mil_BooleanLiteralOperandAst* self,
-    R_String* value
-  );
 
 R_Mil_BooleanLiteralOperandAst*
 R_Mil_BooleanLiteralOperandAst_create
@@ -100,21 +95,14 @@ R_Mil_BooleanLiteralOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.NumberLiteralOperandAst extends Cil.OperandAst
+/// class Mil.NumberLiteralOperandAst extends Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Cil.NumberLiteralOperandAst", R_Mil_NumberLiteralOperandAst, "Cil.OperandAst");
+Rex_declareObjectType("Mil.NumberLiteralOperandAst", R_Mil_NumberLiteralOperandAst, "Mil.OperandAst");
 
 struct R_Mil_NumberLiteralOperandAst {
   R_Mil_OperandAst parent;
   R_String* value;
 };
-
-void
-R_Mil_NumberLiteralOperandAst_construct
-  (
-    R_Mil_NumberLiteralOperandAst* self,
-    R_String* value
-  );
 
 R_Mil_NumberLiteralOperandAst*
 R_Mil_NumberLiteralOperandAst_create
@@ -125,21 +113,14 @@ R_Mil_NumberLiteralOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.StringLiteralOperandAst extends Cil.OperandAst
+/// class Mil.StringLiteralOperandAst extends Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Cil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, "Cil.OperandAst");
+Rex_declareObjectType("Mil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, "Mil.OperandAst");
 
 struct R_Mil_StringLiteralOperandAst {
   R_Mil_OperandAst parent;
   R_String* value;
 };
-
-void
-R_Mil_StringLiteralOperandAst_construct
-  (
-    R_Mil_StringLiteralOperandAst* self,
-    R_String* value
-  );
 
 R_Mil_StringLiteralOperandAst*
 R_Mil_StringLiteralOperandAst_create
@@ -150,21 +131,14 @@ R_Mil_StringLiteralOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.VariableOperandAst extends Cil.OperandAst
+/// class Mil.VariableOperandAst extends Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Cil.VariableOperandAst", R_Mil_VariableOperandAst, "Cil.OperandAst");
+Rex_declareObjectType("Mil.VariableOperandAst", R_Mil_VariableOperandAst, "Mil.OperandAst");
 
 struct R_Mil_VariableOperandAst {
   R_Mil_OperandAst parent;
   R_String* value;
 };
-
-void
-R_Mil_VariableOperandAst_construct
-  (
-    R_Mil_VariableOperandAst* self,
-    R_String* value
-  );
 
 R_Mil_VariableOperandAst*
 R_Mil_VariableOperandAst_create
@@ -175,21 +149,14 @@ R_Mil_VariableOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.VoidLiteralOperandAst extends Cil.OperandAst
+/// class Mil.VoidLiteralOperandAst extends Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Cil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandAst, "Cil.OperandAst");
+Rex_declareObjectType("Mil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandAst, "Mil.OperandAst");
 
 struct R_Mil_VoidLiteralOperandAst {
   R_Mil_OperandAst parent;
   R_String* value;
 };
-
-void
-R_Mil_VoidLiteralOperandAst_construct
-  (
-    R_Mil_VoidLiteralOperandAst* self,
-    R_String* value
-  );
 
 R_Mil_VoidLiteralOperandAst*
 R_Mil_VoidLiteralOperandAst_create
@@ -200,44 +167,30 @@ R_Mil_VoidLiteralOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.ExpressionAst
+/// class Mil.ExpressionAst
 /// @endcode
-Rex_declareObjectType("Cil.ExpressionAst", R_Mil_ExpressionAst, "R.Object");
+Rex_declareObjectType("Mil.ExpressionAst", R_Mil_ExpressionAst, "R.Object");
 
 struct R_Mil_ExpressionAst {
   R_Object _parent;
 };
 
-void
-R_Mil_ExpressionAst_construct
-  (
-    R_Mil_ExpressionAst* self
-  );
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.UnaryExpressionAst extends Cil.ExpressionAst
+/// class Mil.UnaryExpressionAst extends Mil.ExpressionAst
 /// @endcode
 /// Represents an unary epxression like
 //// @code
 /// invoke variableOperand '(' (operand (',' operand)*)? ')'
 /// @endcode
-Rex_declareObjectType("Cil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, "Cil.ExpressionAst");
+Rex_declareObjectType("Mil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, "Mil.ExpressionAst");
 
 struct R_Mil_InvokeExpressionAst {
   R_Mil_ExpressionAst parent;
   R_Mil_VariableOperandAst* callee;
   R_List* operands;
 };
-
-void
-R_Mil_InvokeExpressionAst_construct
-  (
-    R_Mil_InvokeExpressionAst* self,
-    R_Mil_VariableOperandAst* callee,
-    R_List* operands
-  );
 
 R_Mil_InvokeExpressionAst*
 R_Mil_InvokeExpressionAst_create
@@ -256,27 +209,19 @@ enum R_Mil_UnaryExpressionAstType {
 };
 
 /// @code
-/// class Cil.UnaryExpressionAst extends Cil.ExpressionAst
+/// class Mil.UnaryExpressionAst extends Mil.ExpressionAst
 /// @endcode
 /// Represents an unary epxression like
 //// @code
 /// (negate|not) <operand1>
 /// @endcode
-Rex_declareObjectType("Cil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, "Cil.ExpressionAst");
+Rex_declareObjectType("Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, "Mil.ExpressionAst");
 
 struct R_Mil_UnaryExpressionAst {
   R_Mil_ExpressionAst parent;
   R_Mil_UnaryExpressionAstType type;
   R_Mil_OperandAst* operand1;
 };
-
-void
-R_Mil_UnaryExpressionAst_construct
-  (
-    R_Mil_UnaryExpressionAst* self,
-    R_Mil_UnaryExpressionAstType type,
-    R_Mil_OperandAst* operand1
-  );
 
 R_Mil_UnaryExpressionAst*
 R_Mil_UnaryExpressionAst_create
@@ -300,13 +245,13 @@ enum R_Mil_BinaryExpressionAstType {
 };
 
 /// @code
-/// class Cil.BinaryOperationExpressionAst extends Cil.ExpressionAst
+/// class Mil.BinaryOperationExpressionAst extends Mil.ExpressionAst
 /// @endcode
 /// Represents a binary operations like
 //// @code
 /// (add|and|divide|subtract|multiply|or) <operand1> <operand2>
 /// @endcode
-Rex_declareObjectType("Cil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, "Cil.ExpressionAst");
+Rex_declareObjectType("Mil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, "Mil.ExpressionAst");
 
 struct R_Mil_BinaryExpressionAst {
   R_Mil_ExpressionAst parent;
@@ -314,15 +259,6 @@ struct R_Mil_BinaryExpressionAst {
   R_Mil_OperandAst* operand1;
   R_Mil_OperandAst* operand2;
 };
-
-void
-R_Mil_BinaryExpressionAst_construct
-  (
-    R_Mil_BinaryExpressionAst* self,
-    R_Mil_BinaryExpressionAstType type,
-    R_Mil_OperandAst* operand1,
-    R_Mil_OperandAst* operand2
-  );
 
 R_Mil_BinaryExpressionAst*
 R_Mil_BinaryExpressionAst_create
@@ -335,25 +271,18 @@ R_Mil_BinaryExpressionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.LoadExpressionAst extends Cil.ExpressionAst
+/// class Mil.LoadExpressionAst extends Mil.ExpressionAst
 /// @endcode
 /// Represents a load expression
 /// @code
 /// BooleanLiteral | NumberLiteral | StringLiteral | VariableName
 /// @endcode
-Rex_declareObjectType("Cil.LiteralExpressionAst", R_Mil_LoadExpressionAst, "Cil.ExpressionAst");
+Rex_declareObjectType("Mil.LiteralExpressionAst", R_Mil_LoadExpressionAst, "Mil.ExpressionAst");
 
 struct R_Mil_LoadExpressionAst {
   R_Mil_ExpressionAst parent;
   R_Mil_OperandAst* operand;
 };
-
-void
-R_Mil_LoadExpressionAst_construct
-  (
-    R_Mil_LoadExpressionAst* self,
-    R_Mil_OperandAst* operand
-  );
 
 R_Mil_LoadExpressionAst*
 R_Mil_LoadExpressionAst_create
@@ -364,41 +293,27 @@ R_Mil_LoadExpressionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.StatementAst
+/// class Mil.StatementAst
 /// @endcode
-Rex_declareObjectType("Cil.StatementAst", R_Mil_StatementAst, "R.Object");
+Rex_declareObjectType("Mil.StatementAst", R_Mil_StatementAst, "R.Object");
 
 struct R_Mil_StatementAst {
   R_Object _parent;
 };
 
-void
-R_Mil_StatementAst_construct
-  (
-    R_Mil_StatementAst* self
-  );
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.ExpressionStatementAst extends Cil.Statement
+/// class Mil.ExpressionStatementAst extends Mil.Statement
 /// @endcode
 /// Represents
-Rex_declareObjectType("Cil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, "Cil.StatementAst");
+Rex_declareObjectType("Mil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, "Mil.StatementAst");
 
 struct R_Mil_ExpressionStatementAst {
   R_Mil_StatementAst parent;
   R_String* targetVariableName;
   R_Mil_ExpressionAst* expression;
 };
-
-void
-R_Mil_ExpressionStatementAst_construct
-  (
-    R_Mil_ExpressionStatementAst* self,
-    R_String* targetVariableName,
-    R_Mil_ExpressionAst* expression
-  );
 
 /// @brief Create a CIL expression statement AST.
 /// @return A pointer to this CIL expression statement ASt.
@@ -409,31 +324,42 @@ R_Mil_ExpressionStatementAst_create
     R_Mil_ExpressionAst* expression
   );
 
+/// @brief Get the name of the target variable.
+/// @param self This expression statement AST.
+/// @return The name of the target variable.
+R_String*
+R_Mil_ExpressionStatementAst_getTargetVariableName
+  (
+    R_Mil_ExpressionStatementAst* self
+  );
+
+/// @brief Get the expression AST of the expression statement AST.
+/// @param self This expression statement AST.
+/// @return The expression AST.
+R_Mil_ExpressionAst*
+R_Mil_ExpressionStatementAst_getExpression
+  (
+    R_Mil_ExpressionStatementAst* self
+  );
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.LabelStatementAst extends Cil.Statement
+/// class Mil.LabelStatementAst extends Mil.Statement
 /// @endcode
 /// Represents
 /// @code
 /// name ':'
 /// @endcode
-Rex_declareObjectType("Cil.LabelStatementAst", R_Mil_LabelStatementAst, "Cil.StatementAst");
+Rex_declareObjectType("Mil.LabelStatementAst", R_Mil_LabelStatementAst, "Mil.StatementAst");
 
 struct R_Mil_LabelStatementAst {
   R_Mil_StatementAst parent;
   R_String* labelName;
 };
 
-void
-R_Mil_LabelStatementAst_construct
-  (
-    R_Mil_LabelStatementAst* self,
-    R_String* labelName
-  );
-
-/// @brief Create a CIL label statement AST.
-/// @return A pointer to this CIL label statement AST.
+/// @brief Create a MIL label statement AST.
+/// @return A pointer to this MIL label statement AST.
 R_Mil_LabelStatementAst*
 R_Mil_LabelStatementAst_create
   (
@@ -443,25 +369,18 @@ R_Mil_LabelStatementAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.ReturnStatementAst extends Cil.Statement
+/// class Mil.ReturnStatementAst extends Mil.Statement
 /// @endcode
 /// Represents
 /// @code
 /// 'return' (BooleanLiteral | NumberLiteral | StringLiteral | VariableName)
 /// @endcode
-Rex_declareObjectType("Cil.ReturnStatementAst", R_Mil_ReturnStatementAst, "Cil.StatementAst");
+Rex_declareObjectType("Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, "Mil.StatementAst");
 
 struct R_Mil_ReturnStatementAst {
   R_Mil_StatementAst parent;
   R_Mil_OperandAst* operand;
 };
-
-void
-R_Mil_ReturnStatementAst_construct
-  (
-    R_Mil_ReturnStatementAst* self,
-    R_Mil_OperandAst* operand
-  );
 
 /// @brief Create a CIL return statement AST.
 /// @return A pointer to this CIL return statement AST.
@@ -474,55 +393,41 @@ R_Mil_ReturnStatementAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.DefinitionAst extends R.Object
+/// class Mil.DefinitionAst extends R.Object
 /// @endcode
-Rex_declareObjectType("Cil.DefinitionAst", R_Mil_DefinitionAst, "R.Object");
+Rex_declareObjectType("Mil.DefinitionAst", R_Mil_DefinitionAst, "R.Object");
 
 struct R_Mil_DefinitionAst {
   R_Object _parent;
 };
 
-void
-R_Mil_DefinitionAst_construct
-  (
-    R_Mil_DefinitionAst* self
-  );
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.ProcedureDefinitionAst extends Cil.DefinitionAst
+/// class Mil.ProcedureDefinitionAst extends Mil.DefinitionAst
 /// @endcode
 /// Represents
 /// @code
-/// procedureDefinition : 'procedure' ('native' string)? name procedureParameters procedureBody
+/// procedureDefinition : 'procedure' 'entry'? ('native' string)? name procedureParameters procedureBody
 /// procedureBody : '{' statements '}'
 /// @endcode
-Rex_declareObjectType("Cil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, "R.Object");
+Rex_declareObjectType("Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, "R.Object");
 
 struct R_Mil_ProcedureDefinitionAst {
   R_Mil_DefinitionAst _parent;
+  R_BooleanValue entry;
   R_String* nativeName;
   R_String* procedureName;
   R_List* procedureParameters;
   R_List* procedureBody;
 };
 
-void
-R_Mil_ProcedureDefinitionAst_construct
-  (
-    R_Mil_ProcedureDefinitionAst* self,
-    R_String* nativeName,
-    R_String* procedureName,
-    R_List* procedureParameters,
-    R_List* procedureBody
-  );
-
-/// @brief Create a CIL procedure definition AST.
-/// @return A pointer to this CIL procedure definition AST.
+/// @brief Create a MIL procedure definition AST.
+/// @return A pointer to this MIL procedure definition AST.
 R_Mil_ProcedureDefinitionAst*
 R_Mil_ProcedureDefinitionAst_create
   (
+    R_BooleanValue entry,
     R_String* nativeName,
     R_String* procedureName,
     R_List* procedureParameters,
@@ -532,14 +437,16 @@ R_Mil_ProcedureDefinitionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Cil.ClassDefinitionAst extends Cil.DefinitionAst
+/// class Mil.ClassDefinitionAst extends Mil.DefinitionAst {
+///   construct(className:String, extendedClassName:String, classBody:List)
+/// }
 /// @endcode
 /// Represents
 /// @code
 /// classDefinition : 'class' name ('extends' name)? classBody
 /// classBody : '{' classMemberDefinition* '}'
 /// @endcode
-Rex_declareObjectType("Cil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, "Cil.DefinitionAst");
+Rex_declareObjectType("Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, "Mil.DefinitionAst");
 
 struct R_Mil_ClassDefinitionAst {
   R_Mil_DefinitionAst _parent;
@@ -548,17 +455,8 @@ struct R_Mil_ClassDefinitionAst {
   R_List* classBody;
 };
 
-void
-R_Mil_ClassDefinitionAst_construct
-  (
-    R_Mil_ClassDefinitionAst* self,
-    R_String* className,
-    R_String* extendedClassName,
-    R_List* classBody
-  );
-
-/// @brief Create a CIL class definition AST.
-/// @return A pointer to this CIL class definition AST.
+/// @brief Create a MIL class definition AST.
+/// @return A pointer to this MIL class definition AST.
 R_Mil_ClassDefinitionAst*
 R_Mil_ClassDefinitionAst_create
   (
@@ -569,21 +467,15 @@ R_Mil_ClassDefinitionAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("Cil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, "Cil.DefinitionAst");
+Rex_declareObjectType("Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, "Mil.DefinitionAst");
 
 struct R_Mil_ClassMemberDefinitionAst {
   R_Mil_DefinitionAst _parent;
 };
 
-void
-R_Mil_ClassMemberDefinitionAst_construct
-  (
-    R_Mil_ClassMemberDefinitionAst* self
-  );
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("Cil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, "Cil.ClassMemberDefinitionAst");
+Rex_declareObjectType("Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, "Mil.ClassMemberDefinitionAst");
 
 struct R_Mil_MethodDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;
@@ -591,15 +483,6 @@ struct R_Mil_MethodDefinitionAst {
   R_List* methodParameters;
   R_List* methodBody;
 };
-
-void
-R_Mil_MethodDefinitionAst_construct
-  ( 
-    R_Mil_MethodDefinitionAst* self,
-    R_String* methodName,
-    R_List* methodParameters,
-    R_List* methodBody
-  );
 
 R_Mil_MethodDefinitionAst*
 R_Mil_MethodDefinitionAst_create
@@ -611,21 +494,13 @@ R_Mil_MethodDefinitionAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("Cil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, "Cil.ClassMemberDefinitionAst");
+Rex_declareObjectType("Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, "Mil.ClassMemberDefinitionAst");
 
 struct R_Mil_ConstructorDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;
   R_List* constructorParameters;
   R_List* constructorBody;
 };
-
-void
-R_Mil_ConstructorDefinitionAst_construct
-  (
-    R_Mil_ConstructorDefinitionAst* self,
-    R_List* constructorParameters,
-    R_List* constructorBody
-  );
 
 R_Mil_ConstructorDefinitionAst*
 R_Mil_ConstructorDefinitionAst_create
@@ -636,19 +511,12 @@ R_Mil_ConstructorDefinitionAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("Cil.VariableDefinitionAst", R_Mil_VariableDefinitionAst, "Cil.ClassMemberDefinitionAst");
+Rex_declareObjectType("Mil.VariableDefinitionAst", R_Mil_VariableDefinitionAst, "Mil.ClassMemberDefinitionAst");
 
 struct R_Mil_VariableDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;
   R_String* variableName;
 };
-
-void
-R_Mil_VariableDefinitionAst_construct
-  (
-    R_Mil_VariableDefinitionAst* self,
-    R_String* name
-  );
 
 R_Mil_VariableDefinitionAst*
 R_Mil_VariableDefinitionAst_create

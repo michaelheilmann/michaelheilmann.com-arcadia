@@ -36,6 +36,7 @@ main1
 
   // (3) Create a window.
   NativeWindowsWindow* window = NativeWindowsWindow_create();
+  R_Object_lock(window);
 
   // (4) Ensure the window is opened.
   NativeWindowsWindow_open(window);
@@ -54,10 +55,11 @@ main1
   NativeWindowsWindow_setSmallIcon(window, icon);
 
   // (7) Set the title.
-  NativeWindowsWindow_setTitle(window, R_String_create_pn("Michael Heilmann's Liminality", sizeof("Michael Heilmann's Liminality") - 1));
+  NativeWindowsWindow_setTitle(window, R_String_create_pn(R_ImmutableByteArray_create("Michael Heilmann's Liminality", sizeof("Michael Heilmann's Liminality") - 1)));
 
   // (8) Enter the message loop.
   while (!NativeWindowsWindow_getQuitRequested(window)) {
+    R_Arms_step();
     NativeWindowsWindow_update(window);
   }
 
@@ -67,6 +69,8 @@ main1
   // (10) Shutdown audials.
   // TODO: Causes a leak if not invoked.
   Audials_shutdown();
+
+  R_Object_unlock(window);
 }
 
 int

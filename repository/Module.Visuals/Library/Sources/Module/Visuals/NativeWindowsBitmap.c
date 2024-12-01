@@ -18,23 +18,21 @@
 #include "Module/Visuals/NativeWindowsBitmap.h"
 
 static void
+NativeWindowsBitmap_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 NativeWindowsBitmap_destruct
   (
     NativeWindowsBitmap* self
-  )
-{
-  if (NULL != self->hBitmap) {
-    DeleteObject(self->hBitmap);
-    self->hBitmap = NULL;
-  }
-  if (NULL != self->hDeviceContext) {
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
-  }
-}
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &NativeWindowsBitmap_constructImpl,
   .destruct = &NativeWindowsBitmap_destruct,
   .visit = NULL,
 };
@@ -61,26 +59,44 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("NativeWindowsBitmap", NativeWindowsBitmap, "R.Object", R_Object, &_typeOperations);
 
-void
-NativeWindowsBitmap_construct
+static void
+NativeWindowsBitmap_constructImpl
   (
-    NativeWindowsBitmap* self,
-    int width,
-    int height
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  NativeWindowsBitmap* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _NativeWindowsBitmap_getType();
-  R_Object_construct((R_Object*)self);
-  self->hBitmap = NULL;
-  self->hDeviceContext = NULL;
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+ 
+  if (2 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  if (!R_Value_isInteger32Value(&argumentValues[0])) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  if (!R_Value_isInteger32Value(&argumentValues[1])) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+
+  _self->hBitmap = NULL;
+  _self->hDeviceContext = NULL;
 
   HDC hScreenDeviceContext = GetDC(NULL);
   if (!hScreenDeviceContext) {
     R_setStatus(R_Status_EnvironmentFailed);
     R_jump();
   }
-  self->hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
-  if (!self->hDeviceContext) {
+  _self->hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
+  if (!_self->hDeviceContext) {
     ReleaseDC(NULL, hScreenDeviceContext);
     hScreenDeviceContext = NULL;
     R_setStatus(R_Status_EnvironmentFailed);
@@ -91,72 +107,89 @@ NativeWindowsBitmap_construct
 
   BITMAPINFO bmi;
   bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = width;
-  bmi.bmiHeader.biHeight = height;
+  bmi.bmiHeader.biWidth = R_Value_getInteger32Value(&argumentValues[0]);
+  bmi.bmiHeader.biHeight = R_Value_getInteger32Value(&argumentValues[1]);
   bmi.bmiHeader.biPlanes = 1;
   bmi.bmiHeader.biBitCount = 24;
   bmi.bmiHeader.biCompression = BI_RGB;
-  bmi.bmiHeader.biSizeImage = (width * height) * 3;
+  bmi.bmiHeader.biSizeImage = (bmi.bmiHeader.biWidth * bmi.bmiHeader.biHeight) * 3;
 
-  self->hBitmap = CreateDIBSection(self->hDeviceContext, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
-  if (!self->hBitmap) {
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
+  _self->hBitmap = CreateDIBSection(_self->hDeviceContext, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
+  if (!_self->hBitmap) {
+    DeleteDC(_self->hDeviceContext);
+    _self->hDeviceContext = NULL;
     R_setStatus(R_Status_EnvironmentFailed);
     R_jump();
   }
   if (bmi.bmiHeader.biBitCount != 24) {
-    DeleteObject(self->hBitmap);
-    self->hBitmap = NULL;
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
+    DeleteObject(_self->hBitmap);
+    _self->hBitmap = NULL;
+    DeleteDC(_self->hDeviceContext);
+    _self->hDeviceContext = NULL;
     R_setStatus(R_Status_EnvironmentFailed);
     R_jump();
   }
-  self->width = width;
-  self->height = height;
+  _self->width = R_Value_getInteger32Value(&argumentValues[0]);
+  _self->height = R_Value_getInteger32Value(&argumentValues[1]);
   DWORD lineStride = ((((bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) + 31) & ~31) >> 3);
   DWORD linePadding = lineStride - ((bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) >> 3);
   if (lineStride > INT32_MAX) {
-    DeleteObject(self->hBitmap);
-    self->hBitmap = NULL;
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
+    DeleteObject(_self->hBitmap);
+    _self->hBitmap = NULL;
+    DeleteDC(_self->hDeviceContext);
+    _self->hDeviceContext = NULL;
     R_setStatus(R_Status_EnvironmentFailed);
     R_jump();
   }
-  self->lineStride = (int32_t)lineStride;
-  self->linePadding = (uint32_t)linePadding;
-  self->numberOfBitsPerPixel = 24;
-  self->pixelFormat = PixelFormat_Bn8Gn8Rn8;
+  _self->lineStride = (int32_t)lineStride;
+  _self->linePadding = (uint32_t)linePadding;
+  _self->numberOfBitsPerPixel = 24;
+  _self->pixelFormat = PixelFormat_Bn8Gn8Rn8;
 
   HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
   if (!hBrush) {
-    DeleteObject(self->hBitmap);
-    self->hBitmap = NULL;
-    DeleteDC(self->hDeviceContext);
-    self->hDeviceContext = NULL;
+    DeleteObject(_self->hBitmap);
+    _self->hBitmap = NULL;
+    DeleteDC(_self->hDeviceContext);
+    _self->hDeviceContext = NULL;
     R_setStatus(R_Status_EnvironmentFailed);
     R_jump();
   }
-  SelectObject(self->hDeviceContext, self->hBitmap);
-  RECT fillRetc = { .left = 0, .top = 0, .right = self->width, .bottom = self->height };
-  FillRect(self->hDeviceContext, &fillRetc, hBrush);
+  SelectObject(_self->hDeviceContext, _self->hBitmap);
+  RECT fillRetc = { .left = 0, .top = 0, .right = _self->width, .bottom = _self->height };
+  FillRect(_self->hDeviceContext, &fillRetc, hBrush);
   DeleteObject(hBrush);
   hBrush = NULL;
 
-  R_Object_setType(self, _type);
+  R_Object_setType(_self, _type);
+}
+
+static void
+NativeWindowsBitmap_destruct
+  (
+    NativeWindowsBitmap* self
+  )
+{
+  if (NULL != self->hBitmap) {
+    DeleteObject(self->hBitmap);
+    self->hBitmap = NULL;
+  }
+  if (NULL != self->hDeviceContext) {
+    DeleteDC(self->hDeviceContext);
+    self->hDeviceContext = NULL;
+  }
 }
 
 NativeWindowsBitmap*
 NativeWindowsBitmap_create
   (
-    int width,
-    int height
+    R_Integer32Value width,
+    R_Integer32Value height
   )
 {
-  NativeWindowsBitmap* self = R_allocateObject(_NativeWindowsBitmap_getType());
-  NativeWindowsBitmap_construct(self, width, height);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Integer32, .integer32Value = width },
+                               {.tag = R_ValueTag_Integer32, .integer32Value = height } };
+  NativeWindowsBitmap* self = R_allocateObject(_NativeWindowsBitmap_getType(), 2, &argumentValues[0]);
   return self;
 }
 
@@ -164,9 +197,9 @@ void
 NativeWindowsBitmap_fill
   (
     NativeWindowsBitmap* self,
-    uint8_t r,
-    uint8_t g,
-    uint8_t b
+    R_Natural8Value r,
+    R_Natural8Value g,
+    R_Natural8Value b
   )
 {
   HBRUSH hBrush = CreateSolidBrush(RGB(r, g, b));
@@ -198,7 +231,6 @@ NativeWindowsBitmap_toPixelBuffer
   for (int32_t y = 0; y < self->height; ++y) {
     for (int32_t x = 0; x < self->width; ++x) {
       int32_t sourceOffset = self->lineStride * y + (x * self->numberOfBitsPerPixel) / 8;
-      int32_t targetOffset = PixelBuffer_getLineStride(pixelBuffer) * y + x * PixelBuffer_getBytesPerPixel(pixelBuffer);
       uint8_t* source = sourceBytes + sourceOffset;
       PixelBuffer_setPixelRgba(pixelBuffer, x, y, source[2], source[1], source[0], 255);
     }
@@ -206,118 +238,3 @@ NativeWindowsBitmap_toPixelBuffer
   PixelBuffer_reflectHorizontally(pixelBuffer);
   return pixelBuffer;
 }
-
-#if 0
-static void
-TextureFontWindows_destruct
-  (
-    TextureFontWindows* self
-  )
-{
-  if (NULL != self->hFont) {
-    DeleteObject(self->hFont);
-    self->hFont = NULL;
-  }
-}
-
-Rex_defineObjectType("TextureFontWindows", TextureFontWindows, "R.Object", R_Object, NULL, &TextureFontWindows_destruct);
-
-void
-TextureFontWindows_construct
-  (
-    TextureFontWindows* self
-  )
-{
-  R_Type* _type = _TextureFontWindows_getType();
-  R_Object_construct((R_Object*)self);
-  //
-  HDC hScreenDeviceContext = GetDC(NULL);
-  if (!hScreenDeviceContext) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  HDC hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
-  if (!hDeviceContext) {
-    ReleaseDC(NULL, hScreenDeviceContext);
-    hScreenDeviceContext = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
-  }
-  ReleaseDC(NULL, hScreenDeviceContext);
-  hScreenDeviceContext = NULL;
-  // Get the size of the symbol.
-  self->codePoint = 'A';
-  R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
-  R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(byteBuffer);
-  R_Utf8Writer_writeCodePoints(utf8ByteBufferWriter, &self->codePoint, 1);
-  RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
-  DrawTextA(hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
-  int32_t width = textRect.right - textRect.left;
-  int32_t height = textRect.bottom - textRect.top;
-  DeleteDC(hDeviceContext);
-  hDeviceContext = NULL;
-  // Create a bitmap of that size. Draw the symbol to the bitmap.
-  self->bitmap = NativeWindowsBitmap_create(width, height);
-  DrawTextA(self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
-  //
-  R_Object_setType(self, _type);
-}
-
-TextureFontWindows*
-TextureFontWindows_create
-  (
-  )
-{
-  TextureFontWindows* self = R_allocateObject(_TextureFontWindows_getType());
-  TextureFontWindows_construct(self);
-  return self;
-}
-
-void
-TextureFontWindows_setCodePoint
-  (
-    TextureFontWindows* self,
-    R_Natural32Value codePoint
-  )
-{
-  if (self->codePoint != codePoint) {
-    HDC hScreenDeviceContext = GetDC(NULL);
-    if (!hScreenDeviceContext) {
-      R_setStatus(R_Status_EnvironmentFailed);
-      R_jump();
-    }
-    HDC hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
-    if (!hDeviceContext) {
-      ReleaseDC(NULL, hScreenDeviceContext);
-      hScreenDeviceContext = NULL;
-      R_setStatus(R_Status_EnvironmentFailed);
-      R_jump();
-    }
-    ReleaseDC(NULL, hScreenDeviceContext);
-    hScreenDeviceContext = NULL;
-    // Get the size of the symbol.
-    self->codePoint = codePoint;
-    R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
-    R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(byteBuffer);
-    R_Utf8Writer_writeCodePoints(utf8ByteBufferWriter, &self->codePoint, 1);
-    RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
-    DrawTextA(hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
-    int32_t width = textRect.right - textRect.left;
-    int32_t height = textRect.bottom - textRect.top;
-    DeleteDC(hDeviceContext);
-    hDeviceContext = NULL;
-    // Create a bitmap of that size. Draw the symbol to the bitmap.
-    self->bitmap = NativeWindowsBitmap_create(width, height);
-    DrawTextA(self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
-  }
-}
-
-PixelBuffer*
-TextureFontWindows_getPixelBuffer
-  (
-    TextureFontWindows* self
-  )
-{
-  return NativeWindowsBitmap_toPixelBuffer(self->bitmap);
-}
-#endif

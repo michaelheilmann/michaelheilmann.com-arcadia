@@ -18,30 +18,22 @@
 
 #include "R/Object.h"
 #include "R/Value.h"
-#include "R/Machine/Code/Include.h"
+#include "R/Interpreter/Include.h"
 
 Rex_declareObjectType("R.Procedure", R_Procedure, "R.Object");
 
 struct R_Procedure {
   R_Object _parent;
-  R_Machine_Code* code;
+  R_Interpreter_Code* code;
 };
-
-// Currently, there is no restriction in code for a procedure.
-void
-R_Procedure_construct
-  (
-    R_Procedure* self,
-    R_Machine_Code* code
-  );
 
 R_Procedure*
 R_Procedure_create
   (
-    R_Machine_Code* code
+    R_Interpreter_Code* code
   );
 
-R_Machine_Code*
+R_Interpreter_Code*
 R_Procedure_getCode
   (
     R_Procedure* self

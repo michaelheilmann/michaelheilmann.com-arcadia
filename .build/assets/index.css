@@ -284,10 +284,31 @@ body.my-index-page-1, body.my-error-page {
 
 body.my-content-page-1 {
   margin: 16px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
 }
 
-body.my-content-page-1 header
-{/*Intentionally empty.*/}
+body.my-error-page-1 header, body.my-content-page-1 header {
+  background-color: var(--black);
+  /*min-height: 16px;*/
+  display: flex;
+  flex-direction: row;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+body.my-error-page-1 header a, body.my-content-page-1 header a {
+  text-decoration: none;
+  color: var(--white);
+}
+
+body.my-content-page-1 main {
+  margin-left: 16px;
+  margin-right: 16px;
+}
 
 body.my-content-page-1 footer {
   border-top-style: solid;

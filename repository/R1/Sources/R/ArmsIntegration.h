@@ -20,20 +20,6 @@
 #include "R/Size.h"
 #include "R/Status.h"
 
-#if defined(R_EXPORTED_INCLUDE)
-  #error("R/ArmsIntegration.h must not be included from public header")
-#endif
-
-R_Status
-R_Arms_startup
-  (
-  );
-
-R_Status
-R_Arms_shutdown
-  (
-  );
-
 R_Status
 R_Arms_step
   (
@@ -50,13 +36,13 @@ R_Arms_visit
     void* object
   );
 
-void
+R_Status
 R_Arms_lock
   (
     void* object
   );
 
-void
+R_Status
 R_Arms_unlock
   (
     void* object

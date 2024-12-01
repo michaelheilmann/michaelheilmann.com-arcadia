@@ -34,12 +34,6 @@ struct Context {
   R_List* files;
 };
 
-void
-Context_construct
-  (
-    Context* self
-  );
-
 Context*
 Context_create
   (

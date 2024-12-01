@@ -34,14 +34,15 @@ testProcedureDefinitions
     u8"procedure native \"print\" print (a)\n"
     ;
   R_Mil_Parser* parser = R_Mil_Parser_create();
-  R_Mil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
+  R_Mil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create(input, strlen(input)))));
   R_Mil_Parser_run(parser);
 }
 
 static void
 testClassDefinitions
-(
-) {
+  (
+  )
+{
   static const char* input =
     u8"class MyClassB extends MyClassA {\n"
     u8"  constructor {\n"
@@ -55,7 +56,7 @@ testClassDefinitions
     u8"}\n"
     ;
   R_Mil_Parser* parser = R_Mil_Parser_create();
-  R_Mil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
+  R_Mil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create(input, strlen(input)))));
   R_Mil_Parser_run(parser);
 }
 
@@ -122,7 +123,7 @@ testStatements
     u8"}\n"
     ;
   R_Mil_Parser* parser = R_Mil_Parser_create();
-  R_Mil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
+  R_Mil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create(input, strlen(input)))));
   R_Mil_Parser_run(parser);
 }
 

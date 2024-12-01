@@ -21,10 +21,7 @@
 #include "R/Object.h"
 #include "R/Status.h"
 #include "R/UnmanagedMemory.h"
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/cstdlib.h"
 
 static R_BooleanValue g_initialized = R_BooleanValue_False;
 
@@ -44,6 +41,14 @@ R_List_ensureInitialized
   );
 
 static void
+R_List_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 R_List_destruct
   (
     R_List* self
@@ -54,6 +59,34 @@ R_List_visit
   (
     R_List* self
   );
+
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .construct = &R_List_constructImpl,
+  .destruct = &R_List_destruct,
+  .visit = &R_List_visit,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.List", R_List, "R.Object", R_Object, &_typeOperations);
 
 static void
 R_List_ensureFreeCapacity
@@ -108,6 +141,34 @@ R_List_ensureInitialized
 }
 
 static void
+R_List_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_List* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_List_getType();
+  R_List_ensureInitialized();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->elements = NULL;
+  _self->capacity = 0;
+  _self->size = 0;
+  _self->capacity = g_minimumCapacity;
+  if (!R_allocateUnmanaged_nojump(&_self->elements, sizeof(R_Value) * _self->capacity)) {
+    R_jump();
+  }
+  for (R_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
+    R_Value_setVoidValue(_self->elements + i, R_VoidValue_Void);
+  }
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+static void
 R_List_destruct
   (
     R_List* self
@@ -132,64 +193,16 @@ R_List_visit
   }
 }
 
-static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
-  .destruct = &R_List_destruct,
-  .visit = &R_List_visit,
-};
-
-static const R_Type_Operations _typeOperations = {
-  .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
-};
-
-Rex_defineObjectType("R.List", R_List, "R.Object", R_Object, &_typeOperations);
-
-void
-R_List_construct
-  (
-    R_List* self
-  )
-{
-  R_Type* _type = _R_List_getType();
-  R_List_ensureInitialized();
-  R_Object_construct((R_Object*)self);
-  self->elements = NULL;
-  self->capacity = 0;
-  self->size = 0;
-  self->capacity = g_minimumCapacity;
-  if (!R_allocateUnmanaged_nojump(&self->elements, sizeof(R_Value) * self->capacity)) {
-    R_jump();
-  }
-  for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    R_Value_setVoidValue(self->elements + i, R_VoidValue_Void);
-  }
-  R_Object_setType((R_Object*)self, _type);
-}
-
 R_List*
 R_List_create
   (
   )
 {
   R_List_ensureInitialized();
-  R_List* self = R_allocateObject(_R_List_getType());
-  R_List_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_List* self = R_allocateObject(_R_List_getType(), 0, &argumentValues[0]);
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)self };
+  R_List_constructImpl(&selfValue, 0, &argumentValues[0]);
   return self;
 }
 
@@ -243,9 +256,9 @@ R_List_insertAt
     R_List_ensureFreeCapacity(self, R_SizeValue_Literal(1));
   }
   if (index < self->size) {
-    memmove(self->elements + index + 1,
-            self->elements + index + 0,
-            sizeof(R_Value) * (self->size - index));
+    c_memmove(self->elements + index + 1,
+              self->elements + index + 0,
+              sizeof(R_Value) * (self->size - index));
   }
   self->elements[index] = value;
   self->size++;
@@ -288,7 +301,7 @@ R_List_remove
   R_SizeValue tailLength = (self->size - index) - count;
   if (tailLength) {
     R_SizeValue tailStart = index + count;
-    memmove(self->elements + index, self->elements + tailStart, tailLength * sizeof(R_Value));
+    c_memmove(self->elements + index, self->elements + tailStart, tailLength * sizeof(R_Value));
   }
   self->size -= count;
 }

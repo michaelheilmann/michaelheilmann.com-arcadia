@@ -21,10 +21,16 @@
 #include "R/Object.h"
 #include "R/Status.h"
 #include "R/UnmanagedMemory.h"
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/Value.h"
+#include "R/cstdlib.h"
+
+static void
+R_ByteBuffer_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static void
 R_ByteBuffer_destruct
@@ -32,20 +38,8 @@ R_ByteBuffer_destruct
     R_ByteBuffer* self
   );
 
-static void
-R_ByteBuffer_destruct
-  (
-    R_ByteBuffer* self
-  )
-{
-  if (self->p) {
-    R_deallocateUnmanaged_nojump(self->p);
-    self->p = NULL;
-  }
-}
-
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_ByteBuffer_constructImpl,
   .destruct = &R_ByteBuffer_destruct,
   .visit = NULL,
 };
@@ -72,21 +66,39 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.ByteBuffer", R_ByteBuffer, "R.Object", R_Object, &_typeOperations);
 
-void
-R_ByteBuffer_construct
+static void
+R_ByteBuffer_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_ByteBuffer* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_ByteBuffer_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->p = NULL;
+  _self->sz = 0;
+  _self->cp = 0;
+  if (!R_allocateUnmanaged_nojump(&_self->p, 0)) {
+    R_jump();
+  }
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+static void
+R_ByteBuffer_destruct
   (
     R_ByteBuffer* self
   )
 {
-  R_Type* _type = _R_ByteBuffer_getType();
-  R_Object_construct((R_Object*)self);
-  self->p = NULL;
-  self->sz = 0;
-  self->cp = 0;
-  if (!R_allocateUnmanaged_nojump(&self->p, 0)) {
-    R_jump();
+  if (self->p) {
+    R_deallocateUnmanaged_nojump(self->p);
+    self->p = NULL;
   }
-  R_Object_setType((R_Object*)self, _type);
 }
 
 R_ByteBuffer*
@@ -94,8 +106,10 @@ R_ByteBuffer_create
   (
   )
 {
-  R_ByteBuffer* self = R_allocateObject(_R_ByteBuffer_getType());
-  R_ByteBuffer_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_ByteBuffer* self = R_allocateObject(_R_ByteBuffer_getType(), 0, &argumentValues[0]);
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = self };
+  R_ByteBuffer_constructImpl(&selfValue, 0, &argumentValues[0]);
   return self;
 }
 
@@ -111,7 +125,7 @@ R_ByteBuffer_endsWith_pn
     return R_BooleanValue_False;
   }
   R_SizeValue d = self->sz - numberOfBytes;
-  return !memcmp(self->p + d, bytes, numberOfBytes);
+  return !c_memcmp(self->p + d, bytes, numberOfBytes);
 }
 
 R_BooleanValue
@@ -125,7 +139,7 @@ R_ByteBuffer_startsWith_pn
   if (self->sz < numberOfBytes) {
     return R_BooleanValue_False;
   }
-  return !memcmp(self->p, bytes, numberOfBytes);
+  return !c_memcmp(self->p, bytes, numberOfBytes);
 }
 
 void
@@ -189,9 +203,9 @@ R_ByteBuffer_insert_pn
     self->cp = newCapacity;
   }
   if (index < self->sz) {
-    memmove(self->p + index, self->p + index + numberOfBytes, self->sz - index);
+    c_memmove(self->p + index, self->p + index + numberOfBytes, self->sz - index);
   }
-  memcpy(self->p + index, bytes, numberOfBytes);
+  c_memcpy(self->p + index, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }
 
@@ -206,7 +220,7 @@ R_ByteBuffer_isEqualTo
     return R_BooleanValue_True;
   }
   if (self->sz == other->sz) {
-    return !memcmp(self->p, other->p, self->sz);
+    return !c_memcmp(self->p, other->p, self->sz);
   } else {
     return R_BooleanValue_False;
   }
@@ -225,7 +239,7 @@ R_ByteBuffer_isEqualTo_pn
     R_jump();
   }
   if (self->sz == numberOfBytes) {
-    return !memcmp(self->p, bytes, numberOfBytes);
+    return !c_memcmp(self->p, bytes, numberOfBytes);
   } else {
     return R_BooleanValue_False;
   }

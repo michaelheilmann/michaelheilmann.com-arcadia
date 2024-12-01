@@ -32,20 +32,25 @@ endif()
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
 
-set(MyExecutableName ${MyProjectName}.Tools.TemplateEngine.Tests.Test1)
-add_executable(${MyExecutableName})
-BeginProduct(${MyExecutableName})
+set(MyTestName ${MyProjectName}.Tools.TemplateEngine.Tests.Test1)
+add_executable(${MyTestName})
+BeginProduct(${MyTestName})
 
 # Create configuration file.
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Configure.h @ONLY)
 # Add source and header files.
-list(APPEND ${MyExecutableName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Configure.h)
-list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Main.c)
+list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Configure.h)
+list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Main.c)
 
 # Copy assets.
-add_custom_command(TARGET ${MyExecutableName} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets $<TARGET_FILE_DIR:${MyExecutableName}>)           
+add_custom_command(TARGET ${MyTestName} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets $<TARGET_FILE_DIR:${MyTestName}>)           
 
-target_link_libraries(${MyExecutableName} Tools.TemplateEngineLibrary Arcadia.R Arcadia.Arms)
-set_property(TARGET ${MyExecutableName} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyExecutableName}>)
-EndProduct(${MyExecutableName} executable)
+target_link_libraries(${MyTestName} ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.R ${MyProjectName}.Arms)
+
+add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+set_property(TARGET ${MyTestName} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+
+set_target_properties(${MyTestName} PROPERTIES FOLDER "Tools/TemplateEngine")
+
+EndProduct(${MyTestName} executable)

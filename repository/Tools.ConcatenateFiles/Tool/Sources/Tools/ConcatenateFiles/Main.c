@@ -20,7 +20,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-static void main1(int argc, char** argv) {
+static void
+main1
+  (
+    int argc,
+    char** argv
+  )
+{
   if (argc < 3) {
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
@@ -44,7 +50,13 @@ static void main1(int argc, char** argv) {
   R_FileHandle_close(fileHandle);
 }
 
-int main(int argc, char** argv) {
+int
+main
+  (
+    int argc,
+    char** argv
+  )
+{
   R_Status status[2];
   status[0] = R_startup();
   if (status[0]) {

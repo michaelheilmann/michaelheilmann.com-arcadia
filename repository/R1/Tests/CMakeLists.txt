@@ -29,6 +29,7 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
+add_subdirectory(ArmsTests)
 add_subdirectory(ClampTests)
 add_subdirectory(CountLeadingZeroesTests)
 add_subdirectory(FilePathTests)

@@ -20,11 +20,7 @@
 #include "R/JumpTarget.h"
 #include "R/Status.h"
 #include "R/UnmanagedMemory.h"
-
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/cstdlib.h"
 
 typedef struct Singleton {
   R_Natural64Value referenceCount;

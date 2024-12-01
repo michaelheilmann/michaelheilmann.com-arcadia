@@ -84,7 +84,7 @@ testScanner3
     u8"\n"
     ;
   R_Mil_Scanner* scanner = R_Mil_Scanner_create();
-  R_Mil_Scanner_setInput(scanner, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
+  R_Mil_Scanner_setInput(scanner, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create(input, strlen(input)))));
 
   //
   expectAndNext(scanner, R_Mil_TokenType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
@@ -150,7 +150,7 @@ testScanner2
     u8"\n"
     ;
   R_Mil_Scanner* scanner = R_Mil_Scanner_create();
-  R_Mil_Scanner_setInput(scanner, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
+  R_Mil_Scanner_setInput(scanner, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create(input, strlen(input)))));
 
   expectAndNext(scanner, R_Mil_TokenType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(scanner, R_Mil_TokenType_Name, u8"Name", sizeof(u8"Name") - 1);
@@ -182,7 +182,7 @@ testScanner1
     u8""
     ;
   R_Mil_Scanner* scanner = R_Mil_Scanner_create();
-  R_Mil_Scanner_setInput(scanner, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(input, strlen(input))));
+  R_Mil_Scanner_setInput(scanner, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create(input, strlen(input)))));
 
   expectAndNext(scanner, R_Mil_TokenType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(scanner, R_Mil_TokenType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);

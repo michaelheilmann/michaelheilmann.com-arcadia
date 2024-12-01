@@ -26,7 +26,7 @@ typedef struct R_Value R_Value;
 
 /// Type operations for object types.
 typedef struct R_ObjectType_Operations {
-  void (*constructor)(R_Value* self, R_SizeValue numberOfArguments, R_Value* arguments);
+  void (*construct)(R_Value* self, R_SizeValue numberOfArguments, R_Value* arguments);
   void (*destruct)(void* self);
   void (*visit)(void* self);
 } R_ObjectType_Operations;
@@ -77,9 +77,9 @@ typedef enum R_TypeKind {
   /// <code>R.Boolean</code> is an example of this type kind.
   R_TypeKind_Boolean,
 
-  /// The foreign pricedure type kind.
-  /// <code>R.ForeignProcedure</code> is an example of this type kind.
-  R_TypeKind_ForeignProcedure,
+  /// The foreign value type kind.
+  /// <code>R.ForeignProcedure</code> and <code>R.ImmutableByteArray</code> are example of this type kind.
+  R_TypeKind_ForeignValue,
 
   /// The integer type kind.
   /// <code>R.Integer(8|16|32|64)</code> are examples for this type kind.
@@ -180,15 +180,15 @@ R_Type_isBooleanKind
   )
 { return R_TypeKind_Boolean == R_Type_getKind(self); }
 
-/// @brief Get if this type is of the kind of type "foreign procedure".
+/// @brief Get if this type is of the kind of type "foreign value".
 /// @param self A pointer to this type.
-/// @return #R_BooleanValue_True if the type is of the kind of type "foreign procedure". #R_BooleanValue_False otherwise.
+/// @return #R_BooleanValue_True if the type is of the kind of type "foreign value". #R_BooleanValue_False otherwise.
 static inline R_BooleanValue
-R_Type_isForeignProcedureKind
+R_Type_isForeignValueKind
   (
     R_Type const* self
   )
-{ return R_TypeKind_ForeignProcedure == R_Type_getKind(self); }
+{ return R_TypeKind_ForeignValue == R_Type_getKind(self); }
 
 /// @brief Get if this type is of the kind of type "integer".
 /// @param self A pointer to this type.
@@ -262,7 +262,7 @@ R_registerBooleanType
 
 /* R_Status_ArgumentValueInvalid, R_Status_AllocationFailed, R_Status_TypeExists */
 void
-R_registerForeignProcedureType
+R_registerForeignValueType
   (
     char const* name,
     size_t nameLength,

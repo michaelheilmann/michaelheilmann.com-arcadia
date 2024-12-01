@@ -17,14 +17,15 @@
 
 #include "Module/Visuals/NativeWindowsIcon.h"
 
-// EXIT_FAILURE, EXIT_SUCCESS
-#include <stdlib.h>
+#include "R/cstdlib.h"
 
-// fprintf, stderr
-#include <stdio.h>
-
-// malloc, free, realloc
-#include <malloc.h>
+static void
+NativeWindowsIcon_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static void
 NativeWindowsIcon_destruct
@@ -33,7 +34,7 @@ NativeWindowsIcon_destruct
   );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &NativeWindowsIcon_constructImpl,
   .destruct = &NativeWindowsIcon_destruct,
   .visit = NULL,
 };
@@ -60,31 +61,60 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("NativeWindowsIcon", NativeWindowsIcon, "R.Object", R_Object, &_typeOperations);
 
+// R_Integer32Value width
+// R_Integer32Value height
+// R_Natural8Value red
+// R_Natural8Value green
+// R_Natural8Value blue
 static void
-NativeWindowsIcon_destruct
+NativeWindowsIcon_constructImpl
   (
-    NativeWindowsIcon* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
-  if (self->hIcon) {
-    DestroyIcon(self->hIcon);
-    self->hIcon = NULL;
-  }
-}
-
-void
-NativeWindowsIcon_construct
-  (
-    NativeWindowsIcon* self,
-    R_Integer32Value width,
-    R_Integer32Value height,
-    R_Natural8Value red,
-    R_Natural8Value green,
-    R_Natural8Value blue
-  )
-{
+  NativeWindowsIcon* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _NativeWindowsIcon_getType();
-  R_Object_construct((R_Object*)self);
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+
+  if (5 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+
+  if (!R_Value_isInteger32Value(&argumentValues[0])) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_Integer32Value width = R_Value_getInteger32Value(&argumentValues[0]);
+
+  if (!R_Value_isInteger32Value(&argumentValues[1])) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_Integer32Value height = R_Value_getInteger32Value(&argumentValues[1]);
+
+  if (!R_Value_isNatural8Value(&argumentValues[2])) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_Natural8Value red = R_Value_getNatural8Value(&argumentValues[2]);
+
+  if (!R_Value_isNatural8Value(&argumentValues[3])) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_Natural8Value green = R_Value_getNatural8Value(&argumentValues[3]);
+
+  if (!R_Value_isNatural8Value(&argumentValues[4])) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_Natural8Value blue = R_Value_getNatural8Value(&argumentValues[4]);
 
   HDC hMemDC;
   BITMAPV5HEADER bi;
@@ -205,8 +235,20 @@ NativeWindowsIcon_construct
     R_jump();
   }
 
-  self->hIcon = hIcon;
-  R_Object_setType((R_Object*)self, _type);
+  _self->hIcon = hIcon;
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+static void
+NativeWindowsIcon_destruct
+  (
+    NativeWindowsIcon* self
+  )
+{
+  if (self->hIcon) {
+    DestroyIcon(self->hIcon);
+    self->hIcon = NULL;
+  }
 }
 
 NativeWindowsIcon*
@@ -219,7 +261,13 @@ NativeWindowsIcon_create
     R_Natural8Value blue
   )
 {
-  NativeWindowsIcon* self = R_allocateObject(_NativeWindowsIcon_getType());
-  NativeWindowsIcon_construct(self, width, height, red, green, blue);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Integer32, .integer32Value = width },
+                               {.tag = R_ValueTag_Integer32, .integer32Value = height },
+                               {.tag = R_ValueTag_Natural8, .natural8Value = red },
+                               {.tag = R_ValueTag_Natural8, .natural8Value = green },
+                               {.tag = R_ValueTag_Natural8, .natural8Value = blue } };
+  NativeWindowsIcon* self = R_allocateObject(_NativeWindowsIcon_getType(), 5, &argumentValues[0]);
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = self };
+  NativeWindowsIcon_constructImpl(&selfValue, 5, &argumentValues[0]);
   return self;
 }

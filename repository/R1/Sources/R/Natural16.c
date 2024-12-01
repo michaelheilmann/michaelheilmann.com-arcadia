@@ -117,7 +117,7 @@ subtract
   );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = NULL,
   .destruct = NULL,
   .visit = NULL,
 };

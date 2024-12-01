@@ -56,26 +56,23 @@ execute1
     R_Value const* argumentValues
   )
 {
-  R_Machine_Code* code = R_Machine_Code_create();
-  R_Value* constants = NULL;
-  if (!R_allocateUnmanaged_nojump(&constants, 0)) {
-    R_jump();
-  }
+  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_create();
+  R_Interpreter_Code* code = R_Interpreter_Code_create();
   uint8_t codeBytes[] = {
     R_Machine_Code_Opcode_Idle,  
   };
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    R_Machine_Code_append(code, codeBytes, 1);
-    R_executeProcedure(constants, R_Procedure_create(code));
-    R_deallocateUnmanaged_nojump(constants);
-    constants = NULL;
+    R_Interpreter_Code_append(code, codeBytes, 1);
+    R_executeProcedure(process, R_Procedure_create(code));
+    R_Interpreter_ProcessState_destroy(process);
+    process = NULL;
     R_popJumpTarget();
   } else {
+    R_Interpreter_ProcessState_destroy(process);
+    process = NULL;
     R_popJumpTarget();
-    R_deallocateUnmanaged_nojump(constants);
-    constants = NULL;
     R_jump();
   }
 }
@@ -88,30 +85,33 @@ execute2
     R_Value const* argumentValues
   )
 {
-  R_Machine_Code* code = R_Machine_Code_create();
-  R_Value* constants = NULL;
-
-  if (!R_allocateUnmanaged_nojump(&constants, sizeof(R_Value) * 2)) {
-    R_jump();
-  }
-  R_Value_setInteger32Value(constants + 0, R_Integer32Value_Literal(5));
-  R_Value_setInteger32Value(constants + 1, R_Integer32Value_Literal(7));
+  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_create();
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
+    R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(process);
+    R_Interpreter_Code* code = R_Interpreter_Code_create();
+    if (0 != R_Interpreter_Code_Constants_getOrCreateInteger32(constants, R_Integer32Value_Literal(5))) {
+      R_setStatus(R_Status_TestFailed);
+      R_jump();
+    }
+    if (1 != R_Interpreter_Code_Constants_getOrCreateInteger32(constants, R_Integer32Value_Literal(7))) {
+      R_setStatus(R_Status_TestFailed);
+      R_jump();
+    }
     uint8_t opcode = R_Machine_Code_Opcode_Add;
-    R_Machine_Code_append(code, &opcode, 1);
-    R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Register, 2);
-    R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 0);
-    R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 1);
-    R_executeProcedure(constants, R_Procedure_create(code));
-    R_deallocateUnmanaged_nojump(constants);
-    constants = NULL;
+    R_Interpreter_Code_append(code, &opcode, 1);
+    R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Register, 2);
+    R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 0);
+    R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 1);
+    R_executeProcedure(process, R_Procedure_create(code));
+    R_Interpreter_ProcessState_destroy(process);
+    process = NULL;
     R_popJumpTarget();
   } else {
+    R_Interpreter_ProcessState_destroy(process);
+    process = NULL;
     R_popJumpTarget();
-    R_deallocateUnmanaged_nojump(constants);
-    constants = NULL;
     R_jump();
   }
 }
@@ -135,31 +135,34 @@ execute3
     R_Value const* argumentValues
   )
 {
-  R_Machine_Code* code = R_Machine_Code_create();
-  R_Value* constants = NULL;
-
-  if (!R_allocateUnmanaged_nojump(&constants, sizeof(R_Value) * 2)) {
-    R_jump();
-  }
-  R_Value_setForeignProcedureValue(constants + 0, &print);
-  R_Value_setObjectReferenceValue(constants + 1, R_String_create_pn("Hello, World!\n", sizeof("Hello, World!\n")));
+  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_create();
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
+    R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(process);
+    R_Interpreter_Code* code = R_Interpreter_Code_create();
+    if (0 != R_Interpreter_Code_Constants_getOrCreateForeignProcedure(constants, &print)) {
+      R_setStatus(R_Status_TestFailed);
+      R_jump();
+    }
+    if (1 != R_Interpreter_Code_Constants_getOrCreateString(constants, R_String_create_pn(R_ImmutableByteArray_create("Hello, World!\n", sizeof("Hello, World!\n"))))) {
+      R_setStatus(R_Status_TestFailed);
+      R_jump();
+    }
     uint8_t opcode = R_Machine_Code_Opcode_Invoke;
-    R_Machine_Code_append(code, &opcode, 1);
-    R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Register, 0); // target
-    R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 0); // calleee
-    R_Machine_Code_appendCountNatural8(code, 1); // number of arguments
-    R_Machine_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
-    R_executeProcedure(constants, R_Procedure_create(code));
-    R_deallocateUnmanaged_nojump(constants);
-    constants = NULL;
+    R_Interpreter_Code_append(code, &opcode, 1);
+    R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Register, 0); // target
+    R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 0); // calleee
+    R_Interpreter_Code_appendCountNatural8(code, 1); // number of arguments
+    R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
+    R_executeProcedure(process, R_Procedure_create(code));
+    R_Interpreter_ProcessState_destroy(process);
+    process = NULL;
     R_popJumpTarget();
   } else {
+    R_Interpreter_ProcessState_destroy(process);
+    process = NULL;
     R_popJumpTarget();
-    R_deallocateUnmanaged_nojump(constants);
-    constants = NULL;
     R_jump();
   }
 }

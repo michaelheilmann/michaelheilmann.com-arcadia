@@ -67,16 +67,31 @@ struct R_Object {
   }
 
 void
-R_Object_construct
+R_Object_constructImpl
   (
-    R_Object* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   );
 
-/* R_ArgumentValueInvalid, R_Status_AllocationFailed */
+/*
+ * @brief Allocate a "Core.Object" or derived type value.
+ * Allocate a "Core.Object" value of the specified "Core.Object" or derived type "type".
+ * This operation performs the following actions:
+ * a) allocate memory of size "Core.Type.getValueSize(type)" at address "a".
+ * b) ensure each field denoted by "type" and all its ancestor types is initialized to the default value "void".
+ * c) the type of the object is "type" such that "Core.Object.getType(a)" returns "type".
+ *
+ * All fields of T and all its ancestor types are initialized to the default value "void".
+ * @error Core.Status.ArgumentValueInvalid if "type" is "NULL"
+ * @error Core.Status.AllocationFailed if step a) fails
+ */
 void*
 R_allocateObject
   (
-    R_Type* type
+    R_Type* type,
+    R_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
 void
@@ -90,6 +105,22 @@ R_Object_setType
 /// @param self A pointer to the object.
 void
 R_Object_visit
+  (
+    void* self
+  );
+
+/// @brief Increment the lock count of the object.
+/// @param self A pointer to the object.
+void
+R_Object_lock
+  (
+    void* self
+  );
+
+/// @brief Decrement the lock count of the object.
+/// @param self A pointer to the object.
+void
+R_Object_unlock
   (
     void* self
   );

@@ -80,6 +80,8 @@ typedef enum R_Mil_TokenType {
 
   // "native"
   R_Mil_TokenType_Native,
+  // "entry"
+  R_Mil_TokenType_Entry,
   // "return"
   R_Mil_TokenType_Return,
   // "variable"

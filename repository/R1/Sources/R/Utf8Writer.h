@@ -34,12 +34,6 @@ struct R_Utf8Writer {
 };
 
 void
-R_Utf8Writer_construct
-  (
-    R_Utf8Writer* self
-  );
-
-void
 R_Utf8Writer_writeBytes
   (
     R_Utf8Writer* self,

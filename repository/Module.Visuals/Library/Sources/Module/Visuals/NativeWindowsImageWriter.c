@@ -42,12 +42,11 @@ static HRESULT createMemoryStream(IStream** pStream, size_t initialSize) {
   if (!g_hMemory) {
     return E_OUTOFMEMORY;
   }
-  LPVOID pImage = GlobalLock(g_hMemory);
-  GlobalUnlock(g_hMemory);
-
   IStream* pStream1 = NULL;
   HRESULT hr = CreateStreamOnHGlobal(g_hMemory, FALSE, &pStream1);
   if (FAILED(hr)) {
+    GlobalFree(g_hMemory);
+    g_hMemory = NULL;
     return hr;
   }
   *pStream = pStream1;
@@ -141,7 +140,7 @@ startup1
   //
   if (ImageWriterParameters_hasPath(parameters)) {
     R_ByteBuffer* b = R_ByteBuffer_create();
-    R_ByteBuffer_append_pn(b, ImageWriterParameters_getPath(parameters)->p, ImageWriterParameters_getPath(parameters)->numberOfBytes);
+    R_ByteBuffer_append_pn(b, R_String_getBytes(ImageWriterParameters_getPath(parameters)), R_String_getNumberOfBytes(ImageWriterParameters_getPath(parameters)));
     R_ByteBuffer_append_pn(b, "", 1);
     wchar_t* targetPathW = multiByteToWideChar(b->p);
     if (!targetPathW) {
@@ -484,7 +483,7 @@ typedef struct ICONDIRENTRY {
 void writeIconToPath(R_List* sourcePixelBuffers, R_String* targetPath) {
   R_ByteBuffer* targetByteBuffer = R_ByteBuffer_create();
   writeIconToByteBuffer(sourcePixelBuffers, targetByteBuffer);
-  R_FileSystem_setFileContents(R_FileSystem_create(), R_FilePath_parseUnixFilePath(targetPath->p, targetPath->numberOfBytes), targetByteBuffer);
+  R_FileSystem_setFileContents(R_FileSystem_create(), R_FilePath_parseUnixFilePath(R_String_getBytes(targetPath), R_String_getNumberOfBytes(targetPath)), targetByteBuffer);
 }
 
 void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer) {
@@ -541,8 +540,16 @@ void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteB
   }
 }
 
+static void
+NativeWindowsImageWriter_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  ); 
+
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &NativeWindowsImageWriter_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -569,13 +576,31 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("NativeWindowsImageWriter", NativeWindowsImageWriter, "R.Object", R_Object, &_typeOperations);
 
-void
-NativeWindowsImageWriter_construct
+static void
+NativeWindowsImageWriter_constructImpl
   (
-    NativeWindowsImageWriter* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  NativeWindowsImageWriter* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _NativeWindowsImageWriter_getType();
-  R_Object_construct((R_Object*)self);
-  R_Object_setType((R_Object*)self, _type);
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+NativeWindowsImageWriter*
+NativeWindowsImageWriter_create
+  (
+  )
+{
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  NativeWindowsImageWriter* self = R_allocateObject(_NativeWindowsImageWriter_getType(), 0, &argumentValues[0]);
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = self };
+  NativeWindowsImageWriter_constructImpl(&selfValue, 0, &argumentValues[0]);
+  return self;
 }

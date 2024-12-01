@@ -254,23 +254,24 @@ static void
 FileContext_destruct
   (
     FileContext* self
-  )
-{/*Intentionally empty.*/}
+  );
 
 static void
 FileContext_visit
   (
     FileContext* self
-  )
-{
-  R_Object_visit(self->context);
-  R_Object_visit(self->sourceFilePath);
-  R_Object_visit(self->source);
-  R_Object_visit(self->environment);
-}
+  );
+
+static void
+FileContext_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &FileContext_constructImpl,
   .destruct = &FileContext_destruct,
   .visit = &FileContext_visit,
 };
@@ -297,25 +298,60 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("Tools.TemplateEngine.FileContext", FileContext, "R.Object", R_Object, &_typeOperations);
 
-void
-FileContext_construct
+static void
+FileContext_destruct
   (
-    FileContext* self,
-    Context* context,
-    R_FilePath* sourceFilePath
+    FileContext* self
+  )
+{/*Intentionally empty.*/}
+
+static void
+FileContext_visit
+  (
+    FileContext* self
   )
 {
+  R_Object_visit(self->context);
+  R_Object_visit(self->sourceFilePath);
+  R_Object_visit(self->source);
+  R_Object_visit(self->environment);
+}
+
+static void
+FileContext_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  FileContext* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _FileContext_getType();
-  R_Object_construct((R_Object*)self);
-  self->context = context;
-  self->sourceFilePath = sourceFilePath;
-  self->source = NULL;
-  self->environment = R_Map_create();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  if (2 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _Context_getType())) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  if (!R_Type_isSubType(R_Value_getType(&argumentValues[1]), _R_FilePath_getType())) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  _self->context = R_Value_getObjectReferenceValue(&argumentValues[0]);
+  _self->sourceFilePath = R_Value_getObjectReferenceValue(&argumentValues[1]);
+  _self->source = NULL;
+  _self->environment = R_Map_create();
   R_Value k, v;
-  R_Value_setObjectReferenceValue(&k, (R_ObjectReferenceValue)R_String_create_pn("siteAddress", sizeof("siteAddress") - 1));
-  R_Value_setObjectReferenceValue(&v, (R_ObjectReferenceValue)R_String_create_pn("https://michaelheilmann.com", sizeof("https://michaelheilmann.com") - 1));
-  R_Map_set(self->environment, k, v);
-  R_Object_setType((R_Object*)self, _type);
+  R_Value_setObjectReferenceValue(&k, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("siteAddress", sizeof("siteAddress") - 1)));
+  R_Value_setObjectReferenceValue(&v, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("https://michaelheilmann.com", sizeof("https://michaelheilmann.com") - 1)));
+  R_Map_set(_self->environment, k, v);
+  R_Object_setType((R_Object*)_self, _type);
 }
 
 FileContext*
@@ -325,8 +361,9 @@ FileContext_create
     R_FilePath* sourceFilePath
   )
 {
-  FileContext* self = R_allocateObject(_FileContext_getType());
-  FileContext_construct(self, context, sourceFilePath);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)context },
+                               {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)sourceFilePath }, };
+  FileContext* self = R_allocateObject(_FileContext_getType(), 2, &argumentValues[0]);
   return self;
 }
 

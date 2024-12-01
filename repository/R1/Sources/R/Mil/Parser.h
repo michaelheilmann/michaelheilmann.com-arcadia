@@ -19,24 +19,12 @@
 #define R_MIL_PARSER_H_INCLUDED
 
 #include "R.h"
-
-typedef enum R_Mil_AstType {
-  // A program.
-  R_Mil_AstType_Program,
-  // A statement.
-  R_Mil_AstType_Statement,
-} R_Mil_AstType;
+#include "R/Mil/Ast.h"
 
 /// @code
 /// class Cil.Parser
 /// @endcode
 Rex_declareObjectType("Cil.Parser", R_Mil_Parser, "R.Object");
-
-void
-R_Mil_Parser_construct
-  (
-    R_Mil_Parser* self
-  );
 
 /// @brief Create a CIL parser.
 /// @return A pointer to this CIL parser.
@@ -46,8 +34,9 @@ R_Mil_Parser_create
   );
 
 /// @brief Translate the token stream into an AST.
-/// @param self A pointer to this CIL parser. 
-void
+/// @param self A pointer to this MIL parser.
+/// @return A pointer to the MIL AST.
+R_Mil_ModuleAst*
 R_Mil_Parser_run
   (
     R_Mil_Parser* self

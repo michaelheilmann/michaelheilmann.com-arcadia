@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-16
+# Last modified: 2024-12-02
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -32,19 +32,22 @@ endif()
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
 
-if (NOT TARGET Tools.TemplateEngineLibrary)
-    add_library(Tools.TemplateEngineLibrary)
-    BeginProduct(Tools.TemplateEngineLibrary)
+set(MyLibraryName ${MyProjectName}.Tools.TemplateEngineLibrary)
+if (NOT TARGET ${MyLibraryName})
+    add_library(${MyLibraryName})
+    BeginProduct(${MyLibraryName})
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h @ONLY)
 
-    list(APPEND Tools.TemplateEngineLibrary.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Context.c)
-    list(APPEND Tools.TemplateEngineLibrary.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Context.h)
-    list(APPEND Tools.TemplateEngineLibrary.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/FileContext.c)
-    list(APPEND Tools.TemplateEngineLibrary.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/FileContext.h)
-    list(APPEND Tools.TemplateEngineLibrary.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h)
+    list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Context.c)
+    list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Context.h)
+    list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/FileContext.c)
+    list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/FileContext.h)
+    list(APPEND ${MyLibraryName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h)
 
-    target_link_libraries(Tools.TemplateEngineLibrary Arcadia.R Arcadia.Arms)
+    target_link_libraries(${MyLibraryName} ${MyProjectName}.R ${MyProjectName}.Arms)
 
-    EndProduct(Tools.TemplateEngineLibrary library)
+    set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Tools/TemplateEngine")
+
+    EndProduct(${MyLibraryName} library)
 endif()

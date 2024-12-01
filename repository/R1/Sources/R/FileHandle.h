@@ -37,12 +37,6 @@ struct R_FileHandle {
   FILE* fd;
 };
 
-void
-R_FileHandle_construct
-  (
-    R_FileHandle* self
-  );
-
 // https://michaelheilmann.com/repository/R1/#r-filehandle-create
 R_FileHandle*
 R_FileHandle_create

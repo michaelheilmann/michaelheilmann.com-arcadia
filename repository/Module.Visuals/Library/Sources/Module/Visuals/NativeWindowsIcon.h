@@ -25,23 +25,17 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+/// @code
+/// class NativeWindowsIcon {
+///   construct(width:Integer32, height:Integer32, red:Natural8, green:Natural8, blue:Natural8)
+/// }
+/// @endcode
 Rex_declareObjectType("NativeWindowsIcon", NativeWindowsIcon, "R.Object")
 
 struct NativeWindowsIcon {
   R_Object _parent;
   HICON hIcon;
 };
-
-void
-IconWindows_construct
-  (
-    NativeWindowsIcon* self,
-    R_Integer32Value width,
-    R_Integer32Value height,
-    R_Natural8Value red,
-    R_Natural8Value green,
-    R_Natural8Value blue
-  );
 
 NativeWindowsIcon*
 NativeWindowsIcon_create

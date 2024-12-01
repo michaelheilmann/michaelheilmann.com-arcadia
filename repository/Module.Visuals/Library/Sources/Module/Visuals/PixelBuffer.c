@@ -18,13 +18,16 @@
 #include "Module/Visuals/PixelBuffer.h"
 
 #include "R.h"
+#include "R/cstdlib.h"
 
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
-
-static inline void Memory_copy(R_Natural8Value* target, R_Natural8Value const* source, size_t count) {
+static inline void
+Memory_copy
+  (
+    R_Natural8Value* target,
+    R_Natural8Value const* source,
+    size_t count
+  )
+{
   for (size_t i = 0, n = count; i < n; ++i) {
     *target = *source;
     source++;
@@ -32,7 +35,14 @@ static inline void Memory_copy(R_Natural8Value* target, R_Natural8Value const* s
   }
 }
 
-static inline void Memory_swap(R_Natural8Value* target, R_Natural8Value* source, size_t count) {
+static inline void
+Memory_swap
+  (
+    R_Natural8Value* target,
+    R_Natural8Value* source,
+    size_t count
+  )
+{
   for (size_t i = 0, n = count; i < n; ++i) {
     R_Natural8Value temporary = *source;
     *source = *target;
@@ -258,26 +268,29 @@ getTranscodeCallbacks
   *targetNumberOfBytesPerPixel = targetEntry->numberOfBytesPerPixel;
 }
 
+/// @code
+/// construct(linePadding:Integer32,width:Integer32,height:Integer32,pixelFormat:Natural8)
+/// @endcode
+/// 
+/// @code
+/// construct(pixelBuffer:PixelBuffer)
+/// @endcode
 static void
-PixelBuffer_destruct
+PixelBuffer_constructImpl
   (
-    PixelBuffer* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   );
 
 static void
 PixelBuffer_destruct
   (
     PixelBuffer* self
-  )
-{
-  if (self->bytes) {
-    R_deallocateUnmanaged_nojump(self->bytes);
-    self->bytes = NULL;
-  }
-}
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &PixelBuffer_constructImpl,
   .destruct = &PixelBuffer_destruct,
   .visit = NULL,
 };
@@ -303,6 +316,150 @@ static const R_Type_Operations _typeOperations = {
 };
 
 Rex_defineObjectType("PixelBuffer", PixelBuffer, "R.Object", R_Object, &_typeOperations);
+
+static void
+PixelBuffer_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  if (1 == numberOfArgumentValues) {
+    PixelBuffer* _self = R_Value_getObjectReferenceValue(self);
+    R_Type* _type = _PixelBuffer_getType();
+    {
+      R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+      R_Object_constructImpl(self, 0, &argumentValues[0]);
+    }
+    if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _PixelBuffer_getType())) {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
+      R_jump();
+    }
+    PixelBuffer* other = (PixelBuffer*)R_Value_getObjectReferenceValue(&argumentValues[0]);
+    _self->numberOfColumns = PixelBuffer_getNumberOfColumns(other);
+    _self->numberOfRows = PixelBuffer_getNumberOfRows(other);
+    _self->linePadding = PixelBuffer_getLinePadding(other);
+    _self->pixelFormat = PixelBuffer_getPixelFormat(other);
+    R_SizeValue bytesPerPixel = PixelBuffer_getBytesPerPixel(other);
+    R_SizeValue bytes = (bytesPerPixel * _self->numberOfColumns + _self->linePadding) * _self->numberOfRows;
+    if (!R_allocateUnmanaged_nojump(&_self->bytes, bytes)) {
+      R_jump();
+    }
+    c_memcpy(_self->bytes, other->bytes, bytes);
+    R_Object_setType((R_Object*)_self, _type);
+  } else if (4 == numberOfArgumentValues) {
+    R_Type* _type = _PixelBuffer_getType();
+    PixelBuffer* _self = R_Value_getObjectReferenceValue(self);
+    {
+      R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+      R_Object_constructImpl(self, 0, &argumentValues[0]);
+    }
+    if (!R_Value_isInteger32Value(&argumentValues[0])) {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
+      R_jump();
+    }
+    if (!R_Value_isInteger32Value(&argumentValues[1])) {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
+      R_jump();
+    }
+    if (!R_Value_isInteger32Value(&argumentValues[2])) {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
+      R_jump();
+    }
+    if (!R_Value_isNatural32Value(&argumentValues[3])) {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
+      R_jump();
+    }
+    _self->bytes = NULL;
+    _self->pixelFormat = R_Value_getNatural32Value(&argumentValues[3]);
+    _self->numberOfColumns = R_Value_getInteger32Value(&argumentValues[1]);
+    _self->numberOfRows = R_Value_getInteger32Value(&argumentValues[2]);
+    _self->linePadding = R_Value_getInteger32Value(&argumentValues[0]);
+    R_SizeValue bytesPerPixel = 0;
+    switch (_self->pixelFormat) {
+      case PixelFormat_An8Bn8Gn8Rn8:
+      case PixelFormat_An8Rn8Gn8Bn8:
+      case PixelFormat_Bn8Gn8Rn8An8:
+      case PixelFormat_Rn8Gn8Bn8An8: {
+        bytesPerPixel = 4;
+      } break;
+      case PixelFormat_Bn8Gn8Rn8:
+      case PixelFormat_Rn8Gn8Bn8: {
+        bytesPerPixel = 3;
+      } break;
+      default: {
+        R_setStatus(R_Status_ArgumentValueInvalid);
+        R_jump();
+      } break;
+    };
+    if (!R_allocateUnmanaged_nojump(&_self->bytes, (_self->numberOfColumns * bytesPerPixel + _self->linePadding) * _self->numberOfRows)) {
+      R_jump();
+    }
+    switch (_self->pixelFormat) {
+      case PixelFormat_An8Bn8Gn8Rn8: {
+        R_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
+        for (R_SizeValue y = 0; y < _self->numberOfRows; ++y) {
+          R_Natural8Value* p = _self->bytes + (y * lineStride);
+          for (R_SizeValue x = 0; x < _self->numberOfColumns; ++x) {
+            PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
+            ENCODE_ABGR(p + x * bytesPerPixel, &pixel);
+          }
+        }
+      } break;
+      case PixelFormat_An8Rn8Gn8Bn8: {
+        R_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
+        for (R_SizeValue y = 0; y < _self->numberOfRows; ++y) {
+          R_Natural8Value* p = _self->bytes + (y * lineStride);
+          for (R_SizeValue x = 0; x < _self->numberOfColumns; ++x) {
+            PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
+            ENCODE_ARGB(p + x * bytesPerPixel, &pixel);
+          }
+        }
+      } break;
+      case PixelFormat_Bn8Gn8Rn8: {
+        R_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
+        for (R_SizeValue y = 0; y < _self->numberOfRows; ++y) {
+          R_Natural8Value* p = _self->bytes + (y * lineStride);
+          for (R_SizeValue x = 0; x < _self->numberOfColumns; ++x) {
+            PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
+            ENCODE_BGR(p + x * bytesPerPixel, &pixel);
+          }
+        }
+      } break;
+      case PixelFormat_Rn8Gn8Bn8: {
+        R_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
+        for (R_SizeValue y = 0; y < _self->numberOfRows; ++y) {
+          R_Natural8Value* p = _self->bytes + (y * lineStride);
+          for (R_SizeValue x = 0; x < _self->numberOfColumns; ++x) {
+            PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
+            ENCODE_RGB(p + x * bytesPerPixel, &pixel);
+          }
+        }
+      } break;
+      default: {
+        R_setStatus(R_Status_ArgumentValueInvalid);
+        R_jump();
+      } break;
+    };
+    R_Object_setType((R_Object*)_self, _type);
+  } else {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+}
+
+static void
+PixelBuffer_destruct
+  (
+    PixelBuffer* self
+  )
+{
+  if (self->bytes) {
+    R_deallocateUnmanaged_nojump(self->bytes);
+    self->bytes = NULL;
+  }
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -408,7 +565,7 @@ PixelBuffer_setLinePadding
     for (R_SizeValue rowIndex = 0; rowIndex < self->numberOfRows; ++rowIndex) {
       R_Natural8Value* oldLine = oldBytes + rowIndex * (self->numberOfColumns * bytesPerPixel + oldLinePadding);
       R_Natural8Value* newLine = newBytes + rowIndex * (self->numberOfColumns * bytesPerPixel + newLinePadding);
-      memcpy(newLine, oldLine, self->numberOfColumns * bytesPerPixel);
+      c_memcpy(newLine, oldLine, self->numberOfColumns * bytesPerPixel);
     }
     R_deallocateUnmanaged_nojump(oldBytes);
     self->bytes = newBytes;
@@ -596,7 +753,6 @@ PixelBuffer_fill
     case PixelFormat_Rn8Gn8Bn8An8: {
       R_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
-      R_SizeValue lineStride = self->numberOfColumns * bytesPerPixel + self->linePadding;
       R_Natural8Value* p = self->bytes;
       for (R_SizeValue y = 0; y < self->numberOfRows; ++y) {
         for (R_SizeValue x = 0; x < self->numberOfColumns; ++x) {
@@ -749,92 +905,6 @@ PixelBuffer_getBytesPerPixel
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-void
-PixelBuffer_construct
-  (
-    PixelBuffer* self,
-    R_Integer32Value linePadding,
-    R_Integer32Value width,
-    R_Integer32Value height,
-    R_Natural8Value pixelFormat
-  )
-{
-  R_Type* _type = _PixelBuffer_getType();
-  R_Object_construct((R_Object*)self);
-  self->bytes = NULL;
-  self->pixelFormat = pixelFormat;
-  self->numberOfColumns = width;
-  self->numberOfRows = height;
-  self->linePadding = linePadding;
-  R_SizeValue bytesPerPixel = 0;
-  switch (pixelFormat) {
-    case PixelFormat_An8Bn8Gn8Rn8:
-    case PixelFormat_An8Rn8Gn8Bn8:
-    case PixelFormat_Bn8Gn8Rn8An8:
-    case PixelFormat_Rn8Gn8Bn8An8: {
-      bytesPerPixel = 4;
-    } break;
-    case PixelFormat_Bn8Gn8Rn8:
-    case PixelFormat_Rn8Gn8Bn8: {
-      bytesPerPixel = 3;
-    } break;
-  default: {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-      R_jump();
-    } break;
-  };
-  if (!R_allocateUnmanaged_nojump(&self->bytes, (width * bytesPerPixel + linePadding) * height)) {
-    R_jump();
-  }
-  switch (pixelFormat) {
-    case PixelFormat_An8Bn8Gn8Rn8: {
-      R_SizeValue lineStride = self->numberOfColumns * bytesPerPixel + self->linePadding;
-      for (R_SizeValue y = 0; y < self->numberOfRows; ++y) {
-        R_Natural8Value* p = self->bytes + (y * lineStride);
-        for (R_SizeValue x = 0; x < self->numberOfColumns; ++x) {
-          PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
-          ENCODE_ABGR(p + x * bytesPerPixel, &pixel);
-        }
-      }
-    } break;
-    case PixelFormat_An8Rn8Gn8Bn8: {
-      R_SizeValue lineStride = self->numberOfColumns * bytesPerPixel + self->linePadding;
-      for (R_SizeValue y = 0; y < self->numberOfRows; ++y) {
-        R_Natural8Value* p = self->bytes + (y * lineStride);
-        for (R_SizeValue x = 0; x < self->numberOfColumns; ++x) {
-          PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
-          ENCODE_ARGB(p + x * bytesPerPixel, &pixel);
-        }
-      }
-    } break;
-    case PixelFormat_Bn8Gn8Rn8: {
-      R_SizeValue lineStride = self->numberOfColumns * bytesPerPixel + self->linePadding;
-      for (R_SizeValue y = 0; y < self->numberOfRows; ++y) {
-        R_Natural8Value* p = self->bytes + (y * lineStride);
-        for (R_SizeValue x = 0; x < self->numberOfColumns; ++x) {
-          PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
-          ENCODE_BGR(p + x * bytesPerPixel, &pixel);
-        }
-      }
-    } break;
-    case PixelFormat_Rn8Gn8Bn8: {
-      R_SizeValue lineStride = self->numberOfColumns * bytesPerPixel + self->linePadding;
-      for (R_SizeValue y = 0; y < self->numberOfRows; ++y) {
-        R_Natural8Value* p = self->bytes + (y * lineStride);
-        for (R_SizeValue x = 0; x < self->numberOfColumns; ++x) {
-          PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
-          ENCODE_RGB(p + x * bytesPerPixel, &pixel);
-        }
-      }
-    } break;
-    default: {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-      R_jump();
-    } break;
-  };
-  R_Object_setType((R_Object*)self, _type);
-}
-
 PixelBuffer*
 PixelBuffer_create
   (
@@ -844,31 +914,12 @@ PixelBuffer_create
     R_Natural8Value pixelFormat
   )
 {
-  PixelBuffer* self = R_allocateObject(_PixelBuffer_getType());
-  PixelBuffer_construct(self, linePadding, width, height, pixelFormat);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Integer32, .integer32Value = linePadding },
+                               {.tag = R_ValueTag_Integer32, .integer32Value = width },
+                               {.tag = R_ValueTag_Integer32, .integer32Value = height },
+                               {.tag = R_ValueTag_Natural32, .natural32Value = pixelFormat } };
+  PixelBuffer* self = R_allocateObject(_PixelBuffer_getType(), 4, &argumentValues[0]);
   return self;
-}
-
-void
-PixelBuffer_constructClone
-  (
-    PixelBuffer* self,
-    PixelBuffer* other
-  )
-{
-  R_Type* _type = _PixelBuffer_getType();
-  R_Object_construct((R_Object*)self);
-  self->numberOfColumns = PixelBuffer_getNumberOfColumns(other);
-  self->numberOfRows = PixelBuffer_getNumberOfRows(other);
-  self->linePadding = PixelBuffer_getLinePadding(other);
-  self->pixelFormat = PixelBuffer_getPixelFormat(other);
-  R_SizeValue bytesPerPixel = PixelBuffer_getBytesPerPixel(other);
-  R_SizeValue bytes = (bytesPerPixel * self->numberOfColumns + self->linePadding) *self->numberOfRows;
-  if (!R_allocateUnmanaged_nojump(&self->bytes, bytes)) {
-    R_jump();
-  }
-  memcpy(self->bytes, other->bytes, bytes);
-  R_Object_setType((R_Object*)self, _type);
 }
 
 PixelBuffer*
@@ -877,7 +928,21 @@ PixelBuffer_createClone
     PixelBuffer* other
   )
 { 
-  PixelBuffer* self = R_allocateObject(_PixelBuffer_getType());
-  PixelBuffer_constructClone(self, other);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = other } };
+  PixelBuffer* self = R_allocateObject(_PixelBuffer_getType(), 1, &argumentValues[0]);
   return self;
 }
+
+R_Integer32Value
+PixelBuffer_getWidth
+  (
+    PixelBuffer* self
+  )
+{ return self->numberOfColumns; }
+
+R_Integer32Value
+PixelBuffer_getHeight
+  (
+    PixelBuffer* self
+  )
+{ return self->numberOfRows; }

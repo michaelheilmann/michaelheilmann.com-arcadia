@@ -30,7 +30,9 @@ struct NativeWindowsImageWriter {
 void
 NativeWindowsImageWriter_construct
   (
-    NativeWindowsImageWriter* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   );
 
 NativeWindowsImageWriter*

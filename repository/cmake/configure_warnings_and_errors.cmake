@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-08-29
+# Last modified: 2024-12-07
 
 # SUMMARY
 # Configure warnings and errors for a static libraries, module libraries, and executables.
@@ -33,27 +33,33 @@ macro(ConfigureWarningsAndErrors target)
   endif()
 
   if(${${target}.Compiler.C} EQUAL ${${target}.Compiler.C.Msvc})
-    set(${target}.compile_options "")
+    set(${target}.CompileOptions "")
     # C4090:  'opertion' : different 'modifier' qualifiers
-    list(APPEND ${target}.compile_options "/we4090")
+    list(APPEND ${target}.CompileOptions "/we4090")
     # C4133: 'function' incompatible types - from 'type1' to 'type2'
-    list(APPEND ${target}.compile_options "/we4133")
+    list(APPEND ${target}.CompileOptions "/we4133")
     # C4020_ 'function': too many actual parameters
-    list(APPEND ${target}.compile_options "/we4020")
+    list(APPEND ${target}.CompileOptions "/we4020")
     # C4013: 'function': undefined; assuming extern returning int
-    list(APPEND ${target}.compile_options "/we4013")
+    list(APPEND ${target}.CompileOptions "/we4013")
     # C4024: 'function': different types for formal and actual parameter 'number'
-    list(APPEND ${target}.compile_options "/we4024")
+    list(APPEND ${target}.CompileOptions "/we4024")
     # C4716: 'function' must return a value
-    list(APPEND ${target}.compile_options "/we4716")
+    list(APPEND ${target}.CompileOptions "/we4716")
     # C4013: 'function' undefined; assuming extern returning int
-    list(APPEND ${target}.compile_options "/we4013")
+    list(APPEND ${target}.CompileOptions "/we4013")
     # C4028: formal parameter 'number' different from declaration
-    list(APPEND ${target}.compile_options "/we4028")
+    list(APPEND ${target}.CompileOptions "/we4028")
 
-    # The quotes around "${${target}.compile_options}" concatenate the list elements to a single string separated by semicolons.
-    set_source_files_properties(${${target}.SourceFiles} PROPERTIES COMPILE_OPTIONS "${${target}.compile_options}")
-    set_source_files_properties(${${target}.HeaderFiles} PROPERTIES COMPILE_OPTIONS "${${target}.compile_options}")
+    # C4189: 'identifier' : local variable is initialized but not referenced
+    list(APPEND ${target}.CompileOptions "/we4189")
+
+    # The quotes around "${${target}.CompileOptions}" concatenate the list elements to a single string separated by semicolons.
+    set_source_files_properties(${${target}.SourceFiles} PROPERTIES COMPILE_OPTIONS "${${target}.CompileOptions}")
+    set_source_files_properties(${${target}.HeaderFiles} PROPERTIES COMPILE_OPTIONS "${${target}.CompileOptions}")
+
+    # warning level 4
+    target_compile_options(${target} PRIVATE /W1)
 
   endif()
 

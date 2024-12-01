@@ -22,6 +22,8 @@
 
 static IXAudio2* g_xaudio2 = NULL;
 static IXAudio2MasteringVoice* g_xaudio2MasteringVoice = NULL;
+
+static R_ByteBuffer* g_sourceVoiceBuffer = NULL;
 static IXAudio2SourceVoice* g_xaudio2SourceVoice = NULL;
 
 static void
@@ -48,6 +50,33 @@ Audials_XAudio2_startup
     R_setStatus(R_Status_EnvironmentFailed);
     R_jump();
   }
+  R_JumpTarget jumpTarget;
+
+  R_pushJumpTarget(&jumpTarget);
+  if (R_JumpTarget_save(&jumpTarget)) {
+    g_sourceVoiceBuffer = R_ByteBuffer_create();
+    R_popJumpTarget();
+  } else {
+    R_popJumpTarget();
+    IXAudio2_Release(g_xaudio2);
+    g_xaudio2 = NULL;
+    CoUninitialize();
+    R_setStatus(R_Status_EnvironmentFailed);
+    R_jump();
+  }
+
+  R_pushJumpTarget(&jumpTarget);
+  if (R_JumpTarget_save(&jumpTarget)) {
+    R_Object_lock(g_sourceVoiceBuffer);
+    R_popJumpTarget();
+  } else {
+    R_popJumpTarget();
+    IXAudio2_Release(g_xaudio2);
+    g_xaudio2 = NULL;
+    CoUninitialize();
+    R_setStatus(R_Status_EnvironmentFailed);
+    R_jump();
+  }
 }
 
 static void
@@ -64,6 +93,8 @@ Audials_XAudio2_shutdown
   IXAudio2_Release(g_xaudio2);
   g_xaudio2 = NULL;
   CoUninitialize();
+  R_Object_unlock(g_sourceVoiceBuffer);
+  g_sourceVoiceBuffer = NULL;
 }
 
 static const WORD BITSPERSAMPLE = 16;
@@ -74,6 +105,123 @@ static const WORD AUDIOBUFFERSIZEINCYCLES = 10;
 static const double PI = 3.14159265358979323846;
 
 #include <math.h>
+
+Rex_declareObjectType("Audials.Xaudio2.Source", Source, "R.Object");
+
+struct Source {
+  R_Object _parent;
+  struct Source* next;
+  /// The backing source voice.
+  IXAudio2SourceVoice* xAudio2SourceVoice;
+};
+
+static void
+Source_destruct
+  (
+    Source* self
+  )
+{ 
+  if (self->xAudio2SourceVoice) {
+    // Stop the voice. Remove the voice from the XAudio2 graph.
+    IXAudio2Voice_DestroyVoice(self->xAudio2SourceVoice);
+    self->xAudio2SourceVoice = NULL;
+  }
+}
+
+static void
+Source_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .construct = &Source_constructImpl,
+  .destruct = &Source_destruct,
+  .visit = NULL,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("Audials.Xaudio2.Source", Source, "R.Object", R_Object, &_typeOperations)
+
+// bytes : ByteBuffer
+static void
+Source_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  Source* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _Source_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
+  }
+  if (1 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  if (!R_Value_isObjectReferenceValue(&argumentValues[0])) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_Object* objectValue = R_Value_getObjectReferenceValue(&argumentValues[0]);
+  if (!R_Type_isSubType(R_Object_getType(objectValue), _R_ByteBuffer_getType())) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  //R_ByteBuffer* byteBufferValue = (R_ByteBuffer*)objectValue;
+  _self->xAudio2SourceVoice = NULL;
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+void
+Source_notifyBackendShuttingDown
+  (
+    Source* self
+  )
+{
+  if (self->xAudio2SourceVoice) {
+    // Stop the voice. Remove the voice from the XAudio2 graph.
+    IXAudio2Voice_DestroyVoice(self->xAudio2SourceVoice);
+    self->xAudio2SourceVoice = NULL;
+  }
+}
+
+Source*
+Source_create
+  (
+    R_ByteBuffer* bytes
+  )
+{
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)bytes } };
+  Source* self = R_allocateObject(_Source_getType(), 1, &argumentValues[0]);
+  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)self };
+  Source_constructImpl(&selfValue, 1, &argumentValues[0]);
+  return self;
+}
 
 void
 Audials_playSine1
@@ -99,21 +247,20 @@ Audials_playSine1
     R_setStatus(R_Status_EnvironmentFailed);
     R_jump();
   }
-  R_ByteBuffer* buffer = R_ByteBuffer_create();
   double phase = 0.0;
   uint32_t bufferIndex = 0;
   while (bufferIndex < AUDIOBUFFERSIZEINBYTES) {
     phase += (2 * PI) / SAMPLESPERCYCLE;
     int16_t sample = (int16_t)(sin(phase) * INT16_MAX * VOLUME);
     uint8_t bytes[2] = { (uint8_t)(sample >> 0), (uint8_t)(sample >> 8) };
-    R_ByteBuffer_append_pn(buffer, bytes, 2);
+    R_ByteBuffer_append_pn(g_sourceVoiceBuffer, bytes, 2);
     bufferIndex += 2;
   }
 
   XAUDIO2_BUFFER xAudio2Buffer;
   xAudio2Buffer.Flags = XAUDIO2_END_OF_STREAM;
   xAudio2Buffer.AudioBytes = AUDIOBUFFERSIZEINBYTES;
-  xAudio2Buffer.pAudioData = R_ByteBuffer_getBytes(buffer);
+  xAudio2Buffer.pAudioData = R_ByteBuffer_getBytes(g_sourceVoiceBuffer);
   xAudio2Buffer.PlayBegin = 0;
   xAudio2Buffer.PlayLength = 0;
   xAudio2Buffer.LoopBegin = 0;

@@ -31,11 +31,11 @@
 static void checkNormalized(char const* p, char const* q) {
   R_FilePath* filePath = R_FilePath_parseNative(p, strlen(p));
   R_String* filePathString = R_FilePath_toNative(filePath);
-  if (filePathString->numberOfBytes != strlen(q) + 1) {
+  if (R_String_getNumberOfBytes(filePathString) != strlen(q) + 1) {
     R_setStatus(R_Status_TestFailed);
     R_jump();
   }
-  if (memcmp(filePathString->p, q, strlen(q))) {
+  if (memcmp(R_String_getBytes(filePathString), q, strlen(q))) {
     R_setStatus(R_Status_TestFailed);
     R_jump();
   }

@@ -18,19 +18,21 @@
 #include "Module/Visuals/Font.h"
 
 static void
+TextureFontWindows_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 TextureFontWindows_destruct
   (
     TextureFontWindows* self
-  )
-{
-  if (NULL != self->hFont) {
-    DeleteObject(self->hFont);
-    self->hFont = NULL;
-  }
-}
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &TextureFontWindows_constructImpl,
   .destruct = &TextureFontWindows_destruct,
   .visit = NULL,
 };
@@ -57,14 +59,20 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("TextureFontWindows", TextureFontWindows, "R.Object", R_Object, &_typeOperations);
 
-void
-TextureFontWindows_construct
+static void
+TextureFontWindows_constructImpl
   (
-    TextureFontWindows* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  TextureFontWindows* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _TextureFontWindows_getType();
-  R_Object_construct((R_Object*)self);
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
+  }
   //
   HDC hScreenDeviceContext = GetDC(NULL);
   if (!hScreenDeviceContext) {
@@ -81,10 +89,10 @@ TextureFontWindows_construct
   ReleaseDC(NULL, hScreenDeviceContext);
   hScreenDeviceContext = NULL;
   // Get the size of the symbol.
-  self->codePoint = 'A';
+  _self->codePoint = 'A';
   R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
   R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(byteBuffer);
-  R_Utf8Writer_writeCodePoints(utf8ByteBufferWriter, &self->codePoint, 1);
+  R_Utf8Writer_writeCodePoints(utf8ByteBufferWriter, &_self->codePoint, 1);
   RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
   DrawTextA(hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
   int32_t width = textRect.right - textRect.left;
@@ -92,10 +100,22 @@ TextureFontWindows_construct
   DeleteDC(hDeviceContext);
   hDeviceContext = NULL;
   // Create a bitmap of that size. Draw the symbol to the bitmap.
-  self->bitmap = NativeWindowsBitmap_create(width, height);
-  DrawTextA(self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
+  _self->bitmap = NativeWindowsBitmap_create(width, height);
+  DrawTextA(_self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   //
-  R_Object_setType(self, _type);
+  R_Object_setType(_self, _type);
+}
+
+static void
+TextureFontWindows_destruct
+  (
+    TextureFontWindows* self
+  )
+{
+  if (NULL != self->hFont) {
+    DeleteObject(self->hFont);
+    self->hFont = NULL;
+  }
 }
 
 TextureFontWindows*
@@ -103,8 +123,8 @@ TextureFontWindows_create
   (
   )
 {
-  TextureFontWindows* self = R_allocateObject(_TextureFontWindows_getType());
-  TextureFontWindows_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  TextureFontWindows* self = R_allocateObject(_TextureFontWindows_getType(), 0, &argumentValues[0]);
   return self;
 }
 

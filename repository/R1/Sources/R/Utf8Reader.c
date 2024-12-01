@@ -19,14 +19,22 @@
 
 #include "R/Object.h"
 #include "R/Utf8.h"
+#include "R/Value.h"
+#include "R/cstdlib.h"
 
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+/// @code
+/// construct()
+/// @endcode
+static void
+R_Utf8Reader_constructorImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_Utf8Reader_constructorImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -53,18 +61,24 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.Utf8Reader", R_Utf8Reader, "R.Object", R_Object, &_typeOperations);
 
-void
-R_Utf8Reader_construct
+static void
+R_Utf8Reader_constructorImpl
   (
-    R_Utf8Reader* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  R_Utf8Reader* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _R_Utf8Reader_getType();
-  R_Object_construct((R_Object*)self);
-  self->getCodePoint = NULL;
-  self->hasCodePoint = NULL;
-  self->next = NULL;
-  R_Object_setType(self, _type);
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->getCodePoint = NULL;
+  _self->hasCodePoint = NULL;
+  _self->next = NULL;
+  R_Object_setType(_self, _type);
 }
 
 void

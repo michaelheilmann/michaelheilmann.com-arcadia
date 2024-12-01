@@ -20,13 +20,7 @@
 #include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/TypeNames.h"
-
-// debug assert
-#include <assert.h>
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/cstdlib.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -267,7 +261,7 @@ R_registerBooleanType
 }
 
 void
-R_registerForeignProcedureType
+R_registerForeignValueType
   (
     char const* name,
     size_t nameLength,
@@ -286,7 +280,7 @@ R_registerForeignProcedureType
   if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
-  typeNode->kind = R_TypeKind_ForeignProcedure;
+  typeNode->kind = R_TypeKind_ForeignValue;
   typeNode->typeName = typeName;
   typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
@@ -405,6 +399,7 @@ R_registerObjectType
 
   assert(NULL != typeNode->typeOperations);
   assert(NULL != typeNode->typeOperations->objectTypeOperations);
+  assert(NULL != typeNode->typeOperations->objectTypeOperations->construct);
 
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
@@ -529,16 +524,21 @@ R_Type_isSubType
 {
   TypeNode* self1 = (TypeNode*)self;
   TypeNode* other1 = (TypeNode*)other;
-  if (self1->kind != R_TypeKind_Object || other1->kind != R_TypeKind_Object) {
+  if (self1->kind == other1->kind) {
+    if (self1->kind == R_TypeKind_Object) {
+      do {
+        if (self1 == other1) {
+          return R_BooleanValue_True;
+        }
+        self1 = self1->parentObjectType;
+      } while (NULL != self1);
+      return R_BooleanValue_False;
+    } else {
+      return self1 == other1;
+    }
+  } else {
     return R_BooleanValue_False;
   }
-  do {  
-    if (self1 == other1) {
-      return R_BooleanValue_True;
-    }
-    self1 = self1->parentObjectType;
-  } while (NULL != self1);
-  return R_BooleanValue_False;
 }
 
 R_Type*

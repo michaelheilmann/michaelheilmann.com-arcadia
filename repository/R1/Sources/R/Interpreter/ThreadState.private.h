@@ -13,16 +13,20 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-11-04
+// Last modified: 2024-12-07
 
-#if !defined(R_THREADSTATE_PRIVATE_H_INCLUDED)
-#define R_THREADSTATE_PRIVATE_H_INCLUDED
+#if !defined(R_INTERPRETER_THREADSTATE_PRIVATE_H_INCLUDED)
+#define R_INTERPRETER_THREADSTATE_PRIVATE_H_INCLUDED
 
 #include "R/Size.h"
 #include "R/Value.h"
-#include "R/ThreadState.h"
+#include "R/Interpreter/Include.h"
+
+#define R_ThreadState_withRegisterStack (0)
 
 typedef struct R_Value R_Value;
+
+#if defined(R_ThreadState_withRegisterStack) && 1 == R_ThreadState_withRegisterStack
 
 typedef struct _RegisterStack _RegisterStack;
 
@@ -54,21 +58,30 @@ struct _RegisterFrame {
   R_SizeValue length;
 };
 
-struct R_ThreadState {
+#endif
+
+struct R_Interpreter_ThreadState {
   struct {
     R_CallState* elements;
     R_SizeValue size;
     R_SizeValue capacity; 
   } calls;
-#if 0
+
+#if defined(R_Interpreter_ThreadState_withRegisterStack) && 1 == R_Interpreter_ThreadState_withRegisterStack
+
   _RegisterStack  registerStack;
+
   // List of unused register frame objects for being re-used.
   _RegisterFrame* unusedRegisterFrames;
+
   // Stack fo register frames.
   _RegisterFrame* registerFrameStack;
+
 #endif
+
   R_Value* registers;
   R_SizeValue numberOfRegisters;
+
 };
 
-#endif // R_THREADSTATE_PRIVATE_H_INCLUDED
+#endif // R_INTERPRETER_THREADSTATE_PRIVATE_H_INCLUDED

@@ -120,7 +120,7 @@ _R_ForeignProcedureValue_getType
   )
 {
   if (!g_type) {
-    R_registerForeignProcedureType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1, &_typeOperations, &typeDestructing);
+    R_registerForeignValueType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1, &_typeOperations, &typeDestructing);
     g_type = R_getType(u8"R.ForeignProcedure", sizeof("R.ForeignProcedure") - 1);
   }
   return g_type;

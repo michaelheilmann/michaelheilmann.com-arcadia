@@ -24,10 +24,7 @@
 #include "R/Object.h"
 #include "R/Status.h"
 #include "R/UnmanagedMemory.h"
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/cstdlib.h"
 
 typedef struct Singleton Singleton;
 
@@ -245,7 +242,7 @@ R_Atoms_getOrCreateAtom
   R_SizeValue index = hash % g_singleton->capacity;
   for (R_Atom* atom = g_singleton->buckets[index]; NULL != atom; atom = atom->next) {
     if (atom->numberOfBytes == numberOfBytes && atom->hash == hash) {
-      if (!memcmp(atom->bytes, bytes, numberOfBytes)) {
+      if (!c_memcmp(atom->bytes, bytes, numberOfBytes)) {
         return atom;
       }
     }
@@ -254,7 +251,7 @@ R_Atoms_getOrCreateAtom
   if (!R_allocateUnmanaged_nojump(&atom, sizeof(R_Atom) + numberOfBytes)) {
     R_jump();
   }
-  memcpy(atom->bytes, bytes, numberOfBytes);
+  c_memcpy(atom->bytes, bytes, numberOfBytes);
   atom->numberOfBytes = numberOfBytes;
   atom->hash = hash;
   atom->lastVisited = R_getTickCount();

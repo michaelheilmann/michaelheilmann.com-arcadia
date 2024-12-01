@@ -26,17 +26,16 @@
 typedef struct R_FileHandle R_FileHandle;
 typedef struct R_FilePath R_FilePath;
 
+/// @code
+/// class FileSystem {
+///   constructor()
+/// }
+/// @endcode
 Rex_declareObjectType("R.FileSystem", R_FileSystem, "R.Object");
 
 struct R_FileSystem {
   R_Object _parent;
 };
-
-void
-R_FileSystem_construct
-  (
-    R_FileSystem* self
-  );
 
 // https://michaelheilmann.com/repository/R1/#r-filesystem-create
 R_FileSystem*

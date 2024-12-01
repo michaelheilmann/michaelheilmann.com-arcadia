@@ -33,12 +33,6 @@ struct R_ByteBuffer {
   R_SizeValue cp;
 };
 
-void
-R_ByteBuffer_construct
-  (
-    R_ByteBuffer* self
-  );
-
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-create
 R_ByteBuffer*
 R_ByteBuffer_create

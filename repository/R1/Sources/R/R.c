@@ -22,7 +22,7 @@
 // For registering the types.
 #include "R/TypeNames.h"
 
-#include "R/ArmsIntegration.h"
+#include "R/ArmsIntegration.private.h"
 
 typedef uint32_t ReferenceCount;
 #define ReferenceCount_Minimum (UINT32_C(0))

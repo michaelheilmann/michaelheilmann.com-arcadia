@@ -25,6 +25,14 @@
 #include "R/String.h"
 
 static void
+R_FileSystem_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 R_FileSystem_visit
   (
     R_FileSystem* self
@@ -35,23 +43,9 @@ R_FileSystem_destruct
   (
     R_FileSystem* self
   );
-
-static void
-R_FileSystem_visit
-  (
-    R_FileSystem* self
-  )
-{/*Intentionally empty.*/}
-
-static void
-R_FileSystem_destruct
-  (
-    R_FileSystem* self
-  )
-{/*Intentionally empty.*/}
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_FileSystem_constructImpl,
   .destruct = &R_FileSystem_destruct,
   .visit = &R_FileSystem_visit,
 };
@@ -78,24 +72,44 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.FileSystem", R_FileSystem, "R.Object", R_Object, &_typeOperations);
 
-void
-R_FileSystem_construct
+static void
+R_FileSystem_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_FileSystem* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_FileSystem_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  R_Object_setType((R_Object*)_self, _type);
+}
+
+static void
+R_FileSystem_visit
   (
     R_FileSystem* self
   )
-{
-  R_Type* _type = _R_FileSystem_getType();
-  R_Object_construct((R_Object*)self);
-  R_Object_setType((R_Object*)self, _type);
-}
+{/*Intentionally empty.*/}
+
+static void
+R_FileSystem_destruct
+  (
+    R_FileSystem* self
+  )
+{/*Intentionally empty.*/}
 
 R_FileSystem*
 R_FileSystem_create
   (
   )
 {
-  R_FileSystem* self = R_allocateObject(_R_FileSystem_getType());
-  R_FileSystem_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_FileSystem* self = R_allocateObject(_R_FileSystem_getType(), 0, &argumentValues[0]);
   return self;
 }
 
@@ -160,7 +174,7 @@ R_FileSystem_regularFileExists
   )
 {
   R_String* nativePathString = R_FilePath_toNative(path);
-  DWORD dwFileAttributes = GetFileAttributes(nativePathString->p);
+  DWORD dwFileAttributes = GetFileAttributes(R_String_getBytes(nativePathString));
 
   return (dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
          !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
@@ -174,7 +188,7 @@ R_FileSystem_directoryFileExists
   )
 {
   R_String* nativePathString = R_FilePath_toNative(path);
-  DWORD dwFileAttributes = GetFileAttributes(nativePathString->p);
+  DWORD dwFileAttributes = GetFileAttributes(R_String_getBytes(nativePathString));
 
   return (dwFileAttributes != INVALID_FILE_ATTRIBUTES);
 }
@@ -188,7 +202,7 @@ R_FileSystem_createDirectory
 {
 #if R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Windows
   R_String* nativePath = R_FilePath_toNative(path);
-  if (FALSE == CreateDirectory(nativePath->p, NULL)) {
+  if (FALSE == CreateDirectory(R_String_getBytes(nativePath), NULL)) {
     R_setStatus(R_Status_FileSystemOperationFailed);
     R_jump();
   }

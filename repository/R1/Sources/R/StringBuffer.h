@@ -21,6 +21,11 @@
 #include "R/Object.h"
 #include "R/Value.h"
 
+/// @code
+/// class StringBuffer {
+///   constructor()
+/// }
+/// @endcode
 Rex_declareObjectType("R.StringBuffer", R_StringBuffer, "R.Object");
 
 struct R_StringBuffer {
@@ -29,12 +34,6 @@ struct R_StringBuffer {
   R_SizeValue size;
   R_SizeValue capacity;
 };
-
-void
-R_StringBuffer_construct
-  (
-    R_StringBuffer* self
-  );
 
 /// @brief Create a string buffer.
 /// @return The string buffer.

@@ -21,10 +21,22 @@
 #include "R/Object.h"
 #include "R/Status.h"
 #include "R/Utf8.h"
+#include "R/Value.h"
 
 #define CodePoint_Start (R_Utf8CodePoint_Last + 1)
 #define CodePoint_End (R_Utf8CodePoint_Last + 2)
 #define CodePoint_Error (R_Utf8CodePoint_Last + 3)
+
+/// @code
+/// construct(source:ByteBuffer)
+/// @endcode
+static void
+R_Utf8ByteBufferReader_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static void
 R_Utf8ByteBufferReader_visit
@@ -170,7 +182,7 @@ R_Utf8ByteBufferReader_getByteIndexImpl
 { return self->byteIndex; }
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_Utf8ByteBufferReader_constructImpl,
   .destruct = NULL,
   .visit = &R_Utf8ByteBufferReader_visit,
 };
@@ -198,22 +210,35 @@ static const R_Type_Operations _typeOperations = {
 Rex_defineObjectType("R.Utf8ByteBufferReader", R_Utf8ByteBufferReader, "R.Utf8Reader", R_Utf8Reader, &_typeOperations);
 
 void
-R_Utf8ByteBufferReader_construct
+R_Utf8ByteBufferReader_constructImpl
   (
-    R_Utf8ByteBufferReader* self,
-    R_ByteBuffer* source
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  R_Utf8ByteBufferReader* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _R_Utf8ByteBufferReader_getType();
-  R_Utf8Reader_construct(R_UTF8READER(self));
-  self->source = source;
-  self->byteIndex = 0;
-  self->codePoint = CodePoint_Start;
-  R_UTF8READER(self)->getByteIndex = (R_SizeValue(*)(R_Utf8Reader*)) & R_Utf8ByteBufferReader_getByteIndexImpl;
-  R_UTF8READER(self)->getCodePoint = (R_Natural32Value (*)(R_Utf8Reader*)) & R_Utf8ByteBufferReader_getCodePointImpl;
-  R_UTF8READER(self)->hasCodePoint = (R_BooleanValue (*)(R_Utf8Reader*)) &R_Utf8ByteBufferReader_hasCodePointImpl;
-  R_UTF8READER(self)->next = (void (*)(R_Utf8Reader*)) &R_Utf8ByteBufferReader_nextImpl;
-  R_Object_setType(self, _type);
+  {
+    R_Value argumentValues[] =  { { .tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void }, };
+    R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, & argumentValues[0]);
+  }
+  if (1 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_ByteBuffer_getType())) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  _self->source = R_Value_getObjectReferenceValue(&argumentValues[0]);
+  _self->byteIndex = 0;
+  _self->codePoint = CodePoint_Start;
+  R_UTF8READER(_self)->getByteIndex = (R_SizeValue(*)(R_Utf8Reader*)) & R_Utf8ByteBufferReader_getByteIndexImpl;
+  R_UTF8READER(_self)->getCodePoint = (R_Natural32Value (*)(R_Utf8Reader*)) & R_Utf8ByteBufferReader_getCodePointImpl;
+  R_UTF8READER(_self)->hasCodePoint = (R_BooleanValue (*)(R_Utf8Reader*)) &R_Utf8ByteBufferReader_hasCodePointImpl;
+  R_UTF8READER(_self)->next = (void (*)(R_Utf8Reader*)) &R_Utf8ByteBufferReader_nextImpl;
+  R_Object_setType(_self, _type);
 }
 
 R_Utf8ByteBufferReader*
@@ -222,7 +247,7 @@ R_Utf8ByteBufferReader_create
     R_ByteBuffer* source
   )
 {
-  R_Utf8ByteBufferReader* self = R_allocateObject(_R_Utf8ByteBufferReader_getType());
-  R_Utf8ByteBufferReader_construct(self, source);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = source }, };
+  R_Utf8ByteBufferReader* self = R_allocateObject(_R_Utf8ByteBufferReader_getType(), 1, &argumentValues[0]);
   return self;
 }

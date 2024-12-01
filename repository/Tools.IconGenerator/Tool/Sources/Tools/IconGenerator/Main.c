@@ -31,10 +31,9 @@ main1
   R_Value_setVoidValue(&target, R_VoidValue_Void);
   R_List* arguments = R_List_create();
   for (int argi = 1; argi < argc; ++argi) {
-    R_String* argument = R_String_create_pn(argv[argi], strlen(argv[argi]));
+    R_String* argument = R_String_create_pn(R_ImmutableByteArray_create(argv[argi], strlen(argv[argi])));
     R_List_appendObjectReferenceValue(arguments, (R_ObjectReferenceValue)argument);
   }
-  R_String* prefix = R_String_create_pn(u8"--", sizeof(u8"--") - 1);
   for (R_SizeValue i = 0, n = R_List_getSize(arguments); i < n; ++i) {
     R_String* argument = (R_String*)R_List_getObjectReferenceValueAt(arguments, i);
     R_Utf8StringReader* r = R_Utf8StringReader_create(argument);
@@ -52,15 +51,15 @@ main1
     } else {
       R_CommandLine_raiseUnknownArgumentError(key, value);
     }
-    fwrite(key->p, 1, key->numberOfBytes, stdout);
+    fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
     if (value) {
       fwrite(u8"=", 1, sizeof(u8"=") - 1, stdout);
-      fwrite(value->p, 1, value->numberOfBytes, stdout);
+      fwrite(R_String_getBytes(value), 1, R_String_getNumberOfBytes(value), stdout);
     }
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
   if (R_Value_isVoidValue(&target)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(u8"target", sizeof(u8"target") - 1));
+    R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(R_ImmutableByteArray_create(u8"target", sizeof(u8"target") - 1)));
   }
   R_List* pixelBufferList = R_List_create();
   R_SizeValue sizes[] = {

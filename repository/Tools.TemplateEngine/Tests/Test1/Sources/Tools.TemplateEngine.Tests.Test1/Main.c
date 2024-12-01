@@ -52,7 +52,6 @@ recursiveInclude1
     char** argv
   )
 {
-  R_FileSystem* fileSystem = R_FileSystem_create();
   Context* context = Context_create();
   context->stack = R_Stack_create();
   context->targetBuffer = R_ByteBuffer_create();
@@ -84,7 +83,6 @@ recursiveInclude2
     char** argv
   )
 {
-  R_FileSystem* fileSystem = R_FileSystem_create();
   Context* context = Context_create();
   context->stack = R_Stack_create();
   context->targetBuffer = R_ByteBuffer_create();

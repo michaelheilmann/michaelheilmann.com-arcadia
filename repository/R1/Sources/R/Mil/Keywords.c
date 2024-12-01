@@ -33,6 +33,14 @@ struct R_Mil_Keywords {
 };
 
 static void
+R_Mil_Keywords_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
 R_Mil_Keywords_destruct
   (
     R_Mil_Keywords* self
@@ -77,7 +85,7 @@ R_Mil_Keywords_visit
 }
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
+  .construct = &R_Mil_Keywords_constructImpl,
   .destruct = &R_Mil_Keywords_destruct,
   .visit = &R_Mil_Keywords_visit,
 };
@@ -104,23 +112,33 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.Mil.Keywords", R_Mil_Keywords, "R.Object", R_Object, &_typeOperations);
 
-void
-R_Mil_Keywords_construct
+static void
+R_Mil_Keywords_constructImpl
   (
-    R_Mil_Keywords* self
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
   )
 {
+  R_Mil_Keywords* _self = R_Value_getObjectReferenceValue(self);
   R_Type* _type = _R_Mil_Keywords_getType();
-  R_Object_construct((R_Object*)self);
-  self->size = 0;
-  self->capacity = 8;
-  if (!R_allocateUnmanaged_nojump((void**)&self->buckets, sizeof(Keyword*) * self->capacity)) {
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  if (0 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
-  for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    self->buckets[i] = NULL;
+  _self->size = 0;
+  _self->capacity = 8;
+  if (!R_allocateUnmanaged_nojump((void**)&_self->buckets, sizeof(Keyword*) * _self->capacity)) {
+    R_jump();
   }
-  R_Object_setType((R_Object*)self, _type);
+  for (R_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
+    _self->buckets[i] = NULL;
+  }
+  R_Object_setType((R_Object*)_self, _type);
 }
 
 R_Mil_Keywords*
@@ -128,8 +146,8 @@ R_Mil_Keywords_create
   (
   )
 {
-  R_Mil_Keywords* self = R_allocateObject(_R_Mil_Keywords_getType());
-  R_Mil_Keywords_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void }, };
+  R_Mil_Keywords* self = R_allocateObject(_R_Mil_Keywords_getType(), 0, &argumentValues[0]);
   return self;
 }
 

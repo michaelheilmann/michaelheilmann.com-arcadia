@@ -22,11 +22,16 @@
 #include "R/Object.h"
 #include "R/Status.h"
 #include "R/Utf8/EncodeCodePoints.h"
+#include "R/Value.h"
+#include "R/cstdlib.h"
 
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+static void
+R_Utf8ByteBufferWriter_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
 
 static void
 R_Utf8ByteBufferWriter_visit
@@ -49,6 +54,62 @@ R_Utf8ByteBufferWriter_writeCodePointsImpl
     R_Natural32Value const* codePoints,
     R_SizeValue numberOfCodePoints
   );
+
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .construct = &R_Utf8ByteBufferWriter_constructImpl,
+  .destruct = NULL,
+  .visit = &R_Utf8ByteBufferWriter_visit,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("R.Utf8ByteBufferWriter", R_Utf8ByteBufferWriter, "R.Utf8Writer", R_Utf8Writer, &_typeOperations);
+
+static void
+R_Utf8ByteBufferWriter_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_Utf8ByteBufferWriter* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_Utf8ByteBufferWriter_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void }, };
+    R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
+  }
+  if (1 != numberOfArgumentValues) {
+    R_setStatus(R_Status_NumberOfArgumentsInvalid);
+    R_jump();
+  }
+  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_ByteBuffer_getType())) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  _self->target = R_Value_getObjectReferenceValue(&argumentValues[0]);
+  R_UTF8WRITER(_self)->writeBytes = (void (*)(R_Utf8Writer*, void const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeBytesImpl;
+  R_UTF8WRITER(_self)->writeCodePoints = (void (*)(R_Utf8Writer*, R_Natural32Value const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeCodePointsImpl;
+  R_Object_setType(_self, _type);
+}
 
 static void
 R_Utf8ByteBufferWriter_visit
@@ -138,56 +199,13 @@ R_Utf8ByteBufferWriter_writeCodePointsImpl
   R_Utf8_encodeCodePoints(codePoints, numberOfCodePoints, self->target, (void (*)(void*, R_Natural8Value const*, R_SizeValue)) & R_ByteBuffer_append_pn);
 }
 
-static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
-  .destruct = NULL,
-  .visit = &R_Utf8ByteBufferWriter_visit,
-};
-
-static const R_Type_Operations _typeOperations = {
-  .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
-};
-
-Rex_defineObjectType("R.Utf8ByteBufferWriter", R_Utf8ByteBufferWriter, "R.Utf8Writer", R_Utf8Writer, &_typeOperations);
-
-void
-R_Utf8ByteBufferWriter_construct
-  (
-    R_Utf8ByteBufferWriter* self,
-    R_ByteBuffer* target
-  )
-{
-  R_Type* _type = _R_Utf8ByteBufferWriter_getType();
-  R_Utf8Writer_construct(R_UTF8WRITER(self));
-  self->target = target;
-  R_UTF8WRITER(self)->writeBytes = (void (*)(R_Utf8Writer*, void const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeBytesImpl;
-  R_UTF8WRITER(self)->writeCodePoints = (void (*)(R_Utf8Writer*, R_Natural32Value const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeCodePointsImpl;
-  R_Object_setType(self, _type);
-}
-
 R_Utf8ByteBufferWriter*
 R_Utf8ByteBufferWriter_create
   (
     R_ByteBuffer* target
   )
 {
-  R_Utf8ByteBufferWriter* self = R_allocateObject(_R_Utf8ByteBufferWriter_getType());
-  R_Utf8ByteBufferWriter_construct(self, target);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)target } };
+  R_Utf8ByteBufferWriter* self = R_allocateObject(_R_Utf8ByteBufferWriter_getType(), 1, &argumentValues[0]);
   return self;
 }

@@ -24,6 +24,11 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
+/// @code
+/// class NativeWindowsBitmap {
+///   construct(width:Integer32, height: Integer32)
+/// }
+/// @endcode
 Rex_declareObjectType("NativeWindowsBitmap", NativeWindowsBitmap, "R.Object");
 
 struct NativeWindowsBitmap {
@@ -38,28 +43,20 @@ struct NativeWindowsBitmap {
   R_Natural8Value pixelFormat;
 };
 
-void
-NativeWindowsBitmap_construct
-  (
-    NativeWindowsBitmap* self,
-    int width,
-    int height
-  );
-
 NativeWindowsBitmap*
 NativeWindowsBitmap_create
   (
-    int width,
-    int height
+    R_Integer32Value width,
+    R_Integer32Value height
   );
 
 void
 NativeWindowsBitmap_fill
   (
     NativeWindowsBitmap* self,
-    uint8_t r,
-    uint8_t g,
-    uint8_t b
+    R_Natural8Value r,
+    R_Natural8Value g,
+    R_Natural8Value b
   );
 
 PixelBuffer*

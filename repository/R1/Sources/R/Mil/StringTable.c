@@ -17,11 +17,97 @@
 
 #include "R/Mil/StringTable.h"
 
-// memcmp, memcpy, memmove
-#include <string.h>
-// fprintf, stderr
-#include <stdio.h>
+#include "R/cstdlib.h"
 
+static void
+R_Mil_StringTable_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  );
+
+static void
+R_Mil_StringTable_maybeResize_nojump
+  (
+    R_Mil_StringTable* self
+  );
+
+static R_SizeValue
+R_Mil_StringTable_hashBytes
+  (
+    R_Natural8Value const* bytes,
+    R_SizeValue numberOfBytes
+  );
+
+static void
+R_Mil_StringTable_visit
+  (
+    R_Mil_StringTable* self
+  );
+
+static void
+R_Mil_StringTable_destruct
+  (
+    R_Mil_StringTable* self
+  );
+
+static const R_ObjectType_Operations _objectTypeOperations = {
+  .construct = &R_Mil_StringTable_constructImpl,
+  .destruct = &R_Mil_StringTable_destruct,
+  .visit = &R_Mil_StringTable_visit,
+};
+
+static const R_Type_Operations _typeOperations = {
+  .objectTypeOperations = &_objectTypeOperations,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = NULL,
+  .greaterThan = NULL,
+  .greaterThanOrEqualTo = NULL,
+  .hash = NULL,
+  .lowerThan = NULL,
+  .lowerThanOrEqualTo = NULL,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = NULL,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+Rex_defineObjectType("Cil.StringTable", R_Mil_StringTable, "R.Object", R_Object, &_typeOperations);
+
+static void
+R_Mil_StringTable_constructImpl
+  (
+    R_Value* self,
+    R_SizeValue numberOfArgumentValues,
+    R_Value const* argumentValues
+  )
+{
+  R_Mil_StringTable* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_Mil_StringTable_getType();
+  {
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
+    R_Object_constructImpl(self, 0, &argumentValues[0]);
+  }
+  _self->buckets = NULL;
+  _self->size = R_SizeValue_Literal(0);
+  _self->capacity = R_SizeValue_Literal(0);
+  static R_SizeValue const g_defaultCapacity = 8;
+  if (!R_allocateUnmanaged_nojump((void**)&_self->buckets, sizeof(R_Mil_StringTable_Node*) * g_defaultCapacity)) {
+    R_jump();
+  }
+  for (R_SizeValue i = 0, n = g_defaultCapacity; i < n; ++i) {
+    _self->buckets[i] = NULL;
+  }
+  _self->capacity = g_defaultCapacity;
+  R_Object_setType((R_Object*)_self, _type);
+}
+                              
 static void
 R_Mil_StringTable_maybeResize_nojump
   (
@@ -49,14 +135,14 @@ R_Mil_StringTable_maybeResize_nojump
     for (R_SizeValue i = 0, n = newCapacity; i < n; ++i) {
       newBuckets[i] = NULL;
     }
-    for (R_SizeValue i = 0, n = oldCapacity; i < n; ++i) {
-      while (oldBuckets[i]) {
-        R_Mil_StringTable_Node* node = oldBuckets[i];
-        oldBuckets[i] = oldBuckets[i]->next;
+    for (R_SizeValue oldIndex = 0, n = oldCapacity; oldIndex < n; ++oldIndex) {
+      while (oldBuckets[oldIndex]) {
+        R_Mil_StringTable_Node* node = oldBuckets[oldIndex];
+        oldBuckets[oldIndex] = oldBuckets[oldIndex]->next;
         R_SizeValue hash = R_Object_getHash((R_ObjectReferenceValue)node->string);
-        R_SizeValue index = hash % newCapacity;
-        node->next = newBuckets[i];
-        newBuckets[i] = node;
+        R_SizeValue newIndex = hash % newCapacity;
+        node->next = newBuckets[newIndex];
+        newBuckets[newIndex] = node;
       }
     }
     R_deallocateUnmanaged_nojump(oldBuckets);
@@ -71,7 +157,7 @@ R_Mil_StringTable_hashBytes
     R_Natural8Value const* bytes,
     R_SizeValue numberOfBytes
   )
-{ 
+{
   R_SizeValue hash = numberOfBytes;
   for (R_SizeValue i = 0, n = numberOfBytes; i < n; ++i) {
     hash = hash * 37 + bytes[i];
@@ -101,7 +187,7 @@ R_Mil_StringTable_destruct
   )
 {
   for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    while(self->buckets[i]) {
+    while (self->buckets[i]) {
       R_Mil_StringTable_Node* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
       R_deallocateUnmanaged_nojump(node);
@@ -109,63 +195,13 @@ R_Mil_StringTable_destruct
   }
 }
 
-static const R_ObjectType_Operations _objectTypeOperations = {
-  .constructor = NULL,
-  .destruct = &R_Mil_StringTable_destruct,
-  .visit = &R_Mil_StringTable_visit,
-};
-
-static const R_Type_Operations _typeOperations = {
-  .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
-};
-
-Rex_defineObjectType("Cil.StringTable", R_Mil_StringTable, "R.Object", R_Object, &_typeOperations);
-
-void
-R_Mil_StringTable_construct
-  (
-    R_Mil_StringTable* self
-  )
-{
-  R_Type* _type = _R_Mil_StringTable_getType();
-  R_Object_construct((R_Object*)self);
-  self->buckets = NULL;
-  self->size = R_SizeValue_Literal(0);
-  self->capacity = R_SizeValue_Literal(0);
-  static R_SizeValue const g_defaultCapacity = 8;
-  if (!R_allocateUnmanaged_nojump((void**)&self->buckets, sizeof(R_Mil_StringTable_Node*) * g_defaultCapacity)) {
-    R_jump();
-  }
-  for (R_SizeValue i = 0, n = g_defaultCapacity; i < n; ++i) {
-    self->buckets[i] = NULL;
-  }
-  self->capacity = g_defaultCapacity;
-  R_Object_setType((R_Object*)self, _type);
-}
-
 R_Mil_StringTable*
 R_Mil_StringTable_create
   (
   )
 {
-  R_Mil_StringTable* self = R_allocateObject(_R_Mil_StringTable_getType());
-  R_Mil_StringTable_construct(self);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
+  R_Mil_StringTable* self = R_allocateObject(_R_Mil_StringTable_getType(), 0, &argumentValues[0]);
   return self;
 }
 
@@ -180,7 +216,7 @@ R_Mil_StringTable_getOrCreateString
   R_SizeValue index = hash % self->capacity;
   for (R_Mil_StringTable_Node* node = self->buckets[index]; NULL != node; node = node->next) {
     if (R_Object_getHash((R_ObjectReferenceValue)node->string) == hash && R_String_getNumberOfBytes(node->string)) {
-      if (!memcmp(R_String_getBytes(node->string), R_StringBuffer_getBytes(stringBuffer), R_String_getNumberOfBytes(node->string))) {
+      if (!c_memcmp(R_String_getBytes(node->string), R_StringBuffer_getBytes(stringBuffer), R_String_getNumberOfBytes(node->string))) {
         return node->string;
       }
     }

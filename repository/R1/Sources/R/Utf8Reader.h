@@ -35,12 +35,6 @@ struct R_Utf8Reader {
 };
 
 void
-R_Utf8Reader_construct
-  (
-    R_Utf8Reader* self
-  );
-
-void
 R_Utf8Reader_next
   (
     R_Utf8Reader* self

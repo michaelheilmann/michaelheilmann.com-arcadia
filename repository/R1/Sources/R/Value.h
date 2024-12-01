@@ -24,6 +24,8 @@
 
 #include "R/ForeignProcedure.h"
 
+#include "R/ImmutableByteArray.h"
+
 #include "R/Integer16.h"
 #include "R/Integer32.h"
 #include "R/Integer64.h"
@@ -47,22 +49,24 @@
 
 #define R_ValueTag_ForeignProcedure (3)
 
-#define R_ValueTag_Integer16 (4)
-#define R_ValueTag_Integer32 (5)
-#define R_ValueTag_Integer64 (6)
-#define R_ValueTag_Integer8 (7)
+#define R_ValueTag_ImmutableByteArray (4)
 
-#define R_ValueTag_Natural16 (8)
-#define R_ValueTag_Natural32 (9)
-#define R_ValueTag_Natural64 (10)
-#define R_ValueTag_Natural8 (11)
+#define R_ValueTag_Integer16 (5)
+#define R_ValueTag_Integer32 (6)
+#define R_ValueTag_Integer64 (7)
+#define R_ValueTag_Integer8 (8)
 
-#define R_ValueTag_ObjectReference (12)
+#define R_ValueTag_Natural16 (9)
+#define R_ValueTag_Natural32 (10)
+#define R_ValueTag_Natural64 (11)
+#define R_ValueTag_Natural8 (12)
 
-#define R_ValueTag_Real32 (13)
-#define R_ValueTag_Real64 (14)
+#define R_ValueTag_ObjectReference (13)
 
-#define R_ValueTag_Size (15)
+#define R_ValueTag_Real32 (14)
+#define R_ValueTag_Real64 (15)
+
+#define R_ValueTag_Size (16)
 
 // The tag for type "Void" must be 0.
 #define R_ValueTag_Void (0)
@@ -77,6 +81,8 @@ typedef struct R_Value {
     Define(Boolean, boolean)
 
     Define(ForeignProcedure, foreignProcedure)
+
+    Define(ImmutableByteArray, immutableByteArray)
     
     Define(Integer16, integer16)
     Define(Integer32, integer32)
@@ -137,6 +143,8 @@ R_Value_getTag
 Define(Boolean, boolean)
 
 Define(ForeignProcedure, foreignProcedure)
+
+Define(ImmutableByteArray, immutableByteArray)
 
 Define(Integer16, integer16)
 Define(Integer32, integer32)

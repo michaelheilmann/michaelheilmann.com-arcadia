@@ -300,8 +300,6 @@ PixelBuffer_createClone
     PixelBuffer* other
   );
 
-
-#if 0
 /// @brief Get the width of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The width of this pixel buffer.
@@ -310,9 +308,7 @@ PixelBuffer_getWidth
   (
     PixelBuffer* self
   );
-#endif
 
-#if 0
 /// @brief Get the height of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The height of this pixel buffer.
@@ -321,6 +317,5 @@ PixelBuffer_getHeight
   (
     PixelBuffer* self
   );
-#endif
 
 #endif // MODULE_VISUALS_PIXELBUFFER_H_INCLUDED

@@ -9,15 +9,14 @@ An <code>R_ObjectReferenceValue</code> pointing to a <code>R_String</code> value
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-string-create-pn">R_String_create_pn</h5>
 <p><code>
-R_String* R_String_create_pn(void const* bytes, R_SizeValue numberOfBytes)
+R_String* R_String_create_pn(R_ImmutableByteArray* immutableByteArray)
 </code></p>
 
-<p>Create a string from a sequence of Bytes.</p>
+<p>Create a string from an immutable Byte array.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>bytes        </td><td>A pointer to an array of Bytes.</td></tr>
-  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code>.</td></tr>
+  <tr><td>immutableByteArray</td><td>A pointer to an immutable Byte array</td></tr>
 </table>
 
 <h6><b>Return value</b></h6>
@@ -25,7 +24,7 @@ R_String* R_String_create_pn(void const* bytes, R_SizeValue numberOfBytes)
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>immutableByteArray</code> is a null pointer.</td></tr>
   <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
 </table>
 
@@ -53,6 +52,11 @@ In that case, the string is created from the R_String object.
 <p>
 The specified value may contain a R_StringBuffer object.
 In that case, the string is created from the R_StringBuffer object.
+</p>
+
+<p>
+The specified value may contain a R_ImmutableByteArray object.
+In that case, the string is created from the R_ImmutableByteArray object.
 </p>
 
 <h6><b>Parameters</b></h6>

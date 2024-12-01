@@ -18,6 +18,8 @@
 #if !defined(R_R_H_INCLUDED)
 #define R_R_H_INCLUDED
 
+#include "R/ArmsIntegration.h"
+
 #include "R/Boolean.h"
 
 #include "R/ByteBuffer.h"
@@ -25,6 +27,8 @@
 #include "R/clamp.h"
 #include "R/CommandLine/Include.h"
 #include "R/countLeadingZeroes.h"
+
+#include "R/ImmutableByteArray.h"
 
 #include "R/execute.h"
 

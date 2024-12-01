@@ -6,8 +6,9 @@ image: Visual Studio 2022
 
 # Build on pushes to all branches.
 #branches:
-  #only:
-  #  - master
+#  only:
+#    - main
+#    - develop
 
 # Do not build on tag pushes.
 skip_tags: true
@@ -76,7 +77,7 @@ before_build:
         cmake -G ${env:CMAKE_GENERATOR_NAME} -A ${env:CMAKE_ARCHITECTURE_NAME} CMakeLists.txt
 
 build:
-    parallel: true      # enable MSBuild parallel builds
+    parallel: true # enable MSBuild parallel builds
     project: Arcadia.sln # path to Visual Studio solution or project
 
 after_build:
@@ -102,9 +103,9 @@ deploy:
     provider: GitHub
     auth_token:
         secure: iTg7jon0UCvoGT5y2flVxNsUjQru+5xUeiqiCRWyXnjyZtUOsd4f33Wnx+St2N2r4xn1Eg3gHtD2/7KUoZpOvfnUzH9GyOr5xGeJI8rIKx2ydlK2jbgeGRHIp1kgUtnV # encrypted token from GitHub
-        artifact: $(ZIP_FILENAME)                                                # upload the artifact
+        artifact: $(ZIP_FILENAME) # upload the artifact
     draft: true
     prerelease: false
     force_update: true
     #on:
-    #   branch: master                                                           # release from "master" branch only
+    #   branch: master # release from "master" branch only
