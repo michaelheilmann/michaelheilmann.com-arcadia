@@ -58,7 +58,7 @@ R_ImmutableByteArray_create
     g_registered = R_BooleanValue_True;
   }
   R_ImmutableByteArray *array = NULL;
-  if (!R_Arms_allocate_nojump(&array, Name, sizeof(Name) - 1, sizeof(R_ImmutableByteArray) + numberOfBytes)) {
+  if (!R_allocate_nojump(&array, Name, sizeof(Name) - 1, sizeof(R_ImmutableByteArray) + numberOfBytes)) {
     R_jump();
   }
   c_memcpy(array->bytes, bytes, numberOfBytes);

@@ -13,30 +13,45 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(R_PROCEDURE_H_INCLUDED)
-#define R_PROCEDURE_H_INCLUDED
+// Last modified: 2024-12-12
 
+#if !defined(R_INTERPRETER_CONSTRUCTOR_INCLUDED)
+#define R_INTERPRETER_CONSTRUCTOR_INCLUDED
+
+#include "R/ForeignProcedure.h"
 #include "R/Object.h"
 #include "R/Value.h"
 #include "R/Interpreter/Include.h"
 
-Rex_declareObjectType("R.Procedure", R_Procedure, "R.Object");
+Rex_declareObjectType("R.Interpreter.Constructor", R_Interpreter_Constructor, "R.Object");
 
-struct R_Procedure {
+struct R_Interpreter_Constructor {
   R_Object _parent;
-  R_Interpreter_Code* code;
+  /// R_BooleanValue_True indicates that code is invalid and foreignProcedure points to a foreign procedure of this method.
+  /// R_BooleanValue_False indicates that foreignProcedure is invalid and code points to the code of this method.
+  R_BooleanValue isForeign;
+  union {
+    R_ForeignProcedureValue foreignProcedure;
+    R_Interpreter_Code* code;
+  };
 };
 
-R_Procedure*
-R_Procedure_create
+R_Interpreter_Constructor*
+R_Interpreter_Constructor_createForeign
+  (
+    R_ForeignProcedureValue foreignProcedure
+  );
+
+R_Interpreter_Constructor*
+R_Interpreter_Constructor_create
   (
     R_Interpreter_Code* code
   );
 
 R_Interpreter_Code*
-R_Procedure_getCode
+R_Interpreter_Constructor_getCode
   (
-    R_Procedure* self
+    R_Interpreter_Constructor* self
   );
 
-#endif // R_PROCEDURE_H_INCLUDED
+#endif // R_INTERPRETER_CONSTRUCTOR_INCLUDED

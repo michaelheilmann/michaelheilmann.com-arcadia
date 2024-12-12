@@ -19,29 +19,6 @@
 #include "R/Status.h"
 #include "R/ArmsIntegration.h"
 
-R_BooleanValue
-R_allocateUnmanaged_nojump
-  (
-    void** p,
-    R_SizeValue n
-  )
-{ return R_Arms_allocateUnmanaged_nojump(p, n); }
-
-R_BooleanValue
-R_deallocateUnmanaged_nojump
-  (
-    void* p
-  )
-{ return R_Arms_deallocateUnmanaged_nojump(p); }
-
-R_BooleanValue
-R_reallocateUnmanaged_nojump
-  (
-    void** p,
-    R_SizeValue n
-  )
-{ return R_Arms_reallocateUnmanaged_nojump(p, n); }
-
 void
 R_DynamicArrayUtilities_ensureFreeCapacity1
   (

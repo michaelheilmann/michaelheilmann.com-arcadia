@@ -15,7 +15,7 @@
 
 // Last modified: 2024-09-26
 
-#include "R/ToNumber/Include.h"
+#include "R/StringToNumber/Include.h"
 
 #include "R/JumpTarget.h"
 #include "R/Status.h"
@@ -122,6 +122,80 @@ isExponentPrefix
 {
   return ('e' == state->symbol)
       || ('E' == state->symbol);
+}
+
+static R_BooleanValue
+is
+  (
+    State* state,
+    uint32_t x
+  )
+{ return x == state->symbol; }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static R_BooleanValue
+toBoolean
+  (
+    State* state
+  );
+
+static R_BooleanValue
+toBoolean
+  (
+    State* state
+  )
+{
+#if 0
+ // Precondition prevents that.
+  if (CodePoint_Start != state->symbol) {
+    R_setStatus(R_Status_ConversionFailed);
+    R_jump();
+  }
+#endif
+#define check(x) \
+  if (!is(state, (x))) { \
+    R_setStatus(R_Status_ConversionFailed); \
+    R_jump(); \
+  } \
+  next(state);
+
+  next(state);
+  if (is(state, 't')) {
+    next(state);
+    check('r');
+    check('u');
+    check('e');
+    check(CodePoint_End);
+    return R_BooleanValue_True;
+  } else if (is(state, 'f')) {
+    next(state);
+    check('a');
+    check('l');
+    check('s');
+    check('e');
+    check(CodePoint_End);
+    return R_BooleanValue_False;
+  } else {
+    R_setStatus(R_Status_ConversionFailed);
+    R_jump();
+  }
+#undef check
+}
+
+R_BooleanValue
+R_toBoolean
+  (
+    char const* p,
+    size_t n
+  )
+{ 
+  State state;
+  state.start = p;
+  state.end = p + n;
+  state.current = p;
+  state.symbol = CodePoint_Start;
+  return toBoolean(&state);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -523,3 +597,58 @@ R_toNatural64
   state.symbol = CodePoint_Start;
   return toNatural64(&state);
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+static R_BooleanValue
+toVoid
+  (
+    State* state
+  );
+
+static R_BooleanValue
+toVoid
+  (
+    State* state
+  )
+{
+#if 0
+ // Precondition prevents that.
+  if (CodePoint_Start != state->symbol) {
+    R_setStatus(R_Status_ConversionFailed);
+    R_jump();
+  }
+#endif
+#define check(x) \
+  if (!is(state, (x))) { \
+    R_setStatus(R_Status_ConversionFailed); \
+    R_jump(); \
+  } \
+  next(state);
+
+  next(state);
+  check('v');
+  check('o');
+  check('i');
+  check('d');
+  check(CodePoint_End);
+  return R_VoidValue_Void;
+#undef check
+}
+
+R_VoidValue
+R_toVoid
+  (
+    char const* p,
+    size_t n
+  )
+{
+  State state;
+  state.start = p;
+  state.end = p + n;
+  state.current = p;
+  state.symbol = CodePoint_Start;
+  return toVoid(&state);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

@@ -52,6 +52,7 @@ typedef struct R_Type_Operations {
   void (*notEqualTo)(R_Value* target, R_Value const* self, R_Value const* other);
   void (*or )(R_Value* target, R_Value const* self, R_Value const* other);
   void (*subtract)(R_Value* target, R_Value const* self, R_Value const* other);
+  void (*toString)(R_Value* target, R_Value const* self);
 } R_Type_Operations;
 
 /// @brief Type of a visti callback function.

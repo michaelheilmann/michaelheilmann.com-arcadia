@@ -20,7 +20,7 @@
 
 #include "R/Value.h"
 typedef struct R_Interpreter_Code R_Interpreter_Code;
-typedef struct R_Procedure R_Procedure;
+typedef struct R_Interpreter_Procedure R_Interpreter_Procedure;
 
 /// The thread state consists
 /// - registers (at least 256)
@@ -108,7 +108,7 @@ struct R_CallState {
   R_Natural32Value instructionIndex;
   union {
     /// Pointer to the procedure to be called.
-    R_Procedure* procedure;
+    R_Interpreter_Procedure* procedure;
     /// Pointer to the foreign procedure to be called.
     R_ForeignProcedureValue foreignProcedure;
   };
@@ -128,7 +128,7 @@ R_Interpreter_ThreadState_beginProcedureCall
   (
     R_Interpreter_ThreadState* thread,
     R_Natural32Value instructionIndex,
-    R_Procedure* procedure
+    R_Interpreter_Procedure* procedure
   );
 
 /// calls@new = [...] and calls@old = [x,...]

@@ -78,7 +78,7 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Cil.StringTable", R_Mil_StringTable, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType("R.Mil.StringTable", R_Mil_StringTable, "R.Object", R_Object, &_typeOperations);
 
 static void
 R_Mil_StringTable_constructImpl

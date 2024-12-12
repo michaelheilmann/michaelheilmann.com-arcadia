@@ -21,19 +21,19 @@
 #include "R/Mil/TokenType.h"
 
 /// @code
-/// class Cil.Scanner
+/// class R.Mil.Scanner
 /// @endcode
-Rex_declareObjectType("Cil.Scanner", R_Mil_Scanner, "R.Object");
+Rex_declareObjectType("R.Mil.Scanner", R_Mil_Scanner, "R.Object");
 
-/// @brief Create a CIL scanner.
-/// @return A pointer to this CIL scanner.
+/// @brief Create a MIL scanner.
+/// @return A pointer to this MIL scanner.
 R_Mil_Scanner*
 R_Mil_Scanner_create
   (
   );
 
 /// @brief Get the text of the token.
-/// @param self A pointer to this CIL scanner.
+/// @param self A pointer to this MIL scanner.
 /// @return The text of the token.
 R_String*
 R_Mil_Scanner_getTokenText
@@ -42,7 +42,7 @@ R_Mil_Scanner_getTokenText
   );
 
 /// @brief Get the type of the token.
-/// @param self A pointer to this CIL scanner.
+/// @param self A pointer to this MIL scanner.
 /// @return The type of the token.
 R_Natural32Value
 R_Mil_Scanner_getTokenType
@@ -51,7 +51,7 @@ R_Mil_Scanner_getTokenType
   );
 
 /// @brief Move to next token.
-/// @param self A pointer to this CIL scanner.
+/// @param self A pointer to this MIL scanner.
 void
 R_Mil_Scanner_step
   (
@@ -59,7 +59,7 @@ R_Mil_Scanner_step
   );
 
 /// @brief Set the input.
-/// @param self A pointer to this CIL scanner.
+/// @param self A pointer to this MIL scanner.
 /// @param input A pointer to the UTF8 reader.
 void
 R_Mil_Scanner_setInput

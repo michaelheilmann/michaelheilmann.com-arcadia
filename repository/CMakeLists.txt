@@ -33,6 +33,8 @@ endif()
 add_subdirectory(Arms1)
 add_subdirectory(R1)
 
+add_subdirectory(Integrations)
+
 add_subdirectory(Engine.Demo)
 
 add_subdirectory(Tools.ConcatenateFiles)

@@ -15,9 +15,10 @@
 
 // Last modified: 2024-09-26
 
-#if !defined(R_TONUMBER_COMMON_H_INCLUDED)
-#define R_TONUMBER_COMMON_H_INCLUDED
+#if !defined(R_TONUMBER_INCLUDE_H_INCLUDED)
+#define R_TONUMBER_INCLUDE_H_INCLUDED
 
+#include "R/Boolean.h"
 #include "R/Integer16.h"
 #include "R/Integer32.h"
 #include "R/Integer64.h"
@@ -28,6 +29,16 @@
 #include "R/Natural8.h"
 #include "R/Real32.h"
 #include "R/Real64.h"
+#include "R/Void.h"
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+R_BooleanValue
+R_toBoolean
+  (
+    char const* p,
+    size_t n
+  );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -91,4 +102,13 @@ R_toNatural64
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_TONUMBER_COMMON_H_INCLUDED
+R_VoidValue
+R_toVoid
+  (
+    char const* p,
+    size_t n
+  );
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+#endif // R_TONUMBER_INCLUDE_H_INCLUDED

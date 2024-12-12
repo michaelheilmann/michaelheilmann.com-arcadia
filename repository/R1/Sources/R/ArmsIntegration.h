@@ -69,7 +69,7 @@ R_Arms_registerType_nojump
 /// - R_Status_TypeNotExists if the type does not exist.
 /// - R_Status_ArgumentInvalid if @a p or @a name is a null pointer.
 R_BooleanValue
-R_Arms_allocate_nojump
+R_allocate_nojump
   (
     void** p,
     char const* name,
@@ -82,7 +82,7 @@ R_Arms_allocate_nojump
 /// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
 /// If the allocation failed, then #R_Status_AllocationFailed is assigned.
 R_BooleanValue
-R_Arms_allocateUnmanaged_nojump
+R_allocateUnmanaged_nojump
   (
     void** p,
     R_SizeValue n
@@ -93,7 +93,7 @@ R_Arms_allocateUnmanaged_nojump
 /// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
 /// If the allocation failed, then #R_Status_AllocationFailed is assigned.
 R_BooleanValue
-R_Arms_deallocateUnmanaged_nojump
+R_deallocateUnmanaged_nojump
   (
     void* p
   );
@@ -103,7 +103,7 @@ R_Arms_deallocateUnmanaged_nojump
 /// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
 /// If the allocation failed, then #R_Status_AllocationFailed is assigned.
 R_BooleanValue
-R_Arms_reallocateUnmanaged_nojump
+R_reallocateUnmanaged_nojump
   (
     void** p,
     R_SizeValue n

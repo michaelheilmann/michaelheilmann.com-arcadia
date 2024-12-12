@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-22
+# Last modified: 2024-09-16
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -23,8 +23,9 @@ if (NOT MyProjectIsDefined)
   endif()
   project(${MyProjectName})
   enable_testing()
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
   include(FetchContent)
-  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../..)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
   set(MyProjectIsDefined)
 endif()
@@ -32,22 +33,17 @@ endif()
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
 
-set(MyTestName ${MyProjectName}.R.Mil.Tests.SemanticalAnalysis)
+set(MyTargetName Integrations.Apache)
+add_executable(${MyTargetName})
+BeginProduct(${MyTargetName})
 
-if (NOT TARGET ${MyTestName})
-  add_executable(${MyTestName})
-  BeginProduct(${MyTestName})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h @ONLY)
 
-  add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+list(APPEND ${MyTargetName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Main.c)
+list(APPEND ${MyTargetName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Mil/Tests/SemanticalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Mil/Tests/SemanticalAnalysis/Configure.h @ONLY)
+target_link_libraries(${MyTargetName} Arcadia.R Arcadia.Arms)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Mil/Tests/SemanticalAnalysis/Main.c)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Mil/Tests/SemanticalAnalysis/Configure.h)
+set_target_properties(${MyTargetName} PROPERTIES OUTPUT_NAME "arcadia")
 
-  target_link_libraries(${MyTestName} Arcadia.R Arcadia.Arms)
-
-  set_target_properties(${MyTestName} PROPERTIES FOLDER "R")
-
-  EndProduct(${MyTestName} executable)
-endif()
+EndProduct(${MyTargetName} executable)

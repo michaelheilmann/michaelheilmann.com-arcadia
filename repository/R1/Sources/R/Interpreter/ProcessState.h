@@ -18,7 +18,8 @@
 #if !defined(R_INTERPRETER_PROCESSSTATE_H_INCLUDED)
 #define R_INTERPRETER_PROCESSSTATE_H_INCLUDED
 
-#include "R/Procedure.h"
+#include "R/Interpreter/Class.h"
+#include "R/Interpreter/Procedure.h"
 #include "R/String.h"
 #include "R/Interpreter/Instruction.h"
 
@@ -54,34 +55,30 @@ R_Interpreter_ProcessState_visit
 
 /**
  * @brief Define a global procedure.
- * @param name The name of the procedure.
- * @param code The code of the procedure.
- * @error R_Status_ArgumentValueInvalid @a name is a null pointer
- * @error R_Status_ArgumentValueInvalid @a code is a null pointer
+ * @param procedure The procedure.
+ * @error R_Status_ArgumentValueInvalid @a procedure is a null pointer
+ * @error R_Status_ArgumentValueInvalid a class or procedure of that name already exists
  * @error R_Status_AllocationFailed an allocation failed
  */
 void
 R_Interpreter_ProcessState_defineGlobalProcedure
   (
     R_Interpreter_ProcessState* self,
-    R_String* name,
-    R_Procedure* code
+    R_Interpreter_Procedure* procedure
   );
 
 /**
- * @brief Define a global foreign procedure.
- * @param name The name of the foreign procedure.
- * @param code The code of the foreign procedure.
- * @error R_Status_ArgumentValueInvalid @a name is a null pointer
- * @error R_Status_ArgumentValueInvalid @a code is a null pointer
+ * @brief Define a global class.
+ * @param class The class.
+ * @error R_Status_ArgumentValueInvalid @a class is a null pointer
+ * @error R_Status_ArgumentValueInvalid a class or procedure of that name already exists
  * @error R_Status_AllocationFailed an allocation failed
  */
 void
-R_Interpreter_ProcessState_defineGlobalForeignProcedure
+R_Interpreter_ProcessState_defineGlobalClass
   (
     R_Interpreter_ProcessState* self,
-    R_String* name,
-    R_ForeignProcedureValue code
+    R_Interpreter_Class* class
   );
 
 /**

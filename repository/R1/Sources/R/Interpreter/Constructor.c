@@ -13,19 +13,20 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-11-21
+// Last modified: 2024-12-12
 
-#include "R/Procedure.h"
+#include "R/Interpreter/Constructor.h"
 
 #include "R/JumpTarget.h"
 #include "R/Object.h"
 #include "R/Status.h"
+#include "R/ArgumentsValidation.h"
 #include "R/UnmanagedMemory.h"
 #include "R/Interpreter/Code.h"
 #include "R/cstdlib.h"
 
 static void
-R_Procedure_constructImpl
+R_Interpreter_Constructor_constructImpl
   (
     R_Value* self,
     R_SizeValue numberOfArgumentValues,
@@ -33,15 +34,15 @@ R_Procedure_constructImpl
   );
 
 static void
-R_Procedure_visit
+R_Interpreter_Constructor_visit
   (
-    R_Procedure* self
+    R_Interpreter_Constructor* self
   );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
-  .construct = &R_Procedure_constructImpl,
+  .construct = &R_Interpreter_Constructor_constructImpl,
   .destruct = NULL,
-  .visit = &R_Procedure_visit,
+  .visit = &R_Interpreter_Constructor_visit,
 };
 
 static const R_Type_Operations _typeOperations = {
@@ -64,18 +65,18 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("R.Procedure", R_Procedure, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType("R.Interpreter.Constructor", R_Interpreter_Constructor, "R.Object", R_Object, &_typeOperations);
 
 static void
-R_Procedure_constructImpl
+R_Interpreter_Constructor_constructImpl
   (
     R_Value* self,
     R_SizeValue numberOfArgumentValues,
     R_Value const* argumentValues
   )
 {
-  R_Procedure* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _R_Procedure_getType();
+  R_Interpreter_Constructor* _self = R_Value_getObjectReferenceValue(self);
+  R_Type* _type = _R_Interpreter_Constructor_getType();
   {
     R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
     R_Object_constructImpl(self, 0, &argumentValues[0]);
@@ -84,37 +85,55 @@ R_Procedure_constructImpl
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_Interpreter_Code_getType())) {
+  if (R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_ForeignProcedureValue_getType())) {
+    _self->isForeign = R_BooleanValue_True;
+    _self->foreignProcedure = R_Value_getForeignProcedureValue(&argumentValues[0]);
+  } else if (R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_Interpreter_Code_getType())) {
+    _self->isForeign = R_BooleanValue_False;
+    _self->code = R_Value_getObjectReferenceValue(&argumentValues[0]);
+  } else {
     R_setStatus(R_Status_ArgumentTypeInvalid);
     R_jump();
   }
-  _self->code = R_Value_getObjectReferenceValue(&argumentValues[0]);
   R_Object_setType((R_Object*)_self, _type);
 }
 
 static void
-R_Procedure_visit
+R_Interpreter_Constructor_visit
   (
-    R_Procedure* self
+    R_Interpreter_Constructor* self
   )
 {
-  R_Object_visit(self->code);
+  if (!self->isForeign) {
+    R_Object_visit(self->code);
+  }
 }
 
-R_Procedure*
-R_Procedure_create
+R_Interpreter_Constructor*
+R_Interpreter_Constructor_createForeign
+  (
+    R_ForeignProcedureValue foreignProcedure
+  )
+{
+  R_Value argumentValues[] = { {.tag = R_ValueTag_ForeignProcedure, .foreignProcedureValue = foreignProcedure } };
+  R_Interpreter_Constructor* self = R_allocateObject(_R_Interpreter_Constructor_getType(), 1, &argumentValues[0]);
+  return self;
+}
+
+R_Interpreter_Constructor*
+R_Interpreter_Constructor_create
   (
     R_Interpreter_Code* code
   )
 {
   R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = code } };
-  R_Procedure* self = R_allocateObject(_R_Procedure_getType(), 1, &argumentValues[0]);
+  R_Interpreter_Constructor* self = R_allocateObject(_R_Interpreter_Constructor_getType(), 1, &argumentValues[0]);
   return self;
 }
 
 R_Interpreter_Code*
-R_Procedure_getCode
+R_Interpreter_Constructor_getCode
   (
-    R_Procedure* self
+    R_Interpreter_Constructor* self
   )
 { return self->code; }

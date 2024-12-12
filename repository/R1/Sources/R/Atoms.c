@@ -17,6 +17,7 @@
 
 #include "R/Atoms.h"
 
+#include "R/ArmsIntegration.h"
 #include "R/getTickCount.h"
 #include "R/Integer32.h"
 #include "R/JumpTarget.h"

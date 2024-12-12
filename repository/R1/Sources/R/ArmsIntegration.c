@@ -223,7 +223,7 @@ R_Arms_registerType_nojump
 }
 
 R_BooleanValue
-R_Arms_allocate_nojump
+R_allocate_nojump
   (
     void** p,
     char const* name,
@@ -259,7 +259,7 @@ R_Arms_allocate_nojump
 }
 
 R_BooleanValue
-R_Arms_allocateUnmanaged_nojump
+R_allocateUnmanaged_nojump
   (
     void** p,
     R_SizeValue n
@@ -280,7 +280,7 @@ R_Arms_allocateUnmanaged_nojump
 }
 
 R_BooleanValue
-R_Arms_deallocateUnmanaged_nojump
+R_deallocateUnmanaged_nojump
   (
     void* p
   )
@@ -298,7 +298,7 @@ R_Arms_deallocateUnmanaged_nojump
 }
 
 R_BooleanValue
-R_Arms_reallocateUnmanaged_nojump
+R_reallocateUnmanaged_nojump
   (
     void** p,
     R_SizeValue n

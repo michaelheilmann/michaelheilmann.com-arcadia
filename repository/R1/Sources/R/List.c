@@ -17,6 +17,7 @@
 
 #include "R/List.h"
 
+#include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/Object.h"
 #include "R/Status.h"

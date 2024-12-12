@@ -59,3 +59,53 @@ void* c_realloc(void* ptr, size_t new_size) {
 void c_free(void* ptr) {
   free(ptr);
 }
+
+#include <stdint.h>
+
+#if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
+  #include <intrin.h>
+#endif
+
+bool c_safe_add_sz(size_t a, size_t b, size_t* r) {
+  #if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
+    #if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_Unknown_X64
+      static_assert(SIZE_MAX == UINT64_MAX && sizeof(size_t) == sizeof(uint64_t), "environment not (yet) supported");
+      size_t t = _umul128(a, b, r);
+      return 0 != t;
+    #elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_Unknown_X32
+      static_assert(SIZE_MAX == UINT32_MAX && sizeof(size_t) == sizeof(uint32_t), "environment not (yet) supported");
+      int64_t t = a * b;
+      *r = (size_t)t;
+      return t > SIZE_MAX;
+    #else
+      #error ("environemnt not (yet) supported");
+    #endif
+  #else
+    // This builtin function returns false if there was no overflow and true if there was an overflow.
+    return __builtin_add_overflow(a, b, result);
+  #endif
+}
+
+bool c_safe_mul_sz(size_t a, size_t b, size_t* r) {
+  #if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
+    #if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_Unknown_X64
+      static_assert(SIZE_MAX == UINT64_MAX && sizeof(size_t) == sizeof(uint64_t), "environment not (yet) supported");
+      size_t t = _umul128(a, b, r);
+      return 0 != t;
+    #elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_Unknown_X32
+      static_assert(SIZE_MAX == UINT32_MAX && sizeof(size_t) == sizeof(uint32_t), "environment not (yet) supported");
+      int64_t t = a * b;
+      *r = (size_t)t;
+      return t > SIZE_MAX;
+    #else
+      #error ("environemnt not (yet) supported");
+    #endif
+  #else
+    // This builtin function returns false if there was no overflow and true if there was an overflow.
+    return __builtin_mul_overflow(a, b, result);
+  #endif
+}
+
+size_t c_strlen(const char* w) {
+  return strlen(w);
+}

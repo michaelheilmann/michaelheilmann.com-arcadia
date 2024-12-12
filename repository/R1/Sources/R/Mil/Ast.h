@@ -31,7 +31,7 @@ typedef struct R_Mil_StatementAst R_Mil_StatementAst;
 /// @code
 /// module : definition*
 /// @endcode
-Rex_declareObjectType("Mil.ModuleAst", R_Mil_ModuleAst, "R.Object");
+Rex_declareObjectType("R.Mil.ModuleAst", R_Mil_ModuleAst, "R.Object");
 
 struct R_Mil_ModuleAst {
   R_Object _parent;
@@ -66,9 +66,9 @@ R_Mil_ModuleAst_getDefinitionAt
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.OperandAst
+/// class R.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Mil.OperandAst", R_Mil_OperandAst, "R.Object");
+Rex_declareObjectType("R.Mil.OperandAst", R_Mil_OperandAst, "R.Object");
 
 struct R_Mil_OperandAst {
   R_Object _parent;
@@ -77,9 +77,9 @@ struct R_Mil_OperandAst {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.BooleanLiteralOperandAst extends Mil.OperandAst
+/// class R.Mil.BooleanLiteralOperandAst extends R.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Mil.BooleanConstantOperandAst", R_Mil_BooleanLiteralOperandAst, "Mil.OperandAst");
+Rex_declareObjectType("R.Mil.BooleanConstantOperandAst", R_Mil_BooleanLiteralOperandAst, "R.Mil.OperandAst");
 
 struct R_Mil_BooleanLiteralOperandAst {
   R_Mil_OperandAst parent;
@@ -95,9 +95,9 @@ R_Mil_BooleanLiteralOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.NumberLiteralOperandAst extends Mil.OperandAst
+/// class R.Mil.NumberLiteralOperandAst extends R.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Mil.NumberLiteralOperandAst", R_Mil_NumberLiteralOperandAst, "Mil.OperandAst");
+Rex_declareObjectType("R.Mil.NumberLiteralOperandAst", R_Mil_NumberLiteralOperandAst, "R.Mil.OperandAst");
 
 struct R_Mil_NumberLiteralOperandAst {
   R_Mil_OperandAst parent;
@@ -113,9 +113,9 @@ R_Mil_NumberLiteralOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.StringLiteralOperandAst extends Mil.OperandAst
+/// class R.Mil.StringLiteralOperandAst extends R.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Mil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, "Mil.OperandAst");
+Rex_declareObjectType("R.Mil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, "R.Mil.OperandAst");
 
 struct R_Mil_StringLiteralOperandAst {
   R_Mil_OperandAst parent;
@@ -131,9 +131,9 @@ R_Mil_StringLiteralOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.VariableOperandAst extends Mil.OperandAst
+/// class R.Mil.VariableOperandAst extends R.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Mil.VariableOperandAst", R_Mil_VariableOperandAst, "Mil.OperandAst");
+Rex_declareObjectType("R.Mil.VariableOperandAst", R_Mil_VariableOperandAst, "R.Mil.OperandAst");
 
 struct R_Mil_VariableOperandAst {
   R_Mil_OperandAst parent;
@@ -149,9 +149,9 @@ R_Mil_VariableOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.VoidLiteralOperandAst extends Mil.OperandAst
+/// class R.Mil.VoidLiteralOperandAst extends R.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType("Mil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandAst, "Mil.OperandAst");
+Rex_declareObjectType("R.Mil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandAst, "R.Mil.OperandAst");
 
 struct R_Mil_VoidLiteralOperandAst {
   R_Mil_OperandAst parent;
@@ -167,9 +167,9 @@ R_Mil_VoidLiteralOperandAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.ExpressionAst
+/// class R.Mil.ExpressionAst
 /// @endcode
-Rex_declareObjectType("Mil.ExpressionAst", R_Mil_ExpressionAst, "R.Object");
+Rex_declareObjectType("R.Mil.ExpressionAst", R_Mil_ExpressionAst, "R.Object");
 
 struct R_Mil_ExpressionAst {
   R_Object _parent;
@@ -178,13 +178,13 @@ struct R_Mil_ExpressionAst {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.UnaryExpressionAst extends Mil.ExpressionAst
+/// class R.Mil.UnaryExpressionAst extends R.Mil.ExpressionAst
 /// @endcode
 /// Represents an unary epxression like
-//// @code
+/// @code
 /// invoke variableOperand '(' (operand (',' operand)*)? ')'
 /// @endcode
-Rex_declareObjectType("Mil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, "Mil.ExpressionAst");
+Rex_declareObjectType("R.Mil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, "R.Mil.ExpressionAst");
 
 struct R_Mil_InvokeExpressionAst {
   R_Mil_ExpressionAst parent;
@@ -209,13 +209,13 @@ enum R_Mil_UnaryExpressionAstType {
 };
 
 /// @code
-/// class Mil.UnaryExpressionAst extends Mil.ExpressionAst
+/// class R.Mil.UnaryExpressionAst extends R.Mil.ExpressionAst
 /// @endcode
 /// Represents an unary epxression like
-//// @code
+/// @code
 /// (negate|not) <operand1>
 /// @endcode
-Rex_declareObjectType("Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, "Mil.ExpressionAst");
+Rex_declareObjectType("R.Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, "R.Mil.ExpressionAst");
 
 struct R_Mil_UnaryExpressionAst {
   R_Mil_ExpressionAst parent;
@@ -245,13 +245,13 @@ enum R_Mil_BinaryExpressionAstType {
 };
 
 /// @code
-/// class Mil.BinaryOperationExpressionAst extends Mil.ExpressionAst
+/// class R.Mil.BinaryOperationExpressionAst extends R.Mil.ExpressionAst
 /// @endcode
 /// Represents a binary operations like
-//// @code
+/// @code
 /// (add|and|divide|subtract|multiply|or) <operand1> <operand2>
 /// @endcode
-Rex_declareObjectType("Mil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, "Mil.ExpressionAst");
+Rex_declareObjectType("R.Mil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, "R.Mil.ExpressionAst");
 
 struct R_Mil_BinaryExpressionAst {
   R_Mil_ExpressionAst parent;
@@ -271,13 +271,13 @@ R_Mil_BinaryExpressionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.LoadExpressionAst extends Mil.ExpressionAst
+/// class R.Mil.LoadExpressionAst extends R.Mil.ExpressionAst
 /// @endcode
 /// Represents a load expression
 /// @code
 /// BooleanLiteral | NumberLiteral | StringLiteral | VariableName
 /// @endcode
-Rex_declareObjectType("Mil.LiteralExpressionAst", R_Mil_LoadExpressionAst, "Mil.ExpressionAst");
+Rex_declareObjectType("R.Mil.LiteralExpressionAst", R_Mil_LoadExpressionAst, "R.Mil.ExpressionAst");
 
 struct R_Mil_LoadExpressionAst {
   R_Mil_ExpressionAst parent;
@@ -293,9 +293,9 @@ R_Mil_LoadExpressionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.StatementAst
+/// class R.Mil.StatementAst
 /// @endcode
-Rex_declareObjectType("Mil.StatementAst", R_Mil_StatementAst, "R.Object");
+Rex_declareObjectType("R.Mil.StatementAst", R_Mil_StatementAst, "R.Object");
 
 struct R_Mil_StatementAst {
   R_Object _parent;
@@ -304,10 +304,10 @@ struct R_Mil_StatementAst {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.ExpressionStatementAst extends Mil.Statement
+/// class R.Mil.ExpressionStatementAst extends R.Mil.Statement
 /// @endcode
 /// Represents
-Rex_declareObjectType("Mil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, "Mil.StatementAst");
+Rex_declareObjectType("R.Mil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, "R.Mil.StatementAst");
 
 struct R_Mil_ExpressionStatementAst {
   R_Mil_StatementAst parent;
@@ -315,8 +315,8 @@ struct R_Mil_ExpressionStatementAst {
   R_Mil_ExpressionAst* expression;
 };
 
-/// @brief Create a CIL expression statement AST.
-/// @return A pointer to this CIL expression statement ASt.
+/// @brief Create a Mil expression statement AST.
+/// @return A pointer to this Mil expression statement ASt.
 R_Mil_ExpressionStatementAst*
 R_Mil_ExpressionStatementAst_create
   (
@@ -345,13 +345,13 @@ R_Mil_ExpressionStatementAst_getExpression
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.LabelStatementAst extends Mil.Statement
+/// class R.Mil.LabelStatementAst extends R.Mil.Statement
 /// @endcode
 /// Represents
 /// @code
 /// name ':'
 /// @endcode
-Rex_declareObjectType("Mil.LabelStatementAst", R_Mil_LabelStatementAst, "Mil.StatementAst");
+Rex_declareObjectType("R.Mil.LabelStatementAst", R_Mil_LabelStatementAst, "R.Mil.StatementAst");
 
 struct R_Mil_LabelStatementAst {
   R_Mil_StatementAst parent;
@@ -369,21 +369,21 @@ R_Mil_LabelStatementAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.ReturnStatementAst extends Mil.Statement
+/// class R.Mil.ReturnStatementAst extends R.Mil.Statement
 /// @endcode
 /// Represents
 /// @code
 /// 'return' (BooleanLiteral | NumberLiteral | StringLiteral | VariableName)
 /// @endcode
-Rex_declareObjectType("Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, "Mil.StatementAst");
+Rex_declareObjectType("R.Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, "R.Mil.StatementAst");
 
 struct R_Mil_ReturnStatementAst {
   R_Mil_StatementAst parent;
   R_Mil_OperandAst* operand;
 };
 
-/// @brief Create a CIL return statement AST.
-/// @return A pointer to this CIL return statement AST.
+/// @brief Create a Mil return statement AST.
+/// @return A pointer to this Mil return statement AST.
 R_Mil_ReturnStatementAst*
 R_Mil_ReturnStatementAst_create
   (
@@ -393,9 +393,9 @@ R_Mil_ReturnStatementAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.DefinitionAst extends R.Object
+/// class R.Mil.DefinitionAst extends R.Object
 /// @endcode
-Rex_declareObjectType("Mil.DefinitionAst", R_Mil_DefinitionAst, "R.Object");
+Rex_declareObjectType("R.Mil.DefinitionAst", R_Mil_DefinitionAst, "R.Object");
 
 struct R_Mil_DefinitionAst {
   R_Object _parent;
@@ -404,14 +404,15 @@ struct R_Mil_DefinitionAst {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.ProcedureDefinitionAst extends Mil.DefinitionAst
+/// class R.Mil.ProcedureDefinitionAst extends R.Mil.DefinitionAst
 /// @endcode
 /// Represents
 /// @code
-/// procedureDefinition : 'procedure' 'entry'? ('native' string)? name procedureParameters procedureBody
+/// procedureDefinition : 'procedure' 'entry'? ('native' string)? name procedureParameters
+///                     | 'procedure' 'entry'? name procedureParameters procedureBody
 /// procedureBody : '{' statements '}'
 /// @endcode
-Rex_declareObjectType("Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, "R.Object");
+Rex_declareObjectType("R.Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, "R.Object");
 
 struct R_Mil_ProcedureDefinitionAst {
   R_Mil_DefinitionAst _parent;
@@ -437,7 +438,7 @@ R_Mil_ProcedureDefinitionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class Mil.ClassDefinitionAst extends Mil.DefinitionAst {
+/// class R.Mil.ClassDefinitionAst extends R.Mil.DefinitionAst {
 ///   construct(className:String, extendedClassName:String, classBody:List)
 /// }
 /// @endcode
@@ -446,7 +447,7 @@ R_Mil_ProcedureDefinitionAst_create
 /// classDefinition : 'class' name ('extends' name)? classBody
 /// classBody : '{' classMemberDefinition* '}'
 /// @endcode
-Rex_declareObjectType("Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, "Mil.DefinitionAst");
+Rex_declareObjectType("R.Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, "R.Mil.DefinitionAst");
 
 struct R_Mil_ClassDefinitionAst {
   R_Mil_DefinitionAst _parent;
@@ -467,7 +468,7 @@ R_Mil_ClassDefinitionAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, "Mil.DefinitionAst");
+Rex_declareObjectType("R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, "R.Mil.DefinitionAst");
 
 struct R_Mil_ClassMemberDefinitionAst {
   R_Mil_DefinitionAst _parent;
@@ -475,10 +476,11 @@ struct R_Mil_ClassMemberDefinitionAst {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, "Mil.ClassMemberDefinitionAst");
+Rex_declareObjectType("R.Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, "R.Mil.ClassMemberDefinitionAst");
 
 struct R_Mil_MethodDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;
+  R_String* nativeName;
   R_String* methodName;
   R_List* methodParameters;
   R_List* methodBody;
@@ -487,6 +489,7 @@ struct R_Mil_MethodDefinitionAst {
 R_Mil_MethodDefinitionAst*
 R_Mil_MethodDefinitionAst_create
   (
+    R_String* nativeName,
     R_String* methodName,
     R_List* methodParameters,
     R_List* methodBody
@@ -494,10 +497,11 @@ R_Mil_MethodDefinitionAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, "Mil.ClassMemberDefinitionAst");
+Rex_declareObjectType("R.Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, "R.Mil.ClassMemberDefinitionAst");
 
 struct R_Mil_ConstructorDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;
+  R_String* nativeName;
   R_List* constructorParameters;
   R_List* constructorBody;
 };
@@ -505,13 +509,14 @@ struct R_Mil_ConstructorDefinitionAst {
 R_Mil_ConstructorDefinitionAst*
 R_Mil_ConstructorDefinitionAst_create
   (
+    R_String* nativeName,
     R_List* constructorParameters,
     R_List* constructorBody
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("Mil.VariableDefinitionAst", R_Mil_VariableDefinitionAst, "Mil.ClassMemberDefinitionAst");
+Rex_declareObjectType("R.Mil.VariableDefinitionAst", R_Mil_VariableDefinitionAst, "R.Mil.ClassMemberDefinitionAst");
 
 struct R_Mil_VariableDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;

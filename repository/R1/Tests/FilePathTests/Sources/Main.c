@@ -18,6 +18,7 @@
 #include <stdlib.h>
 
 #include "R.h"
+#include <string.h>
 
 /// @todo Add to R's test utilities.
 #define R_Test_assert(result) \
@@ -25,8 +26,6 @@
     R_setStatus(R_Status_TestFailed); \
     R_jump(); \
   }
-
-#include <string.h>
 
 static void checkNormalized(char const* p, char const* q) {
   R_FilePath* filePath = R_FilePath_parseNative(p, strlen(p));

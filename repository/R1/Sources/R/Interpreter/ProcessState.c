@@ -17,10 +17,13 @@
 
 #include "R/Interpreter/ProcessState.private.h"
 
+#include "R/ArmsIntegration.h"
+#include "R/Interpreter/Code/Constants.h"
 #include "R/JumpTarget.h"
 #include "R/Status.h"
 #include "R/Interpreter/ThreadState.h"
 #include "R/UnmanagedMemory.h"
+#include "R/Interpreter/Procedure.h"
 
 R_Interpreter_ProcessState*
 R_Interpreter_ProcessState_create
@@ -95,43 +98,41 @@ void
 R_Interpreter_ProcessState_defineGlobalProcedure
   (
     R_Interpreter_ProcessState* self,
-    R_String* name,
-    R_Procedure* code
+    R_Interpreter_Procedure* procedure
   )
 { 
-  if (!name || !code) {
+  if (!procedure) {
     R_setStatus(R_Status_ArgumentValueInvalid);
     R_jump();
   }
-  R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = name };
+  R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = procedure->procedureName };
   R_Value value = R_Map_get(self->globals, key);
   if (!R_Value_isVoidValue(&value)) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_setStatus(R_Status_Exists);
     R_jump();
   }
-  value = (R_Value){ .tag = R_ValueTag_ObjectReference, .objectReferenceValue = code };
+  value = (R_Value){ .tag = R_ValueTag_ObjectReference, .objectReferenceValue = procedure };
   R_Map_set(self->globals, key, value);
 }
 
 void
-R_Interpreter_ProcessState_defineGlobalForeignProcedure
+R_Interpreter_ProcessState_defineGlobalClass
   (
     R_Interpreter_ProcessState* self,
-    R_String* name,
-    R_ForeignProcedureValue code
+    R_Interpreter_Class* class
   )
-{ 
-  if (!name || !code) {
+{
+  if (!class) {
     R_setStatus(R_Status_ArgumentValueInvalid);
     R_jump();
   }
-  R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = name };
+  R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = class->className };
   R_Value value = R_Map_get(self->globals, key);
   if (!R_Value_isVoidValue(&value)) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
+    R_setStatus(R_Status_Exists);
     R_jump();
   }
-  value = (R_Value){ .tag = R_ValueTag_ObjectReference, .objectReferenceValue = code };
+  value = (R_Value){ .tag = R_ValueTag_ObjectReference, .objectReferenceValue = class };
   R_Map_set(self->globals, key, value);
 }
 

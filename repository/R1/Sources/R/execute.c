@@ -3,7 +3,7 @@
 #include "R/JumpTarget.h"
 #include "R/Status.h"
 #include "R/Types.h"
-#include "R/Procedure.h"
+#include "R/Interpreter/Procedure.h"
 #include "R/Interpreter/Include.h"
 #include "R/Interpreter/ThreadState.private.h" // TODO: Remove this.
 #include "R/Interpreter/Code.h"
@@ -123,8 +123,8 @@ execute1
           }
         } else if (R_Value_isObjectReferenceValue(&calleeValue)) {
           R_Object* object = R_Value_getObjectReferenceValue(&calleeValue);
-          if (R_Type_isSubType(R_Object_getType(object), _R_Procedure_getType())) {
-            R_Interpreter_ThreadState_beginProcedureCall(thread, 0, (R_Procedure*)object);
+          if (R_Type_isSubType(R_Object_getType(object), _R_Interpreter_Procedure_getType())) {
+            R_Interpreter_ThreadState_beginProcedureCall(thread, 0, (R_Interpreter_Procedure*)object);
           } else {
             R_setStatus(R_Status_ArgumentTypeInvalid);
             R_jump();
@@ -154,7 +154,7 @@ void
 R_executeProcedure
   (
     R_Interpreter_ProcessState* process,
-    R_Procedure* procedure
+    R_Interpreter_Procedure* procedure
   )
 {
   R_Interpreter_ThreadState_beginProcedureCall(R_Interpreter_ProcessState_getMainThread(process), 0, procedure);

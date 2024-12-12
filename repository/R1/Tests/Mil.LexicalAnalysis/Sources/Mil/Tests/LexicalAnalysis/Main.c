@@ -18,10 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "R.h"
-#include "R/Mil/Keywords.h"
-#include "R/Mil/StringTable.h"
-#include "R/Mil/Scanner.h"
-#include "R/Mil/Parser.h"
+#include "R/Mil/Include.h"
 
 static void
 expectAndNext

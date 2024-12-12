@@ -131,7 +131,7 @@ ensureFreeCapacityBytes
       R_jump();
     }
     R_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    if (!R_Arms_reallocateUnmanaged_nojump(&self->elements, newCapacity)) {
+    if (!R_reallocateUnmanaged_nojump(&self->elements, newCapacity)) {
       R_setStatus(R_Status_AllocationFailed);
       R_jump();
     }

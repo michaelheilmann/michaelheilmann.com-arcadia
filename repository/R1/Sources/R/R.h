@@ -66,7 +66,7 @@
 
 #include "R/Object.h"
 
-#include "R/Procedure.h"
+#include "R/Interpreter/Procedure.h"
 
 #include "R/Stack.h"
 

@@ -22,7 +22,7 @@
 #include "R/Status.h"
 #include "R/Types.h"
 #include "R/cstdlib.h"
-#include "R/Procedure.h"
+#include "R/Interpreter/Procedure.h"
 #include "R/String.h"
 
 static R_Value*

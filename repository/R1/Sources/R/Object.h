@@ -19,7 +19,9 @@
 #define R_OBJECT_H_INCLUDED
 
 #include "R/Types.h"
+typedef struct R_String R_String;
 typedef struct R_Value R_Value;
+
 
 typedef struct R_Object R_Object;
 R_Type* \
@@ -152,6 +154,12 @@ R_Object_notEqualTo
   (
     R_Object* self,
     R_Value const* other
+  );
+
+R_String*
+R_Object_toString
+  (
+    R_Object* self
   );
 
 #endif // R_OBJECT_H_INCLUDED

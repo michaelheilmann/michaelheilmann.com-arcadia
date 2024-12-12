@@ -91,7 +91,7 @@ TypeNodes_create
   )
 { 
   TypeNodes* typeNodes = NULL;
-  if (!R_Arms_allocateUnmanaged_nojump(&typeNodes, sizeof(TypeNodes))) {
+  if (!R_allocateUnmanaged_nojump(&typeNodes, sizeof(TypeNodes))) {
     return NULL;
   }
   typeNodes->typeNodes = NULL;
@@ -241,7 +241,7 @@ R_registerBooleanType
     }
   }
   TypeNode* typeNode = NULL;
-  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Boolean;
@@ -277,7 +277,7 @@ R_registerForeignValueType
     }
   }
   TypeNode* typeNode = NULL;
-  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_ForeignValue;
@@ -313,7 +313,7 @@ R_registerIntegerType
     }
   }
   TypeNode* typeNode = NULL;
-  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Integer;
@@ -349,7 +349,7 @@ R_registerNaturalType
     }
   }
   TypeNode* typeNode = NULL;
-  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Natural;
@@ -387,7 +387,7 @@ R_registerObjectType
     }
   }
   TypeNode* typeNode = NULL;
-  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Object;
@@ -424,7 +424,7 @@ R_registerRealType
     }
   }
   TypeNode* typeNode = NULL;
-  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Real;
@@ -460,7 +460,7 @@ R_registerSizeType
     }
   }
   TypeNode* typeNode = NULL;
-  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Size;
@@ -496,7 +496,7 @@ R_registerVoidType
     }
   }
   TypeNode* typeNode = NULL;
-  if (!R_Arms_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
     R_jump();
   }
   typeNode->kind = R_TypeKind_Void;

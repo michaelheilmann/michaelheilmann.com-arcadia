@@ -23,7 +23,7 @@
 #include "R/StringBuffer.h"
 #include "R/UnmanagedMemory.h"
 #include "R/Utf8.h"
-#include "R/ToNumber/Include.h"
+#include "R/StringToNumber/Include.h"
 #include "R/cstdlib.h"
 
 static void

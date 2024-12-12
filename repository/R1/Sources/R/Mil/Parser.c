@@ -611,7 +611,8 @@ onParameters
   return parameters;
 }
 
-// constructorDefinition : 'constructor' constructorParameters? constructorBody?
+// constructorDefinition : 'constructor' ('native' string)? constructorParameters? constructorBody?
+// constructorParameters = parameters
 static R_Mil_ConstructorDefinitionAst*
 onConstructorDefinition
   (
@@ -634,11 +635,12 @@ onConstructorDefinition
     next(self);
   }
   R_List* constructorParameters = onParameters(self);
-  R_List* constructorBody = R_List_create();
+  R_List* constructorBody = NULL;
   while (is(self, R_Mil_TokenType_LineTerminator)) {
     next(self);
   }
   if (is(self, R_Mil_TokenType_LeftCurlyBracket)) {
+    constructorBody = R_List_create();
     next(self);
     while (is(self, R_Mil_TokenType_LineTerminator)) {
       next(self);
@@ -662,11 +664,13 @@ onConstructorDefinition
       R_jump();
     }
   }
-  R_Mil_ConstructorDefinitionAst* constructorDefinitionAst = R_Mil_ConstructorDefinitionAst_create(constructorParameters, constructorBody);
+  R_Mil_ConstructorDefinitionAst* constructorDefinitionAst = R_Mil_ConstructorDefinitionAst_create(nativeName, constructorParameters, constructorBody);
   return constructorDefinitionAst;
 }
 
-// methodDefinition : 'method' methodName methodParameters? methodBody?
+// methodDefinition : 'method' ('native' string)? methodName methodParameters? methodBody?
+// methodParameters : '(' (name (',' name)*)? ')'
+// methodBody : '{' statements '}'
 static R_Mil_MethodDefinitionAst*
 onMethodDefinition
   (
@@ -695,11 +699,12 @@ onMethodDefinition
   R_String* methodName = getText(self);
   next(self);
   R_List* methodParameters = onParameters(self);
-  R_List* methodBody = R_List_create();
+  R_List* methodBody = NULL;
   while (is(self, R_Mil_TokenType_LineTerminator)) {
     next(self);
   }
   if (is(self, R_Mil_TokenType_LeftCurlyBracket)) {
+    methodBody = R_List_create();
     next(self);
     while (is(self, R_Mil_TokenType_LineTerminator)) {
       next(self);
@@ -717,7 +722,7 @@ onMethodDefinition
   while (is(self, R_Mil_TokenType_LineTerminator)) {
     next(self);
   }
-  R_Mil_MethodDefinitionAst* methodDefinitionAst = R_Mil_MethodDefinitionAst_create(methodName, methodParameters, methodBody);
+  R_Mil_MethodDefinitionAst* methodDefinitionAst = R_Mil_MethodDefinitionAst_create(nativeName, methodName, methodParameters, methodBody);
   return methodDefinitionAst;
 }
 
@@ -861,11 +866,12 @@ onProcedureDefinition
   R_String* procedureName = getText(self);
   next(self);
   R_List* procedureParameters = onParameters(self);
-  R_List* procedureBody = R_List_create();
+  R_List* procedureBody = NULL;
   while (is(self, R_Mil_TokenType_LineTerminator)) {
     next(self);
   }
   if (is(self, R_Mil_TokenType_LeftCurlyBracket)) {
+    procedureBody = R_List_create();
     next(self);
     while (is(self, R_Mil_TokenType_LineTerminator)) {
       next(self);

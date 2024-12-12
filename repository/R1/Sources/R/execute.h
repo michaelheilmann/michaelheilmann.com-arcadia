@@ -7,7 +7,7 @@ void
 R_executeProcedure
   (
     R_Interpreter_ProcessState* process,
-    R_Procedure* procedure
+    R_Interpreter_Procedure* procedure
   );
 
 #endif // R_EXECUTE_H_INCLUDED

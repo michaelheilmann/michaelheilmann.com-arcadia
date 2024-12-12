@@ -18,8 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "R.h"
-#include "R/Mil/Parser.h"
-#include "R/Mil/Ast.h"
+#include "R/Mil/Include.h"
 
 static void
 testProcedureDefinitions

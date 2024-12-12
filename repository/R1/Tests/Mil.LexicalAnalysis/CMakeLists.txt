@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-09
+# Last modified: 2024-09-22
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -29,4 +29,26 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-add_subdirectory(Sources)
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
+FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
+
+set(MyTestName ${MyProjectName}.R.Mil.Tests.LexicalAnalysis)
+
+if (NOT TARGET ${MyTestName})
+  add_executable(${MyTestName})
+  BeginProduct(${MyTestName})
+
+  add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Mil/Tests/LexicalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Mil/Tests/LexicalAnalysis/Configure.h @ONLY)
+
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Mil/Tests/LexicalAnalysis/Main.c)
+  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Mil/Tests/LexicalAnalysis/Configure.h)
+
+  target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
+  target_link_libraries(${MyTestName} Arcadia.R Arcadia.Arms)
+
+  set_target_properties(${MyTestName} PROPERTIES FOLDER "R")
+
+  EndProduct(${MyTestName} executable)
+endif()

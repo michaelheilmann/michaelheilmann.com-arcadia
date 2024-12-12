@@ -22,12 +22,12 @@
 #include "R/Mil/Ast.h"
 
 /// @code
-/// class Cil.Parser
+/// class R.Mil.Parser
 /// @endcode
-Rex_declareObjectType("Cil.Parser", R_Mil_Parser, "R.Object");
+Rex_declareObjectType("R.Mil.Parser", R_Mil_Parser, "R.Object");
 
-/// @brief Create a CIL parser.
-/// @return A pointer to this CIL parser.
+/// @brief Create a MIL parser.
+/// @return A pointer to this MIL parser.
 R_Mil_Parser*
 R_Mil_Parser_create
   (
@@ -43,7 +43,7 @@ R_Mil_Parser_run
   );
 
 /// @brief Set the input.
-/// @param self A pointer to this CIL parser.
+/// @param self A pointer to this MIL parser.
 /// @param input A pointer to the UTF8 reader.
 void
 R_Mil_Parser_setInput

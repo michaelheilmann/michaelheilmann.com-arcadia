@@ -17,6 +17,7 @@
 
 #include "R/Interpreter/ThreadState.private.h"
 
+#include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/Object.h"
 #include "R/Status.h"
@@ -167,7 +168,7 @@ R_Interpreter_ThreadState_beginProcedureCall
   (
     R_Interpreter_ThreadState* thread,
     R_Natural32Value instructionIndex,
-    R_Procedure* procedure
+    R_Interpreter_Procedure* procedure
   )
 {
   R_DynamicArrayUtilities_ensureFreeCapacity1(&thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1);

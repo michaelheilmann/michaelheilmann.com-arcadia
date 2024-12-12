@@ -17,6 +17,7 @@
 
 #include "R/Interpreter/Code/Constants.h"
 
+#include "R/ArmsIntegration.h"
 #include "R/JumpTarget.h"
 #include "R/Status.h"
 #include "R/UnmanagedMemory.h"

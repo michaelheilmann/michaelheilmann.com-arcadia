@@ -19,38 +19,6 @@
 #include "R/Boolean.h"
 #include "R/Size.h"
 
-/// @return #R_BooleanValue_True on success. #R_BooleanValue_False on failure.
-/// @remarks This function sets the status variable on failure. However, it does not invoke R_jump(),
-/// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
-/// If the allocation failed, then #R_Status_AllocationFailed is assigned.
-R_BooleanValue
-R_allocateUnmanaged_nojump
-  (
-    void** p,
-    R_SizeValue n
-  );
-
-/// @return #R_BooleanValue_True on success. #R_BooleanValue_False on failure.
-/// @remarks This function sets the status variable on failure. However, it does not invoke R_jump(),
-/// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
-/// If the allocation failed, then #R_Status_AllocationFailed is assigned.
-R_BooleanValue
-R_deallocateUnmanaged_nojump
-  (
-    void* p
-  );
-
-/// @return #R_BooleanValue_True on success. #R_BooleanValue_False on failure.
-/// @remarks This function sets the status variable on failure. However, it does not invoke R_jump(),
-/// If <code>p</code> is a null pointer, then #R_Status_ArgumentValueInvalid is assigned.
-/// If the allocation failed, then #R_Status_AllocationFailed is assigned.
-R_BooleanValue
-R_reallocateUnmanaged_nojump
-  (
-    void** p,
-    R_SizeValue n
-  );
-
 // Grow the array such that there is room for at least required free capacity elements.
 // availableFreeCapacity = capacity@old - size
 // capacity@new = capacity@old + (requiredFreeCapacity - availableFreeCapacity) if requiredFreeCapacity > availableFreeCapacity

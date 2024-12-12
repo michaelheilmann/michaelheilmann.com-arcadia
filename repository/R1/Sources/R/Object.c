@@ -198,7 +198,7 @@ R_allocateObject
     R_setStatus(R_Status_AllocationFailed);
     R_jump();
   }
-  if (!R_Arms_allocate_nojump(&tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + R_Type_getValueSize(type))) {
+  if (!R_allocate_nojump(&tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + R_Type_getValueSize(type))) {
     R_jump();
   }
   tag->type = type;

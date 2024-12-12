@@ -55,6 +55,9 @@ void* c_realloc(void* ptr, size_t new_size);
 // https://en.cppreference.com/w/c/memory/free
 void c_free(void* ptr);
 
+// https://en.cppreference.com/w/c/string/byte/strlen
+size_t c_strlen(const char *w);
+
 /// @since 1.0
 /// @brief
 /// Function annotation indicating indicating its return value shall be used.
@@ -82,5 +85,25 @@ void c_free(void* ptr);
 #else
   #define C_NO_RETURN()
 #endif
+
+#include <stdbool.h>
+
+/**
+ * @brief Perform safe addition.
+ * @param a The 1st operand.
+ * @param b The 2nd operand.
+ * @param result A pointer to the result variable.
+ * @return @a true if there was an overflow, @a false otherwise.
+ */
+bool c_safe_add_sz(size_t a, size_t b, size_t* r);
+
+/**
+ * @brief Perform safe addition.
+ * @param a The 1st operand.
+ * @param b The 2nd operand.
+ * @param result A pointer to the result variable.
+ * @return @a true if there was an overflow, @a false otherwise.
+ */
+bool c_safe_mul_sz(size_t a, size_t b, size_t* r);
 
 #endif // R_CSTDLIB_H_INCLUDED

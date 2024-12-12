@@ -17,6 +17,8 @@
 
 #include "R/Mil/Ast.h"
 
+#include "R/ArgumentsValidation.h"
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
@@ -62,7 +64,7 @@ static const R_Type_Operations _R_Mil_ModuleAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.ModuleAst", R_Mil_ModuleAst, "R.Object", R_Object, &_R_Mil_ModuleAst_typeOperations);
+Rex_defineObjectType("R.Mil.ModuleAst", R_Mil_ModuleAst, "R.Object", R_Object, &_R_Mil_ModuleAst_typeOperations);
 
 static void
 R_Mil_ModuleAst_constructImpl
@@ -166,7 +168,7 @@ static const R_Type_Operations _R_Mil_OperandAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.OperandAst", R_Mil_OperandAst, "R.Object", R_Object, &_R_Mil_OperandAst_typeOperations);
+Rex_defineObjectType("R.Mil.OperandAst", R_Mil_OperandAst, "R.Object", R_Object, &_R_Mil_OperandAst_typeOperations);
 
 static void
 R_Mil_OperandAst_constructImpl
@@ -227,7 +229,7 @@ static const R_Type_Operations _R_Mil_BooleanLiteralOperandAst_typeOperations = 
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.BooleanLiteralOperandAst", R_Mil_BooleanLiteralOperandAst, "Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_BooleanLiteralOperandAst_typeOperations);
+Rex_defineObjectType("R.Mil.BooleanLiteralOperandAst", R_Mil_BooleanLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_BooleanLiteralOperandAst_typeOperations);
 
 static void
 R_Mil_BooleanLiteralOperandAst_constructImpl
@@ -323,7 +325,7 @@ static const R_Type_Operations _R_Mil_NumberLiteralOperandAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.NumberLiteralOperandAst", R_Mil_NumberLiteralOperandAst, "Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_NumberLiteralOperandAst_typeOperations);
+Rex_defineObjectType("R.Mil.NumberLiteralOperandAst", R_Mil_NumberLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_NumberLiteralOperandAst_typeOperations);
 
 static void
 R_Mil_NumberLiteralOperandAst_constructImpl
@@ -419,7 +421,7 @@ static const R_Type_Operations _R_Mil_StringLiteralOperandAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, "Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_StringLiteralOperandAst_typeOperations);
+Rex_defineObjectType("R.Mil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_StringLiteralOperandAst_typeOperations);
 
 static void
 R_Mil_StringLiteralOperandAst_constructImpl
@@ -518,7 +520,7 @@ static const R_Type_Operations _R_Mil_VariableOperandAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.VariableOperandAst", R_Mil_VariableOperandAst, "Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_VariableOperandAst_typeOperations);
+Rex_defineObjectType("R.Mil.VariableOperandAst", R_Mil_VariableOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_VariableOperandAst_typeOperations);
 
 void
 R_Mil_VariableOperandAst_constructImpl
@@ -609,7 +611,7 @@ static const R_Type_Operations _R_Mil_VoidLiteralOperandAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandAst, "Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_VoidLiteralOperandAst_typeOperations);
+Rex_defineObjectType("R.Mil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandAst, "R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_VoidLiteralOperandAst_typeOperations);
 
 static void
 R_Mil_VoidLiteralOperandAst_constructImpl
@@ -702,7 +704,7 @@ static const R_Type_Operations _R_Mil_ExpressionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.ExpressionAst", R_Mil_ExpressionAst, "R.Object", R_Object, &_R_Mil_ExpressionAst_typeOperations);
+Rex_defineObjectType("R.Mil.ExpressionAst", R_Mil_ExpressionAst, "R.Object", R_Object, &_R_Mil_ExpressionAst_typeOperations);
 
 void
 R_Mil_ExpressionAst_constructImpl
@@ -728,7 +730,7 @@ R_Mil_ExpressionAst_constructImpl
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(callee:Mil.VariableOperandAst,operands:R.List)
+/// construct(callee:R.Mil.VariableOperandAst,operands:R.List)
 /// @endcode
 static void
 R_Mil_InvokeExpressionAst_constructImpl
@@ -770,7 +772,7 @@ static const R_Type_Operations _R_Mil_InvokeExpressionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, "R.Object", R_Object, &_R_Mil_InvokeExpressionAst_typeOperations);
+Rex_defineObjectType("R.Mil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, "R.Object", R_Object, &_R_Mil_InvokeExpressionAst_typeOperations);
 
 void
 R_Mil_InvokeExpressionAst_constructImpl
@@ -833,7 +835,7 @@ R_Mil_InvokeExpressionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(type : R.Natural32Value<Mil.UnaryExpressionAstType>, operand1 : Mil.OperandAst)
+/// construct(type : R.Natural32Value<R.Mil.UnaryExpressionAstType>, operand1 : R.Mil.OperandAst)
 /// @endcode
 static void
 R_Mil_UnaryExpressionAst_constructImpl
@@ -875,7 +877,7 @@ static const R_Type_Operations _R_Mil_UnaryExpressionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, "Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_UnaryExpressionAst_typeOperations);
+Rex_defineObjectType("R.Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_UnaryExpressionAst_typeOperations);
 
 static void
 R_Mil_UnaryExpressionAst_constructImpl
@@ -935,7 +937,7 @@ R_Mil_UnaryExpressionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(type : Mil.BinaryExpressionAstType, operand1 : Mil.OperandAst, operand2 : Mil.OperandAst)
+/// construct(type : R.Mil.BinaryExpressionAstType, operand1 : R.Mil.OperandAst, operand2 : R.Mil.OperandAst)
 /// @endcode
 static void
 R_Mil_BinaryExpressionAst_constructImpl
@@ -977,7 +979,7 @@ static const R_Type_Operations _R_Mil_BinaryExpressionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, "Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_BinaryExpressionAst_typeOperations);
+Rex_defineObjectType("R.Mil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_BinaryExpressionAst_typeOperations);
 
 static void
 R_Mil_BinaryExpressionAst_constructImpl
@@ -1057,7 +1059,7 @@ R_Mil_BinaryExpressionAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(expression : Mil.OperandAst)
+/// construct(expression : R.Mil.OperandAst)
 /// @endcode
 static void
 R_Mil_LoadExpressionAst_constructImpl
@@ -1099,7 +1101,7 @@ static const R_Type_Operations _R_Mil_LoadExpressionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.LoadExpressionAst", R_Mil_LoadExpressionAst, "Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_LoadExpressionAst_typeOperations);
+Rex_defineObjectType("R.Mil.LoadExpressionAst", R_Mil_LoadExpressionAst, "R.Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_LoadExpressionAst_typeOperations);
 
 static void
 R_Mil_LoadExpressionAst_constructImpl
@@ -1187,7 +1189,7 @@ static const R_Type_Operations _R_Mil_StatementAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.StatementAst", R_Mil_StatementAst, "R.Object", R_Object, &_R_Mil_StatementAst_typeOperations);
+Rex_defineObjectType("R.Mil.StatementAst", R_Mil_StatementAst, "R.Object", R_Object, &_R_Mil_StatementAst_typeOperations);
 
 static void
 R_Mil_StatementAst_constructImpl
@@ -1251,7 +1253,7 @@ static const R_Type_Operations _R_Mil_ExpressionStatementAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, "Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_ExpressionStatementAst_typeOperations);
+Rex_defineObjectType("R.Mil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, "R.Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_ExpressionStatementAst_typeOperations);
 
 static void
 R_Mil_ExpressionStatementAst_constructImpl
@@ -1376,7 +1378,7 @@ static const R_Type_Operations _R_Mil_LabelStatementAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.LabelStatementAst", R_Mil_LabelStatementAst, "Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_LabelStatementAst_typeOperations);
+Rex_defineObjectType("R.Mil.LabelStatementAst", R_Mil_LabelStatementAst, "R.Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_LabelStatementAst_typeOperations);
 
 static void
 R_Mil_LabelStatementAst_constructImpl
@@ -1425,7 +1427,7 @@ R_Mil_LabelStatementAst_create
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(operand:Mil.OperandAst)
+/// construct(operand:R.Mil.OperandAst)
 /// @endcode
 static void
 R_Mil_ReturnStatementAst_constructImpl
@@ -1467,7 +1469,7 @@ static const R_Type_Operations _R_Mil_ReturnStatementAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, "Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_ReturnStatementAst_typeOperations);
+Rex_defineObjectType("R.Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, "Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_ReturnStatementAst_typeOperations);
 
 static void
 R_Mil_ReturnStatementAst_constructImpl
@@ -1549,7 +1551,7 @@ static const R_Type_Operations _R_Mil_DefinitionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.DefinitionAst", R_Mil_DefinitionAst, "R.Object", R_Object, &_R_Mil_DefinitionAst_typeOperations);
+Rex_defineObjectType("R.Mil.DefinitionAst", R_Mil_DefinitionAst, "R.Object", R_Object, &_R_Mil_DefinitionAst_typeOperations);
 
 static void
 R_Mil_DefinitionAst_constructImpl
@@ -1575,7 +1577,7 @@ R_Mil_DefinitionAst_constructImpl
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(nativeName:String, procedureName:String,procedureParameters:List,procedureBody:List)
+/// construct(nativeName:R.String, procedureName:R.String,procedureParameters:R.List,procedureBody:List)
 /// @endcode
 static void
 R_Mil_ProcedureDefinitionAst_constructImpl
@@ -1617,7 +1619,7 @@ static const R_Type_Operations _R_Mil_ProcedureDefinitionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, "Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ProcedureDefinitionAst_typeOperations);
+Rex_defineObjectType("R.Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ProcedureDefinitionAst_typeOperations);
 
 static void
 R_Mil_ProcedureDefinitionAst_constructImpl
@@ -1638,32 +1640,11 @@ R_Mil_ProcedureDefinitionAst_constructImpl
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
-  R_String* nativeName = NULL;
-  if (R_Type_isSubType(R_Value_getType(&argumentValues[1]), _R_String_getType())) {
-    nativeName = R_Value_getObjectReferenceValue(&argumentValues[1]);
-  } else if (R_Type_isSubType(R_Value_getType(&argumentValues[1]), _R_VoidValue_getType())) {
-    // Intentionally empty.
-  } else {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[2]), _R_String_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[3]), _R_List_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[4]), _R_List_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
   _self->entry = R_Value_getBooleanValue(&argumentValues[0]);
-  _self->nativeName = nativeName;
-  _self->procedureName = R_Value_getObjectReferenceValue(&argumentValues[2]);
-  _self->procedureParameters = R_Value_getObjectReferenceValue(&argumentValues[3]);
-  _self->procedureBody = R_Value_getObjectReferenceValue(&argumentValues[4]);
+  _self->nativeName = R_Argument_getObjectReferenceValueOrNull(&argumentValues[1], _R_String_getType());
+  _self->procedureName = R_Argument_getObjectReferenceValue(&argumentValues[2], _R_String_getType());
+  _self->procedureParameters = R_Argument_getObjectReferenceValue(&argumentValues[3], _R_List_getType());
+  _self->procedureBody = R_Argument_getObjectReferenceValueOrNull(&argumentValues[4], _R_List_getType());
   R_Object_setType(_self, _type);
 }
 
@@ -1697,9 +1678,12 @@ R_Mil_ProcedureDefinitionAst_create
                                {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void },
                                {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = procedureName },
                                {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = procedureParameters },
-                               {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = procedureBody }, };
+                               {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void }, };
   if (nativeName) {
-    R_Value_setObjectReferenceValue(&argumentValues[0], nativeName);
+    R_Value_setObjectReferenceValue(&argumentValues[1], nativeName);
+  }
+  if (procedureBody) {
+    R_Value_setObjectReferenceValue(&argumentValues[4], procedureBody);
   }
   R_Mil_ProcedureDefinitionAst* self = R_allocateObject(_R_Mil_ProcedureDefinitionAst_getType(), 5, &argumentValues[0]);
   return self;
@@ -1750,7 +1734,7 @@ static const R_Type_Operations _R_Mil_ClassDefinitionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, "Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ClassDefinitionAst_typeOperations);
+Rex_defineObjectType("R.Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ClassDefinitionAst_typeOperations);
 
 static void
 R_Mil_ClassDefinitionAst_constructImpl
@@ -1766,26 +1750,13 @@ R_Mil_ClassDefinitionAst_constructImpl
     R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
     R_Mil_DefinitionAst_constructImpl(self, 0, &argumentValues[0]);
   }
-
   if (3 != numberOfArgumentValues) {
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_String_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[1]), _R_String_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[2]), _R_List_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  _self->className = R_Value_getObjectReferenceValue(&argumentValues[0]);
-  _self->extendedClassName = R_Value_getObjectReferenceValue(&argumentValues[1]);
-  _self->classBody = R_Value_getObjectReferenceValue(&argumentValues[2]);
+  _self->className = R_Argument_getObjectReferenceValue(&argumentValues[0], _R_String_getType());
+  _self->extendedClassName = R_Argument_getObjectReferenceValueOrNull(&argumentValues[1], _R_String_getType());
+  _self->classBody = R_Argument_getObjectReferenceValue(&argumentValues[2], _R_List_getType());
   R_Object_setType(_self, _type);
 }
 
@@ -1814,9 +1785,12 @@ R_Mil_ClassDefinitionAst_create
 {
   R_Value argumentValues[] = {
     {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = className },
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = extendedClassName },
+    {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void },
     {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = classBody },
   };
+  if (extendedClassName) {
+    R_Value_setObjectReferenceValue(&argumentValues[1], extendedClassName);
+  }
   R_Mil_ClassDefinitionAst* self = R_allocateObject(_R_Mil_ClassDefinitionAst_getType(), 3, &argumentValues[0]);
   return self;
 }
@@ -1863,7 +1837,7 @@ static const R_Type_Operations _R_Mil_ClassMemberDefinitionAst_typeOperations = 
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, "Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ClassMemberDefinitionAst_typeOperations);
+Rex_defineObjectType("R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, "R.Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ClassMemberDefinitionAst_typeOperations);
 
 static void
 R_Mil_ClassMemberDefinitionAst_constructImpl
@@ -1896,7 +1870,7 @@ R_Mil_ClassMemberDefinitionAst_visit
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(methodName:String, methodParameters:List, methodBody:List)
+/// construct(methodName:R.String, methodParameters:R.List, methodBody:R.List)
 /// @endcode
 static void
 R_Mil_MethodDefinitionAst_constructImpl
@@ -1938,7 +1912,7 @@ static const R_Type_Operations _R_Mil_MethodDefinitionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, "Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_MethodDefinitionAst_typeOperations);
+Rex_defineObjectType("R.Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_MethodDefinitionAst_typeOperations);
 
 static void
 R_Mil_MethodDefinitionAst_constructImpl
@@ -1954,25 +1928,14 @@ R_Mil_MethodDefinitionAst_constructImpl
     R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
     R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
   }
-  if (3 != numberOfArgumentValues) {
+  if (4 != numberOfArgumentValues) {
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_String_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[1]), _R_List_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[2]), _R_List_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  _self->methodName = R_Value_getObjectReferenceValue(&argumentValues[0]);
-  _self->methodParameters = R_Value_getObjectReferenceValue(&argumentValues[1]);
-  _self->methodBody = R_Value_getObjectReferenceValue(&argumentValues[2]);
+  _self->nativeName = R_Argument_getObjectReferenceValueOrNull(&argumentValues[0], _R_String_getType());
+  _self->methodName = (R_String*)R_Argument_getObjectReferenceValue(&argumentValues[1], _R_String_getType());
+  _self->methodParameters = (R_List*)R_Argument_getObjectReferenceValue(&argumentValues[2], _R_List_getType());
+  _self->methodBody = (R_List*)R_Argument_getObjectReferenceValueOrNull(&argumentValues[3], _R_List_getType());
   R_Object_setType(_self, _type);
 }
 
@@ -1982,6 +1945,7 @@ R_Mil_MethodDefinitionAst_visit
     R_Mil_MethodDefinitionAst* self
   )
 {
+  R_Object_visit(self->nativeName);
   R_Object_visit(self->methodName);
   R_Object_visit(self->methodParameters);
   R_Object_visit(self->methodBody);
@@ -1990,24 +1954,30 @@ R_Mil_MethodDefinitionAst_visit
 R_Mil_MethodDefinitionAst*
 R_Mil_MethodDefinitionAst_create
   (
+    R_String* nativeName,
     R_String* methodName,
     R_List* methodParameters,
     R_List* methodBody
   )
 {
-  R_Value argumentValues[] = {
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)methodName },
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)methodParameters },
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)methodBody },
-  };
-  R_Mil_MethodDefinitionAst* self = R_allocateObject(_R_Mil_MethodDefinitionAst_getType(), 3, &argumentValues[0]);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void },
+                               {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = methodName },
+                               {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = methodParameters },
+                               {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void }, };
+  if (nativeName) {
+    R_Value_setObjectReferenceValue(&argumentValues[0], nativeName);
+  }
+  if (methodBody) {
+    R_Value_setObjectReferenceValue(&argumentValues[3], methodBody);
+  }
+  R_Mil_MethodDefinitionAst* self = R_allocateObject(_R_Mil_MethodDefinitionAst_getType(), 4, &argumentValues[0]);
   return self;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// constructor(constructorParameters:List, constructorBody:List)
+/// constructor(constructorParameters:R.List, constructorBody:R.List)
 /// @endcode
 static void
 R_Mil_ConstructorDefinitionAst_constructImpl
@@ -2049,7 +2019,7 @@ static const R_Type_Operations _R_Mil_ConstructorDefinitionAst_typeOperations = 
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, "Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_ConstructorDefinitionAst_typeOperations);
+Rex_defineObjectType("R.Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_ConstructorDefinitionAst_typeOperations);
 
 static void
 R_Mil_ConstructorDefinitionAst_constructImpl
@@ -2065,20 +2035,13 @@ R_Mil_ConstructorDefinitionAst_constructImpl
     R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
     R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
   }
-  if (2 != numberOfArgumentValues) {
+  if (3 != numberOfArgumentValues) {
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_List_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[1]), _R_List_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
-  }
-  _self->constructorParameters = R_Value_getObjectReferenceValue(&argumentValues[0]);
-  _self->constructorBody = R_Value_getObjectReferenceValue(&argumentValues[1]);
+  _self->nativeName = R_Argument_getObjectReferenceValueOrNull(&argumentValues[0], _R_String_getType());
+  _self->constructorParameters = (R_List*)R_Argument_getObjectReferenceValue(&argumentValues[1], _R_List_getType());
+  _self->constructorBody = (R_List*)R_Argument_getObjectReferenceValueOrNull(&argumentValues[2], _R_List_getType());
   R_Object_setType(_self, _type);
 }
 
@@ -2088,6 +2051,7 @@ R_Mil_ConstructorDefinitionAst_visit
     R_Mil_ConstructorDefinitionAst* self
   )
 {
+  R_Object_visit(self->nativeName);
   R_Object_visit(self->constructorParameters);
   R_Object_visit(self->constructorBody);
 }
@@ -2095,22 +2059,30 @@ R_Mil_ConstructorDefinitionAst_visit
 R_Mil_ConstructorDefinitionAst*
 R_Mil_ConstructorDefinitionAst_create
   (
+    R_String* nativeName,
     R_List* constructorParameters,
     R_List* constructorBody
   )
 {
   R_Value argumentValues[] = {
+    {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void },
     {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)constructorParameters },
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)constructorBody },
+    {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void },
   };
-  R_Mil_ConstructorDefinitionAst* self = R_allocateObject(_R_Mil_ConstructorDefinitionAst_getType(), 2, &argumentValues[0]);
+  if (nativeName) {
+    R_Value_setObjectReferenceValue(&argumentValues[0], nativeName);
+  }
+  if (constructorBody) {
+    R_Value_setObjectReferenceValue(&argumentValues[2], constructorBody);
+  }
+  R_Mil_ConstructorDefinitionAst* self = R_allocateObject(_R_Mil_ConstructorDefinitionAst_getType(), 3, &argumentValues[0]);
   return self;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(variableName : R.String)
+/// construct(variableName:R.String)
 /// @endcode
 static void
 R_Mil_VariableDefinitionAst_constructImpl
@@ -2152,7 +2124,7 @@ static const R_Type_Operations _R_Mil_VariableDefinitionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Mil.VariableDefinitionAst", R_Mil_VariableDefinitionAst, "Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_VariableDefinitionAst_typeOperations);
+Rex_defineObjectType("R.Mil.VariableDefinitionAst", R_Mil_VariableDefinitionAst, "R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_VariableDefinitionAst_typeOperations);
 
 static void
 R_Mil_VariableDefinitionAst_constructImpl
