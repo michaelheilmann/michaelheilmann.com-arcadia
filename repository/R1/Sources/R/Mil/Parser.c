@@ -568,6 +568,7 @@ onParameter
   return parameter;
 }
 
+// parameters : '(' (name (',' name)*)? ')'
 static R_List*
 onParameters
   (
@@ -612,7 +613,8 @@ onParameters
 }
 
 // constructorDefinition : 'constructor' ('native' string)? constructorParameters? constructorBody?
-// constructorParameters = parameters
+// constructorParameters : parameters
+// constructorBody : '{' statements '}
 static R_Mil_ConstructorDefinitionAst*
 onConstructorDefinition
   (
@@ -669,7 +671,7 @@ onConstructorDefinition
 }
 
 // methodDefinition : 'method' ('native' string)? methodName methodParameters? methodBody?
-// methodParameters : '(' (name (',' name)*)? ')'
+// methodParameters : parameters
 // methodBody : '{' statements '}'
 static R_Mil_MethodDefinitionAst*
 onMethodDefinition
@@ -831,7 +833,7 @@ onClassDefinition
 }
 
 // procedureDefinition : 'procedure' 'entry'? ('native' string)? name procedureParameters? procedureBody?
-// procedureParameters : '(' (name (',' name)*)? ')'
+// procedureParameters : parameters
 // procedureBody : '{' statements '}'
 static R_Mil_ProcedureDefinitionAst*
 onProcedureDefinition

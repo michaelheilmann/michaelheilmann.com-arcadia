@@ -18,10 +18,13 @@
 #if !defined(R_INTERPRETER_H_INCLUDED)
 #define R_INTERPRETER_H_INCLUDED
 
-#include "R/Interpreter/Instruction.h"
-#include "R/Interpreter/ThreadState.h"
-#include "R/Interpreter/ProcessState.h"
 #include "R/Interpreter/Code/Constants.h"
 #include "R/Interpreter/Code.h"
+#include "R/Interpreter/Class.h"
+#include "R/Interpreter/Instruction.h"
+#include "R/Interpreter/ProcessState.h"
+#include "R/Interpreter/Method.h"
+#include "R/Interpreter/ThreadState.h"
+#include "R/Interpreter/Variable.h"
 
 #endif // R_INTERPRETER_H_INCLUDED

@@ -31,9 +31,66 @@ R_Value_visit
     R_Value* self
   )
 {
-  if (self->tag == R_ValueTag_ObjectReference) {
-    R_Object_visit(self->objectReferenceValue);
-  }
+  switch (self->tag) {
+    case R_ValueTag_Atom: {
+      R_Atom_visit(self->atomValue);
+    } break;
+    case R_ValueTag_Boolean: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_ForeignProcedure: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_ImmutableByteArray: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Integer16: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Integer32: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Integer64: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Integer8: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Natural16: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Natural32: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Natural64: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Natural8: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_ObjectReference: {
+      R_Object_visit(self->objectReferenceValue);
+    } break;
+    case R_ValueTag_Real32: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Real64: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Size: {
+      /* Intentionally empty. */
+    } break;
+    case R_ValueTag_Type: {
+      R_Type_visit(self->typeValue);
+    } break;
+    case R_ValueTag_Void: {
+      /* Intentionally empty. */
+    } break;
+    default: {
+      fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
 }
 
 R_Type*
@@ -43,6 +100,9 @@ R_Value_getType
   )
 { 
   switch (self->tag) {
+    case R_ValueTag_Atom: {
+      return _R_Atom_getType();
+    } break;
     case R_ValueTag_Boolean: {
       return _R_BooleanValue_getType();
     } break;
@@ -83,10 +143,13 @@ R_Value_getType
       return _R_Real32Value_getType();
     } break;
     case R_ValueTag_Real64: {
-      return _R_Natural64Value_getType();
+      return _R_Real64Value_getType();
     } break;
     case R_ValueTag_Size: {
       return _R_SizeValue_getType();
+    } break;
+    case R_ValueTag_Type: {
+      return _R_Type_getType();
     } break;
     case R_ValueTag_Void: {
       return _R_VoidValue_getType();
@@ -106,6 +169,12 @@ R_Value_isEqualTo
   )
 {
   switch (self->tag) {
+    case R_ValueTag_Atom: {
+      if (!R_Value_isAtomValue(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->atomValue == other->atomValue;
+    } break;
     case R_ValueTag_Boolean: {
       if (!R_Value_isBooleanValue(other)) {
         return R_BooleanValue_False;
@@ -187,6 +256,12 @@ R_Value_isEqualTo
       }
       return self->sizeValue == other->sizeValue;
     } break;
+    case R_ValueTag_Type: {
+      if (!R_Value_isTypeValue(other)) {
+        return R_BooleanValue_False;
+      }
+      return self->typeValue == other->typeValue;
+    } break;
     case R_ValueTag_Void: {
       return R_Value_isVoidValue(other);
     } break;
@@ -204,6 +279,9 @@ R_Value_hash
   )
 {
   switch (self->tag) {
+    case R_ValueTag_Atom: {
+      return R_hashAtomValue(self->typeValue);
+    } break;
     case R_ValueTag_Boolean: {
       return R_hashBooleanValue(self->booleanValue);
     } break;
@@ -235,7 +313,7 @@ R_Value_hash
       return R_hashNatural8Value(self->natural8Value);
     } break;
     case R_ValueTag_ObjectReference: {
-      return R_Object_getHash(self->objectReferenceValue);
+      return R_Object_hash(self->objectReferenceValue);
     } break;
     case R_ValueTag_Real32: {
       return R_hashReal32Value(self->real32Value);
@@ -245,6 +323,9 @@ R_Value_hash
     } break;
     case R_ValueTag_Size: {
       return R_hashSizeValue(self->sizeValue);
+    } break;
+    case R_ValueTag_Type: {
+      return R_hashTypeValue(self->typeValue);
     } break;
     case R_ValueTag_Void: {
       return R_hashVoidValue(self->voidValue);

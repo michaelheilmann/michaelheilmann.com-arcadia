@@ -109,6 +109,45 @@ static const R_Type_Operations _typeOperations = {
 
 Rex_defineObjectType("R.String", R_String, "R.Object", R_Object, &_typeOperations);
 
+#include "R/ToString/Include.h"
+#include "Arms.h"
+
+#define On(Type) \
+  static R_ImmutableByteArray* \
+  from##Type \
+    ( \
+      R_##Type##Value value \
+    ) \
+  { \
+    Arms_MemoryManager* memoryManager = Arms_getSlabMemoryManager(); \
+    char* p; size_t n; \
+    R_##Type##_toString(memoryManager, value, &p, &n); \
+    R_JumpTarget jumpTarget; \
+    R_pushJumpTarget(&jumpTarget); \
+    if (R_JumpTarget_save(&jumpTarget)) { \
+      R_ImmutableByteArray* result = R_ImmutableByteArray_create(p, n); \
+      Arms_MemoryManager_deallocate(memoryManager, p); \
+      p = NULL; \
+      R_popJumpTarget(); \
+      return result; \
+    } else { \
+      R_popJumpTarget(); \
+      Arms_MemoryManager_deallocate(memoryManager, p); \
+      p = NULL; \
+      R_jump(); \
+    } \
+  }
+
+On(Integer16)
+On(Integer32)
+On(Integer64)
+On(Integer8)
+
+On(Natural16)
+On(Natural32)
+On(Natural64)
+On(Natural8)
+
 static void
 R_String_constructImpl
   (
@@ -127,7 +166,47 @@ R_String_constructImpl
     R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
     R_Object_constructImpl(self, 0, &argumentValues[0]);
   }
-  if (R_Value_isImmutableByteArrayValue(&argumentValues[0])) {
+  if (R_Value_isInteger16Value(&argumentValues[0])) {
+    R_ImmutableByteArray* immutableByteArray = fromInteger16(R_Value_getInteger16Value(&argumentValues[0]));
+    /* The functions assert the Bytes are UTF-8. */
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } else if (R_Value_isInteger32Value(&argumentValues[0])) {
+    R_ImmutableByteArray* immutableByteArray = fromInteger32(R_Value_getInteger16Value(&argumentValues[0]));
+    /* The functions assert the Bytes are UTF-8. */
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } else if (R_Value_isInteger64Value(&argumentValues[0])) {
+    R_ImmutableByteArray* immutableByteArray = fromInteger64(R_Value_getInteger16Value(&argumentValues[0]));
+    /* The functions assert the Bytes are UTF-8. */
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } else if (R_Value_isInteger8Value(&argumentValues[0])) {
+    R_ImmutableByteArray* immutableByteArray = fromInteger8(R_Value_getInteger16Value(&argumentValues[0]));
+    /* The functions assert the Bytes are UTF-8. */
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } else if (R_Value_isNatural16Value(&argumentValues[0])) {
+    R_ImmutableByteArray* immutableByteArray = fromNatural16(R_Value_getInteger16Value(&argumentValues[0]));
+    /* The functions assert the Bytes are UTF-8. */
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } else if (R_Value_isNatural32Value(&argumentValues[0])) {
+    R_ImmutableByteArray* immutableByteArray = fromNatural32(R_Value_getInteger16Value(&argumentValues[0]));
+    /* The functions assert the Bytes are UTF-8. */
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } else if (R_Value_isNatural64Value(&argumentValues[0])) {
+    R_ImmutableByteArray* immutableByteArray = fromNatural64(R_Value_getInteger16Value(&argumentValues[0]));
+    /* The functions assert the Bytes are UTF-8. */
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } else if (R_Value_isNatural8Value(&argumentValues[0])) {
+    R_ImmutableByteArray* immutableByteArray = fromNatural8(R_Value_getInteger16Value(&argumentValues[0]));
+    /* The functions assert the Bytes are UTF-8. */
+    _self->immutableByteArray = immutableByteArray;
+    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+  } if (R_Value_isImmutableByteArrayValue(&argumentValues[0])) {
     R_SizeValue numberOfSymbols;
     R_ImmutableByteArray* immutableByteArray = R_Value_getImmutableByteArrayValue(&argumentValues[0]);
     if (!R_isUtf8(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray), &numberOfSymbols)) {

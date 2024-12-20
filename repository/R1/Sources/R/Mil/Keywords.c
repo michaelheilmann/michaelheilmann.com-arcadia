@@ -159,7 +159,7 @@ R_Mil_Keywords_add
     R_Natural32Value type
   )
 {
-  R_SizeValue hash = R_Object_getHash((R_ObjectReferenceValue)string);
+  R_SizeValue hash = R_Object_hash((R_ObjectReferenceValue)string);
   R_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
     R_Value t;
@@ -190,7 +190,7 @@ R_Mil_Keywords_scan
 {
   R_Value stringValue;
   R_Value_setObjectReferenceValue(&stringValue, string);
-  R_SizeValue hash = R_Object_getHash((R_ObjectReferenceValue)string);
+  R_SizeValue hash = R_Object_hash((R_ObjectReferenceValue)string);
   R_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
     if (R_Object_equalTo((R_ObjectReferenceValue)keyword->string, &stringValue)) {

@@ -166,6 +166,13 @@ parseName
   }
 }
 
+R_SizeValue
+R_TypeName_hash
+  (
+    R_TypeNameValue typeNameValue
+  )
+{ return R_Atom_getHash(typeNameValue->atomValue); }
+
 R_TypeNameValue
 R_TypeNames_getOrCreateTypeName
   (

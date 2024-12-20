@@ -241,7 +241,7 @@ R_Mil_SymbolTable_getIndex
     R_String* name
   )
 {
-  R_SizeValue hash = R_Object_getHash((R_Object*)name);
+  R_SizeValue hash = R_Object_hash((R_Object*)name);
   R_SizeValue index = hash % self->capacity;
   R_SizeValue tombstoneIndex = 0;
   R_BooleanValue tombstoneFound = R_BooleanValue_False;

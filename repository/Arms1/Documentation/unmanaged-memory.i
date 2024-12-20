@@ -1,18 +1,30 @@
-<h2>Unmanaged Memory</h2>
-<p>ARMS1 allows for allocation, reallocation, and deallocation of <em>unmanaged</em> memory.</p>
+<h2>4. Unmanaged Memory</h2>
+<p>
+ARMS1 allows for allocation, reallocation, and deallocation of <em>unmanaged</em> memory via <em>memory managers</em>.
+</p>
 
-<h3>Arms_allocateUnmanaged</h3>
+<p>
+There are two different memory managers available for different use cases.
+Currently, the <em>default memory manager</em> and the <em>slab memory manager</em> are available.
+The former is described in section <a href="#default-memory-manager">"Default Memory Manager"</a>,
+the latter is described in section <a href="#slab-memory-manager">"Slab Memory Manager"</a>.
+All memory manager share a commmon interface which is described in section <a href="#memory-manager-interface">"Memory Manager Interface"</a>.
+
+<h3 id="memory-manager-interface">4.1 Memory Manager Interface</h3>
+<p>This section describes the interface of the memory managers.</p>
+
+<h4>4.1.1 Arms_MemoryManager_allocate</h4>
 <p><code>
-Arms_Status Arms_allocateUnmanaged(void** p, size_t n);
+Arms_MemoryManager_Status Arms_MemoryManager_allocate(Arms_MemoryManager* memoryManager, void** p, Arms_Size n);
 </code></p>
 <p>
-Allocates an unmanaged memory block of size <code>n</code>.
+Allocates an unmanaged memory block of size <code>n</code> using the specified memory manager.
 </p>
 
 <p>
 <em>If this function succeeds</em>:
 A pointer to the beginning of the memory block is stored in <code>*p</code>.
-<code>Arms_Status_Success</code> is returned.
+<code>Arms_MemoryManager_Status_Success</code> is returned.
 </p>
 
 <p>
@@ -23,17 +35,17 @@ The function returns one of the status code in the table below.
 
 <table>
   <tr><td>Status Code</td><td>Description</td></tr>
-  <tr><td>Arms_Status_AllocationFailed</td><td>The allocation failed.</td></tr>
-  <tr><td>Arms_Status_ArgumentValueInvalid</td><td><code>p</code> is a null pointer.</td></tr>
+  <tr><td>Arms_MemoryManager_Status_AllocationFailed</td><td>The allocation failed.</td></tr>
+  <tr><td>Arms_MemoryManager_Status_ArgumentValueInvalid</td><td><code>p</code> is a null pointer.</td></tr>
 </table>
 
 
 <p>Note that <code>n</code> can be 0 as 0 is a valid size for a memory block.</p>
 
 
-<h3>Arms_reallocateUnmanaged</h3>
+<h4>4.1.2 Arms_MemoryManager_reallocate</h4>
 <p><code>
-Arms_Status Arms_rallocateUnmanaged(void** p, size_t n);
+Arms_MemoryManager_Status Arms_reallocate(Arms_MemoryManager* memoryManager, void** p, size_t n);
 </code></p>
 
 <p>
@@ -42,7 +54,7 @@ A pointer to the beginning of the new memory block is stored in <code>*p</code>.
 The first <my-mv>k</my-mv> values of the new memory memory block and the old memory block are equal
 where <code><my-mv>k</my-mv></code> is <code>min(n, <my-mv>m</my-mv>)</code> where <code>n</code> is the size of the
 new memory block and <my-mv>m</my-mv> is the size of the new memory block.
-<code>Arms_Status_Success</code> is returned.
+<code>Arms_MemoryManager_Status_Success</code> is returned.
 </p>
 
 <p>
@@ -53,15 +65,15 @@ The function returns one of the status code in the table below.
 
 <table>
   <tr><td>Status Code</td><td>Description</td></tr>
-  <tr><td>Arms_Status_AllocationFailed</td><td>The allocation failed.</td></tr>
-  <tr><td>Arms_Status_ArgumentValueInvalid</td><td><code>p</code> is a null pointer.</td></tr>
+  <tr><td>Arms_MemoryManager_Status_AllocationFailed</td><td>The allocation failed.</td></tr>
+  <tr><td>Arms_MemoryManager_Status_ArgumentValueInvalid</td><td><code>p</code> is a null pointer.</td></tr>
 </table>
 
 <p>Note that <code>n</code> can be 0 as 0 is a valid size for a memory block.</p>
 
-<h3>Arms_deallocateUnmanaged</h3>
+<h4>4.1.3 Arms_MemoryManager_deallocate</h4>
 <p><code>
-Arms_Status Arms_deallocateUnmanaged(void* p);
+Arms_MemoryManager_Status Arms_MemoryManager_deallocate(Arms_MemoryManager* memoryManager, void* p);
 </code></p>
 
 <p>Deallocates an unmanaged memory block.</p>
@@ -73,5 +85,31 @@ The memory block pointed to by <code>p</code> was deallocated.
 <p>
 <em>If this function fails</em>:
 The environment is not observably changed.
-This function fails only if <code>p</code> is a null pointer. In that case, it returns <code>Arms_Status_ArgumentValueInvalid</code>.
+This function fails only if <code>p</code> is a null pointer. In that case, it returns <code>Arms_MemoryManager_Status_ArgumentValueInvalid</code>.
 </p>
+
+<h3>4.2 Default Memory Manager</h3>
+<p>
+Obtain a pointer to the <em>default memory manager</em> by a call to to the function
+</p>
+<p><code>
+Arms_MemoryManager* Arms_getDefaultMemoryManager()
+</code></p>
+<p>
+This function always succeeds if ARMS1 is initialized. Otherwise its behaviour is undefined.
+The memory manager returned is valid as long as ARMS1 is initialized.
+</p>
+
+<h3>4.3 Slab Memory Manager</h3>
+<p>
+Obtain a pointer to the <em>slab memory manager</em> by a call to to the function
+</p>
+<p><code>
+Arms_MemoryManager* Arms_getSlabMemoryManager()
+</code></p>
+<p>
+This function always succeeds if ARMS1 is initialized. Otherwise its behaviour is undefined.
+The memory manager returned is valid as long as ARMS1 is initialized.
+</p>
+
+<p>Warning: The Slab Memory Manager is work in progress.</p>

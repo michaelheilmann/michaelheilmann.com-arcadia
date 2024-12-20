@@ -79,6 +79,12 @@ testScanner3
     u8"\n"
     u8"procedure"
     u8"\n"
+    u8"method"
+    u8"\n"
+    u8"constructor"
+    u8"\n"
+    u8"variable"
+    u8"\n"
     ;
   R_Mil_Scanner* scanner = R_Mil_Scanner_create();
   R_Mil_Scanner_setInput(scanner, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create(input, strlen(input)))));
@@ -117,6 +123,12 @@ testScanner3
   expectAndNext(scanner, R_Mil_TokenType_Native, u8"native", sizeof(u8"native") - 1);
   expectAndNext(scanner, R_Mil_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   expectAndNext(scanner, R_Mil_TokenType_Procedure, u8"procedure", sizeof(u8"procedure") - 1);
+  expectAndNext(scanner, R_Mil_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(scanner, R_Mil_TokenType_Method, u8"method", sizeof(u8"method") - 1);
+  expectAndNext(scanner, R_Mil_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(scanner, R_Mil_TokenType_Constructor, u8"constructor", sizeof(u8"constructor") - 1);
+  expectAndNext(scanner, R_Mil_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(scanner, R_Mil_TokenType_Variable, u8"variable", sizeof(u8"variable") - 1);
   expectAndNext(scanner, R_Mil_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   //
   expectAndNext(scanner, R_Mil_TokenType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);

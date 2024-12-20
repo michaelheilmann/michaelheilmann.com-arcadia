@@ -18,7 +18,6 @@
 #include "R/Interpreter/Method.h"
 
 #include "R/ArgumentsValidation.h"
-#include "R/ArgumentsValidation.h"
 #include "R/Interpreter/Code.h"
 #include "R/JumpTarget.h"
 #include "R/Object.h"
@@ -85,6 +84,8 @@ R_Interpreter_Method_constructImpl
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
+  _self->ready = R_BooleanValue_False;
+  _self->index = R_SizeValue_Literal(0);
   _self->name = R_Argument_getObjectReferenceValue(&argumentValues[0], _R_String_getType());
   if (R_Type_isSubType(R_Value_getType(&argumentValues[1]), _R_ForeignProcedureValue_getType())) {
     _self->isForeign = R_BooleanValue_True;

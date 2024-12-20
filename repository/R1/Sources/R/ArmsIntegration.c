@@ -265,7 +265,7 @@ R_allocateUnmanaged_nojump
     R_SizeValue n
   )
 {
-  Arms_Status status = Arms_allocateUnmanaged(p, n);
+  Arms_Status status = Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), p, n);
   if (status) {
     if (status == Arms_Status_ArgumentValueInvalid) {
       R_setStatus(R_Status_ArgumentValueInvalid);
@@ -285,9 +285,9 @@ R_deallocateUnmanaged_nojump
     void* p
   )
 {
-  Arms_Status status = Arms_deallocateUnmanaged(p);
+  Arms_MemoryManager_Status status = Arms_MemoryManager_deallocate(Arms_getDefaultMemoryManager(), p);
   if (status) {
-    if (status == Arms_Status_ArgumentValueInvalid) {
+    if (status == Arms_MemoryManager_Status_ArgumentValueInvalid) {
       R_setStatus(R_Status_ArgumentValueInvalid);
     } else {
       R_setStatus(R_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use R_Status_EnvironmentInvalid.*/
@@ -304,11 +304,11 @@ R_reallocateUnmanaged_nojump
     R_SizeValue n
   )
 {
-  Arms_Status status = Arms_reallocateUnmanaged(p, n);
+  Arms_MemoryManager_Status status = Arms_MemoryManager_reallocate(Arms_getDefaultMemoryManager(), p, n);
   if (status) {
-    if (status == Arms_Status_ArgumentValueInvalid) {
+    if (status == Arms_MemoryManager_Status_ArgumentValueInvalid) {
       R_setStatus(R_Status_ArgumentValueInvalid);
-    } else if (status == Arms_Status_AllocationFailed) {
+    } else if (status == Arms_MemoryManager_Status_AllocationFailed) {
       R_setStatus(R_Status_AllocationFailed);
     } else {
       R_setStatus(R_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use R_Status_EnvironmentInvalid.*/

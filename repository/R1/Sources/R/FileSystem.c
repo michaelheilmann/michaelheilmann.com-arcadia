@@ -216,3 +216,9 @@ R_FileSystem_createDirectory
   #error("operating system not (yet) supported")
 #endif  
 }
+
+R_FilePath*
+R_FileSystem_getWorkingDirectory
+  (
+    R_FileSystem* self
+  );

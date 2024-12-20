@@ -13,59 +13,24 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-27
+// Last modified: 2024-08-31
 
-#if !defined(R_MAP_H_INCLUDED)
-#define R_MAP_H_INCLUDED
+#if !defined(ARMS_SIZETYPE_H_INCLUDED)
+#define ARMS_SIZETYPE_H_INCLUDED
 
-#include "R/Object.h"
-#include "R/List.h"
-#include "R/Value.h"
+// size_t
+#include <stddef.h>
 
-Rex_declareObjectType("R.Map", R_Map, "R.Object");
+// A non-negative binary integer.
+// Its width, in Bits, is at least 16.
+// It is large enough to fit the result of Arms_SizeOf, Arms_AlignOf, and Arms_OffsetOf.
+typedef size_t Arms_Size;
 
-R_Map*
-R_Map_create
-  (
-  );
+/// The minimum value of Arms_Size.
+/// Guaranteed to be @a 0.
+#define Arms_Size_Minimum ((Arms_Size)0)
 
-void
-R_Map_clear
-  (
-    R_Map* self
-  );
+/// The maximum value of Arms_Size.
+#define Arms_Size_Maximum (SIZE_MAX)
 
-R_SizeValue
-R_Map_getSize
-  (
-    R_Map const* self
-  );
-
-void
-R_Map_set
-  (
-    R_Map* self,
-    R_Value key,
-    R_Value value
-  );
-
-R_Value
-R_Map_get
-  (
-    R_Map const* self,
-    R_Value key
-  );
-
-R_List*
-R_Map_getValues
-  (
-    R_Map const* self
-  );
-
-R_List*
-R_Map_getKeys
-  (
-    R_Map const* self
-  );
-
-#endif // R_MAP_H_INCLUDED
+#endif // ARMS_SIZETYPE_H_INCLUDED

@@ -1,4 +1,4 @@
-<h3>Finalize callback function</h3>
+<h4>Finalize callback function</h4>
 <p>
 A finalize function is a function of the signature <code>void Arms_FinalizeCallbackFunction(void *object)</code>.
 The finalize callback function is supplied to a type when that type is created and is passed a pointer to

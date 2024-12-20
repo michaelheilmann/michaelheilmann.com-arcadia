@@ -1,4 +1,4 @@
-<h3>Visit callback function</h3>
+<h4>Visit callback function</h4>
 <p>
 A visit function is a function of the signature <code>void Arms_VisitCallbackFunction(void *object)</code>.
 The visit callback function is supplied to a type when that type is created and is passed a pointer to

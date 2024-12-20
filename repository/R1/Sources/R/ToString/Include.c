@@ -19,67 +19,70 @@
 
 #include "R/JumpTarget.h"
 #include "R/Status.h"
-#include "R/Utf8.h"
-#include "R/cstdlib.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-size_t
+void
 R_Integer16_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Integer16Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   )
-{ return R_Integer64_toString(value, buffer, bufferLength); }
+{ R_Integer64_toString(memoryManager, value, buffer, bufferLength); }
 
-size_t
+void
 R_Integer32_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Integer32Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   )
-{ return R_Integer64_toString(value, buffer, bufferLength); }
+{ R_Integer64_toString(memoryManager, value, buffer, bufferLength); }
 
-size_t
+void
 R_Integer64_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Integer64Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   )
 {
   R_Integer64Value valueTemporary;
   size_t numberOfDigits = 0;
-  size_t requiredBufferLength = 0;
+  size_t _bufferLength = 0;
 
   valueTemporary = value;
   if (!valueTemporary) {
-    requiredBufferLength++;
+    _bufferLength++;
     numberOfDigits++;
   } else {
     if (valueTemporary < 0) {
       while (value < 0) {
         valueTemporary /= 10;
-        requiredBufferLength++;
+        _bufferLength++;
         numberOfDigits++;
       }
     } else {
       while (valueTemporary > 0) {
         valueTemporary /= 10;
-        requiredBufferLength++;
+        _bufferLength++;
         numberOfDigits++;
       }
     }
   }
 
-  if (!buffer || bufferLength < requiredBufferLength) {
-    return requiredBufferLength;
+  char* _buffer = NULL;
+  if (Arms_MemoryManager_allocate(memoryManager, &_buffer, _bufferLength)) {
+    R_setStatus(R_Status_AllocationFailed);
+    R_jump();
   }
 
   valueTemporary = value;
-  char *p = buffer;
+  char *p = _buffer;
   if (!valueTemporary) {
     *p = (char)'0';
     ++p;
@@ -105,68 +108,75 @@ R_Integer64_toString
     }
   }
 
-  return requiredBufferLength;
+  *buffer = _buffer;
+  *bufferLength = _bufferLength;
 }
 
-size_t
+void
 R_Integer8_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Integer8Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   )
-{ return R_Integer64_toString(value, buffer, bufferLength); }
+{ R_Integer64_toString(memoryManager, value, buffer, bufferLength); }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-size_t
+void
 R_Natural16_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Natural16Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   )
-{ return R_Natural64_toString(value, buffer, bufferLength); }
+{ R_Natural64_toString(memoryManager, value, buffer, bufferLength); }
 
-size_t
+void
 R_Natural32_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Natural32Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   )
-{ return R_Natural64_toString(value, buffer, bufferLength); }
+{ R_Natural64_toString(memoryManager, value, buffer, bufferLength); }
 
-size_t
+void
 R_Natural64_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Natural64Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   )
 {
   R_Natural64Value valueTemporary;
   size_t numberOfDigits = 0;
-  size_t requiredBufferLength = 0;
+  size_t _bufferLength = 0;
 
   valueTemporary = value;
   if (!valueTemporary) {
-    requiredBufferLength++;
+    _bufferLength++;
     numberOfDigits++;
   } else {
     while (valueTemporary > 0) {
       valueTemporary /= 10;
-      requiredBufferLength++;
+      _bufferLength++;
       numberOfDigits++;
     }
   }
 
-  if (!buffer || bufferLength < requiredBufferLength) {
-    return requiredBufferLength;
+  char* _buffer = NULL;
+  if (Arms_MemoryManager_allocate(memoryManager, &_buffer, _bufferLength)) {
+    R_setStatus(R_Status_AllocationFailed);
+    R_jump();
   }
 
   valueTemporary = value;
-  char* p = buffer;
+  char* p = _buffer;
   if (!valueTemporary) {
     *p = (char)'0';
     ++p;
@@ -180,17 +190,19 @@ R_Natural64_toString
     p += numberOfDigits;
   }
 
-  return requiredBufferLength;
+  *buffer = _buffer;
+  *bufferLength = _bufferLength;
 }
 
-size_t
+void
 R_Natural8_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Natural8Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   )
-{ return R_Natural64_toString(value, buffer, bufferLength); }
+{ R_Natural64_toString(memoryManager, value, buffer, bufferLength); }
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

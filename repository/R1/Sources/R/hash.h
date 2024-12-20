@@ -18,6 +18,8 @@
 #if !defined(R_HASH_H_INCLUDED)
 #define R_HASH_H_INCLUDED
 
+#include "R/Atoms.h"
+
 #include "R/Boolean.h"
 
 #include "R/ForeignProcedure.h"
@@ -37,7 +39,15 @@
 
 #include "R/Size.h"
 
+#include "R/Types.h"
+
 #include "R/Void.h"
+
+R_SizeValue
+R_hashAtomValue
+  (
+    R_AtomValue x
+  );
 
 // https://michaelheilmann.com/repository/R1/#r-hash
 R_SizeValue
@@ -128,6 +138,13 @@ R_SizeValue
 R_hashSizeValue
   (
     R_SizeValue x
+  );
+
+// https://michaelheilmann.com/repository/R1/#r-hash
+R_SizeValue
+R_hashTypeValue
+  (
+    R_TypeValue x
   );
 
 // https://michaelheilmann.com/repository/R1/#r-hash

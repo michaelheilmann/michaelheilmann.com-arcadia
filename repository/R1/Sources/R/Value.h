@@ -43,7 +43,14 @@
 
 #include "R/Size.h"
 
+#include "R/Types.h"
+#include "R/TypeNames.h"
+
 #include "R/Void.h"
+
+typedef R_Type* R_TypeValue;
+
+#define R_ValueTag_Atom (1)
 
 #define R_ValueTag_Boolean (2)
 
@@ -68,6 +75,8 @@
 
 #define R_ValueTag_Size (16)
 
+#define R_ValueTag_Type (17)
+
 // The tag for type "Void" must be 0.
 #define R_ValueTag_Void (0)
 
@@ -77,6 +86,8 @@ typedef struct R_Value {
 
   #define Define(Suffix,  Prefix) \
     R_##Suffix##Value Prefix##Value;
+
+    Define(Atom, atom)
 
     Define(Boolean, boolean)
 
@@ -100,6 +111,8 @@ typedef struct R_Value {
     Define(Real64, real64)
 
     Define(Size, size)
+
+    Define(Type, type)
     
     Define(Void, void)
 
@@ -140,6 +153,8 @@ R_Value_getTag
     value->Prefix##Value = Prefix##Value; \
   }
 
+Define(Atom, atom)
+
 Define(Boolean, boolean)
 
 Define(ForeignProcedure, foreignProcedure)
@@ -162,6 +177,8 @@ Define(Real32, real32)
 Define(Real64, real64)
 
 Define(Size, size)
+
+Define(Type, type)
 
 Define(Void, void)
 

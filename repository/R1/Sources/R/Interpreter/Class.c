@@ -17,17 +17,13 @@
 
 #include "R/Interpreter/Class.h"
 
+#include "R/ArgumentsValidation.h"
+#include "R/Interpreter/Include.h"
 #include "R/JumpTarget.h"
 #include "R/Object.h"
-#include "R/String.h"
 #include "R/Status.h"
-#include "R/ArgumentsValidation.h"
-#include "R/UnmanagedMemory.h"
-#include "R/Interpreter/Code.h"
+#include "R/String.h"
 #include "R/cstdlib.h"
-#include "R/Interpreter/Constructor.h"
-#include "R/Interpreter/Method.h"
-#include "R/Interpreter/Variable.h"
 
 static void
 R_Interpreter_Class_constructImpl
@@ -94,6 +90,8 @@ R_Interpreter_Class_constructImpl
   _self->classMembers = R_Map_create();
 
   _self->extendedClass = NULL;
+
+  _self->complete = R_BooleanValue_False;
   
 
   R_Object_setType((R_Object*)_self, _type);
@@ -194,4 +192,96 @@ R_Interpreter_Class_addVariable
   }
   R_Value_setObjectReferenceValue(&value, variable);
   R_Map_set(self->classMembers, key, value);
+}
+
+static R_Interpreter_Class*
+getClass
+  (
+    R_Value v
+  )
+{
+  if (!R_Value_isObjectReferenceValue(&v)) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  R_ObjectReferenceValue o = R_Value_getObjectReferenceValue(&v);
+  if (!R_Type_isSubType(R_Object_getType(o), _R_Interpreter_Class_getType())) {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+  return o;
+}
+
+void
+R_Interpreter_Class_complete
+  (
+    R_Interpreter_Class* self,
+    R_Interpreter_ProcessState* processState
+  )
+{ 
+  if (self->complete) {
+    return;
+  }
+  if (self->extendedClassName) {
+    R_Map* temporary = R_Map_create();
+    self->extendedClass = getClass(R_Interpreter_ProcessState_getGlobal(processState, self->extendedClassName));
+    R_Interpreter_Class_complete(self->extendedClass, processState);
+    R_Interpreter_Class* current = self;
+    do {
+      R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = current->className };
+      R_Value v = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = self };
+      v = R_Map_get(temporary, v);
+      if (R_Value_isObjectReferenceValue(&v)) {
+        R_setStatus(R_Status_SemanticalError);
+        R_jump();
+      }
+      R_Map_set(temporary, v, k);
+      current = current->extendedClass;
+    } while (current);
+    self->complete = R_BooleanValue_True;
+  }
+  R_SizeValue methodIndex = 0;
+  R_SizeValue variableIndex = 0;
+  if (self->extendedClass) {
+    R_List* classMember = R_Map_getValues(self->extendedClass->classMembers);
+    for (R_SizeValue i = 0, n = R_List_getSize(classMember); i < n; ++i) {
+      R_Value value = R_List_getAt(classMember, i);
+      R_Type* valueType = R_Value_getType(&value);
+      if (R_Type_isSubType(valueType, _R_Interpreter_Method_getType())) {
+        R_Interpreter_Method* method = R_Value_getObjectReferenceValue(&value);
+        if (methodIndex < method->index) {
+          methodIndex = method->index;
+        }
+      } else if (R_Type_isSubType(valueType, _R_Interpreter_Variable_getType())) {
+        R_Interpreter_Variable* variable = R_Value_getObjectReferenceValue(&value);
+        if (variableIndex < variable->index) {
+          variableIndex = variable->index;
+        }
+      } else {
+        R_setStatus(R_Status_SemanticalError);
+        R_jump();
+      }
+    }
+  }
+  methodIndex += 1;
+  variableIndex += 1;
+  // Complete instance class methods and the instance class variables.
+  R_List* classMember = R_Map_getValues(self->classMembers);
+  for (R_SizeValue i = 0, n = R_List_getSize(classMember); i < n; ++i) {
+    R_Value value = R_List_getAt(classMember, i);
+    R_Type* valueType = R_Value_getType(&value);
+    if (R_Type_isSubType(valueType, _R_Interpreter_Method_getType())) {
+      R_Interpreter_Method* method = R_Value_getObjectReferenceValue(&value);
+      method->index = methodIndex++;
+      method->ready = R_BooleanValue_True;
+    } else if (R_Type_isSubType(valueType, _R_Interpreter_Variable_getType())) {
+      R_Interpreter_Variable* variable = R_Value_getObjectReferenceValue(&value);
+      variable->index = variableIndex++;
+      variable->ready = R_BooleanValue_True;
+    } else {
+      R_setStatus(R_Status_SemanticalError);
+      R_jump();
+    }
+  }
+  
 }

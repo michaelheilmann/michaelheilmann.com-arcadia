@@ -17,13 +17,11 @@
 
 #include "R/Interpreter/Variable.h"
 
+#include "R/ArgumentsValidation.h"
+#include "R/Interpreter/Include.h"
 #include "R/JumpTarget.h"
 #include "R/Object.h"
 #include "R/Status.h"
-#include "R/ArgumentsValidation.h"
-#include "R/UnmanagedMemory.h"
-#include "R/Interpreter/Code.h"
-#include "R/cstdlib.h"
 
 static void
 R_Interpreter_Variable_constructImpl
@@ -81,11 +79,14 @@ R_Interpreter_Variable_constructImpl
     R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
     R_Object_constructImpl(self, 0, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
-  _self->name = R_Argument_getObjectReferenceValue(&argumentValues[0], _R_String_getType());
+  _self->ready = R_BooleanValue_False;
+  _self->index = R_SizeValue_Literal(0);
+  _self->class = R_Argument_getObjectReferenceValue(&argumentValues[0], _R_Interpreter_Class_getType());
+  _self->name = R_Argument_getObjectReferenceValue(&argumentValues[1], _R_String_getType());
   R_Object_setType((R_Object*)_self, _type);
 }
 
@@ -95,19 +96,31 @@ R_Interpreter_Variable_visit
     R_Interpreter_Variable* self
   )
 {
+  R_Object_visit(self->class);
   R_Object_visit(self->name);
 }
 
 R_Interpreter_Variable*
 R_Interpreter_Variable_create
   (
+    R_Interpreter_Class* class,
     R_String* name
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = name } };
-  R_Interpreter_Variable* self = R_allocateObject(_R_Interpreter_Variable_getType(), 1, &argumentValues[0]);
+  R_Value argumentValues[] = {
+    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = class },
+    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = name },
+  };
+  R_Interpreter_Variable* self = R_allocateObject(_R_Interpreter_Variable_getType(), 2, &argumentValues[0]);
   return self;
 }
+
+R_Interpreter_Class*
+R_Interpreter_Variable_getClass
+  (
+    R_Interpreter_Variable* self
+  )
+{ return self->class; }
 
 R_String*
 R_Interpreter_Variable_getName

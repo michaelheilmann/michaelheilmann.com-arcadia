@@ -18,6 +18,9 @@
 #if !defined(R_NUMBERTOSTRING_INCLUDE_H_INCLUDED)
 #define R_NUMBERTOSTRING_INCLUDE_H_INCLUDED
 
+#include "Arms.h"
+
+#include "R/Boolean.h"
 #include "R/Integer16.h"
 #include "R/Integer32.h"
 #include "R/Integer64.h"
@@ -28,99 +31,116 @@
 #include "R/Natural8.h"
 #include "R/Real32.h"
 #include "R/Real64.h"
-
-#include "R/StringBuffer.h"
+#include "R/Void.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// if buffer is null, then return the required buffer length.
-// if buffer is not null but bufferLength is too small, do not write to the buffer and return the required buffer length.
-// otherwise write to the buffer and return the number of Bytes written.
-size_t
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+// On success:
+// <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
+// <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
+// The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
+void
 R_Integer16_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Integer16Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   );
 
-// if buffer is null, then return the required buffer length.
-// if buffer is not null but bufferLength is too small, do not write to the buffer and return the required buffer length.
-// otherwise write to the buffer and return the number of Bytes written.
-size_t
+// On success:
+// <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
+// <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
+// The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
+void
 R_Integer32_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Integer32Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   );
 
-// if buffer is null, then return the required buffer length.
-// if buffer is not null but bufferLength is too small, do not write to the buffer and return the required buffer length.
-// otherwise write to the buffer and return the number of Bytes written.
-size_t
+// On success:
+// <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
+// <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
+// The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
+void
 R_Integer64_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Integer64Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   );  
 
-// if buffer is null, then return the required buffer length.
-// if buffer is not null but bufferLength is too small, do not write to the buffer and return the required buffer length.
-// otherwise write to the buffer and return the number of Bytes written.
-size_t
+// On success:
+// <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
+// <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
+// The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
+void
 R_Integer8_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Integer8Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// if buffer is null, then return the required buffer length.
-// if buffer is not null but bufferLength is too small, do not write to the buffer and return the required buffer length.
-// otherwise write to the buffer and return the number of Bytes written.
-size_t
+// On success:
+// <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
+// <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
+// The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
+void
 R_Natural16_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Natural16Value value,
-    char* buffer,
-    size_t bufferCapacity
+    char** buffer,
+    size_t* bufferCapacity
   );
 
-// if buffer is null, then return the required buffer length.
-// if buffer is not null but bufferLength is too small, do not write to the buffer and return the required buffer length.
-// otherwise write to the buffer and return the number of Bytes written.
-size_t
+// On success:
+// <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
+// <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
+// The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
+void
 R_Natural32_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Natural32Value value,
-    char* buffer,
-    size_t bufferCapacity
+    char** buffer,
+    size_t* bufferCapacity
   );
 
-// if buffer is null, then return the required buffer length.
-// if buffer is not null but bufferLength is too small, do not write to the buffer and return the required buffer length.
-// otherwise write to the buffer and return the number of Bytes written.
-size_t
+// On success:
+// <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
+// <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
+// The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
+void
 R_Natural64_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Natural64Value value,
-    char* buffer,
-    size_t bufferLength
+    char** buffer,
+    size_t* bufferLength
   );
 
-// if buffer is null, then return the required buffer length.
-// if buffer is not null but bufferLength is too small, do not write to the buffer and return the required buffer length.
-// otherwise write to the buffer and return the number of Bytes written.
-size_t
+// On success:
+// <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
+// <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
+// The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
+void
 R_Natural8_toString
   (
+    Arms_MemoryManager* memoryManager,
     R_Natural8Value value,
-    char* buffer,
-    size_t bufferCapacity
+    char** buffer,
+    size_t* bufferCapacity
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

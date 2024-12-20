@@ -19,6 +19,8 @@
 #define ARMS_H_INCLUDED
 
 #include "Arms/Configure.h"
+#include "Arms/SizeType.h"
+#include "Arms/MemoryManager.h"
 
 // size_t
 #include <stddef.h>
@@ -40,18 +42,6 @@ typedef uint8_t Arms_Natural8;
 /// The maximum value of Arms_Natural8.
 #define Arms_Natural8_Maximum (UINT8_MAX)
 
-// A non-negative binary integer.
-// Its width, in Bits, is at least 16.
-// It is large enough to fit the result of Arms_SizeOf, Arms_AlignOf, and Arms_OffsetOf.
-typedef size_t Arms_Size;
-
-/// The minimum value of Arms_Size.
-/// Guaranteed to be @a 0.
-#define Arms_Size_Minimum ((Arms_Size)0)
-
-/// The maximum value of Arms_Size.
-#define Arms_Size_Maximum (UINT8_MAX)
-
 typedef enum Arms_Status {
   Arms_Status_Success = 0,
   Arms_Status_ArgumentValueInvalid = 1,
@@ -59,6 +49,7 @@ typedef enum Arms_Status {
   Arms_Status_TypeExists = 3,
   Arms_Status_TypeNotExists = 4,
   Arms_Status_OperationInvalid = 5,
+  Arms_Status_EnvironmentFailed = 6,
 } Arms_Status;
 
 typedef void (Arms_TypeRemovedCallbackFunction)(Arms_Natural8 const* name, Arms_Size nameLength);
@@ -129,24 +120,14 @@ Arms_unlock
 
 #endif // Arms_Configuration_WithLocks
 
-Arms_Status
-Arms_allocateUnmanaged
+Arms_MemoryManager*
+Arms_getDefaultMemoryManager
   (
-    void** p,
-    Arms_Size n
   );
 
-Arms_Status
-Arms_reallocateUnmanaged
+Arms_MemoryManager*
+Arms_getSlabMemoryManager
   (
-    void** p,
-    Arms_Size n
-  );
-
-Arms_Status
-Arms_deallocateUnmanaged
-  (
-    void* p
   );
 
 #endif // ARMS_H_INCLUDED

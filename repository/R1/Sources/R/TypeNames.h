@@ -47,6 +47,12 @@ struct R_TypeName {
   R_AtomValue atomValue;
 };
 
+R_SizeValue
+R_TypeName_hash
+  (
+    R_TypeNameValue typeNameValue
+  );
+
 /* Create a type name. Raise error on failure. */
 R_TypeNameValue
 R_TypeNames_getOrCreateTypeName

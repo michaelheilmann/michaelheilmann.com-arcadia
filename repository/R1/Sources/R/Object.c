@@ -304,7 +304,7 @@ R_Object_getType
 }
 
 R_SizeValue
-R_Object_getHash
+R_Object_hash
   ( 
     R_Object* self
   )

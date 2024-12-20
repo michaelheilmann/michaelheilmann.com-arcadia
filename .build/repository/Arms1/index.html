@@ -32,7 +32,7 @@
   This is the documentation for Michael  Heilmann's Automatic Resource Management System Mark 1,
   henceforth ARMS1. ARMS1 is a precise stop the world garbage collector to be used for programs
   written in C. ARMS1 is available at <a href="https://michaelheilmann.com/repository/arms1">michaelheilmann.com/repository/arms1</a>. 
-  <h2>Files</h2>
+  <h2>1. Files</h2>
   <p>
   You can find the sources of ARMS1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
   The subdirectory of Arms1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arms1</a>.</p>
@@ -56,7 +56,7 @@
   cmake <my-mv>path-to-repository-directory</my-mv>
   </code></p>
 
-  <h2>How a ARMS1 works</h2>
+  <h2>2. How a ARMS1 works</h2>
   <p>
   ARMS1 allows for the creation of objects and maintains a set of these created objects called the <em>universe</em> \(U\).
   When an object \(x\) is created, a type \(a\) is associated with that object.
@@ -67,7 +67,7 @@
   (also note that \(R \subseteq L\) and \(R \cap D = \emptyset\)).
   ARMS1 removes all dead objects \(D\) from the universe \(U\) such that \(U@new = U@old - D\) and destroys them.
   </p>
-  <h2>Starting up and shutting down</h2>
+  <h2>3. Starting up and shutting down</h2>
   <p>To use the services of ARMS1, a user must acquire an handle to ARMS1. The user acquires a handle by a succesfull call to <code>Arms_Status Arms_startup()</code>.
   This function returns <code>Arms_Status_Success</code> to indicate success and returns status code different from <code>Arms_Status_Success</code> on failure.
   The following table lists the possible values returned in case of failure</p>
@@ -92,25 +92,27 @@
   Using the services of ARMS1 without a handle is undefined behavior.
   </p>
   
-  <h2>Creating types</h2>
-  <p>The user adds a type to the ARMS1 by invoking <code>Arms_Status Arms_registerType(char const* name, size_t nameLength, 
-  Arms_TypeRemovedCallbackFunction* typeRemoved, Arms_VisitCallbackFunction *visit, Arms_FinalizeCallbackFunction* finalize)</code>. The first argument <code>name</code> is
-  a pointer to an array of <code>nameLength</code> Bytes denoting the type name. No two types of the same name can be
-  registered and this function fails with <code>Arms_Status_TypeExists</code> if an attempt is made to do so. <code>visit</code>
-  must point to a <code>Arms_VisitCallbackFunction</code> or must be a null pointer. <code>finalize</code> must point to a
-  <code>Arms_FinalizeCallbackFunction</code> or must be a null pointer. <code>typeRemoved</code> must point to a <code>Arms_TypeRemovedCallbackFunction</code>
-  or must be a null pointer. If this function fails it returns a value different from <code>Arms_Status_Success</code>. The following table lists the possible values returned in case of failure
-  </p>
-  <table>
-    <tr><td>Value</td><td>Description</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>pObject</code> is a null pointer</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>name</code> is a null pointer</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>nameLength</code> exceeds limits</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>size</code> exceeds limits</td></tr>
-    <tr><td><code>Arms_Status_AllocationFailed</code></td><td>an allocation failed</td></tr>
-  </table>
-  
-  <h3>Type removed callback function</h3>
+<h2>3. Managed Memory</h2>
+
+<h3>3.1 Creating types</h3>
+<p>The user adds a type to the ARMS1 by invoking <code>Arms_Status Arms_registerType(char const* name, size_t nameLength, 
+Arms_TypeRemovedCallbackFunction* typeRemoved, Arms_VisitCallbackFunction *visit, Arms_FinalizeCallbackFunction* finalize)</code>. The first argument <code>name</code> is
+a pointer to an array of <code>nameLength</code> Bytes denoting the type name. No two types of the same name can be
+registered and this function fails with <code>Arms_Status_TypeExists</code> if an attempt is made to do so. <code>visit</code>
+must point to a <code>Arms_VisitCallbackFunction</code> or must be a null pointer. <code>finalize</code> must point to a
+<code>Arms_FinalizeCallbackFunction</code> or must be a null pointer. <code>typeRemoved</code> must point to a <code>Arms_TypeRemovedCallbackFunction</code>
+or must be a null pointer. If this function fails it returns a value different from <code>Arms_Status_Success</code>. The following table lists the possible values returned in case of failure
+</p>
+<table>
+  <tr><td>Value</td><td>Description</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>pObject</code> is a null pointer</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>name</code> is a null pointer</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>nameLength</code> exceeds limits</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>size</code> exceeds limits</td></tr>
+  <tr><td><code>Arms_Status_AllocationFailed</code></td><td>an allocation failed</td></tr>
+</table>
+
+<h4>Type removed callback function</h4>
 <p>
 A type removed function is a function of the signature <code>void Arms_TypeRemovedCallbackFunction(Arms_Natural8 const* name, Arms_Size nameLength)</code>.
 The type removed callback function is supplied to a type when that type is created.
@@ -141,7 +143,7 @@ int main(int argc, char**argv) {<br>
 </p> 
 <p>Note that types can be created with a null pointer for the finalize function.</p>
 
-  <h3>Visit callback function</h3>
+<h4>Visit callback function</h4>
 <p>
 A visit function is a function of the signature <code>void Arms_VisitCallbackFunction(void *object)</code>.
 The visit callback function is supplied to a type when that type is created and is passed a pointer to
@@ -180,7 +182,7 @@ int main(int argc, char**argv) {<br>
 </p> 
 <p>Note that types can be created with a null pointer for the visit function.</p>
 
-  <h3>Finalize callback function</h3>
+<h4>Finalize callback function</h4>
 <p>
 A finalize function is a function of the signature <code>void Arms_FinalizeCallbackFunction(void *object)</code>.
 The finalize callback function is supplied to a type when that type is created and is passed a pointer to
@@ -217,76 +219,89 @@ int main(int argc, char**argv) {<br>
 <p>Note that types can be created with a null pointer for the finalize function.</p>
 
 
-  <h2>Creating objects</h2>
-  <p>
-  To create an object, the user of ARMS1 creates an object by invoking <code>Arms_Status Arms_allocate(void** pObject,
-  char const* name, size_t nameLength, size_t size)</code>. <code>name</code> is a pointer to an array of <code>nameLength</code> Bytes
-  denoting the type name of the type to be assigned to object. <code>size</code> denotes the size, in Bytes, of the object to allocated
-  (0 is a valid size). If this function is invoked successfully, the <code>*pObject</code> is assigned a pointer to an object of the
-  specified size. The contents of the Bytes are unspecified. The object is assigned the type of the specified name. 
-  If this function fails it returns a value different from  <code>Arms_Status_Success</code>.
-  The following table lists the possible values returned in case of failure
-  </p>
-  <table>
-    <tr><td>Value</td><td>Description</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>pObject</code> is a null pointer</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>name</code> is a null pointer</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>nameLength</code> exceeds limits</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>size</code> exceeds limits</td></tr>
-    <tr><td><code>Arms_Status_TypeNotExists</code></td><td>the type does not exist</td></tr>
-    <tr><td><code>Arms_Status_AllocationFailed</code></td><td>an allocation failed</td></tr>
-  </table>
-  
-  <h2>Freeing resources</h2>
-  <p>To relinqish resources, the user invokes <code>Arms_Status Arms_run()</code> which destroys dead objects \(D\) such that the new universe
-  only contains live objects, in other terms \(U@new = U@old - D\) or equivalently \(U@new = L\) holds.</p>
-  
-  <p><code>Arms_run</code> always succeeds.</p>
-  
-  <h2>Locks</h2>
-  <p>
-  A locked object \(x\) is element of the root set \(R\).
-  Hence this object and all objects reachable from this object are live.
-  </p>
-  
-  <p>
-  To add a lock to an object, the user invokes <code>Arms_Status Arms_lock(void* object)</code>.
-  If this function is invoked successfully, the lock count of the object pointed to by <code>object</code>
-  was incremented by one. The initial lock count of an object is 0. A lock count of 0 means an object is not locked.
-  If this function fails it returns a value different from  <code>Arms_Status_Success</code>.
-  The following table lists the possible values returned in case of failure
-  <table>
-    <tr><td>Value</td><td>Description</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>object</code> is a null pointer</td></tr>
-    <tr><td><code>Arms_Status_OperationInvalid</code></td><td>the lock would overflow</td></tr>
-    <tr><td><code>Arms_Status_AllocationFailed</code></td><td>an allocation failed</td></tr>
-  </table>
-  
-  <p>
-  To remove a lock from an object, the user invokes <code>Arms_Status Arms_unlock(void* object)</code>.
-  If this function is invoked successfully, the lock count of the object pointed to by <code>object</code>
-  was decremented by one. If this function fails it returns a value different from  <code>Arms_Status_Success</code>.
-  The following table lists the possible values returned in case of failure
-  <table>
-    <tr><td>Value</td><td>Description</td></tr>
-    <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>object</code> is a null pointer</td></tr>
-    <tr><td><code>Arms_Status_OperationInvalid</code></td><td>the lock count would underflow</td></tr>
-  </table>
-<h2>Unmanaged Memory</h2>
-<p>ARMS1 allows for allocation, reallocation, and deallocation of <em>unmanaged</em> memory.</p>
+<h3>3.2 Creating objects</h3>
+<p>
+To create an object, the user of ARMS1 creates an object by invoking <code>Arms_Status Arms_allocate(void** pObject,
+char const* name, size_t nameLength, size_t size)</code>. <code>name</code> is a pointer to an array of <code>nameLength</code> Bytes
+denoting the type name of the type to be assigned to object. <code>size</code> denotes the size, in Bytes, of the object to allocated
+(0 is a valid size). If this function is invoked successfully, the <code>*pObject</code> is assigned a pointer to an object of the
+specified size. The contents of the Bytes are unspecified. The object is assigned the type of the specified name. 
+If this function fails it returns a value different from  <code>Arms_Status_Success</code>.
+The following table lists the possible values returned in case of failure
+</p>
+<table>
+  <tr><td>Value</td><td>Description</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>pObject</code> is a null pointer</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>name</code> is a null pointer</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>nameLength</code> exceeds limits</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>size</code> exceeds limits</td></tr>
+  <tr><td><code>Arms_Status_TypeNotExists</code></td><td>the type does not exist</td></tr>
+  <tr><td><code>Arms_Status_AllocationFailed</code></td><td>an allocation failed</td></tr>
+</table>
 
-<h3>Arms_allocateUnmanaged</h3>
+<h3>3.3 Freeing resources</h3>
+<p>To relinqish resources, the user invokes <code>Arms_Status Arms_run()</code> which destroys dead objects \(D\) such that the new universe
+only contains live objects, in other terms \(U@new = U@old - D\) or equivalently \(U@new = L\) holds.</p>
+
+<p><code>Arms_run</code> always succeeds.</p>
+
+<h3>3.4 Locks</h3>
+<p>
+A locked object \(x\) is element of the root set \(R\).
+Hence this object and all objects reachable from this object are live.
+</p>
+
+<p>
+To add a lock to an object, the user invokes <code>Arms_Status Arms_lock(void* object)</code>.
+If this function is invoked successfully, the lock count of the object pointed to by <code>object</code>
+was incremented by one. The initial lock count of an object is 0. A lock count of 0 means an object is not locked.
+If this function fails it returns a value different from  <code>Arms_Status_Success</code>.
+The following table lists the possible values returned in case of failure
+<table>
+  <tr><td>Value</td><td>Description</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>object</code> is a null pointer</td></tr>
+  <tr><td><code>Arms_Status_OperationInvalid</code></td><td>the lock would overflow</td></tr>
+  <tr><td><code>Arms_Status_AllocationFailed</code></td><td>an allocation failed</td></tr>
+</table>
+
+<p>
+To remove a lock from an object, the user invokes <code>Arms_Status Arms_unlock(void* object)</code>.
+If this function is invoked successfully, the lock count of the object pointed to by <code>object</code>
+was decremented by one. If this function fails it returns a value different from  <code>Arms_Status_Success</code>.
+The following table lists the possible values returned in case of failure
+<table>
+  <tr><td>Value</td><td>Description</td></tr>
+  <tr><td><code>Arms_Status_ArgumentInvalid</code></td><td><code>object</code> is a null pointer</td></tr>
+  <tr><td><code>Arms_Status_OperationInvalid</code></td><td>the lock count would underflow</td></tr>
+</table>
+
+<h2>4. Unmanaged Memory</h2>
+<p>
+ARMS1 allows for allocation, reallocation, and deallocation of <em>unmanaged</em> memory via <em>memory managers</em>.
+</p>
+
+<p>
+There are two different memory managers available for different use cases.
+Currently, the <em>default memory manager</em> and the <em>slab memory manager</em> are available.
+The former is described in section <a href="#default-memory-manager">"Default Memory Manager"</a>,
+the latter is described in section <a href="#slab-memory-manager">"Slab Memory Manager"</a>.
+All memory manager share a commmon interface which is described in section <a href="#memory-manager-interface">"Memory Manager Interface"</a>.
+
+<h3 id="memory-manager-interface">4.1 Memory Manager Interface</h3>
+<p>This section describes the interface of the memory managers.</p>
+
+<h4>4.1.1 Arms_MemoryManager_allocate</h4>
 <p><code>
-Arms_Status Arms_allocateUnmanaged(void** p, size_t n);
+Arms_MemoryManager_Status Arms_MemoryManager_allocate(Arms_MemoryManager* memoryManager, void** p, Arms_Size n);
 </code></p>
 <p>
-Allocates an unmanaged memory block of size <code>n</code>.
+Allocates an unmanaged memory block of size <code>n</code> using the specified memory manager.
 </p>
 
 <p>
 <em>If this function succeeds</em>:
 A pointer to the beginning of the memory block is stored in <code>*p</code>.
-<code>Arms_Status_Success</code> is returned.
+<code>Arms_MemoryManager_Status_Success</code> is returned.
 </p>
 
 <p>
@@ -297,17 +312,17 @@ The function returns one of the status code in the table below.
 
 <table>
   <tr><td>Status Code</td><td>Description</td></tr>
-  <tr><td>Arms_Status_AllocationFailed</td><td>The allocation failed.</td></tr>
-  <tr><td>Arms_Status_ArgumentValueInvalid</td><td><code>p</code> is a null pointer.</td></tr>
+  <tr><td>Arms_MemoryManager_Status_AllocationFailed</td><td>The allocation failed.</td></tr>
+  <tr><td>Arms_MemoryManager_Status_ArgumentValueInvalid</td><td><code>p</code> is a null pointer.</td></tr>
 </table>
 
 
 <p>Note that <code>n</code> can be 0 as 0 is a valid size for a memory block.</p>
 
 
-<h3>Arms_reallocateUnmanaged</h3>
+<h4>4.1.2 Arms_MemoryManager_reallocate</h4>
 <p><code>
-Arms_Status Arms_rallocateUnmanaged(void** p, size_t n);
+Arms_MemoryManager_Status Arms_reallocate(Arms_MemoryManager* memoryManager, void** p, size_t n);
 </code></p>
 
 <p>
@@ -316,7 +331,7 @@ A pointer to the beginning of the new memory block is stored in <code>*p</code>.
 The first <my-mv>k</my-mv> values of the new memory memory block and the old memory block are equal
 where <code><my-mv>k</my-mv></code> is <code>min(n, <my-mv>m</my-mv>)</code> where <code>n</code> is the size of the
 new memory block and <my-mv>m</my-mv> is the size of the new memory block.
-<code>Arms_Status_Success</code> is returned.
+<code>Arms_MemoryManager_Status_Success</code> is returned.
 </p>
 
 <p>
@@ -327,15 +342,15 @@ The function returns one of the status code in the table below.
 
 <table>
   <tr><td>Status Code</td><td>Description</td></tr>
-  <tr><td>Arms_Status_AllocationFailed</td><td>The allocation failed.</td></tr>
-  <tr><td>Arms_Status_ArgumentValueInvalid</td><td><code>p</code> is a null pointer.</td></tr>
+  <tr><td>Arms_MemoryManager_Status_AllocationFailed</td><td>The allocation failed.</td></tr>
+  <tr><td>Arms_MemoryManager_Status_ArgumentValueInvalid</td><td><code>p</code> is a null pointer.</td></tr>
 </table>
 
 <p>Note that <code>n</code> can be 0 as 0 is a valid size for a memory block.</p>
 
-<h3>Arms_deallocateUnmanaged</h3>
+<h4>4.1.3 Arms_MemoryManager_deallocate</h4>
 <p><code>
-Arms_Status Arms_deallocateUnmanaged(void* p);
+Arms_MemoryManager_Status Arms_MemoryManager_deallocate(Arms_MemoryManager* memoryManager, void* p);
 </code></p>
 
 <p>Deallocates an unmanaged memory block.</p>
@@ -347,8 +362,34 @@ The memory block pointed to by <code>p</code> was deallocated.
 <p>
 <em>If this function fails</em>:
 The environment is not observably changed.
-This function fails only if <code>p</code> is a null pointer. In that case, it returns <code>Arms_Status_ArgumentValueInvalid</code>.
+This function fails only if <code>p</code> is a null pointer. In that case, it returns <code>Arms_MemoryManager_Status_ArgumentValueInvalid</code>.
 </p>
+
+<h3>4.2 Default Memory Manager</h3>
+<p>
+Obtain a pointer to the <em>default memory manager</em> by a call to to the function
+</p>
+<p><code>
+Arms_MemoryManager* Arms_getDefaultMemoryManager()
+</code></p>
+<p>
+This function always succeeds if ARMS1 is initialized. Otherwise its behaviour is undefined.
+The memory manager returned is valid as long as ARMS1 is initialized.
+</p>
+
+<h3>4.3 Slab Memory Manager</h3>
+<p>
+Obtain a pointer to the <em>slab memory manager</em> by a call to to the function
+</p>
+<p><code>
+Arms_MemoryManager* Arms_getSlabMemoryManager()
+</code></p>
+<p>
+This function always succeeds if ARMS1 is initialized. Otherwise its behaviour is undefined.
+The memory manager returned is valid as long as ARMS1 is initialized.
+</p>
+
+<p>Warning: The Slab Memory Manager is work in progress.</p>
 
 </main>
 

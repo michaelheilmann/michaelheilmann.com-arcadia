@@ -18,6 +18,15 @@
 #include "R/Hash.h"
 
 R_SizeValue
+R_hashAtomValue
+  (
+    R_AtomValue x
+  )
+{
+  return R_Atom_getHash(x);
+}
+
+R_SizeValue
 R_hashBooleanValue
   (
     R_BooleanValue x
@@ -148,6 +157,14 @@ R_hashSizeValue
   return (R_SizeValue)x;
 }
 
+R_SizeValue
+R_hashTypeValue
+  (
+    R_TypeValue x
+  )
+{
+  return R_Type_hash(x);
+}
 
 R_SizeValue
 R_hashVoidValue

@@ -21,12 +21,19 @@
 #include "R/ForeignProcedure.h"
 #include "R/Object.h"
 #include "R/Value.h"
-#include "R/Interpreter/Include.h"
+typedef struct R_Interpreter_Class R_Interpreter_Class;
 
 Rex_declareObjectType("R.Interpreter.Variable", R_Interpreter_Variable, "R.Object");
 
 struct R_Interpreter_Variable {
   R_Object _parent;
+  /// If the variable is ready.
+  R_BooleanValue ready;
+  /// The zero-based index of this variable if ready is true.
+  /// Zero otherwise.
+  R_SizeValue index;
+  /// The class defining this variable.
+  R_Interpreter_Class *class;
   /// The name of this variable.
   R_String* name;
 };
@@ -34,7 +41,14 @@ struct R_Interpreter_Variable {
 R_Interpreter_Variable*
 R_Interpreter_Variable_create
   (
+    R_Interpreter_Class* class,
     R_String* name
+  );
+
+R_Interpreter_Class*
+R_Interpreter_Variable_getClass
+  (
+    R_Interpreter_Variable* self
   );
 
 R_String*

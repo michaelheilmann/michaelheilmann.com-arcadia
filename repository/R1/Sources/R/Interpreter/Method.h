@@ -27,6 +27,11 @@ Rex_declareObjectType("R.Interpreter.Method", R_Interpreter_Method, "R.Object");
 
 struct R_Interpreter_Method {
   R_Object _parent;
+  /// If the method is ready.
+  R_BooleanValue ready;
+  /// The zero-based index of this method if ready is true.
+  /// Zero otherwise.
+  R_SizeValue index;
   /// The name of this method.
   R_String* name;
   /// R_BooleanValue_True indicates that code is invalid and foreignProcedure points to a foreign procedure of this method.

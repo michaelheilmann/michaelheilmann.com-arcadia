@@ -71,40 +71,69 @@ typedef void (R_Type_TypeDestructingCallbackFunction)(void* context);
 
 typedef void R_Type;
 
+typedef R_Type* R_TypeValue;
+
 /// An enumeration of the type kinds.
 typedef enum R_TypeKind {
 
-  /// The boolean type kind.
+  /// The "internal" type kind.
+  /// <code>R.Internal.Atom</code> and <code>R.Internal.Type</code> are examples of this type kind.
+  R_TypeKind_Internal,
+
+  /// The "boolean" type kind.
   /// <code>R.Boolean</code> is an example of this type kind.
   R_TypeKind_Boolean,
 
-  /// The foreign value type kind.
+  /// The "foreign value" type kind.
   /// <code>R.ForeignProcedure</code> and <code>R.ImmutableByteArray</code> are example of this type kind.
   R_TypeKind_ForeignValue,
 
-  /// The integer type kind.
+  /// The "integer" type kind.
   /// <code>R.Integer(8|16|32|64)</code> are examples for this type kind.
   R_TypeKind_Integer,
 
-  /// The natural type kind.
+  /// The "natural" type kind.
   /// <code>R.Natural(8|16|32|64)</code> are examples for this type kind.
   R_TypeKind_Natural,
 
-  /// An object type kind.
+  /// The "object" type kind.
   R_TypeKind_Object,
 
-  /// The real type kind.
+  /// The "real" type kind.
   R_TypeKind_Real,
 
-  /// The size type kind.
+  /// The "size" type kind.
   /// <code>R.Size</code> is an example of this type kind.
   R_TypeKind_Size,
 
-  /// The void type kind.
+  /// The "void" type kind.
   /// <code>R.Void</code> is of this type.
   R_TypeKind_Void,
 
 } R_TypeKind;
+
+R_Type*
+_R_Type_getType
+  (
+  );
+
+R_Type*
+_R_Atom_getType
+  (
+  );
+
+static inline void
+R_Type_visit
+  (
+    R_TypeValue self
+  )
+{/*Intentionally empty.*/}
+
+R_SizeValue
+R_Type_hash
+  (
+    R_TypeValue self
+  );
 
 /// @brief Get the size, in Bytes, of a value of this type.
 /// @param self A pointer to this type.

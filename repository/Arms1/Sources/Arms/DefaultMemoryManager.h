@@ -13,59 +13,19 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-27
+// Last modified: 2024-08-31
 
-#if !defined(R_MAP_H_INCLUDED)
-#define R_MAP_H_INCLUDED
+#if !defined(ARMS_DEFAULTMEMORYMANAGER_PRIVATE_H_INCLUDED)
+#define ARMS_DEFAULTMEMORYMANAGER_PRIVATE_H_INCLUDED
 
-#include "R/Object.h"
-#include "R/List.h"
-#include "R/Value.h"
+#include "Arms/MemoryManager.private.h"
+                   
+typedef struct Arms_DefaultMemoryManager Arms_DefaultMemoryManager;
 
-Rex_declareObjectType("R.Map", R_Map, "R.Object");
-
-R_Map*
-R_Map_create
+Arms_MemoryManagerStartupShutdown_Status
+Arms_DefaultMemoryManager_create
   (
+    Arms_DefaultMemoryManager** result
   );
 
-void
-R_Map_clear
-  (
-    R_Map* self
-  );
-
-R_SizeValue
-R_Map_getSize
-  (
-    R_Map const* self
-  );
-
-void
-R_Map_set
-  (
-    R_Map* self,
-    R_Value key,
-    R_Value value
-  );
-
-R_Value
-R_Map_get
-  (
-    R_Map const* self,
-    R_Value key
-  );
-
-R_List*
-R_Map_getValues
-  (
-    R_Map const* self
-  );
-
-R_List*
-R_Map_getKeys
-  (
-    R_Map const* self
-  );
-
-#endif // R_MAP_H_INCLUDED
+#endif // ARMS_DEFAULTMEMORYMANAGER_PRIVATE_H_INCLUDED

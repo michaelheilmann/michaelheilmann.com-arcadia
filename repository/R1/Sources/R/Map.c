@@ -336,3 +336,37 @@ R_Map_get
   R_Value_setVoidValue(&temporary, R_VoidValue_Void);
   return temporary;
 }
+
+R_List*
+R_Map_getValues
+  (
+    R_Map const* self
+  )
+{
+  R_List* list = R_List_create();
+  for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    Node* node = self->buckets[i];
+    while (node) {
+      R_List_append(list, node->value);
+      node = node->next;
+    }
+  }
+  return list;
+}
+
+R_List*
+R_Map_getKeys
+  (
+    R_Map const* self
+  )
+{
+  R_List* list = R_List_create();
+  for (R_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    Node* node = self->buckets[i];
+    while (node) {
+      R_List_append(list, node->key);
+      node = node->next;
+    }
+  }
+  return list;
+}

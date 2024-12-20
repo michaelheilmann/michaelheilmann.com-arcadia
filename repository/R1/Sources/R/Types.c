@@ -24,6 +24,18 @@
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+static void
+registerTypeType
+  (
+  );
+
+static void
+registerAtomType
+  (
+  );
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 #define TypeNodeName "R.Internal.TypeNode"
 
 typedef struct TypeNode TypeNode;
@@ -138,6 +150,23 @@ _R_Types_startup
     R_TypeNames_shutdown();
     R_jump();
   }
+  R_JumpTarget jumpTarget;
+  R_pushJumpTarget(&jumpTarget);
+  if (R_JumpTarget_save(&jumpTarget)) {
+    registerTypeType();
+    registerAtomType();
+    R_popJumpTarget();
+  } else {
+    R_popJumpTarget();
+    TypeNodes_destroy(g_typeNodes);
+    g_typeNodes = NULL;
+    R_Status status = R_Arms_run();
+    if (status) {
+      /*Intentionally empty.*/
+    }
+    R_TypeNames_shutdown();
+    R_jump();
+  }
 }
 
 R_SizeValue
@@ -208,13 +237,12 @@ _R_Types_shutdown
 {
   TypeNodes_destroy(g_typeNodes);
   g_typeNodes = NULL;
+  
   R_Status status = R_Arms_run();
   if (status) {
-    R_setStatus(status);
-    R_jump();
+    /* Intentionally empty.*/
   }
-  // TODO: Make this re-entrant.
-  R_TypeNames_shutdown();
+   R_TypeNames_shutdown();
 }
 
 R_TypeKind
@@ -480,6 +508,43 @@ R_registerSizeType
 }
 
 void
+R_registerTypeType
+  (
+    char const* name,
+    size_t nameLength,
+    R_Type_Operations const* typeOperations,
+    R_Type_TypeDestructingCallbackFunction* typeDestructing
+  )
+{
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName(name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
+    }
+  }
+  TypeNode* typeNode = NULL;
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+    R_jump();
+  }
+  typeNode->kind = R_TypeKind_Internal;
+  typeNode->typeName = typeName;
+  typeNode->typeOperations = NULL;
+  typeNode->parentObjectType = NULL;
+  typeNode->valueSize = 0;
+  typeNode->typeDestructing = typeDestructing;
+
+  assert(NULL != typeNode->typeOperations);
+  assert(NULL == typeNode->typeOperations->objectTypeOperations);
+
+  typeNode->next = g_typeNodes->typeNodes;
+  g_typeNodes->typeNodes = typeNode;
+
+  R_Arms_lock(typeNode);
+}
+
+
+void
 R_registerVoidType
   (
     char const* name,
@@ -581,3 +646,107 @@ R_Type_getOperations
   TypeNode* typeNode = (TypeNode*)type;
   return typeNode->typeOperations;
 }
+
+static TypeNode* g_typeType = NULL;
+
+static void typeTypeDestructing(void* context) {
+  g_typeType = NULL;
+}
+
+static void
+registerTypeType
+  (
+  )
+{
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName("R.Internal.Type", sizeof("R.Internal.Type") - 1);
+#if _DEBUG
+  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
+    }
+  }
+#endif
+  TypeNode* typeNode = NULL;
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+    R_jump();
+  }
+  typeNode->kind = R_TypeKind_Internal;
+  typeNode->typeName = typeName;
+  typeNode->typeOperations = NULL;
+  typeNode->parentObjectType = NULL;
+  typeNode->valueSize = 0;
+  typeNode->typeDestructing = &typeTypeDestructing;
+
+  assert(NULL == typeNode->typeOperations);
+  /*assert(NULL == typeNode->typeOperations->objectTypeOperations);*/
+
+  typeNode->next = g_typeNodes->typeNodes;
+  g_typeNodes->typeNodes = typeNode;
+
+  g_typeType = typeNode;
+
+  R_Arms_lock(typeNode);
+}
+
+static TypeNode* g_atomType = NULL;
+
+static void atomTypeDestructing(void* context) {
+  g_atomType = NULL;
+}
+
+
+static void
+registerAtomType
+  (
+  )
+{
+  R_TypeNameValue typeName = R_TypeNames_getOrCreateTypeName("R.Internal.Atom", sizeof("R.Internal.Atom") - 1);
+#if _DEBUG
+  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
+      R_setStatus(R_Status_TypeExists);
+      R_jump();
+    }
+  }
+#endif
+  TypeNode* typeNode = NULL;
+  if (!R_allocate_nojump(&typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode))) {
+    R_jump();
+  }
+  typeNode->kind = R_TypeKind_Internal;
+  typeNode->typeName = typeName;
+  typeNode->typeOperations = NULL;
+  typeNode->parentObjectType = NULL;
+  typeNode->valueSize = 0;
+  typeNode->typeDestructing = &atomTypeDestructing;
+
+  assert(NULL == typeNode->typeOperations);
+  /*assert(NULL == typeNode->typeOperations->objectTypeOperations);*/
+
+  typeNode->next = g_typeNodes->typeNodes;
+  g_typeNodes->typeNodes = typeNode;
+
+  g_typeType = typeNode;
+
+  R_Arms_lock(typeNode);
+}
+
+R_Type*
+_R_Type_getType
+  (
+  )
+{ return g_typeType; }
+
+R_Type*
+_R_Atom_getType
+  (
+  )
+{ return g_atomType; }
+
+R_SizeValue
+R_Type_hash
+  (
+    R_TypeValue self
+  )
+{ return R_TypeName_hash(R_Type_getName(self)); }

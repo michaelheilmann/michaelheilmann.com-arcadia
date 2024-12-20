@@ -17,6 +17,10 @@
 
 #include "Arms.h"
 
+#include "Arms/MemoryManager.private.h"
+#include "Arms/DefaultMemoryManager.h"
+#include "Arms/SlabMemoryManager.h"
+
 // malloc, free, realloc
 #include <malloc.h>
 // memcmp, memcpy
@@ -58,25 +62,50 @@ struct Arms_Type {
 #define Arms_TagFlags_Black (2)
 #define Arms_TagFlags_Gray (Arms_TagFlags_White|Arms_TagFlags_Black)
 
-// We must make sure that this thing is 64 bit aligned.
-#if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Msvc
-#pragma pack(push, 8)
+#if Arms_Configuration_InstructionSetArchitecture_X64 == Arms_Configuration_InstructionSetArchitecture
+
+  // We must make sure that this thing is 64 bit aligned.
+  #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Msvc
+    #pragma pack(push, 8)
+  #endif
+
+#elif Arms_Configuration_InstructionSetArchitecture_X32 == Arms_Configuration_InstructionSetArchitecture
+
+  // We must make sure that this thing is 32 bit aligned.
+  #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Msvc
+    #pragma pack(push, 4)
+  #endif
+
 #endif
-struct Arms_Tag{
+
+struct Arms_Tag {
   uint8_t flags;
   Arms_Type* type;
   Arms_Tag* universeNext;
   Arms_Tag* grayNext;
 }
-#if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Gcc
-__attribute__((aligned(16)))
+#if Arms_Configuration_InstructionSetArchitecture_X64 == Arms_Configuration_InstructionSetArchitecture
+  // We must make sure that this thing is 64 bit aligned.
+  #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Gcc
+    __attribute__((aligned(16)))
+  #endif
+#elif Arms_Configuration_InstructionSetArchitecture_X32 == Arms_Configuration_InstructionSetArchitecture
+  // We must make sure that this thing is 32 bit aligned.
+  #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Gcc
+    __attribute__((aligned(16)))
+  #endif
 #endif
 ;
+
 #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Msvc
-#pragma pack(pop, 8)
+  #pragma pack(pop)
 #endif
 
-static_assert(sizeof(Arms_Tag) % 8 == 0, "Arms_Tag size not 8 Byte aligned");
+#if Arms_Configuration_InstructionSetArchitecture_X64 == Arms_Configuration_InstructionSetArchitecture
+  static_assert(sizeof(Arms_Tag) % 8 == 0, "Arms_Tag size not 8 Byte aligned");
+#elif Arms_Configuration_InstructionSetArchitecture_X32 == Arms_Configuration_InstructionSetArchitecture
+  static_assert(sizeof(Arms_Tag) % 4 == 0, "Arms_Tag size not 4 Byte aligned");
+#endif
 
 #if defined(Arms_Configuration_WithLocks) && 1 == Arms_Configuration_WithLocks
 
@@ -144,6 +173,9 @@ Arms_Tag_setBlack
   )
 { tag->flags = (tag->flags & ~Arms_TagFlags_White) | Arms_TagFlags_Black; }
 
+static Arms_DefaultMemoryManager* g_defaultMemoryManager = NULL;
+static Arms_SlabMemoryManager* g_slabMemoryManager = NULL;
+
 Arms_Status
 Arms_startup
   (
@@ -154,6 +186,41 @@ Arms_startup
     return Arms_Status_OperationInvalid;
   }
   if (!g_referenceCount) {
+    switch (Arms_DefaultMemoryManager_create(&g_defaultMemoryManager)) {
+      case Arms_MemoryManagerStartupShutdown_Status_AllocationFailed: {
+        return Arms_Status_AllocationFailed;
+      } break;
+      case Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid: {
+        return Arms_Status_ArgumentValueInvalid;
+      } break;
+      case Arms_MemoryManagerStartupShutdown_Status_Success: {
+        /* Intentionally empty.*/
+      } break;
+      default: {
+        return Arms_Status_EnvironmentFailed;
+      } break;
+    };
+    switch (Arms_SlabMemoryManager_create(&g_slabMemoryManager)) {
+      case Arms_MemoryManagerStartupShutdown_Status_AllocationFailed: {
+        Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+        g_defaultMemoryManager = NULL;
+        return Arms_Status_AllocationFailed;
+      } break;
+      case Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid: {
+        Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+        g_defaultMemoryManager = NULL;
+        return Arms_Status_ArgumentValueInvalid;
+      } break;
+      case Arms_MemoryManagerStartupShutdown_Status_Success: {
+        /* Intentionally empty.*/
+      } break;
+      default: {
+        Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+        g_defaultMemoryManager = NULL;
+        return Arms_Status_EnvironmentFailed;
+      } break;
+    };
+
     g_types = NULL;
 
     g_universe = NULL;
@@ -197,6 +264,10 @@ Arms_shutdown
       free(type);
       type = NULL;
     }
+    Arms_MemoryManager_destroy((Arms_MemoryManager*)g_slabMemoryManager);
+    g_slabMemoryManager = NULL;
+    Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+    g_defaultMemoryManager = NULL;
   }
   g_referenceCount = referenceCount;
   return Arms_Status_Success;
@@ -412,51 +483,14 @@ Arms_unlock
 
 #endif
 
-Arms_Status
-Arms_allocateUnmanaged
+Arms_MemoryManager*
+Arms_getDefaultMemoryManager
   (
-    void** p,
-    Arms_Size n
   )
-{
-  if (!p) {
-    return Arms_Status_ArgumentValueInvalid;
-  }
-  void *q = malloc(n > 0 ? n : 1);
-  if (!q) {
-    return Arms_Status_AllocationFailed;
-  }
-  *p = q;
-  return Arms_Status_Success;
-}
+{ return (Arms_MemoryManager*)g_defaultMemoryManager; }
 
-Arms_Status
-Arms_reallocateUnmanaged
+Arms_MemoryManager*
+Arms_getSlabMemoryManager
   (
-    void** p,
-    Arms_Size n
   )
-{
-  if (!p) {
-    return Arms_Status_ArgumentValueInvalid;
-  }
-  void* q = realloc(*p, n > 0 ? n : 1);
-  if (!q) {
-    return Arms_Status_AllocationFailed;
-  }
-  *p = q;
-  return Arms_Status_Success;
-}
-
-Arms_Status
-Arms_deallocateUnmanaged
-  (
-    void* p
-  )
-{
-  if (!p) {
-    return Arms_Status_ArgumentValueInvalid;
-  }
-  free(p);
-  return Arms_Status_Success;
-}
+{ return (Arms_MemoryManager*)g_slabMemoryManager; }

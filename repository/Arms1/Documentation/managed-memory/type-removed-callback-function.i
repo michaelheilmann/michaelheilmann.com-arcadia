@@ -1,4 +1,4 @@
-<h3>Type removed callback function</h3>
+<h4>Type removed callback function</h4>
 <p>
 A type removed function is a function of the signature <code>void Arms_TypeRemovedCallbackFunction(Arms_Natural8 const* name, Arms_Size nameLength)</code>.
 The type removed callback function is supplied to a type when that type is created.
