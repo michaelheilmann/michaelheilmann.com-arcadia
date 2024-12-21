@@ -25,6 +25,63 @@
 
 #include "Module/Visuals/ImageWriterParameters.h"
 
+static void
+NativeWindowsImageWriter_writePngToPathImpl
+  (
+    NativeWindowsImageWriter* self,
+    PixelBuffer* sourcePixelBuffer,
+    R_String* targetPath
+  );
+
+static void
+NativeWindowsImageWriter_writePngToByteBufferImpl
+  (
+    NativeWindowsImageWriter* self,
+    PixelBuffer* sourcePixelBuffer,
+    R_ByteBuffer* targetByteBuffer
+  );
+
+static void
+NativeWindowsImageWriter_writeBmpToPathImpl
+  (
+    NativeWindowsImageWriter* self,
+    PixelBuffer* sourcePixelBuffer,
+    R_String* targetPath
+  );
+
+static void
+NativeWindowsImageWriter_writeBmpToByteBufferImpl
+  (
+    NativeWindowsImageWriter* self,
+    PixelBuffer* sourcePixelBuffer,
+    R_ByteBuffer* targetByteBuffer
+  );
+
+// The "Windows Imaging Component" ("WIC") does not provide an encoder for "ico" files.
+// See https://learn.microsoft.com/en-us/windows/win32/wic/ico-format-overview?redirectedfrom=MSDN for more information.
+//
+// The "ico" file format is described on Wikipedia.
+// See https://en.wikipedia.org/wiki/ICO_(file_format) for more information.
+//
+// From the description of the file format:
+// - The width and height of any image in an "ico" files may not exceed 256.
+// - all source pixel buffers must be of format PixelBuffer_An8Rn8Gn8Bn8.
+static void
+NativeWindowsImageWriter_writeIcoToPathImpl
+  (
+    NativeWindowsImageWriter* self,
+    R_List* sourcePixelBuffers,
+    R_String* targetPath
+  );
+
+static void
+NativeWindowsImageWriter_writeIcoToByteBufferImpl
+  (
+    NativeWindowsImageWriter* self,
+    R_List* sourcePixelBuffers,
+    R_ByteBuffer* targetByteBuffer
+  );
+
 static IWICImagingFactory* g_piFactory = NULL;
 static HGLOBAL g_hMemory = NULL;
 static IStream *g_piMemoryStream = NULL; // NULL if there is no memory stream
@@ -37,7 +94,13 @@ static IPropertyBag2* g_pPropertyBag = NULL;
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-static HRESULT createMemoryStream(IStream** pStream, size_t initialSize) {
+static HRESULT
+createMemoryStream
+  (
+    IStream** pStream,
+    size_t initialSize
+  )
+{
   g_hMemory = GlobalAlloc(GMEM_MOVEABLE, initialSize);
   if (!g_hMemory) {
     return E_OUTOFMEMORY;
@@ -93,10 +156,10 @@ startupFactory
   }
   //
   hr = CoCreateInstance(&CLSID_WICImagingFactory,
-    NULL,
-    CLSCTX_INPROC_SERVER,
-    &IID_IWICImagingFactory,
-    (LPVOID*)&g_piFactory);
+                        NULL,
+                        CLSCTX_INPROC_SERVER,
+                        &IID_IWICImagingFactory,
+                        (LPVOID*)&g_piFactory);
   if (FAILED(hr)) {
     CoUninitialize();
     R_setStatus(R_Status_EnvironmentFailed);
@@ -443,50 +506,92 @@ static write(PixelBuffer* sourcePixelBuffer, ImageWriterParameters* parameters) 
   }
 }
 
-void writePngToPath(PixelBuffer* sourcePixelBuffer, R_String* targetPath) {
+static void
+NativeWindowsImageWriter_writePngToPathImpl
+  (
+    NativeWindowsImageWriter* self,
+    PixelBuffer* sourcePixelBuffer,
+    R_String* targetPath
+  )
+{
   ImageWriterParameters* imageWriterParameters = ImageWriterParameters_createFile(targetPath, ImageWriterFormat_Png);
   write(sourcePixelBuffer, imageWriterParameters);
 }
 
-void writePngToByteBuffer(PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer) {
+static void
+NativeWindowsImageWriter_writePngToByteBufferImpl
+  (
+    NativeWindowsImageWriter* self,
+    PixelBuffer* sourcePixelBuffer,
+    R_ByteBuffer* targetByteBuffer
+  )
+{
   ImageWriterParameters* imageWriterParameters = ImageWriterParameters_createByteBuffer(targetByteBuffer, ImageWriterFormat_Png);
   write(sourcePixelBuffer, imageWriterParameters);
 }
 
-void writeBmpToPath(PixelBuffer* sourcePixelBuffer, R_String* targetPath) {
+static void
+NativeWindowsImageWriter_writeBmpToPathImpl
+  (
+    NativeWindowsImageWriter* self,
+    PixelBuffer* sourcePixelBuffer,
+    R_String* targetPath
+  )
+{
   ImageWriterParameters* imageWriterParameters = ImageWriterParameters_createFile(targetPath, ImageWriterFormat_Bmp);
   write(sourcePixelBuffer, imageWriterParameters);
 }
 
-void writeBmpToByteBuffer(PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer) {
+static void
+NativeWindowsImageWriter_writeBmpToByteBufferImpl
+  (
+    NativeWindowsImageWriter* self,
+    PixelBuffer* sourcePixelBuffer,
+    R_ByteBuffer* targetByteBuffer
+  )
+{
   ImageWriterParameters* imageWriterParameters = ImageWriterParameters_createByteBuffer(targetByteBuffer, ImageWriterFormat_Bmp);
   write(sourcePixelBuffer, imageWriterParameters);
 }
 
-typedef struct ICONDIR {
-  uint16_t reserved1;
-  uint16_t type;
-  uint16_t numberOfImages;
-} ICONDIR;
-
-typedef struct ICONDIRENTRY {
-  uint8_t width;
-  uint8_t height;
-  uint8_t numberOfColors;
-  uint8_t reserved1;
-  uint16_t numberOfColorPlanes;
-  uint16_t numberOfBitsPerPixel;
-  uint32_t imageSize;
-  uint32_t offset;
-} ICONDIRENTRY;
-
-void writeIconToPath(R_List* sourcePixelBuffers, R_String* targetPath) {
+static void
+NativeWindowsImageWriter_writeIcoToPathImpl
+  (
+    NativeWindowsImageWriter* self,
+    R_List* sourcePixelBuffers,
+    R_String* targetPath
+  )
+{
   R_ByteBuffer* targetByteBuffer = R_ByteBuffer_create();
-  writeIconToByteBuffer(sourcePixelBuffers, targetByteBuffer);
-  R_FileSystem_setFileContents(R_FileSystem_create(), R_FilePath_parseUnixFilePath(R_String_getBytes(targetPath), R_String_getNumberOfBytes(targetPath)), targetByteBuffer);
+  ImageWriter_writeIcoToByteBuffer((ImageWriter*)self, sourcePixelBuffers, targetByteBuffer);
+  R_FileSystem_setFileContents(R_FileSystem_create(), R_FilePath_parseNative(R_String_getBytes(targetPath), R_String_getNumberOfBytes(targetPath)), targetByteBuffer);
 }
 
-void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer) {
+static void
+NativeWindowsImageWriter_writeIcoToByteBufferImpl
+  (
+    NativeWindowsImageWriter* self,
+    R_List* sourcePixelBuffers,
+    R_ByteBuffer* targetByteBuffer
+  )
+{
+  typedef struct ICONDIR {
+    uint16_t reserved1;
+    uint16_t type;
+    uint16_t numberOfImages;
+  } ICONDIR;
+
+  typedef struct ICONDIRENTRY {
+    uint8_t width;
+    uint8_t height;
+    uint8_t numberOfColors;
+    uint8_t reserved1;
+    uint16_t numberOfColorPlanes;
+    uint16_t numberOfBitsPerPixel;
+    uint32_t imageSize;
+    uint32_t offset;
+  } ICONDIRENTRY;
+
   ICONDIR iconDir = {
     .reserved1 = 0,
     .type = 1,
@@ -498,7 +603,7 @@ void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteB
   for (R_SizeValue i = 0, offset = 0, n = R_List_getSize(sourcePixelBuffers); i < n; ++i) {
     PixelBuffer* pixelBuffer = (PixelBuffer*)R_List_getObjectReferenceValueAt(sourcePixelBuffers, i);
     R_ByteBuffer_clear(temporary);
-    writePngToByteBuffer(pixelBuffer, temporary);
+    ImageWriter_writePngToByteBuffer((ImageWriter*)self, pixelBuffer, temporary);
     if (PixelFormat_An8Rn8Gn8Bn8 != PixelBuffer_getPixelFormat(pixelBuffer)) {
       R_setStatus(R_Status_ArgumentValueInvalid);
       R_jump();
@@ -534,7 +639,7 @@ void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteB
   for (R_SizeValue i = 0, offset = 0, n = R_List_getSize(sourcePixelBuffers); i < n; ++i) {
     PixelBuffer* pixelBuffer = (PixelBuffer*)R_List_getObjectReferenceValueAt(sourcePixelBuffers, i);
     R_ByteBuffer_clear(temporary);
-    writePngToByteBuffer(pixelBuffer, temporary);
+    ImageWriter_writePngToByteBuffer((ImageWriter*)self, pixelBuffer, temporary);
     R_ByteBuffer_append_pn(targetByteBuffer, temporary->p, temporary->sz);
     offset += R_ByteBuffer_getSize(temporary);
   }
@@ -546,7 +651,7 @@ NativeWindowsImageWriter_constructImpl
     R_Value* self,
     R_SizeValue numberOfArgumentValues,
     R_Value const* argumentValues
-  ); 
+  );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
   .construct = &NativeWindowsImageWriter_constructImpl,
@@ -574,7 +679,7 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("NativeWindowsImageWriter", NativeWindowsImageWriter, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType("NativeWindowsImageWriter", NativeWindowsImageWriter, "ImageWriter", ImageWriter, &_typeOperations);
 
 static void
 NativeWindowsImageWriter_constructImpl
@@ -588,8 +693,15 @@ NativeWindowsImageWriter_constructImpl
   R_Type* _type = _NativeWindowsImageWriter_getType();
   {
     R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Object_constructImpl(self, 0, &argumentValues[0]);
+    R_Type* _typeParent = R_Type_getParentObjectType(_type);
+    R_Type_getOperations(_typeParent)->objectTypeOperations->construct(self, 0, &argumentValues[0]);
   }
+  ((ImageWriter*)_self)->writeBmpToByteBuffer = (void (*)(ImageWriter*, PixelBuffer*,R_ByteBuffer*))NativeWindowsImageWriter_writeBmpToByteBufferImpl;
+  ((ImageWriter*)_self)->writeBmpToPath = (void (*)(ImageWriter*, PixelBuffer*, R_String*))NativeWindowsImageWriter_writeBmpToPathImpl;
+  ((ImageWriter*)_self)->writeIcoToByteBuffer = (void (*)(ImageWriter*, R_List*, R_ByteBuffer*))NativeWindowsImageWriter_writeIcoToByteBufferImpl;
+  ((ImageWriter*)_self)->writeIcoToPath = (void (*)(ImageWriter*, R_List*, R_String*))NativeWindowsImageWriter_writeIcoToPathImpl;
+  ((ImageWriter*)_self)->writePngToByteBuffer = (void (*)(ImageWriter*, PixelBuffer*, R_ByteBuffer*))NativeWindowsImageWriter_writePngToByteBufferImpl;
+  ((ImageWriter*)_self)->writePngToPath = (void (*)(ImageWriter*, PixelBuffer*, R_String*))NativeWindowsImageWriter_writePngToPathImpl;
   R_Object_setType((R_Object*)_self, _type);
 }
 

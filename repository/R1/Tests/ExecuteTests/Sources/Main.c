@@ -56,7 +56,8 @@ execute1
     R_Value const* argumentValues
   )
 {
-  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_create();
+  R_Interpreter_ProcessState_startup();
+  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_get();
   R_Interpreter_Code* code = R_Interpreter_Code_create();
   uint8_t codeBytes[] = {
     R_Machine_Code_Opcode_Idle,  
@@ -66,11 +67,11 @@ execute1
   if (R_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_append(code, codeBytes, 1);
     R_executeProcedure(process, R_Interpreter_Procedure_create(R_String_create_pn(R_ImmutableByteArray_create("main", sizeof("main") - 1)), code));
-    R_Interpreter_ProcessState_destroy(process);
+    R_Interpreter_ProcessState_shutdown();
     process = NULL;
     R_popJumpTarget();
   } else {
-    R_Interpreter_ProcessState_destroy(process);
+    R_Interpreter_ProcessState_shutdown();
     process = NULL;
     R_popJumpTarget();
     R_jump();
@@ -85,7 +86,8 @@ execute2
     R_Value const* argumentValues
   )
 {
-  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_create();
+  R_Interpreter_ProcessState_startup();
+  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_get();
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
@@ -105,11 +107,11 @@ execute2
     R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 0);
     R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 1);
     R_executeProcedure(process, R_Interpreter_Procedure_create(R_String_create_pn(R_ImmutableByteArray_create("main", sizeof("main") - 1)), code));
-    R_Interpreter_ProcessState_destroy(process);
+    R_Interpreter_ProcessState_shutdown();
     process = NULL;
     R_popJumpTarget();
   } else {
-    R_Interpreter_ProcessState_destroy(process);
+    R_Interpreter_ProcessState_shutdown();
     process = NULL;
     R_popJumpTarget();
     R_jump();
@@ -135,7 +137,8 @@ execute3
     R_Value const* argumentValues
   )
 {
-  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_create();
+  R_Interpreter_ProcessState_startup();
+  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_get();
   R_JumpTarget jumpTarget;
   R_pushJumpTarget(&jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
@@ -156,11 +159,11 @@ execute3
     R_Interpreter_Code_appendCountNatural8(code, 1); // number of arguments
     R_Interpreter_Code_appendIndexNatural8(code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
     R_executeProcedure(process, R_Interpreter_Procedure_create(R_String_create_pn(R_ImmutableByteArray_create("main", sizeof("main") - 1)), code));
-    R_Interpreter_ProcessState_destroy(process);
+    R_Interpreter_ProcessState_shutdown();
     process = NULL;
     R_popJumpTarget();
   } else {
-    R_Interpreter_ProcessState_destroy(process);
+    R_Interpreter_ProcessState_shutdown();
     process = NULL;
     R_popJumpTarget();
     R_jump();

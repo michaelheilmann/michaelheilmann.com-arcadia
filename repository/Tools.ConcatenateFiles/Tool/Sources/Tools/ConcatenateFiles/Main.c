@@ -31,8 +31,9 @@ main1
     R_setStatus(R_Status_NumberOfArgumentsInvalid);
     R_jump();
   }
+  R_FileSystem* fileSystem = R_FileSystem_create();
   R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
-  R_FileHandle* fileHandle = R_FileHandle_create();
+  R_FileHandle* fileHandle = R_FileHandle_create(fileSystem);
   for (int argi = 1; argi < argc - 1; ++argi) {
     R_FileHandle_openForReading(fileHandle, R_FilePath_parseNative(argv[argi], strlen(argv[argi])));
     char bytes[5012];

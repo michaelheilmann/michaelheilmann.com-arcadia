@@ -13,9 +13,9 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-10-06
+# Last modified: 2024-12-29
 
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.20)
 
 project("liminal")
 add_executable(liminal main.c game.c game.h sg.c sg.h os-windows.c os-windows.h os-windows-icon.c os-windows-icon.h os-windows-bitmap.c os-windows-bitmap.h os-commons.c os-commons.h)

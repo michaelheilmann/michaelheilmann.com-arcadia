@@ -2,10 +2,13 @@
 
 ## Installing the dependencies
 *michaelheilmann.com* requires
-- *make* Version 4.3.0 or better.
-- *gcc* Version 11.4.0 or better.
-- *cmake* Version 3.29.6 or better.
-- Optional: *gdb* Version 12.1 or better.
+- *make* version 4.3.0 or better.
+- *gcc* version 11.4.0 or better.
+- *cmake* version 3.20 or better.
+  Under *Ubuntu*: install the package *cmake*.
+- *libpng* version 1.6 or better.
+  Under *Ubuntu*: install the package *libpng-dev*.
+- Optional: *gdb* version 12.1 or better.
 
 ## Building the program
 The following instructions will perform an out-of-source build. An out-of-source build does not modify the source directory

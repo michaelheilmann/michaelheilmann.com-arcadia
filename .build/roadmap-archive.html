@@ -26,14 +26,14 @@
   </header>
   <main>
     <h1>Roadmap Archive</h1>
-    <h2>Milestone 7: 1st iteration of a parser for the L1 language</h2>
+    <h2>Milestone "Machine Interface Language" 1: 1st iteration of a parser for the L1 language</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 3 October 2024</p>
 <p>
 A 1st iteration of the parser for the L1 language,
 a language for interfacing with the
 <a href="https://michaelheilmann.com/repository/R">R</a>
 runtime currently in the making.
-That 1st iteration shall add support for the following features:
+That 1st iteration provides the following features:
 </p>
 <ul>
   <li>
@@ -56,14 +56,16 @@ That 1st iteration shall add support for the following features:
   </li>
 </ul>
 
-    <h2>Milestone 6: Separate website sources and product</h2>
+    <h2>Milestone "Website" 4: Separate website sources and product</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 1 October 2024</p>
 <p>The website shall be generated in a dedicated `.build` folder of the repository.
-This will result in reduces sizes of the uploads to webhosts.</p>
-    <h2>Milestone 5: Maintain roadmap on website</h2>
+This results in a size reduction of uploads to webhosts.</p>
+
+    <h2>Milestone "Website" 3: Maintain roadmap on website</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 1 October 2024</p>
-<p>The roadmap shall be maintained on the website.</p>
-    <h2>Milestone 4: Tooling for generating icons and banners (Windows only) | Tools.BannerGenerator</h2>
+<p>The roadmap is maintained on the website.</p>
+
+    <h2>Milestone "Banner Generator" 1: Tooling for generating icons (Windows only)</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 4 September 2024</p>
 
 <p>
@@ -74,7 +76,8 @@ The banner generator generates a "PNG" file.
 As parameters, it takes the width and the height of the banner and the path of the "PNG" file.
 The generated "PNG" file is an opaque black banner.
 </p>
-    <h2>Milestone 3: Tooling for generating icons (Windows only) | Tools.IconGenerator</h2>
+
+    <h2>Milestone "Icon Generator" 1: Tooling for generating icons (Windows only)</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 3 September 2024</p>
 
 <p>
@@ -87,7 +90,26 @@ The icon generator generates an "ICO" file.
 As parameter, it takes the path of the "ICO" file.
 The generated "ICO" file contains opaque black black icons of the sizes 8x8, 16x16, 24x24, 32x32, 48x48, 64x64, 96x96, 128x128, and 256x256.
 </p>
-    <h2>Milestone 2.1: Tooling for building the website | Tools.TemplateEngine</h2>
+
+    <h2>Milestone "Template Engine" 1: Template Engine: Ampersand- and Include-directives</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 2 September 2024</p>
+
+<p>
+The <em>Template Engine</em> is a tool which takes the filename of a (source) file and the filename of a (target) file.
+It will <i>parse</i> the source file to create the target file.
+<i>parsing</i> means that the contents of the source file are written to the target file unlesss directives are encountered.
+The directives are not written to the target file. Instead, they are interpreted. There are two kinds of directives:
+</p>
+<ul>
+  <li><code>@@</code> directive results in <code>@</code> in being written to the target file.</li>
+  <li><code>@include(&lt;filename&gt;)</code> directive *parses* the file specified by <code>&lt;filename&gt;</code>.
+</ul>
+<p>
+Recursive include directives yield an error.
+The parser must support UTF-8-NO-BOM encoding.
+</p>
+
+    <h2>Milestone "Website" 2: Tooling for building the website | Tools.TemplateEngine</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 2 September 2024</p>
 
 <p>
@@ -110,7 +132,7 @@ Recursive include directives yield an error.
 The parser must support UTF-8-NO-BOM encoding.
 </p>
 
-    <h2>Milestone 1: Improve tooling to build the website | Tools.Concatenate</h2>
+    <h2>Milestone "Website" 1: Improve tooling to build the website | Tools.Concatenate</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 1 September 2024</p>
 
 <p>

@@ -26,12 +26,15 @@ onOperand
   (
     R_Interpreter_ProcessState* process,
     R_Interpreter_Code* code,
+    R_List* variables,
     R_Mil_OperandAst* operand
   );
 
 R_Interpreter_Code*
 onConstructorBody
   (
+    R_Interpreter_ProcessState* process,
+    R_List* variables,
     R_List* statements
   );
 
@@ -48,6 +51,8 @@ onConstructorDefinition
 R_Interpreter_Code*
 onMethodBody
   (
+    R_Interpreter_ProcessState* process,
+    R_List* variables,
     R_List* statements
   );
 
@@ -64,6 +69,8 @@ onMethodDefinition
 R_Interpreter_Code*
 onProcedureBody
   (
+    R_Interpreter_ProcessState* process,
+    R_List* variables,
     R_List* statements
   );
 

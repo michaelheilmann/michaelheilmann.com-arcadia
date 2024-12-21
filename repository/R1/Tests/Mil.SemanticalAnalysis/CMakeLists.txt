@@ -29,8 +29,8 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
+FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
 set(MyTestName ${MyProjectName}.R.Mil.Tests.SemanticalAnalysis)
 
@@ -38,7 +38,8 @@ if (NOT TARGET ${MyTestName})
   add_executable(${MyTestName})
   BeginProduct(${MyTestName})
 
-  add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+  add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+  #add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Configure.h @ONLY)
 
@@ -55,4 +56,7 @@ if (NOT TARGET ${MyTestName})
   set_target_properties(${MyTestName} PROPERTIES FOLDER "R")
 
   EndProduct(${MyTestName} executable)
+
+  CopyProductAssets(${MyTestName}.CopyAssets ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
+  add_dependencies(${MyTestName} ${MyTestName}.CopyAssets)
 endif()

@@ -48,8 +48,8 @@ macro(EndProduct target type)
   set_property(TARGET ${target} PROPERTY C_STANDARD 17)
 
   if (${type} STREQUAL library)
-    target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-    target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+    target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
+    target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Sources)
   endif()
   if (${type} STREQUAL executable)
     target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -63,8 +63,33 @@ macro(FetchProduct target directory help)
       set(__${target}.SourceDir "${directory}" CACHE STRING ${help})
       get_filename_component(__${target}.SourceDir "${__${target}.SourceDir}"
                               REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-      message(STATUS "fetching ${__${target}.SourceDir}")
+      #message(STATUS "fetching ${__${target}.SourceDir}")
       FetchContent_Declare(__${target} SOURCE_DIR ${__${target}.SourceDir})
       FetchContent_MakeAvailable(__${target})
   endif()
+endmacro()
+
+macro(CopyProductAssets target sourceDirectory targetDirectory)
+ #message(STATUS "=> target directory ${targetDirectory}")
+ file(GLOB_RECURSE sourceFiles RELATIVE ${sourceDirectory} "${sourceDirectory}/*")
+ set(targetFiles "")
+ foreach (sourceFile ${sourceFiles})
+   set(targetFile ${sourceFile})
+   #message(STATUS "=> source file: ${sourceDirectory}/${sourceFile}")
+   #message(STATUS "=> target file: ${targetDirectory}/${targetFile}")
+   get_filename_component(targetFileDirectory ${targetDirectory}/${targetFile} DIRECTORY)
+   #message(STATUS "=> target file directory: ${targetFileDirectory}")
+   add_custom_command(OUTPUT ${targetDirectory}/${targetFile}
+                      COMMAND ${CMAKE_COMMAND} -E make_directory ${targetFileDirectory}
+                      COMMAND ${CMAKE_COMMAND} -E copy ${sourceDirectory}/${sourceFile} ${targetDirectory}/${targetFile}
+                      COMMAND ${CMAKE_COMMAND} -E touch ${targetDirectory}/${targetFile}
+                      DEPENDS ${sourceDirectory}/${sourceFile}
+                      VERBATIM
+                      COMMENT "copy file `${sourceDirectory}/${sourceFile}` to `${targetDirectory}/${targetFile}`")
+   list(APPEND targetFiles "${targetFileDirectory}" "${targetDirectory}/${targetFile}")
+ endforeach()
+
+ add_custom_target(${target} ALL DEPENDS ${targetFiles})
+ set_target_properties(${target} PROPERTIES FOLDER "R")
+
 endmacro()

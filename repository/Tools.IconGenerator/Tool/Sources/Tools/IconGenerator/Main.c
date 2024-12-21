@@ -26,7 +26,7 @@ main1
     int argc,
     char** argv
   )
-{ 
+{
   R_Value target;
   R_Value_setVoidValue(&target, R_VoidValue_Void);
   R_List* arguments = R_List_create();
@@ -72,11 +72,18 @@ main1
     128,
     256,
   };
+#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+  ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create();
+#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+  ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create();
+#else
+  #error("environment not (yet) supported")
+#endif
   for (R_SizeValue i = 0, n = sizeof(sizes) / sizeof(size_t); i < n; ++i) {
     PixelBuffer* pixelBuffer = PixelBuffer_create(0, sizes[i], sizes[i], PixelFormat_An8Rn8Gn8Bn8);
     R_List_appendObjectReferenceValue(pixelBufferList, (R_ObjectReferenceValue)pixelBuffer);
   }
-  writeIconToPath(pixelBufferList, R_Value_getObjectReferenceValue(&target));
+  ImageWriter_writeIcoToPath(imageWriter, pixelBufferList, R_Value_getObjectReferenceValue(&target));
 }
 
 int

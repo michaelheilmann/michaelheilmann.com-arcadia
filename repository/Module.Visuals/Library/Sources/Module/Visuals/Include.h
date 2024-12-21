@@ -18,11 +18,20 @@
 #if !defined(MODULE_VISUALS_INCLUDE_H_INCLUDED)
 #define MODULE_VISUALS_INCLUDE_H_INCLUDED
 
-#include "Module/Visuals/Font.h"
-#include "Module/Visuals/NativeWindowsImageWriter.h"
+#include "R.h"
+
+#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+  #include "Module/Visuals/Font.h"
+  #include "Module/Visuals/NativeWindowsImageWriter.h"
+  #include "Module/Visuals/NativeWindowsIcon.h"
+  #include "Module/Visuals/NativeWindowsWindow.h"
+#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+  #include "Module/Visuals/NativeLinuxImageWriter.h"
+#else
+  #error("environment not (yet) supported")
+#endif
 #include "Module/Visuals/ImageWriterParameters.h"
 #include "Module/Visuals/PixelBuffer.h"
-#include "Module/Visuals/NativeWindowsIcon.h"
-#include "Module/Visuals/NativeWindowsWindow.h"
+
 
 #endif // MODULE_VISUALS_INCLUDE_H_INCLUDED

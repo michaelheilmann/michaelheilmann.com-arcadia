@@ -17,6 +17,8 @@
 
 #include "Module/Visuals/NativeWindowsWindow.h"
 
+#include "R/cstdlib.h"
+
 static LRESULT CALLBACK
 WindowProc
   (
@@ -445,7 +447,7 @@ NativeWindowsWindow_getCanvasSize
     R_setStatus(R_Status_EnvironmentFailed);
     R_jump();
   }
-  static_assert(LONG_MAX <= INT32_MAX, "<internal error>");
+  c_static_assert(LONG_MAX <= INT32_MAX, "<internal error>");
   *width = clientRectangle.right - clientRectangle.left;
   *height = clientRectangle.bottom - clientRectangle.top;
 }

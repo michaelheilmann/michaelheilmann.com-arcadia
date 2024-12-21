@@ -22,180 +22,223 @@
 #include "R/Interpreter/Method.h"
 #include "R/Mil/Include.h"
 #include "R/cstdlib.h"
+#include "R/ArgumentsValidation.h"
+
+void addVariable(R_List* variables, R_String* name) {
+  for (R_SizeValue i = 0, n = R_List_getSize(variables); i < n; ++i) {
+    R_Value value = R_List_getAt(variables, i);
+    if (R_Object_equalTo((R_Object*)name, &value)) {
+      R_setStatus(R_Status_SemanticalError);
+      R_jump();
+    }
+  }
+}
+
+R_Natural32Value getRegisterOfVariable(R_List* variables, R_String* name) {
+  for (R_SizeValue i = 0, n = R_List_getSize(variables); i < n; ++i) {
+    R_Value value = R_List_getAt(variables, i);
+    if (R_Object_equalTo((R_Object*)name, &value)) {
+      return i;
+    }
+  }
+  R_List_appendObjectReferenceValue(variables, name);
+  return R_List_getSize(variables) - 1;
+}
 
 void
 onOperand
   (
     R_Interpreter_ProcessState* process,
     R_Interpreter_Code* code,
-    R_Mil_OperandAst* operand
+    R_List* variables,
+    R_Mil_OperandAst* operandAst
   )
 {
-  if (R_Type_isSubType(R_Object_getType(operand), _R_Mil_BooleanLiteralOperandAst_getType())) {
-  } else if (R_Type_isSubType(R_Object_getType(operand), _R_Mil_NumberLiteralOperandAst_getType())) {
-  } else if (R_Type_isSubType(R_Object_getType(operand), _R_Mil_VoidLiteralOperandAst_getType())) {
+  if (R_Type_isSubType(R_Object_getType(operandAst), _R_Mil_VariableOperandAst_getType())) {
+    R_Mil_VariableOperandAst* variableOperandAst = (R_Mil_VariableOperandAst*)operandAst;
+    R_Interpreter_Code_appendIndexNatural32(code, R_Machine_Code_IndexKind_Register,
+                                            getRegisterOfVariable(variables, variableOperandAst->value));
+  } else if (R_Type_isSubType(R_Object_getType(operandAst), _R_Mil_BooleanLiteralOperandAst_getType())) {
+    R_Mil_BooleanLiteralOperandAst* booleanLiteralOperandAst = (R_Mil_BooleanLiteralOperandAst*)operandAst;
+    R_Interpreter_Code_Constants_getOrCreateBoolean(R_Interpreter_ProcessState_getConstants(process), R_String_toBoolean(booleanLiteralOperandAst->value));
+  } else if (R_Type_isSubType(R_Object_getType(operandAst), _R_Mil_IntegerLiteralOperandAst_getType())) {
+    R_Mil_IntegerLiteralOperandAst* integerLiteralOperandAst = (R_Mil_IntegerLiteralOperandAst*)operandAst;
+    R_Interpreter_Code_Constants_getOrCreateInteger64(R_Interpreter_ProcessState_getConstants(process), R_String_toInteger64(integerLiteralOperandAst->value));
+  } else if (R_Type_isSubType(R_Object_getType(operandAst), _R_Mil_RealLiteralOperandAst_getType())) {
+    R_Mil_RealLiteralOperandAst* realLiteralOperandAst = (R_Mil_RealLiteralOperandAst*)operandAst;
+    R_String_toReal64(realLiteralOperandAst->value);
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  } else if (R_Type_isSubType(R_Object_getType(operandAst), _R_Mil_StringLiteralOperandAst_getType())) {
+    R_Mil_StringLiteralOperandAst* stringLiteralOperandAst = (R_Mil_StringLiteralOperandAst*)operandAst;
+    R_Interpreter_Code_Constants_getOrCreateString(R_Interpreter_ProcessState_getConstants(process), stringLiteralOperandAst->value);
+  } else if (R_Type_isSubType(R_Object_getType(operandAst), _R_Mil_VoidLiteralOperandAst_getType())) {
+    R_Mil_VoidLiteralOperandAst* voidLiteralOperandAst = (R_Mil_VoidLiteralOperandAst*)operandAst;
+    R_Interpreter_Code_Constants_getOrCreateVoid(R_Interpreter_ProcessState_getConstants(process), R_String_toVoid(voidLiteralOperandAst->value));
   } else {
     R_setStatus(R_Status_ArgumentTypeInvalid);
     R_jump();
   }
 }
 
-R_Interpreter_Code*
-onConstructorBody
+void
+onExpressionStatement
   (
+    R_Interpreter_ProcessState* process,
+    R_Interpreter_Code* code,
+    R_List* variables,
+    R_Mil_ExpressionStatementAst* expressionStatementAst
+  )
+{
+  R_Mil_ExpressionAst* expressionAst = R_Mil_ExpressionStatementAst_getExpression(expressionStatementAst);
+  if (R_Type_isSubType(R_Object_getType(expressionAst), _R_Mil_BinaryExpressionAst_getType())) {
+    R_Mil_BinaryExpressionAst* binaryExpressionAst = (R_Mil_BinaryExpressionAst*)expressionAst;
+    switch (binaryExpressionAst->type) {
+      case R_Mil_BinaryExpressionAstType_Add: {
+        R_Natural8Value opcode = R_Machine_Code_Opcode_Add;
+        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_appendIndexNatural32(code, R_Machine_Code_IndexKind_Register,
+                                                getRegisterOfVariable(variables, expressionStatementAst->targetVariableName));
+        onOperand(process, code, variables, binaryExpressionAst->operand1);
+        onOperand(process, code, variables, binaryExpressionAst->operand2);
+      } break;
+      case R_Mil_BinaryExpressionAstType_Subtract: {
+        R_Natural8Value opcode = R_Machine_Code_Opcode_Subtract;
+        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_appendIndexNatural32(code, R_Machine_Code_IndexKind_Register,
+                                                getRegisterOfVariable(variables, expressionStatementAst->targetVariableName));
+        onOperand(process, code, variables, binaryExpressionAst->operand1);
+        onOperand(process, code, variables, binaryExpressionAst->operand2);
+      } break;
+      case R_Mil_BinaryExpressionAstType_Multiply: {
+        R_Natural8Value opcode = R_Machine_Code_Opcode_Multiply;
+        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_appendIndexNatural32(code, R_Machine_Code_IndexKind_Register,
+                                                getRegisterOfVariable(variables, expressionStatementAst->targetVariableName));
+        onOperand(process, code, variables, binaryExpressionAst->operand1);
+        onOperand(process, code, variables, binaryExpressionAst->operand2);
+      } break;
+      case R_Mil_BinaryExpressionAstType_Divide: {
+        R_Natural8Value opcode = R_Machine_Code_Opcode_Divide;
+        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_appendIndexNatural32(code, R_Machine_Code_IndexKind_Register,
+                                                getRegisterOfVariable(variables, expressionStatementAst->targetVariableName));
+        onOperand(process, code, variables, binaryExpressionAst->operand1);
+        onOperand(process, code, variables, binaryExpressionAst->operand2);
+      } break;
+      case R_Mil_BinaryExpressionAstType_Concatenate: {
+        R_Natural8Value opcode = R_Machine_Code_Opcode_Concatenate;
+        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_appendIndexNatural32(code, R_Machine_Code_IndexKind_Register,
+                                                getRegisterOfVariable(variables, expressionStatementAst->targetVariableName));
+        onOperand(process, code, variables, binaryExpressionAst->operand1);
+        onOperand(process, code, variables, binaryExpressionAst->operand2);
+      } break;
+      default: {
+        R_setStatus(R_Status_ArgumentTypeInvalid);
+        R_jump();
+      } break;
+    };
+  } else if (R_Type_isSubType(R_Object_getType(expressionAst), _R_Mil_UnaryExpressionAst_getType())) {
+    R_Mil_UnaryExpressionAst* unaryExpressionAst = (R_Mil_UnaryExpressionAst*)expressionAst;
+    switch (unaryExpressionAst->type) {
+      case R_Mil_UnaryExpressionAstType_Negate: {
+        R_Natural8Value opcode = R_Machine_Code_Opcode_Negate;
+        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_appendIndexNatural32(code, R_Machine_Code_IndexKind_Register,
+                                                getRegisterOfVariable(variables, expressionStatementAst->targetVariableName));
+        onOperand(process, code, variables, unaryExpressionAst->operand1);
+      } break;
+      case R_Mil_UnaryExpressionAstType_Not: {
+        R_Natural8Value opcode = R_Machine_Code_Opcode_Not;
+        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_appendIndexNatural32(code, R_Machine_Code_IndexKind_Register,
+                                                getRegisterOfVariable(variables, expressionStatementAst->targetVariableName));
+        onOperand(process, code, variables, unaryExpressionAst->operand1);
+      } break;
+      default: {
+        R_setStatus(R_Status_ArgumentTypeInvalid);
+        R_jump();
+      } break;
+    };
+  } else {
+    R_setStatus(R_Status_ArgumentTypeInvalid);
+    R_jump();
+  }
+}
+
+void
+onVariableDefinitionStatement
+  (
+    R_Interpreter_ProcessState* process,
+    R_Interpreter_Code* code,
+    R_List* variables,
+    R_Mil_VariableDefinitionAst* variableDefinitionStatement
+  )
+{
+  addVariable(variables, variableDefinitionStatement->variableName);
+}
+
+void
+onStatements
+  (
+    R_Interpreter_ProcessState* process,
+    R_Interpreter_Code* code,
+    R_List* variables,
     R_List* statements
   )
 {
-  R_Interpreter_Code* code = R_Interpreter_Code_create();
   for (R_SizeValue i = 0, n = R_List_getSize(statements); i < n; ++i) {
     R_Value elementValue = R_List_getAt(statements, i);
     R_ObjectReferenceValue objectElementValue = R_Value_getObjectReferenceValue(&elementValue);
     R_Mil_StatementAst* statement = (R_Mil_StatementAst*)objectElementValue;
     if (R_Type_isSubType(R_Object_getType(statement), _R_Mil_ExpressionStatementAst_getType())) {
-      R_Mil_ExpressionStatementAst* expressionStatement = (R_Mil_ExpressionStatementAst*)statement;
-      R_Mil_ExpressionAst* expression = R_Mil_ExpressionStatementAst_getExpression(expressionStatement);
-      if (R_Type_isSubType(R_Object_getType(expression), _R_Mil_BinaryExpressionAst_getType())) {
-        R_Mil_BinaryExpressionAst* binaryExpression = (R_Mil_BinaryExpressionAst*)expression;
-        switch (binaryExpression->type) {
-          case R_Mil_BinaryExpressionAstType_Add: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Subtract: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Multiply: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Divide: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Concatenate: {
-          } break;
-          default: {
-            R_setStatus(R_Status_ArgumentTypeInvalid);
-            R_jump();
-          } break;
-        };
-      } else if (R_Type_isSubType(R_Object_getType(expression), _R_Mil_UnaryExpressionAst_getType())) {
-        R_Mil_UnaryExpressionAst* unaryExpression = (R_Mil_UnaryExpressionAst*)expression;
-        switch (unaryExpression->type) {
-          case R_Mil_UnaryExpressionAstType_Negate: {
-          } break;
-          case R_Mil_UnaryExpressionAstType_Not: {
-          } break;
-          default: {
-            R_setStatus(R_Status_ArgumentTypeInvalid);
-            R_jump();
-          } break;
-        };
-      } else {
-        R_setStatus(R_Status_ArgumentTypeInvalid);
-        R_jump();
-      }
+      onExpressionStatement(process, code, variables, (R_Mil_ExpressionStatementAst*)statement);
+    } else if (R_Type_isSubType(R_Object_getType(statement), _R_Mil_VariableDefinitionAst_getType())) {
+      onVariableDefinitionStatement(process, code, variables, (R_Mil_VariableDefinitionAst*)statement);
+    } else {
+      R_setStatus(R_Status_ArgumentTypeInvalid);
+      R_jump();
     }
   }
+}
+
+R_Interpreter_Code*
+onConstructorBody
+  (
+    R_Interpreter_ProcessState* process,
+    R_List* variables,
+    R_List* statements
+  )
+{
+  R_Interpreter_Code* code = R_Interpreter_Code_create();
+  onStatements(process, code, variables, statements);
   return code;
 }
 
 R_Interpreter_Code*
 onMethodBody
   (
+    R_Interpreter_ProcessState* process,
+    R_List* variables,
     R_List* statements
   )
 {
   R_Interpreter_Code* code = R_Interpreter_Code_create();
-  for (R_SizeValue i = 0, n = R_List_getSize(statements); i < n; ++i) {
-    R_Value elementValue = R_List_getAt(statements, i);
-    R_ObjectReferenceValue objectElementValue = R_Value_getObjectReferenceValue(&elementValue);
-    R_Mil_StatementAst* statement = (R_Mil_StatementAst*)objectElementValue;
-    if (R_Type_isSubType(R_Object_getType(statement), _R_Mil_ExpressionStatementAst_getType())) {
-      R_Mil_ExpressionStatementAst* expressionStatement = (R_Mil_ExpressionStatementAst*)statement;
-      R_Mil_ExpressionAst* expression = R_Mil_ExpressionStatementAst_getExpression(expressionStatement);
-      if (R_Type_isSubType(R_Object_getType(expression), _R_Mil_BinaryExpressionAst_getType())) {
-        R_Mil_BinaryExpressionAst* binaryExpression = (R_Mil_BinaryExpressionAst*)expression;
-        switch (binaryExpression->type) {
-          case R_Mil_BinaryExpressionAstType_Add: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Subtract: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Multiply: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Divide: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Concatenate: {
-          } break;
-          default: {
-            R_setStatus(R_Status_ArgumentTypeInvalid);
-            R_jump();
-          } break;
-        };
-      } else if (R_Type_isSubType(R_Object_getType(expression), _R_Mil_UnaryExpressionAst_getType())) {
-        R_Mil_UnaryExpressionAst* unaryExpression = (R_Mil_UnaryExpressionAst*)expression;
-        switch (unaryExpression->type) {
-          case R_Mil_UnaryExpressionAstType_Negate: {
-          } break;
-          case R_Mil_UnaryExpressionAstType_Not: {
-          } break;
-          default: {
-            R_setStatus(R_Status_ArgumentTypeInvalid);
-            R_jump();
-          } break;
-        };
-      } else {
-        R_setStatus(R_Status_ArgumentTypeInvalid);
-        R_jump();
-      }
-    }
-  }
+  onStatements(process, code, variables, statements);
   return code;
 }
 
 R_Interpreter_Code*
 onProcedureBody
   (
+    R_Interpreter_ProcessState* process,
+    R_List* variables,
     R_List* statements
   )
 {
   R_Interpreter_Code* code = R_Interpreter_Code_create();
-  for (R_SizeValue i = 0, n = R_List_getSize(statements); i < n; ++i) {
-    R_Value elementValue = R_List_getAt(statements, i);
-    R_ObjectReferenceValue objectElementValue = R_Value_getObjectReferenceValue(&elementValue);
-    R_Mil_StatementAst* statement = (R_Mil_StatementAst*)objectElementValue;
-    if (R_Type_isSubType(R_Object_getType(statement), _R_Mil_ExpressionStatementAst_getType())) {
-      R_Mil_ExpressionStatementAst* expressionStatement = (R_Mil_ExpressionStatementAst*)statement;
-      R_Mil_ExpressionAst* expression = R_Mil_ExpressionStatementAst_getExpression(expressionStatement);
-      if (R_Type_isSubType(R_Object_getType(expression), _R_Mil_BinaryExpressionAst_getType())) {
-        R_Mil_BinaryExpressionAst* binaryExpression = (R_Mil_BinaryExpressionAst*)expression;
-        switch (binaryExpression->type) {
-          case R_Mil_BinaryExpressionAstType_Add: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Subtract: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Multiply: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Divide: {
-          } break;
-          case R_Mil_BinaryExpressionAstType_Concatenate: {
-          } break;
-          default: {
-            R_setStatus(R_Status_ArgumentTypeInvalid);
-            R_jump();
-          } break;
-        };
-      } else if (R_Type_isSubType(R_Object_getType(expression), _R_Mil_UnaryExpressionAst_getType())) {
-        R_Mil_UnaryExpressionAst* unaryExpression = (R_Mil_UnaryExpressionAst*)expression;
-        switch (unaryExpression->type) {
-          case R_Mil_UnaryExpressionAstType_Negate: {
-          } break;
-          case R_Mil_UnaryExpressionAstType_Not: {
-          } break;
-          default: {
-            R_setStatus(R_Status_ArgumentTypeInvalid);
-            R_jump();
-          } break;
-        };
-      } else {
-        R_setStatus(R_Status_ArgumentTypeInvalid);
-        R_jump();
-      }
-    }
-  }
+  onStatements(process, code, variables, statements);
   return code;
 }
 
@@ -213,6 +256,12 @@ onProcedureDefinition
   if (!R_Value_isVoidValue(&v)) {
     R_setStatus(R_Status_SemanticalError);
     R_jump();
+  }
+  R_List* variables = R_List_create();
+  for (R_SizeValue i = 0, n = R_List_getSize(definitionAst->procedureParameters); i < n; ++i) {
+    R_Value variableNameValue = R_List_getAt(definitionAst->procedureParameters, i);
+    R_String* variableNameString = R_Argument_getObjectReferenceValue(&variableNameValue, _R_String_getType());
+    addVariable(variables, variableNameString);
   }
   if (definitionAst->nativeName) {
     if (definitionAst->procedureBody) {
@@ -232,7 +281,7 @@ onProcedureDefinition
       R_setStatus(R_Status_SemanticalError);
       R_jump();
     }
-    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_create(definitionAst->procedureName, onProcedureBody(definitionAst->procedureBody));
+    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_create(definitionAst->procedureName, onProcedureBody(process, variables, definitionAst->procedureBody));
     R_Interpreter_ProcessState_defineGlobalProcedure(process, procedure);
   }
 }
@@ -254,6 +303,12 @@ onConstructorDefinition
     R_setStatus(R_Status_SemanticalError);
     R_jump();
   }
+  R_List* variables = R_List_create();
+  for (R_SizeValue i = 0, n = R_List_getSize(definitionAst->constructorParameters); i < n; ++i) {
+    R_Value variableNameValue = R_List_getAt(definitionAst->constructorParameters, i);
+    R_String* variableNameString = R_Argument_getObjectReferenceValue(&variableNameValue, _R_String_getType());
+    addVariable(variables, variableNameString);
+  }
   if (definitionAst->nativeName) {
     if (definitionAst->constructorBody) {
       R_setStatus(R_Status_SemanticalError);
@@ -272,7 +327,7 @@ onConstructorDefinition
       R_setStatus(R_Status_SemanticalError);
       R_jump();
     }
-    R_Interpreter_Constructor* constructor = R_Interpreter_Constructor_create(onConstructorBody(definitionAst->constructorBody));
+    R_Interpreter_Constructor* constructor = R_Interpreter_Constructor_create(onConstructorBody(process, variables, definitionAst->constructorBody));
     R_Interpreter_Class_addConstructor(enclosing, constructor);
   }
 }
@@ -293,6 +348,12 @@ onMethodDefinition
     R_setStatus(R_Status_SemanticalError);
     R_jump();
   }
+  R_List* variables = R_List_create();
+  for (R_SizeValue i = 0, n = R_List_getSize(definitionAst->methodParameters); i < n; ++i) {
+    R_Value variableNameValue = R_List_getAt(definitionAst->methodParameters, i);
+    R_String* variableNameString = R_Argument_getObjectReferenceValue(&variableNameValue, _R_String_getType());
+    addVariable(variables, variableNameString);
+  }
   if (definitionAst->nativeName) {
     if (definitionAst->methodBody) {
       R_setStatus(R_Status_SemanticalError);
@@ -311,7 +372,7 @@ onMethodDefinition
       R_setStatus(R_Status_SemanticalError);
       R_jump();
     }
-    R_Interpreter_Method* method = R_Interpreter_Method_create(definitionAst->methodName, onMethodBody(definitionAst->methodBody));
+    R_Interpreter_Method* method = R_Interpreter_Method_create(definitionAst->methodName, onMethodBody(process, variables, definitionAst->methodBody));
     R_Interpreter_Class_addMethod(enclosing, method);
   }
 }

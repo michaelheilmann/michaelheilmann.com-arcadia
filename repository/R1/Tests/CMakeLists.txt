@@ -13,9 +13,9 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-09
+# Last modified: 2024-12-29
 
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.20)
 
 if (NOT MyProjectIsDefined)
   if (NOT DEFINED MyProjectName)
@@ -30,6 +30,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 add_subdirectory(ArmsTests)
+add_subdirectory(BigInteger)
 add_subdirectory(ClampTests)
 add_subdirectory(CountLeadingZeroesTests)
 add_subdirectory(FilePathTests)

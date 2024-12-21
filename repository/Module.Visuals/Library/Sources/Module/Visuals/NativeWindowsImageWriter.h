@@ -15,50 +15,22 @@
 
 // Last modified: 2024-09-19
 
-#if !defined(MODULE_VISUALS_NATIVEINWODWSIMAGEWRITER_H_INCLUDED)
-#define MODULE_VISUALS_NATIVEINWODWSIMAGEWRITER_H_INCLUDED
+#if !defined(MODULE_VISUALS_NATIVEWINDOWSIMAGEWRITER_H_INCLUDED)
+#define MODULE_VISUALS_NATIVEWINDOWSIMAGEWRITER_H_INCLUDED
 
 #include "R.h"
+#include "Module/Visuals/ImageWriter.h"
 #include "Module/Visuals/PixelBuffer.h"
 
-Rex_declareObjectType("NativeWindowsImageWriter", NativeWindowsImageWriter, "R.Object");
+Rex_declareObjectType("NativeWindowsImageWriter", NativeWindowsImageWriter, "ImageWriter");
 
 struct NativeWindowsImageWriter {
-  R_Object _parent;
+  ImageWriter _parent;
 };
-
-void
-NativeWindowsImageWriter_construct
-  (
-    R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
-  );
 
 NativeWindowsImageWriter*
 NativeWindowsImageWriter_create
   (
   );
 
-void writePngToPath(PixelBuffer* sourcePixelBuffer, R_String* targetPath);
-
-void writePngToByteBuffer(PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
-
-void writeBmpToPath(PixelBuffer* sourcePixelBuffer, R_String* targetPath);
-
-void writeBmpToByteBuffer(PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
-
-// The "Windows Imaging Component" ("WIC") does not provide an encoder for "ico" files.
-// See https://learn.microsoft.com/en-us/windows/win32/wic/ico-format-overview?redirectedfrom=MSDN for more information.
-// 
-// The "ico" file format is described on Wikipedia.
-// See https://en.wikipedia.org/wiki/ICO_(file_format) for more information.
-// 
-// From the description of the file format:
-// - The width and height of any image in an "ico" files may not exceed 256.
-// - all source pixel buffers must be of format PixelBuffer_An8Rn8Gn8Bn8.
-void writeIconToPath(R_List* sourcePixelBuffers, R_String* targetPath);
-
-void writeIconToByteBuffer(R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer);
-
-#endif // MODULE_VISUALS_NATIVEINWODWSIMAGEWRITER_H_INCLUDED
+#endif // MODULE_VISUALS_NATIVEWINDOWSIMAGEWRITER_H_INCLUDED

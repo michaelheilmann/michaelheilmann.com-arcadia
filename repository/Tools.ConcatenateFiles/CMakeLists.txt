@@ -29,4 +29,4 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-add_subdirectory(Tool/Sources)
+add_subdirectory(Tool)

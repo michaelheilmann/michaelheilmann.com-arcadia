@@ -29,8 +29,8 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" "path to the ARMS1 source directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Sources" "path to the R1 source directory")
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
+FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
 set(MyTestName ${MyProjectName}.R.Mil.Tests.LexicalAnalysis)
 
@@ -40,10 +40,10 @@ if (NOT TARGET ${MyTestName})
 
   add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Mil/Tests/LexicalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Mil/Tests/LexicalAnalysis/Configure.h @ONLY)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Configure.h @ONLY)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Mil/Tests/LexicalAnalysis/Main.c)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Mil/Tests/LexicalAnalysis/Configure.h)
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Main.c)
+  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Configure.h)
 
   target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
   target_link_libraries(${MyTestName} Arcadia.R Arcadia.Arms)

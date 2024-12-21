@@ -63,7 +63,14 @@ main1
   }
   TextureFontWindows* font = TextureFontWindows_create();
   PixelBuffer* pixelBuffer = TextureFontWindows_getPixelBuffer(font);
-  writePngToPath(pixelBuffer, R_Value_getObjectReferenceValue(&target));
+#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+  ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create();
+#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+  ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create();
+#else
+  #error("environment not (yet) supported")
+#endif
+  ImageWriter_writePngToPath(imageWriter, pixelBuffer, R_Value_getObjectReferenceValue(&target));
 }
 
 int

@@ -18,12 +18,11 @@
 #include "R.h"
 #include "R/Mil/Include.h"
 #include <stdlib.h>
-#include <string.h>
 
 #include "R/Mil/Tests/SemanticalAnalysis/Enter.h"
 
 static void
-_KeyboardKeyMessage_construct
+_Library_KeyboardKeyMessage_construct
   (
     R_Value* target,
     R_SizeValue numberOfArgument,
@@ -32,7 +31,7 @@ _KeyboardKeyMessage_construct
 { }
 
 static void
-_KeyboardKeyMessage_getAction
+_Library_KeyboardKeyMessage_getAction
   (
     R_Value* target,
     R_SizeValue numberOfArgument,
@@ -41,7 +40,7 @@ _KeyboardKeyMessage_getAction
 { }
 
 static void
-_KeyboardKeyMessage_getKey
+_Library_KeyboardKeyMessage_getKey
   (
     R_Value* target,
     R_SizeValue numberOfArgument,
@@ -50,7 +49,7 @@ _KeyboardKeyMessage_getKey
 { }
 
 static void
-R_Library_print
+_Library_print
   (
     R_Value* target,
     R_SizeValue numberOfArgument,
@@ -59,7 +58,7 @@ R_Library_print
 {/*Intentionally empty.*/}
 
 static void
-R_Library_main
+_Library_main
   (
     R_Value* target,
     R_SizeValue numberOfArgument,
@@ -80,39 +79,59 @@ testNativePrintProcedure
     R_Value v = { .tag = R_ValueTag_ForeignProcedure, .foreignProcedureValue = &Function }; \
     R_Map_set(foreignProcedures, k, v); \
   }
-  Define("KeyboardKeyMessage_construct", _KeyboardKeyMessage_construct)
-  Define("KeyboardKeyMessage_getAction", _KeyboardKeyMessage_getAction)
-  Define("KeyboardKeyMessage_getKey", _KeyboardKeyMessage_getKey)
-  Define("print", R_Library_print)
-  Define("main", R_Library_main)
+  Define("KeyboardKeyMessage_construct", _Library_KeyboardKeyMessage_construct)
+  Define("KeyboardKeyMessage_getAction", _Library_KeyboardKeyMessage_getAction)
+  Define("KeyboardKeyMessage_getKey", _Library_KeyboardKeyMessage_getKey)
+  Define("print", _Library_print)
+  Define("main", _Library_main)
 #undef Define
-  static const char* input =
-    u8"procedure native \"print\" Print (a)\n"
-    u8"\n"
-    u8"procedure entry native \"main\" Main()\n"
-    u8"\n"
-    u8"class KeyboardKeyMessage {\n"
-    u8"  constructor native \"KeyboardKeyMessage_construct\" ()\n"
-    u8"  method native \"KeyboardKeyMessage_getAction\" getAction()\n"
-    u8"  method native \"KeyboardKeyMessage_getKey\" getKey()\n"
-    u8"}\n"
-    ;
+
+  R_List* paths = R_List_create();
+  R_List_appendObjectReferenceValue(paths, R_FilePath_parseGeneric("Assets/KeyboardKeyMessage.mil", sizeof("Assets/KeyboardKeyMessage.mil") - 1));
+  R_List_appendObjectReferenceValue(paths, R_FilePath_parseGeneric("Assets/print.mil", sizeof("Assets/print.mil") - 1));
+  R_List_appendObjectReferenceValue(paths, R_FilePath_parseGeneric("Assets/main.mil", sizeof("Assets/main.mil") - 1));
+
   R_Mil_Parser* parser = R_Mil_Parser_create();
-  R_Mil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create(input, strlen(input)))));
-  R_Mil_ModuleAst* moduleAst = R_Mil_Parser_run(parser);
-  
-  R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_create();
-  for (R_SizeValue i = 0, n = R_Mil_ModuleAst_getNumberOfDefinitions(moduleAst); i < n; ++i) {
-    R_Mil_DefinitionAst* definitionAst = R_Mil_ModuleAst_getDefinitionAt(moduleAst, i);
-    if (R_Type_isSubType(R_Object_getType(definitionAst), _R_Mil_ClassDefinitionAst_getType())) {
-      onClassDefinition(process, symbolTable, foreignProcedures, (R_Mil_ClassDefinitionAst*)definitionAst);
-    } else if (R_Type_isSubType(R_Object_getType(definitionAst), _R_Mil_ProcedureDefinitionAst_getType())) {
-      onProcedureDefinition(process, symbolTable, foreignProcedures, (R_Mil_ProcedureDefinitionAst*)definitionAst);
-    } else {
-      R_setStatus(R_Status_ArgumentTypeInvalid);
-      R_jump();
+  R_FileSystem* fileSystem = R_FileSystem_create();
+  R_Interpreter_ProcessState_startup();
+
+  R_JumpTarget jumpTarget;
+  R_pushJumpTarget(&jumpTarget);
+  if (R_JumpTarget_save(&jumpTarget)) {
+    for (size_t i = 0; i < 3; ++i) {
+      R_FilePath* sourceFilePath = R_List_getObjectReferenceValueAt(paths, i);
+      R_FilePath* absoluteSourceFilePath = NULL;
+      if (R_FilePath_isRelative(sourceFilePath)) {
+        absoluteSourceFilePath = R_FileSystem_getWorkingDirectory(fileSystem);
+        R_FilePath_append(absoluteSourceFilePath, sourceFilePath);
+      } else {
+        absoluteSourceFilePath = sourceFilePath;
+      }
+      R_ByteBuffer* sourceFileContents = R_FileSystem_getFileContents(fileSystem, absoluteSourceFilePath);
+
+      R_Mil_Parser_setInput(parser, (R_Utf8Reader*)R_Utf8ByteBufferReader_create(sourceFileContents));
+      R_Mil_ModuleAst* moduleAst = R_Mil_Parser_run(parser);
+
+      R_Interpreter_ProcessState* process = R_Interpreter_ProcessState_get();
+      for (R_SizeValue i = 0, n = R_Mil_ModuleAst_getNumberOfDefinitions(moduleAst); i < n; ++i) {
+        R_Mil_DefinitionAst* definitionAst = R_Mil_ModuleAst_getDefinitionAt(moduleAst, i);
+        if (R_Type_isSubType(R_Object_getType(definitionAst), _R_Mil_ClassDefinitionAst_getType())) {
+          onClassDefinition(process, symbolTable, foreignProcedures, (R_Mil_ClassDefinitionAst*)definitionAst);
+        } else if (R_Type_isSubType(R_Object_getType(definitionAst), _R_Mil_ProcedureDefinitionAst_getType())) {
+          onProcedureDefinition(process, symbolTable, foreignProcedures, (R_Mil_ProcedureDefinitionAst*)definitionAst);
+        } else {
+          R_setStatus(R_Status_ArgumentTypeInvalid);
+          R_jump();
+        }
+      }
     }
+    R_popJumpTarget();
+  } else {
+    R_popJumpTarget();
+    R_Interpreter_ProcessState_shutdown();
+    R_jump();
   }
+  R_Interpreter_ProcessState_shutdown();
 }
 
 void

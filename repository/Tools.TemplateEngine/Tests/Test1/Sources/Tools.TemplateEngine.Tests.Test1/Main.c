@@ -36,13 +36,13 @@ main1
   context->temporaryBuffer = R_ByteBuffer_create();
   context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(context->temporaryBuffer);
 
-  R_FilePath* filePath = R_FilePath_parseNative("HelloWorld.t", strlen("HelloWorld.t"));
+  R_FilePath* filePath = R_FilePath_parseGeneric("HelloWorld.t", strlen("HelloWorld.t"));
   R_Value filePathValue;
   R_Value_setObjectReferenceValue(&filePathValue, filePath);
   R_Stack_push(context->stack, filePathValue);
   Context_onRun(context);
 
-  R_FileSystem_setFileContents(fileSystem, R_FilePath_parseNative("HelloWorld.txt", strlen("HelloWorld.txt")), context->targetBuffer);
+  R_FileSystem_setFileContents(fileSystem, R_FilePath_parseGeneric("HelloWorld.txt", strlen("HelloWorld.txt")), context->targetBuffer);
 }
 
 static void
@@ -59,7 +59,7 @@ recursiveInclude1
   context->temporaryBuffer = R_ByteBuffer_create();
   context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(context->temporaryBuffer);
 
-  R_FilePath* filePath = R_FilePath_parseNative("recursiveInclude1.t", strlen("recursiveInclude1.t"));
+  R_FilePath* filePath = R_FilePath_parseGeneric("recursiveInclude1.t", strlen("recursiveInclude1.t"));
   R_Value filePathValue;
   R_Value_setObjectReferenceValue(&filePathValue, filePath);
   R_Stack_push(context->stack, filePathValue);
@@ -90,7 +90,7 @@ recursiveInclude2
   context->temporaryBuffer = R_ByteBuffer_create();
   context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(context->temporaryBuffer);
 
-  R_FilePath* filePath = R_FilePath_parseNative("recursiveInclude2.t", strlen("recursiveInclude2.t"));
+  R_FilePath* filePath = R_FilePath_parseGeneric("recursiveInclude2.t", strlen("recursiveInclude2.t"));
   R_Value filePathValue;
   R_Value_setObjectReferenceValue(&filePathValue, filePath);
   R_Stack_push(context->stack, filePathValue);

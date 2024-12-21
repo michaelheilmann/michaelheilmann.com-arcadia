@@ -13,9 +13,9 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-09
+# Last modified: 2024-12-29
 
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.20)
 
 if (NOT MyProjectIsDefined)
   if (NOT DEFINED MyProjectName)
@@ -30,7 +30,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 if (NOT TARGET ${MyProjectName}.Arms)
-  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Sources" CACHE STRING "path to the ARMS1 source directory")
+  set(Arms1-Source-Dir "${REPOSITORY_SOURCE_DIR}/Arms1/Library" CACHE STRING "path to the ARMS1 source directory")
   get_filename_component(Arms1-Source-Dir "${Arms1-Source-Dir}"
                          REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
   message(STATUS "fetching ${Arms1-Source-Dir}")
@@ -38,7 +38,7 @@ if (NOT TARGET ${MyProjectName}.Arms)
   FetchContent_MakeAvailable(arms1)
 endif()
 
-add_subdirectory(Sources)
+add_subdirectory(Library)
 add_subdirectory(Demos)
 add_subdirectory(Documentation)
 add_subdirectory(Tests)

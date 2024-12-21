@@ -10,10 +10,15 @@ An <code>R_ObjectReferenceValue</code> pointing to a <code>R_FileHandle</code> v
 <h5 id="r-filehandle-create">create</h5>
 
 <p><code>
-R_FileHandle* R_FileHandle_create()
+R_FileHandle* R_FileHandle_create(R_FileSystem* fileSystem)
 </code></p>
 
 <p>Create a file handle. The file handle is closed.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_FileSystem* self</td><td>A pointer to the backing <code>R_FileSystem</code> object.</td></tr>
+</table>
 
 <h6><b>Return Value</b></h6>
 <p>A pointer to the file handle.</p>

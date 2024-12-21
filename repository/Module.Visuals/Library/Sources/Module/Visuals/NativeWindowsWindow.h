@@ -81,6 +81,15 @@ NativeWindowsWindow_update
     NativeWindowsWindow* self
   );
 
+/**
+ * @brief Get the size (width and height), in pixels, of a big window icon.
+ * @param width A pointer to a <code>R_Integer32Value</code> variable.
+ * @param height A pointer to a <code>R_Integer32Value</code> variable.
+ * @post
+ * On Success:
+ * - <code>*width</code> was assigned the width, in pixels, required for a big window icon. 
+ * - <code>*height</code> was assigned the height, in pixels, required for a big window icon.
+ */
 void
 NativeWindowsWindow_getRequiredBigIconSize
   (
@@ -89,6 +98,15 @@ NativeWindowsWindow_getRequiredBigIconSize
     R_Integer32Value* height
   );
 
+/**
+ * @brief Get the size (width and height), in pixels, of a small window icon.
+ * @param width A pointer to a <code>R_Integer32Value</code> variable.
+ * @param height A pointer to a <code>R_Integer32Value</code> variable.
+ * @post
+ * On Success:
+ * - <code>*width</code> was assigned the width, in pixels, required for a small window icon. 
+ * - <code>*height</code> was assigned the height, in pixels, required for a small window icon.
+ */
 void
 NativeWindowsWindow_getRequiredSmallIconSize
   (

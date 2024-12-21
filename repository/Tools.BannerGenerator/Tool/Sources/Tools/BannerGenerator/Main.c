@@ -95,17 +95,15 @@ main1
   if (R_Value_isVoidValue(&height)) {
     R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(R_ImmutableByteArray_create(u8"height", sizeof(u8"height") - 1)));
   }
+#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+  ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create();
+#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+  ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create();
+#else
+  #error("environment not (yet) supported")
+#endif
   PixelBuffer* pixelBuffer = PixelBuffer_create(0, R_Value_getInteger32Value(&width), R_Value_getInteger32Value(&height), PixelFormat_An8Rn8Gn8Bn8);
-#if 0
-  writeBmpToPath(pixelBuffer, R_String_create(u8"test.bmp", sizeof("u8test.bmp") - 1));
-#endif
-  writePngToPath(pixelBuffer, R_Value_getObjectReferenceValue(&target));
-#if 0
-  R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
-  writePngToByteBuffer(pixelBuffer, byteBuffer);
-  R_FileSystem_setFileContents(R_FileSystem_create(), R_FilePath_parseUnixFilePath("test2.png", sizeof("test2.png") - 1), byteBuffer);
-  R_ByteBuffer* iconByteBuffer = R_ByteBuffer_create();
-#endif
+  ImageWriter_writePngToPath(imageWriter, pixelBuffer, R_Value_getObjectReferenceValue(&target));
 }
 
 int

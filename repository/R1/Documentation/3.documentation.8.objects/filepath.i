@@ -19,9 +19,9 @@ R_FilePath* R_Path_create()
 <p>A pointer to the file path.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filepath-parsewindowsfilepath">parseWindowsFilePath</h5>
+<h5 id="r-filepath-parsewindows">parseWindows</h5>
 <p><code>
-R_FilePath* R_FilePath_parseWindowsFilePath(void const* bytes, R_SizeValue numberOfBytes)
+R_FilePath* R_FilePath_parseWindows(void const* bytes, R_SizeValue numberOfBytes)
 </code></p>
 
 <p>Parse a file path in the Windows format.</p>
@@ -36,9 +36,9 @@ R_FilePath* R_FilePath_parseWindowsFilePath(void const* bytes, R_SizeValue numbe
 <p>A pointer to the file path.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filepath-parseunixfilepath">parseUnixFilePath</h5>
+<h5 id="r-filepath-parseunix">parseUnix</h5>
 <p><code>
-R_FilePath* R_FilePath_parseUnixFilePath(void const* bytes, R_SizeValue numberOfBytes)
+R_FilePath* R_FilePath_parseUnix(void const* bytes, R_SizeValue numberOfBytes)
 </code></p>
 
 <p>Parse a file path in the Unix format.</p>
@@ -53,9 +53,9 @@ R_FilePath* R_FilePath_parseUnixFilePath(void const* bytes, R_SizeValue numberOf
 <p>A pointer to the file path.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filepath-parsenativefilepath">parseNativeFilePath</h5>
+<h5 id="r-filepath-parsenative">parseNative</h5>
 <p><code>
-R_FilePath* R_FilePath_parseNativeFilePath(void const* bytes, R_SizeValue numberOfBytes)
+R_FilePath* R_FilePath_parseNative(void const* bytes, R_SizeValue numberOfBytes)
 </code></p>
 
 <p>Parse a file path in the native format.</p>

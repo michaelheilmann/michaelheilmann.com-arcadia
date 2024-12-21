@@ -12,15 +12,20 @@
   </header>
   <main>
     <h1>Roadmap</h1>
-    @{include("./Roadmap/Milestone2.2.i")}
-    @{include("./Roadmap/Milestone10.i")}
-    @{include("./Roadmap/Milestone9.i")}
-    @{include("./Roadmap/Milestone8.i")}
+    @{include("./Roadmap/Milestone-Banner_Generator-2.i")}
+    @{include("./Roadmap/Milestone-Icon_Generator-2.i")}
+    @{include("./Roadmap/Milestone-Arbitrary_Precision_Arithmetic-2.i")}
+    @{include("./Roadmap/Milestone-Arbitrary_Precision_Arithmetic-1.i")}
+    @{include("./Roadmap/Milestone-Template_Engine-2.i")}
+    @{include("./Roadmap/Milestone-Website-5.i")}
+    @{include("./Roadmap/Milestone-Runtime-2.i")}
+    @{include("./Roadmap/Milestone-Runtime-1.i")}
+    @{include("./Roadmap/Milestone-Mil-2.i")}
     <h2>Archive of completed milestones</h2>
     <p>You can review completed milestones in the <a href="https://michaelheilmann.com/roadmap-archive">roadmap archive</a>.</p>
   </main>
   <footer>
-    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 20 October 2024.</span>
+    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 26 December 2024.</span>
   </footer>
 </body>
 </html>

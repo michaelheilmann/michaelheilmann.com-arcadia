@@ -199,12 +199,12 @@ R_Natural8Value R_String_getByteAt(R_String const* self, R_SizeValue index)
 <p>The Byte value.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tointeger8">toInteger8</h5>
+<h5 id="r-string-toboolean">toBoolean</h5>
 <p><code>
-R_Integer8Value R_String_toInteger8(R_String const* self)
+R_BooleanValue R_String_toBoolean(R_String const* self)
 </code></p>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer8Value</code>.</p>
+<p>Interprete the symbols of this string as boolean literal and convert the boolean represented by that literal into an <code>R_BooleanValue</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -212,7 +212,7 @@ R_Integer8Value R_String_toInteger8(R_String const* self)
 </table>
 
 <h6><b>Return Value</b></h6>
-<p>The integer value.</p>
+<p>The boolean value.</p>
 
 <h6><b>Errors</b></h6>
 <table>
@@ -222,10 +222,9 @@ R_Integer8Value R_String_toInteger8(R_String const* self)
   </tr>
   <tr>
     <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer8Value</code>.</td>
+    <td>The symbols of this string cannot be interpreted as a boolean literal. Valid boolean literals are <code>true</code> and <code>false</code>, both case sensitve.</td>
   </tr>
 </table>
-
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-string-tointeger16">toInteger16</h5>
@@ -251,7 +250,8 @@ R_Integer16Value R_String_toInteger16(R_String const* self)
   </tr>
   <tr>
     <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer16Value</code>.</td>
+    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Integer16Value</code>.</td>
   </tr>
 </table>
 
@@ -261,7 +261,7 @@ R_Integer16Value R_String_toInteger16(R_String const* self)
 R_Integer32Value R_String_toInteger32(R_String const* self)
 </code></p>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer32Value</code>.</p>
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>R_Integer32Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -279,7 +279,8 @@ R_Integer32Value R_String_toInteger32(R_String const* self)
   </tr>
   <tr>
     <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer32Value</code>.</td>
+    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Integer32Value</code>.</td>
   </tr>
 </table>
 
@@ -289,7 +290,7 @@ R_Integer32Value R_String_toInteger32(R_String const* self)
 R_Integer64Value R_String_toInteger64(R_String const* self)
 </code></p>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer64Value</code>.</p>
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>R_Integer64Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -307,17 +308,18 @@ R_Integer64Value R_String_toInteger64(R_String const* self)
   </tr>
   <tr>
     <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as an integer literal or the number represented by the integer literal cannot be represented a value of type <code>R_Integer64Value</code>.</td>
+    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Integer64Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tonatural8">toNatural8</h5>
+<h5 id="r-string-tointeger8">toInteger8</h5>
 <p><code>
-R_Natural8Value R_String_toNatural8(R_String const* self)
+R_Integer8Value R_String_toInteger8(R_String const* self)
 </code></p>
 
-<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural8Value</code>.</p>
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>R_Integer8Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -325,7 +327,7 @@ R_Natural8Value R_String_toNatural8(R_String const* self)
 </table>
 
 <h6><b>Return Value</b></h6>
-<p>The natural value.</p>
+<p>The integer value.</p>
 
 <h6><b>Errors</b></h6>
 <table>
@@ -335,7 +337,8 @@ R_Natural8Value R_String_toNatural8(R_String const* self)
   </tr>
   <tr>
     <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural8Value</code>.</td>
+    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
+    the number represented by the integer literal cannot be represented a value of type <code>R_Integer8Value</code>.</td>
   </tr>
 </table>
 
@@ -345,7 +348,7 @@ R_Natural8Value R_String_toNatural8(R_String const* self)
 R_Natural16Value R_String_toNatural16(R_String const* self)
 </code></p>
 
-<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural16Value</code>.</p>
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>R_Natural16Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -363,7 +366,8 @@ R_Natural16Value R_String_toNatural16(R_String const* self)
   </tr>
   <tr>
     <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural16Value</code>.</td>
+    <td>The symbols of this string cannot be interpreted as a decimal natural literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Natural16Value</code>.</td>
   </tr>
 </table>
 
@@ -373,7 +377,7 @@ R_Natural16Value R_String_toNatural16(R_String const* self)
 R_Natural32Value R_String_toNatural16(R_String const* self)
 </code></p>
 
-<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural32Value</code>.</p>
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>R_Natural32Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -391,7 +395,8 @@ R_Natural32Value R_String_toNatural16(R_String const* self)
   </tr>
   <tr>
     <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural32Value</code>.</td>
+    <td>The symbols of this string cannot be interpreted as a decimal natural literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Natural32Value</code>.</td>
   </tr>
 </table>
 
@@ -401,7 +406,7 @@ R_Natural32Value R_String_toNatural16(R_String const* self)
 R_Natural64Value R_String_toNatural16(R_String const* self)
 </code></p>
 
-<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that natural literal into an <code>R_Natural64Value</code>.</p>
+<p>Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>R_Natural64Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
@@ -419,6 +424,121 @@ R_Natural64Value R_String_toNatural16(R_String const* self)
   </tr>
   <tr>
     <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as an natural literal or the number represented by the natural literal cannot be represented a value of type <code>R_Natural64Value</code>.</td>
+    <td>The symbols of this string cannot be interpreted as a decimal natural literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Natural64Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-tonatural8">toNatural8</h5>
+<p><code>
+R_Natural8Value R_String_toNatural8(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>R_Natural8Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The natural value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as a decimal natural literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Natural8Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-toreal32">toReal32</h5>
+<p><code>
+R_Real32Value R_String_toReal32(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>R_Real32Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The <code>R_Real32Value</code> value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as a decimal real literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Real32Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="r-string-toreal64">toReal64</h5>
+<p><code>
+R_Real64Value R_String_toReal64(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>R_Real64Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The <code>R_Real64Value</code> value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as a decimal real literal or
+    the number represented by the literal cannot be represented a value of type <code>R_Real64Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<p><code>
+R_VoidValue R_String_toVoid(R_String const* self)
+</code></p>
+
+<p>Interprete the symbols of this string as a void literal and convert the void value represented by that literal into an <code>R_VoidValue</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The void value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>R_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>R_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as a void literal. The valid void literal is <code>void</code>, case sensitve.</td>
   </tr>
 </table>

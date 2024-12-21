@@ -104,7 +104,7 @@ onIdentifier
     R_setStatus(R_Status_ArgumentValueInvalid);
     R_jump();
   }
-  do {                                              
+  do {
     R_Natural32Value targetCodePoint = R_Utf8Reader_getCodePoint(context->source);
     R_Utf8Writer_writeCodePoints(context->context->temporary, &targetCodePoint, 1);
     R_Utf8Reader_next(context->source);
@@ -177,7 +177,7 @@ onIncludeDirective
   R_Utf8Reader_next(context->source);
   R_ByteBuffer_clear(context->context->temporaryBuffer);
   onString(context);
-  R_FilePath* filePath = R_FilePath_parseWindowsFilePath(context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz);
+  R_FilePath* filePath = R_FilePath_parseWindows(context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz);
   R_Value value;
   R_Value_setObjectReferenceValue(&value, filePath);
   R_Stack_push(context->context->stack, value);
