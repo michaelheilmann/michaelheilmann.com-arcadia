@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,9 +18,7 @@
 #include "R/Interpreter/ThreadState.private.h"
 
 #include "R/ArmsIntegration.h"
-#include "R/JumpTarget.h"
 #include "R/Object.h"
-#include "R/Status.h"
 #include "R/DynamicArrayUtilities.h"
 #include "R/Value.h"
 
@@ -37,7 +35,7 @@ _RegisterStack_initialize
   )
 {
   if (!R_allocateUnmanaged_nojump(&self->elements, 0 * sizeof(R_Value))) {
-    R_jump();
+    Arcadia_Process_jump(process);
   }
   self->size = 0;
   self->capacity = 0;
@@ -59,28 +57,29 @@ _RegisterStack_uninitialize
 R_Interpreter_ThreadState*
 R_Interpreter_ThreadState_create
   (
+    Arcadia_Process* process
   )
 {
   R_Interpreter_ThreadState* thread = NULL;
-  if (!R_allocateUnmanaged_nojump(&thread, sizeof(R_Interpreter_ThreadState))) {
-    R_jump();
+  if (!R_allocateUnmanaged_nojump(process, &thread, sizeof(R_Interpreter_ThreadState))) {
+    Arcadia_Process_jump(process);
   }
   thread->numberOfRegisters = R_Configuration_DefaultNumberOfRegisters;
-  if (!R_allocateUnmanaged_nojump(&thread->registers, sizeof(R_Value) * thread->numberOfRegisters)) {
-    R_deallocateUnmanaged_nojump(thread);
+  if (!R_allocateUnmanaged_nojump(process, &thread->registers, sizeof(R_Value) * thread->numberOfRegisters)) {
+    R_deallocateUnmanaged_nojump(process, thread);
     thread = NULL;
-    R_jump();
+    Arcadia_Process_jump(process);
   }
-  for (R_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
-    R_Value_setVoidValue(thread->registers + i, R_VoidValue_Void);
+  for (Arcadia_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
+    R_Value_setVoidValue(thread->registers + i, Arcadia_VoidValue_Void);
   }
 
-  if (!R_allocateUnmanaged_nojump(&thread->calls.elements, sizeof(R_CallState))) {
-    R_deallocateUnmanaged_nojump(thread->registers);
+  if (!R_allocateUnmanaged_nojump(process, &thread->calls.elements, sizeof(R_CallState))) {
+    R_deallocateUnmanaged_nojump(process, thread->registers);
     thread->registers = NULL;
-    R_deallocateUnmanaged_nojump(thread);
+    R_deallocateUnmanaged_nojump(process, thread);
     thread = NULL;
-    R_jump();
+    Arcadia_Process_jump(process);
   }
   thread->calls.size = 0;
   thread->calls.capacity = 1;
@@ -91,14 +90,15 @@ R_Interpreter_ThreadState_create
 void
 R_Interpreter_ThreadState_destroy
   (
+    Arcadia_Process* process,
     R_Interpreter_ThreadState* thread
   )
 {
-  R_deallocateUnmanaged_nojump(thread->calls.elements);
+  R_deallocateUnmanaged_nojump(process, thread->calls.elements);
   thread->calls.elements = NULL;
-  R_deallocateUnmanaged_nojump(thread->registers);
+  R_deallocateUnmanaged_nojump(process, thread->registers);
   thread->registers = NULL;
-  R_deallocateUnmanaged_nojump(thread);
+  R_deallocateUnmanaged_nojump(process, thread);
   thread = NULL;
 }
 
@@ -108,10 +108,10 @@ R_Interpreter_ThreadState_visit
     R_Interpreter_ThreadState* thread
   )
 {
-  for (R_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
     R_Value_visit(thread->registers + i);
   }
-  for (R_SizeValue i = 0, n = thread->calls.size; i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = thread->calls.size; i < n; ++i) {
     R_CallState* callState = &(thread->calls.elements[i]);
     if (callState->flags == R_CallState_Flags_Procedure) {
       R_Object_visit(callState->procedure);
@@ -119,7 +119,7 @@ R_Interpreter_ThreadState_visit
   }
 }
 
-R_SizeValue
+Arcadia_SizeValue
 R_Interpreter_ThreadState_getNumberOfRegisters
   (
     R_Interpreter_ThreadState* thread
@@ -127,17 +127,10 @@ R_Interpreter_ThreadState_getNumberOfRegisters
 { return thread->numberOfRegisters; }
 
 R_Value*
-R_Interpreter_ThreadState_getRegisters
-  (
-    R_Interpreter_ThreadState* thread
-  )
-{ return thread->registers; }
-
-R_Value*
 R_Interpreter_ThreadState_getRegisterAt
   (
     R_Interpreter_ThreadState* thread,
-    R_SizeValue registerIndex
+    Arcadia_SizeValue registerIndex
   )
 { return &(thread->registers[registerIndex]); }
 
@@ -145,8 +138,8 @@ R_CallState*
 R_Interpreter_ThreadState_beginForeignProcedureCall
   (
     R_Interpreter_ThreadState* thread,
-    R_Natural32Value instructionIndex,
-    R_ForeignProcedureValue foreignProcedure
+    Arcadia_Natural32Value instructionIndex,
+    Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
   R_DynamicArrayUtilities_ensureFreeCapacity(&thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, R_DynamicArrayUtilities_GrowthStrategy1);
@@ -167,7 +160,7 @@ R_CallState*
 R_Interpreter_ThreadState_beginProcedureCall
   (
     R_Interpreter_ThreadState* thread,
-    R_Natural32Value instructionIndex,
+    Arcadia_Natural32Value instructionIndex,
     R_Interpreter_Procedure* procedure
   )
 {

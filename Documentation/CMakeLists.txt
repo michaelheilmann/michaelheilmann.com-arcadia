@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -63,7 +63,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i => ${DOCUMENTATION_TARGET_FILE}"
-                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
 add_custom_target(Website.RoadmapPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "roadmap-archive.html".
@@ -73,7 +73,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i => ${DOCUMENTATION_TARGET_FILE}"
-                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
 add_custom_target(Website.RoadmapArchivePage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "assets/index.css".
@@ -92,6 +92,16 @@ set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/assets/reset.c
 add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENT_TARGET_FILE}"
-                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILES})
-add_custom_target(Website.ResetCss ALL DEPENDS ${DOCUMENT_TARGET_FILE})
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+add_custom_target(Website.ResetCss ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+
+# Build "Specifications/Cil/index.html".
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Cil/index.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/specifications/cil/index.html")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+add_custom_target(Website.Specifications.Cil ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})

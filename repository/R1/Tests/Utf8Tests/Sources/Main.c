@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,21 +21,34 @@
 #include "read.h"
 #include "readWrite.h"
 
-static bool safeExecute(void (*f)()) {
+static bool
+safeExecute
+  (
+    void (*f)(Arcadia_Process* process)
+  )
+{
   bool result = true;
-  R_Status status = R_startup();
+  Arcadia_Status status = R_startup();
   if (status) {
     result = false;
     return result;
   }
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    R_shutdown();
+    result = false;
+    return result;
+  }
   R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    (*f)();
+    (*f)(process);
   } else {
     result = false;
   }
-  R_popJumpTarget();
+  Arcadia_Process_popJumpTarget(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   status = R_shutdown();
   if (status) {
     result = false;
@@ -43,9 +56,9 @@ static bool safeExecute(void (*f)()) {
   return result;
 }
 
-static void R1_Tests_Utf8_readWrite1() {
-  R1_Tests_Utf8_readWrite("abc", sizeof("abc") - 1);
-  R1_Tests_Utf8_readWrite("xyz", sizeof("xyz") - 1);
+static void R1_Tests_Utf8_readWrite1(Arcadia_Process* process) {
+  R1_Tests_Utf8_readWrite(process, u8"abc", sizeof(u8"abc") - 1);
+  R1_Tests_Utf8_readWrite(process, u8"xyz", sizeof(u8"xyz") - 1);
 }
 
 int main(int argc, char **argv) {

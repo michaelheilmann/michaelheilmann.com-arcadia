@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,18 +18,9 @@
 #if !defined(R_INTERPRETER_CODE_CONSTANTS_H_INCLUDED)
 #define R_INTERPRETER_CODE_CONSTANTS_H_INCLUDED
 
-#include "R/Boolean.h"
-#include "R/Integer16.h"
-#include "R/Integer32.h"
-#include "R/Integer64.h"
-#include "R/Integer8.h"
-#include "R/Natural16.h"
-#include "R/Natural32.h"
-#include "R/Natural64.h"
-#include "R/Natural8.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Object.h"
 #include "R/String.h"
-#include "R/Size.h"
 
 /**
  * @brief A set of constants.
@@ -42,7 +33,7 @@
  * - string values
  * - void values
  */
-Rex_declareObjectType("R.Interpreter.Code.Constants", R_Interpreter_Code_Constants, R_Object);
+Rex_declareObjectType(u8"R.Interpreter.Code.Constants", R_Interpreter_Code_Constants, u8"R.Object");
 
 typedef struct Constant Constant;
 
@@ -51,112 +42,127 @@ struct R_Interpreter_Code_Constants {
   /** @brief A pointer to an array of cp constants. The first sz R_Value object contain the values of constants, the remaining cp - sz R_Value objects contain void values. */
   R_Value* p;
   /** @brief The size of the constant array. */
-  R_SizeValue sz;
+  Arcadia_SizeValue sz;
   /** @brief The capacity of the constant array. */
-  R_SizeValue cp;
+  Arcadia_SizeValue cp;
 };
 
 R_Interpreter_Code_Constants*
 R_Interpreter_Code_Constants_create
   (
+    Arcadia_Process* process
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateBoolean
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_BooleanValue booleanValue
+    Arcadia_BooleanValue booleanValue
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateForeignProcedure
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_ForeignProcedureValue foreignProcedureValue
+    Arcadia_ForeignProcedureValue foreignProcedureValue
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateInteger16
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_Integer16Value integer16Value
+    Arcadia_Integer16Value integer16Value
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateInteger32
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_Integer32Value integer32Value
+    Arcadia_Integer32Value integer32Value
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateInteger64
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_Integer64Value integer64Value
+    Arcadia_Integer64Value integer64Value
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateInteger8
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_Integer8Value natural8Value
+    Arcadia_Integer8Value natural8Value
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateNatural16
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_Natural16Value natural16Value
+    Arcadia_Natural16Value natural16Value
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateNatural32
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_Natural32Value natural32Value
+    Arcadia_Natural32Value natural32Value
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateNatural64
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_Natural64Value natural64Value
+    Arcadia_Natural64Value natural64Value
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateNatural8
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_Natural8Value natural8Value
+    Arcadia_Natural8Value natural8Value
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateSize
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_SizeValue sizeValue
+    Arcadia_SizeValue sizeValue
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateString
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
     R_String* stringValue
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateVoid
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_VoidValue voidValue
+    Arcadia_VoidValue voidValue
   );
 
 R_Value const*
 R_Interpreter_Code_Constants_getAt
   (
+    Arcadia_Process* process,
     R_Interpreter_Code_Constants const* self,
-    R_Natural32Value index
+    Arcadia_Natural32Value index
   );
 
 #endif // R_INTERPRETER_CODE_CONSTANTS_H_INCLUDED

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,91 +19,99 @@
 
 #include "R/Convert/parse.i"
 
-static R_Natural8Value
+static Arcadia_Natural8Value
 toNatural8
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_Natural16Value
+static Arcadia_Natural16Value
 toNatural16
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_Natural32Value
+static Arcadia_Natural32Value
 toNatural32
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_Natural64Value
+static Arcadia_Natural64Value
 toNatural64
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_Natural8Value
+static Arcadia_Natural8Value
 toNatural8
   (
+    Arcadia_Process* process,
     State* state
   )
 {
-  R_Natural64Value w = toNatural64(state);
-  if (w > R_Natural8Value_Maximum) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+  Arcadia_Natural64Value w = toNatural64(process, state);
+  if (w > Arcadia_Natural8Value_Maximum) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
-  R_Natural8Value v = (R_Natural8Value)w;
+  Arcadia_Natural8Value v = (Arcadia_Natural8Value)w;
   return v;
 }
 
-static R_Natural16Value
+static Arcadia_Natural16Value
 toNatural16
   (
+    Arcadia_Process* process,
     State* state
   )
 {
-  R_Natural64Value w = toNatural64(state);
-  if (w > R_Natural16Value_Maximum) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+  Arcadia_Natural64Value w = toNatural64(process, state);
+  if (w > Arcadia_Natural16Value_Maximum) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
-  R_Natural16Value v = (R_Natural16Value)w;
+  Arcadia_Natural16Value v = (Arcadia_Natural16Value)w;
   return v;
 }
 
-static R_Natural32Value
+static Arcadia_Natural32Value
 toNatural32
   (
+    Arcadia_Process* process,
     State* state
   )
 {
-  R_Natural64Value w = toNatural64(state);
-  if (w > R_Natural32Value_Maximum) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+  Arcadia_Natural64Value w = toNatural64(process, state);
+  if (w > Arcadia_Natural32Value_Maximum) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
-  R_Natural32Value v = (R_Natural32Value)w;
+  Arcadia_Natural32Value v = (Arcadia_Natural32Value)w;
   return v;
 }
 
-static R_Natural64Value
+static Arcadia_Natural64Value
 toNatural64
   (
+    Arcadia_Process* process,
     State* state
   )
 {
-  static const R_Natural64Value BASE = 10;
-  // The maximum decimal value of an R_Natural64Value is +18,446,744,073,709,551,615. These are 20 decimal digits.
-  // The minimum decimal value of an R_Integer64Value is +0. This 1 one decimal digit.
-  // 19 = 20 - 1 is the number of decimal digits which always fit into an R_Integer64Value.
-  static const R_SizeValue SAFEDIGITSBASE10 = 19;
+  static const Arcadia_Natural64Value BASE = 10;
+  // The maximum decimal value of an Arcadia_Natural64Value is +18,446,744,073,709,551,615. These are 20 decimal digits.
+  // The minimum decimal value of an Arcadia_Integer64Value is +0. This 1 one decimal digit.
+  // 19 = 20 - 1 is the number of decimal digits which always fit into an Arcadia_Integer64Value.
+  static const Arcadia_SizeValue SAFEDIGITSBASE10 = 19;
 #if 0
   // Precondition prevents that.
   if (CodePoint_Start != state->symbol) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
 #endif
   next(state);
@@ -114,47 +122,48 @@ toNatural64
   while (isZero(state)) {
     next(state);
   }
-  R_Natural64Value v = 0;
+  Arcadia_Natural64Value v = 0;
   if (!isDigit(state)) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   while (isDigit(state)) {
-    R_Integer64Value w = 0;
+    Arcadia_Integer64Value w = 0;
     // We accumulate up to 19 decimal digits in w.
-    R_SizeValue i = 0, n = SAFEDIGITSBASE10;
+    Arcadia_SizeValue i = 0, n = SAFEDIGITSBASE10;
     for (; isDigit(state) && i < n; ++i) {
-      R_Natural64Value digit = (R_Natural64Value)(state->symbol - '0');
+      Arcadia_Natural64Value digit = (Arcadia_Natural64Value)(state->symbol - '0');
       w = w * BASE + digit;
       next(state);
     }
     // We would have to multiply v by the number of digits in w.
     while (i > 0) {
-      if (v < R_Integer64Value_Minimum / 10) {
-        R_setStatus(R_Status_ConversionFailed);
-        R_jump();
+      if (v < Arcadia_Integer64Value_Minimum / 10) {
+        Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+        Arcadia_Process_jump(process);
       }
       v = v * i;
       i--;
     }
-    if (v > R_Natural64Value_Maximum - w) {
-      R_setStatus(R_Status_ConversionFailed);
-      R_jump();
+    if (v > Arcadia_Natural64Value_Maximum - w) {
+      Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+      Arcadia_Process_jump(process);
     }
     v = v + w;
   }
   if (CodePoint_End != state->symbol) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   return v;
 }
 
-R_Natural8Value
+Arcadia_Natural8Value
 R_toNatural8
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -162,14 +171,15 @@ R_toNatural8
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toNatural8(&state);
+  return toNatural8(process, &state);
 }
 
-R_Natural16Value
+Arcadia_Natural16Value
 R_toNatural16
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -177,14 +187,15 @@ R_toNatural16
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toNatural32(&state);
+  return toNatural32(process, &state);
 }
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_toNatural32
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -192,14 +203,15 @@ R_toNatural32
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toNatural32(&state);
+  return toNatural32(process, &state);
 }
 
-R_Natural64Value
+Arcadia_Natural64Value
 R_toNatural64
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -207,5 +219,5 @@ R_toNatural64
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toNatural64(&state);
+  return toNatural64(process, &state);
 }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,63 +20,70 @@
 void
 ImageWriter_writePngToPath
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     R_String* targetPath
   )
-{ self->writePngToPath(self, sourcePixelBuffer, targetPath); }
+{ self->writePngToPath(process, self, sourcePixelBuffer, targetPath); }
 
 void
 ImageWriter_writePngToByteBuffer
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     R_ByteBuffer* targetByteBuffer
   )
-{ self->writePngToByteBuffer(self, sourcePixelBuffer, targetByteBuffer); }
+{ self->writePngToByteBuffer(process, self, sourcePixelBuffer, targetByteBuffer); }
 
 void
 ImageWriter_writeBmpToPath
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     R_String* targetPath
   )
-{ self->writeBmpToPath(self, sourcePixelBuffer, targetPath); }
+{ self->writeBmpToPath(process, self, sourcePixelBuffer, targetPath); }
 
 void
 ImageWriter_writeBmpToByteBuffer
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     R_ByteBuffer* targetByteBuffer
   )
-{ self->writeBmpToByteBuffer(self, sourcePixelBuffer, targetByteBuffer); }
+{ self->writeBmpToByteBuffer(process, self, sourcePixelBuffer, targetByteBuffer); }
 
 void
 ImageWriter_writeIcoToPath
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     R_List* sourcePixelBuffers,
     R_String* targetPath
   )
-{ self->writeIcoToPath(self, sourcePixelBuffers, targetPath); }
+{ self->writeIcoToPath(process, self, sourcePixelBuffers, targetPath); }
 
 void
 ImageWriter_writeIcoToByteBuffer
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     R_List* sourcePixelBuffers,
     R_ByteBuffer* targetByteBuffer
   )
-{ self->writeIcoToByteBuffer(self, sourcePixelBuffers, targetByteBuffer); }
+{ self->writeIcoToByteBuffer(process, self, sourcePixelBuffers, targetByteBuffer); }
 
 static void
 ImageWriter_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   ); 
 
 static const R_ObjectType_Operations _objectTypeOperations = {
@@ -85,7 +92,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = NULL,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -105,21 +112,22 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("ImageWriter", ImageWriter, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"ImageWriter", ImageWriter, u8"R.Object", R_Object, &_typeOperations);
 
 static void
 ImageWriter_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   ImageWriter* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _ImageWriter_getType();
+  Arcadia_TypeValue _type = _ImageWriter_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Object_constructImpl(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->writeBmpToByteBuffer = NULL;
   _self->writeBmpToPath = NULL;

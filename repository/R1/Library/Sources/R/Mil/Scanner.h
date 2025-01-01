@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,13 +23,14 @@
 /// @code
 /// class R.Mil.Scanner
 /// @endcode
-Rex_declareObjectType("R.Mil.Scanner", R_Mil_Scanner, "R.Object");
+Rex_declareObjectType(u8"R.Mil.Scanner", R_Mil_Scanner, u8"R.Object");
 
 /// @brief Create a MIL scanner.
 /// @return A pointer to this MIL scanner.
 R_Mil_Scanner*
 R_Mil_Scanner_create
   (
+    Arcadia_Process* process
   );
 
 /// @brief Get the text of the token.
@@ -38,13 +39,14 @@ R_Mil_Scanner_create
 R_String*
 R_Mil_Scanner_getTokenText
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
 /// @brief Get the type of the token.
 /// @param self A pointer to this MIL scanner.
 /// @return The type of the token.
-R_Natural32Value
+Arcadia_Natural32Value
 R_Mil_Scanner_getTokenType
   (
     R_Mil_Scanner* self
@@ -55,6 +57,7 @@ R_Mil_Scanner_getTokenType
 void
 R_Mil_Scanner_step
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
@@ -64,6 +67,7 @@ R_Mil_Scanner_step
 void
 R_Mil_Scanner_setInput
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self,
     R_Utf8Reader* input
   );

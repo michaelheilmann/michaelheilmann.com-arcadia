@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,17 +17,16 @@
 
 #include "R/Convert/BooleanToString.h"
 
-#include "R/JumpTarget.h"
-#include "R/Status.h"
 #include "R/cstdlib.h"
 
 void
 R_Boolean_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_BooleanValue value,
+    Arcadia_BooleanValue value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   )
 {
   char* _buffer = NULL;
@@ -35,15 +34,15 @@ R_Boolean_toString
   if (value) {
      _bufferLength = sizeof(u8"true") - 1;
     if (Arms_MemoryManager_allocate(memoryManager, &_buffer, _bufferLength)) {
-      R_setStatus(R_Status_AllocationFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
+      Arcadia_Process_jump(process);
     }
     c_memcpy(_buffer, u8"true", _bufferLength);
   } else {
      _bufferLength = sizeof(u8"false") - 1;
     if (Arms_MemoryManager_allocate(memoryManager, &_buffer, _bufferLength)) {
-      R_setStatus(R_Status_AllocationFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
+      Arcadia_Process_jump(process);
     }
     c_memcpy(_buffer, u8"false", _bufferLength);
   }

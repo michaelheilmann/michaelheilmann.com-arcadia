@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -52,11 +52,11 @@ typedef enum Arms_Status {
   Arms_Status_EnvironmentFailed = 6,
 } Arms_Status;
 
-typedef void (Arms_TypeRemovedCallbackFunction)(Arms_Natural8 const* name, Arms_Size nameLength);
+typedef void (Arms_TypeRemovedCallbackFunction)(void* context, Arms_Natural8 const* name, Arms_Size nameLength);
 
-typedef void (Arms_VisitCallbackFunction)(void*);
+typedef void (Arms_VisitCallbackFunction)(void* context, void* object);
 
-typedef void (Arms_FinalizeCallbackFunction)(void*);
+typedef void (Arms_FinalizeCallbackFunction)(void* context, void* object);
 
 Arms_Status
 Arms_startup
@@ -73,6 +73,7 @@ Arms_addType
   (
     Arms_Natural8 const* name,
     Arms_Size nameLength,
+    void* contex,
     Arms_TypeRemovedCallbackFunction* typeRemoved,
     Arms_VisitCallbackFunction* visit,
     Arms_FinalizeCallbackFunction* finalize

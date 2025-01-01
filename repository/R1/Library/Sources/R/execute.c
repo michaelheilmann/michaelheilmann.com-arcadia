@@ -1,8 +1,6 @@
 #include "R/execute.h"
 
-#include "R/JumpTarget.h"
-#include "R/Status.h"
-#include "R/Types.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Interpreter/Procedure.h"
 #include "R/Interpreter/Include.h"
 #include "R/Interpreter/ThreadState.private.h" // TODO: Remove this.
@@ -12,13 +10,14 @@
 static void
 execute1
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcessState
   )
 {
-  R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(process);
+  R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcessState);
   R_CallState* currentCallState = NULL;
   while (true) {
-    R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+    R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcessState);
     currentCallState = R_Interpreter_ThreadState_getCurrentCall(thread);
   
     if (currentCallState->instructionIndex == currentCallState->procedure->code->sz) {
@@ -31,113 +30,113 @@ execute1
     }
     switch (*(currentCallState->procedure->code->p + currentCallState->instructionIndex)) {
       case R_Machine_Code_Opcode_Idle: {
-        R_Instructions_idle(process);
+        R_Instructions_idle(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Add: {
-        R_Instructions_add(process);
+        R_Instructions_add(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_And: {
-        R_Instructions_and(process);
+        R_Instructions_and(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Concatenate: {
-        R_Instructions_concatenate(process);
+        R_Instructions_concatenate(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Divide: {
-        R_Instructions_divide(process);
+        R_Instructions_divide(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Subtract: {
-        R_Instructions_subtract(process);
+        R_Instructions_subtract(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Multiply: {
-        R_Instructions_multiply(process);
+        R_Instructions_multiply(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Negate: {
-        R_Instructions_negate(process);
+        R_Instructions_negate(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Not: {
-        R_Instructions_not(process);
+        R_Instructions_not(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Or: {
-        R_Instructions_or(process);
+        R_Instructions_or(process, interpreterProcessState);
       } break;
       case R_Machine_Code_Opcode_Return: {
         // Not yet implemented.
-        R_setStatus(R_Status_ArgumentValueInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+        Arcadia_Process_jump(process);
       } break;
       case R_Machine_Code_Opcode_Invoke: {
         assert(R_Machine_Code_Opcode_Invoke == *(currentCallState->procedure->code->p + currentCallState->instructionIndex));
         currentCallState->instructionIndex++;
         // target index
         R_Machine_Code_IndexKind targetIndexKind;
-        R_Natural32Value targetIndex;
+        Arcadia_Natural32Value targetIndex;
         R_Value* targetValue = NULL;
-        R_Interpreter_Code_decodeIndex(currentCallState->procedure->code, &currentCallState->instructionIndex, &targetIndexKind, &targetIndex);
+        R_Interpreter_Code_decodeIndex(process, currentCallState->procedure->code, &currentCallState->instructionIndex, &targetIndexKind, &targetIndex);
         if (targetIndexKind == R_Machine_Code_IndexKind_Constant) {
-          R_setStatus(R_Status_NumberOfArgumentsInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
+          Arcadia_Process_jump(process);
         } else {
           targetValue = R_Interpreter_ThreadState_getRegisterAt(thread, targetIndex);
         }
         // callee
         R_Machine_Code_IndexKind calleeIndexKind;
-        R_Natural32Value calleeIndex;
+        Arcadia_Natural32Value calleeIndex;
         R_Value calleeValue;
-        R_Interpreter_Code_decodeIndex(currentCallState->procedure->code, &currentCallState->instructionIndex, &calleeIndexKind, &calleeIndex);
+        R_Interpreter_Code_decodeIndex(process, currentCallState->procedure->code, &currentCallState->instructionIndex, &calleeIndexKind, &calleeIndex);
         if (calleeIndexKind == R_Machine_Code_IndexKind_Constant) {
-          calleeValue = *R_Interpreter_Code_Constants_getAt(constants, calleeIndex);
+          calleeValue = *R_Interpreter_Code_Constants_getAt(process, constants, calleeIndex);
         } else {
           calleeValue = *R_Interpreter_ThreadState_getRegisterAt(thread, calleeIndex);
         }
         // number of arguments
-        R_Natural32Value count;
-        R_Interpreter_Code_decodeCount(currentCallState->procedure->code, &currentCallState->instructionIndex, &count);
+        Arcadia_Natural32Value count;
+        R_Interpreter_Code_decodeCount(process, currentCallState->procedure->code, &currentCallState->instructionIndex, &count);
         if (count > R_Machine_Code_NumberOfArguments_Maximum) {
-          R_setStatus(R_Status_NumberOfArgumentsInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
+          Arcadia_Process_jump(process);
         }
         R_Value argumentValues[R_Machine_Code_NumberOfArguments_Maximum];
-        for (R_Natural32Value i = 0, n = count; i < n; ++i) {
+        for (Arcadia_Natural32Value i = 0, n = count; i < n; ++i) {
           R_Machine_Code_IndexKind argumentIndexKind;
-          R_Natural32Value argumentIndex;
-          R_Interpreter_Code_decodeIndex(currentCallState->procedure->code, &currentCallState->instructionIndex, &argumentIndexKind, &argumentIndex);
+          Arcadia_Natural32Value argumentIndex;
+          R_Interpreter_Code_decodeIndex(process, currentCallState->procedure->code, &currentCallState->instructionIndex, &argumentIndexKind, &argumentIndex);
           if (argumentIndexKind == R_Machine_Code_IndexKind_Constant) {
-            argumentValues[i] = *R_Interpreter_Code_Constants_getAt(constants, argumentIndex);
+            argumentValues[i] = *R_Interpreter_Code_Constants_getAt(process, constants, argumentIndex);
           } else {
             argumentValues[i] = *R_Interpreter_ThreadState_getRegisterAt(thread, argumentIndex);
           }
         }
         if (R_Value_isForeignProcedureValue(&calleeValue)) {
-          R_ForeignProcedureValue foreignProcedureValue = R_Value_getForeignProcedureValue(&calleeValue);
+          Arcadia_ForeignProcedureValue foreignProcedureValue = R_Value_getForeignProcedureValue(&calleeValue);
           R_Interpreter_ThreadState_beginForeignProcedureCall(thread, 0, foreignProcedureValue);
           R_JumpTarget jumpTarget;
-          R_pushJumpTarget(&jumpTarget);
+          Arcadia_Process_pushJumpTarget(process, &jumpTarget);
           if (R_JumpTarget_save(&jumpTarget)) {
-            (*foreignProcedureValue)(targetValue, count, &(argumentValues[0]));
-            R_popJumpTarget();
+            (*foreignProcedureValue)(process, targetValue, count, &(argumentValues[0]));
+            Arcadia_Process_popJumpTarget(process);
             R_Interpreter_ThreadState_endCall(thread); // Must not fail.
           } else {
-            R_popJumpTarget();
+            Arcadia_Process_popJumpTarget(process);
             R_Interpreter_ThreadState_endCall(thread); // Must not fail.
-            R_jump();
+            Arcadia_Process_jump(process);
           }
         } else if (R_Value_isObjectReferenceValue(&calleeValue)) {
           R_Object* object = R_Value_getObjectReferenceValue(&calleeValue);
-          if (R_Type_isSubType(R_Object_getType(object), _R_Interpreter_Procedure_getType())) {
+          if (Arcadia_Type_isSubType(R_Object_getType(object), _R_Interpreter_Procedure_getType(process))) {
             R_Interpreter_ThreadState_beginProcedureCall(thread, 0, (R_Interpreter_Procedure*)object);
           } else {
-            R_setStatus(R_Status_ArgumentTypeInvalid);
-            R_jump();
+            Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+            Arcadia_Process_jump(process);
           }
         } else {
-          R_setStatus(R_Status_ArgumentTypeInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+          Arcadia_Process_jump(process);
         }
       } break;
       default: {
         // Borked code. This should never happen.
-        R_setStatus(R_Status_ArgumentValueInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+        Arcadia_Process_jump(process);
       } break;
     };
   }
@@ -146,17 +145,19 @@ execute1
 static void
 execute
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
-{ execute1(process); }
+{ execute1(process, interpreterProcess); }
 
 void
 R_executeProcedure
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess,
     R_Interpreter_Procedure* procedure
   )
 {
-  R_Interpreter_ThreadState_beginProcedureCall(R_Interpreter_ProcessState_getMainThread(process), 0, procedure);
-  execute(process);
+  R_Interpreter_ThreadState_beginProcedureCall(R_Interpreter_ProcessState_getMainThread(interpreterProcess), 0, procedure);
+  execute(process, interpreterProcess);
 }

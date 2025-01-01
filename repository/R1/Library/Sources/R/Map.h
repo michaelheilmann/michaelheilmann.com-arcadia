@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,26 +22,29 @@
 #include "R/List.h"
 #include "R/Value.h"
 
-Rex_declareObjectType("R.Map", R_Map, "R.Object");
+Rex_declareObjectType(u8"R.Map", R_Map, u8"R.Object");
 
 R_Map*
 R_Map_create
   (
+    Arcadia_Process* process
   );
 
 R_Map*
 R_Map_clone
   (
+    Arcadia_Process* process,
     R_Map* self
   );
 
 void
 R_Map_clear
   (
+    Arcadia_Process* process,
     R_Map* self
   );
 
-R_SizeValue
+Arcadia_SizeValue
 R_Map_getSize
   (
     R_Map const* self
@@ -50,6 +53,7 @@ R_Map_getSize
 void
 R_Map_set
   (
+    Arcadia_Process* process,
     R_Map* self,
     R_Value key,
     R_Value value
@@ -58,6 +62,7 @@ R_Map_set
 R_Value
 R_Map_get
   (
+    Arcadia_Process* process,
     R_Map const* self,
     R_Value key
   );
@@ -65,12 +70,14 @@ R_Map_get
 R_List*
 R_Map_getValues
   (
+    Arcadia_Process* process,
     R_Map const* self
   );
 
 R_List*
 R_Map_getKeys
   (
+    Arcadia_Process* process,
     R_Map const* self
   );
 

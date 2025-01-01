@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,7 +17,7 @@
 
 #include "R/Value.h"
 
-#include "R/hash.h"
+#include "Arcadia/Ring1/Implementation/hash.h"
 #include "R/Object.h"
 // exit, EXIT_FAILURE
 #include <stdlib.h>
@@ -33,7 +33,7 @@ R_Value_visit
 {
   switch (self->tag) {
     case R_ValueTag_Atom: {
-      R_Atom_visit(self->atomValue);
+      Arcadia_Atom_visit(self->atomValue);
     } break;
     case R_ValueTag_Boolean: {
       /* Intentionally empty. */
@@ -81,7 +81,7 @@ R_Value_visit
       /* Intentionally empty. */
     } break;
     case R_ValueTag_Type: {
-      R_Type_visit(self->typeValue);
+      Arcadia_Type_visit(self->typeValue);
     } break;
     case R_ValueTag_Void: {
       /* Intentionally empty. */
@@ -93,66 +93,67 @@ R_Value_visit
   };
 }
 
-R_Type*
+Arcadia_TypeValue
 R_Value_getType
   (
+    Arcadia_Process* process,
     R_Value const* self
   )
 { 
   switch (self->tag) {
     case R_ValueTag_Atom: {
-      return _R_Atom_getType();
+      return _R_Atom_getType(process);
     } break;
     case R_ValueTag_Boolean: {
-      return _R_BooleanValue_getType();
+      return _Arcadia_BooleanValue_getType(process);
     } break;
     case R_ValueTag_ForeignProcedure: {
-      return _R_ForeignProcedureValue_getType();
+      return _Arcadia_ForeignProcedureValue_getType(process);
     } break;
     case R_ValueTag_ImmutableByteArray: {
-      return _R_ImmutableByteArray_getType();
+      return _Arcadia_ImmutableByteArray_getType(process);
     } break;
     case R_ValueTag_Integer16: {
-      return _R_Integer16Value_getType();
+      return _Arcadia_Integer16Value_getType(process);
     } break;
     case R_ValueTag_Integer32: {
-      return _R_Integer32Value_getType();
+      return _Arcadia_Integer32Value_getType(process);
     } break;
     case R_ValueTag_Integer64: {
-      return _R_Integer64Value_getType();
+      return _Arcadia_Integer64Value_getType(process);
     } break;
     case R_ValueTag_Integer8: {
-      return _R_Integer8Value_getType();
+      return _Arcadia_Integer8Value_getType(process);
     } break;
     case R_ValueTag_Natural16: {
-      return _R_Natural16Value_getType();
+      return _Arcadia_Natural16Value_getType(process);
     } break;
     case R_ValueTag_Natural32: {
-      return _R_Natural32Value_getType();
+      return _Arcadia_Natural32Value_getType(process);
     } break;
     case R_ValueTag_Natural64: {
-      return _R_Natural64Value_getType();
+      return _Arcadia_Natural64Value_getType(process);
     } break;
     case R_ValueTag_Natural8: {
-      return _R_Natural8Value_getType();
+      return _Arcadia_Natural8Value_getType(process);
     } break;
     case R_ValueTag_ObjectReference: {
       return R_Object_getType(self->objectReferenceValue);
     } break;
     case R_ValueTag_Real32: {
-      return _R_Real32Value_getType();
+      return _Arcadia_Real32Value_getType(process);
     } break;
     case R_ValueTag_Real64: {
-      return _R_Real64Value_getType();
+      return _Arcadia_Real64Value_getType(process);
     } break;
     case R_ValueTag_Size: {
-      return _R_SizeValue_getType();
+      return _Arcadia_SizeValue_getType(process);
     } break;
     case R_ValueTag_Type: {
-      return _R_Type_getType();
+      return _Arcadia_Type_getType(process);
     } break;
     case R_ValueTag_Void: {
-      return _R_VoidValue_getType();
+      return _Arcadia_VoidValue_getType(process);
     } break;
     default: {
       fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
@@ -161,9 +162,10 @@ R_Value_getType
   };
 }
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Value_isEqualTo
   (
+    Arcadia_Process* process,
     R_Value const* self,
     R_Value const* other 
   )
@@ -171,94 +173,94 @@ R_Value_isEqualTo
   switch (self->tag) {
     case R_ValueTag_Atom: {
       if (!R_Value_isAtomValue(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->atomValue == other->atomValue;
     } break;
     case R_ValueTag_Boolean: {
       if (!R_Value_isBooleanValue(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->booleanValue == other->booleanValue;
     } break;
     case R_ValueTag_ForeignProcedure: {
       if (!R_Value_isForeignProcedureValue(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->foreignProcedureValue == other->foreignProcedureValue;
     } break;
     case R_ValueTag_Integer16: {
       if (!R_Value_isInteger16Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->integer16Value == other->integer16Value;
     } break;
     case R_ValueTag_Integer32: {
       if (!R_Value_isInteger32Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->integer32Value == other->integer32Value;
     } break;
     case R_ValueTag_Integer64: {
       if (!R_Value_isInteger64Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->integer64Value == other->integer64Value;
     } break;
     case R_ValueTag_Integer8: {
       if (!R_Value_isInteger8Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->natural8Value == other->natural8Value;
     } break;
     case R_ValueTag_Natural16: {
       if (!R_Value_isNatural16Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->natural16Value == other->natural16Value;
     } break;
     case R_ValueTag_Natural32: {
       if (!R_Value_isNatural32Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->natural32Value == other->natural32Value;
     } break;
     case R_ValueTag_Natural64: {
       if (!R_Value_isNatural64Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->natural64Value == other->natural64Value;
     } break;
     case R_ValueTag_Natural8: 
       if (!R_Value_isNatural8Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       } {
         return self->natural8Value == other->natural8Value;
     } break;
     case R_ValueTag_ObjectReference: {
-      return R_Object_equalTo(self->objectReferenceValue, other);
+      return R_Object_equalTo(process, self->objectReferenceValue, other);
     } break;
     case R_ValueTag_Real32: {
       if (!R_Value_isReal32Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->real32Value == other->real32Value;
     } break;
     case R_ValueTag_Real64: {
       if (!R_Value_isReal64Value(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->real64Value == other->real64Value;
     } break;
     case R_ValueTag_Size: {
       if (!R_Value_isSizeValue(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->sizeValue == other->sizeValue;
     } break;
     case R_ValueTag_Type: {
       if (!R_Value_isTypeValue(other)) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
       return self->typeValue == other->typeValue;
     } break;
@@ -272,63 +274,64 @@ R_Value_isEqualTo
   };
 }
 
-R_SizeValue
+Arcadia_SizeValue
 R_Value_hash
   (
+    Arcadia_Process* process,
     R_Value const* self
   )
 {
   switch (self->tag) {
     case R_ValueTag_Atom: {
-      return R_hashAtomValue(self->typeValue);
+      return Arcadia_hashAtomValue(self->typeValue);
     } break;
     case R_ValueTag_Boolean: {
-      return R_hashBooleanValue(self->booleanValue);
+      return Arcadia_hashBooleanValue(self->booleanValue);
     } break;
     case R_ValueTag_ForeignProcedure: {
-      return R_hashForeignProcedureValue(self->foreignProcedureValue);
+      return Arcadia_hashForeignProcedureValue(self->foreignProcedureValue);
     } break;
     case R_ValueTag_Integer16: {
-      return R_hashInteger16Value(self->integer16Value);
+      return Arcadia_hashInteger16Value(self->integer16Value);
     } break;
     case R_ValueTag_Integer32: {
-      return R_hashInteger32Value(self->integer32Value);
+      return Arcadia_hashInteger32Value(self->integer32Value);
     } break;
     case R_ValueTag_Integer64: {
-      return R_hashInteger64Value(self->integer64Value);
+      return Arcadia_hashInteger64Value(self->integer64Value);
     } break;
     case R_ValueTag_Integer8: {
-      return R_hashInteger8Value(self->integer8Value);
+      return Arcadia_hashInteger8Value(self->integer8Value);
     } break;
     case R_ValueTag_Natural16: {
-      return R_hashNatural16Value(self->natural16Value);
+      return Arcadia_hashNatural16Value(self->natural16Value);
     } break;
     case R_ValueTag_Natural32: {
-      return R_hashNatural32Value(self->natural32Value);
+      return Arcadia_hashNatural32Value(self->natural32Value);
     } break;
     case R_ValueTag_Natural64: {
-      return R_hashNatural64Value(self->natural64Value);
+      return Arcadia_hashNatural64Value(self->natural64Value);
     } break;
     case R_ValueTag_Natural8: {
-      return R_hashNatural8Value(self->natural8Value);
+      return Arcadia_hashNatural8Value(self->natural8Value);
     } break;
     case R_ValueTag_ObjectReference: {
-      return R_Object_hash(self->objectReferenceValue);
+      return R_Object_hash(process, self->objectReferenceValue);
     } break;
     case R_ValueTag_Real32: {
-      return R_hashReal32Value(self->real32Value);
+      return Arcadia_hashReal32Value(self->real32Value);
     } break;
     case R_ValueTag_Real64: {
-      return R_hashReal64Value(self->real64Value);
+      return Arcadia_hashReal64Value(self->real64Value);
     } break;
     case R_ValueTag_Size: {
-      return R_hashSizeValue(self->sizeValue);
+      return Arcadia_hashSizeValue(self->sizeValue);
     } break;
     case R_ValueTag_Type: {
-      return R_hashTypeValue(self->typeValue);
+      return Arcadia_hashTypeValue(self->typeValue);
     } break;
     case R_ValueTag_Void: {
-      return R_hashVoidValue(self->voidValue);
+      return Arcadia_hashVoidValue(self->voidValue);
     } break;
     default: {
       fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);

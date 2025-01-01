@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,7 +22,7 @@
 #include "Module/Visuals/ImageWriter.h"
 #include "Module/Visuals/PixelBuffer.h"
 
-Rex_declareObjectType("NativeWindowsImageWriter", NativeWindowsImageWriter, "ImageWriter");
+Rex_declareObjectType(u8"NativeWindowsImageWriter", NativeWindowsImageWriter, u8"ImageWriter");
 
 struct NativeWindowsImageWriter {
   ImageWriter _parent;
@@ -31,6 +31,7 @@ struct NativeWindowsImageWriter {
 NativeWindowsImageWriter*
 NativeWindowsImageWriter_create
   (
+    Arcadia_Process* process
   );
 
 #endif // MODULE_VISUALS_NATIVEWINDOWSIMAGEWRITER_H_INCLUDED

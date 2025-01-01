@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,13 +24,14 @@
 /// @code
 /// class R.Mil.Parser
 /// @endcode
-Rex_declareObjectType("R.Mil.Parser", R_Mil_Parser, "R.Object");
+Rex_declareObjectType(u8"R.Mil.Parser", R_Mil_Parser, u8"R.Object");
 
 /// @brief Create a MIL parser.
 /// @return A pointer to this MIL parser.
 R_Mil_Parser*
 R_Mil_Parser_create
   (
+    Arcadia_Process* process
   );
 
 /// @brief Translate the token stream into an AST.
@@ -39,6 +40,7 @@ R_Mil_Parser_create
 R_Mil_ModuleAst*
 R_Mil_Parser_run
   (
+    Arcadia_Process* process,
     R_Mil_Parser* self
   );
 
@@ -48,6 +50,7 @@ R_Mil_Parser_run
 void
 R_Mil_Parser_setInput
   (
+    Arcadia_Process* process,
     R_Mil_Parser* self,
     R_Utf8Reader* input
   );

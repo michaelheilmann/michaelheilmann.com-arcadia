@@ -1,0 +1,17 @@
+class MouseButtonMessage {
+  variable m_action
+  variable m_button
+  
+  constructor(action, button) {
+    m_action = action
+    m_button = button
+  }
+  
+  method getAction() {
+    return m_action
+  }
+  
+  method getButton() {
+    return m_button
+  }
+}

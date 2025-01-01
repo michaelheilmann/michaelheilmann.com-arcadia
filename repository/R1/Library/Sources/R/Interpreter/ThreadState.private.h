@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,7 +18,7 @@
 #if !defined(R_INTERPRETER_THREADSTATE_PRIVATE_H_INCLUDED)
 #define R_INTERPRETER_THREADSTATE_PRIVATE_H_INCLUDED
 
-#include "R/Size.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Value.h"
 #include "R/Interpreter/Include.h"
 
@@ -32,7 +32,7 @@ typedef struct _RegisterStack _RegisterStack;
 
 struct _RegisterStack {
   R_Value* elements;
-  R_SizeValue size, capacity;
+  Arcadia_SizeValue size, capacity;
 };
 
 void
@@ -52,10 +52,10 @@ typedef struct _RegisterFrame _RegisterFrame;
 struct _RegisterFrame {
   _RegisterFrame* previous;
   // The stack index (0 -> top of the stack, n - 1 -> bottom of the stack, n is the size of the stack) where registers backed up on the register stack by this register frame start at.
-  R_SizeValue start;
+  Arcadia_SizeValue start;
   // The number of registers backed up on the registers by this register frame.
   // start + length not be greater than the size of the stack.
-  R_SizeValue length;
+  Arcadia_SizeValue length;
 };
 
 #endif
@@ -63,8 +63,8 @@ struct _RegisterFrame {
 struct R_Interpreter_ThreadState {
   struct {
     R_CallState* elements;
-    R_SizeValue size;
-    R_SizeValue capacity; 
+    Arcadia_SizeValue size;
+    Arcadia_SizeValue capacity; 
   } calls;
 
 #if defined(R_Interpreter_ThreadState_withRegisterStack) && 1 == R_Interpreter_ThreadState_withRegisterStack
@@ -80,7 +80,7 @@ struct R_Interpreter_ThreadState {
 #endif
 
   R_Value* registers;
-  R_SizeValue numberOfRegisters;
+  Arcadia_SizeValue numberOfRegisters;
 
 };
 

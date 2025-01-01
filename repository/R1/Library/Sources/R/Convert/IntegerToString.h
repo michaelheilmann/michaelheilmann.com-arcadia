@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,23 +19,24 @@
 #define R_CONVERT_INTEGERTOSTRING_H_INCLUDED
 
 #include "Arms.h"
-#include "R/Integer16.h"
-#include "R/Integer32.h"
-#include "R/Integer64.h"
-#include "R/Integer8.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Integer16.h"
+#include "Arcadia/Ring1/Implementation/Integer32.h"
+#include "Arcadia/Ring1/Implementation/Integer64.h"
+#include "Arcadia/Ring1/Implementation/Integer8.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
 // On success:
 // <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
 // <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
 // The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
 void
-R_Integer16_toString
+Arcadia_Integer16_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Integer16Value value,
+    Arcadia_Integer16Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   );
 
 // On success:
@@ -43,12 +44,13 @@ R_Integer16_toString
 // <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
 // The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
 void
-R_Integer32_toString
+Arcadia_Integer32_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Integer32Value value,
+    Arcadia_Integer32Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   );
 
 // On success:
@@ -56,12 +58,13 @@ R_Integer32_toString
 // <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
 // The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
 void
-R_Integer64_toString
+Arcadia_Integer64_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Integer64Value value,
+    Arcadia_Integer64Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   );  
 
 // On success:
@@ -69,12 +72,13 @@ R_Integer64_toString
 // <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
 // The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
 void
-R_Integer8_toString
+Arcadia_Integer8_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Integer8Value value,
+    Arcadia_Integer8Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   );
 
 #endif // R_CONVERT_INTEGERTOSTRING_H_INCLUDED

@@ -282,7 +282,7 @@ body.my-index-page-1, body.my-error-page {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-body.my-content-page-1 {
+body.my-error-page-1, body.my-content-page-1 {
   margin: 16px;
   margin-left: 0px;
   margin-right: 0px;
@@ -305,32 +305,87 @@ body.my-error-page-1 header a, body.my-content-page-1 header a {
   color: var(--white);
 }
 
-body.my-content-page-1 main {
+body.my-error-page-1 main, body.my-content-page-1 main {
   margin-left: 16px;
   margin-right: 16px;
 }
 
-body.my-content-page-1 footer {
+body.my-error-page-1 footer, body.my-content-page-1 footer {
   border-top-style: solid;
   border-top-width: 1px;
   margin-top: 16px;
   padding-top: 16px;
 }
 
-body.my-content-page-1 ul li {
+body.my-error-page-1 ul li, body.my-content-page-1 ul li {
   margin-left: 1rem;
 }
 
+body.my-error-page-1 p, body.my-content-page-1 p {
+  margin-top: 1rem;
+}
+
+body.my-error-page-1 div.left-column, body.my-content-page-1 div.left-column {
+  flex-grow: 0;
+  width: 8vw;
+}
+
+body.my-error-page-1 div.center-column, body.my-content-page-1 div.center-column {
+  flex-grow: 1;
+  width: 84vw;
+}
+
+body.my-error-page-1 div.right-column, body.my-content-page-1 div.right-column {
+  flex-grow: 0;
+  width: 8vw;
+}
+
+body.my-error-page-1 main, body.my-content-page-1 main {
+  display: flex;
+  flex-direction: row;
+}
+
+body.my-error-page-1 footer, body.my-content-page-1 footer {
+  display: flex;
+  flex-direction: row;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* headline formatting for body.my-content-page-1 */
+
+/*
 body.my-content-page-1 h2 {
   margin-top: 2rem;
   margin-bottom: 0.5rem;
 }
-
+*/
+/*
 body.my-content-page-1 h3 {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
+*/
 
-body.my-content-page-1 p {
-  margin-top: 1rem;
+body.my-error-page-1 h1, body.my-content-page-1 h1 {
+  margin: .67em 0
+}
+
+body.my-error-page-1 h2, body.my-content-page-1 h2 {
+  margin: .75em 0
+}
+
+body.my-error-page-1 h3, body.my-content-page-1 h3 {
+  margin: .83em 0
+}
+
+body.my-error-page-1 h4, body.my-content-page-1 h4 {
+  margin: 1.12em 0
+}
+
+body.my-error-page-1 h5, body.my-content-page-1 h5 {
+  margin: 1.5em 0
+}
+
+body.my-error-page-1 h6, body.my-content-page-1 h6 {
+  margin: 1.67em 0
 }

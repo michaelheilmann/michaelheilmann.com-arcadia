@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,20 +22,23 @@
 static void
 Context_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );  
 
 static void
 Context_destruct
   (
+    Arcadia_Process* process,
     Context* self
   );
 
 static void
 Context_visit
   (
+    Arcadia_Process* process,
     Context* self
   );
 
@@ -45,7 +48,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = &Context_visit,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -65,34 +68,36 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Tools.TemplateEngine.Context", Context, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"Tools.TemplateEngine.Context", Context, u8"R.Object", R_Object, &_typeOperations);
 
 void
 Context_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   Context* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _Context_getType();
+  Arcadia_TypeValue _type = _Context_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Object_constructImpl(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->targetBuffer = NULL;
   _self->target = NULL;
   _self->temporaryBuffer = NULL;
   _self->temporary = NULL;
   _self->stack = NULL;
-  _self->files = R_List_create();
+  _self->files = R_List_create(process);
   R_Object_setType((R_Object*)_self, _type);
 }
 
 static void
 Context_destruct
   (
+    Arcadia_Process* process,
     Context* self
   )
 {/*Intentionally empty.*/}
@@ -100,6 +105,7 @@ Context_destruct
 static void
 Context_visit
   (
+    Arcadia_Process* process,
     Context* self
   )
 {
@@ -116,41 +122,50 @@ Context_visit
 Context*
 Context_create
   (
+    Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
-  Context* self = R_allocateObject(_Context_getType(), 0, &argumentValues[0]);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Context* self = R_allocateObject(process, _Context_getType(process), 0, &argumentValues[0]);
   return self;
 }
 
-static void recursionGuard(Context* context, R_FilePath* path) {
-  path = R_FilePath_getFullPath(path);
-  for (R_SizeValue i = 0, n = R_List_getSize(context->files); i < n; ++i) {
-    R_FilePath* p = (R_FilePath*)R_List_getObjectReferenceValueAt(context->files, i);
-    if (R_FilePath_isEqualTo(p, path)) {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-      R_jump();
+static void
+recursionGuard
+  (
+    Arcadia_Process* process,
+    Context* context,
+    R_FilePath* path
+  )
+{
+  path = R_FilePath_getFullPath(process, path);
+  for (Arcadia_SizeValue i = 0, n = R_List_getSize(context->files); i < n; ++i) {
+    R_FilePath* p = (R_FilePath*)R_List_getObjectReferenceValueAt(process, context->files, i);
+    if (R_FilePath_isEqualTo(process, p, path)) {
+      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Process_jump(process);
     }
   }
-  R_List_appendObjectReferenceValue(context->files, path);
+  R_List_appendObjectReferenceValue(process, context->files, path);
 }
 
 void
 Context_onRun
   (
+    Arcadia_Process* process,
     Context* context
   )
 {
-  R_FileSystem* fileSystem = R_FileSystem_create();
+  R_FileSystem* fileSystem = R_FileSystem_create(process);
   while (!R_Stack_isEmpty(context->stack)) {
-    R_Value elementValue = R_Stack_peek(context->stack);
-    R_Stack_pop(context->stack);
+    R_Value elementValue = R_Stack_peek(process, context->stack);
+    R_Stack_pop(process, context->stack);
     R_FilePath* filePath = (R_FilePath*)R_Value_getObjectReferenceValue(&elementValue);
-    FileContext* fileContext = FileContext_create(context, filePath);
-    R_ByteBuffer* sourceByteBuffer = R_FileSystem_getFileContents(fileSystem, fileContext->sourceFilePath);
-    fileContext->source = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(sourceByteBuffer);
-    recursionGuard(context, filePath);
-    FileContext_execute(fileContext);
-    R_List_remove(context->files, R_List_getSize(context->files) - 1, 1);
+    FileContext* fileContext = FileContext_create(process, context, filePath);
+    R_ByteBuffer* sourceByteBuffer = R_FileSystem_getFileContents(process, fileSystem, fileContext->sourceFilePath);
+    fileContext->source = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(process, sourceByteBuffer);
+    recursionGuard(process, context, filePath);
+    FileContext_execute(process, fileContext);
+    R_List_remove(process, context->files, R_List_getSize(context->files) - 1, 1);
   }
 }

@@ -1,4 +1,4 @@
-<h3 id="foreignprocedure-type">Foreign Procedure Type</h3>
+<h3 id="foreignprocedure-type">3.1.2. Foreign Procedure Type</h3>
 <p>
 R provides the <scode>R_ForeignProcedureValue</code> type.
 </p>

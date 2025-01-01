@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,14 +18,15 @@
 #if !defined(R_CONVERT_STRINGTOBOOLEAN_H_INCLUDED)
 #define R_CONVERT_STRINGTOBOOLEAN_H_INCLUDED
 
-#include "R/Boolean.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Boolean.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_toBoolean
   (
+    Arcadia_Process* process,
     char const* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
 #endif // R_CONVERT_STRINGTOBOOLEAN_H_INCLUDED

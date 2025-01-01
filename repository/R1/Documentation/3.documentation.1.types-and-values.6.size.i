@@ -1,4 +1,4 @@
-<h3 id="size-type">Size Type</h3>
+<h3 id="size-type">3.1.6. Size Type</h3>
 <p>
 R provides an alias for builtin <code>size_t</code> type.
 </p>

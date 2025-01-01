@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,55 +20,57 @@
 
 #include "R/Interpreter/Instruction.h"
 
-/**
- * @brief Code executed by the interpreter.
- * @remarks Code executed by the interpreter is a sequence of Natural8 values.
- */
-Rex_declareObjectType("R.Interpreter.Code", R_Interpreter_Code, R_Object);
+/// @brief Code executed by the interpreter.
+/// @remarks Code executed by the interpreter is a sequence of Natural8 values.
+Rex_declareObjectType(u8"R.Interpreter.Code", R_Interpreter_Code, u8"R.Object");
 
 struct R_Interpreter_Code {
   R_Object _parent;
   /** @brief A pointer to an array of R_Machine_Code::cp Natural8 values. The first R_Machine_Code::sz values contain code. */
-  R_Natural8Value* p;
-  R_SizeValue sz, cp;
+  Arcadia_Natural8Value* p;
+  Arcadia_SizeValue sz, cp;
 };
 
 R_Interpreter_Code*
 R_Interpreter_Code_create
   (
+    Arcadia_Process* process
   );
 
 void
 R_Interpreter_Code_append
   (
     R_Interpreter_Code* self,
-    R_Natural8Value const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_Natural8Value const* bytes,
+    Arcadia_SizeValue numberOfBytes
   );
 
 void
 R_Interpreter_Code_appendIndexNatural8
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
-    R_Natural8Value indexValue
+    Arcadia_Natural8Value indexValue
   );
 
 void
 R_Interpreter_Code_appendIndexNatural16
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
-    R_Natural16Value indexValue
+    Arcadia_Natural16Value indexValue
   );
 
 // index must be smaller than 52.4287.
 void
 R_Interpreter_Code_appendIndexNatural32
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
-    R_Natural16Value indexValue
+    Arcadia_Natural16Value indexValue
   );
 
 /**
@@ -80,7 +82,7 @@ void
 R_Interpreter_Code_appendCountNatural8
   (
     R_Interpreter_Code* self,
-    R_Natural8Value countValue
+    Arcadia_Natural8Value countValue
   );
 
 /**
@@ -92,7 +94,7 @@ void
 R_Interpreter_Code_appendCountNatural16
   (
     R_Interpreter_Code* self,
-    R_Natural16Value countValue
+    Arcadia_Natural16Value countValue
   );
 
 /**
@@ -104,24 +106,26 @@ void
 R_Interpreter_Code_appendCountNatural32
   (
     R_Interpreter_Code* self,
-    R_Natural32Value countValue
+    Arcadia_Natural32Value countValue
   );
 
 void
 R_Interpreter_Code_decodeCount
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
-    R_Natural32Value* current,
-    R_Natural32Value* countValue
+    Arcadia_Natural32Value* current,
+    Arcadia_Natural32Value* countValue
   );
 
 void
 R_Interpreter_Code_decodeIndex
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
-    R_Natural32Value* current,
+    Arcadia_Natural32Value* current,
     R_Machine_Code_IndexKind* indexKind,
-    R_Natural32Value* indexValue
+    Arcadia_Natural32Value* indexValue
   );
 
 #endif // R_INTERPRETER_CODE_H_INCLUDED

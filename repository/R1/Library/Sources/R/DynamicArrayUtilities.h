@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,7 +16,7 @@
 #if !defined(R_DYNAMICARRAYUTILITIES_H_INCLUDED)
 #define R_DYNAMICARRAYUTILITIES_H_INCLUDED
 
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
 typedef enum R_DynamicArrayUtilities_GrowthStrategy {
 
@@ -88,10 +88,10 @@ R_DynamicArrayUtilities_Result
 R_DynamicArrayUtilities_grow
   (
     void** elements,
-    R_SizeValue elementSize,
-    R_SizeValue size,
-    R_SizeValue* capacity,
-    R_SizeValue additionalCapacity,
+    Arcadia_SizeValue elementSize,
+    Arcadia_SizeValue size,
+    Arcadia_SizeValue* capacity,
+    Arcadia_SizeValue additionalCapacity,
     R_DynamicArrayUtilities_GrowthStrategy strategy
   );
 
@@ -103,10 +103,10 @@ R_DynamicArrayUtilities_Result
 R_DynamicArrayUtilities_ensureFreeCapacity
   (
     void** elements,
-    R_SizeValue elementSize,
-    R_SizeValue size,
-    R_SizeValue* capacity,
-    R_SizeValue requiredFreeCapacity,
+    Arcadia_SizeValue elementSize,
+    Arcadia_SizeValue size,
+    Arcadia_SizeValue* capacity,
+    Arcadia_SizeValue requiredFreeCapacity,
     R_DynamicArrayUtilities_GrowthStrategy strategy
   );
 

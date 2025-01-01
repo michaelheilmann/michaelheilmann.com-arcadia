@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,7 +19,7 @@
 #define R_FILEPATH_H_INCLUDED
 
 #include "R/Configure.h"
-#include "R/Boolean.h"
+#include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "R/ByteBuffer.h"
 #include "R/List.h"
 #include "R/String.h"
@@ -36,12 +36,12 @@
 /// trailing slashes are ignored
 /// For Windows, `/a` is translated to `a:\` and `/a(/<dir1>)(/<dir2>)*` is translated to `a:\<dir1>(\<dir2>)*`
 /// For Linux, `/a(/<dir>)* is translated to `/a(/<dir>)*`
-Rex_declareObjectType("R.FilePath", R_FilePath, "R.Object");
+Rex_declareObjectType(u8"R.FilePath", R_FilePath, u8"R.Object");
 
 struct R_FilePath {
   R_Object _parent;
   R_List* fileNames;
-  R_BooleanValue relative;
+  Arcadia_BooleanValue relative;
   R_String* root;
 };
 
@@ -49,6 +49,7 @@ struct R_FilePath {
 R_FilePath*
 R_FilePath_create
   (
+    Arcadia_Process* process
   );
 
 // Parse a Windows file path.
@@ -62,8 +63,9 @@ R_FilePath_create
 R_FilePath*
 R_FilePath_parseWindows
   (
+    Arcadia_Process* process,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // Parse a Unix file path.
@@ -74,29 +76,33 @@ R_FilePath_parseWindows
 R_FilePath*
 R_FilePath_parseUnix
   (
+    Arcadia_Process* process,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // Invoke R_FilePath_parseUnix or R_FilePath_parseWindows depending on the operating system.
 R_FilePath*
 R_FilePath_parseNative
   (
+    Arcadia_Process* process,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // Parse a Generic file path.
 R_FilePath*
 R_FilePath_parseGeneric
   (
+    Arcadia_Process* process,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 R_String*
 R_FilePath_toNative
   (
+    Arcadia_Process* process,
     R_FilePath* self
   );
 
@@ -105,20 +111,22 @@ R_FilePath_toNative
 R_FilePath*
 R_FilePath_getFullPath
   (
+    Arcadia_Process* process,
     R_FilePath* self
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_FilePath_isEqualTo
   (
+    Arcadia_Process* process,
     R_FilePath* self,
     R_FilePath* other
   );
 
 /// @brief Get if this file path is absolute.
 /// @param self This file path.
-/// @return #R_BooleanValue_True if this file path is absolute. #R_BooleanValue_False otherwise.
-R_BooleanValue
+/// @return #Arcadia_BooleanValue_True if this file path is absolute. #Arcadia_BooleanValue_False otherwise.
+Arcadia_BooleanValue
 R_FilePath_isAbsolute
   (
     R_FilePath* self
@@ -126,8 +134,8 @@ R_FilePath_isAbsolute
 
 /// @brief Get if this file path is relative.
 /// @param self This file path.
-/// @return #R_BooleanValue_True if this file path is relative. #R_BooleanValue_False otherwise.
-R_BooleanValue
+/// @return #Arcadia_BooleanValue_True if this file path is relative. #Arcadia_BooleanValue_False otherwise.
+Arcadia_BooleanValue
 R_FilePath_isRelative
   (
     R_FilePath* self
@@ -139,6 +147,7 @@ R_FilePath_isRelative
 void
 R_FilePath_append
   (
+    Arcadia_Process* process,
     R_FilePath* self,
     R_FilePath* other
   );

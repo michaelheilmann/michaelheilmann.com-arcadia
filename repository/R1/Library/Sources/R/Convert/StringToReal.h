@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,22 +18,24 @@
 #if !defined(R_CONVERT_STRINGTOREAL_H_INCLUDED)
 #define R_CONVERT_STRINGTOREAL_H_INCLUDED
 
-#include "R/Real32.h"
-#include "R/Real64.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Real32.h"
+#include "Arcadia/Ring1/Implementation/Real64.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
-R_Real32Value
+Arcadia_Real32Value
 R_toReal32
   (
+    Arcadia_Process* process,
     char const* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
-R_Real64Value
+Arcadia_Real64Value
 R_toReal64
   (
+    Arcadia_Process* process,
     char const* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
 #endif // R_CONVERT_STRINGTOREAL_H_INCLUDED

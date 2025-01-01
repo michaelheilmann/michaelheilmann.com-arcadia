@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,7 +20,7 @@
 
 #include "R.h"
 
-Rex_declareObjectType("Tools.TemplateEngine.Context", Context, "R.Object");
+Rex_declareObjectType(u8"Tools.TemplateEngine.Context", Context, u8"R.Object");
 
 struct Context {
   R_Object _parent;
@@ -37,11 +37,13 @@ struct Context {
 Context*
 Context_create
   (
+    Arcadia_Process* process
   );
 
 void
 Context_onRun
   (
+    Arcadia_Process* process,
     Context* context
   );
 

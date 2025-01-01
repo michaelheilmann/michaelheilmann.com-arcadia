@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,7 +24,8 @@
 void
 onOperand
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_Interpreter_Code* code,
     R_List* variables,
     R_Mil_OperandAst* operand
@@ -33,7 +34,8 @@ onOperand
 R_Interpreter_Code*
 onConstructorBody
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_List* variables,
     R_List* statements
   );
@@ -41,7 +43,8 @@ onConstructorBody
 void
 onConstructorDefinition
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_Map* symbolTable,
     R_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
@@ -51,7 +54,8 @@ onConstructorDefinition
 R_Interpreter_Code*
 onMethodBody
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_List* variables,
     R_List* statements
   );
@@ -59,7 +63,8 @@ onMethodBody
 void
 onMethodDefinition
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_Map* symbolTable,
     R_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
@@ -69,7 +74,8 @@ onMethodDefinition
 R_Interpreter_Code*
 onProcedureBody
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_List* variables,
     R_List* statements
   );
@@ -77,7 +83,8 @@ onProcedureBody
 void
 onProcedureDefinition
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_Map* symbolTable,
     R_Map* foreignProcedures,
     R_Mil_ProcedureDefinitionAst* definitionAst
@@ -86,7 +93,8 @@ onProcedureDefinition
 void
 onVariableDefinition
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_Map* symbolTable,
     R_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
@@ -96,7 +104,8 @@ onVariableDefinition
 void
 onClassBodyDefinition
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterState,
     R_Map* symbolTable,
     R_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
@@ -106,7 +115,8 @@ onClassBodyDefinition
 void
 onClassDefinition
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess,
     R_Map* symbolTable,
     R_Map* foreignProcedures,
     R_Mil_ClassDefinitionAst* definitionAst

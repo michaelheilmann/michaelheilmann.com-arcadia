@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -35,6 +35,9 @@ typedef enum R_Machine_Code_IndexKind {
 } R_Machine_Code_IndexKind;
 
 typedef enum R_Machine_Code_Opcode {
+
+  // load <target> <operand>
+  R_Machine_Code_Opcode_Load,
   
   // add <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Add,
@@ -141,102 +144,118 @@ typedef enum R_Machine_Code_Opcode {
 // A program with more than 524 287 constants or more than 524 287 registers is rejected.
 //
 // COUNTS
-// A count is a value between R_Natural32Value_Minimum and R_Natural32Value_Maximum.
+// A count is a value between Arcadia_Natural32Value_Minimum and Arcadia_Natural32Value_Maximum.
 
 void
 R_Instructions_add
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_and
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_concatenate
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_divide
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_equalTo
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_greaterThan
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_greaterThanOrEqualTo
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_idle
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_lowerThan
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_lowerThanOrEqualTo
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_multiply
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_negate
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_not
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_notEqualTo
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_or
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
 R_Instructions_subtract
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   );
 
 #endif // R_INTERPRETER_INSTRUCTION_H_INCLUDED

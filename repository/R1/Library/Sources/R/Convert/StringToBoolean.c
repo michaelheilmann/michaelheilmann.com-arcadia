@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,29 +19,31 @@
 
 #include "R/Convert/parse.i"
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 toBoolean
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 toBoolean
   (
+    Arcadia_Process* process,
     State* state
   )
 {
 #if 0
  // Precondition prevents that.
   if (CodePoint_Start != state->symbol) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
 #endif
 #define check(x) \
   if (!is(state, (x))) { \
-    R_setStatus(R_Status_ConversionFailed); \
-    R_jump(); \
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed); \
+    Arcadia_Process_jump(process); \
   } \
   next(state);
 
@@ -52,7 +54,7 @@ toBoolean
     check('u');
     check('e');
     check(CodePoint_End);
-    return R_BooleanValue_True;
+    return Arcadia_BooleanValue_True;
   } else if (is(state, 'f')) {
     next(state);
     check('a');
@@ -60,19 +62,20 @@ toBoolean
     check('s');
     check('e');
     check(CodePoint_End);
-    return R_BooleanValue_False;
+    return Arcadia_BooleanValue_False;
   } else {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
 #undef check
 }
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_toBoolean
   (
+    Arcadia_Process* process,
     char const* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 { 
   State state;
@@ -80,5 +83,5 @@ R_toBoolean
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toBoolean(&state);
+  return toBoolean(process, &state);
 }

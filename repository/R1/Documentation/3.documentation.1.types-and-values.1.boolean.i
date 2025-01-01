@@ -1,4 +1,4 @@
-<h3 id="boolean-type">Boolean Type</h3>
+<h3 id="boolean-type">3.1.1. Boolean Type</h3>
 <p>
 R1 provides a boolean type.
 </p>

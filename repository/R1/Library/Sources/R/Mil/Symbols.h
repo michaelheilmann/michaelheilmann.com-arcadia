@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,7 +25,7 @@ typedef struct R_Mil_Scope R_Mil_Scope;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("R.Mil.Symbol", R_Mil_Symbol, "R.Object");
+Rex_declareObjectType(u8"R.Mil.Symbol", R_Mil_Symbol, u8"R.Object");
 
 struct R_Mil_Symbol {
   R_Object _parent;
@@ -47,23 +47,24 @@ R_Mil_Symbol_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("R.Mil.SymbolTable", R_Mil_SymbolTable, "R.Object");
+Rex_declareObjectType(u8"R.Mil.SymbolTable", R_Mil_SymbolTable, u8"R.Object");
 
 struct R_Mil_SymbolTable {
   R_Object _parent;
   R_Mil_Symbol** elements;
-  R_SizeValue size;
-  R_SizeValue capacity;
+  Arcadia_SizeValue size;
+  Arcadia_SizeValue capacity;
 };
 
 R_Mil_SymbolTable*
 R_Mil_SymbolTable_create
   (
+    Arcadia_Process* process
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType("R.Mil.Scope", R_Mil_Scope, "R.Object");
+Rex_declareObjectType(u8"R.Mil.Scope", R_Mil_Scope, u8"R.Object");
 
 struct R_Mil_Scope {
   R_Object _parent;
@@ -82,6 +83,7 @@ struct R_Mil_Scope {
 R_Mil_Scope*
 R_Mil_Scope_create
   (
+    Arcadia_Process* process
   );
 
 #endif // R_MIL_SYMBOLS_H_INCLUDED

@@ -53,6 +53,15 @@ macro(ConfigureWarningsAndErrors target)
 
     # C4189: 'identifier' : local variable is initialized but not referenced
     list(APPEND ${target}.CompileOptions "/we4189")
+    
+    # C4113: 'identifier1' differs in parameter lists from 'identifier2'
+    list(APPEND ${target}.CompileOptions "/we4113")
+    
+    # C4002: 'function' : pointer mismatch for actual parameter 'number'
+    list(APPEND ${target}.CompileOptions "/we4002")
+    
+    # C4047: 'operator' : 'identifier1' differs in levels of indirection from 'identifier2'
+    list(APPEND ${target}.CompileOptions "/we4047")
 
     # The quotes around "${${target}.CompileOptions}" concatenate the list elements to a single string separated by semicolons.
     set_source_files_properties(${${target}.SourceFiles} PROPERTIES COMPILE_OPTIONS "${${target}.CompileOptions}")

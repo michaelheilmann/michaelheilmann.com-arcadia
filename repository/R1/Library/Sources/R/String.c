@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,9 +18,7 @@
 #include "R/String.h"
 
 #include "R/Convert/Include.h"
-#include "R/JumpTarget.h"
 #include "R/Object.h"
-#include "R/Status.h"
 #include "R/StringBuffer.h"
 #include "R/Utf8.h"
 #include "R/cstdlib.h"
@@ -29,21 +27,23 @@
 static void
 R_String_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
-static R_SizeValue
+static Arcadia_SizeValue
 hash
   (
-    R_Natural8Value const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_Natural8Value const* bytes,
+    Arcadia_SizeValue numberOfBytes
   );
 
 static void
 equalToImpl
   (
+    Arcadia_Process* process,
     R_Value* target,
     R_Value const* self,
     R_Value const* other
@@ -52,6 +52,7 @@ equalToImpl
 static void
 hashImpl
   (
+    Arcadia_Process* process,
     R_Value* target,
     R_Value const* self
   );
@@ -59,6 +60,7 @@ hashImpl
 static void
 notEqualToImpl
   (
+    Arcadia_Process* process,
     R_Value* target,
     R_Value const* self,
     R_Value const* other
@@ -67,18 +69,20 @@ notEqualToImpl
 static void
 R_String_visit
   (
+    Arcadia_Process* process,
     R_String* string 
   );
 
 static void
 getByteRange
   (
-    R_SizeValue symbolIndex,
-    R_SizeValue symbolLength,
-    R_SizeValue* byteIndex,
-    R_SizeValue* byteLength,
+    Arcadia_Process* process,
+    Arcadia_SizeValue symbolIndex,
+    Arcadia_SizeValue symbolLength,
+    Arcadia_SizeValue* byteIndex,
+    Arcadia_SizeValue* byteLength,
     uint8_t const* p,
-    R_SizeValue l
+    Arcadia_SizeValue l
   );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
@@ -87,7 +91,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = &R_String_visit,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -107,149 +111,151 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("R.String", R_String, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.String", R_String, u8"R.Object", R_Object, &_typeOperations);
 
-#define On(Type) \
-  static R_ImmutableByteArray* \
-  from##Type \
+#define On(Type, Suffix) \
+  static Arcadia_ImmutableByteArray* \
+  from##Suffix \
     ( \
-      R_##Type##Value value \
+      Arcadia_Process* process, \
+      Type##Value value \
     ) \
   { \
     Arms_MemoryManager* memoryManager = Arms_getSlabMemoryManager(); \
     char* p; size_t n; \
-    R_##Type##_toString(memoryManager, value, &p, &n); \
+    Type##_toString(process, memoryManager, value, &p, &n); \
     R_JumpTarget jumpTarget; \
-    R_pushJumpTarget(&jumpTarget); \
+    Arcadia_Process_pushJumpTarget(process, &jumpTarget); \
     if (R_JumpTarget_save(&jumpTarget)) { \
-      R_ImmutableByteArray* result = R_ImmutableByteArray_create(p, n); \
+      Arcadia_ImmutableByteArray* result = Arcadia_ImmutableByteArray_create(process, p, n); \
       Arms_MemoryManager_deallocate(memoryManager, p); \
       p = NULL; \
-      R_popJumpTarget(); \
+      Arcadia_Process_popJumpTarget(process); \
       return result; \
     } else { \
-      R_popJumpTarget(); \
+      Arcadia_Process_popJumpTarget(process); \
       Arms_MemoryManager_deallocate(memoryManager, p); \
       p = NULL; \
-      R_jump(); \
+      Arcadia_Process_jump(process); \
     } \
   }
 
-On(Integer16)
-On(Integer32)
-On(Integer64)
-On(Integer8)
+On(Arcadia_Integer16, Integer16)
+On(Arcadia_Integer32, Integer32)
+On(Arcadia_Integer64, Integer64)
+On(Arcadia_Integer8, Integer8)
 
-On(Natural16)
-On(Natural32)
-On(Natural64)
-On(Natural8)
+On(Arcadia_Natural16, Natural16)
+On(Arcadia_Natural32, Natural32)
+On(Arcadia_Natural64, Natural64)
+On(Arcadia_Natural8, Natural8)
 
 static void
 R_String_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   if (1 != numberOfArgumentValues) {
-    R_setStatus(R_Status_NumberOfArgumentsInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Process_jump(process);
   }
   R_String* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _R_String_getType();
+  Arcadia_TypeValue _type = _R_String_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Object_constructImpl(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (R_Value_isInteger16Value(&argumentValues[0])) {
-    R_ImmutableByteArray* immutableByteArray = fromInteger16(R_Value_getInteger16Value(&argumentValues[0]));
+    Arcadia_ImmutableByteArray* immutableByteArray = fromInteger16(process, R_Value_getInteger16Value(&argumentValues[0]));
     /* The functions assert the Bytes are UTF-8. */
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } else if (R_Value_isInteger32Value(&argumentValues[0])) {
-    R_ImmutableByteArray* immutableByteArray = fromInteger32(R_Value_getInteger16Value(&argumentValues[0]));
+    Arcadia_ImmutableByteArray* immutableByteArray = fromInteger32(process, R_Value_getInteger16Value(&argumentValues[0]));
     /* The functions assert the Bytes are UTF-8. */
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } else if (R_Value_isInteger64Value(&argumentValues[0])) {
-    R_ImmutableByteArray* immutableByteArray = fromInteger64(R_Value_getInteger16Value(&argumentValues[0]));
+    Arcadia_ImmutableByteArray* immutableByteArray = fromInteger64(process, R_Value_getInteger16Value(&argumentValues[0]));
     /* The functions assert the Bytes are UTF-8. */
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } else if (R_Value_isInteger8Value(&argumentValues[0])) {
-    R_ImmutableByteArray* immutableByteArray = fromInteger8(R_Value_getInteger16Value(&argumentValues[0]));
+    Arcadia_ImmutableByteArray* immutableByteArray = fromInteger8(process, R_Value_getInteger16Value(&argumentValues[0]));
     /* The functions assert the Bytes are UTF-8. */
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } else if (R_Value_isNatural16Value(&argumentValues[0])) {
-    R_ImmutableByteArray* immutableByteArray = fromNatural16(R_Value_getInteger16Value(&argumentValues[0]));
+    Arcadia_ImmutableByteArray* immutableByteArray = fromNatural16(process, R_Value_getInteger16Value(&argumentValues[0]));
     /* The functions assert the Bytes are UTF-8. */
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } else if (R_Value_isNatural32Value(&argumentValues[0])) {
-    R_ImmutableByteArray* immutableByteArray = fromNatural32(R_Value_getInteger16Value(&argumentValues[0]));
+    Arcadia_ImmutableByteArray* immutableByteArray = fromNatural32(process, R_Value_getInteger16Value(&argumentValues[0]));
     /* The functions assert the Bytes are UTF-8. */
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } else if (R_Value_isNatural64Value(&argumentValues[0])) {
-    R_ImmutableByteArray* immutableByteArray = fromNatural64(R_Value_getInteger16Value(&argumentValues[0]));
+    Arcadia_ImmutableByteArray* immutableByteArray = fromNatural64(process, R_Value_getInteger16Value(&argumentValues[0]));
     /* The functions assert the Bytes are UTF-8. */
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } else if (R_Value_isNatural8Value(&argumentValues[0])) {
-    R_ImmutableByteArray* immutableByteArray = fromNatural8(R_Value_getInteger16Value(&argumentValues[0]));
+    Arcadia_ImmutableByteArray* immutableByteArray = fromNatural8(process, R_Value_getInteger16Value(&argumentValues[0]));
     /* The functions assert the Bytes are UTF-8. */
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } if (R_Value_isImmutableByteArrayValue(&argumentValues[0])) {
-    R_SizeValue numberOfSymbols;
-    R_ImmutableByteArray* immutableByteArray = R_Value_getImmutableByteArrayValue(&argumentValues[0]);
-    if (!R_isUtf8(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray), &numberOfSymbols)) {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
+    Arcadia_SizeValue numberOfSymbols;
+    Arcadia_ImmutableByteArray* immutableByteArray = R_Value_getImmutableByteArrayValue(&argumentValues[0]);
+    if (!R_isUtf8(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray), &numberOfSymbols)) {
+      Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+      Arcadia_Process_jump(process);
     }
     _self->immutableByteArray = immutableByteArray;
-    _self->hash = hash(R_ImmutableByteArray_getBytes(immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
+    _self->hash = hash(Arcadia_ImmutableByteArray_getBytes(immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(immutableByteArray));
   } else if (R_Value_isObjectReferenceValue(&argumentValues[0])) {
     R_ObjectReferenceValue referenceValue = R_Value_getObjectReferenceValue(&argumentValues[0]);
-    if (R_Type_isSubType(R_Object_getType(referenceValue), _R_ByteBuffer_getType())) {
+    if (Arcadia_Type_isSubType(R_Object_getType(referenceValue), _R_ByteBuffer_getType(process))) {
       R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
       if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
-      _self->immutableByteArray = R_ImmutableByteArray_create(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
+      _self->immutableByteArray = Arcadia_ImmutableByteArray_create(process, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
       _self->hash = hash(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
-    } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_String_getType())) {
+    } else if (Arcadia_Type_isSubType(R_Object_getType(referenceValue), _R_String_getType(process))) {
       R_String* object = (R_String*)referenceValue;
       _self->immutableByteArray = object->immutableByteArray;
       _self->hash = object->hash;
-    } else if (R_Type_isSubType(R_Object_getType(referenceValue), _R_StringBuffer_getType())) {
+    } else if (Arcadia_Type_isSubType(R_Object_getType(referenceValue), _R_StringBuffer_getType(process))) {
       R_StringBuffer* object = (R_StringBuffer*)referenceValue;
-      _self->immutableByteArray = R_ImmutableByteArray_create(R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
+      _self->immutableByteArray = Arcadia_ImmutableByteArray_create(process, R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
       _self->hash = hash(R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
     } else {
-      R_setStatus(R_Status_ArgumentTypeInvalid);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+      Arcadia_Process_jump(process);
     }
   } else {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   R_Object_setType((R_Object*)_self, _type);
 }
 
-static R_SizeValue
+static Arcadia_SizeValue
 hash
   (
-    R_Natural8Value const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_Natural8Value const* bytes,
+    Arcadia_SizeValue numberOfBytes
   )
 {
-  R_SizeValue hash = numberOfBytes;
-  for (R_SizeValue i = 0, n = numberOfBytes; i < n; ++i) {
+  Arcadia_SizeValue hash = numberOfBytes;
+  for (Arcadia_SizeValue i = 0, n = numberOfBytes; i < n; ++i) {
     hash = hash * 37 + bytes[i];
   }
   return hash;
@@ -258,6 +264,7 @@ hash
 static void
 equalToImpl
   (
+    Arcadia_Process* process,
     R_Value* target,
     R_Value const* self,
     R_Value const* other
@@ -265,31 +272,32 @@ equalToImpl
 {
   R_String* self1 = (R_String*)R_Value_getObjectReferenceValue(self);
   if (!R_Value_isObjectReferenceValue(other)) {
-    R_Value_setBooleanValue(target, R_BooleanValue_False);
+    R_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
     return;
   }
   R_Object* other1 = R_Value_getObjectReferenceValue(other);
   if ((R_Object*)self1 == other1) {
-    R_Value_setBooleanValue(target, R_BooleanValue_True);
+    R_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
     return;
   }
-  if (!R_Type_isSubType(R_Object_getType(other1), _R_String_getType())) {
-    R_Value_setBooleanValue(target, R_BooleanValue_False);
+  if (!Arcadia_Type_isSubType(R_Object_getType(other1), _R_String_getType(process))) {
+    R_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
     return;
   }
   R_String* otherString1 = (R_String*)other1;
-  if (R_ImmutableByteArray_getNumberOfBytes(self1->immutableByteArray) == R_ImmutableByteArray_getNumberOfBytes(otherString1->immutableByteArray)) {
-    R_Value_setBooleanValue(target, !c_memcmp(R_ImmutableByteArray_getBytes(self1->immutableByteArray), 
-                                              R_ImmutableByteArray_getBytes(otherString1->immutableByteArray), 
-                                              R_ImmutableByteArray_getNumberOfBytes(self1->immutableByteArray)));
+  if (Arcadia_ImmutableByteArray_getNumberOfBytes(self1->immutableByteArray) == Arcadia_ImmutableByteArray_getNumberOfBytes(otherString1->immutableByteArray)) {
+    R_Value_setBooleanValue(target, !c_memcmp(Arcadia_ImmutableByteArray_getBytes(self1->immutableByteArray), 
+                                              Arcadia_ImmutableByteArray_getBytes(otherString1->immutableByteArray), 
+                                              Arcadia_ImmutableByteArray_getNumberOfBytes(self1->immutableByteArray)));
   } else {
-    R_Value_setBooleanValue(target, R_BooleanValue_False);
+    R_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
   }
 }
 
 static void
 hashImpl
   (
+    Arcadia_Process* process,
     R_Value* target,
     R_Value const* self
   )
@@ -301,32 +309,35 @@ hashImpl
 static void
 notEqualToImpl
   (
+    Arcadia_Process* process,
     R_Value* target,
     R_Value const* self,
     R_Value const* other
   )
 {
-  equalToImpl(target, self, other);
+  equalToImpl(process, target, self, other);
 }
 
 static void
 R_String_visit
   (
+    Arcadia_Process* process,
     R_String* string
   )
 { 
-  R_ImmutableByteArray_visit(string->immutableByteArray);
+  Arcadia_ImmutableByteArray_visit(string->immutableByteArray);
 }
 
 static void
 getByteRange
   (
-    R_SizeValue symbolIndex,
-    R_SizeValue symbolLength,
-    R_SizeValue* byteIndex,
-    R_SizeValue* byteLength,
+    Arcadia_Process* process,
+    Arcadia_SizeValue symbolIndex,
+    Arcadia_SizeValue symbolLength,
+    Arcadia_SizeValue* byteIndex,
+    Arcadia_SizeValue* byteLength,
     uint8_t const* p,
-    R_SizeValue l
+    Arcadia_SizeValue l
   )
 {
   uint8_t const* start = p;
@@ -334,10 +345,10 @@ getByteRange
   uint8_t const* current = start;
 
   uint8_t const* currentByteIndex = NULL;
-  R_SizeValue currentSymbolIndex = 0;
+  Arcadia_SizeValue currentSymbolIndex = 0;
 
   uint8_t const* currentByteLength = NULL;
-  R_SizeValue currentSymbolLength = 0;
+  Arcadia_SizeValue currentSymbolLength = 0;
 
   while (current != end) {
     uint8_t x = (*current);
@@ -353,15 +364,15 @@ getByteRange
     } else if (x <= 0x7ff) {
       uint8_t const* last = current;
       if (end - current < 2) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
-      for (R_SizeValue i = 1; i < 2; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 2; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
       }
       current++;
@@ -374,15 +385,15 @@ getByteRange
     } else if (x <= 0xffff) {
       uint8_t const* last = current;
       if (end - current < 3) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
-      for (R_SizeValue i = 1; i < 3; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 3; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
       }
       current++;
@@ -395,15 +406,15 @@ getByteRange
     } else if (x <= 0x10ffff) {
       uint8_t const* last = current;
       if (end - current < 4) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
-      for (R_SizeValue i = 1; i < 4; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 4; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
       }
       current++;
@@ -414,13 +425,13 @@ getByteRange
         currentSymbolIndex++;
       }
     } else {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+      Arcadia_Process_jump(process);
     }
   }
   if (!currentByteIndex) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
 
   while (current != end) {
@@ -435,15 +446,15 @@ getByteRange
       }
     } else if (x <= 0x7ff) {
       if (end - current < 2) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
-      for (R_SizeValue i = 1; i < 2; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 2; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
       }
       current++;
@@ -455,15 +466,15 @@ getByteRange
       }
     } else if (x <= 0xffff) {
       if (end - current < 3) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
-      for (R_SizeValue i = 1; i < 3; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 3; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
       }
       current++;
@@ -475,15 +486,15 @@ getByteRange
       }
     } else if (x <= 0x10ffff) {
       if (end - current < 4) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
-      for (R_SizeValue i = 1; i < 4; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 4; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
       }
       current++;
@@ -494,13 +505,13 @@ getByteRange
         currentSymbolLength++;
       }
     } else {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+      Arcadia_Process_jump(process);
     }
   }
   if (!currentByteLength) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
   *byteIndex = currentByteIndex - start;
   *byteLength = currentByteLength - start;
@@ -509,205 +520,222 @@ getByteRange
 R_String*
 R_String_create_pn
   (
-    R_ImmutableByteArray* immutableByteArray
+    Arcadia_Process* process,
+    Arcadia_ImmutableByteArray* immutableByteArray
   )
 {
   R_Value argumentValues[] = { { .tag = R_ValueTag_ImmutableByteArray, .immutableByteArrayValue = immutableByteArray } };
-  R_String* self = R_allocateObject(_R_String_getType(), 1, &argumentValues[0]);
+  R_String* self = R_allocateObject(process, _R_String_getType(process), 1, &argumentValues[0]);
   return self;
 }
 
 R_String*
 R_String_create
   (
+    Arcadia_Process* process,
     R_Value value
   )
 { 
   R_Value argumentValues[] = { value };
-  R_String* self = R_allocateObject(_R_String_getType(), 1, &argumentValues[0]);
+  R_String* self = R_allocateObject(process, _R_String_getType(process), 1, &argumentValues[0]);
   return self;
 }
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_String_endsWith_pn
   (
     R_String const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   )
 {
-  if (R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) < numberOfBytes) {
-    return R_BooleanValue_False;
+  if (Arcadia_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) < numberOfBytes) {
+    return Arcadia_BooleanValue_False;
   }
-  R_SizeValue d = R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) - numberOfBytes;
-  return !c_memcmp(R_ImmutableByteArray_getBytes(self->immutableByteArray) + d, bytes, numberOfBytes);
+  Arcadia_SizeValue d = Arcadia_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) - numberOfBytes;
+  return !c_memcmp(Arcadia_ImmutableByteArray_getBytes(self->immutableByteArray) + d, bytes, numberOfBytes);
 }
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_String_startsWith_pn
   (
     R_String const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   )
 {
-  if (R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) < numberOfBytes) {
-    return R_BooleanValue_False;
+  if (Arcadia_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) < numberOfBytes) {
+    return Arcadia_BooleanValue_False;
   }
-  return !c_memcmp(R_ImmutableByteArray_getBytes(self->immutableByteArray), bytes, numberOfBytes);
+  return !c_memcmp(Arcadia_ImmutableByteArray_getBytes(self->immutableByteArray), bytes, numberOfBytes);
 }
 
-R_SizeValue
+Arcadia_SizeValue
 R_String_getNumberOfBytes
   (
     R_String const* self
   )
 {
-  return R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray);
+  return Arcadia_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray);
 }
 
-R_Natural8Value const*
+Arcadia_Natural8Value const*
 R_String_getBytes
   (
     R_String const* self
   )
 {
-  return R_ImmutableByteArray_getBytes(self->immutableByteArray);
+  return Arcadia_ImmutableByteArray_getBytes(self->immutableByteArray);
 }
 
-R_Natural8Value
+Arcadia_Natural8Value
 R_String_getByteAt
   (
+    Arcadia_Process* process,
     R_String const* self,
-    R_SizeValue index
+    Arcadia_SizeValue index
   )
 {
   if (index >= R_String_getNumberOfBytes(self)) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
   return *(R_String_getBytes(self) + index);
 }
 
-R_SizeValue
+Arcadia_SizeValue
 R_String_getNumberOfSymbols
   (
     R_String const* self
   )
 {
-  R_SizeValue numberOfSymbols;
+  Arcadia_SizeValue numberOfSymbols;
   R_isUtf8(R_String_getBytes(self), R_String_getNumberOfBytes(self), &numberOfSymbols);
   return numberOfSymbols;
 }
 
+#if 0
 R_String*
 R_String_getSubString
   (
     R_String const* self,
-    R_SizeValue index,
-    R_SizeValue length
+    Arcadia_SizeValue index,
+    Arcadia_SizeValue length
   )
 {
-  R_SizeValue byteIndex, byteLength;
-  getByteRange(index, length, &byteIndex, &byteLength, R_ImmutableByteArray_getBytes(self->immutableByteArray), R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray));
+  Arcadia_SizeValue byteIndex, byteLength;
+  getByteRange(index, length, &byteIndex, &byteLength, Arcadia_ImmutableByteArray_getBytes(self->immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray));
   return NULL;
 }
+#endif
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_String_isEqualTo_pn
   (
     R_String const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   )
 {
-  if (R_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) == numberOfBytes) {
-    return !c_memcmp(R_ImmutableByteArray_getBytes(self->immutableByteArray), bytes, numberOfBytes);
+  if (Arcadia_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray) == numberOfBytes) {
+    return !c_memcmp(Arcadia_ImmutableByteArray_getBytes(self->immutableByteArray), bytes, numberOfBytes);
   } else {
-    return R_BooleanValue_False;
+    return Arcadia_BooleanValue_False;
   }
 }
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_String_toBoolean
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toBoolean(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toBoolean(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Integer16Value
+Arcadia_Integer16Value
 R_String_toInteger16
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toInteger16(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toInteger16(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Integer32Value
+Arcadia_Integer32Value
 R_String_toInteger32
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toInteger32(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toInteger32(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Integer64Value
+Arcadia_Integer64Value
 R_String_toInteger64
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toInteger64(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toInteger64(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Integer8Value
+Arcadia_Integer8Value
 R_String_toInteger8
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toInteger8(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toInteger8(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Natural16Value
+Arcadia_Natural16Value
 R_String_toNatural16
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toNatural16(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toNatural16(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_String_toNatural32
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toNatural32(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toNatural32(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Natural64Value
+Arcadia_Natural64Value
 R_String_toNatural64
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toNatural64(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toNatural64(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Natural8Value
+Arcadia_Natural8Value
 R_String_toNatural8
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toNatural8(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toNatural8(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Real32Value
+Arcadia_Real32Value
 R_String_toReal32
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toReal32(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toReal32(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_Real64Value
+Arcadia_Real64Value
 R_String_toReal64
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toReal64(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toReal64(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
 
-R_VoidValue
+Arcadia_VoidValue
 R_String_toVoid
   (
+    Arcadia_Process* process,
     R_String const* self
   )
-{ return R_toVoid(R_String_getBytes(self), R_String_getNumberOfBytes(self)); }
+{ return R_toVoid(process, R_String_getBytes(self), R_String_getNumberOfBytes(self)); }

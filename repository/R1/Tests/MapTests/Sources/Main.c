@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,39 +22,57 @@
 /// @todo Add to R's test utilities.
 #define R_Test_assert(result) \
   if (!(result)) { \
-    R_setStatus(R_Status_TestFailed); \
-    R_jump(); \
+    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
+    Arcadia_Process_jump(process); \
   }
 
 // We use integers for testing.
 // Append range [1,7]. Assert the range was added. Assert getSize returns 7. Assert isEmpty returns false.
 // Clear the list. Assert getSize returns 0. Assert isEmpty returns true.
-static void mapTest1() {
-  R_Map* m = R_Map_create();
+static void
+mapTest1
+  (
+    Arcadia_Process* process
+  )
+{
+  R_Map* m = R_Map_create(process);
   R_Value k, v;
-  R_Value_setObjectReferenceValue(&k, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("siteAddress", sizeof("siteAddress") - 1)));
-  R_Value_setObjectReferenceValue(&v, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("https://michaelheilmann.com", sizeof("https://michaelheilmann.com") - 1)));
-  R_Map_set(m, k, v);
+  R_Value_setObjectReferenceValue(&k, (R_ObjectReferenceValue)R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
+  R_Value_setObjectReferenceValue(&v, (R_ObjectReferenceValue)R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
+  R_Map_set(process, m, k, v);
   R_Value k2, v2;
-  R_Value_setObjectReferenceValue(&k2, (R_ObjectReferenceValue)R_String_create_pn(R_ImmutableByteArray_create("siteAddress", sizeof("siteAddress") - 1)));
-  v2 = R_Map_get(m, k2);
+  R_Value_setObjectReferenceValue(&k2, (R_ObjectReferenceValue)R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
+  v2 = R_Map_get(process, m, k2);
 }
 
-static bool safeExecute(void (*f)()) {
+static bool
+safeExecute
+  (
+    void (*f)(Arcadia_Process* process)
+  )
+{
   bool result = true;
-  R_Status status = R_startup();
+  Arcadia_Status status = R_startup();
   if (status) {
     result = false;
     return result;
   }
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    R_shutdown();
+    result = false;
+    return result;
+  }
   R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    (*f)();
+    (*f)(process);
   } else {
     result = false;
   }
-  R_popJumpTarget();
+  Arcadia_Process_popJumpTarget(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   status = R_shutdown();
   if (status) {
     result = false;

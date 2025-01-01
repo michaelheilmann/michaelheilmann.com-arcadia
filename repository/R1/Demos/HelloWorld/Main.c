@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,7 +25,7 @@ main
     char** argv
   )
 {
-  R_Status status = R_startup();
+  Arcadia_Status status = R_startup();
   if (status) {
     return EXIT_FAILURE;
   }

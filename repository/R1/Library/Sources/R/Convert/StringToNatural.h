@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,38 +18,42 @@
 #if !defined(R_CONVERT_STRINGTONATURAL_H_INCLUDED)
 #define R_CONVERT_STRINGTONATURAL_H_INCLUDED
 
-#include "R/Natural16.h"
-#include "R/Natural32.h"
-#include "R/Natural64.h"
-#include "R/Natural8.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Natural16.h"
+#include "Arcadia/Ring1/Implementation/Natural32.h"
+#include "Arcadia/Ring1/Implementation/Natural64.h"
+#include "Arcadia/Ring1/Implementation/Natural8.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
-R_Natural8Value
+Arcadia_Natural8Value
 R_toNatural8
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
-R_Natural16Value
+Arcadia_Natural16Value
 R_toNatural16
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_toNatural32
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
-R_Natural64Value
+Arcadia_Natural64Value
 R_toNatural64
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
 #endif // R_CONVERT_STRINGTONATURAL_H_INCLUDED

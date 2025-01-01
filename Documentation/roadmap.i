@@ -11,6 +11,8 @@
   </div>
   </header>
   <main>
+    <div class="left-column"></div>
+    <div class="center-column">
     <h1>Roadmap</h1>
     @{include("./Roadmap/Milestone-Banner_Generator-2.i")}
     @{include("./Roadmap/Milestone-Icon_Generator-2.i")}
@@ -23,9 +25,15 @@
     @{include("./Roadmap/Milestone-Mil-2.i")}
     <h2>Archive of completed milestones</h2>
     <p>You can review completed milestones in the <a href="https://michaelheilmann.com/roadmap-archive">roadmap archive</a>.</p>
+  </div>
+  <div class="right-column"></div>
   </main>
   <footer>
+    <div class="left-column"></div>
+    <div class="center-column"></div>
+    <div class="right-column"></div>
     <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 26 December 2024.</span>
+    </div>
   </footer>
 </body>
 </html>

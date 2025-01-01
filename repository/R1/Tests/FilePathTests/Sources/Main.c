@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,44 +23,69 @@
 /// @todo Add to R's test utilities.
 #define R_Test_assert(result) \
   if (!(result)) { \
-    R_setStatus(R_Status_TestFailed); \
-    R_jump(); \
+    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
+    Arcadia_Process_jump(process); \
   }
 
-static void checkNormalized(char const* p, char const* q) {
-  R_FilePath* filePath = R_FilePath_parseNative(p, strlen(p));
-  R_String* filePathString = R_FilePath_toNative(filePath);
+static void
+checkNormalized
+  (
+    Arcadia_Process * process,
+    char const* p,
+    char const* q
+  )
+{
+  R_FilePath* filePath = R_FilePath_parseNative(process, p, strlen(p));
+  R_String* filePathString = R_FilePath_toNative(process, filePath);
   if (R_String_getNumberOfBytes(filePathString) != strlen(q) + 1) {
-    R_setStatus(R_Status_TestFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
+    Arcadia_Process_jump(process);
   }
   if (memcmp(R_String_getBytes(filePathString), q, strlen(q))) {
-    R_setStatus(R_Status_TestFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
+    Arcadia_Process_jump(process);
   }
 }
 
-static void normalizationTests() {
-  checkNormalized("Hello/..", ".");
-  checkNormalized(".", ".");
-  checkNormalized("./", ".");
+static void
+normalizationTests
+  (
+    Arcadia_Process* process
+  )
+{
+  checkNormalized(process, u8"Hello/..", ".");
+  checkNormalized(process, u8".", ".");
+  checkNormalized(process, u8"./", ".");
 }
 
-static bool safeExecute(void (*f)()) {
+static bool
+safeExecute
+  (
+    void (*f)(Arcadia_Process*)
+  )
+{
   bool result = true;
-  R_Status status = R_startup();
+  Arcadia_Status status = R_startup();
   if (status) {
     result = false;
     return result;
   }
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    R_shutdown();
+    result = false;
+    return result;
+  }
   R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    (*f)();
+    (*f)(process);
   } else {
     result = false;
   }
-  R_popJumpTarget();
+  Arcadia_Process_popJumpTarget(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   status = R_shutdown();
   if (status) {
     result = false;

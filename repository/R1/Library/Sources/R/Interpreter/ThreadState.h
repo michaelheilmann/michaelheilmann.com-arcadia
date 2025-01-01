@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -31,10 +31,11 @@ typedef struct R_Interpreter_ThreadState R_Interpreter_ThreadState;
 // @private
 // @brief Create a thread state.
 // @return A pointer to the thread state.
-// @error #R_Status_AllocationFailed an allocation failed
+// @error #Arcadia_Status_AllocationFailed an allocation failed
 R_Interpreter_ThreadState*
 R_Interpreter_ThreadState_create
   (
+    Arcadia_Process* process
   );
 
 // @private
@@ -43,6 +44,7 @@ R_Interpreter_ThreadState_create
 void
 R_Interpreter_ThreadState_destroy
   (
+    Arcadia_Process* process,
     R_Interpreter_ThreadState* thread
   );
 
@@ -59,15 +61,8 @@ R_Interpreter_ThreadState_visit
 // @brief Get the number of registers.
 // @param A pointer to the thread state.
 // @return The number of registers.
-R_SizeValue
+Arcadia_SizeValue
 R_Interpreter_ThreadState_getNumberOfRegisters
-  (
-    R_Interpreter_ThreadState* thread
-  );
-
-// @todo Remove this.
-R_Value*
-R_Interpreter_ThreadState_getRegisters
   (
     R_Interpreter_ThreadState* thread
   );
@@ -76,12 +71,12 @@ R_Interpreter_ThreadState_getRegisters
 /// @brief Get the register at the specified index.
 /// @param A pointer to the thread state.
 /// @return A pointer to the register.
-/// @error #R_Status_RegisterIndexOutOfBounds the index is not within the bounds of [0, R_Interpreter_ThreadState_getNumberOfRegisters(threadState)].
+/// @error #Arcadia_Status_RegisterIndexOutOfBounds the index is not within the bounds of [0, R_Interpreter_ThreadState_getNumberOfRegisters(threadState)].
 R_Value*
 R_Interpreter_ThreadState_getRegisterAt
   (
     R_Interpreter_ThreadState* thread,
-    R_SizeValue registerIndex
+    Arcadia_SizeValue registerIndex
   );
 
 typedef struct R_CallState R_CallState;
@@ -101,16 +96,16 @@ struct R_CallState {
   /**
    * @brief Must be one of R_CallState_Flags_Procedure or R_CallState_Flags_ForeignProcedure.
    */
-  R_Natural8Value flags;
+  Arcadia_Natural8Value flags;
   /** 
    * The instruction index of this call.
    */
-  R_Natural32Value instructionIndex;
+  Arcadia_Natural32Value instructionIndex;
   union {
     /// Pointer to the procedure to be called.
     R_Interpreter_Procedure* procedure;
     /// Pointer to the foreign procedure to be called.
-    R_ForeignProcedureValue foreignProcedure;
+    Arcadia_ForeignProcedureValue foreignProcedure;
   };
 };
 
@@ -119,15 +114,15 @@ R_CallState*
 R_Interpreter_ThreadState_beginForeignProcedureCall
   (
     R_Interpreter_ThreadState* thread,
-    R_Natural32Value instructionIndex,
-    R_ForeignProcedureValue foreignProcedure
+    Arcadia_Natural32Value instructionIndex,
+    Arcadia_ForeignProcedureValue foreignProcedure
   );
 
 R_CallState*
 R_Interpreter_ThreadState_beginProcedureCall
   (
     R_Interpreter_ThreadState* thread,
-    R_Natural32Value instructionIndex,
+    Arcadia_Natural32Value instructionIndex,
     R_Interpreter_Procedure* procedure
   );
 

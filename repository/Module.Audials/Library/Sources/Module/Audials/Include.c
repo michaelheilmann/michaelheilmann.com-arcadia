@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -29,59 +29,61 @@ static IXAudio2SourceVoice* g_xaudio2SourceVoice = NULL;
 static void
 Audials_XAudio2_startup
   (
+    Arcadia_Process* process
   )
 {
   HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
   if (FAILED(hr)) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   hr = XAudio2Create(&g_xaudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
   if (FAILED(hr)) {
     CoUninitialize();
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   hr = IXAudio2_CreateMasteringVoice(g_xaudio2, &g_xaudio2MasteringVoice, XAUDIO2_DEFAULT_CHANNELS, XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL, AudioCategory_Other);
   if (FAILED(hr)) {
     IXAudio2_Release(g_xaudio2);
     g_xaudio2 = NULL;
     CoUninitialize();
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   R_JumpTarget jumpTarget;
 
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    g_sourceVoiceBuffer = R_ByteBuffer_create();
-    R_popJumpTarget();
+    g_sourceVoiceBuffer = R_ByteBuffer_create(process);
+    Arcadia_Process_popJumpTarget(process);
   } else {
-    R_popJumpTarget();
+    Arcadia_Process_popJumpTarget(process);
     IXAudio2_Release(g_xaudio2);
     g_xaudio2 = NULL;
     CoUninitialize();
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
 
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    R_Object_lock(g_sourceVoiceBuffer);
-    R_popJumpTarget();
+    R_Object_lock(process, g_sourceVoiceBuffer);
+    Arcadia_Process_popJumpTarget(process);
   } else {
-    R_popJumpTarget();
+    Arcadia_Process_popJumpTarget(process);
     IXAudio2_Release(g_xaudio2);
     g_xaudio2 = NULL;
     CoUninitialize();
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
 }
 
 static void
 Audials_XAudio2_shutdown
   (
+    Arcadia_Process* process
   )
 {
   if (g_xaudio2SourceVoice) {
@@ -93,7 +95,7 @@ Audials_XAudio2_shutdown
   IXAudio2_Release(g_xaudio2);
   g_xaudio2 = NULL;
   CoUninitialize();
-  R_Object_unlock(g_sourceVoiceBuffer);
+  R_Object_unlock(process, g_sourceVoiceBuffer);
   g_sourceVoiceBuffer = NULL;
 }
 
@@ -106,7 +108,7 @@ static const double PI = 3.14159265358979323846;
 
 #include <math.h>
 
-Rex_declareObjectType("Audials.Xaudio2.Source", Source, "R.Object");
+Rex_declareObjectType(u8"Audials.Xaudio2.Source", Source, u8"R.Object");
 
 struct Source {
   R_Object _parent;
@@ -118,6 +120,7 @@ struct Source {
 static void
 Source_destruct
   (
+    Arcadia_Process* process,
     Source* self
   )
 { 
@@ -131,9 +134,10 @@ Source_destruct
 static void
 Source_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
@@ -142,7 +146,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = NULL,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -162,35 +166,36 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Audials.Xaudio2.Source", Source, "R.Object", R_Object, &_typeOperations)
+Rex_defineObjectType(u8"Audials.Xaudio2.Source", Source, u8"R.Object", R_Object, &_typeOperations)
 
 // bytes : ByteBuffer
 static void
 Source_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   Source* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _Source_getType();
+  Arcadia_TypeValue _type = _Source_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
-    R_setStatus(R_Status_NumberOfArgumentsInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Process_jump(process);
   }
   if (!R_Value_isObjectReferenceValue(&argumentValues[0])) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   R_Object* objectValue = R_Value_getObjectReferenceValue(&argumentValues[0]);
-  if (!R_Type_isSubType(R_Object_getType(objectValue), _R_ByteBuffer_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+  if (!Arcadia_Type_isSubType(R_Object_getType(objectValue), _R_ByteBuffer_getType(process))) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   //R_ByteBuffer* byteBufferValue = (R_ByteBuffer*)objectValue;
   _self->xAudio2SourceVoice = NULL;
@@ -213,19 +218,19 @@ Source_notifyBackendShuttingDown
 Source*
 Source_create
   (
+    Arcadia_Process* process,
     R_ByteBuffer* bytes
   )
 {
   R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)bytes } };
-  Source* self = R_allocateObject(_Source_getType(), 1, &argumentValues[0]);
-  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)self };
-  Source_constructImpl(&selfValue, 1, &argumentValues[0]);
+  Source* self = R_allocateObject(process, _Source_getType(process), 1, &argumentValues[0]);
   return self;
 }
 
 void
 Audials_playSine1
   (
+    Arcadia_Process* process
   )
 {
   const DWORD SAMPLESPERCYCLE = (DWORD)(SAMPLESPERSEC / CYCLESPERSEC);                // 200 samples per cycle.
@@ -244,8 +249,8 @@ Audials_playSine1
 
   HRESULT hr = IXAudio2_CreateSourceVoice(g_xaudio2, &g_xaudio2SourceVoice, &waveFormatEx, 0, 1.0, NULL, NULL, NULL);
   if (FAILED(hr)) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   double phase = 0.0;
   uint32_t bufferIndex = 0;
@@ -253,7 +258,7 @@ Audials_playSine1
     phase += (2 * PI) / SAMPLESPERCYCLE;
     int16_t sample = (int16_t)(sin(phase) * INT16_MAX * VOLUME);
     uint8_t bytes[2] = { (uint8_t)(sample >> 0), (uint8_t)(sample >> 8) };
-    R_ByteBuffer_append_pn(g_sourceVoiceBuffer, bytes, 2);
+    R_ByteBuffer_append_pn(process, g_sourceVoiceBuffer, bytes, 2);
     bufferIndex += 2;
   }
 
@@ -269,36 +274,39 @@ Audials_playSine1
 
   hr = IXAudio2SourceVoice_SubmitSourceBuffer(g_xaudio2SourceVoice, &xAudio2Buffer, NULL);
   if (FAILED(hr)) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   hr = IXAudio2SourceVoice_Start(g_xaudio2SourceVoice, UINT32_C(0), UINT32_C(0));
   if (FAILED(hr)) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
 }
 
 void
 Audials_playSine
   (
+    Arcadia_Process* process
   )
 {
-  Audials_playSine1();
+  Audials_playSine1(process);
 }
 
 void
 Audials_startup
   (
+    Arcadia_Process* process
   )
 {
-  Audials_XAudio2_startup();
+  Audials_XAudio2_startup(process);
 }
 
 void
 Audials_shutdown
   (
+    Arcadia_Process* process
   )
 {
-  Audials_XAudio2_shutdown();
+  Audials_XAudio2_shutdown(process);
 }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,22 +18,22 @@
 #if !defined(R_FILEHANDLE_H_INCLUDED)
 #define R_FILEHANDLE_H_INCLUDED
 
-#include "R/Boolean.h"
-#include "R/Natural8.h"
+#include "Arcadia/Ring1/Implementation/Boolean.h"
+#include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "R/Object.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct R_FilePath R_FilePath;
 typedef struct R_FileSystem R_FileSystem;
 
 // FILE
 #include <stdio.h>
 
-Rex_declareObjectType("R.FileHandle", R_FileHandle, "R.Object");
+Rex_declareObjectType(u8"R.FileHandle", R_FileHandle, u8"R.Object");
 
 struct R_FileHandle {
   R_Object _parent;
   R_FileSystem* fileSystem;
-  R_Natural8Value flags;
+  Arcadia_Natural8Value flags;
   FILE* fd;
 };
 
@@ -41,34 +41,39 @@ struct R_FileHandle {
 R_FileHandle*
 R_FileHandle_create
   (
+    Arcadia_Process* process,
     R_FileSystem* fileSystem
   );
 
 // https://michaelheilmann.com/repository/R1/#r-filehandle-isclosed
-R_BooleanValue
+Arcadia_BooleanValue
 R_FileHandle_isClosed
   (
+    Arcadia_Process* process,
     R_FileHandle const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-filehandle-isopened
-R_BooleanValue
+Arcadia_BooleanValue
 R_FileHandle_isOpened
   (
+    Arcadia_Process* process,
     R_FileHandle const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-filehandle-isopenedforreading
-R_BooleanValue
+Arcadia_BooleanValue
 R_FileHandle_isOpenedForReading
   (
+    Arcadia_Process* process,
     R_FileHandle const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-filehandle-isopenedforwriting
-R_BooleanValue
+Arcadia_BooleanValue
 R_FileHandle_isOpenedForWriting
   (
+    Arcadia_Process* process,
     R_FileHandle const* self
   );
 
@@ -83,6 +88,7 @@ R_FileHandle_close
 void
 R_FileHandle_openForReading
   (
+    Arcadia_Process* process,
     R_FileHandle* self,
     R_FilePath* path
   );
@@ -91,6 +97,7 @@ R_FileHandle_openForReading
 void
 R_FileHandle_openForWriting
   (
+    Arcadia_Process* process,
     R_FileHandle* self,
     R_FilePath* path
   );
@@ -99,20 +106,22 @@ R_FileHandle_openForWriting
 void
 R_FileHandle_read
   (
+    Arcadia_Process* process,
     R_FileHandle* self,
     void* byes,
-    R_SizeValue bytesToRead,
-    R_SizeValue* bytesRead
+    Arcadia_SizeValue bytesToRead,
+    Arcadia_SizeValue* bytesRead
   );
      
 // https://michaelheilmann.com/repository/R1/#r-filehandle-write    
 void
 R_FileHandle_write
   (
+    Arcadia_Process* process,
     R_FileHandle* self,
     void const* bytes,
-    R_SizeValue bytesToWrite,
-    R_SizeValue* bytesWritten
+    Arcadia_SizeValue bytesToWrite,
+    Arcadia_SizeValue* bytesWritten
   );
 
 #endif // R_FILEHANDLE_H_INCLUDED

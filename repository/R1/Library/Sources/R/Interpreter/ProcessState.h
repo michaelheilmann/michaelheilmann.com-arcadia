@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -51,6 +51,7 @@ R_Interpreter_ProcessState_get
 void
 R_Interpreter_ProcessState_startup
   (
+    Arcadia_Process* process
   );
 
 /// @brief Shutdown the process state singleton.
@@ -58,6 +59,7 @@ R_Interpreter_ProcessState_startup
 void
 R_Interpreter_ProcessState_shutdown
   (
+    Arcadia_Process* process
   );
 
 void
@@ -69,13 +71,14 @@ R_Interpreter_ProcessState_visit
 /**
  * @brief Define a global procedure.
  * @param procedure The procedure.
- * @error R_Status_ArgumentValueInvalid @a procedure is a null pointer
- * @error R_Status_ArgumentValueInvalid a class or procedure of that name already exists
- * @error R_Status_AllocationFailed an allocation failed
+ * @error Arcadia_Status_ArgumentValueInvalid @a procedure is a null pointer
+ * @error Arcadia_Status_ArgumentValueInvalid a class or procedure of that name already exists
+ * @error Arcadia_Status_AllocationFailed an allocation failed
  */
 void
 R_Interpreter_ProcessState_defineGlobalProcedure
   (
+    Arcadia_Process* process,
     R_Interpreter_ProcessState* self,
     R_Interpreter_Procedure* procedure
   );
@@ -83,13 +86,14 @@ R_Interpreter_ProcessState_defineGlobalProcedure
 /**
  * @brief Define a global class.
  * @param class The class.
- * @error R_Status_ArgumentValueInvalid @a class is a null pointer
- * @error R_Status_ArgumentValueInvalid a class or procedure of that name already exists
- * @error R_Status_AllocationFailed an allocation failed
+ * @error Arcadia_Status_ArgumentValueInvalid @a class is a null pointer
+ * @error Arcadia_Status_ArgumentValueInvalid a class or procedure of that name already exists
+ * @error Arcadia_Status_AllocationFailed an allocation failed
  */
 void
 R_Interpreter_ProcessState_defineGlobalClass
   (
+    Arcadia_Process* process,
     R_Interpreter_ProcessState* self,
     R_Interpreter_Class* class
   );
@@ -98,12 +102,13 @@ R_Interpreter_ProcessState_defineGlobalClass
  * @brief Get a global.
  * @param name The name of the global.
  * @return The global.
- * @error R_Status_ArgumentValueInvalid @a name is a null pointer
- * @error R_Status_NotExists no global of name @a name was found 
+ * @error Arcadia_Status_ArgumentValueInvalid @a name is a null pointer
+ * @error Arcadia_Status_NotExists no global of name @a name was found 
  */
 R_Value
 R_Interpreter_ProcessState_getGlobal
   (
+    Arcadia_Process* process,
     R_Interpreter_ProcessState* self,
     R_String* name
   );

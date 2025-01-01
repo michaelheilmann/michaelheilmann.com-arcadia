@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,19 +17,18 @@
 
 #include "R/Utf8.h"
 
-#include "R/JumpTarget.h"
-#include "R/Status.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/cstdlib.h"
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_isUtf8
   (
     void const* bytes,
-    R_SizeValue numberOfBytes,
-    R_SizeValue* numberOfSymbols
+    Arcadia_SizeValue numberOfBytes,
+    Arcadia_SizeValue* numberOfSymbols
   )
 {
-  R_SizeValue numberOfSymbols1 = 0;
+  Arcadia_SizeValue numberOfSymbols1 = 0;
   uint8_t const* start = (uint8_t const*)bytes;
   uint8_t const* end = start + numberOfBytes;
   uint8_t const* current = start;
@@ -41,50 +40,50 @@ R_isUtf8
       numberOfSymbols1++;
     } else if (x <= 0x7ff) {
       if (end - current < 2) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
-      for (R_SizeValue i = 1; i < 2; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 2; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          return R_BooleanValue_False;
+          return Arcadia_BooleanValue_False;
         }
       }
       current++;
       numberOfSymbols1++;
     } else if (x <= 0xffff) {
       if (end - current < 3) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
-      for (R_SizeValue i = 1; i < 3; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 3; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          return R_BooleanValue_False;
+          return Arcadia_BooleanValue_False;
         }
       }
       current++;
       numberOfSymbols1++;
     } else if (x <= 0x10ffff) {
       if (end - current < 4) {
-        return R_BooleanValue_False;
+        return Arcadia_BooleanValue_False;
       }
-      for (R_SizeValue i = 1; i < 4; ++i) {
+      for (Arcadia_SizeValue i = 1; i < 4; ++i) {
         current++;
         x = *current;
         if (0x80 != (x & 0xc0)) {
-          return R_BooleanValue_False;
+          return Arcadia_BooleanValue_False;
         }
       }
       current++;
       numberOfSymbols1++;
     } else {
-      return R_BooleanValue_False;
+      return Arcadia_BooleanValue_False;
     }
   }
   if (numberOfSymbols) {
     *numberOfSymbols = numberOfSymbols1;
   }
-  return R_BooleanValue_True;
+  return Arcadia_BooleanValue_True;
 }
 

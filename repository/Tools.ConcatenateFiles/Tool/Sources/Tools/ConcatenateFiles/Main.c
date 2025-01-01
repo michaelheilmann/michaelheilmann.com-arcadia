@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,31 +23,32 @@
 static void
 main1
   (
+    Arcadia_Process* process,
     int argc,
     char** argv
   )
 {
   if (argc < 3) {
-    R_setStatus(R_Status_NumberOfArgumentsInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Process_jump(process);
   }
-  R_FileSystem* fileSystem = R_FileSystem_create();
-  R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
-  R_FileHandle* fileHandle = R_FileHandle_create(fileSystem);
+  R_FileSystem* fileSystem = R_FileSystem_create(process);
+  R_ByteBuffer* byteBuffer = R_ByteBuffer_create(process);
+  R_FileHandle* fileHandle = R_FileHandle_create(process, fileSystem);
   for (int argi = 1; argi < argc - 1; ++argi) {
-    R_FileHandle_openForReading(fileHandle, R_FilePath_parseNative(argv[argi], strlen(argv[argi])));
+    R_FileHandle_openForReading(process, fileHandle, R_FilePath_parseNative(process, argv[argi], strlen(argv[argi])));
     char bytes[5012];
-    R_SizeValue bytesToRead = 5012;
-    R_SizeValue bytesRead = 0;
+    Arcadia_SizeValue bytesToRead = 5012;
+    Arcadia_SizeValue bytesRead = 0;
     do {
-      R_FileHandle_read(fileHandle, bytes, bytesToRead, &bytesRead);
-      R_ByteBuffer_append_pn(byteBuffer, bytes, bytesRead);
+      R_FileHandle_read(process, fileHandle, bytes, bytesToRead, &bytesRead);
+      R_ByteBuffer_append_pn(process, byteBuffer, bytes, bytesRead);
     } while (bytesRead > 0);
     R_FileHandle_close(fileHandle);
   }
-  R_FileHandle_openForWriting(fileHandle, R_FilePath_parseNative(argv[argc - 1], strlen(argv[argc - 1])));
-  R_SizeValue bytesWritten;
-  R_FileHandle_write(fileHandle, byteBuffer->p, byteBuffer->sz, &bytesWritten);
+  R_FileHandle_openForWriting(process, fileHandle, R_FilePath_parseNative(process, argv[argc - 1], strlen(argv[argc - 1])));
+  Arcadia_SizeValue bytesWritten;
+  R_FileHandle_write(process, fileHandle, byteBuffer->p, byteBuffer->sz, &bytesWritten);
   R_FileHandle_close(fileHandle);
 }
 
@@ -58,18 +59,25 @@ main
     char** argv
   )
 {
-  R_Status status[2];
+  Arcadia_Status status[2];
   status[0] = R_startup();
   if (status[0]) {
     return EXIT_FAILURE;
   }
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    main1(argc, argv);
-    R_popJumpTarget();
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    R_shutdown();
+    return EXIT_FAILURE;
   }
-  status[0] = R_getStatus();
+  R_JumpTarget jumpTarget;
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  if (R_JumpTarget_save(&jumpTarget)) {
+    main1(process, argc, argv);
+  }
+  Arcadia_Process_popJumpTarget(process);
+  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   status[1] = R_shutdown();
   if (status[1] || status[0]) {
     return EXIT_FAILURE;

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,17 +20,17 @@
 
 #include "R/cstdlib.h"
 #include "R/ByteBuffer.h"
-#include "R/Natural32.h"
+#include "Arcadia/Ring1/Implementation/Natural32.h"
 
 #define R_Utf8CodePoint_Last (0x0010ffff)
-c_static_assert(R_Utf8CodePoint_Last <= R_Natural32Value_Maximum - 3, "<internal error>");
+c_static_assert(R_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximum - 3, "<internal error>");
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_isUtf8
   (
     void const* bytes,
-    R_SizeValue numberOfBytes,
-    R_SizeValue* numberOfSymbols
+    Arcadia_SizeValue numberOfBytes,
+    Arcadia_SizeValue* numberOfSymbols
   );
 
 #endif // R_UTF8_H_INCLUDED

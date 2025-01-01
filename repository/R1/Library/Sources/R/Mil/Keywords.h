@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,38 +23,41 @@
 /// @code
 /// class R.Mil.Keywords
 /// @endcode
-Rex_declareObjectType("R.Mil.Keywords", R_Mil_Keywords, "R.Object");
+Rex_declareObjectType(u8"R.Mil.Keywords", R_Mil_Keywords, u8"R.Object");
 
 /// @brief Create a MIL keywords object.
 /// @return A pointer to this CIL keywords object.
 R_Mil_Keywords*
 R_Mil_Keywords_create
   (
+    Arcadia_Process* process
   );
 
 /// @brief Add a MIL keyword.
 /// @param string The string of the keyword.
 /// @param type The type of the keyword
-/// @error R_Status_Exists The keyword already was added.
+/// @error Arcadia_Status_Exists The keyword already was added.
 void
 R_Mil_Keywords_add
   (
+    Arcadia_Process* process,
     R_Mil_Keywords* self,
     R_String* string,
-    R_Natural32Value type
+    Arcadia_Natural32Value type
   );
 
 /// @brief Get the token type.
 /// @param self A pointer to this MIL keyword scanner.
 /// @param string The string to be tested for being a keyword.
 /// @param tokenType A pointer to a variable that is assigned the keyword's token type if the string is a keyword. Not modified otherwise.
-/// @return R_BooleanValue_True if the specified string was a keyword. #R_BooleanValue_False otherwise.
-R_BooleanValue
+/// @return Arcadia_BooleanValue_True if the specified string was a keyword. #Arcadia_BooleanValue_False otherwise.
+Arcadia_BooleanValue
 R_Mil_Keywords_scan
   (
+    Arcadia_Process* process,
     R_Mil_Keywords* self,
     R_String* string,
-    R_Natural32Value* tokenType
+    Arcadia_Natural32Value* tokenType
   );
 
 #endif // R_MIL_KEYWORDS_H_INCLUDED

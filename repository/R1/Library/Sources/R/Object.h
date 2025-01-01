@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,62 +18,70 @@
 #if !defined(R_OBJECT_H_INCLUDED)
 #define R_OBJECT_H_INCLUDED
 
-#include "R/Types.h"
+#include "Arcadia/Ring1/Implementation/Types.h"
 typedef struct R_String R_String;
 typedef struct R_Value R_Value;
 
 
 typedef struct R_Object R_Object;
-R_Type* \
+Arcadia_TypeValue
 _R_Object_getType
   (
+    Arcadia_Process* process
   );
 
 struct R_Object {
   int dummy;
 };
 
-// R(untime) ex(tension) macro.
-#define Rex_declareObjectType(cilName, cName, cilParentName) \
-  typedef struct cName cName; \
-  R_Type* \
-  _##cName##_getType \
+#define Rex_superTypeConstructor(_process, _type, ...) \
+  Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(_type))->objectTypeOperations->construct(_process, __VA_ARGS__)
+
+/// R(untime) ex(tension) macro.
+/// @param _cilName, _cilParentName UTF8 string literals for the Common Intermediate Language type names of the type and its parent type.
+#define Rex_declareObjectType(_cilName, _cName, _cilParentName) \
+  typedef struct _cName _cName; \
+  Arcadia_TypeValue \
+  _##_cName##_getType \
     ( \
+      Arcadia_Process* process \
     );
 
-// R(untime) ex(tension) macro.
-// TODO: FIXME: If _getObjectType fails then _type is still null althought _registerObjectType was successful.
-#define Rex_defineObjectType(cilName, cName, cilParentName, cParentName, cTypeOperations) \
-  static R_Type* g_##cName##_type = NULL; \
+/// R(untime) ex(tension) macro.
+/// @param _cilName, _cilParentName UTF8 string literals for the Common Intermediate Language type names of the type and its parent type.
+#define Rex_defineObjectType(_cilName, _cName, _cilParentName, _cParentName, _cTypeOperations) \
+  static Arcadia_TypeValue g_##_cName##_type = NULL; \
   \
   static void \
-  _##cName##_typeDestructing \
+  _##_cName##_typeDestructing \
     ( \
       void *context \
     ) \
   { \
-    g_##cName##_type = NULL; \
+    g_##_cName##_type = NULL; \
   } \
   \
-  R_Type* \
-  _##cName##_getType \
+  Arcadia_TypeValue \
+  _##_cName##_getType \
     ( \
+      Arcadia_Process* process \
     ) \
   { \
-    if (!g_##cName##_type) { \
-      R_Type* parentType = _##cParentName##_getType(); \
-      R_registerObjectType(u8##cilName, sizeof(u8##cilName) - 1, sizeof(cName), parentType, cTypeOperations, &_##cName##_typeDestructing); \
-      g_##cName##_type = R_getType(u8##cilName, sizeof(u8##cilName) - 1); \
+    if (!g_##_cName##_type) { \
+      Arcadia_TypeValue parentType = _##_cParentName##_getType(process); \
+      g_##_cName##_type = R_registerObjectType(process, _cilName, sizeof(_cilName) - 1, sizeof(_cName), parentType, _cTypeOperations, &_##_cName##_typeDestructing); \
     } \
-    return g_##cName##_type; \
+    return g_##_cName##_type; \
   }
 
+/// @todo Make static.
 void
 R_Object_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
 /*
@@ -91,8 +99,9 @@ R_Object_constructImpl
 void*
 R_allocateObject
   (
-    R_Type* type,
-    R_SizeValue numberOfArgumentValues,
+    Arcadia_Process* process,
+    Arcadia_TypeValue type,
+    Arcadia_SizeValue numberOfArgumentValues,
     R_Value* argumentValues
   );
 
@@ -100,7 +109,7 @@ void
 R_Object_setType
   (
     void* self,
-    R_Type* type
+    Arcadia_TypeValue type
   );
 
 /// @brief Visit an object.
@@ -116,6 +125,7 @@ R_Object_visit
 void
 R_Object_lock
   (
+    Arcadia_Process* process,
     void* self
   );
 
@@ -124,27 +134,30 @@ R_Object_lock
 void
 R_Object_unlock
   (
+    Arcadia_Process* process,
     void* self
   );
 
 /// @brief Get the type of an object.
 /// @param self A pointer to the object.
 /// @return The type of an object.
-R_Type*
+Arcadia_TypeValue
 R_Object_getType
   (
     void* self
   );
 
-R_SizeValue
+Arcadia_SizeValue
 R_Object_hash
   (
+    Arcadia_Process* process,
     R_Object* self
   );
 
 R_Object*
 R_Object_add
   (
+    Arcadia_Process* process,
     R_Object* self,
     R_Value const* other
   );
@@ -152,48 +165,55 @@ R_Object_add
 R_Object*
 R_Object_subtract
   (
+    Arcadia_Process* process,
     R_Object* self,
     R_Value const* other
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Object_equalTo
   (
+    Arcadia_Process* process,
     R_Object* self,
     R_Value const* other
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Object_greaterThan
   (
+    Arcadia_Process* process,
     R_Object* self,
     R_Value const* other
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Object_greaterThanOrEqualTo
   (
+    Arcadia_Process* process,
     R_Object* self,
     R_Value const* other
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Object_lowerThan
   (
+    Arcadia_Process* process,
     R_Object* self,
     R_Value const* other
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Object_lowerThanOrEqualTo
   (
+    Arcadia_Process* process,
     R_Object* self,
     R_Value const* other
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Object_notEqualTo
   (
+    Arcadia_Process* process,
     R_Object* self,
     R_Value const* other
   );
@@ -201,6 +221,7 @@ R_Object_notEqualTo
 R_String*
 R_Object_toString
   (
+    Arcadia_Process* process,
     R_Object* self
   );
 

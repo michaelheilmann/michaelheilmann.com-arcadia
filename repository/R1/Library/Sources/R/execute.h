@@ -6,7 +6,8 @@
 void
 R_executeProcedure
   (
-    R_Interpreter_ProcessState* process,
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess,
     R_Interpreter_Procedure* procedure
   );
 

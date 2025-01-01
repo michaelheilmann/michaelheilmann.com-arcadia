@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,33 +23,34 @@
 void
 main1
   (
+    Arcadia_Process* process,
     int argc,
     char** argv
   )
 {
   R_Value target;
-  R_Value_setVoidValue(&target,R_VoidValue_Void);
-  R_List* arguments = R_List_create();
+  R_Value_setVoidValue(&target,Arcadia_VoidValue_Void);
+  R_List* arguments = R_List_create(process);
   for (int argi = 1; argi < argc; ++argi) {
-    R_String* argument = R_String_create_pn(R_ImmutableByteArray_create(argv[argi], strlen(argv[argi])));
-    R_List_appendObjectReferenceValue(arguments, (R_ObjectReferenceValue)argument);
+    R_String* argument = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, argv[argi], strlen(argv[argi])));
+    R_List_appendObjectReferenceValue(process, arguments, (R_ObjectReferenceValue)argument);
   }
-  for (R_SizeValue i = 0, n = R_List_getSize(arguments); i < n; ++i) {
-    R_String* argument = (R_String*)R_List_getObjectReferenceValueAt(arguments, i);
-    R_Utf8StringReader *r = R_Utf8StringReader_create(argument);
+  for (Arcadia_SizeValue i = 0, n = R_List_getSize(arguments); i < n; ++i) {
+    R_String* argument = (R_String*)R_List_getObjectReferenceValueAt(process, arguments, i);
+    R_Utf8StringReader *r = R_Utf8StringReader_create(process, argument);
     R_String *key = NULL,
              *value = NULL;
-    if (!R_CommandLine_parseArgument((R_Utf8Reader*)r, &key, &value)) {
-      R_setStatus(R_Status_ArgumentValueInvalid);
-      R_jump();
+    if (!R_CommandLine_parseArgument(process, (R_Utf8Reader*)r, &key, &value)) {
+      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Process_jump(process);
     }
     if (R_String_isEqualTo_pn(key, u8"target", sizeof(u8"target") - 1)) {
       if (!value) {
-        R_CommandLine_raiseNoValueError(key);
+        R_CommandLine_raiseNoValueError(process, key);
       }
       R_Value_setObjectReferenceValue(&target, value);
     } else {
-      R_CommandLine_raiseUnknownArgumentError(key, value);
+      R_CommandLine_raiseUnknownArgumentError(process, key, value);
     }
     fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
     if (value) {
@@ -59,18 +60,18 @@ main1
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
   if (R_Value_isVoidValue(&target)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(R_String_create_pn(R_ImmutableByteArray_create(u8"target", sizeof(u8"target") - 1)));
+    R_CommandLine_raiseRequiredArgumentMissingError(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"target", sizeof(u8"target") - 1)));
   }
-  TextureFontWindows* font = TextureFontWindows_create();
-  PixelBuffer* pixelBuffer = TextureFontWindows_getPixelBuffer(font);
+  TextureFontWindows* font = TextureFontWindows_create(process);
+  PixelBuffer* pixelBuffer = TextureFontWindows_getPixelBuffer(process, font);
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
-  ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create();
+  ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(process);
 #elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
   ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create();
 #else
   #error("environment not (yet) supported")
 #endif
-  ImageWriter_writePngToPath(imageWriter, pixelBuffer, R_Value_getObjectReferenceValue(&target));
+  ImageWriter_writePngToPath(process, imageWriter, pixelBuffer, R_Value_getObjectReferenceValue(&target));
 }
 
 int
@@ -80,18 +81,25 @@ main
     char** argv
   )
 {
-  R_Status status[2];
+  Arcadia_Status status[2];
   status[0] = R_startup();
   if (status[0]) {
     return EXIT_FAILURE;
   }
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    main1(argc, argv);
-    R_popJumpTarget();
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    R_shutdown();
+    return EXIT_FAILURE;
   }
-  status[0] = R_getStatus();
+  R_JumpTarget jumpTarget;
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  if (R_JumpTarget_save(&jumpTarget)) {
+    main1(process, argc, argv);
+  }
+  Arcadia_Process_popJumpTarget(process);
+  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   status[1] = R_shutdown();
   if (status[1] || status[0]) {
     return EXIT_FAILURE;

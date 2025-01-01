@@ -1,0 +1,20 @@
+
+class MyClassB extends MyClassA {
+
+  variable myVariable1
+
+  constructor
+  {}
+
+  constructor(myVariable2,b)
+  {
+    variable myVariable3
+  }
+
+  method MyMethodA
+  {}
+
+  method MyMethodB(a, b)
+  {}
+
+}

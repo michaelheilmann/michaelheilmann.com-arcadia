@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,10 +19,10 @@
 #define R_FILESYSTEM_H_INCLUDED
 
 #include "R/Configure.h"
-#include "R/Boolean.h"
+#include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "R/ByteBuffer.h"
-#include "R/Natural8.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Natural8.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct R_FileHandle R_FileHandle;
 typedef struct R_FilePath R_FilePath;
 
@@ -31,7 +31,7 @@ typedef struct R_FilePath R_FilePath;
 ///   constructor()
 /// }
 /// @endcode
-Rex_declareObjectType("R.FileSystem", R_FileSystem, "R.Object");
+Rex_declareObjectType(u8"R.FileSystem", R_FileSystem, u8"R.Object");
 
 struct R_FileSystem {
   R_Object _parent;
@@ -41,12 +41,14 @@ struct R_FileSystem {
 R_FileSystem*
 R_FileSystem_create
   (
+    Arcadia_Process* process
   );
 
 // https://michaelheilmann.com/repository/R1/#r-filesystem-getfilecontents
 R_ByteBuffer*
 R_FileSystem_getFileContents
   (
+    Arcadia_Process* process,
     R_FileSystem* self,
     R_FilePath* path
   );
@@ -55,6 +57,7 @@ R_FileSystem_getFileContents
 void
 R_FileSystem_setFileContents
   (
+    Arcadia_Process* process,
     R_FileSystem* self,
     R_FilePath* path,
     R_ByteBuffer * contents
@@ -64,20 +67,23 @@ R_FileSystem_setFileContents
 void
 R_FileSystem_createDirectory
   (
+    Arcadia_Process* process,
     R_FileSystem* self,
     R_FilePath* path
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_FileSystem_regularFileExists
   (
+    Arcadia_Process* process,
     R_FileSystem* self,
     R_FilePath* path
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_FileSystem_directoryFileExists
   (
+    Arcadia_Process* process,
     R_FileSystem* self,
     R_FilePath* path
   );
@@ -85,6 +91,7 @@ R_FileSystem_directoryFileExists
 R_FilePath*
 R_FileSystem_getWorkingDirectory
   (
+    Arcadia_Process* process,
     R_FileSystem* self
   );
 

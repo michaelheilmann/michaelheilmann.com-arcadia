@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,9 +19,10 @@
 
 #include "R/Convert/parse.i"
 
-R_Real32Value
+Arcadia_Real32Value
 toReal32
   (
+    Arcadia_Process* process,
     State* state
   )
 {
@@ -36,15 +37,15 @@ toReal32
   } else if (isPeriod(state)) {
     next(state);
     if (!isDigit(state)) {
-      R_setStatus(R_Status_ConversionFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+      Arcadia_Process_jump(process);
     }
     do {
       next(state);
     } while (isDigit(state));
   } else {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   if (isExponentPrefix(state)) {
     next(state);
@@ -52,8 +53,8 @@ toReal32
       next(state);
     }
     if (!isDigit(state)) {
-      R_setStatus(R_Status_ConversionFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+      Arcadia_Process_jump(process);
     }
     do {
       next(state);
@@ -62,24 +63,25 @@ toReal32
   // @todo: Should be replaced by a "to_chars"-like function.
   char* start;
   if (Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), &start, (state->end - state->start) + 1)) {
-    R_setStatus(R_Status_AllocationFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
+    Arcadia_Process_jump(process);
   }
   c_memcpy(start, state->start, state->end - state->start);
   start[state->end - state->start] = '\0';
   char* end;
   float d = strtof(start, &end);
   if (start == end) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   Arms_MemoryManager_deallocate(Arms_getDefaultMemoryManager(), start);
   return d;
 }
 
-R_Real32Value
+Arcadia_Real32Value
 toReal64
   (
+    Arcadia_Process* process,
     State* state
   )
 {
@@ -94,15 +96,15 @@ toReal64
   } else if (isPeriod(state)) {
     next(state);
     if (!isDigit(state)) {
-      R_setStatus(R_Status_ConversionFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+      Arcadia_Process_jump(process);
     }
     do {
       next(state);
     } while (isDigit(state));
   } else {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   if (isExponentPrefix(state)) {
     next(state);
@@ -110,8 +112,8 @@ toReal64
       next(state);
     }
     if (!isDigit(state)) {
-      R_setStatus(R_Status_ConversionFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+      Arcadia_Process_jump(process);
     }
     do {
       next(state);
@@ -120,26 +122,27 @@ toReal64
   // @todo: Should be replaced by a "to_chars"-like function.
   char* start;
   if (Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), &start, (state->end - state->start) + 1)) {
-    R_setStatus(R_Status_AllocationFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
+    Arcadia_Process_jump(process);
   }
   c_memcpy(start, state->start, state->end - state->start);
   start[state->end - state->start] = '\0';
   char* end = NULL;
   double d = strtod(start, &end);
   if (start == end) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   Arms_MemoryManager_deallocate(Arms_getDefaultMemoryManager(), start);
   return d;
 }
 
-R_Real32Value
+Arcadia_Real32Value
 R_toReal32
   (
+    Arcadia_Process* process,
     char const* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -147,14 +150,15 @@ R_toReal32
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toReal32(&state);
+  return toReal32(process, &state);
 }
 
-R_Real64Value
+Arcadia_Real64Value
 R_toReal64
   (
+    Arcadia_Process* process,
     char const* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -162,5 +166,5 @@ R_toReal64
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toReal64(&state);
+  return toReal64(process, &state);
 }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,9 +18,7 @@
 #include "R/Utf8ByteBufferWriter.h"
 
 #include "R/ByteBuffer.h"
-#include "R/JumpTarget.h"
 #include "R/Object.h"
-#include "R/Status.h"
 #include "R/Utf8/EncodeCodePoints.h"
 #include "R/Value.h"
 #include "R/cstdlib.h"
@@ -28,31 +26,35 @@
 static void
 R_Utf8ByteBufferWriter_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
 static void
 R_Utf8ByteBufferWriter_visit
   (
+    Arcadia_Process* process,
     R_Utf8ByteBufferWriter* self
   );
 
 static void
 R_Utf8ByteBufferWriter_writeBytesImpl
   (
+    Arcadia_Process* process,
     R_Utf8ByteBufferWriter* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 static void
 R_Utf8ByteBufferWriter_writeCodePointsImpl
   (
+    Arcadia_Process* process,
     R_Utf8ByteBufferWriter* self,
-    R_Natural32Value const* codePoints,
-    R_SizeValue numberOfCodePoints
+    Arcadia_Natural32Value const* codePoints,
+    Arcadia_SizeValue numberOfCodePoints
   );
 
 static const R_ObjectType_Operations _objectTypeOperations = {
@@ -61,7 +63,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = &R_Utf8ByteBufferWriter_visit,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -81,39 +83,41 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("R.Utf8ByteBufferWriter", R_Utf8ByteBufferWriter, "R.Utf8Writer", R_Utf8Writer, &_typeOperations);
+Rex_defineObjectType(u8"R.Utf8ByteBufferWriter", R_Utf8ByteBufferWriter, u8"R.Utf8Writer", R_Utf8Writer, &_typeOperations);
 
 static void
 R_Utf8ByteBufferWriter_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   R_Utf8ByteBufferWriter* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _R_Utf8ByteBufferWriter_getType();
+  Arcadia_TypeValue _type = _R_Utf8ByteBufferWriter_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void }, };
-    R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
-    R_setStatus(R_Status_NumberOfArgumentsInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Process_jump(process);
   }
-  if (!R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_ByteBuffer_getType())) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+  if (!Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[0]), _R_ByteBuffer_getType(process))) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   _self->target = R_Value_getObjectReferenceValue(&argumentValues[0]);
-  R_UTF8WRITER(_self)->writeBytes = (void (*)(R_Utf8Writer*, void const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeBytesImpl;
-  R_UTF8WRITER(_self)->writeCodePoints = (void (*)(R_Utf8Writer*, R_Natural32Value const*, R_SizeValue)) & R_Utf8ByteBufferWriter_writeCodePointsImpl;
+  ((R_Utf8Writer*)_self)->writeBytes = (void (*)(Arcadia_Process*, R_Utf8Writer*, void const*, Arcadia_SizeValue)) & R_Utf8ByteBufferWriter_writeBytesImpl;
+  ((R_Utf8Writer*)_self)->writeCodePoints = (void (*)(Arcadia_Process*, R_Utf8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & R_Utf8ByteBufferWriter_writeCodePointsImpl;
   R_Object_setType(_self, _type);
 }
 
 static void
 R_Utf8ByteBufferWriter_visit
   (
+    Arcadia_Process* process,
     R_Utf8ByteBufferWriter* self
   )
 {
@@ -123,67 +127,68 @@ R_Utf8ByteBufferWriter_visit
 static void
 R_Utf8ByteBufferWriter_writeBytesImpl
   (
+    Arcadia_Process* process,
     R_Utf8ByteBufferWriter* self,
     const void* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   )
 {
   if (!numberOfBytes) {
     return;
   }
-  for (R_Natural8Value const* current = (R_Natural8Value const*)bytes, *end = (R_Natural8Value const*)bytes + numberOfBytes; current != end; ) {
-    R_Natural8Value x = *current;
+  for (Arcadia_Natural8Value const* current = (Arcadia_Natural8Value const*)bytes, *end = (Arcadia_Natural8Value const*)bytes + numberOfBytes; current != end; ) {
+    Arcadia_Natural8Value x = *current;
     if (x <= 0x7f) {
-      R_ByteBuffer_append_pn(self->target, current, 1);
+      R_ByteBuffer_append_pn(process, self->target, current, 1);
       current++;
     } else if (x <= 0x7ff) {
-      R_ByteBuffer_append_pn(self->target, current, 1);
+      R_ByteBuffer_append_pn(process, self->target, current, 1);
       if (end - current < 2) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
       current++;
       for (size_t i = 1; i < 2; ++i) {
         if (0x80 != (*current) & 0xc0) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
-        R_ByteBuffer_append_pn(self->target, current, 1);
+        R_ByteBuffer_append_pn(process, self->target, current, 1);
         current++;
       }
     } else if (x <= 0xffff) {
-      R_ByteBuffer_append_pn(self->target, current, 1);
+      R_ByteBuffer_append_pn(process, self->target, current, 1);
       if (end - current < 3) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
       current++;
       for (size_t i = 1; i < 3; ++i) {
         if (0x80 != (*current) & 0xc0) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
-        R_ByteBuffer_append_pn(self->target, current, 1);
+        R_ByteBuffer_append_pn(process, self->target, current, 1);
         current++;
       }
     } else if (x <= 0x10ffff) {
-      R_ByteBuffer_append_pn(self->target, current, 1);
+      R_ByteBuffer_append_pn(process, self->target, current, 1);
       if (end - current < 4) {
-        R_setStatus(R_Status_EncodingInvalid);
-        R_jump();
+        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+        Arcadia_Process_jump(process);
       }
       current++;
       for (size_t i = 1; i < 4; ++i) {
         if (0x80 != (*current) & 0xc0) {
-          R_setStatus(R_Status_EncodingInvalid);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+          Arcadia_Process_jump(process);
         }
-        R_ByteBuffer_append_pn(self->target, current, 1);
+        R_ByteBuffer_append_pn(process, self->target, current, 1);
         current++;
       }
     } else {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+      Arcadia_Process_jump(process);
     }
   }
 }
@@ -191,21 +196,23 @@ R_Utf8ByteBufferWriter_writeBytesImpl
 static void
 R_Utf8ByteBufferWriter_writeCodePointsImpl
   (
+    Arcadia_Process* process,
     R_Utf8ByteBufferWriter* self,
-    R_Natural32Value const* codePoints,
-    R_SizeValue numberOfCodePoints
+    Arcadia_Natural32Value const* codePoints,
+    Arcadia_SizeValue numberOfCodePoints
   )
 {
-  R_Utf8_encodeCodePoints(codePoints, numberOfCodePoints, self->target, (void (*)(void*, R_Natural8Value const*, R_SizeValue)) & R_ByteBuffer_append_pn);
+  R_Utf8_encodeCodePoints(process, codePoints, numberOfCodePoints, self->target, (void (*)(Arcadia_Process*, void*, Arcadia_Natural8Value const*, Arcadia_SizeValue)) & R_ByteBuffer_append_pn);
 }
 
 R_Utf8ByteBufferWriter*
 R_Utf8ByteBufferWriter_create
   (
+    Arcadia_Process* process,
     R_ByteBuffer* target
   )
 {
   R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)target } };
-  R_Utf8ByteBufferWriter* self = R_allocateObject(_R_Utf8ByteBufferWriter_getType(), 1, &argumentValues[0]);
+  R_Utf8ByteBufferWriter* self = R_allocateObject(process, _R_Utf8ByteBufferWriter_getType(process), 1, &argumentValues[0]);
   return self;
 }

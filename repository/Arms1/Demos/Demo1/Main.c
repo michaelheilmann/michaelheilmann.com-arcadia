@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -76,13 +76,13 @@ int main(int argc, char **argv) {
   if (Arms_startup()) {
     return EXIT_FAILURE;
   }
-  if (Arms_addType("Sender", strlen("Sender"), NULL, (Arms_VisitCallbackFunction*)&Sender_visit, (Arms_FinalizeCallbackFunction*)&Sender_finalize)) {
+  if (Arms_addType("Sender", strlen("Sender"), NULL, NULL, (Arms_VisitCallbackFunction*)&Sender_visit, (Arms_FinalizeCallbackFunction*)&Sender_finalize)) {
     Arms_RunStatistics statistics = { .destroyed = 0 };
     Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
-  if (Arms_addType("Message", strlen("Message"), NULL, (Arms_VisitCallbackFunction*) & Message_visit, (Arms_FinalizeCallbackFunction*) & Message_finalize)) {
+  if (Arms_addType("Message", strlen("Message"), NULL, NULL, (Arms_VisitCallbackFunction*) & Message_visit, (Arms_FinalizeCallbackFunction*) & Message_finalize)) {
     Arms_RunStatistics statistics = { .destroyed = 0 };
     Arms_run(&statistics);
     Arms_shutdown();

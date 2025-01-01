@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -59,6 +59,7 @@ struct Arms_Type {
   Arms_Type* next;
   uint8_t* name;
   size_t nameLength;
+  void* context;
   Arms_TypeRemovedCallbackFunction* typeRemoved;
   Arms_VisitCallbackFunction* visit;
   Arms_FinalizeCallbackFunction* finalize;
@@ -263,7 +264,7 @@ Arms_shutdown
       Arms_Type* type = g_types;
       g_types = type->next;
       if (type->typeRemoved) {
-        type->typeRemoved(type->name, type->nameLength);
+        type->typeRemoved(type->context, type->name, type->nameLength);
       }
       free(type->name);
       type->name = NULL;
@@ -284,6 +285,7 @@ Arms_addType
   (
     Arms_Natural8 const* name,
     Arms_Size nameLength,
+    void* context,
     Arms_TypeRemovedCallbackFunction* typeRemoved,
     Arms_VisitCallbackFunction* visit,
     Arms_FinalizeCallbackFunction* finalize
@@ -292,6 +294,7 @@ Arms_addType
   if (!name) {
     return Arms_Status_ArgumentValueInvalid;
   }
+
   for (Arms_Type* type = g_types; NULL != type; type = type->next) {
     if (type->nameLength == nameLength){
       if (!memcmp(type->name, name, nameLength)) {
@@ -299,10 +302,12 @@ Arms_addType
       }
     }
   }
+
   Arms_Type* type = malloc(sizeof(Arms_Type));
   if (!type) {
     return Arms_Status_AllocationFailed;
   }
+
   type->nameLength = nameLength;
   type->name = malloc(nameLength > 0 ? nameLength : 1);
   if (!type->name) {
@@ -311,7 +316,8 @@ Arms_addType
     return Arms_Status_AllocationFailed;
   }
   memcpy(type->name, name, nameLength);
-  
+
+  type->context = context;
   type->typeRemoved = typeRemoved;
   type->visit = visit;
   type->finalize = finalize;
@@ -392,7 +398,7 @@ Arms_run
     g_grayObjects = object->grayNext;
     Arms_Tag_setBlack(object);
     if (object->type->visit) {
-      object->type->visit(object + 1);
+      object->type->visit(object->type->context, object + 1);
     }
   }
   // Sweep phase:
@@ -407,7 +413,7 @@ Arms_run
       *previousObject = currentObject->universeNext;
       currentObject = currentObject->universeNext;
       if (deadObject->type->finalize) {
-        deadObject->type->finalize(deadObject + 1);
+        deadObject->type->finalize(deadObject->type->context, deadObject + 1);
       }
       destroyed++;
       free(deadObject);

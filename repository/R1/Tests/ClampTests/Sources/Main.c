@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,52 +22,61 @@
 /// @todo Add to R's test utilities.
 #define R_Test_assert(result) \
   if (!(result)) { \
-    R_setStatus(R_Status_TestFailed); \
-    R_jump(); \
+    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
+    Arcadia_Process_jump(process); \
   }
 
 static void
 clampTests
   (
+    Arcadia_Process* process
   )
 {
-#define Do(Type) \
-  R_Test_assert(R_##Type##Value_Literal(0) == R_clamp##Type##Value(R_##Type##Value_Literal(0), R_##Type##Value_Minimum,    R_##Type##Value_Maximum)); \
-  R_Test_assert(R_##Type##Value_Literal(0) == R_clamp##Type##Value(R_##Type##Value_Minimum,    R_##Type##Value_Literal(0), R_##Type##Value_Maximum)); \
-  R_Test_assert(R_##Type##Value_Literal(0) == R_clamp##Type##Value(R_##Type##Value_Maximum,    R_##Type##Value_Minimum,    R_##Type##Value_Literal(0))); \
-  R_Test_assert(R_##Type##Value_Minimum    == R_clamp##Type##Value(R_##Type##Value_Maximum,    R_##Type##Value_Minimum,    R_##Type##Value_Minimum)); \
-  R_Test_assert(R_##Type##Value_Maximum    == R_clamp##Type##Value(R_##Type##Value_Minimum,    R_##Type##Value_Maximum,    R_##Type##Value_Maximum));
+#define Do(Type, Suffix) \
+  R_Test_assert(Type##Value_Literal(0) == R_clamp##Suffix##Value(process, Type##Value_Literal(0), Type##Value_Minimum,    Type##Value_Maximum)); \
+  R_Test_assert(Type##Value_Literal(0) == R_clamp##Suffix##Value(process, Type##Value_Minimum,    Type##Value_Literal(0), Type##Value_Maximum)); \
+  R_Test_assert(Type##Value_Literal(0) == R_clamp##Suffix##Value(process, Type##Value_Maximum,    Type##Value_Minimum,    Type##Value_Literal(0))); \
+  R_Test_assert(Type##Value_Minimum    == R_clamp##Suffix##Value(process, Type##Value_Maximum,    Type##Value_Minimum,    Type##Value_Minimum)); \
+  R_Test_assert(Type##Value_Maximum    == R_clamp##Suffix##Value(process, Type##Value_Minimum,    Type##Value_Maximum,    Type##Value_Maximum));
 
-  Do(Integer8);
-  Do(Integer16);
-  Do(Integer32);
-  Do(Integer64);
+  Do(Arcadia_Integer16, Integer16)
+  Do(Arcadia_Integer32, Integer32)
+  Do(Arcadia_Integer64, Integer64)
+  Do(Arcadia_Integer8, Integer8)
 
-  Do(Natural8);
-  Do(Natural16);
-  Do(Natural32);
-  Do(Natural64);
+  Do(Arcadia_Natural16, Natural16)
+  Do(Arcadia_Natural32, Natural32)
+  Do(Arcadia_Natural64, Natural64)
+  Do(Arcadia_Natural8, Natural8)
 
-  Do(Size);
+  Do(Arcadia_Size, Size)
 
 #undef Do
 }
 
-static bool safeExecute(void (*f)()) {
+static bool safeExecute(void (*f)(Arcadia_Process*)) {
   bool result = true;
-  R_Status status = R_startup();
+  Arcadia_Status status = R_startup();
   if (status) {
     result = false;
     return result;
   }
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    R_shutdown();
+    result = false;
+    return result;
+  }
   R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    (*f)();
+    (*f)(process);
   } else {
     result = false;
   }
-  R_popJumpTarget();
+  Arcadia_Process_popJumpTarget(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   status = R_shutdown();
   if (status) {
     result = false;

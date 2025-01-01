@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -56,7 +56,7 @@ typedef struct R_Interpreter_Variable R_Interpreter_Variable;
 /// 
 /// PARAMETER VARIABLES
 /// The parameter variables x1, x2, ..., xn of a procedure or method or constructor are stored in the registers 0, ..., n - 1.
-Rex_declareObjectType("R.Interpreter.Class", R_Interpreter_Class, "R.Object");
+Rex_declareObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"R.Object");
 
 struct R_Interpreter_Class {
   R_Object _parent;
@@ -69,7 +69,7 @@ struct R_Interpreter_Class {
   R_Map* classMembers;
 
   /// The number of variables (synthetic) getVarsDefined(cls) := |cls.varsDefined| + getVarsDefined(cls.extendedClass).
-  R_SizeValue numberOfVariables;
+  Arcadia_SizeValue numberOfVariables;
 
   /// Used for link
   R_Map* methodDispatch;
@@ -79,12 +79,13 @@ struct R_Interpreter_Class {
   /// Otherwise a pointer to the extended class if it was resolved successfully.
   R_Interpreter_Class* extendedClass;
   /// If this class is complete.
-  R_BooleanValue complete;
+  Arcadia_BooleanValue complete;
 };
 
 R_Interpreter_Class*
 R_Interpreter_Class_create
   (
+    Arcadia_Process* process,
     R_String* className,
     R_String* extendedClassName
   );
@@ -92,6 +93,7 @@ R_Interpreter_Class_create
 void
 R_Interpreter_Class_addConstructor
   (
+    Arcadia_Process* process,
     R_Interpreter_Class* self,
     R_Interpreter_Constructor* constructor
   );
@@ -99,6 +101,7 @@ R_Interpreter_Class_addConstructor
 void
 R_Interpreter_Class_addMethod
   (
+    Arcadia_Process* process,
     R_Interpreter_Class* self,
     R_Interpreter_Method* method
   );
@@ -106,6 +109,7 @@ R_Interpreter_Class_addMethod
 void
 R_Interpreter_Class_addVariable
   (
+    Arcadia_Process* process,
     R_Interpreter_Class* self,
     R_Interpreter_Variable* variable
   );
@@ -113,6 +117,7 @@ R_Interpreter_Class_addVariable
 void
 R_Interpreter_Class_complete
   (
+    Arcadia_Process* process,
     R_Interpreter_Class* self,
     R_Interpreter_ProcessState* processState
   );

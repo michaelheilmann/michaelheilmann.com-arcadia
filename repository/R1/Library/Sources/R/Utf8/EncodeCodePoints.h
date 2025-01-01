@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,9 +22,9 @@
   #error("R/Utf8/EncodeCodePoints.h must not be included from public header")
 #endif
 
-#include "R/Natural8.h"
-#include "R/Natural32.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Natural8.h"
+#include "Arcadia/Ring1/Implementation/Natural32.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
 /// @brief Encode a sequence of Unicode code points to their corresponding sequence of UTF-8 Bytes.
 /// Given a sequence of code points x_1, ..., x_n then callbackFunction is invoked for each code point in ascending order at most once.
@@ -33,10 +33,11 @@
 void
 R_Utf8_encodeCodePoints
   (
-    R_Natural32Value const* codePoints,
-    R_SizeValue numberOfCodePoints,
+    Arcadia_Process* process,
+    Arcadia_Natural32Value const* codePoints,
+    Arcadia_SizeValue numberOfCodePoints,
     void* callbackContext,
-    void (*callbackFunction)(void *callbackContext, R_Natural8Value const* bytes, R_SizeValue numberOfBytes)
+    void (*callbackFunction)(Arcadia_Process*, void *callbackContext, Arcadia_Natural8Value const* bytes, Arcadia_SizeValue numberOfBytes)
   );
 
 #endif // R_UTF8_ENCODECODEPOINTS_H_INCLUDED

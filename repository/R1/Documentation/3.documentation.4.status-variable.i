@@ -1,4 +1,4 @@
-  <h3 id="status-variable">Status Variable</h3>
+  <h3 id="status-variable">3.4. Status Variable</h3>
   <p>R provides a global status variable.</p>
 
   <p><code>

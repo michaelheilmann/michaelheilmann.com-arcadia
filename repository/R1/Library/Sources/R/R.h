@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,61 +20,30 @@
 
 #include "R/ArmsIntegration.h"
 
-#include "R/Boolean.h"
 
 #include "R/ByteBuffer.h"
 
-#include "R/clamp.h"
 #include "R/CommandLine/Include.h"
-#include "R/countLeadingZeroes.h"
 
 #include "R/ImmutableByteArray.h"
 
 #include "R/execute.h"
 
-#include "R/ForeignProcedure.h"
+#include "Arcadia/Ring1/Include.h"
 
 #include "R/FileHandle.h"
 #include "R/FilePath.h"
 #include "R/FileSystem.h"
 
-#include "R/getTickCount.h"
-
-#include "R/Integer16.h"
-#include "R/Integer32.h"
-#include "R/Integer64.h"
-#include "R/Integer8.h"
-
-#include "R/isPowerOfTwo.h"
-
-#include "R/JumpTarget.h"
-
 #include "R/List.h"
 
 #include "R/Map.h"
-
-#include "R/maximum.h"
-#include "R/minimum.h"
-
-#include "R/Natural16.h"
-#include "R/Natural32.h"
-#include "R/Natural64.h"
-#include "R/Natural8.h"
-
-#include "R/nextPowerOfTwoGt.h"
-#include "R/nextPowerOfTwoGte.h"
 
 #include "R/Object.h"
 
 #include "R/Interpreter/Procedure.h"
 
 #include "R/Stack.h"
-
-#include "R/swap.h"
-
-#include "R/Size.h"
-
-#include "R/Status.h"
 
 #include "R/String.h"
 #include "R/StringBuffer.h"
@@ -90,14 +59,14 @@
 
 #include "R/Value.h"
 
-#include "R/Void.h"
 
-R_Status
+
+Arcadia_Status
 R_startup
   (
   );
 
-R_Status
+Arcadia_Status
 R_shutdown
   (
   );

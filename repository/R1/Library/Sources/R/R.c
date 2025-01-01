@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,12 +17,13 @@
 
 #include "R/R.h"
 
-#include "R/Atoms.h"
+#include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring1/Implementation/Atoms.private.h" ///< @todo A better solution must be found.
 #include "R/Object.internal.h"
-// For registering the types.
-#include "R/TypeNames.h"
 
 #include "R/ArmsIntegration.private.h"
+
+static Arcadia_Process* g_process = NULL;
 
 typedef uint32_t ReferenceCount;
 #define ReferenceCount_Minimum (UINT32_C(0))
@@ -30,91 +31,72 @@ typedef uint32_t ReferenceCount;
 
 static ReferenceCount g_referenceCount = 0;
 
-R_Status
+Arcadia_Status
 R_startup
   (
   )
 {
   if (g_referenceCount == ReferenceCount_Maximum) {
-    return R_Status_OperationInvalid;
+    return Arcadia_Status_OperationInvalid;
   }
   if (!g_referenceCount) {
-    R_Status status = R_Arms_startup();
-    if (status) {
-      return status;
+    if (Arcadia_Process_get(&g_process)) {
+      return Arcadia_Status_EnvironmentFailed;
     }
     R_JumpTarget jumpTarget;
 
-    R_pushJumpTarget(&jumpTarget);
+    Arcadia_Process_pushJumpTarget(g_process, &jumpTarget);
     if (R_JumpTarget_save(&jumpTarget)) {
-      R_TypeNames_startup();
-      R_popJumpTarget();
+      Arcadia_Atoms_startup(g_process);
+      Arcadia_Process_popJumpTarget(g_process);
     } else {
-      R_popJumpTarget();
+      Arcadia_Process_popJumpTarget(g_process);
       R_Arms_run();
-      R_Arms_shutdown();
-      return R_getStatus();
+      Arcadia_Status status = Arcadia_Process_getStatus(g_process);
+      Arcadia_Process_relinquish(g_process);
+      g_process = NULL;
+      return status;
     }
 
-    R_pushJumpTarget(&jumpTarget);
+    Arcadia_Process_pushJumpTarget(g_process, &jumpTarget);
     if (R_JumpTarget_save(&jumpTarget)) {
-      _R_Types_startup();
-      R_popJumpTarget();
+      Arcadia_Types_startup(g_process);
+      Arcadia_Process_popJumpTarget(g_process);
     } else {
-      R_popJumpTarget();
-      R_TypeNames_onPreMark();
+      Arcadia_Process_popJumpTarget(g_process);
+      Arcadia_Atoms_onPreMark();
       R_Arms_run();
-      R_TypeNames_onPostFinalize(true);
-      R_TypeNames_shutdown();
-      R_Arms_shutdown();
-      return R_getStatus();
-    }
-
-    R_pushJumpTarget(&jumpTarget);
-    if (R_JumpTarget_save(&jumpTarget)) {
-      _R_Object_getType();
-      R_popJumpTarget();
-    } else {
-      R_popJumpTarget();
-
-      _R_Types_shutdown();
-
-      R_TypeNames_onPreMark();
+      Arcadia_Atoms_onFinalize(g_process, Arcadia_BooleanValue_True);
+      Arcadia_Atoms_shutdown(g_process);
       R_Arms_run();
-      R_TypeNames_onPostFinalize(true);
-      R_TypeNames_shutdown();
-
-      R_Arms_run();
-
-      R_Arms_shutdown();
-
-      return R_getStatus();
+      Arcadia_Status status = Arcadia_Process_getStatus(g_process);
+      Arcadia_Process_relinquish(g_process);
+      g_process = NULL;
+      return status;
     }
   }
   g_referenceCount++;
-  return R_Status_Success;
+  return Arcadia_Status_Success;
 }
 
-R_Status
+Arcadia_Status
 R_shutdown
   (
   )
 {
   if (g_referenceCount == ReferenceCount_Minimum) {
-    return R_Status_OperationInvalid;
+    return Arcadia_Status_OperationInvalid;
   }
   if (1 == g_referenceCount) {
-    _R_Types_shutdown();
-
-    R_TypeNames_onPreMark();
+    Arcadia_Types_shutdown(g_process);
+    Arcadia_Atoms_onPreMark();
     R_Arms_run();
-    R_TypeNames_onPostFinalize(true);
-    R_TypeNames_shutdown();
-
+    Arcadia_Atoms_onFinalize(g_process, Arcadia_BooleanValue_True);
+    Arcadia_Atoms_shutdown(g_process);
     R_Arms_run();
-
-    R_Arms_shutdown();
+    Arcadia_Process_relinquish(g_process);
+    g_process = NULL;
   }
   g_referenceCount--;
-  return R_Status_Success;
+  return Arcadia_Status_Success;
 }

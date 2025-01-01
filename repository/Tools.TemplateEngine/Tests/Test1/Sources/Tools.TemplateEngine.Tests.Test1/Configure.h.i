@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -12,3 +12,10 @@
 // WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+// Last modified: 2025-01-01
+
+#if !defined(TOOLS_TEMPLATEENGINE_TESTS_TEST1_CONFIGURE_H_INCLUDED)
+#define TOOLS_TEMPLATEENGINE_TESTS_TEST1_CONFIGURE_H_INCLUDED
+
+#endif // TOOLS_TEMPLATEENGINE_TESTS_TEST1_CONFIGURE_H_INCLUDED

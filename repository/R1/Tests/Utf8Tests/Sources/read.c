@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,8 +19,13 @@
 
 #include "R.h"
 
-void R1_Tests_Utf8_read1() {
-  R_ByteBuffer* sourceByteBuffer = R_ByteBuffer_create();
+void
+R1_Tests_Utf8_read1
+  (
+    Arcadia_Process* process
+  )
+{
+  R_ByteBuffer* sourceByteBuffer = R_ByteBuffer_create(process);
   uint8_t sourceBytes[] = {
     'a',
     'b',
@@ -32,7 +37,7 @@ void R1_Tests_Utf8_read1() {
   };
   size_t numberOfSourceBytes = sizeof(sourceBytes) / sizeof(uint8_t);
   for (uint8_t i = 0, n = numberOfSourceBytes; i < n; ++i) {
-    R_ByteBuffer_append_pn(sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
+    R_ByteBuffer_append_pn(process, sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
   }
 
   uint32_t expectedCodePoints[] = {
@@ -45,24 +50,24 @@ void R1_Tests_Utf8_read1() {
   };
   size_t numberOfExpectedCodePoints = sizeof(expectedCodePoints) / sizeof(uint32_t);
 
-  R_Utf8Reader* reader = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(sourceByteBuffer);
-  R_SizeValue numberOfReceivedCodePoints = 0;
+  R_Utf8Reader* reader = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(process, sourceByteBuffer);
+  Arcadia_SizeValue numberOfReceivedCodePoints = 0;
 
-  while (R_Utf8Reader_hasCodePoint(reader)) {
-    R_Natural32Value receivedCodePoint = R_Utf8Reader_getCodePoint(reader);
+  while (R_Utf8Reader_hasCodePoint(process, reader)) {
+    Arcadia_Natural32Value receivedCodePoint = R_Utf8Reader_getCodePoint(process, reader);
     if (numberOfReceivedCodePoints >= numberOfExpectedCodePoints) {
-      R_setStatus(R_Status_TestFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
+      Arcadia_Process_jump(process);
     }
     if (receivedCodePoint != expectedCodePoints[numberOfReceivedCodePoints]) {
-      R_setStatus(R_Status_TestFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
+      Arcadia_Process_jump(process);
     }
-    R_Utf8Reader_next(reader);
+    R_Utf8Reader_next(process, reader);
     numberOfReceivedCodePoints++;
   }
   if (numberOfReceivedCodePoints != numberOfExpectedCodePoints) {
-    R_setStatus(R_Status_TestFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
+    Arcadia_Process_jump(process);
   }
 }

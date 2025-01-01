@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,21 +21,22 @@
 #include "R.h"
 #include "Module/Visuals/PixelBuffer.h"
 
-Rex_declareObjectType("ImageWriter", ImageWriter, "R.Object");
+Rex_declareObjectType(u8"ImageWriter", ImageWriter, u8"R.Object");
 
 struct ImageWriter {
   R_Object _parent;
-  void (*writePngToPath)(ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_String* targetPath);
-  void (*writePngToByteBuffer)(ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
-  void (*writeBmpToPath)(ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_String* targetPath);
-  void (*writeBmpToByteBuffer)(ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
-  void (*writeIcoToPath)(ImageWriter* self, R_List* sourcePixelBuffers, R_String* targetPath);
-  void (*writeIcoToByteBuffer)(ImageWriter* self, R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer);
+  void (*writePngToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_String* targetPath);
+  void (*writePngToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
+  void (*writeBmpToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_String* targetPath);
+  void (*writeBmpToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
+  void (*writeIcoToPath)(Arcadia_Process* process, ImageWriter* self, R_List* sourcePixelBuffers, R_String* targetPath);
+  void (*writeIcoToByteBuffer)(Arcadia_Process* process, ImageWriter* self, R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer);
 };
 
 void
 ImageWriter_writePngToPath
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     R_String* targetPath
@@ -44,6 +45,7 @@ ImageWriter_writePngToPath
 void
 ImageWriter_writePngToByteBuffer
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     R_ByteBuffer* targetByteBuffer
@@ -52,6 +54,7 @@ ImageWriter_writePngToByteBuffer
 void
 ImageWriter_writeBmpToPath
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     R_String* targetPath
@@ -60,6 +63,7 @@ ImageWriter_writeBmpToPath
 void
 ImageWriter_writeBmpToByteBuffer
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     R_ByteBuffer* targetByteBuffer
@@ -68,6 +72,7 @@ ImageWriter_writeBmpToByteBuffer
 void
 ImageWriter_writeIcoToPath
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     R_List* sourcePixelBuffers,
     R_String* targetPath
@@ -76,6 +81,7 @@ ImageWriter_writeIcoToPath
 void
 ImageWriter_writeIcoToByteBuffer
   (
+    Arcadia_Process* process,
     ImageWriter* self,
     R_List* sourcePixelBuffers,
     R_ByteBuffer* targetByteBuffer

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,29 +19,31 @@
 
 #include "R/Convert/parse.i"
 
-static R_VoidValue
+static Arcadia_VoidValue
 toVoid
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_VoidValue
+static Arcadia_VoidValue
 toVoid
   (
+    Arcadia_Process* process,
     State* state
   )
 {
 #if 0
  // Precondition prevents that.
   if (CodePoint_Start != state->symbol) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
 #endif
 #define check(x) \
   if (!is(state, (x))) { \
-    R_setStatus(R_Status_ConversionFailed); \
-    R_jump(); \
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed); \
+    Arcadia_Process_jump(process); \
   } \
   next(state);
 
@@ -51,13 +53,14 @@ toVoid
   check('i');
   check('d');
   check(CodePoint_End);
-  return R_VoidValue_Void;
+  return Arcadia_VoidValue_Void;
 #undef check
 }
 
-R_VoidValue
+Arcadia_VoidValue
 R_toVoid
   (
+    Arcadia_Process* process,
     char const* p,
     size_t n
   )
@@ -67,5 +70,5 @@ R_toVoid
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toVoid(&state);
+  return toVoid(process, &state);
 }

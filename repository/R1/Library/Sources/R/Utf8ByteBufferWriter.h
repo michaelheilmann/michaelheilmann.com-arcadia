@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,7 +21,7 @@
 #include "R/Utf8Writer.h"
 typedef struct R_ByteBuffer R_ByteBuffer;
 
-Rex_declareObjectType("R.Utf8ByteBufferWriter", R_Utf8ByteBufferWriter, "R.Utf8Writer");
+Rex_declareObjectType(u8"R.Utf8ByteBufferWriter", R_Utf8ByteBufferWriter, u8"R.Utf8Writer");
 
 struct R_Utf8ByteBufferWriter {
   R_Utf8Writer parent;
@@ -31,6 +31,7 @@ struct R_Utf8ByteBufferWriter {
 R_Utf8ByteBufferWriter*
 R_Utf8ByteBufferWriter_create
   (
+    Arcadia_Process* process,
     R_ByteBuffer* target
   );
 

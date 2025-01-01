@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,42 +18,44 @@
 #if !defined(R_UTF8READER_H_INCLUDED)
 #define R_UTF8READER_H_INCLUDED
 
-#include "R/Boolean.h"
-#include "R/Natural32.h"
+#include "Arcadia/Ring1/Implementation/Boolean.h"
+#include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "R/Object.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
-#define R_UTF8READER(x) ((R_Utf8Reader*)(x))
-Rex_declareObjectType("R.Utf8Reader", R_Utf8Reader, "R.Object");
+Rex_declareObjectType(u8"R.Utf8Reader", R_Utf8Reader, u8"R.Object");
 
 struct R_Utf8Reader {
   R_Object _parent;
-  void (*next)(R_Utf8Reader* self);
-  R_Natural32Value (*getCodePoint)(R_Utf8Reader* self);
-  R_BooleanValue (*hasCodePoint)(R_Utf8Reader* self);
-  R_SizeValue (*getByteIndex)(R_Utf8Reader* self);
+  void (*next)(Arcadia_Process*, R_Utf8Reader* self);
+  Arcadia_Natural32Value (*getCodePoint)(Arcadia_Process*, R_Utf8Reader* self);
+  Arcadia_BooleanValue (*hasCodePoint)(Arcadia_Process*, R_Utf8Reader* self);
+  Arcadia_SizeValue (*getByteIndex)(R_Utf8Reader* self);
 };
 
 void
 R_Utf8Reader_next
   (
+    Arcadia_Process* process,
     R_Utf8Reader* self
   );
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Utf8Reader_getCodePoint
   (
+    Arcadia_Process* process,
     R_Utf8Reader* self
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Utf8Reader_hasCodePoint
   (
+    Arcadia_Process* process,
     R_Utf8Reader* self
   );
 
 /// @return The index of the current Byte.
-R_SizeValue
+Arcadia_SizeValue
 R_Utf8Reader_getByteIndex
   (
     R_Utf8Reader* self

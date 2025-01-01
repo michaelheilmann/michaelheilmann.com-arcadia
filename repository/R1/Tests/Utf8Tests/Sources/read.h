@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,7 +26,11 @@
 /// - decode them from the Byte buffer using Utf8ByteBufferReader and compare the decoded Unicode code point to the corresponding Unicode code point of the decoded UTF8 Byte sequence 
 /// - success if they are equal
 /// - failure otherwise
-void R1_Tests_Utf8_read1();
+void
+R1_Tests_Utf8_read1
+  (
+    Arcadia_Process* process
+  );
 
 #endif // R1_TESTS_UTF8_READ_H_INCLUDED
 

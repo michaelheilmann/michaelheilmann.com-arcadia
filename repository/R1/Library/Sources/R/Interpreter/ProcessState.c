@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -33,40 +33,41 @@ R_Interpreter_ProcessState_get
 void
 R_Interpreter_ProcessState_startup
   (
+    Arcadia_Process* process
   )
 {
   if (g_singleton) {
-    R_setStatus(R_Status_Initialized);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_Initialized);
+    Arcadia_Process_jump(process);
   }
   R_Interpreter_ProcessState* singleton = NULL;
-  if (!R_allocateUnmanaged_nojump(&singleton, sizeof(R_Interpreter_ProcessState))) {
-    R_jump();
+  if (!R_allocateUnmanaged_nojump(process, &singleton, sizeof(R_Interpreter_ProcessState))) {
+    Arcadia_Process_jump(process);
   }
   R_JumpTarget jumpTarget;
 
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    singleton->constants = R_Interpreter_Code_Constants_create();
-    singleton->globals = R_Map_create();
-    R_popJumpTarget();
+    singleton->constants = R_Interpreter_Code_Constants_create(process);
+    singleton->globals = R_Map_create(process);
+    Arcadia_Process_popJumpTarget(process);
   } else {
-    R_popJumpTarget();
-    R_deallocateUnmanaged_nojump(singleton);
+    Arcadia_Process_popJumpTarget(process);
+    R_deallocateUnmanaged_nojump(process, singleton);
     singleton = NULL;
-    R_jump();
+    Arcadia_Process_jump(process);
   }
 
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    singleton->mainThread = R_Interpreter_ThreadState_create();
+    singleton->mainThread = R_Interpreter_ThreadState_create(process);
     singleton->currentThread = singleton->mainThread;
-    R_popJumpTarget();
+    Arcadia_Process_popJumpTarget(process);
   } else {
-    R_popJumpTarget();
-    R_deallocateUnmanaged_nojump(singleton);
+    Arcadia_Process_popJumpTarget(process);
+    R_deallocateUnmanaged_nojump(process, singleton);
     singleton = NULL;
-    R_jump();
+    Arcadia_Process_jump(process);
   }
 
   g_singleton = singleton;
@@ -75,23 +76,24 @@ R_Interpreter_ProcessState_startup
 void
 R_Interpreter_ProcessState_shutdown
   (
+    Arcadia_Process* process
   )
 {
   if (!g_singleton) {
-    R_setStatus(R_Status_NotInitialized);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_NotInitialized);
+    Arcadia_Process_jump(process);
   }
   R_Interpreter_ProcessState* singleton = g_singleton;
   g_singleton = NULL;
   singleton->currentThread = NULL;
 
-  R_Interpreter_ThreadState_destroy(singleton->mainThread);
+  R_Interpreter_ThreadState_destroy(process, singleton->mainThread);
   singleton->mainThread = NULL;
 
   singleton->globals = NULL;
   singleton->constants = NULL;
   
-  R_deallocateUnmanaged_nojump(singleton);
+  R_deallocateUnmanaged_nojump(process, singleton);
   singleton = NULL;
 }
 
@@ -111,61 +113,64 @@ R_Interpreter_ProcessState_visit
 void
 R_Interpreter_ProcessState_defineGlobalProcedure
   (
+    Arcadia_Process* process,
     R_Interpreter_ProcessState* self,
     R_Interpreter_Procedure* procedure
   )
 { 
   if (!procedure) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
   R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = procedure->unqualifiedName };
-  R_Value value = R_Map_get(self->globals, key);
+  R_Value value = R_Map_get(process, self->globals, key);
   if (!R_Value_isVoidValue(&value)) {
-    R_setStatus(R_Status_Exists);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
+    Arcadia_Process_jump(process);
   }
   value = (R_Value){ .tag = R_ValueTag_ObjectReference, .objectReferenceValue = procedure };
-  R_Map_set(self->globals, key, value);
+  R_Map_set(process, self->globals, key, value);
 }
 
 void
 R_Interpreter_ProcessState_defineGlobalClass
   (
+    Arcadia_Process* process,
     R_Interpreter_ProcessState* self,
     R_Interpreter_Class* class
   )
 {
   if (!class) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
   R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = class->className };
-  R_Value value = R_Map_get(self->globals, key);
+  R_Value value = R_Map_get(process, self->globals, key);
   if (!R_Value_isVoidValue(&value)) {
-    R_setStatus(R_Status_Exists);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
+    Arcadia_Process_jump(process);
   }
   value = (R_Value){ .tag = R_ValueTag_ObjectReference, .objectReferenceValue = class };
-  R_Map_set(self->globals, key, value);
+  R_Map_set(process, self->globals, key, value);
 }
 
 R_Value
 R_Interpreter_ProcessState_getGlobal
   (
+    Arcadia_Process* process,
     R_Interpreter_ProcessState* self,
     R_String* name
   )
 { 
   if (!name) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
   R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = name };
-  R_Value value = R_Map_get(self->globals, key);
+  R_Value value = R_Map_get(process, self->globals, key);
   if (R_Value_isVoidValue(&value)) {
-    R_setStatus(R_Status_NotExists);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_NotExists);
+    Arcadia_Process_jump(process);
   }
   return value;
 }

@@ -1,4 +1,4 @@
-<h3 id="void-type">Void Type</h3>
+<h3 id="void-type">3.1.7. Void Type</h3>
 <p>
 R provides a void type.
 </p>

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,7 +18,7 @@
 #if !defined(R_COMMANDLINE_INCLUDE_H_INCLUDED)
 #define R_COMMANDLINE_INCLUDE_H_INCLUDED
 
-#include "R/Boolean.h"
+#include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "R/Utf8Reader.h"
 #include "R/String.h"
 
@@ -31,9 +31,10 @@
 // @code{<name>} is returned in @code{*key}.
 // If a @code{<value>} is specified, it is returned in @code{*value}.
 // Otherwise *value is assigned NULL.
-R_BooleanValue
+Arcadia_BooleanValue
 R_CommandLine_parseArgument
   (
+    Arcadia_Process* process,
     R_Utf8Reader* reader,
     R_String** key,
     R_String** value
@@ -42,12 +43,14 @@ R_CommandLine_parseArgument
 void
 R_CommandLine_raiseRequiredArgumentMissingError
   (
+    Arcadia_Process* process,
     R_String* key
   );
 
 void
 R_CommandLine_raiseUnknownArgumentError
   (
+    Arcadia_Process* process,
     R_String* key,
     R_String* value
   );
@@ -55,12 +58,14 @@ R_CommandLine_raiseUnknownArgumentError
 void
 R_CommandLine_raiseNoValueError
   (
+    Arcadia_Process* process,
     R_String* key
   );
 
 void
 R_CommandLine_raiseValueInvalidError
   (
+    Arcadia_Process* process,
     R_String* key,
     R_String* value
   );

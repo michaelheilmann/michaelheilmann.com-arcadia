@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -33,11 +33,12 @@ typedef enum ImageWriterFormat {
 ///   construct(byteBuffer:ByteBuffer,format:ImageWriterFormat)
 /// }
 /// @endcode
-Rex_declareObjectType("ImageWriterParameters", ImageWriterParameters, "R.Object");
+Rex_declareObjectType(u8"ImageWriterParameters", ImageWriterParameters, u8"R.Object");
 
 ImageWriterParameters*
 ImageWriterParameters_createFile
   (
+    Arcadia_Process* process,
     R_String* path,
     ImageWriterFormat format
   );
@@ -45,31 +46,36 @@ ImageWriterParameters_createFile
 ImageWriterParameters*
 ImageWriterParameters_createByteBuffer
   (
+    Arcadia_Process* process,
     R_ByteBuffer* byteBuffer,
     ImageWriterFormat format
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 ImageWriterParameters_hasPath
   (
+    Arcadia_Process* process,
     ImageWriterParameters* self
   );
 
 R_String*
 ImageWriterParameters_getPath
   (
+    Arcadia_Process* process,
     ImageWriterParameters* self
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 ImageWriterParameters_hasByteBuffer
   (
+    Arcadia_Process* process,
     ImageWriterParameters* self
   );
 
 R_ByteBuffer*
 ImageWriterParameters_getByteBuffer
   (
+    Arcadia_Process* process,
     ImageWriterParameters* self
   );
 

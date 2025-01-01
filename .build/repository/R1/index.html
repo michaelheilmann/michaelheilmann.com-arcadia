@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html class='my-theme-1' lang='en'>
 <head>
 
@@ -13,91 +13,90 @@
   <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
   <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
 
-    <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=3'>
-    <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=3'>
-    <link rel='canonical' href='https://michaelheilmann.com/repository/R1/'>
-    <title>Michael Heilmann's Runtime Mark 1</title>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-    /* variable */
-    my-v {
-      font-family: my-code-font;
-      font-size: 0.9rem;
-    }
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=3'>
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=3'>
+<link rel='canonical' href='https://michaelheilmann.com/repository/R1/'>
+<title>Michael Heilmann's Runtime Mark 1</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  /* variable */
+  my-v {
+    font-family: my-code-font;
+    font-size: 0.9rem;
+  }
 
-    /* meta variable */
-    my-mv {
-      display: inline;
-      font-family: my-code-font;
-      font-size: 0.9rem;
-    }
-    my-mv::before {
-      content: "<";
-    }
-    my-mv::after {
-      content: ">";
-    }
+  /* meta variable */
+  my-mv {
+    display: inline;
+    font-family: my-code-font;
+    font-size: 0.9rem;
+  }
+  my-mv::before {
+    content: "<";
+  }
+  my-mv::after {
+    content: ">";
+  }
 
-    /* meta variable */
-    .meta {
-      font-family: my-code-font;
-      font-size: 0.9rem;
-    }
-    .meta::before {
-      content: "<";
-    }
-    .meta::after {
-      content: ">";
-    }
-    </style>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  </head>
-  <body class="my-content-page-1">
+  /* meta variable */
+  .meta {
+    font-family: my-code-font;
+    font-size: 0.9rem;
+  }
+  .meta::before {
+    content: "<";
+  }
+  .meta::after {
+    content: ">";
+  }
+</style>
+</head>
+<body class="my-content-page-1">
   <header>
-  <div>
-  <a href="https://michaelheilmann.com/">Home</a>
-  </div>
+    <div>
+    <a href="https://michaelheilmann.com/">Home</a>
+    </div>
   </header>
-  <main>
+<main>
+  <div class="left-column"></div>
+  <div class="center-column">
   <h1>Michael Heilmann's Runtime Mark 1</h1>
   <p>
   This is the documentation for Michael  Heilmann's Runtime Mark 1,
   henceforth R1. R1 facilates the creation of C programs - in particular interpreters - that are portable,
   maintainable, as well as safe. R1 is available at <a href="https://michaelheilmann.com/repository/R1">michaelheilmann.com/repository/R1</a>.
 
-  <h2>Files</h2>
-  <p>
-  You can find the sources of R1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
-  The subdirectory of R1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1</a>.</p>
-  </p>
-  
-  <ul>
-    <li>The (sources of the) library resides in the directory
-    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources</a>
-    </li>
-    <li>The (sources of) tests reside in the directory
-    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests</a>
-    </li>
-    <li>The (sources of) demos reside in the directory
-    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Demos">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Demos</a>
-    </li>
-    <li>The (sources of this very documentation you are reading) documentation reside in the directory
-    <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation</a>
-    </li>
-  </ul>
-  
-  <p>You can compile and run these under various platforms (including but not restricted to Windows, Linux, and many more),
-  however, we currently only officially support Windows. To build and run all these, simply checkout the repository to the
-  and outside of the repository directory create a build folder.
-  Invoke from the the build folder</p>
-  <p><code>
-  cmake <my-mv>path-to-repository-directory</my-mv>
-  </code></p>
+<h2>1. Files</h2>
+<p>
+You can find the sources of R1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
+The subdirectory of R1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1</a>.</p>
+</p>
+
+<ul>
+  <li>The (sources of the) library resides in the directory
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources</a>
+  </li>
+  <li>The (sources of) tests reside in the directory
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests</a>
+  </li>
+  <li>The (sources of this very documentation you are reading) documentation reside in the directory
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation</a>
+  </li>
+</ul>
+
+<p>
+R1 supports various platforms (including but not restricted to Windows, Linux, and many more), however, we currently only officially support Windows.
+Find instructions on how to build, test, and use R1 under various systems,
+please refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/README.md">README.md</a> in the root folder of the repository.
+</p>
+
+<h3>2. Further References</h3>
+<p>R1 relies on <a href="https://michaelheilmann.com/repository/Arms1">ARMS1</a>.</p>
 
 
-  <h2>Documentation</h2>
+  <h2>3. Documentation</h2>
 
-<h3 id="boolean-type">Boolean Type</h3>
+<h3 id="boolean-type">3.1.1. Boolean Type</h3>
 <p>
 R1 provides a boolean type.
 </p>
@@ -115,7 +114,7 @@ typedef <my-mv>implementation detail</my-mv> R_BooleanValue
 </code><p>
 <p>is a value of the type denoting logically <code>false</code>. It converts to <code>0</code> in arithmetic expressions.</p>
 
-<h3 id="foreignprocedure-type">Foreign Procedure Type</h3>
+<h3 id="foreignprocedure-type">3.1.2. Foreign Procedure Type</h3>
 <p>
 R provides the <scode>R_ForeignProcedureValue</code> type.
 </p>
@@ -143,7 +142,7 @@ A valid value of the <code>R_ForeignProcedureValue</code> is the null value
 </code><p>
 <p>denotes the number of Bytes of the type which is usually <code>R_ForeignProcedureValue_NumberOfBits</code> divided by 8.</p>
 
-<h3 id="integer-types">Integer Types</h3>
+<h3 id="integer-types">3.1.3. Integer Types</h3>
 <p>
 R provides a two's complement integer number types.
 </p>
@@ -210,7 +209,7 @@ The following table denotes  the expansions of the macro:
 <tr><td>64                   </td><td>x##LL</td></tr>
 </table>
 
-<h3 id="natural-types">Natural Types</h3>
+<h3 id="natural-types">3.1.4. Natural Types</h3>
 <p>
 R provides natural number types.
 </p>
@@ -277,7 +276,7 @@ The following table denotes  the expansions of the macro:
 <tr><td>64                   </td><td>x##ULL</td></tr>
 </table>
 
-<h3 id="object-reference-type">Object Reference Type</h3>
+<h3 id="object-reference-type">3.1.5. Object Reference Type</h3>
 <p>
 R provides a ObjectReference type.
 </p>
@@ -305,7 +304,7 @@ A valid value of the <code>R_ObjectReferenceValue</code> is the null reference
 </code><p>
 <p>denotes the number of Bytes of the type which is usually <code>R_ObjectReferenceValue_NumberOfBits</code> divided by 8.</p>
 
-<h3 id="size-type">Size Type</h3>
+<h3 id="size-type">3.1.6. Size Type</h3>
 <p>
 R provides an alias for builtin <code>size_t</code> type.
 </p>
@@ -338,7 +337,7 @@ This restriction may be relaxed in future versions of R.
 </code><p>
 <p>is used to write a literal of type <code>R_SizeValue</code> in C source code.</p>
 
-<h3 id="void-type">Void Type</h3>
+<h3 id="void-type">3.1.7. Void Type</h3>
 <p>
 R provides a void type.
 </p>
@@ -365,7 +364,7 @@ R_VoidValue is an unsigned integral type.
 </code><p>
 <p>denotes the number of Bytes of the type which is usually <code>R_VoidValue_NumberOfBits</code> divided by 8.</p>
 
-<h3 id="value-type">Value Type</h3>
+<h3 id="value-type">3.2. Value Type</h3>
 <p>
 <code>R_Value</code> is a tagged union of values supported by the
 runtime. It consists of a tag indicating the value stored in the
@@ -435,7 +434,7 @@ the <code>R_Value</code>. The behavior of <code>R_Value_set<my-mv>Suffix
 </my-mv></code> is undefined if the value does not store a value of  the
 type corresponding to <my-mv>Suffix</my-mv>.</p>
 
-  <h3 id="status-codes">Status Codes</h3>
+  <h3 id="status-codes">3.3. Status Codes</h3>
   <p>
   R provides a status type and symbolic constants for its values. That type denotes success or failure of program (or a part of it)
   as well as information on the reason for the failure.</p>
@@ -493,7 +492,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
 
   </table>
 
-  <h3 id="status-variable">Status Variable</h3>
+  <h3 id="status-variable">3.4. Status Variable</h3>
   <p>R provides a global status variable.</p>
 
   <p><code>
@@ -513,7 +512,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
   </code></p>
   <p>sets the value of the status variable to the value <code>status</code>.</p>
 
-  <h3>Jumps and Jump Targets</h3>
+  <h3>3.5. Jumps and Jump Targets</h3>
   <p>R provides non-local jumps by allowing to save and restore the C program state.</p>
 
   <p><code>
@@ -585,7 +584,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
   }
   </code></p>
 
-<h3>Numeric functions</h3>
+<h3>3.6. Numeric functions</h3>
 
 <h4 id="r-clamp">R_clamp</h4>
 <p>Clamp a value to a range.</p>
@@ -808,15 +807,15 @@ R_SizeValue R_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 <p>Return the next power of two greater than or equal to <code>x</code>.</p>
 
 <h4>R_getTickCount</h4>
-<p>Get the time, in milliseconds, since the start of the process.</p>
+<p>Get the time, in milliseconds, since an unspecified moment in the past.</p>
 <p><code>
 R_Natural64Value R_getTickCount()
 </code></p>
 
 <h5>Return value</h5>
-<p>The time, in milliseconds, since the start of the process.</p>
+<p>The time, in milliseconds, since an unspecified momentn in the past.</p>
 
-<h3>Objects</h3>
+<h3>3.8. Objects</h3>
 
 <h4 id="r-bytebuffer">Byte Buffer</h4>
 <p>
@@ -2270,6 +2269,9 @@ R_VoidValue R_String_toVoid(R_String const* self)
   </tr>
 </table>
 
+  </div>
+  <div class="right-column">
+  </div>
   </main>
   <footer>
     <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 6 October 2024.</span>

@@ -22,7 +22,7 @@
 #include "Module/Visuals/ImageWriter.h"
 #include "Module/Visuals/PixelBuffer.h"
 
-Rex_declareObjectType("NativeLinuxImageWriter", NativeLinuxImageWriter, "ImageWriter");
+Rex_declareObjectType(u8"NativeLinuxImageWriter", NativeLinuxImageWriter, u8"ImageWriter");
 
 struct NativeLinuxImageWriter {
   ImageWriter _parent;

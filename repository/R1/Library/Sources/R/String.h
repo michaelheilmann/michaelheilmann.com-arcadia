@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,170 +26,187 @@ Rex_declareObjectType("R.String", R_String, "R.Object");
 
 struct R_String {
   R_Object _parent;
-  R_ImmutableByteArray* immutableByteArray;
+  Arcadia_ImmutableByteArray* immutableByteArray;
   // We could compute this lazily if we had the "mutable" keyword in C.
-  R_SizeValue hash;
+  Arcadia_SizeValue hash;
 };
 
 // https://michaelheilmann.com/repository/R1/#r-string-create-pn
 R_String*
 R_String_create_pn
   (
-    R_ImmutableByteArray* immutableByteArray
+    Arcadia_Process* process,
+    Arcadia_ImmutableByteArray* immutableByteArray
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-create
 R_String*
 R_String_create
   (
+    Arcadia_Process* process,
     R_Value value
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-endswith-pn
-R_BooleanValue
+Arcadia_BooleanValue
 R_String_endsWith_pn
   (
     R_String const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-startswith-pn
-R_BooleanValue
+Arcadia_BooleanValue
 R_String_startsWith_pn
   (
     R_String const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-getnumberofbytes
-R_SizeValue
+Arcadia_SizeValue
 R_String_getNumberOfBytes
   (
     R_String const* self
   );
 
-R_Natural8Value const*
+Arcadia_Natural8Value const*
 R_String_getBytes
   (
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-getbyteat
-R_Natural8Value
+Arcadia_Natural8Value
 R_String_getByteAt
   (
+    Arcadia_Process* process,
     R_String const* self,
-    R_SizeValue index
+    Arcadia_SizeValue index
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-getnumberofsymbols
-R_SizeValue
+Arcadia_SizeValue
 R_String_getNumberOfSymbols
   (
     R_String const* self
   );
 
+#if 0
 // https://michaelheilmann.com/repository/R1/#r-string-getsubstring
 R_String*
 R_String_getSubString
   (
     R_String const* self,
-    R_SizeValue index,
-    R_SizeValue length
+    Arcadia_SizeValue index,
+    Arcadia_SizeValue length
   );
+#endif
 
 // https://michaelheilmann.com/repository/R1/#r-string-isequalto-pn
-R_BooleanValue
+Arcadia_BooleanValue
 R_String_isEqualTo_pn
   (
     R_String const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-toboolean
-R_BooleanValue
+Arcadia_BooleanValue
 R_String_toBoolean
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-tointeger16
-R_Integer16Value
+Arcadia_Integer16Value
 R_String_toInteger16
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-tointeger32
-R_Integer32Value
+Arcadia_Integer32Value
 R_String_toInteger32
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-tointeger64
-R_Integer64Value
+Arcadia_Integer64Value
 R_String_toInteger64
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-tointeger8
-R_Integer8Value
+Arcadia_Integer8Value
 R_String_toInteger8
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-tonatural16
-R_Natural16Value
+Arcadia_Natural16Value
 R_String_toNatural16
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-tonatura32
-R_Natural32Value
+Arcadia_Natural32Value
 R_String_toNatural32
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-tonatural64
-R_Natural64Value
+Arcadia_Natural64Value
 R_String_toNatural64
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-tonatural8
-R_Natural8Value
+Arcadia_Natural8Value
 R_String_toNatural8
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-toreal32
-R_Real32Value
+Arcadia_Real32Value
 R_String_toReal32
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-toreal64
-R_Real64Value
+Arcadia_Real64Value
 R_String_toReal64
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-string-void
-R_VoidValue
+Arcadia_VoidValue
 R_String_toVoid
   (
+    Arcadia_Process* process,
     R_String const* self
   );
 

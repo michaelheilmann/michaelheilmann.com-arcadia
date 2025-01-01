@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,27 +18,26 @@
 #if !defined (R_ARGUMENTSVALIDATION_H_INCLUDED)
 #define R_ARGUMENTSVALIDATION_H_INCLUDED
 
-#include "R/JumpTarget.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Object.h"
-#include "R/Status.h"
-#include "R/Types.h"
 #include "R/Value.h"
 
 static inline R_ObjectReferenceValue
 R_Argument_getObjectReferenceValue
   (
+    Arcadia_Process* process,
     R_Value const* value,
-    R_Type *type
+    Arcadia_TypeValue type
   )
 {
   if (!R_Value_isObjectReferenceValue(value)) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   R_ObjectReferenceValue objectReferenceValue = R_Value_getObjectReferenceValue(value);
-  if (!R_Type_isSubType(R_Object_getType(objectReferenceValue), type)) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+  if (!Arcadia_Type_isSubType(R_Object_getType(objectReferenceValue), type)) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   return objectReferenceValue;
 }
@@ -46,21 +45,22 @@ R_Argument_getObjectReferenceValue
 static inline R_ObjectReferenceValue
 R_Argument_getObjectReferenceValueOrNull
   (
+    Arcadia_Process* process,
     R_Value const* value,
-    R_Type* type
+    Arcadia_TypeValue type
   ) 
 {
   if (R_Value_isVoidValue(value)) {
     return NULL;
   }
   if (!R_Value_isObjectReferenceValue(value)) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   R_ObjectReferenceValue objectReferenceValue = R_Value_getObjectReferenceValue(value);
-  if (!R_Type_isSubType(R_Object_getType(objectReferenceValue), type)) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+  if (!Arcadia_Type_isSubType(R_Object_getType(objectReferenceValue), type)) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   return objectReferenceValue;
 }

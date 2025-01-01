@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,14 +20,16 @@
 static void
 TextureFontWindows_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
 static void
 TextureFontWindows_destruct
   (
+    Arcadia_Process* process,
     TextureFontWindows* self
   );
 
@@ -37,7 +39,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = NULL,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -57,42 +59,43 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("TextureFontWindows", TextureFontWindows, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"TextureFontWindows", TextureFontWindows, u8"R.Object", R_Object, &_typeOperations);
 
 static void
 TextureFontWindows_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   TextureFontWindows* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _TextureFontWindows_getType();
+  Arcadia_TypeValue _type = _TextureFontWindows_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Type_getOperations(R_Type_getParentObjectType(_type))->objectTypeOperations->construct(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   //
   HDC hScreenDeviceContext = GetDC(NULL);
   if (!hScreenDeviceContext) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   HDC hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
   if (!hDeviceContext) {
     ReleaseDC(NULL, hScreenDeviceContext);
     hScreenDeviceContext = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   ReleaseDC(NULL, hScreenDeviceContext);
   hScreenDeviceContext = NULL;
   // Get the size of the symbol.
   _self->codePoint = 'A';
-  R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
-  R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(byteBuffer);
-  R_Utf8Writer_writeCodePoints(utf8ByteBufferWriter, &_self->codePoint, 1);
+  R_ByteBuffer* byteBuffer = R_ByteBuffer_create(process);
+  R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, byteBuffer);
+  R_Utf8Writer_writeCodePoints(process, utf8ByteBufferWriter, &_self->codePoint, 1);
   RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
   DrawTextA(hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
   int32_t width = textRect.right - textRect.left;
@@ -100,7 +103,7 @@ TextureFontWindows_constructImpl
   DeleteDC(hDeviceContext);
   hDeviceContext = NULL;
   // Create a bitmap of that size. Draw the symbol to the bitmap.
-  _self->bitmap = NativeWindowsBitmap_create(width, height);
+  _self->bitmap = NativeWindowsBitmap_create(process, width, height);
   DrawTextA(_self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   //
   R_Object_setType(_self, _type);
@@ -109,6 +112,7 @@ TextureFontWindows_constructImpl
 static void
 TextureFontWindows_destruct
   (
+    Arcadia_Process* process,
     TextureFontWindows* self
   )
 {
@@ -121,40 +125,42 @@ TextureFontWindows_destruct
 TextureFontWindows*
 TextureFontWindows_create
   (
+    Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
-  TextureFontWindows* self = R_allocateObject(_TextureFontWindows_getType(), 0, &argumentValues[0]);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  TextureFontWindows* self = R_allocateObject(process, _TextureFontWindows_getType(process), 0, &argumentValues[0]);
   return self;
 }
 
 void
 TextureFontWindows_setCodePoint
   (
+    Arcadia_Process* process,
     TextureFontWindows* self,
-    R_Natural32Value codePoint
+    Arcadia_Natural32Value codePoint
   )
 {
   if (self->codePoint != codePoint) {
     HDC hScreenDeviceContext = GetDC(NULL);
     if (!hScreenDeviceContext) {
-      R_setStatus(R_Status_EnvironmentFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+      Arcadia_Process_jump(process);
     }
     HDC hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
     if (!hDeviceContext) {
       ReleaseDC(NULL, hScreenDeviceContext);
       hScreenDeviceContext = NULL;
-      R_setStatus(R_Status_EnvironmentFailed);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+      Arcadia_Process_jump(process);
     }
     ReleaseDC(NULL, hScreenDeviceContext);
     hScreenDeviceContext = NULL;
     // Get the size of the symbol.
     self->codePoint = codePoint;
-    R_ByteBuffer* byteBuffer = R_ByteBuffer_create();
-    R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(byteBuffer);
-    R_Utf8Writer_writeCodePoints(utf8ByteBufferWriter, &self->codePoint, 1);
+    R_ByteBuffer* byteBuffer = R_ByteBuffer_create(process);
+    R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, byteBuffer);
+    R_Utf8Writer_writeCodePoints(process, utf8ByteBufferWriter, &self->codePoint, 1);
     RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
     DrawTextA(hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
     int32_t width = textRect.right - textRect.left;
@@ -162,7 +168,7 @@ TextureFontWindows_setCodePoint
     DeleteDC(hDeviceContext);
     hDeviceContext = NULL;
     // Create a bitmap of that size. Draw the symbol to the bitmap.
-    self->bitmap = NativeWindowsBitmap_create(width, height);
+    self->bitmap = NativeWindowsBitmap_create(process, width, height);
     DrawTextA(self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   }
 }
@@ -170,8 +176,9 @@ TextureFontWindows_setCodePoint
 PixelBuffer*
 TextureFontWindows_getPixelBuffer
   (
+    Arcadia_Process* process,
     TextureFontWindows* self
   )
 {
-  return NativeWindowsBitmap_toPixelBuffer(self->bitmap);
+  return NativeWindowsBitmap_toPixelBuffer(process, self->bitmap);
 }

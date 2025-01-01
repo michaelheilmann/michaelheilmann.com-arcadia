@@ -1,4 +1,4 @@
-<h3 id="integer-types">Integer Types</h3>
+<h3 id="integer-types">3.1.3. Integer Types</h3>
 <p>
 R provides a two's complement integer number types.
 </p>

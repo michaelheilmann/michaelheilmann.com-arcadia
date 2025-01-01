@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,14 +25,16 @@
 static void
 R_Interpreter_Constructor_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
 static void
 R_Interpreter_Constructor_visit
   (
+    Arcadia_Process* process,
     R_Interpreter_Constructor* self
   );
 
@@ -42,7 +44,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = &R_Interpreter_Constructor_visit,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -62,35 +64,36 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("R.Interpreter.Constructor", R_Interpreter_Constructor, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.Interpreter.Constructor", R_Interpreter_Constructor, u8"R.Object", R_Object, &_typeOperations);
 
 static void
 R_Interpreter_Constructor_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   R_Interpreter_Constructor* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _R_Interpreter_Constructor_getType();
+  Arcadia_TypeValue _type = _R_Interpreter_Constructor_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Object_constructImpl(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
-    R_setStatus(R_Status_NumberOfArgumentsInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Process_jump(process);
   }
-  if (R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_ForeignProcedureValue_getType())) {
-    _self->isForeign = R_BooleanValue_True;
+  if (Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[0]), _Arcadia_ForeignProcedureValue_getType(process))) {
+    _self->isForeign = Arcadia_BooleanValue_True;
     _self->foreignProcedure = R_Value_getForeignProcedureValue(&argumentValues[0]);
-  } else if (R_Type_isSubType(R_Value_getType(&argumentValues[0]), _R_Interpreter_Code_getType())) {
-    _self->isForeign = R_BooleanValue_False;
+  } else if (Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[0]), _R_Interpreter_Code_getType(process))) {
+    _self->isForeign = Arcadia_BooleanValue_False;
     _self->code = R_Value_getObjectReferenceValue(&argumentValues[0]);
   } else {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
   R_Object_setType((R_Object*)_self, _type);
 }
@@ -98,6 +101,7 @@ R_Interpreter_Constructor_constructImpl
 static void
 R_Interpreter_Constructor_visit
   (
+    Arcadia_Process* process,
     R_Interpreter_Constructor* self
   )
 {
@@ -109,22 +113,24 @@ R_Interpreter_Constructor_visit
 R_Interpreter_Constructor*
 R_Interpreter_Constructor_createForeign
   (
-    R_ForeignProcedureValue foreignProcedure
+    Arcadia_Process* process,
+    Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
   R_Value argumentValues[] = { {.tag = R_ValueTag_ForeignProcedure, .foreignProcedureValue = foreignProcedure } };
-  R_Interpreter_Constructor* self = R_allocateObject(_R_Interpreter_Constructor_getType(), 1, &argumentValues[0]);
+  R_Interpreter_Constructor* self = R_allocateObject(process, _R_Interpreter_Constructor_getType(process), 1, &argumentValues[0]);
   return self;
 }
 
 R_Interpreter_Constructor*
 R_Interpreter_Constructor_create
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* code
   )
 {
   R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = code } };
-  R_Interpreter_Constructor* self = R_allocateObject(_R_Interpreter_Constructor_getType(), 1, &argumentValues[0]);
+  R_Interpreter_Constructor* self = R_allocateObject(process, _R_Interpreter_Constructor_getType(process), 1, &argumentValues[0]);
   return self;
 }
 

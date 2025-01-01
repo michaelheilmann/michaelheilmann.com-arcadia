@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,24 +17,23 @@
 
 #include "R/Convert/VoidToString.h"
 
-#include "R/JumpTarget.h"
-#include "R/Status.h"
 #include "R/cstdlib.h"
 
 void
-R_Void_toString
+Arcadia_Void_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_VoidValue value,
+    Arcadia_VoidValue value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   )
 {
   char* _buffer = NULL;
-  R_SizeValue _bufferLength = sizeof(u8"void") - 1;
+  Arcadia_SizeValue _bufferLength = sizeof(u8"void") - 1;
   if (Arms_MemoryManager_allocate(memoryManager, &_buffer, _bufferLength)) {
-    R_setStatus(R_Status_AllocationFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
+    Arcadia_Process_jump(process);
   }
   c_memcpy(_buffer, u8"void", _bufferLength);
   *buffer = _buffer;

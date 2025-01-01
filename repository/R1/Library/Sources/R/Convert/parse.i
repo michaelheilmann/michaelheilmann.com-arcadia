@@ -17,8 +17,6 @@
 
 #include "R/Convert/Include.h"
 
-#include "R/JumpTarget.h"
-#include "R/Status.h"
 #include "R/Utf8.h"
 #include "R/cstdlib.h"
 
@@ -51,14 +49,14 @@ next
   }
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isEnd
   (
     State* state
   )
 { return (CodePoint_End == state->symbol); }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isZero
   (
     State* state
@@ -67,7 +65,7 @@ isZero
   return ('0' == state->symbol);
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isDigit
   (
     State* state
@@ -77,7 +75,7 @@ isDigit
       && (state->symbol <= '9');
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isSign
   (
     State* state
@@ -87,7 +85,7 @@ isSign
       || ('-' == state->symbol);
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isPlus
   (
     State* state
@@ -96,7 +94,7 @@ isPlus
   return ('+' == state->symbol);
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isMinus
   (
     State* state
@@ -105,14 +103,14 @@ isMinus
   return ('-' == state->symbol);
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isPeriod
   (
     State* state
   )
 { return ('.' == state->symbol); }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isExponentPrefix
   (
     State* state
@@ -122,7 +120,7 @@ isExponentPrefix
       || ('E' == state->symbol);
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 is
   (
     State* state,

@@ -1,1 +1,1 @@
-<h3>Numeric functions</h3>
+<h3>3.6. Numeric functions</h3>

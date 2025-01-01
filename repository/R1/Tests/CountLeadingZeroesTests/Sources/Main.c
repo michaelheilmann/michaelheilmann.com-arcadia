@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,67 +22,81 @@
 /// @todo Add to R's test utilities.
 #define R_Test_assert(result) \
   if (!(result)) { \
-    R_setStatus(R_Status_TestFailed); \
-    R_jump(); \
+    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
+    Arcadia_Process_jump(process); \
   }
 
 static void
 countLeadingZeroesTests
   (
+    Arcadia_Process * process
   )
 {
 #define Do(Type, VALUE, EXPECTED) \
   { \
-    R_SizeValue expected = EXPECTED; \
-    R_SizeValue received = R_countLeadingZeroes##Type##Value(VALUE); \
+    Arcadia_SizeValue expected = EXPECTED; \
+    Arcadia_SizeValue received = Arcadia_countLeadingZeroes##Type##Value(process, VALUE); \
     R_Test_assert(received == expected); \
   }
-  Do(Natural64, R_Natural64Value_Literal(0), R_SizeValue_Literal(56) + R_SizeValue_Literal(8));
-  Do(Natural64, R_Natural64Value_Literal(1), R_SizeValue_Literal(56) + R_SizeValue_Literal(7));
-  Do(Natural64, R_Natural64Value_Literal(2), R_SizeValue_Literal(56) + R_SizeValue_Literal(6));
-  Do(Natural64, R_Natural64Value_Literal(3), R_SizeValue_Literal(56) + R_SizeValue_Literal(6));
-  Do(Natural64, R_Natural64Value_Literal(4), R_SizeValue_Literal(56) + R_SizeValue_Literal(5));
-  Do(Natural64, R_Natural64Value_Maximum,    R_SizeValue_Literal(0));
+  Do(Natural64, Arcadia_Natural64Value_Literal(0), Arcadia_SizeValue_Literal(56) + Arcadia_SizeValue_Literal(8));
+  Do(Natural64, Arcadia_Natural64Value_Literal(1), Arcadia_SizeValue_Literal(56) + Arcadia_SizeValue_Literal(7));
+  Do(Natural64, Arcadia_Natural64Value_Literal(2), Arcadia_SizeValue_Literal(56) + Arcadia_SizeValue_Literal(6));
+  Do(Natural64, Arcadia_Natural64Value_Literal(3), Arcadia_SizeValue_Literal(56) + Arcadia_SizeValue_Literal(6));
+  Do(Natural64, Arcadia_Natural64Value_Literal(4), Arcadia_SizeValue_Literal(56) + Arcadia_SizeValue_Literal(5));
+  Do(Natural64, Arcadia_Natural64Value_Maximum,    Arcadia_SizeValue_Literal(0));
 
-  Do(Natural32, R_Natural32Value_Literal(0), R_SizeValue_Literal(24) + R_SizeValue_Literal(8));
-  Do(Natural32, R_Natural32Value_Literal(1), R_SizeValue_Literal(24) + R_SizeValue_Literal(7));
-  Do(Natural32, R_Natural32Value_Literal(2), R_SizeValue_Literal(24) + R_SizeValue_Literal(6));
-  Do(Natural32, R_Natural32Value_Literal(3), R_SizeValue_Literal(24) + R_SizeValue_Literal(6));
-  Do(Natural32, R_Natural32Value_Literal(4), R_SizeValue_Literal(24) + R_SizeValue_Literal(5));
-  Do(Natural32, R_Natural32Value_Maximum,    R_SizeValue_Literal(0));
+  Do(Natural32, Arcadia_Natural32Value_Literal(0), Arcadia_SizeValue_Literal(24) + Arcadia_SizeValue_Literal(8));
+  Do(Natural32, Arcadia_Natural32Value_Literal(1), Arcadia_SizeValue_Literal(24) + Arcadia_SizeValue_Literal(7));
+  Do(Natural32, Arcadia_Natural32Value_Literal(2), Arcadia_SizeValue_Literal(24) + Arcadia_SizeValue_Literal(6));
+  Do(Natural32, Arcadia_Natural32Value_Literal(3), Arcadia_SizeValue_Literal(24) + Arcadia_SizeValue_Literal(6));
+  Do(Natural32, Arcadia_Natural32Value_Literal(4), Arcadia_SizeValue_Literal(24) + Arcadia_SizeValue_Literal(5));
+  Do(Natural32, Arcadia_Natural32Value_Maximum,    Arcadia_SizeValue_Literal(0));
 
-  Do(Natural16, R_Natural16Value_Literal(0), R_SizeValue_Literal(8) + R_SizeValue_Literal(8));
-  Do(Natural16, R_Natural16Value_Literal(1), R_SizeValue_Literal(8) + R_SizeValue_Literal(7));
-  Do(Natural16, R_Natural16Value_Literal(2), R_SizeValue_Literal(8) + R_SizeValue_Literal(6));
-  Do(Natural16, R_Natural16Value_Literal(3), R_SizeValue_Literal(8) + R_SizeValue_Literal(6));
-  Do(Natural16, R_Natural16Value_Literal(4), R_SizeValue_Literal(8) + R_SizeValue_Literal(5));
-  Do(Natural16, R_Natural16Value_Maximum,    R_SizeValue_Literal(0));
+  Do(Natural16, Arcadia_Natural16Value_Literal(0), Arcadia_SizeValue_Literal(8) + Arcadia_SizeValue_Literal(8));
+  Do(Natural16, Arcadia_Natural16Value_Literal(1), Arcadia_SizeValue_Literal(8) + Arcadia_SizeValue_Literal(7));
+  Do(Natural16, Arcadia_Natural16Value_Literal(2), Arcadia_SizeValue_Literal(8) + Arcadia_SizeValue_Literal(6));
+  Do(Natural16, Arcadia_Natural16Value_Literal(3), Arcadia_SizeValue_Literal(8) + Arcadia_SizeValue_Literal(6));
+  Do(Natural16, Arcadia_Natural16Value_Literal(4), Arcadia_SizeValue_Literal(8) + Arcadia_SizeValue_Literal(5));
+  Do(Natural16, Arcadia_Natural16Value_Maximum,    Arcadia_SizeValue_Literal(0));
 
-  Do(Natural8, R_Natural8Value_Literal(0),   R_SizeValue_Literal(8));
-  Do(Natural8, R_Natural8Value_Literal(1),   R_SizeValue_Literal(7));
-  Do(Natural8, R_Natural8Value_Literal(2),   R_SizeValue_Literal(6));
-  Do(Natural8, R_Natural8Value_Literal(3),   R_SizeValue_Literal(6));
-  Do(Natural8, R_Natural8Value_Literal(4),   R_SizeValue_Literal(5));
-  Do(Natural8, R_Natural8Value_Maximum,      R_SizeValue_Literal(0));
+  Do(Natural8, Arcadia_Natural8Value_Literal(0),   Arcadia_SizeValue_Literal(8));
+  Do(Natural8, Arcadia_Natural8Value_Literal(1),   Arcadia_SizeValue_Literal(7));
+  Do(Natural8, Arcadia_Natural8Value_Literal(2),   Arcadia_SizeValue_Literal(6));
+  Do(Natural8, Arcadia_Natural8Value_Literal(3),   Arcadia_SizeValue_Literal(6));
+  Do(Natural8, Arcadia_Natural8Value_Literal(4),   Arcadia_SizeValue_Literal(5));
+  Do(Natural8, Arcadia_Natural8Value_Maximum,      Arcadia_SizeValue_Literal(0));
 
 #undef Do
 }
 
-static bool safeExecute(void (*f)()) {
+static bool
+safeExecute
+  (
+    void (*f)(Arcadia_Process*)
+  )
+{
   bool result = true;
-  R_Status status = R_startup();
+  Arcadia_Status status = R_startup();
   if (status) {
     result = false;
     return result;
   }
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    R_shutdown();
+    result = false;
+    return result;
+  }
   R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (R_JumpTarget_save(&jumpTarget)) {
-    (*f)();
+    (*f)(process);
   } else {
     result = false;
   }
-  R_popJumpTarget();
+  Arcadia_Process_popJumpTarget(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   status = R_shutdown();
   if (status) {
     result = false;

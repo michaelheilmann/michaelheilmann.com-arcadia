@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,44 +18,46 @@
 #if !defined(R_INTERPRETER_METHOD_INCLUDED)
 #define R_INTERPRETER_METHOD_INCLUDED
 
-#include "R/ForeignProcedure.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Interpreter/Code.h"
 #include "R/Object.h"
 #include "R/Value.h"
 #include "R/List.h"
 
-Rex_declareObjectType("R.Interpreter.Method", R_Interpreter_Method, "R.Object");
+Rex_declareObjectType(u8"R.Interpreter.Method", R_Interpreter_Method, u8"R.Object");
 
 struct R_Interpreter_Method {
   R_Object _parent;
   /// If the method is ready.
-  R_BooleanValue ready;
+  Arcadia_BooleanValue ready;
   /// The unqualified name of this method.
   R_String* unqualifiedName;
   /// List of strings. The string at index i denotes the name of the i-th parameter variable.
   R_List* parameterNames;
-  /// R_BooleanValue_True indicates that code is invalid and foreignProcedure points to a foreign procedure of this method.
-  /// R_BooleanValue_False indicates that foreignProcedure is invalid and code points to the code of this method.
-  R_BooleanValue isForeign;
+  /// Arcadia_BooleanValue_True indicates that code is invalid and foreignProcedure points to a foreign procedure of this method.
+  /// Arcadia_BooleanValue_False indicates that foreignProcedure is invalid and code points to the code of this method.
+  Arcadia_BooleanValue isForeign;
   union {
-    R_ForeignProcedureValue foreignProcedure;
+    Arcadia_ForeignProcedureValue foreignProcedure;
     R_Interpreter_Code* code;
   };
   /// The zero-based index of this method if ready is true.
   /// Zero otherwise.
-  R_SizeValue index;
+  Arcadia_SizeValue index;
 };
 
 R_Interpreter_Method*
 R_Interpreter_Method_createForeign
   (
+    Arcadia_Process* process,
     R_String* unqualifiedName,
-    R_ForeignProcedureValue foreignProcedure
+    Arcadia_ForeignProcedureValue foreignProcedure
   );
 
 R_Interpreter_Method*
 R_Interpreter_Method_create
   (
+    Arcadia_Process* process,
     R_String* unqualifiedName,
     R_Interpreter_Code* code
   );

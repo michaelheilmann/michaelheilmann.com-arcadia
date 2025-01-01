@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -37,15 +37,15 @@
 ///                number of columns * bytesPerPixel + line padding
 /// - cell: A cell is uniquely adressed by its column index and its row index.
 ///         Each cell accomodates one pixel.
-Rex_declareObjectType("PixelBuffer", PixelBuffer, "R.Object");
+Rex_declareObjectType(u8"PixelBuffer", PixelBuffer, u8"R.Object");
 
 struct PixelBuffer {
   R_Object _parent;
-  R_Natural8Value* bytes;
-  R_Natural8Value pixelFormat;
-  R_Integer32Value numberOfRows;
-  R_Integer32Value numberOfColumns;
-  R_Integer32Value linePadding;
+  Arcadia_Natural8Value* bytes;
+  Arcadia_Natural8Value pixelFormat;
+  Arcadia_Integer32Value numberOfRows;
+  Arcadia_Integer32Value numberOfColumns;
+  Arcadia_Integer32Value linePadding;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -53,7 +53,7 @@ struct PixelBuffer {
 /// @brief Get the pixel format of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The pixel format of this pixel buffer.
-R_Natural8Value
+Arcadia_Natural8Value
 PixelBuffer_getPixelFormat
   (
     PixelBuffer* self
@@ -70,8 +70,9 @@ PixelBuffer_getPixelFormat
 void
 PixelBuffer_setPixelFormat
   (
+    Arcadia_Process* process,
     PixelBuffer* self,
-    R_Natural8Value pixelFormat
+    Arcadia_Natural8Value pixelFormat
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -79,7 +80,7 @@ PixelBuffer_setPixelFormat
 /// @brief Get the line padding of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The line padding of this pixel buffer. Always non-negative.
-R_Integer32Value
+Arcadia_Integer32Value
 PixelBuffer_getLinePadding
   (
     PixelBuffer* self
@@ -93,8 +94,9 @@ PixelBuffer_getLinePadding
 void
 PixelBuffer_setLinePadding
   (
+    Arcadia_Process* process,
     PixelBuffer* self,
-    R_Integer32Value linePadding
+    Arcadia_Integer32Value linePadding
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -105,10 +107,10 @@ PixelBuffer_setLinePadding
 /// Must be non-negative. Must be smaller than or equal to the number of columns.
 /// @param row The row of the pixel.
 /// Must be non-negative. Must be smaller than or equal to the number of rows.
-/// @param r A pointer to a <code>R_Natural8Value</code> variable.
-/// @param g A pointer to a <code>R_Natural8Value</code> variable.
-/// @param b A pointer to a <code>R_Natural8Value</code> variable.
-/// @param a A pointer to a <code>R_Natural8Value</code> variable.
+/// @param r A pointer to a <code>Arcadia_Natural8Value</code> variable.
+/// @param g A pointer to a <code>Arcadia_Natural8Value</code> variable.
+/// @param b A pointer to a <code>Arcadia_Natural8Value</code> variable.
+/// @param a A pointer to a <code>Arcadia_Natural8Value</code> variable.
 /// @pre The pixel buffer must of a format ABGR, ARGB, BGR, BGRA, RGB, or RGBA.
 /// The component values of the format must be an integer within the range of of [0,255].
 /// @post
@@ -122,13 +124,14 @@ PixelBuffer_setLinePadding
 void
 PixelBuffer_getPixelRgba
   (
+    Arcadia_Process* process,
     PixelBuffer* self,
-    R_Integer32Value column,
-    R_Integer32Value row,
-    R_Natural8Value* r,
-    R_Natural8Value* g,
-    R_Natural8Value* b,
-    R_Natural8Value* a
+    Arcadia_Integer32Value column,
+    Arcadia_Integer32Value row,
+    Arcadia_Natural8Value* r,
+    Arcadia_Natural8Value* g,
+    Arcadia_Natural8Value* b,
+    Arcadia_Natural8Value* a
   );
 
 /// @brief Set component values of a pixel at the specified position in this pixel buffer.
@@ -153,13 +156,14 @@ PixelBuffer_getPixelRgba
 void
 PixelBuffer_setPixelRgba
   (
+    Arcadia_Process* process,
     PixelBuffer* self,
-    R_Integer32Value column,
-    R_Integer32Value row,
-    R_Natural8Value r,
-    R_Natural8Value g,
-    R_Natural8Value b,
-    R_Natural8Value a
+    Arcadia_Integer32Value column,
+    Arcadia_Integer32Value row,
+    Arcadia_Natural8Value r,
+    Arcadia_Natural8Value g,
+    Arcadia_Natural8Value b,
+    Arcadia_Natural8Value a
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -182,11 +186,12 @@ PixelBuffer_setPixelRgba
 void
 PixelBuffer_fill
   (
+    Arcadia_Process* process,
     PixelBuffer* self,
-    R_Natural8Value r,
-    R_Natural8Value g,
-    R_Natural8Value b,
-    R_Natural8Value a
+    Arcadia_Natural8Value r,
+    Arcadia_Natural8Value g,
+    Arcadia_Natural8Value b,
+    Arcadia_Natural8Value a
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -198,9 +203,10 @@ PixelBuffer_fill
 void
 PixelBuffer_swapColumns
   (
+    Arcadia_Process* process,
     PixelBuffer* self,
-    R_Integer32Value column1,
-    R_Integer32Value column2
+    Arcadia_Integer32Value column1,
+    Arcadia_Integer32Value column2
   );
 
 /// @brief Swap row.
@@ -210,9 +216,10 @@ PixelBuffer_swapColumns
 void
 PixelBuffer_swapRows
   (
+    Arcadia_Process* process,
     PixelBuffer* self,
-    R_Integer32Value row1,
-    R_Integer32Value row2
+    Arcadia_Integer32Value row1,
+    Arcadia_Integer32Value row2
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -225,6 +232,7 @@ PixelBuffer_swapRows
 void
 PixelBuffer_reflectVertically
   (
+    Arcadia_Process* process,
     PixelBuffer* self
   );
 
@@ -236,6 +244,7 @@ PixelBuffer_reflectVertically
 void
 PixelBuffer_reflectHorizontally
   (
+    Arcadia_Process* process,
     PixelBuffer* self
   );
 
@@ -244,7 +253,7 @@ PixelBuffer_reflectHorizontally
 /// @brief Get the number of columns of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The number of columns of this pixel buffer.
-R_Integer32Value
+Arcadia_Integer32Value
 PixelBuffer_getNumberOfColumns
   (
     PixelBuffer* self
@@ -253,7 +262,7 @@ PixelBuffer_getNumberOfColumns
 /// @brief Get the number of rows of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The number of rows of this pixel buffer.
-R_Integer32Value
+Arcadia_Integer32Value
 PixelBuffer_getNumberOfRows
   (
     PixelBuffer* self
@@ -264,9 +273,10 @@ PixelBuffer_getNumberOfRows
 /// @brief Get the line stride of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The line stride of this pixel buffer.
-R_Integer32Value
+Arcadia_Integer32Value
 PixelBuffer_getLineStride
   (
+    Arcadia_Process* process,
     PixelBuffer* self
   );
 
@@ -275,9 +285,10 @@ PixelBuffer_getLineStride
 /// @brief Get the Bytes per pixel of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The line stride of this pixel buffer.
-R_Integer32Value
+Arcadia_Integer32Value
 PixelBuffer_getBytesPerPixel
   (
+    Arcadia_Process* process,
     PixelBuffer* self
   );
 
@@ -288,22 +299,24 @@ PixelBuffer_getBytesPerPixel
 PixelBuffer*
 PixelBuffer_create
   (
-    R_Integer32Value linePadding,
-    R_Integer32Value width,
-    R_Integer32Value height,
-    R_Natural8Value pixelFormat
+    Arcadia_Process* process,
+    Arcadia_Integer32Value linePadding,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height,
+    Arcadia_Natural8Value pixelFormat
   );
 
 PixelBuffer*
 PixelBuffer_createClone
   (
+    Arcadia_Process* process,
     PixelBuffer* other
   );
 
 /// @brief Get the width of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The width of this pixel buffer.
-R_Integer32Value
+Arcadia_Integer32Value
 PixelBuffer_getWidth
   (
     PixelBuffer* self
@@ -312,7 +325,7 @@ PixelBuffer_getWidth
 /// @brief Get the height of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The height of this pixel buffer.
-R_Integer32Value
+Arcadia_Integer32Value
 PixelBuffer_getHeight
   (
     PixelBuffer* self

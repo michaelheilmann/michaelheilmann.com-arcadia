@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,19 +17,19 @@
 
 #include "Module/Visuals/NativeWindowsIcon.h"
 
-#include "R/cstdlib.h"
-
 static void
 NativeWindowsIcon_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
 static void
 NativeWindowsIcon_destruct
   (
+    Arcadia_Process* process,
     NativeWindowsIcon* self
   );
 
@@ -39,7 +39,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = NULL,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -59,62 +59,63 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("NativeWindowsIcon", NativeWindowsIcon, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"NativeWindowsIcon", NativeWindowsIcon, u8"R.Object", R_Object, &_typeOperations);
 
-// R_Integer32Value width
-// R_Integer32Value height
-// R_Natural8Value red
-// R_Natural8Value green
-// R_Natural8Value blue
+// Arcadia_Integer32Value width
+// Arcadia_Integer32Value height
+// Arcadia_Natural8Value red
+// Arcadia_Natural8Value green
+// Arcadia_Natural8Value blue
 static void
 NativeWindowsIcon_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   NativeWindowsIcon* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _NativeWindowsIcon_getType();
+  Arcadia_TypeValue _type = _NativeWindowsIcon_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Object_constructImpl(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
 
   if (5 != numberOfArgumentValues) {
-    R_setStatus(R_Status_NumberOfArgumentsInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Process_jump(process);
   }
 
   if (!R_Value_isInteger32Value(&argumentValues[0])) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
-  R_Integer32Value width = R_Value_getInteger32Value(&argumentValues[0]);
+  Arcadia_Integer32Value width = R_Value_getInteger32Value(&argumentValues[0]);
 
   if (!R_Value_isInteger32Value(&argumentValues[1])) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
-  R_Integer32Value height = R_Value_getInteger32Value(&argumentValues[1]);
+  Arcadia_Integer32Value height = R_Value_getInteger32Value(&argumentValues[1]);
 
   if (!R_Value_isNatural8Value(&argumentValues[2])) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
-  R_Natural8Value red = R_Value_getNatural8Value(&argumentValues[2]);
+  Arcadia_Natural8Value red = R_Value_getNatural8Value(&argumentValues[2]);
 
   if (!R_Value_isNatural8Value(&argumentValues[3])) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
-  R_Natural8Value green = R_Value_getNatural8Value(&argumentValues[3]);
+  Arcadia_Natural8Value green = R_Value_getNatural8Value(&argumentValues[3]);
 
   if (!R_Value_isNatural8Value(&argumentValues[4])) {
-    R_setStatus(R_Status_ArgumentTypeInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
   }
-  R_Natural8Value blue = R_Value_getNatural8Value(&argumentValues[4]);
+  Arcadia_Natural8Value blue = R_Value_getNatural8Value(&argumentValues[4]);
 
   HDC hMemDC;
   BITMAPV5HEADER bi;
@@ -138,10 +139,8 @@ NativeWindowsIcon_constructImpl
 
   HDC hDC = GetDC(NULL);
   if (!hDC) {
-    ReleaseDC(NULL, hDC);
-    hDC = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
 
   // Create the DIB section with an alpha channel.
@@ -149,8 +148,8 @@ NativeWindowsIcon_constructImpl
   if (!hBitmap) {
     ReleaseDC(NULL, hDC);
     hDC = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
 
   hMemDC = CreateCompatibleDC(hDC);
@@ -159,8 +158,8 @@ NativeWindowsIcon_constructImpl
     hBitmap = NULL;
     ReleaseDC(NULL, hDC);
     hDC = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   ReleaseDC(NULL, hDC);
   hDC = NULL;
@@ -172,8 +171,8 @@ NativeWindowsIcon_constructImpl
     hBitmap = NULL;
     DeleteDC(hMemDC);
     hMemDC = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   PatBlt(hMemDC, 0, 0, width, height, WHITENESS);
   if (HGDI_ERROR == SelectObject(hMemDC, hOldBitmap)) {
@@ -181,8 +180,8 @@ NativeWindowsIcon_constructImpl
     hBitmap = NULL;
     DeleteDC(hMemDC);
     hMemDC = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
   DeleteDC(hMemDC);
   hMemDC = NULL;
@@ -192,8 +191,8 @@ NativeWindowsIcon_constructImpl
   if (!hMonoBitmap) {
     DeleteObject(hBitmap);
     hBitmap = NULL;
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
 
   // Set the alpha values for each pixel in the cursor so that
@@ -231,8 +230,8 @@ NativeWindowsIcon_constructImpl
   hBitmap = NULL;
 
   if (!hIcon) {
-    R_setStatus(R_Status_EnvironmentFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Process_jump(process);
   }
 
   _self->hIcon = hIcon;
@@ -242,6 +241,7 @@ NativeWindowsIcon_constructImpl
 static void
 NativeWindowsIcon_destruct
   (
+    Arcadia_Process* process,
     NativeWindowsIcon* self
   )
 {
@@ -254,11 +254,12 @@ NativeWindowsIcon_destruct
 NativeWindowsIcon*
 NativeWindowsIcon_create
   (
-    R_Integer32Value width,
-    R_Integer32Value height,
-    R_Natural8Value red,
-    R_Natural8Value green,  
-    R_Natural8Value blue
+    Arcadia_Process* process,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height,
+    Arcadia_Natural8Value red,
+    Arcadia_Natural8Value green,  
+    Arcadia_Natural8Value blue
   )
 {
   R_Value argumentValues[] = { {.tag = R_ValueTag_Integer32, .integer32Value = width },
@@ -266,8 +267,6 @@ NativeWindowsIcon_create
                                {.tag = R_ValueTag_Natural8, .natural8Value = red },
                                {.tag = R_ValueTag_Natural8, .natural8Value = green },
                                {.tag = R_ValueTag_Natural8, .natural8Value = blue } };
-  NativeWindowsIcon* self = R_allocateObject(_NativeWindowsIcon_getType(), 5, &argumentValues[0]);
-  R_Value selfValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = self };
-  NativeWindowsIcon_constructImpl(&selfValue, 5, &argumentValues[0]);
+  NativeWindowsIcon* self = R_allocateObject(process, _NativeWindowsIcon_getType(process), 5, &argumentValues[0]);
   return self;
 }

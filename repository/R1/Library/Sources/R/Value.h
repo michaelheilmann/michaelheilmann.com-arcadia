@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,37 +18,34 @@
 #if !defined(R_VALUE_H_INCLUDED)
 #define R_VALUE_H_INCLUDED
 
-#include "R/Atoms.h"
+#include "Arcadia/Ring1/Implementation/Atoms.h"
 
-#include "R/Boolean.h"
+#include "Arcadia/Ring1/Implementation/Boolean.h"
 
-#include "R/ForeignProcedure.h"
+#include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 
 #include "R/ImmutableByteArray.h"
 
-#include "R/Integer16.h"
-#include "R/Integer32.h"
-#include "R/Integer64.h"
-#include "R/Integer8.h"
+#include "Arcadia/Ring1/Implementation/Integer16.h"
+#include "Arcadia/Ring1/Implementation/Integer32.h"
+#include "Arcadia/Ring1/Implementation/Integer64.h"
+#include "Arcadia/Ring1/Implementation/Integer8.h"
 
-#include "R/Natural16.h"
-#include "R/Natural32.h"
-#include "R/Natural64.h"
-#include "R/Natural8.h"
+#include "Arcadia/Ring1/Implementation/Natural16.h"
+#include "Arcadia/Ring1/Implementation/Natural32.h"
+#include "Arcadia/Ring1/Implementation/Natural64.h"
+#include "Arcadia/Ring1/Implementation/Natural8.h"
 
-#include "R/ObjectReference.h"
+#include "Arcadia/Ring1/Implementation/ObjectReference.h"
 
-#include "R/Real32.h"
-#include "R/Real64.h"
+#include "Arcadia/Ring1/Implementation/Real32.h"
+#include "Arcadia/Ring1/Implementation/Real64.h"
 
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
-#include "R/Types.h"
-#include "R/TypeNames.h"
+#include "Arcadia/Ring1/Implementation/Types.h"
 
-#include "R/Void.h"
-
-typedef R_Type* R_TypeValue;
+#include "Arcadia/Ring1/Implementation/Void.h"
 
 #define R_ValueTag_Atom (1)
 
@@ -84,37 +81,37 @@ typedef struct R_Value {
   uint8_t tag;
   union {
 
-  #define Define(Suffix,  Prefix) \
-    R_##Suffix##Value Prefix##Value;
+  #define Define(Prefix, Suffix, Variable) \
+    Prefix##_##Suffix##Value Variable##Value;
 
-    Define(Atom, atom)
+    Define(Arcadia, Atom, atom)
 
-    Define(Boolean, boolean)
+    Define(Arcadia, Boolean, boolean)
 
-    Define(ForeignProcedure, foreignProcedure)
+    Define(Arcadia, ForeignProcedure, foreignProcedure)
 
-    Define(ImmutableByteArray, immutableByteArray)
+    Define(Arcadia, ImmutableByteArray, immutableByteArray)
     
-    Define(Integer16, integer16)
-    Define(Integer32, integer32)
-    Define(Integer64, integer64)
-    Define(Integer8, integer8)
+    Define(Arcadia, Integer16, integer16)
+    Define(Arcadia, Integer32, integer32)
+    Define(Arcadia, Integer64, integer64)
+    Define(Arcadia, Integer8, integer8)
 
-    Define(Natural16, natural16)
-    Define(Natural32, natural32)
-    Define(Natural64, natural64)
-    Define(Natural8, natural8)
+    Define(Arcadia, Natural16, natural16)
+    Define(Arcadia, Natural32, natural32)
+    Define(Arcadia, Natural64, natural64)
+    Define(Arcadia, Natural8, natural8)
 
-    Define(ObjectReference, objectReference)
+    Define(R, ObjectReference, objectReference)
 
-    Define(Real32, real32)
-    Define(Real64, real64)
+    Define(Arcadia, Real32, real32)
+    Define(Arcadia, Real64, real64)
 
-    Define(Size, size)
+    Define(Arcadia, Size, size)
 
-    Define(Type, type)
+    Define(R, Type, type)
     
-    Define(Void, void)
+    Define(Arcadia, Void, void)
 
   #undef Define
   };
@@ -127,13 +124,13 @@ R_Value_getTag
   )
 { return value->tag; }
 
-#define Define(Suffix, Prefix) \
-  static inline R_##Suffix##Value \
+#define Define(Prefix, Suffix, Variable) \
+  static inline Prefix##_##Suffix##Value \
   R_Value_get##Suffix##Value \
     ( \
       R_Value const* value \
     ) \
-  {  return value->Prefix##Value; } \
+  {  return value->Variable##Value; } \
 \
   static inline bool \
   R_Value_is##Suffix##Value \
@@ -146,41 +143,41 @@ R_Value_getTag
   R_Value_set##Suffix##Value \
     ( \
       R_Value* value, \
-      R_##Suffix##Value const Prefix##Value \
+      Prefix##_##Suffix##Value const Variable##Value \
     ) \
   { \
     value->tag = R_ValueTag_##Suffix; \
-    value->Prefix##Value = Prefix##Value; \
+    value->Variable##Value = Variable##Value; \
   }
 
-Define(Atom, atom)
+Define(Arcadia, Atom, atom)
 
-Define(Boolean, boolean)
+Define(Arcadia, Boolean, boolean)
 
-Define(ForeignProcedure, foreignProcedure)
+Define(Arcadia, ForeignProcedure, foreignProcedure)
 
-Define(ImmutableByteArray, immutableByteArray)
+Define(Arcadia, ImmutableByteArray, immutableByteArray)
 
-Define(Integer16, integer16)
-Define(Integer32, integer32)
-Define(Integer64, integer64)
-Define(Integer8, integer8)
+Define(Arcadia, Integer16, integer16)
+Define(Arcadia, Integer32, integer32)
+Define(Arcadia, Integer64, integer64)
+Define(Arcadia, Integer8, integer8)
 
-Define(Natural16, natural16)
-Define(Natural32, natural32)
-Define(Natural64, natural64)
-Define(Natural8, natural8)
+Define(Arcadia, Natural16, natural16)
+Define(Arcadia, Natural32, natural32)
+Define(Arcadia, Natural64, natural64)
+Define(Arcadia, Natural8, natural8)
 
-Define(ObjectReference, objectReference)
+Define(R, ObjectReference, objectReference)
 
-Define(Real32, real32)
-Define(Real64, real64)
+Define(Arcadia, Real32, real32)
+Define(Arcadia, Real64, real64)
 
-Define(Size, size)
+Define(Arcadia, Size, size)
 
-Define(Type, type)
+Define(R, Type, type)
 
-Define(Void, void)
+Define(Arcadia, Void, void)
 
 #undef Define
 
@@ -190,22 +187,25 @@ R_Value_visit
     R_Value* self
   );
 
-R_Type*
+Arcadia_TypeValue
 R_Value_getType
   (
+    Arcadia_Process* process,
     R_Value const* self
   );
 
-R_BooleanValue
+Arcadia_BooleanValue
 R_Value_isEqualTo
   (
+    Arcadia_Process* process,
     R_Value const* self,
     R_Value const* other
   );
 
-R_SizeValue
+Arcadia_SizeValue
 R_Value_hash
   (
+    Arcadia_Process* process,
     R_Value const* self
   );
 

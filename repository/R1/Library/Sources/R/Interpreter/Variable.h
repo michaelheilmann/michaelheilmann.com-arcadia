@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,20 +18,20 @@
 #if !defined(R_INTERPRETER_VARIABLE_INCLUDED)
 #define R_INTERPRETER_VARIABLE_INCLUDED
 
-#include "R/ForeignProcedure.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Object.h"
 #include "R/Value.h"
 typedef struct R_Interpreter_Class R_Interpreter_Class;
 
-Rex_declareObjectType("R.Interpreter.Variable", R_Interpreter_Variable, "R.Object");
+Rex_declareObjectType(u8"R.Interpreter.Variable", R_Interpreter_Variable, u8"R.Object");
 
 struct R_Interpreter_Variable {
   R_Object _parent;
   /// If the variable is ready.
-  R_BooleanValue ready;
+  Arcadia_BooleanValue ready;
   /// The zero-based index of this variable if ready is true.
   /// Zero otherwise.
-  R_SizeValue index;
+  Arcadia_SizeValue index;
   /// The class defining this variable.
   R_Interpreter_Class *class;
   /// The name of this variable.
@@ -41,6 +41,7 @@ struct R_Interpreter_Variable {
 R_Interpreter_Variable*
 R_Interpreter_Variable_create
   (
+    Arcadia_Process* process,
     R_Interpreter_Class* class,
     R_String* name
   );

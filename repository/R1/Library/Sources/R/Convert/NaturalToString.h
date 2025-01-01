@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,23 +19,24 @@
 #define R_CONVERT_NATURALTOSTRING_H_INCLUDED
 
 #include "Arms.h"
-#include "R/Natural16.h"
-#include "R/Natural32.h"
-#include "R/Natural64.h"
-#include "R/Natural8.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Natural16.h"
+#include "Arcadia/Ring1/Implementation/Natural32.h"
+#include "Arcadia/Ring1/Implementation/Natural64.h"
+#include "Arcadia/Ring1/Implementation/Natural8.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
 // On success:
 // <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.
 // <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
 // The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
 void
-R_Natural16_toString
+Arcadia_Natural16_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Natural16Value value,
+    Arcadia_Natural16Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   );
 
 // On success:
@@ -43,12 +44,13 @@ R_Natural16_toString
 // <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
 // The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
 void
-R_Natural32_toString
+Arcadia_Natural32_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Natural32Value value,
+    Arcadia_Natural32Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   );
 
 // On success:
@@ -56,12 +58,13 @@ R_Natural32_toString
 // <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
 // The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
 void
-R_Natural64_toString
+Arcadia_Natural64_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Natural64Value value,
+    Arcadia_Natural64Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   );
 
 // On success:
@@ -69,12 +72,13 @@ R_Natural64_toString
 // <code>*bufferLength</code> is assigned the length, in Bytes, of that string.
 // The array of Bytes must was allocated by the specified memory manager and must be deallocated using that memory manager when no longer required.
 void
-R_Natural8_toString
+Arcadia_Natural8_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Natural8Value value,
+    Arcadia_Natural8Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   );
 
 #endif // R_CONVERT_NATURALTOSTRING_H_INCLUDED

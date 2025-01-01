@@ -1,4 +1,4 @@
-  <h3>Jumps and Jump Targets</h3>
+  <h3>3.5. Jumps and Jump Targets</h3>
   <p>R provides non-local jumps by allowing to save and restore the C program state.</p>
 
   <p><code>

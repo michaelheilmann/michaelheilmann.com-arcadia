@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,41 +17,43 @@
 
 #include "R/Convert/NaturalToString.h"
 
-#include "R/JumpTarget.h"
-#include "R/Status.h"
+#include "Arcadia/Ring1/Include.h"
 
 void
-R_Natural16_toString
+Arcadia_Natural16_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Natural16Value value,
+    Arcadia_Natural16Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   )
-{ R_Natural64_toString(memoryManager, value, buffer, bufferLength); }
+{ Arcadia_Natural64_toString(process, memoryManager, value, buffer, bufferLength); }
 
 void
-R_Natural32_toString
+Arcadia_Natural32_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Natural32Value value,
+    Arcadia_Natural32Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   )
-{ R_Natural64_toString(memoryManager, value, buffer, bufferLength); }
+{ Arcadia_Natural64_toString(process, memoryManager, value, buffer, bufferLength); }
 
 void
-R_Natural64_toString
+Arcadia_Natural64_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Natural64Value value,
+    Arcadia_Natural64Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   )
 {
-  R_Natural64Value valueTemporary;
-  R_SizeValue numberOfDigits = 0;
-  R_SizeValue _bufferLength = 0;
+  Arcadia_Natural64Value valueTemporary;
+  Arcadia_SizeValue numberOfDigits = 0;
+  Arcadia_SizeValue _bufferLength = 0;
 
   valueTemporary = value;
   if (!valueTemporary) {
@@ -67,8 +69,8 @@ R_Natural64_toString
 
   char* _buffer = NULL;
   if (Arms_MemoryManager_allocate(memoryManager, &_buffer, _bufferLength)) {
-    R_setStatus(R_Status_AllocationFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
+    Arcadia_Process_jump(process);
   }
 
   valueTemporary = value;
@@ -79,7 +81,7 @@ R_Natural64_toString
   } else {
     char* q = p + numberOfDigits;
     while (valueTemporary > 0) {
-      R_Natural64Value digit = valueTemporary % 10;
+      Arcadia_Natural64Value digit = valueTemporary % 10;
       *(--q) = (char)digit;
       valueTemporary /= 10;
     }
@@ -91,11 +93,12 @@ R_Natural64_toString
 }
 
 void
-R_Natural8_toString
+Arcadia_Natural8_toString
   (
+    Arcadia_Process* process,
     Arms_MemoryManager* memoryManager,
-    R_Natural8Value value,
+    Arcadia_Natural8Value value,
     char** buffer,
-    R_SizeValue* bufferLength
+    Arcadia_SizeValue* bufferLength
   )
-{ R_Natural64_toString(memoryManager, value, buffer, bufferLength); }
+{ Arcadia_Natural64_toString(process, memoryManager, value, buffer, bufferLength); }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,6 +24,7 @@
 void
 main1
   (
+    Arcadia_Process* process,
     int argc,
     char **argv
   )
@@ -35,42 +36,42 @@ main1
   Audials_playSine();
 
   // (3) Create a window.
-  NativeWindowsWindow* window = NativeWindowsWindow_create();
-  R_Object_lock(window);
+  NativeWindow* window = (NativeWindow*)NativeWindowsWindow_create(process);
+  R_Object_lock(process, window);
 
   // (4) Ensure the window is opened.
-  NativeWindowsWindow_open(window);
+  NativeWindow_open(process, window);
   
-  R_Integer32Value width, height;
-  NativeWindowsIcon* icon;
+  Arcadia_Integer32Value width, height;
+  NativeIcon* icon;
 
   // (5) Set the big icon.
-  NativeWindowsWindow_getRequiredBigIconSize(window, &width, &height);
-  icon = NativeWindowsIcon_create(width, height, 47, 47, 47);
-  NativeWindowsWindow_setBigIcon(window, icon);
+  NativeWindow_getRequiredBigIconSize(window, &width, &height);
+  icon = (NativeIcon*)NativeWindowsIcon_create(process, width, height, 47, 47, 47);
+  NativeWindow_setBigIcon(window, icon);
   
   // (6) Set the small icon.
-  NativeWindowsWindow_getRequiredSmallIconSize(window, &width, &height);
-  icon = NativeWindowsIcon_create(width, height, 47, 47, 47);
-  NativeWindowsWindow_setSmallIcon(window, icon);
+  NativeWindow_getRequiredSmallIconSize(window, &width, &height);
+  icon = (NativeIcon*)NativeWindowsIcon_create(process, width, height, 47, 47, 47);
+  NativeWindow_setSmallIcon(window, icon);
 
   // (7) Set the title.
-  NativeWindowsWindow_setTitle(window, R_String_create_pn(R_ImmutableByteArray_create("Michael Heilmann's Liminality", sizeof("Michael Heilmann's Liminality") - 1)));
+  NativeWindow_setTitle(process, window, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
 
   // (8) Enter the message loop.
-  while (!NativeWindowsWindow_getQuitRequested(window)) {
+  while (!NativeWindow_getQuitRequested(window)) {
     R_Arms_step();
-    NativeWindowsWindow_update(window);
+    NativeWindow_update(window);
   }
 
   // (9) Ensure the window is closed.
-  NativeWindowsWindow_close(window);
+  NativeWindow_close(process, window);
 
   // (10) Shutdown audials.
   // TODO: Causes a leak if not invoked.
   Audials_shutdown();
 
-  R_Object_unlock(window);
+  R_Object_unlock(process, window);
 }
 
 int
@@ -80,18 +81,25 @@ main
     char** argv
   )
 {
-  R_Status status[2];
+  Arcadia_Status status[2];
   status[0] = R_startup();
   if (status[0]) {
     return EXIT_FAILURE;
   }
-  R_JumpTarget jumpTarget;
-  R_pushJumpTarget(&jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    main1(argc, argv);
-    R_popJumpTarget();
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    R_shutdown();
+    return EXIT_FAILURE;
   }
-  status[0] = R_getStatus();
+  R_JumpTarget jumpTarget;
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  if (R_JumpTarget_save(&jumpTarget)) {
+    main1(process, argc, argv);
+  }
+  Arcadia_Process_popJumpTarget(process);
+  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   status[1] = R_shutdown();
   if (status[1] || status[0]) {
     return EXIT_FAILURE;

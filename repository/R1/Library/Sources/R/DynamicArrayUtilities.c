@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,19 +21,19 @@ R_DynamicArrayUtilities_Result
 R_DynamicArrayUtilities_grow
   (
     void** elements,
-    R_SizeValue elementSize,
-    R_SizeValue size,
-    R_SizeValue* capacity,
-    R_SizeValue additionalCapacity,
+    Arcadia_SizeValue elementSize,
+    Arcadia_SizeValue size,
+    Arcadia_SizeValue* capacity,
+    Arcadia_SizeValue additionalCapacity,
     R_DynamicArrayUtilities_GrowthStrategy strategy
   )
 { 
   if (!elements || !elementSize || !capacity || size > (*capacity)) {
     return R_DynamicArrayUtilities_Result_InvalidArgument;
   }
-  R_SizeValue oldCapacity = *capacity;
-  R_SizeValue newCapacity;
-  R_SizeValue const maximalCapacity = R_SizeValue_Maximum / elementSize;
+  Arcadia_SizeValue oldCapacity = *capacity;
+  Arcadia_SizeValue newCapacity;
+  Arcadia_SizeValue const maximalCapacity = Arcadia_SizeValue_Maximum / elementSize;
   switch (strategy) {
     case R_DynamicArrayUtilities_GrowthStrategy1: {
       if (maximalCapacity - oldCapacity < additionalCapacity) {
@@ -46,8 +46,8 @@ R_DynamicArrayUtilities_grow
       *capacity = newCapacity;
     } break;
     case R_DynamicArrayUtilities_GrowthStrategy2: {
-      R_SizeValue currentNewCapacity = oldCapacity ? oldCapacity : 1; // 1 = 2^n with n = 0
-      R_SizeValue currentAdditionalCapacity = currentNewCapacity - oldCapacity;
+      Arcadia_SizeValue currentNewCapacity = oldCapacity ? oldCapacity : 1; // 1 = 2^n with n = 0
+      Arcadia_SizeValue currentAdditionalCapacity = currentNewCapacity - oldCapacity;
       while (currentAdditionalCapacity < additionalCapacity && currentNewCapacity <= maximalCapacity / 2) {
         currentNewCapacity *= 2;
         currentAdditionalCapacity = currentNewCapacity - oldCapacity;
@@ -62,7 +62,7 @@ R_DynamicArrayUtilities_grow
       *capacity = newCapacity;
     } break;
     case R_DynamicArrayUtilities_GrowthStrategy3: {
-      R_SizeValue newCapacity = maximalCapacity;
+      Arcadia_SizeValue newCapacity = maximalCapacity;
       if (additionalCapacity > newCapacity - oldCapacity) {
         return R_DynamicArrayUtilities_Result_NotExists;
       }
@@ -93,17 +93,17 @@ R_DynamicArrayUtilities_Result
 R_DynamicArrayUtilities_ensureFreeCapacity
   (
     void** elements,
-    R_SizeValue elementSize,
-    R_SizeValue size,
-    R_SizeValue* capacity,
-    R_SizeValue requiredFreeCapacity,
+    Arcadia_SizeValue elementSize,
+    Arcadia_SizeValue size,
+    Arcadia_SizeValue* capacity,
+    Arcadia_SizeValue requiredFreeCapacity,
     R_DynamicArrayUtilities_GrowthStrategy strategy
   )
 {
   if (!elements || !elementSize || !capacity || size > (*capacity)) {
     return R_DynamicArrayUtilities_Result_InvalidArgument;
   }
-  R_SizeValue availableFreeCapacity = (*capacity) - size;
+  Arcadia_SizeValue availableFreeCapacity = (*capacity) - size;
   if (availableFreeCapacity < requiredFreeCapacity) {
     return R_DynamicArrayUtilities_grow(elements, elementSize, size, capacity, requiredFreeCapacity - availableFreeCapacity, strategy);
   }

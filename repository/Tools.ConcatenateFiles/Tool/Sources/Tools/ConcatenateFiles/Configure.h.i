@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -13,9 +13,9 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-31
+// Last modified: 2025-01-01
 
-#if !defined(TOOLS_CONCATENATE_CONFIGURE_H_INCLUDED)
-#define TOOLS_CONCATENATE_CONFIGURE_H_INCLUDED
+#if !defined(TOOLS_CONCATENATEFILES_CONFIGURE_H_INCLUDED)
+#define TOOLS_CONCATENATEFILES_CONFIGURE_H_INCLUDED
 
-#endif // TOOLS_CONCATENATE_CONFIGURE_H_INCLUDED
+#endif // TOOLS_CONCATENATEFILES_CONFIGURE_H_INCLUDED

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,47 +19,47 @@
 
 #include "R/cstdlib.h"
 #include "R/ArmsIntegration.h"
-#include "R/JumpTarget.h"
-#include "R/Status.h"
-#include "R/Types.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Value.h"
 
 #define Name u8"R.ImmutableByteArray"
 
-static R_BooleanValue g_registered = R_BooleanValue_False;
+static Arcadia_BooleanValue g_registered = Arcadia_BooleanValue_False;
 
 static void
 onTypeRemoved
   (
-    uint8_t const* bytes,
+    Arcadia_Process* process,
+    const uint8_t* bytes,
     size_t numberOfBytes
   )
-{ g_registered = R_BooleanValue_False; }
+{ g_registered = Arcadia_BooleanValue_False; }
 
-R_ImmutableByteArray*
-R_ImmutableByteArray_create
+Arcadia_ImmutableByteArray*
+Arcadia_ImmutableByteArray_create
   (
-    R_Natural8Value const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_Process* process,
+    Arcadia_Natural8Value const* bytes,
+    Arcadia_SizeValue numberOfBytes
   )
 {
   if (!bytes) {
-     R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();   
+     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);   
   }
-  if (SIZE_MAX - sizeof(R_ImmutableByteArray) < numberOfBytes) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+  if (SIZE_MAX - sizeof(Arcadia_ImmutableByteArray) < numberOfBytes) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
   if (!g_registered) {
-    if (!R_Arms_registerType_nojump(Name, sizeof(Name) - 1, &onTypeRemoved, NULL, NULL)) {
-      R_jump();
+    if (!R_Arms_registerType_nojump(process, Name, sizeof(Name) - 1, process, &onTypeRemoved, NULL, NULL)) {
+      Arcadia_Process_jump(process);
     }
-    g_registered = R_BooleanValue_True;
+    g_registered = Arcadia_BooleanValue_True;
   }
-  R_ImmutableByteArray *array = NULL;
-  if (!R_allocate_nojump(&array, Name, sizeof(Name) - 1, sizeof(R_ImmutableByteArray) + numberOfBytes)) {
-    R_jump();
+  Arcadia_ImmutableByteArray*array = NULL;
+  if (!R_allocate_nojump(process, &array, Name, sizeof(Name) - 1, sizeof(Arcadia_ImmutableByteArray) + numberOfBytes)) {
+    Arcadia_Process_jump(process);
   }
   c_memcpy(array->bytes, bytes, numberOfBytes);
   array->numberOfBytes = numberOfBytes;
@@ -67,50 +67,53 @@ R_ImmutableByteArray_create
 }
 
 void
-R_ImmutableByteArray_visit
+Arcadia_ImmutableByteArray_visit
   (
-    R_ImmutableByteArray* immutableByteArray
+    Arcadia_ImmutableByteArray* immutableByteArray
   )
 { R_Arms_visit(immutableByteArray); }
 
-R_Natural8Value const*
-R_ImmutableByteArray_getBytes
+Arcadia_Natural8Value const*
+Arcadia_ImmutableByteArray_getBytes
   (
-    R_ImmutableByteArray const* immutableByteArray
+    Arcadia_ImmutableByteArray const* immutableByteArray
   )
 { return immutableByteArray->bytes; }
 
-R_SizeValue
-R_ImmutableByteArray_getNumberOfBytes
+Arcadia_SizeValue
+Arcadia_ImmutableByteArray_getNumberOfBytes
   (
-    R_ImmutableByteArray const* immutableByteArray
+    Arcadia_ImmutableByteArray const* immutableByteArray
   )
 { return immutableByteArray->numberOfBytes; }
 
 static void
 equalTo
-(
-  R_Value* target,
-  R_Value const* self,
-  R_Value const* other
-);
+  (
+    Arcadia_Process* process,
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
 
 static void
 hash
-(
-  R_Value* target,
-  R_Value const* self
-);
+  (
+    Arcadia_Process* process,
+    R_Value* target,
+    R_Value const* self
+  );
 
 static void
 notEqualTo
-(
-  R_Value* target,
-  R_Value const* self,
-  R_Value const* other
-);
+  (
+    Arcadia_Process* process,
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  );
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = NULL,
   .add = NULL,
   .and = NULL,
@@ -132,42 +135,46 @@ static const R_Type_Operations _typeOperations = {
 
 static void
 equalTo
-(
-  R_Value* target,
-  R_Value const* self,
-  R_Value const* other
-) {
-  if (R_Value_isForeignProcedureValue(other)) {
-    R_Value_setBooleanValue(target, R_Value_getForeignProcedureValue(self) == R_Value_getForeignProcedureValue(other));
+  (
+    Arcadia_Process* process,
+    R_Value* target,
+    R_Value const* self,
+    R_Value const* other
+  )
+{
+  if (R_Value_isImmutableByteArrayValue(other)) {
+    R_Value_setBooleanValue(target, R_Value_getImmutableByteArrayValue(self) == R_Value_getImmutableByteArrayValue(other));
   } else {
-    R_Value_setBooleanValue(target, R_BooleanValue_False);
+    R_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
   }
 }
 
 static void
 hash
   (
+    Arcadia_Process* process,
     R_Value* target,
     R_Value const* self
   )
-{ R_Value_setSizeValue(target, (R_SizeValue)(uintptr_t)R_Value_getForeignProcedureValue(self)); }
+{ R_Value_setSizeValue(target, (Arcadia_SizeValue)(uintptr_t)R_Value_getImmutableByteArrayValue(self)); }
 
 static void
 notEqualTo
   (
+    Arcadia_Process* process,
     R_Value* target,
     R_Value const* self,
     R_Value const* other
   )
 {
-  if (R_Value_isForeignProcedureValue(other)) {
-    R_Value_setBooleanValue(target, R_Value_getForeignProcedureValue(self) != R_Value_getForeignProcedureValue(other));
+  if (R_Value_isImmutableByteArrayValue(other)) {
+    R_Value_setBooleanValue(target, R_Value_getImmutableByteArrayValue(self) != R_Value_getImmutableByteArrayValue(other));
   } else {
-    R_Value_setBooleanValue(target, R_BooleanValue_True);
+    R_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
   }
 }
 
-static R_Type* g_type = NULL;
+static Arcadia_TypeValue g_type = NULL;
 
 static void
 typeDestructing
@@ -178,14 +185,14 @@ typeDestructing
   g_type = NULL;
 }
 
-R_Type*
-_R_ImmutableByteArray_getType
+Arcadia_TypeValue
+_Arcadia_ImmutableByteArray_getType
   (
+    Arcadia_Process* process
   )
 {
   if (!g_type) {
-    R_registerForeignValueType(Name, sizeof(Name) - 1, &_typeOperations, &typeDestructing);
-    g_type = R_getType(Name, sizeof(Name) - 1);
+    g_type = R_registerInternalType(process, Name, sizeof(Name) - 1, &_typeOperations, &typeDestructing);
   }
   return g_type;
 }

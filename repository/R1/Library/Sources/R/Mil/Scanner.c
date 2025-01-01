@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -51,7 +51,7 @@
 struct R_Mil_Scanner {
   R_Object _parent;
   // The current symbol "s".
-  R_Natural32Value symbol;
+  Arcadia_Natural32Value symbol;
   // The input stream.
   R_Utf8Reader* input;
   // The string table.
@@ -62,52 +62,59 @@ struct R_Mil_Scanner {
     /// The text of the token.
     R_StringBuffer* text;
     /// The type of the token.
-    R_Natural32Value type;
+    Arcadia_Natural32Value type;
   } token;
 };
 
 static void
 R_Mil_Scanner_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   );
 
 static void
 R_Mil_Scanner_destruct
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
 static void
 R_Mil_Scanner_visit
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
 static void
 write
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self,
-    R_Natural32Value codePoint
+    Arcadia_Natural32Value codePoint
   );
 
 static void
 save
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
 static void
 next
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
 static void
 saveAndNext
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
@@ -118,15 +125,17 @@ onEndToken
     R_Mil_TokenType type
   );
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isAlphabetic
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isDigit
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   );
 
@@ -136,7 +145,7 @@ static const R_ObjectType_Operations _objectTypeOperations = {
   .visit = &R_Mil_Scanner_visit,
 };
 
-static const R_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
   .and = NULL,
@@ -156,22 +165,23 @@ static const R_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType("Cil.Scanner", R_Mil_Scanner, "R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"Cil.Scanner", R_Mil_Scanner, u8"R.Object", R_Object, &_typeOperations);
 
 static void
 R_Mil_Scanner_constructImpl
   (
+    Arcadia_Process* process,
     R_Value* self,
-    R_SizeValue numberOfArgumentValues,
-    R_Value const* argumentValues
+    Arcadia_SizeValue numberOfArgumentValues,
+    R_Value* argumentValues
   )
 {
   R_Mil_Scanner* _self = R_Value_getObjectReferenceValue(self);
-  R_Type* _type = _R_Mil_Scanner_getType();
+  Arcadia_TypeValue _type = _R_Mil_Scanner_getType(process);
   //
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void} };
-    R_Object_constructImpl(self, 0, &argumentValues[0]);
+    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   //
   _self->token.type = R_Mil_TokenType_StartOfInput;
@@ -181,21 +191,21 @@ R_Mil_Scanner_constructImpl
   _self->input = NULL;
   _self->symbol = CodePoint_Start;
   //
-  _self->keywords = R_Mil_Keywords_create();
+  _self->keywords = R_Mil_Keywords_create(process);
   //
   _self->token.type = R_Mil_TokenType_StartOfInput;
-  _self->stringTable = R_Mil_StringTable_create();
-  _self->input = (R_Utf8Reader*)R_Utf8StringReader_create(R_String_create_pn(R_ImmutableByteArray_create("", sizeof("") - 1)));
-  _self->token.text = R_StringBuffer_create();
+  _self->stringTable = R_Mil_StringTable_create(process);
+  _self->input = (R_Utf8Reader*)R_Utf8StringReader_create(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"", sizeof(u8"") - 1)));
+  _self->token.text = R_StringBuffer_create(process);
   //
-  R_StringBuffer_append_pn(_self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  R_StringBuffer_append_pn(process, _self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   //
-  R_StringBuffer* temporary = R_StringBuffer_create();
+  R_StringBuffer* temporary = R_StringBuffer_create(process);
 #define On(text, type) \
   { \
     R_StringBuffer_clear(temporary); \
-    R_StringBuffer_append_pn(temporary, text, sizeof(text) - 1); \
-    R_Mil_Keywords_add(_self->keywords, R_Mil_StringTable_getOrCreateString(_self->stringTable, temporary), R_Mil_TokenType_##type); \
+    R_StringBuffer_append_pn(process, temporary, text, sizeof(text) - 1); \
+    R_Mil_Keywords_add(process, _self->keywords, R_Mil_StringTable_getOrCreateString(process, _self->stringTable, temporary), R_Mil_TokenType_##type); \
   }
   //
   On(u8"class", Class);
@@ -237,6 +247,7 @@ R_Mil_Scanner_constructImpl
 static void
 R_Mil_Scanner_destruct
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
 {/*Intentionally empty.*/}
@@ -244,6 +255,7 @@ R_Mil_Scanner_destruct
 static void
 R_Mil_Scanner_visit
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
 {
@@ -256,29 +268,32 @@ R_Mil_Scanner_visit
 static void
 write
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self,
-    R_Natural32Value codePoint
+    Arcadia_Natural32Value codePoint
   )
 {
-  R_StringBuffer_appendCodePoints(self->token.text, &codePoint, R_SizeValue_Literal(1));
+  R_StringBuffer_appendCodePoints(process, self->token.text, &codePoint, Arcadia_SizeValue_Literal(1));
 }
 
 static void
 save
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
-{ write(self, self->symbol); }
+{ write(process, self, self->symbol); }
 
 static void
 next
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
 {
-  if (R_Utf8Reader_hasCodePoint(self->input)) {
-    self->symbol = R_Utf8Reader_getCodePoint(self->input);
-    R_Utf8Reader_next(self->input);
+  if (R_Utf8Reader_hasCodePoint(process, self->input)) {
+    self->symbol = R_Utf8Reader_getCodePoint(process, self->input);
+    R_Utf8Reader_next(process, self->input);
   } else {
     self->symbol = CodePoint_End;
   }
@@ -287,11 +302,12 @@ next
 static void
 saveAndNext
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
 {
-  save(self);
-  next(self);
+  save(process, self);
+  next(process, self);
 }
 
 static void
@@ -304,9 +320,10 @@ onEndToken
   self->token.type = type;
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isAlphabetic
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
 {
@@ -314,9 +331,10 @@ isAlphabetic
       || ('a' <= self->symbol && self->symbol <= 'z');
 }
 
-static R_BooleanValue
+static Arcadia_BooleanValue
 isDigit
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
 {
@@ -326,21 +344,23 @@ isDigit
 R_Mil_Scanner*
 R_Mil_Scanner_create
   (
+    Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = R_VoidValue_Void } };
-  R_Mil_Scanner* self = R_allocateObject(_R_Mil_Scanner_getType(), 0, &argumentValues[0]);
+  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  R_Mil_Scanner* self = R_allocateObject(process, _R_Mil_Scanner_getType(process), 0, &argumentValues[0]);
   return self;
 }
 
 R_String*
 R_Mil_Scanner_getTokenText
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
-{ return R_Mil_StringTable_getOrCreateString(self->stringTable, self->token.text); }
+{ return R_Mil_StringTable_getOrCreateString(process, self->stringTable, self->token.text); }
 
-R_Natural32Value
+Arcadia_Natural32Value
 R_Mil_Scanner_getTokenType
   (
     R_Mil_Scanner* self
@@ -350,21 +370,22 @@ R_Mil_Scanner_getTokenType
 static void
 onEndOfLine
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
 {
   if ('\r' == self->symbol) {
-    next(self);
+    next(process, self);
     if ('\n' == self->symbol) {
-      next(self);
+      next(process, self);
     }
     onEndToken(self, R_Mil_TokenType_LineTerminator);
-    R_StringBuffer_append_pn(self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    R_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   } else if ('\n' == self->symbol) {
-    next(self);
+    next(process, self);
     onEndToken(self, R_Mil_TokenType_LineTerminator);
-    R_StringBuffer_append_pn(self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    R_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   }
 }
@@ -372,207 +393,209 @@ onEndOfLine
 void
 R_Mil_Scanner_step
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self
   )
 {
   R_StringBuffer_clear(self->token.text);
   if (CodePoint_Start == self->symbol) {
-    next(self);
+    next(process, self);
   }
   if (CodePoint_End == self->symbol) {
     onEndToken(self, R_Mil_TokenType_EndOfInput);
-    R_StringBuffer_append_pn(self->token.text, u8"<end of input>", sizeof(u8"<end of input>") - 1);
+    R_StringBuffer_append_pn(process, self->token.text, u8"<end of input>", sizeof(u8"<end of input>") - 1);
     return;
   } 
   // Whitespace :  <Whitespace> | <Tabulator>
   if (' ' == self->symbol || '\t' == self->symbol) {
     do {
-      next(self);
+      next(process, self);
     } while (' ' == self->symbol || '\t' == self->symbol);
     onEndToken(self, R_Mil_TokenType_WhiteSpaces);
-    R_StringBuffer_append_pn(self->token.text, u8"<whitespaces>", sizeof(u8"<whitespaces>") - 1);
+    R_StringBuffer_append_pn(process, self->token.text, u8"<whitespaces>", sizeof(u8"<whitespaces>") - 1);
     return;
   }
   // LineTerminator : <LineFeed>
   //                  <CarriageReturn>
   //                  <CarriageReturn> <LineFeed>
   if ('\r' == self->symbol) {
-    next(self);
+    next(process, self);
     if ('\n' == self->symbol) {
-      next(self);
+      next(process, self);
     }
     onEndToken(self, R_Mil_TokenType_LineTerminator);
-    R_StringBuffer_append_pn(self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    R_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   } else if ('\n' == self->symbol) {
-    next(self);
+    next(process, self);
     onEndToken(self, R_Mil_TokenType_LineTerminator);
-    R_StringBuffer_append_pn(self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    R_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   }
   if ('=' == self->symbol) {
     // <equals sign>
-    saveAndNext(self);
+    saveAndNext(process, self);
     onEndToken(self, R_Mil_TokenType_EqualsSign);
     return;
   } else if (':' == self->symbol) {
      // <colon>
-    saveAndNext(self);
+    saveAndNext(process, self);
     onEndToken(self, R_Mil_TokenType_Colon);
     return;
   } else if (',' == self->symbol) {
      // <comma>
-    saveAndNext(self);
+    saveAndNext(process, self);
     onEndToken(self, R_Mil_TokenType_Comma);
     return;
   } else if ('{' == self->symbol) {
      // <left curly bracket>
-    saveAndNext(self);
+    saveAndNext(process, self);
     onEndToken(self, R_Mil_TokenType_LeftCurlyBracket);
     return;
   } else if ('}' == self->symbol) {
      // <right curly bracket>
-    saveAndNext(self);
+    saveAndNext(process, self);
     onEndToken(self, R_Mil_TokenType_RightCurlyBracket);
     return;
   } else if ('(' == self->symbol) {
      // <left parenthesis>
-    saveAndNext(self);
+    saveAndNext(process, self);
     onEndToken(self, R_Mil_TokenType_LeftParenthesis);
     return;
   } else if (')' == self->symbol) {
      // <right parenthesis>
-    saveAndNext(self);
+    saveAndNext(process, self);
     onEndToken(self, R_Mil_TokenType_RightParenthesis);
     return;
   } else if ('"' == self->symbol) {
     // <string>    
-    next(self);
-    R_BooleanValue lastWasSlash = R_BooleanValue_False;
-    while (R_BooleanValue_True) {
+    next(process, self);
+    Arcadia_BooleanValue lastWasSlash = Arcadia_BooleanValue_False;
+    while (Arcadia_BooleanValue_True) {
       if (lastWasSlash) {
         switch (self->symbol) {
           case '"': {
-            write(self, '"');
-            next(self);
+            write(process, self, '"');
+            next(process, self);
           } break;
           case '\\': {
-            write(self, '\\');
-            next(self);
+            write(process, self, '\\');
+            next(process, self);
           } break;
           case 'n': {
-            write(self, '\n');
-            next(self);
+            write(process, self, '\n');
+            next(process, self);
           } break;
           case 'r': {
-            write(self, '\r');
-            next(self);
+            write(process, self, '\r');
+            next(process, self);
           } break;
           default: {
-            R_setStatus(R_Status_LexicalError);
-            R_jump();
+            Arcadia_Process_setStatus(process, Arcadia_Status_LexicalError);
+            Arcadia_Process_jump(process);
           } break;
         }
-        lastWasSlash = R_BooleanValue_False;
+        lastWasSlash = Arcadia_BooleanValue_False;
       } else {
         if ('\\' == self->symbol) {
-          lastWasSlash = R_BooleanValue_True;
-          next(self);
+          lastWasSlash = Arcadia_BooleanValue_True;
+          next(process, self);
         } else if ('"' == self->symbol) {
-          next(self);
+          next(process, self);
           break;
         } else if (CodePoint_End == self->symbol) {
-          R_setStatus(R_Status_LexicalError);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_LexicalError);
+          Arcadia_Process_jump(process);
         } else {
-          saveAndNext(self);
+          saveAndNext(process, self);
         }
       }
     }
     onEndToken(self, R_Mil_TokenType_StringLiteral);
     return;
-  } else if ('_' == self->symbol || isAlphabetic(self)) {
+  } else if ('_' == self->symbol || isAlphabetic(process, self)) {
     // <name>
-    saveAndNext(self);
-    while ('_' == self->symbol || isAlphabetic(self) || isDigit(self)) {
-      saveAndNext(self);
+    saveAndNext(process, self);
+    while ('_' == self->symbol || isAlphabetic(process, self) || isDigit(process, self)) {
+      saveAndNext(process, self);
     }
     onEndToken(self, R_Mil_TokenType_Name);
-    R_Mil_Keywords_scan(self->keywords, R_Mil_Scanner_getTokenText(self), &self->token.type);
+    R_Mil_Keywords_scan(process, self->keywords, R_Mil_Scanner_getTokenText(process, self), &self->token.type);
     return;
-  } else if (isDigit(self)) {
+  } else if (isDigit(process, self)) {
     do {
-      saveAndNext(self);
-    } while (isDigit(self));
+      saveAndNext(process, self);
+    } while (isDigit(process,self));
     if ('.' == self->symbol) {
-      saveAndNext(self);
-      while (isDigit(self)) {
-        saveAndNext(self);
+      saveAndNext(process, self);
+      while (isDigit(process, self)) {
+        saveAndNext(process, self);
       }
       if ('e' == self->symbol || 'E' == self->symbol) {
-        saveAndNext(self);
+        saveAndNext(process, self);
         if ('+' == self->symbol || '-' == self->symbol) {
-          saveAndNext(self);
+          saveAndNext(process, self);
         }
-        if (!isDigit(self)) {
-          R_setStatus(R_Status_LexicalError);
-          R_jump();
+        if (!isDigit(process, self)) {
+          Arcadia_Process_setStatus(process, Arcadia_Status_LexicalError);
+          Arcadia_Process_jump(process);
         }
         do {
-          saveAndNext(self);
-        } while (isDigit(self));
+          saveAndNext(process, self);
+        } while (isDigit(process, self));
       }
       onEndToken(self, R_Mil_TokenType_RealLiteral);
     } else {
       onEndToken(self, R_Mil_TokenType_IntegerLiteral);
     }
   } else if ('/' == self->symbol) {
-    next(self);
+    next(process, self);
     if ('*' == self->symbol) {
       // multi line comment
-      next(self);
+      next(process, self);
       while (true) {
         if (CodePoint_End == self->symbol) {
-          R_setStatus(R_Status_LexicalError);
-          R_jump();
+          Arcadia_Process_setStatus(process, Arcadia_Status_LexicalError);
+          Arcadia_Process_jump(process);
         } else if ('\n' == self->symbol) {
-          next(self);
+          next(process, self);
         } else if ('\r' == self->symbol) {
-          next(self);
+          next(process, self);
           if ('\n' == self->symbol) {
-            next(self);
+            next(process, self);
           }
         } else if ('*' == self->symbol) {
-          next(self);
+          next(process, self);
           if ('/' == self->symbol) {
-            next(self);
+            next(process, self);
             break;
           } else {
-            write(self, '*');
+            write(process, self, '*');
           }
         }
       }
       onEndToken(self, R_Mil_TokenType_MultiLineComment);
     } else if ('/' == self->symbol) {
       // single line comment
-      next(self);
+      next(process, self);
       while (CodePoint_End != self->symbol && '\n' != self->symbol && '\r' != self->symbol) {
-        saveAndNext(self);
+        saveAndNext(process, self);
       }
       onEndToken(self, R_Mil_TokenType_SingleLineComment);
     } else {
-      R_setStatus(R_Status_LexicalError);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_LexicalError);
+      Arcadia_Process_jump(process);
     }
   } else {
-    R_setStatus(R_Status_LexicalError);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_LexicalError);
+    Arcadia_Process_jump(process);
   }
 }
 
 void
 R_Mil_Scanner_setInput
   (
+    Arcadia_Process* process,
     R_Mil_Scanner* self,
     R_Utf8Reader* input
   )
@@ -581,5 +604,5 @@ R_Mil_Scanner_setInput
   self->symbol = CodePoint_Start;
   self->token.type = R_Mil_TokenType_StartOfInput;
   R_StringBuffer_clear(self->token.text);
-  R_StringBuffer_append_pn(self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  R_StringBuffer_append_pn(process, self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
 }

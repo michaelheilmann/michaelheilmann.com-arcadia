@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,6 +19,7 @@
 #define MODULE_VISUALS_NATIVEWINDOWSICON_H_INCLUDED
  
 #include "R.h"
+#include "Module/Visuals/NativeIcon.h"
 
 #include <stdint.h>
 
@@ -30,21 +31,22 @@
 ///   construct(width:Integer32, height:Integer32, red:Natural8, green:Natural8, blue:Natural8)
 /// }
 /// @endcode
-Rex_declareObjectType("NativeWindowsIcon", NativeWindowsIcon, "R.Object")
+Rex_declareObjectType(u8"NativeWindowsIcon", NativeWindowsIcon, u8"R.Object")
 
 struct NativeWindowsIcon {
-  R_Object _parent;
+  NativeIcon _parent;
   HICON hIcon;
 };
 
 NativeWindowsIcon*
 NativeWindowsIcon_create
   (
-    R_Integer32Value width,
-    R_Integer32Value height,
-    R_Natural8Value red,
-    R_Natural8Value green,
-    R_Natural8Value blue
+    Arcadia_Process* process,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height,
+    Arcadia_Natural8Value red,
+    Arcadia_Natural8Value green,
+    Arcadia_Natural8Value blue
   );
 
 #endif // MODULE_VISUALS_NATIVEWINDOWSICON_H_INCLUDED

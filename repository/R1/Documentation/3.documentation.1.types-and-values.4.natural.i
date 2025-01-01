@@ -1,4 +1,4 @@
-<h3 id="natural-types">Natural Types</h3>
+<h3 id="natural-types">3.1.4. Natural Types</h3>
 <p>
 R provides natural number types.
 </p>

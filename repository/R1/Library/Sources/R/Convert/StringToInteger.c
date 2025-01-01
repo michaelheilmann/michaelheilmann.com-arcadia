@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,88 +19,96 @@
 
 #include "R/Convert/parse.i"
 
-static R_Integer8Value
+static Arcadia_Integer8Value
 toInteger8
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_Integer16Value
+static Arcadia_Integer16Value
 toInteger16
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_Integer32Value
+static Arcadia_Integer32Value
 toInteger32
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_Integer64Value
+static Arcadia_Integer64Value
 toInteger64
   (
+    Arcadia_Process* process,
     State* state
   );
 
-static R_Integer8Value
+static Arcadia_Integer8Value
 toInteger8
   (
+    Arcadia_Process* process,
     State* state
   )
 {
-  R_Integer64Value v = toInteger64(state);
-  if (v < R_Integer8Value_Minimum || v > R_Integer8Value_Maximum) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+  Arcadia_Integer64Value v = toInteger64(process, state);
+  if (v < Arcadia_Integer8Value_Minimum || v > Arcadia_Integer8Value_Maximum) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
-  return (R_Integer8Value)v;
+  return (Arcadia_Integer8Value)v;
 }
 
-static R_Integer16Value
+static Arcadia_Integer16Value
 toInteger16
   (
+    Arcadia_Process* process,
     State* state
   )
 {
-  R_Integer64Value v = toInteger64(state);
-  if (v < R_Integer16Value_Minimum || v > R_Integer16Value_Maximum) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+  Arcadia_Integer64Value v = toInteger64(process, state);
+  if (v < Arcadia_Integer16Value_Minimum || v > Arcadia_Integer16Value_Maximum) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
-  return (R_Integer16Value)v;
+  return (Arcadia_Integer16Value)v;
 }
 
-static R_Integer32Value
+static Arcadia_Integer32Value
 toInteger32
   (
+    Arcadia_Process* process,
     State* state
   )
 {
-  R_Integer64Value v = toInteger64(state);
-  if (v < R_Integer32Value_Minimum || v > R_Integer32Value_Maximum) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+  Arcadia_Integer64Value v = toInteger64(process, state);
+  if (v < Arcadia_Integer32Value_Minimum || v > Arcadia_Integer32Value_Maximum) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
-  return (R_Integer32Value)v;
+  return (Arcadia_Integer32Value)v;
 }
 
-static R_Integer64Value
+static Arcadia_Integer64Value
 toInteger64
   (
+    Arcadia_Process* process,
     State* state
   )
 {
-  static const R_Integer64Value BASE = 10;
-  // The maximum decimal value of an R_Integer64Value is -9,223,372,036,854,775,808. These are 19 decimal digits.
-  // The minimum decimal value of an R_Integer64Value is +9,223,372,036,854,775,807. These are 19 decimal digits.
-  // 18 = 19 - 1 is the number of decimal digits which always fit into an R_Integer64Value.
-  static const R_SizeValue SAFEDIGITSBASE10 = 18;
+  static const Arcadia_Integer64Value BASE = 10;
+  // The maximum decimal value of an Arcadia_Integer64Value is -9,223,372,036,854,775,808. These are 19 decimal digits.
+  // The minimum decimal value of an Arcadia_Integer64Value is +9,223,372,036,854,775,807. These are 19 decimal digits.
+  // 18 = 19 - 1 is the number of decimal digits which always fit into an Arcadia_Integer64Value.
+  static const Arcadia_SizeValue SAFEDIGITSBASE10 = 18;
 #if 0
   // Precondition prevents that.
   if (CodePoint_Start != state->symbol) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
 #endif
   next(state);
@@ -111,60 +119,61 @@ toInteger64
   } else if (isPlus(state)) {
     next(state);
   }
-  R_Integer64Value v = 0;
+  Arcadia_Integer64Value v = 0;
   if (!isDigit(state)) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   // Skip leading zeroes.
   while (isZero(state)) {
     next(state);
   }
   while (isDigit(state)) {
-    R_Integer64Value w = 0; 
+    Arcadia_Integer64Value w = 0; 
     // We accumulate up to 18 decimal digits in w.
-    R_SizeValue i = 0, n = SAFEDIGITSBASE10;
+    Arcadia_SizeValue i = 0, n = SAFEDIGITSBASE10;
     for (; isDigit(state) && i < n; ++i) {
-      R_Integer64Value digit = (R_Integer64Value)(state->symbol - '0');
+      Arcadia_Integer64Value digit = (Arcadia_Integer64Value)(state->symbol - '0');
       w = w * BASE + digit;
       next(state);
     }
     // We need to multiply v by the number of digits in w.
     while (i > 0) {
-      if (v < R_Integer64Value_Minimum / 10) {
-        R_setStatus(R_Status_ConversionFailed);
-        R_jump();
+      if (v < Arcadia_Integer64Value_Minimum / 10) {
+        Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+        Arcadia_Process_jump(process);
       }
       v = v * i;
       i--;
     }
     // If we cannot subtract w from v, then this number is not representable.
-    if (v < R_Integer16Value_Minimum + w) {
-      R_setStatus(R_Status_ConversionFailed);
-      R_jump();
+    if (v < Arcadia_Integer16Value_Minimum + w) {
+      Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+      Arcadia_Process_jump(process);
     }
     v -= w;
   }
   if (CodePoint_End != state->symbol) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   if (negative) {
     return v;
   }
-  if (v == R_Integer64Value_Minimum) {
-    R_setStatus(R_Status_ConversionFailed);
-    R_jump();
+  if (v == Arcadia_Integer64Value_Minimum) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ConversionFailed);
+    Arcadia_Process_jump(process);
   }
   v = -v;
   return v;
 }
 
-R_Integer8Value
+Arcadia_Integer8Value
 R_toInteger8
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -172,14 +181,15 @@ R_toInteger8
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toInteger8(&state);
+  return toInteger8(process, &state);
 }
 
-R_Integer16Value
+Arcadia_Integer16Value
 R_toInteger16
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -187,14 +197,15 @@ R_toInteger16
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toInteger16(&state);
+  return toInteger16(process, &state);
 }
 
-R_Integer32Value
+Arcadia_Integer32Value
 R_toInteger32
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -202,14 +213,15 @@ R_toInteger32
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toInteger32(&state);
+  return toInteger32(process, &state);
 }
 
-R_Integer64Value
+Arcadia_Integer64Value
 R_toInteger64
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   )
 {
   State state;
@@ -217,5 +229,5 @@ R_toInteger64
   state.end = p + n;
   state.current = p;
   state.symbol = CodePoint_Start;
-  return toInteger64(&state);
+  return toInteger64(process, &state);
 }

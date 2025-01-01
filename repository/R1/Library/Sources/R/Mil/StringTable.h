@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,7 +20,7 @@
 
 #include "R.h"
 
-Rex_declareObjectType("R.Mil.StringTable", R_Mil_StringTable, "R.Object");
+Rex_declareObjectType(u8"R.Mil.StringTable", R_Mil_StringTable, u8"R.Object");
 
 // Unmanaged.
 typedef struct R_Mil_StringTable_Node R_Mil_StringTable_Node;
@@ -32,18 +32,20 @@ struct R_Mil_StringTable_Node {
 struct R_Mil_StringTable {
   R_Object _parent;
   R_Mil_StringTable_Node** buckets;
-  R_SizeValue size;
-  R_SizeValue capacity;
+  Arcadia_SizeValue size;
+  Arcadia_SizeValue capacity;
 };
 
 R_Mil_StringTable*
 R_Mil_StringTable_create
   (
+    Arcadia_Process* process
   );
 
 R_String*
 R_Mil_StringTable_getOrCreateString
   (
+    Arcadia_Process* process,
     R_Mil_StringTable* self,
     R_StringBuffer* stringBuffer
   );

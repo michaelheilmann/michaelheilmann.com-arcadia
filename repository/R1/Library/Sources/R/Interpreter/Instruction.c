@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,10 +17,10 @@
 
 #include "R/Interpreter/Instruction.h"
 
+#include "Arcadia/Ring1/Include.h"
+#include "R/Value.h"
+
 #include "R/Interpreter/Include.h"
-#include "R/JumpTarget.h"
-#include "R/Status.h"
-#include "R/Types.h"
 #include "R/cstdlib.h"
 #include "R/Interpreter/Procedure.h"
 #include "R/String.h"
@@ -28,19 +28,20 @@
 static R_Value*
 R_InterpreterState_decodeTarget
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
   R_Interpreter_Code* code = call->procedure->code;
 
   R_Machine_Code_IndexKind indexKind;
-  R_Natural32Value indexValue;
-  R_Interpreter_Code_decodeIndex(code, &call->instructionIndex, &indexKind, &indexValue);
+  Arcadia_Natural32Value indexValue;
+  R_Interpreter_Code_decodeIndex(process, code, &call->instructionIndex, &indexKind, &indexValue);
   if (R_Machine_Code_IndexKind_Register != indexKind) {
-    R_setStatus(R_Status_SemanticalError);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
+    Arcadia_Process_jump(process);
   }
   return R_Interpreter_ThreadState_getRegisterAt(thread, indexValue);
 }
@@ -48,69 +49,73 @@ R_InterpreterState_decodeTarget
 static R_Value const*
 R_InterpreterState_decodeOperand
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(process);
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
   R_Interpreter_Code* code = call->procedure->code;
 
   R_Machine_Code_IndexKind indexKind;
-  R_Natural32Value indexValue;
-  R_Interpreter_Code_decodeIndex(code, &call->instructionIndex, &indexKind, &indexValue);
+  Arcadia_Natural32Value indexValue;
+  R_Interpreter_Code_decodeIndex(process, code, &call->instructionIndex, &indexKind, &indexValue);
   R_Value const* value = indexKind == R_Machine_Code_IndexKind_Constant ?
-                         R_Interpreter_Code_Constants_getAt(constants, indexValue) : R_Interpreter_ThreadState_getRegisterAt(thread, indexValue);
+                         R_Interpreter_Code_Constants_getAt(process, constants, indexValue) : R_Interpreter_ThreadState_getRegisterAt(thread, indexValue);
   return value;
 }
 
 static R_String*
 R_InterpreterState_decodeStringConstant
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(process);
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
   R_Interpreter_Code* code = call->procedure->code;
 
   R_Machine_Code_IndexKind indexKind;
-  R_Natural32Value indexValue;
-  R_Interpreter_Code_decodeIndex(code, &call->instructionIndex, &indexKind, &indexValue);
+  Arcadia_Natural32Value indexValue;
+  R_Interpreter_Code_decodeIndex(process, code, &call->instructionIndex, &indexKind, &indexValue);
   if (R_Machine_Code_IndexKind_Constant != indexKind) {
-    R_setStatus(R_Status_SemanticalError);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
+    Arcadia_Process_jump(process);
   }
-  if (!R_Type_isSubType(R_Value_getType(R_Interpreter_Code_Constants_getAt(constants, indexValue)), _R_String_getType())) {
-    R_setStatus(R_Status_SemanticalError);
-    R_jump();
+  if (!Arcadia_Type_isSubType(R_Value_getType(process, R_Interpreter_Code_Constants_getAt(process, constants, indexValue)), _R_String_getType(process))) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
+    Arcadia_Process_jump(process);
   }
-  return (R_String*)R_Value_getObjectReferenceValue(R_Interpreter_Code_Constants_getAt(constants, indexValue));
+  return (R_String*)R_Value_getObjectReferenceValue(R_Interpreter_Code_Constants_getAt(process, constants, indexValue));
 }
 
-static R_Natural32Value
+static Arcadia_Natural32Value
 R_InterpreterState_decodeCount
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
   R_Interpreter_Code* code = call->procedure->code;
 
-  R_Natural32Value countValue;
-  R_Interpreter_Code_decodeCount(code, &call->instructionIndex, &countValue);
+  Arcadia_Natural32Value countValue;
+  R_Interpreter_Code_decodeCount(process, code, &call->instructionIndex, &countValue);
   return countValue;
 }
 
 void
 R_Instructions_add
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -119,26 +124,27 @@ R_Instructions_add
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->add) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->add(targetValue, firstOperandValue, secondOperandValue);
+  operations->add(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_and
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -147,26 +153,27 @@ R_Instructions_and
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->and) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->and(targetValue, firstOperandValue, secondOperandValue);
+  operations->and(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_concatenate
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -175,26 +182,27 @@ R_Instructions_concatenate
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->concatenate) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->concatenate(targetValue, firstOperandValue, secondOperandValue);
+  operations->concatenate(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_divide
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -203,26 +211,27 @@ R_Instructions_divide
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->divide) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->divide(targetValue, firstOperandValue, secondOperandValue);
+  operations->divide(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_equalTo
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -231,26 +240,27 @@ R_Instructions_equalTo
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->equalTo) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->equalTo(targetValue, firstOperandValue, secondOperandValue);
+  operations->equalTo(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_greaterThan
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -259,26 +269,27 @@ R_Instructions_greaterThan
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->greaterThan) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->greaterThan(targetValue, firstOperandValue, secondOperandValue);
+  operations->greaterThan(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_greaterThanOrEqualTo
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -287,26 +298,27 @@ R_Instructions_greaterThanOrEqualTo
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->greaterThanOrEqualTo) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->greaterThanOrEqualTo(targetValue, firstOperandValue, secondOperandValue);
+  operations->greaterThanOrEqualTo(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_idle
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -319,10 +331,11 @@ R_Instructions_idle
 void
 R_Instructions_lowerThan
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -331,26 +344,27 @@ R_Instructions_lowerThan
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->lowerThan) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->lowerThan(targetValue, firstOperandValue, secondOperandValue);
+  operations->lowerThan(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_lowerThanOrEqualTo
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -359,26 +373,27 @@ R_Instructions_lowerThanOrEqualTo
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->lowerThanOrEqualTo) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->lowerThanOrEqualTo(targetValue, firstOperandValue, secondOperandValue);
+  operations->lowerThanOrEqualTo(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_multiply
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -387,26 +402,27 @@ R_Instructions_multiply
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->multiply) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->multiply(targetValue, firstOperandValue, secondOperandValue);
+  operations->multiply(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_negate
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -415,25 +431,26 @@ R_Instructions_negate
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* operandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* operandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* operandType = R_Value_getType(operandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(operandType);
+  Arcadia_TypeValue operandType = R_Value_getType(process, operandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(operandType);
   if (!operations->negate) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->negate(targetValue, operandValue);
+  operations->negate(process, targetValue, operandValue);
 }
 
 void
 R_Instructions_not
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -442,25 +459,26 @@ R_Instructions_not
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* operandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* operandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* operandType = R_Value_getType(operandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(operandType);
+  Arcadia_TypeValue operandType = R_Value_getType(process, operandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(operandType);
   if (!operations->not) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->not(targetValue, operandValue);
+  operations->not(process, targetValue, operandValue);
 }
 
 void
 R_Instructions_notEqualTo
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -469,26 +487,27 @@ R_Instructions_notEqualTo
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->notEqualTo) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->notEqualTo(targetValue, firstOperandValue, secondOperandValue);
+  operations->notEqualTo(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_or
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -497,26 +516,27 @@ R_Instructions_or
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations-> or ) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->or(targetValue, firstOperandValue, secondOperandValue);
+  operations->or(process, targetValue, firstOperandValue, secondOperandValue);
 }
 
 void
 R_Instructions_subtract
   (
-    R_Interpreter_ProcessState* process
+    Arcadia_Process* process,
+    R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(process);
+  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
 #if defined(_DEBUG)
   R_Interpreter_Code* code = call->procedure->code;
@@ -525,15 +545,15 @@ R_Instructions_subtract
 
   call->instructionIndex++;
 
-  R_Value* targetValue = R_InterpreterState_decodeTarget(process);
-  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process);
-  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process);
+  R_Value* targetValue = R_InterpreterState_decodeTarget(process, interpreterProcess);
+  R_Value const* firstOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
+  R_Value const* secondOperandValue = R_InterpreterState_decodeOperand(process, interpreterProcess);
 
-  R_Type* firstOperandType = R_Value_getType(firstOperandValue);
-  R_Type_Operations const* operations = R_Type_getOperations(firstOperandType);
+  Arcadia_TypeValue firstOperandType = R_Value_getType(process, firstOperandValue);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
   if (!operations->subtract) {
-    R_setStatus(R_Status_ArgumentValueInvalid);
-    R_jump();
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
   }
-  operations->subtract(targetValue, firstOperandValue, secondOperandValue);
+  operations->subtract(process, targetValue, firstOperandValue, secondOperandValue);
 }

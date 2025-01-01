@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,45 +17,45 @@
 
 #include "R/Utf8/EncodeCodePoints.h"
 
-#include "R/JumpTarget.h"
-#include "R/Status.h"
+#include "Arcadia/Ring1/Include.h"
 
 void
 R_Utf8_encodeCodePoints
   ( 
-    R_Natural32Value const* codePoints,
-    R_SizeValue numberOfCodePoints,
+    Arcadia_Process* process,
+    Arcadia_Natural32Value const* codePoints,
+    Arcadia_SizeValue numberOfCodePoints,
     void* callbackContext,
-    void (*callbackFunction)(void* callbackContext, R_Natural8Value const* bytes, R_SizeValue numberOfBytes)
+    void (*callbackFunction)(Arcadia_Process* process, void* callbackContext, Arcadia_Natural8Value const* bytes, Arcadia_SizeValue numberOfBytes)
   )
 {
   if (!numberOfCodePoints) {
     return;
   }
-  for (R_SizeValue i = 0, n = numberOfCodePoints; i < n; ++i) {
-    R_Natural32Value codePoint = codePoints[i];
+  for (Arcadia_SizeValue i = 0, n = numberOfCodePoints; i < n; ++i) {
+    Arcadia_Natural32Value codePoint = codePoints[i];
     if (codePoint <= 0x7f) {
-      R_Natural8Value x[1];
+      Arcadia_Natural8Value x[1];
       x[0] = (codePoint & 0b1111111);
-      (*callbackFunction)(callbackContext, &x[0], R_SizeValue_Literal(1));
+      (*callbackFunction)(process, callbackContext, &x[0], Arcadia_SizeValue_Literal(1));
     } else if (/*0x80 <=*/ codePoint <= 0x7ff) {
       // This CP uses the lower 11 bit of the 32 Bit number.
       // The first 5 of these bits are stored in the first Byte.
       // The last 6 of these bits are stored in the second Byte.
-      R_Natural8Value x[2];
+      Arcadia_Natural8Value x[2];
       x[0] = (codePoint & 0b11111000000) >> 6;
       x[1] = (codePoint & 0b00000111111) >> 0;
       // OR in 1100.0000.
       x[0] |= 0b11000000;
       // OR in 1000.0000.
       x[1] |= 0b10000000;
-      (*callbackFunction)(callbackContext, &x[0], R_SizeValue_Literal(2));
+      (*callbackFunction)(process, callbackContext, &x[0], Arcadia_SizeValue_Literal(2));
     } else if (/*0x800 <=*/ codePoint <= 0xffff) {
       // This CP uses the lower 16 bit of the 32 Bit number.
       // The first 4 of these bits are stored in the first Byte.
       // The next 6 of these bits are stored in the second Byte.
       // The last 6 of these bits are stored in teh third Byte.
-      R_Natural8Value x[3];
+      Arcadia_Natural8Value x[3];
       x[0] = (codePoint & 0b1111000000000000) >> 12;
       x[1] = (codePoint & 0b0000111111000000) >> 6;
       x[2] = (codePoint & 0b0000000000111111) >> 0;
@@ -64,14 +64,14 @@ R_Utf8_encodeCodePoints
       // OR in 1000.0000.
       x[1] |= 0b10000000;
       x[2] |= 0b10000000;
-      (*callbackFunction)(callbackContext, &x[0], R_SizeValue_Literal(3));
+      (*callbackFunction)(process, callbackContext, &x[0], Arcadia_SizeValue_Literal(3));
     } else if (/*0x10000 <=*/ codePoint <= 0x10FFFF) {
       // This CP uses the lower 21 Bit of the code point.
       // The first 3 are stored in the first Byte.
       // The next 6 are stored in the second Byte.
       // The next 6 are stored in the third Byte.
       // The last 6 are stored in the fourth Byte.
-      R_Natural8Value x[4];
+      Arcadia_Natural8Value x[4];
       x[0] = (codePoint & 0b111000000000000000000) >> 18;
       x[1] = (codePoint & 0b000111111000000000000) >> 12;
       x[2] = (codePoint & 0b000000000111111000000) >> 6;
@@ -82,10 +82,10 @@ R_Utf8_encodeCodePoints
       x[1] |= 0b10000000;
       x[2] |= 0b10000000;
       x[3] |= 0b10000000;
-      (*callbackFunction)(callbackContext, &x[0], R_SizeValue_Literal(4));
+      (*callbackFunction)(process, callbackContext, &x[0], Arcadia_SizeValue_Literal(4));
     } else {
-      R_setStatus(R_Status_EncodingInvalid);
-      R_jump();
+      Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
+      Arcadia_Process_jump(process);
     }
   }
 }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -31,31 +31,34 @@
 ///   construct()
 /// }
 /// @endcode
-Rex_declareObjectType("TextureFontWindows", TextureFontWindows, "R.Object");
+Rex_declareObjectType(u8"TextureFontWindows", TextureFontWindows, u8"R.Object");
 
 struct TextureFontWindows {
   R_Object _parent;
   NativeWindowsBitmap* bitmap;
   HFONT hFont;
   HDC hDeviceContext;
-  R_Natural32Value codePoint;
+  Arcadia_Natural32Value codePoint;
 };
 
 TextureFontWindows*
 TextureFontWindows_create
   (
+    Arcadia_Process* process
   );
 
 void
 TextureFontWindows_setCodePoint
   (
+    Arcadia_Process* process,
     TextureFontWindows* self,
-    R_Natural32Value codePoint
+    Arcadia_Natural32Value codePoint
   );
 
 PixelBuffer*
 TextureFontWindows_getPixelBuffer
   (
+    Arcadia_Process* process,
     TextureFontWindows* self
   );
 

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,15 +17,5 @@
 #define R_ARMSINTEGRATION_PRIVATE_H_INCLUDED
 
 #include "R/ArmsIntegration.h"
-
-R_Status
-R_Arms_startup
-  (
-  );
-
-R_Status
-R_Arms_shutdown
-  (
-  );
 
 #endif // R_ARMSINTEGRATION_PRIVATE_H_INCLUDED

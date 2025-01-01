@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,38 +18,42 @@
 #if !defined(R_CONVERT_STRINGTOINTEGER_H_INCLUDED)
 #define R_CONVERT_STRINGTOINTEGER_H_INCLUDED
 
-#include "R/Integer16.h"
-#include "R/Integer32.h"
-#include "R/Integer64.h"
-#include "R/Integer8.h"
-#include "R/Size.h"
+#include "Arcadia/Ring1/Implementation/Integer16.h"
+#include "Arcadia/Ring1/Implementation/Integer32.h"
+#include "Arcadia/Ring1/Implementation/Integer64.h"
+#include "Arcadia/Ring1/Implementation/Integer8.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 
-R_Integer8Value
+Arcadia_Integer8Value
 R_toInteger8
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
-R_Integer16Value
+Arcadia_Integer16Value
 R_toInteger16
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
-R_Integer32Value
+Arcadia_Integer32Value
 R_toInteger32
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
-R_Integer64Value
+Arcadia_Integer64Value
 R_toInteger64
   (
+    Arcadia_Process* process,
     const char* p,
-    R_SizeValue n
+    Arcadia_SizeValue n
   );
 
 #endif // R_CONVERT_STRINGTOINTEGER_H_INCLUDED

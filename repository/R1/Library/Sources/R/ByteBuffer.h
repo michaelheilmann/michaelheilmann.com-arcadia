@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,75 +18,76 @@
 #if !defined(R_BYTEBUFFER_H_INCLUDED)
 #define R_BYTEBUFFER_H_INCLUDED
 
-#include "R/Boolean.h"
-#include "R/Natural8.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Object.h"
-#include "R/swap.h"
-#include "R/Size.h"
 
-Rex_declareObjectType("R.ByteBuffer", R_ByteBuffer, "R.Object");
+Rex_declareObjectType(u8"R.ByteBuffer", R_ByteBuffer, u8"R.Object");
 
 struct R_ByteBuffer {
   R_Object _parent;
   char* p;
-  R_SizeValue sz;
-  R_SizeValue cp;
+  Arcadia_SizeValue sz;
+  Arcadia_SizeValue cp;
 };
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-create
 R_ByteBuffer*
 R_ByteBuffer_create
   (
+    Arcadia_Process* process
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-endswith-pn
-R_BooleanValue
+Arcadia_BooleanValue
 R_ByteBuffer_endsWith_pn
   (
     R_ByteBuffer const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-startswith-pn
-R_BooleanValue
+Arcadia_BooleanValue
 R_ByteBuffer_startsWith_pn
   (
     R_ByteBuffer const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-append-pn
 void
 R_ByteBuffer_append_pn
   (
+    Arcadia_Process* process,
     R_ByteBuffer* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-prepend-pn
 void
 R_ByteBuffer_prepend_pn
   (
+    Arcadia_Process* process,
     R_ByteBuffer* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-insert-pn
 void
 R_ByteBuffer_insert_pn
   (
+    Arcadia_Process* process,
     R_ByteBuffer* self,
-    R_SizeValue index,
+    Arcadia_SizeValue index,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-isequalto
-R_BooleanValue
+Arcadia_BooleanValue
 R_ByteBuffer_isEqualTo
   (
     R_ByteBuffer const* self,
@@ -94,12 +95,13 @@ R_ByteBuffer_isEqualTo
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-isequalto-pn
-R_BooleanValue
+Arcadia_BooleanValue
 R_ByteBuffer_isEqualTo_pn
   (
+    Arcadia_Process* process,
     R_ByteBuffer const* self,
     void const* bytes,
-    R_SizeValue numberOfBytes
+    Arcadia_SizeValue numberOfBytes
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-clear
@@ -110,42 +112,44 @@ R_ByteBuffer_clear
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-getsize
-R_SizeValue
+Arcadia_SizeValue
 R_ByteBuffer_getSize
   (
     R_ByteBuffer const* self
   );
 
-R_SizeValue
+Arcadia_SizeValue
 R_ByteBuffer_getNumberOfBytes
   (
     R_ByteBuffer const* self
   );
 
-R_Natural8Value const*
+Arcadia_Natural8Value const*
 R_ByteBuffer_getBytes
   (
     R_ByteBuffer const* self
   );
 
 // https://michaelheilmann.com/repository/R1/#r-bytebuffer-getat
-R_Natural8Value
+Arcadia_Natural8Value
 R_ByteBuffer_getAt
   (
+    Arcadia_Process* process,
     R_ByteBuffer const* self,
-    R_SizeValue index
+    Arcadia_SizeValue index
   );
 
 static inline void
 R_ByteBuffer_swap
   (
+    Arcadia_Process* process,
     R_ByteBuffer* self,
     R_ByteBuffer* other
   )
 {
-  R_swap_p(&self->p, &other->p);
-  R_swap_s(&self->sz, &other->sz);
-  R_swap_s(&self->cp, &other->cp);
+  Arcadia_swap_p(process, &self->p, &other->p);
+  Arcadia_swap_s(process, &self->sz, &other->sz);
+  Arcadia_swap_s(process, &self->cp, &other->cp);
 }
 
 #endif // R_BYTEBUFFER_H_INCLUDED

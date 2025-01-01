@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,6 +18,6 @@
 #if !defined(R_OBJECT_INTERNAL_H_INCLUDED)
 #define R_OBJECT_INTERNAL_H_INCLUDED
 
-#include "R/Types.internal.h"
+#include "Arcadia/Ring1/Implementation/Types.private.h"
 
 #endif // R_OBJECT_INTERNAL_H_INCLUDED
