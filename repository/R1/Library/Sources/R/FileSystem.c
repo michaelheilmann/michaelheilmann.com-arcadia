@@ -19,7 +19,6 @@
 
 #include "R/FileHandle.h"
 #include "R/FilePath.h"
-#include "R/Object.h"
 #include "R/String.h"
 
 #if R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Windows
@@ -40,9 +39,9 @@ static void
 R_FileSystem_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -59,7 +58,7 @@ R_FileSystem_destruct
     R_FileSystem* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_FileSystem_constructImpl,
   .destruct = &R_FileSystem_destruct,
   .visit = &R_FileSystem_visit,
@@ -85,24 +84,24 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.FileSystem", R_FileSystem, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.FileSystem", R_FileSystem, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_FileSystem_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_FileSystem* _self = R_Value_getObjectReferenceValue(self);
+  R_FileSystem* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_FileSystem_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -127,7 +126,7 @@ R_FileSystem_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_FileSystem* self = R_allocateObject(process, _R_FileSystem_getType(process), 0, &argumentValues[0]);
   return self;
 }
@@ -186,15 +185,15 @@ R_FileSystem_regularFileExists
     R_FilePath* path
   )
 {
-  R_String* nativePathString = R_FilePath_toNative(process, path);
+  Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
-  DWORD dwFileAttributes = GetFileAttributes(R_String_getBytes(nativePathString));
+  DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(nativePathString));
 
   return (dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
          !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
 #elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
   struct stat stat;
-  if(-1 == lstat(R_String_getBytes(nativePathString), &stat)) {
+  if(-1 == lstat(Arcadia_String_getBytes(nativePathString), &stat)) {
     switch (errno) {
       case EOVERFLOW:
       case ENOMEM: {
@@ -218,13 +217,13 @@ R_FileSystem_directoryFileExists
     R_FilePath* path
   )
 {
-  R_String* nativePathString = R_FilePath_toNative(process, path);
+  Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
-  DWORD dwFileAttributes = GetFileAttributes(R_String_getBytes(nativePathString));
+  DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(nativePathString));
   return (dwFileAttributes != INVALID_FILE_ATTRIBUTES);
 #elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
   struct stat stat;
-  if(-1 == lstat(R_String_getBytes(nativePathString), &stat)) {
+  if(-1 == lstat(Arcadia_String_getBytes(nativePathString), &stat)) {
     switch (errno) {
       case EOVERFLOW:
       case ENOMEM: {
@@ -248,14 +247,14 @@ R_FileSystem_createDirectory
     R_FilePath* path
   )
 {
-  R_String* nativePath = R_FilePath_toNative(process, path);
+  Arcadia_String* nativePath = R_FilePath_toNative(process, path);
 #if R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Windows
-  if (FALSE == CreateDirectory(R_String_getBytes(nativePath), NULL)) {
+  if (FALSE == CreateDirectory(Arcadia_String_getBytes(nativePath), NULL)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);
   }
 #elif R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Linux
-  if (-1 == mkdir(R_String_getBytes(nativePath), 0777)) {
+  if (-1 == mkdir(Arcadia_String_getBytes(nativePath), 0777)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);
   }
@@ -288,9 +287,9 @@ R_FileSystem_getWorkingDirectory
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_FilePath* filePath = R_FilePath_parseWindows(process, pBuffer, dwBufferSize - 1);
     Arcadia_Process_popJumpTarget(process);
     Arms_MemoryManager_deallocate(Arms_getSlabMemoryManager(), pBuffer);

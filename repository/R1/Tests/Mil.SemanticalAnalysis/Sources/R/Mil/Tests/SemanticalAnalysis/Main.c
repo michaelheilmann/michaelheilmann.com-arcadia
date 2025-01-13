@@ -25,9 +25,9 @@ static void
 _Library_KeyboardKeyMessage_construct
   (
     Arcadia_Process* process,
-    R_Value* target,
+    Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 { }
 
@@ -35,9 +35,9 @@ static void
 _Library_KeyboardKeyMessage_getAction
   (
     Arcadia_Process* process,
-    R_Value* target,
+    Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 { }
 
@@ -45,9 +45,9 @@ static void
 _Library_KeyboardKeyMessage_getKey
   (
     Arcadia_Process* process,
-    R_Value* target,
+    Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 { }
 
@@ -55,9 +55,9 @@ static void
 _Library_print
   (
     Arcadia_Process* process,
-    R_Value* target,
+    Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {/*Intentionally empty.*/}
 
@@ -65,9 +65,9 @@ static void
 _Library_main
   (
     Arcadia_Process* process,
-    R_Value* target,
+    Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {/*Intentionally empty.*/}
 
@@ -81,8 +81,8 @@ testNativePrintProcedure
   R_Map* foreignProcedures = R_Map_create(process);
 #define Define(Name,Function) \
   { \
-    R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, Name, sizeof(Name) - 1)) }; \
-    R_Value v = { .tag = R_ValueTag_ForeignProcedure, .foreignProcedureValue = &Function }; \
+    Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, Name, sizeof(Name) - 1)) }; \
+    Arcadia_Value v = { .tag = Arcadia_ValueTag_ForeignProcedure, .foreignProcedureValue = &Function }; \
     R_Map_set(process, foreignProcedures, k, v); \
   }
   Define(u8"KeyboardKeyMessage_construct", _Library_KeyboardKeyMessage_construct)
@@ -102,9 +102,9 @@ testNativePrintProcedure
   R_FileSystem* fileSystem = R_FileSystem_create(process);
   R_Interpreter_ProcessState_startup(process);
 
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     for (size_t i = 0, n = R_List_getSize(paths); i < n; ++i) {
       R_FilePath* sourceFilePath = R_List_getObjectReferenceValueAt(process, paths, i);
       R_FilePath* absoluteSourceFilePath = NULL;
@@ -122,9 +122,9 @@ testNativePrintProcedure
       R_Interpreter_ProcessState* interpreterProcess = R_Interpreter_ProcessState_get();
       for (Arcadia_SizeValue i = 0, n = R_Mil_ModuleAst_getNumberOfDefinitions(moduleAst); i < n; ++i) {
         R_Mil_DefinitionAst* definitionAst = R_Mil_ModuleAst_getDefinitionAt(process, moduleAst, i);
-        if (Arcadia_Type_isSubType(R_Object_getType(definitionAst), _R_Mil_ClassDefinitionAst_getType(process))) {
+        if (Arcadia_Type_isSubType(Arcadia_Object_getType(definitionAst), _R_Mil_ClassDefinitionAst_getType(process))) {
           onClassDefinition(process, interpreterProcess, symbolTable, foreignProcedures, (R_Mil_ClassDefinitionAst*)definitionAst);
-        } else if (Arcadia_Type_isSubType(R_Object_getType(definitionAst), _R_Mil_ProcedureDefinitionAst_getType(process))) {
+        } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(definitionAst), _R_Mil_ProcedureDefinitionAst_getType(process))) {
           onProcedureDefinition(process, interpreterProcess, symbolTable, foreignProcedures, (R_Mil_ProcedureDefinitionAst*)definitionAst);
         } else {
           Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
@@ -169,9 +169,9 @@ main
     R_shutdown();
     return EXIT_FAILURE;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
   }
   Arcadia_Process_popJumpTarget(process);

@@ -27,7 +27,7 @@ Rex_declareObjectType(u8"R.Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefin
 
 struct R_Mil_ConstructorDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;
-  R_String* nativeName;
+  Arcadia_String* nativeName;
   R_List* constructorParameters;
   R_List* constructorBody;
 };
@@ -36,7 +36,7 @@ R_Mil_ConstructorDefinitionAst*
 R_Mil_ConstructorDefinitionAst_create
   (
     Arcadia_Process* process,
-    R_String* nativeName,
+    Arcadia_String* nativeName,
     R_List* constructorParameters,
     R_List* constructorBody
   );

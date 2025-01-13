@@ -18,7 +18,7 @@
 #if !defined(R_INTERPRETER_THREADSTATE_H_INCLUDED)
 #define R_INTERPRETER_THREADSTATE_H_INCLUDED
 
-#include "R/Value.h"
+#include "Arcadia/Ring1/Include.h"
 typedef struct R_Interpreter_Code R_Interpreter_Code;
 typedef struct R_Interpreter_Procedure R_Interpreter_Procedure;
 
@@ -54,6 +54,7 @@ R_Interpreter_ThreadState_destroy
 void
 R_Interpreter_ThreadState_visit
   (
+    Arcadia_Process* process,
     R_Interpreter_ThreadState* thread
   );
 
@@ -72,7 +73,7 @@ R_Interpreter_ThreadState_getNumberOfRegisters
 /// @param A pointer to the thread state.
 /// @return A pointer to the register.
 /// @error #Arcadia_Status_RegisterIndexOutOfBounds the index is not within the bounds of [0, R_Interpreter_ThreadState_getNumberOfRegisters(threadState)].
-R_Value*
+Arcadia_Value*
 R_Interpreter_ThreadState_getRegisterAt
   (
     R_Interpreter_ThreadState* thread,

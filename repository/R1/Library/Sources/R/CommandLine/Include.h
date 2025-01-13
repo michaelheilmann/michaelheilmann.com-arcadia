@@ -36,38 +36,38 @@ R_CommandLine_parseArgument
   (
     Arcadia_Process* process,
     R_Utf8Reader* reader,
-    R_String** key,
-    R_String** value
+    Arcadia_String** key,
+    Arcadia_String** value
   );
 
 void
 R_CommandLine_raiseRequiredArgumentMissingError
   (
     Arcadia_Process* process,
-    R_String* key
+    Arcadia_String* key
   );
 
 void
 R_CommandLine_raiseUnknownArgumentError
   (
     Arcadia_Process* process,
-    R_String* key,
-    R_String* value
+    Arcadia_String* key,
+    Arcadia_String* value
   );
 
 void
 R_CommandLine_raiseNoValueError
   (
     Arcadia_Process* process,
-    R_String* key
+    Arcadia_String* key
   );
 
 void
 R_CommandLine_raiseValueInvalidError
   (
     Arcadia_Process* process,
-    R_String* key,
-    R_String* value
+    Arcadia_String* key,
+    Arcadia_String* value
   );
 
 #endif // R_COMMANDLINE_INCLUDE_H_INCLUDED

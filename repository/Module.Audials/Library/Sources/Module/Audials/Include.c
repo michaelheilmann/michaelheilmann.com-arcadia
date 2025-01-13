@@ -51,10 +51,10 @@ Audials_XAudio2_startup
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
 
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     g_sourceVoiceBuffer = R_ByteBuffer_create(process);
     Arcadia_Process_popJumpTarget(process);
   } else {
@@ -67,8 +67,8 @@ Audials_XAudio2_startup
   }
 
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    R_Object_lock(process, g_sourceVoiceBuffer);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_Object_lock(process, g_sourceVoiceBuffer);
     Arcadia_Process_popJumpTarget(process);
   } else {
     Arcadia_Process_popJumpTarget(process);
@@ -95,7 +95,7 @@ Audials_XAudio2_shutdown
   IXAudio2_Release(g_xaudio2);
   g_xaudio2 = NULL;
   CoUninitialize();
-  R_Object_unlock(process, g_sourceVoiceBuffer);
+  Arcadia_Object_unlock(process, g_sourceVoiceBuffer);
   g_sourceVoiceBuffer = NULL;
 }
 
@@ -108,10 +108,10 @@ static const double PI = 3.14159265358979323846;
 
 #include <math.h>
 
-Rex_declareObjectType(u8"Audials.Xaudio2.Source", Source, u8"R.Object");
+Rex_declareObjectType(u8"Audials.Xaudio2.Source", Source, u8"Arcadia.Object");
 
 struct Source {
-  R_Object _parent;
+  Arcadia_Object _parent;
   struct Source* next;
   /// The backing source voice.
   IXAudio2SourceVoice* xAudio2SourceVoice;
@@ -135,12 +135,12 @@ static void
 Source_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &Source_constructImpl,
   .destruct = &Source_destruct,
   .visit = NULL,
@@ -166,40 +166,40 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"Audials.Xaudio2.Source", Source, u8"R.Object", R_Object, &_typeOperations)
+Rex_defineObjectType(u8"Audials.Xaudio2.Source", Source, u8"Arcadia.Object", Arcadia_Object, &_typeOperations)
 
 // bytes : ByteBuffer
 static void
 Source_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  Source* _self = R_Value_getObjectReferenceValue(self);
+  Source* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Source_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!R_Value_isObjectReferenceValue(&argumentValues[0])) {
+  if (!Arcadia_Value_isObjectReferenceValue(&argumentValues[0])) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  R_Object* objectValue = R_Value_getObjectReferenceValue(&argumentValues[0]);
-  if (!Arcadia_Type_isSubType(R_Object_getType(objectValue), _R_ByteBuffer_getType(process))) {
+  Arcadia_Object* objectValue = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
+  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectValue), _R_ByteBuffer_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
   //R_ByteBuffer* byteBufferValue = (R_ByteBuffer*)objectValue;
   _self->xAudio2SourceVoice = NULL;
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 void
@@ -222,7 +222,7 @@ Source_create
     R_ByteBuffer* bytes
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)bytes } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)bytes } };
   Source* self = R_allocateObject(process, _Source_getType(process), 1, &argumentValues[0]);
   return self;
 }

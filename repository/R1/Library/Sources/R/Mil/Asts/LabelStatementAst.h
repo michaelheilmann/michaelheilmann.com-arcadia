@@ -33,7 +33,7 @@ Rex_declareObjectType(u8"R.Mil.LabelStatementAst", R_Mil_LabelStatementAst, u8"R
 
 struct R_Mil_LabelStatementAst {
   R_Mil_StatementAst parent;
-  R_String* labelName;
+  Arcadia_String* labelName;
 };
 
 /// @brief Create a MIL label statement AST.
@@ -42,7 +42,7 @@ R_Mil_LabelStatementAst*
 R_Mil_LabelStatementAst_create
   (
     Arcadia_Process* process,
-    R_String* labelName
+    Arcadia_String* labelName
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

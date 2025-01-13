@@ -36,12 +36,12 @@ checkNormalized
   )
 {
   R_FilePath* filePath = R_FilePath_parseNative(process, p, strlen(p));
-  R_String* filePathString = R_FilePath_toNative(process, filePath);
-  if (R_String_getNumberOfBytes(filePathString) != strlen(q) + 1) {
+  Arcadia_String* filePathString = R_FilePath_toNative(process, filePath);
+  if (Arcadia_String_getNumberOfBytes(filePathString) != strlen(q) + 1) {
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
     Arcadia_Process_jump(process);
   }
-  if (memcmp(R_String_getBytes(filePathString), q, strlen(q))) {
+  if (memcmp(Arcadia_String_getBytes(filePathString), q, strlen(q))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
     Arcadia_Process_jump(process);
   }
@@ -76,9 +76,9 @@ safeExecute
     result = false;
     return result;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     (*f)(process);
   } else {
     result = false;

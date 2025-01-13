@@ -1,6 +1,8 @@
 #include "R/BigInteger/add.h"
 
 #include "R/BigInteger/digits.h"
+#include <assert.h>
+#include <string.h>
 
 // precondition: the magnitude of a must be greater than the magnitude of b
 // Examples where this is applied:
@@ -154,7 +156,7 @@ Digits_add
     // b is zero. Return a.
     R_BigInteger_Digit* digits1 = NULL;
     Digits_allocate(process, &digits1, a->size);
-    c_memcpy(digits1, a->digits, sizeof(R_BigInteger_Digit) * a->size);
+    memcpy(digits1, a->digits, sizeof(R_BigInteger_Digit) * a->size);
     *digits = digits1;
     *size = a->size;
     *capacity = a->size;
@@ -166,7 +168,7 @@ Digits_add
     // Return -b.
     R_BigInteger_Digit* digits1 = NULL;
     Digits_allocate(process, &digits1, b->size);
-    c_memcpy(digits1, b->digits, sizeof(R_BigInteger_Digit) * b->size);
+    memcpy(digits1, b->digits, sizeof(R_BigInteger_Digit) * b->size);
     *digits = digits1;
     *size = b->size;
     *capacity = b->size;
@@ -218,7 +220,7 @@ Digits_subtract
     // b is zero. Return a.
     R_BigInteger_Digit* digits1 = NULL;
     Digits_allocate(process, &digits1, a->size);
-    c_memcpy(digits1, a->digits, sizeof(R_BigInteger_Digit) * a->size);
+    memcpy(digits1, a->digits, sizeof(R_BigInteger_Digit) * a->size);
     *digits = digits1;
     *size = a->size;
     *capacity = a->size;
@@ -230,7 +232,7 @@ Digits_subtract
     // Return b.
     R_BigInteger_Digit* digits1 = NULL;
     Digits_allocate(process, &digits1, b->size);
-    c_memcpy(digits1, b->digits, sizeof(R_BigInteger_Digit) * b->size);
+    memcpy(digits1, b->digits, sizeof(R_BigInteger_Digit) * b->size);
     *digits = digits1;
     *size = b->size;
     *capacity = b->size;

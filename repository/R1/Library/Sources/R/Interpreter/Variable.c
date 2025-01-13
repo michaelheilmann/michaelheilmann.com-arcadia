@@ -19,15 +19,14 @@
 
 #include "R/ArgumentsValidation.h"
 #include "R/Interpreter/Include.h"
-#include "R/Object.h"
 
 static void
 R_Interpreter_Variable_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -37,7 +36,7 @@ R_Interpreter_Variable_visit
     R_Interpreter_Variable* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_Interpreter_Variable_constructImpl,
   .destruct = NULL,
   .visit = &R_Interpreter_Variable_visit,
@@ -63,21 +62,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Interpreter.Variable", R_Interpreter_Variable, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.Interpreter.Variable", R_Interpreter_Variable, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_Interpreter_Variable_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Interpreter_Variable* _self = R_Value_getObjectReferenceValue(self);
+  R_Interpreter_Variable* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Variable_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
@@ -87,8 +86,8 @@ R_Interpreter_Variable_constructImpl
   _self->ready = Arcadia_BooleanValue_False;
   _self->index = Arcadia_SizeValue_Literal(0);
   _self->class = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _R_Interpreter_Class_getType(process));
-  _self->name = R_Argument_getObjectReferenceValue(process, &argumentValues[1], _R_String_getType(process));
-  R_Object_setType((R_Object*)_self, _type);
+  _self->name = R_Argument_getObjectReferenceValue(process, &argumentValues[1], _Arcadia_String_getType(process));
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -98,8 +97,8 @@ R_Interpreter_Variable_visit
     R_Interpreter_Variable* self
   )
 {
-  R_Object_visit(self->class);
-  R_Object_visit(self->name);
+  Arcadia_Object_visit(process, self->class);
+  Arcadia_Object_visit(process, self->name);
 }
 
 R_Interpreter_Variable*
@@ -107,12 +106,12 @@ R_Interpreter_Variable_create
   (
     Arcadia_Process* process,
     R_Interpreter_Class* class,
-    R_String* name
+    Arcadia_String* name
   )
 {
-  R_Value argumentValues[] = {
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = class },
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = name },
+  Arcadia_Value argumentValues[] = {
+    {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = class },
+    {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name },
   };
   R_Interpreter_Variable* self = R_allocateObject(process, _R_Interpreter_Variable_getType(process), 2, &argumentValues[0]);
   return self;
@@ -125,7 +124,7 @@ R_Interpreter_Variable_getClass
   )
 { return self->class; }
 
-R_String*
+Arcadia_String*
 R_Interpreter_Variable_getName
   (
     R_Interpreter_Variable* self

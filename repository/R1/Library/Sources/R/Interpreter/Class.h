@@ -18,9 +18,8 @@
 #if !defined(R_INTERPRETER_CLASS_H_INCLUDED)
 #define R_INTERPRETER_CLASS_H_INCLUDED
 
-#include "R/Object.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Map.h"
-#include "R/Value.h"
 typedef struct R_Interpreter_Constructor R_Interpreter_Constructor;
 typedef struct R_Interpreter_Method R_Interpreter_Method;
 typedef struct R_Interpreter_ProcessState R_Interpreter_ProcessState;
@@ -56,15 +55,15 @@ typedef struct R_Interpreter_Variable R_Interpreter_Variable;
 /// 
 /// PARAMETER VARIABLES
 /// The parameter variables x1, x2, ..., xn of a procedure or method or constructor are stored in the registers 0, ..., n - 1.
-Rex_declareObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"R.Object");
+Rex_declareObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"Arcadia.Object");
 
 struct R_Interpreter_Class {
-  R_Object _parent;
+  Arcadia_Object _parent;
 
   /// The name of the class.
-  R_String* className;
+  Arcadia_String* className;
   /// The ename of the class extended by this class.
-  R_String* extendedClassName;
+  Arcadia_String* extendedClassName;
   /// The set of class members.
   R_Map* classMembers;
 
@@ -86,8 +85,8 @@ R_Interpreter_Class*
 R_Interpreter_Class_create
   (
     Arcadia_Process* process,
-    R_String* className,
-    R_String* extendedClassName
+    Arcadia_String* className,
+    Arcadia_String* extendedClassName
   );
 
 void

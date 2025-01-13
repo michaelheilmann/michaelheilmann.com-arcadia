@@ -20,6 +20,7 @@
 #include "R.h"
 #include "Module/Audials/Include.h"
 #include "Module/Visuals/Include.h"
+#include "Arcadia/Ring1/Include.h"
 
 void
 main1
@@ -30,14 +31,14 @@ main1
   )
 { 
   // (1) Initialize Audials.
-  Audials_startup();
+  Audials_startup(process);
   
   // (2) Play sine wave.
-  Audials_playSine();
+  Audials_playSine(process);
 
   // (3) Create a window.
   NativeWindow* window = (NativeWindow*)NativeWindowsWindow_create(process);
-  R_Object_lock(process, window);
+  Arcadia_Object_lock(process, window);
 
   // (4) Ensure the window is opened.
   NativeWindow_open(process, window);
@@ -56,11 +57,11 @@ main1
   NativeWindow_setSmallIcon(window, icon);
 
   // (7) Set the title.
-  NativeWindow_setTitle(process, window, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
+  NativeWindow_setTitle(process, window, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
 
   // (8) Enter the message loop.
   while (!NativeWindow_getQuitRequested(window)) {
-    R_Arms_step();
+    Arcadia_Process_stepArms(process);
     NativeWindow_update(window);
   }
 
@@ -69,9 +70,9 @@ main1
 
   // (10) Shutdown audials.
   // TODO: Causes a leak if not invoked.
-  Audials_shutdown();
+  Audials_shutdown(process);
 
-  R_Object_unlock(process, window);
+  Arcadia_Object_unlock(process, window);
 }
 
 int
@@ -91,9 +92,9 @@ main
     R_shutdown();
     return EXIT_FAILURE;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
   }
   Arcadia_Process_popJumpTarget(process);

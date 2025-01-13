@@ -69,9 +69,9 @@ safeExecute
     result = false;
     return result;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     (*f)(process);
   } else {
     result = false;

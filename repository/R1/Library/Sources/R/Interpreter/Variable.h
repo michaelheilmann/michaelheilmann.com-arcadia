@@ -19,14 +19,12 @@
 #define R_INTERPRETER_VARIABLE_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "R/Object.h"
-#include "R/Value.h"
 typedef struct R_Interpreter_Class R_Interpreter_Class;
 
-Rex_declareObjectType(u8"R.Interpreter.Variable", R_Interpreter_Variable, u8"R.Object");
+Rex_declareObjectType(u8"R.Interpreter.Variable", R_Interpreter_Variable, u8"Arcadia.Object");
 
 struct R_Interpreter_Variable {
-  R_Object _parent;
+  Arcadia_Object _parent;
   /// If the variable is ready.
   Arcadia_BooleanValue ready;
   /// The zero-based index of this variable if ready is true.
@@ -35,7 +33,7 @@ struct R_Interpreter_Variable {
   /// The class defining this variable.
   R_Interpreter_Class *class;
   /// The name of this variable.
-  R_String* name;
+  Arcadia_String* name;
 };
 
 R_Interpreter_Variable*
@@ -43,7 +41,7 @@ R_Interpreter_Variable_create
   (
     Arcadia_Process* process,
     R_Interpreter_Class* class,
-    R_String* name
+    Arcadia_String* name
   );
 
 R_Interpreter_Class*
@@ -52,7 +50,7 @@ R_Interpreter_Variable_getClass
     R_Interpreter_Variable* self
   );
 
-R_String*
+Arcadia_String*
 R_Interpreter_Variable_getName
   (
     R_Interpreter_Variable* self

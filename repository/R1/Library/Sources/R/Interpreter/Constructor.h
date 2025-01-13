@@ -19,14 +19,12 @@
 #define R_INTERPRETER_CONSTRUCTOR_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "R/Object.h"
-#include "R/Value.h"
 #include "R/Interpreter/Include.h"
 
-Rex_declareObjectType(u8"R.Interpreter.Constructor", R_Interpreter_Constructor, u8"R.Object");
+Rex_declareObjectType(u8"R.Interpreter.Constructor", R_Interpreter_Constructor, u8"Arcadia.Object");
 
 struct R_Interpreter_Constructor {
-  R_Object _parent;
+  Arcadia_Object _parent;
   /// Arcadia_BooleanValue_True indicates that code is invalid and foreignProcedure points to a foreign procedure of this method.
   /// Arcadia_BooleanValue_False indicates that foreignProcedure is invalid and code points to the code of this method.
   Arcadia_BooleanValue isForeign;

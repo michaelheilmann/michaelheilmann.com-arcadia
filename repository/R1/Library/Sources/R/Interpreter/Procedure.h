@@ -18,16 +18,14 @@
 
 #include "Arcadia/Ring1/Include.h"
 #include "R/Interpreter/Code.h"
-#include "R/Object.h"
 #include "R/List.h"
-#include "R/Value.h"
 
-Rex_declareObjectType(u8"R.Interpreter.Procedure", R_Interpreter_Procedure, u8"R.Object");
+Rex_declareObjectType(u8"R.Interpreter.Procedure", R_Interpreter_Procedure, u8"Arcadia.Object");
 
 struct R_Interpreter_Procedure {
-  R_Object _parent;
+  Arcadia_Object _parent;
   /// The unqualified name of this procedure.
-  R_String* unqualifiedName;
+  Arcadia_String* unqualifiedName;
   /// List of strings. The string at index i denotes the name of the i-th parameter variable.
   R_List* parameterNames;
   /// Arcadia_BooleanValue_True indicates that code is invalid and foreignProcedure points to a foreign procedure of this procedure.
@@ -43,7 +41,7 @@ R_Interpreter_Procedure*
 R_Interpreter_Procedure_createForeign
   ( 
     Arcadia_Process* process,
-    R_String* procedureName,
+    Arcadia_String* procedureName,
     Arcadia_ForeignProcedureValue foreignProcedure
   );
 
@@ -51,7 +49,7 @@ R_Interpreter_Procedure*
 R_Interpreter_Procedure_create
   (
     Arcadia_Process* process,
-    R_String* name,
+    Arcadia_String* name,
     R_Interpreter_Code* code
   );
 

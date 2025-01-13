@@ -16,14 +16,13 @@
 #if !defined(R_LIST_H_INCLUDED)
 #define R_LIST_H_INCLUDED
 
-#include "R/Object.h"
-#include "R/Value.h"
+#include "Arcadia/Ring1/Include.h"
 
-Rex_declareObjectType(u8"R.List", R_List, u8"R.Object");
+Rex_declareObjectType(u8"R.List", R_List, u8"Arcadia.Object");
 
 struct R_List {
-  R_Object _parent;
-  R_Value* elements;
+  Arcadia_Object _parent;
+  Arcadia_Value* elements;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
 };
@@ -55,7 +54,7 @@ R_List_append
   (
     Arcadia_Process* process,
     R_List* self,
-    R_Value value
+    Arcadia_Value value
   );
 
 // https://michaelheilmann.com/repository/R1/#r-list-prepend
@@ -64,7 +63,7 @@ R_List_prepend
   (
     Arcadia_Process* process,
     R_List* self,
-    R_Value value
+    Arcadia_Value value
   );
 
 // https://michaelheilmann.com/repository/R1/#r-list-insertat
@@ -74,11 +73,11 @@ R_List_insertAt
     Arcadia_Process* process,
     R_List* self,
     Arcadia_SizeValue index,
-    R_Value value
+    Arcadia_Value value
   );
 
 // https://michaelheilmann.com/repository/R1/#r-list-getat
-R_Value
+Arcadia_Value
 R_List_getAt
   (
     Arcadia_Process* process,
@@ -158,7 +157,7 @@ Define(Arcadia_Natural8, Natural8, natural8)
 Define(Arcadia_Natural16, Natural16, natural16)
 Define(Arcadia_Natural32, Natural32, natural32)
 Define(Arcadia_Natural64, Natural64, natural64)
-Define(R_ObjectReference, ObjectReference, objectReference)
+Define(Arcadia_ObjectReference, ObjectReference, objectReference)
 Define(Arcadia_Size, Size, size)
 Define(Arcadia_Void, Void, void)
 

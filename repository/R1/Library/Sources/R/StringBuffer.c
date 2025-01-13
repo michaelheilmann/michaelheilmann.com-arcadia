@@ -19,30 +19,29 @@
 
 #include "R/Utf8/EncodeCodePoints.h"
 #include "R/cstdlib.h"
-#include "R/ArmsIntegration.h"
 #include "R.h"
 
 static void
-R_StringBuffer_constructImpl
+Arcadia_StringBuffer_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
-R_StringBuffer_destruct
+Arcadia_StringBuffer_destruct
   (
     Arcadia_Process* process,
-    R_StringBuffer* self
+    Arcadia_StringBuffer* self
   );
 
 static void
 ensureFreeCapacityBytes
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     Arcadia_SizeValue requiredFreeCapacity
   );
 
@@ -51,14 +50,14 @@ static void
 appendBytesInternal
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
-  .construct = &R_StringBuffer_constructImpl,
-  .destruct = &R_StringBuffer_destruct,
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  .construct = &Arcadia_StringBuffer_constructImpl,
+  .destruct = &Arcadia_StringBuffer_destruct,
   .visit = NULL,
 };
 
@@ -82,41 +81,39 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.StringBuffer", R_StringBuffer, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
-R_StringBuffer_constructImpl
+Arcadia_StringBuffer_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_StringBuffer* _self = R_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_StringBuffer_getType(process);
+  Arcadia_StringBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_StringBuffer_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->elements = NULL;
   _self->size = 0;
   _self->capacity = 0;
-  if (!R_allocateUnmanaged_nojump(process, &_self->elements, 0)) {
-    Arcadia_Process_jump(process);
-  }
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Process_allocateUnmanaged(process, &_self->elements, 0);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
-R_StringBuffer_destruct
+Arcadia_StringBuffer_destruct
   (
     Arcadia_Process* process,
-    R_StringBuffer* self
+    Arcadia_StringBuffer* self
   )
 {
   if (self->elements) {
-    R_deallocateUnmanaged_nojump(process, self->elements);
+    Arcadia_Process_deallocateUnmanaged(process, self->elements);
     self->elements = NULL;
   }
 }
@@ -125,7 +122,7 @@ static void
 ensureFreeCapacityBytes
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     Arcadia_SizeValue requiredFreeCapacity
   )
 {
@@ -138,10 +135,7 @@ ensureFreeCapacityBytes
       Arcadia_Process_jump(process);
     }
     Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    if (!R_reallocateUnmanaged_nojump(process, &self->elements, newCapacity)) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_Process_reallocateUnmanaged(process, &self->elements, newCapacity);
     self->capacity = newCapacity;
   }
 }
@@ -150,7 +144,7 @@ static void
 appendBytesInternal
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -160,21 +154,21 @@ appendBytesInternal
   self->size += numberOfBytes;
 }
 
-R_StringBuffer*
-R_StringBuffer_create
+Arcadia_StringBuffer*
+Arcadia_StringBuffer_create
   (
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  R_StringBuffer* self = R_allocateObject(process, _R_StringBuffer_getType(process), 0, &argumentValues[0]);
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_StringBuffer* self = R_allocateObject(process, _Arcadia_StringBuffer_getType(process), 0, &argumentValues[0]);
   return self;
 }
 
 Arcadia_BooleanValue
-R_StringBuffer_endsWith_pn
+Arcadia_StringBuffer_endsWith_pn
   (
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -187,9 +181,9 @@ R_StringBuffer_endsWith_pn
 }
 
 Arcadia_BooleanValue
-R_StringBuffer_startsWith_pn
+Arcadia_StringBuffer_startsWith_pn
   (
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -201,10 +195,10 @@ R_StringBuffer_startsWith_pn
 }
 
 void
-R_StringBuffer_append_pn
+Arcadia_StringBuffer_append_pn
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -223,19 +217,19 @@ R_StringBuffer_append_pn
 }
 
 void
-R_StringBuffer_append
+Arcadia_StringBuffer_append
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
-    R_Value value
+    Arcadia_StringBuffer* self,
+    Arcadia_Value value
   )
 {
-  if (!R_Value_isObjectReferenceValue(&value)) {
+  if (!Arcadia_Value_isObjectReferenceValue(&value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  R_ObjectReferenceValue referenceValue = R_Value_getObjectReferenceValue(&value);
-  if (Arcadia_Type_isSubType(R_Object_getType(referenceValue), _R_ByteBuffer_getType(process))) {
+  Arcadia_ObjectReferenceValue referenceValue = Arcadia_Value_getObjectReferenceValue(&value);
+  if (Arcadia_Type_isSubType(Arcadia_Object_getType(referenceValue), _R_ByteBuffer_getType(process))) {
     R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
     if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
@@ -244,18 +238,18 @@ R_StringBuffer_append
     ensureFreeCapacityBytes(process, self, R_ByteBuffer_getNumberOfBytes(object));
     c_memcpy(self->elements + self->size, R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object));
     self->size += R_ByteBuffer_getNumberOfBytes(object);
-  } else if (Arcadia_Type_isSubType(R_Object_getType(referenceValue), _R_String_getType(process))) {
-    R_String* object = (R_String*)referenceValue;
-    // The Byte sequence of R.String is guaranteed to be an UTF8 Byte sequence.
-    ensureFreeCapacityBytes(process, self, R_String_getNumberOfBytes(object));
-    c_memcpy(self->elements + self->size, R_String_getBytes(object), R_String_getNumberOfBytes(object));
-    self->size += R_String_getNumberOfBytes(object);
-  } else if (Arcadia_Type_isSubType(R_Object_getType(referenceValue), _R_StringBuffer_getType(process))) {
-    R_StringBuffer* object = (R_StringBuffer*)referenceValue;
-    // The Byte sequence of R.StringBuffer is guaranteed to be an UTF8 Byte sequence.
-    ensureFreeCapacityBytes(process, self, R_StringBuffer_getNumberOfBytes(object));
-    c_memcpy(self->elements + self->size, R_StringBuffer_getBytes(object), R_StringBuffer_getNumberOfBytes(object));
-    self->size += R_StringBuffer_getNumberOfBytes(object);
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(referenceValue), _Arcadia_String_getType(process))) {
+    Arcadia_String* object = (Arcadia_String*)referenceValue;
+    // The Byte sequence of Arcadia.String is guaranteed to be an UTF8 Byte sequence.
+    ensureFreeCapacityBytes(process, self, Arcadia_String_getNumberOfBytes(object));
+    c_memcpy(self->elements + self->size, Arcadia_String_getBytes(object), Arcadia_String_getNumberOfBytes(object));
+    self->size += Arcadia_String_getNumberOfBytes(object);
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(referenceValue), _Arcadia_StringBuffer_getType(process))) {
+    Arcadia_StringBuffer* object = (Arcadia_StringBuffer*)referenceValue;
+    // The Byte sequence of Arcadia.StringBuffer is guaranteed to be an UTF8 Byte sequence.
+    ensureFreeCapacityBytes(process, self, Arcadia_StringBuffer_getNumberOfBytes(object));
+    c_memcpy(self->elements + self->size, Arcadia_StringBuffer_getBytes(object), Arcadia_StringBuffer_getNumberOfBytes(object));
+    self->size += Arcadia_StringBuffer_getNumberOfBytes(object);
   } else {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
@@ -263,10 +257,10 @@ R_StringBuffer_append
 }
 
 void
-R_StringBuffer_appendCodePoints
+Arcadia_StringBuffer_appendCodePoints
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     Arcadia_Natural32Value const* codePoints,
     Arcadia_SizeValue numberOfCodePoints
   )
@@ -275,10 +269,10 @@ R_StringBuffer_appendCodePoints
 }
 
 Arcadia_BooleanValue
-R_StringBuffer_isEqualTo
+Arcadia_StringBuffer_isEqualTo
   (
-    R_StringBuffer* self,
-    R_StringBuffer* other
+    Arcadia_StringBuffer* self,
+    Arcadia_StringBuffer* other
   )
 {
   if (self == other) {
@@ -292,22 +286,22 @@ R_StringBuffer_isEqualTo
 }
 
 void
-R_StringBuffer_clear
+Arcadia_StringBuffer_clear
   (
-    R_StringBuffer* self
+    Arcadia_StringBuffer* self
   )
 { self->size = 0; }
 
 Arcadia_SizeValue
-R_StringBuffer_getNumberOfBytes
+Arcadia_StringBuffer_getNumberOfBytes
   (
-    R_StringBuffer const* self
+    Arcadia_StringBuffer const* self
   )
 { return self->size; }
 
 Arcadia_Natural8Value const*
-R_StringBuffer_getBytes
+Arcadia_StringBuffer_getBytes
   (
-    R_StringBuffer const* self
+    Arcadia_StringBuffer const* self
   )
 { return self->elements; }

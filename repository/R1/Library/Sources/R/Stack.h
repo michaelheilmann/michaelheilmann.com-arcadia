@@ -16,14 +16,13 @@
 #if !defined(R_STACK_H_INCLUDED)
 #define R_STACK_H_INCLUDED
 
-#include "R/Object.h"
-#include "R/Value.h"
+#include "Arcadia/Ring1/Include.h"
 
-Rex_declareObjectType(u8"R.Stack", R_Stack, u8"R.Object");
+Rex_declareObjectType(u8"R.Stack", R_Stack, u8"Arcadia.Object");
 
 struct R_Stack {
-  R_Object _parent;
-  R_Value* elements;
+  Arcadia_Object _parent;
+  Arcadia_Value* elements;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
 };
@@ -55,7 +54,7 @@ R_Stack_push
   (
     Arcadia_Process* process,
     R_Stack* self,
-    R_Value value
+    Arcadia_Value value
   );
 
 // https://michaelheilmann.com/repository/R1/#r-stack-ppop
@@ -67,7 +66,7 @@ R_Stack_pop
   );
 
 // https://michaelheilmann.com/repository/R1/#r-stack-peek
-R_Value
+Arcadia_Value
 R_Stack_peek
   (
     Arcadia_Process* process,
@@ -114,7 +113,7 @@ Define(Arcadia_Natural8, Natural8, natural8)
 Define(Arcadia_Natural16, Natural16, natural16)
 Define(Arcadia_Natural32, Natural32, natural32)
 Define(Arcadia_Natural64, Natural64, natural64)
-Define(R_ObjectReference, ObjectReference, objectReference)
+Define(Arcadia_ObjectReference, ObjectReference, objectReference)
 Define(Arcadia_Size, Size, size)
 Define(Arcadia_Void, Void, void)
 

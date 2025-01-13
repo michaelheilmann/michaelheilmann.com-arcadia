@@ -19,46 +19,44 @@
 #define R_ARGUMENTSVALIDATION_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "R/Object.h"
-#include "R/Value.h"
 
-static inline R_ObjectReferenceValue
+static inline Arcadia_ObjectReferenceValue
 R_Argument_getObjectReferenceValue
   (
     Arcadia_Process* process,
-    R_Value const* value,
+    Arcadia_Value const* value,
     Arcadia_TypeValue type
   )
 {
-  if (!R_Value_isObjectReferenceValue(value)) {
+  if (!Arcadia_Value_isObjectReferenceValue(value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  R_ObjectReferenceValue objectReferenceValue = R_Value_getObjectReferenceValue(value);
-  if (!Arcadia_Type_isSubType(R_Object_getType(objectReferenceValue), type)) {
+  Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_Value_getObjectReferenceValue(value);
+  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectReferenceValue), type)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
   return objectReferenceValue;
 }
 
-static inline R_ObjectReferenceValue
+static inline Arcadia_ObjectReferenceValue
 R_Argument_getObjectReferenceValueOrNull
   (
     Arcadia_Process* process,
-    R_Value const* value,
+    Arcadia_Value const* value,
     Arcadia_TypeValue type
   ) 
 {
-  if (R_Value_isVoidValue(value)) {
+  if (Arcadia_Value_isVoidValue(value)) {
     return NULL;
   }
-  if (!R_Value_isObjectReferenceValue(value)) {
+  if (!Arcadia_Value_isObjectReferenceValue(value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  R_ObjectReferenceValue objectReferenceValue = R_Value_getObjectReferenceValue(value);
-  if (!Arcadia_Type_isSubType(R_Object_getType(objectReferenceValue), type)) {
+  Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_Value_getObjectReferenceValue(value);
+  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectReferenceValue), type)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }

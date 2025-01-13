@@ -27,11 +27,11 @@ main1
     char** argv
   )
 {
-  R_String* s = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1));
-  R_Object_lock(process, s);
-  R_Arms_step();
-  R_Arms_step();
-  R_Object_unlock(process, s);
+  Arcadia_String* s = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1));
+  Arcadia_Object_lock(process, s);
+  Arcadia_Process_stepArms(process);
+  Arcadia_Process_stepArms(process);
+  Arcadia_Object_unlock(process, s);
 }
 
 int
@@ -51,9 +51,9 @@ main
     R_shutdown();
     return EXIT_FAILURE;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
     Arcadia_Process_popJumpTarget(process);
   }

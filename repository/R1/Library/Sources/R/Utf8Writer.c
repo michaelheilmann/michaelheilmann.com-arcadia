@@ -17,20 +17,18 @@
 
 #include "R/Utf8Writer.h"
 
-#include "R/Object.h"
-#include "R/Value.h"
 #include "R/cstdlib.h"
 
 static void
 R_Utf8Writer_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_Utf8Writer_constructImpl,
   .destruct = NULL,
   .visit = NULL,
@@ -56,26 +54,26 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Utf8Writer", R_Utf8Writer, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.Utf8Writer", R_Utf8Writer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_Utf8Writer_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Utf8Writer* _self = R_Value_getObjectReferenceValue(self);
+  R_Utf8Writer* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Utf8Writer_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    R_Object_constructImpl(process, self, 0, &argumentValues[0]);
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->writeBytes = NULL;
   _self->writeCodePoints = NULL;
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 void

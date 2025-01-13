@@ -17,19 +17,16 @@
 
 #include "ByteBuffer.h"
 
-#include "R/ArmsIntegration.h"
-#include "R/Object.h"
 #include "R/DynamicArrayUtilities.h"
-#include "R/Value.h"
 #include "R/cstdlib.h"
 
 static void
 R_ByteBuffer_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -39,7 +36,7 @@ R_ByteBuffer_destruct
     R_ByteBuffer* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_ByteBuffer_constructImpl,
   .destruct = &R_ByteBuffer_destruct,
   .visit = NULL,
@@ -65,30 +62,28 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.ByteBuffer", R_ByteBuffer, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.ByteBuffer", R_ByteBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_ByteBuffer_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_ByteBuffer* _self = R_Value_getObjectReferenceValue(self);
+  R_ByteBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_ByteBuffer_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->p = NULL;
   _self->sz = 0;
   _self->cp = 0;
-  if (!R_allocateUnmanaged_nojump(process, &_self->p, 0)) {
-    Arcadia_Process_jump(process);
-  }
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Process_allocateUnmanaged(process, &_self->p, 0);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -99,7 +94,7 @@ R_ByteBuffer_destruct
   )
 {
   if (self->p) {
-    R_deallocateUnmanaged_nojump(process, self->p);
+    Arcadia_Process_deallocateUnmanaged(process, self->p);
     self->p = NULL;
   }
 }
@@ -110,7 +105,7 @@ R_ByteBuffer_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_ByteBuffer* self = R_allocateObject(process, _R_ByteBuffer_getType(process), 0, &argumentValues[0]);
   return self;
 }
@@ -202,9 +197,7 @@ R_ByteBuffer_insert_pn
       Arcadia_Process_jump(process);
     }
     Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    if (!R_reallocateUnmanaged_nojump(process, &self->p, newCapacity)) {
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_Process_reallocateUnmanaged(process, &self->p, newCapacity);
     self->cp = newCapacity;
   }
   if (index < self->sz) {

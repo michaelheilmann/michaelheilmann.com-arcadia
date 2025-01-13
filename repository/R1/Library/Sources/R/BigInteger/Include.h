@@ -1,15 +1,8 @@
 #if !defined(R_BIGINTEGER_H_INCLUDED)
 #define R_BIGINTEGER_H_INCLUDED
 
-#include "R/Object.h"
-#include "Arcadia/Ring1/Implementation/Integer16.h"
-#include "Arcadia/Ring1/Implementation/Integer32.h"
-#include "Arcadia/Ring1/Implementation/Integer64.h"
-#include "Arcadia/Ring1/Implementation/Integer8.h"
-#include "Arcadia/Ring1/Implementation/Natural16.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "Arcadia/Ring1/Implementation/Natural64.h"
-#include "Arcadia/Ring1/Implementation/Natural8.h"
+#include "R/Configure.h"
+#include "Arcadia/Ring1/Include.h"
 
 #define R_Configuration_BigInteger_DigitType_Natural16 (1)
 #define R_Configuration_BigInteger_DigitType_Natural32 (2)
@@ -78,10 +71,10 @@
 //
 // If we select a good basis (e.g., UINT8_MAX or UINT64_MAX) we can represent most numbers by a single digit.
 // The current basis is UINT64_MAX.
-Rex_declareObjectType("R.BigInteger", R_BigInteger, "R.Object");
+Rex_declareObjectType("R.BigInteger", R_BigInteger, "Arcadia.Object");
 
 struct R_BigInteger {
-  R_Object _parent;
+  Arcadia_Object _parent;
   Arcadia_BooleanValue sign;
   R_BigInteger_Digit* digits;
   Arcadia_SizeValue size, capacity;
@@ -91,7 +84,7 @@ R_BigInteger*
 R_BigInteger_create
   (
     Arcadia_Process* process,
-    R_Value v
+    Arcadia_Value v
   );
 
 // compute

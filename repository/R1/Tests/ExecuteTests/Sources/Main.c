@@ -37,11 +37,11 @@ safeExecute
     result = false;
     return result;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
-    R_Value targetValue;
-    R_Value argumentValues[1];
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_Value targetValue;
+    Arcadia_Value argumentValues[1];
     (*f)(process, &targetValue, 0, &argumentValues[0]);
   } else {
     result = false;
@@ -60,9 +60,9 @@ static void
 execute1
   (
     Arcadia_Process* process,
-    R_Value* targetValue,
+    Arcadia_Value* targetValue,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
   R_Interpreter_ProcessState_startup(process);
@@ -71,11 +71,11 @@ execute1
   uint8_t codeBytes[] = {
     R_Machine_Code_Opcode_Idle,  
   };
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_append(code, codeBytes, 1);
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);
@@ -91,16 +91,16 @@ static void
 execute2
   (
     Arcadia_Process* process,
-    R_Value* targetValue,
+    Arcadia_Value* targetValue,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
   R_Interpreter_ProcessState_startup(process);
   R_Interpreter_ProcessState* interpreterProcess = R_Interpreter_ProcessState_get();
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
     R_Interpreter_Code* code = R_Interpreter_Code_create(process);
     if (0 != R_Interpreter_Code_Constants_getOrCreateInteger32(process, constants, Arcadia_Integer32Value_Literal(5))) {
@@ -116,7 +116,7 @@ execute2
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Register, 2);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1);
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);
@@ -132,9 +132,9 @@ static void
 print
   (
     Arcadia_Process* process,
-    R_Value* targetValue,
+    Arcadia_Value* targetValue,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
   fprintf(stdout, "Hello, World!\n");
@@ -144,23 +144,23 @@ static void
 execute3
   (
     Arcadia_Process* process,
-    R_Value* targetValue,
+    Arcadia_Value* targetValue,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
   R_Interpreter_ProcessState_startup(process);
   R_Interpreter_ProcessState* interpreterProcess = R_Interpreter_ProcessState_get();
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
     R_Interpreter_Code* code = R_Interpreter_Code_create(process);
     if (0 != R_Interpreter_Code_Constants_getOrCreateForeignProcedure(process, constants, &print)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
       Arcadia_Process_jump(process);
     }
-    if (1 != R_Interpreter_Code_Constants_getOrCreateString(process, constants, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
+    if (1 != R_Interpreter_Code_Constants_getOrCreateString(process, constants, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
       Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
       Arcadia_Process_jump(process);
     }
@@ -170,7 +170,7 @@ execute3
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0); // calleee
     R_Interpreter_Code_appendCountNatural8(code, 1); // number of arguments
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);

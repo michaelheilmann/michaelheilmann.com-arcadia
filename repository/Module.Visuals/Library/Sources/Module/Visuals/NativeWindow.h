@@ -28,10 +28,10 @@
 // The window is in "closed" state when it is creeated by NativeWindowsWindow_create.
 // A successful call to NativeWindowsWindow_open puts the window in "opened" state.
 // The window is put in "closed" state if it is destructed or by a successful call to NativeWindowsWindow_close.
-Rex_declareObjectType(u8"NativeWindow", NativeWindow, u8"R.Object");
+Rex_declareObjectType(u8"NativeWindow", NativeWindow, u8"Arcadia.Object");
 
 struct NativeWindow {
-  R_Object _parent;
+  Arcadia_Object _parent;
 
   void (*open)(Arcadia_Process*, NativeWindow*);
 
@@ -53,8 +53,8 @@ struct NativeWindow {
   NativeIcon* (*getSmallIcon)(NativeWindow* self);
   void (*setSmallIcon)(NativeWindow*, NativeIcon*);
 
-  R_String* (*getTitle)(NativeWindow*);
-  void (*setTitle)(Arcadia_Process*, NativeWindow*, R_String*);
+  Arcadia_String* (*getTitle)(NativeWindow*);
+  void (*setTitle)(Arcadia_Process*, NativeWindow*, Arcadia_String*);
 
   void (*getCanvasSize)(NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
@@ -178,7 +178,7 @@ NativeWindow_setSmallIcon
 /// @brief Get the title.
 /// @param self A pointer to this window.
 /// @return The title.
-R_String*
+Arcadia_String*
 NativeWindow_getTitle
   (
     NativeWindow* self
@@ -192,7 +192,7 @@ NativeWindow_setTitle
   (
     Arcadia_Process* process,
     NativeWindow* self,
-    R_String* title
+    Arcadia_String* title
   );
 
 /// @brief Get the canvas size.

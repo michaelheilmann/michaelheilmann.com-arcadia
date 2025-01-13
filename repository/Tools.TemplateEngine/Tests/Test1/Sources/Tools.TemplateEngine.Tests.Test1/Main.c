@@ -38,8 +38,8 @@ main1
   context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
 
   R_FilePath* filePath = R_FilePath_parseGeneric(process, u8"HelloWorld.t", strlen(u8"HelloWorld.t"));
-  R_Value filePathValue;
-  R_Value_setObjectReferenceValue(&filePathValue, filePath);
+  Arcadia_Value filePathValue;
+  Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
   R_Stack_push(process, context->stack, filePathValue);
   Context_onRun(process, context);
 
@@ -62,12 +62,12 @@ recursiveInclude1
   context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
 
   R_FilePath* filePath = R_FilePath_parseGeneric(process, u8"recursiveInclude1.t", strlen(u8"recursiveInclude1.t"));
-  R_Value filePathValue;
-  R_Value_setObjectReferenceValue(&filePathValue, filePath);
+  Arcadia_Value filePathValue;
+  Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
   R_Stack_push(process, context->stack, filePathValue);
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Context_onRun(process, context);
     Arcadia_Process_popJumpTarget(process);
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
@@ -94,12 +94,12 @@ recursiveInclude2
   context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
 
   R_FilePath* filePath = R_FilePath_parseGeneric(process, u8"recursiveInclude2.t", strlen(u8"recursiveInclude2.t"));
-  R_Value filePathValue;
-  R_Value_setObjectReferenceValue(&filePathValue, filePath);
+  Arcadia_Value filePathValue;
+  Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
   R_Stack_push(process, context->stack, filePathValue);
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Context_onRun(process, context);
     Arcadia_Process_popJumpTarget(process);
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
@@ -127,9 +127,9 @@ main
     R_shutdown();
     return EXIT_FAILURE;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
     recursiveInclude1(process, argc, argv);
     recursiveInclude2(process, argc, argv);

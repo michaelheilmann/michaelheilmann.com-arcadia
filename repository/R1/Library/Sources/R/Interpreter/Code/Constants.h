@@ -19,7 +19,6 @@
 #define R_INTERPRETER_CODE_CONSTANTS_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "R/Object.h"
 #include "R/String.h"
 
 /**
@@ -33,14 +32,14 @@
  * - string values
  * - void values
  */
-Rex_declareObjectType(u8"R.Interpreter.Code.Constants", R_Interpreter_Code_Constants, u8"R.Object");
+Rex_declareObjectType(u8"R.Interpreter.Code.Constants", R_Interpreter_Code_Constants, u8"Arcadia.Object");
 
 typedef struct Constant Constant;
 
 struct R_Interpreter_Code_Constants {
-  R_Object _parent;
-  /** @brief A pointer to an array of cp constants. The first sz R_Value object contain the values of constants, the remaining cp - sz R_Value objects contain void values. */
-  R_Value* p;
+  Arcadia_Object _parent;
+  /** @brief A pointer to an array of cp constants. The first sz Arcadia_Value object contain the values of constants, the remaining cp - sz Arcadia_Value objects contain void values. */
+  Arcadia_Value* p;
   /** @brief The size of the constant array. */
   Arcadia_SizeValue sz;
   /** @brief The capacity of the constant array. */
@@ -146,7 +145,7 @@ R_Interpreter_Code_Constants_getOrCreateString
   (
     Arcadia_Process* process,
     R_Interpreter_Code_Constants* self,
-    R_String* stringValue
+    Arcadia_String* stringValue
   );
 
 Arcadia_Natural32Value
@@ -157,7 +156,7 @@ R_Interpreter_Code_Constants_getOrCreateVoid
     Arcadia_VoidValue voidValue
   );
 
-R_Value const*
+Arcadia_Value const*
 R_Interpreter_Code_Constants_getAt
   (
     Arcadia_Process* process,

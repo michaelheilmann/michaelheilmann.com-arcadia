@@ -37,7 +37,7 @@ struct NativeWindowsWindow {
   HWND windowHandle;
   HDC windowDeviceContextHandle;
 
-  R_String* title;
+  Arcadia_String* title;
   NativeWindowsIcon* smallIcon;
   NativeWindowsIcon* bigIcon;
 };

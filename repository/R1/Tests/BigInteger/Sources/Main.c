@@ -27,13 +27,13 @@
     Arcadia_Process_jump(process); \
   }
 
-static inline R_Value
-R_Value_fromObjectReferenceValue
+static inline Arcadia_Value
+Arcadia_Value_fromObjectReferenceValue
   (
-    R_ObjectReferenceValue v
+    Arcadia_ObjectReferenceValue v
   )
 {
-  R_Value w = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = v };
+  Arcadia_Value w = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = v };
   return w;
 }
 
@@ -57,56 +57,56 @@ R_Test_BigInteger_assertRelational
   )
 {
   R_BigInteger *pa = NULL, *pb = NULL;
-  R_Value vb;
+  Arcadia_Value vb;
   pa = R_BigInteger_fromInteger64(process, a);
   pb = R_BigInteger_fromInteger64(process, b);
-  vb = R_Value_fromObjectReferenceValue(pb);
+  vb = Arcadia_Value_fromObjectReferenceValue(pb);
   switch (op) {
     case R_Test_Op_equalTo: {
-      R_Test_assert(expectedResult == R_Object_equalTo(process, (R_Object*)pa, &vb));
-      R_Test_assert(expectedResult == !R_Object_notEqualTo(process, (R_Object*)pa, &vb));
+      R_Test_assert(expectedResult == Arcadia_Object_equalTo(process, (Arcadia_Object*)pa, &vb));
+      R_Test_assert(expectedResult == !Arcadia_Object_notEqualTo(process, (Arcadia_Object*)pa, &vb));
     } break;
     case R_Test_Op_greaterThan: {
-      Arcadia_BooleanValue receivedResult = R_Object_greaterThan(process, (R_Object*)pa, &vb);
+      Arcadia_BooleanValue receivedResult = Arcadia_Object_greaterThan(process, (Arcadia_Object*)pa, &vb);
       R_Test_assert(expectedResult == receivedResult);
       if (expectedResult) {
         // "greaterThan(x,y)" true implies "lowerThanOrEqualTo(x,y)" and "lowerThan(x,y)" false.
-        R_Test_assert(!R_Object_lowerThanOrEqualTo(process, (R_Object*)pa, &vb));
-        R_Test_assert(!R_Object_lowerThan(process, (R_Object*)pa, &vb));
+        R_Test_assert(!Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
+        R_Test_assert(!Arcadia_Object_lowerThan(process, (Arcadia_Object*)pa, &vb));
       } else {
         // "greaterThan(x,y)" false implies "lowerThanOrEqualTo(x,y)" true.
-        R_Test_assert(R_Object_lowerThanOrEqualTo(process, (R_Object*)pa, &vb));
+        R_Test_assert(Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
       }
     } break;
     case R_Test_Op_greaterThanOrEqualTo: {
-      R_Test_assert(expectedResult == R_Object_greaterThanOrEqualTo(process, (R_Object*)pa, &vb));
+      R_Test_assert(expectedResult == Arcadia_Object_greaterThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
       if (expectedResult) {
         // "greaterThanOrEqualTo(x,y)" true implies "lowerThan(x,y)" false.
-        R_Test_assert(!R_Object_lowerThan(process, (R_Object*)pa, &vb));
+        R_Test_assert(!Arcadia_Object_lowerThan(process, (Arcadia_Object*)pa, &vb));
       }
     } break;
     case R_Test_Op_lowerThan: {
-      Arcadia_BooleanValue receivedResult = R_Object_lowerThan(process, (R_Object*)pa, &vb);
+      Arcadia_BooleanValue receivedResult = Arcadia_Object_lowerThan(process, (Arcadia_Object*)pa, &vb);
       R_Test_assert(expectedResult == receivedResult);
       if (expectedResult) {
         // "lowerThan(x,y)" true implies "greaterThanOrEqualTo(x,y)" and "greaterThan(x,y)" false.
-        R_Test_assert(!R_Object_greaterThanOrEqualTo(process, (R_Object*)pa, &vb));
-        R_Test_assert(!R_Object_greaterThan(process, (R_Object*)pa, &vb));
+        R_Test_assert(!Arcadia_Object_greaterThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
+        R_Test_assert(!Arcadia_Object_greaterThan(process, (Arcadia_Object*)pa, &vb));
       } else {
         // "lowerThan(x,y)" false implies "greaterThanOrEqualTo(x,y)" true.
-        R_Test_assert(R_Object_greaterThanOrEqualTo(process, (R_Object*)pa, &vb));
+        R_Test_assert(Arcadia_Object_greaterThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
       }
     } break;
     case R_Test_Op_lowerThanOrEqualTo: {
-      R_Test_assert(expectedResult == R_Object_lowerThanOrEqualTo(process, (R_Object*)pa, &vb));
+      R_Test_assert(expectedResult == Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
       if (expectedResult) {
         // "lowerThanOrEqualTo(x,y)" true implies "greaterThan(x,y)" false.
-        R_Test_assert(!R_Object_greaterThan(process, (R_Object*)pa, &vb));
+        R_Test_assert(!Arcadia_Object_greaterThan(process, (Arcadia_Object*)pa, &vb));
       }
     } break;
     case R_Test_Op_notEqualTo: {
-      R_Test_assert(expectedResult == R_Object_lowerThanOrEqualTo(process, (R_Object*)pa, &vb));
-      R_Test_assert(expectedResult == !R_Object_lowerThanOrEqualTo(process, (R_Object*)pa, &vb));
+      R_Test_assert(expectedResult == Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
+      R_Test_assert(expectedResult == !Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
     } break;
     default: {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
@@ -126,11 +126,11 @@ R_Test_BigInteger_assertAdditive
   )
 {
   R_BigInteger* pa = NULL, * pb = NULL;
-  R_Value vb;
+  Arcadia_Value vb;
   pa = R_BigInteger_fromInteger64(process, a);
   pb = R_BigInteger_fromInteger64(process,b);
   R_BigInteger* pexpectedResult = R_BigInteger_fromInteger64(process, expectedResult);
-  vb = R_Value_fromObjectReferenceValue(pb);
+  vb = Arcadia_Value_fromObjectReferenceValue(pb);
   switch (op) {
     case R_Test_Op_add: {
       R_BigInteger* preceivedResult = R_BigInteger_add(process, pa, pb);
@@ -243,9 +243,9 @@ safeExecute
     result = false;
     return result;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     (*f)(process);
   } else {
     result = false;

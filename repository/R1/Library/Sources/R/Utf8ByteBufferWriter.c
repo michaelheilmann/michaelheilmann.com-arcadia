@@ -18,18 +18,16 @@
 #include "R/Utf8ByteBufferWriter.h"
 
 #include "R/ByteBuffer.h"
-#include "R/Object.h"
 #include "R/Utf8/EncodeCodePoints.h"
-#include "R/Value.h"
 #include "R/cstdlib.h"
 
 static void
 R_Utf8ByteBufferWriter_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -57,7 +55,7 @@ R_Utf8ByteBufferWriter_writeCodePointsImpl
     Arcadia_SizeValue numberOfCodePoints
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_Utf8ByteBufferWriter_constructImpl,
   .destruct = NULL,
   .visit = &R_Utf8ByteBufferWriter_visit,
@@ -89,29 +87,29 @@ static void
 R_Utf8ByteBufferWriter_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Utf8ByteBufferWriter* _self = R_Value_getObjectReferenceValue(self);
+  R_Utf8ByteBufferWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Utf8ByteBufferWriter_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[0]), _R_ByteBuffer_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _R_ByteBuffer_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  _self->target = R_Value_getObjectReferenceValue(&argumentValues[0]);
+  _self->target = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
   ((R_Utf8Writer*)_self)->writeBytes = (void (*)(Arcadia_Process*, R_Utf8Writer*, void const*, Arcadia_SizeValue)) & R_Utf8ByteBufferWriter_writeBytesImpl;
   ((R_Utf8Writer*)_self)->writeCodePoints = (void (*)(Arcadia_Process*, R_Utf8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & R_Utf8ByteBufferWriter_writeCodePointsImpl;
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -121,7 +119,7 @@ R_Utf8ByteBufferWriter_visit
     R_Utf8ByteBufferWriter* self
   )
 {
-  R_Object_visit(self->target);
+  Arcadia_Object_visit(process, self->target);
 }
 
 static void
@@ -212,7 +210,7 @@ R_Utf8ByteBufferWriter_create
     R_ByteBuffer* target
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)target } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)target } };
   R_Utf8ByteBufferWriter* self = R_allocateObject(process, _R_Utf8ByteBufferWriter_getType(process), 1, &argumentValues[0]);
   return self;
 }

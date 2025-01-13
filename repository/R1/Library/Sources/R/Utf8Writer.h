@@ -18,16 +18,13 @@
 #if !defined(R_UTF8WRITER_H_INCLUDED)
 #define R_UTF8WRITER_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "R/Object.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Include.h"
 typedef struct R_ByteBuffer R_ByteBuffer;
 
-Rex_declareObjectType(u8"R.Utf8Writer", R_Utf8Writer, u8"R.Object");
+Rex_declareObjectType(u8"R.Utf8Writer", R_Utf8Writer, u8"Arcadia.Object");
 
 struct R_Utf8Writer {
-  R_Object _parent;
+  Arcadia_Object _parent;
   void (*writeBytes)(Arcadia_Process*, R_Utf8Writer* self, const void* bytes, Arcadia_SizeValue numberOfBytes);
   void (*writeCodePoints)(Arcadia_Process*, R_Utf8Writer* self, Arcadia_Natural32Value const* codePoints, Arcadia_SizeValue numberOfCodePoints);
 };

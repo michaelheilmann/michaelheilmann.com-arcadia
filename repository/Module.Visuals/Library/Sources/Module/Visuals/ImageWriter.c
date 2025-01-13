@@ -23,7 +23,7 @@ ImageWriter_writePngToPath
     Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_String* targetPath
+    Arcadia_String* targetPath
   )
 { self->writePngToPath(process, self, sourcePixelBuffer, targetPath); }
 
@@ -43,7 +43,7 @@ ImageWriter_writeBmpToPath
     Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_String* targetPath
+    Arcadia_String* targetPath
   )
 { self->writeBmpToPath(process, self, sourcePixelBuffer, targetPath); }
 
@@ -63,7 +63,7 @@ ImageWriter_writeIcoToPath
     Arcadia_Process* process,
     ImageWriter* self,
     R_List* sourcePixelBuffers,
-    R_String* targetPath
+    Arcadia_String* targetPath
   )
 { self->writeIcoToPath(process, self, sourcePixelBuffers, targetPath); }
 
@@ -81,12 +81,12 @@ static void
 ImageWriter_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   ); 
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &ImageWriter_constructImpl,
   .destruct = NULL,
   .visit = NULL,
@@ -112,21 +112,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"ImageWriter", ImageWriter, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 ImageWriter_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  ImageWriter* _self = R_Value_getObjectReferenceValue(self);
+  ImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _ImageWriter_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->writeBmpToByteBuffer = NULL;
@@ -135,5 +135,5 @@ ImageWriter_constructImpl
   _self->writeIcoToPath = NULL;
   _self->writePngToByteBuffer = NULL;
   _self->writePngToPath = NULL;
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }

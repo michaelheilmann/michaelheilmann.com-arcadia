@@ -28,14 +28,14 @@ Rex_declareObjectType(u8"R.Mil.VariableDefinitionAst", R_Mil_VariableDefinitionA
 
 struct R_Mil_VariableDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;
-  R_String* variableName;
+  Arcadia_String* variableName;
 };
 
 R_Mil_VariableDefinitionAst*
 R_Mil_VariableDefinitionAst_create
   (
     Arcadia_Process* process,
-    R_String* name
+    Arcadia_String* name
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

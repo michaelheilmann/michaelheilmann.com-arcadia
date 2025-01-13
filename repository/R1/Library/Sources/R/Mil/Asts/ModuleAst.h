@@ -35,10 +35,10 @@
 /// @code
 /// module : definition*
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.ModuleAst", R_Mil_ModuleAst, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.ModuleAst", R_Mil_ModuleAst, u8"Arcadia.Object");
 
 struct R_Mil_ModuleAst {
-  R_Object _parent;
+  Arcadia_Object _parent;
   R_List* definitions;
 };
 

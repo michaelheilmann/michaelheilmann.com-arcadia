@@ -65,6 +65,7 @@ R_Interpreter_ProcessState_shutdown
 void
 R_Interpreter_ProcessState_visit
   (
+    Arcadia_Process* process,
     R_Interpreter_ProcessState* self
   );
 
@@ -105,12 +106,12 @@ R_Interpreter_ProcessState_defineGlobalClass
  * @error Arcadia_Status_ArgumentValueInvalid @a name is a null pointer
  * @error Arcadia_Status_NotExists no global of name @a name was found 
  */
-R_Value
+Arcadia_Value
 R_Interpreter_ProcessState_getGlobal
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* self,
-    R_String* name
+    Arcadia_String* name
   );
 
 /**

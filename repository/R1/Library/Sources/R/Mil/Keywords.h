@@ -23,7 +23,7 @@
 /// @code
 /// class R.Mil.Keywords
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.Keywords", R_Mil_Keywords, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.Keywords", R_Mil_Keywords, u8"Arcadia.Object");
 
 /// @brief Create a MIL keywords object.
 /// @return A pointer to this CIL keywords object.
@@ -42,7 +42,7 @@ R_Mil_Keywords_add
   (
     Arcadia_Process* process,
     R_Mil_Keywords* self,
-    R_String* string,
+    Arcadia_String* string,
     Arcadia_Natural32Value type
   );
 
@@ -56,7 +56,7 @@ R_Mil_Keywords_scan
   (
     Arcadia_Process* process,
     R_Mil_Keywords* self,
-    R_String* string,
+    Arcadia_String* string,
     Arcadia_Natural32Value* tokenType
   );
 

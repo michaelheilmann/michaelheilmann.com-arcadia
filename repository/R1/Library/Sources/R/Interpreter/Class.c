@@ -26,9 +26,9 @@ static void
 R_Interpreter_Class_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -38,7 +38,7 @@ R_Interpreter_Class_visit
     R_Interpreter_Class* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_Interpreter_Class_constructImpl,
   .destruct = NULL,
   .visit = &R_Interpreter_Class_visit,
@@ -64,29 +64,29 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_Interpreter_Class_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Interpreter_Class* _self = R_Value_getObjectReferenceValue(self);
+  R_Interpreter_Class* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Class_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  _self->className = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _R_String_getType(process));
-  _self->extendedClassName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[1], _R_String_getType(process));
+  _self->className = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _Arcadia_String_getType(process));
+  _self->extendedClassName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[1], _Arcadia_String_getType(process));
   _self->classMembers = R_Map_create(process);
 
   _self->extendedClass = NULL;
@@ -94,7 +94,7 @@ R_Interpreter_Class_constructImpl
   _self->complete = Arcadia_BooleanValue_False;
   
 
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -104,40 +104,39 @@ R_Interpreter_Class_visit
     R_Interpreter_Class* self
   )
 {
-  R_Object_visit(self->className);
-  R_Object_visit(self->extendedClassName);
-  R_Object_visit(self->classMembers);
-
-  R_Object_visit(self->extendedClass);
+  Arcadia_Object_visit(process, self->className);
+  Arcadia_Object_visit(process, self->extendedClassName);
+  Arcadia_Object_visit(process, self->classMembers);
+  Arcadia_Object_visit(process, self->extendedClass);
 }
 
 R_Interpreter_Class*
 R_Interpreter_Class_create
   (
     Arcadia_Process* process,
-    R_String* className,
-    R_String* extendedClassName
+    Arcadia_String* className,
+    Arcadia_String* extendedClassName
   )
 {
-  R_Value argumentValues[] = { 
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = className },
-    {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
+  Arcadia_Value argumentValues[] = { 
+    {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = className },
+    {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
   };
   if (extendedClassName) {
-    R_Value_setObjectReferenceValue(&argumentValues[1], extendedClassName);
+    Arcadia_Value_setObjectReferenceValue(&argumentValues[1], extendedClassName);
   }
   R_Interpreter_Class* self = R_allocateObject(process, _R_Interpreter_Class_getType(process), 2, &argumentValues[0]);
   return self;
 }
 
-R_String*
+Arcadia_String*
 R_Interpreter_Class_getClassName
   (
     R_Interpreter_Class* self
   )
 { return self->className; }
 
-R_String*
+Arcadia_String*
 R_Interpreter_Class_getExtendedClassName
   (
     R_Interpreter_Class* self
@@ -152,14 +151,14 @@ R_Interpreter_Class_addConstructor
     R_Interpreter_Constructor* constructor
   )
 { 
-  R_String* name = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"<constructor>", c_strlen(u8"<constructor>")));
-  R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = name };
-  R_Value value = R_Map_get(process, self->classMembers, key);
-  if (!R_Value_isVoidValue(&value)) {
+  Arcadia_String* name = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"<constructor>", c_strlen(u8"<constructor>")));
+  Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
+  Arcadia_Value value = R_Map_get(process, self->classMembers, key);
+  if (!Arcadia_Value_isVoidValue(&value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
     Arcadia_Process_jump(process);
   }
-  R_Value_setObjectReferenceValue(&value, constructor);
+  Arcadia_Value_setObjectReferenceValue(&value, constructor);
   R_Map_set(process, self->classMembers, key, value);
 }
 
@@ -171,13 +170,13 @@ R_Interpreter_Class_addMethod
     R_Interpreter_Method* method
   )
 {
-  R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = method->unqualifiedName };
-  R_Value value = R_Map_get(process, self->classMembers, key);
-  if (!R_Value_isVoidValue(&value)) {
+  Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = method->unqualifiedName };
+  Arcadia_Value value = R_Map_get(process, self->classMembers, key);
+  if (!Arcadia_Value_isVoidValue(&value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
     Arcadia_Process_jump(process);
   }
-  R_Value_setObjectReferenceValue(&value, method);
+  Arcadia_Value_setObjectReferenceValue(&value, method);
   R_Map_set(process, self->classMembers, key, value);
 }
 
@@ -189,13 +188,13 @@ R_Interpreter_Class_addVariable
     R_Interpreter_Variable* variable
   )
 {
-  R_Value key = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = variable->name };
-  R_Value value = R_Map_get(process, self->classMembers, key);
-  if (!R_Value_isVoidValue(&value)) {
+  Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = variable->name };
+  Arcadia_Value value = R_Map_get(process, self->classMembers, key);
+  if (!Arcadia_Value_isVoidValue(&value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
     Arcadia_Process_jump(process);
   }
-  R_Value_setObjectReferenceValue(&value, variable);
+  Arcadia_Value_setObjectReferenceValue(&value, variable);
   R_Map_set(process, self->classMembers, key, value);
 }
 
@@ -203,15 +202,15 @@ static R_Interpreter_Class*
 getClass
   (
     Arcadia_Process* process,
-    R_Value v
+    Arcadia_Value v
   )
 {
-  if (!R_Value_isObjectReferenceValue(&v)) {
+  if (!Arcadia_Value_isObjectReferenceValue(&v)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  R_ObjectReferenceValue o = R_Value_getObjectReferenceValue(&v);
-  if (!Arcadia_Type_isSubType(R_Object_getType(o), _R_Interpreter_Class_getType(process))) {
+  Arcadia_ObjectReferenceValue o = Arcadia_Value_getObjectReferenceValue(&v);
+  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(o), _R_Interpreter_Class_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
@@ -238,10 +237,10 @@ completeExtendedClass
     R_Map* temporary = R_Map_create(process);
     R_Interpreter_Class* current = self;
     do {
-      R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = current->className };
-      R_Value v = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = self };
+      Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = current->className };
+      Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self };
       v = R_Map_get(process, temporary, v);
-      if (R_Value_isObjectReferenceValue(&v)) {
+      if (Arcadia_Value_isObjectReferenceValue(&v)) {
         /* "Y may not inherit from itself" */
         Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
         Arcadia_Process_jump(process);
@@ -267,10 +266,10 @@ completeVariables
   // Complete class instance variables.
   R_List* classMember = R_Map_getValues(process, self->classMembers);
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(classMember); i < n; ++i) {
-    R_Value value = R_List_getAt(process, classMember, i);
-    Arcadia_TypeValue valueType = R_Value_getType(process, &value);
+    Arcadia_Value value = R_List_getAt(process, classMember, i);
+    Arcadia_TypeValue valueType = Arcadia_Value_getType(process, &value);
     if (Arcadia_Type_isSubType(valueType, _R_Interpreter_Variable_getType(process))) {
-      R_Interpreter_Variable* variable = R_Value_getObjectReferenceValue(&value);
+      R_Interpreter_Variable* variable = Arcadia_Value_getObjectReferenceValue(&value);
       variable->index = numberOfVariables++;
       variable->ready = Arcadia_BooleanValue_True;
     } else {
@@ -304,10 +303,10 @@ R_Interpreter_Class_complete
     R_Map* temporary = R_Map_create(process);
     R_Interpreter_Class* current = self;
     do {
-      R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = current->className };
-      R_Value v = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = self };
+      Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = current->className };
+      Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self };
       v = R_Map_get(process, temporary, v);
-      if (R_Value_isObjectReferenceValue(&v)) {
+      if (Arcadia_Value_isObjectReferenceValue(&v)) {
         /* "Y may not inherit from itself" */
         Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
         Arcadia_Process_jump(process);
@@ -328,13 +327,13 @@ R_Interpreter_Class_complete
   }
   R_List* members = R_Map_getValues(process, self->classMembers);
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(members); i < n; ++i) {
-    R_Value v = R_List_getAt(process, members, i);
-    if (Arcadia_Type_isSubType(R_Value_getType(process, &v), _R_Interpreter_Method_getType(process))) {
-      R_Interpreter_Method *m = R_Value_getObjectReferenceValue(&v);
-      R_Value k2 = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = m->unqualifiedName };
-      R_Value v2 = R_Map_get(process, self->methodDispatch, k2);
-      if (!R_Value_isVoidValue(&v2)) {
-        R_Interpreter_Method* m2 = R_Value_getObjectReferenceValue(&v2);
+    Arcadia_Value v = R_List_getAt(process, members, i);
+    if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &v), _R_Interpreter_Method_getType(process))) {
+      R_Interpreter_Method *m = Arcadia_Value_getObjectReferenceValue(&v);
+      Arcadia_Value k2 = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = m->unqualifiedName };
+      Arcadia_Value v2 = R_Map_get(process, self->methodDispatch, k2);
+      if (!Arcadia_Value_isVoidValue(&v2)) {
+        R_Interpreter_Method* m2 = Arcadia_Value_getObjectReferenceValue(&v2);
         m->index = m2->index;
         m->ready = Arcadia_BooleanValue_True;
       } else {

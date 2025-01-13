@@ -17,8 +17,6 @@
 
 #include "R/List.h"
 
-#include "R/ArmsIntegration.h"
-#include "R/Object.h"
 #include "R/DynamicArrayUtilities.h"
 #include "R/cstdlib.h"
 
@@ -45,9 +43,9 @@ static void
 R_List_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -64,7 +62,7 @@ R_List_visit
     R_List* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_List_constructImpl,
   .destruct = &R_List_destruct,
   .visit = &R_List_visit,
@@ -90,7 +88,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.List", R_List, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.List", R_List, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_List_ensureFreeCapacity
@@ -120,9 +118,7 @@ R_List_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  if (!R_reallocateUnmanaged_nojump(process, &self->elements, sizeof(R_Value) * newCapacity)) {
-    Arcadia_Process_jump(process);
-  }
+  Arcadia_Process_reallocateUnmanaged(process, &self->elements, sizeof(Arcadia_Value) * newCapacity);
   self->capacity = newCapacity;
 }
 
@@ -134,7 +130,7 @@ R_List_ensureInitialized
 {
   if (!g_initialized) {
     g_minimumCapacity = 8;
-    g_maximumCapacity = SIZE_MAX / sizeof(R_Value);
+    g_maximumCapacity = SIZE_MAX / sizeof(Arcadia_Value);
     if (g_maximumCapacity > Arcadia_Integer32Value_Maximum) {
       g_maximumCapacity = Arcadia_Integer32Value_Maximum;
     }
@@ -150,29 +146,27 @@ static void
 R_List_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_List* _self = R_Value_getObjectReferenceValue(self);
+  R_List* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_List_getType(process);
   R_List_ensureInitialized(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->elements = NULL;
   _self->capacity = 0;
   _self->size = 0;
   _self->capacity = g_minimumCapacity;
-  if (!R_allocateUnmanaged_nojump(process, &_self->elements, sizeof(R_Value) * _self->capacity)) {
-    Arcadia_Process_jump(process);
-  }
+  Arcadia_Process_allocateUnmanaged(process, &_self->elements, sizeof(Arcadia_Value) * _self->capacity);
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
-    R_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
+    Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
   }
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -183,7 +177,7 @@ R_List_destruct
   )
 {
   if (self->elements) {
-    R_deallocateUnmanaged_nojump(process, self->elements);
+    Arcadia_Process_deallocateUnmanaged(process, self->elements);
     self->elements = NULL;
   }
 }
@@ -197,7 +191,7 @@ R_List_visit
 {
   if (self->elements) {
     for (Arcadia_SizeValue i = 0, n = self->size; i < n; ++i) {
-      R_Value_visit(self->elements + i);
+      Arcadia_Value_visit(process, self->elements + i);
     }
   }
 }
@@ -209,7 +203,7 @@ R_List_create
   )
 {
   R_List_ensureInitialized(process);
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_List* self = R_allocateObject(process, _R_List_getType(process), 0, &argumentValues[0]);
   return self;
 }
@@ -233,7 +227,7 @@ R_List_append
   (
     Arcadia_Process* process,
     R_List* self,
-    R_Value value
+    Arcadia_Value value
   )
 {
   R_List_insertAt(process, self, self->size, value);
@@ -244,7 +238,7 @@ R_List_prepend
   (
     Arcadia_Process* process,
     R_List* self,
-    R_Value value
+    Arcadia_Value value
   )
 {
   R_List_insertAt(process, self, Arcadia_SizeValue_Literal(0), value);
@@ -256,7 +250,7 @@ R_List_insertAt
     Arcadia_Process* process,
     R_List* self,
     Arcadia_SizeValue index,
-    R_Value value
+    Arcadia_Value value
   )
 {
   if (index > self->size) {
@@ -269,13 +263,13 @@ R_List_insertAt
   if (index < self->size) {
     c_memmove(self->elements + index + 1,
               self->elements + index + 0,
-              sizeof(R_Value) * (self->size - index));
+              sizeof(Arcadia_Value) * (self->size - index));
   }
   self->elements[index] = value;
   self->size++;
 }
 
-R_Value
+Arcadia_Value
 R_List_getAt
   (
     Arcadia_Process* process,
@@ -314,7 +308,7 @@ R_List_remove
   Arcadia_SizeValue tailLength = (self->size - index) - count;
   if (tailLength) {
     Arcadia_SizeValue tailStart = index + count;
-    c_memmove(self->elements + index, self->elements + tailStart, tailLength * sizeof(R_Value));
+    c_memmove(self->elements + index, self->elements + tailStart, tailLength * sizeof(Arcadia_Value));
   }
   self->size -= count;
 }
@@ -328,8 +322,8 @@ R_List_remove
       Type##Value Variable##Value \
     ) \
   { \
-    R_Value value; \
-    R_Value_set##Suffix##Value(&value, Variable##Value); \
+    Arcadia_Value value; \
+    Arcadia_Value_set##Suffix##Value(&value, Variable##Value); \
     R_List_append(process, self, value); \
   } \
 \
@@ -341,8 +335,8 @@ R_List_remove
       Type##Value Variable##Value \
     ) \
   { \
-    R_Value value; \
-    R_Value_set##Suffix##Value(&value, Variable##Value); \
+    Arcadia_Value value; \
+    Arcadia_Value_set##Suffix##Value(&value, Variable##Value); \
     R_List_prepend(process, self, value); \
   } \
 \
@@ -358,7 +352,7 @@ R_List_remove
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid); \
       Arcadia_Process_jump(process); \
     } \
-    return R_Value_is##Suffix##Value(self->elements + index); \
+    return Arcadia_Value_is##Suffix##Value(self->elements + index); \
   } \
 \
   Type##Value \
@@ -373,12 +367,12 @@ R_List_remove
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid); \
       Arcadia_Process_jump(process); \
     } \
-    R_Value* element = self->elements + index; \
-    if (!R_Value_is##Suffix##Value(element)) { \
+    Arcadia_Value* element = self->elements + index; \
+    if (!Arcadia_Value_is##Suffix##Value(element)) { \
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid); \
       Arcadia_Process_jump(process); \
     } \
-    return R_Value_get##Suffix##Value(element); \
+    return Arcadia_Value_get##Suffix##Value(element); \
   }
 
 Define(Arcadia_Boolean, Boolean, boolean)
@@ -391,7 +385,7 @@ Define(Arcadia_Natural8, Natural8, natural8)
 Define(Arcadia_Natural16, Natural16, natural16)
 Define(Arcadia_Natural32, Natural32, natural32)
 Define(Arcadia_Natural64, Natural64, natural64)
-Define(R_ObjectReference, ObjectReference, objectReference)
+Define(Arcadia_ObjectReference, ObjectReference, objectReference)
 Define(Arcadia_Size, Size, size)
 Define(Arcadia_Void, Void, void)
 

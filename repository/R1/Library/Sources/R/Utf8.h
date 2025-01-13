@@ -23,7 +23,7 @@
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 
 #define R_Utf8CodePoint_Last (0x0010ffff)
-c_static_assert(R_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximum - 3, "<internal error>");
+Arcadia_StaticAssert(R_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximum - 3, "<internal error>");
 
 Arcadia_BooleanValue
 R_isUtf8

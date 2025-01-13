@@ -29,7 +29,7 @@ Rex_declareObjectType(u8"R.Mil.RealLiteralOperandAst", R_Mil_RealLiteralOperandA
 
 struct R_Mil_RealLiteralOperandAst {
   R_Mil_OperandAst parent;
-  R_String* value;
+  Arcadia_String* value;
 };
 
 /// @undefined @a value is not a real literal
@@ -37,7 +37,7 @@ R_Mil_RealLiteralOperandAst*
 R_Mil_RealLiteralOperandAst_create
   (
     Arcadia_Process* process,
-    R_String* value
+    Arcadia_String* value
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

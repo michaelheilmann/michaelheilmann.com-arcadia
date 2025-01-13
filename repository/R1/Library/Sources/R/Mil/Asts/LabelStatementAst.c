@@ -22,15 +22,15 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(labelName:R.String)
+/// construct(labelName:Arcadia.String)
 /// @endcode
 static void
 R_Mil_LabelStatementAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -40,7 +40,7 @@ R_Mil_LabelStatementAst_visit
     R_Mil_LabelStatementAst* self
   );
 
-static const R_ObjectType_Operations _R_Mil_LabelStatementAst_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _R_Mil_LabelStatementAst_objectTypeOperations = {
   .construct = &R_Mil_LabelStatementAst_constructImpl,
   .destruct = NULL,
   .visit = &R_Mil_LabelStatementAst_visit,
@@ -72,27 +72,27 @@ static void
 R_Mil_LabelStatementAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Mil_LabelStatementAst* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_LabelStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_LabelStatementAst_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[0]), _R_String_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_String_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  _self->labelName = R_Value_getObjectReferenceValue(&argumentValues[0]);
-  R_Object_setType(_self, _type);
+  _self->labelName = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -101,16 +101,16 @@ R_Mil_LabelStatementAst_visit
     Arcadia_Process* process,
     R_Mil_LabelStatementAst* self
   )
-{ R_Object_visit(self->labelName); }
+{ Arcadia_Object_visit(process, self->labelName); }
 
 R_Mil_LabelStatementAst*
 R_Mil_LabelStatementAst_create
   (
     Arcadia_Process* process,
-    R_String* labelName
+    Arcadia_String* labelName
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)labelName }, };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)labelName }, };
   R_Mil_LabelStatementAst* self = R_allocateObject(process, _R_Mil_LabelStatementAst_getType(process), 1, &argumentValues[0]);
   return self;
 }

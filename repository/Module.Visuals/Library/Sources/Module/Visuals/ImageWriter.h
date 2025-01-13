@@ -21,15 +21,15 @@
 #include "R.h"
 #include "Module/Visuals/PixelBuffer.h"
 
-Rex_declareObjectType(u8"ImageWriter", ImageWriter, u8"R.Object");
+Rex_declareObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object");
 
 struct ImageWriter {
-  R_Object _parent;
-  void (*writePngToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_String* targetPath);
+  Arcadia_Object _parent;
+  void (*writePngToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
   void (*writePngToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
-  void (*writeBmpToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_String* targetPath);
+  void (*writeBmpToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
   void (*writeBmpToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
-  void (*writeIcoToPath)(Arcadia_Process* process, ImageWriter* self, R_List* sourcePixelBuffers, R_String* targetPath);
+  void (*writeIcoToPath)(Arcadia_Process* process, ImageWriter* self, R_List* sourcePixelBuffers, Arcadia_String* targetPath);
   void (*writeIcoToByteBuffer)(Arcadia_Process* process, ImageWriter* self, R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer);
 };
 
@@ -39,7 +39,7 @@ ImageWriter_writePngToPath
     Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_String* targetPath
+    Arcadia_String* targetPath
   );
 
 void
@@ -57,7 +57,7 @@ ImageWriter_writeBmpToPath
     Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_String* targetPath
+    Arcadia_String* targetPath
   );
 
 void
@@ -75,7 +75,7 @@ ImageWriter_writeIcoToPath
     Arcadia_Process* process,
     ImageWriter* self,
     R_List* sourcePixelBuffers,
-    R_String* targetPath
+    Arcadia_String* targetPath
   );
 
 void

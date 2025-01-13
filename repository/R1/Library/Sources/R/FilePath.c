@@ -18,9 +18,9 @@
 #include "R/FilePath.h"
 
 #include "R/ByteBuffer.h"
-#include "R/Object.h"
 #include "R/Utf8ByteBufferReader.h"
 #include "R/Utf8ByteBufferWriter.h"
+#include <string.h>
 
 typedef struct Context {
   R_Utf8Writer* temporaryWriter;
@@ -196,17 +196,17 @@ normalize
 {
   Arcadia_SizeValue previous = 0, current = 1;
   while (current < R_List_getSize(self->fileNames)) {
-    R_Value t;
+    Arcadia_Value t;
     t = R_List_getAt(process, self->fileNames, previous);
-    R_String* previousString = (R_String*)R_Value_getObjectReferenceValue(&t);
+    Arcadia_String* previousString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&t);
     t = R_List_getAt(process, self->fileNames, current);
-    R_String* currentString = (R_String*)R_Value_getObjectReferenceValue(&t);
-    if (!R_String_isEqualTo_pn(previousString, "..", sizeof("..") - 1) &&
-      !R_String_isEqualTo_pn(previousString, u8".", sizeof(u8".")) &&
-      R_String_isEqualTo_pn(currentString, u8"..", sizeof(u8"..") - 1)) {
+    Arcadia_String* currentString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&t);
+    if (!Arcadia_String_isEqualTo_pn(previousString, "..", sizeof("..") - 1) &&
+      !Arcadia_String_isEqualTo_pn(previousString, u8".", sizeof(u8".")) &&
+      Arcadia_String_isEqualTo_pn(currentString, u8"..", sizeof(u8"..") - 1)) {
    // Remove previous and current.
       R_List_remove(process, self->fileNames, previous, 2);
-    } else if (R_String_isEqualTo_pn(currentString, u8".", sizeof(u8".") - 1)) {
+    } else if (Arcadia_String_isEqualTo_pn(currentString, u8".", sizeof(u8".") - 1)) {
       // Remove current.
       R_List_remove(process, self->fileNames, current, 1);
     } else {
@@ -216,7 +216,7 @@ normalize
   }
   if (!self->root && R_List_isEmpty(self->fileNames)) {
     // If the path is empty, then the path is `.`.
-    R_List_appendObjectReferenceValue(process, self->fileNames, (R_ObjectReferenceValue)R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8".", sizeof(u8".") - 1)));
+    R_List_appendObjectReferenceValue(process, self->fileNames, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8".", sizeof(u8".") - 1)));
   }
 }
 
@@ -246,16 +246,16 @@ parseWindowsFilePath
         // absolute.
         context.target->relative = Arcadia_BooleanValue_False;
         next(process, &context);
-        R_Value temporaryValue;
-        R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)context.temporaryBuffer);
-        context.target->root = R_String_create(process, temporaryValue);
+        Arcadia_Value temporaryValue;
+        Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+        context.target->root = Arcadia_String_create(process, temporaryValue);
         R_ByteBuffer_clear(context.temporaryBuffer);
       } else {
         // relative to "root" drive and the diretory on the drive
         context.target->relative = Arcadia_BooleanValue_True;
-        R_Value temporaryValue;
-        R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)context.temporaryBuffer);
-        context.target->root = R_String_create(process, temporaryValue);
+        Arcadia_Value temporaryValue;
+        Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+        context.target->root = Arcadia_String_create(process, temporaryValue);
         R_ByteBuffer_clear(context.temporaryBuffer);
       }
     } else {
@@ -263,9 +263,9 @@ parseWindowsFilePath
         saveAndNext(process, &context);
       }
       if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
-        R_Value temporary;
-        R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
-        R_Value_setObjectReferenceValue(&temporary, R_String_create(process, temporary));
+        Arcadia_Value temporary;
+        Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+        Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(process, temporary));
         R_List_append(process, context.target->fileNames, temporary);
         R_ByteBuffer_clear(context.temporaryBuffer);
       }
@@ -284,9 +284,9 @@ parseWindowsFilePath
     if (isDirectorySeparator(process, &context)) {
       next(process, &context);
       if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
-        R_Value temporary;
-        R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
-        R_Value_setObjectReferenceValue(&temporary, R_String_create(process, temporary));
+        Arcadia_Value temporary;
+        Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+        Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(process, temporary));
         R_List_append(process, context.target->fileNames, temporary);
         R_ByteBuffer_clear(context.temporaryBuffer);
       }
@@ -295,9 +295,9 @@ parseWindowsFilePath
     }
   }
   if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
-    R_Value temporary;
-    R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
-    R_Value_setObjectReferenceValue(&temporary, R_String_create(process, temporary));
+    Arcadia_Value temporary;
+    Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+    Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(process, temporary));
     R_List_append(process, context.target->fileNames, temporary);
     R_ByteBuffer_clear(context.temporaryBuffer);
   }
@@ -323,7 +323,7 @@ parseUnixFilePath
 
   if (isSlash(process, &context)) {
     target->relative = Arcadia_BooleanValue_False;
-    target->root = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"/", sizeof(u8"/") - 1));
+    target->root = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"/", sizeof(u8"/") - 1));
     next(process, &context);
   }
   // read the remaining directories
@@ -332,9 +332,9 @@ parseUnixFilePath
     if (isDirectorySeparator(process, &context)) {
       next(process, &context);
       if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
-        R_Value temporary;
-        R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
-        R_Value_setObjectReferenceValue(&temporary, R_String_create(process, temporary));
+        Arcadia_Value temporary;
+        Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+        Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(process, temporary));
         R_List_append(process, context.target->fileNames, temporary);
         R_ByteBuffer_clear(context.temporaryBuffer);
       }
@@ -343,9 +343,9 @@ parseUnixFilePath
     }
   }
   if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
-    R_Value temporary;
-    R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
-    R_Value_setObjectReferenceValue(&temporary, R_String_create(process, temporary));
+    Arcadia_Value temporary;
+    Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+    Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(process, temporary));
     R_List_append(process, context.target->fileNames, temporary);
     R_ByteBuffer_clear(context.temporaryBuffer);
   }
@@ -371,7 +371,7 @@ parseGenericFilePath
 
   if (isSlash(process, &context)) {
     target->relative = Arcadia_BooleanValue_False;
-    target->root = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"/", sizeof(u8"/") - 1));
+    target->root = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"/", sizeof(u8"/") - 1));
     next(process, &context);
   }
   // read the remaining directories
@@ -380,9 +380,9 @@ parseGenericFilePath
     if (isDirectorySeparator(process, &context)) {
       next(process, &context);
       if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
-        R_Value temporary;
-        R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
-        R_Value_setObjectReferenceValue(&temporary, R_String_create(process, temporary));
+        Arcadia_Value temporary;
+        Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+        Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(process, temporary));
         R_List_append(process, context.target->fileNames, temporary);
         R_ByteBuffer_clear(context.temporaryBuffer);
       }
@@ -391,9 +391,9 @@ parseGenericFilePath
     }
   }
   if (R_ByteBuffer_getNumberOfBytes(context.temporaryBuffer)) {
-    R_Value temporary;
-    R_Value_setObjectReferenceValue(&temporary, (R_ObjectReferenceValue)context.temporaryBuffer);
-    R_Value_setObjectReferenceValue(&temporary, R_String_create(process, temporary));
+    Arcadia_Value temporary;
+    Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
+    Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(process, temporary));
     R_List_append(process, context.target->fileNames, temporary);
     R_ByteBuffer_clear(context.temporaryBuffer);
   }
@@ -403,9 +403,9 @@ static void
 R_FilePath_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -422,7 +422,7 @@ R_FilePath_visit
     R_FilePath* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_FilePath_constructImpl,
   .destruct = &R_FilePath_destruct,
   .visit = &R_FilePath_visit,
@@ -448,21 +448,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.FilePath", R_FilePath, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.FilePath", R_FilePath, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_FilePath_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_FilePath* _self = R_Value_getObjectReferenceValue(self);
+  R_FilePath* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_FilePath_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
@@ -473,7 +473,7 @@ R_FilePath_constructImpl
   _self->relative = Arcadia_BooleanValue_False;
   _self->root = NULL;
   _self->fileNames = R_List_create(process);
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -491,8 +491,8 @@ R_FilePath_visit
     R_FilePath* self
   )
 {
-  R_Object_visit(self->fileNames);
-  R_Object_visit(self->root);
+  Arcadia_Object_visit(process, self->fileNames);
+  Arcadia_Object_visit(process, self->root);
 }
 
 R_FilePath*
@@ -501,7 +501,7 @@ R_FilePath_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_FilePath* self = R_allocateObject(process, _R_FilePath_getType(process), 0, &argumentValues[0]);
   return self;
 }
@@ -515,7 +515,7 @@ R_FilePath_parseWindows
   )
 {
   Arcadia_TypeValue _type = _R_FilePath_getType(process);
-  R_Value argumentValues[] = { { .tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { { .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_FilePath* self = R_allocateObject(process, _type, 0, &argumentValues[0]);
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
@@ -537,7 +537,7 @@ R_FilePath_parseUnix
   )
 {
   Arcadia_TypeValue _type = _R_FilePath_getType(process);
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_FilePath* self = R_allocateObject(process, _type, 0, &argumentValues[0]);
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
@@ -576,7 +576,7 @@ R_FilePath_parseGeneric
   )
 {
   Arcadia_TypeValue _type = _R_FilePath_getType(process);
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_FilePath* self = R_allocateObject(process, _type, 0, &argumentValues[0]);
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
@@ -589,7 +589,7 @@ R_FilePath_parseGeneric
   return self;
 }
 
-R_String*
+Arcadia_String*
 R_FilePath_toNative
   (
     Arcadia_Process* process,
@@ -602,7 +602,7 @@ R_FilePath_toNative
   Arcadia_SizeValue i = 0, n = R_List_getSize(self->fileNames);
 
   if (self->root) {
-    R_Utf8Writer_writeBytes(process, temporary, R_String_getBytes(self->root), R_String_getNumberOfBytes(self->root));
+    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(self->root), Arcadia_String_getNumberOfBytes(self->root));
     Arcadia_Natural32Value x;
     x = ':';
     R_Utf8Writer_writeCodePoints(process, temporary, &x, 1);
@@ -614,9 +614,9 @@ R_FilePath_toNative
     }
   }
   if (n > 0) {
-    R_Value e = R_List_getAt(process, self->fileNames, 0);
-    R_String* fileName = (R_String*)R_Value_getObjectReferenceValue(&e);
-    R_Utf8Writer_writeBytes(process, temporary, R_String_getBytes(fileName), R_String_getNumberOfBytes(fileName));
+    Arcadia_Value e = R_List_getAt(process, self->fileNames, 0);
+    Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
+    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(fileName), Arcadia_String_getNumberOfBytes(fileName));
     i++;
 
     for (; i < n; ++i) {
@@ -624,27 +624,27 @@ R_FilePath_toNative
       x = '\\';
       R_Utf8Writer_writeCodePoints(process, temporary, &x, 1);
 
-      R_Value e = R_List_getAt(process, self->fileNames, i);
-      R_String* fileName = (R_String*)R_Value_getObjectReferenceValue(&e);
-      R_Utf8Writer_writeBytes(process, temporary, R_String_getBytes(fileName), R_String_getNumberOfBytes(fileName));
+      Arcadia_Value e = R_List_getAt(process, self->fileNames, i);
+      Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
+      R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(fileName), Arcadia_String_getNumberOfBytes(fileName));
     }
   }
   Arcadia_Natural32Value x = '\0';
   R_Utf8Writer_writeCodePoints(process, temporary, &x, 1);
-  R_Value temporaryValue;
-  R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)temporaryBuffer);
-  return R_String_create(process, temporaryValue);
+  Arcadia_Value temporaryValue;
+  Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
+  return Arcadia_String_create(process, temporaryValue);
 #elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
   R_ByteBuffer* temporaryBuffer = R_ByteBuffer_create(process);
   R_Utf8Writer* temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(temporaryBuffer);
   Arcadia_SizeValue i = 0, n = R_List_getSize(self->fileNames);
   if (self->root) {
-    R_Utf8Writer_writeBytes(process, temporary, R_String_getBytes(self->root), R_String_getNumberOfBytes(self->root));
+    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(self->root), Arcadia_String_getNumberOfBytes(self->root));
   }
   if (n > 0) {
-    R_Value e = R_List_getAt(self->fileNames, 0);
-    R_String* fileName = (R_String*)R_Value_getObjectReferenceValue(&e);
-    R_Utf8Writer_writeBytes(process, temporary, R_String_getBytes(fileName), R_String_getNumberOfBytes(fileName));
+    Arcadia_Value e = R_List_getAt(self->fileNames, 0);
+    Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
+    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(fileName), Arcadia_String_getNumberOfBytes(fileName));
     i++;
 
     for (; i < n; ++i) {
@@ -652,16 +652,16 @@ R_FilePath_toNative
       x = '/';
       R_Utf8Writer_writeCodePoints(process, temporary, &x, 1);
 
-      R_Value e = R_List_getAt(self->fileNames, i);
-      R_String* fileName = (R_String*)R_Value_getObjectReferenceValue(&e);
-      R_Utf8Writer_writeBytes(process, temporary, R_String_getBytes(fileName), R_String_getNumberOfBytes(fileName));
+      Arcadia_Value e = R_List_getAt(self->fileNames, i);
+      Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
+      R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(fileName), Arcadia_String_getNumberOfBytes(fileName));
     }
   }
   Arcadia_Natural32Value x = '\0';
   R_Utf8Writer_writeCodePoints(process, temporary, &x, 1);
-  R_Value temporaryValue;
-  R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)temporaryBuffer);
-  return R_String_create(temporaryValue);
+  Arcadia_Value temporaryValue;
+  Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
+  return Arcadia_String_create(temporaryValue);
 #else
   #error("operating system not (yet) supported")
 #endif
@@ -683,24 +683,24 @@ R_FilePath_getFullPath
 {
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
 #define BUFFER_LENGTH (4096)
-  R_String* s = R_FilePath_toNative(process, self);
+  Arcadia_String* s = R_FilePath_toNative(process, self);
   char buffer[BUFFER_LENGTH];
-  DWORD result = GetFullPathName(R_String_getBytes(s), BUFFER_LENGTH, buffer, NULL);
+  DWORD result = GetFullPathName(Arcadia_String_getBytes(s), BUFFER_LENGTH, buffer, NULL);
   if (!result) {
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);
   }
-  return R_FilePath_parseNative(process, buffer, c_strlen(buffer));
+  return R_FilePath_parseNative(process, buffer, strlen(buffer));
 #undef BUFFER_LENGTH
 #elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
-  R_String* s = R_FilePath_toNative(self);
+  Arcadia_String* s = R_FilePath_toNative(self);
   char buffer[PATH_MAX];
-  char* result = realpath(R_String_getBytes(s), buffer);
+  char* result = realpath(Arcadia_String_getBytes(s), buffer);
   if (!result) {
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);
   }
-  return R_FilePath_parseNative(process, buffer, c_strlen(buffer));
+  return R_FilePath_parseNative(process, buffer, strlen(buffer));
 #else
   #error("operating system not (yet) supported")
 #endif
@@ -726,9 +726,9 @@ R_FilePath_isEqualTo
     return Arcadia_BooleanValue_False;
   }
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(self->fileNames); i < n; ++i) {
-    R_Object* x = R_List_getObjectReferenceValueAt(process, self->fileNames, i);
-    R_Value y = R_List_getAt(process, other->fileNames, i);
-    if (!R_Object_equalTo(process, x, &y)) {
+    Arcadia_Object* x = R_List_getObjectReferenceValueAt(process, self->fileNames, i);
+    Arcadia_Value y = R_List_getAt(process, other->fileNames, i);
+    if (!Arcadia_Object_equalTo(process, x, &y)) {
       return Arcadia_BooleanValue_False;
     }
   }
@@ -736,9 +736,9 @@ R_FilePath_isEqualTo
     return Arcadia_BooleanValue_False;
   }
   if (self->root != NULL) {
-    R_Value t;
-    R_Value_setObjectReferenceValue(&t, other->root);
-    if (!R_Object_equalTo(process, (R_Object*)self->root, &t)) {
+    Arcadia_Value t;
+    Arcadia_Value_setObjectReferenceValue(&t, other->root);
+    if (!Arcadia_Object_equalTo(process, (Arcadia_Object*)self->root, &t)) {
       return Arcadia_BooleanValue_False;
     }
   }
@@ -772,7 +772,7 @@ R_FilePath_append
     Arcadia_Process_jump(process);
   }
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(other->fileNames); i < n; ++i) {
-    R_Value v = R_List_getAt(process, other->fileNames, i);
+    Arcadia_Value v = R_List_getAt(process, other->fileNames, i);
     R_List_append(process, self->fileNames, v);
   }
 }

@@ -25,7 +25,7 @@
 
 /// @code
 /// class R.Mil.ClassDefinitionAst extends R.Mil.DefinitionAst {
-///   construct(className:R.String, extendedClassName:R.String, classBody:R.List)
+///   construct(className:Arcadia.String, extendedClassName:Arcadia.String, classBody:R.List)
 /// }
 /// @endcode
 /// Represents
@@ -37,8 +37,8 @@ Rex_declareObjectType(u8"R.Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, u8
 
 struct R_Mil_ClassDefinitionAst {
   R_Mil_DefinitionAst _parent;
-  R_String* className;
-  R_String* extendedClassName;
+  Arcadia_String* className;
+  Arcadia_String* extendedClassName;
   R_List* classBody;
 };
 
@@ -48,8 +48,8 @@ R_Mil_ClassDefinitionAst*
 R_Mil_ClassDefinitionAst_create
   (
     Arcadia_Process* process,
-    R_String* className,
-    R_String* extendedClassName,
+    Arcadia_String* className,
+    Arcadia_String* extendedClassName,
     R_List* classBody
   );
 

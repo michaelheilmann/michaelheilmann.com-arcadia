@@ -18,18 +18,17 @@
 #if !defined(R_STRINGBUFFER_H_INCLUDED)
 #define R_STRINGBUFFER_H_INCLUDED
 
-#include "R/Object.h"
-#include "R/Value.h"
+#include "Arcadia/Ring1/Include.h"
 
 /// @code
 /// class StringBuffer {
 ///   constructor()
 /// }
 /// @endcode
-Rex_declareObjectType(u8"R.StringBuffer", R_StringBuffer, u8"R.Object");
+Rex_declareObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer, u8"Arcadia.Object");
 
-struct R_StringBuffer {
-  R_Object _parent;
+struct Arcadia_StringBuffer {
+  Arcadia_Object _parent;
   Arcadia_Natural8Value* elements;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
@@ -38,8 +37,8 @@ struct R_StringBuffer {
 /// @brief Create a string buffer.
 /// @return The string buffer.
 /// @remarks The string buffer is empty.
-R_StringBuffer*
-R_StringBuffer_create
+Arcadia_StringBuffer*
+Arcadia_StringBuffer_create
   (
     Arcadia_Process* process
   );
@@ -52,9 +51,9 @@ R_StringBuffer_create
 /// Arcadia_BooleanValue_True if the sequence of Bytes is a suffix of the string buffer.
 /// Arcadia_BooleanValue_False otherwise.
 Arcadia_BooleanValue
-R_StringBuffer_endsWith_pn
+Arcadia_StringBuffer_endsWith_pn
   (
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -67,9 +66,9 @@ R_StringBuffer_endsWith_pn
 /// Arcadia_BooleanValue_True if the sequence of Bytes is a prefix of the string buffer.
 /// Arcadia_BooleanValue_False otherwise.
 Arcadia_BooleanValue
-R_StringBuffer_startsWith_pn
+Arcadia_StringBuffer_startsWith_pn
   (
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -81,30 +80,30 @@ R_StringBuffer_startsWith_pn
 /// @error Arcadia_Status_ArgumentValueInvalid @a bytes is a null pointer
 /// @error Arcadia_Status_EncodingInvalid The Bytes are not an UTF-8 Byte sequence.
 void
-R_StringBuffer_append_pn
+Arcadia_StringBuffer_append_pn
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
 
 /// @brief Append Bytes to this string buffer.
 /// @param value The Bytes.
-/// Either R.ByteBuffer, R.StringBuffer, or R.String.
+/// Either R.ByteBuffer, Arcadia.StringBuffer, or Arcadia.String.
 void
-R_StringBuffer_append
+Arcadia_StringBuffer_append
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
-    R_Value value
+    Arcadia_StringBuffer* self,
+    Arcadia_Value value
   );
 
 void
-R_StringBuffer_appendCodePoints
+Arcadia_StringBuffer_appendCodePoints
   (
     Arcadia_Process* process,
-    R_StringBuffer* self,
+    Arcadia_StringBuffer* self,
     Arcadia_Natural32Value const* codePoints,
     Arcadia_SizeValue numberOfCodePoints
   );
@@ -119,30 +118,30 @@ R_StringBuffer_appendCodePoints
 /// Arcadia_BooleanValue_True if the contents of this string buffer is lexicographically equal to the contents of the other string buffer string buffer.
 /// Arcadia_BooleanValue_False otherwise.
 Arcadia_BooleanValue
-R_StringBuffer_isEqualTo
+Arcadia_StringBuffer_isEqualTo
   (
-    R_StringBuffer* self,
-    R_StringBuffer* other
+    Arcadia_StringBuffer* self,
+    Arcadia_StringBuffer* other
   );
 
 /// @brief Set the number of UTF-8 symbols in this string buffer to zero.
 /// @param self A pointer to this string buffer.
 void
-R_StringBuffer_clear
+Arcadia_StringBuffer_clear
   (
-    R_StringBuffer* self
+    Arcadia_StringBuffer* self
   );
 
 Arcadia_SizeValue
-R_StringBuffer_getNumberOfBytes
+Arcadia_StringBuffer_getNumberOfBytes
   (
-    R_StringBuffer const* self
+    Arcadia_StringBuffer const* self
   );
 
 Arcadia_Natural8Value const*
-R_StringBuffer_getBytes
+Arcadia_StringBuffer_getBytes
   (
-    R_StringBuffer const* self
+    Arcadia_StringBuffer const* self
   );
 
 #endif // R_STRINGBUFFER_H_INCLUDED

@@ -29,12 +29,12 @@ addVariable
   (
     Arcadia_Process* process,
     R_List* variables,
-    R_String* name
+    Arcadia_String* name
   )
 {
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(variables); i < n; ++i) {
-    R_Value value = R_List_getAt(process, variables, i);
-    if (R_Object_equalTo(process, (R_Object*)name, &value)) {
+    Arcadia_Value value = R_List_getAt(process, variables, i);
+    if (Arcadia_Object_equalTo(process, (Arcadia_Object*)name, &value)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
       Arcadia_Process_jump(process);
     }
@@ -46,12 +46,12 @@ getRegisterOfVariable
   (
     Arcadia_Process* process,
     R_List* variables,
-    R_String* name
+    Arcadia_String* name
   )
 {
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(variables); i < n; ++i) {
-    R_Value value = R_List_getAt(process, variables, i);
-    if (R_Object_equalTo(process, (R_Object*)name, &value)) {
+    Arcadia_Value value = R_List_getAt(process, variables, i);
+    if (Arcadia_Object_equalTo(process, (Arcadia_Object*)name, &value)) {
       return i;
     }
   }
@@ -69,27 +69,27 @@ onOperand
     R_Mil_OperandAst* operandAst
   )
 {
-  if (Arcadia_Type_isSubType(R_Object_getType(operandAst), _R_Mil_VariableOperandAst_getType(process))) {
+  if (Arcadia_Type_isSubType(Arcadia_Object_getType(operandAst), _R_Mil_VariableOperandAst_getType(process))) {
     R_Mil_VariableOperandAst* variableOperandAst = (R_Mil_VariableOperandAst*)operandAst;
     R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                             getRegisterOfVariable(process, variables, variableOperandAst->value));
-  } else if (Arcadia_Type_isSubType(R_Object_getType(operandAst), _R_Mil_BooleanLiteralOperandAst_getType(process))) {
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(operandAst), _R_Mil_BooleanLiteralOperandAst_getType(process))) {
     R_Mil_BooleanLiteralOperandAst* booleanLiteralOperandAst = (R_Mil_BooleanLiteralOperandAst*)operandAst;
-    R_Interpreter_Code_Constants_getOrCreateBoolean(process, R_Interpreter_ProcessState_getConstants(interpreterProcessState), R_String_toBoolean(process, booleanLiteralOperandAst->value));
-  } else if (Arcadia_Type_isSubType(R_Object_getType(operandAst), _R_Mil_IntegerLiteralOperandAst_getType(process))) {
+    R_Interpreter_Code_Constants_getOrCreateBoolean(process, R_Interpreter_ProcessState_getConstants(interpreterProcessState), Arcadia_String_toBoolean(process, booleanLiteralOperandAst->value));
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(operandAst), _R_Mil_IntegerLiteralOperandAst_getType(process))) {
     R_Mil_IntegerLiteralOperandAst* integerLiteralOperandAst = (R_Mil_IntegerLiteralOperandAst*)operandAst;
-    R_Interpreter_Code_Constants_getOrCreateInteger64(process, R_Interpreter_ProcessState_getConstants(interpreterProcessState), R_String_toInteger64(process, integerLiteralOperandAst->value));
-  } else if (Arcadia_Type_isSubType(R_Object_getType(operandAst), _R_Mil_RealLiteralOperandAst_getType(process))) {
+    R_Interpreter_Code_Constants_getOrCreateInteger64(process, R_Interpreter_ProcessState_getConstants(interpreterProcessState), Arcadia_String_toInteger64(process, integerLiteralOperandAst->value));
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(operandAst), _R_Mil_RealLiteralOperandAst_getType(process))) {
     R_Mil_RealLiteralOperandAst* realLiteralOperandAst = (R_Mil_RealLiteralOperandAst*)operandAst;
-    R_String_toReal64(process, realLiteralOperandAst->value);
+    Arcadia_String_toReal64(process, realLiteralOperandAst->value);
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
-  } else if (Arcadia_Type_isSubType(R_Object_getType(operandAst), _R_Mil_StringLiteralOperandAst_getType(process))) {
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(operandAst), _R_Mil_StringLiteralOperandAst_getType(process))) {
     R_Mil_StringLiteralOperandAst* stringLiteralOperandAst = (R_Mil_StringLiteralOperandAst*)operandAst;
     R_Interpreter_Code_Constants_getOrCreateString(process, R_Interpreter_ProcessState_getConstants(interpreterProcessState), stringLiteralOperandAst->value);
-  } else if (Arcadia_Type_isSubType(R_Object_getType(operandAst), _R_Mil_VoidLiteralOperandAst_getType(process))) {
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(operandAst), _R_Mil_VoidLiteralOperandAst_getType(process))) {
     R_Mil_VoidLiteralOperandAst* voidLiteralOperandAst = (R_Mil_VoidLiteralOperandAst*)operandAst;
-    R_Interpreter_Code_Constants_getOrCreateVoid(process, R_Interpreter_ProcessState_getConstants(interpreterProcessState), R_String_toVoid(process, voidLiteralOperandAst->value));
+    R_Interpreter_Code_Constants_getOrCreateVoid(process, R_Interpreter_ProcessState_getConstants(interpreterProcessState), Arcadia_String_toVoid(process, voidLiteralOperandAst->value));
   } else {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
@@ -122,14 +122,14 @@ onExpressionStatement
   )
 {
   R_Mil_ExpressionAst* expressionAst = R_Mil_ExpressionStatementAst_getExpression(expressionStatementAst);
-  if (Arcadia_Type_isSubType(R_Object_getType(expressionAst), _R_Mil_LoadExpressionAst_getType(process))) {
+  if (Arcadia_Type_isSubType(Arcadia_Object_getType(expressionAst), _R_Mil_LoadExpressionAst_getType(process))) {
     R_Mil_LoadExpressionAst* loadExpressionAst = (R_Mil_LoadExpressionAst*)expressionAst;
     Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Load;
     R_Interpreter_Code_append(code, &opcode, 1);
     R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                             getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
     onOperand(process, interpreterProcessState, code, variables, loadExpressionAst->operand);
-  } else if (Arcadia_Type_isSubType(R_Object_getType(expressionAst), _R_Mil_BinaryExpressionAst_getType(process))) {
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(expressionAst), _R_Mil_BinaryExpressionAst_getType(process))) {
     R_Mil_BinaryExpressionAst* binaryExpressionAst = (R_Mil_BinaryExpressionAst*)expressionAst;
     switch (binaryExpressionAst->type) {
       case R_Mil_BinaryExpressionAstType_Add: {
@@ -177,7 +177,7 @@ onExpressionStatement
         Arcadia_Process_jump(process);
       } break;
     };
-  } else if (Arcadia_Type_isSubType(R_Object_getType(expressionAst), _R_Mil_UnaryExpressionAst_getType(process))) {
+  } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(expressionAst), _R_Mil_UnaryExpressionAst_getType(process))) {
     R_Mil_UnaryExpressionAst* unaryExpressionAst = (R_Mil_UnaryExpressionAst*)expressionAst;
     switch (unaryExpressionAst->type) {
       case R_Mil_UnaryExpressionAstType_Negate: {
@@ -229,14 +229,14 @@ onStatements
   )
 {
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(statements); i < n; ++i) {
-    R_Value elementValue = R_List_getAt(process, statements, i);
-    R_ObjectReferenceValue objectElementValue = R_Value_getObjectReferenceValue(&elementValue);
+    Arcadia_Value elementValue = R_List_getAt(process, statements, i);
+    Arcadia_ObjectReferenceValue objectElementValue = Arcadia_Value_getObjectReferenceValue(&elementValue);
     R_Mil_StatementAst* statement = (R_Mil_StatementAst*)objectElementValue;
-    if (Arcadia_Type_isSubType(R_Object_getType(statement), _R_Mil_ReturnStatementAst_getType(process))) {
+    if (Arcadia_Type_isSubType(Arcadia_Object_getType(statement), _R_Mil_ReturnStatementAst_getType(process))) {
       onReturnStatement(process, interpreterProcessState, code, variables, (R_Mil_ReturnStatementAst*)statement);
-    } else if (Arcadia_Type_isSubType(R_Object_getType(statement), _R_Mil_ExpressionStatementAst_getType(process))) {
+    } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(statement), _R_Mil_ExpressionStatementAst_getType(process))) {
       onExpressionStatement(process, interpreterProcessState, code, variables, (R_Mil_ExpressionStatementAst*)statement);
-    } else if (Arcadia_Type_isSubType(R_Object_getType(statement), _R_Mil_VariableDefinitionStatementAst_getType(process))) {
+    } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(statement), _R_Mil_VariableDefinitionStatementAst_getType(process))) {
       onVariableDefinitionStatement(process, interpreterProcessState, code, variables, (R_Mil_VariableDefinitionAst*)statement);
     } else {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
@@ -297,16 +297,16 @@ onProcedureDefinition
     R_Mil_ProcedureDefinitionAst* definitionAst
   )
 {
-  R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->procedureName };
-  R_Value v = R_Map_get(process, symbolTable, k);
-  if (!R_Value_isVoidValue(&v)) {
+  Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->procedureName };
+  Arcadia_Value v = R_Map_get(process, symbolTable, k);
+  if (!Arcadia_Value_isVoidValue(&v)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
     Arcadia_Process_jump(process);
   }
   R_List* variables = R_List_create(process);
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(definitionAst->procedureParameters); i < n; ++i) {
-    R_Value variableNameValue = R_List_getAt(process, definitionAst->procedureParameters, i);
-    R_String* variableNameString = R_Argument_getObjectReferenceValue(process, &variableNameValue, _R_String_getType(process));
+    Arcadia_Value variableNameValue = R_List_getAt(process, definitionAst->procedureParameters, i);
+    Arcadia_String* variableNameString = R_Argument_getObjectReferenceValue(process, &variableNameValue, _Arcadia_String_getType(process));
     addVariable(process, variables, variableNameString);
   }
   if (definitionAst->nativeName) {
@@ -314,13 +314,13 @@ onProcedureDefinition
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
       Arcadia_Process_jump(process);
     }
-    R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->nativeName };
-    R_Value v = R_Map_get(process, foreignProcedures, k);
-    if (R_Value_isVoidValue(&v)) {
+    Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->nativeName };
+    Arcadia_Value v = R_Map_get(process, foreignProcedures, k);
+    if (Arcadia_Value_isVoidValue(&v)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
       Arcadia_Process_jump(process);
     }
-    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_createForeign(process, definitionAst->procedureName, R_Value_getForeignProcedureValue(&v));
+    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_createForeign(process, definitionAst->procedureName, Arcadia_Value_getForeignProcedureValue(&v));
     R_Interpreter_ProcessState_defineGlobalProcedure(process, interpreterProcessState, procedure);
   } else {
     if (!definitionAst->procedureBody) {
@@ -343,17 +343,17 @@ onConstructorDefinition
     R_Mil_ConstructorDefinitionAst* definitionAst
   )
 {
-  R_String* name = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"<constructor>", c_strlen(u8"<constructor>")));
-  R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = name };
-  R_Value v = R_Map_get(process, symbolTable, k);
-  if (!R_Value_isVoidValue(&v)) {
+  Arcadia_String* name = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"<constructor>", c_strlen(u8"<constructor>")));
+  Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
+  Arcadia_Value v = R_Map_get(process, symbolTable, k);
+  if (!Arcadia_Value_isVoidValue(&v)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
     Arcadia_Process_jump(process);
   }
   R_List* variables = R_List_create(process);
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(definitionAst->constructorParameters); i < n; ++i) {
-    R_Value variableNameValue = R_List_getAt(process, definitionAst->constructorParameters, i);
-    R_String* variableNameString = R_Argument_getObjectReferenceValue(process, &variableNameValue, _R_String_getType(process));
+    Arcadia_Value variableNameValue = R_List_getAt(process, definitionAst->constructorParameters, i);
+    Arcadia_String* variableNameString = R_Argument_getObjectReferenceValue(process, &variableNameValue, _Arcadia_String_getType(process));
     addVariable(process, variables, variableNameString);
   }
   if (definitionAst->nativeName) {
@@ -361,13 +361,13 @@ onConstructorDefinition
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
       Arcadia_Process_jump(process);
     }
-    R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->nativeName };
-    R_Value v = R_Map_get(process, foreignProcedures, k);
-    if (R_Value_isVoidValue(&v)) {
+    Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->nativeName };
+    Arcadia_Value v = R_Map_get(process, foreignProcedures, k);
+    if (Arcadia_Value_isVoidValue(&v)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
       Arcadia_Process_jump(process);
     }
-    R_Interpreter_Constructor* construcor = R_Interpreter_Constructor_createForeign(process, R_Value_getForeignProcedureValue(&v));
+    R_Interpreter_Constructor* construcor = R_Interpreter_Constructor_createForeign(process, Arcadia_Value_getForeignProcedureValue(&v));
     R_Interpreter_Class_addConstructor(process, enclosing, construcor);
   } else {
     if (!definitionAst->constructorBody) {
@@ -390,16 +390,16 @@ onMethodDefinition
     R_Mil_MethodDefinitionAst* definitionAst
   )
 {
-  R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->methodName };
-  R_Value v = R_Map_get(process, symbolTable, k);
-  if (!R_Value_isVoidValue(&v)) {
+  Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->methodName };
+  Arcadia_Value v = R_Map_get(process, symbolTable, k);
+  if (!Arcadia_Value_isVoidValue(&v)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
     Arcadia_Process_jump(process);
   }
   R_List* variables = R_List_create(process);
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(definitionAst->methodParameters); i < n; ++i) {
-    R_Value variableNameValue = R_List_getAt(process, definitionAst->methodParameters, i);
-    R_String* variableNameString = R_Argument_getObjectReferenceValue(process, &variableNameValue, _R_String_getType(process));
+    Arcadia_Value variableNameValue = R_List_getAt(process, definitionAst->methodParameters, i);
+    Arcadia_String* variableNameString = R_Argument_getObjectReferenceValue(process, &variableNameValue, _Arcadia_String_getType(process));
     addVariable(process, variables, variableNameString);
   }
   if (definitionAst->nativeName) {
@@ -407,13 +407,13 @@ onMethodDefinition
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
       Arcadia_Process_jump(process);
     }
-    R_Value k = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->nativeName };
-    R_Value v = R_Map_get(process, foreignProcedures, k);
-    if (R_Value_isVoidValue(&v)) {
+    Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = definitionAst->nativeName };
+    Arcadia_Value v = R_Map_get(process, foreignProcedures, k);
+    if (Arcadia_Value_isVoidValue(&v)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
       Arcadia_Process_jump(process);
     }
-    R_Interpreter_Method* method = R_Interpreter_Method_createForeign(process, definitionAst->methodName, R_Value_getForeignProcedureValue(&v));
+    R_Interpreter_Method* method = R_Interpreter_Method_createForeign(process, definitionAst->methodName, Arcadia_Value_getForeignProcedureValue(&v));
     R_Interpreter_Class_addMethod(process, enclosing, method);
   } else {
     if (!definitionAst->methodBody) {
@@ -449,12 +449,12 @@ onClassBodyDefinition
   )
 {
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(classBodyAst); i < n; ++i) {
-    R_ObjectReferenceValue element = R_List_getObjectReferenceValueAt(process, classBodyAst, i);
-    if (Arcadia_Type_isSubType(R_Object_getType(element), _R_Mil_ConstructorDefinitionAst_getType(process))) {
+    Arcadia_ObjectReferenceValue element = R_List_getObjectReferenceValueAt(process, classBodyAst, i);
+    if (Arcadia_Type_isSubType(Arcadia_Object_getType(element), _R_Mil_ConstructorDefinitionAst_getType(process))) {
       onConstructorDefinition(process, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
-    } else if (Arcadia_Type_isSubType(R_Object_getType(element), _R_Mil_MethodDefinitionAst_getType(process))) {
+    } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(element), _R_Mil_MethodDefinitionAst_getType(process))) {
       onMethodDefinition(process, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
-    } else if (Arcadia_Type_isSubType(R_Object_getType(element), _R_Mil_VariableDefinitionAst_getType(process))) {
+    } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(element), _R_Mil_VariableDefinitionAst_getType(process))) {
       onVariableDefinition(process, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
     } else {
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);

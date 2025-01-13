@@ -28,50 +28,50 @@ main1
     char** argv
   )
 {
-  R_Value target, width, height;
-  R_Value_setVoidValue(&target,Arcadia_VoidValue_Void);
-  R_Value_setVoidValue(&width, Arcadia_VoidValue_Void);
-  R_Value_setVoidValue(&height, Arcadia_VoidValue_Void);
+  Arcadia_Value target, width, height;
+  Arcadia_Value_setVoidValue(&target,Arcadia_VoidValue_Void);
+  Arcadia_Value_setVoidValue(&width, Arcadia_VoidValue_Void);
+  Arcadia_Value_setVoidValue(&height, Arcadia_VoidValue_Void);
   R_List* arguments = R_List_create(process);
   for (int argi = 1; argi < argc; ++argi) {
-    R_String* argument = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, argv[argi], strlen(argv[argi])));
-    R_List_appendObjectReferenceValue(process, arguments, (R_ObjectReferenceValue)argument);
+    Arcadia_String* argument = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, argv[argi], strlen(argv[argi])));
+    R_List_appendObjectReferenceValue(process, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(arguments); i < n; ++i) {
-    R_String* argument = (R_String*)R_List_getObjectReferenceValueAt(process, arguments, i);
+    Arcadia_String* argument = (Arcadia_String*)R_List_getObjectReferenceValueAt(process, arguments, i);
     R_Utf8StringReader *r = R_Utf8StringReader_create(process, argument);
-    R_String *key = NULL,
+    Arcadia_String *key = NULL,
              *value = NULL;
     if (!R_CommandLine_parseArgument(process, (R_Utf8Reader*)r, &key, &value)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Process_jump(process);
     }
-    if (R_String_isEqualTo_pn(key, u8"target", sizeof(u8"target") - 1)) {
+    if (Arcadia_String_isEqualTo_pn(key, u8"target", sizeof(u8"target") - 1)) {
       if (!value) {
         R_CommandLine_raiseNoValueError(process, key);
       }
-      R_Value_setObjectReferenceValue(&target, value);
-    } else if (R_String_isEqualTo_pn(key, u8"width", sizeof(u8"width") - 1)) {
+      Arcadia_Value_setObjectReferenceValue(&target, value);
+    } else if (Arcadia_String_isEqualTo_pn(key, u8"width", sizeof(u8"width") - 1)) {
       if (!value) {
         R_CommandLine_raiseNoValueError(process, key);
       }
-      R_JumpTarget jumpTarget;
+      Arcadia_JumpTarget jumpTarget;
       Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-      if (R_JumpTarget_save(&jumpTarget)) {
-        R_Value_setInteger32Value(&width, R_String_toInteger32(process, value));
+      if (Arcadia_JumpTarget_save(&jumpTarget)) {
+        Arcadia_Value_setInteger32Value(&width, Arcadia_String_toInteger32(process, value));
         Arcadia_Process_popJumpTarget(process);
       } else {
         Arcadia_Process_popJumpTarget(process);
         R_CommandLine_raiseValueInvalidError(process, key, value);
       }
-    } else if(R_String_isEqualTo_pn(key, u8"height", sizeof(u8"height") - 1)) {
+    } else if(Arcadia_String_isEqualTo_pn(key, u8"height", sizeof(u8"height") - 1)) {
       if (!value) {
         R_CommandLine_raiseNoValueError(process, key);
       }
-      R_JumpTarget jumpTarget;
+      Arcadia_JumpTarget jumpTarget;
       Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-      if (R_JumpTarget_save(&jumpTarget)) {
-        R_Value_setInteger32Value(&height, R_String_toInteger32(process, value));
+      if (Arcadia_JumpTarget_save(&jumpTarget)) {
+        Arcadia_Value_setInteger32Value(&height, Arcadia_String_toInteger32(process, value));
         Arcadia_Process_popJumpTarget(process);
       } else {
         Arcadia_Process_popJumpTarget(process);
@@ -80,21 +80,21 @@ main1
     } else {
       R_CommandLine_raiseUnknownArgumentError(process, key, value);
     }
-    fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
+    fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
     if (value) {
       fwrite(u8"=", 1, sizeof(u8"=") - 1, stdout);
-      fwrite(R_String_getBytes(value), 1, R_String_getNumberOfBytes(value), stdout);
+      fwrite(Arcadia_String_getBytes(value), 1, Arcadia_String_getNumberOfBytes(value), stdout);
     }
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
-  if (R_Value_isVoidValue(&target)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"target", sizeof(u8"target") - 1)));
+  if (Arcadia_Value_isVoidValue(&target)) {
+    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"target", sizeof(u8"target") - 1)));
   }
-  if (R_Value_isVoidValue(&width)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"width", sizeof(u8"width") - 1)));
+  if (Arcadia_Value_isVoidValue(&width)) {
+    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"width", sizeof(u8"width") - 1)));
   }
-  if (R_Value_isVoidValue(&height)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"height", sizeof(u8"height") - 1)));
+  if (Arcadia_Value_isVoidValue(&height)) {
+    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"height", sizeof(u8"height") - 1)));
   }
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
   ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(process);
@@ -103,8 +103,8 @@ main1
 #else
   #error("environment not (yet) supported")
 #endif
-  PixelBuffer* pixelBuffer = PixelBuffer_create(process, 0, R_Value_getInteger32Value(&width), R_Value_getInteger32Value(&height), PixelFormat_An8Rn8Gn8Bn8);
-  ImageWriter_writePngToPath(process, imageWriter, pixelBuffer, R_Value_getObjectReferenceValue(&target));
+  PixelBuffer* pixelBuffer = PixelBuffer_create(process, 0, Arcadia_Value_getInteger32Value(&width), Arcadia_Value_getInteger32Value(&height), PixelFormat_An8Rn8Gn8Bn8);
+  ImageWriter_writePngToPath(process, imageWriter, pixelBuffer, Arcadia_Value_getObjectReferenceValue(&target));
 }
 
 int
@@ -124,9 +124,9 @@ main
     R_shutdown();
     return EXIT_FAILURE;
   }
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
   }
   Arcadia_Process_popJumpTarget(process);

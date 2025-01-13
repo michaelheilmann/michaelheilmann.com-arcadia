@@ -31,7 +31,7 @@ Rex_declareObjectType(u8"R.Mil.ExpressionStatementAst", R_Mil_ExpressionStatemen
 
 struct R_Mil_ExpressionStatementAst {
   R_Mil_StatementAst parent;
-  R_String* targetVariableName;
+  Arcadia_String* targetVariableName;
   R_Mil_ExpressionAst* expression;
 };
 
@@ -41,14 +41,14 @@ R_Mil_ExpressionStatementAst*
 R_Mil_ExpressionStatementAst_create
   (
     Arcadia_Process* process,
-    R_String* targetVariableName,
+    Arcadia_String* targetVariableName,
     R_Mil_ExpressionAst* expression
   );
 
 /// @brief Get the name of the target variable.
 /// @param self This expression statement AST.
 /// @return The name of the target variable.
-R_String*
+Arcadia_String*
 R_Mil_ExpressionStatementAst_getTargetVariableName
   (
     R_Mil_ExpressionStatementAst* self

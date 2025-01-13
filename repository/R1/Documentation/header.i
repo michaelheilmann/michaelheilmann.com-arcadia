@@ -49,5 +49,5 @@
   <h1>Michael Heilmann's Runtime Mark 1</h1>
   <p>
   This is the documentation for Michael  Heilmann's Runtime Mark 1,
-  henceforth R1. R1 facilates the creation of C programs - in particular interpreters - that are portable,
+  henceforth R1. R1 facilitates the creation of C programs - in particular interpreters - that are portable,
   maintainable, as well as safe. R1 is available at <a href="@{siteAddress}/repository/R1">michaelheilmann.com/repository/R1</a>.

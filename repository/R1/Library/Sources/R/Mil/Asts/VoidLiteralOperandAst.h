@@ -29,14 +29,14 @@ Rex_declareObjectType(u8"R.Mil.VoidLiteralOperandAst", R_Mil_VoidLiteralOperandA
 
 struct R_Mil_VoidLiteralOperandAst {
   R_Mil_OperandAst parent;
-  R_String* value;
+  Arcadia_String* value;
 };
 
 R_Mil_VoidLiteralOperandAst*
 R_Mil_VoidLiteralOperandAst_create
   (
     Arcadia_Process* process,
-    R_String* value
+    Arcadia_String* value
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

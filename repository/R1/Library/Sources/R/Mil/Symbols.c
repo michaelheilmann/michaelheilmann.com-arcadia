@@ -18,7 +18,6 @@
 #include "R/Mil/Symbols.h"
 
 #include "R/ArgumentsValidation.h"
-#include "R/ArmsIntegration.h"
 #include "R/cstdlib.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -27,21 +26,22 @@ static void
 R_Mil_Symbol_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
 R_Mil_Symbol_visit
   (
+    Arcadia_Process* process,
     R_Mil_Symbol* self
   );
 
-static const R_ObjectType_Operations R_Mil_Symbol_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations R_Mil_Symbol_objectTypeOperations = {
   .construct = &R_Mil_Symbol_constructImpl,
   .destruct = NULL,
-  .visit = NULL,
+  .visit = &R_Mil_Symbol_visit,
 };
 
 static const Arcadia_Type_Operations R_Mil_Symbol_typeOperations = {
@@ -64,42 +64,43 @@ static const Arcadia_Type_Operations R_Mil_Symbol_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.Symbol", R_Mil_Symbol, u8"R.Object", R_Object, &R_Mil_Symbol_typeOperations)
+Rex_defineObjectType(u8"R.Mil.Symbol", R_Mil_Symbol, u8"Arcadia.Object", Arcadia_Object, &R_Mil_Symbol_typeOperations)
 
 static void
 R_Mil_Symbol_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Mil_Symbol* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_Symbol* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_Symbol_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (4 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  _self->name = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _R_String_getType(process));
+  _self->name = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _Arcadia_String_getType(process));
   _self->sibling = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[1], _R_Mil_Symbol_getType(process));
   _self->shadowed = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[2], _R_Mil_Symbol_getType(process));
   _self->scope = R_Argument_getObjectReferenceValue(process, &argumentValues[3], _R_Mil_Scope_getType(process));
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
 R_Mil_Symbol_visit
   (
+    Arcadia_Process* process,
     R_Mil_Symbol* self
   )
 {
-  R_Object_visit(self->name);
-  R_Object_visit(self->sibling);
+  Arcadia_Object_visit(process, self->name);
+  Arcadia_Object_visit(process, self->sibling);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -108,9 +109,9 @@ static void
 R_Mil_SymbolTable_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -134,7 +135,7 @@ R_Mil_SymbolTable_visit
     R_Mil_SymbolTable* self
   );
 
-static const R_ObjectType_Operations R_Mil_SymbolTable_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations R_Mil_SymbolTable_objectTypeOperations = {
   .construct = &R_Mil_SymbolTable_constructImpl,
   .destruct = &R_Mil_SymbolTable_destruct,
   .visit = &R_Mil_SymbolTable_visit,
@@ -160,31 +161,29 @@ static const Arcadia_Type_Operations R_Mil_SymbolTable_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.SymbolTable", R_Mil_SymbolTable, u8"R.Object", R_Object, &R_Mil_SymbolTable_typeOperations)
+Rex_defineObjectType(u8"R.Mil.SymbolTable", R_Mil_SymbolTable, u8"Arcadia.Object", Arcadia_Object, &R_Mil_SymbolTable_typeOperations)
 
 static void
 R_Mil_SymbolTable_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Mil_SymbolTable* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_SymbolTable* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_SymbolTable_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
-  if (!R_allocateUnmanaged_nojump(process, (void**)&_self->elements, sizeof(R_Mil_Symbol*) * 8)) {
-    Arcadia_Process_jump(process);
-  }
+  Arcadia_Process_allocateUnmanaged(process, (void**)&_self->elements, sizeof(R_Mil_Symbol*) * 8);
   for (Arcadia_SizeValue i = 0, n = 8; i < n; ++i) {
     _self->elements[i] = NULL;
   }
   _self->size = 0;
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -194,7 +193,7 @@ R_Mil_SymbolTable_destruct
     R_Mil_SymbolTable* self
   )
 {
-  R_deallocateUnmanaged_nojump(process, self->elements);
+  Arcadia_Process_deallocateUnmanaged(process, self->elements);
   self->elements = NULL;
 }
 
@@ -219,9 +218,7 @@ R_Mil_SymbolTable_doubleCapacity
     Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
     Arcadia_Process_jump(process);
   }
-  if (!R_reallocateUnmanaged_nojump(process, (void**)&self->elements, sizeof(void*) * newCapacity)) {
-    Arcadia_Process_jump(process);
-  }
+  Arcadia_Process_reallocateUnmanaged(process, (void**)&self->elements, sizeof(void*) * newCapacity);
   for (Arcadia_SizeValue i = oldCapacity, n = newCapacity; i < n; ++i) {
     self->elements[i] = NULL;
   }
@@ -235,7 +232,7 @@ R_Mil_SymbolTable_visit
   )
 {
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    R_Object_visit(self->elements[i]);
+    Arcadia_Object_visit(process, self->elements[i]);
   }
 }
 
@@ -246,16 +243,16 @@ R_Mil_SymbolTable_getIndex
   (
     Arcadia_Process* process,
     R_Mil_SymbolTable* self,
-    R_String* name
+    Arcadia_String* name
   )
 {
-  Arcadia_SizeValue hash = R_Object_hash(process, (R_Object*)name);
+  Arcadia_SizeValue hash = Arcadia_Object_hash(process, (Arcadia_Object*)name);
   Arcadia_SizeValue index = hash % self->capacity;
   Arcadia_SizeValue tombstoneIndex = 0;
   Arcadia_BooleanValue tombstoneFound = Arcadia_BooleanValue_False;
   while (Arcadia_BooleanValue_True) {
     R_Mil_Symbol* entry = self->elements[index];
-    R_Value nameValue = { .tag = R_ValueTag_ObjectReference, .objectReferenceValue = name };
+    Arcadia_Value nameValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
     if (NULL == entry) {
       return tombstoneFound ? tombstoneIndex : index;
     } else if ((R_Mil_Symbol*)&g_dummy == entry) {
@@ -263,7 +260,7 @@ R_Mil_SymbolTable_getIndex
         tombstoneFound = Arcadia_BooleanValue_True;
         tombstoneIndex = index;
       }
-    } else if (R_Object_equalTo(process, (R_Object*)entry->name, &nameValue)) {
+    } else if (Arcadia_Object_equalTo(process, (Arcadia_Object*)entry->name, &nameValue)) {
       return index;
     }
     index = (index + 1) % self->capacity;
@@ -277,8 +274,8 @@ R_Mil_SymbolTable_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = {
-    {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
+  Arcadia_Value argumentValues[] = {
+    {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
   };
   R_Mil_SymbolTable* self = R_allocateObject(process, _R_Mil_SymbolTable_getType(process), 0, &argumentValues[0]);
   return self;
@@ -290,9 +287,9 @@ static void
 R_Mil_Scope_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
   
 static void
@@ -309,7 +306,7 @@ R_Mil_Scope_visit
     R_Mil_Scope* self
   );
 
-static const R_ObjectType_Operations R_Mil_Scope_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations R_Mil_Scope_objectTypeOperations = {
   .construct = &R_Mil_Scope_constructImpl,
   .destruct = &R_Mil_Scope_destruct,
   .visit = &R_Mil_Scope_visit,
@@ -335,14 +332,14 @@ static const Arcadia_Type_Operations R_Mil_Scope_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.Scope", R_Mil_Scope, u8"R.Object", R_Object, &R_Mil_Scope_typeOperations)
+Rex_defineObjectType(u8"R.Mil.Scope", R_Mil_Scope, u8"Arcadia.Object", Arcadia_Object, &R_Mil_Scope_typeOperations)
 
 static void
 set
   (
     Arcadia_Process* process,
     R_Mil_Scope* self,
-    R_String* name
+    Arcadia_String* name
   )
 {
   while (self->table->size * 3 >= self->table->capacity * 2) {
@@ -373,7 +370,7 @@ get
   (
     Arcadia_Process* process,
     R_Mil_Scope* self,
-    R_String* name
+    Arcadia_String* name
   )
 {
   Arcadia_SizeValue index = R_Mil_SymbolTable_getIndex(process, self->table, name);
@@ -387,21 +384,21 @@ static void
 R_Mil_Scope_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Mil_Scope* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_Scope* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_Scope_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->enclosing = NULL;
   _self->entries = NULL;
   _self->table = R_Mil_SymbolTable_create(process);
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -419,10 +416,10 @@ R_Mil_Scope_visit
     R_Mil_Scope* self
   )
 {
-  R_Object_visit(self->enclosing);
+  Arcadia_Object_visit(process, self->enclosing);
   R_Mil_Symbol* symbol = self->entries;
   while (symbol) {
-    R_Object_visit(symbol);
+    Arcadia_Object_visit(process, symbol);
     symbol = symbol->sibling;
   }
 }
@@ -433,8 +430,8 @@ R_Mil_Scope_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = {
-    {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
+  Arcadia_Value argumentValues[] = {
+    {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
   };
   R_Mil_Scope* self = R_allocateObject(process, _R_Mil_Scope_getType(process), 0, &argumentValues[0]);
   return self;

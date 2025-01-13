@@ -188,8 +188,8 @@ onIncludeDirective
   R_ByteBuffer_clear(context->context->temporaryBuffer);
   onString(process, context);
   R_FilePath* filePath = R_FilePath_parseWindows(process, context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz);
-  R_Value value;
-  R_Value_setObjectReferenceValue(&value, filePath);
+  Arcadia_Value value;
+  Arcadia_Value_setObjectReferenceValue(&value, filePath);
   R_Stack_push(process, context->context->stack, value);
   if (!isRightParenthesis(process, context)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
@@ -211,20 +211,20 @@ onStatement
     onIncludeDirective(process, context);
     Context_onRun(process, context->context);
   } else {
-    R_Value t;
-    R_Value_setObjectReferenceValue(&t, (R_ObjectReferenceValue)context->context->temporaryBuffer);
-    R_Value_setObjectReferenceValue(&t, (R_ObjectReferenceValue)R_String_create(process, t));
+    Arcadia_Value t;
+    Arcadia_Value_setObjectReferenceValue(&t, (Arcadia_ObjectReferenceValue)context->context->temporaryBuffer);
+    Arcadia_Value_setObjectReferenceValue(&t, (Arcadia_ObjectReferenceValue)Arcadia_String_create(process, t));
     t = R_Map_get(process, context->environment, t);
-    if (!R_Value_isObjectReferenceValue(&t)) {
+    if (!Arcadia_Value_isObjectReferenceValue(&t)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Process_jump(process);
     }
-    R_Object* object = R_Value_getObjectReferenceValue(&t);
-    if (!Arcadia_Type_isSubType(R_Object_getType(object), _R_String_getType(process))) {
+    Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&t);
+    if (!Arcadia_Type_isSubType(Arcadia_Object_getType(object), _Arcadia_String_getType(process))) {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Process_jump(process);
     }
-    R_ByteBuffer_append_pn(process, context->context->targetBuffer, R_String_getBytes((R_String*)object), R_String_getNumberOfBytes((R_String*)object));
+    R_ByteBuffer_append_pn(process, context->context->targetBuffer, Arcadia_String_getBytes((Arcadia_String*)object), Arcadia_String_getNumberOfBytes((Arcadia_String*)object));
   }
 }
 
@@ -280,12 +280,12 @@ static void
 FileContext_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &FileContext_constructImpl,
   .destruct = &FileContext_destruct,
   .visit = &FileContext_visit,
@@ -311,7 +311,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 FileContext_destruct
@@ -328,48 +328,48 @@ FileContext_visit
     FileContext* self
   )
 {
-  R_Object_visit(self->context);
-  R_Object_visit(self->sourceFilePath);
-  R_Object_visit(self->source);
-  R_Object_visit(self->environment);
+  Arcadia_Object_visit(process, self->context);
+  Arcadia_Object_visit(process, self->sourceFilePath);
+  Arcadia_Object_visit(process, self->source);
+  Arcadia_Object_visit(process, self->environment);
 }
 
 static void
 FileContext_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  FileContext* _self = R_Value_getObjectReferenceValue(self);
+  FileContext* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _FileContext_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[0]), _Context_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Context_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[1]), _R_FilePath_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _R_FilePath_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  _self->context = R_Value_getObjectReferenceValue(&argumentValues[0]);
-  _self->sourceFilePath = R_Value_getObjectReferenceValue(&argumentValues[1]);
+  _self->context = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
+  _self->sourceFilePath = Arcadia_Value_getObjectReferenceValue(&argumentValues[1]);
   _self->source = NULL;
   _self->environment = R_Map_create(process);
-  R_Value k, v;
-  R_Value_setObjectReferenceValue(&k, (R_ObjectReferenceValue)R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
-  R_Value_setObjectReferenceValue(&v, (R_ObjectReferenceValue)R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
+  Arcadia_Value k, v;
+  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
+  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
   R_Map_set(process, _self->environment, k, v);
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 FileContext*
@@ -380,8 +380,8 @@ FileContext_create
     R_FilePath* sourceFilePath
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)context },
-                               {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)sourceFilePath }, };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)context },
+                               {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)sourceFilePath }, };
   FileContext* self = R_allocateObject(process, _FileContext_getType(process), 2, &argumentValues[0]);
   return self;
 }

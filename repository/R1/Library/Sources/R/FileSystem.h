@@ -31,10 +31,10 @@ typedef struct R_FilePath R_FilePath;
 ///   constructor()
 /// }
 /// @endcode
-Rex_declareObjectType(u8"R.FileSystem", R_FileSystem, u8"R.Object");
+Rex_declareObjectType(u8"R.FileSystem", R_FileSystem, u8"Arcadia.Object");
 
 struct R_FileSystem {
-  R_Object _parent;
+  Arcadia_Object _parent;
 };
 
 // https://michaelheilmann.com/repository/R1/#r-filesystem-create

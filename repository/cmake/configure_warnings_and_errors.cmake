@@ -62,6 +62,9 @@ macro(ConfigureWarningsAndErrors target)
     
     # C4047: 'operator' : 'identifier1' differs in levels of indirection from 'identifier2'
     list(APPEND ${target}.CompileOptions "/we4047")
+    
+    # C4029: declared formal parameter list different from definition
+    list(APPEND ${target}.CompileOptions "/we4029")
 
     # The quotes around "${${target}.CompileOptions}" concatenate the list elements to a single string separated by semicolons.
     set_source_files_properties(${${target}.SourceFiles} PROPERTIES COMPILE_OPTIONS "${${target}.CompileOptions}")

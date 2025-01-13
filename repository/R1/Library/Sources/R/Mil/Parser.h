@@ -24,7 +24,7 @@
 /// @code
 /// class R.Mil.Parser
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.Parser", R_Mil_Parser, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.Parser", R_Mil_Parser, u8"Arcadia.Object");
 
 /// @brief Create a MIL parser.
 /// @return A pointer to this MIL parser.

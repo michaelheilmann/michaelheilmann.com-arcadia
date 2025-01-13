@@ -23,7 +23,7 @@
 /// @code
 /// class R.Mil.Scanner
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.Scanner", R_Mil_Scanner, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.Scanner", R_Mil_Scanner, u8"Arcadia.Object");
 
 /// @brief Create a MIL scanner.
 /// @return A pointer to this MIL scanner.
@@ -36,7 +36,7 @@ R_Mil_Scanner_create
 /// @brief Get the text of the token.
 /// @param self A pointer to this MIL scanner.
 /// @return The text of the token.
-R_String*
+Arcadia_String*
 R_Mil_Scanner_getTokenText
   (
     Arcadia_Process* process,

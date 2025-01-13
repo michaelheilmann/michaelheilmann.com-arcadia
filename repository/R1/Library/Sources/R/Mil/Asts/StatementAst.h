@@ -25,10 +25,10 @@
 /// @code
 /// class R.Mil.StatementAst
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.StatementAst", R_Mil_StatementAst, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.StatementAst", R_Mil_StatementAst, u8"Arcadia.Object");
 
 struct R_Mil_StatementAst {
-  R_Object _parent;
+  Arcadia_Object _parent;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

@@ -21,9 +21,9 @@ static void
 TextureFontWindows_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -33,7 +33,7 @@ TextureFontWindows_destruct
     TextureFontWindows* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &TextureFontWindows_constructImpl,
   .destruct = &TextureFontWindows_destruct,
   .visit = NULL,
@@ -59,21 +59,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"TextureFontWindows", TextureFontWindows, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"TextureFontWindows", TextureFontWindows, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 TextureFontWindows_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  TextureFontWindows* _self = R_Value_getObjectReferenceValue(self);
+  TextureFontWindows* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _TextureFontWindows_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   //
@@ -106,7 +106,7 @@ TextureFontWindows_constructImpl
   _self->bitmap = NativeWindowsBitmap_create(process, width, height);
   DrawTextA(_self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   //
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -128,7 +128,7 @@ TextureFontWindows_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   TextureFontWindows* self = R_allocateObject(process, _TextureFontWindows_getType(process), 0, &argumentValues[0]);
   return self;
 }

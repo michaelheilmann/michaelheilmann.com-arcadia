@@ -18,20 +18,17 @@
 #if !defined(R_FILEHANDLE_H_INCLUDED)
 #define R_FILEHANDLE_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "R/Object.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Include.h"
 typedef struct R_FilePath R_FilePath;
 typedef struct R_FileSystem R_FileSystem;
 
 // FILE
 #include <stdio.h>
 
-Rex_declareObjectType(u8"R.FileHandle", R_FileHandle, u8"R.Object");
+Rex_declareObjectType(u8"R.FileHandle", R_FileHandle, u8"Arcadia.Object");
 
 struct R_FileHandle {
-  R_Object _parent;
+  Arcadia_Object _parent;
   R_FileSystem* fileSystem;
   Arcadia_Natural8Value flags;
   FILE* fd;

@@ -18,11 +18,10 @@
 #if !defined(R_MAP_H_INCLUDED)
 #define R_MAP_H_INCLUDED
 
-#include "R/Object.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/List.h"
-#include "R/Value.h"
 
-Rex_declareObjectType(u8"R.Map", R_Map, u8"R.Object");
+Rex_declareObjectType(u8"R.Map", R_Map, u8"Arcadia.Object");
 
 R_Map*
 R_Map_create
@@ -55,16 +54,16 @@ R_Map_set
   (
     Arcadia_Process* process,
     R_Map* self,
-    R_Value key,
-    R_Value value
+    Arcadia_Value key,
+    Arcadia_Value value
   );
 
-R_Value
+Arcadia_Value
 R_Map_get
   (
     Arcadia_Process* process,
     R_Map const* self,
-    R_Value key
+    Arcadia_Value key
   );
 
 R_List*

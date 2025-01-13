@@ -70,7 +70,7 @@ execute1
         // target index
         R_Machine_Code_IndexKind targetIndexKind;
         Arcadia_Natural32Value targetIndex;
-        R_Value* targetValue = NULL;
+        Arcadia_Value* targetValue = NULL;
         R_Interpreter_Code_decodeIndex(process, currentCallState->procedure->code, &currentCallState->instructionIndex, &targetIndexKind, &targetIndex);
         if (targetIndexKind == R_Machine_Code_IndexKind_Constant) {
           Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -81,7 +81,7 @@ execute1
         // callee
         R_Machine_Code_IndexKind calleeIndexKind;
         Arcadia_Natural32Value calleeIndex;
-        R_Value calleeValue;
+        Arcadia_Value calleeValue;
         R_Interpreter_Code_decodeIndex(process, currentCallState->procedure->code, &currentCallState->instructionIndex, &calleeIndexKind, &calleeIndex);
         if (calleeIndexKind == R_Machine_Code_IndexKind_Constant) {
           calleeValue = *R_Interpreter_Code_Constants_getAt(process, constants, calleeIndex);
@@ -95,7 +95,7 @@ execute1
           Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
           Arcadia_Process_jump(process);
         }
-        R_Value argumentValues[R_Machine_Code_NumberOfArguments_Maximum];
+        Arcadia_Value argumentValues[R_Machine_Code_NumberOfArguments_Maximum];
         for (Arcadia_Natural32Value i = 0, n = count; i < n; ++i) {
           R_Machine_Code_IndexKind argumentIndexKind;
           Arcadia_Natural32Value argumentIndex;
@@ -106,12 +106,12 @@ execute1
             argumentValues[i] = *R_Interpreter_ThreadState_getRegisterAt(thread, argumentIndex);
           }
         }
-        if (R_Value_isForeignProcedureValue(&calleeValue)) {
-          Arcadia_ForeignProcedureValue foreignProcedureValue = R_Value_getForeignProcedureValue(&calleeValue);
+        if (Arcadia_Value_isForeignProcedureValue(&calleeValue)) {
+          Arcadia_ForeignProcedureValue foreignProcedureValue = Arcadia_Value_getForeignProcedureValue(&calleeValue);
           R_Interpreter_ThreadState_beginForeignProcedureCall(thread, 0, foreignProcedureValue);
-          R_JumpTarget jumpTarget;
+          Arcadia_JumpTarget jumpTarget;
           Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-          if (R_JumpTarget_save(&jumpTarget)) {
+          if (Arcadia_JumpTarget_save(&jumpTarget)) {
             (*foreignProcedureValue)(process, targetValue, count, &(argumentValues[0]));
             Arcadia_Process_popJumpTarget(process);
             R_Interpreter_ThreadState_endCall(thread); // Must not fail.
@@ -120,9 +120,9 @@ execute1
             R_Interpreter_ThreadState_endCall(thread); // Must not fail.
             Arcadia_Process_jump(process);
           }
-        } else if (R_Value_isObjectReferenceValue(&calleeValue)) {
-          R_Object* object = R_Value_getObjectReferenceValue(&calleeValue);
-          if (Arcadia_Type_isSubType(R_Object_getType(object), _R_Interpreter_Procedure_getType(process))) {
+        } else if (Arcadia_Value_isObjectReferenceValue(&calleeValue)) {
+          Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&calleeValue);
+          if (Arcadia_Type_isSubType(Arcadia_Object_getType(object), _R_Interpreter_Procedure_getType(process))) {
             R_Interpreter_ThreadState_beginProcedureCall(thread, 0, (R_Interpreter_Procedure*)object);
           } else {
             Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);

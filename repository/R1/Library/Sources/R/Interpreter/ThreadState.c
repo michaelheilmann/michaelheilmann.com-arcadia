@@ -17,10 +17,8 @@
 
 #include "R/Interpreter/ThreadState.private.h"
 
-#include "R/ArmsIntegration.h"
-#include "R/Object.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/DynamicArrayUtilities.h"
-#include "R/Value.h"
 
 #define R_Configuration_DefaultNumberOfArgumentRegisters 32
 #define R_Configuration_DefaultNumberOfRegisters 256
@@ -34,7 +32,7 @@ _RegisterStack_initialize
     _RegisterStack* self
   )
 {
-  if (!R_allocateUnmanaged_nojump(&self->elements, 0 * sizeof(R_Value))) {
+  if (!R_allocateUnmanaged_nojump(&self->elements, 0 * sizeof(Arcadia_Value))) {
     Arcadia_Process_jump(process);
   }
   self->size = 0;
@@ -61,26 +59,39 @@ R_Interpreter_ThreadState_create
   )
 {
   R_Interpreter_ThreadState* thread = NULL;
-  if (!R_allocateUnmanaged_nojump(process, &thread, sizeof(R_Interpreter_ThreadState))) {
-    Arcadia_Process_jump(process);
-  }
+  Arcadia_Process_allocateUnmanaged(process, &thread, sizeof(R_Interpreter_ThreadState));
   thread->numberOfRegisters = R_Configuration_DefaultNumberOfRegisters;
-  if (!R_allocateUnmanaged_nojump(process, &thread->registers, sizeof(R_Value) * thread->numberOfRegisters)) {
-    R_deallocateUnmanaged_nojump(process, thread);
+
+  Arcadia_JumpTarget jumpTarget;
+
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_Process_allocateUnmanaged(process, &thread->registers, sizeof(Arcadia_Value) * thread->numberOfRegisters);
+    Arcadia_Process_popJumpTarget(process);
+  } else {
+    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Process_deallocateUnmanaged(process, thread);
     thread = NULL;
     Arcadia_Process_jump(process);
-  }
-  for (Arcadia_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
-    R_Value_setVoidValue(thread->registers + i, Arcadia_VoidValue_Void);
   }
 
-  if (!R_allocateUnmanaged_nojump(process, &thread->calls.elements, sizeof(R_CallState))) {
-    R_deallocateUnmanaged_nojump(process, thread->registers);
+  for (Arcadia_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
+    Arcadia_Value_setVoidValue(thread->registers + i, Arcadia_VoidValue_Void);
+  }
+
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_Process_allocateUnmanaged(process, &thread->calls.elements, sizeof(R_CallState));
+    Arcadia_Process_popJumpTarget(process);
+  } else {
+    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Process_deallocateUnmanaged(process, thread->registers);
     thread->registers = NULL;
-    R_deallocateUnmanaged_nojump(process, thread);
+    Arcadia_Process_deallocateUnmanaged(process, thread);
     thread = NULL;
     Arcadia_Process_jump(process);
   }
+
   thread->calls.size = 0;
   thread->calls.capacity = 1;
 
@@ -94,27 +105,28 @@ R_Interpreter_ThreadState_destroy
     R_Interpreter_ThreadState* thread
   )
 {
-  R_deallocateUnmanaged_nojump(process, thread->calls.elements);
+  Arcadia_Process_deallocateUnmanaged(process, thread->calls.elements);
   thread->calls.elements = NULL;
-  R_deallocateUnmanaged_nojump(process, thread->registers);
+  Arcadia_Process_deallocateUnmanaged(process, thread->registers);
   thread->registers = NULL;
-  R_deallocateUnmanaged_nojump(process, thread);
+  Arcadia_Process_deallocateUnmanaged(process, thread);
   thread = NULL;
 }
 
 void
 R_Interpreter_ThreadState_visit
   (
+    Arcadia_Process* process,
     R_Interpreter_ThreadState* thread
   )
 {
   for (Arcadia_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
-    R_Value_visit(thread->registers + i);
+    Arcadia_Value_visit(process, thread->registers + i);
   }
   for (Arcadia_SizeValue i = 0, n = thread->calls.size; i < n; ++i) {
     R_CallState* callState = &(thread->calls.elements[i]);
     if (callState->flags == R_CallState_Flags_Procedure) {
-      R_Object_visit(callState->procedure);
+      Arcadia_Object_visit(process, callState->procedure);
     }
   }
 }
@@ -126,7 +138,7 @@ R_Interpreter_ThreadState_getNumberOfRegisters
   )
 { return thread->numberOfRegisters; }
 
-R_Value*
+Arcadia_Value*
 R_Interpreter_ThreadState_getRegisterAt
   (
     R_Interpreter_ThreadState* thread,

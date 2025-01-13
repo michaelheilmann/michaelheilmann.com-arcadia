@@ -25,12 +25,12 @@ static void
 R_Mil_DefinitionAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
-static const R_ObjectType_Operations _R_Mil_DefinitionAst_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _R_Mil_DefinitionAst_objectTypeOperations = {
   .construct = &R_Mil_DefinitionAst_constructImpl,
   .destruct = NULL,
   .visit = NULL,
@@ -56,28 +56,28 @@ static const Arcadia_Type_Operations _R_Mil_DefinitionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.DefinitionAst", R_Mil_DefinitionAst, u8"R.Object", R_Object, &_R_Mil_DefinitionAst_typeOperations);
+Rex_defineObjectType(u8"R.Mil.DefinitionAst", R_Mil_DefinitionAst, u8"Arcadia.Object", Arcadia_Object, &_R_Mil_DefinitionAst_typeOperations);
 
 static void
 R_Mil_DefinitionAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Mil_DefinitionAst* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_DefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_DefinitionAst_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

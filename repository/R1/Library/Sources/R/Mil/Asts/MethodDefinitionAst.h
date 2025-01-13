@@ -27,8 +27,8 @@ Rex_declareObjectType(u8"R.Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, 
 
 struct R_Mil_MethodDefinitionAst {
   R_Mil_ClassMemberDefinitionAst _parent;
-  R_String* nativeName;
-  R_String* methodName;
+  Arcadia_String* nativeName;
+  Arcadia_String* methodName;
   R_List* methodParameters;
   R_List* methodBody;
 };
@@ -37,8 +37,8 @@ R_Mil_MethodDefinitionAst*
 R_Mil_MethodDefinitionAst_create
   (
     Arcadia_Process* process,
-    R_String* nativeName,
-    R_String* methodName,
+    Arcadia_String* nativeName,
+    Arcadia_String* methodName,
     R_List* methodParameters,
     R_List* methodBody
   );

@@ -23,16 +23,19 @@
 void
 Audials_startup
   (
+    Arcadia_Process* process
   );
 
 void
 Audials_shutdown
   (
+    Arcadia_Process* process
   );
 
 void
 Audials_playSine
   (
+    Arcadia_Process* process
   );
 
 #endif // MODULE_AUDIALS_INCLUDE_H_INCLUDED

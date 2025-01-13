@@ -18,14 +18,9 @@
 #if !defined(R_R_H_INCLUDED)
 #define R_R_H_INCLUDED
 
-#include "R/ArmsIntegration.h"
-
-
 #include "R/ByteBuffer.h"
 
 #include "R/CommandLine/Include.h"
-
-#include "R/ImmutableByteArray.h"
 
 #include "R/execute.h"
 
@@ -38,8 +33,6 @@
 #include "R/List.h"
 
 #include "R/Map.h"
-
-#include "R/Object.h"
 
 #include "R/Interpreter/Procedure.h"
 
@@ -56,10 +49,6 @@
 #include "R/Utf8ByteBufferWriter.h"
 #include "R/Utf8StringReader.h"
 #include "R/Utf8Writer.h"
-
-#include "R/Value.h"
-
-
 
 Arcadia_Status
 R_startup

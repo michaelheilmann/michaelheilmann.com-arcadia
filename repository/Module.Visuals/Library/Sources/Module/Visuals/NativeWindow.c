@@ -21,12 +21,12 @@ static void
 NativeWindow_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &NativeWindow_constructImpl,
   .destruct = NULL,
   .visit = NULL,
@@ -52,21 +52,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"NativeWindow", NativeWindow, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"NativeWindow", NativeWindow, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 NativeWindow_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  NativeWindow* _self = R_Value_getObjectReferenceValue(self);
+  NativeWindow* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _NativeWindow_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->open = NULL;
@@ -83,7 +83,7 @@ NativeWindow_constructImpl
   _self->getTitle = NULL;
   _self->setTitle  = NULL;
   _self->getCanvasSize = NULL;
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 void
@@ -172,7 +172,7 @@ NativeWindow_setSmallIcon
   )
 { self->setSmallIcon(self, icon); }
 
-R_String*
+Arcadia_String*
 NativeWindow_getTitle
   (
     NativeWindow* self
@@ -184,7 +184,7 @@ NativeWindow_setTitle
   (
     Arcadia_Process* process,
     NativeWindow* self,
-    R_String* title
+    Arcadia_String* title
   )
 { self->setTitle(process, self, title); }
 

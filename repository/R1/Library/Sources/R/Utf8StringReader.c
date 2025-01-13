@@ -17,7 +17,6 @@
 
 #include "R/Utf8StringReader.h"
 
-#include "R/Object.h"
 #include "R/String.h"
 #include "R/Utf8.h"
 
@@ -32,9 +31,9 @@ static void
 R_Utf8StringReader_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -71,7 +70,7 @@ R_Utf8StringReader_getByteIndexImpl
     R_Utf8StringReader* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_Utf8StringReader_constructImpl,
   .destruct = NULL,
   .visit = &R_Utf8StringReader_visit,
@@ -103,33 +102,33 @@ static void
 R_Utf8StringReader_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Utf8StringReader* _self = R_Value_getObjectReferenceValue(self);
+  R_Utf8StringReader* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Utf8StringReader_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[0]), _R_String_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_String_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  _self->source = (R_String*)R_Value_getObjectReferenceValue(&argumentValues[0]);
+  _self->source = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
   _self->byteIndex = 0;
   _self->codePoint = CodePoint_Start;
   ((R_Utf8Reader*)_self)->getByteIndex = (Arcadia_SizeValue(*)(R_Utf8Reader*)) & R_Utf8StringReader_getByteIndexImpl;
   ((R_Utf8Reader*)_self)->getCodePoint = (Arcadia_Natural32Value(*)(Arcadia_Process*, R_Utf8Reader*)) & R_Utf8StringReader_getCodePointImpl;
   ((R_Utf8Reader*)_self)->hasCodePoint = (Arcadia_BooleanValue(*)(Arcadia_Process*, R_Utf8Reader*)) & R_Utf8StringReader_hasCodePointImpl;
   ((R_Utf8Reader*)_self)->next = (void (*)(Arcadia_Process*, R_Utf8Reader*)) & R_Utf8StringReader_nextImpl;
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -139,7 +138,7 @@ R_Utf8StringReader_visit
     R_Utf8StringReader* self
   )
 {
-  R_Object_visit(self->source);
+  Arcadia_Object_visit(process, self->source);
 }
 
 static void
@@ -153,13 +152,13 @@ R_Utf8StringReader_nextImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
     Arcadia_Process_jump(process);
   }
-  Arcadia_SizeValue n = R_String_getNumberOfBytes(self->source);
+  Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(self->source);
   if (self->byteIndex == n) {
     self->codePoint = CodePoint_End;
     return;
   }
   Arcadia_Natural32Value codePoint;
-  Arcadia_Natural8Value x = R_String_getByteAt(process, self->source, self->byteIndex);
+  Arcadia_Natural8Value x = Arcadia_String_getByteAt(process, self->source, self->byteIndex);
   if (x <= 0b01111111) {
     codePoint = x;
     self->byteIndex += 1;
@@ -171,7 +170,7 @@ R_Utf8StringReader_nextImpl
       Arcadia_Process_jump(process);
     }
     for (size_t i = 1; i < 2; ++i) {
-      x = R_String_getByteAt(process, self->source, self->byteIndex + i);
+      x = Arcadia_String_getByteAt(process, self->source, self->byteIndex + i);
       if (0x80 != x & 0xc0) {
         Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
         Arcadia_Process_jump(process);
@@ -188,7 +187,7 @@ R_Utf8StringReader_nextImpl
       Arcadia_Process_jump(process);
     }
     for (size_t i = 1; i < 3; ++i) {
-      x = R_String_getByteAt(process, self->source, self->byteIndex + i);
+      x = Arcadia_String_getByteAt(process, self->source, self->byteIndex + i);
       if (0x80 != x & 0xc0) {
         Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
         Arcadia_Process_jump(process);
@@ -205,7 +204,7 @@ R_Utf8StringReader_nextImpl
       Arcadia_Process_jump(process);
     }
     for (size_t i = 1; i < 4; ++i) {
-      x = R_String_getByteAt(process, self->source, self->byteIndex + i);
+      x = Arcadia_String_getByteAt(process, self->source, self->byteIndex + i);
       if (0x80 != x & 0xc0) {
         Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
         Arcadia_Process_jump(process);
@@ -259,10 +258,10 @@ R_Utf8StringReader*
 R_Utf8StringReader_create
   (
     Arcadia_Process* process,
-    R_String* source
+    Arcadia_String* source
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)source } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)source } };
   R_Utf8StringReader* self = R_allocateObject(process, _R_Utf8StringReader_getType(process), 1, &argumentValues[0]);
   return self;
 }

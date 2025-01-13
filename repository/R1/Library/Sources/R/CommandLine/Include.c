@@ -61,12 +61,12 @@ R_CommandLine_parseArgument
   (
     Arcadia_Process* process,
     R_Utf8Reader* reader,
-    R_String** key,
-    R_String** value
+    Arcadia_String** key,
+    Arcadia_String** value
   )
 {
-  R_String* value1 = NULL, *key1 = NULL;
-  R_Value temporaryValue;
+  Arcadia_String* value1 = NULL, *key1 = NULL;
+  Arcadia_Value temporaryValue;
   R_ByteBuffer* writerByteBuffer = R_ByteBuffer_create(process);
   R_Utf8Writer* writer = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, writerByteBuffer);
   // '--'
@@ -93,8 +93,8 @@ R_CommandLine_parseArgument
     R_Utf8Writer_writeCodePoints(process, writer, &codePoint, 1);
     R_Utf8Reader_next(process, reader);
   } while (!isEqualOrEnd(process, reader));
-  R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)writerByteBuffer);
-  key1 = R_String_create(process, temporaryValue);
+  Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)writerByteBuffer);
+  key1 = Arcadia_String_create(process, temporaryValue);
   R_ByteBuffer_clear(writerByteBuffer);
   if (isEnd(process, reader)) {
     return Arcadia_BooleanValue_True;
@@ -112,8 +112,8 @@ R_CommandLine_parseArgument
     R_Utf8Writer_writeCodePoints(process, writer, &codePoint, 1);
     R_Utf8Reader_next(process, reader);
   } while (!isEnd(process, reader));
-  R_Value_setObjectReferenceValue(&temporaryValue, (R_ObjectReferenceValue)writerByteBuffer);
-  value1 = R_String_create(process, temporaryValue);
+  Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)writerByteBuffer);
+  value1 = Arcadia_String_create(process, temporaryValue);
   R_ByteBuffer_clear(writerByteBuffer);
   *key = key1;
   *value = value1;
@@ -124,11 +124,11 @@ void
 R_CommandLine_raiseRequiredArgumentMissingError
   (
     Arcadia_Process* process,
-    R_String* key
+    Arcadia_String* key
   )
 {
   fwrite(u8"required command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
-  fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
+  fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
   fwrite(u8"` not specified", 1, sizeof(u8"` not specified") - 1, stdout);
   Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Process_jump(process);
@@ -138,12 +138,12 @@ void
 R_CommandLine_raiseUnknownArgumentError
   (
     Arcadia_Process* process,
-    R_String* key,
-    R_String* value
+    Arcadia_String* key,
+    Arcadia_String* value
   )
 {
   fwrite(u8"unknown command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
-  fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
+  fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
   fwrite(u8"`", 1, sizeof(u8"`") - 1, stdout);
   Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Process_jump(process);
@@ -153,11 +153,11 @@ void
 R_CommandLine_raiseNoValueError
   (
     Arcadia_Process* process,
-    R_String* key
+    Arcadia_String* key
   )
 {
   fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
-  fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
+  fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
   fwrite(u8"` is not valid", 1, sizeof(u8"` is not valid") - 1, stdout);
   Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Process_jump(process);
@@ -167,12 +167,12 @@ void
 R_CommandLine_raiseValueInvalidError
   (
     Arcadia_Process* process,
-    R_String* key,
-    R_String* value
+    Arcadia_String* key,
+    Arcadia_String* value
   )
 {
   fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
-  fwrite(R_String_getBytes(key), 1, R_String_getNumberOfBytes(key), stdout);
+  fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
   fwrite(u8"` is not valid", 1, sizeof(u8"` is not valid") - 1, stdout);
   Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Process_jump(process);

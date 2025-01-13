@@ -22,7 +22,7 @@
 #include "R/ArgumentsValidation.h"
 #include "R/cstdlib.h"
 
-static R_Value*
+static Arcadia_Value*
 R_InterpreterState_decodeTarget
   (
     Arcadia_Process* process,
@@ -43,7 +43,7 @@ R_InterpreterState_decodeTarget
   return R_Interpreter_ThreadState_getRegisterAt(thread, indexValue);
 }
 
-static R_Value const*
+static Arcadia_Value const*
 R_InterpreterState_decodeOperand
   (
     Arcadia_Process* process,
@@ -58,12 +58,12 @@ R_InterpreterState_decodeOperand
   R_Machine_Code_IndexKind indexKind;
   Arcadia_Natural32Value indexValue;
   R_Interpreter_Code_decodeIndex(process, code, &call->instructionIndex, &indexKind, &indexValue);
-  R_Value const* value = indexKind == R_Machine_Code_IndexKind_Constant ?
+  Arcadia_Value const* value = indexKind == R_Machine_Code_IndexKind_Constant ?
                          R_Interpreter_Code_Constants_getAt(process, constants, indexValue) : R_Interpreter_ThreadState_getRegisterAt(thread, indexValue);
   return value;
 }
 
-static R_String*
+static Arcadia_String*
 R_InterpreterState_decodeStringConstant
   (
     Arcadia_Process* process,
@@ -82,11 +82,11 @@ R_InterpreterState_decodeStringConstant
     Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(R_Value_getType(process, R_Interpreter_Code_Constants_getAt(process, constants, indexValue)), _R_String_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, R_Interpreter_Code_Constants_getAt(process, constants, indexValue)), _Arcadia_String_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
     Arcadia_Process_jump(process);
   }
-  return (R_String*)R_Value_getObjectReferenceValue(R_Interpreter_Code_Constants_getAt(process, constants, indexValue));
+  return (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(R_Interpreter_Code_Constants_getAt(process, constants, indexValue));
 }
 
 static Arcadia_Natural32Value
@@ -109,9 +109,9 @@ static void
 R_Interpreter_Code_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -121,7 +121,7 @@ R_Interpreter_Code_destruct
     R_Interpreter_Code* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_Interpreter_Code_constructImpl,
   .destruct = &R_Interpreter_Code_destruct,
   .visit = NULL,
@@ -147,21 +147,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Interpreter.Code", R_Interpreter_Code, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.Interpreter.Code", R_Interpreter_Code, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_Interpreter_Code_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Interpreter_Code* _self = R_Value_getObjectReferenceValue(self);
+  R_Interpreter_Code* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Code_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
@@ -171,10 +171,8 @@ R_Interpreter_Code_constructImpl
   _self->p = NULL;
   _self->sz = 0;
   _self->cp = 0;
-  if (!R_allocateUnmanaged_nojump(process, &_self->p, 0)) {
-    Arcadia_Process_jump(process);
-  }
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Process_allocateUnmanaged(process, &_self->p, 0);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -185,7 +183,7 @@ R_Interpreter_Code_destruct
   )
 {
   if (self->p) {
-    R_deallocateUnmanaged_nojump(process, self->p);
+    Arcadia_Process_deallocateUnmanaged(process, self->p);
     self->p = NULL;
   }
 }
@@ -196,7 +194,7 @@ R_Interpreter_Code_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_Interpreter_Code* self = R_allocateObject(process, _R_Interpreter_Code_getType(process), 0, &argumentValues[0]);
   return self;
 }

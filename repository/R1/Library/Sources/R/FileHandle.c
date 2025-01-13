@@ -19,7 +19,6 @@
 
 #include "R/FileSystem.h"
 #include "R/FilePath.h"
-#include "R/Object.h"
 #include "R/String.h"
 #include "R/ArgumentsValidation.h"
 
@@ -31,9 +30,9 @@ static void
 R_FileHandle_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -50,7 +49,7 @@ R_FileHandle_visit
     R_FileHandle* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_FileHandle_constructImpl,
   .destruct = &R_FileHandle_destruct,
   .visit = &R_FileHandle_visit,
@@ -76,21 +75,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.FileHandle", R_FileHandle, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"R.FileHandle", R_FileHandle, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_FileHandle_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_FileHandle* _self = R_Value_getObjectReferenceValue(self);
+  R_FileHandle* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_FileHandle_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
@@ -98,10 +97,10 @@ R_FileHandle_constructImpl
     Arcadia_Process_jump(process);
   }
   _self->fileSystem = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _R_FileSystem_getType(process));
-  R_Object_lock(process, _self->fileSystem);
+  Arcadia_Object_lock(process, _self->fileSystem);
   _self->fd = NULL;
   _self->flags = 0;
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -118,7 +117,7 @@ R_FileHandle_destruct
     self->fd = NULL;
     self->flags = 0;
   }
-  R_Object_unlock(process, self->fileSystem);
+  Arcadia_Object_unlock(process, self->fileSystem);
   self->fileSystem = NULL;
 }
 
@@ -129,7 +128,7 @@ R_FileHandle_visit
     R_FileHandle* self
   )
 {
-  R_Object_visit(self->fileSystem);
+  Arcadia_Object_visit(process, self->fileSystem);
 }
 
 R_FileHandle*
@@ -139,9 +138,9 @@ R_FileHandle_create
     R_FileSystem* fileSystem
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   if (fileSystem) {
-    R_Value_setObjectReferenceValue(&argumentValues[0], fileSystem);
+    Arcadia_Value_setObjectReferenceValue(&argumentValues[0], fileSystem);
   }
   R_FileHandle* self = R_allocateObject(process, _R_FileHandle_getType(process), 1, &argumentValues[0]);
   return self;
@@ -191,8 +190,8 @@ Arcadia_BooleanValue R_FileHandle_isOpenedForWriting(Arcadia_Process* process, R
 
 void R_FileHandle_openForReading(Arcadia_Process* process, R_FileHandle* self, R_FilePath* path) {
   R_FileHandle_close(self);
-  R_String* nativePathString = R_FilePath_toNative(process, path);
-  self->fd = fopen(R_String_getBytes(nativePathString), "rb");
+  Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
+  self->fd = fopen(Arcadia_String_getBytes(nativePathString), "rb");
   if (!self->fd) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);
@@ -202,8 +201,8 @@ void R_FileHandle_openForReading(Arcadia_Process* process, R_FileHandle* self, R
 
 void R_FileHandle_openForWriting(Arcadia_Process* process, R_FileHandle* self, R_FilePath* path) {
   R_FileHandle_close(self);
-  R_String* nativePathString = R_FilePath_toNative(process, path);
-  self->fd = fopen(R_String_getBytes(nativePathString), "wb");
+  Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
+  self->fd = fopen(Arcadia_String_getBytes(nativePathString), "wb");
   if (!self->fd) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);

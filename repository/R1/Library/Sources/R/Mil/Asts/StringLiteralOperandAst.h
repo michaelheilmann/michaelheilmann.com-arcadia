@@ -29,14 +29,14 @@ Rex_declareObjectType(u8"R.Mil.StringLiteralOperandAst", R_Mil_StringLiteralOper
 
 struct R_Mil_StringLiteralOperandAst {
   R_Mil_OperandAst parent;
-  R_String* value;
+  Arcadia_String* value;
 };
 
 R_Mil_StringLiteralOperandAst*
 R_Mil_StringLiteralOperandAst_create
   (
     Arcadia_Process* process,
-    R_String* value
+    Arcadia_String* value
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

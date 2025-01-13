@@ -28,9 +28,9 @@ static void
 R_Mil_ConstructorDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -40,7 +40,7 @@ R_Mil_ConstructorDefinitionAst_visit
     R_Mil_ConstructorDefinitionAst* self
   );
 
-static const R_ObjectType_Operations _R_Mil_ConstructorDefinitionAst_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _R_Mil_ConstructorDefinitionAst_objectTypeOperations = {
   .construct = &R_Mil_ConstructorDefinitionAst_constructImpl,
   .destruct = NULL,
   .visit = &R_Mil_ConstructorDefinitionAst_visit,
@@ -72,25 +72,25 @@ static void
 R_Mil_ConstructorDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Mil_ConstructorDefinitionAst* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_ConstructorDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_ConstructorDefinitionAst_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (3 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  _self->nativeName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[0], _R_String_getType(process));
+  _self->nativeName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[0], _Arcadia_String_getType(process));
   _self->constructorParameters = (R_List*)R_Argument_getObjectReferenceValue(process, &argumentValues[1], _R_List_getType(process));
   _self->constructorBody = (R_List*)R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[2], _R_List_getType(process));
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -100,30 +100,30 @@ R_Mil_ConstructorDefinitionAst_visit
     R_Mil_ConstructorDefinitionAst* self
   )
 {
-  R_Object_visit(self->nativeName);
-  R_Object_visit(self->constructorParameters);
-  R_Object_visit(self->constructorBody);
+  Arcadia_Object_visit(process, self->nativeName);
+  Arcadia_Object_visit(process, self->constructorParameters);
+  Arcadia_Object_visit(process, self->constructorBody);
 }
 
 R_Mil_ConstructorDefinitionAst*
 R_Mil_ConstructorDefinitionAst_create
   (
     Arcadia_Process* process,
-    R_String* nativeName,
+    Arcadia_String* nativeName,
     R_List* constructorParameters,
     R_List* constructorBody
   )
 {
-  R_Value argumentValues[] = {
-    {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)constructorParameters },
-    {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
+  Arcadia_Value argumentValues[] = {
+    {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
+    {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)constructorParameters },
+    {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
   };
   if (nativeName) {
-    R_Value_setObjectReferenceValue(&argumentValues[0], nativeName);
+    Arcadia_Value_setObjectReferenceValue(&argumentValues[0], nativeName);
   }
   if (constructorBody) {
-    R_Value_setObjectReferenceValue(&argumentValues[2], constructorBody);
+    Arcadia_Value_setObjectReferenceValue(&argumentValues[2], constructorBody);
   }
   R_Mil_ConstructorDefinitionAst* self = R_allocateObject(process, _R_Mil_ConstructorDefinitionAst_getType(process), 3, &argumentValues[0]);
   return self;

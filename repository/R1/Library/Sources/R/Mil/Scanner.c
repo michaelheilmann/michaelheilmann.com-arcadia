@@ -39,7 +39,7 @@
 //   i is not incremented, n is assigned the size, in Bytes, of the EDN symbol, and s is assigned the END symbol.
 //
 // The scanner writes the lexeme to a string buffer.
-// This allows for efficient creation of strings (see R_String_create).
+// This allows for efficient creation of strings (see Arcadia_String_create).
 // Furthermore, it avoids to create a string twice by using a string table (see R_Mil_StringTable).
 #include "R/cstdlib.h"
 #include "R.h"
@@ -49,7 +49,7 @@
 #define CodePoint_Error (R_Utf8CodePoint_Last + 3)
 
 struct R_Mil_Scanner {
-  R_Object _parent;
+  Arcadia_Object _parent;
   // The current symbol "s".
   Arcadia_Natural32Value symbol;
   // The input stream.
@@ -60,7 +60,7 @@ struct R_Mil_Scanner {
   R_Mil_Keywords* keywords;
   struct {
     /// The text of the token.
-    R_StringBuffer* text;
+    Arcadia_StringBuffer* text;
     /// The type of the token.
     Arcadia_Natural32Value type;
   } token;
@@ -70,9 +70,9 @@ static void
 R_Mil_Scanner_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -139,7 +139,7 @@ isDigit
     R_Mil_Scanner* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &R_Mil_Scanner_constructImpl,
   .destruct = &R_Mil_Scanner_destruct,
   .visit = &R_Mil_Scanner_visit,
@@ -165,22 +165,22 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"Cil.Scanner", R_Mil_Scanner, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"Cil.Scanner", R_Mil_Scanner, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_Mil_Scanner_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Mil_Scanner* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_Scanner* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_Scanner_getType(process);
   //
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   //
@@ -195,16 +195,16 @@ R_Mil_Scanner_constructImpl
   //
   _self->token.type = R_Mil_TokenType_StartOfInput;
   _self->stringTable = R_Mil_StringTable_create(process);
-  _self->input = (R_Utf8Reader*)R_Utf8StringReader_create(process, R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"", sizeof(u8"") - 1)));
-  _self->token.text = R_StringBuffer_create(process);
+  _self->input = (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"", sizeof(u8"") - 1)));
+  _self->token.text = Arcadia_StringBuffer_create(process);
   //
-  R_StringBuffer_append_pn(process, _self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  Arcadia_StringBuffer_append_pn(process, _self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   //
-  R_StringBuffer* temporary = R_StringBuffer_create(process);
+  Arcadia_StringBuffer* temporary = Arcadia_StringBuffer_create(process);
 #define On(text, type) \
   { \
-    R_StringBuffer_clear(temporary); \
-    R_StringBuffer_append_pn(process, temporary, text, sizeof(text) - 1); \
+    Arcadia_StringBuffer_clear(temporary); \
+    Arcadia_StringBuffer_append_pn(process, temporary, text, sizeof(text) - 1); \
     R_Mil_Keywords_add(process, _self->keywords, R_Mil_StringTable_getOrCreateString(process, _self->stringTable, temporary), R_Mil_TokenType_##type); \
   }
   //
@@ -241,7 +241,7 @@ R_Mil_Scanner_constructImpl
   On(u8"false", BooleanLiteral);
 #undef On
   //
-  R_Object_setType((R_Object*)_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -259,10 +259,10 @@ R_Mil_Scanner_visit
     R_Mil_Scanner* self
   )
 {
-  R_Object_visit(self->input);
-  R_Object_visit(self->token.text);
-  R_Object_visit(self->stringTable);
-  R_Object_visit(self->keywords);
+  Arcadia_Object_visit(process, self->input);
+  Arcadia_Object_visit(process, self->token.text);
+  Arcadia_Object_visit(process, self->stringTable);
+  Arcadia_Object_visit(process, self->keywords);
 }
 
 static void
@@ -273,7 +273,7 @@ write
     Arcadia_Natural32Value codePoint
   )
 {
-  R_StringBuffer_appendCodePoints(process, self->token.text, &codePoint, Arcadia_SizeValue_Literal(1));
+  Arcadia_StringBuffer_appendCodePoints(process, self->token.text, &codePoint, Arcadia_SizeValue_Literal(1));
 }
 
 static void
@@ -347,12 +347,12 @@ R_Mil_Scanner_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   R_Mil_Scanner* self = R_allocateObject(process, _R_Mil_Scanner_getType(process), 0, &argumentValues[0]);
   return self;
 }
 
-R_String*
+Arcadia_String*
 R_Mil_Scanner_getTokenText
   (
     Arcadia_Process* process,
@@ -380,12 +380,12 @@ onEndOfLine
       next(process, self);
     }
     onEndToken(self, R_Mil_TokenType_LineTerminator);
-    R_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    Arcadia_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   } else if ('\n' == self->symbol) {
     next(process, self);
     onEndToken(self, R_Mil_TokenType_LineTerminator);
-    R_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    Arcadia_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   }
 }
@@ -397,13 +397,13 @@ R_Mil_Scanner_step
     R_Mil_Scanner* self
   )
 {
-  R_StringBuffer_clear(self->token.text);
+  Arcadia_StringBuffer_clear(self->token.text);
   if (CodePoint_Start == self->symbol) {
     next(process, self);
   }
   if (CodePoint_End == self->symbol) {
     onEndToken(self, R_Mil_TokenType_EndOfInput);
-    R_StringBuffer_append_pn(process, self->token.text, u8"<end of input>", sizeof(u8"<end of input>") - 1);
+    Arcadia_StringBuffer_append_pn(process, self->token.text, u8"<end of input>", sizeof(u8"<end of input>") - 1);
     return;
   } 
   // Whitespace :  <Whitespace> | <Tabulator>
@@ -412,7 +412,7 @@ R_Mil_Scanner_step
       next(process, self);
     } while (' ' == self->symbol || '\t' == self->symbol);
     onEndToken(self, R_Mil_TokenType_WhiteSpaces);
-    R_StringBuffer_append_pn(process, self->token.text, u8"<whitespaces>", sizeof(u8"<whitespaces>") - 1);
+    Arcadia_StringBuffer_append_pn(process, self->token.text, u8"<whitespaces>", sizeof(u8"<whitespaces>") - 1);
     return;
   }
   // LineTerminator : <LineFeed>
@@ -424,12 +424,12 @@ R_Mil_Scanner_step
       next(process, self);
     }
     onEndToken(self, R_Mil_TokenType_LineTerminator);
-    R_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    Arcadia_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   } else if ('\n' == self->symbol) {
     next(process, self);
     onEndToken(self, R_Mil_TokenType_LineTerminator);
-    R_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    Arcadia_StringBuffer_append_pn(process, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   }
   if ('=' == self->symbol) {
@@ -603,6 +603,6 @@ R_Mil_Scanner_setInput
   self->input = input;
   self->symbol = CodePoint_Start;
   self->token.type = R_Mil_TokenType_StartOfInput;
-  R_StringBuffer_clear(self->token.text);
-  R_StringBuffer_append_pn(process, self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  Arcadia_StringBuffer_clear(self->token.text);
+  Arcadia_StringBuffer_append_pn(process, self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
 }

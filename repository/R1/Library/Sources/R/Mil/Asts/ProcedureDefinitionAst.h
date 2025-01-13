@@ -32,13 +32,13 @@
 ///                     | 'procedure' 'entry'? name procedureParameters procedureBody
 /// procedureBody : '{' statements '}'
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, u8"Arcadia.Object");
 
 struct R_Mil_ProcedureDefinitionAst {
   R_Mil_DefinitionAst _parent;
   Arcadia_BooleanValue entry;
-  R_String* nativeName;
-  R_String* procedureName;
+  Arcadia_String* nativeName;
+  Arcadia_String* procedureName;
   R_List* procedureParameters;
   R_List* procedureBody;
 };
@@ -50,8 +50,8 @@ R_Mil_ProcedureDefinitionAst_create
   (
     Arcadia_Process* process,
     Arcadia_BooleanValue entry,
-    R_String* nativeName,
-    R_String* procedureName,
+    Arcadia_String* nativeName,
+    Arcadia_String* procedureName,
     R_List* procedureParameters,
     R_List* procedureBody
   );

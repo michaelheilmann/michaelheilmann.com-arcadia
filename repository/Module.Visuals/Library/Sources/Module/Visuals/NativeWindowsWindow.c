@@ -36,6 +36,7 @@ NativeWindowsWindow_destruct
 static void
 NativeWindowsWindow_visit
   (
+    Arcadia_Process* process,
     NativeWindowsWindow* self
   );
 
@@ -44,16 +45,16 @@ NativeWindowsWindow_setTitleHelper
   (
     Arcadia_Process* process,
     HWND windowHandle,
-    R_String* title
+    Arcadia_String* title
   );
 
 static void
 NativeWindowsWindow_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -131,7 +132,7 @@ setSmallIconImpl
     NativeWindowsIcon* icon
   );
 
-static R_String*
+static Arcadia_String*
 getTitleImpl
   (
     NativeWindowsWindow* self
@@ -142,7 +143,7 @@ setTitleImpl
   (
     Arcadia_Process* process,
     NativeWindowsWindow* self,
-    R_String* title
+    Arcadia_String* title
   );
 
 static void
@@ -160,10 +161,10 @@ static const char g_className[] = "Liminality Window Class";
 
 static Arcadia_BooleanValue g_quitRequested = Arcadia_BooleanValue_False;
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &NativeWindowsWindow_constructImpl,
   .destruct = &NativeWindowsWindow_destruct,
-  .visit = NULL,
+  .visit = &NativeWindowsWindow_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -235,17 +236,18 @@ NativeWindowsWindow_destruct
 static void
 NativeWindowsWindow_visit
   (
+    Arcadia_Process* process,
     NativeWindowsWindow* self
   )
 {
   if (self->title) {
-    R_Object_visit(self->title);
+    Arcadia_Object_visit(process, self->title);
   }
   if (self->smallIcon) {
-    R_Object_visit(self->smallIcon);
+    Arcadia_Object_visit(process, self->smallIcon);
   }
   if (self->bigIcon) {
-    R_Object_visit(self->bigIcon);
+    Arcadia_Object_visit(process, self->bigIcon);
   }
 }
 
@@ -254,36 +256,36 @@ NativeWindowsWindow_setTitleHelper
   (
     Arcadia_Process* process,
     HWND windowHandle,
-    R_String* title
+    Arcadia_String* title
   )
 {
-  R_StringBuffer* stringBuffer = R_StringBuffer_create(process);
-  R_Value value;
-  R_Value_setObjectReferenceValue(&value, (R_ObjectReferenceValue)title);
-  R_StringBuffer_append(process, stringBuffer, value);
-  R_Value_setObjectReferenceValue(&value, (R_ObjectReferenceValue)R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"", 1)));
-  R_StringBuffer_append(process, stringBuffer, value);
-  SendMessage(windowHandle, WM_SETTEXT, 0, (LPARAM)R_StringBuffer_getBytes(stringBuffer));
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(process);
+  Arcadia_Value value;
+  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)title);
+  Arcadia_StringBuffer_append(process, stringBuffer, value);
+  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"", 1)));
+  Arcadia_StringBuffer_append(process, stringBuffer, value);
+  SendMessage(windowHandle, WM_SETTEXT, 0, (LPARAM)Arcadia_StringBuffer_getBytes(stringBuffer));
 }
 
 static void
 NativeWindowsWindow_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  NativeWindowsWindow* _self = R_Value_getObjectReferenceValue(self);
+  NativeWindowsWindow* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _NativeWindowsWindow_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->instanceHandle = NULL;
   _self->windowHandle = NULL;
-  _self->title = R_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, g_title, sizeof(g_title) - 1));
+  _self->title = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, g_title, sizeof(g_title) - 1));
   _self->bigIcon = NULL;
   _self->smallIcon = NULL;
 
@@ -305,12 +307,12 @@ NativeWindowsWindow_constructImpl
   ((NativeWindow*)_self)->getSmallIcon = (NativeIcon*(*)(NativeWindow*)) & getSmallIconImpl;
   ((NativeWindow*)_self)->setSmallIcon = (void(*)(NativeWindow*, NativeIcon*)) & setSmallIconImpl;
 
-  ((NativeWindow*)_self)->getTitle = (R_String*(*)(NativeWindow*)) & getTitleImpl;
-  ((NativeWindow*)_self)->setTitle = (void(*)(Arcadia_Process*, NativeWindow*, R_String*)) & setTitleImpl;
+  ((NativeWindow*)_self)->getTitle = (Arcadia_String*(*)(NativeWindow*)) & getTitleImpl;
+  ((NativeWindow*)_self)->setTitle = (void(*)(Arcadia_Process*, NativeWindow*, Arcadia_String*)) & setTitleImpl;
 
   ((NativeWindow*)_self)->getCanvasSize = (void(*)(NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
 
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -385,9 +387,9 @@ openImpl
     Arcadia_Process_jump(process);
   }
 
-  R_JumpTarget jumpTarget;
+  Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (R_JumpTarget_save(&jumpTarget)) {
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
     NativeWindowsWindow_setTitleHelper(process, self->windowHandle, self->title);
     Arcadia_Process_popJumpTarget(process);
   } else {
@@ -522,7 +524,7 @@ setSmallIconImpl
   }
 }
 
-static R_String*
+static Arcadia_String*
 getTitleImpl
   (
     NativeWindowsWindow* self
@@ -534,7 +536,7 @@ setTitleImpl
   (
     Arcadia_Process* process,
     NativeWindowsWindow* self,
-    R_String* title
+    Arcadia_String* title
   )
 {
   if (!title) {
@@ -576,7 +578,7 @@ NativeWindowsWindow_create
     Arcadia_Process* process
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
   NativeWindowsWindow* self = R_allocateObject(process, _NativeWindowsWindow_getType(process), 0, &argumentValues[0]);
   return self;
 }

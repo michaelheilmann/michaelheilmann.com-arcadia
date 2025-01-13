@@ -21,9 +21,9 @@ static void
 NativeWindowsBitmap_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -33,7 +33,7 @@ NativeWindowsBitmap_destruct
     NativeWindowsBitmap* self
   );
 
-static const R_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &NativeWindowsBitmap_constructImpl,
   .destruct = &NativeWindowsBitmap_destruct,
   .visit = NULL,
@@ -59,21 +59,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"NativeWindowsBitmap", NativeWindowsBitmap, u8"R.Object", R_Object, &_typeOperations);
+Rex_defineObjectType(u8"NativeWindowsBitmap", NativeWindowsBitmap, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 NativeWindowsBitmap_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  NativeWindowsBitmap* _self = R_Value_getObjectReferenceValue(self);
+  NativeWindowsBitmap* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _NativeWindowsBitmap_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
  
@@ -81,11 +81,11 @@ NativeWindowsBitmap_constructImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!R_Value_isInteger32Value(&argumentValues[0])) {
+  if (!Arcadia_Value_isInteger32Value(&argumentValues[0])) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!R_Value_isInteger32Value(&argumentValues[1])) {
+  if (!Arcadia_Value_isInteger32Value(&argumentValues[1])) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
@@ -110,8 +110,8 @@ NativeWindowsBitmap_constructImpl
 
   BITMAPINFO bmi;
   bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = R_Value_getInteger32Value(&argumentValues[0]);
-  bmi.bmiHeader.biHeight = R_Value_getInteger32Value(&argumentValues[1]);
+  bmi.bmiHeader.biWidth = Arcadia_Value_getInteger32Value(&argumentValues[0]);
+  bmi.bmiHeader.biHeight = Arcadia_Value_getInteger32Value(&argumentValues[1]);
   bmi.bmiHeader.biPlanes = 1;
   bmi.bmiHeader.biBitCount = 24;
   bmi.bmiHeader.biCompression = BI_RGB;
@@ -132,8 +132,8 @@ NativeWindowsBitmap_constructImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);
   }
-  _self->width = R_Value_getInteger32Value(&argumentValues[0]);
-  _self->height = R_Value_getInteger32Value(&argumentValues[1]);
+  _self->width = Arcadia_Value_getInteger32Value(&argumentValues[0]);
+  _self->height = Arcadia_Value_getInteger32Value(&argumentValues[1]);
   DWORD lineStride = ((((bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) + 31) & ~31) >> 3);
   DWORD linePadding = lineStride - ((bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) >> 3);
   if (lineStride > INT32_MAX) {
@@ -164,7 +164,7 @@ NativeWindowsBitmap_constructImpl
   DeleteObject(hBrush);
   hBrush = NULL;
 
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -192,8 +192,8 @@ NativeWindowsBitmap_create
     Arcadia_Integer32Value height
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Integer32, .integer32Value = width },
-                               {.tag = R_ValueTag_Integer32, .integer32Value = height } };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Integer32, .integer32Value = width },
+                               {.tag = Arcadia_ValueTag_Integer32, .integer32Value = height } };
   NativeWindowsBitmap* self = R_allocateObject(process, _NativeWindowsBitmap_getType(process), 2, &argumentValues[0]);
   return self;
 }

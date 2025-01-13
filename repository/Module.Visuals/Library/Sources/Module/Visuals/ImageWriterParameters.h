@@ -33,13 +33,13 @@ typedef enum ImageWriterFormat {
 ///   construct(byteBuffer:ByteBuffer,format:ImageWriterFormat)
 /// }
 /// @endcode
-Rex_declareObjectType(u8"ImageWriterParameters", ImageWriterParameters, u8"R.Object");
+Rex_declareObjectType(u8"ImageWriterParameters", ImageWriterParameters, u8"Arcadia.Object");
 
 ImageWriterParameters*
 ImageWriterParameters_createFile
   (
     Arcadia_Process* process,
-    R_String* path,
+    Arcadia_String* path,
     ImageWriterFormat format
   );
 
@@ -58,7 +58,7 @@ ImageWriterParameters_hasPath
     ImageWriterParameters* self
   );
 
-R_String*
+Arcadia_String*
 ImageWriterParameters_getPath
   (
     Arcadia_Process* process,

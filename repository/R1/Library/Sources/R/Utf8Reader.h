@@ -18,15 +18,12 @@
 #if !defined(R_UTF8READER_H_INCLUDED)
 #define R_UTF8READER_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "R/Object.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Include.h"
 
-Rex_declareObjectType(u8"R.Utf8Reader", R_Utf8Reader, u8"R.Object");
+Rex_declareObjectType(u8"R.Utf8Reader", R_Utf8Reader, u8"Arcadia.Object");
 
 struct R_Utf8Reader {
-  R_Object _parent;
+  Arcadia_Object _parent;
   void (*next)(Arcadia_Process*, R_Utf8Reader* self);
   Arcadia_Natural32Value (*getCodePoint)(Arcadia_Process*, R_Utf8Reader* self);
   Arcadia_BooleanValue (*hasCodePoint)(Arcadia_Process*, R_Utf8Reader* self);

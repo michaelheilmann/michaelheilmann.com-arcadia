@@ -20,17 +20,17 @@
 
 #include "R.h"
 
-Rex_declareObjectType(u8"R.Mil.StringTable", R_Mil_StringTable, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.StringTable", R_Mil_StringTable, u8"Arcadia.Object");
 
 // Unmanaged.
 typedef struct R_Mil_StringTable_Node R_Mil_StringTable_Node;
 struct R_Mil_StringTable_Node {
   R_Mil_StringTable_Node* next;
-  R_String* string;
+  Arcadia_String* string;
 };
 
 struct R_Mil_StringTable {
-  R_Object _parent;
+  Arcadia_Object _parent;
   R_Mil_StringTable_Node** buckets;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
@@ -42,12 +42,12 @@ R_Mil_StringTable_create
     Arcadia_Process* process
   );
 
-R_String*
+Arcadia_String*
 R_Mil_StringTable_getOrCreateString
   (
     Arcadia_Process* process,
     R_Mil_StringTable* self,
-    R_StringBuffer* stringBuffer
+    Arcadia_StringBuffer* stringBuffer
   );
 
 #endif // R_MIL_STRINGTABLE_H_INCLUDED

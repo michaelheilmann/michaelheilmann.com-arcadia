@@ -22,15 +22,15 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(className:R.String, extendedClassName:R.String, classBody:R.List)
+/// construct(className:Arcadia.String, extendedClassName:Arcadia.String, classBody:R.List)
 /// @endcode
 static void
 R_Mil_ClassDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -40,7 +40,7 @@ R_Mil_ClassDefinitionAst_visit
     R_Mil_ClassDefinitionAst* self
   );
 
-static const R_ObjectType_Operations _R_Mil_ClassDefinitionAst_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _R_Mil_ClassDefinitionAst_objectTypeOperations = {
   .construct = &R_Mil_ClassDefinitionAst_constructImpl,
   .destruct = NULL,
   .visit = &R_Mil_ClassDefinitionAst_visit,
@@ -72,25 +72,25 @@ static void
 R_Mil_ClassDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 { 
-  R_Mil_ClassDefinitionAst* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_ClassDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_ClassDefinitionAst_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (3 != numberOfArgumentValues) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  _self->className = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _R_String_getType(process));
-  _self->extendedClassName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[1], _R_String_getType(process));
+  _self->className = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _Arcadia_String_getType(process));
+  _self->extendedClassName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[1], _Arcadia_String_getType(process));
   _self->classBody = R_Argument_getObjectReferenceValue(process, &argumentValues[2], _R_List_getType(process));
-  R_Object_setType(_self, _type);
+  Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
@@ -100,12 +100,12 @@ R_Mil_ClassDefinitionAst_visit
     R_Mil_ClassDefinitionAst* self
   )
 {
-  R_Object_visit(self->className);
+  Arcadia_Object_visit(process, self->className);
   if (self->extendedClassName) {
-    R_Object_visit(self->extendedClassName);
+    Arcadia_Object_visit(process, self->extendedClassName);
   }
   if (self->classBody) {
-    R_Object_visit(self->classBody);
+    Arcadia_Object_visit(process, self->classBody);
   }
 }
 
@@ -113,18 +113,18 @@ R_Mil_ClassDefinitionAst*
 R_Mil_ClassDefinitionAst_create
   (
     Arcadia_Process* process,
-    R_String* className,
-    R_String* extendedClassName,
+    Arcadia_String* className,
+    Arcadia_String* extendedClassName,
     R_List* classBody
   )
 {
-  R_Value argumentValues[] = {
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = className },
-    {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
-    {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = classBody },
+  Arcadia_Value argumentValues[] = {
+    {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = className },
+    {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
+    {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = classBody },
   };
   if (extendedClassName) {
-    R_Value_setObjectReferenceValue(&argumentValues[1], extendedClassName);
+    Arcadia_Value_setObjectReferenceValue(&argumentValues[1], extendedClassName);
   }
   R_Mil_ClassDefinitionAst* self = R_allocateObject(process, _R_Mil_ClassDefinitionAst_getType(process), 3, &argumentValues[0]);
   return self;

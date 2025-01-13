@@ -29,9 +29,9 @@ static void
 R_Mil_BinaryExpressionAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   );
 
 static void
@@ -41,7 +41,7 @@ R_Mil_BinaryExpressionAst_visit
     R_Mil_BinaryExpressionAst* self
   );
 
-static const R_ObjectType_Operations _R_Mil_BinaryExpressionAst_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _R_Mil_BinaryExpressionAst_objectTypeOperations = {
   .construct = &R_Mil_BinaryExpressionAst_constructImpl,
   .destruct = NULL,
   .visit = &R_Mil_BinaryExpressionAst_visit,
@@ -73,15 +73,15 @@ static void
 R_Mil_BinaryExpressionAst_constructImpl
   (
     Arcadia_Process* process,
-    R_Value* self,
+    Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    R_Value* argumentValues
+    Arcadia_Value* argumentValues
   )
 {
-  R_Mil_BinaryExpressionAst* _self = R_Value_getObjectReferenceValue(self);
+  R_Mil_BinaryExpressionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Mil_BinaryExpressionAst_getType(process);
   {
-    R_Value argumentValues[] = { {.tag = R_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
 
@@ -90,34 +90,34 @@ R_Mil_BinaryExpressionAst_constructImpl
     Arcadia_Process_jump(process);
   }
 
-  if (!R_Value_isInteger32Value(&argumentValues[0])) {
+  if (!Arcadia_Value_isInteger32Value(&argumentValues[0])) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
 
-  if (!R_Value_isObjectReferenceValue(&argumentValues[1])) {
+  if (!Arcadia_Value_isObjectReferenceValue(&argumentValues[1])) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[1]), _R_Mil_OperandAst_getType(process))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
-  }
-
-  if (!R_Value_isObjectReferenceValue(&argumentValues[2])) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
-  }
-  if (!Arcadia_Type_isSubType(R_Value_getType(process, &argumentValues[2]), _R_Mil_OperandAst_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _R_Mil_OperandAst_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
 
-  _self->type = R_Value_getInteger32Value(&argumentValues[0]);
-  _self->operand1 = R_Value_getObjectReferenceValue(&argumentValues[1]);
-  _self->operand2 = R_Value_getObjectReferenceValue(&argumentValues[2]);
+  if (!Arcadia_Value_isObjectReferenceValue(&argumentValues[2])) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
+  }
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[2]), _R_Mil_OperandAst_getType(process))) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Process_jump(process);
+  }
 
-  R_Object_setType(_self, _type);  
+  _self->type = Arcadia_Value_getInteger32Value(&argumentValues[0]);
+  _self->operand1 = Arcadia_Value_getObjectReferenceValue(&argumentValues[1]);
+  _self->operand2 = Arcadia_Value_getObjectReferenceValue(&argumentValues[2]);
+
+  Arcadia_Object_setType(process, _self, _type);  
 }
 
 static void
@@ -127,8 +127,8 @@ R_Mil_BinaryExpressionAst_visit
     R_Mil_BinaryExpressionAst* self
   )
 {
-  R_Object_visit(self->operand1);
-  R_Object_visit(self->operand2);
+  Arcadia_Object_visit(process, self->operand1);
+  Arcadia_Object_visit(process, self->operand2);
 }
 
 R_Mil_BinaryExpressionAst*
@@ -140,9 +140,9 @@ R_Mil_BinaryExpressionAst_create
     R_Mil_OperandAst* operand2
   )
 {
-  R_Value argumentValues[] = { {.tag = R_ValueTag_Integer32, .integer32Value = type },
-                               {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)operand1 },
-                               {.tag = R_ValueTag_ObjectReference, .objectReferenceValue = (R_ObjectReferenceValue)operand2 }, };
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Integer32, .integer32Value = type },
+                               {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)operand1 },
+                               {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)operand2 }, };
   R_Mil_BinaryExpressionAst* self = R_allocateObject(process, _R_Mil_BinaryExpressionAst_getType(process), 3, &argumentValues[0]);
   return self;
 }

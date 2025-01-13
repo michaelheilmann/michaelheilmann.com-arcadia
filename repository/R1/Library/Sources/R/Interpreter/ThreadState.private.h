@@ -19,19 +19,18 @@
 #define R_INTERPRETER_THREADSTATE_PRIVATE_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "R/Value.h"
 #include "R/Interpreter/Include.h"
 
 #define R_ThreadState_withRegisterStack (0)
 
-typedef struct R_Value R_Value;
+typedef struct Arcadia_Value Arcadia_Value;
 
 #if defined(R_ThreadState_withRegisterStack) && 1 == R_ThreadState_withRegisterStack
 
 typedef struct _RegisterStack _RegisterStack;
 
 struct _RegisterStack {
-  R_Value* elements;
+  Arcadia_Value* elements;
   Arcadia_SizeValue size, capacity;
 };
 
@@ -79,7 +78,7 @@ struct R_Interpreter_ThreadState {
 
 #endif
 
-  R_Value* registers;
+  Arcadia_Value* registers;
   Arcadia_SizeValue numberOfRegisters;
 
 };

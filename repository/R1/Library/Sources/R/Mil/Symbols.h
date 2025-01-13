@@ -18,19 +18,19 @@
 #if !defined(R_MIL_SYMBOLS_H_INCLUDED)
 #define R_MIL_SYMBOLS_H_INCLUDED
 
-#include "R/Object.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/String.h"
 typedef struct R_Mil_Symbol R_Mil_Symbol;
 typedef struct R_Mil_Scope R_Mil_Scope;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.Symbol", R_Mil_Symbol, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.Symbol", R_Mil_Symbol, u8"Arcadia.Object");
 
 struct R_Mil_Symbol {
-  R_Object _parent;
+  Arcadia_Object _parent;
   // The name of the symbol.
-  R_String* name;
+  Arcadia_String* name;
   // The symbol shadwoed by this symbol.
   R_Mil_Symbol* shadowed;
   // The sibling of this symbol in this scope.
@@ -42,15 +42,15 @@ struct R_Mil_Symbol {
 R_Mil_Symbol*
 R_Mil_Symbol_create
   (
-    R_String* name
+    Arcadia_String* name
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.SymbolTable", R_Mil_SymbolTable, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.SymbolTable", R_Mil_SymbolTable, u8"Arcadia.Object");
 
 struct R_Mil_SymbolTable {
-  R_Object _parent;
+  Arcadia_Object _parent;
   R_Mil_Symbol** elements;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
@@ -64,10 +64,10 @@ R_Mil_SymbolTable_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.Scope", R_Mil_Scope, u8"R.Object");
+Rex_declareObjectType(u8"R.Mil.Scope", R_Mil_Scope, u8"Arcadia.Object");
 
 struct R_Mil_Scope {
-  R_Object _parent;
+  Arcadia_Object _parent;
   
   // The enclosing scope.
   R_Mil_Scope* enclosing;

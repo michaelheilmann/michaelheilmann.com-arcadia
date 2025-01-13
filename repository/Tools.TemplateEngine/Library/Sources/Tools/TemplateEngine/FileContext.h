@@ -21,10 +21,10 @@
 #include "R.h"
 #include "Tools/TemplateEngine/Context.h"
 
-Rex_declareObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"R.Object");
+Rex_declareObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"Arcadia.Object");
 
 struct FileContext {
-  R_Object _parent;
+  Arcadia_Object _parent;
   /// The underlaying context.
   Context* context;
   /// The path to the source file.
