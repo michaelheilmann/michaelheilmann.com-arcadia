@@ -128,7 +128,7 @@ R_CommandLine_raiseRequiredArgumentMissingError
   )
 {
   fwrite(u8"required command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
-  fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
+  fwrite(Arcadia_String_getBytes(process, key), 1, Arcadia_String_getNumberOfBytes(process, key), stdout);
   fwrite(u8"` not specified", 1, sizeof(u8"` not specified") - 1, stdout);
   Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Process_jump(process);
@@ -143,7 +143,7 @@ R_CommandLine_raiseUnknownArgumentError
   )
 {
   fwrite(u8"unknown command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
-  fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
+  fwrite(Arcadia_String_getBytes(process, key), 1, Arcadia_String_getNumberOfBytes(process, key), stdout);
   fwrite(u8"`", 1, sizeof(u8"`") - 1, stdout);
   Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Process_jump(process);
@@ -157,7 +157,7 @@ R_CommandLine_raiseNoValueError
   )
 {
   fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
-  fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
+  fwrite(Arcadia_String_getBytes(process, key), 1, Arcadia_String_getNumberOfBytes(process, key), stdout);
   fwrite(u8"` is not valid", 1, sizeof(u8"` is not valid") - 1, stdout);
   Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Process_jump(process);
@@ -172,7 +172,7 @@ R_CommandLine_raiseValueInvalidError
   )
 {
   fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
-  fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
+  fwrite(Arcadia_String_getBytes(process, key), 1, Arcadia_String_getNumberOfBytes(process, key), stdout);
   fwrite(u8"` is not valid", 1, sizeof(u8"` is not valid") - 1, stdout);
   Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Process_jump(process);

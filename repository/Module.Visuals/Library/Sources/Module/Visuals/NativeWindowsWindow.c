@@ -17,6 +17,8 @@
 
 #include "Module/Visuals/NativeWindowsWindow.h"
 
+#include <limits.h>
+
 static LRESULT CALLBACK
 WindowProc
   (
@@ -263,7 +265,7 @@ NativeWindowsWindow_setTitleHelper
   Arcadia_Value value;
   Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)title);
   Arcadia_StringBuffer_append(process, stringBuffer, value);
-  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"", 1)));
+  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"", 1)));
   Arcadia_StringBuffer_append(process, stringBuffer, value);
   SendMessage(windowHandle, WM_SETTEXT, 0, (LPARAM)Arcadia_StringBuffer_getBytes(stringBuffer));
 }
@@ -285,7 +287,7 @@ NativeWindowsWindow_constructImpl
   }
   _self->instanceHandle = NULL;
   _self->windowHandle = NULL;
-  _self->title = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, g_title, sizeof(g_title) - 1));
+  _self->title = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), g_title, sizeof(g_title) - 1));
   _self->bigIcon = NULL;
   _self->smallIcon = NULL;
 
@@ -567,7 +569,7 @@ getCanvasSizeImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);
   }
-  c_static_assert(LONG_MAX <= INT32_MAX, "<internal error>");
+  Arcadia_StaticAssert(LONG_MAX <= INT32_MAX, "<internal error>");
   *width = clientRectangle.right - clientRectangle.left;
   *height = clientRectangle.bottom - clientRectangle.top;
 }

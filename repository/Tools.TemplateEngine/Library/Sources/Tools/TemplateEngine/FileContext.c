@@ -224,7 +224,7 @@ onStatement
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Process_jump(process);
     }
-    R_ByteBuffer_append_pn(process, context->context->targetBuffer, Arcadia_String_getBytes((Arcadia_String*)object), Arcadia_String_getNumberOfBytes((Arcadia_String*)object));
+    R_ByteBuffer_append_pn(process, context->context->targetBuffer, Arcadia_String_getBytes(process, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(process, (Arcadia_String*)object));
   }
 }
 
@@ -366,8 +366,8 @@ FileContext_constructImpl
   _self->source = NULL;
   _self->environment = R_Map_create(process);
   Arcadia_Value k, v;
-  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
-  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
+  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"siteAddress", sizeof(u8"siteAddress") - 1)));
+  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
   R_Map_set(process, _self->environment, k, v);
   Arcadia_Object_setType(process, _self, _type);
 }

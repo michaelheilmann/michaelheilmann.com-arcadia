@@ -18,11 +18,8 @@
 #if !defined(R_CONVERT_STRINGTONATURAL_H_INCLUDED)
 #define R_CONVERT_STRINGTONATURAL_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Natural16.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "Arcadia/Ring1/Implementation/Natural64.h"
-#include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Include.h"
+#include "Arms.h"
 
 Arcadia_Natural8Value
 R_toNatural8

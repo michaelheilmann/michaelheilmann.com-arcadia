@@ -104,7 +104,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Map", R_Map, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Library.Map", R_Map, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_Map_ensureFreeCapacity
@@ -307,7 +307,7 @@ R_Map_set
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  Arcadia_SizeValue hash = Arcadia_Value_hash(process, &key);
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &key);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Node* node = self->buckets[index]; NULL != node; node = node->next) {
     if (hash == node->hash) {
@@ -340,7 +340,7 @@ R_Map_get
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  Arcadia_SizeValue hash = Arcadia_Value_hash(process, &key);
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &key);
   Arcadia_SizeValue index = hash % self->capacity;
 
   for (Node* node = self->buckets[index]; NULL != node; node = node->next) {

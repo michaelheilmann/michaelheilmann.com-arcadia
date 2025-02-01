@@ -49,6 +49,7 @@ Arcadia_String_create
 Arcadia_BooleanValue
 Arcadia_String_endsWith_pn
   (
+    Arcadia_Process* process,
     Arcadia_String const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -58,6 +59,7 @@ Arcadia_String_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_String_startsWith_pn
   (
+    Arcadia_Process* process,
     Arcadia_String const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -67,12 +69,14 @@ Arcadia_String_startsWith_pn
 Arcadia_SizeValue
 Arcadia_String_getNumberOfBytes
   (
+    Arcadia_Process* process,
     Arcadia_String const* self
   );
 
 Arcadia_Natural8Value const*
 Arcadia_String_getBytes
   (
+    Arcadia_Process* process,
     Arcadia_String const* self
   );
 
@@ -89,6 +93,7 @@ Arcadia_String_getByteAt
 Arcadia_SizeValue
 Arcadia_String_getNumberOfSymbols
   (
+    Arcadia_Process* process,
     Arcadia_String const* self
   );
 
@@ -107,6 +112,7 @@ Arcadia_String_getSubString
 Arcadia_BooleanValue
 Arcadia_String_isEqualTo_pn
   (
+    Arcadia_Process* process,
     Arcadia_String const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes

@@ -20,9 +20,9 @@
 #include "R/String.h"
 #include "R/Utf8.h"
 
-#define CodePoint_Start (R_Utf8CodePoint_Last + 1)
-#define CodePoint_End (R_Utf8CodePoint_Last + 2)
-#define CodePoint_Error (R_Utf8CodePoint_Last + 3)
+#define CodePoint_Start (Arcadia_Utf8CodePoint_Last + 1)
+#define CodePoint_End (Arcadia_Utf8CodePoint_Last + 2)
+#define CodePoint_Error (Arcadia_Utf8CodePoint_Last + 3)
 
 /// @code
 /// construct(source:String)
@@ -152,7 +152,7 @@ R_Utf8StringReader_nextImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
     Arcadia_Process_jump(process);
   }
-  Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(self->source);
+  Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(process, self->source);
   if (self->byteIndex == n) {
     self->codePoint = CodePoint_End;
     return;

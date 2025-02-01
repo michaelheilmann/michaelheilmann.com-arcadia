@@ -15,4 +15,5 @@
 
 // Last modified: 2025-01-01
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"

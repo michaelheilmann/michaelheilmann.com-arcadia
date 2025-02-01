@@ -18,27 +18,28 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEBYTEARRAY_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEBYTEARRAY_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 
-/// An immutable byte array managed by ARMS.
-/// 
-/// It is typically used when strings are transferred from the C domain into the Ring2 domain, e.g.
-/// @code
-/// Arcadia_Value value = { .tag = Arcadia_ValueTag_ImmutableByteArray, .immutableByteArray = Arcadia_ImmutableByteArray_create(u8"Hello, World!", strlen(u8"Hello, World!") };
-/// Arcadia_String_create(&value);
-/// @endcode
-typedef struct Arcadia_ImmutableByteArray {
+/// @brief The immutable byte array representation native to Arcadia Ring 1.
+/// @warning Arcadia_ImmutableByteArray's precondition is an initialized type system.
+typedef struct Arcadia_ImmutableByteArray Arcadia_ImmutableByteArray; 
+
+struct Arcadia_ImmutableByteArray {
   Arcadia_SizeValue numberOfBytes;
   Arcadia_Natural8Value bytes[];
-} Arcadia_ImmutableByteArray;
+};
 
 typedef Arcadia_ImmutableByteArray* Arcadia_ImmutableByteArrayValue;
 
 Arcadia_ImmutableByteArray*
 Arcadia_ImmutableByteArray_create
   (
-    Arcadia_Process* process,
+    Arcadia_Process1* process,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -46,8 +47,8 @@ Arcadia_ImmutableByteArray_create
 void
 Arcadia_ImmutableByteArray_visit
   (
-    Arcadia_Process* process,
-    Arcadia_ImmutableByteArray* immutableByteArray
+    Arcadia_Process1* process,
+    Arcadia_ImmutableByteArrayValue self
   );
 
 /// @brief Get a pointer to the Bytes in an immutable Byte Array.
@@ -56,7 +57,8 @@ Arcadia_ImmutableByteArray_visit
 Arcadia_Natural8Value const*
 Arcadia_ImmutableByteArray_getBytes
   (
-    Arcadia_ImmutableByteArray const* immutableByteArray
+    Arcadia_Process1* process,
+    Arcadia_ImmutableByteArrayValue self
   );
 
 /// @brief Get the number of Bytes in an immutable Byte array.
@@ -65,10 +67,11 @@ Arcadia_ImmutableByteArray_getBytes
 Arcadia_SizeValue
 Arcadia_ImmutableByteArray_getNumberOfBytes
   (
-    Arcadia_ImmutableByteArray const* immutableByteArray
+    Arcadia_Process1* process,
+    Arcadia_ImmutableByteArrayValue self
   );
 
-/// @return A pointer to an "foreign value" type of name "R.Foreign.ImmutableByteArray".
+/// @return A pointer to an "foreign value" type of name "Arcadia.ImmutableByteArray".
 Arcadia_TypeValue
 _Arcadia_ImmutableByteArray_getType
   (

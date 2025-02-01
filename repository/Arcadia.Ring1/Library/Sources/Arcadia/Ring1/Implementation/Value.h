@@ -55,24 +55,26 @@
 
 #define Arcadia_ValueTag_ImmutableByteArray (4)
 
-#define Arcadia_ValueTag_Integer16 (5)
-#define Arcadia_ValueTag_Integer32 (6)
-#define Arcadia_ValueTag_Integer64 (7)
-#define Arcadia_ValueTag_Integer8 (8)
+#define Arcadia_ValueTag_ImmutableString (5)
 
-#define Arcadia_ValueTag_Natural16 (9)
-#define Arcadia_ValueTag_Natural32 (10)
-#define Arcadia_ValueTag_Natural64 (11)
-#define Arcadia_ValueTag_Natural8 (12)
+#define Arcadia_ValueTag_Integer16 (6)
+#define Arcadia_ValueTag_Integer32 (7)
+#define Arcadia_ValueTag_Integer64 (8)
+#define Arcadia_ValueTag_Integer8 (9)
 
-#define Arcadia_ValueTag_ObjectReference (13)
+#define Arcadia_ValueTag_Natural16 (10)
+#define Arcadia_ValueTag_Natural32 (11)
+#define Arcadia_ValueTag_Natural64 (12)
+#define Arcadia_ValueTag_Natural8 (13)
 
-#define Arcadia_ValueTag_Real32 (14)
-#define Arcadia_ValueTag_Real64 (15)
+#define Arcadia_ValueTag_ObjectReference (14)
 
-#define Arcadia_ValueTag_Size (16)
+#define Arcadia_ValueTag_Real32 (15)
+#define Arcadia_ValueTag_Real64 (16)
 
-#define Arcadia_ValueTag_Type (17)
+#define Arcadia_ValueTag_Size (17)
+
+#define Arcadia_ValueTag_Type (18)
 
 // The tag for type "Void" must be 0.
 #define Arcadia_ValueTag_Void (0)
@@ -203,11 +205,51 @@ Arcadia_Value_isEqualTo
     Arcadia_Value const* other
   );
 
-Arcadia_SizeValue
-Arcadia_Value_hash
+Arcadia_BooleanValue
+Arcadia_Value_isNotEqualTo
   (
     Arcadia_Process* process,
-    Arcadia_Value const* self
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  );
+
+Arcadia_BooleanValue
+Arcadia_Value_isLowerThan
+  (
+    Arcadia_Process* process,
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  );
+
+Arcadia_BooleanValue
+Arcadia_Value_isLowerThanOrEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  );
+
+Arcadia_BooleanValue
+Arcadia_Value_isGreaterThan
+  (
+    Arcadia_Process* process,
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  );
+
+Arcadia_BooleanValue
+Arcadia_Value_isGreaterThanOrEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  );
+
+Arcadia_SizeValue
+Arcadia_Value_getHash
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* self
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_VALUE_H_INCLUDED

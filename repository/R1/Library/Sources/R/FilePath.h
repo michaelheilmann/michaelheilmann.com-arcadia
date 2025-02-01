@@ -19,7 +19,7 @@
 #define R_FILEPATH_H_INCLUDED
 
 #include "R/Configure.h"
-#include "Arcadia/Ring1/Implementation/Boolean.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/ByteBuffer.h"
 #include "R/List.h"
 #include "R/String.h"
@@ -36,7 +36,7 @@
 /// trailing slashes are ignored
 /// For Windows, `/a` is translated to `a:\` and `/a(/<dir1>)(/<dir2>)*` is translated to `a:\<dir1>(\<dir2>)*`
 /// For Linux, `/a(/<dir>)* is translated to `/a(/<dir>)*`
-Rex_declareObjectType(u8"R.FilePath", R_FilePath, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Library.FilePath", R_FilePath, u8"Arcadia.Object");
 
 struct R_FilePath {
   Arcadia_Object _parent;

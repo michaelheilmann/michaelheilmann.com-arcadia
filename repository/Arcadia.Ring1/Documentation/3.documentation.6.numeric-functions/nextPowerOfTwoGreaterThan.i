@@ -1,4 +1,4 @@
-<h4 id="r-nextpoweroftwogt">Arcadia_nextPowerOfTwoGreaterThan</h4>
+<h4 id="arcadia-nextpoweroftwogreaterthan">Arcadia_nextPowerOfTwoGreaterThan</h4>
 <p>R provides functions returning the next power of two greater than a value.</p>
 <p><code>
 <my-mv>Type</my-mv> Arcadia_nextPowerOfTwoGt<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)

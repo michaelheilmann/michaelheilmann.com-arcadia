@@ -15,6 +15,7 @@
 
 // Last modified: 2024-10-31
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Integer8.h"
 
 #include "Arcadia/Ring1/Implementation/_defineScalarType.h"

@@ -22,9 +22,7 @@
   #error("R/Utf8/EncodeCodePoints.h must not be included from public header")
 #endif
 
-#include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Include.h"
 
 /// @brief Encode a sequence of Unicode code points to their corresponding sequence of UTF-8 Bytes.
 /// Given a sequence of code points x_1, ..., x_n then callbackFunction is invoked for each code point in ascending order at most once.

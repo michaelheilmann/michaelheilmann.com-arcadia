@@ -39,15 +39,21 @@ if (NOT TARGET ${MyLibrary})
   add_library(${MyLibrary})
   BeginProduct(${MyLibrary})
 
-  ###############
-
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Ring1/Implementation/Configure.h @ONLY)
   list(APPEND ${MyLibrary}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Ring1/Implementation/Configure.h)
+
+  list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/safeAdd.c)
+  list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/safeAdd.h)
+  list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/safeMultiply.c)
+  list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/safeMultiply.h)
 
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Atoms.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Atoms.h)
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Atoms.private.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Atoms.private.h)
+
+  list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/makeBitmask.c)
+  list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/makeBitmask.h)
 
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Boolean.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Boolean.h)
@@ -92,7 +98,7 @@ if (NOT TARGET ${MyLibrary})
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/maximum.h)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/minimum.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/minimum.h)
-
+ 
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Natural16.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Natural16.h)
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Natural32.c)
@@ -137,6 +143,9 @@ if (NOT TARGET ${MyLibrary})
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/swap.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/swap.h)
 
+  list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Tests.c)
+  list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Tests.h)
+
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/TypeNameParser.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/TypeNameParser.h)
 
@@ -153,8 +162,6 @@ if (NOT TARGET ${MyLibrary})
 
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Value.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Value.h)
-
-  ###############
 
   target_link_libraries(${MyLibrary} Arcadia.Arms)
 

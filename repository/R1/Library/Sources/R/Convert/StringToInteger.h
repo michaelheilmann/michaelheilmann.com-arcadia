@@ -18,11 +18,8 @@
 #if !defined(R_CONVERT_STRINGTOINTEGER_H_INCLUDED)
 #define R_CONVERT_STRINGTOINTEGER_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Integer16.h"
-#include "Arcadia/Ring1/Implementation/Integer32.h"
-#include "Arcadia/Ring1/Implementation/Integer64.h"
-#include "Arcadia/Ring1/Implementation/Integer8.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Include.h"
+#include "Arms.h"
 
 Arcadia_Integer8Value
 R_toInteger8

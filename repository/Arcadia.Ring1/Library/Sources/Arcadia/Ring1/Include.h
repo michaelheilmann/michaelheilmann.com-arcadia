@@ -18,6 +18,10 @@
 #if !defined(ARCADIA_RING1_INCLUDE_H_INCLUDED)
 #define ARCADIA_RING1_INCLUDE_H_INCLUDED
 
+#pragma push_macro("ARCADIA_RING1_PRIVATE")
+#undef ARCADIA_RING1_PRIVATE
+#define ARCADIA_RING1_PRIVATE (1)
+
 #include "Arcadia/Ring1/Implementation/Atoms.h"
 
 #include "Arcadia/Ring1/Implementation/Boolean.h"
@@ -25,6 +29,8 @@
 #include "Arcadia/Ring1/Implementation/clamp.h"
 
 #include "Arcadia/Ring1/Implementation/countLeadingZeroes.h"
+
+#include "Arcadia/Ring1/Implementation/Diagnostics.h"
 
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 
@@ -40,6 +46,8 @@
 #include "Arcadia/Ring1/Implementation/Integer8.h"
 
 #include "Arcadia/Ring1/Implementation/isPowerOfTwo.h"
+
+#include "Arcadia/Ring1/Implementation/makeBitmask.h"
 
 #include "Arcadia/Ring1/Implementation/maximum.h"
 #include "Arcadia/Ring1/Implementation/minimum.h"
@@ -64,16 +72,24 @@
 #include "Arcadia/Ring1/Implementation/Real32.h"
 #include "Arcadia/Ring1/Implementation/Real64.h"
 
+#include "Arcadia/Ring1/Implementation/safeAdd.h"
+#include "Arcadia/Ring1/Implementation/safeMultiply.h"
+
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 
 #include "Arcadia/Ring1/Implementation/swap.h"
 
+#include "Arcadia/Ring1/Implementation/Tests.h"
+
 #include "Arcadia/Ring1/Implementation/Types.h"
 
 #include "Arcadia/Ring1/Implementation/Value.h"
 
 #include "Arcadia/Ring1/Implementation/Void.h"
+
+#undef ARCADIA_RING1_PRIVATE
+#pragma pop_macro("ARCADIA_RING1_PRIVATE")
 
 #endif // ARCADIA_RING1_INCLUDE_H_INCLUDED

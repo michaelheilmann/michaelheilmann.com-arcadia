@@ -16,7 +16,7 @@
 #if !defined(R_DYNAMICARRAYUTILITIES_H_INCLUDED)
 #define R_DYNAMICARRAYUTILITIES_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Include.h"
 
 typedef enum R_DynamicArrayUtilities_GrowthStrategy {
 

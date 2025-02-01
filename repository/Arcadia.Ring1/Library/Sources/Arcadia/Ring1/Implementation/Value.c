@@ -15,14 +15,84 @@
 
 // Last modified: 2024-10-07
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Value.h"
 
+#include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include "Arcadia/Ring1/Implementation/hash.h"
 #include "Arcadia/Ring1/Implementation/Object.h"
 // exit, EXIT_FAILURE
 #include <stdlib.h>
-// fprintf, stderr
-#include <stdio.h>
+
+static Arcadia_SizeValue
+Arcadia_Object_hash
+  (
+    Arcadia_Process* process,
+    Arcadia_Object* self
+  );
+
+static Arcadia_BooleanValue
+Arcadia_Object_isNotEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  );
+
+static Arcadia_BooleanValue
+Arcadia_Object_isEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  );
+
+static Arcadia_SizeValue
+Arcadia_Object_hash
+  (
+    Arcadia_Process* process,
+    Arcadia_Object* self
+  )
+{
+  Arcadia_TypeValue type = Arcadia_Object_getType(self);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+  Arcadia_Value resultValue;
+  Arcadia_Value args[1] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, };
+  operations->hash(process, &resultValue, 1, &args[0]);
+  return Arcadia_Value_getSizeValue(&resultValue);
+}
+
+static Arcadia_BooleanValue
+Arcadia_Object_isNotEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  )
+{
+  Arcadia_TypeValue type = Arcadia_Object_getType(self);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+  Arcadia_Value resultValue;
+  Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, *other };
+  operations->notEqualTo(process, &resultValue, 2, &args[0]);
+  return Arcadia_Value_getBooleanValue(&resultValue);
+}
+
+static Arcadia_BooleanValue
+Arcadia_Object_isEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  )
+{
+  Arcadia_TypeValue type = Arcadia_Object_getType(self);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+  Arcadia_Value resultValue;
+  Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, *other };
+  operations->equalTo(process, &resultValue, 2, &args[0]);
+  return Arcadia_Value_getBooleanValue(&resultValue);
+}
 
 void
 Arcadia_Value_visit
@@ -42,7 +112,7 @@ Arcadia_Value_visit
       /* Intentionally empty. */
     } break;
     case Arcadia_ValueTag_ImmutableByteArray: {
-      Arcadia_ImmutableByteArray_visit(process, self->immutableByteArrayValue);
+      Arcadia_ImmutableByteArray_visit(Arcadia_Process_getBackendNoLock(process), self->immutableByteArrayValue);
       /* Intentionally empty. */
     } break;
     case Arcadia_ValueTag_Integer16: {
@@ -88,7 +158,7 @@ Arcadia_Value_visit
       /* Intentionally empty. */
     } break;
     default: {
-      fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
     } break;
   };
@@ -103,7 +173,7 @@ Arcadia_Value_getType
 { 
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      return _R_Atom_getType(process);
+      return _Arcadia_Atom_getType(process);
     } break;
     case Arcadia_ValueTag_Boolean: {
       return _Arcadia_BooleanValue_getType(process);
@@ -157,12 +227,22 @@ Arcadia_Value_getType
       return _Arcadia_VoidValue_getType(process);
     } break;
     default: {
-      fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
     } break;
   };
 }
 
+#define OnRelational(Type, Operation) \
+  case Arcadia_ValueTag_##Type: { \
+      Arcadia_TypeValue type = _Arcadia_##Type##Value_getType(process); \
+      Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type); \
+      Arcadia_Value result; \
+      Arcadia_Value arguments[] = { *self, *other }; \
+      operations->Operation(process, &result, 2, &arguments[0]); \
+      return Arcadia_Value_getBooleanValue(&result); \
+  } break;
+  
 Arcadia_BooleanValue
 Arcadia_Value_isEqualTo
   (
@@ -178,86 +258,22 @@ Arcadia_Value_isEqualTo
       }
       return self->atomValue == other->atomValue;
     } break;
-    case Arcadia_ValueTag_Boolean: {
-      if (!Arcadia_Value_isBooleanValue(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->booleanValue == other->booleanValue;
-    } break;
-    case Arcadia_ValueTag_ForeignProcedure: {
-      if (!Arcadia_Value_isForeignProcedureValue(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->foreignProcedureValue == other->foreignProcedureValue;
-    } break;
-    case Arcadia_ValueTag_Integer16: {
-      if (!Arcadia_Value_isInteger16Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->integer16Value == other->integer16Value;
-    } break;
-    case Arcadia_ValueTag_Integer32: {
-      if (!Arcadia_Value_isInteger32Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->integer32Value == other->integer32Value;
-    } break;
-    case Arcadia_ValueTag_Integer64: {
-      if (!Arcadia_Value_isInteger64Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->integer64Value == other->integer64Value;
-    } break;
-    case Arcadia_ValueTag_Integer8: {
-      if (!Arcadia_Value_isInteger8Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->natural8Value == other->natural8Value;
-    } break;
-    case Arcadia_ValueTag_Natural16: {
-      if (!Arcadia_Value_isNatural16Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->natural16Value == other->natural16Value;
-    } break;
-    case Arcadia_ValueTag_Natural32: {
-      if (!Arcadia_Value_isNatural32Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->natural32Value == other->natural32Value;
-    } break;
-    case Arcadia_ValueTag_Natural64: {
-      if (!Arcadia_Value_isNatural64Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->natural64Value == other->natural64Value;
-    } break;
-    case Arcadia_ValueTag_Natural8: 
-      if (!Arcadia_Value_isNatural8Value(other)) {
-        return Arcadia_BooleanValue_False;
-      } {
-        return self->natural8Value == other->natural8Value;
-    } break;
+    OnRelational(Boolean, equalTo);
+    OnRelational(ForeignProcedure, equalTo);
+    OnRelational(Integer16, equalTo);
+    OnRelational(Integer32, equalTo);
+    OnRelational(Integer64, equalTo);
+    OnRelational(Integer8, equalTo);
+    OnRelational(Natural16, equalTo);
+    OnRelational(Natural32, equalTo);
+    OnRelational(Natural64, equalTo);
+    OnRelational(Natural8, equalTo);
+    OnRelational(Real32, equalTo);
+    OnRelational(Real64, equalTo);
+    OnRelational(Size, equalTo);
+    OnRelational(Void, equalTo);
     case Arcadia_ValueTag_ObjectReference: {
-      return Arcadia_Object_equalTo(process, self->objectReferenceValue, other);
-    } break;
-    case Arcadia_ValueTag_Real32: {
-      if (!Arcadia_Value_isReal32Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->real32Value == other->real32Value;
-    } break;
-    case Arcadia_ValueTag_Real64: {
-      if (!Arcadia_Value_isReal64Value(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->real64Value == other->real64Value;
-    } break;
-    case Arcadia_ValueTag_Size: {
-      if (!Arcadia_Value_isSizeValue(other)) {
-        return Arcadia_BooleanValue_False;
-      }
-      return self->sizeValue == other->sizeValue;
+      return Arcadia_Object_isEqualTo(process, self->objectReferenceValue, other);
     } break;
     case Arcadia_ValueTag_Type: {
       if (!Arcadia_Value_isTypeValue(other)) {
@@ -265,78 +281,292 @@ Arcadia_Value_isEqualTo
       }
       return self->typeValue == other->typeValue;
     } break;
-    case Arcadia_ValueTag_Void: {
-      return Arcadia_Value_isVoidValue(other);
-    } break;
     default: {
-      fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
     } break;
   };
 }
 
-Arcadia_SizeValue
-Arcadia_Value_hash
+Arcadia_BooleanValue
+Arcadia_Value_isNotEqualTo
   (
     Arcadia_Process* process,
-    Arcadia_Value const* self
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  )
+{
+  switch (self->tag) {
+    case Arcadia_ValueTag_Atom: {
+      if (!Arcadia_Value_isAtomValue(other)) {
+        return Arcadia_BooleanValue_True;
+      }
+      return self->atomValue != other->atomValue;
+    } break;
+    OnRelational(Boolean, notEqualTo);
+    OnRelational(ForeignProcedure, notEqualTo);
+    OnRelational(Integer16, notEqualTo);
+    OnRelational(Integer32, notEqualTo);
+    OnRelational(Integer64, notEqualTo);
+    OnRelational(Integer8, notEqualTo);
+    OnRelational(Natural16, notEqualTo);
+    OnRelational(Natural32, notEqualTo);
+    OnRelational(Natural64, notEqualTo);
+    OnRelational(Natural8, notEqualTo);
+    OnRelational(Real32, notEqualTo);
+    OnRelational(Real64, notEqualTo);
+    OnRelational(Size, notEqualTo);
+    OnRelational(Void, notEqualTo);
+    case Arcadia_ValueTag_ObjectReference: {
+      return Arcadia_Object_isNotEqualTo(process, self->objectReferenceValue, other);
+    } break;
+    case Arcadia_ValueTag_Type: {
+      if (!Arcadia_Value_isTypeValue(other)) {
+        return Arcadia_BooleanValue_True;
+      }
+      return self->typeValue != other->typeValue;
+    } break;
+    default: {
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
+}
+
+Arcadia_BooleanValue
+Arcadia_Value_isLowerThan
+  (
+    Arcadia_Process* process,
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  )
+{
+  switch (self->tag) {
+    case Arcadia_ValueTag_Atom: {
+      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
+      Arcadia_Process_jump(process);
+    } break;
+    OnRelational(Boolean, lowerThan);
+    OnRelational(ForeignProcedure, lowerThan);
+    OnRelational(Integer16, lowerThan);
+    OnRelational(Integer32, lowerThan);
+    OnRelational(Integer64, lowerThan);
+    OnRelational(Integer8, lowerThan);
+    OnRelational(Natural16, lowerThan);
+    OnRelational(Natural32, lowerThan);
+    OnRelational(Natural64, lowerThan);
+    OnRelational(Natural8, lowerThan);
+    OnRelational(Real32, lowerThan);
+    OnRelational(Real64, lowerThan);
+    OnRelational(Size, lowerThan);
+    OnRelational(Void, lowerThan);
+    case Arcadia_ValueTag_ObjectReference: {
+      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+      Arcadia_Value resultValue;
+      Arcadia_Value args[2] = { *self, *other };
+      operations->lowerThan(process, &resultValue, 2, &args[0]);
+      return Arcadia_Value_getBooleanValue(&resultValue);
+    } break;
+    case Arcadia_ValueTag_Type: {
+      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
+      Arcadia_Process_jump(process);
+    } break;
+    default: {
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
+}
+
+Arcadia_BooleanValue
+Arcadia_Value_isLowerThanOrEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  )
+{
+  switch (self->tag) {
+    case Arcadia_ValueTag_Atom: {
+      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
+      Arcadia_Process_jump(process);
+    } break;
+    OnRelational(Boolean, lowerThanOrEqualTo);
+    OnRelational(ForeignProcedure, lowerThanOrEqualTo);
+    OnRelational(Integer16, lowerThanOrEqualTo);
+    OnRelational(Integer32, lowerThanOrEqualTo);
+    OnRelational(Integer64, lowerThanOrEqualTo);
+    OnRelational(Integer8, lowerThanOrEqualTo);
+    OnRelational(Natural16, lowerThanOrEqualTo);
+    OnRelational(Natural32, lowerThanOrEqualTo);
+    OnRelational(Natural64, lowerThanOrEqualTo);
+    OnRelational(Natural8, lowerThanOrEqualTo);
+    OnRelational(Real32, lowerThanOrEqualTo);
+    OnRelational(Real64, lowerThanOrEqualTo);
+    OnRelational(Size, lowerThanOrEqualTo);
+    OnRelational(Void, lowerThanOrEqualTo);
+    case Arcadia_ValueTag_ObjectReference: {
+      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+      Arcadia_Value resultValue;
+      Arcadia_Value args[2] = { *self, *other };
+      operations->lowerThanOrEqualTo(process, &resultValue, 2, &args[0]);
+      return Arcadia_Value_getBooleanValue(&resultValue);
+    } break;
+    case Arcadia_ValueTag_Type: {
+      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
+      Arcadia_Process_jump(process);
+    } break;
+    default: {
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
+}
+
+Arcadia_BooleanValue
+Arcadia_Value_isGreaterThan
+  (
+    Arcadia_Process* process,
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  )
+{
+  switch (self->tag) {
+    case Arcadia_ValueTag_Atom: {
+      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
+      Arcadia_Process_jump(process);
+    } break;
+    OnRelational(Boolean, greaterThan);
+    OnRelational(ForeignProcedure, greaterThan);
+    OnRelational(Integer16, greaterThan);
+    OnRelational(Integer32, greaterThan);
+    OnRelational(Integer64, greaterThan);
+    OnRelational(Integer8, greaterThan);
+    OnRelational(Natural16, greaterThan);
+    OnRelational(Natural32, greaterThan);
+    OnRelational(Natural64, greaterThan);
+    OnRelational(Natural8, greaterThan);
+    OnRelational(Real32, greaterThan);
+    OnRelational(Real64, greaterThan);
+    OnRelational(Size, greaterThan);
+    OnRelational(Void, greaterThan);
+    case Arcadia_ValueTag_ObjectReference: {
+      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+      Arcadia_Value resultValue;
+      Arcadia_Value args[2] = { *self, *other };
+      operations->greaterThan(process, &resultValue, 2, &args[0]);
+      return Arcadia_Value_getBooleanValue(&resultValue);
+    } break;
+    case Arcadia_ValueTag_Type: {
+      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
+      Arcadia_Process_jump(process);
+    } break;
+    default: {
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
+}
+
+Arcadia_BooleanValue
+Arcadia_Value_isGreaterThanOrEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value const* self,
+    Arcadia_Value const* other
+  )
+{
+  switch (self->tag) {
+    case Arcadia_ValueTag_Atom: {
+      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
+      Arcadia_Process_jump(process);
+    } break;
+    OnRelational(Boolean, greaterThanOrEqualTo);
+    OnRelational(ForeignProcedure, greaterThanOrEqualTo);
+    OnRelational(Integer16, greaterThanOrEqualTo);
+    OnRelational(Integer32, greaterThanOrEqualTo);
+    OnRelational(Integer64, greaterThanOrEqualTo);
+    OnRelational(Integer8, greaterThanOrEqualTo);
+    OnRelational(Natural16, greaterThanOrEqualTo);
+    OnRelational(Natural32, greaterThanOrEqualTo);
+    OnRelational(Natural64, greaterThanOrEqualTo);
+    OnRelational(Natural8, greaterThanOrEqualTo);
+    OnRelational(Real32, greaterThanOrEqualTo);
+    OnRelational(Real64, greaterThanOrEqualTo);
+    OnRelational(Size, greaterThanOrEqualTo);
+    OnRelational(Void, greaterThanOrEqualTo);
+    case Arcadia_ValueTag_ObjectReference: {
+      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+      Arcadia_Value resultValue;
+      Arcadia_Value args[2] = { *self, *other };
+      operations->greaterThanOrEqualTo(process, &resultValue, 2, &args[0]);
+      return Arcadia_Value_getBooleanValue(&resultValue);
+    } break;
+    case Arcadia_ValueTag_Type: {
+      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
+      Arcadia_Process_jump(process);
+    } break;
+    default: {
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
+}
+
+#undef OnRelational
+
+#define OnHash(Type) \
+  case Arcadia_ValueTag_##Type: { \
+    Arcadia_TypeValue type = _Arcadia_##Type##Value_getType(process); \
+    Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type); \
+    Arcadia_Value result; \
+    Arcadia_Value arguments[] = { *self }; \
+    operations->hash(process, &result, 1, &arguments[0]); \
+    return Arcadia_Value_getSizeValue(&result); \
+  } break;
+
+Arcadia_SizeValue
+Arcadia_Value_getHash
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* self
   )
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
       return Arcadia_hashAtomValue(self->typeValue);
     } break;
-    case Arcadia_ValueTag_Boolean: {
-      return Arcadia_hashBooleanValue(self->booleanValue);
-    } break;
-    case Arcadia_ValueTag_ForeignProcedure: {
-      return Arcadia_hashForeignProcedureValue(self->foreignProcedureValue);
-    } break;
-    case Arcadia_ValueTag_Integer16: {
-      return Arcadia_hashInteger16Value(self->integer16Value);
-    } break;
-    case Arcadia_ValueTag_Integer32: {
-      return Arcadia_hashInteger32Value(self->integer32Value);
-    } break;
-    case Arcadia_ValueTag_Integer64: {
-      return Arcadia_hashInteger64Value(self->integer64Value);
-    } break;
-    case Arcadia_ValueTag_Integer8: {
-      return Arcadia_hashInteger8Value(self->integer8Value);
-    } break;
-    case Arcadia_ValueTag_Natural16: {
-      return Arcadia_hashNatural16Value(self->natural16Value);
-    } break;
-    case Arcadia_ValueTag_Natural32: {
-      return Arcadia_hashNatural32Value(self->natural32Value);
-    } break;
-    case Arcadia_ValueTag_Natural64: {
-      return Arcadia_hashNatural64Value(self->natural64Value);
-    } break;
-    case Arcadia_ValueTag_Natural8: {
-      return Arcadia_hashNatural8Value(self->natural8Value);
-    } break;
+    OnHash(Boolean);
+    OnHash(ForeignProcedure);
+    OnHash(Integer16);
+    OnHash(Integer32);
+    OnHash(Integer64);
+    OnHash(Integer8);
+    OnHash(Natural16);
+    OnHash(Natural32);
+    OnHash(Natural64);
+    OnHash(Natural8);
+    OnHash(Real32);
+    OnHash(Real64);
+    OnHash(Size);
+    OnHash(Void);
     case Arcadia_ValueTag_ObjectReference: {
-      return Arcadia_Object_hash(process, self->objectReferenceValue);
-    } break;
-    case Arcadia_ValueTag_Real32: {
-      return Arcadia_hashReal32Value(self->real32Value);
-    } break;
-    case Arcadia_ValueTag_Real64: {
-      return Arcadia_hashReal64Value(self->real64Value);
-    } break;
-    case Arcadia_ValueTag_Size: {
-      return Arcadia_hashSizeValue(self->sizeValue);
-    } break;
-    case Arcadia_ValueTag_Type: {
-      return Arcadia_hashTypeValue(self->typeValue);
-    } break;
-    case Arcadia_ValueTag_Void: {
-      return Arcadia_hashVoidValue(self->voidValue);
+      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+      Arcadia_Value resultValue;
+      Arcadia_Value args[1] = { *self };
+      operations->hash(process, &resultValue, 1, &args[0]);
+      return Arcadia_Value_getSizeValue(&resultValue);
     } break;
     default: {
-      fprintf(stderr, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
     } break;
   };
 }
+
+#undef OnHash

@@ -1,6 +1,6 @@
 <h3 id="boolean-type">3.1.1. Boolean Type</h3>
 <p>
-R1 provides a boolean type.
+Arcadia Ring 1 provides a boolean type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_BooleanValue

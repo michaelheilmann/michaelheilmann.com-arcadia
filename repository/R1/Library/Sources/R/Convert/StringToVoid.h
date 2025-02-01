@@ -18,7 +18,8 @@
 #if !defined(R_CONVERT_STRINGOTVOID_INCLUDE_H_INCLUDED)
 #define R_CONVERT_STRINGOTVOID_INCLUDE_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Void.h"
+#include "Arcadia/Ring1/Include.h"
+#include "Arms.h"
 
 Arcadia_VoidValue
 R_toVoid

@@ -18,9 +18,8 @@
 #if !defined(R_CONVERT_BOOLEANTOSTRING_H_INCLUDED)
 #define R_CONVERT_BOOLEANTOSTRING_H_INCLUDED
 
+#include "Arcadia/Ring1/Include.h"
 #include "Arms.h"
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
 
 // On success:
 // <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.

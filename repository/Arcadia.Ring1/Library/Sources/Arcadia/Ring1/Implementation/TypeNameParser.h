@@ -18,6 +18,10 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_TYPENAMEPARSER_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_TYPENAMEPARSER_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/Configure.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 

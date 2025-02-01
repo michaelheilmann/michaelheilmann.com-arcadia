@@ -18,6 +18,10 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/Configure.h"
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
@@ -36,7 +40,7 @@
 /// digit : '0' - '9'
 /// @endcode
 /// @remarks
-/// Caching: Atoms are kept in a dats structure which allows efficient lookup of an atom by a sequence of Bytes.
+/// Caching: Atoms are kept in a data structure which allows efficient lookup of an atom by a sequence of Bytes.
 /// Atoms maintain an age. Atoms below a certain age are marked as "life" during premark phase (unless purge cache is specified).
 /// If an atom is dead, then in the finalize callback, its ADDRESS and its HASH value are used to effieciently remove the atom from the set of atoms.
 typedef struct Arcadia_Atom Arcadia_Atom;
@@ -67,9 +71,11 @@ Arcadia_Atoms_getOrCreateAtom
   );
 
 /// @brief
-/// Visit this atom.
+/// Visit this Arcadia_Atom object.
+/// @param process
+/// A pointer to the Arcadia_Process object.
 /// @param self
-/// This atom.
+/// A pointer to this Arcadia_Atom object.
 void
 Arcadia_Atom_visit
   (

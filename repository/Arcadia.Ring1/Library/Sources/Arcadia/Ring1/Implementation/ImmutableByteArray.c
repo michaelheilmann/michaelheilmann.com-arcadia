@@ -15,10 +15,11 @@
 
 // Last modified: 2024-09-20
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include <string.h>
+#include <string.h> /*TODO: Add and use Arcadia_Process functionality.*/
 
 #define TypeName u8"Arcadia.ImmutableByteArray"
 
@@ -36,25 +37,25 @@ onTypeRemoved
 Arcadia_ImmutableByteArray*
 Arcadia_ImmutableByteArray_create
   (
-    Arcadia_Process* process,
+    Arcadia_Process1* process,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
   if (!bytes) {
-     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);   
+    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process1_jump(process);   
   }
   if (SIZE_MAX - sizeof(Arcadia_ImmutableByteArray) < numberOfBytes) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process1_jump(process);
   }
   if (!g_registered) {
-    Arcadia_Process_registerType(process, TypeName, sizeof(TypeName) - 1, process, &onTypeRemoved, NULL, NULL);
+    Arcadia_Process1_registerType(process, TypeName, sizeof(TypeName) - 1, process, &onTypeRemoved, NULL, NULL);
     g_registered = Arcadia_BooleanValue_True;
   }
   Arcadia_ImmutableByteArray*array = NULL;
-  Arcadia_Process_allocate(process, &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableByteArray) + numberOfBytes);
+  Arcadia_Process1_allocate(process, &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableByteArray) + numberOfBytes);
   memcpy(array->bytes, bytes, numberOfBytes);
   array->numberOfBytes = numberOfBytes;
   return array;
@@ -63,24 +64,26 @@ Arcadia_ImmutableByteArray_create
 void
 Arcadia_ImmutableByteArray_visit
   (
-    Arcadia_Process* process,
-    Arcadia_ImmutableByteArray* immutableByteArray
+    Arcadia_Process1* process,
+    Arcadia_ImmutableByteArrayValue self
   )
-{ Arcadia_Process_visitObject(process, immutableByteArray); }
+{ Arcadia_Process1_visitObject(process, self); }
 
 Arcadia_Natural8Value const*
 Arcadia_ImmutableByteArray_getBytes
   (
-    Arcadia_ImmutableByteArray const* immutableByteArray
+    Arcadia_Process1* process,
+    Arcadia_ImmutableByteArrayValue self
   )
-{ return immutableByteArray->bytes; }
+{ return self->bytes; }
 
 Arcadia_SizeValue
 Arcadia_ImmutableByteArray_getNumberOfBytes
   (
-    Arcadia_ImmutableByteArray const* immutableByteArray
+    Arcadia_Process1* process,
+    Arcadia_ImmutableByteArrayValue self
   )
-{ return immutableByteArray->numberOfBytes; }
+{ return self->numberOfBytes; }
 
 static void
 equalTo

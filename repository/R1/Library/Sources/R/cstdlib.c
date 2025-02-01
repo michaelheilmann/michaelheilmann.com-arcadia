@@ -20,7 +20,7 @@
 // exit, EXIT_FAILURE, malloc, realloc, free
 #include <stdlib.h>
 
-c_noreturn() void c_exit(int code) {
+Arcadia_NoReturn() void c_exit(int code) {
   exit(code);
 }
 
@@ -48,18 +48,6 @@ int c_vfprintf(FILE* restrict stream, const char* restrict format, va_list argum
   return vfprintf(stream, format, arguments);
 }
 
-void* c_malloc(size_t size) {
-  return malloc(size > 0 ? size : 1);
-}
-
-void* c_realloc(void* ptr, size_t new_size) {
-  return realloc(ptr, new_size > 0 ? new_size : 1);
-}
-
-void c_free(void* ptr) {
-  free(ptr);
-}
-
 #include <stdint.h>
 #include "R/Configure.h"
 
@@ -70,11 +58,11 @@ void c_free(void* ptr) {
 bool c_safe_add_sz(size_t a, size_t b, size_t* r) {
   #if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
     #if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X64
-      c_static_assert(SIZE_MAX == UINT64_MAX && sizeof(size_t) == sizeof(uint64_t), "environment not (yet) supported");
+      Arcadia_StaticAssert(SIZE_MAX == UINT64_MAX && sizeof(size_t) == sizeof(uint64_t), "environment not (yet) supported");
       size_t t = _umul128(a, b, r);
       return 0 != t;
     #elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X86
-      c_static_assert(SIZE_MAX == UINT32_MAX && sizeof(size_t) == sizeof(uint32_t), "environment not (yet) supported");
+      Arcadia_StaticAssert(SIZE_MAX == UINT32_MAX && sizeof(size_t) == sizeof(uint32_t), "environment not (yet) supported");
       int64_t t = a * b;
       *r = (size_t)t;
       return t > SIZE_MAX;
@@ -84,26 +72,6 @@ bool c_safe_add_sz(size_t a, size_t b, size_t* r) {
   #else
     // This builtin function returns false if there was no overflow and true if there was an overflow.
     return __builtin_add_overflow(a, b, r);
-  #endif
-}
-
-bool c_safe_mul_sz(size_t a, size_t b, size_t* r) {
-  #if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
-    #if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X64
-      c_static_assert(SIZE_MAX == UINT64_MAX && sizeof(size_t) == sizeof(uint64_t), "environment not (yet) supported");
-      size_t t = _umul128(a, b, r);
-      return 0 != t;
-    #elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X86
-      c_static_assert(SIZE_MAX == UINT32_MAX && sizeof(size_t) == sizeof(uint32_t), "environment not (yet) supported");
-      int64_t t = a * b;
-      *r = (size_t)t;
-      return t > SIZE_MAX;
-    #else
-      #error ("environemnt not (yet) supported");
-    #endif
-  #else
-    // This builtin function returns false if there was no overflow and true if there was an overflow.
-    return __builtin_mul_overflow(a, b, r);
   #endif
 }
 

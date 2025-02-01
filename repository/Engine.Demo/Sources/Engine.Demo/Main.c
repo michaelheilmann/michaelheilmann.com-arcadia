@@ -57,7 +57,7 @@ main1
   NativeWindow_setSmallIcon(window, icon);
 
   // (7) Set the title.
-  NativeWindow_setTitle(process, window, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
+  NativeWindow_setTitle(process, window, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
 
   // (8) Enter the message loop.
   while (!NativeWindow_getQuitRequested(window)) {

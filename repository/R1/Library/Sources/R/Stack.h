@@ -18,7 +18,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 
-Rex_declareObjectType(u8"R.Stack", R_Stack, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Library.Stack", R_Stack, u8"Arcadia.Object");
 
 struct R_Stack {
   Arcadia_Object _parent;

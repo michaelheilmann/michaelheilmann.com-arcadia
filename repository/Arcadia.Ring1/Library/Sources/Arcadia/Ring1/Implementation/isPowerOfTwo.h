@@ -18,6 +18,10 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_ISPOWEROFTWO_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_ISPOWEROFTWO_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 
 #include "Arcadia/Ring1/Implementation/Integer16.h"

@@ -88,7 +88,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.List", R_List, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Library.List", R_List, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_List_ensureFreeCapacity

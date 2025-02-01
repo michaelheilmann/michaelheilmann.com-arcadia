@@ -19,13 +19,6 @@
 
 #include "Arcadia/Ring1/Include.h"
 
-/// @todo Add to R's test utilities.
-#define R_Test_assert(result) \
-  if (!(result)) { \
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
-    Arcadia_Process_jump(process); \
-  }
-
 #define EXPECT_SUCCESS(TYPE, SUFFIX, FLAVOR, INPUT, OUTPUT) \
   { \
     TYPE##Value x = Arcadia_nextPowerOfTwo##FLAVOR##SUFFIX##Value(process, INPUT); \
@@ -224,47 +217,23 @@ nextPowerOfTwoNatural8ValueTests
   EXPECT_FAILURE(Arcadia_Natural8, Natural8, GreaterThan, Arcadia_Natural8Value_Maximum - 0);
 }
 
-static bool
-safeExecute
+int
+main
   (
-    void (*f)(Arcadia_Process* process)
+    int argc,
+    char **argv
   )
 {
-  Arcadia_Status status = Arcadia_Status_Success;
-  bool result = true;
-  Arcadia_Process* process = NULL;
-  if (Arcadia_Process_get(&process)) {
-    result = false;
-    return result;
-  }
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    (*f)(process);
-  } else {
-    result = false;
-  }
-  Arcadia_Process_popJumpTarget(process);
-  status = Arcadia_Process_getStatus(process);
-  Arcadia_Process_relinquish(process);
-  process = NULL;
-  if (status) {
-    result = false;
-  }
-  return result;
-}
-
-int main(int argc, char **argv) {
-  if (!safeExecute(&nextPowerOfTwoNatural64ValueTests)) {
+  if (!Arcadia_Tests_safeExecute(&nextPowerOfTwoNatural64ValueTests)) {
     return EXIT_FAILURE;
   }
-  if (!safeExecute(&nextPowerOfTwoNatural32ValueTests)) {
+  if (!Arcadia_Tests_safeExecute(&nextPowerOfTwoNatural32ValueTests)) {
     return EXIT_FAILURE;
   }
-  if (!safeExecute(&nextPowerOfTwoNatural16ValueTests)) {
+  if (!Arcadia_Tests_safeExecute(&nextPowerOfTwoNatural16ValueTests)) {
     return EXIT_FAILURE;
   }
-  if (!safeExecute(&nextPowerOfTwoNatural8ValueTests)) {
+  if (!Arcadia_Tests_safeExecute(&nextPowerOfTwoNatural8ValueTests)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

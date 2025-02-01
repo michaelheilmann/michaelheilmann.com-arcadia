@@ -75,7 +75,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.FileHandle", R_FileHandle, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Library.FileHandle", R_FileHandle, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_FileHandle_constructImpl
@@ -191,7 +191,7 @@ Arcadia_BooleanValue R_FileHandle_isOpenedForWriting(Arcadia_Process* process, R
 void R_FileHandle_openForReading(Arcadia_Process* process, R_FileHandle* self, R_FilePath* path) {
   R_FileHandle_close(self);
   Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
-  self->fd = fopen(Arcadia_String_getBytes(nativePathString), "rb");
+  self->fd = fopen(Arcadia_String_getBytes(process, nativePathString), "rb");
   if (!self->fd) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);
@@ -202,7 +202,7 @@ void R_FileHandle_openForReading(Arcadia_Process* process, R_FileHandle* self, R
 void R_FileHandle_openForWriting(Arcadia_Process* process, R_FileHandle* self, R_FilePath* path) {
   R_FileHandle_close(self);
   Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
-  self->fd = fopen(Arcadia_String_getBytes(nativePathString), "wb");
+  self->fd = fopen(Arcadia_String_getBytes(process, nativePathString), "wb");
   if (!self->fd) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);

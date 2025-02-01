@@ -1,6 +1,6 @@
 <h3 id="natural-types">3.1.4. Natural Types</h3>
 <p>
-R provides natural number types.
+Arcadia Ring 1 provides natural number types.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_Natural<my-mv>Suffix</my-mv>Value

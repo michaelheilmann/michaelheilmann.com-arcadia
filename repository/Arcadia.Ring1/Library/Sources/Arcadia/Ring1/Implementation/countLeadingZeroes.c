@@ -15,12 +15,13 @@
 
 // Last modified: 2024-09-28
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/countLeadingZeroes.h"
 
 #include "Arcadia/Ring1/Include.h"
 
-#if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
-#include <intrin.h>
+#if Arcadia_Configuration_CompilerC == Arcadia_Configuration_CompilerC_Msvc
+  #include <intrin.h>
 #endif
 
 Arcadia_SizeValue
@@ -119,7 +120,7 @@ Arcadia_countLeadingZeroesNatural32Value
     Arcadia_Natural32Value x
   )
 {
-#if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
+#if Arcadia_Configuration_CompilerC == Arcadia_Configuration_CompilerC_Msvc
   unsigned long n;
   if (_BitScanReverse(&n, x)) {
     // x was not zero.
@@ -160,9 +161,9 @@ Arcadia_countLeadingZeroesSizeValue
     Arcadia_SizeValue x
   )
 {
-#if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X64
+#if Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X64
   return Arcadia_countLeadingZeroesNatural64Value(process, x);
-#elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X86
+#elif Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X86
   return Arcadia_countLeadingZeroesNatural32Value(process, x);
 #else
   #error("environment not (yet) supported")

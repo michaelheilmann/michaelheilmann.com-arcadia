@@ -34,7 +34,7 @@ expectAndNext
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_String_isEqualTo_pn(R_Mil_Scanner_getTokenText(process, scanner), tokenText, tokenTextLength)) {
+  if (!Arcadia_String_isEqualTo_pn(process, R_Mil_Scanner_getTokenText(process, scanner), tokenText, tokenTextLength)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
     Arcadia_Process_jump(process);
   }
@@ -89,7 +89,7 @@ testScanner3
     u8"\n"
     ;
   R_Mil_Scanner* scanner = R_Mil_Scanner_create(process);
-  R_Mil_Scanner_setInput(process, scanner, (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, input, strlen(input)))));
+  R_Mil_Scanner_setInput(process, scanner, (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), input, strlen(input)))));
 
   //
   expectAndNext(process, scanner, R_Mil_TokenType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
@@ -162,7 +162,7 @@ testScanner2
     u8"\n"
     ;
   R_Mil_Scanner* scanner = R_Mil_Scanner_create(process);
-  R_Mil_Scanner_setInput(process, scanner, (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, input, strlen(input)))));
+  R_Mil_Scanner_setInput(process, scanner, (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), input, strlen(input)))));
 
   expectAndNext(process, scanner, R_Mil_TokenType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(process, scanner, R_Mil_TokenType_Name, u8"Name", sizeof(u8"Name") - 1);
@@ -196,7 +196,7 @@ testScanner1
     u8""
     ;
   R_Mil_Scanner* scanner = R_Mil_Scanner_create(process);
-  R_Mil_Scanner_setInput(process, scanner, (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, input, strlen(input)))));
+  R_Mil_Scanner_setInput(process, scanner, (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), input, strlen(input)))));
 
   expectAndNext(process, scanner, R_Mil_TokenType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(process, scanner, R_Mil_TokenType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);

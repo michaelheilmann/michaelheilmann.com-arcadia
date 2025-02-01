@@ -165,12 +165,13 @@ R_Mil_Keywords_add
     Arcadia_Natural32Value type
   )
 {
-  Arcadia_SizeValue hash = Arcadia_Object_hash(process, (Arcadia_ObjectReferenceValue)string);
+  Arcadia_Value stringValue =  { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = string };
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &stringValue);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
-    Arcadia_Value t;
-    Arcadia_Value_setObjectReferenceValue(&t, (Arcadia_ObjectReferenceValue)string);
-    if (Arcadia_Object_equalTo(process, (Arcadia_Object*)keyword->string, &t)) {
+    Arcadia_Value v[] = { { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = keyword->string },
+                          stringValue };
+    if (Arcadia_Value_isEqualTo(process, &v[0], &v[1])) {
       Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
       Arcadia_Process_jump(process);
     }
@@ -193,12 +194,13 @@ R_Mil_Keywords_scan
     Arcadia_Natural32Value* tokenType
   )
 {
-  Arcadia_Value stringValue;
-  Arcadia_Value_setObjectReferenceValue(&stringValue, string);
-  Arcadia_SizeValue hash = Arcadia_Object_hash(process, (Arcadia_ObjectReferenceValue)string);
+  Arcadia_Value stringValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = string };
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &stringValue);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
-    if (Arcadia_Object_equalTo(process, (Arcadia_ObjectReferenceValue)keyword->string, &stringValue)) {
+    Arcadia_Value v[2] = { { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = keyword->string }, 
+                           stringValue };
+    if (Arcadia_Value_isEqualTo(process, &v[0], &v[1])) {
       *tokenType = keyword->type;
       return Arcadia_BooleanValue_True;
     }

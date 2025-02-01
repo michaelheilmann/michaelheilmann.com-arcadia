@@ -209,8 +209,9 @@ R_Mil_SymbolTable_doubleCapacity
   Arcadia_SizeValue maximalCapacity = maximalCapacity1 < maximalCapacity2 ? maximalCapacity1 : maximalCapacity2;
 
   Arcadia_SizeValue oldCapacity = self->capacity;
-  Arcadia_SizeValue newCapacity;
-  if (c_safe_mul_sz(oldCapacity, 2, &newCapacity)) {
+  Arcadia_SizeValue newCapacity, overflow;
+  Arcadia_safeMultiply_sz(Arcadia_Process_getBackendNoLock(process), oldCapacity, 2, &overflow, &newCapacity);
+  if (overflow) {
     Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
     Arcadia_Process_jump(process);
   }
@@ -246,13 +247,14 @@ R_Mil_SymbolTable_getIndex
     Arcadia_String* name
   )
 {
-  Arcadia_SizeValue hash = Arcadia_Object_hash(process, (Arcadia_Object*)name);
+  Arcadia_Value nameValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &nameValue);
   Arcadia_SizeValue index = hash % self->capacity;
   Arcadia_SizeValue tombstoneIndex = 0;
   Arcadia_BooleanValue tombstoneFound = Arcadia_BooleanValue_False;
   while (Arcadia_BooleanValue_True) {
     R_Mil_Symbol* entry = self->elements[index];
-    Arcadia_Value nameValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
+    Arcadia_Value entryNameValue = { .tag =Arcadia_ValueTag_ObjectReference, .objectReferenceValue = entry->name };
     if (NULL == entry) {
       return tombstoneFound ? tombstoneIndex : index;
     } else if ((R_Mil_Symbol*)&g_dummy == entry) {
@@ -260,7 +262,7 @@ R_Mil_SymbolTable_getIndex
         tombstoneFound = Arcadia_BooleanValue_True;
         tombstoneIndex = index;
       }
-    } else if (Arcadia_Object_equalTo(process, (Arcadia_Object*)entry->name, &nameValue)) {
+    } else if (Arcadia_Value_isEqualTo(process, &entryNameValue, &nameValue)) {
       return index;
     }
     index = (index + 1) % self->capacity;

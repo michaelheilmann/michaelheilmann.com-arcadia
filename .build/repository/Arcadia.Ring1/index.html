@@ -97,7 +97,7 @@ please refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/
 
 <h3 id="boolean-type">3.1.1. Boolean Type</h3>
 <p>
-R1 provides a boolean type.
+Arcadia Ring 1 provides a boolean type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_BooleanValue
@@ -115,7 +115,7 @@ typedef <my-mv>implementation detail</my-mv> Arcadia_BooleanValue
 
 <h3 id="foreignprocedure-type">3.1.2. Foreign Procedure Type</h3>
 <p>
-R provides the <scode>Arcadia_ForeignProcedureValue</code> type.
+Arcadia Ring 1 provides the <scode>Arcadia_ForeignProcedureValue</code> type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_ForeignProcedureValue;
@@ -143,7 +143,7 @@ A valid value of the <code>Arcadia_ForeignProcedureValue</code> is the null valu
 
 <h3 id="integer-types">3.1.3. Integer Types</h3>
 <p>
-R provides a two's complement integer number types.
+Arcadia Ring 1 provides a two's complement integer number types.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_Integer<my-mv>Suffix</my-mv>Value
@@ -210,7 +210,7 @@ The following table denotes  the expansions of the macro:
 
 <h3 id="natural-types">3.1.4. Natural Types</h3>
 <p>
-R provides natural number types.
+Arcadia Ring 1 provides natural number types.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_Natural<my-mv>Suffix</my-mv>Value
@@ -586,7 +586,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
 
 <h3>3.6. Numeric functions</h3>
 
-<h4 id="r-clamp">Arcadia_clamp</h4>
+<h4 id="arcadia-clamp">Arcadia_clamp</h4>
 <p>Clamp a value to a range.</p>
 <p><code>
 <my-mv>Type</my-mv> Arcadia_clamp<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value, <my-mv>Type</my-mv> lower, <my-mv>Type</my-mv> upper)
@@ -624,7 +624,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
 <h5>Return value</h5>
 <p>The value <code>value</code> clamped to the range <code>[lower, upper]</code>.</p>
 
-<h4 id="r-countleadingzeroes">Arcadia_countLeadingZeroes</h4>
+<h4 id="arcadia-countleadingzeroes">Arcadia_countLeadingZeroes</h4>
 <p>Return the number of leadin gzeroes of the binary representation of a value.</p>
 <p><code>
 Arcadia_SizeValue Arcadia_countLeadingZeroes<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value)
@@ -649,7 +649,7 @@ Arcadia_SizeValue Arcadia_countLeadingZeroes<my-mv>Suffix</my-mv>(<my-mv>Type</m
 <h5>Return value</h5>
 <p>The number of leading zeroes.</p>
 
-<h4 id="r-hash">Arcadia_hash</h4>
+<h4 id="arcadia-hash">Arcadia_hash</h4>
 <p>Return the hash of a value.</p>
 <p><code>
 Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
@@ -682,7 +682,7 @@ Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 <h5>Return value</h5>
 <p>Return hash of  <code>x</code>.</p>
 
-<h4 id="r-maximum">Arcadia_maximum</h4>
+<h4 id="arcadia-maximum">Arcadia_maximum</h4>
 <p>Return the maximum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv> Arcadia_maximum<my-mv>Suffix</my-mv>(<my-mv>Type<my-mv> x, <my-mv>Type<my->mv> y)
@@ -711,7 +711,7 @@ Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 <h5>Return value</h5>
 <p>Return the maximum of <code>x</code> and <code>y</code>.</p>
 
-<h4 id="r-minimum">Arcadia_minimum</h4>
+<h4 id="arcadia-minimum">Arcadia_minimum</h4>
 <p>Return the minimum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv> Arcadia_minimum<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x, <my-mv>Type</my-mv> y)
@@ -740,7 +740,7 @@ Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 <h5>Return value</h5>
 <p>Return the minimum of <code>x</code> and <code>y</code>.</p>
 
-<h4 id="r-nextpoweroftwogt">Arcadia_nextPowerOfTwoGreaterThan</h4>
+<h4 id="arcadia-nextpoweroftwogreaterthan">Arcadia_nextPowerOfTwoGreaterThan</h4>
 <p>R provides functions returning the next power of two greater than a value.</p>
 <p><code>
 <my-mv>Type</my-mv> Arcadia_nextPowerOfTwoGt<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
@@ -773,7 +773,7 @@ Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 <h5>Return value</h5>
 <p>Return the next power of two greater than <code>x</code>.</p>
 
-<h4 id="r-nextpoweroftwogte">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo</h4>
+<h4 id="arcadia-nextpoweroftwogreaterthanorequalto">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo</h4>
 <p>R provides functions returning the next power of two greater or equal to a value.</p>
 <p><code>
 <my-mv>Type</my-mv> Arcadia_nextPowerOfTwoGte<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
@@ -805,6 +805,55 @@ Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 
 <h5>Return value</h5>
 <p>Return the next power of two greater than or equal to <code>x</code>.</p>
+
+<h4 id="arcadia-safeadd">Arcadia_safeAdd</h4>
+<p>Get the sum of two values.</p>
+<p><code>
+void Arcadia_safeAdd<my-mv>Suffix</my-mv>(<my-mv>Type<my-mv> augend, <my-mv>Type<my->mv> addend, <my-mv>Type</my-mv>* sumHigh, <my-mv>Type</my-mv>* sumLow)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td>      <td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Natural16Value</code></td><td><code>Arcadia_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code></td><td><code>Arcadia_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code></td><td><code>Arcadia_Natural64Value</code></td></tr>
+<tr><td><code>Natural8Value</code></td> <td><code>Arcadia_Natural8Value</code></td></tr>
+<tr><td><code>SizeValue</code></td>     <td><code>Arcadia_SizeValue</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> augend</td>  <td>The augend value.</td></tr>
+  <tr><td><my-mv>Type</my-mv> addend</td>  <td>The addend value.</td></tr>
+  <tr><td><my-mv>Type</my-mv>* sumHigh</td><td>A pointer to a variable. The variable is assigned the high bits of the result.</td></tr>
+  <tr><td><my-mv>Type</my-mv>* sumLow</td> <td>A pointer to a variable. The variable is assigned the low bits of the result.</td></tr>
+</table>
+
+<h4 id="arcadia-safemultiply">Arcadia_safeMultiply</h4>
+<p>Get the product of two values.</p>
+<p><code>
+void Arcadia_safeMultiply<my-mv>Suffix</my-mv>(<my-mv>Type<my-mv> x, <my-mv>Type<my->mv> y)
+</code></p>
+<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+<table>
+<tr><td><my-mv>Suffix</my-mv></td> <td><my-mv>Type</my-mv></td></tr>
+<tr><td><code>Natural8Value</code></td><td><code>Arcadia_Natural8Value</code></td></tr>
+<tr><td><code>Natural16Value</code></td><td><code>Arcadia_Natural16Value</code></td></tr>
+<tr><td><code>Natural32Value</code></td><td><code>Arcadia_Natural32Value</code></td></tr>
+<tr><td><code>Natural64Value</code></td><td><code>Arcadia_Natural64Value</code></td></tr>
+<tr><td><code>SizeValue</code></td><td><code>Arcadia_SizeValue</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td><my-mv>Type</my-mv> x</td><td>The first value.</td></tr>
+  <tr><td><my-mv>Type</my-mv> y</td><td>The second value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the maximum of <code>x</code> and <code>y</code>.</p>
 
 <h4>R_getTickCount</h4>
 <p>Get the time, in milliseconds, since an unspecified moment in the past.</p>

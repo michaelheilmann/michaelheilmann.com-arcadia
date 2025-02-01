@@ -15,10 +15,11 @@
 
 // Last modified: 2025-01-01
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Process1.h"
 
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
-#include <stdio.h>
+#include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include <malloc.h>
 #include "Arms.h"
 
@@ -131,7 +132,7 @@ Arcadia_Process1_relinquish
   }
   if (ReferenceCount_Minimum == --process->referenceCount) {
     if (Arms_shutdown()) {
-      fprintf(stderr, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
     }
     free(g_process);
     g_process = NULL;
@@ -155,7 +156,7 @@ Arcadia_Process1_get
     g_process = malloc(sizeof(Arcadia_Process1));
     if (!g_process) {
       if (Arms_shutdown()) {
-        fprintf(stderr, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
+        Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
       }
       return Arcadia_ProcessStatus_AllocationFailed;
     }
@@ -495,43 +496,6 @@ Arcadia_Process1_registerType
       } break;
     };
     Arcadia_Process1_jump(process);
-  }
-}
-
-bool
-Arcadia_Process1_allocate_nojump
-  (
-    Arcadia_Process1* process,
-    void** p,
-    const char* name,
-    size_t nameLength,
-    size_t size
-  )
-{
-  void* q = NULL;
-  Arms_Status status = Arms_allocate(&q, name, nameLength, size);
-  if (status) {
-    switch (status) {
-      case Arms_Status_AllocationFailed: {
-        Arcadia_Process1_setStatus(process, Arms_Status_AllocationFailed);
-      } break;
-      case Arms_Status_TypeNotExists: {
-        Arcadia_Process1_setStatus(process, Arms_Status_TypeNotExists);
-      } break;
-      case Arms_Status_ArgumentValueInvalid: {
-        Arcadia_Process1_setStatus(process, Arms_Status_ArgumentValueInvalid);
-      } break;
-      case Arms_Status_OperationInvalid: {
-        Arcadia_Process1_setStatus(process, Arms_Status_OperationInvalid);
-      } break;
-      default: {
-        Arcadia_Process1_setStatus(process, Arms_Status_OperationInvalid);
-      } break;
-    };
-    return false;
-  } else {
-    *p = q;
-    return true;
   }
 }
 

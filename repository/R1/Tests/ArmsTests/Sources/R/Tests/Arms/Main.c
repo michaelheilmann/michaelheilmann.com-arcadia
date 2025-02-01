@@ -27,7 +27,7 @@ main1
     char** argv
   )
 {
-  Arcadia_String* s = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1));
+  Arcadia_String* s = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1));
   Arcadia_Object_lock(process, s);
   Arcadia_Process_stepArms(process);
   Arcadia_Process_stepArms(process);

@@ -37,12 +37,12 @@ Arcadia_Value_fromObjectReferenceValue
   return w;
 }
 
-#define R_Test_Op_equalTo (1)
-#define R_Test_Op_greaterThan (5)
-#define R_Test_Op_greaterThanOrEqualTo (6)
-#define R_Test_Op_lowerThan (3)
-#define R_Test_Op_lowerThanOrEqualTo (4)
-#define R_Test_Op_notEqualTo (2)
+#define R_Test_Op_isEqualTo (1)
+#define R_Test_Op_isGreaterThan (5)
+#define R_Test_Op_isGreaterThanOrEqualTo (6)
+#define R_Test_Op_isLowerThan (3)
+#define R_Test_Op_isLowerThanOrEqualTo (4)
+#define R_Test_Op_isNotEqualTo (2)
 #define R_Test_Op_add (7)
 #define R_Test_Op_subtract (8)
 
@@ -56,57 +56,54 @@ R_Test_BigInteger_assertRelational
     Arcadia_Integer64Value b
   )
 {
-  R_BigInteger *pa = NULL, *pb = NULL;
-  Arcadia_Value vb;
-  pa = R_BigInteger_fromInteger64(process, a);
-  pb = R_BigInteger_fromInteger64(process, b);
-  vb = Arcadia_Value_fromObjectReferenceValue(pb);
+  Arcadia_Value va = Arcadia_Value_fromObjectReferenceValue(R_BigInteger_fromInteger64(process, a));
+  Arcadia_Value vb = Arcadia_Value_fromObjectReferenceValue(R_BigInteger_fromInteger64(process, b));
   switch (op) {
-    case R_Test_Op_equalTo: {
-      R_Test_assert(expectedResult == Arcadia_Object_equalTo(process, (Arcadia_Object*)pa, &vb));
-      R_Test_assert(expectedResult == !Arcadia_Object_notEqualTo(process, (Arcadia_Object*)pa, &vb));
+    case R_Test_Op_isEqualTo: {
+      R_Test_assert(expectedResult == Arcadia_Value_isEqualTo(process, &va, &vb));
+      R_Test_assert(expectedResult == !Arcadia_Value_isNotEqualTo(process, &va, &vb));
     } break;
-    case R_Test_Op_greaterThan: {
-      Arcadia_BooleanValue receivedResult = Arcadia_Object_greaterThan(process, (Arcadia_Object*)pa, &vb);
+    case R_Test_Op_isGreaterThan: {
+      Arcadia_BooleanValue receivedResult = Arcadia_Value_isGreaterThan(process, &va, &vb);
       R_Test_assert(expectedResult == receivedResult);
       if (expectedResult) {
-        // "greaterThan(x,y)" true implies "lowerThanOrEqualTo(x,y)" and "lowerThan(x,y)" false.
-        R_Test_assert(!Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
-        R_Test_assert(!Arcadia_Object_lowerThan(process, (Arcadia_Object*)pa, &vb));
+        // "isGreaterThan(x,y)" true implies "isLowerThanOrEqualTo(x,y)" and "isLowerThan(x,y)" false.
+        R_Test_assert(!Arcadia_Value_isLowerThanOrEqualTo(process, &va, &vb));
+        R_Test_assert(!Arcadia_Value_isLowerThan(process, &va, &vb));
       } else {
-        // "greaterThan(x,y)" false implies "lowerThanOrEqualTo(x,y)" true.
-        R_Test_assert(Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
+        // "isGreaterThan(x,y)" false implies "isLowerThanOrEqualTo(x,y)" true.
+        R_Test_assert(Arcadia_Value_isLowerThanOrEqualTo(process, &va, &vb));
       }
     } break;
-    case R_Test_Op_greaterThanOrEqualTo: {
-      R_Test_assert(expectedResult == Arcadia_Object_greaterThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
+    case R_Test_Op_isGreaterThanOrEqualTo: {
+      R_Test_assert(expectedResult == Arcadia_Value_isGreaterThanOrEqualTo(process, &va, &vb));
       if (expectedResult) {
-        // "greaterThanOrEqualTo(x,y)" true implies "lowerThan(x,y)" false.
-        R_Test_assert(!Arcadia_Object_lowerThan(process, (Arcadia_Object*)pa, &vb));
+        // "isGreaterThanOrEqualTo(x,y)" true implies "isLowerThan(x,y)" false.
+        R_Test_assert(!Arcadia_Value_isLowerThan(process, &va, &vb));
       }
     } break;
-    case R_Test_Op_lowerThan: {
-      Arcadia_BooleanValue receivedResult = Arcadia_Object_lowerThan(process, (Arcadia_Object*)pa, &vb);
+    case R_Test_Op_isLowerThan: {
+      Arcadia_BooleanValue receivedResult = Arcadia_Value_isLowerThan(process, &va, &vb);
       R_Test_assert(expectedResult == receivedResult);
       if (expectedResult) {
-        // "lowerThan(x,y)" true implies "greaterThanOrEqualTo(x,y)" and "greaterThan(x,y)" false.
-        R_Test_assert(!Arcadia_Object_greaterThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
-        R_Test_assert(!Arcadia_Object_greaterThan(process, (Arcadia_Object*)pa, &vb));
+        // "isLowerThan(x,y)" true implies "isGreaterThanOrEqualTo(x,y)" and "isGreaterThan(x,y)" false.
+        R_Test_assert(!Arcadia_Value_isGreaterThanOrEqualTo(process, &va, &vb));
+        R_Test_assert(!Arcadia_Value_isGreaterThan(process, &va, &vb));
       } else {
-        // "lowerThan(x,y)" false implies "greaterThanOrEqualTo(x,y)" true.
-        R_Test_assert(Arcadia_Object_greaterThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
+        // "isLowerThan(x,y)" false implies "isGreaterThanOrEqualTo(x,y)" true.
+        R_Test_assert(Arcadia_Value_isGreaterThanOrEqualTo(process, &va, &vb));
       }
     } break;
-    case R_Test_Op_lowerThanOrEqualTo: {
-      R_Test_assert(expectedResult == Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
+    case R_Test_Op_isLowerThanOrEqualTo: {
+      R_Test_assert(expectedResult == Arcadia_Value_isLowerThanOrEqualTo(process, &va, &vb));
       if (expectedResult) {
-        // "lowerThanOrEqualTo(x,y)" true implies "greaterThan(x,y)" false.
-        R_Test_assert(!Arcadia_Object_greaterThan(process, (Arcadia_Object*)pa, &vb));
+        // "isLowerThanOrEqualTo(x,y)" true implies "isGreaterThan(x,y)" false.
+        R_Test_assert(!Arcadia_Value_isGreaterThan(process, &va, &vb));
       }
     } break;
-    case R_Test_Op_notEqualTo: {
-      R_Test_assert(expectedResult == Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
-      R_Test_assert(expectedResult == !Arcadia_Object_lowerThanOrEqualTo(process, (Arcadia_Object*)pa, &vb));
+    case R_Test_Op_isNotEqualTo: {
+      R_Test_assert(expectedResult == Arcadia_Value_isLowerThanOrEqualTo(process, &va, &vb));
+      R_Test_assert(expectedResult == !Arcadia_Value_isLowerThanOrEqualTo(process, &va, &vb));
     } break;
     default: {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
@@ -160,34 +157,34 @@ relationalOperations
   } Test;
   Test tests[] = {
     /* two positive numbers */
-    { Arcadia_BooleanValue_True, R_Test_Op_equalTo, 2, 2 }, // 0
+    { Arcadia_BooleanValue_True, R_Test_Op_isEqualTo, 2, 2 }, // 0
 
-    { Arcadia_BooleanValue_True, R_Test_Op_greaterThan, 2, 1 },
-    { Arcadia_BooleanValue_False, R_Test_Op_greaterThan, 2, 2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isGreaterThan, 2, 1 },
+    { Arcadia_BooleanValue_False, R_Test_Op_isGreaterThan, 2, 2 },
 
-    { Arcadia_BooleanValue_True, R_Test_Op_greaterThanOrEqualTo, 2, 1 },
-    { Arcadia_BooleanValue_True, R_Test_Op_greaterThanOrEqualTo, 2, 2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isGreaterThanOrEqualTo, 2, 1 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isGreaterThanOrEqualTo, 2, 2 },
   
-    { Arcadia_BooleanValue_True, R_Test_Op_lowerThan, 1, 2 },
-    { Arcadia_BooleanValue_False, R_Test_Op_lowerThan, 2, 2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isLowerThan, 1, 2 },
+    { Arcadia_BooleanValue_False, R_Test_Op_isLowerThan, 2, 2 },
 
-    { Arcadia_BooleanValue_True, R_Test_Op_lowerThanOrEqualTo, 1, 2 },
-    { Arcadia_BooleanValue_True, R_Test_Op_lowerThanOrEqualTo, 2, 2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isLowerThanOrEqualTo, 1, 2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isLowerThanOrEqualTo, 2, 2 },
 
     /* two negative numbers */
-    { Arcadia_BooleanValue_True, R_Test_Op_equalTo, -2, -2 }, // 9
+    { Arcadia_BooleanValue_True, R_Test_Op_isEqualTo, -2, -2 }, // 9
 
-    { Arcadia_BooleanValue_True, R_Test_Op_greaterThan, -1, -2 },
-    { Arcadia_BooleanValue_False, R_Test_Op_greaterThan, -2, -2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isGreaterThan, -1, -2 },
+    { Arcadia_BooleanValue_False, R_Test_Op_isGreaterThan, -2, -2 },
 
-    { Arcadia_BooleanValue_True, R_Test_Op_greaterThanOrEqualTo, -1, -2 },
-    { Arcadia_BooleanValue_True, R_Test_Op_greaterThanOrEqualTo, -2, -2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isGreaterThanOrEqualTo, -1, -2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isGreaterThanOrEqualTo, -2, -2 },
 
-    { Arcadia_BooleanValue_True, R_Test_Op_lowerThan, -2, -1 },
-    { Arcadia_BooleanValue_False, R_Test_Op_lowerThan, -2, -2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isLowerThan, -2, -1 },
+    { Arcadia_BooleanValue_False, R_Test_Op_isLowerThan, -2, -2 },
 
-    { Arcadia_BooleanValue_True, R_Test_Op_lowerThanOrEqualTo, -2, -1 },
-    { Arcadia_BooleanValue_True, R_Test_Op_lowerThanOrEqualTo, -2, -2 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isLowerThanOrEqualTo, -2, -1 },
+    { Arcadia_BooleanValue_True, R_Test_Op_isLowerThanOrEqualTo, -2, -2 },
   };
   Arcadia_SizeValue numberOfTests = sizeof(tests) / sizeof(Test);
   for (Arcadia_SizeValue i = 0, n = numberOfTests; i < n; ++i) {

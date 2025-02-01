@@ -15,14 +15,15 @@
 
 // Last modified: 2025-01-01
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Process.h"
 
 #include "Arcadia/Ring1/Implementation/Process1.h"
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
-#include <stdio.h>
-#include <malloc.h>
 #include "Arcadia/Ring1/Implementation/Atoms.private.h"
 #include "Arcadia/Ring1/Implementation/Types.private.h"
+#include "Arcadia/Ring1/Implementation/Diagnostics.h"
+#include <malloc.h> /*TODO: Use ARMS*/
 
 typedef uint32_t ReferenceCount;
 
@@ -36,7 +37,12 @@ struct Arcadia_Process {
   Arcadia_Process1* process1;
 };
 
-static void startup(Arcadia_Process1* process) {
+static void
+startup
+  (
+    Arcadia_Process1* process
+  )
+{
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -66,7 +72,12 @@ static void startup(Arcadia_Process1* process) {
   }
 }
 
-static void shutdown(Arcadia_Process1* process) {
+static void
+shutdown
+  (
+    Arcadia_Process1* process
+  )
+{
   Arcadia_Types_onPreMark(process, Arcadia_BooleanValue_True);
   Arcadia_Atoms_onPreMark(process, Arcadia_BooleanValue_True);
   Arcadia_Process1_runArms(process);
@@ -299,3 +310,10 @@ Arcadia_Process_allocate
     size_t size
   )
 { Arcadia_Process1_allocate(process->process1, p, name, nameLength, size); }
+
+Arcadia_Process1*
+Arcadia_Process_getBackendNoLock
+  (
+    Arcadia_Process* process
+  )
+{ return process->process1; }

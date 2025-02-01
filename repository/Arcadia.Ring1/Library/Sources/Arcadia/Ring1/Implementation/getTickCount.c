@@ -15,12 +15,13 @@
 
 // Last modified: 2024-09-20
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/getTickCount.h"
 
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #define WIN32_LEAN_AND_MEAN
   #include <Windows.h>
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   #include <time.h>
   #include <math.h> // round
 #else
@@ -32,9 +33,9 @@ Arcadia_getTickCount
   (
   )
 {
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   return GetTickCount64();
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   // This is incorrect. It provides the time since some unspecified point in the past and not since the start of the process.
   struct timespec t;
   //t = (struct timespec *)malloc(sizeof(t)); 
@@ -46,6 +47,6 @@ Arcadia_getTickCount
   milliseconds += t.tv_sec*1000;
   return milliseconds;
 #else
-  #error("operating system not (yet) supported")
+  #error("environment not (yet) supported")
 #endif
 }

@@ -1,4 +1,4 @@
-<h4 id="r-minimum">Arcadia_minimum</h4>
+<h4 id="arcadia-minimum">Arcadia_minimum</h4>
 <p>Return the minimum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv> Arcadia_minimum<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x, <my-mv>Type</my-mv> y)

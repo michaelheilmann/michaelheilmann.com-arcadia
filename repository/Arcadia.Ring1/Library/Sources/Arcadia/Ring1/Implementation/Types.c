@@ -15,6 +15,7 @@
 
 // Last modified: 2024-10-07
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Types.private.h"
 
 #include "Arcadia/Ring1/Include.h"
@@ -531,7 +532,7 @@ atomTypeDestructing
 }
 
 Arcadia_TypeValue
-_R_Atom_getType
+_Arcadia_Atom_getType
   (
     Arcadia_Process* process
   )

@@ -18,9 +18,8 @@
 #if !defined(R_CONVERT_VOIDTOSTRING_H_INCLUDED)
 #define R_CONVERT_VOIDTOSTRING_H_INCLUDED
 
+#include "Arcadia/Ring1/Include.h"
 #include "Arms.h"
-#include "Arcadia/Ring1/Implementation/Void.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
 
 /// @brief Convert a "void" value into a "string" value.
 /// @param value The "void" value.

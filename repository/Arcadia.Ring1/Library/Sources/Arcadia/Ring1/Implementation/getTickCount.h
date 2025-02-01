@@ -18,6 +18,10 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_GETTICKCOUNT_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_GETTICKCOUNT_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 
 // https://michaelheilmann.com/repository/R1/#r-gettickcount

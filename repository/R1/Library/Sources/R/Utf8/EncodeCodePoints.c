@@ -17,8 +17,6 @@
 
 #include "R/Utf8/EncodeCodePoints.h"
 
-#include "Arcadia/Ring1/Include.h"
-
 void
 R_Utf8_encodeCodePoints
   ( 

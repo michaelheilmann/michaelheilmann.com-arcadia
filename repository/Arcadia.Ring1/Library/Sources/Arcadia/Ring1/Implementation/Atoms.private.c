@@ -15,15 +15,15 @@
 
 // Last modified: 2025-01-06
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Atoms.private.h"
 
+#include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring1/Implementation/Process1.h"
 #include "Arcadia/Ring1/Implementation/TypeNameParser.h"
 #include "Arms.h"
-#include "Arcadia/Ring1/Implementation/getTickCount.h"
-#include "Arcadia/Ring1/Implementation/Integer32.h"
-#include "Arcadia/Ring1/Implementation/Natural64.h"
-#include <stdio.h>
-#include <string.h>
+#include "Arcadia/Ring1/Implementation/Diagnostics.h"
+#include <string.h> /*TODO: Add and use Arcadia_Process functionality.*/
 
 // 60 seconds
 #define THRESHOLD 1000*60
@@ -279,7 +279,7 @@ Arcadia_Atoms_shutdown
   }
   if (0 == --g_singleton->referenceCount) {
     if (g_singleton->size > 0) {
-      fprintf(stderr, "%s:%d warning: atoms not empty\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d warning: atoms not empty\n", __FILE__, __LINE__);
     }
     Arcadia_Process1_deallocateUnmanaged(process, g_singleton->buckets);
     g_singleton->buckets = NULL;

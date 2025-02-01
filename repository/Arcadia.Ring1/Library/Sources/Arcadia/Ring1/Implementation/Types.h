@@ -18,6 +18,10 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_TYPES_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_TYPES_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
@@ -289,7 +293,7 @@ _Arcadia_Type_getType
 /// @param process A pointer to the Arcadia_Proces object.
 /// @return The "Arcadia.Atom" type.
 Arcadia_TypeValue
-_R_Atom_getType
+_Arcadia_Atom_getType
   (
     Arcadia_Process* process
   );

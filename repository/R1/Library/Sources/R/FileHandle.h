@@ -25,7 +25,7 @@ typedef struct R_FileSystem R_FileSystem;
 // FILE
 #include <stdio.h>
 
-Rex_declareObjectType(u8"R.FileHandle", R_FileHandle, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Library.FileHandle", R_FileHandle, u8"Arcadia.Object");
 
 struct R_FileHandle {
   Arcadia_Object _parent;

@@ -33,8 +33,9 @@ addVariable
   )
 {
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(variables); i < n; ++i) {
-    Arcadia_Value value = R_List_getAt(process, variables, i);
-    if (Arcadia_Object_equalTo(process, (Arcadia_Object*)name, &value)) {
+    Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name },
+                              R_List_getAt(process, variables, i) };
+    if (Arcadia_Value_isEqualTo(process, &args[0], &args[1])) {
       Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
       Arcadia_Process_jump(process);
     }
@@ -50,8 +51,9 @@ getRegisterOfVariable
   )
 {
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(variables); i < n; ++i) {
-    Arcadia_Value value = R_List_getAt(process, variables, i);
-    if (Arcadia_Object_equalTo(process, (Arcadia_Object*)name, &value)) {
+    Arcadia_Value args[2] = { { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name }, 
+                              R_List_getAt(process, variables, i) };
+    if (Arcadia_Value_isEqualTo(process, &args[0], &args[1])) {
       return i;
     }
   }
@@ -343,7 +345,7 @@ onConstructorDefinition
     R_Mil_ConstructorDefinitionAst* definitionAst
   )
 {
-  Arcadia_String* name = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"<constructor>", c_strlen(u8"<constructor>")));
+  Arcadia_String* name = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"<constructor>", c_strlen(u8"<constructor>")));
   Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
   Arcadia_Value v = R_Map_get(process, symbolTable, k);
   if (!Arcadia_Value_isVoidValue(&v)) {

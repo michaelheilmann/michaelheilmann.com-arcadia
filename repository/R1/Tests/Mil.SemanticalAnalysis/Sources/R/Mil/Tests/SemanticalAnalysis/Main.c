@@ -81,7 +81,7 @@ testNativePrintProcedure
   R_Map* foreignProcedures = R_Map_create(process);
 #define Define(Name,Function) \
   { \
-    Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, Name, sizeof(Name) - 1)) }; \
+    Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), Name, sizeof(Name) - 1)) }; \
     Arcadia_Value v = { .tag = Arcadia_ValueTag_ForeignProcedure, .foreignProcedureValue = &Function }; \
     R_Map_set(process, foreignProcedures, k, v); \
   }

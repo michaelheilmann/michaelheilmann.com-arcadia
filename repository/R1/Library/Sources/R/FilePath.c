@@ -201,12 +201,12 @@ normalize
     Arcadia_String* previousString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&t);
     t = R_List_getAt(process, self->fileNames, current);
     Arcadia_String* currentString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&t);
-    if (!Arcadia_String_isEqualTo_pn(previousString, "..", sizeof("..") - 1) &&
-      !Arcadia_String_isEqualTo_pn(previousString, u8".", sizeof(u8".")) &&
-      Arcadia_String_isEqualTo_pn(currentString, u8"..", sizeof(u8"..") - 1)) {
+    if (!Arcadia_String_isEqualTo_pn(process, previousString, "..", sizeof("..") - 1) &&
+        !Arcadia_String_isEqualTo_pn(process, previousString, u8".", sizeof(u8".")) &&
+         Arcadia_String_isEqualTo_pn(process, currentString, u8"..", sizeof(u8"..") - 1)) {
    // Remove previous and current.
       R_List_remove(process, self->fileNames, previous, 2);
-    } else if (Arcadia_String_isEqualTo_pn(currentString, u8".", sizeof(u8".") - 1)) {
+    } else if (Arcadia_String_isEqualTo_pn(process, currentString, u8".", sizeof(u8".") - 1)) {
       // Remove current.
       R_List_remove(process, self->fileNames, current, 1);
     } else {
@@ -216,7 +216,7 @@ normalize
   }
   if (!self->root && R_List_isEmpty(self->fileNames)) {
     // If the path is empty, then the path is `.`.
-    R_List_appendObjectReferenceValue(process, self->fileNames, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8".", sizeof(u8".") - 1)));
+    R_List_appendObjectReferenceValue(process, self->fileNames, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8".", sizeof(u8".") - 1)));
   }
 }
 
@@ -323,7 +323,7 @@ parseUnixFilePath
 
   if (isSlash(process, &context)) {
     target->relative = Arcadia_BooleanValue_False;
-    target->root = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"/", sizeof(u8"/") - 1));
+    target->root = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"/", sizeof(u8"/") - 1));
     next(process, &context);
   }
   // read the remaining directories
@@ -371,7 +371,7 @@ parseGenericFilePath
 
   if (isSlash(process, &context)) {
     target->relative = Arcadia_BooleanValue_False;
-    target->root = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"/", sizeof(u8"/") - 1));
+    target->root = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"/", sizeof(u8"/") - 1));
     next(process, &context);
   }
   // read the remaining directories
@@ -448,7 +448,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.FilePath", R_FilePath, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Library.FilePath", R_FilePath, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_FilePath_constructImpl
@@ -602,7 +602,7 @@ R_FilePath_toNative
   Arcadia_SizeValue i = 0, n = R_List_getSize(self->fileNames);
 
   if (self->root) {
-    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(self->root), Arcadia_String_getNumberOfBytes(self->root));
+    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(process, self->root), Arcadia_String_getNumberOfBytes(process, self->root));
     Arcadia_Natural32Value x;
     x = ':';
     R_Utf8Writer_writeCodePoints(process, temporary, &x, 1);
@@ -616,7 +616,7 @@ R_FilePath_toNative
   if (n > 0) {
     Arcadia_Value e = R_List_getAt(process, self->fileNames, 0);
     Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(fileName), Arcadia_String_getNumberOfBytes(fileName));
+    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(process, fileName), Arcadia_String_getNumberOfBytes(process, fileName));
     i++;
 
     for (; i < n; ++i) {
@@ -626,7 +626,7 @@ R_FilePath_toNative
 
       Arcadia_Value e = R_List_getAt(process, self->fileNames, i);
       Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-      R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(fileName), Arcadia_String_getNumberOfBytes(fileName));
+      R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(process, fileName), Arcadia_String_getNumberOfBytes(process, fileName));
     }
   }
   Arcadia_Natural32Value x = '\0';
@@ -685,7 +685,7 @@ R_FilePath_getFullPath
 #define BUFFER_LENGTH (4096)
   Arcadia_String* s = R_FilePath_toNative(process, self);
   char buffer[BUFFER_LENGTH];
-  DWORD result = GetFullPathName(Arcadia_String_getBytes(s), BUFFER_LENGTH, buffer, NULL);
+  DWORD result = GetFullPathName(Arcadia_String_getBytes(process, s), BUFFER_LENGTH, buffer, NULL);
   if (!result) {
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);
@@ -726,9 +726,9 @@ R_FilePath_isEqualTo
     return Arcadia_BooleanValue_False;
   }
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(self->fileNames); i < n; ++i) {
-    Arcadia_Object* x = R_List_getObjectReferenceValueAt(process, self->fileNames, i);
+    Arcadia_Value x = R_List_getAt(process, self->fileNames, i);
     Arcadia_Value y = R_List_getAt(process, other->fileNames, i);
-    if (!Arcadia_Object_equalTo(process, x, &y)) {
+    if (!Arcadia_Value_isEqualTo(process, &x, &y)) {
       return Arcadia_BooleanValue_False;
     }
   }
@@ -736,9 +736,9 @@ R_FilePath_isEqualTo
     return Arcadia_BooleanValue_False;
   }
   if (self->root != NULL) {
-    Arcadia_Value t;
-    Arcadia_Value_setObjectReferenceValue(&t, other->root);
-    if (!Arcadia_Object_equalTo(process, (Arcadia_Object*)self->root, &t)) {
+    Arcadia_Value args[2] = { { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self->root },
+                              { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = other->root } };
+    if (!Arcadia_Value_isEqualTo(process, &args[0], &args[1])) {
       return Arcadia_BooleanValue_False;
     }
   }

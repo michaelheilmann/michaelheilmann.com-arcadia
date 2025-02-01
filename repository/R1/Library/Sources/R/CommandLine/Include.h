@@ -18,7 +18,7 @@
 #if !defined(R_COMMANDLINE_INCLUDE_H_INCLUDED)
 #define R_COMMANDLINE_INCLUDE_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Boolean.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/Utf8Reader.h"
 #include "R/String.h"
 

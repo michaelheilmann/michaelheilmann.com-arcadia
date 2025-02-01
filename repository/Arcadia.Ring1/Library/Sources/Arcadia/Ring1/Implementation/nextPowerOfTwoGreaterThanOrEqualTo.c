@@ -15,6 +15,7 @@
 
 // Last modified: 2024-09-28
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/nextPowerOfTwoGreaterThanOrEqualTo.h"
 
 #include "Arcadia/Ring1/Include.h"

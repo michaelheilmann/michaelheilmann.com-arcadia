@@ -18,7 +18,9 @@
 #include "Module/Visuals/PixelBuffer.h"
 
 #include "R.h"
+#include "R/cstdlib.h" /*TODO: Add and use Arcadia_Process functionality.*/
 
+/* TODO: Add this to Arcadia_Process_copyMemory. */
 static inline void
 Memory_copy
   (
@@ -34,6 +36,7 @@ Memory_copy
   }
 }
 
+/* TODO: Add this to Arcadia_Process_swapMemory. */
 static inline void
 Memory_swap
   (

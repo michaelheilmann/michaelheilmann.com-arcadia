@@ -19,13 +19,6 @@
 
 #include "Arcadia/Ring1/Include.h"
 
-/// @todo Add to R's test utilities.
-#define R_Test_assert(result) \
-  if (!(result)) { \
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
-    Arcadia_Process_jump(process); \
-  }
-
 static void
 minimumTests
   (
@@ -33,10 +26,10 @@ minimumTests
   )
 {
 #define Do(Type, Suffix) \
-  R_Test_assert(Type##Value_Minimum == R_minimum##Suffix##Value(process, Type##Value_Minimum, Type##Value_Maximum)); \
-  R_Test_assert(Type##Value_Minimum == R_minimum##Suffix##Value(process, Type##Value_Maximum, Type##Value_Minimum)); \
-  R_Test_assert(Type##Value_Minimum == R_minimum##Suffix##Value(process, Type##Value_Literal(0), Type##Value_Minimum)); \
-  R_Test_assert(Type##Value_Minimum == R_minimum##Suffix##Value(process, Type##Value_Minimum, Type##Value_Literal(0)));
+  Arcadia_Tests_assertTrue(Type##Value_Minimum == R_minimum##Suffix##Value(process, Type##Value_Minimum, Type##Value_Maximum)); \
+  Arcadia_Tests_assertTrue(Type##Value_Minimum == R_minimum##Suffix##Value(process, Type##Value_Maximum, Type##Value_Minimum)); \
+  Arcadia_Tests_assertTrue(Type##Value_Minimum == R_minimum##Suffix##Value(process, Type##Value_Literal(0), Type##Value_Minimum)); \
+  Arcadia_Tests_assertTrue(Type##Value_Minimum == R_minimum##Suffix##Value(process, Type##Value_Minimum, Type##Value_Literal(0)));
 
   Do(Arcadia_Integer8, Integer8);
   Do(Arcadia_Integer16, Integer16);
@@ -53,36 +46,6 @@ minimumTests
 #undef Do
 }
 
-static bool
-safeExecute
-  (
-    void (*f)(Arcadia_Process* process)
-  )
-{
-  Arcadia_Status status = Arcadia_Status_Success;
-  bool result = true;
-  Arcadia_Process* process = NULL;
-  if (Arcadia_Process_get(&process)) {
-    result = false;
-    return result;
-  }
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    (*f)(process);
-  } else {
-    result = false;
-  }
-  Arcadia_Process_popJumpTarget(process);
-  status = Arcadia_Process_getStatus(process);
-  Arcadia_Process_relinquish(process);
-  process = NULL;
-  if (status) {
-    result = false;
-  }
-  return result;
-}
-
 int
 main
   (
@@ -90,7 +53,7 @@ main
     char **argv
   )
 {
-  if (!safeExecute(&minimumTests)) {
+  if (!Arcadia_Tests_safeExecute(&minimumTests)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

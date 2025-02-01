@@ -21,5 +21,7 @@
 @{include("3.documentation.6.numeric-functions/minimum.i")}
 @{include("3.documentation.6.numeric-functions/nextPowerOfTwoGreaterThan.i")}
 @{include("3.documentation.6.numeric-functions/nextPowerOfTwoGreaterThanOrEqualTo.i")}
+@{include("3.documentation.6.numeric-functions/safeAdd.i")}
+@{include("3.documentation.6.numeric-functions/safeMultiply.i")}
 @{include("3.documentation.7.time-and-date-functions/1.getTickCount.i")}
 @{include("footer.i")}

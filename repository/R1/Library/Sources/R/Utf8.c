@@ -21,7 +21,7 @@
 #include "R/cstdlib.h"
 
 Arcadia_BooleanValue
-R_isUtf8
+Arcadia_isUtf8
   (
     void const* bytes,
     Arcadia_SizeValue numberOfBytes,

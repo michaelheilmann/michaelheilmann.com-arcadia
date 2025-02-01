@@ -19,10 +19,8 @@
 #define R_FILESYSTEM_H_INCLUDED
 
 #include "R/Configure.h"
-#include "Arcadia/Ring1/Implementation/Boolean.h"
+#include "Arcadia/Ring1/Include.h"
 #include "R/ByteBuffer.h"
-#include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct R_FileHandle R_FileHandle;
 typedef struct R_FilePath R_FilePath;
 
@@ -31,7 +29,7 @@ typedef struct R_FilePath R_FilePath;
 ///   constructor()
 /// }
 /// @endcode
-Rex_declareObjectType(u8"R.FileSystem", R_FileSystem, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Library.FileSystem", R_FileSystem, u8"Arcadia.Object");
 
 struct R_FileSystem {
   Arcadia_Object _parent;

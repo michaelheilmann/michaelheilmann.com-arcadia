@@ -151,7 +151,7 @@ R_Interpreter_Class_addConstructor
     R_Interpreter_Constructor* constructor
   )
 { 
-  Arcadia_String* name = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"<constructor>", c_strlen(u8"<constructor>")));
+  Arcadia_String* name = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"<constructor>", c_strlen(u8"<constructor>")));
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
   Arcadia_Value value = R_Map_get(process, self->classMembers, key);
   if (!Arcadia_Value_isVoidValue(&value)) {

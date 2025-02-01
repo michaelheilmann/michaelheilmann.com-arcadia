@@ -44,9 +44,9 @@
 #include "R/cstdlib.h"
 #include "R.h"
 
-#define CodePoint_Start (R_Utf8CodePoint_Last + 1)
-#define CodePoint_End (R_Utf8CodePoint_Last + 2)
-#define CodePoint_Error (R_Utf8CodePoint_Last + 3)
+#define CodePoint_Start (Arcadia_Utf8CodePoint_Last + 1)
+#define CodePoint_End (Arcadia_Utf8CodePoint_Last + 2)
+#define CodePoint_Error (Arcadia_Utf8CodePoint_Last + 3)
 
 struct R_Mil_Scanner {
   Arcadia_Object _parent;
@@ -195,7 +195,7 @@ R_Mil_Scanner_constructImpl
   //
   _self->token.type = R_Mil_TokenType_StartOfInput;
   _self->stringTable = R_Mil_StringTable_create(process);
-  _self->input = (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"", sizeof(u8"") - 1)));
+  _self->input = (R_Utf8Reader*)R_Utf8StringReader_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"", sizeof(u8"") - 1)));
   _self->token.text = Arcadia_StringBuffer_create(process);
   //
   Arcadia_StringBuffer_append_pn(process, _self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);

@@ -18,8 +18,8 @@
 #if !defined(R_CONVERT_STRINGTOBOOLEAN_H_INCLUDED)
 #define R_CONVERT_STRINGTOBOOLEAN_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Include.h"
+#include "Arms.h"
 
 Arcadia_BooleanValue
 R_toBoolean

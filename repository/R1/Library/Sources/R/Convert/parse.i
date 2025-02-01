@@ -20,9 +20,9 @@
 #include "R/Utf8.h"
 #include "R/cstdlib.h"
 
-#define CodePoint_Start (R_Utf8CodePoint_Last + 1)
-#define CodePoint_End (R_Utf8CodePoint_Last + 2)
-#define CodePoint_Error (R_Utf8CodePoint_Last + 3)
+#define CodePoint_Start (Arcadia_Utf8CodePoint_Last + 1)
+#define CodePoint_End (Arcadia_Utf8CodePoint_Last + 2)
+#define CodePoint_Error (Arcadia_Utf8CodePoint_Last + 3)
 
 typedef struct State {
   uint32_t symbol;

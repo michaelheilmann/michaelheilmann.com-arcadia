@@ -55,6 +55,7 @@ struct Arcadia_JumpTarget {
 #define Arcadia_Status_Uninitialized (19)
 #define Arcadia_Status_EnvironmentFailed (20)
 #define Arcadia_Status_NotInitialized (21)
+#define Arcadia_Status_NotImplemented (22)
 
 typedef uint32_t Arcadia_Status;
 
@@ -302,16 +303,6 @@ Arcadia_Process1_registerType
 /// - Arcadia_Status_AllocationFailed if an allocation failed.
 /// - Arcadia_Status_TypeNotExists if the type does not exist.
 /// - Arcadia_Status_ArgumentInvalid if @a p or @a name is a null pointer.
-bool
-Arcadia_Process1_allocate_nojump
-  (
-    Arcadia_Process1* process,
-    void** p,
-    const char* name,
-    size_t nameLength,
-    size_t size
-  );
-
 void
 Arcadia_Process1_allocate
   (

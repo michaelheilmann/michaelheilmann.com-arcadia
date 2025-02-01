@@ -143,7 +143,8 @@ R_Mil_StringTable_maybeResize_nojump
         while (oldBuckets[oldIndex]) {
           R_Mil_StringTable_Node* node = oldBuckets[oldIndex];
           oldBuckets[oldIndex] = oldBuckets[oldIndex]->next;
-          Arcadia_SizeValue hash = Arcadia_Object_hash(process, (Arcadia_ObjectReferenceValue)node->string); // TODO: Strengthen the contract of Arcadia_Object_hash not to jump.
+          Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)node->string  };
+          Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &v);
           Arcadia_SizeValue newIndex = hash % newCapacity;
           node->next = newBuckets[newIndex];
           newBuckets[newIndex] = node;
@@ -228,8 +229,9 @@ R_Mil_StringTable_getOrCreateString
   Arcadia_SizeValue hash = R_Mil_StringTable_hashBytes(Arcadia_StringBuffer_getBytes(stringBuffer), Arcadia_StringBuffer_getNumberOfBytes(stringBuffer));
   Arcadia_SizeValue index = hash % self->capacity;
   for (R_Mil_StringTable_Node* node = self->buckets[index]; NULL != node; node = node->next) {
-    if (Arcadia_Object_hash(process, (Arcadia_ObjectReferenceValue)node->string) == hash && Arcadia_String_getNumberOfBytes(node->string)) {
-      if (!c_memcmp(Arcadia_String_getBytes(node->string), Arcadia_StringBuffer_getBytes(stringBuffer), Arcadia_String_getNumberOfBytes(node->string))) {
+    Arcadia_Value nodeValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)node->string };
+    if (Arcadia_Value_getHash(process, &nodeValue) == hash && Arcadia_String_getNumberOfBytes(process, node->string)) {
+      if (!c_memcmp(Arcadia_String_getBytes(process, node->string), Arcadia_StringBuffer_getBytes(stringBuffer), Arcadia_String_getNumberOfBytes(process, node->string))) {
         return node->string;
       }
     }

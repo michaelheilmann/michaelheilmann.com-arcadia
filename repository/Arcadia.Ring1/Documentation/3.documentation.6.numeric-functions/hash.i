@@ -1,4 +1,4 @@
-<h4 id="r-hash">Arcadia_hash</h4>
+<h4 id="arcadia-hash">Arcadia_hash</h4>
 <p>Return the hash of a value.</p>
 <p><code>
 Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)

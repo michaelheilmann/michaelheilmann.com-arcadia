@@ -218,4 +218,11 @@ Arcadia_Process_allocate
     size_t size
   );
 
+/// @return A pointer to the Arcadia_Process1 object.
+Arcadia_Process1*
+Arcadia_Process_getBackendNoLock
+  (
+    Arcadia_Process* process
+  );
+
 #endif // R_JUMPTARGET_H_INCLUDED

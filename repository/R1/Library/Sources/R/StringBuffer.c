@@ -207,7 +207,7 @@ Arcadia_StringBuffer_append_pn
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!R_isUtf8(bytes, numberOfBytes, NULL)) {
+  if (!Arcadia_isUtf8(bytes, numberOfBytes, NULL)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
     Arcadia_Process_jump(process);
   }
@@ -231,7 +231,7 @@ Arcadia_StringBuffer_append
   Arcadia_ObjectReferenceValue referenceValue = Arcadia_Value_getObjectReferenceValue(&value);
   if (Arcadia_Type_isSubType(Arcadia_Object_getType(referenceValue), _R_ByteBuffer_getType(process))) {
     R_ByteBuffer* object = (R_ByteBuffer*)referenceValue;
-    if (!R_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
+    if (!Arcadia_isUtf8(R_ByteBuffer_getBytes(object), R_ByteBuffer_getNumberOfBytes(object), NULL)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
       Arcadia_Process_jump(process);
     }
@@ -241,9 +241,9 @@ Arcadia_StringBuffer_append
   } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(referenceValue), _Arcadia_String_getType(process))) {
     Arcadia_String* object = (Arcadia_String*)referenceValue;
     // The Byte sequence of Arcadia.String is guaranteed to be an UTF8 Byte sequence.
-    ensureFreeCapacityBytes(process, self, Arcadia_String_getNumberOfBytes(object));
-    c_memcpy(self->elements + self->size, Arcadia_String_getBytes(object), Arcadia_String_getNumberOfBytes(object));
-    self->size += Arcadia_String_getNumberOfBytes(object);
+    ensureFreeCapacityBytes(process, self, Arcadia_String_getNumberOfBytes(process, object));
+    c_memcpy(self->elements + self->size, Arcadia_String_getBytes(process, object), Arcadia_String_getNumberOfBytes(process, object));
+    self->size += Arcadia_String_getNumberOfBytes(process, object);
   } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(referenceValue), _Arcadia_StringBuffer_getType(process))) {
     Arcadia_StringBuffer* object = (Arcadia_StringBuffer*)referenceValue;
     // The Byte sequence of Arcadia.StringBuffer is guaranteed to be an UTF8 Byte sequence.

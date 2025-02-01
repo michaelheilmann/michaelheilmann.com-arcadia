@@ -1,6 +1,10 @@
 #if !defined(ARCADIA_RING1_DIAGNOSTICS_H_INCLUDED)
 #define ARCADIA_RING1_DIAGNOSTICS_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include <stdarg.h>
 #include <stdint.h>
 

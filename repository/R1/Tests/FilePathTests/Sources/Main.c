@@ -37,11 +37,11 @@ checkNormalized
 {
   R_FilePath* filePath = R_FilePath_parseNative(process, p, strlen(p));
   Arcadia_String* filePathString = R_FilePath_toNative(process, filePath);
-  if (Arcadia_String_getNumberOfBytes(filePathString) != strlen(q) + 1) {
+  if (Arcadia_String_getNumberOfBytes(process, filePathString) != strlen(q) + 1) {
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
     Arcadia_Process_jump(process);
   }
-  if (memcmp(Arcadia_String_getBytes(filePathString), q, strlen(q))) {
+  if (memcmp(Arcadia_String_getBytes(process, filePathString), q, strlen(q))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
     Arcadia_Process_jump(process);
   }

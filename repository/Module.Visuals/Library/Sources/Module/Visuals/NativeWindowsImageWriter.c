@@ -212,7 +212,7 @@ startup1
   //
   if (ImageWriterParameters_hasPath(process, parameters)) {
     R_ByteBuffer* b = R_ByteBuffer_create(process);
-    R_ByteBuffer_append_pn(process, b, Arcadia_String_getBytes(ImageWriterParameters_getPath(process, parameters)), Arcadia_String_getNumberOfBytes(ImageWriterParameters_getPath(process, parameters)));
+    R_ByteBuffer_append_pn(process, b, Arcadia_String_getBytes(process, ImageWriterParameters_getPath(process, parameters)), Arcadia_String_getNumberOfBytes(process, ImageWriterParameters_getPath(process, parameters)));
     R_ByteBuffer_append_pn(process, b, u8"", 1);
     wchar_t* targetPathW = multiByteToWideChar(b->p);
     if (!targetPathW) {
@@ -590,7 +590,7 @@ NativeWindowsImageWriter_writeIcoToPathImpl
 {
   R_ByteBuffer* targetByteBuffer = R_ByteBuffer_create(process);
   ImageWriter_writeIcoToByteBuffer(process, (ImageWriter*)self, sourcePixelBuffers, targetByteBuffer);
-  R_FileSystem_setFileContents(process, R_FileSystem_create(process), R_FilePath_parseNative(process, Arcadia_String_getBytes(targetPath), Arcadia_String_getNumberOfBytes(targetPath)), targetByteBuffer);
+  R_FileSystem_setFileContents(process, R_FileSystem_create(process), R_FilePath_parseNative(process, Arcadia_String_getBytes(process, targetPath), Arcadia_String_getNumberOfBytes(process, targetPath)), targetByteBuffer);
 }
 
 static void

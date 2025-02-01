@@ -34,7 +34,7 @@ main1
   Arcadia_Value_setVoidValue(&height, Arcadia_VoidValue_Void);
   R_List* arguments = R_List_create(process);
   for (int argi = 1; argi < argc; ++argi) {
-    Arcadia_String* argument = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, argv[argi], strlen(argv[argi])));
+    Arcadia_String* argument = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), argv[argi], strlen(argv[argi])));
     R_List_appendObjectReferenceValue(process, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
   for (Arcadia_SizeValue i = 0, n = R_List_getSize(arguments); i < n; ++i) {
@@ -46,12 +46,12 @@ main1
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Process_jump(process);
     }
-    if (Arcadia_String_isEqualTo_pn(key, u8"target", sizeof(u8"target") - 1)) {
+    if (Arcadia_String_isEqualTo_pn(process, key, u8"target", sizeof(u8"target") - 1)) {
       if (!value) {
         R_CommandLine_raiseNoValueError(process, key);
       }
       Arcadia_Value_setObjectReferenceValue(&target, value);
-    } else if (Arcadia_String_isEqualTo_pn(key, u8"width", sizeof(u8"width") - 1)) {
+    } else if (Arcadia_String_isEqualTo_pn(process, key, u8"width", sizeof(u8"width") - 1)) {
       if (!value) {
         R_CommandLine_raiseNoValueError(process, key);
       }
@@ -64,7 +64,7 @@ main1
         Arcadia_Process_popJumpTarget(process);
         R_CommandLine_raiseValueInvalidError(process, key, value);
       }
-    } else if(Arcadia_String_isEqualTo_pn(key, u8"height", sizeof(u8"height") - 1)) {
+    } else if(Arcadia_String_isEqualTo_pn(process, key, u8"height", sizeof(u8"height") - 1)) {
       if (!value) {
         R_CommandLine_raiseNoValueError(process, key);
       }
@@ -80,21 +80,21 @@ main1
     } else {
       R_CommandLine_raiseUnknownArgumentError(process, key, value);
     }
-    fwrite(Arcadia_String_getBytes(key), 1, Arcadia_String_getNumberOfBytes(key), stdout);
+    fwrite(Arcadia_String_getBytes(process, key), 1, Arcadia_String_getNumberOfBytes(process, key), stdout);
     if (value) {
       fwrite(u8"=", 1, sizeof(u8"=") - 1, stdout);
-      fwrite(Arcadia_String_getBytes(value), 1, Arcadia_String_getNumberOfBytes(value), stdout);
+      fwrite(Arcadia_String_getBytes(process, value), 1, Arcadia_String_getNumberOfBytes(process, value), stdout);
     }
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
   if (Arcadia_Value_isVoidValue(&target)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"target", sizeof(u8"target") - 1)));
+    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"target", sizeof(u8"target") - 1)));
   }
   if (Arcadia_Value_isVoidValue(&width)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"width", sizeof(u8"width") - 1)));
+    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"width", sizeof(u8"width") - 1)));
   }
   if (Arcadia_Value_isVoidValue(&height)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"height", sizeof(u8"height") - 1)));
+    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"height", sizeof(u8"height") - 1)));
   }
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
   ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(process);

@@ -1,6 +1,6 @@
 <h3 id="foreignprocedure-type">3.1.2. Foreign Procedure Type</h3>
 <p>
-R provides the <scode>Arcadia_ForeignProcedureValue</code> type.
+Arcadia Ring 1 provides the <scode>Arcadia_ForeignProcedureValue</code> type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_ForeignProcedureValue;

@@ -17,6 +17,7 @@
 #define R_CSTDLIB_H_INCLUDED
 
 #include "R/Configure.h"
+#include "Arcadia/Ring1/Include.h"
 
 // assert
 #include <assert.h>
@@ -42,28 +43,11 @@
 // UINTx_MAX, INTx_MIN, INTx_MAX
 #include <limits.h>
 
-#if __STDC_VERSION__ < 202311L 
-  #define c_static_assert(expression, message) _Static_assert(expression, message)
-#else
-  #define c_static_assert(expression, message) static_assert(expression, message)
-#endif
-
-/// @since 1.0
-/// @brief
-/// Function annotation indicating a function does not return normally.
-#if R_Configuration_CompilerC_Msvc == R_Configuration_CompilerC
-  #define c_noreturn() __declspec(noreturn)
-#elif R_Configuration_CompilerC_Gcc == R_Configuration_CompilerC
-  #define c_noreturn() __attribute__((noreturn))
-#else
-  #define c_noreturn()
-#endif
-
 // https://en.cppreference.com/w/c/error/assert
 #define c_assert(expression) assert(expression)
 
 // https://en.cppreference.com/w/c/program/exit
-c_noreturn() void c_exit(int code);
+Arcadia_NoReturn() void c_exit(int code);
 
 // https://en.cppreference.com/w/c/string/byte/memcpy
 void* c_memcpy(void* restrict dst, const void* restrict src, size_t count);
@@ -80,15 +64,6 @@ int c_fprintf(FILE* restrict stream, const char* restrict format, ...);
 // https://en.cppreference.com/w/c/io/vfprintf
 int c_vfprintf(FILE* restrict stream, const char* restrict format, va_list arguments);
 
-// https://en.cppreference.com/w/c/memory/malloc
-void* c_malloc(size_t size);
-
-// https://en.cppreference.com/w/c/memory/realloc
-void* c_realloc(void* ptr, size_t new_size);
-
-// https://en.cppreference.com/w/c/memory/free
-void c_free(void* ptr);
-
 // https://en.cppreference.com/w/c/string/byte/strlen
 size_t c_strlen(const char *w);
 
@@ -98,10 +73,10 @@ size_t c_strlen(const char *w);
 #if defined(C_WARN_UNUSED_RETURN_VALUE)
   #error("C_WARN_UNUSED_RETURN_VALUE() already defined")
 #endif
-#if R_Configuration_CompilerC_Gcc == R_Configuration_CompilerC || \
-    R_Configuration_CompilerC_Clang == R_Configuration_CompilerC
+#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC || \
+    Arcadia_Configuration_CompilerC_Clang == Arcadia_Configuration_CompilerC
   #define C_WARN_UNUSED_RETURN_VALUE() __attribute__((warn_unused_result))
-#elif R_Configuration_CompilerC_Msvc == R_Configuration_CompilerC
+#elif Arcadia_Configuration_CompilerC_Msvc == Arcadia_Configuration_CompilerC
   #include <sal.h>
   #define C_WARN_UNUSED_RETURN_VALUE() _Check_return_
 #else
@@ -118,14 +93,5 @@ size_t c_strlen(const char *w);
  * @return @a true if there was an overflow, @a false otherwise.
  */
 bool c_safe_add_sz(size_t a, size_t b, size_t* r);
-
-/**
- * @brief Perform safe addition.
- * @param a The 1st operand.
- * @param b The 2nd operand.
- * @param result A pointer to the result variable.
- * @return @a true if there was an overflow, @a false otherwise.
- */
-bool c_safe_mul_sz(size_t a, size_t b, size_t* r);
 
 #endif // R_CSTDLIB_H_INCLUDED

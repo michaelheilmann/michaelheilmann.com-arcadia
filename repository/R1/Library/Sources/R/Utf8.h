@@ -18,15 +18,14 @@
 #if !defined(R_UTF8_H_INCLUDED)
 #define R_UTF8_H_INCLUDED
 
-#include "R/cstdlib.h"
 #include "R/ByteBuffer.h"
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 
-#define R_Utf8CodePoint_Last (0x0010ffff)
-Arcadia_StaticAssert(R_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximum - 3, "<internal error>");
+#define Arcadia_Utf8CodePoint_Last (0x0010ffff)
+Arcadia_StaticAssert(Arcadia_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximum - 3, "<internal error>");
 
 Arcadia_BooleanValue
-R_isUtf8
+Arcadia_isUtf8
   (
     void const* bytes,
     Arcadia_SizeValue numberOfBytes,

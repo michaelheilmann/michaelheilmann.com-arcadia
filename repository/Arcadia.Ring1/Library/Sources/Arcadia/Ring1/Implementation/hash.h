@@ -18,6 +18,10 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_HASH_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_HASH_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/Atoms.h"
 
 #include "Arcadia/Ring1/Implementation/Boolean.h"
@@ -51,107 +55,9 @@ Arcadia_hashAtomValue
 
 // https://michaelheilmann.com/repository/R1/#r-hash
 Arcadia_SizeValue
-Arcadia_hashBooleanValue
-  (
-    Arcadia_BooleanValue x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashForeignProcedureValue
-  (
-    Arcadia_ForeignProcedureValue x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashInteger16Value
-  (
-    Arcadia_Integer16Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashInteger32Value
-  (
-    Arcadia_Integer32Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashInteger64Value
-  (
-    Arcadia_Integer64Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashInteger8Value
-  (
-    Arcadia_Integer8Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashNatural16Value
-  (
-    Arcadia_Natural16Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashNatural32Value
-  (
-    Arcadia_Natural32Value x
-  );
-  
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashNatural64Value
-  (
-    Arcadia_Natural64Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashNatural8Value
-  (
-    Arcadia_Natural8Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashReal32Value
-  (
-    Arcadia_Real32Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashReal64Value
-  (
-    Arcadia_Real64Value x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashSizeValue
-  (
-    Arcadia_SizeValue x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
 Arcadia_hashTypeValue
   (
     Arcadia_TypeValue x
-  );
-
-// https://michaelheilmann.com/repository/R1/#r-hash
-Arcadia_SizeValue
-Arcadia_hashVoidValue
-  (
-    Arcadia_VoidValue x
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_HASH_H_INCLUDED

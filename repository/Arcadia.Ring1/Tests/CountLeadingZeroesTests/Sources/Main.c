@@ -19,13 +19,6 @@
 
 #include "Arcadia/Ring1/Include.h"
 
-/// @todo Add to R's test utilities.
-#define R_Test_assert(result) \
-  if (!(result)) { \
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
-    Arcadia_Process_jump(process); \
-  }
-
 static void
 countLeadingZeroesTests
   (
@@ -36,7 +29,7 @@ countLeadingZeroesTests
   { \
     Arcadia_SizeValue expected = EXPECTED; \
     Arcadia_SizeValue received = Arcadia_countLeadingZeroes##Type##Value(process, VALUE); \
-    R_Test_assert(received == expected); \
+    Arcadia_Tests_assertTrue(received == expected); \
   }
   Do(Natural64, Arcadia_Natural64Value_Literal(0), Arcadia_SizeValue_Literal(56) + Arcadia_SizeValue_Literal(8));
   Do(Natural64, Arcadia_Natural64Value_Literal(1), Arcadia_SizeValue_Literal(56) + Arcadia_SizeValue_Literal(7));
@@ -69,38 +62,14 @@ countLeadingZeroesTests
 #undef Do
 }
 
-static bool
-safeExecute
+int
+main
   (
-    void (*f)(Arcadia_Process*)
+    int argc,
+    char **argv
   )
 {
-  Arcadia_Status status = Arcadia_Status_Success;
-  bool result = true;
-  Arcadia_Process* process = NULL;
-  if (Arcadia_Process_get(&process)) {
-    result = false;
-    return result;
-  }
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    (*f)(process);
-  } else {
-    result = false;
-  }
-  Arcadia_Process_popJumpTarget(process);
-  status = Arcadia_Process_getStatus(process);
-  Arcadia_Process_relinquish(process);
-  process = NULL;
-  if (status) {
-    result = false;
-  }
-  return result;
-}
-
-int main(int argc, char **argv) {
-  if (!safeExecute(&countLeadingZeroesTests)) {
+  if (!Arcadia_Tests_safeExecute(&countLeadingZeroesTests)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

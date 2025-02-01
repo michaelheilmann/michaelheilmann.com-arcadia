@@ -1,6 +1,6 @@
 <h3 id="integer-types">3.1.3. Integer Types</h3>
 <p>
-R provides a two's complement integer number types.
+Arcadia Ring 1 provides a two's complement integer number types.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_Integer<my-mv>Suffix</my-mv>Value

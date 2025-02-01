@@ -18,12 +18,8 @@
 #if !defined(R_CONVERT_NATURALTOSTRING_H_INCLUDED)
 #define R_CONVERT_NATURALTOSTRING_H_INCLUDED
 
+#include "Arcadia/Ring1/Include.h"
 #include "Arms.h"
-#include "Arcadia/Ring1/Implementation/Natural16.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "Arcadia/Ring1/Implementation/Natural64.h"
-#include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
 
 // On success:
 // <code>*buffer</code> is assigned an array of Bytes that is an UTF-8 string with a textual representation of the numeric value.

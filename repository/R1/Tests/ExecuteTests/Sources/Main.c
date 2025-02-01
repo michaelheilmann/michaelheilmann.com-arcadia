@@ -75,7 +75,7 @@ execute1
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_append(code, codeBytes, 1);
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);
@@ -116,7 +116,7 @@ execute2
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Register, 2);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1);
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);
@@ -160,7 +160,7 @@ execute3
       Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
       Arcadia_Process_jump(process);
     }
-    if (1 != R_Interpreter_Code_Constants_getOrCreateString(process, constants, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
+    if (1 != R_Interpreter_Code_Constants_getOrCreateString(process, constants, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
       Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
       Arcadia_Process_jump(process);
     }
@@ -170,7 +170,7 @@ execute3
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0); // calleee
     R_Interpreter_Code_appendCountNatural8(code, 1); // number of arguments
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(process, u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);

@@ -84,7 +84,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.FileSystem", R_FileSystem, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Library.FileSystem", R_FileSystem, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 R_FileSystem_constructImpl
@@ -187,7 +187,7 @@ R_FileSystem_regularFileExists
 {
   Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
-  DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(nativePathString));
+  DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(process, nativePathString));
 
   return (dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
          !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
@@ -219,7 +219,7 @@ R_FileSystem_directoryFileExists
 {
   Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
 #if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
-  DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(nativePathString));
+  DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(process, nativePathString));
   return (dwFileAttributes != INVALID_FILE_ATTRIBUTES);
 #elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
   struct stat stat;
@@ -249,7 +249,7 @@ R_FileSystem_createDirectory
 {
   Arcadia_String* nativePath = R_FilePath_toNative(process, path);
 #if R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Windows
-  if (FALSE == CreateDirectory(Arcadia_String_getBytes(nativePath), NULL)) {
+  if (FALSE == CreateDirectory(Arcadia_String_getBytes(process, nativePath), NULL)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);
   }
