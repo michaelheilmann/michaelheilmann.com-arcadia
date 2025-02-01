@@ -56,7 +56,7 @@ Arcadia_safeAdd_n32
   *sumLow = (uint32_t)(temporary & 0x00000000ffffffff);
 }
 
-#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_Compiler
+#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
 
 void
 Arcadia_mulex_n64_gcc

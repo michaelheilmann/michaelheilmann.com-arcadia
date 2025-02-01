@@ -25,6 +25,7 @@
   #define WIN32_LEAN_AND_MEAN
   #include <Windows.h> // GetFileAttributes
 #elif R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Linux
+  #include <string.h> // strlen
   #include <sys/stat.h> // stat
   #include <errno.h> // errno
   #include <unistd.h> // getcwd
@@ -186,14 +187,14 @@ R_FileSystem_regularFileExists
   )
 {
   Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(process, nativePathString));
 
   return (dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
          !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   struct stat stat;
-  if(-1 == lstat(Arcadia_String_getBytes(nativePathString), &stat)) {
+  if(-1 == lstat(Arcadia_String_getBytes(process, nativePathString), &stat)) {
     switch (errno) {
       case EOVERFLOW:
       case ENOMEM: {
@@ -218,12 +219,12 @@ R_FileSystem_directoryFileExists
   )
 {
   Arcadia_String* nativePathString = R_FilePath_toNative(process, path);
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(process, nativePathString));
   return (dwFileAttributes != INVALID_FILE_ATTRIBUTES);
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   struct stat stat;
-  if(-1 == lstat(Arcadia_String_getBytes(nativePathString), &stat)) {
+  if(-1 == lstat(Arcadia_String_getBytes(process, nativePathString), &stat)) {
     switch (errno) {
       case EOVERFLOW:
       case ENOMEM: {
@@ -248,13 +249,13 @@ R_FileSystem_createDirectory
   )
 {
   Arcadia_String* nativePath = R_FilePath_toNative(process, path);
-#if R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Windows
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   if (FALSE == CreateDirectory(Arcadia_String_getBytes(process, nativePath), NULL)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);
   }
-#elif R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Linux
-  if (-1 == mkdir(Arcadia_String_getBytes(nativePath), 0777)) {
+#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
+  if (-1 == mkdir(Arcadia_String_getBytes(process, nativePath), 0777)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_FileSystemOperationFailed);
     Arcadia_Process_jump(process);
   }
@@ -270,7 +271,7 @@ R_FileSystem_getWorkingDirectory
     R_FileSystem* self
   )
 {
-#if R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Windows
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   DWORD dwBufferSize = GetCurrentDirectory(0, NULL);
   if (0 == dwBufferSize) {
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
@@ -301,15 +302,15 @@ R_FileSystem_getWorkingDirectory
     pBuffer = NULL;
     Arcadia_Process_jump(process);
   }
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
-  c_static_assert(PATH_MAX < Arcadia_SizeValue_Maximum, "environment not (yet) supported");
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  Arcadia_StaticAssert(PATH_MAX < Arcadia_SizeValue_Maximum, "environment not (yet) supported");
   #define CWD_CAPACITY (PATH_MAX+1)
   char cwd[CWD_CAPACITY];
   if (!getcwd(cwd, CWD_CAPACITY)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);
   }
-  R_FilePath* filePath = R_FilePath_parseUnix(cwd, c_strlen(cwd));
+  R_FilePath* filePath = R_FilePath_parseUnix(process, cwd, strlen(cwd));
   return filePath;
 #else
   #error("environment not (yet) supported")

@@ -34,18 +34,22 @@ set(MyTool Tools.IconGenerator)
 
 BeginProduct(${MyTool})
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+if (${${MyTool}.OperatingSystem} STREQUAL ${${MyTool}.OperatingSystem.Windows})
 
-add_executable(${MyTool})
+    FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
+    FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h @ONLY)
+    add_executable(${MyTool})
 
-list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Main.c)
-list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h @ONLY)
 
-target_link_libraries(${MyTool} Module.Visuals Arcadia.R Arcadia.Arms)
+    list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Main.c)
+    list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h)
 
-set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.ico\"")
+    target_link_libraries(${MyTool} Module.Visuals Arcadia.R Arcadia.Arms)
 
-EndProduct(${MyTool} executable)
+    set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.ico\"")
+
+    EndProduct(${MyTool} executable)
+
+endif()

@@ -18,8 +18,14 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_PROCESS1_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_PROCESS1_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+#error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/NoReturn.h"
-#include <stdbool.h>
+#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
+#include <stddef.h>
+#endif
 #include <stdint.h>
 #include <setjmp.h>
 

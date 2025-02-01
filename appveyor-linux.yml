@@ -1,0 +1,40 @@
+# AppVeyor configuration for AppVeyor project "primordialmachine".
+clone_depth: 1
+
+# Build worker image (VM template).
+image: Ubuntu
+
+# Build on pushes to all branches.
+branches:
+  only:
+    - main
+    - develop
+
+# Do not build on tag pushes.
+skip_tags: true
+
+install:
+
+# Generate solution and project files.
+before_build:
+    - ps: |
+        cmake CMakeLists.txt
+
+build_script:
+    - sh: make all
+       
+test_script:
+    - ps: ctest --output-junit test-results-${env:APPVEYOR_JOB_ID}.xml -C ${env:CONFIGURATION} 
+    - ps: |
+        $webClient = New-Object 'System.Net.WebClient'
+        $webClient.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test-results-${env:APPVEYOR_JOB_ID}.xml))
+
+after_build:
+                                          
+# If one matrix entry fails, all entries fails (https://www.appveyor.com/docs/build-configuration#failing-strategy).
+matrix:
+    fast_finish: true
+
+artifacts:
+
+deploy:

@@ -24,6 +24,9 @@
 
 #include "Arcadia/Ring1/Implementation/_declareScalarType.h"
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
+#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
+#include <stddef.h>
+#endif
 #include <stdint.h>
 
 typedef size_t Arcadia_SizeValue;

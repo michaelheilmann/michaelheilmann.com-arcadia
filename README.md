@@ -12,8 +12,10 @@ This repository contains
 - (Building under Linux)[building-under-linux.md]
 
 ### Build status
-[![Build status](https://ci.appveyor.com/api/projects/status/og37g8g7t984xtt2/branch/main?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com/branch/main)
-[![Build status](https://ci.appveyor.com/api/projects/status/og37g8g7t984xtt2/branch/develop?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com/branch/develop)
+- Windows Main [![Build status](https://ci.appveyor.com/api/projects/status/og37g8g7t984xtt2/branch/main?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com-windows/branch/main)
+- Windows Develop [![Build status](https://ci.appveyor.com/api/projects/status/og37g8g7t984xtt2/branch/develop?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com-windows/branch/develop)
+- Linux Main [![Build status](https://ci.appveyor.com/api/projects/status/mb5gqtaq9cds3xs2/branch/main?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com-linux/branch/main)
+- Linux Develop [![Build status](https://ci.appveyor.com/api/projects/status/mb5gqtaq9cds3xs2/branch/develop?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com-linux/branch/develop)
 
 ### Roadmap
 The roadmap (that is, what is was, is, and will be done) is available on [michaelheilmann.com/roadmap](https://michaelheilmann.com/roadmap).

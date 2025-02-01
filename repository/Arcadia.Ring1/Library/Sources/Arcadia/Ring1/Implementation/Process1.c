@@ -20,6 +20,7 @@
 
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
+#include <stdbool.h>
 #include <malloc.h>
 #include "Arms.h"
 

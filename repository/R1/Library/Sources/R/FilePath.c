@@ -596,7 +596,7 @@ R_FilePath_toNative
     R_FilePath* self
   )
 {
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   R_ByteBuffer* temporaryBuffer = R_ByteBuffer_create(process);
   R_Utf8Writer* temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, temporaryBuffer);
   Arcadia_SizeValue i = 0, n = R_List_getSize(self->fileNames);
@@ -634,17 +634,17 @@ R_FilePath_toNative
   Arcadia_Value temporaryValue;
   Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
   return Arcadia_String_create(process, temporaryValue);
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   R_ByteBuffer* temporaryBuffer = R_ByteBuffer_create(process);
-  R_Utf8Writer* temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(temporaryBuffer);
+  R_Utf8Writer* temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, temporaryBuffer);
   Arcadia_SizeValue i = 0, n = R_List_getSize(self->fileNames);
   if (self->root) {
-    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(self->root), Arcadia_String_getNumberOfBytes(self->root));
+    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(process, self->root), Arcadia_String_getNumberOfBytes(process, self->root));
   }
   if (n > 0) {
-    Arcadia_Value e = R_List_getAt(self->fileNames, 0);
+    Arcadia_Value e = R_List_getAt(process, self->fileNames, 0);
     Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(fileName), Arcadia_String_getNumberOfBytes(fileName));
+    R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(process, fileName), Arcadia_String_getNumberOfBytes(process, fileName));
     i++;
 
     for (; i < n; ++i) {
@@ -652,26 +652,27 @@ R_FilePath_toNative
       x = '/';
       R_Utf8Writer_writeCodePoints(process, temporary, &x, 1);
 
-      Arcadia_Value e = R_List_getAt(self->fileNames, i);
+      Arcadia_Value e = R_List_getAt(process, self->fileNames, i);
       Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-      R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(fileName), Arcadia_String_getNumberOfBytes(fileName));
+      R_Utf8Writer_writeBytes(process, temporary, Arcadia_String_getBytes(process, fileName), Arcadia_String_getNumberOfBytes(process, fileName));
     }
   }
   Arcadia_Natural32Value x = '\0';
   R_Utf8Writer_writeCodePoints(process, temporary, &x, 1);
   Arcadia_Value temporaryValue;
   Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
-  return Arcadia_String_create(temporaryValue);
+  return Arcadia_String_create(process, temporaryValue);
 #else
   #error("operating system not (yet) supported")
 #endif
 }
 
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #define WIN32_LEAN_AND_MEAN
   #include <Windows.h> // for GetFullPathName
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   #include <stdlib.h> // for realpath
+  #include <linux/limits.h> // for PATH_MAX
 #endif
 
 R_FilePath*
@@ -681,7 +682,7 @@ R_FilePath_getFullPath
     R_FilePath* self
   )
 {
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
 #define BUFFER_LENGTH (4096)
   Arcadia_String* s = R_FilePath_toNative(process, self);
   char buffer[BUFFER_LENGTH];
@@ -692,10 +693,10 @@ R_FilePath_getFullPath
   }
   return R_FilePath_parseNative(process, buffer, strlen(buffer));
 #undef BUFFER_LENGTH
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
-  Arcadia_String* s = R_FilePath_toNative(self);
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  Arcadia_String* s = R_FilePath_toNative(process, self);
   char buffer[PATH_MAX];
-  char* result = realpath(Arcadia_String_getBytes(s), buffer);
+  char* result = realpath(Arcadia_String_getBytes(process, s), buffer);
   if (!result) {
     Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
     Arcadia_Process_jump(process);

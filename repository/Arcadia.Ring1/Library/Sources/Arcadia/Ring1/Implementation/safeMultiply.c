@@ -87,7 +87,7 @@ Arcadia_safeMultiply_n64_x64msvc
 }
 #endif
 
-#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_Compiler
+#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
 
 void
 Arcadia_safeMultiply_n64_gcc
