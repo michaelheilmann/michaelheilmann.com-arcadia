@@ -58,12 +58,6 @@ void* c_memmove(void* dst, const void* src, size_t count);
 // https://en.cppreference.com/w/c/string/byte/memcmp
 int c_memcmp(const void* lhs, const void* rhs, size_t count);
 
-// https://en.cppreference.com/w/c/io/fprintf
-int c_fprintf(FILE* restrict stream, const char* restrict format, ...);
-
-// https://en.cppreference.com/w/c/io/vfprintf
-int c_vfprintf(FILE* restrict stream, const char* restrict format, va_list arguments);
-
 // https://en.cppreference.com/w/c/string/byte/strlen
 size_t c_strlen(const char *w);
 
@@ -82,16 +76,5 @@ size_t c_strlen(const char *w);
 #else
   #define C_WARN_UNUSED_RETURN_VALUE()
 #endif
-
-#include <stdbool.h>
-
-/**
- * @brief Perform safe addition.
- * @param a The 1st operand.
- * @param b The 2nd operand.
- * @param result A pointer to the result variable.
- * @return @a true if there was an overflow, @a false otherwise.
- */
-bool c_safe_add_sz(size_t a, size_t b, size_t* r);
 
 #endif // R_CSTDLIB_H_INCLUDED

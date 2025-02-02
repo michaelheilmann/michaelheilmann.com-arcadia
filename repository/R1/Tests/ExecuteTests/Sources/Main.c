@@ -74,7 +74,7 @@ execute1
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    R_Interpreter_Code_append(code, codeBytes, 1);
+    R_Interpreter_Code_append(process, code, codeBytes, 1);
     R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
@@ -112,7 +112,7 @@ execute2
       Arcadia_Process_jump(process);
     }
     uint8_t opcode = R_Machine_Code_Opcode_Add;
-    R_Interpreter_Code_append(code, &opcode, 1);
+    R_Interpreter_Code_append(process, code, &opcode, 1);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Register, 2);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1);
@@ -165,10 +165,10 @@ execute3
       Arcadia_Process_jump(process);
     }
     uint8_t opcode = R_Machine_Code_Opcode_Invoke;
-    R_Interpreter_Code_append(code, &opcode, 1);
+    R_Interpreter_Code_append(process, code, &opcode, 1);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Register, 0); // target
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0); // calleee
-    R_Interpreter_Code_appendCountNatural8(code, 1); // number of arguments
+    R_Interpreter_Code_appendCountNatural8(process, code, 1); // number of arguments
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
     R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);

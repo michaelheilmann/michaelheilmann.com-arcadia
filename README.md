@@ -8,8 +8,8 @@ This repository contains
 - the C source code of support libraries for the tools
 
 ### Building from source
-- (Building under Windows 11 Visual Studio Community 2022)[building-under-windows-11-visual-studio-community-2022.md]
-- (Building under Linux)[building-under-linux.md]
+- [Building under Windows 11 Visual Studio Community 2022](building-under-windows-11-visual-studio-community-2022.md)
+- [Building under Linux](building-under-linux.md)
 
 ### Build status
 - Windows Main [![Build status](https://ci.appveyor.com/api/projects/status/og37g8g7t984xtt2/branch/main?svg=true)](https://ci.appveyor.com/project/michaelheilmann-com/michaelheilmann-com-windows/branch/main)

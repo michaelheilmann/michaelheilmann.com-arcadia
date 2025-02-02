@@ -96,10 +96,10 @@ main1
   if (Arcadia_Value_isVoidValue(&height)) {
     R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"height", sizeof(u8"height") - 1)));
   }
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(process);
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
-  ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create();
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create(process);
 #else
   #error("environment not (yet) supported")
 #endif

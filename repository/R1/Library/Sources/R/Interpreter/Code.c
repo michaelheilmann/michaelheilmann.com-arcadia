@@ -202,6 +202,7 @@ R_Interpreter_Code_create
 void
 R_Interpreter_Code_append
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -270,7 +271,7 @@ R_Interpreter_Code_appendIndexNatural32
     // The Byte stores 5 Bits.
     uint8_t x = (index & 0b000011111);
     x |= a;
-    R_Interpreter_Code_append(self, &x, 1);
+    R_Interpreter_Code_append(process, self, &x, 1);
   } else if (index <= 511) {
     // We must encode 9 Bits in two Bytes.
     // The first Byte stores 3 Bits, the 2nd Byte stores 6 Bits.
@@ -279,8 +280,8 @@ R_Interpreter_Code_appendIndexNatural32
     x |= 0b00110000;
     uint8_t y = (index & 0b000111111) >> 0;
     y |= 128/*0b10000000*/;
-    R_Interpreter_Code_append(self, &x, 1);
-    R_Interpreter_Code_append(self, &y, 1);
+    R_Interpreter_Code_append(process, self, &x, 1);
+    R_Interpreter_Code_append(process, self, &y, 1);
   } else if (index <= 16383) {
     // We must encode 14 Bits in three Bytes.
     // The first Byte uses 2 Bits, the 2nd to the 3rd Byte each use 6 Bits.
@@ -291,9 +292,9 @@ R_Interpreter_Code_appendIndexNatural32
     y |= 128;
     uint8_t z = (index & 0b00000000111111) >> 0;
     z |= 128;
-    R_Interpreter_Code_append(self, &x, 1);
-    R_Interpreter_Code_append(self, &y, 1);
-    R_Interpreter_Code_append(self, &z, 1);
+    R_Interpreter_Code_append(process, self, &x, 1);
+    R_Interpreter_Code_append(process, self, &y, 1);
+    R_Interpreter_Code_append(process, self, &z, 1);
   } else if (index <= 524287) {
     // We must encode 19 Bits in four Bytes.
     // The first Byte uses 1 Byte, the 2nd to the 4th Byte each use 6 Bits.
@@ -306,10 +307,10 @@ R_Interpreter_Code_appendIndexNatural32
     z |= 128;
     uint8_t w = (index & 0b0000000000000111111) >> 0;
     w |= 128;
-    R_Interpreter_Code_append(self, &x, 1);
-    R_Interpreter_Code_append(self, &y, 1);
-    R_Interpreter_Code_append(self, &z, 1);
-    R_Interpreter_Code_append(self, &w, 1);
+    R_Interpreter_Code_append(process, self, &x, 1);
+    R_Interpreter_Code_append(process, self, &y, 1);
+    R_Interpreter_Code_append(process, self, &z, 1);
+    R_Interpreter_Code_append(process, self, &w, 1);
   } else {
     // Cannot be encoded.
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
@@ -320,31 +321,34 @@ R_Interpreter_Code_appendIndexNatural32
 void
 R_Interpreter_Code_appendCountNatural8
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     Arcadia_Natural8Value countValue
   )
 {
-  R_Interpreter_Code_appendCountNatural32(self, countValue);
+  R_Interpreter_Code_appendCountNatural32(process, self, countValue);
 }
 
 void
 R_Interpreter_Code_appendCountNatural16
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     Arcadia_Natural16Value countValue
   )
 {
-  R_Interpreter_Code_appendCountNatural32(self, countValue);
+  R_Interpreter_Code_appendCountNatural32(process, self, countValue);
 }
 
 void
 R_Interpreter_Code_appendCountNatural32
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     Arcadia_Natural32Value countValue
   )
 {
-  R_Interpreter_Code_append(self, (Arcadia_Natural8Value const*)&countValue, sizeof(Arcadia_Natural32Value));
+  R_Interpreter_Code_append(process, self, (Arcadia_Natural8Value const*)&countValue, sizeof(Arcadia_Natural32Value));
 }
 
 void

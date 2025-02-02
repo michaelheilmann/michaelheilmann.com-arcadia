@@ -31,6 +31,7 @@ struct NativeLinuxImageWriter {
 NativeLinuxImageWriter*
 NativeLinuxImageWriter_create
   (
+    Arcadia_Process* process
   );
 
 #endif // MODULE_VISUALS_NATIVELINUXIMAGEWRITER_H_INCLUDED

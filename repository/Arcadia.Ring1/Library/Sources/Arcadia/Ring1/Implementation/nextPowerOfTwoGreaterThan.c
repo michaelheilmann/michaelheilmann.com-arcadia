@@ -53,9 +53,9 @@ R_nextPowerOfTwoGreaterThanSizeValue
     Arcadia_SizeValue x
   )
 {
-#if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X64
+#if Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X64
   return Arcadia_nextPowerOfTwoGreaterThanNatural64Value(process, x);
-#elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X86
+#elif Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X86
   return Arcadia_nextPowerOfTwoGreaterThanNatural32Value(process, x);
 #else
   #error("environment not (yet) supported")

@@ -19,11 +19,8 @@
 #define MODULE_VISUALS_NATIVEWINDOW_H_INCLUDED
 
 #include "R.h"
-#include "Module/Visuals/NativeWindowsIcon.h"
+#include "Module/Visuals/NativeIcon.h"
 #include "Module/Visuals/PixelBuffer.h"
-
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
 
 // The window is in "closed" state when it is creeated by NativeWindowsWindow_create.
 // A successful call to NativeWindowsWindow_open puts the window in "opened" state.

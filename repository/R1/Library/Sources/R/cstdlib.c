@@ -19,6 +19,8 @@
 #include <string.h>
 // exit, EXIT_FAILURE, malloc, realloc, free
 #include <stdlib.h>
+#include <stdint.h>
+#include "R/Configure.h"
 
 Arcadia_NoReturn() void c_exit(int code) {
   exit(code);
@@ -34,45 +36,6 @@ void* c_memmove(void* dst, const void* src, size_t count) {
 
 int c_memcmp(const void* lhs, const void* rhs, size_t count) {
   return memcmp(lhs, rhs, count);
-}
-
-int c_fprintf(FILE* restrict stream, const char* restrict format, ...) {
-  va_list arguments;
-  va_start(arguments, format);
-  int result = vfprintf(stream, format, arguments);
-  va_end(arguments);
-  return result;
-}
-
-int c_vfprintf(FILE* restrict stream, const char* restrict format, va_list arguments) {
-  return vfprintf(stream, format, arguments);
-}
-
-#include <stdint.h>
-#include "R/Configure.h"
-
-#if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
-  #include <intrin.h>
-#endif
-
-bool c_safe_add_sz(size_t a, size_t b, size_t* r) {
-  #if R_Configuration_CompilerC == R_Configuration_CompilerC_Msvc
-    #if R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X64
-      Arcadia_StaticAssert(SIZE_MAX == UINT64_MAX && sizeof(size_t) == sizeof(uint64_t), "environment not (yet) supported");
-      size_t t = _umul128(a, b, r);
-      return 0 != t;
-    #elif R_Configuration_InstructionSetArchitecture == R_Configuration_InstructionSetArchitecture_X86
-      Arcadia_StaticAssert(SIZE_MAX == UINT32_MAX && sizeof(size_t) == sizeof(uint32_t), "environment not (yet) supported");
-      int64_t t = a * b;
-      *r = (size_t)t;
-      return t > SIZE_MAX;
-    #else
-      #error ("environemnt not (yet) supported");
-    #endif
-  #else
-    // This builtin function returns false if there was no overflow and true if there was an overflow.
-    return __builtin_add_overflow(a, b, r);
-  #endif
 }
 
 size_t c_strlen(const char* w) {

@@ -20,12 +20,12 @@
 
 #include "R.h"
 
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #include "Module/Visuals/Font.h"
   #include "Module/Visuals/NativeWindowsImageWriter.h"
   #include "Module/Visuals/NativeWindowsIcon.h"
   #include "Module/Visuals/NativeWindowsWindow.h"
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   #include "Module/Visuals/NativeLinuxImageWriter.h"
 #else
   #error("environment not (yet) supported")

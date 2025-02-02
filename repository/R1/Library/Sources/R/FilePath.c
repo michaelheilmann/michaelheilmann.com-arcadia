@@ -558,9 +558,9 @@ R_FilePath_parseNative
     Arcadia_SizeValue numberOfBytes
   )
  {
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   return R_FilePath_parseWindows(process, bytes, numberOfBytes);
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   return R_FilePath_parseUnix(process, bytes, numberOfBytes);
 #else
   #error("operating system not (yet) supported")

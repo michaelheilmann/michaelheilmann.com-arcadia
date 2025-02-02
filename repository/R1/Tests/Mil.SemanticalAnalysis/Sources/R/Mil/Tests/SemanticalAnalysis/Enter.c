@@ -109,7 +109,7 @@ onReturnStatement
   )
 {
   Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Return;
-  R_Interpreter_Code_append(code, &opcode, 1);
+  R_Interpreter_Code_append(process, code, &opcode, 1);
   onOperand(process, interpreterProcessState, code, variables, returnStatementAst->operand);
 }
 
@@ -127,7 +127,7 @@ onExpressionStatement
   if (Arcadia_Type_isSubType(Arcadia_Object_getType(expressionAst), _R_Mil_LoadExpressionAst_getType(process))) {
     R_Mil_LoadExpressionAst* loadExpressionAst = (R_Mil_LoadExpressionAst*)expressionAst;
     Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Load;
-    R_Interpreter_Code_append(code, &opcode, 1);
+    R_Interpreter_Code_append(process, code, &opcode, 1);
     R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                             getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
     onOperand(process, interpreterProcessState, code, variables, loadExpressionAst->operand);
@@ -136,7 +136,7 @@ onExpressionStatement
     switch (binaryExpressionAst->type) {
       case R_Mil_BinaryExpressionAstType_Add: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Add;
-        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_append(process, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                                 getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
         onOperand(process, interpreterProcessState, code, variables, binaryExpressionAst->operand1);
@@ -144,7 +144,7 @@ onExpressionStatement
       } break;
       case R_Mil_BinaryExpressionAstType_Subtract: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Subtract;
-        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_append(process, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                                 getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
         onOperand(process, interpreterProcessState, code, variables, binaryExpressionAst->operand1);
@@ -152,7 +152,7 @@ onExpressionStatement
       } break;
       case R_Mil_BinaryExpressionAstType_Multiply: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Multiply;
-        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_append(process, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                                 getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
         onOperand(process, interpreterProcessState, code, variables, binaryExpressionAst->operand1);
@@ -160,7 +160,7 @@ onExpressionStatement
       } break;
       case R_Mil_BinaryExpressionAstType_Divide: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Divide;
-        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_append(process, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                                 getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
         onOperand(process, interpreterProcessState, code, variables, binaryExpressionAst->operand1);
@@ -168,7 +168,7 @@ onExpressionStatement
       } break;
       case R_Mil_BinaryExpressionAstType_Concatenate: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Concatenate;
-        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_append(process, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                                 getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
         onOperand(process, interpreterProcessState, code, variables, binaryExpressionAst->operand1);
@@ -184,14 +184,14 @@ onExpressionStatement
     switch (unaryExpressionAst->type) {
       case R_Mil_UnaryExpressionAstType_Negate: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Negate;
-        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_append(process, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                                 getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
         onOperand(process, interpreterProcessState, code, variables, unaryExpressionAst->operand1);
       } break;
       case R_Mil_UnaryExpressionAstType_Not: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Not;
-        R_Interpreter_Code_append(code, &opcode, 1);
+        R_Interpreter_Code_append(process, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(process, code, R_Machine_Code_IndexKind_Register,
                                                 getRegisterOfVariable(process, variables, expressionStatementAst->targetVariableName));
         onOperand(process, interpreterProcessState, code, variables, unaryExpressionAst->operand1);

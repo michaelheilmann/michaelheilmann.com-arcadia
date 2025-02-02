@@ -40,6 +40,7 @@ R_Interpreter_Code_create
 void
 R_Interpreter_Code_append
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -81,6 +82,7 @@ R_Interpreter_Code_appendIndexNatural32
 void
 R_Interpreter_Code_appendCountNatural8
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     Arcadia_Natural8Value countValue
   );
@@ -93,6 +95,7 @@ R_Interpreter_Code_appendCountNatural8
 void
 R_Interpreter_Code_appendCountNatural16
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     Arcadia_Natural16Value countValue
   );
@@ -105,6 +108,7 @@ R_Interpreter_Code_appendCountNatural16
 void
 R_Interpreter_Code_appendCountNatural32
   (
+    Arcadia_Process* process,
     R_Interpreter_Code* self,
     Arcadia_Natural32Value countValue
   );

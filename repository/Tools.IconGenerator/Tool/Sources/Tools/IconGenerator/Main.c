@@ -73,9 +73,9 @@ main1
     128,
     256,
   };
-#if R_Configuration_OperatingSystem_Windows == R_Configuration_OperatingSystem
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(process);
-#elif R_Configuration_OperatingSystem_Linux == R_Configuration_OperatingSystem
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create(process);
 #else
   #error("environment not (yet) supported")

@@ -18,8 +18,8 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_TYPES_PRIVATE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_TYPES_PRIVATE_H_INCLUDED
 
-#if defined(R_EXPORTED_INCLUDE)
-  #error("R/Types.internal.h must not be included from public header")
+#if !defined(ARCADIA_RING1_PRIVATE)
+#error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 #include "Arcadia/Ring1/Implementation/Configure.h"
 #include "Arcadia/Ring1/Include.h"

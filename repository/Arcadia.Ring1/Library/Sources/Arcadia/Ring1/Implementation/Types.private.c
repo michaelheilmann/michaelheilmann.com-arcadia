@@ -15,4 +15,5 @@
 
 // Last modified: 2024-09-22
 
+#define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Types.private.h"

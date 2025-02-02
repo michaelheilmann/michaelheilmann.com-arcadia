@@ -21,10 +21,10 @@
 #include "R/FilePath.h"
 #include "R/String.h"
 
-#if R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Windows
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   #define WIN32_LEAN_AND_MEAN
   #include <Windows.h> // GetFileAttributes
-#elif R_Configuration_OperatingSystem == R_Configuration_OperatingSystem_Linux
+#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
   #include <string.h> // strlen
   #include <sys/stat.h> // stat
   #include <errno.h> // errno
