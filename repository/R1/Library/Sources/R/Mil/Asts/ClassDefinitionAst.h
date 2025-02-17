@@ -15,17 +15,17 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_CLASSDEFINITIONAST_H_INCLUDED)
-#define R_MIL_ASTS_CLASSDEFINITIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_CLASSDEFINITIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_CLASSDEFINITIONAST_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Mil/Asts/DefinitionAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.ClassDefinitionAst extends R.Mil.DefinitionAst {
-///   construct(className:Arcadia.String, extendedClassName:Arcadia.String, classBody:R.List)
+/// class Arcadia.Mil.ClassDefinitionAst extends Arcadia.Mil.DefinitionAst {
+///   construct(className:Arcadia.Library.String, extendedClassName:Arcadia.Library.String, classBody:Arcadia.Library.List)
 /// }
 /// @endcode
 /// Represents
@@ -33,26 +33,26 @@
 /// classDefinition : 'class' name ('extends' name)? classBody
 /// classBody : '{' classMemberDefinition* '}'
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.ClassDefinitionAst", R_Mil_ClassDefinitionAst, u8"R.Mil.DefinitionAst");
+Rex_declareObjectType(u8"Arcadia.Mil.ClassDefinitionAst", Arcadia_Mil_ClassDefinitionAst, u8"Arcadia.Mil.DefinitionAst");
 
-struct R_Mil_ClassDefinitionAst {
-  R_Mil_DefinitionAst _parent;
+struct Arcadia_Mil_ClassDefinitionAst {
+  Arcadia_Mil_DefinitionAst _parent;
   Arcadia_String* className;
   Arcadia_String* extendedClassName;
-  R_List* classBody;
+  Arcadia_List* classBody;
 };
 
 /// @brief Create a MIL class definition AST.
 /// @return A pointer to this MIL class definition AST.
-R_Mil_ClassDefinitionAst*
-R_Mil_ClassDefinitionAst_create
+Arcadia_Mil_ClassDefinitionAst*
+Arcadia_Mil_ClassDefinitionAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* className,
     Arcadia_String* extendedClassName,
-    R_List* classBody
+    Arcadia_List* classBody
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_CLASSDEFINITIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_CLASSDEFINITIONAST_H_INCLUDED

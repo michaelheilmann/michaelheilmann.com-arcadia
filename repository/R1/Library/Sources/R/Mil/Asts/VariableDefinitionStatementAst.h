@@ -15,36 +15,36 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_VARIABLEDEFINITIONSTATEMENTAST_H_INCLUDED)
-#define R_MIL_ASTS_VARIABLEDEFINITIONSTATEMENTAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_VARIABLEDEFINITIONSTATEMENTAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_VARIABLEDEFINITIONSTATEMENTAST_H_INCLUDED
 
 #include "R/Mil/Asts/StatementAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.VariableDefinitionStatement extends R.Mil.Statement
+/// class Arcadia.Mil.VariableDefinitionStatement extends Arcadia.Mil.Statement
 /// @endcode
 /// Represents
 /// @code
 /// 'variable' VariableName
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.VariableDefinitionStatementAst", R_Mil_VariableDefinitionStatementAst, u8"R.Mil.StatementAst");
+Rex_declareObjectType(u8"Arcadia.Mil.VariableDefinitionStatementAst", Arcadia_Mil_VariableDefinitionStatementAst, u8"Arcadia.Mil.StatementAst");
 
-struct R_Mil_VariableDefinitionStatementAst {
-  R_Mil_StatementAst parent;
-  Arcadia_String* name;
+struct Arcadia_Mil_VariableDefinitionStatementAst {
+  Arcadia_Mil_StatementAst parent;
+  Arcadia_String* variableName;
 };
 
 /// @brief Create a Mil variable definition statement AST.
 /// @return A pointer to this Mil variable definition statement AST.
-R_Mil_VariableDefinitionStatementAst*
-R_Mil_VariableDefinitionStatementAst_create
+Arcadia_Mil_VariableDefinitionStatementAst*
+Arcadia_Mil_VariableDefinitionStatementAst_create
   (
     Arcadia_Process* process,
-    Arcadia_String* name
+    Arcadia_String* variableName
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_VARIABLEDEFINITIONSTATEMENTAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_VARIABLEDEFINITIONSTATEMENTAST_H_INCLUDED

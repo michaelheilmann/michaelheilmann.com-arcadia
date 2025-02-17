@@ -15,26 +15,30 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_INTEGERLITERALOPERANDAST_H_INCLUDED)
-#define R_MIL_ASTS_INTEGERLITERALOPERANDAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_INTEGERLITERALOPERANDAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_INTEGERLITERALOPERANDAST_H_INCLUDED
 
 #include "R/Mil/Asts/OperandAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.IntegerLiteralOperandAst extends R.Mil.OperandAst
+/// class Arcadia.Mil.IntegerLiteralOperandAst extends Arcadia.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.IntegerLiteralOperandAst", R_Mil_IntegerLiteralOperandAst, u8"R.Mil.OperandAst");
+/// represents
+/// @code
+/// integerLiteral : lexicalAnalysis.integerLiteral
+/// @endcode
+Rex_declareObjectType(u8"Arcadia.Mil.IntegerLiteralOperandAst", Arcadia_Mil_IntegerLiteralOperandAst, u8"Arcadia.Mil.OperandAst");
 
-struct R_Mil_IntegerLiteralOperandAst {
-  R_Mil_OperandAst parent;
+struct Arcadia_Mil_IntegerLiteralOperandAst {
+  Arcadia_Mil_OperandAst parent;
   Arcadia_String* value;
 };
 
 /// @undefined @a value is not an integer literal
-R_Mil_IntegerLiteralOperandAst*
-R_Mil_IntegerLiteralOperandAst_create
+Arcadia_Mil_IntegerLiteralOperandAst*
+Arcadia_Mil_IntegerLiteralOperandAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* value
@@ -42,4 +46,4 @@ R_Mil_IntegerLiteralOperandAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_INTEGERLITERALOPERANDAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_INTEGERLITERALOPERANDAST_H_INCLUDED

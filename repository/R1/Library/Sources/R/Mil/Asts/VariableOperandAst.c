@@ -22,10 +22,10 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(value : Arcadia.String)
+/// construct(value : Arcadia.Library.String)
 /// @endcode
 static void
-R_Mil_VariableOperandAst_constructImpl
+Arcadia_Mil_VariableOperandAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -34,20 +34,20 @@ R_Mil_VariableOperandAst_constructImpl
   );
 
 static void
-R_Mil_VariableOperandAst_visit
+Arcadia_Mil_VariableOperandAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_VariableOperandAst* self
+    Arcadia_Mil_VariableOperandAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_VariableOperandAst_objectTypeOperations = {
-  .construct = &R_Mil_VariableOperandAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_VariableOperandAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_VariableOperandAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_VariableOperandAst_visit,
+  .visit = &Arcadia_Mil_VariableOperandAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_VariableOperandAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_VariableOperandAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_VariableOperandAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_VariableOperandAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -66,10 +66,10 @@ static const Arcadia_Type_Operations _R_Mil_VariableOperandAst_typeOperations = 
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.VariableOperandAst", R_Mil_VariableOperandAst, u8"R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_VariableOperandAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.VariableOperandAst", Arcadia_Mil_VariableOperandAst, u8"Arcadia.Mil.OperandAst", Arcadia_Mil_OperandAst, &_Arcadia_Mil_VariableOperandAst_typeOperations);
 
 void
-R_Mil_VariableOperandAst_constructImpl
+Arcadia_Mil_VariableOperandAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -77,8 +77,8 @@ R_Mil_VariableOperandAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_VariableOperandAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_VariableOperandAst_getType(process);
+  Arcadia_Mil_VariableOperandAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_VariableOperandAst_getType(process);
 
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
@@ -99,22 +99,22 @@ R_Mil_VariableOperandAst_constructImpl
 }
 
 static void
-R_Mil_VariableOperandAst_visit
+Arcadia_Mil_VariableOperandAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_VariableOperandAst* self
+    Arcadia_Mil_VariableOperandAst* self
   )
 { Arcadia_Object_visit(process, self->value); }
 
-R_Mil_VariableOperandAst*
-R_Mil_VariableOperandAst_create
+Arcadia_Mil_VariableOperandAst*
+Arcadia_Mil_VariableOperandAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* value
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)value } };
-  R_Mil_VariableOperandAst* self = R_allocateObject(process, _R_Mil_VariableOperandAst_getType(process), 1, &argumentValues[0]);
+  Arcadia_Mil_VariableOperandAst* self = R_allocateObject(process, _Arcadia_Mil_VariableOperandAst_getType(process), 1, &argumentValues[0]);
   return self;
 }
 

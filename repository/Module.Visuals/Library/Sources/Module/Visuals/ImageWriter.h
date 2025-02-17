@@ -18,7 +18,7 @@
 #if !defined(MODULE_VISUALS_IMAGEWRITER_H_INCLUDED)
 #define MODULE_VISUALS_IMAGEWRITER_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "Module/Visuals/PixelBuffer.h"
 
 Rex_declareObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object");
@@ -26,11 +26,11 @@ Rex_declareObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object");
 struct ImageWriter {
   Arcadia_Object _parent;
   void (*writePngToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
-  void (*writePngToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
+  void (*writePngToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
   void (*writeBmpToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
-  void (*writeBmpToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, R_ByteBuffer* targetByteBuffer);
-  void (*writeIcoToPath)(Arcadia_Process* process, ImageWriter* self, R_List* sourcePixelBuffers, Arcadia_String* targetPath);
-  void (*writeIcoToByteBuffer)(Arcadia_Process* process, ImageWriter* self, R_List* sourcePixelBuffers, R_ByteBuffer* targetByteBuffer);
+  void (*writeBmpToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
+  void (*writeIcoToPath)(Arcadia_Process* process, ImageWriter* self, Arcadia_List* sourcePixelBuffers, Arcadia_String* targetPath);
+  void (*writeIcoToByteBuffer)(Arcadia_Process* process, ImageWriter* self, Arcadia_List* sourcePixelBuffers, Arcadia_ByteBuffer* targetByteBuffer);
 };
 
 void
@@ -48,7 +48,7 @@ ImageWriter_writePngToByteBuffer
     Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_ByteBuffer* targetByteBuffer
   );
 
 void
@@ -66,7 +66,7 @@ ImageWriter_writeBmpToByteBuffer
     Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_ByteBuffer* targetByteBuffer
   );
 
 void
@@ -74,7 +74,7 @@ ImageWriter_writeIcoToPath
   (
     Arcadia_Process* process,
     ImageWriter* self,
-    R_List* sourcePixelBuffers,
+    Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
   );
 
@@ -83,8 +83,8 @@ ImageWriter_writeIcoToByteBuffer
   (
     Arcadia_Process* process,
     ImageWriter* self,
-    R_List* sourcePixelBuffers,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_List* sourcePixelBuffers,
+    Arcadia_ByteBuffer* targetByteBuffer
   );
 
 #endif // MODULE_VISUALS_IMAGEWRITER_H_INCLUDED

@@ -1,7 +1,12 @@
 <h4 id="arcadia-countleadingzeroes">Arcadia_countLeadingZeroes</h4>
 <p>Return the number of leadin gzeroes of the binary representation of a value.</p>
 <p><code>
-Arcadia_SizeValue Arcadia_countLeadingZeroes<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value)
+Arcadia_SizeValue
+Arcadia_countLeadingZeroes<my-mv>Suffix</my-mv>
+  (
+    Arcadia_Process* process,
+    <my-mv>Type</my-mv> value
+  )
 </code></p>
 <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
 
@@ -19,6 +24,12 @@ Arcadia_SizeValue Arcadia_countLeadingZeroes<my-mv>Suffix</my-mv>(<my-mv>Type</m
 </table>
 
 <p>This function returns the number of leading zeroes of the binary representation of <code>value</code>.</p>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><my-mv>Type</my-mv> value</td><td>The value.</td></tr>
+</table>
 
 <h5>Return value</h5>
 <p>The number of leading zeroes.</p>

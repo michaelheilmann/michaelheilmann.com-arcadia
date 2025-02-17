@@ -22,7 +22,7 @@
 #define Define(Type, Suffix, A, B, H, L) \
 { \
   Arcadia_##Type##Value h, l; \
-  Arcadia_safeMultiply_##Suffix(Arcadia_Process_getBackendNoLock(process), A, B, &h, &l); \
+  Arcadia_safeMultiply_##Suffix(Arcadia_Process_getProcess1(process), A, B, &h, &l); \
   if (h != H) { \
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
     Arcadia_Process_jump(process); \
@@ -52,7 +52,7 @@ safeMultiplyNatural8Tests
   static const Arcadia_SizeValue bits = 8;
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural8Value lower, upper;
     Arcadia_Natural8Value u, v;
     // The lower Arcadia_Natural8 value.
@@ -77,7 +77,7 @@ safeMultiplyNatural8Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural8Value lower, upper;
     Arcadia_Natural8Value u, v;
     // The lower Arcadia_Natural8 value.
@@ -102,7 +102,7 @@ safeMultiplyNatural8Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural8Value upper, lower;
     Arcadia_Natural8Value u, v;
     // The lower Arcadia_Natural8 value.
@@ -127,7 +127,7 @@ safeMultiplyNatural8Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural8Value upper, lower;
     Arcadia_Natural8Value u, v;
     // The lower Arcadia_Natural8 value.
@@ -172,7 +172,7 @@ safeMultiplyNatural16Tests
   static const Arcadia_SizeValue bits = 16;
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural16Value lower, upper;
     Arcadia_Natural16Value u, v;
     // The lower Arcadia_Natural8 value.
@@ -197,7 +197,7 @@ safeMultiplyNatural16Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural16Value lower, upper;
     Arcadia_Natural16Value u, v;
     // The lower Arcadia_Natural8 value.
@@ -222,7 +222,7 @@ safeMultiplyNatural16Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural16Value upper, lower;
     Arcadia_Natural16Value u, v;
     // The lower Arcadia_Natural16 value.
@@ -247,7 +247,7 @@ safeMultiplyNatural16Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural16Value upper, lower;
     Arcadia_Natural16Value u, v;
     // The lower Arcadia_Natural16 value.
@@ -292,7 +292,7 @@ safeMultiplyNatural32Tests
   static const Arcadia_SizeValue bits = 32;
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural32Value lower, upper;
     Arcadia_Natural32Value u, v;
     // The lower Arcadia_Natural32 value.
@@ -317,7 +317,7 @@ safeMultiplyNatural32Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural32Value lower, upper;
     Arcadia_Natural32Value u, v;
     // The lower Arcadia_Natural32 value.
@@ -342,7 +342,7 @@ safeMultiplyNatural32Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural32Value upper, lower;
     Arcadia_Natural32Value u, v;
     // The lower Arcadia_Natural32 value.
@@ -367,7 +367,7 @@ safeMultiplyNatural32Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural32Value upper, lower;
     Arcadia_Natural32Value u, v;
     // The lower Arcadia_Natural32 value.
@@ -412,7 +412,7 @@ safeMultiplyNatural64Tests
   static const Arcadia_SizeValue bits = 64;
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural64Value lower, upper;
     Arcadia_Natural64Value u, v;
     // The lower Arcadia_Natural64 value.
@@ -437,7 +437,7 @@ safeMultiplyNatural64Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural64Value lower, upper;
     Arcadia_Natural64Value u, v;
     // The lower Arcadia_Natural64 value.
@@ -462,7 +462,7 @@ safeMultiplyNatural64Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural64Value upper, lower;
     Arcadia_Natural64Value u, v;
     // The lower Arcadia_Natural64 value.
@@ -487,7 +487,7 @@ safeMultiplyNatural64Tests
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural64Value upper, lower;
     Arcadia_Natural64Value u, v;
     // The lower Arcadia_Natural64 value.

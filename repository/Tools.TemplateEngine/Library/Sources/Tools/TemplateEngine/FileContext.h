@@ -18,7 +18,7 @@
 #if !defined(TOOLS_TEMPLATEENGINE_FILECONTEXT_H_INCLUDED)
 #define TOOLS_TEMPLATEENGINE_FILECONTEXT_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "Tools/TemplateEngine/Context.h"
 
 Rex_declareObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"Arcadia.Object");
@@ -28,11 +28,11 @@ struct FileContext {
   /// The underlaying context.
   Context* context;
   /// The path to the source file.
-  R_FilePath* sourceFilePath;
+  Arcadia_FilePath* sourceFilePath;
   /// UTF8 reader for the source file.
-  R_Utf8Reader* source;
+  Arcadia_Utf8Reader* source;
   /// Map from strings to strings.
-  R_Map* environment;
+  Arcadia_Map* environment;
 };
 
 FileContext*
@@ -40,7 +40,7 @@ FileContext_create
   (
     Arcadia_Process* process,
     Context* context,
-    R_FilePath* sourceFilePath
+    Arcadia_FilePath* sourceFilePath
   );
 
 void

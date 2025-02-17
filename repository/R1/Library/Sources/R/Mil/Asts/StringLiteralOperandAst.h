@@ -15,25 +15,29 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_STRINGLITERALOPERANDAST_H_INCLUDED)
-#define R_MIL_ASTS_STRINGLITERALOPERANDAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_STRINGLITERALOPERANDAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_STRINGLITERALOPERANDAST_H_INCLUDED
 
 #include "R/Mil/Asts/OperandAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.StringLiteralOperandAst extends R.Mil.OperandAst
+/// class Arcadia.Mil.StringLiteralOperandAst extends Arcadia.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.StringLiteralOperandAst", R_Mil_StringLiteralOperandAst, u8"R.Mil.OperandAst");
+/// represents
+/// @code
+/// stringLiteral : lexicalAnalysis.stringLiteral
+/// @endcode
+Rex_declareObjectType(u8"Arcadia.Mil.StringLiteralOperandAst", Arcadia_Mil_StringLiteralOperandAst, u8"Arcadia.Mil.OperandAst");
 
-struct R_Mil_StringLiteralOperandAst {
-  R_Mil_OperandAst parent;
+struct Arcadia_Mil_StringLiteralOperandAst {
+  Arcadia_Mil_OperandAst parent;
   Arcadia_String* value;
 };
 
-R_Mil_StringLiteralOperandAst*
-R_Mil_StringLiteralOperandAst_create
+Arcadia_Mil_StringLiteralOperandAst*
+Arcadia_Mil_StringLiteralOperandAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* value
@@ -41,4 +45,4 @@ R_Mil_StringLiteralOperandAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_STRINGLITERALOPERANDAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_STRINGLITERALOPERANDAST_H_INCLUDED

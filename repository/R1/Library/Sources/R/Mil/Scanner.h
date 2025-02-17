@@ -21,14 +21,14 @@
 #include "R/Mil/TokenType.h"
 
 /// @code
-/// class R.Mil.Scanner
+/// class Arcadia.MilScanner
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.Scanner", R_Mil_Scanner, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.Scanner", Arcadia_Mil_Scanner, u8"Arcadia.Object");
 
 /// @brief Create a MIL scanner.
 /// @return A pointer to this MIL scanner.
-R_Mil_Scanner*
-R_Mil_Scanner_create
+Arcadia_Mil_Scanner*
+Arcadia_Mil_Scanner_create
   (
     Arcadia_Process* process
   );
@@ -37,39 +37,39 @@ R_Mil_Scanner_create
 /// @param self A pointer to this MIL scanner.
 /// @return The text of the token.
 Arcadia_String*
-R_Mil_Scanner_getTokenText
+Arcadia_Mil_Scanner_getTokenText
   (
     Arcadia_Process* process,
-    R_Mil_Scanner* self
+    Arcadia_Mil_Scanner* self
   );
 
 /// @brief Get the type of the token.
 /// @param self A pointer to this MIL scanner.
 /// @return The type of the token.
 Arcadia_Natural32Value
-R_Mil_Scanner_getTokenType
+Arcadia_Mil_Scanner_getTokenType
   (
-    R_Mil_Scanner* self
+    Arcadia_Mil_Scanner* self
   );
 
 /// @brief Move to next token.
 /// @param self A pointer to this MIL scanner.
 void
-R_Mil_Scanner_step
+Arcadia_Mil_Scanner_step
   (
     Arcadia_Process* process,
-    R_Mil_Scanner* self
+    Arcadia_Mil_Scanner* self
   );
 
 /// @brief Set the input.
 /// @param self A pointer to this MIL scanner.
 /// @param input A pointer to the UTF8 reader.
 void
-R_Mil_Scanner_setInput
+Arcadia_Mil_Scanner_setInput
   (
     Arcadia_Process* process,
-    R_Mil_Scanner* self,
-    R_Utf8Reader* input
+    Arcadia_Mil_Scanner* self,
+    Arcadia_Utf8Reader* input
   );
 
 #endif // R_MIL_SCANNER_H_INCLUDED

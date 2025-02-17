@@ -1,7 +1,15 @@
 <h4 id="arcadia-safeadd">Arcadia_safeAdd</h4>
 <p>Get the sum of two values.</p>
 <p><code>
-void Arcadia_safeAdd<my-mv>Suffix</my-mv>(<my-mv>Type<my-mv> augend, <my-mv>Type<my->mv> addend, <my-mv>Type</my-mv>* sumHigh, <my-mv>Type</my-mv>* sumLow)
+void
+Arcadia_safeAdd<my-mv>Suffix</my-mv>
+  (
+    Arcadia_Process* process,
+    <my-mv>Type</my-mv> augend,
+    <my-mv>Type</my-mv> addend,
+    <my-mv>Type</my-mv>* sumHigh,
+    <my-mv>Type</my-mv>* sumLow
+  )
 </code></p>
 <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
 
@@ -16,6 +24,7 @@ void Arcadia_safeAdd<my-mv>Suffix</my-mv>(<my-mv>Type<my-mv> augend, <my-mv>Type
 
 <h5>Parameters</h5>
 <table>
+  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td><my-mv>Type</my-mv> augend</td>  <td>The augend value.</td></tr>
   <tr><td><my-mv>Type</my-mv> addend</td>  <td>The addend value.</td></tr>
   <tr><td><my-mv>Type</my-mv>* sumHigh</td><td>A pointer to a variable. The variable is assigned the high bits of the result.</td></tr>

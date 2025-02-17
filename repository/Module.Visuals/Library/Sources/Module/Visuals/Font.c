@@ -93,18 +93,18 @@ TextureFontWindows_constructImpl
   hScreenDeviceContext = NULL;
   // Get the size of the symbol.
   _self->codePoint = 'A';
-  R_ByteBuffer* byteBuffer = R_ByteBuffer_create(process);
-  R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, byteBuffer);
-  R_Utf8Writer_writeCodePoints(process, utf8ByteBufferWriter, &_self->codePoint, 1);
+  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(process);
+  Arcadia_Utf8Writer* utf8ByteBufferWriter = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, byteBuffer);
+  Arcadia_Utf8Writer_writeCodePoints(process, utf8ByteBufferWriter, &_self->codePoint, 1);
   RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
-  DrawTextA(hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
+  DrawTextA(hDeviceContext, Arcadia_ByteBuffer_getBytes(process, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(process, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
   int32_t width = textRect.right - textRect.left;
   int32_t height = textRect.bottom - textRect.top;
   DeleteDC(hDeviceContext);
   hDeviceContext = NULL;
   // Create a bitmap of that size. Draw the symbol to the bitmap.
   _self->bitmap = NativeWindowsBitmap_create(process, width, height);
-  DrawTextA(_self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
+  DrawTextA(_self->bitmap->hDeviceContext, Arcadia_ByteBuffer_getBytes(process, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(process, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   //
   Arcadia_Object_setType(process, _self, _type);
 }
@@ -158,18 +158,18 @@ TextureFontWindows_setCodePoint
     hScreenDeviceContext = NULL;
     // Get the size of the symbol.
     self->codePoint = codePoint;
-    R_ByteBuffer* byteBuffer = R_ByteBuffer_create(process);
-    R_Utf8Writer* utf8ByteBufferWriter = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, byteBuffer);
-    R_Utf8Writer_writeCodePoints(process, utf8ByteBufferWriter, &self->codePoint, 1);
+    Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(process);
+    Arcadia_Utf8Writer* utf8ByteBufferWriter = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, byteBuffer);
+    Arcadia_Utf8Writer_writeCodePoints(process, utf8ByteBufferWriter, &self->codePoint, 1);
     RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
-    DrawTextA(hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
+    DrawTextA(hDeviceContext, Arcadia_ByteBuffer_getBytes(process, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(process, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
     int32_t width = textRect.right - textRect.left;
     int32_t height = textRect.bottom - textRect.top;
     DeleteDC(hDeviceContext);
     hDeviceContext = NULL;
     // Create a bitmap of that size. Draw the symbol to the bitmap.
     self->bitmap = NativeWindowsBitmap_create(process, width, height);
-    DrawTextA(self->bitmap->hDeviceContext, R_ByteBuffer_getBytes(byteBuffer), R_ByteBuffer_getNumberOfBytes(byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
+    DrawTextA(self->bitmap->hDeviceContext, Arcadia_ByteBuffer_getBytes(process, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(process, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   }
 }
 

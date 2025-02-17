@@ -18,7 +18,7 @@
 #if !defined(R1_TESTS_UTF8_READ_H_INCLUDED)
 #define R1_TESTS_UTF8_READ_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 
 /// @brief
 /// - provides a set of Unicode code points and their corresponding UTF8 Byte sequences
@@ -27,7 +27,7 @@
 /// - success if they are equal
 /// - failure otherwise
 void
-R1_Tests_Utf8_read1
+Arcadia_Tests_Utf8_read1
   (
     Arcadia_Process* process
   );

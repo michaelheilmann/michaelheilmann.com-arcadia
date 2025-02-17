@@ -15,8 +15,8 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_VARIABLEOPERANDAST_H_INCLUDED)
-#define R_MIL_ASTS_VARIABLEOPERANDAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_VARIABLEOPERANDAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_VARIABLEOPERANDAST_H_INCLUDED
 
 #include "R/Mil/Asts/OperandAst.h"
 
@@ -24,17 +24,17 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.VariableOperandAst extends R.Mil.OperandAst
+/// class Arcadia.Mil.VariableOperandAst extends Arcadia.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.VariableOperandAst", R_Mil_VariableOperandAst, u8"R.Mil.OperandAst");
+Rex_declareObjectType(u8"Arcadia.Mil.VariableOperandAst", Arcadia_Mil_VariableOperandAst, u8"Arcadia.Mil.OperandAst");
 
-struct R_Mil_VariableOperandAst {
-  R_Mil_OperandAst parent;
+struct Arcadia_Mil_VariableOperandAst {
+  Arcadia_Mil_OperandAst parent;
   Arcadia_String* value;
 };
 
-R_Mil_VariableOperandAst*
-R_Mil_VariableOperandAst_create
+Arcadia_Mil_VariableOperandAst*
+Arcadia_Mil_VariableOperandAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* value
@@ -42,4 +42,4 @@ R_Mil_VariableOperandAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_VARIABLEOPERANDAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_VARIABLEOPERANDAST_H_INCLUDED

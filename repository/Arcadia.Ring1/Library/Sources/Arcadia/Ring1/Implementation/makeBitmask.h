@@ -25,6 +25,8 @@
 
 #include "Arcadia/Ring1/Implementation/Size.h"
 
+typedef struct Arcadia_Process1 Arcadia_Process1;
+
 /// @brief Create a bitmask.
 /// @param process A pointer to the Arcadia_Process1 object.
 /// @param i The index of the first 1 bit.

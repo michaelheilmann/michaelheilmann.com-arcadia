@@ -25,7 +25,7 @@ struct Keyword {
   Arcadia_Natural32Value type;
 };
 
-struct R_Mil_Keywords {
+struct Arcadia_Mil_Keywords {
   Arcadia_Object _parent;
   Keyword** buckets;
   Arcadia_SizeValue size;
@@ -33,7 +33,7 @@ struct R_Mil_Keywords {
 };
 
 static void
-R_Mil_Keywords_constructImpl
+Arcadia_Mil_Keywords_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -42,24 +42,24 @@ R_Mil_Keywords_constructImpl
   );
 
 static void
-R_Mil_Keywords_destruct
+Arcadia_Mil_Keywords_destruct
   (
     Arcadia_Process* process,
-    R_Mil_Keywords* self
+    Arcadia_Mil_Keywords* self
   );
 
 static void
-R_Mil_Keywords_visit
+Arcadia_Mil_Keywords_visit
   (
     Arcadia_Process* process,
-    R_Mil_Keywords* self
+    Arcadia_Mil_Keywords* self
   );
 
 static void
-R_Mil_Keywords_destruct
+Arcadia_Mil_Keywords_destruct
   (
     Arcadia_Process* process,
-    R_Mil_Keywords* self
+    Arcadia_Mil_Keywords* self
   )
 {
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
@@ -74,10 +74,10 @@ R_Mil_Keywords_destruct
 }
 
 static void
-R_Mil_Keywords_visit
+Arcadia_Mil_Keywords_visit
   (
     Arcadia_Process* process,
-    R_Mil_Keywords* self
+    Arcadia_Mil_Keywords* self
   )
 {
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
@@ -90,9 +90,9 @@ R_Mil_Keywords_visit
 }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &R_Mil_Keywords_constructImpl,
-  .destruct = &R_Mil_Keywords_destruct,
-  .visit = &R_Mil_Keywords_visit,
+  .construct = &Arcadia_Mil_Keywords_constructImpl,
+  .destruct = &Arcadia_Mil_Keywords_destruct,
+  .visit = &Arcadia_Mil_Keywords_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -115,10 +115,10 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.Keywords", R_Mil_Keywords, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.Keywords", Arcadia_Mil_Keywords, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
-R_Mil_Keywords_constructImpl
+Arcadia_Mil_Keywords_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -126,8 +126,8 @@ R_Mil_Keywords_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_Keywords* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_Keywords_getType(process);
+  Arcadia_Mil_Keywords* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_Keywords_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -145,22 +145,22 @@ R_Mil_Keywords_constructImpl
   Arcadia_Object_setType(process, _self, _type);
 }
 
-R_Mil_Keywords*
-R_Mil_Keywords_create
+Arcadia_Mil_Keywords*
+Arcadia_Mil_Keywords_create
   (
     Arcadia_Process* process
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
-  R_Mil_Keywords* self = R_allocateObject(process, _R_Mil_Keywords_getType(process), 0, &argumentValues[0]);
+  Arcadia_Mil_Keywords* self = R_allocateObject(process, _Arcadia_Mil_Keywords_getType(process), 0, &argumentValues[0]);
   return self;
 }
 
 void
-R_Mil_Keywords_add
+Arcadia_Mil_Keywords_add
   (
     Arcadia_Process* process,
-    R_Mil_Keywords* self,
+    Arcadia_Mil_Keywords* self,
     Arcadia_String* string,
     Arcadia_Natural32Value type
   )
@@ -186,10 +186,10 @@ R_Mil_Keywords_add
 }
 
 Arcadia_BooleanValue
-R_Mil_Keywords_scan
+Arcadia_Mil_Keywords_scan
   (
     Arcadia_Process* process,
-    R_Mil_Keywords* self,
+    Arcadia_Mil_Keywords* self,
     Arcadia_String* string,
     Arcadia_Natural32Value* tokenType
   )

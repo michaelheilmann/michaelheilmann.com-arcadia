@@ -15,8 +15,8 @@
 
 // Last modified: 2025-01-06
 
-#if !defined(ARCADIA_RING1_IMPLEMENTATION_H_INCLUDED)
-#define ARCADIA_RING1_IMPLEMENTATION_H_INCLUDED
+#if !defined(ARCADIA_RING1_IMPLEMENTATION_ATOMS_H_INCLUDED)
+#define ARCADIA_RING1_IMPLEMENTATION_ATOMS_H_INCLUDED
 
 #if !defined(ARCADIA_RING1_PRIVATE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
@@ -135,4 +135,4 @@ Arcadia_Atom_isEqualTo
     Arcadia_AtomValue other
   );
 
-#endif // ARCADIA_RING1_IMPLEMENTATION_H_INCLUDED
+#endif // ARCADIA_RING1_IMPLEMENTATION_ATOMS_H_INCLUDED

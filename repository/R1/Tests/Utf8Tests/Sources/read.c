@@ -17,15 +17,15 @@
 
 #include "read.h"
 
-#include "R.h"
+#include "R/Include.h"
 
 void
-R1_Tests_Utf8_read1
+Arcadia_Tests_Utf8_read1
   (
     Arcadia_Process* process
   )
 {
-  R_ByteBuffer* sourceByteBuffer = R_ByteBuffer_create(process);
+  Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_ByteBuffer_create(process);
   uint8_t sourceBytes[] = {
     'a',
     'b',
@@ -37,7 +37,7 @@ R1_Tests_Utf8_read1
   };
   size_t numberOfSourceBytes = sizeof(sourceBytes) / sizeof(uint8_t);
   for (uint8_t i = 0, n = numberOfSourceBytes; i < n; ++i) {
-    R_ByteBuffer_append_pn(process, sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
+    Arcadia_ByteBuffer_append_pn(process, sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
   }
 
   uint32_t expectedCodePoints[] = {
@@ -50,11 +50,11 @@ R1_Tests_Utf8_read1
   };
   size_t numberOfExpectedCodePoints = sizeof(expectedCodePoints) / sizeof(uint32_t);
 
-  R_Utf8Reader* reader = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(process, sourceByteBuffer);
+  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(process, sourceByteBuffer);
   Arcadia_SizeValue numberOfReceivedCodePoints = 0;
 
-  while (R_Utf8Reader_hasCodePoint(process, reader)) {
-    Arcadia_Natural32Value receivedCodePoint = R_Utf8Reader_getCodePoint(process, reader);
+  while (Arcadia_Utf8Reader_hasCodePoint(process, reader)) {
+    Arcadia_Natural32Value receivedCodePoint = Arcadia_Utf8Reader_getCodePoint(process, reader);
     if (numberOfReceivedCodePoints >= numberOfExpectedCodePoints) {
       Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
       Arcadia_Process_jump(process);
@@ -63,7 +63,7 @@ R1_Tests_Utf8_read1
       Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
       Arcadia_Process_jump(process);
     }
-    R_Utf8Reader_next(process, reader);
+    Arcadia_Utf8Reader_next(process, reader);
     numberOfReceivedCodePoints++;
   }
   if (numberOfReceivedCodePoints != numberOfExpectedCodePoints) {

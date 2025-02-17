@@ -18,12 +18,11 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Process.h"
 
+#include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring1/Implementation/Process1.h"
-#include "Arcadia/Ring1/Implementation/StaticAssert.h"
+#include "Arcadia/Ring1/Implementation/Stack.private.h"
 #include "Arcadia/Ring1/Implementation/Atoms.private.h"
 #include "Arcadia/Ring1/Implementation/Types.private.h"
-#include "Arcadia/Ring1/Implementation/Diagnostics.h"
-#include <malloc.h> /*TODO: Use ARMS*/
 
 typedef uint32_t ReferenceCount;
 
@@ -32,9 +31,22 @@ typedef uint32_t ReferenceCount;
 
 Arcadia_StaticAssert(ReferenceCount_Minimum < ReferenceCount_Maximum, "environment not (yet) supported");
 
+typedef struct Arcadia_CallInfo Arcadia_CallInfo;
+
+struct Arcadia_CallInfo {
+  Arcadia_CallInfo* previous;
+  Arcadia_CallInfo* next;
+  Arcadia_SizeValue stackBase;
+};
+
 struct Arcadia_Process {
   ReferenceCount referenceCount;
   Arcadia_Process1* process1;
+  Arcadia_ValueStack stack;
+  /// The current call.
+  Arcadia_CallInfo* currentCall;
+  /// The initial call.
+  Arcadia_CallInfo initialCall;
 };
 
 static void
@@ -46,28 +58,24 @@ startup
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Atoms_startup(process);
+    Arcadia_Atoms_getModule(process)->onStartUp(process);
     Arcadia_Process1_popJumpTarget(process);
   } else {
     Arcadia_Process1_popJumpTarget(process);
 
-    Arcadia_Process1_runArms(process);
+    Arcadia_Process1_runArms(process, true);
     Arcadia_Process1_jump(process);
   }
 
   Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Types_startup(process);
+    Arcadia_Types_getModule(process)->onStartUp(process);
     Arcadia_Process1_popJumpTarget(process);
   } else {
     Arcadia_Process1_popJumpTarget(process);
-
-    Arcadia_Atoms_onPreMark(process, Arcadia_BooleanValue_True);
-    Arcadia_Process1_runArms(process);
-    Arcadia_Atoms_onFinalize(process);
-    Arcadia_Atoms_shutdown(process);
-
-    Arcadia_Process1_runArms(process);
+    Arcadia_Process1_runArms(process, true);
+    Arcadia_Atoms_getModule(process)->onShutDown(process);
+    Arcadia_Process1_runArms(process, true);
     Arcadia_Process1_jump(process);
   }
 }
@@ -78,21 +86,13 @@ shutdown
     Arcadia_Process1* process
   )
 {
-  Arcadia_Types_onPreMark(process, Arcadia_BooleanValue_True);
-  Arcadia_Atoms_onPreMark(process, Arcadia_BooleanValue_True);
-  Arcadia_Process1_runArms(process);
-  Arcadia_Types_onFinalize(process);
-  Arcadia_Atoms_onFinalize(process);
+  Arcadia_Process1_runArms(process, true);
+  Arcadia_Types_getModule(process)->onShutDown(process);
 
-  Arcadia_Types_shutdown(process);
+  Arcadia_Process1_runArms(process, true);
+  Arcadia_Atoms_getModule(process)->onShutDown(process);
 
-  Arcadia_Atoms_onPreMark(process, Arcadia_BooleanValue_True);
-  Arcadia_Process1_runArms(process);
-  Arcadia_Atoms_onFinalize(process);
-
-  Arcadia_Atoms_shutdown(process);
-
-  Arcadia_Process1_runArms(process);
+  Arcadia_Process1_runArms(process, true);
 }
 
 static Arcadia_Process* g_process = NULL;
@@ -127,11 +127,13 @@ Arcadia_Process_relinquish
     return Arcadia_ProcessStatus_OperationInvalid;
   }
   if (ReferenceCount_Minimum == --process->referenceCount) {
+    Arcadia_ValueStack_uninitialize(g_process->process1, &g_process->stack);
     shutdown(g_process->process1);
-    Arcadia_Process1_relinquish(g_process->process1);
+    Arcadia_Process1* process1 = g_process->process1;
     g_process->process1 = NULL;
-    free(g_process);
+    Arcadia_Process1_deallocateUnmanaged(process1, g_process);
     g_process = NULL;
+    Arcadia_Process1_relinquish(process1);
   }
   return Arcadia_ProcessStatus_Success;
 }
@@ -146,29 +148,57 @@ Arcadia_Process_get
     return Arcadia_ProcessStatus_ArgumentValueInvalid;
   }
   if (!g_process) {
-    g_process = malloc(sizeof(Arcadia_Process));
-    if (!g_process) {
-      return Arcadia_ProcessStatus_AllocationFailed;
-    }
-    g_process->referenceCount = ReferenceCount_Minimum + 1;
-    if (Arcadia_Process1_get(&g_process->process1)) {
-      free(g_process);
-      g_process = NULL;
+    Arcadia_Process1* process1 = NULL;
+    if (Arcadia_Process1_get(&process1)) {
       return Arcadia_ProcessStatus_AllocationFailed;
     }
     Arcadia_JumpTarget jumpTarget;
+    //
+    Arcadia_Process1_pushJumpTarget(process1, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_Process1_allocateUnmanaged(process1, &g_process, sizeof(Arcadia_Process));
+      Arcadia_Process1_popJumpTarget(process1);
+    } else {
+      Arcadia_Process1_popJumpTarget(process1);
+      Arcadia_Process1_relinquish(process1);
+      process1 = NULL;
+      return Arcadia_ProcessStatus_AllocationFailed;
+    }
+    //
+    g_process->process1 = process1;
+    g_process->referenceCount = ReferenceCount_Minimum + 1;
+    //
     Arcadia_Process1_pushJumpTarget(g_process->process1, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
       startup(g_process->process1);
       Arcadia_Process1_popJumpTarget(g_process->process1);
     } else {
       Arcadia_Process1_popJumpTarget(g_process->process1);
-      Arcadia_Process1_relinquish(g_process->process1);
-      g_process->process1 = NULL;
-      free(g_process);
+      Arcadia_Process1_deallocateUnmanaged(process1, g_process);
       g_process = NULL;
+      Arcadia_Process1_relinquish(process1);
+      process1 = NULL;
       return Arcadia_ProcessStatus_AllocationFailed;
     }
+    //
+    Arcadia_Process1_pushJumpTarget(g_process->process1, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_ValueStack_initialize(g_process->process1, &g_process->stack);
+      Arcadia_Process1_popJumpTarget(g_process->process1);
+    } else {
+      Arcadia_Process1_popJumpTarget(g_process->process1);
+      shutdown(process1);
+      Arcadia_Process1_deallocateUnmanaged(process1, g_process);
+      g_process = NULL;
+      Arcadia_Process1_relinquish(process1);
+      process1 = NULL;
+      return Arcadia_ProcessStatus_AllocationFailed;
+    }
+    //
+    g_process->initialCall.previous = NULL;
+    g_process->initialCall.next = NULL;
+    g_process->initialCall.stackBase = 0;
+    g_process->currentCall = &g_process->initialCall;
     *process = g_process;
     return Arcadia_ProcessStatus_Success;
   }
@@ -195,18 +225,14 @@ Arcadia_Process_popJumpTarget
   (
     Arcadia_Process* process
   )
-{
-  Arcadia_Process1_popJumpTarget(process->process1);
-}
+{ Arcadia_Process1_popJumpTarget(process->process1); }
 
 Arcadia_NoReturn() void
 Arcadia_Process_jump
   (
     Arcadia_Process* process
   )
-{
-  Arcadia_Process1_jump(process->process1);
-}
+{ Arcadia_Process1_jump(process->process1); }
 
 Arcadia_Status
 Arcadia_Process_getStatus
@@ -283,9 +309,10 @@ Arcadia_Process_stepArms
 Arcadia_Status
 Arcadia_Process_runArms
   (
-    Arcadia_Process* process
+    Arcadia_Process* process,
+    bool purgeCaches
   )
-{ return Arcadia_Process1_runArms(process->process1); }
+{ return Arcadia_Process1_runArms(process->process1, purgeCaches); }
 
 void
 Arcadia_Process_registerType
@@ -312,8 +339,34 @@ Arcadia_Process_allocate
 { Arcadia_Process1_allocate(process->process1, p, name, nameLength, size); }
 
 Arcadia_Process1*
-Arcadia_Process_getBackendNoLock
+Arcadia_Process_getProcess1
   (
     Arcadia_Process* process
   )
 { return process->process1; }
+
+Arcadia_ValueStack*
+Arcadia_Process_getStack
+  (
+    Arcadia_Process* process
+  )
+{ return &process->stack; }
+
+void
+Arcadia_Process_safeInvoke
+  (
+    Arcadia_Process* process,
+    Arcadia_ForeignProcedure* procedure,
+    Arcadia_Value* targetValue,
+    Arcadia_SizeValue numberOfArgumentValues,
+    Arcadia_Value* argumentValues
+  )
+{
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    (*procedure)(process, targetValue, numberOfArgumentValues, argumentValues);
+  }
+  Arcadia_Process_popJumpTarget(process);
+  
+}

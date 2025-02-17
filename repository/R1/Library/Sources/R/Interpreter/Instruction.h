@@ -50,23 +50,23 @@ typedef enum R_Machine_Code_Opcode {
   // divide <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Divide,
   
-  // equalTo <target> <firstOperand> <secondOperand>
-  R_Machine_Code_Opcode_EqualTo,
+  // isEqualTo <target> <firstOperand> <secondOperand>
+  R_Machine_Code_Opcode_IsEqualTo,
   
-  // greaterThan <target> <firstOperand> <secondOperand>
-  R_Machine_Code_Opcode_GreaterThan,
+  // isGreaterThan <target> <firstOperand> <secondOperand>
+  R_Machine_Code_Opcode_IsGreaterThan,
   
-  // greaterThanOrEqualTo <target> <firstOperand> <secondOperand>
-  R_Machine_Code_Opcode_GreaterThanOrEqualTo,
+  // isGreaterThanOrEqualTo <target> <firstOperand> <secondOperand>
+  R_Machine_Code_Opcode_IsGreaterThanOrEqualTo,
   
   // idle
   R_Machine_Code_Opcode_Idle,
   
-  // lowerThan <target> <firstOperand> <secondOperand>
-  R_Machine_Code_Opcode_LowerThan,
+  // isLowerThan <target> <firstOperand> <secondOperand>
+  R_Machine_Code_Opcode_IsLowerThan,
   
-  // lowerThanOrEqualTo <target> <firstOperand> <secondOperand>
-  R_Machine_Code_Opcode_LowerThanOrEqualTo,
+  // isLowerThanOrEqualTo <target> <firstOperand> <secondOperand>
+  R_Machine_Code_Opcode_IsLowerThanOrEqualTo,
   
   // multiply <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Multiply,
@@ -77,12 +77,15 @@ typedef enum R_Machine_Code_Opcode {
   // not <target> <operand>
   R_Machine_Code_Opcode_Not,
 
-  // notEqualTo <target> <firstOperand> <secondOperand>
-  R_Machine_Code_Opcode_NotEqualTo,
+  // IsNotEqualTo <target> <firstOperand> <secondOperand>
+  R_Machine_Code_Opcode_IsNotEqualTo,
 
   // or <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Or,
-  
+
+  // raise
+  R_Machine_Code_Opcode_Raise, 
+
   // return
   R_Machine_Code_Opcode_Return,
 
@@ -174,21 +177,21 @@ R_Instructions_divide
   );
 
 void
-R_Instructions_equalTo
+R_Instructions_isEqualTo
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
-R_Instructions_greaterThan
+R_Instructions_isGreaterThan
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
-R_Instructions_greaterThanOrEqualTo
+R_Instructions_isGreaterThanOrEqualTo
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
@@ -202,14 +205,14 @@ R_Instructions_idle
   );
 
 void
-R_Instructions_lowerThan
+R_Instructions_isLowerThan
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
   );
 
 void
-R_Instructions_lowerThanOrEqualTo
+R_Instructions_isLowerThanOrEqualTo
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
@@ -237,7 +240,7 @@ R_Instructions_not
   );
 
 void
-R_Instructions_notEqualTo
+R_Instructions_isNotEqualTo
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess

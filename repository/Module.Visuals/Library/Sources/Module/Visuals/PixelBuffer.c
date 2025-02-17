@@ -17,8 +17,7 @@
 
 #include "Module/Visuals/PixelBuffer.h"
 
-#include "R.h"
-#include "R/cstdlib.h" /*TODO: Add and use Arcadia_Process functionality.*/
+#include "R/Include.h"
 
 /* TODO: Add this to Arcadia_Process_copyMemory. */
 static inline void
@@ -350,7 +349,7 @@ PixelBuffer_constructImpl
     Arcadia_SizeValue bytesPerPixel = PixelBuffer_getBytesPerPixel(process, other);
     Arcadia_SizeValue bytes = (bytesPerPixel * _self->numberOfColumns + _self->linePadding) * _self->numberOfRows;
     Arcadia_Process_allocateUnmanaged(process, &_self->bytes, bytes);
-    c_memcpy(_self->bytes, other->bytes, bytes);
+    Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), _self->bytes, other->bytes, bytes);
     Arcadia_Object_setType(process, _self, _type);
   } else if (4 == numberOfArgumentValues) {
     Arcadia_TypeValue _type = _PixelBuffer_getType(process);
@@ -566,7 +565,7 @@ PixelBuffer_setLinePadding
     for (Arcadia_SizeValue rowIndex = 0; rowIndex < self->numberOfRows; ++rowIndex) {
       Arcadia_Natural8Value* oldLine = oldBytes + rowIndex * (self->numberOfColumns * bytesPerPixel + oldLinePadding);
       Arcadia_Natural8Value* newLine = newBytes + rowIndex * (self->numberOfColumns * bytesPerPixel + newLinePadding);
-      c_memcpy(newLine, oldLine, self->numberOfColumns * bytesPerPixel);
+      Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), newLine, oldLine, self->numberOfColumns * bytesPerPixel);
     }
     Arcadia_Process_deallocateUnmanaged(process, oldBytes);
     self->bytes = newBytes;

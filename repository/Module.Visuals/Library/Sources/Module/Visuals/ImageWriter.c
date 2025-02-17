@@ -33,7 +33,7 @@ ImageWriter_writePngToByteBuffer
     Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_ByteBuffer* targetByteBuffer
   )
 { self->writePngToByteBuffer(process, self, sourcePixelBuffer, targetByteBuffer); }
 
@@ -53,7 +53,7 @@ ImageWriter_writeBmpToByteBuffer
     Arcadia_Process* process,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_ByteBuffer* targetByteBuffer
   )
 { self->writeBmpToByteBuffer(process, self, sourcePixelBuffer, targetByteBuffer); }
 
@@ -62,7 +62,7 @@ ImageWriter_writeIcoToPath
   (
     Arcadia_Process* process,
     ImageWriter* self,
-    R_List* sourcePixelBuffers,
+    Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
   )
 { self->writeIcoToPath(process, self, sourcePixelBuffers, targetPath); }
@@ -72,8 +72,8 @@ ImageWriter_writeIcoToByteBuffer
   (
     Arcadia_Process* process,
     ImageWriter* self,
-    R_List* sourcePixelBuffers,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_List* sourcePixelBuffers,
+    Arcadia_ByteBuffer* targetByteBuffer
   )
 { self->writeIcoToByteBuffer(process, self, sourcePixelBuffers, targetByteBuffer); }
 

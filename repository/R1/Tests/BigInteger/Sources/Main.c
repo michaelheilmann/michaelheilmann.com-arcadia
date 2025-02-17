@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/BigInteger/Include.h"
 
 /// @todo Add to R's test utilities.
@@ -229,14 +229,8 @@ safeExecute
   )
 {
   bool result = true;
-  Arcadia_Status status = R_startup();
-  if (status) {
-    result = false;
-    return result;
-  }
   Arcadia_Process* process = NULL;
   if (Arcadia_Process_get(&process)) {
-    R_shutdown();
     result = false;
     return result;
   }
@@ -247,10 +241,10 @@ safeExecute
   } else {
     result = false;
   }
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
   Arcadia_Process_popJumpTarget(process);
   Arcadia_Process_relinquish(process);
   process = NULL;
-  status = R_shutdown();
   if (status) {
     result = false;
   }

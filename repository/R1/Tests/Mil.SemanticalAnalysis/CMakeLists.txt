@@ -32,7 +32,7 @@ endif()
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
-set(MyTestName ${MyProjectName}.R.Mil.Tests.SemanticalAnalysis)
+set(MyTestName ${MyProjectName}.Arcadia.MilTests.SemanticalAnalysis)
 
 if (NOT TARGET ${MyTestName})
   add_executable(${MyTestName})
@@ -44,8 +44,12 @@ if (NOT TARGET ${MyTestName})
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Configure.h @ONLY)
 
   list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Main.c)
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Enter.c)
-  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Enter.h)
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/EnterPass.c)
+  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/EnterPass.h)
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/StatementsContext.c)
+  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/StatementsContext.h)
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Pass.c)
+  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Pass.h)
   list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Configure.h)
 
   target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

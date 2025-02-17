@@ -24,6 +24,7 @@
 
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 
 #define Arcadia_Tests_assertTrue(expression) \
   if (!(expression)) { \
@@ -38,7 +39,6 @@ Arcadia_Tests_safeExecute
     void (*f)(Arcadia_Process*)
   )
 {
-  Arcadia_Status status = Arcadia_Status_Success;
   Arcadia_BooleanValue result = Arcadia_BooleanValue_True;
   Arcadia_Process* process = NULL;
   if (Arcadia_Process_get(&process)) {
@@ -53,7 +53,7 @@ Arcadia_Tests_safeExecute
     result = Arcadia_BooleanValue_False;
   }
   Arcadia_Process_popJumpTarget(process);
-  status = Arcadia_Process_getStatus(process);
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

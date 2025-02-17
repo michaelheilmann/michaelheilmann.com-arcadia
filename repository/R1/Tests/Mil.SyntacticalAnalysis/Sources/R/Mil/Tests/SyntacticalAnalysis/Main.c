@@ -17,28 +17,28 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "R.h"
+#include "R/Include.h"
 #include "R/Mil/Include.h"
 
 static void
 onTest
   (
     Arcadia_Process* process,
-    R_FilePath* sourceFilePath
+    Arcadia_FilePath* sourceFilePath
   )
 {
-  R_FileSystem* fileSystem = R_FileSystem_create(process);
-  R_FilePath* absoluteSourceFilePath = NULL;
-  if (R_FilePath_isRelative(sourceFilePath)) {
-    absoluteSourceFilePath = R_FileSystem_getWorkingDirectory(process, fileSystem);
-    R_FilePath_append(process, absoluteSourceFilePath, sourceFilePath);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(process);
+  Arcadia_FilePath* absoluteSourceFilePath = NULL;
+  if (Arcadia_FilePath_isRelative(sourceFilePath)) {
+    absoluteSourceFilePath = Arcadia_FileSystem_getWorkingDirectory(process, fileSystem);
+    Arcadia_FilePath_append(process, absoluteSourceFilePath, sourceFilePath);
   } else {
     absoluteSourceFilePath = sourceFilePath;
   }
-  R_ByteBuffer* sourceFileContents = R_FileSystem_getFileContents(process, fileSystem, absoluteSourceFilePath);
-  R_Mil_Parser* parser = R_Mil_Parser_create(process);
-  R_Mil_Parser_setInput(process, parser, (R_Utf8Reader*)R_Utf8ByteBufferReader_create(process, sourceFileContents));
-  R_Mil_Parser_run(process, parser);
+  Arcadia_ByteBuffer* sourceFileContents = Arcadia_FileSystem_getFileContents(process, fileSystem, absoluteSourceFilePath);
+  Arcadia_Mil_Parser* parser = Arcadia_Mil_Parser_create(process);
+  Arcadia_Mil_Parser_setInput(process, parser, (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(process, sourceFileContents));
+  Arcadia_Mil_Parser_run(process, parser);
 }
 
 void
@@ -49,10 +49,10 @@ main1
     char** argv
   )
 {
-  onTest(process, R_FilePath_parseGeneric(process, u8"Assets/Procedures.mil", sizeof(u8"Assets/Procedures.mil") - 1));
-  onTest(process, R_FilePath_parseGeneric(process, u8"Assets/Classes.mil", sizeof(u8"Assets/Classes.mil") - 1));
-  onTest(process, R_FilePath_parseGeneric(process, u8"Assets/Statements.mil", sizeof(u8"Assets/Statements.mil") - 1));
-  onTest(process, R_FilePath_parseGeneric(process, u8"Assets/Variables.mil", sizeof(u8"Assets/Variables.mil") - 1));
+  onTest(process, Arcadia_FilePath_parseGeneric(process, u8"Assets/Procedures.mil", sizeof(u8"Assets/Procedures.mil") - 1));
+  onTest(process, Arcadia_FilePath_parseGeneric(process, u8"Assets/Classes.mil", sizeof(u8"Assets/Classes.mil") - 1));
+  onTest(process, Arcadia_FilePath_parseGeneric(process, u8"Assets/Statements.mil", sizeof(u8"Assets/Statements.mil") - 1));
+  onTest(process, Arcadia_FilePath_parseGeneric(process, u8"Assets/Variables.mil", sizeof(u8"Assets/Variables.mil") - 1));
 }
 
 int
@@ -62,14 +62,8 @@ main
     char** argv
   )
 {
-  Arcadia_Status status[2];
-  status[0] = R_startup();
-  if (status[0]) {
-    return EXIT_FAILURE;
-  }
   Arcadia_Process* process = NULL;
   if (Arcadia_Process_get(&process)) {
-    R_shutdown();
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
@@ -78,11 +72,10 @@ main
     main1(process, argc, argv);
   }
   Arcadia_Process_popJumpTarget(process);
-  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
   Arcadia_Process_relinquish(process);
   process = NULL;
-  status[1] = R_shutdown();
-  if (status[1] || status[0]) {
+  if (status) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

@@ -18,7 +18,8 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION__DECLARESCALARTYPE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION__DECLARESCALARTYPE_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Configure.h"
+typedef struct Arcadia_Process Arcadia_Process;
 
 typedef void Arcadia_Type;
 typedef Arcadia_Type* Arcadia_TypeValue;

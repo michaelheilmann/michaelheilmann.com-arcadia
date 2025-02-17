@@ -19,7 +19,7 @@
 #define R_INTERPRETER_CLASS_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "R/Map.h"
+#include "Arcadia/Ring2/Implementation/Map.h"
 typedef struct R_Interpreter_Constructor R_Interpreter_Constructor;
 typedef struct R_Interpreter_Method R_Interpreter_Method;
 typedef struct R_Interpreter_ProcessState R_Interpreter_ProcessState;
@@ -65,13 +65,13 @@ struct R_Interpreter_Class {
   /// The ename of the class extended by this class.
   Arcadia_String* extendedClassName;
   /// The set of class members.
-  R_Map* classMembers;
+  Arcadia_Map* classMembers;
 
   /// The number of variables (synthetic) getVarsDefined(cls) := |cls.varsDefined| + getVarsDefined(cls.extendedClass).
   Arcadia_SizeValue numberOfVariables;
 
   /// Used for link
-  R_Map* methodDispatch;
+  Arcadia_Map* methodDispatch;
 
   /// A pointer to the extended class.
   /// null if extendedClassName is null.

@@ -50,6 +50,13 @@ procedure hello {
   c = not a
   c = not true
   c = not false
+  
+  c = isEqualTo a, b
+  c = isNotEqualTo a, b
+  c = isLowerThan a, b
+  c = isLowerThanOrEqualTo a, b
+  c = isGreaterThan a, b
+  c = isGreaterThanOrEqualTo a, b
 
   return c
 }

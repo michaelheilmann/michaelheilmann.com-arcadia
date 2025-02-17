@@ -45,6 +45,8 @@
 
 #include "Arcadia/Ring1/Implementation/Types.h"
 
+#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+
 #include "Arcadia/Ring1/Implementation/Void.h"
 
 #define Arcadia_ValueTag_Atom (1)
@@ -54,8 +56,7 @@
 #define Arcadia_ValueTag_ForeignProcedure (3)
 
 #define Arcadia_ValueTag_ImmutableByteArray (4)
-
-#define Arcadia_ValueTag_ImmutableString (5)
+#define Arcadia_ValueTag_ImmutableUtf8String (5)
 
 #define Arcadia_ValueTag_Integer16 (6)
 #define Arcadia_ValueTag_Integer32 (7)
@@ -93,6 +94,7 @@ typedef struct Arcadia_Value {
     Define(Arcadia, ForeignProcedure, foreignProcedure)
 
     Define(Arcadia, ImmutableByteArray, immutableByteArray)
+    Define(Arcadia, ImmutableUtf8String, immutableUtf8String)
     
     Define(Arcadia, Integer16, integer16)
     Define(Arcadia, Integer32, integer32)
@@ -159,6 +161,7 @@ Define(Arcadia, Boolean, boolean)
 Define(Arcadia, ForeignProcedure, foreignProcedure)
 
 Define(Arcadia, ImmutableByteArray, immutableByteArray)
+Define(Arcadia, ImmutableUtf8String, immutableUtf8String)
 
 Define(Arcadia, Integer16, integer16)
 Define(Arcadia, Integer32, integer32)

@@ -15,22 +15,22 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_DEFINITIONAST_H_INCLUDED)
-#define R_MIL_ASTS_DEFINITIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_DEFINITIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_DEFINITIONAST_H_INCLUDED
 
-#include "R.h"
+#include "R/Mil/Asts/Ast.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.DefinitionAst extends Arcadia.Object
+/// class Arcadia.Mil.DefinitionAst extends Arcadia.Mil.Ast
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.DefinitionAst", R_Mil_DefinitionAst, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.DefinitionAst", Arcadia_Mil_DefinitionAst, u8"Arcadia.Object");
 
-struct R_Mil_DefinitionAst {
-  Arcadia_Object _parent;
+struct Arcadia_Mil_DefinitionAst {
+  Arcadia_Mil_Ast _parent;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_DEFINITIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_DEFINITIONAST_H_INCLUDED

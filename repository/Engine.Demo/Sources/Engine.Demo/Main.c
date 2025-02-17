@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 
-#include "R.h"
+#include "R/Include.h"
 #include "Module/Audials/Include.h"
 #include "Module/Visuals/Include.h"
 #include "Arcadia/Ring1/Include.h"
@@ -57,7 +57,7 @@ main1
   NativeWindow_setSmallIcon(window, icon);
 
   // (7) Set the title.
-  NativeWindow_setTitle(process, window, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
+  NativeWindow_setTitle(process, window, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
 
   // (8) Enter the message loop.
   while (!NativeWindow_getQuitRequested(window)) {
@@ -82,14 +82,8 @@ main
     char** argv
   )
 {
-  Arcadia_Status status[2];
-  status[0] = R_startup();
-  if (status[0]) {
-    return EXIT_FAILURE;
-  }
   Arcadia_Process* process = NULL;
   if (Arcadia_Process_get(&process)) {
-    R_shutdown();
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
@@ -98,11 +92,10 @@ main
     main1(process, argc, argv);
   }
   Arcadia_Process_popJumpTarget(process);
-  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
   Arcadia_Process_relinquish(process);
   process = NULL;
-  status[1] = R_shutdown();
-  if (status[1] || status[0]) {
+  if (status) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

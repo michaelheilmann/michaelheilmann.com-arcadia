@@ -20,7 +20,7 @@
 
 #include "R/Interpreter/Class.h"
 #include "R/Interpreter/Procedure.h"
-#include "R/String.h"
+#include "Arcadia/Ring2/Implementation/String.h"
 #include "R/Interpreter/Instruction.h"
 
 /**

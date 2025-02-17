@@ -19,7 +19,6 @@
 #include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include <string.h> /*TODO: Add and use Arcadia_Process functionality.*/
 
 #define TypeName u8"Arcadia.ImmutableByteArray"
 
@@ -56,7 +55,7 @@ Arcadia_ImmutableByteArray_create
   }
   Arcadia_ImmutableByteArray*array = NULL;
   Arcadia_Process1_allocate(process, &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableByteArray) + numberOfBytes);
-  memcpy(array->bytes, bytes, numberOfBytes);
+  Arcadia_Process1_copyMemory(process, array->bytes, bytes, numberOfBytes);
   array->numberOfBytes = numberOfBytes;
   return array;
 }
@@ -198,7 +197,7 @@ typeDestructing
 }
 
 Arcadia_TypeValue
-_Arcadia_ImmutableByteArray_getType
+_Arcadia_ImmutableByteArrayValue_getType
   (
     Arcadia_Process* process
   )

@@ -26,7 +26,7 @@
 /// construct(targetVariableName : Arcadia.String, expression : Mil.ExpressionAst)
 /// @endcode
 static void
-R_Mil_ExpressionStatementAst_constructImpl
+Arcadia_Mil_ExpressionStatementAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -35,20 +35,20 @@ R_Mil_ExpressionStatementAst_constructImpl
   );
 
 static void
-R_Mil_ExpressionStatementAst_visit
+Arcadia_Mil_ExpressionStatementAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ExpressionStatementAst* self
+    Arcadia_Mil_ExpressionStatementAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_ExpressionStatementAst_objectTypeOperations = {
-  .construct = &R_Mil_ExpressionStatementAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_ExpressionStatementAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_ExpressionStatementAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_ExpressionStatementAst_visit,
+  .visit = &Arcadia_Mil_ExpressionStatementAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_ExpressionStatementAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_ExpressionStatementAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_ExpressionStatementAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_ExpressionStatementAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -67,10 +67,10 @@ static const Arcadia_Type_Operations _R_Mil_ExpressionStatementAst_typeOperation
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.ExpressionStatementAst", R_Mil_ExpressionStatementAst, u8"R.Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_ExpressionStatementAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.ExpressionStatementAst", Arcadia_Mil_ExpressionStatementAst, u8"Arcadia.Mil.StatementAst", Arcadia_Mil_StatementAst, &_Arcadia_Mil_ExpressionStatementAst_typeOperations);
 
 static void
-R_Mil_ExpressionStatementAst_constructImpl
+Arcadia_Mil_ExpressionStatementAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -78,8 +78,8 @@ R_Mil_ExpressionStatementAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_ExpressionStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_ExpressionStatementAst_getType(process);
+  Arcadia_Mil_ExpressionStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_ExpressionStatementAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -101,52 +101,52 @@ R_Mil_ExpressionStatementAst_constructImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(Arcadia_Value_getObjectReferenceValue(&argumentValues[1])), _R_Mil_ExpressionAst_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(Arcadia_Value_getObjectReferenceValue(&argumentValues[1])), _Arcadia_Mil_ExpressionAst_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
   
   _self->targetVariableName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
-  _self->expression =  (R_Mil_ExpressionAst*)Arcadia_Value_getObjectReferenceValue(&argumentValues[1]);
+  _self->expression =  (Arcadia_Mil_ExpressionAst*)Arcadia_Value_getObjectReferenceValue(&argumentValues[1]);
   Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
-R_Mil_ExpressionStatementAst_visit
+Arcadia_Mil_ExpressionStatementAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ExpressionStatementAst* self
+    Arcadia_Mil_ExpressionStatementAst* self
   )
 {
   Arcadia_Object_visit(process, self->targetVariableName);
   Arcadia_Object_visit(process, self->expression);
 }
 
-R_Mil_ExpressionStatementAst*
-R_Mil_ExpressionStatementAst_create
+Arcadia_Mil_ExpressionStatementAst*
+Arcadia_Mil_ExpressionStatementAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* targetVariableName,
-    R_Mil_ExpressionAst* expression
+    Arcadia_Mil_ExpressionAst* expression
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)targetVariableName },
                                {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)expression } };
-  R_Mil_ExpressionStatementAst* self = R_allocateObject(process, _R_Mil_ExpressionStatementAst_getType(process), 2, &argumentValues[0]);
+  Arcadia_Mil_ExpressionStatementAst* self = R_allocateObject(process, _Arcadia_Mil_ExpressionStatementAst_getType(process), 2, &argumentValues[0]);
   return self;
 }
 
 Arcadia_String*
-R_Mil_ExpressionStatementAst_getTargetVariableName
+Arcadia_Mil_ExpressionStatementAst_getTargetVariableName
   (
-    R_Mil_ExpressionStatementAst* self
+    Arcadia_Mil_ExpressionStatementAst* self
   )
 { return self->targetVariableName; }
 
-R_Mil_ExpressionAst*
-R_Mil_ExpressionStatementAst_getExpression
+Arcadia_Mil_ExpressionAst*
+Arcadia_Mil_ExpressionStatementAst_getExpression
   (
-    R_Mil_ExpressionStatementAst* self
+    Arcadia_Mil_ExpressionStatementAst* self
   )
 { return self->expression; }
 

@@ -18,7 +18,7 @@
 #if !defined(MODULE_VISUALS_IMAGEWRITERPARAMETERS_H_INCLUDED)
 #define MODULE_VISUALS_IMAGEWRITERPARAMETERS_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 
 typedef enum ImageWriterFormat {
   ImageWriterFormat_Undefined = 0,
@@ -47,7 +47,7 @@ ImageWriterParameters*
 ImageWriterParameters_createByteBuffer
   (
     Arcadia_Process* process,
-    R_ByteBuffer* byteBuffer,
+    Arcadia_ByteBuffer* byteBuffer,
     ImageWriterFormat format
   );
 
@@ -72,7 +72,7 @@ ImageWriterParameters_hasByteBuffer
     ImageWriterParameters* self
   );
 
-R_ByteBuffer*
+Arcadia_ByteBuffer*
 ImageWriterParameters_getByteBuffer
   (
     Arcadia_Process* process,

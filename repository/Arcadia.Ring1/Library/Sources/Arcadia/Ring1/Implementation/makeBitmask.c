@@ -18,6 +18,8 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/makeBitmask.h"
 
+#include "Arcadia/Ring1/Include.h"
+
 #define On(Type, Bits)
 
 Arcadia_Natural16Value

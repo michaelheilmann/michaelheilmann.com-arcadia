@@ -1,7 +1,12 @@
 <h4 id="arcadia-nextpoweroftwogreaterthanorequalto">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo</h4>
 <p>R provides functions returning the next power of two greater or equal to a value.</p>
 <p><code>
-<my-mv>Type</my-mv> Arcadia_nextPowerOfTwoGte<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
+<my-mv>Type</my-mv>
+Arcadia_nextPowerOfTwoGreaterThanOrEqualTo<my-mv>Suffix</my-mv>
+  (
+    Arcadia_Process* process,
+    <my-mv>Type</my-mv> x
+  )
 </code></p>
 <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
 
@@ -20,6 +25,7 @@
 
 <h5>Parameters</h5>
 <table>
+  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td><my-mv>Type</my-mv> x</td><td>The value.</td></tr>
 </table>
 

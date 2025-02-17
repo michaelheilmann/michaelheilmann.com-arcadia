@@ -19,69 +19,69 @@
 #define R_MIL_SYMBOLS_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "R/String.h"
-typedef struct R_Mil_Symbol R_Mil_Symbol;
-typedef struct R_Mil_Scope R_Mil_Scope;
+#include "Arcadia/Ring2/Implementation/String.h"
+typedef struct Arcadia_Mil_Symbol Arcadia_Mil_Symbol;
+typedef struct Arcadia_Mil_Scope Arcadia_Mil_Scope;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.Symbol", R_Mil_Symbol, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.Symbol", Arcadia_Mil_Symbol, u8"Arcadia.Object");
 
-struct R_Mil_Symbol {
+struct Arcadia_Mil_Symbol {
   Arcadia_Object _parent;
   // The name of the symbol.
   Arcadia_String* name;
   // The symbol shadwoed by this symbol.
-  R_Mil_Symbol* shadowed;
+  Arcadia_Mil_Symbol* shadowed;
   // The sibling of this symbol in this scope.
-  R_Mil_Symbol* sibling;
+  Arcadia_Mil_Symbol* sibling;
   // The scope to which this symbol belongs.
-  R_Mil_Scope* scope;
+  Arcadia_Mil_Scope* scope;
 };
 
-R_Mil_Symbol*
-R_Mil_Symbol_create
+Arcadia_Mil_Symbol*
+Arcadia_Mil_Symbol_create
   (
     Arcadia_String* name
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.SymbolTable", R_Mil_SymbolTable, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.SymbolTable", Arcadia_Mil_SymbolTable, u8"Arcadia.Object");
 
-struct R_Mil_SymbolTable {
+struct Arcadia_Mil_SymbolTable {
   Arcadia_Object _parent;
-  R_Mil_Symbol** elements;
+  Arcadia_Mil_Symbol** elements;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
 };
 
-R_Mil_SymbolTable*
-R_Mil_SymbolTable_create
+Arcadia_Mil_SymbolTable*
+Arcadia_Mil_SymbolTable_create
   (
     Arcadia_Process* process
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.Scope", R_Mil_Scope, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.Scope", Arcadia_Mil_Scope, u8"Arcadia.Object");
 
-struct R_Mil_Scope {
+struct Arcadia_Mil_Scope {
   Arcadia_Object _parent;
   
   // The enclosing scope.
-  R_Mil_Scope* enclosing;
+  Arcadia_Mil_Scope* enclosing;
   
   // A singly-linked list of symbols in this scope (linking pointer is Symbol.sibling).
   // Symbols that are added later are further on the front.
-  R_Mil_Symbol* entries;
+  Arcadia_Mil_Symbol* entries;
   
   /// The table shared between the scopes.
-  R_Mil_SymbolTable* table;
+  Arcadia_Mil_SymbolTable* table;
 };
 
-R_Mil_Scope*
-R_Mil_Scope_create
+Arcadia_Mil_Scope*
+Arcadia_Mil_Scope_create
   (
     Arcadia_Process* process
   );

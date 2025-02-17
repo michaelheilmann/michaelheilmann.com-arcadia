@@ -17,7 +17,7 @@
 
 #include "R/Interpreter/Method.h"
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/ArgumentsValidation.h"
 
 static void
@@ -85,7 +85,7 @@ R_Interpreter_Method_constructImpl
   }
   _self->ready = Arcadia_BooleanValue_False;
   _self->index = Arcadia_SizeValue_Literal(0);
-  _self->parameterNames = R_List_create(process);
+  _self->parameterNames = Arcadia_List_create(process);
   _self->unqualifiedName = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _Arcadia_String_getType(process));
   if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _Arcadia_ForeignProcedureValue_getType(process))) {
     _self->isForeign = Arcadia_BooleanValue_True;

@@ -1,7 +1,12 @@
 <h4 id="arcadia-hash">Arcadia_hash</h4>
 <p>Return the hash of a value.</p>
 <p><code>
-Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
+Arcadia_SizeValue
+Arcadia_hash<my-mv>Suffix</my-mv>
+  (
+    Arcadia_Process* process,
+    <my-mv>Type</my-mv> x
+  )
 </code></p>
 <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
 
@@ -25,6 +30,7 @@ Arcadia_SizeValue Arcadia_hash<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x)
 
 <h5>Parameters</h5>
 <table>
+  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td><my-mv>Type</my-mv> x</td><td>The value.</td></tr>
 </table>
 

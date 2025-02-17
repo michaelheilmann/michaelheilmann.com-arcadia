@@ -23,10 +23,10 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(operand:R.Mil.OperandAst)
+/// construct(operand:Arcadia.MilOperandAst)
 /// @endcode
 static void
-R_Mil_ReturnStatementAst_constructImpl
+Arcadia_Mil_ReturnStatementAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -35,20 +35,20 @@ R_Mil_ReturnStatementAst_constructImpl
   );
 
 static void
-R_Mil_ReturnStatementAst_visit
+Arcadia_Mil_ReturnStatementAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ReturnStatementAst* self
+    Arcadia_Mil_ReturnStatementAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_ReturnStatementAst_objectTypeOperations = {
-  .construct = &R_Mil_ReturnStatementAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_ReturnStatementAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_ReturnStatementAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_ReturnStatementAst_visit,
+  .visit = &Arcadia_Mil_ReturnStatementAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_ReturnStatementAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_ReturnStatementAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_ReturnStatementAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_ReturnStatementAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -67,10 +67,10 @@ static const Arcadia_Type_Operations _R_Mil_ReturnStatementAst_typeOperations = 
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, u8"Mil.StatementAst", R_Mil_StatementAst, &_R_Mil_ReturnStatementAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.ReturnStatementAst", Arcadia_Mil_ReturnStatementAst, u8"Arcadia.Mil.StatementAst", Arcadia_Mil_StatementAst, &_Arcadia_Mil_ReturnStatementAst_typeOperations);
 
 static void
-R_Mil_ReturnStatementAst_constructImpl
+Arcadia_Mil_ReturnStatementAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -78,8 +78,8 @@ R_Mil_ReturnStatementAst_constructImpl
     Arcadia_Value* argumentValues 
   )
 {
-  R_Mil_ReturnStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_ReturnStatementAst_getType(process);
+  Arcadia_Mil_ReturnStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_ReturnStatementAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -88,7 +88,7 @@ R_Mil_ReturnStatementAst_constructImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _R_Mil_OperandAst_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_Mil_OperandAst_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
@@ -97,22 +97,22 @@ R_Mil_ReturnStatementAst_constructImpl
 }
 
 static void
-R_Mil_ReturnStatementAst_visit
+Arcadia_Mil_ReturnStatementAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ReturnStatementAst* self
+    Arcadia_Mil_ReturnStatementAst* self
   )
 { Arcadia_Object_visit(process, self->operand); }
 
-R_Mil_ReturnStatementAst*
-R_Mil_ReturnStatementAst_create
+Arcadia_Mil_ReturnStatementAst*
+Arcadia_Mil_ReturnStatementAst_create
   (
     Arcadia_Process* process,
-    R_Mil_OperandAst* operand
+    Arcadia_Mil_OperandAst* operand
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)operand }, };
-  R_Mil_ReturnStatementAst* self = R_allocateObject(process, _R_Mil_ReturnStatementAst_getType(process), 1, &argumentValues[0]);
+  Arcadia_Mil_ReturnStatementAst* self = R_allocateObject(process, _Arcadia_Mil_ReturnStatementAst_getType(process), 1, &argumentValues[0]);
   return self;
 }
 

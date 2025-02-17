@@ -23,10 +23,10 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(type : Arcadia.Natural32Value<R.Mil.UnaryExpressionAstType>, operand1 : R.Mil.OperandAst)
+/// construct(type : Arcadia.Natural32Value<Arcadia.MilUnaryExpressionAstType>, operand1 : Arcadia.MilOperandAst)
 /// @endcode
 static void
-R_Mil_UnaryExpressionAst_constructImpl
+Arcadia_Mil_UnaryExpressionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -35,20 +35,20 @@ R_Mil_UnaryExpressionAst_constructImpl
   );
 
 static void
-R_Mil_UnaryExpressionAst_visit
+Arcadia_Mil_UnaryExpressionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_UnaryExpressionAst* self
+    Arcadia_Mil_UnaryExpressionAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_UnaryExpressionAst_objectTypeOperations = {
-  .construct = &R_Mil_UnaryExpressionAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_UnaryExpressionAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_UnaryExpressionAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_UnaryExpressionAst_visit,
+  .visit = &Arcadia_Mil_UnaryExpressionAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_UnaryExpressionAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_UnaryExpressionAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_UnaryExpressionAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_UnaryExpressionAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -67,10 +67,10 @@ static const Arcadia_Type_Operations _R_Mil_UnaryExpressionAst_typeOperations = 
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, u8"R.Mil.ExpressionAst", R_Mil_ExpressionAst, &_R_Mil_UnaryExpressionAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.UnaryExpressionAst", Arcadia_Mil_UnaryExpressionAst, u8"Arcadia.Mil.ExpressionAst", Arcadia_Mil_ExpressionAst, &_Arcadia_Mil_UnaryExpressionAst_typeOperations);
 
 static void
-R_Mil_UnaryExpressionAst_constructImpl
+Arcadia_Mil_UnaryExpressionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -78,8 +78,8 @@ R_Mil_UnaryExpressionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_UnaryExpressionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_UnaryExpressionAst_getType(process);
+  Arcadia_Mil_UnaryExpressionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_UnaryExpressionAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -94,7 +94,7 @@ R_Mil_UnaryExpressionAst_constructImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _R_Mil_OperandAst_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _Arcadia_Mil_OperandAst_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);  
   }
@@ -106,24 +106,24 @@ R_Mil_UnaryExpressionAst_constructImpl
 }
 
 static void
-R_Mil_UnaryExpressionAst_visit
+Arcadia_Mil_UnaryExpressionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_UnaryExpressionAst* self
+    Arcadia_Mil_UnaryExpressionAst* self
   )
 { Arcadia_Object_visit(process, self->operand1); }
 
-R_Mil_UnaryExpressionAst*
-R_Mil_UnaryExpressionAst_create
+Arcadia_Mil_UnaryExpressionAst*
+Arcadia_Mil_UnaryExpressionAst_create
   (
     Arcadia_Process* process,
-    R_Mil_UnaryExpressionAstType type,
-    R_Mil_OperandAst* operand1
+    Arcadia_Mil_UnaryExpressionAstType type,
+    Arcadia_Mil_OperandAst* operand1
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Integer32, .integer32Value = type },
                                {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)operand1 }, };
-  R_Mil_UnaryExpressionAst* self = R_allocateObject(process, _R_Mil_UnaryExpressionAst_getType(process), 2, &argumentValues[0]);
+  Arcadia_Mil_UnaryExpressionAst* self = R_allocateObject(process, _Arcadia_Mil_UnaryExpressionAst_getType(process), 2, &argumentValues[0]);
   return self;
 }
 

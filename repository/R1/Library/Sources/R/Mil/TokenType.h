@@ -18,104 +18,127 @@
 #if !defined(R_MIL_TOKENTYPE_H_INCLUDED)
 #define R_MIL_TOKENTYPE_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 
-typedef enum R_Mil_TokenType {
+typedef enum Arcadia_Mil_TokenType {
 
   // Start of input.
-  R_Mil_TokenType_StartOfInput,
+  Arcadia_Mil_TokenType_StartOfInput,
   // End of input.
-  R_Mil_TokenType_EndOfInput,
+  Arcadia_Mil_TokenType_EndOfInput,
 
   // LF, CR or CR LF
-  R_Mil_TokenType_LineTerminator,
+  Arcadia_Mil_TokenType_LineTerminator,
   // Any non-empty sequence of the symbols tabulator and whitespace.
-  R_Mil_TokenType_WhiteSpaces,
+  Arcadia_Mil_TokenType_WhiteSpaces,
 
   // The `Equals Sign` / `=`  / U+003D.
-  R_Mil_TokenType_EqualsSign,
+  Arcadia_Mil_TokenType_EqualsSign,
   // The `Colon` / `:` / U+003A.
-  R_Mil_TokenType_Colon,
+  Arcadia_Mil_TokenType_Colon,
   // The `Comma` / `,` / U+002C.
-  R_Mil_TokenType_Comma,
+  Arcadia_Mil_TokenType_Comma,
   // The `Left Curly Bracket` / `{` / U+007B.
-  R_Mil_TokenType_LeftCurlyBracket,
+  Arcadia_Mil_TokenType_LeftCurlyBracket,
   // The `Right Curly Bracket`/ `}` / U+007D.
-  R_Mil_TokenType_RightCurlyBracket,
+  Arcadia_Mil_TokenType_RightCurlyBracket,
   // The `Left Parenthesis` / `(` / U+0028.
-  R_Mil_TokenType_LeftParenthesis,
+  Arcadia_Mil_TokenType_LeftParenthesis,
   // The `Right Parenthesis`/ `)` / U+0029.
-  R_Mil_TokenType_RightParenthesis,
+  Arcadia_Mil_TokenType_RightParenthesis,
 
 
   // A name.
-  R_Mil_TokenType_Name,
+  Arcadia_Mil_TokenType_Name,
 
   // A boolean literal.
-  // `true` or `false`.
-  R_Mil_TokenType_BooleanLiteral,
+  // "true" or "false".
+  Arcadia_Mil_TokenType_BooleanLiteral,
   // A real number literal.
-  R_Mil_TokenType_RealLiteral,
+  Arcadia_Mil_TokenType_RealLiteral,
   // An integer literal.
-  R_Mil_TokenType_IntegerLiteral,
+  Arcadia_Mil_TokenType_IntegerLiteral,
   // A string literal.
-  R_Mil_TokenType_StringLiteral,
+  Arcadia_Mil_TokenType_StringLiteral,
   // A void literal.
   // `void`.
-  R_Mil_TokenType_VoidLiteral,
+  Arcadia_Mil_TokenType_VoidLiteral,
 
   // "class"
-  R_Mil_TokenType_Class,
+  Arcadia_Mil_TokenType_Class,
   // "constructor"
-  R_Mil_TokenType_Constructor,
+  Arcadia_Mil_TokenType_Constructor,
   // "extends"
-  R_Mil_TokenType_Extends,
+  Arcadia_Mil_TokenType_Extends,
   // "implements"
-  R_Mil_TokenType_Implements,
+  Arcadia_Mil_TokenType_Implements,
   // "procedure"
-  R_Mil_TokenType_Procedure,
+  Arcadia_Mil_TokenType_Procedure,
   // "method"
-  R_Mil_TokenType_Method,
+  Arcadia_Mil_TokenType_Method,
 
   // "invoke"
-  R_Mil_TokenType_Invoke,
+  Arcadia_Mil_TokenType_Invoke,
 
   // "native"
-  R_Mil_TokenType_Native,
+  Arcadia_Mil_TokenType_Native,
   // "entry"
-  R_Mil_TokenType_Entry,
+  Arcadia_Mil_TokenType_Entry,
   // "return"
-  R_Mil_TokenType_Return,
+  Arcadia_Mil_TokenType_Return,
   // "variable"
-  R_Mil_TokenType_Variable,
+  Arcadia_Mil_TokenType_Variable,
+
+  // "jump"
+  Arcadia_Mil_TokenType_Jump,
+  // "jumpIfTrue"
+  Arcadia_Mil_TokenType_JumpIfTrue,
+  // "jumpIfFalse"
+  Arcadia_Mil_TokenType_JumpIfFalse,
+
+  // "raise"
+  Arcadia_Mil_TokenType_Raise,
 
   // "add" (arithmetic operations)
-  R_Mil_TokenType_Add,
+  Arcadia_Mil_TokenType_Add,
   // "subtract" (arithmetic operations)
-  R_Mil_TokenType_Subtract,
+  Arcadia_Mil_TokenType_Subtract,
   // "multiply" (arithmetic operations)
-  R_Mil_TokenType_Multiply,
+  Arcadia_Mil_TokenType_Multiply,
   // "divide" (arithmetic operations)
-  R_Mil_TokenType_Divide,
+  Arcadia_Mil_TokenType_Divide,
+
+  // "isEqualTo" (relational operation)
+  Arcadia_Mil_TokenType_IsEqualTo,
+  // "isNotEqualTo" (relational operation),
+  Arcadia_Mil_TokenType_IsNotEqualTo,
+  // "isLowerThan" (relational operation)
+  Arcadia_Mil_TokenType_IsLowerThan,
+  // "isLowerThanOrEqualTo" (relational operation)
+  Arcadia_Mil_TokenType_IsLowerThanOrEqualTo,
+  // "isGreaterThan" (relational operation)
+  Arcadia_Mil_TokenType_IsGreaterThan,
+  // "isGreaterThanOrEqualTo" (relational operation)
+  Arcadia_Mil_TokenType_IsGreaterThanOrEqualTo,
 
   // "negate" (arithmetic operations/logical operations)
-  R_Mil_TokenType_Negate,
+  Arcadia_Mil_TokenType_Negate,
 
   // "not" (boolean operations)
-  R_Mil_TokenType_Not,
+  Arcadia_Mil_TokenType_Not,
   // "and" (boolean operations)
-  R_Mil_TokenType_And,
+  Arcadia_Mil_TokenType_And,
   // "or" (boolean operations)
-  R_Mil_TokenType_Or,
+  Arcadia_Mil_TokenType_Or,
 
   // "concatenate" (list operations)
-  R_Mil_TokenType_Concatenate,
+  Arcadia_Mil_TokenType_Concatenate,
 
   /// A single line comment.
-  R_Mil_TokenType_SingleLineComment,
+  Arcadia_Mil_TokenType_SingleLineComment,
   /// A multi line comment.
-  R_Mil_TokenType_MultiLineComment,
+  Arcadia_Mil_TokenType_MultiLineComment,
 
-} R_Mil_TokenType;
+} Arcadia_Mil_TokenType;
 
 #endif // R_MIL_TOKENTYPE_H_INCLUDED

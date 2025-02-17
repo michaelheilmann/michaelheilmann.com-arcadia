@@ -25,10 +25,10 @@ is
     uint32_t expectedCodePoint
   )
 {
-  if (!R_Utf8Reader_hasCodePoint(process, context->source)) {
+  if (!Arcadia_Utf8Reader_hasCodePoint(process, context->source)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value currentCodePoint = R_Utf8Reader_getCodePoint(process, context->source);
+  Arcadia_Natural32Value currentCodePoint = Arcadia_Utf8Reader_getCodePoint(process, context->source);
   return expectedCodePoint == currentCodePoint;
 }
 
@@ -49,10 +49,10 @@ isLetter
     FileContext* context
   )
 {
-  if (!R_Utf8Reader_hasCodePoint(process, context->source)) {
+  if (!Arcadia_Utf8Reader_hasCodePoint(process, context->source)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value current = R_Utf8Reader_getCodePoint(process, context->source);
+  Arcadia_Natural32Value current = Arcadia_Utf8Reader_getCodePoint(process, context->source);
   return ('A' <= current && current <= 'Z')
       || ('a' <= current && current <= 'z');
 }
@@ -64,10 +64,10 @@ isDigit
     FileContext* context
   )
 {
-  if (!R_Utf8Reader_hasCodePoint(process, context->source)) {
+  if (!Arcadia_Utf8Reader_hasCodePoint(process, context->source)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value current = R_Utf8Reader_getCodePoint(process, context->source);
+  Arcadia_Natural32Value current = Arcadia_Utf8Reader_getCodePoint(process, context->source);
   return ('0' <= current && current <= '9');
 }
 
@@ -113,9 +113,9 @@ onIdentifier
     Arcadia_Process_jump(process);
   }
   do {
-    Arcadia_Natural32Value targetCodePoint = R_Utf8Reader_getCodePoint(process, context->source);
-    R_Utf8Writer_writeCodePoints(process, context->context->temporary, &targetCodePoint, 1);
-    R_Utf8Reader_next(process, context->source);
+    Arcadia_Natural32Value targetCodePoint = Arcadia_Utf8Reader_getCodePoint(process, context->source);
+    Arcadia_Utf8Writer_writeCodePoints(process, context->context->temporary, &targetCodePoint, 1);
+    Arcadia_Utf8Reader_next(process, context->source);
   } while (isUnderscore(process, context) || isLetter(process, context) || isDigit(process, context));
 }
 
@@ -130,25 +130,25 @@ onString
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Process_jump(process);
   }
-  R_Utf8Reader_next(process, context->source);
+  Arcadia_Utf8Reader_next(process, context->source);
 
   Arcadia_BooleanValue lastWasSlash = Arcadia_BooleanValue_False;
   while (true) {
-    if (!R_Utf8Reader_hasCodePoint(process, context->source)) {
+    if (!Arcadia_Utf8Reader_hasCodePoint(process, context->source)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Process_jump(process);
     }
-    Arcadia_Natural32Value current = R_Utf8Reader_getCodePoint(process, context->source);
+    Arcadia_Natural32Value current = Arcadia_Utf8Reader_getCodePoint(process, context->source);
     if (lastWasSlash) {
       switch (current) {
         case '\\': {
           Arcadia_Natural32Value targetCodePoint = '\\';
-          R_Utf8Writer_writeCodePoints(process, context->context->temporary, &targetCodePoint, 1);
+          Arcadia_Utf8Writer_writeCodePoints(process, context->context->temporary, &targetCodePoint, 1);
           lastWasSlash = Arcadia_BooleanValue_False;
         } break;
         case '"': {
           Arcadia_Natural32Value targetCodePoint = '"';
-          R_Utf8Writer_writeCodePoints(process, context->context->temporary, &targetCodePoint, 1);
+          Arcadia_Utf8Writer_writeCodePoints(process, context->context->temporary, &targetCodePoint, 1);
           lastWasSlash = Arcadia_BooleanValue_False;
         } break;
         default: {
@@ -158,14 +158,14 @@ onString
       };
     } else {
       if (current == '"') {
-        R_Utf8Reader_next(process, context->source);
+        Arcadia_Utf8Reader_next(process, context->source);
         return;
       } else if (current == '\\') {
         lastWasSlash = Arcadia_BooleanValue_True;
-        R_Utf8Reader_next(process, context->source);
+        Arcadia_Utf8Reader_next(process, context->source);
       } else {
-        R_Utf8Writer_writeCodePoints(process, context->context->temporary, &current, 1);
-        R_Utf8Reader_next(process, context->source);
+        Arcadia_Utf8Writer_writeCodePoints(process, context->context->temporary, &current, 1);
+        Arcadia_Utf8Reader_next(process, context->source);
       }
     }
   }
@@ -184,18 +184,18 @@ onIncludeDirective
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Process_jump(process);
   }
-  R_Utf8Reader_next(process, context->source);
-  R_ByteBuffer_clear(context->context->temporaryBuffer);
+  Arcadia_Utf8Reader_next(process, context->source);
+  Arcadia_ByteBuffer_clear(process, context->context->temporaryBuffer);
   onString(process, context);
-  R_FilePath* filePath = R_FilePath_parseWindows(process, context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz);
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseWindows(process, context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz);
   Arcadia_Value value;
   Arcadia_Value_setObjectReferenceValue(&value, filePath);
-  R_Stack_push(process, context->context->stack, value);
+  Arcadia_Stack_push(process, context->context->stack, value);
   if (!isRightParenthesis(process, context)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Process_jump(process);
   }
-  R_Utf8Reader_next(process, context->source);
+  Arcadia_Utf8Reader_next(process, context->source);
 }
 
 static void
@@ -205,16 +205,16 @@ onStatement
     FileContext* context
   )
 {
-  R_ByteBuffer_clear(context->context->temporaryBuffer);
+  Arcadia_ByteBuffer_clear(process, context->context->temporaryBuffer);
   onIdentifier(process, context);
-  if (R_ByteBuffer_isEqualTo_pn(process, context->context->temporaryBuffer, "include", sizeof("include") - 1)) {
+  if (Arcadia_ByteBuffer_isEqualTo_pn(process, context->context->temporaryBuffer, "include", sizeof("include") - 1)) {
     onIncludeDirective(process, context);
     Context_onRun(process, context->context);
   } else {
     Arcadia_Value t;
     Arcadia_Value_setObjectReferenceValue(&t, (Arcadia_ObjectReferenceValue)context->context->temporaryBuffer);
     Arcadia_Value_setObjectReferenceValue(&t, (Arcadia_ObjectReferenceValue)Arcadia_String_create(process, t));
-    t = R_Map_get(process, context->environment, t);
+    t = Arcadia_Map_get(process, context->environment, t);
     if (!Arcadia_Value_isObjectReferenceValue(&t)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Process_jump(process);
@@ -224,7 +224,7 @@ onStatement
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Process_jump(process);
     }
-    R_ByteBuffer_append_pn(process, context->context->targetBuffer, Arcadia_String_getBytes(process, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(process, (Arcadia_String*)object));
+    Arcadia_ByteBuffer_append_pn(process, context->context->targetBuffer, Arcadia_String_getBytes(process, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(process, (Arcadia_String*)object));
   }
 }
 
@@ -235,25 +235,25 @@ onDirective
     FileContext* context
   )
 {
-  if (!R_Utf8Reader_hasCodePoint(process, context->source)) {
+  if (!Arcadia_Utf8Reader_hasCodePoint(process, context->source)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Process_jump(process);
   }
-  Arcadia_Natural32Value current = R_Utf8Reader_getCodePoint(process, context->source);
+  Arcadia_Natural32Value current = Arcadia_Utf8Reader_getCodePoint(process, context->source);
   switch (current) {
     case '@': {
       Arcadia_Natural32Value targetCodePoint = '@';
-      R_Utf8Writer_writeCodePoints(process, context->context->target, &targetCodePoint, 1);
-      R_Utf8Reader_next(process, context->source);
+      Arcadia_Utf8Writer_writeCodePoints(process, context->context->target, &targetCodePoint, 1);
+      Arcadia_Utf8Reader_next(process, context->source);
     } break;
     case '{': {
-      R_Utf8Reader_next(process, context->source);
+      Arcadia_Utf8Reader_next(process, context->source);
       onStatement(process, context);
       if (!is(process, context, '}')) {
         Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
         Arcadia_Process_jump(process);
       }
-      R_Utf8Reader_next(process, context->source);
+      Arcadia_Utf8Reader_next(process, context->source);
     } break;
     default: {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
@@ -357,18 +357,18 @@ FileContext_constructImpl
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _R_FilePath_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _Arcadia_FilePath_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
   _self->context = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
   _self->sourceFilePath = Arcadia_Value_getObjectReferenceValue(&argumentValues[1]);
   _self->source = NULL;
-  _self->environment = R_Map_create(process);
+  _self->environment = Arcadia_Map_create(process);
   Arcadia_Value k, v;
-  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"siteAddress", sizeof(u8"siteAddress") - 1)));
-  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
-  R_Map_set(process, _self->environment, k, v);
+  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"siteAddress", sizeof(u8"siteAddress") - 1)));
+  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
+  Arcadia_Map_set(process, _self->environment, k, v);
   Arcadia_Object_setType(process, _self, _type);
 }
 
@@ -377,7 +377,7 @@ FileContext_create
   (
     Arcadia_Process* process,
     Context* context,
-    R_FilePath* sourceFilePath
+    Arcadia_FilePath* sourceFilePath
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)context },
@@ -393,15 +393,15 @@ FileContext_execute
     FileContext* context
   )
 {
-  while (R_Utf8Reader_hasCodePoint(process, context->source)) {
-    Arcadia_Natural32Value sourceCodePoint = R_Utf8Reader_getCodePoint(process, context->source);
+  while (Arcadia_Utf8Reader_hasCodePoint(process, context->source)) {
+    Arcadia_Natural32Value sourceCodePoint = Arcadia_Utf8Reader_getCodePoint(process, context->source);
     if (sourceCodePoint == '@') {
-      R_Utf8Reader_next(process, context->source);
+      Arcadia_Utf8Reader_next(process, context->source);
       onDirective(process, context);
     } else {
       Arcadia_Natural32Value targetCodePoint = sourceCodePoint;
-      R_Utf8Writer_writeCodePoints(process, context->context->target, &targetCodePoint, 1);
-      R_Utf8Reader_next(process, context->source);
+      Arcadia_Utf8Writer_writeCodePoints(process, context->context->target, &targetCodePoint, 1);
+      Arcadia_Utf8Reader_next(process, context->source);
     }
   }
 }

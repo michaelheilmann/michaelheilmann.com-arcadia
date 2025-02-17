@@ -19,7 +19,7 @@
 #define ARCADIA_RING1_IMPLEMENTATION_PROCESS1_H_INCLUDED
 
 #if !defined(ARCADIA_RING1_PRIVATE)
-#error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
 #include "Arcadia/Ring1/Implementation/NoReturn.h"
@@ -27,6 +27,8 @@
 #include <stddef.h>
 #endif
 #include <stdint.h>
+#include <stdbool.h>
+#include <inttypes.h>
 #include <setjmp.h>
 
 typedef struct Arcadia_JumpTarget Arcadia_JumpTarget;
@@ -188,6 +190,15 @@ Arcadia_Process1_copyMemory
     size_t n
   );
 
+int
+Arcadia_Process1_compareMemory
+  (
+    Arcadia_Process1* process,
+    const void *p,
+    const void* q, 
+    size_t n
+  );
+
 /// @brief
 /// Allocate unmanaged memory.
 /// @param process
@@ -283,7 +294,54 @@ Arcadia_Process1_stepArms
 Arcadia_Status
 Arcadia_Process1_runArms
   (
-    Arcadia_Process1* process
+    Arcadia_Process1* process,
+    bool purgeCaches
+  );
+
+typedef void (Arcadia_Process1_PreMarkCallback)(Arcadia_Process1* process, bool purgeCaches);
+typedef void (Arcadia_Process1_VisitCallback)(Arcadia_Process1* process);
+typedef void (Arcadia_Process1_FinalizeCallback)(Arcadia_Process1* process, size_t* destroyed);
+
+void
+Arcadia_Process1_addArmsPreMarkCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_PreMarkCallback* callback
+  );
+
+void
+Arcadia_Process1_removeArmsPreMarkCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_PreMarkCallback* callback
+  );
+
+void
+Arcadia_Process1_addArmsVisitCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_VisitCallback* callback
+  );
+
+void
+Arcadia_Process1_removeArmsVisitCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_VisitCallback* callback
+  );
+
+void
+Arcadia_Process1_addArmsFinalizeCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_FinalizeCallback* callback
+  );
+
+void
+Arcadia_Process1_removeArmsFinalizeCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_FinalizeCallback* callback
   );
 
 void
@@ -318,5 +376,81 @@ Arcadia_Process1_allocate
     size_t nameLength,
     size_t size
   );
+
+/// @brief Get the time, in milliseconds, since some undef
+
+typedef struct ModuleInfo {
+  /// @brief Pointer to the name of the module. The name is a static constant C string.
+  const char* name;
+  /// @brief Visit the module.
+  /// @warning Internal function.
+  Arcadia_Process1_VisitCallback* onVisit;
+  /// @brief Startup the module.
+  /// @warning Internal function.
+  void (*onStartUp)(Arcadia_Process1* process);
+  /// @brief Shutdown the module.
+  /// @warning Internal function.
+  void (*onShutDown)(Arcadia_Process1* process);
+  /// @brief Must be invoked in the pre mark phase.
+  /// @warning Internal function.
+  Arcadia_Process1_PreMarkCallback* onPreMark;
+  /// @brief Must be invoked in the finalize phase.
+  /// @warning Internal function.
+  Arcadia_Process1_FinalizeCallback* onFinalize;
+} ModuleInfo;
+
+#define Arcadia_DeclareModule(Name, cName) \
+  const ModuleInfo* \
+  cName##_getModule \
+    ( \
+    );
+
+#define Arcadia_DefineModule(Name, cName) \
+  static void \
+  _##cName##_onStartUp \
+    ( \
+      Arcadia_Process1* process \
+    ); \
+\
+  static void \
+  _##cName##_onShutDown \
+    ( \
+      Arcadia_Process1* process \
+    ); \
+\
+  static void \
+  _##cName##_onPreMark \
+    ( \
+      Arcadia_Process1* process, \
+      bool purgeCache \
+    ); \
+\
+  static void \
+  _##cName##_onFinalize \
+    ( \
+      Arcadia_Process1* process, \
+      size_t* destroyed \
+    ); \
+\
+  static void \
+  _##cName##_onVisit \
+    ( \
+      Arcadia_Process1* process \
+    ); \
+\
+  static const ModuleInfo _##cName##_moduleInfo = { \
+    .name = Name, \
+    .onVisit = &_##cName##_onVisit, \
+    .onStartUp = &_##cName##_onStartUp, \
+    .onShutDown = &_##cName##_onShutDown, \
+    .onPreMark = &_##cName##_onPreMark, \
+    .onFinalize = &_##cName##_onFinalize, \
+  }; \
+\
+  const ModuleInfo* \
+  cName##_getModule \
+    ( \
+    ) \
+  { return &_##cName##_moduleInfo; }
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_PROCESS1_H_INCLUDED

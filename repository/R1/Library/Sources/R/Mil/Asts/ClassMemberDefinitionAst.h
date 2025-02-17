@@ -15,22 +15,22 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_CLASSMEMBERDEFINITIONAST_H_INCLUDED)
-#define R_MIL_ASTS_CLASSMEMBERDEFINITIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_CLASSMEMBERDEFINITIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_CLASSMEMBERDEFINITIONAST_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Mil/Asts/DefinitionAst.h"
 #include "R/Mil/Asts/ExpressionAst.h"
 #include "R/Mil/Asts/StatementAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, u8"R.Mil.DefinitionAst");
+Rex_declareObjectType(u8"Arcadia.Mil.ClassMemberDefinitionAst", Arcadia_Mil_ClassMemberDefinitionAst, u8"Arcadia.Mil.DefinitionAst");
 
-struct R_Mil_ClassMemberDefinitionAst {
-  R_Mil_DefinitionAst _parent;
+struct Arcadia_Mil_ClassMemberDefinitionAst {
+  Arcadia_Mil_DefinitionAst _parent;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_CLASSMEMBERDEFINITIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_CLASSMEMBERDEFINITIONAST_H_INCLUDED

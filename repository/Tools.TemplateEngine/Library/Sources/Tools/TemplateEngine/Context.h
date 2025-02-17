@@ -18,20 +18,20 @@
 #if !defined(TOOLS_TEMPLATEENGINE_CONTEXT_H_INCLUDED)
 #define TOOLS_TEMPLATEENGINE_CONTEXT_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 
 Rex_declareObjectType(u8"Tools.TemplateEngine.Context", Context, u8"Arcadia.Object");
 
 struct Context {
   Arcadia_Object _parent;
-  R_Utf8Writer* target;
-  R_ByteBuffer* targetBuffer;
+  Arcadia_Utf8Writer* target;
+  Arcadia_ByteBuffer* targetBuffer;
 
-  R_Utf8Writer* temporary;
-  R_ByteBuffer* temporaryBuffer;
+  Arcadia_Utf8Writer* temporary;
+  Arcadia_ByteBuffer* temporaryBuffer;
 
-  R_Stack* stack;
-  R_List* files;
+  Arcadia_Stack* stack;
+  Arcadia_List* files;
 };
 
 Context*

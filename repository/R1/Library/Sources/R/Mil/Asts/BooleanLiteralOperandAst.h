@@ -15,25 +15,25 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_BOOLEANLITERALOPERANDAST_H_INCLUDED)
-#define R_MIL_ASTS_BOOLEANLITERALOPERANDAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_BOOLEANLITERALOPERANDAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_BOOLEANLITERALOPERANDAST_H_INCLUDED
 
 #include "R/Mil/Asts/OperandAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.BooleanLiteralOperandAst extends R.Mil.OperandAst
+/// class Arcadia.Mil.BooleanLiteralOperandAst extends Arcadia.Mil.OperandAst
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.BooleanLiteralOperandAst", R_Mil_BooleanLiteralOperandAst, u8"R.Mil.OperandAst");
+Rex_declareObjectType(u8"Arcadia.Mil.BooleanLiteralOperandAst", Arcadia_Mil_BooleanLiteralOperandAst, u8"Arcadia.Mil.OperandAst");
 
-struct R_Mil_BooleanLiteralOperandAst {
-  R_Mil_OperandAst parent;
+struct Arcadia_Mil_BooleanLiteralOperandAst {
+  Arcadia_Mil_OperandAst parent;
   Arcadia_String* value;
 };
 
-R_Mil_BooleanLiteralOperandAst*
-R_Mil_BooleanLiteralOperandAst_create
+Arcadia_Mil_BooleanLiteralOperandAst*
+Arcadia_Mil_BooleanLiteralOperandAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* value
@@ -41,4 +41,4 @@ R_Mil_BooleanLiteralOperandAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_BOOLEANLITERALOPERANDAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_BOOLEANLITERALOPERANDAST_H_INCLUDED

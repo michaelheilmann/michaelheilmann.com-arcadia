@@ -25,7 +25,7 @@
 /// construct(methodName:Arcadia.String, methodParameters:R.List, methodBody:R.List)
 /// @endcode
 static void
-R_Mil_MethodDefinitionAst_constructImpl
+Arcadia_Mil_MethodDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -34,20 +34,20 @@ R_Mil_MethodDefinitionAst_constructImpl
   );
 
 static void
-R_Mil_MethodDefinitionAst_visit
+Arcadia_Mil_MethodDefinitionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_MethodDefinitionAst* self
+    Arcadia_Mil_MethodDefinitionAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_MethodDefinitionAst_objectTypeOperations = {
-  .construct = &R_Mil_MethodDefinitionAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_MethodDefinitionAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_MethodDefinitionAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_MethodDefinitionAst_visit,
+  .visit = &Arcadia_Mil_MethodDefinitionAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_MethodDefinitionAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_MethodDefinitionAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_MethodDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_MethodDefinitionAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -66,10 +66,10 @@ static const Arcadia_Type_Operations _R_Mil_MethodDefinitionAst_typeOperations =
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, u8"R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_MethodDefinitionAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.MethodDefinitionAst", Arcadia_Mil_MethodDefinitionAst, u8"Arcadia.Mil.ClassMemberDefinitionAst", Arcadia_Mil_ClassMemberDefinitionAst, &_Arcadia_Mil_MethodDefinitionAst_typeOperations);
 
 static void
-R_Mil_MethodDefinitionAst_constructImpl
+Arcadia_Mil_MethodDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -77,8 +77,8 @@ R_Mil_MethodDefinitionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_MethodDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_MethodDefinitionAst_getType(process);
+  Arcadia_Mil_MethodDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_MethodDefinitionAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -89,16 +89,16 @@ R_Mil_MethodDefinitionAst_constructImpl
   }
   _self->nativeName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[0], _Arcadia_String_getType(process));
   _self->methodName = (Arcadia_String*)R_Argument_getObjectReferenceValue(process, &argumentValues[1], _Arcadia_String_getType(process));
-  _self->methodParameters = (R_List*)R_Argument_getObjectReferenceValue(process, &argumentValues[2], _R_List_getType(process));
-  _self->methodBody = (R_List*)R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[3], _R_List_getType(process));
+  _self->methodParameters = (Arcadia_List*)R_Argument_getObjectReferenceValue(process, &argumentValues[2], _Arcadia_List_getType(process));
+  _self->methodBody = (Arcadia_List*)R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[3], _Arcadia_List_getType(process));
   Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
-R_Mil_MethodDefinitionAst_visit
+Arcadia_Mil_MethodDefinitionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_MethodDefinitionAst* self
+    Arcadia_Mil_MethodDefinitionAst* self
   )
 {
   Arcadia_Object_visit(process, self->nativeName);
@@ -107,14 +107,14 @@ R_Mil_MethodDefinitionAst_visit
   Arcadia_Object_visit(process, self->methodBody);
 }
 
-R_Mil_MethodDefinitionAst*
-R_Mil_MethodDefinitionAst_create
+Arcadia_Mil_MethodDefinitionAst*
+Arcadia_Mil_MethodDefinitionAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* nativeName,
     Arcadia_String* methodName,
-    R_List* methodParameters,
-    R_List* methodBody
+    Arcadia_List* methodParameters,
+    Arcadia_List* methodBody
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
@@ -127,7 +127,7 @@ R_Mil_MethodDefinitionAst_create
   if (methodBody) {
     Arcadia_Value_setObjectReferenceValue(&argumentValues[3], methodBody);
   }
-  R_Mil_MethodDefinitionAst* self = R_allocateObject(process, _R_Mil_MethodDefinitionAst_getType(process), 4, &argumentValues[0]);
+  Arcadia_Mil_MethodDefinitionAst* self = R_allocateObject(process, _Arcadia_Mil_MethodDefinitionAst_getType(process), 4, &argumentValues[0]);
   return self;
 }
 

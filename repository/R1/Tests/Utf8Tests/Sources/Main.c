@@ -17,55 +17,21 @@
 
 #include <stdlib.h>
 
-#include "R.h"
+#include "R/Include.h"
 #include "read.h"
 #include "readWrite.h"
 
-static bool
-safeExecute
+int
+main
   (
-    void (*f)(Arcadia_Process* process)
+    int argc,
+    char **argv
   )
 {
-  bool result = true;
-  Arcadia_Status status = R_startup();
-  if (status) {
-    result = false;
-    return result;
-  }
-  Arcadia_Process* process = NULL;
-  if (Arcadia_Process_get(&process)) {
-    R_shutdown();
-    result = false;
-    return result;
-  }
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    (*f)(process);
-  } else {
-    result = false;
-  }
-  Arcadia_Process_popJumpTarget(process);
-  Arcadia_Process_relinquish(process);
-  process = NULL;
-  status = R_shutdown();
-  if (status) {
-    result = false;
-  }
-  return result;
-}
-
-static void R1_Tests_Utf8_readWrite1(Arcadia_Process* process) {
-  R1_Tests_Utf8_readWrite(process, u8"abc", sizeof(u8"abc") - 1);
-  R1_Tests_Utf8_readWrite(process, u8"xyz", sizeof(u8"xyz") - 1);
-}
-
-int main(int argc, char **argv) {
-  if (!safeExecute(&R1_Tests_Utf8_read1)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Tests_Utf8_read1)) {
     return EXIT_FAILURE;
   }
-  if (!safeExecute(&R1_Tests_Utf8_readWrite1)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Tests_Utf8_readWrite1)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

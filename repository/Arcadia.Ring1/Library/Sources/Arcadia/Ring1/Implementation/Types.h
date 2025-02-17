@@ -293,7 +293,7 @@ _Arcadia_Type_getType
 /// @param process A pointer to the Arcadia_Proces object.
 /// @return The "Arcadia.Atom" type.
 Arcadia_TypeValue
-_Arcadia_Atom_getType
+_Arcadia_AtomValue_getType
   (
     Arcadia_Process* process
   );

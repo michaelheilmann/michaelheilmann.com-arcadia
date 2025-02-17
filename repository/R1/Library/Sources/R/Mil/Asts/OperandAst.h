@@ -15,22 +15,29 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_OPERANDAST_H_INCLUDED)
-#define R_MIL_ASTS_OPERANDAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_OPERANDAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_OPERANDAST_H_INCLUDED
 
-#include "R.h"
+#include "R/Mil/Asts/Ast.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.OperandAst
+/// class Arcadia.Mil.OperandAst extends Arcadia.Mil.Ast
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.OperandAst", R_Mil_OperandAst, u8"Arcadia.Object");
+/// represents
+/// @code
+/// operand : booleanLiteralOperand
+///         | numberLiteralOperand
+///         | stringLiteralOperand
+///         | variableOperand
+/// @endcode
+Rex_declareObjectType(u8"Arcadia.Mil.OperandAst", Arcadia_Mil_OperandAst, u8"Arcadia.Mil.Ast");
 
-struct R_Mil_OperandAst {
-  Arcadia_Object _parent;
+struct Arcadia_Mil_OperandAst {
+  Arcadia_Mil_Ast _parent;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_OPERANDAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_OPERANDAST_H_INCLUDED

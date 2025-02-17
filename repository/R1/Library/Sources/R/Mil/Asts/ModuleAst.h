@@ -15,61 +15,59 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_MODULEAST_H_INCLUDED)
-#define R_MIL_ASTS_MODULEAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_MODULEAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_MODULEAST_H_INCLUDED
 
-#include "R.h"
-#include "R/Mil/Asts/ClassDefinitionAst.h"
-#include "R/Mil/Asts/ClassMemberDefinitionAst.h"
-#include "R/Mil/Asts/ConstructorDefinitionAst.h"
+#include "R/Include.h"
+#include "R/Mil/Asts/Ast.h"
 #include "R/Mil/Asts/DefinitionAst.h"
-#include "R/Mil/Asts/ExpressionAst.h"
-#include "R/Mil/Asts/MethodDefinitionAst.h"
-#include "R/Mil/Asts/StatementAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.ModuleAst
+/// class Arcadia.Mil.ModuleAst extends Arcadia.Mil.Ast
 /// @endcode
 /// @code
 /// module : definition*
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.ModuleAst", R_Mil_ModuleAst, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.ModuleAst", Arcadia_Mil_ModuleAst, u8"Arcadia.Mil.Ast");
 
-struct R_Mil_ModuleAst {
-  Arcadia_Object _parent;
-  R_List* definitions;
+struct Arcadia_Mil_ModuleAst {
+  Arcadia_Mil_Ast _parent;
+  /// The file path of the module or null.
+  Arcadia_FilePath* path;
+  Arcadia_List* definitions;
 };
 
-R_Mil_ModuleAst*
-R_Mil_ModuleAst_create
+Arcadia_Mil_ModuleAst*
+Arcadia_Mil_ModuleAst_create
   (
     Arcadia_Process* process
   );
 
 void
-R_Mil_ModuleAst_appendDefinition
+Arcadia_Mil_ModuleAst_appendDefinition
   (
     Arcadia_Process* process,
-    R_Mil_ModuleAst* self,
-    R_Mil_DefinitionAst* definition
+    Arcadia_Mil_ModuleAst* self,
+    Arcadia_Mil_DefinitionAst* definition
   );
 
 Arcadia_SizeValue
-R_Mil_ModuleAst_getNumberOfDefinitions
-  (
-    R_Mil_ModuleAst* self
-  );
-
-R_Mil_DefinitionAst*
-R_Mil_ModuleAst_getDefinitionAt
+Arcadia_Mil_ModuleAst_getNumberOfDefinitions
   (
     Arcadia_Process* process,
-    R_Mil_ModuleAst* self,
+    Arcadia_Mil_ModuleAst* self
+  );
+
+Arcadia_Mil_DefinitionAst*
+Arcadia_Mil_ModuleAst_getDefinitionAt
+  (
+    Arcadia_Process* process,
+    Arcadia_Mil_ModuleAst* self,
     Arcadia_SizeValue index
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_MODULEAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_MODULEAST_H_INCLUDED

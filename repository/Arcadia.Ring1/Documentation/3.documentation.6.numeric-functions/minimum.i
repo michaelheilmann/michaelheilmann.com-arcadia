@@ -1,7 +1,13 @@
 <h4 id="arcadia-minimum">Arcadia_minimum</h4>
 <p>Return the minimum of two values.</p>
 <p><code>
-<my-mv>Type</my-mv> Arcadia_minimum<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> x, <my-mv>Type</my-mv> y)
+<my-mv>Type</my-mv>
+Arcadia_minimum<my-mv>Suffix</my-mv>
+  (
+    Arcadia_Process* process,
+    <my-mv>Type</my-mv> x,
+    <my-mv>Type</my-mv> y
+  )
 </code></p>
 <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
 

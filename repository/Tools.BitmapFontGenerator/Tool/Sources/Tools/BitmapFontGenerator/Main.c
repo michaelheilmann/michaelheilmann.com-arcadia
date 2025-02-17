@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "R.h"
+#include "R/Include.h"
 #include "Module/Visuals/Include.h"
 
 void
@@ -30,27 +30,27 @@ main1
 {
   Arcadia_Value target;
   Arcadia_Value_setVoidValue(&target,Arcadia_VoidValue_Void);
-  R_List* arguments = R_List_create(process);
+  Arcadia_List* arguments = Arcadia_List_create(process);
   for (int argi = 1; argi < argc; ++argi) {
-    Arcadia_String* argument = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), argv[argi], strlen(argv[argi])));
-    R_List_appendObjectReferenceValue(process, arguments, (Arcadia_ObjectReferenceValue)argument);
+    Arcadia_String* argument = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), argv[argi], strlen(argv[argi])));
+    Arcadia_List_appendObjectReferenceValue(process, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
-  for (Arcadia_SizeValue i = 0, n = R_List_getSize(arguments); i < n; ++i) {
-    Arcadia_String* argument = (Arcadia_String*)R_List_getObjectReferenceValueAt(process, arguments, i);
-    R_Utf8StringReader *r = R_Utf8StringReader_create(process, argument);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, arguments); i < n; ++i) {
+    Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(process, arguments, i);
+    Arcadia_Utf8StringReader *r = Arcadia_Utf8StringReader_create(process, argument);
     Arcadia_String *key = NULL,
              *value = NULL;
-    if (!R_CommandLine_parseArgument(process, (R_Utf8Reader*)r, &key, &value)) {
+    if (!Arcadia_CommandLine_parseArgument(process, (Arcadia_Utf8Reader*)r, &key, &value)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Process_jump(process);
     }
     if (Arcadia_String_isEqualTo_pn(process, key, u8"target", sizeof(u8"target") - 1)) {
       if (!value) {
-        R_CommandLine_raiseNoValueError(process, key);
+        Arcadia_CommandLine_raiseNoValueError(process, key);
       }
       Arcadia_Value_setObjectReferenceValue(&target, value);
     } else {
-      R_CommandLine_raiseUnknownArgumentError(process, key, value);
+      Arcadia_CommandLine_raiseUnknownArgumentError(process, key, value);
     }
     fwrite(Arcadia_String_getBytes(process, key), 1, Arcadia_String_getNumberOfBytes(process, key), stdout);
     if (value) {
@@ -60,7 +60,7 @@ main1
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
   if (Arcadia_Value_isVoidValue(&target)) {
-    R_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"target", sizeof(u8"target") - 1)));
+    Arcadia_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"target", sizeof(u8"target") - 1)));
   }
   TextureFontWindows* font = TextureFontWindows_create(process);
   PixelBuffer* pixelBuffer = TextureFontWindows_getPixelBuffer(process, font);
@@ -81,14 +81,8 @@ main
     char** argv
   )
 {
-  Arcadia_Status status[2];
-  status[0] = R_startup();
-  if (status[0]) {
-    return EXIT_FAILURE;
-  }
   Arcadia_Process* process = NULL;
   if (Arcadia_Process_get(&process)) {
-    R_shutdown();
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
@@ -97,11 +91,10 @@ main
     main1(process, argc, argv);
   }
   Arcadia_Process_popJumpTarget(process);
-  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
   Arcadia_Process_relinquish(process);
   process = NULL;
-  status[1] = R_shutdown();
-  if (status[1] || status[0]) {
+  if (status) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

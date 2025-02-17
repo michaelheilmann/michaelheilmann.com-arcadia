@@ -25,7 +25,7 @@
 /// construct(nativeName:Arcadia.String, procedureName:Arcadia.String,procedureParameters:R.List,procedureBody:List)
 /// @endcode
 static void
-R_Mil_ProcedureDefinitionAst_constructImpl
+Arcadia_Mil_ProcedureDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -34,20 +34,20 @@ R_Mil_ProcedureDefinitionAst_constructImpl
   );
 
 static void
-R_Mil_ProcedureDefinitionAst_visit
+Arcadia_Mil_ProcedureDefinitionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ProcedureDefinitionAst* self
+    Arcadia_Mil_ProcedureDefinitionAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_ProcedureDefinitionAst_objectTypeOperations = {
-  .construct = &R_Mil_ProcedureDefinitionAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_ProcedureDefinitionAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_ProcedureDefinitionAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_ProcedureDefinitionAst_visit,
+  .visit = &Arcadia_Mil_ProcedureDefinitionAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_ProcedureDefinitionAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_ProcedureDefinitionAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_ProcedureDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_ProcedureDefinitionAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -66,10 +66,10 @@ static const Arcadia_Type_Operations _R_Mil_ProcedureDefinitionAst_typeOperation
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, u8"R.Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ProcedureDefinitionAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.ProcedureDefinitionAst", Arcadia_Mil_ProcedureDefinitionAst, u8"Arcadia.Mil.DefinitionAst", Arcadia_Mil_DefinitionAst, &_Arcadia_Mil_ProcedureDefinitionAst_typeOperations);
 
 static void
-R_Mil_ProcedureDefinitionAst_constructImpl
+Arcadia_Mil_ProcedureDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -77,8 +77,8 @@ R_Mil_ProcedureDefinitionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_ProcedureDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_ProcedureDefinitionAst_getType(process);
+  Arcadia_Mil_ProcedureDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_ProcedureDefinitionAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -91,16 +91,16 @@ R_Mil_ProcedureDefinitionAst_constructImpl
   _self->entry = Arcadia_Value_getBooleanValue(&argumentValues[0]);
   _self->nativeName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[1], _Arcadia_String_getType(process));
   _self->procedureName = R_Argument_getObjectReferenceValue(process, &argumentValues[2], _Arcadia_String_getType(process));
-  _self->procedureParameters = R_Argument_getObjectReferenceValue(process, &argumentValues[3], _R_List_getType(process));
-  _self->procedureBody = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[4], _R_List_getType(process));
+  _self->procedureParameters = R_Argument_getObjectReferenceValue(process, &argumentValues[3], _Arcadia_List_getType(process));
+  _self->procedureBody = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[4], _Arcadia_List_getType(process));
   Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
-R_Mil_ProcedureDefinitionAst_visit
+Arcadia_Mil_ProcedureDefinitionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ProcedureDefinitionAst* self
+    Arcadia_Mil_ProcedureDefinitionAst* self
   )
 {
   if (self->nativeName) {
@@ -113,15 +113,15 @@ R_Mil_ProcedureDefinitionAst_visit
   }
 }
 
-R_Mil_ProcedureDefinitionAst*
-R_Mil_ProcedureDefinitionAst_create
+Arcadia_Mil_ProcedureDefinitionAst*
+Arcadia_Mil_ProcedureDefinitionAst_create
   (
     Arcadia_Process* process,
     Arcadia_BooleanValue entry,
     Arcadia_String* nativeName,
     Arcadia_String* procedureName,
-    R_List* procedureParameters,
-    R_List* procedureBody
+    Arcadia_List* procedureParameters,
+    Arcadia_List* procedureBody
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Boolean, .booleanValue = entry },
@@ -135,7 +135,7 @@ R_Mil_ProcedureDefinitionAst_create
   if (procedureBody) {
     Arcadia_Value_setObjectReferenceValue(&argumentValues[4], procedureBody);
   }
-  R_Mil_ProcedureDefinitionAst* self = R_allocateObject(process, _R_Mil_ProcedureDefinitionAst_getType(process), 5, &argumentValues[0]);
+  Arcadia_Mil_ProcedureDefinitionAst* self = R_allocateObject(process, _Arcadia_Mil_ProcedureDefinitionAst_getType(process), 5, &argumentValues[0]);
   return self;
 }
 

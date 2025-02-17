@@ -90,7 +90,7 @@ Context_constructImpl
   _self->temporaryBuffer = NULL;
   _self->temporary = NULL;
   _self->stack = NULL;
-  _self->files = R_List_create(process);
+  _self->files = Arcadia_List_create(process);
   Arcadia_Object_setType(process, _self, _type);
 }
 
@@ -135,18 +135,18 @@ recursionGuard
   (
     Arcadia_Process* process,
     Context* context,
-    R_FilePath* path
+    Arcadia_FilePath* path
   )
 {
-  path = R_FilePath_getFullPath(process, path);
-  for (Arcadia_SizeValue i = 0, n = R_List_getSize(context->files); i < n; ++i) {
-    R_FilePath* p = (R_FilePath*)R_List_getObjectReferenceValueAt(process, context->files, i);
-    if (R_FilePath_isEqualTo(process, p, path)) {
+  path = Arcadia_FilePath_getFullPath(process, path);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, context->files); i < n; ++i) {
+    Arcadia_FilePath* p = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueAt(process, context->files, i);
+    if (Arcadia_FilePath_isEqualTo(process, p, path)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Process_jump(process);
     }
   }
-  R_List_appendObjectReferenceValue(process, context->files, path);
+  Arcadia_List_appendObjectReferenceValue(process, context->files, path);
 }
 
 void
@@ -156,16 +156,16 @@ Context_onRun
     Context* context
   )
 {
-  R_FileSystem* fileSystem = R_FileSystem_create(process);
-  while (!R_Stack_isEmpty(context->stack)) {
-    Arcadia_Value elementValue = R_Stack_peek(process, context->stack);
-    R_Stack_pop(process, context->stack);
-    R_FilePath* filePath = (R_FilePath*)Arcadia_Value_getObjectReferenceValue(&elementValue);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(process);
+  while (!Arcadia_Stack_isEmpty(context->stack)) {
+    Arcadia_Value elementValue = Arcadia_Stack_peek(process, context->stack);
+    Arcadia_Stack_pop(process, context->stack);
+    Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_Value_getObjectReferenceValue(&elementValue);
     FileContext* fileContext = FileContext_create(process, context, filePath);
-    R_ByteBuffer* sourceByteBuffer = R_FileSystem_getFileContents(process, fileSystem, fileContext->sourceFilePath);
-    fileContext->source = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(process, sourceByteBuffer);
+    Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_FileSystem_getFileContents(process, fileSystem, fileContext->sourceFilePath);
+    fileContext->source = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(process, sourceByteBuffer);
     recursionGuard(process, context, filePath);
     FileContext_execute(process, fileContext);
-    R_List_remove(process, context->files, R_List_getSize(context->files) - 1, 1);
+    Arcadia_List_remove(process, context->files, Arcadia_List_getSize(process, context->files) - 1, 1);
   }
 }

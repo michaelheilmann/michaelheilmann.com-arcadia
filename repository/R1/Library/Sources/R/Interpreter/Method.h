@@ -20,7 +20,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 #include "R/Interpreter/Code.h"
-#include "R/List.h"
+#include "Arcadia/Ring2/Implementation/List.h"
 
 Rex_declareObjectType(u8"R.Interpreter.Method", R_Interpreter_Method, u8"Arcadia.Object");
 
@@ -31,7 +31,7 @@ struct R_Interpreter_Method {
   /// The unqualified name of this method.
   Arcadia_String* unqualifiedName;
   /// List of strings. The string at index i denotes the name of the i-th parameter variable.
-  R_List* parameterNames;
+  Arcadia_List* parameterNames;
   /// Arcadia_BooleanValue_True indicates that code is invalid and foreignProcedure points to a foreign procedure of this method.
   /// Arcadia_BooleanValue_False indicates that foreignProcedure is invalid and code points to the code of this method.
   Arcadia_BooleanValue isForeign;

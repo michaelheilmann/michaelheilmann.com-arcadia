@@ -22,7 +22,17 @@
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include <stdbool.h>
 #include <malloc.h>
+#include <string.h>
 #include "Arms.h"
+
+typedef struct ArmsCallbackNode ArmsCallbackNode;
+
+struct ArmsCallbackNode {
+  ArmsCallbackNode* next;
+  void (*onPreMark)(Arcadia_Process1*, bool);
+  void (*onVisit)(Arcadia_Process1*);
+  void (*onFinalize)(Arcadia_Process1*, size_t*);
+};
 
 static Arcadia_Status
 startupArms
@@ -86,7 +96,6 @@ shutdownArms
   };
 }
 
-
 typedef uint32_t ReferenceCount;
 
 #define ReferenceCount_Minimum (UINT32_C(0))
@@ -98,6 +107,7 @@ struct Arcadia_Process1 {
   ReferenceCount referenceCount;
   Arcadia_Status status;
   Arcadia_JumpTarget* jumpTarget;
+  ArmsCallbackNode* armsCallbackNodes;
 };
 
 static Arcadia_Process1* g_process = NULL;
@@ -164,6 +174,7 @@ Arcadia_Process1_get
     g_process->referenceCount = ReferenceCount_Minimum + 1;
     g_process->status = Arcadia_Status_Success;
     g_process->jumpTarget = NULL;
+    g_process->armsCallbackNodes = NULL;
     *process = g_process;
     return Arcadia_ProcessStatus_Success;
   }
@@ -220,8 +231,6 @@ Arcadia_Process1_setStatus
 {
   process->status = status;
 }
-
-#include <string.h>
 
 void
 Arcadia_Process1_fillMemory
@@ -280,6 +289,22 @@ Arcadia_Process1_copyMemory
   } else {
     memcpy(p, q, n);
   }
+}
+
+int
+Arcadia_Process1_compareMemory
+  (
+    Arcadia_Process1* process,
+    const void* p,
+    const void* q,
+    size_t n
+  )
+{
+  if (!p || !q) {
+    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process1_jump(process);
+  }
+  return memcmp(p, q, n);
 }
 
 void
@@ -439,11 +464,17 @@ Arcadia_Process1_stepArms
 Arcadia_Status
 Arcadia_Process1_runArms
   (
-    Arcadia_Process1* process
+    Arcadia_Process1* process,
+    bool purgeCaches
   )
 {
   Arms_RunStatistics statistics = { .destroyed = 0 };
   do {
+    for (ArmsCallbackNode* node = process->armsCallbackNodes; NULL != node; node = node->next) {
+      if (node->onPreMark) {
+        node->onPreMark(process, purgeCaches);
+      }
+    }
     Arms_Status status = Arms_run(&statistics);
     switch (status) {
       case Arms_Status_Success:
@@ -461,8 +492,133 @@ Arcadia_Process1_runArms
         return Arcadia_Status_OperationInvalid;
       } break;
     };
+    for (ArmsCallbackNode* node = process->armsCallbackNodes; NULL != node; node = node->next) {
+      if (node->onFinalize) {
+        size_t destroyed;
+        node->onFinalize(process, &destroyed);
+        if (SIZE_MAX - destroyed < statistics.destroyed) {
+          statistics.destroyed = SIZE_MAX;
+        } else {
+          statistics.destroyed += destroyed;
+        }
+      }
+    }
   } while (statistics.destroyed > 0);
   return Arcadia_Status_Success;
+}
+
+void
+Arcadia_Process1_addArmsPreMarkCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_PreMarkCallback* callback
+  )
+{
+  ArmsCallbackNode* armsCallbackNode = NULL;
+  Arcadia_Process1_allocateUnmanaged(process, &armsCallbackNode, sizeof(ArmsCallbackNode));
+  armsCallbackNode->onFinalize = NULL;
+  armsCallbackNode->onPreMark = callback;
+  armsCallbackNode->onVisit = NULL;
+  armsCallbackNode->next = process->armsCallbackNodes;
+  process->armsCallbackNodes = armsCallbackNode;
+}
+
+void
+Arcadia_Process1_removeArmsPreMarkCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_PreMarkCallback* callback
+  )
+{
+  ArmsCallbackNode** previous = &process->armsCallbackNodes;
+  ArmsCallbackNode* current = process->armsCallbackNodes;
+  while (current) {
+    if (current->onPreMark == callback) {
+      *previous = current->next;
+      ArmsCallbackNode* node = current;
+      Arcadia_Process1_deallocateUnmanaged(process, node);
+      break;
+    } else {
+      previous = &current->next;
+      current = current->next;
+    }
+  }
+}
+
+void
+Arcadia_Process1_addArmsVisitCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_VisitCallback* callback
+  )
+{
+  ArmsCallbackNode* armsCallbackNode = NULL;
+  Arcadia_Process1_allocateUnmanaged(process, &armsCallbackNode, sizeof(ArmsCallbackNode));
+  armsCallbackNode->onFinalize = NULL;
+  armsCallbackNode->onPreMark = NULL;
+  armsCallbackNode->onVisit = callback;
+  armsCallbackNode->next = process->armsCallbackNodes;
+  process->armsCallbackNodes = armsCallbackNode;
+}
+
+void
+Arcadia_Process1_removeArmsVisitCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_VisitCallback* callback
+  )
+{
+  ArmsCallbackNode** previous = &process->armsCallbackNodes;
+  ArmsCallbackNode* current = process->armsCallbackNodes;
+  while (current) {
+    if (current->onVisit == callback) {
+      *previous = current->next;
+      ArmsCallbackNode* node = current;
+      Arcadia_Process1_deallocateUnmanaged(process, node);
+      break;
+    } else {
+      previous = &current->next;
+      current = current->next;
+    }
+  }
+}
+
+void
+Arcadia_Process1_addArmsFinalizeCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_FinalizeCallback* callback
+  )
+{
+  ArmsCallbackNode* armsCallbackNode = NULL;
+  Arcadia_Process1_allocateUnmanaged(process, &armsCallbackNode, sizeof(ArmsCallbackNode));
+  armsCallbackNode->onFinalize = callback;
+  armsCallbackNode->onPreMark = NULL;
+  armsCallbackNode->onVisit = NULL;
+  armsCallbackNode->next = process->armsCallbackNodes;
+  process->armsCallbackNodes = armsCallbackNode;
+}
+
+void
+Arcadia_Process1_removeArmsFinalizeCallback
+  (
+    Arcadia_Process1* process,
+    Arcadia_Process1_FinalizeCallback* callback
+  )
+{
+  ArmsCallbackNode** previous = &process->armsCallbackNodes;
+  ArmsCallbackNode* current = process->armsCallbackNodes;
+  while (current) {
+    if (current->onFinalize == callback) {
+      *previous = current->next;
+      ArmsCallbackNode* node = current;
+      Arcadia_Process1_deallocateUnmanaged(process, node);
+      break;
+    } else {
+      previous = &current->next;
+      current = current->next;
+    }
+  }
 }
 
 void

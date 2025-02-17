@@ -15,37 +15,37 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_INVOKEEXPRESSIONAST_H_INCLUDED)
-#define R_MIL_ASTS_INVOKEEXPRESSIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_INVOKEEXPRESSIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_INVOKEEXPRESSIONAST_H_INCLUDED
 
 #include "R/Mil/Asts/ExpressionAst.h"
-typedef struct R_Mil_VariableOperandAst R_Mil_VariableOperandAst;
+typedef struct Arcadia_Mil_VariableOperandAst Arcadia_Mil_VariableOperandAst;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.InvokeExpressionAst extends R.Mil.ExpressionAst
+/// class Arcadia.Mil.InvokeExpressionAst extends Arcadia.Mil.ExpressionAst
 /// @endcode
 /// Represents an unary epxression like
 /// @code
 /// invoke variableOperand '(' (operand (',' operand)*)? ')'
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, u8"R.Mil.ExpressionAst");
+Rex_declareObjectType(u8"Arcadia.Mil.InvokeExpressionAst", Arcadia_Mil_InvokeExpressionAst, u8"Arcadia.Mil.ExpressionAst");
 
-struct R_Mil_InvokeExpressionAst {
-  R_Mil_ExpressionAst parent;
-  R_Mil_VariableOperandAst* callee;
-  R_List* operands;
+struct Arcadia_Mil_InvokeExpressionAst {
+  Arcadia_Mil_ExpressionAst parent;
+  Arcadia_Mil_VariableOperandAst* callee;
+  Arcadia_List* operands;
 };
 
-R_Mil_InvokeExpressionAst*
-R_Mil_InvokeExpressionAst_create
+Arcadia_Mil_InvokeExpressionAst*
+Arcadia_Mil_InvokeExpressionAst_create
   (
     Arcadia_Process* process,
-    R_Mil_VariableOperandAst* callee,
-    R_List* operands
+    Arcadia_Mil_VariableOperandAst* callee,
+    Arcadia_List* operands
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_INVOKEEXPRESSIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_INVOKEEXPRESSIONAST_H_INCLUDED

@@ -18,35 +18,35 @@
 #if !defined(R_MIL_STRINGTABLE_H_INCLUDED)
 #define R_MIL_STRINGTABLE_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 
-Rex_declareObjectType(u8"R.Mil.StringTable", R_Mil_StringTable, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.StringTable", Arcadia_Mil_StringTable, u8"Arcadia.Object");
 
 // Unmanaged.
-typedef struct R_Mil_StringTable_Node R_Mil_StringTable_Node;
-struct R_Mil_StringTable_Node {
-  R_Mil_StringTable_Node* next;
+typedef struct Arcadia_Mil_StringTable_Node Arcadia_Mil_StringTable_Node;
+struct Arcadia_Mil_StringTable_Node {
+  Arcadia_Mil_StringTable_Node* next;
   Arcadia_String* string;
 };
 
-struct R_Mil_StringTable {
+struct Arcadia_Mil_StringTable {
   Arcadia_Object _parent;
-  R_Mil_StringTable_Node** buckets;
+  Arcadia_Mil_StringTable_Node** buckets;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
 };
 
-R_Mil_StringTable*
-R_Mil_StringTable_create
+Arcadia_Mil_StringTable*
+Arcadia_Mil_StringTable_create
   (
     Arcadia_Process* process
   );
 
 Arcadia_String*
-R_Mil_StringTable_getOrCreateString
+Arcadia_Mil_StringTable_getOrCreateString
   (
     Arcadia_Process* process,
-    R_Mil_StringTable* self,
+    Arcadia_Mil_StringTable* self,
     Arcadia_StringBuffer* stringBuffer
   );
 

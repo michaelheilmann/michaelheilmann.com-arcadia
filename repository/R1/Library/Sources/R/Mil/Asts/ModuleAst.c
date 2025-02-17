@@ -25,7 +25,7 @@
 /// construct()
 /// @endcode
 static void
-R_Mil_ModuleAst_constructImpl
+Arcadia_Mil_ModuleAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -34,20 +34,20 @@ R_Mil_ModuleAst_constructImpl
   );
 
 static void
-R_Mil_ModuleAst_visit
+Arcadia_Mil_ModuleAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ModuleAst* self
+    Arcadia_Mil_ModuleAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_ModuleAst_objectTypeOperations = {
-  .construct = &R_Mil_ModuleAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_ModuleAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_ModuleAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_ModuleAst_visit,
+  .visit = &Arcadia_Mil_ModuleAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_ModuleAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_ModuleAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_ModuleAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_ModuleAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -66,10 +66,10 @@ static const Arcadia_Type_Operations _R_Mil_ModuleAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.ModuleAst", R_Mil_ModuleAst, u8"Arcadia.Object", Arcadia_Object, &_R_Mil_ModuleAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.ModuleAst", Arcadia_Mil_ModuleAst, u8"Arcadia.Mil.Ast", Arcadia_Mil_Ast, &_Arcadia_Mil_ModuleAst_typeOperations);
 
 static void
-R_Mil_ModuleAst_constructImpl
+Arcadia_Mil_ModuleAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -77,63 +77,70 @@ R_Mil_ModuleAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_ModuleAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_ModuleAst_getType(process);
+  Arcadia_Mil_ModuleAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_ModuleAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
-  _self->definitions = R_List_create(process);
+  _self->path = NULL;
+  _self->definitions = Arcadia_List_create(process);
   Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
-R_Mil_ModuleAst_visit
+Arcadia_Mil_ModuleAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ModuleAst* self
+    Arcadia_Mil_ModuleAst* self
   )
-{ Arcadia_Object_visit(process, self->definitions); }
+{
+  if (self->path) {
+    Arcadia_Object_visit(process, self->path);
+  }
+  Arcadia_Object_visit(process, self->definitions);
+}
 
-R_Mil_ModuleAst*
-R_Mil_ModuleAst_create
+Arcadia_Mil_ModuleAst*
+Arcadia_Mil_ModuleAst_create
   (
     Arcadia_Process* process
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  R_Mil_ModuleAst* self = R_allocateObject(process, _R_Mil_ModuleAst_getType(process), 0, &argumentValues[0]);
+  Arcadia_Mil_ModuleAst* self = R_allocateObject(process, _Arcadia_Mil_ModuleAst_getType(process), 0, &argumentValues[0]);
   return self;
 }
 
 void
-R_Mil_ModuleAst_appendDefinition
+Arcadia_Mil_ModuleAst_appendDefinition
   (
     Arcadia_Process* process,
-    R_Mil_ModuleAst* self,
-    R_Mil_DefinitionAst* definition
+    Arcadia_Mil_ModuleAst* self,
+    Arcadia_Mil_DefinitionAst* definition
   )
 { 
-  R_List_appendObjectReferenceValue(process, self->definitions, (Arcadia_ObjectReferenceValue)definition);
+  Arcadia_List_appendObjectReferenceValue(process, self->definitions, (Arcadia_ObjectReferenceValue)definition);
 }
 
 Arcadia_SizeValue
-R_Mil_ModuleAst_getNumberOfDefinitions
-  (
-    R_Mil_ModuleAst* self
-  )
-{ return R_List_getSize(self->definitions); }
-
-R_Mil_DefinitionAst*
-R_Mil_ModuleAst_getDefinitionAt
+Arcadia_Mil_ModuleAst_getNumberOfDefinitions
   (
     Arcadia_Process* process,
-    R_Mil_ModuleAst* self,
+    Arcadia_Mil_ModuleAst* self
+  )
+{ return Arcadia_List_getSize(process, self->definitions); }
+
+Arcadia_Mil_DefinitionAst*
+Arcadia_Mil_ModuleAst_getDefinitionAt
+  (
+    Arcadia_Process* process,
+    Arcadia_Mil_ModuleAst* self,
     Arcadia_SizeValue index
   )
 {
-  Arcadia_Value definitionAstValue = R_List_getAt(process, self->definitions, index);
-  R_Mil_DefinitionAst* definitionAst = Arcadia_Value_getObjectReferenceValue(&definitionAstValue);
+  Arcadia_Value definitionAstValue = Arcadia_List_getAt(process, self->definitions, index);
+  Arcadia_Mil_DefinitionAst* definitionAst = Arcadia_Value_getObjectReferenceValue(&definitionAstValue);
   return definitionAst;
 }
 

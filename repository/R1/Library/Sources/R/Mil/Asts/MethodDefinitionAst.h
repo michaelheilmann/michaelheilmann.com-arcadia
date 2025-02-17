@@ -15,34 +15,34 @@
 
 // Last modified: 2024-10-04
 
-#if !defined(R_MIL_ASTS_METHODDEFINITIONAST_H_INCLUDED)
-#define R_MIL_ASTS_METHODDEFINITIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_METHODDEFINITIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_METHODDEFINITIONAST_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Mil/Asts/ClassMemberDefinitionAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.MethodDefinitionAst", R_Mil_MethodDefinitionAst, u8"R.Mil.ClassMemberDefinitionAst");
+Rex_declareObjectType(u8"Arcadia.Mil.MethodDefinitionAst", Arcadia_Mil_MethodDefinitionAst, u8"Arcadia.Mil.ClassMemberDefinitionAst");
 
-struct R_Mil_MethodDefinitionAst {
-  R_Mil_ClassMemberDefinitionAst _parent;
+struct Arcadia_Mil_MethodDefinitionAst {
+  Arcadia_Mil_ClassMemberDefinitionAst _parent;
   Arcadia_String* nativeName;
   Arcadia_String* methodName;
-  R_List* methodParameters;
-  R_List* methodBody;
+  Arcadia_List* methodParameters;
+  Arcadia_List* methodBody;
 };
 
-R_Mil_MethodDefinitionAst*
-R_Mil_MethodDefinitionAst_create
+Arcadia_Mil_MethodDefinitionAst*
+Arcadia_Mil_MethodDefinitionAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* nativeName,
     Arcadia_String* methodName,
-    R_List* methodParameters,
-    R_List* methodBody
+    Arcadia_List* methodParameters,
+    Arcadia_List* methodBody
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_METHODDEFINITIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_METHODDEFINITIONAST_H_INCLUDED

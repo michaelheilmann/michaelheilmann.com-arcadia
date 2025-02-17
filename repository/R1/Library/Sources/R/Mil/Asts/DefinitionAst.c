@@ -22,7 +22,7 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 static void
-R_Mil_DefinitionAst_constructImpl
+Arcadia_Mil_DefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -30,14 +30,14 @@ R_Mil_DefinitionAst_constructImpl
     Arcadia_Value* argumentValues
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_DefinitionAst_objectTypeOperations = {
-  .construct = &R_Mil_DefinitionAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_DefinitionAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_DefinitionAst_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
 
-static const Arcadia_Type_Operations _R_Mil_DefinitionAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_DefinitionAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_DefinitionAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_DefinitionAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -56,10 +56,10 @@ static const Arcadia_Type_Operations _R_Mil_DefinitionAst_typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.DefinitionAst", R_Mil_DefinitionAst, u8"Arcadia.Object", Arcadia_Object, &_R_Mil_DefinitionAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.DefinitionAst", Arcadia_Mil_DefinitionAst, u8"Arcadia.Mil.Ast", Arcadia_Mil_Ast, &_Arcadia_Mil_DefinitionAst_typeOperations);
 
 static void
-R_Mil_DefinitionAst_constructImpl
+Arcadia_Mil_DefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -67,8 +67,8 @@ R_Mil_DefinitionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_DefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_DefinitionAst_getType(process);
+  Arcadia_Mil_DefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_DefinitionAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);

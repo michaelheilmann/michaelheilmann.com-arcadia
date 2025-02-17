@@ -19,11 +19,11 @@
 #define R_INTERPRETER_PROCESSSTATE_PRIVATE_H_INCLUDED
 
 #include "R/Interpreter/ProcessState.h"
-#include "R/Map.h"
+#include "Arcadia/Ring2/Implementation/Map.h"
 
 struct R_Interpreter_ProcessState {
   // Global classe and global procedures.
-  R_Map* globals;
+  Arcadia_Map* globals;
   
   R_Interpreter_Code_Constants* constants;
   R_Interpreter_ThreadState* mainThread;

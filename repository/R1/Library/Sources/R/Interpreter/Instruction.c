@@ -19,8 +19,8 @@
 
 #include "Arcadia/Ring1/Include.h"
 #include "R/Interpreter/Include.h"
-#include "R/String.h"
-#include "R/cstdlib.h"
+#include "Arcadia/Ring2/Implementation/String.h"
+#include <assert.h>
 
 static Arcadia_Value*
 R_InterpreterState_decodeTarget
@@ -222,7 +222,7 @@ R_Instructions_divide
 }
 
 void
-R_Instructions_equalTo
+R_Instructions_isEqualTo
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
@@ -230,7 +230,7 @@ R_Instructions_equalTo
 {
   R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
-  OnAssertOpcode(EqualTo);
+  OnAssertOpcode(IsEqualTo);
 
   call->instructionIndex++;
 
@@ -249,7 +249,7 @@ R_Instructions_equalTo
 }
 
 void
-R_Instructions_greaterThan
+R_Instructions_isGreaterThan
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
@@ -257,7 +257,7 @@ R_Instructions_greaterThan
 {
   R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
-  OnAssertOpcode(GreaterThan);
+  OnAssertOpcode(IsGreaterThan);
 
   call->instructionIndex++;
 
@@ -276,7 +276,7 @@ R_Instructions_greaterThan
 }
 
 void
-R_Instructions_greaterThanOrEqualTo
+R_Instructions_isGreaterThanOrEqualTo
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
@@ -284,7 +284,7 @@ R_Instructions_greaterThanOrEqualTo
 {
   R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
-  OnAssertOpcode(GreaterThanOrEqualTo);
+  OnAssertOpcode(IsGreaterThanOrEqualTo);
 
   call->instructionIndex++;
 
@@ -317,7 +317,7 @@ R_Instructions_idle
 }
 
 void
-R_Instructions_lowerThan
+R_Instructions_islowerThan
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
@@ -325,7 +325,7 @@ R_Instructions_lowerThan
 {
   R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
-  OnAssertOpcode(LowerThan);
+  OnAssertOpcode(IsLowerThan);
 
   call->instructionIndex++;
 
@@ -344,7 +344,7 @@ R_Instructions_lowerThan
 }
 
 void
-R_Instructions_lowerThanOrEqualTo
+R_Instructions_isLowerThanOrEqualTo
   (
     Arcadia_Process* process,
     R_Interpreter_ProcessState* interpreterProcess
@@ -352,7 +352,7 @@ R_Instructions_lowerThanOrEqualTo
 {
   R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
-  OnAssertOpcode(LowerThanOrEqualTo);
+  OnAssertOpcode(IsLowerThanOrEqualTo);
 
   call->instructionIndex++;
 
@@ -464,7 +464,7 @@ R_Instructions_notEqualTo
 {
   R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
   R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
-  OnAssertOpcode(NotEqualTo);
+  OnAssertOpcode(IsNotEqualTo);
 
   call->instructionIndex++;
 

@@ -24,7 +24,7 @@
 
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 
-// https://michaelheilmann.com/repository/R1/#r-gettickcount
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia-getTickCount
 Arcadia_Natural64Value
 Arcadia_getTickCount
   (

@@ -26,7 +26,7 @@ safeAddNatural8Tests
   )
 {
   Arcadia_Natural8Value u, v;
-  Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+  Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
 
   // 0 + 0 = (0, 0)
   Arcadia_safeAdd_n8(process1, 0, 0, &v, &u);
@@ -147,7 +147,7 @@ safeAddNatural16Tests
   )
 {
   Arcadia_Natural16Value u, v;
-  Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+  Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
 
   // 0 + 0 = (0, 0)
   Arcadia_safeAdd_n16(process1, 0, 0, &v, &u);
@@ -268,7 +268,7 @@ safeAddNatural32Tests
   )
 {
   Arcadia_Natural32Value u, v;
-  Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+  Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
 
   // 0 + 0 = (0, 0)
   Arcadia_safeAdd_n32(process1, 0, 0, &v, &u);
@@ -389,7 +389,7 @@ safeAddNatural64Tests
   )
 {
   Arcadia_Natural64Value u, v;
-  Arcadia_Process1* process1 = Arcadia_Process_getBackendNoLock(process);
+  Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
 
   // 0 + 0 = (0, 0)
   Arcadia_safeAdd_n64(process1, 0, 0, &v, &u);

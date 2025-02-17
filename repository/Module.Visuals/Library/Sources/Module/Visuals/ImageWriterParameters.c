@@ -97,7 +97,7 @@ ImageWriterParameters_constructImpl
   if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_String_getType(process))) {
     _self->object = (Arcadia_ObjectReferenceValue)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
     _self->format = Arcadia_Value_getInteger32Value(&argumentValues[1]);
-  } else if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _R_ByteBuffer_getType(process))) {
+  } else if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_ByteBuffer_getType(process))) {
     _self->object = (Arcadia_ObjectReferenceValue)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
     _self->format = Arcadia_Value_getInteger32Value(&argumentValues[1]);
   } else {
@@ -141,7 +141,7 @@ ImageWriterParameters*
 ImageWriterParameters_createByteBuffer
   (
     Arcadia_Process* process,
-    R_ByteBuffer* byteBuffer,
+    Arcadia_ByteBuffer* byteBuffer,
     ImageWriterFormat format
   )
 {
@@ -184,10 +184,10 @@ ImageWriterParameters_hasByteBuffer
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(self->object);
-  return Arcadia_Type_isSubType(type, _R_ByteBuffer_getType(process));
+  return Arcadia_Type_isSubType(type, _Arcadia_ByteBuffer_getType(process));
 }
 
-R_ByteBuffer*
+Arcadia_ByteBuffer*
 ImageWriterParameters_getByteBuffer
   (
     Arcadia_Process* process,
@@ -198,7 +198,7 @@ ImageWriterParameters_getByteBuffer
     Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
     Arcadia_Process_jump(process);
   }
-  return (R_ByteBuffer*)self->object;
+  return (Arcadia_ByteBuffer*)self->object;
 }
 
 ImageWriterFormat

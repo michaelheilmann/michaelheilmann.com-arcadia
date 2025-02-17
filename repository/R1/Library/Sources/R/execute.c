@@ -5,7 +5,7 @@
 #include "R/Interpreter/Include.h"
 #include "R/Interpreter/ThreadState.private.h" // TODO: Remove this.
 #include "R/Interpreter/Code.h"
-#include "R/cstdlib.h"
+#include <assert.h>
 
 static void
 execute1

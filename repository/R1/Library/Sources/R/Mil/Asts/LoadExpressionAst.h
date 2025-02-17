@@ -15,35 +15,35 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_LOADEXPRESSIONAST_H_INCLUDED)
-#define R_MIL_ASTS_LOADEXPRESSIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_LOADEXPRESSIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_LOADEXPRESSIONAST_H_INCLUDED
 
 #include "R/Mil/Asts/ExpressionAst.h"
-typedef struct R_Mil_OperandAst R_Mil_OperandAst;
+typedef struct Arcadia_Mil_OperandAst Arcadia_Mil_OperandAst;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.LoadExpressionAst extends R.Mil.ExpressionAst
+/// class Arcadia.Mil.LoadExpressionAst extends Arcadia.Mil.ExpressionAst
 /// @endcode
 /// Represents a load expression
 /// @code
 /// BooleanLiteral | NumberLiteral | StringLiteral | VariableName
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.LoadExpressionAst", R_Mil_LoadExpressionAst, u8"R.Mil.ExpressionAst");
+Rex_declareObjectType(u8"Arcadia.Mil.LoadExpressionAst", Arcadia_Mil_LoadExpressionAst, u8"Arcadia.Mil.ExpressionAst");
 
-struct R_Mil_LoadExpressionAst {
-  R_Mil_ExpressionAst parent;
-  R_Mil_OperandAst* operand;
+struct Arcadia_Mil_LoadExpressionAst {
+  Arcadia_Mil_ExpressionAst parent;
+  Arcadia_Mil_OperandAst* operand;
 };
 
-R_Mil_LoadExpressionAst*
-R_Mil_LoadExpressionAst_create
+Arcadia_Mil_LoadExpressionAst*
+Arcadia_Mil_LoadExpressionAst_create
   (
     Arcadia_Process* process,
-    R_Mil_OperandAst* operand
+    Arcadia_Mil_OperandAst* operand
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_LOADEXPRESSIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_LOADEXPRESSIONAST_H_INCLUDED

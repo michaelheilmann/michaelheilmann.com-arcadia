@@ -23,7 +23,7 @@
 static IXAudio2* g_xaudio2 = NULL;
 static IXAudio2MasteringVoice* g_xaudio2MasteringVoice = NULL;
 
-static R_ByteBuffer* g_sourceVoiceBuffer = NULL;
+static Arcadia_ByteBuffer* g_sourceVoiceBuffer = NULL;
 static IXAudio2SourceVoice* g_xaudio2SourceVoice = NULL;
 
 static void
@@ -55,7 +55,7 @@ Audials_XAudio2_startup
 
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    g_sourceVoiceBuffer = R_ByteBuffer_create(process);
+    g_sourceVoiceBuffer = Arcadia_ByteBuffer_create(process);
     Arcadia_Process_popJumpTarget(process);
   } else {
     Arcadia_Process_popJumpTarget(process);
@@ -193,11 +193,11 @@ Source_constructImpl
     Arcadia_Process_jump(process);
   }
   Arcadia_Object* objectValue = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
-  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectValue), _R_ByteBuffer_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectValue), _Arcadia_ByteBuffer_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  //R_ByteBuffer* byteBufferValue = (R_ByteBuffer*)objectValue;
+  //Arcadia_ByteBuffer* byteBufferValue = (Arcadia_ByteBuffer*)objectValue;
   _self->xAudio2SourceVoice = NULL;
   Arcadia_Object_setType(process, _self, _type);
 }
@@ -219,7 +219,7 @@ Source*
 Source_create
   (
     Arcadia_Process* process,
-    R_ByteBuffer* bytes
+    Arcadia_ByteBuffer* bytes
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)bytes } };
@@ -258,14 +258,14 @@ Audials_playSine1
     phase += (2 * PI) / SAMPLESPERCYCLE;
     int16_t sample = (int16_t)(sin(phase) * INT16_MAX * VOLUME);
     uint8_t bytes[2] = { (uint8_t)(sample >> 0), (uint8_t)(sample >> 8) };
-    R_ByteBuffer_append_pn(process, g_sourceVoiceBuffer, bytes, 2);
+    Arcadia_ByteBuffer_append_pn(process, g_sourceVoiceBuffer, bytes, 2);
     bufferIndex += 2;
   }
 
   XAUDIO2_BUFFER xAudio2Buffer;
   xAudio2Buffer.Flags = XAUDIO2_END_OF_STREAM;
   xAudio2Buffer.AudioBytes = AUDIOBUFFERSIZEINBYTES;
-  xAudio2Buffer.pAudioData = R_ByteBuffer_getBytes(g_sourceVoiceBuffer);
+  xAudio2Buffer.pAudioData = Arcadia_ByteBuffer_getBytes(process, g_sourceVoiceBuffer);
   xAudio2Buffer.PlayBegin = 0;
   xAudio2Buffer.PlayLength = 0;
   xAudio2Buffer.LoopBegin = 0;

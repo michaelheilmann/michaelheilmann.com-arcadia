@@ -1,4 +1,4 @@
-<h3 id="foreignprocedure-type">3.1.2. Foreign Procedure Type</h3>
+<h3 id="arcadia-foreignprocedurevalue">3.1.2. Foreign Procedure Type</h3>
 <p>
 Arcadia Ring 1 provides the <scode>Arcadia_ForeignProcedureValue</code> type.
 </p>

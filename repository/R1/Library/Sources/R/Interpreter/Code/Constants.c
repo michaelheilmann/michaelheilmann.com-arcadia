@@ -18,9 +18,8 @@
 #include "R/Interpreter/Code/Constants.h"
 
 #include "R/DynamicArrayUtilities.h"
-#include "R/String.h"
+#include "Arcadia/Ring2/Implementation/String.h"
 #include "R/Interpreter/Include.h"
-#include "R/cstdlib.h"
 
 static void
 constructImpl

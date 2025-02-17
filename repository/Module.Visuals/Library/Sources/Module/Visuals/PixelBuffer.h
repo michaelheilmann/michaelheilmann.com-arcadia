@@ -18,7 +18,7 @@
 #if !defined(MODULE_VISUALS_PIXELBUFFER_H_INCLUDED)
 #define MODULE_VISUALS_PIXELBUFFER_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 
 #define PixelFormat_An8Rn8Gn8Bn8 (1)
 #define PixelFormat_An8Bn8Gn8Rn8 (2)

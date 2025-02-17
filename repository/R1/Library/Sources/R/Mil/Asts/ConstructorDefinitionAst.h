@@ -15,32 +15,32 @@
 
 // Last modified: 2024-10-04
 
-#if !defined(R_MIL_ASTS_CONSTRUCTORDEFINITIONAST_H_INCLUDED)
-#define R_MIL_ASTS_CONSTRUCTORDEFINITIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_CONSTRUCTORDEFINITIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_CONSTRUCTORDEFINITIONAST_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Mil/Asts/ClassMemberDefinitionAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Rex_declareObjectType(u8"R.Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, u8"R.Mil.ClassMemberDefinitionAst");
+Rex_declareObjectType(u8"Arcadia.Mil.ConstructorDefinitionAst", Arcadia_Mil_ConstructorDefinitionAst, u8"Arcadia.Mil.ClassMemberDefinitionAst");
 
-struct R_Mil_ConstructorDefinitionAst {
-  R_Mil_ClassMemberDefinitionAst _parent;
+struct Arcadia_Mil_ConstructorDefinitionAst {
+  Arcadia_Mil_ClassMemberDefinitionAst _parent;
   Arcadia_String* nativeName;
-  R_List* constructorParameters;
-  R_List* constructorBody;
+  Arcadia_List* constructorParameters;
+  Arcadia_List* constructorBody;
 };
 
-R_Mil_ConstructorDefinitionAst*
-R_Mil_ConstructorDefinitionAst_create
+Arcadia_Mil_ConstructorDefinitionAst*
+Arcadia_Mil_ConstructorDefinitionAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* nativeName,
-    R_List* constructorParameters,
-    R_List* constructorBody
+    Arcadia_List* constructorParameters,
+    Arcadia_List* constructorBody
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_CONSTRUCTORDEFINITIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_CONSTRUCTORDEFINITIONAST_H_INCLUDED

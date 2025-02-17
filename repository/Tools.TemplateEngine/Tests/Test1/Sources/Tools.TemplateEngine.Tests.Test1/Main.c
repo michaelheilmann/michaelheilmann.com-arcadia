@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "R.h"
+#include "R/Include.h"
 
 #include "Tools/TemplateEngine/FileContext.h"
 
@@ -29,21 +29,21 @@ main1
     char** argv
   )
 { 
-  R_FileSystem* fileSystem = R_FileSystem_create(process);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(process);
   Context* context = Context_create(process);
-  context->stack = R_Stack_create(process);
-  context->targetBuffer = R_ByteBuffer_create(process);
-  context->target = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->targetBuffer);
-  context->temporaryBuffer = R_ByteBuffer_create(process);
-  context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
+  context->stack = Arcadia_Stack_create(process);
+  context->targetBuffer = Arcadia_ByteBuffer_create(process);
+  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->targetBuffer);
+  context->temporaryBuffer = Arcadia_ByteBuffer_create(process);
+  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
 
-  R_FilePath* filePath = R_FilePath_parseGeneric(process, u8"HelloWorld.t", strlen(u8"HelloWorld.t"));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(process, u8"HelloWorld.t", strlen(u8"HelloWorld.t"));
   Arcadia_Value filePathValue;
   Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
-  R_Stack_push(process, context->stack, filePathValue);
+  Arcadia_Stack_push(process, context->stack, filePathValue);
   Context_onRun(process, context);
 
-  R_FileSystem_setFileContents(process, fileSystem, R_FilePath_parseGeneric(process, u8"HelloWorld.txt", strlen(u8"HelloWorld.txt")), context->targetBuffer);
+  Arcadia_FileSystem_setFileContents(process, fileSystem, Arcadia_FilePath_parseGeneric(process, u8"HelloWorld.txt", strlen(u8"HelloWorld.txt")), context->targetBuffer);
 }
 
 static void
@@ -55,16 +55,16 @@ recursiveInclude1
   )
 {
   Context* context = Context_create(process);
-  context->stack = R_Stack_create(process);
-  context->targetBuffer = R_ByteBuffer_create(process);
-  context->target = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->targetBuffer);
-  context->temporaryBuffer = R_ByteBuffer_create(process);
-  context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
+  context->stack = Arcadia_Stack_create(process);
+  context->targetBuffer = Arcadia_ByteBuffer_create(process);
+  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->targetBuffer);
+  context->temporaryBuffer = Arcadia_ByteBuffer_create(process);
+  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
 
-  R_FilePath* filePath = R_FilePath_parseGeneric(process, u8"recursiveInclude1.t", strlen(u8"recursiveInclude1.t"));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(process, u8"recursiveInclude1.t", strlen(u8"recursiveInclude1.t"));
   Arcadia_Value filePathValue;
   Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
-  R_Stack_push(process, context->stack, filePathValue);
+  Arcadia_Stack_push(process, context->stack, filePathValue);
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -87,16 +87,16 @@ recursiveInclude2
   )
 {
   Context* context = Context_create(process);
-  context->stack = R_Stack_create(process);
-  context->targetBuffer = R_ByteBuffer_create(process);
-  context->target = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->targetBuffer);
-  context->temporaryBuffer = R_ByteBuffer_create(process);
-  context->temporary = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
+  context->stack = Arcadia_Stack_create(process);
+  context->targetBuffer = Arcadia_ByteBuffer_create(process);
+  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->targetBuffer);
+  context->temporaryBuffer = Arcadia_ByteBuffer_create(process);
+  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
 
-  R_FilePath* filePath = R_FilePath_parseGeneric(process, u8"recursiveInclude2.t", strlen(u8"recursiveInclude2.t"));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(process, u8"recursiveInclude2.t", strlen(u8"recursiveInclude2.t"));
   Arcadia_Value filePathValue;
   Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
-  R_Stack_push(process, context->stack, filePathValue);
+  Arcadia_Stack_push(process, context->stack, filePathValue);
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -117,14 +117,8 @@ main
     char** argv
   )
 {
-  Arcadia_Status status[2];
-  status[0] = R_startup();
-  if (status[0]) {
-    return EXIT_FAILURE;
-  }
   Arcadia_Process* process = NULL;
   if (Arcadia_Process_get(&process)) {
-    R_shutdown();
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
@@ -135,11 +129,10 @@ main
     recursiveInclude2(process, argc, argv);
   }
   Arcadia_Process_popJumpTarget(process);
-  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
   Arcadia_Process_relinquish(process);
   process = NULL;
-  status[1] = R_shutdown();
-  if (status[1] || status[0]) {
+  if (status) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

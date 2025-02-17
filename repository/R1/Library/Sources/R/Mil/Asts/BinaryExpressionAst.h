@@ -15,51 +15,57 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_BINARYEXPRESSIONAST_H_INCLUDED)
-#define R_MIL_ASTS_BINARYEXPRESSIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_BINARYEXPRESSIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_BINARYEXPRESSIONAST_H_INCLUDED
 
 #include "R/Mil/Asts/ExpressionAst.h"
-typedef struct R_Mil_OperandAst R_Mil_OperandAst;
+typedef struct Arcadia_Mil_OperandAst Arcadia_Mil_OperandAst;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-typedef enum R_Mil_BinaryExpressionAstType R_Mil_BinaryExpressionAstType;
+typedef enum Arcadia_Mil_BinaryExpressionAstType Arcadia_Mil_BinaryExpressionAstType;
 
-enum R_Mil_BinaryExpressionAstType {
-  R_Mil_BinaryExpressionAstType_Add = 1,
-  R_Mil_BinaryExpressionAstType_And = 2,
-  R_Mil_BinaryExpressionAstType_Concatenate = 3,
-  R_Mil_BinaryExpressionAstType_Divide = 4,
-  R_Mil_BinaryExpressionAstType_Multiply = 5,
-  R_Mil_BinaryExpressionAstType_Or = 6,
-  R_Mil_BinaryExpressionAstType_Subtract = 7,
+enum Arcadia_Mil_BinaryExpressionAstType {
+  Arcadia_Mil_BinaryExpressionAstType_Add = 1,
+  Arcadia_Mil_BinaryExpressionAstType_And = 2,
+  Arcadia_Mil_BinaryExpressionAstType_Concatenate = 3,
+  Arcadia_Mil_BinaryExpressionAstType_Divide = 4,
+  Arcadia_Mil_BinaryExpressionAstType_Multiply = 5,
+  Arcadia_Mil_BinaryExpressionAstType_Or = 6,
+  Arcadia_Mil_BinaryExpressionAstType_Subtract = 7,
+  Arcadia_Mil_BinaryExpressionAstType_IsEqualTo = 8,
+  Arcadia_Mil_BinaryExpressionAstType_IsNotEqualTo = 9,
+  Arcadia_Mil_BinaryExpressionAstType_IsLowerThan = 10,
+  Arcadia_Mil_BinaryExpressionAstType_IsLowerThanOrEqualTo = 11,
+  Arcadia_Mil_BinaryExpressionAstType_IsGreaterThan = 12,
+  Arcadia_Mil_BinaryExpressionAstType_IsGreaterThanOrEqualTo = 13,
 };
 
 /// @code
-/// class R.Mil.BinaryOperationExpressionAst extends R.Mil.ExpressionAst
+/// class Arcadia.Mil.BinaryOperationExpressionAst extends Arcadia.Mil.ExpressionAst
 /// @endcode
 /// Represents a binary operations like
 /// @code
 /// (add|and|divide|subtract|multiply|or) <operand1> <operand2>
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.BinaryExpressionAst", R_Mil_BinaryExpressionAst, u8"R.Mil.ExpressionAst");
+Rex_declareObjectType(u8"Arcadia.Mil.BinaryExpressionAst", Arcadia_Mil_BinaryExpressionAst, u8"Arcadia.Mil.ExpressionAst");
 
-struct R_Mil_BinaryExpressionAst {
-  R_Mil_ExpressionAst parent;
-  R_Mil_BinaryExpressionAstType type;
-  R_Mil_OperandAst* operand1;
-  R_Mil_OperandAst* operand2;
+struct Arcadia_Mil_BinaryExpressionAst {
+  Arcadia_Mil_ExpressionAst parent;
+  Arcadia_Mil_BinaryExpressionAstType type;
+  Arcadia_Mil_OperandAst* operand1;
+  Arcadia_Mil_OperandAst* operand2;
 };
 
-R_Mil_BinaryExpressionAst*
-R_Mil_BinaryExpressionAst_create
+Arcadia_Mil_BinaryExpressionAst*
+Arcadia_Mil_BinaryExpressionAst_create
   (
     Arcadia_Process* process,
-    R_Mil_BinaryExpressionAstType type,
-    R_Mil_OperandAst* operand1,
-    R_Mil_OperandAst* operand2
+    Arcadia_Mil_BinaryExpressionAstType type,
+    Arcadia_Mil_OperandAst* operand1,
+    Arcadia_Mil_OperandAst* operand2
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_BINARYEXPRESSIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_BINARYEXPRESSIONAST_H_INCLUDED

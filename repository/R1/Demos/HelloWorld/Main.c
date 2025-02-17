@@ -16,7 +16,7 @@
 // Last modified: 2024-08-31
 
 #include <stdlib.h>
-#include "R.h"
+#include "R/Include.h"
 
 int
 main
@@ -25,10 +25,12 @@ main
     char** argv
   )
 {
-  Arcadia_Status status = R_startup();
-  if (status) {
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
     return EXIT_FAILURE;
   }
-  status = R_shutdown();
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   return status ? EXIT_FAILURE : EXIT_SUCCESS;
 }

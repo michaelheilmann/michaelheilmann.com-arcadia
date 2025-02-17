@@ -25,6 +25,16 @@
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include <string.h> /*TODO: Add and use Arcadia_Process functionality.*/
 
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+  #define WIN32_LEAN_AND_MEAN
+  #include <Windows.h>
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  #include <time.h>
+  #include <math.h> // round
+#else
+  #error("operating system not (yet) supported")
+#endif
+
 // 60 seconds
 #define THRESHOLD 1000*60
 
@@ -43,7 +53,6 @@ struct Arcadia_Atom {
 };
 
 struct Singleton {
-  Arcadia_Natural64Value referenceCount;
   Arcadia_SizeValue minimumCapacity;
   Arcadia_SizeValue maximumCapacity;
   Arcadia_Atom **buckets;
@@ -51,7 +60,13 @@ struct Singleton {
   Arcadia_SizeValue capacity;
 }; 
 
+static uint32_t g_referenceCount = 0;
 static Singleton* g_singleton = NULL;
+
+static Arcadia_Natural64Value
+getTickCount
+  (
+  );
 
 static void
 typeRemovedCallback
@@ -89,6 +104,29 @@ resize
   );
 
 static Arcadia_BooleanValue g_typeRegistered = Arcadia_BooleanValue_False;
+
+static Arcadia_Natural64Value
+getTickCount
+  (
+  )
+{
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+  return GetTickCount64();
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  // This is incorrect. It provides the time since some unspecified point in the past and not since the start of the process.
+  struct timespec t;
+  //t = (struct timespec *)malloc(sizeof(t)); 
+  clock_gettime(CLOCK_MONOTONIC, &t);
+  Arcadia_Natural64Value milliseconds = 0;
+  // Nanoseconds to milliseconds.
+  milliseconds = round(t.tv_nsec / 1.0e6);
+  // Seconds to milliseconds.
+  milliseconds += t.tv_sec * 1000;
+  return milliseconds;
+#else
+#error("environment not (yet) supported")
+#endif
+}
 
 static void
 typeRemovedCallback
@@ -196,13 +234,117 @@ Arcadia_StaticAssert(Arcadia_Ring1_Configuration_Atoms_MinimalCapacity <= Arcadi
 Arcadia_StaticAssert(Arcadia_Ring1_Configuration_Atoms_MinimalCapacity <= Arcadia_Ring1_Configuration_Atoms_InitialCapacity, "configuration invalid");
 Arcadia_StaticAssert(Arcadia_Ring1_Configuration_Atoms_InitialCapacity <= Arcadia_Ring1_Configuration_Atoms_MaximalCapacity, "configuration invalid");
 
+Arcadia_AtomValue
+Arcadia_Atoms_getOrCreateAtom
+  (
+    Arcadia_Process* process,
+    Arcadia_Natural8Value flags,
+    const void* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
+{
+  if (!bytes || (SIZE_MAX - sizeof(Arcadia_Atom)) < numberOfBytes) {
+    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Process_jump(process);
+  }
+  
+  if (Arcadia_AtomKind_Name == (flags & Arcadia_AtomKind_Name)) {
+    R_Names_parseTypeName(process, bytes, numberOfBytes);
+  }
+
+  Arcadia_SizeValue hash = hashBytes(bytes, numberOfBytes);
+  Arcadia_SizeValue index = hash % g_singleton->capacity;
+  for (Arcadia_Atom* atom = g_singleton->buckets[index]; NULL != atom; atom = atom->next) {
+    if (atom->numberOfBytes == numberOfBytes && atom->hash == hash) {
+      if (!memcmp(atom->bytes, bytes, numberOfBytes)) {
+        return atom;
+      }
+    }
+  }
+  Arcadia_Atom* atom = NULL;
+  Arcadia_Process_allocate(process, &atom, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, sizeof(Arcadia_Atom) + numberOfBytes);
+  Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), atom->bytes, bytes, numberOfBytes);
+  atom->numberOfBytes = numberOfBytes;
+  atom->hash = hash;
+  atom->lastVisited = getTickCount();
+  atom->next = g_singleton->buckets[index];
+  g_singleton->buckets[index] = atom;
+  g_singleton->size++;
+  resize(process);
+  return atom;
+}
+
 void
-Arcadia_Atoms_startup
+Arcadia_Atom_visit
+  (
+    Arcadia_Process* process,
+    Arcadia_AtomValue self
+  )
+{ 
+  self->lastVisited = getTickCount();
+  Arms_visit(self);
+}
+
+void const*
+Arcadia_Atom_getBytes
+  (
+    Arcadia_AtomValue self
+  )
+{ return self->bytes; }
+
+Arcadia_SizeValue
+Arcadia_Atom_getNumberOfBytes
+  (
+    Arcadia_AtomValue self
+  )
+{ return self->numberOfBytes; }
+
+Arcadia_SizeValue
+Arcadia_Atom_getHash
+  (
+    Arcadia_AtomValue self
+  )
+{ return self->hash; }
+
+Arcadia_BooleanValue
+Arcadia_Atom_isEqualTo
+  (
+    Arcadia_AtomValue self,
+    Arcadia_AtomValue other
+  )
+{ return self == other; }
+
+Arcadia_DefineModule("Arcadia.Atoms", Arcadia_Atoms);
+
+static void
+_Arcadia_Atoms_onVisit
+  (
+    Arcadia_Process1* process
+  )
+{/*Intentionally empty.*/}
+
+static void
+_Arcadia_Atoms_onFinalize
+  (
+    Arcadia_Process1* process,
+    size_t* destroyed
+  )
+{
+  *destroyed = 0;
+}
+
+static void
+_Arcadia_Atoms_onStartUp
   (
     Arcadia_Process1* process
   )
 {
-  if (!g_singleton) {
+  if (g_referenceCount == UINT32_MAX) {
+    Arcadia_logf(Arcadia_LogFlags_Error, "corrupted reference counter\n");
+    Arcadia_Process1_setStatus(process, Arcadia_Status_OperationInvalid);
+    Arcadia_Process1_jump(process);
+  }
+  if (0 == g_referenceCount) {
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Process1_allocateUnmanaged(process, (void**)&g_singleton, sizeof(Singleton));
     g_singleton->buckets = NULL;
@@ -236,6 +378,23 @@ Arcadia_Atoms_startup
       Arcadia_Process1_jump(process);
     }
 
+    Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_Process1_addArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+      Arcadia_Process1_addArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
+      Arcadia_Process1_addArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+      Arcadia_Process1_popJumpTarget(process);
+    } else {
+      Arcadia_Process1_popJumpTarget(process);
+      Arcadia_Process1_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+      Arcadia_Process1_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
+      Arcadia_Process1_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+      Arcadia_Process1_deallocateUnmanaged(process, g_singleton->buckets);
+      g_singleton->buckets = NULL;
+      Arcadia_Process1_deallocateUnmanaged(process, g_singleton);
+      g_singleton = NULL;
+      Arcadia_Process1_jump(process);
+    }
 
     if (!g_typeRegistered) {
       Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
@@ -244,6 +403,9 @@ Arcadia_Atoms_startup
         Arcadia_Process1_popJumpTarget(process);
       } else {
         Arcadia_Process1_popJumpTarget(process);
+        Arcadia_Process1_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+        Arcadia_Process1_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
+        Arcadia_Process1_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
         Arcadia_Process1_deallocateUnmanaged(process, g_singleton->buckets);
         g_singleton->buckets = NULL;
         Arcadia_Process1_deallocateUnmanaged(process, g_singleton);
@@ -252,35 +414,26 @@ Arcadia_Atoms_startup
       }
     }
     g_typeRegistered = Arcadia_BooleanValue_True;
-    g_singleton->referenceCount = 1;
-  } else {
-    if (g_singleton->referenceCount == Arcadia_Natural64Value_Maximum) {
-      Arcadia_Process1_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process1_jump(process);
-    }
-    g_singleton->referenceCount++;
-    
   }
+  g_referenceCount++;
 }
 
-void
-Arcadia_Atoms_shutdown
+static void
+_Arcadia_Atoms_onShutDown
   (
     Arcadia_Process1* process
   )
 {
-  if (!g_singleton) {
+  if (g_referenceCount == 0) {
+    Arcadia_logf(Arcadia_LogFlags_Error, "corrupted reference counter\n");
     Arcadia_Process1_setStatus(process, Arcadia_Status_OperationInvalid);
     Arcadia_Process1_jump(process);
   }
-  if (g_singleton->referenceCount == Arcadia_Natural64Value_Minimum) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process1_jump(process);
-  }
-  if (0 == --g_singleton->referenceCount) {
-    if (g_singleton->size > 0) {
-      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d warning: atoms not empty\n", __FILE__, __LINE__);
-    }
+  g_referenceCount--;
+  if (0 == g_referenceCount) {
+    Arcadia_Process1_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+    Arcadia_Process1_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
+    Arcadia_Process1_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
     Arcadia_Process1_deallocateUnmanaged(process, g_singleton->buckets);
     g_singleton->buckets = NULL;
     Arcadia_Process1_deallocateUnmanaged(process, g_singleton);
@@ -288,14 +441,14 @@ Arcadia_Atoms_shutdown
   }
 }
 
-void
-Arcadia_Atoms_onPreMark
+static void
+_Arcadia_Atoms_onPreMark
   (
     Arcadia_Process1* process,
-    Arcadia_BooleanValue purgeCache
+    bool purgeCache
   )
 {
-  Arcadia_Natural64Value now = Arcadia_getTickCount();
+  Arcadia_Natural64Value now = getTickCount();
   for (Arcadia_SizeValue i = 0, n = g_singleton->capacity; i < n; ++i) {
     Arcadia_Atom* current = g_singleton->buckets[i];
     while (current) {
@@ -306,90 +459,3 @@ Arcadia_Atoms_onPreMark
     }
   }
 }
-
-void
-Arcadia_Atoms_onFinalize
-  (
-    Arcadia_Process1* process
-  )
-{/*Intentionally empty.*/}
-
-Arcadia_AtomValue
-Arcadia_Atoms_getOrCreateAtom
-  (
-    Arcadia_Process* process,
-    Arcadia_Natural8Value flags,
-    const void* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-{
-  if (!bytes || (SIZE_MAX - sizeof(Arcadia_Atom)) < numberOfBytes) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
-  }
-  
-  if (Arcadia_AtomKind_Name == (flags & Arcadia_AtomKind_Name)) {
-    R_Names_parseTypeName(process, bytes, numberOfBytes);
-  }
-
-  Arcadia_SizeValue hash = hashBytes(bytes, numberOfBytes);
-  Arcadia_SizeValue index = hash % g_singleton->capacity;
-  for (Arcadia_Atom* atom = g_singleton->buckets[index]; NULL != atom; atom = atom->next) {
-    if (atom->numberOfBytes == numberOfBytes && atom->hash == hash) {
-      if (!memcmp(atom->bytes, bytes, numberOfBytes)) {
-        return atom;
-      }
-    }
-  }
-  Arcadia_Atom* atom = NULL;
-  Arcadia_Process_allocate(process, &atom, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, sizeof(Arcadia_Atom) + numberOfBytes);
-  memcpy(atom->bytes, bytes, numberOfBytes);
-  atom->numberOfBytes = numberOfBytes;
-  atom->hash = hash;
-  atom->lastVisited = Arcadia_getTickCount();
-  atom->next = g_singleton->buckets[index];
-  g_singleton->buckets[index] = atom;
-  g_singleton->size++;
-  resize(process);
-  return atom;
-}
-
-void
-Arcadia_Atom_visit
-  (
-    Arcadia_Process* process,
-    Arcadia_AtomValue self
-  )
-{ 
-  self->lastVisited = Arcadia_getTickCount();
-  Arms_visit(self);
-}
-
-void const*
-Arcadia_Atom_getBytes
-  (
-    Arcadia_AtomValue self
-  )
-{ return self->bytes; }
-
-Arcadia_SizeValue
-Arcadia_Atom_getNumberOfBytes
-  (
-    Arcadia_AtomValue self
-  )
-{ return self->numberOfBytes; }
-
-Arcadia_SizeValue
-Arcadia_Atom_getHash
-  (
-    Arcadia_AtomValue self
-  )
-{ return self->hash; }
-
-Arcadia_BooleanValue
-Arcadia_Atom_isEqualTo
-  (
-    Arcadia_AtomValue self,
-    Arcadia_AtomValue other
-  )
-{ return self == other; }

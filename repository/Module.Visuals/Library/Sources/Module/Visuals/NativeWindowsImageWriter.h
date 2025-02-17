@@ -18,7 +18,7 @@
 #if !defined(MODULE_VISUALS_NATIVEWINDOWSIMAGEWRITER_H_INCLUDED)
 #define MODULE_VISUALS_NATIVEWINDOWSIMAGEWRITER_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "Module/Visuals/ImageWriter.h"
 #include "Module/Visuals/PixelBuffer.h"
 

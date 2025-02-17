@@ -15,44 +15,44 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_UNARYEXPRESSIONAST_H_INCLUDED)
-#define R_MIL_ASTS_UNARYEXPRESSIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_UNARYEXPRESSIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_UNARYEXPRESSIONAST_H_INCLUDED
 
 #include "R/Mil/Asts/ExpressionAst.h"
-typedef struct R_Mil_OperandAst R_Mil_OperandAst;
+typedef struct Arcadia_Mil_OperandAst Arcadia_Mil_OperandAst;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-typedef enum R_Mil_UnaryExpressionAstType R_Mil_UnaryExpressionAstType;
+typedef enum Arcadia_Mil_UnaryExpressionAstType Arcadia_Mil_UnaryExpressionAstType;
 
-enum R_Mil_UnaryExpressionAstType {
-  R_Mil_UnaryExpressionAstType_Negate = 1,
-  R_Mil_UnaryExpressionAstType_Not = 2,
+enum Arcadia_Mil_UnaryExpressionAstType {
+  Arcadia_Mil_UnaryExpressionAstType_Negate = 1,
+  Arcadia_Mil_UnaryExpressionAstType_Not = 2,
 };
 
 /// @code
-/// class R.Mil.UnaryExpressionAst extends R.Mil.ExpressionAst
+/// class Arcadia.Mil.UnaryExpressionAst extends Arcadia.Mil.ExpressionAst
 /// @endcode
 /// Represents an unary epxression like
 /// @code
 /// (negate|not) <operand1>
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.UnaryExpressionAst", R_Mil_UnaryExpressionAst, u8"R.Mil.ExpressionAst");
+Rex_declareObjectType(u8"Arcadia.Mil.UnaryExpressionAst", Arcadia_Mil_UnaryExpressionAst, u8"Arcadia.Mil.ExpressionAst");
 
-struct R_Mil_UnaryExpressionAst {
-  R_Mil_ExpressionAst parent;
-  R_Mil_UnaryExpressionAstType type;
-  R_Mil_OperandAst* operand1;
+struct Arcadia_Mil_UnaryExpressionAst {
+  Arcadia_Mil_ExpressionAst parent;
+  Arcadia_Mil_UnaryExpressionAstType type;
+  Arcadia_Mil_OperandAst* operand1;
 };
 
-R_Mil_UnaryExpressionAst*
-R_Mil_UnaryExpressionAst_create
+Arcadia_Mil_UnaryExpressionAst*
+Arcadia_Mil_UnaryExpressionAst_create
   (
     Arcadia_Process* process,
-    R_Mil_UnaryExpressionAstType type,
-    R_Mil_OperandAst* operand1
+    Arcadia_Mil_UnaryExpressionAstType type,
+    Arcadia_Mil_OperandAst* operand1
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_UNARYEXPRESSIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_UNARYEXPRESSIONAST_H_INCLUDED

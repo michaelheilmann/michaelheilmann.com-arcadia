@@ -47,6 +47,8 @@
 
 #include "Arcadia/Ring1/Implementation/isPowerOfTwo.h"
 
+#include "Arcadia/Ring1/Implementation/isUtf8.h"
+
 #include "Arcadia/Ring1/Implementation/makeBitmask.h"
 
 #include "Arcadia/Ring1/Implementation/maximum.h"

@@ -18,7 +18,7 @@
 #if !defined(MODULE_VISUALS_INCLUDE_H_INCLUDED)
 #define MODULE_VISUALS_INCLUDE_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #include "Module/Visuals/Font.h"

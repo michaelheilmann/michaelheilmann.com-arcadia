@@ -18,7 +18,7 @@
 #if !defined(MODULE_AUDIALS_INCLUDE_H_INCLUDED)
 #define MODULE_AUDIALS_INCLUDE_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 
 void
 Audials_startup

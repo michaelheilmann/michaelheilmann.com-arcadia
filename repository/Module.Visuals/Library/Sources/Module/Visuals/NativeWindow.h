@@ -18,7 +18,7 @@
 #if !defined(MODULE_VISUALS_NATIVEWINDOW_H_INCLUDED)
 #define MODULE_VISUALS_NATIVEWINDOW_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "Module/Visuals/NativeIcon.h"
 #include "Module/Visuals/PixelBuffer.h"
 

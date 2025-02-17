@@ -21,14 +21,14 @@
 #include "R/Mil/TokenType.h"
 
 /// @code
-/// class R.Mil.Keywords
+/// class Arcadia.MilKeywords
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.Keywords", R_Mil_Keywords, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.MilKeywords", Arcadia_Mil_Keywords, u8"Arcadia.Object");
 
 /// @brief Create a MIL keywords object.
 /// @return A pointer to this CIL keywords object.
-R_Mil_Keywords*
-R_Mil_Keywords_create
+Arcadia_Mil_Keywords*
+Arcadia_Mil_Keywords_create
   (
     Arcadia_Process* process
   );
@@ -38,10 +38,10 @@ R_Mil_Keywords_create
 /// @param type The type of the keyword
 /// @error Arcadia_Status_Exists The keyword already was added.
 void
-R_Mil_Keywords_add
+Arcadia_Mil_Keywords_add
   (
     Arcadia_Process* process,
-    R_Mil_Keywords* self,
+    Arcadia_Mil_Keywords* self,
     Arcadia_String* string,
     Arcadia_Natural32Value type
   );
@@ -52,10 +52,10 @@ R_Mil_Keywords_add
 /// @param tokenType A pointer to a variable that is assigned the keyword's token type if the string is a keyword. Not modified otherwise.
 /// @return Arcadia_BooleanValue_True if the specified string was a keyword. #Arcadia_BooleanValue_False otherwise.
 Arcadia_BooleanValue
-R_Mil_Keywords_scan
+Arcadia_Mil_Keywords_scan
   (
     Arcadia_Process* process,
-    R_Mil_Keywords* self,
+    Arcadia_Mil_Keywords* self,
     Arcadia_String* string,
     Arcadia_Natural32Value* tokenType
   );

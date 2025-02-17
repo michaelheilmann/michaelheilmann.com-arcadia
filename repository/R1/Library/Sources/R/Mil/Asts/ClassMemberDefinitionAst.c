@@ -22,7 +22,7 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 static void
-R_Mil_ClassMemberDefinitionAst_constructImpl
+Arcadia_Mil_ClassMemberDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -31,20 +31,20 @@ R_Mil_ClassMemberDefinitionAst_constructImpl
   );
 
 static void
-R_Mil_ClassMemberDefinitionAst_visit
+Arcadia_Mil_ClassMemberDefinitionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ClassMemberDefinitionAst* self
+    Arcadia_Mil_ClassMemberDefinitionAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_ClassMemberDefinitionAst_objectTypeOperations = {
-  .construct = &R_Mil_ClassMemberDefinitionAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_ClassMemberDefinitionAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_ClassMemberDefinitionAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_ClassMemberDefinitionAst_visit,
+  .visit = &Arcadia_Mil_ClassMemberDefinitionAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_ClassMemberDefinitionAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_ClassMemberDefinitionAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_ClassMemberDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_ClassMemberDefinitionAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -63,10 +63,10 @@ static const Arcadia_Type_Operations _R_Mil_ClassMemberDefinitionAst_typeOperati
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, u8"R.Mil.DefinitionAst", R_Mil_DefinitionAst, &_R_Mil_ClassMemberDefinitionAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.ClassMemberDefinitionAst", Arcadia_Mil_ClassMemberDefinitionAst, u8"Arcadia.Mil.DefinitionAst", Arcadia_Mil_DefinitionAst, &_Arcadia_Mil_ClassMemberDefinitionAst_typeOperations);
 
 static void
-R_Mil_ClassMemberDefinitionAst_constructImpl
+Arcadia_Mil_ClassMemberDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -74,8 +74,8 @@ R_Mil_ClassMemberDefinitionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_ClassMemberDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_ClassMemberDefinitionAst_getType(process);
+  Arcadia_Mil_ClassMemberDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_ClassMemberDefinitionAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -88,10 +88,10 @@ R_Mil_ClassMemberDefinitionAst_constructImpl
 }
 
 static void
-R_Mil_ClassMemberDefinitionAst_visit
+Arcadia_Mil_ClassMemberDefinitionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ClassMemberDefinitionAst* self
+    Arcadia_Mil_ClassMemberDefinitionAst* self
   )
 {/*Intentionally empty.*/}
 

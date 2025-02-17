@@ -18,18 +18,18 @@
 #if !defined(R_MIL_PARSER_H_INCLUDED)
 #define R_MIL_PARSER_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Mil/Ast.h"
 
 /// @code
-/// class R.Mil.Parser
+/// class Arcadia.MilParser
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.Parser", R_Mil_Parser, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.Parser", Arcadia_Mil_Parser, u8"Arcadia.Object");
 
 /// @brief Create a MIL parser.
 /// @return A pointer to this MIL parser.
-R_Mil_Parser*
-R_Mil_Parser_create
+Arcadia_Mil_Parser*
+Arcadia_Mil_Parser_create
   (
     Arcadia_Process* process
   );
@@ -37,22 +37,22 @@ R_Mil_Parser_create
 /// @brief Translate the token stream into an AST.
 /// @param self A pointer to this MIL parser.
 /// @return A pointer to the MIL AST.
-R_Mil_ModuleAst*
-R_Mil_Parser_run
+Arcadia_Mil_ModuleAst*
+Arcadia_Mil_Parser_run
   (
     Arcadia_Process* process,
-    R_Mil_Parser* self
+    Arcadia_Mil_Parser* self
   );
 
 /// @brief Set the input.
 /// @param self A pointer to this MIL parser.
 /// @param input A pointer to the UTF8 reader.
 void
-R_Mil_Parser_setInput
+Arcadia_Mil_Parser_setInput
   (
     Arcadia_Process* process,
-    R_Mil_Parser* self,
-    R_Utf8Reader* input
+    Arcadia_Mil_Parser* self,
+    Arcadia_Utf8Reader* input
   );
 
 #endif // R_MIL_PARSER_H_INCLUDED

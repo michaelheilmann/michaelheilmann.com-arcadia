@@ -18,7 +18,7 @@
 #if !defined(MODULE_VISUALS_NATIVEWINDOWSICON_H_INCLUDED)
 #define MODULE_VISUALS_NATIVEWINDOWSICON_H_INCLUDED
  
-#include "R.h"
+#include "R/Include.h"
 #include "Module/Visuals/NativeIcon.h"
 
 #include <stdint.h>

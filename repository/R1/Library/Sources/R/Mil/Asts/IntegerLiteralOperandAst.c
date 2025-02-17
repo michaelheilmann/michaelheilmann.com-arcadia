@@ -22,7 +22,7 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 static void
-R_Mil_IntegerLiteralOperandAst_constructImpl
+Arcadia_Mil_IntegerLiteralOperandAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -31,20 +31,20 @@ R_Mil_IntegerLiteralOperandAst_constructImpl
   );
 
 static void
-R_Mil_IntegerLiteralOperandAst_visit
+Arcadia_Mil_IntegerLiteralOperandAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_IntegerLiteralOperandAst* self
+    Arcadia_Mil_IntegerLiteralOperandAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_IntegerLiteralOperandAst_objectTypeOperations = {
-  .construct = &R_Mil_IntegerLiteralOperandAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_IntegerLiteralOperandAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_IntegerLiteralOperandAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_IntegerLiteralOperandAst_visit,
+  .visit = &Arcadia_Mil_IntegerLiteralOperandAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_IntegerLiteralOperandAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_IntegerLiteralOperandAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_IntegerLiteralOperandAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_IntegerLiteralOperandAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -63,10 +63,10 @@ static const Arcadia_Type_Operations _R_Mil_IntegerLiteralOperandAst_typeOperati
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.IntegerLiteralOperandAst", R_Mil_IntegerLiteralOperandAst, u8"R.Mil.OperandAst", R_Mil_OperandAst, &_R_Mil_IntegerLiteralOperandAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.IntegerLiteralOperandAst", Arcadia_Mil_IntegerLiteralOperandAst, u8"Arcadia.Mil.OperandAst", Arcadia_Mil_OperandAst, &_Arcadia_Mil_IntegerLiteralOperandAst_typeOperations);
 
 static void
-R_Mil_IntegerLiteralOperandAst_constructImpl
+Arcadia_Mil_IntegerLiteralOperandAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -74,8 +74,8 @@ R_Mil_IntegerLiteralOperandAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_IntegerLiteralOperandAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_IntegerLiteralOperandAst_getType(process);
+  Arcadia_Mil_IntegerLiteralOperandAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_IntegerLiteralOperandAst_getType(process);
 
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
@@ -101,22 +101,22 @@ R_Mil_IntegerLiteralOperandAst_constructImpl
 }
 
 static void
-R_Mil_IntegerLiteralOperandAst_visit
+Arcadia_Mil_IntegerLiteralOperandAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_IntegerLiteralOperandAst* self
+    Arcadia_Mil_IntegerLiteralOperandAst* self
   )
 { Arcadia_Object_visit(process, self->value); }
 
-R_Mil_IntegerLiteralOperandAst*
-R_Mil_IntegerLiteralOperandAst_create
+Arcadia_Mil_IntegerLiteralOperandAst*
+Arcadia_Mil_IntegerLiteralOperandAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* value
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)value } };
-  R_Mil_IntegerLiteralOperandAst* self = R_allocateObject(process, _R_Mil_IntegerLiteralOperandAst_getType(process), 1, &argumentValues[0]);
+  Arcadia_Mil_IntegerLiteralOperandAst* self = R_allocateObject(process, _Arcadia_Mil_IntegerLiteralOperandAst_getType(process), 1, &argumentValues[0]);
   return self;
 }
 

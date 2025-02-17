@@ -15,22 +15,25 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_EXPRESSIONAST_H_INCLUDED)
-#define R_MIL_ASTS_EXPRESSIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_EXPRESSIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_EXPRESSIONAST_H_INCLUDED
 
-#include "R.h"
+#include "R/Mil/Asts/Ast.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.ExpressionAst
+/// class Arcadia.Mil.ExpressionAst
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.ExpressionAst", R_Mil_ExpressionAst, u8"Arcadia.Object");
+/// represents
+/// @code
+/// @endcode
+Rex_declareObjectType(u8"Arcadia.Mil.ExpressionAst", Arcadia_Mil_ExpressionAst, u8"Arcadia.Mil.Ast");
 
-struct R_Mil_ExpressionAst {
-  Arcadia_Object _parent;
+struct Arcadia_Mil_ExpressionAst {
+  Arcadia_Mil_Ast _parent;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_EXPRESSIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_EXPRESSIONAST_H_INCLUDED

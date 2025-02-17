@@ -38,6 +38,7 @@
 
 #include "Arcadia/Ring1/Implementation/Size.h"
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoInteger8Value
   (
@@ -45,6 +46,7 @@ Arcadia_isPowerOfTwoInteger8Value
     Arcadia_Integer8Value x
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoInteger16Value
   (
@@ -52,6 +54,7 @@ Arcadia_isPowerOfTwoInteger16Value
     Arcadia_Integer16Value x
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoInteger32Value
   (
@@ -59,6 +62,7 @@ Arcadia_isPowerOfTwoInteger32Value
     Arcadia_Integer32Value x
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoInteger64Value
   (
@@ -66,6 +70,7 @@ Arcadia_isPowerOfTwoInteger64Value
     Arcadia_Integer64Value x
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoNatural8Value
   (
@@ -73,6 +78,7 @@ Arcadia_isPowerOfTwoNatural8Value
     Arcadia_Natural8Value x
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoNatural16Value
   (
@@ -80,6 +86,7 @@ Arcadia_isPowerOfTwoNatural16Value
     Arcadia_Natural16Value x
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoNatural32Value
   (
@@ -87,6 +94,7 @@ Arcadia_isPowerOfTwoNatural32Value
     Arcadia_Natural32Value x
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoNatural64Value
   (
@@ -94,6 +102,7 @@ Arcadia_isPowerOfTwoNatural64Value
     Arcadia_Natural64Value x
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isPowerOfTwo
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoSizeValue
   (

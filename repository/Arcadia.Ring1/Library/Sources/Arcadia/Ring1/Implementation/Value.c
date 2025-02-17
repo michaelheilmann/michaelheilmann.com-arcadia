@@ -20,6 +20,8 @@
 
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include "Arcadia/Ring1/Implementation/hash.h"
+#include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
 #include "Arcadia/Ring1/Implementation/Object.h"
 // exit, EXIT_FAILURE
 #include <stdlib.h>
@@ -112,8 +114,10 @@ Arcadia_Value_visit
       /* Intentionally empty. */
     } break;
     case Arcadia_ValueTag_ImmutableByteArray: {
-      Arcadia_ImmutableByteArray_visit(Arcadia_Process_getBackendNoLock(process), self->immutableByteArrayValue);
-      /* Intentionally empty. */
+      Arcadia_ImmutableByteArray_visit(Arcadia_Process_getProcess1(process), self->immutableByteArrayValue);
+    } break;
+    case Arcadia_ValueTag_ImmutableUtf8String: {
+      Arcadia_ImmutableUtf8String_visit(Arcadia_Process_getProcess1(process), self->immutableUtf8StringValue);
     } break;
     case Arcadia_ValueTag_Integer16: {
       /* Intentionally empty. */
@@ -173,7 +177,7 @@ Arcadia_Value_getType
 { 
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      return _Arcadia_Atom_getType(process);
+      return _Arcadia_AtomValue_getType(process);
     } break;
     case Arcadia_ValueTag_Boolean: {
       return _Arcadia_BooleanValue_getType(process);
@@ -182,7 +186,10 @@ Arcadia_Value_getType
       return _Arcadia_ForeignProcedureValue_getType(process);
     } break;
     case Arcadia_ValueTag_ImmutableByteArray: {
-      return _Arcadia_ImmutableByteArray_getType(process);
+      return _Arcadia_ImmutableByteArrayValue_getType(process);
+    } break;
+    case Arcadia_ValueTag_ImmutableUtf8String: {
+      return _Arcadia_ImmutableUtf8StringValue_getType(process);
     } break;
     case Arcadia_ValueTag_Integer16: {
       return _Arcadia_Integer16Value_getType(process);
@@ -260,6 +267,8 @@ Arcadia_Value_isEqualTo
     } break;
     OnRelational(Boolean, equalTo);
     OnRelational(ForeignProcedure, equalTo);
+    OnRelational(ImmutableByteArray, equalTo);
+    OnRelational(ImmutableUtf8String, equalTo);
     OnRelational(Integer16, equalTo);
     OnRelational(Integer32, equalTo);
     OnRelational(Integer64, equalTo);
@@ -305,6 +314,8 @@ Arcadia_Value_isNotEqualTo
     } break;
     OnRelational(Boolean, notEqualTo);
     OnRelational(ForeignProcedure, notEqualTo);
+    OnRelational(ImmutableByteArray, notEqualTo);
+    OnRelational(ImmutableUtf8String, notEqualTo);
     OnRelational(Integer16, notEqualTo);
     OnRelational(Integer32, notEqualTo);
     OnRelational(Integer64, notEqualTo);
@@ -348,6 +359,8 @@ Arcadia_Value_isLowerThan
     } break;
     OnRelational(Boolean, lowerThan);
     OnRelational(ForeignProcedure, lowerThan);
+    OnRelational(ImmutableByteArray, lowerThan);
+    OnRelational(ImmutableUtf8String, lowerThan);
     OnRelational(Integer16, lowerThan);
     OnRelational(Integer32, lowerThan);
     OnRelational(Integer64, lowerThan);
@@ -394,6 +407,8 @@ Arcadia_Value_isLowerThanOrEqualTo
     } break;
     OnRelational(Boolean, lowerThanOrEqualTo);
     OnRelational(ForeignProcedure, lowerThanOrEqualTo);
+    OnRelational(ImmutableByteArray, lowerThanOrEqualTo);
+    OnRelational(ImmutableUtf8String, lowerThanOrEqualTo);
     OnRelational(Integer16, lowerThanOrEqualTo);
     OnRelational(Integer32, lowerThanOrEqualTo);
     OnRelational(Integer64, lowerThanOrEqualTo);
@@ -440,6 +455,8 @@ Arcadia_Value_isGreaterThan
     } break;
     OnRelational(Boolean, greaterThan);
     OnRelational(ForeignProcedure, greaterThan);
+    OnRelational(ImmutableByteArray, greaterThan);
+    OnRelational(ImmutableUtf8String, greaterThan);
     OnRelational(Integer16, greaterThan);
     OnRelational(Integer32, greaterThan);
     OnRelational(Integer64, greaterThan);
@@ -486,6 +503,8 @@ Arcadia_Value_isGreaterThanOrEqualTo
     } break;
     OnRelational(Boolean, greaterThanOrEqualTo);
     OnRelational(ForeignProcedure, greaterThanOrEqualTo);
+    OnRelational(ImmutableByteArray, greaterThanOrEqualTo);
+    OnRelational(ImmutableUtf8String, greaterThanOrEqualTo);
     OnRelational(Integer16, greaterThanOrEqualTo);
     OnRelational(Integer32, greaterThanOrEqualTo);
     OnRelational(Integer64, greaterThanOrEqualTo);
@@ -542,6 +561,8 @@ Arcadia_Value_getHash
     } break;
     OnHash(Boolean);
     OnHash(ForeignProcedure);
+    OnHash(ImmutableByteArray);
+    OnHash(ImmutableUtf8String);
     OnHash(Integer16);
     OnHash(Integer32);
     OnHash(Integer64);

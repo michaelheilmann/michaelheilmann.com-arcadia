@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "R.h"
+#include "R/Include.h"
 
 void
 main1
@@ -27,7 +27,7 @@ main1
     char** argv
   )
 {
-  Arcadia_String* s = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1));
+  Arcadia_String* s = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1));
   Arcadia_Object_lock(process, s);
   Arcadia_Process_stepArms(process);
   Arcadia_Process_stepArms(process);
@@ -41,27 +41,20 @@ main
     char** argv
   )
 {
-  Arcadia_Status status[2];
-  status[0] = R_startup();
-  if (status[0]) {
-    return EXIT_FAILURE;
-  }
   Arcadia_Process* process = NULL;
   if (Arcadia_Process_get(&process)) {
-    R_shutdown();
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
-    Arcadia_Process_popJumpTarget(process);
   }
-  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Process_popJumpTarget(process);
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
   Arcadia_Process_relinquish(process);
   process = NULL;
-  status[1] = R_shutdown();
-  if (status[1] || status[0]) {
+  if (status) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

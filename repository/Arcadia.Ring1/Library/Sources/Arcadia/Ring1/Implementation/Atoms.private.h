@@ -18,43 +18,13 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_ATOMS_PRIVATE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_ATOMS_PRIVATE_H_INCLUDED
 
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
+
 #include "Arcadia/Ring1/Implementation/Atoms.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 
-/// @brief Startup the atoms module.
-/// @warning Internal function.
-void
-Arcadia_Atoms_startup
-  (
-    Arcadia_Process1* process
-  );
-
-/// @brief Shutdown the atoms module.
-/// @warning Internal function.
-void
-Arcadia_Atoms_shutdown
-  (
-    Arcadia_Process1* process
-  );
-
-/// @brief Must be invoked before the pre mark phase.
-/// @remarks
-/// This marks all atoms.
-/// if now - lastVisited > threshold then the atom is marked live unless purgeCache is true
-/// otherwise it is marked dead
-/// @warning Internal function.
-void
-Arcadia_Atoms_onPreMark
-  (
-    Arcadia_Process1* process,
-    Arcadia_BooleanValue purgeCache
-  );
-
-/// @brief Must be invoked after the finalize phase.
-/// @warning Internal function.
-void
-Arcadia_Atoms_onFinalize
-  (
-    Arcadia_Process1* process
-  );
+Arcadia_DeclareModule("Arcadia.Atoms", Arcadia_Atoms);
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_ATOMS_PRIVATE_H_INCLUDED

@@ -17,7 +17,7 @@
 
 #include "R/Interpreter/ProcessState.private.h"
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Interpreter/Include.h"
 
 static R_Interpreter_ProcessState* g_singleton = NULL;
@@ -45,7 +45,7 @@ R_Interpreter_ProcessState_startup
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     singleton->constants = R_Interpreter_Code_Constants_create(process);
-    singleton->globals = R_Map_create(process);
+    singleton->globals = Arcadia_Map_create(process);
     Arcadia_Process_popJumpTarget(process);
   } else {
     Arcadia_Process_popJumpTarget(process);
@@ -120,13 +120,13 @@ R_Interpreter_ProcessState_defineGlobalProcedure
     Arcadia_Process_jump(process);
   }
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = procedure->unqualifiedName };
-  Arcadia_Value value = R_Map_get(process, self->globals, key);
+  Arcadia_Value value = Arcadia_Map_get(process, self->globals, key);
   if (!Arcadia_Value_isVoidValue(&value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
     Arcadia_Process_jump(process);
   }
   value = (Arcadia_Value){ .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = procedure };
-  R_Map_set(process, self->globals, key, value);
+  Arcadia_Map_set(process, self->globals, key, value);
 }
 
 void
@@ -142,13 +142,13 @@ R_Interpreter_ProcessState_defineGlobalClass
     Arcadia_Process_jump(process);
   }
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = class->className };
-  Arcadia_Value value = R_Map_get(process, self->globals, key);
+  Arcadia_Value value = Arcadia_Map_get(process, self->globals, key);
   if (!Arcadia_Value_isVoidValue(&value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
     Arcadia_Process_jump(process);
   }
   value = (Arcadia_Value){ .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = class };
-  R_Map_set(process, self->globals, key, value);
+  Arcadia_Map_set(process, self->globals, key, value);
 }
 
 Arcadia_Value
@@ -164,7 +164,7 @@ R_Interpreter_ProcessState_getGlobal
     Arcadia_Process_jump(process);
   }
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
-  Arcadia_Value value = R_Map_get(process, self->globals, key);
+  Arcadia_Value value = Arcadia_Map_get(process, self->globals, key);
   if (Arcadia_Value_isVoidValue(&value)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_NotExists);
     Arcadia_Process_jump(process);

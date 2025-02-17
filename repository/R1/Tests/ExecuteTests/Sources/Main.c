@@ -17,52 +17,12 @@
 
 #include <stdlib.h>
 
-#include "R.h"
-
-static Arcadia_BooleanValue
-safeExecute
-  (
-    Arcadia_ForeignProcedureValue f
-  )
-{
-  bool result = true;
-  Arcadia_Status status = R_startup();
-  if (status) {
-    result = false;
-    return result;
-  }
-  Arcadia_Process* process = NULL;
-  if (Arcadia_Process_get(&process)) {
-    R_shutdown();
-    result = false;
-    return result;
-  }
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Value targetValue;
-    Arcadia_Value argumentValues[1];
-    (*f)(process, &targetValue, 0, &argumentValues[0]);
-  } else {
-    result = false;
-  }
-  Arcadia_Process_popJumpTarget(process);
-  Arcadia_Process_relinquish(process);
-  process = NULL;
-  status = R_shutdown();
-  if (status) {
-    result = false;
-  }
-  return result;
-}
+#include "R/Include.h"
 
 static void
 execute1
   (
-    Arcadia_Process* process,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Process* process
   )
 {
   R_Interpreter_ProcessState_startup(process);
@@ -75,7 +35,7 @@ execute1
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_append(process, code, codeBytes, 1);
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);
@@ -90,10 +50,7 @@ execute1
 static void
 execute2
   (
-    Arcadia_Process* process,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Process* process
   )
 {
   R_Interpreter_ProcessState_startup(process);
@@ -116,7 +73,7 @@ execute2
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Register, 2);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0);
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1);
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);
@@ -143,10 +100,7 @@ print
 static void
 execute3
   (
-    Arcadia_Process* process,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Process* process
   )
 {
   R_Interpreter_ProcessState_startup(process);
@@ -160,7 +114,7 @@ execute3
       Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
       Arcadia_Process_jump(process);
     }
-    if (1 != R_Interpreter_Code_Constants_getOrCreateString(process, constants, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
+    if (1 != R_Interpreter_Code_Constants_getOrCreateString(process, constants, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
       Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
       Arcadia_Process_jump(process);
     }
@@ -170,7 +124,7 @@ execute3
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0); // calleee
     R_Interpreter_Code_appendCountNatural8(process, code, 1); // number of arguments
     R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), u8"main", sizeof(u8"main") - 1)), code));
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
     Arcadia_Process_popJumpTarget(process);
@@ -189,13 +143,13 @@ main
     char **argv
   )
 {
-  if (!safeExecute(&execute1)) {
+  if (!Arcadia_Tests_safeExecute(&execute1)) {
     return EXIT_FAILURE;
   }
-  if (!safeExecute(&execute2)) {
+  if (!Arcadia_Tests_safeExecute(&execute2)) {
     return EXIT_FAILURE;
   }
-  if (!safeExecute(&execute3)) {
+  if (!Arcadia_Tests_safeExecute(&execute3)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

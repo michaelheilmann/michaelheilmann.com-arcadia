@@ -19,7 +19,7 @@
 #define ARCADIA_RING1_IMPLEMENTATION_TYPES_PRIVATE_H_INCLUDED
 
 #if !defined(ARCADIA_RING1_PRIVATE)
-#error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 #include "Arcadia/Ring1/Implementation/Configure.h"
 #include "Arcadia/Ring1/Include.h"
@@ -37,37 +37,6 @@ struct TypeNode {
   Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing;
 };
 
-/// @brief Startup the type system
-/// @warning Internal function.
-void
-Arcadia_Types_startup
-  (
-    Arcadia_Process1* process
-  );
-
-/// @brief Shutdown the type system.
-/// @warning Internal function.
-void
-Arcadia_Types_shutdown
-  (
-    Arcadia_Process1* process
-  );
-
-/// @brief Must be invoked before the pre mark phase.
-/// @warning Internal function.
-void
-Arcadia_Types_onPreMark
-  (
-    Arcadia_Process1* process,
-    Arcadia_BooleanValue purgeCache
-  );
-
-/// @brief Must be invoked after the finalize phase.
-/// @warning Internal function.
-void
-Arcadia_Types_onFinalize
-  (
-    Arcadia_Process1* process
-  );
+Arcadia_DeclareModule("Arcadia.Types", Arcadia_Types);
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_TYPES_PRIVATE_H_INCLUDED

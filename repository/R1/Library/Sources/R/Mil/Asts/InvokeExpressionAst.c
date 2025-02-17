@@ -23,10 +23,10 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// construct(callee:R.Mil.VariableOperandAst,operands:R.List)
+/// construct(callee:Arcadia.MilVariableOperandAst,operands:R.List)
 /// @endcode
 static void
-R_Mil_InvokeExpressionAst_constructImpl
+Arcadia_Mil_InvokeExpressionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -35,20 +35,20 @@ R_Mil_InvokeExpressionAst_constructImpl
   );
 
 static void
-R_Mil_InvokeExpressionAst_visit
+Arcadia_Mil_InvokeExpressionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_InvokeExpressionAst* self
+    Arcadia_Mil_InvokeExpressionAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_InvokeExpressionAst_objectTypeOperations = {
-  .construct = &R_Mil_InvokeExpressionAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_InvokeExpressionAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_InvokeExpressionAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_InvokeExpressionAst_visit,
+  .visit = &Arcadia_Mil_InvokeExpressionAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_InvokeExpressionAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_InvokeExpressionAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_InvokeExpressionAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_InvokeExpressionAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -67,10 +67,10 @@ static const Arcadia_Type_Operations _R_Mil_InvokeExpressionAst_typeOperations =
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.InvokeExpressionAst", R_Mil_InvokeExpressionAst, u8"Arcadia.Object", Arcadia_Object, &_R_Mil_InvokeExpressionAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.InvokeExpressionAst", Arcadia_Mil_InvokeExpressionAst, u8"Arcadia.Object", Arcadia_Object, &_Arcadia_Mil_InvokeExpressionAst_typeOperations);
 
 void
-R_Mil_InvokeExpressionAst_constructImpl
+Arcadia_Mil_InvokeExpressionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -78,8 +78,8 @@ R_Mil_InvokeExpressionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_InvokeExpressionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_InvokeExpressionAst_getType(process);
+  Arcadia_Mil_InvokeExpressionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_InvokeExpressionAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { { .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -90,11 +90,11 @@ R_Mil_InvokeExpressionAst_constructImpl
     Arcadia_Process_jump(process);
   }
 
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _R_Mil_VariableOperandAst_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_Mil_VariableOperandAst_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _R_List_getType(process))) {
+  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _Arcadia_List_getType(process))) {
     Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Process_jump(process);
   }
@@ -106,27 +106,27 @@ R_Mil_InvokeExpressionAst_constructImpl
 }
 
 static void
-R_Mil_InvokeExpressionAst_visit
+Arcadia_Mil_InvokeExpressionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_InvokeExpressionAst* self
+    Arcadia_Mil_InvokeExpressionAst* self
   )
 {
   Arcadia_Object_visit(process, self->callee);
   Arcadia_Object_visit(process, self->operands);
 }
 
-R_Mil_InvokeExpressionAst*
-R_Mil_InvokeExpressionAst_create
+Arcadia_Mil_InvokeExpressionAst*
+Arcadia_Mil_InvokeExpressionAst_create
   (
     Arcadia_Process* process,
-    R_Mil_VariableOperandAst* callee,
-    R_List* operands
+    Arcadia_Mil_VariableOperandAst* callee,
+    Arcadia_List* operands
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)callee },
                                {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)operands }, };
-  R_Mil_InvokeExpressionAst* self = R_allocateObject(process, _R_Mil_InvokeExpressionAst_getType(process), 2, &argumentValues[0]);
+  Arcadia_Mil_InvokeExpressionAst* self = R_allocateObject(process, _Arcadia_Mil_InvokeExpressionAst_getType(process), 2, &argumentValues[0]);
   return self;
 }
 

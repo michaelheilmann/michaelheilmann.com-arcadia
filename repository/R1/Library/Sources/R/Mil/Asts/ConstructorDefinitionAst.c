@@ -25,7 +25,7 @@
 /// constructor(constructorParameters:R.List, constructorBody:R.List)
 /// @endcode
 static void
-R_Mil_ConstructorDefinitionAst_constructImpl
+Arcadia_Mil_ConstructorDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -34,20 +34,20 @@ R_Mil_ConstructorDefinitionAst_constructImpl
   );
 
 static void
-R_Mil_ConstructorDefinitionAst_visit
+Arcadia_Mil_ConstructorDefinitionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ConstructorDefinitionAst* self
+    Arcadia_Mil_ConstructorDefinitionAst* self
   );
 
-static const Arcadia_ObjectType_Operations _R_Mil_ConstructorDefinitionAst_objectTypeOperations = {
-  .construct = &R_Mil_ConstructorDefinitionAst_constructImpl,
+static const Arcadia_ObjectType_Operations _Arcadia_Mil_ConstructorDefinitionAst_objectTypeOperations = {
+  .construct = &Arcadia_Mil_ConstructorDefinitionAst_constructImpl,
   .destruct = NULL,
-  .visit = &R_Mil_ConstructorDefinitionAst_visit,
+  .visit = &Arcadia_Mil_ConstructorDefinitionAst_visit,
 };
 
-static const Arcadia_Type_Operations _R_Mil_ConstructorDefinitionAst_typeOperations = {
-  .objectTypeOperations = &_R_Mil_ConstructorDefinitionAst_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Mil_ConstructorDefinitionAst_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Mil_ConstructorDefinitionAst_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -66,10 +66,10 @@ static const Arcadia_Type_Operations _R_Mil_ConstructorDefinitionAst_typeOperati
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"R.Mil.ConstructorDefinitionAst", R_Mil_ConstructorDefinitionAst, u8"R.Mil.ClassMemberDefinitionAst", R_Mil_ClassMemberDefinitionAst, &_R_Mil_ConstructorDefinitionAst_typeOperations);
+Rex_defineObjectType(u8"Arcadia.Mil.ConstructorDefinitionAst", Arcadia_Mil_ConstructorDefinitionAst, u8"Arcadia.Mil.ClassMemberDefinitionAst", Arcadia_Mil_ClassMemberDefinitionAst, &_Arcadia_Mil_ConstructorDefinitionAst_typeOperations);
 
 static void
-R_Mil_ConstructorDefinitionAst_constructImpl
+Arcadia_Mil_ConstructorDefinitionAst_constructImpl
   (
     Arcadia_Process* process,
     Arcadia_Value* self,
@@ -77,8 +77,8 @@ R_Mil_ConstructorDefinitionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  R_Mil_ConstructorDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Mil_ConstructorDefinitionAst_getType(process);
+  Arcadia_Mil_ConstructorDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Mil_ConstructorDefinitionAst_getType(process);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -88,16 +88,16 @@ R_Mil_ConstructorDefinitionAst_constructImpl
     Arcadia_Process_jump(process);
   }
   _self->nativeName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[0], _Arcadia_String_getType(process));
-  _self->constructorParameters = (R_List*)R_Argument_getObjectReferenceValue(process, &argumentValues[1], _R_List_getType(process));
-  _self->constructorBody = (R_List*)R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[2], _R_List_getType(process));
+  _self->constructorParameters = (Arcadia_List*)R_Argument_getObjectReferenceValue(process, &argumentValues[1], _Arcadia_List_getType(process));
+  _self->constructorBody = (Arcadia_List*)R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[2], _Arcadia_List_getType(process));
   Arcadia_Object_setType(process, _self, _type);
 }
 
 static void
-R_Mil_ConstructorDefinitionAst_visit
+Arcadia_Mil_ConstructorDefinitionAst_visit
   (
     Arcadia_Process* process,
-    R_Mil_ConstructorDefinitionAst* self
+    Arcadia_Mil_ConstructorDefinitionAst* self
   )
 {
   Arcadia_Object_visit(process, self->nativeName);
@@ -105,13 +105,13 @@ R_Mil_ConstructorDefinitionAst_visit
   Arcadia_Object_visit(process, self->constructorBody);
 }
 
-R_Mil_ConstructorDefinitionAst*
-R_Mil_ConstructorDefinitionAst_create
+Arcadia_Mil_ConstructorDefinitionAst*
+Arcadia_Mil_ConstructorDefinitionAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* nativeName,
-    R_List* constructorParameters,
-    R_List* constructorBody
+    Arcadia_List* constructorParameters,
+    Arcadia_List* constructorBody
   )
 {
   Arcadia_Value argumentValues[] = {
@@ -125,7 +125,7 @@ R_Mil_ConstructorDefinitionAst_create
   if (constructorBody) {
     Arcadia_Value_setObjectReferenceValue(&argumentValues[2], constructorBody);
   }
-  R_Mil_ConstructorDefinitionAst* self = R_allocateObject(process, _R_Mil_ConstructorDefinitionAst_getType(process), 3, &argumentValues[0]);
+  Arcadia_Mil_ConstructorDefinitionAst* self = R_allocateObject(process, _Arcadia_Mil_ConstructorDefinitionAst_getType(process), 3, &argumentValues[0]);
   return self;
 }
 

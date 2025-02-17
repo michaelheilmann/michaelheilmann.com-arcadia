@@ -17,28 +17,46 @@
 
 #include "readWrite.h"
 
-#include "R.h"
+#include "R/Include.h"
 
-void
-R1_Tests_Utf8_readWrite
+/// @brief
+/// - create a Byte buffer holding the sequence (source)
+/// - create an empty Byte buffer (target)
+/// - read its unicode code points using Utf8ByteBufferReader from source
+/// - write each unicode code point into target using Utf8ByteBufferWriter
+/// - compare the contents of both Byte buffer
+/// - success if thes contents are equal
+/// - failure otherwise
+static void
+onReadWrite
   (
     Arcadia_Process* process,
     char const* p,
     size_t n
   )
 {
-  R_ByteBuffer* sourceByteBuffer = R_ByteBuffer_create(process);
-  R_ByteBuffer_append_pn(process, sourceByteBuffer, p, n);
-  R_ByteBuffer* targetByteBuffer = R_ByteBuffer_create(process);
-  R_Utf8Reader* reader = (R_Utf8Reader*)R_Utf8ByteBufferReader_create(process, sourceByteBuffer);
-  R_Utf8Writer* writer = (R_Utf8Writer*)R_Utf8ByteBufferWriter_create(process, targetByteBuffer);
-  while (R_Utf8Reader_hasCodePoint(process, reader)) {
-    Arcadia_Natural32Value codePoint = R_Utf8Reader_getCodePoint(process, reader);
-    R_Utf8Writer_writeCodePoints(process, writer, &codePoint, 1);
-    R_Utf8Reader_next(process, reader);
+  Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_ByteBuffer_create(process);
+  Arcadia_ByteBuffer_append_pn(process, sourceByteBuffer, p, n);
+  Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(process);
+  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(process, sourceByteBuffer);
+  Arcadia_Utf8Writer* writer = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, targetByteBuffer);
+  while (Arcadia_Utf8Reader_hasCodePoint(process, reader)) {
+    Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(process, reader);
+    Arcadia_Utf8Writer_writeCodePoints(process, writer, &codePoint, 1);
+    Arcadia_Utf8Reader_next(process, reader);
   }
-  if (!R_ByteBuffer_isEqualTo(sourceByteBuffer, targetByteBuffer)) {
+  if (!Arcadia_ByteBuffer_isEqualTo(process, sourceByteBuffer, targetByteBuffer)) {
     Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
     Arcadia_Process_jump(process);
   }
+}
+
+void
+Arcadia_Tests_Utf8_readWrite1
+  (
+    Arcadia_Process* process
+  )
+{
+  onReadWrite(process, u8"abc", sizeof(u8"abc") - 1);
+  onReadWrite(process, u8"xyz", sizeof(u8"xyz") - 1);
 }

@@ -18,10 +18,12 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_PROCESS_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_PROCESS_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/NoReturn.h"
+#include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 #include "Arcadia/Ring1/Implementation/Process1.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
 #include <stdint.h>
-#include <setjmp.h>
+typedef struct Arcadia_ValueStack Arcadia_ValueStack;
+typedef struct Arcadia_Value Arcadia_Value;
 
 /// the process object provides access to the current thread.
 /// the current thread provides access to the thread's jump target stack and the thread's status variable.
@@ -193,7 +195,8 @@ Arcadia_Process_stepArms
 Arcadia_Status
 Arcadia_Process_runArms
   (
-    Arcadia_Process* process
+    Arcadia_Process* process,
+    bool purgeCaches
   );
 
 void
@@ -218,11 +221,32 @@ Arcadia_Process_allocate
     size_t size
   );
 
-/// @return A pointer to the Arcadia_Process1 object.
+/// @return A pointer to the backing process object.
 Arcadia_Process1*
-Arcadia_Process_getBackendNoLock
+Arcadia_Process_getProcess1
   (
     Arcadia_Process* process
   );
 
-#endif // R_JUMPTARGET_H_INCLUDED
+/// @return A pointer to the stack.
+Arcadia_ValueStack*
+Arcadia_Process_getStack
+  (
+    Arcadia_Process* process
+  );
+
+/// @brief Invoke a foreign procedure with the specified arguments.
+/// Store the return value in result if the foreign procedure terminates with success.
+/// Store void in return value if the foreign procedure terminates with failure.
+/// The status variable indicates if the foreign procedure terminated with success or with failure.
+void
+Arcadia_Process_safeInvoke
+  (
+    Arcadia_Process* process,
+    Arcadia_ForeignProcedure* procedure,
+    Arcadia_Value* targetValue,
+    Arcadia_SizeValue numberOfArgumentValues,
+    Arcadia_Value* argumentValues
+  );
+
+#endif // ARCADIA_RING1_IMPLEMENTATION_PROCESS_H_INCLUDED

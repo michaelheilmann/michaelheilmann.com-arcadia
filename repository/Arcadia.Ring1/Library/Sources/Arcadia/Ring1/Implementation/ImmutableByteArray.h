@@ -24,6 +24,7 @@
 
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
+typedef struct Arcadia_Process1 Arcadia_Process1;
 
 /// @brief The immutable byte array representation native to Arcadia Ring 1.
 /// @warning Arcadia_ImmutableByteArray's precondition is an initialized type system.
@@ -73,7 +74,7 @@ Arcadia_ImmutableByteArray_getNumberOfBytes
 
 /// @return A pointer to an "foreign value" type of name "Arcadia.ImmutableByteArray".
 Arcadia_TypeValue
-_Arcadia_ImmutableByteArray_getType
+_Arcadia_ImmutableByteArrayValue_getType
   (
     Arcadia_Process* process
   );

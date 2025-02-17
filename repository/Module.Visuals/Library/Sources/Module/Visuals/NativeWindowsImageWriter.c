@@ -40,7 +40,7 @@ NativeWindowsImageWriter_writePngToByteBufferImpl
     Arcadia_Process* process,
     NativeWindowsImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_ByteBuffer* targetByteBuffer
   );
 
 static void
@@ -58,7 +58,7 @@ NativeWindowsImageWriter_writeBmpToByteBufferImpl
     Arcadia_Process* process,
     NativeWindowsImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_ByteBuffer* targetByteBuffer
   );
 
 // The "Windows Imaging Component" ("WIC") does not provide an encoder for "ico" files.
@@ -75,7 +75,7 @@ NativeWindowsImageWriter_writeIcoToPathImpl
   (
     Arcadia_Process* process,
     NativeWindowsImageWriter* self,
-    R_List* sourcePixelBuffers,
+    Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
   );
 
@@ -84,8 +84,8 @@ NativeWindowsImageWriter_writeIcoToByteBufferImpl
   (
     Arcadia_Process* process,
     NativeWindowsImageWriter* self,
-    R_List* sourcePixelBuffers,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_List* sourcePixelBuffers,
+    Arcadia_ByteBuffer* targetByteBuffer
   );
 
 static IWICImagingFactory* g_piFactory = NULL;
@@ -211,9 +211,9 @@ startup1
   HRESULT hr;
   //
   if (ImageWriterParameters_hasPath(process, parameters)) {
-    R_ByteBuffer* b = R_ByteBuffer_create(process);
-    R_ByteBuffer_append_pn(process, b, Arcadia_String_getBytes(process, ImageWriterParameters_getPath(process, parameters)), Arcadia_String_getNumberOfBytes(process, ImageWriterParameters_getPath(process, parameters)));
-    R_ByteBuffer_append_pn(process, b, u8"", 1);
+    Arcadia_ByteBuffer* b = Arcadia_ByteBuffer_create(process);
+    Arcadia_ByteBuffer_append_pn(process, b, Arcadia_String_getBytes(process, ImageWriterParameters_getPath(process, parameters)), Arcadia_String_getNumberOfBytes(process, ImageWriterParameters_getPath(process, parameters)));
+    Arcadia_ByteBuffer_append_pn(process, b, u8"", 1);
     wchar_t* targetPathW = multiByteToWideChar(b->p);
     if (!targetPathW) {
       Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
@@ -465,7 +465,7 @@ startup3
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Process_pushJumpTarget(process, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      R_ByteBuffer_append_pn(process, ImageWriterParameters_getByteBuffer(process, parameters), p, n);
+      Arcadia_ByteBuffer_append_pn(process, ImageWriterParameters_getByteBuffer(process, parameters), p, n);
       GlobalUnlock(g_hMemory);
       Arcadia_Process_popJumpTarget(process);
     } else {
@@ -546,7 +546,7 @@ NativeWindowsImageWriter_writePngToByteBufferImpl
     Arcadia_Process* process,
     NativeWindowsImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_ByteBuffer* targetByteBuffer
   )
 {
   ImageWriterParameters* imageWriterParameters = ImageWriterParameters_createByteBuffer(process, targetByteBuffer, ImageWriterFormat_Png);
@@ -572,7 +572,7 @@ NativeWindowsImageWriter_writeBmpToByteBufferImpl
     Arcadia_Process* process,
     NativeWindowsImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_ByteBuffer* targetByteBuffer
   )
 {
   ImageWriterParameters* imageWriterParameters = ImageWriterParameters_createByteBuffer(process, targetByteBuffer, ImageWriterFormat_Bmp);
@@ -584,13 +584,13 @@ NativeWindowsImageWriter_writeIcoToPathImpl
   (
     Arcadia_Process* process,
     NativeWindowsImageWriter* self,
-    R_List* sourcePixelBuffers,
+    Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
   )
 {
-  R_ByteBuffer* targetByteBuffer = R_ByteBuffer_create(process);
+  Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(process);
   ImageWriter_writeIcoToByteBuffer(process, (ImageWriter*)self, sourcePixelBuffers, targetByteBuffer);
-  R_FileSystem_setFileContents(process, R_FileSystem_create(process), R_FilePath_parseNative(process, Arcadia_String_getBytes(process, targetPath), Arcadia_String_getNumberOfBytes(process, targetPath)), targetByteBuffer);
+  Arcadia_FileSystem_setFileContents(process, Arcadia_FileSystem_create(process), Arcadia_FilePath_parseNative(process, Arcadia_String_getBytes(process, targetPath), Arcadia_String_getNumberOfBytes(process, targetPath)), targetByteBuffer);
 }
 
 static void
@@ -598,8 +598,8 @@ NativeWindowsImageWriter_writeIcoToByteBufferImpl
   (
     Arcadia_Process* process,
     NativeWindowsImageWriter* self,
-    R_List* sourcePixelBuffers,
-    R_ByteBuffer* targetByteBuffer
+    Arcadia_List* sourcePixelBuffers,
+    Arcadia_ByteBuffer* targetByteBuffer
   )
 {
   typedef struct ICONDIR {
@@ -622,14 +622,14 @@ NativeWindowsImageWriter_writeIcoToByteBufferImpl
   ICONDIR iconDir = {
     .reserved1 = 0,
     .type = 1,
-    .numberOfImages = R_List_getSize(sourcePixelBuffers)
+    .numberOfImages = Arcadia_List_getSize(process, sourcePixelBuffers)
   };
-  R_ByteBuffer_append_pn(process, targetByteBuffer, &iconDir, sizeof(ICONDIR));
+  Arcadia_ByteBuffer_append_pn(process, targetByteBuffer, &iconDir, sizeof(ICONDIR));
 
-  R_ByteBuffer* temporary = R_ByteBuffer_create(process);
-  for (Arcadia_SizeValue i = 0, offset = 0, n = R_List_getSize(sourcePixelBuffers); i < n; ++i) {
-    PixelBuffer* pixelBuffer = (PixelBuffer*)R_List_getObjectReferenceValueAt(process, sourcePixelBuffers, i);
-    R_ByteBuffer_clear(temporary);
+  Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(process);
+  for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_List_getSize(process, sourcePixelBuffers); i < n; ++i) {
+    PixelBuffer* pixelBuffer = (PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(process, sourcePixelBuffers, i);
+    Arcadia_ByteBuffer_clear(process, temporary);
     ImageWriter_writePngToByteBuffer(process, (ImageWriter*)self, pixelBuffer, temporary);
     if (PixelFormat_An8Rn8Gn8Bn8 != PixelBuffer_getPixelFormat(pixelBuffer)) {
       Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
@@ -658,17 +658,17 @@ NativeWindowsImageWriter_writeIcoToByteBufferImpl
                                   .reserved1 = 0,
                                   .numberOfColorPlanes = 1,
                                   .numberOfBitsPerPixel = 32,
-                                  .imageSize = R_ByteBuffer_getSize(temporary),
-                                  .offset = sizeof(ICONDIR) + R_List_getSize(sourcePixelBuffers) * sizeof(ICONDIRENTRY) + offset };
-    R_ByteBuffer_append_pn(process, targetByteBuffer, &iconDirEntry, sizeof(ICONDIRENTRY));
-    offset += R_ByteBuffer_getSize(temporary);
+                                  .imageSize = Arcadia_ByteBuffer_getSize(process, temporary),
+                                  .offset = sizeof(ICONDIR) + Arcadia_List_getSize(process, sourcePixelBuffers) * sizeof(ICONDIRENTRY) + offset };
+    Arcadia_ByteBuffer_append_pn(process, targetByteBuffer, &iconDirEntry, sizeof(ICONDIRENTRY));
+    offset += Arcadia_ByteBuffer_getSize(process, temporary);
   }
-  for (Arcadia_SizeValue i = 0, offset = 0, n = R_List_getSize(sourcePixelBuffers); i < n; ++i) {
-    PixelBuffer* pixelBuffer = (PixelBuffer*)R_List_getObjectReferenceValueAt(process, sourcePixelBuffers, i);
-    R_ByteBuffer_clear(temporary);
+  for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_List_getSize(process, sourcePixelBuffers); i < n; ++i) {
+    PixelBuffer* pixelBuffer = (PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(process, sourcePixelBuffers, i);
+    Arcadia_ByteBuffer_clear(process, temporary);
     ImageWriter_writePngToByteBuffer(process, (ImageWriter*)self, pixelBuffer, temporary);
-    R_ByteBuffer_append_pn(process, targetByteBuffer, temporary->p, temporary->sz);
-    offset += R_ByteBuffer_getSize(temporary);
+    Arcadia_ByteBuffer_append_pn(process, targetByteBuffer, temporary->p, temporary->sz);
+    offset += Arcadia_ByteBuffer_getSize(process, temporary);
   }
 }
 
@@ -724,11 +724,11 @@ NativeWindowsImageWriter_constructImpl
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
-  ((ImageWriter*)_self)->writeBmpToByteBuffer = (void (*)(Arcadia_Process*, ImageWriter*, PixelBuffer*,R_ByteBuffer*))NativeWindowsImageWriter_writeBmpToByteBufferImpl;
+  ((ImageWriter*)_self)->writeBmpToByteBuffer = (void (*)(Arcadia_Process*, ImageWriter*, PixelBuffer*,Arcadia_ByteBuffer*))NativeWindowsImageWriter_writeBmpToByteBufferImpl;
   ((ImageWriter*)_self)->writeBmpToPath = (void (*)(Arcadia_Process*, ImageWriter*, PixelBuffer*, Arcadia_String*))NativeWindowsImageWriter_writeBmpToPathImpl;
-  ((ImageWriter*)_self)->writeIcoToByteBuffer = (void (*)(Arcadia_Process*,ImageWriter*, R_List*, R_ByteBuffer*))NativeWindowsImageWriter_writeIcoToByteBufferImpl;
-  ((ImageWriter*)_self)->writeIcoToPath = (void (*)(Arcadia_Process*,ImageWriter*, R_List*, Arcadia_String*))NativeWindowsImageWriter_writeIcoToPathImpl;
-  ((ImageWriter*)_self)->writePngToByteBuffer = (void (*)(Arcadia_Process*,ImageWriter*, PixelBuffer*, R_ByteBuffer*))NativeWindowsImageWriter_writePngToByteBufferImpl;
+  ((ImageWriter*)_self)->writeIcoToByteBuffer = (void (*)(Arcadia_Process*,ImageWriter*, Arcadia_List*, Arcadia_ByteBuffer*))NativeWindowsImageWriter_writeIcoToByteBufferImpl;
+  ((ImageWriter*)_self)->writeIcoToPath = (void (*)(Arcadia_Process*,ImageWriter*, Arcadia_List*, Arcadia_String*))NativeWindowsImageWriter_writeIcoToPathImpl;
+  ((ImageWriter*)_self)->writePngToByteBuffer = (void (*)(Arcadia_Process*,ImageWriter*, PixelBuffer*, Arcadia_ByteBuffer*))NativeWindowsImageWriter_writePngToByteBufferImpl;
   ((ImageWriter*)_self)->writePngToPath = (void (*)(Arcadia_Process*,ImageWriter*, PixelBuffer*, Arcadia_String*))NativeWindowsImageWriter_writePngToPathImpl;
   Arcadia_Object_setType(process, _self, _type);
 }

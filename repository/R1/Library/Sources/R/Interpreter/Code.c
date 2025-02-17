@@ -17,10 +17,9 @@
 
 #include "R/Interpreter/Code.h"
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Interpreter/Include.h"
 #include "R/ArgumentsValidation.h"
-#include "R/cstdlib.h"
 
 static Arcadia_Value*
 R_InterpreterState_decodeTarget
@@ -209,7 +208,7 @@ R_Interpreter_Code_append
   )
 {
   R_DynamicArrayUtilities_ensureFreeCapacity(&self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, R_DynamicArrayUtilities_GrowthStrategy4);
-  c_memcpy(self->p + self->sz, bytes, numberOfBytes);
+  Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), self->p + self->sz, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }
 

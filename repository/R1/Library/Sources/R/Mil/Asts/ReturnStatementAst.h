@@ -15,37 +15,37 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_RETURNSTATEMENTAST_H_INCLUDED)
-#define R_MIL_ASTS_RETURNSTATEMENTAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_RETURNSTATEMENTAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_RETURNSTATEMENTAST_H_INCLUDED
 
 #include "R/Mil/Asts/StatementAst.h"
-typedef struct R_Mil_OperandAst R_Mil_OperandAst;
+typedef struct Arcadia_Mil_OperandAst Arcadia_Mil_OperandAst;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.ReturnStatementAst extends R.Mil.Statement
+/// class Arcadia.Mil.ReturnStatementAst extends Arcadia.Mil.Statement
 /// @endcode
 /// Represents
 /// @code
 /// 'return' (BooleanLiteral | NumberLiteral | StringLiteral | VariableName)
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.ReturnStatementAst", R_Mil_ReturnStatementAst, u8"R.Mil.StatementAst");
+Rex_declareObjectType(u8"Arcadia.Mil.ReturnStatementAst", Arcadia_Mil_ReturnStatementAst, u8"Arcadia.Mil.StatementAst");
 
-struct R_Mil_ReturnStatementAst {
-  R_Mil_StatementAst parent;
-  R_Mil_OperandAst* operand;
+struct Arcadia_Mil_ReturnStatementAst {
+  Arcadia_Mil_StatementAst parent;
+  Arcadia_Mil_OperandAst* operand;
 };
 
 /// @brief Create a Mil return statement AST.
 /// @return A pointer to this Mil return statement AST.
-R_Mil_ReturnStatementAst*
-R_Mil_ReturnStatementAst_create
+Arcadia_Mil_ReturnStatementAst*
+Arcadia_Mil_ReturnStatementAst_create
   (
     Arcadia_Process* process,
-    R_Mil_OperandAst* operand
+    Arcadia_Mil_OperandAst* operand
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_RETURNSTATEMENTAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_RETURNSTATEMENTAST_H_INCLUDED

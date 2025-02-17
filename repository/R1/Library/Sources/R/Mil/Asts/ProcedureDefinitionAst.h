@@ -15,16 +15,16 @@
 
 // Last modified: 2024-10-04
 
-#if !defined(R_MIL_ASTS_PROCEDUREDEFINITIONAST_H_INCLUDED)
-#define R_MIL_ASTS_PROCEDUREDEFINITIONAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_PROCEDUREDEFINITIONAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_PROCEDUREDEFINITIONAST_H_INCLUDED
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Mil/Asts/DefinitionAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.ProcedureDefinitionAst extends R.Mil.DefinitionAst
+/// class Arcadia.Mil.ProcedureDefinitionAst extends Arcadia.Mil.DefinitionAst
 /// @endcode
 /// Represents
 /// @code
@@ -32,30 +32,30 @@
 ///                     | 'procedure' 'entry'? name procedureParameters procedureBody
 /// procedureBody : '{' statements '}'
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.ProcedureDefinitionAst", R_Mil_ProcedureDefinitionAst, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.Mil.ProcedureDefinitionAst", Arcadia_Mil_ProcedureDefinitionAst, u8"Arcadia.Object");
 
-struct R_Mil_ProcedureDefinitionAst {
-  R_Mil_DefinitionAst _parent;
+struct Arcadia_Mil_ProcedureDefinitionAst {
+  Arcadia_Mil_DefinitionAst _parent;
   Arcadia_BooleanValue entry;
   Arcadia_String* nativeName;
   Arcadia_String* procedureName;
-  R_List* procedureParameters;
-  R_List* procedureBody;
+  Arcadia_List* procedureParameters;
+  Arcadia_List* procedureBody;
 };
 
 /// @brief Create a MIL procedure definition AST.
 /// @return A pointer to this MIL procedure definition AST.
-R_Mil_ProcedureDefinitionAst*
-R_Mil_ProcedureDefinitionAst_create
+Arcadia_Mil_ProcedureDefinitionAst*
+Arcadia_Mil_ProcedureDefinitionAst_create
   (
     Arcadia_Process* process,
     Arcadia_BooleanValue entry,
     Arcadia_String* nativeName,
     Arcadia_String* procedureName,
-    R_List* procedureParameters,
-    R_List* procedureBody
+    Arcadia_List* procedureParameters,
+    Arcadia_List* procedureBody
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_PROCEDUREDEFINITIONAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_PROCEDUREDEFINITIONAST_H_INCLUDED

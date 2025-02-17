@@ -15,11 +15,12 @@
 
 // Last modified: 2024-10-18
 
-#include "R.h"
+#include "R/Include.h"
 #include "R/Mil/Include.h"
 #include <stdlib.h>
 
-#include "R/Mil/Tests/SemanticalAnalysis/Enter.h"
+#include "R/Mil/Tests/SemanticalAnalysis/Pass.h"
+#include "R/Mil/Tests/SemanticalAnalysis/EnterPass.h"
 
 static void
 _Library_KeyboardKeyMessage_construct
@@ -72,18 +73,63 @@ _Library_main
 {/*Intentionally empty.*/}
 
 static void
+onPhase1
+  (
+    Arcadia_Process* process,
+    Arcadia_Map* symbolTable,
+    Arcadia_Map* foreignProcedures,
+    Arcadia_Mil_ModuleAst* moduleAst
+  )
+{
+  Arcadia_Mil_EnterPass_onModule(process, R_Interpreter_ProcessState_get(), symbolTable, foreignProcedures, moduleAst);
+}
+
+static void 
+compile
+  (
+    Arcadia_Process* process,
+    Arcadia_Map* symbolTable,
+    Arcadia_Map* foreignProcedures,
+    Arcadia_List* paths
+  )
+{
+  Arcadia_Mil_Parser* parser = Arcadia_Mil_Parser_create(process);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(process);
+  Arcadia_List* moduleAsts = Arcadia_List_create(process);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, paths); i < n; ++i) {
+    Arcadia_FilePath* sourceFilePath = Arcadia_List_getObjectReferenceValueAt(process, paths, i);
+    Arcadia_FilePath* absoluteSourceFilePath = NULL;
+    if (Arcadia_FilePath_isRelative(sourceFilePath)) {
+      absoluteSourceFilePath = Arcadia_FileSystem_getWorkingDirectory(process, fileSystem);
+      Arcadia_FilePath_append(process, absoluteSourceFilePath, sourceFilePath);
+    } else {
+      absoluteSourceFilePath = sourceFilePath;
+    }
+    Arcadia_ByteBuffer* sourceFileContents = Arcadia_FileSystem_getFileContents(process, fileSystem, absoluteSourceFilePath);
+
+    Arcadia_Mil_Parser_setInput(process, parser, (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(process, sourceFileContents));
+    Arcadia_Mil_ModuleAst* moduleAst = Arcadia_Mil_Parser_run(process, parser);
+    Arcadia_List_appendObjectReferenceValue(process, moduleAsts, moduleAst);
+  }
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, moduleAsts); i < n; ++i) {
+    Arcadia_Mil_ModuleAst* moduleAst = Arcadia_List_getObjectReferenceValueAt(process, moduleAsts, i);
+    onPhase1(process, symbolTable, foreignProcedures, moduleAst);
+  }
+}
+
+static void
 testNativePrintProcedure
   (
     Arcadia_Process* process
   )
 {
-  R_Map* symbolTable = R_Map_create(process);
-  R_Map* foreignProcedures = R_Map_create(process);
+  Arcadia_Map* symbolTable = Arcadia_Map_create(process);
+  Arcadia_Map* foreignProcedures = Arcadia_Map_create(process);
 #define Define(Name,Function) \
   { \
-    Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getBackendNoLock(process), Name, sizeof(Name) - 1)) }; \
+    Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), Name, sizeof(Name) - 1)) }; \
     Arcadia_Value v = { .tag = Arcadia_ValueTag_ForeignProcedure, .foreignProcedureValue = &Function }; \
-    R_Map_set(process, foreignProcedures, k, v); \
+    Arcadia_Map_set(process, foreignProcedures, k, v); \
   }
   Define(u8"KeyboardKeyMessage_construct", _Library_KeyboardKeyMessage_construct)
   Define(u8"KeyboardKeyMessage_getAction", _Library_KeyboardKeyMessage_getAction)
@@ -92,46 +138,19 @@ testNativePrintProcedure
   Define(u8"main", _Library_main)
 #undef Define
 
-  R_List* paths = R_List_create(process);
-  R_List_appendObjectReferenceValue(process, paths, R_FilePath_parseGeneric(process, u8"Assets/MouseButtonMessage.mil", sizeof(u8"Assets/MouseButtonMessage.mil") - 1));
-  R_List_appendObjectReferenceValue(process, paths, R_FilePath_parseGeneric(process, u8"Assets/KeyboardKeyMessage.mil", sizeof(u8"Assets/KeyboardKeyMessage.mil") - 1));
-  R_List_appendObjectReferenceValue(process, paths, R_FilePath_parseGeneric(process, u8"Assets/print.mil", sizeof(u8"Assets/print.mil") - 1));
-  R_List_appendObjectReferenceValue(process, paths, R_FilePath_parseGeneric(process, u8"Assets/main.mil", sizeof(u8"Assets/main.mil") - 1));
+  Arcadia_List* paths = Arcadia_List_create(process);
+  Arcadia_List_appendObjectReferenceValue(process, paths, Arcadia_FilePath_parseGeneric(process, u8"Assets/MouseButtonMessage.mil", sizeof(u8"Assets/MouseButtonMessage.mil") - 1));
+  Arcadia_List_appendObjectReferenceValue(process, paths, Arcadia_FilePath_parseGeneric(process, u8"Assets/KeyboardKeyMessage.mil", sizeof(u8"Assets/KeyboardKeyMessage.mil") - 1));
+  Arcadia_List_appendObjectReferenceValue(process, paths, Arcadia_FilePath_parseGeneric(process, u8"Assets/print.mil", sizeof(u8"Assets/print.mil") - 1));
+  Arcadia_List_appendObjectReferenceValue(process, paths, Arcadia_FilePath_parseGeneric(process, u8"Assets/main.mil", sizeof(u8"Assets/main.mil") - 1));
+  Arcadia_List_appendObjectReferenceValue(process, paths, Arcadia_FilePath_parseGeneric(process, u8"Assets/fibonacci.mil", sizeof(u8"Assets/fibonacci.mil") - 1));
 
-  R_Mil_Parser* parser = R_Mil_Parser_create(process);
-  R_FileSystem* fileSystem = R_FileSystem_create(process);
   R_Interpreter_ProcessState_startup(process);
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Process_pushJumpTarget(process, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    for (size_t i = 0, n = R_List_getSize(paths); i < n; ++i) {
-      R_FilePath* sourceFilePath = R_List_getObjectReferenceValueAt(process, paths, i);
-      R_FilePath* absoluteSourceFilePath = NULL;
-      if (R_FilePath_isRelative(sourceFilePath)) {
-        absoluteSourceFilePath = R_FileSystem_getWorkingDirectory(process, fileSystem);
-        R_FilePath_append(process, absoluteSourceFilePath, sourceFilePath);
-      } else {
-        absoluteSourceFilePath = sourceFilePath;
-      }
-      R_ByteBuffer* sourceFileContents = R_FileSystem_getFileContents(process, fileSystem, absoluteSourceFilePath);
-
-      R_Mil_Parser_setInput(process, parser, (R_Utf8Reader*)R_Utf8ByteBufferReader_create(process, sourceFileContents));
-      R_Mil_ModuleAst* moduleAst = R_Mil_Parser_run(process, parser);
-
-      R_Interpreter_ProcessState* interpreterProcess = R_Interpreter_ProcessState_get();
-      for (Arcadia_SizeValue i = 0, n = R_Mil_ModuleAst_getNumberOfDefinitions(moduleAst); i < n; ++i) {
-        R_Mil_DefinitionAst* definitionAst = R_Mil_ModuleAst_getDefinitionAt(process, moduleAst, i);
-        if (Arcadia_Type_isSubType(Arcadia_Object_getType(definitionAst), _R_Mil_ClassDefinitionAst_getType(process))) {
-          onClassDefinition(process, interpreterProcess, symbolTable, foreignProcedures, (R_Mil_ClassDefinitionAst*)definitionAst);
-        } else if (Arcadia_Type_isSubType(Arcadia_Object_getType(definitionAst), _R_Mil_ProcedureDefinitionAst_getType(process))) {
-          onProcedureDefinition(process, interpreterProcess, symbolTable, foreignProcedures, (R_Mil_ProcedureDefinitionAst*)definitionAst);
-        } else {
-          Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-          Arcadia_Process_jump(process);
-        }
-      }
-    }
+    compile(process, symbolTable, foreignProcedures, paths);
     Arcadia_Process_popJumpTarget(process);
   } else {
     Arcadia_Process_popJumpTarget(process);
@@ -159,14 +178,8 @@ main
     char** argv
   )
 {
-  Arcadia_Status status[2];
-  status[0] = R_startup();
-  if (status[0]) {
-    return EXIT_FAILURE;
-  }
   Arcadia_Process* process = NULL;
   if (Arcadia_Process_get(&process)) {
-    R_shutdown();
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
@@ -175,11 +188,10 @@ main
     main1(process, argc, argv);
   }
   Arcadia_Process_popJumpTarget(process);
-  status[0] = Arcadia_Process_getStatus(process);
+  Arcadia_Status status = Arcadia_Process_getStatus(process);
   Arcadia_Process_relinquish(process);
   process = NULL;
-  status[1] = R_shutdown();
-  if (status[1] || status[0]) {
+  if (status) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

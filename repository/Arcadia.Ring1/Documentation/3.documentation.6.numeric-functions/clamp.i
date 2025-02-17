@@ -1,7 +1,14 @@
 <h4 id="arcadia-clamp">Arcadia_clamp</h4>
 <p>Clamp a value to a range.</p>
 <p><code>
-<my-mv>Type</my-mv> Arcadia_clamp<my-mv>Suffix</my-mv>(<my-mv>Type</my-mv> value, <my-mv>Type</my-mv> lower, <my-mv>Type</my-mv> upper)
+<my-mv>Type</my-mv>
+Arcadia_clamp<my-mv>Suffix</my-mv>
+  (
+    Arcadia_Process* process,
+    <my-mv>Type</my-mv> value,
+    <my-mv>Type</my-mv> lower,
+    <my-mv>Type</my-mv> upper
+  )
 </code></p>
 <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
 
@@ -20,6 +27,7 @@
 
 <h5>Parameters</h5>
 <table>
+  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td><my-mv>Type</my-mv> value</td><td>The value to clamp.</td></tr>
   <tr><td><my-mv>Type</my-mv> lower</td><td>The lower bound (inclusive).</td></tr>
   <tr><td><my-mv>Type</my-mv> upper</td><td>The upper bound (inclusive).</td></tr>

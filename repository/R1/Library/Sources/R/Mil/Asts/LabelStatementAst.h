@@ -15,31 +15,31 @@
 
 // Last modified: 2025-01-01
 
-#if !defined(R_MIL_ASTS_LABELSTATEMENTAST_H_INCLUDED)
-#define R_MIL_ASTS_LABELSTATEMENTAST_H_INCLUDED
+#if !defined(ARCADIA_MIL_ASTS_LABELSTATEMENTAST_H_INCLUDED)
+#define ARCADIA_MIL_ASTS_LABELSTATEMENTAST_H_INCLUDED
 
 #include "R/Mil/Asts/StatementAst.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// @code
-/// class R.Mil.LabelStatementAst extends R.Mil.Statement
+/// class Arcadia.Mil.LabelStatementAst extends Arcadia.Mil.Statement
 /// @endcode
 /// Represents
 /// @code
 /// name ':'
 /// @endcode
-Rex_declareObjectType(u8"R.Mil.LabelStatementAst", R_Mil_LabelStatementAst, u8"R.Mil.StatementAst");
+Rex_declareObjectType(u8"Arcadia.Mil.LabelStatementAst", Arcadia_Mil_LabelStatementAst, u8"Arcadia.Mil.StatementAst");
 
-struct R_Mil_LabelStatementAst {
-  R_Mil_StatementAst parent;
+struct Arcadia_Mil_LabelStatementAst {
+  Arcadia_Mil_StatementAst parent;
   Arcadia_String* labelName;
 };
 
 /// @brief Create a MIL label statement AST.
 /// @return A pointer to this MIL label statement AST.
-R_Mil_LabelStatementAst*
-R_Mil_LabelStatementAst_create
+Arcadia_Mil_LabelStatementAst*
+Arcadia_Mil_LabelStatementAst_create
   (
     Arcadia_Process* process,
     Arcadia_String* labelName
@@ -47,4 +47,4 @@ R_Mil_LabelStatementAst_create
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#endif // R_MIL_ASTS_LABELSTATEMENTAST_H_INCLUDED
+#endif // ARCADIA_MIL_ASTS_LABELSTATEMENTAST_H_INCLUDED
