@@ -16,7 +16,6 @@
 // Last modified: 2025-02-14
 
 #include "Arcadia/Ring2/Include.h"
-#include "R/R.h"
 #include <stdlib.h>
 #include <string.h>
 

@@ -31,7 +31,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.Ring2 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring2/Library" "path to the Arcadia Ring2 library directory")
+FetchProduct(${MyProjectName}.Ring2 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring2/Library" "path to the Arcadia.Ring2 library directory")
 
 set(MyTestName ${MyProjectName}.Ring2.Tests.ListTests)
 

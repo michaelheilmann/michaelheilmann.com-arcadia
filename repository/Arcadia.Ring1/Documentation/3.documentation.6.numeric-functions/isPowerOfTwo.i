@@ -1,5 +1,5 @@
-<h4 id="arcadia-ispoweroftwo">Arcadia_isPowerOfTwo</h4>
-<p>Get if a value is a power of two .</p>
+<h4 id="Arcadia_isPowerOfTwo*">Arcadia_isPowerOfTwo*</h4>
+<p>Get if a value is a power of two.</p>
 <p><code>
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwo<my-mv>Suffix</my-mv>

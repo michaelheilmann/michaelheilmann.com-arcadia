@@ -31,15 +31,6 @@ Arcadia_Object_constructImpl
   );
 
 static void
-Arcadia_Object_constructImpl
-  (
-    Arcadia_Process* process,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
-  );
-
-static void
 equalTo
   (
     Arcadia_Process* process,

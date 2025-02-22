@@ -18,7 +18,7 @@
 #include "R/Interpreter/ThreadState.private.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include "R/DynamicArrayUtilities.h"
+#include "Arcadia/Ring2/Include.h"
 
 #define R_Configuration_DefaultNumberOfArgumentRegisters 32
 #define R_Configuration_DefaultNumberOfRegisters 256
@@ -149,12 +149,13 @@ R_Interpreter_ThreadState_getRegisterAt
 R_CallState*
 R_Interpreter_ThreadState_beginForeignProcedureCall
   (
+    Arcadia_Process* process,
     R_Interpreter_ThreadState* thread,
     Arcadia_Natural32Value instructionIndex,
     Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
-  R_DynamicArrayUtilities_ensureFreeCapacity(&thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, R_DynamicArrayUtilities_GrowthStrategy1);
+  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getProcess1(process), Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
   R_CallState* callState = &(thread->calls.elements[thread->calls.size]);
   if (thread->calls.size) {
     callState->previous = &(thread->calls.elements[thread->calls.size - 1]);
@@ -171,12 +172,13 @@ R_Interpreter_ThreadState_beginForeignProcedureCall
 R_CallState*
 R_Interpreter_ThreadState_beginProcedureCall
   (
+    Arcadia_Process* process,
     R_Interpreter_ThreadState* thread,
     Arcadia_Natural32Value instructionIndex,
     R_Interpreter_Procedure* procedure
   )
 {
-  R_DynamicArrayUtilities_ensureFreeCapacity(&thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, R_DynamicArrayUtilities_GrowthStrategy1);
+  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getProcess1(process), Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
   R_CallState* callState = &(thread->calls.elements[thread->calls.size]);
   if (thread->calls.size) {
     callState->previous = &(thread->calls.elements[thread->calls.size - 1]);

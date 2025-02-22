@@ -19,7 +19,7 @@
 #define R_MIL_SYMBOLS_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Implementation/String.h"
+#include "Arcadia/Ring2/Include.h"
 typedef struct Arcadia_Mil_Symbol Arcadia_Mil_Symbol;
 typedef struct Arcadia_Mil_Scope Arcadia_Mil_Scope;
 

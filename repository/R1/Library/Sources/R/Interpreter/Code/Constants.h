@@ -19,7 +19,7 @@
 #define R_INTERPRETER_CODE_CONSTANTS_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Implementation/String.h"
+#include "Arcadia/Ring2/Include.h"
 
 /**
  * @brief A set of constants.

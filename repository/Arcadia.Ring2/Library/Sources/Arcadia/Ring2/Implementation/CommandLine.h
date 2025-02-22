@@ -15,8 +15,12 @@
 
 // Last modified: 2024-09-28
 
-#if !defined(ARCADIA_RING2_COMMANDLINE_INCLUDE_H_INCLUDED)
-#define ARCADIA_RING2_COMMANDLINE_INCLUDE_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_COMMANDLINE_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_COMMANDLINE_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/Utf8Reader.h"
@@ -70,4 +74,4 @@ Arcadia_CommandLine_raiseValueInvalidError
     Arcadia_String* value
   );
 
-#endif // ARCADIA_RING2_COMMANDLINE_INCLUDE_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_COMMANDLINE_H_INCLUDED

@@ -17,8 +17,11 @@
 
 #include "R/Interpreter/Code/Constants.h"
 
+#include "Arcadia/Ring2/Include.h"
+#if 0
 #include "R/DynamicArrayUtilities.h"
 #include "Arcadia/Ring2/Implementation/String.h"
+#endif
 #include "R/Interpreter/Include.h"
 
 static void
@@ -155,7 +158,7 @@ getOrCreate
       return i;
     }
   }
-  R_DynamicArrayUtilities_ensureFreeCapacity(&self->p, sizeof(Arcadia_Value), self->sz, &self->cp, 1, R_DynamicArrayUtilities_GrowthStrategy4);
+  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getProcess1(process), Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Value), self->sz, &self->cp, 1, Arcadia_Arrays_ResizeStrategy_Type4);
   self->p[self->sz++] = *constant;
   return self->sz - 1;
 }

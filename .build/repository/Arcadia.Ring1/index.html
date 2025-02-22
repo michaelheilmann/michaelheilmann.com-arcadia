@@ -67,8 +67,8 @@
 
 <h2>1. Files</h2>
 <p>
-You can find the sources of Arcadia Ring1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
-The subdirectory of Arcadia.Ring1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring1</a>.</p>
+You can find the sources of Arcadia Ring 1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
+The subdirectory of Arcadia Ring 1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring1</a>.</p>
 </p>
 
 <ul>
@@ -84,9 +84,9 @@ The subdirectory of Arcadia.Ring1 in the repository is here <a href="https://git
 </ul>
 
 <p>
-Arcadia Ring1 supports various platforms (including but not restricted to Windows, Linux, and many more), however, we currently only officially support Windows.
-Find instructions on how to build, test, and use Arcadia Ring1 under various systems,
-please refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/README.md">README.md</a> in the root folder of the repository.
+Arcadia Ring 1 supports various platforms (including but not restricted to Windows, Linux, and many more), however, we currently only officially support Windows.
+For instructions on how to build, test, and use Arcadia Ring 1,
+refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/README.md">README.md</a> in the root folder of the repository.
 </p>
 
 <h2>2. Further References</h2>
@@ -95,7 +95,7 @@ please refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/
 
   <h2>3. Documentation</h2>
 
-<h3 id="arcadia-booleanvalue">3.1.1. Boolean Type</h3>
+<h3 id="Arcadia_BooleanValue">3.1.1. Arcadia_BooleanValue</h3>
 <p>
 Arcadia Ring 1 provides a boolean type.
 </p>
@@ -113,7 +113,7 @@ typedef <my-mv>implementation detail</my-mv> Arcadia_BooleanValue
 </code><p>
 <p>is a value of the type denoting logically <code>false</code>. It converts to <code>0</code> in arithmetic expressions.</p>
 
-<h3 id="arcadia-foreignprocedurevalue">3.1.2. Foreign Procedure Type</h3>
+<h3 id="Arcadia_ForeignProcedureValue">3.1.2. Arcadia_ForeignProcedureValue</h3>
 <p>
 Arcadia Ring 1 provides the <scode>Arcadia_ForeignProcedureValue</code> type.
 </p>
@@ -141,7 +141,9 @@ A valid value of the <code>Arcadia_ForeignProcedureValue</code> is the null valu
 </code><p>
 <p>denotes the number of Bytes of the type which is usually <code>Arcadia_ForeignProcedureValue_NumberOfBits</code> divided by 8.</p>
 
-<h3 id="arcadia-integervalue">3.1.3. Integer Types</h3>
+<h3 id="Arcadia_Integer*Value">
+3.1.3. Arcadia_Integer*Value
+</h3>
 <p>
 Arcadia Ring 1 provides a two's complement integer number types.
 </p>
@@ -208,7 +210,9 @@ The following table denotes  the expansions of the macro:
 <tr><td>64                   </td><td>x##LL</td></tr>
 </table>
 
-<h3 id="arcadia-naturalvalue">3.1.4. Natural Types</h3>
+<h3 id="Arcadia_Natural*Value">
+3.1.4. Arcadia_Natural*Value
+</h3>
 <p>
 Arcadia Ring 1 provides natural number types.
 </p>
@@ -275,9 +279,9 @@ The following table denotes  the expansions of the macro:
 <tr><td>64                   </td><td>x##ULL</td></tr>
 </table>
 
-<h3 id="arcadia-objectreferencevalue">3.1.5. Object Reference Type</h3>
+<h3 id="Arcadia_ObjectReferenceValue">3.1.5. Arcadia_ObjectReferenceValue</h3>
 <p>
-R provides a ObjectReference type.
+Arcadia Ring 1 provides a ObjectReference type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_ObjectReferenceValue
@@ -303,7 +307,9 @@ A valid value of the <code>Arcadia_ObjectReferenceValue</code> is the null refer
 </code><p>
 <p>denotes the number of Bytes of the type which is usually <code>Arcadia_ObjectReferenceValue_NumberOfBits</code> divided by 8.</p>
 
-<h3 id="arcadia-realvalue">3.1.6. Real Types</h3>
+<h3 id="Arcadia_Real*Value">
+3.1.6. Arcadia_Real*Value
+</h3>
 <p>
 Arcadia Ring 1 provides IEEE754 real number types.
 </p>
@@ -352,9 +358,9 @@ The following table denotes the value of the constant for the respective <code><
 <tr><td>64                                </td><td><code>+DBL_MAX</code></td></tr>
 </table>
 
-<h3 id="arcadia-sizevalue">3.1.7. Size Type</h3>
+<h3 id="Arcadia_SizeValue">3.1.7. Size Type</h3>
 <p>
-R provides an alias for builtin <code>size_t</code> type.
+Arcadia Ring 1 provides an alias for builtin <code>size_t</code> type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_SizeValue
@@ -385,9 +391,9 @@ This restriction may be relaxed in future versions of <em>Arcadia Ring 1</em>.
 </code><p>
 <p>is used to write a literal of type <code>Arcadia_SizeValue</code> in C source code.</p>
 
-<h3 id="arcadia-voidvalue">3.1.8. Void Type</h3>
+<h3 id="Arcadia_VoidValue">3.1.8. Arcadia_VoidValue</h3>
 <p>
-R provides a void type.
+Arcadia Ring 1 provides a void type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_VoidValue
@@ -635,7 +641,7 @@ type corresponding to <my-mv>Suffix</my-mv>.</p>
 
 <h3>3.6. Numeric functions</h3>
 
-<h4 id="arcadia-clamp">Arcadia_clamp</h4>
+<h4 id="Arcadia_clamp*">Arcadia_clamp*</h4>
 <p>Clamp a value to a range.</p>
 <p><code>
 <my-mv>Type</my-mv>
@@ -681,7 +687,7 @@ Arcadia_clamp<my-mv>Suffix</my-mv>
 <h5>Return value</h5>
 <p>The value <code>value</code> clamped to the range <code>[lower, upper]</code>.</p>
 
-<h4 id="arcadia-countleadingzeroes">Arcadia_countLeadingZeroes</h4>
+<h4 id="Arcadia_countLeadingZeroes*">Arcadia_countLeadingZeroes*</h4>
 <p>Return the number of leadin gzeroes of the binary representation of a value.</p>
 <p><code>
 Arcadia_SizeValue
@@ -717,7 +723,7 @@ Arcadia_countLeadingZeroes<my-mv>Suffix</my-mv>
 <h5>Return value</h5>
 <p>The number of leading zeroes.</p>
 
-<h4 id="arcadia-hash">Arcadia_hash</h4>
+<h4 id="Arcadia_hash*">Arcadia_hash*</h4>
 <p>Return the hash of a value.</p>
 <p><code>
 Arcadia_SizeValue
@@ -756,8 +762,8 @@ Arcadia_hash<my-mv>Suffix</my-mv>
 <h5>Return value</h5>
 <p>Return hash of  <code>x</code>.</p>
 
-<h4 id="arcadia-ispoweroftwo">Arcadia_isPowerOfTwo</h4>
-<p>Get if a value is a power of two .</p>
+<h4 id="Arcadia_isPowerOfTwo*">Arcadia_isPowerOfTwo*</h4>
+<p>Get if a value is a power of two.</p>
 <p><code>
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwo<my-mv>Suffix</my-mv>
@@ -793,7 +799,7 @@ Arcadia_isPowerOfTwo<my-mv>Suffix</my-mv>
 <code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
-<h4 id="arcadia-maximum">Arcadia_maximum</h4>
+<h4 id="Arcadia_maximum*">Arcadia_maximum*</h4>
 <p>Return the maximum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv>
@@ -829,7 +835,7 @@ Arcadia_maximum<my-mv>Suffix</my-mv>
 <h5>Return value</h5>
 <p>Return the maximum of <code>x</code> and <code>y</code>.</p>
 
-<h4 id="arcadia-minimum">Arcadia_minimum</h4>
+<h4 id="Arcadia_minimum*">Arcadia_minimum*</h4>
 <p>Return the minimum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv>
@@ -864,8 +870,8 @@ Arcadia_minimum<my-mv>Suffix</my-mv>
 <h5>Return value</h5>
 <p>Return the minimum of <code>x</code> and <code>y</code>.</p>
 
-<h4 id="arcadia-nextpoweroftwogreaterthan">Arcadia_nextPowerOfTwoGreaterThan</h4>
-<p>R provides functions returning the next power of two greater than a value.</p>
+<h4 id="Arcadia_nextPowerOfTwoGreaterThan*">Arcadia_nextPowerOfTwoGreaterThan*</h4>
+<p>Arcadia Ring 1 provides functions returning the next power of two greater than a value.</p>
 <p><code>
 <my-mv>Type</my-mv>
 Arcadia_nextPowerOfTwoGreaterThan<my-mv>Suffix</my-mv>
@@ -903,8 +909,8 @@ Arcadia_nextPowerOfTwoGreaterThan<my-mv>Suffix</my-mv>
 <h5>Return value</h5>
 <p>Return the next power of two greater than <code>x</code>.</p>
 
-<h4 id="arcadia-nextpoweroftwogreaterthanorequalto">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo</h4>
-<p>R provides functions returning the next power of two greater or equal to a value.</p>
+<h4 id="Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*</h4>
+<p>Arcadia Ring 1 provides functions returning the next power of two greater or equal to a value.</p>
 <p><code>
 <my-mv>Type</my-mv>
 Arcadia_nextPowerOfTwoGreaterThanOrEqualTo<my-mv>Suffix</my-mv>
@@ -942,7 +948,7 @@ Arcadia_nextPowerOfTwoGreaterThanOrEqualTo<my-mv>Suffix</my-mv>
 <h5>Return value</h5>
 <p>Return the next power of two greater than or equal to <code>x</code>.</p>
 
-<h4 id="arcadia-safeadd">Arcadia_safeAdd</h4>
+<h4 id="Arcadia_safeAdd*">Arcadia_safeAdd*</h4>
 <p>Get the sum of two values.</p>
 <p><code>
 void
@@ -975,7 +981,7 @@ Arcadia_safeAdd<my-mv>Suffix</my-mv>
   <tr><td><my-mv>Type</my-mv>* sumLow</td> <td>A pointer to a variable. The variable is assigned the low bits of the result.</td></tr>
 </table>
 
-<h4 id="arcadia-safemultiply">Arcadia_safeMultiply</h4>
+<h4 id="Arcadia_safeMultiply*">Arcadia_safeMultiply*</h4>
 <p>Get the product of two values.</p>
 <p><code>
 void
@@ -1060,7 +1066,7 @@ Arcadia_isUtf8
 <code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
-<h3 id="value">3.9. Value Type</h3>
+<h3 id="Arcadia_Value">3.9. Arcadia_Value</h3>
 <p>
 <code>Arcadia_Value</code> is a tagged union of values supported by the
 runtime. It consists of a tag indicating the value stored in the
@@ -1220,26 +1226,26 @@ The type of the value of this <code>Arcadia_Value</code> object.
   <div class="right-column">
     <nav>
       <ul style="list-style: none">
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-booleanvalue">Arcadia_BooleanValue</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-clamp">Arcadia_clamp</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-countleadingzeroes">Arcadia_countLeadingZeroes</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-foreignprocedurevalue">Arcadia_ForeignProcedureValue</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-gettickcount">Arcadia_getTickCount</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-hash">Arcadia_hash</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-integervalue">Arcadia_IntegerValue</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-isutf8">Arcadia_isUtf8</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-maximum">Arcadia_maximum</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-minimum">Arcadia_minimum</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-naturalvalue">Arcadia_NaturalValue</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-nextpoweroftwogreaterthan">Arcadia_nextPowerOfTwoGreaterThan</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-nextpoweroftwogreaterthanorequalto">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-objectreferencevalue">Arcadia_ObjectReferenceValue</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-realvalue">Arcadia_RealValue</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-safeadd">Arcadia_safeAdd</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-safemultiply">Arcadia_safeMultiply</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-sizevalue">Arcadia_SizeValue</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-value">Arcadia_Value</a></li>
-        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#arcadia-voidvalue">Arcadia_VoidValue</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_BooleanValue">Arcadia_BooleanValue</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_clamp*">Arcadia_clamp*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_countLeadingZeroes*">Arcadia_countLeadingZeroes*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_ForeignProcedureValue">Arcadia_ForeignProcedureValue</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_getTickCount">Arcadia_getTickCount</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_hash*">Arcadia_hash*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_Integer*Value">Arcadia_Integer*Value</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_isUtf8">Arcadia_isUtf8</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_maximum*">Arcadia_maximum*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_minimum*">Arcadia_minimum*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_Natural*Value">Arcadia_Natural*Value</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_nextPowerOfTwoGreaterThan*">Arcadia_nextPowerOfTwoGreaterThan*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_ObjectReferenceValue">Arcadia_ObjectReferenceValue</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_Real*Value">Arcadia_Real*Value</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_safeAdd*">Arcadia_safeAdd*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_safeMultiply*">Arcadia_safeMultiply*</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_SizeValue">Arcadia_SizeValue</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_Value">Arcadia_Value</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_VoidValue">Arcadia_VoidValue</a></li>
       </ul>
     </nav>
   </div>

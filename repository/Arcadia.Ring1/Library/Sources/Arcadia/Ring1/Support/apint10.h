@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-02-16
+// Last modified: 2025-02-19
 
 #if !defined(ARCADIA_RING1_SUPPORT_APINT10_H_INCLUDED)
 #define ARCADIA_RING1_SUPPORT_APINT10_H_INCLUDED
@@ -23,18 +23,24 @@
 #include <float.h>
 #include <malloc.h>
 #include <string.h>
+#include "Arcadia/Ring1/Support/tables.h"
 
 // use uint32_t instead of size_t for sizes
 typedef uint32_t apint10_size_type;
 #define APINT10_SIZE_MIN (UINT32_C(0))
 #define APINT10_SIZE_MAX (UINT32_MAX)
 
-// arbitrary precision base 10 integer.
-// zero is denoted by digits[0] = 0, size = 1.
-// this implementation distinguishes between signed zero by setting negative accordingly.
-// in arithmetic and equivalence checks, positive and negative zero are not distinguished.
-// for a non-zero number with n > 0 digits, size = n.
-// the least significand digit ist stored at digits[0] and the most significand digit is stored at digits[n-1] with digits[n-1] > 0.
+/// A arbitrary precision integer base 10.
+/// s * (d[0] * 10^0 + d[1] * 10^1 + ... + d[n-1] * 10^[n-1]) 
+/// where
+/// - s denotes the sign (+1 for plus, -1 for minus)
+/// - d[i] denotes a digit 0 <= d[i] <= 9
+/// and n > 0 is the number of digits
+/// The following invariant is preserved
+/// - zero is always represented by n = 1, d0 = 0, and s = 1
+/// - d[n-1] != 0 unless n = 1
+/// This implementation distinguishes between signed zero by setting negative accordingly.
+/// In arithmetic and equivalence checks, positive and negative zero are not distinguished.
 typedef struct apint10 {
   uint8_t* digits;
   apint10_size_type size;
@@ -57,6 +63,27 @@ apint10_uninitialize
   );
 
 static inline int
+apint10_is_zero
+  (
+    bool* result,
+    apint10* this
+  );
+
+static inline int
+apint10_is_negative
+  (
+    bool* result,
+    apint10* this
+  );
+
+static inline int
+apint10_is_positive
+  (
+    bool* result,
+    apint10* this
+  );
+
+static inline int
 apint10_copy
   (
     apint10* this,
@@ -68,6 +95,12 @@ apint10_increase_capacity
   (
     apint10* this,
     uint32_t additional_capacity
+  );
+
+static inline int
+apint10_magnitude
+  (
+    apint10* this
   );
 
 static inline int
@@ -135,6 +168,27 @@ apint10_from_uint8
   );
 
 static inline int
+apint10_from_power_of_two_uint64
+  (
+    apint10* this,
+    uint64_t e
+  );
+
+static inline int
+apint10_from_power_of_five_uint64
+  (
+    apint10* this,
+    uint64_t e
+  );
+
+static inline int
+apint10_from_power_of_ten_uint64
+  (
+    apint10* this,
+    uint64_t e
+  );
+
+static inline int
 apint10_compare_magnitudes
   (
     int* result,
@@ -158,7 +212,70 @@ apint10_swap
   );
 
 static inline int
+apint10_add_uint16
+  (
+    apint10* this,
+    uint16_t other
+  );
+
+static inline int
+apint10_add_uint32
+  (
+    apint10* this,
+    uint32_t other
+  );
+
+static inline int
+apint10_add_uint64
+  (
+    apint10* this,
+    uint64_t other
+  );
+
+static inline int
+apint10_add_uint8
+  (
+    apint10* this,
+    uint8_t other
+  );
+
+static inline int
 apint10_add
+  (
+    apint10* this,
+    apint10* other
+  );
+
+static inline int
+apint10_subtract_uint16
+  (
+    apint10* this,
+    uint16_t other
+  );
+
+static inline int
+apint10_subtract_uint32
+  (
+    apint10* this,
+    uint32_t other
+  );
+
+static inline int
+apint10_subtract_uint64
+  (
+    apint10* this,
+    uint64_t other
+  );
+
+static inline int
+apint10_subtract_uint8
+  (
+    apint10* this,
+    uint8_t other
+  );
+
+static inline int
+apint10_subtract
   (
     apint10* this,
     apint10* other
@@ -172,18 +289,307 @@ apint10_multiply
   );
 
 static inline int
-apint10_multiply_p10
+apint10_multiply_p10_uint64
   (
     apint10* this,
     uint64_t e
   );
 
 static inline int
-apint10_divide_p10  
+apint10_divide_p10_uint64
   (
     apint10* this,
     uint64_t e
   );
+
+static inline int
+apint10_negate
+  (
+    apint10* this
+  );
+
+static inline int
+apint10_equal_to
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  );
+
+static inline int
+apint10_not_equal_to
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  );
+
+static inline int
+apint10_greater_than
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  );
+
+static inline int
+apint10_greater_than_or_equal_to
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  );
+
+static inline int
+apint10_lower_than
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  );
+
+static inline int
+apint10_lower_than_or_equal_to
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  );
+
+#define On(Operation, Type) \
+  static inline int \
+  apint10_is_##Operation##_##Type \
+    ( \
+      bool* result, \
+      apint10* this, \
+      Type##_t x \
+    );
+
+On(equal_to, uint16)
+On(equal_to, uint32)
+On(equal_to, uint8)
+On(equal_to, int16)
+On(equal_to, int32)
+On(equal_to, int8)
+
+On(not_equal_to, uint16)
+On(not_equal_to, uint32)
+On(not_equal_to, uint8)
+On(not_equal_to, int16)
+On(not_equal_to, int32)
+On(not_equal_to, int8)
+
+On(greater_than, uint16)
+On(greater_than, uint32)
+On(greater_than, uint8)
+On(greater_than, int16)
+On(greater_than, int32)
+On(greater_than, int8)
+
+On(greater_than_or_equal_to, uint16)
+On(greater_than_or_equal_to, uint32)
+On(greater_than_or_equal_to, uint8)
+On(greater_than_or_equal_to, int16)
+On(greater_than_or_equal_to, int32)
+On(greater_than_or_equal_to, int8)
+
+On(lower_than, uint16)
+On(lower_than, uint32)
+On(lower_than, uint8)
+On(lower_than, int16)
+On(lower_than, int32)
+On(lower_than, int8)
+
+On(lower_than_or_equal_to, uint16)
+On(lower_than_or_equal_to, uint32)
+On(lower_than_or_equal_to, uint8)
+On(lower_than_or_equal_to, int16)
+On(lower_than_or_equal_to, int32)
+On(lower_than_or_equal_to, int8)
+
+#undef On
+
+static inline int
+apint10_equal_to_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  );
+
+static inline int
+apint10_equal_to_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  );
+
+static inline int
+apint10_not_equal_to_uint64
+(
+  bool* result,
+  apint10* this,
+  uint64_t other
+);
+
+static inline int
+apint10_not_equal_to_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  );
+
+static inline int
+apint10_greater_than_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  );
+
+static inline int
+apint10_greater_than_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  );
+
+static inline int
+apint10_greater_than_or_equal_to_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  );
+
+static inline int
+apint10_greater_than_or_equal_to_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  );
+
+static inline int
+apint10_lower_than_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  );
+
+static inline int
+apint10_lower_than_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  );
+
+static inline int
+apint10_lower_than_or_equal_to_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  );
+
+static inline int
+apint10_lower_than_or_equal_to_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t x
+  );
+
+static inline int
+apint10_to_uint16
+  (
+    uint16_t* result,
+    apint10* this
+  );
+
+static inline int
+apint10_to_uint32
+  (
+    uint32_t* result,
+    apint10* this
+  );
+
+static inline int
+apint10_to_uint64
+  (
+    uint64_t* result,
+    apint10* this
+  );
+
+static inline int
+apint10_to_uint8
+  (
+    uint8_t* result,
+    apint10* this
+  );
+
+static inline int
+apint10_to_int16
+  (
+    int16_t* result,
+    apint10* this
+  );
+
+static inline int
+apint10_to_int32
+  (
+    int32_t* result,
+    apint10* this
+  );
+
+static inline int
+apint10_to_int64
+  (
+    int64_t* result,
+    apint10* this
+  );
+
+static inline int
+apint10_to_int8
+  (
+    int8_t* result,
+    apint10* this
+  );
+
+#if 0
+// this := 2^this
+// pre: |this| >= 0
+static inline int
+apint10_power_of_two
+  (
+    apint10* this
+  );
+#endif
+
+#if 0
+// this := 5^this
+// pre: |this| >= 0
+static inline int
+apint10_power_of_five
+  (
+    apint10* this
+  );
+#endif
+
+#if 0
+// this := 10^this
+// pre: |this| >= 0
+static inline int
+apint10_power_of_ten
+  (
+    apint10* this
+  );
+#endif
 
 static inline int
 apint10_initialize
@@ -210,6 +616,39 @@ apint10_uninitialize
 {
   free(this->digits);
   this->digits = 0;
+  return 0;
+}
+
+static inline int
+apint10_is_zero
+  (
+    bool* result,
+    apint10* this
+  )
+{
+  *result = this->size == 1 && this->digits[0] == UINT8_C(0);
+return 0;
+}
+
+static inline int
+apint10_is_negative
+  (
+    bool* result,
+    apint10* this
+  )
+{
+  *result = !(this->size == 1 && this->digits[0] == UINT8_C(0)) && false == this->negative;
+  return 0;
+}
+
+static inline int
+apint10_is_positive
+  (
+    bool* result,
+    apint10* this
+  )
+{
+  *result = !(this->size == 1 && this->digits[0] == UINT8_C(0)) && true == this->negative;
   return 0;
 }
 
@@ -259,6 +698,16 @@ apint10_increase_capacity
 }
 
 static inline int
+apint10_magnitude
+  (
+    apint10* this
+  )
+{
+  this->negative = false;
+  return 0;
+}
+
+static inline int
 apint10_from_int16
   (
     apint10* this,
@@ -303,6 +752,7 @@ apint10_from_int8
   )
 { return apint10_from_int64(this, value); }
 
+// parse this apint10 from an UTF8 decimal integer literal string
 static inline int
 apint10_from_literal
   (
@@ -449,6 +899,144 @@ apint10_from_uint8
 { return apint10_from_uint64(this, value); }
 
 static inline int
+apint10_from_power_of_two_uint64
+  (
+    apint10* this,
+    uint64_t e
+  )
+{
+  uint64_t max_e;
+  if (power_of_two_table_get_max_e_uint64(&max_e)) {
+    return 1;
+  }
+  uint64_t u;
+  if (power_of_two_table_get_uint64(&u, max_e)) {
+    return 1;
+  }
+  apint10 v;
+  if (apint10_initialize(&v)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&v, u)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  while (e > max_e) {
+    if (apint10_multiply(this, &v)) {
+      apint10_uninitialize(&v);
+      return 1;
+    }
+    e -= max_e;
+  }
+  if (power_of_two_table_get_uint64(&u, e)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  if (apint10_from_uint64(&v, u)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  if (apint10_multiply(this, &v)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  apint10_uninitialize(&v);
+  return 0;
+}
+
+static inline int
+apint10_from_power_of_five_uint64
+  (
+    apint10* this,
+    uint64_t e
+  )
+{
+  uint64_t max_e;
+  if (power_of_five_table_get_max_e_uint64(&max_e)) {
+    return 1;
+  }
+  uint64_t u;
+  if (power_of_five_table_get_uint64(&u, max_e)) {
+    return 1;
+  }
+  apint10 v;
+  if (apint10_initialize(&v)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&v, u)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  while (e > max_e) {
+    if (apint10_multiply(this, &v)) {
+      apint10_uninitialize(&v);
+      return 1;
+    }
+    e -= max_e;
+  }
+  if (power_of_five_table_get_uint64(&u, e)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  if (apint10_from_uint64(&v, u)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  if (apint10_multiply(this, &v)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  apint10_uninitialize(&v);
+  return 0;
+}
+
+static inline int
+apint10_from_power_of_ten_uint64
+  (
+    apint10* this,
+    uint64_t e
+  )
+{
+  uint64_t max_e;
+  if (power_of_ten_table_get_max_e_uint64(&max_e)) {
+    return 1;
+  }
+  uint64_t u;
+  if (power_of_ten_table_get_uint64(&u, max_e)) {
+    return 1;
+  }
+  apint10 v;
+  if (apint10_initialize(&v)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&v, u)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  while (e > max_e) {
+    if (apint10_multiply(this, &v)) {
+      apint10_uninitialize(&v);
+      return 1;
+    }
+    e -= max_e;
+  }
+  if (power_of_ten_table_get_uint64(&u, e)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  if (apint10_from_uint64(&v, u)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  if (apint10_multiply(this, &v)) {
+    apint10_uninitialize(&v);
+    return 1;
+  }
+  apint10_uninitialize(&v);
+  return 0;
+}
+
+static inline int
 apint10_compare_magnitudes
   (
     int* result,
@@ -521,7 +1109,7 @@ apint10_compare
   // Why is this correct?
   // Case 1: Both are negative including negative zero.
   // Case 1.1: Assume |a| < |b| holds (that is, -1 = temporary) then consequently b < a.
-  //           Hence temporary must be negated to return -1.
+  //           Hence temporary must be negated to return +1.
   // Case 1.2: Assume |a| > |b| holds (that is, +1 = temporary) then consequently a < b.
   //           Hence temporary must be negated to return -1.
   // Case 1.3: Assume |a| = |b| holds (that is,  0 = temporary) then consequently a = b.
@@ -533,7 +1121,7 @@ apint10_compare
   //           Hence temporary must be retained to return +1.
   // Case 2.3: Assume |a| = |b| holds (that is,  0 = temporary) then consequently a = b.
   //           Hence temporary can be negated or retained, however, the correct result is always 0.
-  *result = this->negative ? +temporary : -temporary;
+  *result = this->negative ? -temporary : +temporary;
   return 0;
 }
 
@@ -571,6 +1159,55 @@ apint10_swap
 }
 
 static inline int
+apint10_add_uint16
+  (
+    apint10* this,
+    uint16_t other
+  )
+{ return apint10_add_uint64(this, other); }
+
+static inline int
+apint10_add_uint32
+  (
+    apint10* this,
+    uint32_t other
+  )
+{ return apint10_add_uint64(this, other); }
+
+static inline int
+apint10_add_uint64
+  (
+    apint10* this,
+    uint64_t other
+  )
+{
+  apint10 b;
+  if (apint10_initialize(&b)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&b, other)) {
+    apint10_uninitialize(&b);
+    return 1;
+  }
+  if (apint10_add(this, &b)) {
+    apint10_uninitialize(&b);
+    return 1;
+  }
+  apint10_uninitialize(&b);
+  return 0;
+}
+
+static inline int
+apint10_add_uint8
+  (
+    apint10* this,
+    uint8_t other
+  )
+{
+  return apint10_add_uint64(this, other);
+}
+
+static inline int
 apint10_add
   (
     apint10* this,
@@ -580,14 +1217,14 @@ apint10_add
   apint10* a = this;
   apint10* b = other;
 
-  if (a->digits[0] == 0) {
+  if (a->size == 1 && a->digits[0] == 0) {
     // special case: a is zero; result is b
     if (apint10_copy(a, b)) {
       return 1;
     }
     return 0;
   }
-  if (b->digits[0] == 0) {
+  if (a->size == 1 && b->digits[0] == 0) {
     // special case: b is zero, result is a
     return 0;
   }
@@ -607,7 +1244,7 @@ apint10_add
       a = b;
       b = t;
     }
-    // INVARIANT: |a| >= |b|     
+    // INVARIANT: l(a) >= l(b)     
     if (c.capacity < a->size + 1) {
       if (apint10_increase_capacity(&c, a->size + 1 - c.capacity)) {
         apint10_uninitialize(&c);
@@ -634,10 +1271,7 @@ apint10_add
       carry = result / 10; // carry is never greater than 1
       c.digits[i] = digit;
     }
-    c.size = i;
-    if (carry) {
-      c.digits[c.size++] = carry;
-    }
+    c.digits[i] = carry;
     c.negative = a->negative;
   } else {
     // INVARIANT: a and b have different signs
@@ -646,7 +1280,7 @@ apint10_add
     if (apint10_compare_magnitudes(&result, a, b)) {
       return 1;
     }
-    if (result > 0) {
+    if (result < 0) {
       apint10* t = a;
       a = b;
       b = t;
@@ -671,31 +1305,100 @@ apint10_add
       uint8_t y = b->digits[i] + carry;
       carry = (y < carry);
       carry += (x < y);
-      c.digits[i] = x - y;
+      c.digits[i] = x < y ? 10 + x - y : x - y;
     }
     // process digits specific to a
     for (; i < a->size; ++i) {
       uint8_t x = a->digits[i];
       uint8_t y = carry;
       carry = (x < y);
-      c.digits[i] = x - y;
+      c.digits[i] = x < y ? 10 + x - y : x - y;
     }
-    if (c.digits[i] == 0) {
-      c.size = 1;
-    } else {
-      c.size = i;
-    }
-    c.size = i;
-    if (carry) {
-      c.digits[c.size++] = carry;
-    }
+    c.digits[i] = carry;
     c.negative = a->negative;
+  }
+  while (c.size > 1 && !c.digits[c.size - 1]) {
+    c.size--;
   }
 
   apint10_swap(this, &c);
 
   apint10_uninitialize(&c);
 
+  return 0;
+}
+
+static inline int
+apint10_subtract_uint16
+  (
+    apint10* this,
+    uint16_t other
+  )
+{ return apint10_subtract_uint64(this, other); }
+
+static inline int
+apint10_subtract_uint32
+  (
+    apint10* this,
+    uint32_t other
+  )
+{ return apint10_subtract_uint64(this, other); }
+
+static inline int
+apint10_subtract_uint64
+  (
+    apint10* this,
+    uint64_t other
+  )
+{
+  apint10 b;
+  if (apint10_initialize(&b)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&b, other)) {
+    apint10_uninitialize(&b);
+    return 1;
+  }
+  if (apint10_subtract(this, &b)) {
+    apint10_uninitialize(&b);
+    return 1;
+  }
+  apint10_uninitialize(&b);
+  return 0;
+}
+
+static inline int
+apint10_subtract_uint8
+  (
+    apint10* this,
+    uint8_t other
+  )
+{ return apint10_subtract_uint64(this, other); }
+
+static inline int
+apint10_subtract
+  (
+    apint10* this,
+    apint10* other
+  )
+{
+  apint10 b;
+  if (apint10_initialize(&b)) {
+    return 1;
+  }
+  if (apint10_copy(&b, other)) {
+    apint10_uninitialize(&b);
+    return 1;
+  }
+  if (apint10_negate(&b)) {
+    apint10_uninitialize(&b);
+    return 1;
+  }
+  if (apint10_add(this, &b)) {
+    apint10_uninitialize(&b);
+    return 1;
+  }
+  apint10_uninitialize(&b);
   return 0;
 }
 
@@ -759,7 +1462,7 @@ apint10_multiply
 }
 
 static inline int
-apint10_multiply_p10
+apint10_multiply_p10_uint64
   (
     apint10* this,
     uint64_t e
@@ -785,7 +1488,7 @@ apint10_multiply_p10
 }
 
 static inline int
-apint10_divide_p10
+apint10_divide_p10_uint64
   (
     apint10* this,
     uint64_t e
@@ -806,5 +1509,692 @@ apint10_divide_p10
   this->size -= e;
   return 0;
 }
+
+static inline int
+apint10_negate
+  (
+    apint10* this
+  )
+{
+  this->negative = !this->negative; 
+  return 0;
+}
+
+static inline int
+apint10_equal_to
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  )
+{
+  int result1;
+  if (apint10_compare(&result1, this, other)) {
+    return 1;
+  }
+  *result = result1 == 0;
+  return 0;
+}
+
+static inline int
+apint10_not_equal_to
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  )
+{
+  int result1;
+  if (apint10_compare(&result1, this, other)) {
+    return 1;
+  }
+  *result = result1 != 0;
+  return 0;
+}
+
+static inline int
+apint10_greater_than
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  )
+{
+  int result1;
+  if (apint10_compare(&result1, this, other)) {
+    return 1;
+  }
+  *result = result1 > 0;
+  return 0;
+}
+
+static inline int
+apint10_greater_than_or_equal_to
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  )
+{
+  int result1;
+  if (apint10_compare(&result1, this, other)) {
+    return 1;
+  }
+  *result = result1 >= 0;
+  return 0;
+}
+
+static inline int
+apint10_lower_than
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  )
+{
+  int result1;
+  if (apint10_compare(&result1, this, other)) {
+    return 1;
+  }
+  *result = result1 < 0;
+  return 0;
+}
+
+static inline int
+apint10_lower_than_or_equal_to
+  (
+    bool* result,
+    apint10* this,
+    apint10* other
+  )
+{
+  int result1;
+  if (apint10_compare(&result1, this, other)) {
+    return 1;
+  }
+  *result = result1 <= 0;
+  return 0;
+}
+
+#define On(Operation, Type) \
+  static inline int \
+  apint10_is_##Operation##_##Type \
+    ( \
+      bool* result, \
+      apint10* this, \
+      Type##_t x \
+    ) \
+  { return apint10_is_##Operation##_##Type(result, this, x); }
+
+On(equal_to, uint16)
+On(equal_to, uint32)
+On(equal_to, uint8)
+On(equal_to, int16)
+On(equal_to, int32)
+On(equal_to, int8)
+
+On(not_equal_to, uint16)
+On(not_equal_to, uint32)
+On(not_equal_to, uint8)
+On(not_equal_to, int16)
+On(not_equal_to, int32)
+On(not_equal_to, int8)
+
+On(greater_than, uint16)
+On(greater_than, uint32)
+On(greater_than, uint8)
+On(greater_than, int16)
+On(greater_than, int32)
+On(greater_than, int8)
+
+On(greater_than_or_equal_to, uint16)
+On(greater_than_or_equal_to, uint32)
+On(greater_than_or_equal_to, uint8)
+On(greater_than_or_equal_to, int16)
+On(greater_than_or_equal_to, int32)
+On(greater_than_or_equal_to, int8)
+
+On(lower_than, uint16)
+On(lower_than, uint32)
+On(lower_than, uint8)
+On(lower_than, int16)
+On(lower_than, int32)
+On(lower_than, int8)
+
+On(lower_than_or_equal_to, uint16)
+On(lower_than_or_equal_to, uint32)
+On(lower_than_or_equal_to, uint8)
+On(lower_than_or_equal_to, int16)
+On(lower_than_or_equal_to, int32)
+On(lower_than_or_equal_to, int8)
+
+#undef On
+
+static inline int
+apint10_equal_to_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_equal_to(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_equal_to_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_int64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_equal_to(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_not_equal_to_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_not_equal_to(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_not_equal_to_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_int64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_not_equal_to(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_greater_than_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_greater_than(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_greater_than_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_int64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_greater_than(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_greater_than_or_equal_to_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_greater_than_or_equal_to(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_greater_than_or_equal_to_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_int64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_greater_than_or_equal_to(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_lower_than_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_lower_than(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_lower_than_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_int64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_lower_than(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_lower_than_or_equal_to_uint64
+  (
+    bool* result,
+    apint10* this,
+    uint64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_uint64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_lower_than_or_equal_to(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_lower_than_or_equal_to_int64
+  (
+    bool* result,
+    apint10* this,
+    int64_t other
+  )
+{
+  bool result1;
+  apint10 other1;
+  if (apint10_initialize(&other1)) {
+    return 1;
+  }
+  if (apint10_from_int64(&other1, other)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  if (apint10_lower_than_or_equal_to(&result1, this, &other1)) {
+    apint10_uninitialize(&other1);
+    return 1;
+  }
+  apint10_uninitialize(&other1);
+  *result = result1;
+  return 0;
+}
+
+static inline int
+apint10_to_uint16
+  (
+    uint16_t* result,
+    apint10* this
+  )
+{
+  if (this->negative) {
+    return 1;
+  }
+  uint32_t temporary = 0;
+  for (size_t i = this->size; i > 0; --i) {
+    temporary = (uint32_t)this->digits[i - 1] + temporary * UINT32_C(10);
+    if (temporary > UINT16_MAX) {
+      return 1;
+    }
+  }
+  *result = (uint16_t)temporary;
+  return 0;
+}
+
+static inline int
+apint10_to_uint32
+  (
+    uint32_t* result,
+    apint10* this
+  )
+{
+  if (this->negative) {
+    return 1;
+  }
+  uint64_t temporary = 0;
+  for (size_t i = this->size; i > 0; --i) {
+    temporary = (uint64_t)this->digits[i - 1] + temporary * UINT64_C(10);
+    if (temporary > UINT32_MAX) {
+      return 1;
+    }
+  }
+  *result = (uint32_t)temporary;
+  return 0;
+}
+
+static inline int
+apint10_to_uint64
+  (
+    uint64_t* result,
+    apint10* this
+  )
+{
+  if (this->negative) {
+    return 1;
+  }
+  uint64_t temporary = 0;
+  for (size_t i = this->size; i > 0; --i) {
+    temporary = this->digits[i - 1] + temporary * 10;
+  }
+  *result = temporary;
+  return 0;
+}
+
+static inline int
+apint10_to_uint8
+  (
+    uint8_t* result,
+    apint10* this
+  )
+{
+  if (this->negative) {
+    return 1;
+  }
+  uint16_t temporary = 0;
+  for (size_t i = this->size; i > 0; --i) {
+    temporary = (uint16_t)this->digits[i - 1] + temporary * UINT16_C(10);
+    if (temporary > UINT8_MAX) {
+      return 1;
+    }
+  }
+  *result = (uint8_t)temporary;
+  return 0;
+}
+
+static inline int
+apint10_to_int16
+  (
+    int16_t* result,
+    apint10* this
+  )  
+{
+  int32_t temporary = 0;
+  for (size_t i = this->size; i > 0; --i) {
+    temporary = (int32_t)this->digits[i - 1] + temporary * INT32_C(10);
+    if (temporary > ((int32_t)INT16_MAX) + 1) { // bail out, that would not work out anyway
+      return 1;
+    }
+  }
+  if (this->negative) {
+    temporary = -temporary;
+  }
+  if (temporary < INT16_MIN || temporary > INT16_MAX) {
+    return 1;
+  }
+  *result = (int16_t)temporary;
+  return 0;
+}
+
+static inline int
+apint10_to_int32
+  (
+    int32_t* result,
+    apint10* this
+  )
+{
+  int64_t temporary = 0;
+  for (size_t i = this->size; i > 0; --i) {
+    temporary = (int64_t)this->digits[i - 1] + temporary * INT64_C(10);
+    if (temporary > ((int64_t)INT32_MAX) + 1) { // bail out, that would not work out anyway
+      return 1;
+    }
+  }
+  if (this->negative) {
+    temporary = -temporary;
+  }
+  if (temporary < INT32_MIN || temporary > INT32_MAX) {
+    return 1;
+  }
+  *result = (int32_t)temporary;
+  return 0;
+}
+
+static inline int
+apint10_to_int64
+  (
+    int64_t* result,
+    apint10* this
+  )
+{
+  uint64_t vu = 0;
+  for (size_t i = this->size; i > 0; --i) {
+    vu = this->digits[i - 1] + vu * 10;
+    if (vu > INT64_MAX + UINT64_C(1)) { // bail out, this would not work out anyway
+      return 1;
+    }
+  }
+  int64_t vi;
+  if (this->negative) {
+    // The right hande side expression can be explained easily:
+    // We use uint8_t as an example.
+    // First, take -128 and add 1 to get to -127 (we cannot just negate -128 as +128 is not representable by uint8_t).
+    // Then negate to obtain +127. Then can cast to unsigned.
+    // Then add one to obtain 128.
+    if (vu > (uint64_t)(-(INT64_MIN + 1)) + 1) {
+      return 1;
+    }
+    vi = -(int64_t)vu;
+  } else {
+    if (vi > INT64_MAX) {
+      return 1;
+    }
+    vi = (int64_t)vu;
+  }
+  if (vi < INT64_MIN || vi > INT64_MAX) {
+    return 1;
+  }
+  *result = vi;
+  return 0;
+}
+
+static inline int
+apint10_to_int8
+  (
+    int8_t* result,
+    apint10* this
+  )
+{
+  int16_t temporary = 0;
+  for (size_t i = this->size; i > 0; --i) {
+    temporary = (int16_t)this->digits[i - 1] + temporary * INT16_C(10);
+    if (temporary > ((int16_t)INT8_MAX) + 1) { // bail out, that would not work out anyway
+      return 1;
+    }
+  }
+  if (this->negative) {
+    temporary = -temporary;
+  }
+  if (temporary < INT8_MIN || temporary > INT8_MAX) {
+    return 1;
+  }
+  *result = (int8_t)temporary;
+  return 0;
+}
+
+#if 0
+static inline int
+apint10_power_of_two
+  (
+    apint10* this
+  );
+#endif
+
+#if 0
+static inline int
+apint10_power_of_five
+  (
+    apint10* this
+  );
+#endif
+
+#if 0
+static inline int
+apint10_power_of_ten
+  (
+    apint10* this
+  );
+#endif
 
 #endif // ARCADIA_RING1_SUPPORT_APINT10_H_INCLUDED

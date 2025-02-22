@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-01-01
+// Last modified: 2025-02-19
 
 #if !defined(ARCADIA_RING1_INCLUDE_H_INCLUDED)
 #define ARCADIA_RING1_INCLUDE_H_INCLUDED
@@ -21,6 +21,8 @@
 #pragma push_macro("ARCADIA_RING1_PRIVATE")
 #undef ARCADIA_RING1_PRIVATE
 #define ARCADIA_RING1_PRIVATE (1)
+
+#include "Arcadia/Ring1/Implementation/Arrays.h"
 
 #include "Arcadia/Ring1/Implementation/Atoms.h"
 
@@ -47,7 +49,7 @@
 
 #include "Arcadia/Ring1/Implementation/isPowerOfTwo.h"
 
-#include "Arcadia/Ring1/Implementation/isUtf8.h"
+#include "Arcadia/Ring1/Implementation/Utf8.h"
 
 #include "Arcadia/Ring1/Implementation/makeBitmask.h"
 

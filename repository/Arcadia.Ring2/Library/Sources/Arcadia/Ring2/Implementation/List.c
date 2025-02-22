@@ -15,10 +15,10 @@
 
 // Last modified: 2024-10-07
 
+#define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/List.h"
 
 #include "Arcadia/Ring2/Include.h"
-#include "R/DynamicArrayUtilities.h"
 
 static Arcadia_BooleanValue g_initialized = Arcadia_BooleanValue_False;
 

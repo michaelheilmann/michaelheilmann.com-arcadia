@@ -13,6 +13,9 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+// Last modified: 2024-09-01
+
+#define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/Stack.h"
 
 #include "Arcadia/Ring2/Include.h"

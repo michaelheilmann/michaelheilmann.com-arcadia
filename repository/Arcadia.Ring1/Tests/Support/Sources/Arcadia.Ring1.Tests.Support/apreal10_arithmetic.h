@@ -13,27 +13,19 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-01
+// Last modified: 2024-09-28
 
-#if !defined(ARCADIA_RING1_UTF8_H_INCLUDED)
-#define ARCADIA_RING1_UTF8_H_INCLUDED
+#if !defined(ARCADIA_RING1_TESTS_SUPPORT_APREAL10_ARITHMETIC_H_INCLUDED)
+#define ARCADIA_RING1_TESTS_SUPPORT_APREAL10_ARITHMETIC_H_INCLUDED
+#include <stdlib.h>
 
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
-#include "Arcadia/Ring1/Implementation/StaticAssert.h"
+#include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring1/Implementation/Utf8ToIeee754/Include.h"
 
-#define Arcadia_Utf8CodePoint_Last (0x0010ffff)
-Arcadia_StaticAssert(Arcadia_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximum - 3, "<internal error>");
-
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia-isUtf8
-Arcadia_BooleanValue
-Arcadia_isUtf8
+void
+Arcadia_Ring1_Tests_Support_apreal10_arithmetic
   (
-    Arcadia_Process* process,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes,
-    Arcadia_SizeValue* numberOfSymbols
+    Arcadia_Process* process
   );
 
-#endif // ARCADIA_RING1_UTF8_H_INCLUDED
+#endif // ARCADIA_RING1_TESTS_SUPPORT_APREAL10_ARITHMETIC_H_INCLUDED

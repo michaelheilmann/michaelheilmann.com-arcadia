@@ -23,14 +23,8 @@
 { \
   Arcadia_##Type##Value h, l; \
   Arcadia_safeMultiply_##Suffix(Arcadia_Process_getProcess1(process), A, B, &h, &l); \
-  if (h != H) { \
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
-    Arcadia_Process_jump(process); \
-  } \
-  if (l != L) { \
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed); \
-    Arcadia_Process_jump(process); \
-  } \
+  Arcadia_Tests_assertTrue (h == H); \
+  Arcadia_Tests_assertTrue (l == L); \
 }
 
 static void
@@ -52,103 +46,75 @@ safeMultiplyNatural8Tests
   static const Arcadia_SizeValue bits = 8;
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural8Value lower, upper;
     Arcadia_Natural8Value u, v;
     // The lower Arcadia_Natural8 value.
     // All bits are one except for the LSB.
     lower = Arcadia_Natural8Value_Maximum;
-    Arcadia_Natural8Value mask = Arcadia_makeBitmaskN8(process1, bits - 1, 1);
+    Arcadia_Natural8Value mask = Arcadia_makeBitmaskN8(Arcadia_Process_getProcess1(process), bits - 1, 1);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural8 value.
     // All bits are zero except for the LSB.
     upper = 1;
     // MAX * 2 = (lower, upper)
-    Arcadia_safeMultiply_n8(process1, Arcadia_Natural8Value_Maximum, 2, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n8(Arcadia_Process_getProcess1(process), Arcadia_Natural8Value_Maximum, 2, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural8Value lower, upper;
     Arcadia_Natural8Value u, v;
     // The lower Arcadia_Natural8 value.
     // All bits are one except for the LSB.
     lower = Arcadia_Natural8Value_Maximum;
-    Arcadia_Natural8Value mask = Arcadia_makeBitmaskN8(process1, bits - 1, 1);
+    Arcadia_Natural8Value mask = Arcadia_makeBitmaskN8(Arcadia_Process_getProcess1(process), bits - 1, 1);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural8 value.
     // All bits are zero except for the LSB.
     upper = 1;
     // 2 * MAX = (lower, upper))
-    Arcadia_safeMultiply_n8(process1, 2, Arcadia_Natural8Value_Maximum, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n8(Arcadia_Process_getProcess1(process), 2, Arcadia_Natural8Value_Maximum, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural8Value upper, lower;
     Arcadia_Natural8Value u, v;
     // The lower Arcadia_Natural8 value.
     // All bits are one except for LSB + 0 and LSB + 1.
     lower = Arcadia_Natural8Value_Maximum;
-    Arcadia_Natural8Value mask = Arcadia_makeBitmaskN8(process1, bits - 2, 2);
+    Arcadia_Natural8Value mask = Arcadia_makeBitmaskN8(Arcadia_Process_getProcess1(process), bits - 2, 2);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural16 value.
     // All bits are zero except for LSB + 0 and LSB + 1.
     upper = 3;
     // MAX * 4 = (lower, upper)
-    Arcadia_safeMultiply_n8(process1, Arcadia_Natural8Value_Maximum, 4, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n8(Arcadia_Process_getProcess1(process), Arcadia_Natural8Value_Maximum, 4, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural8Value upper, lower;
     Arcadia_Natural8Value u, v;
     // The lower Arcadia_Natural8 value.
     // All bits are one except for LSB + 0 and LSB + 1.
     lower = Arcadia_Natural8Value_Maximum;
-    Arcadia_Natural8Value mask = Arcadia_makeBitmaskN8(process1, bits - 2, 2);
+    Arcadia_Natural8Value mask = Arcadia_makeBitmaskN8(Arcadia_Process_getProcess1(process), bits - 2, 2);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural16 value.
     // All bits are zero except for LSB + 0 and LSB + 1.
     upper = 3;
     // 4 * MAX = (lower, upper)
-    Arcadia_safeMultiply_n8(process1, 4, Arcadia_Natural8Value_Maximum, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n8(Arcadia_Process_getProcess1(process), 4, Arcadia_Natural8Value_Maximum, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 }
@@ -172,103 +138,75 @@ safeMultiplyNatural16Tests
   static const Arcadia_SizeValue bits = 16;
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural16Value lower, upper;
     Arcadia_Natural16Value u, v;
     // The lower Arcadia_Natural8 value.
     // All bits are one except for the LSB.
     lower = Arcadia_Natural16Value_Maximum;
-    Arcadia_Natural16Value mask = Arcadia_makeBitmaskN16(process1, bits - 1, 1);
+    Arcadia_Natural16Value mask = Arcadia_makeBitmaskN16(Arcadia_Process_getProcess1(process), bits - 1, 1);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural8 value.
     // All bits are zero except for the LSB.
     upper = 1;
     // MAX * 2 = (lower, upper)
-    Arcadia_safeMultiply_n16(process1, Arcadia_Natural16Value_Maximum, 2, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n16(Arcadia_Process_getProcess1(process), Arcadia_Natural16Value_Maximum, 2, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural16Value lower, upper;
     Arcadia_Natural16Value u, v;
     // The lower Arcadia_Natural8 value.
     // All bits are one except for the LSB.
     lower = Arcadia_Natural16Value_Maximum;
-    Arcadia_Natural16Value mask = Arcadia_makeBitmaskN16(process1, bits - 1, 1);
+    Arcadia_Natural16Value mask = Arcadia_makeBitmaskN16(Arcadia_Process_getProcess1(process), bits - 1, 1);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural8 value.
     // All bits are zero except for the LSB.
     upper = 1;
     // 2 * MAX = (lower, upper))
-    Arcadia_safeMultiply_n16(process1, 2, Arcadia_Natural16Value_Maximum, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n16(Arcadia_Process_getProcess1(process), 2, Arcadia_Natural16Value_Maximum, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural16Value upper, lower;
     Arcadia_Natural16Value u, v;
     // The lower Arcadia_Natural16 value.
     // All bits are one except for LSB + 0 and LSB + 1.
     lower = Arcadia_Natural16Value_Maximum;
-    Arcadia_Natural16Value mask = Arcadia_makeBitmaskN16(process1, bits - 2, 2);
+    Arcadia_Natural16Value mask = Arcadia_makeBitmaskN16(Arcadia_Process_getProcess1(process), bits - 2, 2);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural16 value.
     // All bits are zero except for LSB + 0 and LSB + 1.
     upper = 3;
     // MAX * 4 = (lower, upper)
-    Arcadia_safeMultiply_n16(process1, Arcadia_Natural16Value_Maximum, 4, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n16(Arcadia_Process_getProcess1(process), Arcadia_Natural16Value_Maximum, 4, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural16Value upper, lower;
     Arcadia_Natural16Value u, v;
     // The lower Arcadia_Natural16 value.
     // All bits are one except for LSB + 0 and LSB + 1.
     lower = Arcadia_Natural16Value_Maximum;
-    Arcadia_Natural16Value mask = Arcadia_makeBitmaskN16(process1, bits - 2, 2);
+    Arcadia_Natural16Value mask = Arcadia_makeBitmaskN16(Arcadia_Process_getProcess1(process), bits - 2, 2);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural16 value.
     // All bits are zero except for LSB + 0 and LSB + 1.
     upper = 3;
     // 4 * MAX = (lower, upper)
-    Arcadia_safeMultiply_n16(process1, 4, Arcadia_Natural16Value_Maximum, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n16(Arcadia_Process_getProcess1(process), 4, Arcadia_Natural16Value_Maximum, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 }
@@ -292,103 +230,75 @@ safeMultiplyNatural32Tests
   static const Arcadia_SizeValue bits = 32;
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural32Value lower, upper;
     Arcadia_Natural32Value u, v;
     // The lower Arcadia_Natural32 value.
     // All bits are one except for the LSB.
     lower = Arcadia_Natural32Value_Maximum;
-    Arcadia_Natural32Value mask = Arcadia_makeBitmaskN32(process1, bits - 1, 1);
+    Arcadia_Natural32Value mask = Arcadia_makeBitmaskN32(Arcadia_Process_getProcess1(process), bits - 1, 1);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural32 value.
     // All bits are zero except for the LSB.
     upper = 1;
     // MAX * 2 = (lower, upper)
-    Arcadia_safeMultiply_n32(process1, Arcadia_Natural32Value_Maximum, 2, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n32(Arcadia_Process_getProcess1(process), Arcadia_Natural32Value_Maximum, 2, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural32Value lower, upper;
     Arcadia_Natural32Value u, v;
     // The lower Arcadia_Natural32 value.
     // All bits are one except for the LSB.
     lower = Arcadia_Natural32Value_Maximum;
-    Arcadia_Natural32Value mask = Arcadia_makeBitmaskN32(process1, bits - 1, 1);
+    Arcadia_Natural32Value mask = Arcadia_makeBitmaskN32(Arcadia_Process_getProcess1(process), bits - 1, 1);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural32 value.
     // All bits are zero except for the LSB.
     upper = 1;
     // 2 * MAX = (lower, upper))
-    Arcadia_safeMultiply_n32(process1, 2, Arcadia_Natural32Value_Maximum, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n32(Arcadia_Process_getProcess1(process), 2, Arcadia_Natural32Value_Maximum, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural32Value upper, lower;
     Arcadia_Natural32Value u, v;
     // The lower Arcadia_Natural32 value.
     // All bits are one except for LSB + 0 and LSB + 1.
     lower = Arcadia_Natural32Value_Maximum;
-    Arcadia_Natural32Value mask = Arcadia_makeBitmaskN32(process1, bits - 2, 2);
+    Arcadia_Natural32Value mask = Arcadia_makeBitmaskN32(Arcadia_Process_getProcess1(process), bits - 2, 2);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural32 value.
     // All bits are zero except for LSB + 0 and LSB + 1.
     upper = 3;
     // MAX * 4 = (lower, upper)
-    Arcadia_safeMultiply_n32(process1, Arcadia_Natural32Value_Maximum, 4, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n32(Arcadia_Process_getProcess1(process), Arcadia_Natural32Value_Maximum, 4, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural32Value upper, lower;
     Arcadia_Natural32Value u, v;
     // The lower Arcadia_Natural32 value.
     // All bits are one except for LSB + 0 and LSB + 1.
     lower = Arcadia_Natural32Value_Maximum;
-    Arcadia_Natural32Value mask = Arcadia_makeBitmaskN32(process1, bits - 2, 2);
+    Arcadia_Natural32Value mask = Arcadia_makeBitmaskN32(Arcadia_Process_getProcess1(process), bits - 2, 2);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural32 value.
     // All bits are zero except for LSB + 0 and LSB + 1.
     upper = 3;
     // 4 * MAX = (lower, upper)
-    Arcadia_safeMultiply_n32(process1, 4, Arcadia_Natural32Value_Maximum, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n32(Arcadia_Process_getProcess1(process), 4, Arcadia_Natural32Value_Maximum, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 }
@@ -412,103 +322,75 @@ safeMultiplyNatural64Tests
   static const Arcadia_SizeValue bits = 64;
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural64Value lower, upper;
     Arcadia_Natural64Value u, v;
     // The lower Arcadia_Natural64 value.
     // All bits are one except for the LSB.
     lower = Arcadia_Natural64Value_Maximum;
-    Arcadia_Natural64Value mask = Arcadia_makeBitmaskN64(process1, bits - 1, 1);
+    Arcadia_Natural64Value mask = Arcadia_makeBitmaskN64(Arcadia_Process_getProcess1(process), bits - 1, 1);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural64 value.
     // All bits are zero except for the LSB.
     upper = 1;
     // MAX * 2 = (lower, upper)
-    Arcadia_safeMultiply_n64(process1, Arcadia_Natural64Value_Maximum, 2, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n64(Arcadia_Process_getProcess1(process), Arcadia_Natural64Value_Maximum, 2, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural64Value lower, upper;
     Arcadia_Natural64Value u, v;
     // The lower Arcadia_Natural64 value.
     // All bits are one except for the LSB.
     lower = Arcadia_Natural64Value_Maximum;
-    Arcadia_Natural64Value mask = Arcadia_makeBitmaskN64(process1, bits - 1, 1);
+    Arcadia_Natural64Value mask = Arcadia_makeBitmaskN64(Arcadia_Process_getProcess1(process), bits - 1, 1);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural64 value.
     // All bits are zero except for the LSB.
     upper = 1;
     // 2 * MAX = (lower, upper))
-    Arcadia_safeMultiply_n64(process1, 2, Arcadia_Natural64Value_Maximum, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n64(Arcadia_Process_getProcess1(process), 2, Arcadia_Natural64Value_Maximum, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural64Value upper, lower;
     Arcadia_Natural64Value u, v;
     // The lower Arcadia_Natural64 value.
     // All bits are one except for LSB + 0 and LSB + 1.
     lower = Arcadia_Natural64Value_Maximum;
-    Arcadia_Natural64Value mask = Arcadia_makeBitmaskN64(process1, bits - 2, 2);
+    Arcadia_Natural64Value mask = Arcadia_makeBitmaskN64(Arcadia_Process_getProcess1(process), bits - 2, 2);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural64 value.
     // All bits are zero except for LSB + 0 and LSB + 1.
     upper = 3;
     // MAX * 4 = (lower, upper)
-    Arcadia_safeMultiply_n64(process1, Arcadia_Natural64Value_Maximum, 4, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n64(Arcadia_Process_getProcess1(process), Arcadia_Natural64Value_Maximum, 4, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   {
-    Arcadia_Process1* process1 = Arcadia_Process_getProcess1(process);
     Arcadia_Natural64Value upper, lower;
     Arcadia_Natural64Value u, v;
     // The lower Arcadia_Natural64 value.
     // All bits are one except for LSB + 0 and LSB + 1.
     lower = Arcadia_Natural64Value_Maximum;
-    Arcadia_Natural64Value mask = Arcadia_makeBitmaskN64(process1, bits - 2, 2);
+    Arcadia_Natural64Value mask = Arcadia_makeBitmaskN64(Arcadia_Process_getProcess1(process), bits - 2, 2);
     mask = ~mask;
     lower &= mask;
     // The upper Arcadia_Natural64 value.
     // All bits are zero except for LSB + 0 and LSB + 1.
     upper = 3;
     // 4 * MAX = (lower, upper)
-    Arcadia_safeMultiply_n64(process1, 4, Arcadia_Natural64Value_Maximum, &v, &u);
-    if (u != lower) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
-    if (v != upper) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
-    }
+    Arcadia_safeMultiply_n64(Arcadia_Process_getProcess1(process), 4, Arcadia_Natural64Value_Maximum, &v, &u);
+    Arcadia_Tests_assertTrue(u == lower);
+    Arcadia_Tests_assertTrue(v == upper);
   }
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 }

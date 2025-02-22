@@ -15,8 +15,12 @@
 
 // Last modified: 2025-02-15
 
-#if !defined(ARCADIA_RING2_UTF8WRITER_H_INCLUDED)
-#define ARCADIA_RING2_UTF8WRITER_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_UTF8WRITER_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_UTF8WRITER_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring1/Include.h"
 typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
@@ -47,4 +51,4 @@ Arcadia_Utf8Writer_writeCodePoints
     Arcadia_SizeValue numberOfCodePoints
   );
 
-#endif // ARCADIA_RING2_UTF8WRITER_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_UTF8WRITER_H_INCLUDED

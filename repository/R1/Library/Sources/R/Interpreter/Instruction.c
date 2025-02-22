@@ -18,8 +18,8 @@
 #include "R/Interpreter/Instruction.h"
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Include.h"
 #include "R/Interpreter/Include.h"
-#include "Arcadia/Ring2/Implementation/String.h"
 #include <assert.h>
 
 static Arcadia_Value*

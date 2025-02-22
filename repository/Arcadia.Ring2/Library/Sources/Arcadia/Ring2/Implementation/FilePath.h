@@ -15,10 +15,14 @@
 
 // Last modified: 2024-09-08
 
-#if !defined(ARCADIA_RING2_FILEPATH_H_INCLUDED)
-#define ARCADIA_RING2_FILEPATH_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_FILEPATH_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_FILEPATH_H_INCLUDED
 
-#include "R/Configure.h"
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
+
+#include "Arcadia/Ring2/Implementation/Configure.h"
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 #include "Arcadia/Ring2/Implementation/List.h"
@@ -152,4 +156,4 @@ Arcadia_FilePath_append
     Arcadia_FilePath* other
   );
 
-#endif // ARCADIA_RING2_FILEPATH_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_FILEPATH_H_INCLUDED

@@ -108,7 +108,7 @@ execute1
         }
         if (Arcadia_Value_isForeignProcedureValue(&calleeValue)) {
           Arcadia_ForeignProcedureValue foreignProcedureValue = Arcadia_Value_getForeignProcedureValue(&calleeValue);
-          R_Interpreter_ThreadState_beginForeignProcedureCall(thread, 0, foreignProcedureValue);
+          R_Interpreter_ThreadState_beginForeignProcedureCall(process, thread, 0, foreignProcedureValue);
           Arcadia_JumpTarget jumpTarget;
           Arcadia_Process_pushJumpTarget(process, &jumpTarget);
           if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -123,7 +123,7 @@ execute1
         } else if (Arcadia_Value_isObjectReferenceValue(&calleeValue)) {
           Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&calleeValue);
           if (Arcadia_Type_isSubType(Arcadia_Object_getType(object), _R_Interpreter_Procedure_getType(process))) {
-            R_Interpreter_ThreadState_beginProcedureCall(thread, 0, (R_Interpreter_Procedure*)object);
+            R_Interpreter_ThreadState_beginProcedureCall(process, thread, 0, (R_Interpreter_Procedure*)object);
           } else {
             Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
             Arcadia_Process_jump(process);
@@ -158,6 +158,6 @@ R_executeProcedure
     R_Interpreter_Procedure* procedure
   )
 {
-  R_Interpreter_ThreadState_beginProcedureCall(R_Interpreter_ProcessState_getMainThread(interpreterProcess), 0, procedure);
+  R_Interpreter_ThreadState_beginProcedureCall(process, R_Interpreter_ProcessState_getMainThread(interpreterProcess), 0, procedure);
   execute(process, interpreterProcess);
 }

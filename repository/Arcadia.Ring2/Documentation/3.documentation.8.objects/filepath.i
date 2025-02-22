@@ -1,4 +1,4 @@
-<h4 id="r-filepath">File Path</h4>
+<h4 id="Arcadia_FilePath">Arcadia_FilePath</h4>
 <p>
 <code>R_FilePath</code> represents a file path.
 This type is allocated on the heap and values of this type are referenced by <code>R_FilePath</code> pointers.

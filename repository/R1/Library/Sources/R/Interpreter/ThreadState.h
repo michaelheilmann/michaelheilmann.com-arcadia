@@ -114,6 +114,7 @@ struct R_CallState {
 R_CallState*
 R_Interpreter_ThreadState_beginForeignProcedureCall
   (
+    Arcadia_Process* process,
     R_Interpreter_ThreadState* thread,
     Arcadia_Natural32Value instructionIndex,
     Arcadia_ForeignProcedureValue foreignProcedure
@@ -122,6 +123,7 @@ R_Interpreter_ThreadState_beginForeignProcedureCall
 R_CallState*
 R_Interpreter_ThreadState_beginProcedureCall
   (
+    Arcadia_Process* process,
     R_Interpreter_ThreadState* thread,
     Arcadia_Natural32Value instructionIndex,
     R_Interpreter_Procedure* procedure

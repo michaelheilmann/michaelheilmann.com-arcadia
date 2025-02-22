@@ -1,67 +1,89 @@
-<h4 id="r-string">String</h4>
+<h4 id="Arcadia_String">Arcadia_String</h4>
 <p>
-<code>R_String</code> represents an Unicode string encoded as UTF-8-NO-BOM.
-This type is allocated on the heap and values of this type are referenced by <code>R_String</code> pointers.
-A <code>R_String</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_String</code> value can be safely cast into a <code>R_String</code> pointer.
+<code>Arcadia_String</code> represents an Unicode string encoded as UTF-8-NO-BOM.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_String</code> pointers.
+A <code>Arcadia_String</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>R_String</code> value can be safely cast into a <code>R_String</code> pointer.
 </p>
 
+<p>Arcadia_String derives fro Arcadia_Object and overrides the following methods:</p>
+<ul>
+  <li>Arcadia_Object_equalTo</li>
+  <li>Arcadia_Object_hash</li>
+  <li>Arcadia_Object_notEqualTo</li>
+</ul>
+
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-create-pn">R_String_create_pn</h5>
+<h5 id="Arcadia_String_create_pn">Arcadia_String_create_pn</h5>
 <p><code>
-R_String* R_String_create_pn(R_ImmutableByteArray* immutableByteArray)
+Arcadia_String*
+Arcadia_String_create_pn
+  (
+    Arcadia_Process* process,
+    Arcadia_ImmutableByteArray* immutableByteArray
+  )
 </code></p>
 
 <p>Create a string from an immutable Byte array.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>immutableByteArray</td><td>A pointer to an immutable Byte array</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ImmutableByteBuffer* immutableByteArray</td><td>A pointer to the <code>Arcadia_ImmutableByteArray</code> object</td></tr>
 </table>
 
 <h6><b>Return value</b></h6>
-<p>A pointer to the string.</p>
+<p>A pointer to the <code>Arcadia_String</code> object.</p>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>immutableByteArray</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>immutableByteArray</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-create">R_String_create</h5>
+<h5 id="Arcadia_String_create">Arcadia_String_create</h5>
 <p><code>
-R_String* R_String_create_pn(R_Value value)
+Arcadia_String*
+Arcadia_String_create
+  (
+    Arcadia_Process* process,
+    Arcadia_Value value
+  )
 </code></p>
 
 <p>
 Create a string from a value.
 </p>
 
+<p>The following values are accepted:</p>
+
 <p>
-The specified value may contain a R_ByteBuffer object.
+The specified value may contain a <code>Arcadia_ByteBuffer</code> object.
 In that case, the string is created from the Bytes of the Byte buffer object.
-A <code>R_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>R_ByteBuffer</code> object is not a UTF8 Byte sequence.
+A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ByteBuffer</code> object is not a UTF8 Byte sequence.
 </p>
 
 <p>
-The specified value may contain a R_String object.
-In that case, the string is created from the R_String object.
+The specified value may contain a <code>Arcadia_String</code> object.
+In that case, the string is created from the <code>Arcadia_String</code> object.
 </p>
 
 <p>
-The specified value may contain a R_StringBuffer object.
-In that case, the string is created from the R_StringBuffer object.
+The specified value may contain a <code>Arcadia_StringBuffer</code> object.
+In that case, the string is created from the <code>Arcadia_StringBuffer</code> object.
 </p>
 
 <p>
-The specified value may contain a R_ImmutableByteArray object.
-In that case, the string is created from the R_ImmutableByteArray object.
+The specified value may contain a <code>Arcadia_ImmutableByteArray</code> object.
+In that case, the string is created from the <code>Arcadia_ImmutableByteArray</code> object.
+A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
 </p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>value        </td><td>The value.</td></tr>
+  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Value value     </td><td>The value.</td></tr>
 </table>
 
 <h6><b>Return value</b></h6>
@@ -70,78 +92,76 @@ In that case, the string is created from the R_ImmutableByteArray object.
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
-    <td>The value does not contain either a <code>R_ByteBuffer</code> object, a <code>R_String</code> object, or a <code>R_StringBuffer</code> object.</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
+    <td>The value is not of type <code>Arcadia_ByteBuffer</code>, <code>Arcadia_String</code>, <code>Arcadia_StringBuffer</code>, or <code>Arcadia_ImmutableByteArray</code>.</td>
   </tr>
   <tr>
-    <td>R_Status_EncodingInvalid    </td>
-    <td>The value contains a <code>R_ByteBuffer</code> object. However, the Byte sequence of that <code>R_ByteBuffer</code> object is not a UTF8 Byte sequence.</td>
+    <td>Arcadia_Status_EncodingInvalid</td>
+    <td>
+    The value is a <code>Arcadia_ByteBuffer</code> or <code>Arcadia_ImmutableByteArray</code>.
+    However, the Byte sequence of that <code>Arcadia_ByteBuffer</code> or <code>Arcadia_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
+    </td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-string-endswith-pn">endsWith_pn</h5>
+<h5 id="Arcadia_String_endsWith_pn">Arcadia_String_endsWith_pn</h5>
 <p><code>
-R_BooleanValue R_String_endsWith_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_BooleanValue
+Arcadia_String_endsWith_pn
+  (
+    Arcadia_Process* process,
+    Arcadia_String const* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is a suffix of this string's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_String* self                    </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is a suffix of this string's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this string's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-string-startswith-pn">startsWith_pn</h5>
+<h5 id="Arcadia_String_startsWith_pn">Arcadia_String_startsWith_pn</h5>
 <p><code>
-R_BooleanValue R_String_startsWith_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_BooleanValue
+Arcadia_String_startsWith_pn
+  (
+    Arcadia_String const* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_String* self                    </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is a prefix of this string's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
-</p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-isequalto">isEqualTo</h5>
-<p><code>
-R_BooleanValue R_String_isEqualTo(R_String const* self, R_String const* other)
-</code></p>
-
-<p>Compare this string with another string for equality.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_String const* self </td><td>A pointer to this string.</td></tr>
-  <tr><td>R_String const* other</td><td>A pointer to the other string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>
-<code>R_BooleanValue_True</code> if this string is equal to the other string.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this string's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

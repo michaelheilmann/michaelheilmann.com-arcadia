@@ -20,165 +20,75 @@
 #include <stdlib.h>
 #include "Arcadia/Ring1/Support/apint10.h"
 
+// test
+// - initialize and
+// - set i64
 static void
-additionTestFixture
-  (
-    Arcadia_Process* process,
-    int64_t x,
-    int64_t y,
-    int64_t z
-  )
-{
-  apint10 a, b, c;
-  if (apint10_initialize(&a)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (apint10_initialize(&b)) {
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (apint10_initialize(&c)) {
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-
-  if (apint10_from_int64(&a, x) || apint10_from_int64(&b, y) || apint10_from_int64(&c, z)) {
-    apint10_uninitialize(&c);
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (apint10_add(&a, &b)) {
-    apint10_uninitialize(&c);
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  int result;
-  if (apint10_compare(&result, &a, &c)) {
-    apint10_uninitialize(&c);
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (result) {
-    apint10_uninitialize(&c);
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-
-  apint10_uninitialize(&c);
-  apint10_uninitialize(&b);
-  apint10_uninitialize(&a);
-}
-
-static void
-multiplicationTestFixture
-  (
-    Arcadia_Process* process,
-    int64_t x,
-    int64_t y,
-    int64_t z
-  ) 
-{
-  apint10 a, b, c;
-  if (apint10_initialize(&a)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (apint10_initialize(&b)) {
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (apint10_initialize(&c)) {
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-
-  if (apint10_from_int64(&a, x) || apint10_from_int64(&b, y) || apint10_from_int64(&c, z)) {
-    apint10_uninitialize(&c);
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (apint10_multiply(&a, &b)) {
-    apint10_uninitialize(&c);
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  int result;
-  if (apint10_compare(&result, &a, &c)) {
-    apint10_uninitialize(&c);
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (result) {
-    apint10_uninitialize(&c);
-    apint10_uninitialize(&b);
-    apint10_uninitialize(&a);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-
-  apint10_uninitialize(&c);
-  apint10_uninitialize(&b);
-  apint10_uninitialize(&a);
-}
-
-static void
-testAddition
+testFromI64
   (
     Arcadia_Process* process
   )
 {
-  additionTestFixture(process,  0,  0,  0); // TODO: Test negative zero and positive zero combinations.
+  size_t k = 0;
+  apint10 v[2];
+  for (; k < 2; ++k) {
+    if (apint10_initialize(&v[k])) {
+      goto Error;
+    }
+  }
+  for (size_t i = 0; i < 63; ++i) {
+    int64_t u = INT64_C(1) << i;
+    if (apint10_from_int64(&v[0], u)) {
+      goto Error;
+    }
+  }
 
-  additionTestFixture(process,  0, +1, +1);
-  additionTestFixture(process, +1,  0, +1);
-  additionTestFixture(process, +1, +1, +2);
-
-  additionTestFixture(process,  0, -1, -1);
-  additionTestFixture(process, -1,- 0, -1);
-  additionTestFixture(process, -1, -1, -2);
+  while (k > 0) {
+    apint10_uninitialize(&v[--k]);
+  }
+  return;
+Error:
+  while (k > 0) {
+    apint10_uninitialize(&v[--k]);
+  }
+  Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
+  Arcadia_Process_jump(process);
 }
 
+
+// test
+// - initialize and
+// - set u64
 static void
-testMultiplication
+testFromU64
   (
     Arcadia_Process* process
   )
 {
-  multiplicationTestFixture(process, 0, 0, 0); // TODO: Test negative zero and positive zero combinations.
-  multiplicationTestFixture(process, 0, +1, 0);
-  multiplicationTestFixture(process, 0, -1, 0);
-  multiplicationTestFixture(process, +1, 0, 0);
-  multiplicationTestFixture(process, -1, 0, 0);
-  multiplicationTestFixture(process, -1, -1, +1);
-  multiplicationTestFixture(process, -1, +1, -1);
-  multiplicationTestFixture(process, +1, -1, -1);
-  multiplicationTestFixture(process, +1, +1, +1);
+  size_t k = 0;
+  apint10 v[2];
+  for (; k < 2; ++k) {
+    if (apint10_initialize(&v[k])) {
+      goto Error;
+    }
+  }
+  for (size_t i = 0; i < 63; ++i) {
+    uint64_t u = UINT64_C(1) << i;
+    if (apint10_from_uint64(&v[0], u)) {
+      goto Error;
+    }
+  }
 
-  multiplicationTestFixture(process, +3, +7, +21);
-  multiplicationTestFixture(process, +3, -7, -21);
-  multiplicationTestFixture(process, -3, +7, -21);
-  multiplicationTestFixture(process, -3, -7, +21);
+  while (k > 0) {
+    apint10_uninitialize(&v[--k]);
+  }
+  return;
+Error:
+  while (k > 0) {
+    apint10_uninitialize(&v[--k]);
+  }
+  Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
+  Arcadia_Process_jump(process);
 }
 
 void
@@ -187,6 +97,6 @@ Arcadia_Ring1_Tests_Support_apint10
     Arcadia_Process* process
   )
 {
-  testAddition(process);
-  testMultiplication(process);
+  testFromI64(process);
+  testFromU64(process);
 }

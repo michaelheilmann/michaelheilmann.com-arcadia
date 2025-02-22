@@ -18,7 +18,6 @@
 #include <stdlib.h>
 
 #include "Arcadia/Ring2/Include.h"
-#include "R/R.h"
 #include <stdlib.h>
 #include <string.h>
 

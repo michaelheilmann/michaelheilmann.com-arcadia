@@ -15,6 +15,7 @@
 
 // Last modified: 2024-09-01
 
+#define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/String.h"
 
 #include "R/Convert/Include.h"

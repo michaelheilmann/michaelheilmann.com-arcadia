@@ -1,4 +1,4 @@
-<h4 id="arcadia-countleadingzeroes">Arcadia_countLeadingZeroes</h4>
+<h4 id="Arcadia_countLeadingZeroes*">Arcadia_countLeadingZeroes*</h4>
 <p>Return the number of leadin gzeroes of the binary representation of a value.</p>
 <p><code>
 Arcadia_SizeValue

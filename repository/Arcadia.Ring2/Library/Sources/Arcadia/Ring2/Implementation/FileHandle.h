@@ -15,8 +15,12 @@
 
 // Last modified: 2024-08-29
 
-#if !defined(ARCADIA_RING2_FILEHANDLE_H_INCLUDED)
-#define ARCADIA_RING2_FILEHANDLE_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_FILEHANDLE_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_FILEHANDLE_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring1/Include.h"
 typedef struct Arcadia_FilePath Arcadia_FilePath;
@@ -121,4 +125,4 @@ R_FileHandle_write
     Arcadia_SizeValue* bytesWritten
   );
 
-#endif // ARCADIA_RING2_FILEHANDLE_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_FILEHANDLE_H_INCLUDED

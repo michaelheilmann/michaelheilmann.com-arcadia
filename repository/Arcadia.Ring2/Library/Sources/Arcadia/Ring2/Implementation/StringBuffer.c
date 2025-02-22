@@ -15,9 +15,9 @@
 
 // Last modified: 2024-09-22
 
+#define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/StringBuffer.h"
 
-#include "R/Utf8/EncodeCodePoints.h"
 #include "Arcadia/Ring2/Include.h"
 
 static void
@@ -266,7 +266,7 @@ Arcadia_StringBuffer_appendCodePoints
     Arcadia_SizeValue numberOfCodePoints
   )
 {
-  R_Utf8_encodeCodePoints(process, codePoints, numberOfCodePoints, self, (void (*)(Arcadia_Process*, void*, Arcadia_Natural8Value const*, Arcadia_SizeValue))&appendBytesInternal);
+  Arcadia_Utf8_encodeCodePoints(process, codePoints, numberOfCodePoints, self, (void (*)(Arcadia_Process*, void*, Arcadia_Natural8Value const*, Arcadia_SizeValue))&appendBytesInternal);
 }
 
 Arcadia_BooleanValue

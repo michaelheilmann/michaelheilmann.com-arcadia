@@ -1,4 +1,4 @@
-<h4 id="r-filehandle">File Handle</h4>
+<h4 id="Arcadia_FileHandle">Arcadia_FileHandle</h4>
 <p>
 <code>R_FileHandle</code> represents a operating system file handle.
 This type is allocated on the heap and values of this type are referenced by <code>R_FileHandle</code> pointers.

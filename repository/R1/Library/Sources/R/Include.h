@@ -18,11 +18,9 @@
 #if !defined(R_R_H_INCLUDED)
 #define R_R_H_INCLUDED
 
-#include "R/CommandLine/Include.h"
 #include "R/execute.h"
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Include.h"
 #include "R/Interpreter/Procedure.h"
-#include "R/DynamicArrayUtilities.h"
 
 #endif // R_R_H_INCLUDED

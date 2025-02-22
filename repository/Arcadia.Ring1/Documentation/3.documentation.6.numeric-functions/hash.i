@@ -1,4 +1,4 @@
-<h4 id="arcadia-hash">Arcadia_hash</h4>
+<h4 id="Arcadia_hash*">Arcadia_hash*</h4>
 <p>Return the hash of a value.</p>
 <p><code>
 Arcadia_SizeValue

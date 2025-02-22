@@ -15,8 +15,12 @@
 
 // Last modified: 2024-09-01
 
-#if !defined(ARCADIA_RING2_STRING_H_INCLUDED)
-#define ARCADIA_RING2_STRING_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_STRING_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_STRING_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring1/Include.h"
 
@@ -27,7 +31,7 @@ struct Arcadia_String {
   Arcadia_ImmutableUtf8String* immutableUtf8String;
 };
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-create-pn
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_create_pn
 Arcadia_String*
 Arcadia_String_create_pn
   (
@@ -35,7 +39,7 @@ Arcadia_String_create_pn
     Arcadia_ImmutableByteArray* immutableByteArray
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-create
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_create
 Arcadia_String*
 Arcadia_String_create
   (
@@ -43,7 +47,7 @@ Arcadia_String_create
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-endswith-pn
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_String_endsWith_pn
   (
@@ -53,7 +57,7 @@ Arcadia_String_endsWith_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-startswith-pn
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_startsWith-pn
 Arcadia_BooleanValue
 Arcadia_String_startsWith_pn
   (
@@ -63,7 +67,7 @@ Arcadia_String_startsWith_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-getnumberofbytes
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_string_getNumberOfBytes
 Arcadia_SizeValue
 Arcadia_String_getNumberOfBytes
   (
@@ -78,7 +82,7 @@ Arcadia_String_getBytes
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-getbyteat
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String-getByteAt
 Arcadia_Natural8Value
 Arcadia_String_getByteAt
   (
@@ -87,7 +91,7 @@ Arcadia_String_getByteAt
     Arcadia_SizeValue index
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-getnumberofsymbols
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_getNumberOfSymbols
 Arcadia_SizeValue
 Arcadia_String_getNumberOfSymbols
   (
@@ -96,7 +100,7 @@ Arcadia_String_getNumberOfSymbols
   );
 
 #if 0
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-getsubstring
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_getSubString
 Arcadia_String*
 Arcadia_String_getSubString
   (
@@ -106,7 +110,7 @@ Arcadia_String_getSubString
   );
 #endif
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-isequalto-pn
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_isEqualTo_pn
 Arcadia_BooleanValue
 Arcadia_String_isEqualTo_pn
   (
@@ -116,7 +120,7 @@ Arcadia_String_isEqualTo_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-toboolean
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toBoolean
 Arcadia_BooleanValue
 Arcadia_String_toBoolean
   (
@@ -124,7 +128,7 @@ Arcadia_String_toBoolean
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-tointeger16
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toInteger16
 Arcadia_Integer16Value
 Arcadia_String_toInteger16
   (
@@ -132,7 +136,7 @@ Arcadia_String_toInteger16
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-tointeger32
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toInteger32
 Arcadia_Integer32Value
 Arcadia_String_toInteger32
   (
@@ -140,7 +144,7 @@ Arcadia_String_toInteger32
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-tointeger64
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toInteger64
 Arcadia_Integer64Value
 Arcadia_String_toInteger64
   (
@@ -148,7 +152,7 @@ Arcadia_String_toInteger64
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#r-string-tointeger8
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toInteger8
 Arcadia_Integer8Value
 Arcadia_String_toInteger8
   (
@@ -156,7 +160,7 @@ Arcadia_String_toInteger8
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-tonatural16
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toNatural16
 Arcadia_Natural16Value
 Arcadia_String_toNatural16
   (
@@ -164,7 +168,7 @@ Arcadia_String_toNatural16
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-tonatura32
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toNatural32
 Arcadia_Natural32Value
 Arcadia_String_toNatural32
   (
@@ -172,7 +176,7 @@ Arcadia_String_toNatural32
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-tonatural64
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toNatural64
 Arcadia_Natural64Value
 Arcadia_String_toNatural64
   (
@@ -180,7 +184,7 @@ Arcadia_String_toNatural64
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-tonatural8
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String_toNatural8
 Arcadia_Natural8Value
 Arcadia_String_toNatural8
   (
@@ -188,7 +192,7 @@ Arcadia_String_toNatural8
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#arcadia-string-toreal32
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia-string-toreal32
 Arcadia_Real32Value
 Arcadia_String_toReal32
   (
@@ -212,4 +216,4 @@ Arcadia_String_toVoid
     Arcadia_String const* self
   );
 
-#endif // ARCADIA_RING2_STRING_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_STRING_H_INCLUDED

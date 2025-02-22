@@ -18,7 +18,16 @@
 #if !defined(ARCADIA_RING2_INCLUDE_H_INCLUDED)
 #define ARCADIA_RING2_INCLUDE_H_INCLUDED
 
+#pragma push_macro("ARCADIA_RING2_PRIVATE")
+#undef ARCADIA_RING2_PRIVATE
+#define ARCADIA_RING2_PRIVATE (1)
+
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
+
+#include "Arcadia/Ring2/Implementation/BigInteger.h"
+#include "Arcadia/Ring2/Implementation/CommandLine.h"
+
+#include "Arcadia/Ring1/Include.h"
 
 #include "Arcadia/Ring2/Implementation/FileHandle.h"
 #include "Arcadia/Ring2/Implementation/FilePath.h"
@@ -36,5 +45,8 @@
 
 #include "Arcadia/Ring2/Implementation/String.h"
 #include "Arcadia/Ring2/Implementation/StringBuffer.h"
+
+#undef ARCADIA_RING2_PRIVATE
+#pragma pop_macro("ARCADIA_RING2_PRIVATE")
 
 #endif // ARCADIA_RING2_INCLUDE_H_INCLUDED

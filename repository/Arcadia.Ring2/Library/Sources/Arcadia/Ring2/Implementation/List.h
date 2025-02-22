@@ -13,8 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_RING2_LIST_H_INCLUDED)
-#define ARCADIA_RING2_LIST_H_INCLUDED
+// Last modified: 2024-09-27
+
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_LIST_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_LIST_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring1/Include.h"
 
@@ -27,14 +33,14 @@ struct Arcadia_List {
   Arcadia_SizeValue capacity;
 };
 
-// https://michaelheilmann.com/repository/R1/#r-list-create
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_create
 Arcadia_List*
 Arcadia_List_create
   (
     Arcadia_Process* process
   );
 
-// https://michaelheilmann.com/repository/R1/#r-list-clear
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_clear
 void
 Arcadia_List_clear
   (
@@ -42,7 +48,7 @@ Arcadia_List_clear
     Arcadia_List* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-list-getsize
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_getSize
 Arcadia_SizeValue
 Arcadia_List_getSize
   (
@@ -50,7 +56,7 @@ Arcadia_List_getSize
     Arcadia_List* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-list-append
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_append
 void
 Arcadia_List_append
   (
@@ -59,7 +65,7 @@ Arcadia_List_append
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/R1/#r-list-prepend
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_prepend
 void
 Arcadia_List_prepend
   (
@@ -68,7 +74,7 @@ Arcadia_List_prepend
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/R1/#r-list-insertat
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_insertAt
 void
 Arcadia_List_insertAt
   (
@@ -78,7 +84,7 @@ Arcadia_List_insertAt
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/R1/#r-list-getat
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_getAt
 Arcadia_Value
 Arcadia_List_getAt
   (
@@ -87,7 +93,7 @@ Arcadia_List_getAt
     Arcadia_SizeValue index
   );
 
-// https://michaelheilmann.com/repository/R1/#r-list-remove
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_remove
 void
 Arcadia_List_remove
   (
@@ -97,7 +103,7 @@ Arcadia_List_remove
     Arcadia_SizeValue count
   );
 
-// https://michaelheilmann.com/repository/R1/#r-list-isempty
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_isEmpty
 static inline Arcadia_BooleanValue
 Arcadia_List_isEmpty
   (
@@ -166,4 +172,4 @@ Define(Arcadia_Void, Void, void)
 
 #undef Define
 
-#endif // ARCADIA_RING2_LIST_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_LIST_H_INCLUDED

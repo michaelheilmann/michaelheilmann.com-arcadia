@@ -46,7 +46,7 @@ struct Arcadia_ImmutableUtf8String {
 };
 
 /// @brief Create an immutable UTF8 string object from an UTF8 string.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param bytes A pointer to a sequence of @a numberOfBytes Bytes.
 /// @param numberOfBytes The number of Bytes in the sequence of Bytes pointed to by @a bytes.
 /// @return A pointer to the immmutable UTF8 string object.
@@ -61,7 +61,7 @@ Arcadia_ImmutableUtf8String_create
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Boolean value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param booleanValue The Arcadia_Boolean value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -72,7 +72,7 @@ Arcadia_ImmutableUtf8String_createFromBoolean
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Integer16 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param integer16Value The Arcadia_Integer16 value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -83,7 +83,7 @@ Arcadia_ImmutableUtf8String_createFromInteger16
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Integer32 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param integer32Value The Arcadia_Integer32 value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -94,7 +94,7 @@ Arcadia_ImmutableUtf8String_createFromInteger32
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Integer64 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param integer64Value The Arcadia_Integer64 value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -105,7 +105,7 @@ Arcadia_ImmutableUtf8String_createFromInteger64
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Integer8 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param integer8Value The Arcadia_Integer8 value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -116,7 +116,7 @@ Arcadia_ImmutableUtf8String_createFromInteger8
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Natural16 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param natural16Value The Arcadia_Natural16 value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -127,7 +127,7 @@ Arcadia_ImmutableUtf8String_createFromNatural16
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Natural32 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param natural32Value The Arcadia_Natural32 value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -138,7 +138,7 @@ Arcadia_ImmutableUtf8String_createFromNatural32
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Natural64 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param natural64Value The Arcadia_Natural64 value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -149,7 +149,7 @@ Arcadia_ImmutableUtf8String_createFromNatural64
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Natural8 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param natural8Value The Arcadia_Natural8 value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -160,7 +160,7 @@ Arcadia_ImmutableUtf8String_createFromNatural8
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_Boolean value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param voidValue The Arcadia_Void value.
 /// @return A pointer to the immmutable UTF8 string object.
 Arcadia_ImmutableUtf8String*
@@ -180,7 +180,7 @@ Arcadia_ImmutableUtf8String_visit
   );
 
 /// @brief Get a pointer to the Bytes of this immutable UTF8 string object.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object. 
 /// @return A pointer to the Bytes of this immutable UTF8 stirng object.
 /// @warning The Bytes of the array must not be modified.
@@ -192,7 +192,7 @@ Arcadia_ImmutableUtf8String_getBytes
   );
 
 /// @brief Get the number of Bytes in this immutable UTF8 string object.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object. 
 /// @return The number of Bytes in this immutable UTF8 string object.
 Arcadia_SizeValue
@@ -203,7 +203,7 @@ Arcadia_ImmutableUtf8String_getNumberOfBytes
   );
 
 /// @brief Get the hash of this immutable UTF8 string object.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The hash of this immutable UTF8 string object.
 Arcadia_SizeValue
@@ -214,7 +214,7 @@ Arcadia_ImmutableUtf8String_getHash
   );
 
 /// @brief Convert this immutable UTF8 string object into a Boolean value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Boolean value.
 /// @error #Arcadia_Status_ConversionFailed the string is not a Boolean literal
@@ -226,7 +226,7 @@ Arcadia_ImmutableUtf8String_toBoolean
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer16 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Integer16 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer16 literal
@@ -238,7 +238,7 @@ Arcadia_ImmutableUtf8String_toInteger16
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer32 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Integer32 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer32 literal
@@ -250,7 +250,7 @@ Arcadia_ImmutableUtf8String_toInteger32
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer64 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Integer64 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer64 literal
@@ -262,7 +262,7 @@ Arcadia_ImmutableUtf8String_toInteger64
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer8 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Integer8 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer8 literal
@@ -274,7 +274,7 @@ Arcadia_ImmutableUtf8String_toInteger8
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural16 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Natural16 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural16 literal
@@ -286,7 +286,7 @@ Arcadia_ImmutableUtf8String_toNatural16
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural32 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Natural32 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural32 literal
@@ -298,7 +298,7 @@ Arcadia_ImmutableUtf8String_toNatural32
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural64 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Natural64 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural64 literal
@@ -310,7 +310,7 @@ Arcadia_ImmutableUtf8String_toNatural64
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural8 value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Natural8 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural8 literal
@@ -322,7 +322,7 @@ Arcadia_ImmutableUtf8String_toNatural8
   );
 
 /// @brief Convert this immutable UTF8 string object into a Void value.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The Void value.
 /// @error #Arcadia_Status_ConversionFailed the string is not a Void literal

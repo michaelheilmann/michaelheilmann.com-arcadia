@@ -1,5 +1,5 @@
-<h4 id="arcadia-nextpoweroftwogreaterthanorequalto">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo</h4>
-<p>R provides functions returning the next power of two greater or equal to a value.</p>
+<h4 id="Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*</h4>
+<p>Arcadia Ring 1 provides functions returning the next power of two greater or equal to a value.</p>
 <p><code>
 <my-mv>Type</my-mv>
 Arcadia_nextPowerOfTwoGreaterThanOrEqualTo<my-mv>Suffix</my-mv>

@@ -60,135 +60,176 @@
 <main>
   <div class="left-column"></div>
   <div class="center-column">
-  <h1>Michael Heilmann's Runtime Mark 1</h1>
+  <h1>Michael Heilmann's Arcadia Ring 2</h1>
   <p>
-  This is the documentation for Michael  Heilmann's Runtime Mark 1,
-  henceforth R1. R1 facilitates the creation of C programs - in particular interpreters - that are portable,
-  maintainable, as well as safe. R1 is available at <a href="https://michaelheilmann.com/repository/R1">michaelheilmann.com/repository/R1</a>.
+  This is the documentation for Michael  Heilmann's Arcadia Ring 2.
+  Arcadia Ring 2 facilitates the creation of C programs - in particular interpreters - that are portable, maintainable, as well as safe.
 
 <h2>1. Files</h2>
 <p>
-You can find the sources of R1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
-The subdirectory of R1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1</a>.</p>
+You can find the sources of Arcadia Ring 2 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
+The subdirectory of Arcadia Ring 2 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2</a>.</p>
 </p>
 
 <ul>
   <li>The (sources of the) library resides in the directory
-  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Sources</a>
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Sources</a>
   </li>
   <li>The (sources of) tests reside in the directory
-  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Tests</a>
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Tests</a>
   </li>
   <li>The (sources of this very documentation you are reading) documentation reside in the directory
-  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/R1/Documentation</a>
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Documentation</a>
   </li>
 </ul>
 
 <p>
-R1 supports various platforms (including but not restricted to Windows, Linux, and many more), however, we currently only officially support Windows.
-Find instructions on how to build, test, and use R1 under various systems,
-please refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/README.md">README.md</a> in the root folder of the repository.
+Arcadia Ring 2 supports various platforms (including but not restricted to Windows, Linux, and many more), however, we currently only officially support Windows.
+For instructions on how to build, test, and use Arcadia Ring 1,
+refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/README.md">README.md</a> in the root folder of the repository.
 </p>
 
 <h2>2. Further References</h2>
-<p>R1 relies on <a href="https://michaelheilmann.com/repository/Arms1">ARMS1</a> and <a href="https://michaelheilmann.com/repository/Arcadia.Ring1">Arcadia Ring1</a>.</p>
+<p>Arcadia Ring 2 relies on <a href="https://michaelheilmann.com/repository/Arms1">ARMS1</a> and <a href="https://michaelheilmann.com/repository/Arcadia.Ring1">Arcadia Ring1</a>.</p>
 
   <h2>3. Documentation</h2>
 
 <h3>3.8. Objects</h3>
 
-<h4 id="r-bytebuffer">Byte Buffer</h4>
+<h4 id="Arcadia_ByteBuffer">Arcadia_ByteBuffer</h4>
 <p>
-<code>R_ByteBuffer</code> represents a mutable sequence of Bytes.
-This type is allocated on the heap and values of this type are referenced by <code>R_ByteBuffer</code> pointers.
-A <code>R_ByteBuffer</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_ByteBuffer</code> value can be safely cast into a <code>R_ByteBuffer</code> pointer.
+<code>Arcadia_ByteBuffer</code> represents a mutable sequence of Bytes.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_ByteBuffer</code> pointers.
+A <code>Arcadia_ByteBuffer</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuffer</code> value can be safely cast into a <code>R_ByteBuffer</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-create">create</h5>
+<h5 id="Arcadia_ByteBuffer_create">Arcadia_ByteBuffer_create</h5>
 
 <p><code>
-R_ByteBuffer* R_ByteBuffer_create()
+Arcadia_ByteBuffer*
+Arcadia_ByteBuffer_create
+  (
+    Arcadia_Process* process
+  )
 </code></p>
 
-<p>Create an empty Byte buffer.</p>
+<p>Create a Byte buffer.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>Arcadia_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
+</table>
 
 <h6><b>Return Value</b></h6>
 <p>A pointer to the Byte buffer.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-clear">clear</h5>
+<h5 id="Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</h5>
 <p><code>
-void R_ByteBuffer_clear(R_ByteBuffer* self)
+void
+Arcadia_ByteBuffer_clear
+  (
+    Arcadia_ByteBuffer* self
+  )
 </code></p>
 
 <p>Set the number of elements of this Byte buffer to zero.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-bytebuffer-endswith-pn">endsWith_pn</h5>
+<h5 id="Arcadia_ByteBuffer_endsWith_pn">Arcadia_ByteBuffer_endsWith_pn</h5>
 <p><code>
-R_BooleanValue R_ByteBuffer_endsWith_pn(R_ByteBuffer const* self, void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_BooleanValue
+Arcadia_ByteBuffer_endsWith_pn
+  (
+    Arcadia_ByteBuffer const* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is a suffix of this Byte buffer's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is a suffix of this byte buffer's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this byte buffer's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-bytebuffer-startswith-pn">startsWith_pn</h5>
+<h5 id="Arcadia_ByteBuffer_startsWith_pn">Arcadia_ByteBuffer_startsWith_pn</h5>
 <p><code>
-R_BooleanValue R_ByteBuffer_startsWith_pn(R_ByteBuffer const* self, void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_BooleanValue
+Arcadia_ByteBuffer_startsWith_pn
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is a prefix of this Byte buffer's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-bytebuffer-isequalto-pn">isEqualTo_pn</h5>
+<h5 id="Arcadia_ByteBuffer_isEqualTo_pn">Arcadia_isEqualTo_pn</h5>
 <p><code>
-R_BooleanValue R_ByteBuffer_isEqualTo_pn(R_ByteBuffer const* self, void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_BooleanValue
+Arcadia_ByteBuffer_isEqualTo_pn
+  (
+    Arcadia_Process* process,
+    R_ByteBuffer* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is this Byte buffer's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -198,103 +239,141 @@ R_BooleanValue R_ByteBuffer_isEqualTo_pn(R_ByteBuffer const* self, void const* b
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-append-pn">append_pn</h5>
+<h5 id="Arcadia_ByteBuffer_append_pn">Arcadia_ByteBuffer_append_pn</h5>
 <p><code>
-void R_ByteBuffer_append_pn(R_ByteBuffer* self, void const* bytes, R_SizeValue numberOfBytes)
+void
+Arcadia_ByteBuffer_append_pn
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Append Bytes to this Byte buffer.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self       </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadoa_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-prepend-pn">prepend_pn</h5>
+<h5 id="Arcadia_ByteBuffer_prepend_pn">Arcadia_ByteBuffer_prepend_pn</h5>
 <p><code>
-void R_ByteBuffer_prepend_pn(R_ByteBuffer* self, void const* p, R_SizeValue n)
+void
+Arcadia_ByteBuffer_prepend_pn
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer* self,
+    void const* p,
+    Arcadia_SizeValue n
+  )
 </code></p>
 
 <p>Prepend Bytes to this Byte buffer.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* p     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue n     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* p                           </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue n                     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-insert-pn">insert_pn</h5>
+<h5 id="Arcadia_ByteBuffer_insert_pn">Arcadia_ByteBuffer_insert_pn</h5>
 <p><code>
-void R_ByteBuffer_insert_pn(R_ByteBuffer* self, R_SizeValue index, void const* p, R_SizeValue n)
+void
+Arcadia_ByteBuffer_insert_pn
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer* self,
+    Arcadia_SizeValue index,
+    void const* p,
+    Arcadia_SizeValue n
+  )
 </code></p>
 
 <p>Insert Bytes into this Byte buffer.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>R_SizeValue index </td><td>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
-  <tr><td>void const* p     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue n     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_SizeValue index                 </td><td>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
+  <tr><td>void const* p                           </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue n                     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-isequalto">isEqualTo</h5>
+<h5 id="Arcadia_ByteBuffer_isEqualTo">Arcadia_ByteBuffer_isEqualTo</h5>
 <p><code>
-R_BooleanValue R_ByteBuffer_isEqualTo(R_ByteBuffer const* self, R_ByteBuffer const* other)
+Arcadia_BooleanValue
+Arcadia_ByteBuffer_isEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer const* self,
+    Arcadia_ByteBuffer const* other
+  )
 </code></p>
 
 <p>Compare this Byte buffer with another Byte buffer for equality.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer const* self </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>R_ByteBuffer const* other</td><td>A pointer to the other Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer const* self </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_ByteBuffer const* other</td><td>A pointer to the other Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if this Byte buffer is equal to the other Byte buffer.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if this Byte buffer is equal to the other Byte buffer.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-getsize">getSize</h5>
+<h5 id="Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getSize</h5>
 <p><code>
-R_SizeValue R_ByteBuffer_getSize(R_ByteBuffer const* self)
+Arcadia_SizeValue
+Arcadia_ByteBuffer_getSize
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer const* self
+  )
 </code></p>
 
 <p>Get the size of this Byte buffer.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -304,17 +383,24 @@ R_SizeValue R_ByteBuffer_getSize(R_ByteBuffer const* self)
 <p> The size of a Byte buffer is the length of the Byte sequence it contains.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-getat">getat</h5>
+<h5 id="Arcadia_ByteBuffer_getAt">Arcadia_ByteBuffer_getat</h5>
 <p><code>
-R_Natural8Value R_ByteBuffer_getAt(R_ByteBuffer const* self, R_SizeValue index)
+Arcadia_Natural8Value
+Arcadia_ByteBuffer_getAt
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer const* self,
+    Arcadia_SizeValue index
+  )
 </code></p>
 
 <p>Get the Byte value at the specified index.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -324,16 +410,22 @@ R_Natural8Value R_ByteBuffer_getAt(R_ByteBuffer const* self, R_SizeValue index)
 <p> The size of a Byte buffer is the length of the Byte sequence it contains.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-isempty">isEmpty</h5>
+<h5 id="Arcadia_ByteBuffer_isEmpty">Arcadia_ByteBuffer_isEmpty</h5>
 <p><code>
-R_BooleanValue R_ByteBuffer_isEmpty(R_ByteBuffer* self)
+Arcadia_BooleanValue
+Arcadia_ByteBuffer_isEmpty
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer* self
+  )
 </code></p>
 
 <p>Get if this Byte buffer is empty.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -341,30 +433,37 @@ R_BooleanValue R_ByteBuffer_isEmpty(R_ByteBuffer* self)
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-bytebuffer-swap">swap</h5>
+<h5 id="Arcadia_ByteBuffer_swap">Arcadia_ByteBuffer_swap</h5>
 <p><code>
-void R_ByteBuffer_swap(R_ByteBuffer* self, R_ByteBuffer* other)
+void
+Arcadia_ByteBuffer_swap
+  (
+    Arcadia_Process* process,
+    Arcadia_ByteBuffer* self,
+    Arcadia_ByteBuffer* other
+  )
 </code></p>
 
 <p>Swap the contents of this Byte buffer with the contents of another Byte buffer.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>R_ByteBuffer* self</td><td>A pointer to the other Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to the other Byte buffer.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>other</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>other</code> is a null pointer.</td></tr>
 </table>
 
-<h4 id="r-filehandle">File Handle</h4>
+<h4 id="Arcadia_FileHandle">Arcadia_FileHandle</h4>
 <p>
 <code>R_FileHandle</code> represents a operating system file handle.
 This type is allocated on the heap and values of this type are referenced by <code>R_FileHandle</code> pointers.
@@ -556,7 +655,7 @@ The number of Bytes read is 0 if the end of the file was reached.
   <tr><td>R_Status_FileSystemOperationFailed</td><td>Writing failed.</td></tr>
 </table>
 
-<h4 id="r-filepath">File Path</h4>
+<h4 id="Arcadia_FilePath">Arcadia_FilePath</h4>
 <p>
 <code>R_FilePath</code> represents a file path.
 This type is allocated on the heap and values of this type are referenced by <code>R_FilePath</code> pointers.
@@ -643,146 +742,269 @@ R_String* R_FilePath_toNative(R_FilePath* self)
 <h6><b>Return Value</b></h6>
 <p>A pointer to the string.</p>
 
-<h4 id="r-filesystem">FileSystem</h4>
+<h4 id="Arcadia_FileSystem">Arcadia_FileSystem</h4>
 <p>
-<code>R_FileSystem</code> provides access to the file system.
-This type is allocated on the heap and values of this type are referenced by <code>R_String</code> pointers.
-A <code>R_FileSystem</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_String</code> value can be safely cast into a <code>R_String</code> pointer.
+<code>Arcadia_FileSystem</code> provides access to the file system.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FileSystem</code> pointers.
+A <code>Arcadia_FileSystem</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSystem</code> value can be safely cast into a <code>Arcadia_FileSystem</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filesystem-create">R_FileSystem_create</h5>
+<h5 id="Arcadia_FileSystem_create">Arcadia_FileSystem_create</h5>
 <p><code>
-R_FileSystem* R_FileSystem_create()
+Arcadia_FileSystem*
+Arcadia_FileSystem_create
+  (
+    Arcadia_Process* process
+  )
 </code></p>
 
 <p>Create a file system.</p>
 
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+</table>
+
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
+  <tr><td>Arcadia_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-filesystem-getfilecontents">getFileContents</h5>
+<h5 id="Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</h5>
 <p><code>
-R_ByteBuffer* R_ByteBuffer_getFileContents(R_FilePath *path)
+Arcadia_ByteBuffer*
+Arcadia_FileSystem_getFileContents
+  (
+    Arcadia_Process* process,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
 </code></p>
 
 <p>Get the contents of a file.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">R_FilePath</a>* path</td><td>The file path of the file.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_FilePath</a>* path</td><td>The file path of the file.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-A pointer to a <code>R_ByteBuffer</code> object with the file contents.
+A pointer to a <code>Arcadia_ByteBuffer</code> object with the file contents.
 </p>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td><a href="#">R_Status_ArgumentValueInvalid</a></td><td><code>path</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
+  <tr><td><a href="#">Arcadia_Status_ArgumentValueInvalid</a>     </td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td><a href="#">Arcadia_Status_ArgumentValueInvalid</a>     </td><td><code>path</code> is a null pointer.</td></tr>
+  <tr><td><a href="#">Arcadia_Status_FileSystemOperationFailed</a></td><td>Opening the file failed.            </td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-filesystem-setfilecontents">setFileContents</h5>
+<h5 id="Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</h5>
 <p><code>
-void R_FileSystem_setFileContents(R_FilePath* path, R_ByteBuffer* contents)
+void
+Arcadia_FileSystem_setFileContents
+  (
+    Arcadia_Process* process,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path,
+    Arcadia_ByteBuffer* contents
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_FilePath* path</td><td>The file path of the file.</td></tr>
-  <tr><td>R_ByteBuffer const* byteBuffer</td><td>A poiner to the Byte buffer with the file contents.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
+  <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* contents</td><td>A poiner to the Byte buffer with the file contents.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.    </td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>contents</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.                </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>sekf</code> is a null pointer.    </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>path</code> is a null pointer.    </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>contents</code> is a null pointer.</td></tr>
+  <tr><td>R_Status_FileSystemOperationFailed </td><td>Opening the file failed.                </td></tr>
 </table>
 
-<h4 id="r-list">List</h4>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="Arcadia_FileSystem_regularFileExists">Arcadia_FileSystem_regularFileExists</h5>
+<p><code>
+Arcadia_BooleanValue
+Arcadia_FileSystem_regularFileExists
+  (
+    Arcadia_Process* process,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+</code></p>
+
+<p>Get if a file exists and is a regular file.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
+  <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
 <p>
-<code>R_List</code> represents a list of <code>R_Value</code> objects.
-This type is allocated on the heap and values of this type are referenced by <code>R_List</code> pointers.
+<code>Arcadia_BooleanValue_True</code> if the file exists and is a regular file.
+<code>Arcadia_BooleanValue_False</code> otherwise.
+</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<h5 id="Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</h5>
+<p><code>
+Arcadia_BooleanValue
+Arcadia_FileSystem_directoryFileExists
+  (
+    Arcadia_Process* process,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+</code></p>
+
+<p>Get if a file exists and is a directory file.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
+  <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>
+<code>Arcadia_BooleanValue_True</code> if the file exists and is a directory file.
+<code>Arcadia_BooleanValue_False</code> otherwise.
+</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>path</code> is a null pointer.</td></tr>
+</table>
+
+<h4 id="Arcadia_List">Arcadia_List</h4>
+<p>
+<code>Arcadia_List</code> represents a list of <code>Arcadia_Value</code> objects.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_List</code> pointers.
 A <code>R_List</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_List</code> value can be safely cast into a <code>R_List</code> pointer.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>R_List</code> value can be safely cast into a <code>Arcadia_List</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-list-create">R_List_create</h5>
+<h5 id="Arcadia_List_create">Arcadia_List_create</h5>
 <p><code>
-R_List* R_List_create()
+Arcadia_List*
+Arcadia_List_create
+  (
+    Arcadia_Process* process
+  )
 </code></p>
 
 <p>Create a list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>bytes        </td><td>A pointer to an array of Bytes.</td></tr>
-  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+  <tr><td>Arcadia_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
 </table>
 
 <h6><b>Return value</b></h6>
-<p>A pointer to the <code>R_List</code> value.</p>
+<p>A pointer to the <code>Arcadia_List</code> value.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-list-append">append</h5>
+<h5 id="Arcadia_List_append">Arcadia_List_append</h5>
 <p><code>
-void R_List_append(R_List* self, R_Value value)
+void
+Arcadia_List_append
+  (
+    Arcadia_Process* process,
+    Arcadia_List* self,
+    Arcadia_Value value
+  )
 </code></p>
 
-<p>Append a <code>R_Value</code> to a list.</p>
+<p>Append a value to this list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self           </td><td>A pointer to this list.</td></tr>
-  <tr><td>R_Value value          </td><td>The value to append.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
+  <tr><td>Arcadia_Value value                     </td><td>The value to append.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-list-clear">clear</h5>
+<h5 id="Arcadia_List_clear">Arcadia_List_clear</h5>
 <p><code>
-void R_List_clear(R_List* self)
+void
+Arcadia_List_clear
+  (
+    Arcadia_Process* process,
+    Arcadia_List* self
+  )
 </code></p>
 
 <p>Clear this list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-list-getat">getAt</h5>
+<h5 id="Arcadia_List_getAt">Arcadia_List_getAt</h5>
 <p><code>
-R_Value R_List_getAt(R_List* self, R_SizeValue index)
+Arcadia_Value
+Arcadia_List_getAt
+  (
+    Arcadia_Process* process,
+    Arcadia_List* self,
+    Arcadia_SizeValue index
+  )
 </code></p>
 
 <p>Get the value at the specifie index in this list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
-  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
+  <tr><td>Arcadia_SizeValue index                 </td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -790,115 +1012,169 @@ R_Value R_List_getAt(R_List* self, R_SizeValue index)
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-list-getsize">getSize</h5>
+<h5 id="Arcadia_List_getSize">Arcadia_List_getSize</h5>
 <p><code>
-R_SizeValue R_List_getSize(R_List const* self)
+Arcadia_SizeValue
+Arcadia_List_getSize
+  (
+    Arcadia_Process* process,
+    Arcadia_List const* self
+  )
 </code></p>
 
 <p>Get the size of this list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>The size of this list.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-list-insertat">insert</h5>
+<h5 id="Arcadia_List_insertAt">Arcadia_List_insert</h5>
 <p><code>
-void R_List_insertAt(R_List* self, R_SizeValue index, R_Value value)
+void
+Arcadia_List_insertAt
+  (
+    Arcadia_Process* process,
+    Arcadia_List* self,
+    Arcadia_SizeValue index,
+    Arcadia_Value value
+  )
 </code></p>
 
-<p>Compare this string with another string for equality.</p>
+<p>Insert a value at the specified position in this list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self      </td><td>A pointer to this list.</td></tr>
-  <tr><td>R_SizeValue index </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
-  <tr><td>R_Value value     </td><td>The value to insert.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
+  <tr><td>Arcadia_SizeValue index                 </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
+  <tr><td>Arcadia_Value value                      </td><td>The value to insert.</td></tr>
+</table>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-list-isempty">isEmpty</h5>
+<h5 id="Arcadia_List_isEmpty">Arcadia_List_isEmpty</h5>
 <p><code>
-R_BooleanValue R_List_isEmpty(R_List* self)
+Arcadia_BooleanValue
+Arcadia_List_isEmpty
+  (
+    Arcadia_Process* process,
+    Arcadia_List* self
+  )
 </code></p>
 
 <p>Get if this list is empty.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
-<p><code>R_BooleanValue_True</code> if this list is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+<p><code>Arcadia_BooleanValue_True</code> if this list is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-list-prepend">prepend</h5>
+<h5 id="Arcadia_List_prepend">Arcadia_List_prepend</h5>
 <p><code>
-void R_List_prepend(R_List* self, R_Value value)
+void
+Arcadia_List_prepend
+  (
+    Arcadia_Process* process,
+    Arcadia_List* self,
+    Arcadia_Value value
+  )
 </code></p>
 
-<p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
+<p>Prepend a value to this list.</p>
 
 <p>Prepend a <code>R_Value</code> to a list.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td>R_List* self           </td><td>A pointer to this list.</td></tr>
   <tr><td>R_Value value          </td><td>The value to prepend.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-list-remove">remove</h5>
+<h5 id="Arcadia_List_remove">Arcadia_List_remove</h5>
 <p><code>
-void R_List_remove(R_List* self, R_SizeValue index, R_SizeValue count)
+void
+Arcadia_List_remove
+  (
+    Arcadia_Process* process,
+    Arcadia_List* self,
+    Arcadia_SizeValue start,
+    Arcadia_SizeValue length
+  )
 </code></p>
 
-<p>Remove <code>length</code> elements starting with element at index <code>index</code>.</p>
+<p>Remove <code>length</code> values starting with element at index <code>start</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_List* self</td><td>A pointer to this list.</td></tr>
-  <tr><td>R_SizeValue index</td><td>The index of the first element to remove.</td></tr>
-  <tr><td>R_SizeValue length</td><td>The number of elements to remove.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td>Arcadia_SizeValue start</td><td>The index of the first element to remove.</td></tr>
+  <tr><td>Arcadia_SizeValue length</td><td>The number of elements to remove.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>index + count > n</code> where <code>n</code> is the length of the list.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index + length &gt; n</code> where <code>n</code> is the length of the list.</td></tr>
 </table>
 
-<h4 id="r-stack">Stack</h4>
+<h4 id="Arcadia_Stack">Stack</h4>
 <p>
 <code>R_Stack</code> represents a stack of <code>R_Value</code> objects.
 This type is allocated on the heap and values of this type are referenced by <code>R_Stack</code> pointers.
 A <code>R_Stack</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_Stack</code> value can be safely cast into a <code>R_Stack</code> pointer.
+An <code>R_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> value can be safely cast into a <code>R_Stack</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-stack-create">R_Stack_create</h5>
+<h5 id="Arcadia_Stack_create">Arcadia_Stack_create</h5>
 <p><code>
-R_Stack* R_Stack_create()
+Arcadia_Stack*
+Arcadia_Stack_create
+  (
+    Arcadia_Process* process
+  )
 </code></p>
 
 <p>Create a stack.</p>
 
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+</table>
+
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
 </table>
 
 <h6><b>Return value</b></h6>
@@ -906,7 +1182,7 @@ R_Stack* R_Stack_create()
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-stack-clear">clear</h5>
+<h5 id="Arcadia_Stack_clear">clear</h5>
 <p><code>
 void R_Stack_clear(R_Stack* self)
 </code></p>
@@ -915,12 +1191,13 @@ void R_Stack_clear(R_Stack* self)
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-stack-getsize">getSize</h5>
+<h5 id="Arcadia_Stack_getSize">Arcadia_Stack_getSize</h5>
 <p><code>
 R_SizeValue R_Stack_getSize(R_Stack const* self)
 </code></p>
@@ -929,6 +1206,7 @@ R_SizeValue R_Stack_getSize(R_Stack const* self)
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
@@ -936,7 +1214,7 @@ R_SizeValue R_Stack_getSize(R_Stack const* self)
 <p>The size of this stack.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-stack-isempty">isEmpty</h5>
+<h5 id="Arcadia_Stack_isEmpty">Arcadia_Stack_isEmpty</h5>
 <p><code>
 R_BooleanValue R_Stack_isEmpty(R_Stack* self)
 </code></p>
@@ -945,6 +1223,7 @@ R_BooleanValue R_Stack_isEmpty(R_Stack* self)
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
@@ -957,7 +1236,7 @@ R_BooleanValue R_Stack_isEmpty(R_Stack* self)
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-stack-peek">peek</h5>
+<h5 id="Arcadia_Stack_peek">Arcadia_Stack_peek</h5>
 <p><code>
 R_Value R_Stack_peek(R_Stack* self)
 </code></p>
@@ -966,6 +1245,7 @@ R_Value R_Stack_peek(R_Stack* self)
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
   <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
 </table>
 
@@ -974,16 +1254,21 @@ R_Value R_Stack_peek(R_Stack* self)
 
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-stack-pop">pop</h5>
+<h5 id="Arcadia_Stack_pop">Arcadia_Stack_pop</h5>
 <p><code>
-R_Value R_Stack_pop(R_Stack* self)
+Arcadia_Value
+Arcadia_Stack_pop
+  (
+    Arcadia_Stack* self
+  )
 </code></p>
 
 <p>Pop the value from the top of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Stack* self                     </td><td>A pointer to this stack.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -991,83 +1276,111 @@ R_Value R_Stack_pop(R_Stack* self)
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-stack-push">push</h5>
+<h5 id="Arcadia_Stack_push">Arcadia_Stack_push</h5>
 <p><code>
-void R_Stack_push(R_Stack* self, R_Value value)
+void
+Arcadia_Stack_push
+  (
+    Arcadia_Stack* self,
+    Arcadia_Value value
+  )
 </code></p>
 
 <p>Push a value on the top of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_Stack* self            </td><td>A pointer to this stack.</td></tr>
-  <tr><td>R_Value value            </td><td>The value to push.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Stack* self            </td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Value value            </td><td>The value to push.</td></tr>
 </table>
 
-<h4 id="r-string">String</h4>
+<h4 id="Arcadia_String">Arcadia_String</h4>
 <p>
-<code>R_String</code> represents an Unicode string encoded as UTF-8-NO-BOM.
-This type is allocated on the heap and values of this type are referenced by <code>R_String</code> pointers.
-A <code>R_String</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_String</code> value can be safely cast into a <code>R_String</code> pointer.
+<code>Arcadia_String</code> represents an Unicode string encoded as UTF-8-NO-BOM.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_String</code> pointers.
+A <code>Arcadia_String</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>R_String</code> value can be safely cast into a <code>R_String</code> pointer.
 </p>
 
+<p>Arcadia_String derives fro Arcadia_Object and overrides the following methods:</p>
+<ul>
+  <li>Arcadia_Object_equalTo</li>
+  <li>Arcadia_Object_hash</li>
+  <li>Arcadia_Object_notEqualTo</li>
+</ul>
+
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-create-pn">R_String_create_pn</h5>
+<h5 id="Arcadia_String_create_pn">Arcadia_String_create_pn</h5>
 <p><code>
-R_String* R_String_create_pn(R_ImmutableByteArray* immutableByteArray)
+Arcadia_String*
+Arcadia_String_create_pn
+  (
+    Arcadia_Process* process,
+    Arcadia_ImmutableByteArray* immutableByteArray
+  )
 </code></p>
 
 <p>Create a string from an immutable Byte array.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>immutableByteArray</td><td>A pointer to an immutable Byte array</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_ImmutableByteBuffer* immutableByteArray</td><td>A pointer to the <code>Arcadia_ImmutableByteArray</code> object</td></tr>
 </table>
 
 <h6><b>Return value</b></h6>
-<p>A pointer to the string.</p>
+<p>A pointer to the <code>Arcadia_String</code> object.</p>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>immutableByteArray</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>immutableByteArray</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-create">R_String_create</h5>
+<h5 id="Arcadia_String_create">Arcadia_String_create</h5>
 <p><code>
-R_String* R_String_create_pn(R_Value value)
+Arcadia_String*
+Arcadia_String_create
+  (
+    Arcadia_Process* process,
+    Arcadia_Value value
+  )
 </code></p>
 
 <p>
 Create a string from a value.
 </p>
 
+<p>The following values are accepted:</p>
+
 <p>
-The specified value may contain a R_ByteBuffer object.
+The specified value may contain a <code>Arcadia_ByteBuffer</code> object.
 In that case, the string is created from the Bytes of the Byte buffer object.
-A <code>R_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>R_ByteBuffer</code> object is not a UTF8 Byte sequence.
+A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ByteBuffer</code> object is not a UTF8 Byte sequence.
 </p>
 
 <p>
-The specified value may contain a R_String object.
-In that case, the string is created from the R_String object.
+The specified value may contain a <code>Arcadia_String</code> object.
+In that case, the string is created from the <code>Arcadia_String</code> object.
 </p>
 
 <p>
-The specified value may contain a R_StringBuffer object.
-In that case, the string is created from the R_StringBuffer object.
+The specified value may contain a <code>Arcadia_StringBuffer</code> object.
+In that case, the string is created from the <code>Arcadia_StringBuffer</code> object.
 </p>
 
 <p>
-The specified value may contain a R_ImmutableByteArray object.
-In that case, the string is created from the R_ImmutableByteArray object.
+The specified value may contain a <code>Arcadia_ImmutableByteArray</code> object.
+In that case, the string is created from the <code>Arcadia_ImmutableByteArray</code> object.
+A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
 </p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>value        </td><td>The value.</td></tr>
+  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Value value     </td><td>The value.</td></tr>
 </table>
 
 <h6><b>Return value</b></h6>
@@ -1076,78 +1389,76 @@ In that case, the string is created from the R_ImmutableByteArray object.
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
-    <td>The value does not contain either a <code>R_ByteBuffer</code> object, a <code>R_String</code> object, or a <code>R_StringBuffer</code> object.</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
+    <td>The value is not of type <code>Arcadia_ByteBuffer</code>, <code>Arcadia_String</code>, <code>Arcadia_StringBuffer</code>, or <code>Arcadia_ImmutableByteArray</code>.</td>
   </tr>
   <tr>
-    <td>R_Status_EncodingInvalid    </td>
-    <td>The value contains a <code>R_ByteBuffer</code> object. However, the Byte sequence of that <code>R_ByteBuffer</code> object is not a UTF8 Byte sequence.</td>
+    <td>Arcadia_Status_EncodingInvalid</td>
+    <td>
+    The value is a <code>Arcadia_ByteBuffer</code> or <code>Arcadia_ImmutableByteArray</code>.
+    However, the Byte sequence of that <code>Arcadia_ByteBuffer</code> or <code>Arcadia_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
+    </td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-string-endswith-pn">endsWith_pn</h5>
+<h5 id="Arcadia_String_endsWith_pn">Arcadia_String_endsWith_pn</h5>
 <p><code>
-R_BooleanValue R_String_endsWith_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_BooleanValue
+Arcadia_String_endsWith_pn
+  (
+    Arcadia_Process* process,
+    Arcadia_String const* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is a suffix of this string's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_String* self                    </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is a suffix of this string's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this string's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="r-string-startswith-pn">startsWith_pn</h5>
+<h5 id="Arcadia_String_startsWith_pn">Arcadia_String_startsWith_pn</h5>
 <p><code>
-R_BooleanValue R_String_startsWith_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_BooleanValue
+Arcadia_String_startsWith_pn
+  (
+    Arcadia_String const* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_String* self                    </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is a prefix of this string's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
-</p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-isequalto">isEqualTo</h5>
-<p><code>
-R_BooleanValue R_String_isEqualTo(R_String const* self, R_String const* other)
-</code></p>
-
-<p>Compare this string with another string for equality.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_String const* self </td><td>A pointer to this string.</td></tr>
-  <tr><td>R_String const* other</td><td>A pointer to the other string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>
-<code>R_BooleanValue_True</code> if this string is equal to the other string.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this string's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -1551,6 +1862,17 @@ R_VoidValue R_String_toVoid(R_String const* self)
 
   </div>
   <div class="right-column">
+    <nav>
+      <ul style="list-style: none">
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer">Arcadia_ByteBuffer</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle">Arcadia_FileHandle</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FilePath">Arcadia_FilePath</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List">Arcadia_List</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack">Arcadia_Stack</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_String">Arcadia_String</a></li>
+      </ul>
+    </nav>
   </div>
   </main>
   <footer>

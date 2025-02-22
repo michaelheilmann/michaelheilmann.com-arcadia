@@ -207,7 +207,7 @@ R_Interpreter_Code_append
     Arcadia_SizeValue numberOfBytes
   )
 {
-  R_DynamicArrayUtilities_ensureFreeCapacity(&self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, R_DynamicArrayUtilities_GrowthStrategy4);
+  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getProcess1(process), Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, Arcadia_Arrays_ResizeStrategy_Type4);
   Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), self->p + self->sz, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }

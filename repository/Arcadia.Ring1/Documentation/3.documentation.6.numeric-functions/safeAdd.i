@@ -1,4 +1,4 @@
-<h4 id="arcadia-safeadd">Arcadia_safeAdd</h4>
+<h4 id="Arcadia_safeAdd*">Arcadia_safeAdd*</h4>
 <p>Get the sum of two values.</p>
 <p><code>
 void

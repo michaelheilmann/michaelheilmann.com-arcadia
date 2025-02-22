@@ -15,8 +15,12 @@
 
 // Last modified: 2025-02-15
 
-#if !defined(ARCADIA_RING2_UTF8READER_H_INCLUDED)
-#define ARCADIA_RING2_UTF8READER_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_UTF8READER_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_UTF8READER_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring1/Include.h"
 
@@ -58,4 +62,4 @@ Arcadia_Utf8Reader_getByteIndex
     Arcadia_Utf8Reader* self
   );
 
-#endif // ARCADIA_RING2_UTF8READER_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_UTF8READER_H_INCLUDED

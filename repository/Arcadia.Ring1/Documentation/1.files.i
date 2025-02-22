@@ -1,7 +1,7 @@
 <h2>1. Files</h2>
 <p>
-You can find the sources of Arcadia Ring1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
-The subdirectory of Arcadia.Ring1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring1</a>.</p>
+You can find the sources of Arcadia Ring 1 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
+The subdirectory of Arcadia Ring 1 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring1">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring1</a>.</p>
 </p>
 
 <ul>
@@ -17,7 +17,7 @@ The subdirectory of Arcadia.Ring1 in the repository is here <a href="https://git
 </ul>
 
 <p>
-Arcadia Ring1 supports various platforms (including but not restricted to Windows, Linux, and many more), however, we currently only officially support Windows.
-Find instructions on how to build, test, and use Arcadia Ring1 under various systems,
-please refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/README.md">README.md</a> in the root folder of the repository.
+Arcadia Ring 1 supports various platforms (including but not restricted to Windows, Linux, and many more), however, we currently only officially support Windows.
+For instructions on how to build, test, and use Arcadia Ring 1,
+refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/README.md">README.md</a> in the root folder of the repository.
 </p>

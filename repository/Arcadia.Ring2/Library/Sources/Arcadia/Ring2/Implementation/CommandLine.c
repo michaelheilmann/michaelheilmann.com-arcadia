@@ -15,7 +15,8 @@
 
 // Last modified: 2024-09-28
 
-#include "R/CommandLine/Include.h"
+#define ARCADIA_RING2_PRIVATE (1)
+#include "Arcadia/Ring2/Implementation/CommandLine.h"
 
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 #include "Arcadia/Ring2/Implementation/Utf8ByteBufferWriter.h"

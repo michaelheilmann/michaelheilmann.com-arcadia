@@ -15,6 +15,7 @@
 
 // Last modified: 2024-10-07
 
+#define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/FileHandle.h"
 
 #include "Arcadia/Ring2/Implementation/FileSystem.h"

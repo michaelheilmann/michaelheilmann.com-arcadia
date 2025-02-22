@@ -1,6 +1,6 @@
-<h3 id="arcadia-objectreferencevalue">3.1.5. Object Reference Type</h3>
+<h3 id="Arcadia_ObjectReferenceValue">3.1.5. Arcadia_ObjectReferenceValue</h3>
 <p>
-R provides a ObjectReference type.
+Arcadia Ring 1 provides a ObjectReference type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_ObjectReferenceValue

@@ -15,8 +15,12 @@
 
 // Last modified: 2025-02-15
 
-#if !defined(ARCADIA_RING2_UTF8BYTEBUFFERREADER_H_INCLUDED)
-#define ARCADIA_RING2_UTF8BYTEBUFFERREADER_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_UTF8BYTEBUFFERREADER_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_UTF8BYTEBUFFERREADER_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring2/Implementation/Utf8Reader.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
@@ -38,4 +42,4 @@ Arcadia_Utf8ByteBufferReader_create
     Arcadia_ByteBuffer* source
   );
 
-#endif // ARCADIA_RING2_UTF8BYTEBUFFERREADER_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_UTF8BYTEBUFFERREADER_H_INCLUDED

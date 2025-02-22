@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-01-01
+// Last modified: 2025-02-19
 
 #if !defined(ARCADIA_RING1_SUPPORT_IEEE754_H_INCLUDED)
 #define ARCADIA_RING1_SUPPORT_IEEE754_H_INCLUDED
@@ -48,36 +48,10 @@
 // mask for the sign bits of a float
 #define FLT_SGN_MASK (((UINT32_C(1) << FLT_SGN_BITS) - 1) << (FLT_EXP_BITS + FLT_FRAC_BITS))
 
-
-
+// We have a significand of 23 bits (the bits at indices 0 trough 22) explicitly stored. In addition, the MSB  (the bit at index 23) is fixed to 1.
+// A maximum value of 16 777 215 = 2^24 - 1 can be represent if all 24 bits - that is, the bits at indices 0 through 23 - are set to 1.
+// A minimum value of  8 388 608 = 2^23 can be represented if the bit at index 23 is set to 1 and the bits at indices 0 through 22 are set to 0.
 STATIC_ASSERT(FLT_BITS == FLT_SGN_BITS + FLT_EXP_BITS + FLT_FRAC_BITS, "<internal error>");
-
-// get the fraction bit mask
-static inline uint32_t
-flt_get_frac_mask
-  (
-  )
-{
-  return (UINT32_C(1) << FLT_FRAC_BITS) - 1;
-}
-
-// get the exponent bit mask
-static inline uint32_t
-flt_get_exp_mask
-  (
-  )
-{
-  return ((UINT32_C(1) << FLT_EXP_BITS) - 1) << FLT_FRAC_BITS;
-}
-
-// get the sign bit mask
-static inline uint32_t
-flt_get_sgn_mask
-  (
-  )
-{
-  return ((UINT32_C(1) << FLT_SGN_BITS) - 1) << (FLT_EXP_BITS + FLT_FRAC_BITS);
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -97,33 +71,9 @@ flt_get_sgn_mask
 // mask for the sign bits of a double
 #define DBL_SGN_MASK ((UINT64_C(1) << DBL_SGN_BITS) - 1) << (DBL_EXP_BITS + DBL_FRAC_BITS)
 
+// The significand has 52 bits (the bits at indices 0 through 51) explicitly stored. In addition, the MSB (the bit at index 52) is fixed to 1.
+// A maximum value of 9 007 199 254 740 991 = 2^53 - 1 can be represented if all 53 bits - that is, the bits at indices 0 through 52 - are set to 1.
+// A minimum value of 4 503 599 627 370 496 = 2^52  can be represented if the bit at index 52 is set to 1 and the bits at indices 0 through 51 are set to 0.
 STATIC_ASSERT(DBL_BITS == DBL_SGN_BITS + DBL_EXP_BITS + DBL_FRAC_BITS, "<internal error>");
-
-// get the fraction bit mask
-static inline uint64_t
-dbl_get_frac_mask
-  (
-  )
-{
-  return (UINT64_C(1) << DBL_FRAC_BITS) - 1;
-}
-
-// get the exponent bit mask
-static inline uint64_t
-dbl_get_exp_mask
-  (
-  )
-{ 
-  return ((UINT64_C(1) << DBL_EXP_BITS) - 1) << DBL_FRAC_BITS;
-}
-
-// get the sign bit mask
-static inline uint64_t
-dbl_get_sgn_mask
-  (
-  )
-{
-  return ((UINT64_C(1) << DBL_SGN_BITS) - 1) << (DBL_EXP_BITS + DBL_FRAC_BITS);
-}
 
 #endif // ARCADIA_RING1_SUPPORT_IEEE754_H_INCLUDED

@@ -15,8 +15,12 @@
 
 // Last modified: 2025-02-15
 
-#if !defined(ARCADIA_RING2_UTF8BYTEBUFFERWRITER_H_INCLUDED)
-#define ARCADIA_RING2_UTF8BYTEBUFFERWRITER_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_UTF8BYTEBUFFERWRITER_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_UTF8BYTEBUFFERWRITER_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring2/Implementation/Utf8Writer.h"
 typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
@@ -35,4 +39,4 @@ Arcadia_Utf8ByteBufferWriter_create
     Arcadia_ByteBuffer* target
   );
 
-#endif // ARCADIA_RING2_UTF8BYTEBUFFERWRITER_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_UTF8BYTEBUFFERWRITER_H_INCLUDED

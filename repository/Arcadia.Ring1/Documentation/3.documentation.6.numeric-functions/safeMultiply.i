@@ -1,4 +1,4 @@
-<h4 id="arcadia-safemultiply">Arcadia_safeMultiply</h4>
+<h4 id="Arcadia_safeMultiply*">Arcadia_safeMultiply*</h4>
 <p>Get the product of two values.</p>
 <p><code>
 void

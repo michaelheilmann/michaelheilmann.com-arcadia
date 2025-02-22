@@ -38,22 +38,10 @@ testFloatConstants
     Arcadia_Process * process
   )
 {
-  if (FLT_FRAC_BITS != 23) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (FLT_FRAC_MASK != 0b11111111111111111111111) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (FLT_EXP_MASK != 0b1111111100000000000000000000000) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (FLT_SGN_MASK != 0b10000000000000000000000000000000) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
+  Arcadia_Tests_assertTrue(FLT_FRAC_BITS == 23);
+  Arcadia_Tests_assertTrue(FLT_FRAC_MASK == 0b11111111111111111111111);
+  Arcadia_Tests_assertTrue(FLT_EXP_MASK == 0b1111111100000000000000000000000);
+  Arcadia_Tests_assertTrue(FLT_SGN_MASK == 0b10000000000000000000000000000000);
 }
 
 static void
@@ -62,22 +50,10 @@ testDoubleConstants
     Arcadia_Process* process
   )
 {
-  if (DBL_FRAC_BITS != 52) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (DBL_FRAC_MASK != 0b1111111111111111111111111111111111111111111111111111) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (DBL_EXP_MASK != 0b111111111110000000000000000000000000000000000000000000000000000) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
-  if (DBL_SGN_MASK != 0b1000000000000000000000000000000000000000000000000000000000000000) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
-  }
+  Arcadia_Tests_assertTrue(DBL_FRAC_BITS == 52);
+  Arcadia_Tests_assertTrue(DBL_FRAC_MASK == 0b1111111111111111111111111111111111111111111111111111);
+  Arcadia_Tests_assertTrue(DBL_EXP_MASK == 0b111111111110000000000000000000000000000000000000000000000000000);
+  Arcadia_Tests_assertTrue(DBL_SGN_MASK == 0b1000000000000000000000000000000000000000000000000000000000000000);
 }
 
 void

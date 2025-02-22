@@ -1,6 +1,6 @@
-<h3 id="arcadia-sizevalue">3.1.7. Size Type</h3>
+<h3 id="Arcadia_SizeValue">3.1.7. Size Type</h3>
 <p>
-R provides an alias for builtin <code>size_t</code> type.
+Arcadia Ring 1 provides an alias for builtin <code>size_t</code> type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_SizeValue

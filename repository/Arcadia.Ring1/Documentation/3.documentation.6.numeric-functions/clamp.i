@@ -1,4 +1,4 @@
-<h4 id="arcadia-clamp">Arcadia_clamp</h4>
+<h4 id="Arcadia_clamp*">Arcadia_clamp*</h4>
 <p>Clamp a value to a range.</p>
 <p><code>
 <my-mv>Type</my-mv>

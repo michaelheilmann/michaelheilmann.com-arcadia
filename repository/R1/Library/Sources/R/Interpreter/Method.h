@@ -19,8 +19,8 @@
 #define R_INTERPRETER_METHOD_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Include.h"
 #include "R/Interpreter/Code.h"
-#include "Arcadia/Ring2/Implementation/List.h"
 
 Rex_declareObjectType(u8"R.Interpreter.Method", R_Interpreter_Method, u8"Arcadia.Object");
 

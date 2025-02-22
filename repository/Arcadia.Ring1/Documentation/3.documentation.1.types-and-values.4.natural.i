@@ -1,4 +1,6 @@
-<h3 id="arcadia-naturalvalue">3.1.4. Natural Types</h3>
+<h3 id="Arcadia_Natural*Value">
+3.1.4. Arcadia_Natural*Value
+</h3>
 <p>
 Arcadia Ring 1 provides natural number types.
 </p>

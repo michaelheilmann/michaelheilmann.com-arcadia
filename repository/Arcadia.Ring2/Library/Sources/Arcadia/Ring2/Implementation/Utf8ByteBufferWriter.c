@@ -15,10 +15,10 @@
 
 // Last modified: 2025-02-15
 
+#define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/Utf8ByteBufferWriter.h"
 
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
-#include "R/Utf8/EncodeCodePoints.h"
 
 static void
 Arcadia_Utf8ByteBufferWriter_constructImpl
@@ -132,64 +132,7 @@ Arcadia_Utf8ByteBufferWriter_writeBytesImpl
     Arcadia_SizeValue numberOfBytes
   )
 {
-  if (!numberOfBytes) {
-    return;
-  }
-  for (Arcadia_Natural8Value const* current = (Arcadia_Natural8Value const*)bytes, *end = (Arcadia_Natural8Value const*)bytes + numberOfBytes; current != end; ) {
-    Arcadia_Natural8Value x = *current;
-    if (x <= 0x7f) {
-      Arcadia_ByteBuffer_append_pn(process, self->target, current, 1);
-      current++;
-    } else if (x <= 0x7ff) {
-      Arcadia_ByteBuffer_append_pn(process, self->target, current, 1);
-      if (end - current < 2) {
-        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-        Arcadia_Process_jump(process);
-      }
-      current++;
-      for (size_t i = 1; i < 2; ++i) {
-        if (0x80 != (*current) & 0xc0) {
-          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-          Arcadia_Process_jump(process);
-        }
-        Arcadia_ByteBuffer_append_pn(process, self->target, current, 1);
-        current++;
-      }
-    } else if (x <= 0xffff) {
-      Arcadia_ByteBuffer_append_pn(process, self->target, current, 1);
-      if (end - current < 3) {
-        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-        Arcadia_Process_jump(process);
-      }
-      current++;
-      for (size_t i = 1; i < 3; ++i) {
-        if (0x80 != (*current) & 0xc0) {
-          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-          Arcadia_Process_jump(process);
-        }
-        Arcadia_ByteBuffer_append_pn(process, self->target, current, 1);
-        current++;
-      }
-    } else if (x <= 0x10ffff) {
-      Arcadia_ByteBuffer_append_pn(process, self->target, current, 1);
-      if (end - current < 4) {
-        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-        Arcadia_Process_jump(process);
-      }
-      current++;
-      for (size_t i = 1; i < 4; ++i) {
-        if (0x80 != (*current) & 0xc0) {
-          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-          Arcadia_Process_jump(process);
-        }
-        Arcadia_ByteBuffer_append_pn(process, self->target, current, 1);
-        current++;
-      }
-    } else {
-      Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-      Arcadia_Process_jump(process);
-    }
-  }
+  Arcadia_Utf8_encodeBytes(process, bytes, numberOfBytes, self->target, (void (*)(Arcadia_Process*, void*, Arcadia_Natural8Value const*, Arcadia_SizeValue)) & Arcadia_ByteBuffer_append_pn);
 }
 
 static void
@@ -201,7 +144,7 @@ Arcadia_Utf8ByteBufferWriter_writeCodePointsImpl
     Arcadia_SizeValue numberOfCodePoints
   )
 {
-  R_Utf8_encodeCodePoints(process, codePoints, numberOfCodePoints, self->target, (void (*)(Arcadia_Process*, void*, Arcadia_Natural8Value const*, Arcadia_SizeValue)) & Arcadia_ByteBuffer_append_pn);
+  Arcadia_Utf8_encodeCodePoints(process, codePoints, numberOfCodePoints, self->target, (void (*)(Arcadia_Process*, void*, Arcadia_Natural8Value const*, Arcadia_SizeValue)) & Arcadia_ByteBuffer_append_pn);
 }
 
 Arcadia_Utf8ByteBufferWriter*

@@ -32,7 +32,7 @@ endif()
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
-set(MyTestName ${MyProjectName}.Arcadia.MilTests.SyntacticalAnalysis)
+set(MyTestName ${MyProjectName}.Mil.Tests.SyntacticalAnalysis)
 
 if (NOT TARGET ${MyTestName})
   add_executable(${MyTestName})

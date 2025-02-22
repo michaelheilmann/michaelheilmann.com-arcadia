@@ -13,8 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_RING2_STACK_H_INCLUDED)
-#define ARCADIA_RING2_STACK_H_INCLUDED
+// Last modified: 2024-09-01
+
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_STACK_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_STACK_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring1/Include.h"
 
@@ -27,28 +33,28 @@ struct Arcadia_Stack {
   Arcadia_SizeValue capacity;
 };
 
-// https://michaelheilmann.com/repository/R1/#r-stack-create
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_create
 Arcadia_Stack*
 Arcadia_Stack_create
   (
     Arcadia_Process* process
   );
 
-// https://michaelheilmann.com/repository/R1/#r-stack-clear
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_clear
 void
 Arcadia_Stack_clear
   (
     Arcadia_Stack* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-stack-getsize
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_getSize
 Arcadia_SizeValue
 Arcadia_Stack_getSize
   (
     Arcadia_Stack* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-stack-push
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_push
 void
 Arcadia_Stack_push
   (
@@ -57,7 +63,7 @@ Arcadia_Stack_push
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/R1/#r-stack-ppop
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_pop
 void
 Arcadia_Stack_pop
   (
@@ -65,7 +71,7 @@ Arcadia_Stack_pop
     Arcadia_Stack* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-stack-peek
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_peek
 Arcadia_Value
 Arcadia_Stack_peek
   (
@@ -73,7 +79,7 @@ Arcadia_Stack_peek
     Arcadia_Stack* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-stack-isempty
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_isEmpty
 static inline Arcadia_BooleanValue Arcadia_Stack_isEmpty(Arcadia_Stack* self) {
   return Arcadia_SizeValue_Literal(0) == Arcadia_Stack_getSize(self);
 }
@@ -119,4 +125,4 @@ Define(Arcadia_Void, Void, void)
 
 #undef Define
 
-#endif // ARCADIA_RING2_STACK_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_STACK_H_INCLUDED

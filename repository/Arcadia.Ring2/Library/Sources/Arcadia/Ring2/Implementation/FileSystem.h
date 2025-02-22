@@ -15,13 +15,16 @@
 
 // Last modified: 2024-09-01
 
-#if !defined(ARCADIA_RING2_FILESYSTEM_H_INCLUDED)
-#define ARCADIA_RING2_FILESYSTEM_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_FILESYSTEM_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_FILESYSTEM_H_INCLUDED
 
-#include "R/Configure.h"
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
+
+#include "Arcadia/Ring2/Implementation/Configure.h"
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
-typedef struct R_FileHandle R_FileHandle;
 typedef struct Arcadia_FilePath Arcadia_FilePath;
 
 /// @code
@@ -35,14 +38,14 @@ struct Arcadia_FileSystem {
   Arcadia_Object _parent;
 };
 
-// https://michaelheilmann.com/repository/R1/#r-filesystem-create
+// https://michaelheilmann.com/repository/Arcadia.Ring2/Arcadia_FileSystem_create
 Arcadia_FileSystem*
 Arcadia_FileSystem_create
   (
     Arcadia_Process* process
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filesystem-getfilecontents
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_getFileContents
 Arcadia_ByteBuffer*
 Arcadia_FileSystem_getFileContents
   (
@@ -51,7 +54,7 @@ Arcadia_FileSystem_getFileContents
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filesystem-setfilecontents
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_setFileContents
 void
 Arcadia_FileSystem_setFileContents
   (
@@ -61,7 +64,7 @@ Arcadia_FileSystem_setFileContents
     Arcadia_ByteBuffer * contents
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filesystem-createdirectory
+
 void
 Arcadia_FileSystem_createDirectory
   (
@@ -70,6 +73,7 @@ Arcadia_FileSystem_createDirectory
     Arcadia_FilePath* path
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_regularFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_regularFileExists
   (
@@ -78,6 +82,7 @@ Arcadia_FileSystem_regularFileExists
     Arcadia_FilePath* path
   );
 
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_directoryFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_directoryFileExists
   (
@@ -93,4 +98,4 @@ Arcadia_FileSystem_getWorkingDirectory
     Arcadia_FileSystem* self
   );
 
-#endif // ARCADIA_RING2_FILESYSTEM_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_FILESYSTEM_H_INCLUDED

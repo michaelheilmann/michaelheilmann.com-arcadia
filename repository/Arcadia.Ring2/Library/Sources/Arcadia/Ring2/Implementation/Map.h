@@ -15,8 +15,12 @@
 
 // Last modified: 2024-09-27
 
-#if !defined(ARCADIA_RING2_MAP_H_INCLUDED)
-#define ARCADIA_RING2_MAP_H_INCLUDED
+#if !defined(ARCADIA_RING2_IMPLEMENTATION_MAP_H_INCLUDED)
+#define ARCADIA_RING2_IMPLEMENTATION_MAP_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/List.h"
@@ -80,4 +84,4 @@ Arcadia_Map_getKeys
     Arcadia_Map const* self
   );
 
-#endif // ARCADIA_RING2_MAP_H_INCLUDED
+#endif // ARCADIA_RING2_IMPLEMENTATION_MAP_H_INCLUDED

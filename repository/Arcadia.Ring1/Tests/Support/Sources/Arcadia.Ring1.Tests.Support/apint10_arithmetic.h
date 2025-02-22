@@ -13,6 +13,18 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-10-07
+// Last modified: 2025-02-17
 
-#include "R/R.h"
+#if !defined(ARCADIA_RING1_TESTS_SUPPORT_APINT10_ARITHMETIC_H_INCLUDED)
+#define ARCADIA_RING1_TESTS_SUPPORT_APINT10_ARITHMETIC_H_INCLUDED
+#include <stdlib.h>
+
+#include "Arcadia/Ring1/Include.h"
+
+void
+Arcadia_Ring1_Tests_Support_apint10_arithmetic
+  (
+    Arcadia_Process* process
+  );
+
+#endif // ARCADIA_RING1_TESTS_SUPPORT_APINT10_ARITHMETIC_H_INCLUDED

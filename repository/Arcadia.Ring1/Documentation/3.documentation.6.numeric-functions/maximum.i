@@ -1,4 +1,4 @@
-<h4 id="arcadia-maximum">Arcadia_maximum</h4>
+<h4 id="Arcadia_maximum*">Arcadia_maximum*</h4>
 <p>Return the maximum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv>

@@ -15,4 +15,5 @@
 
 // Last modified: 2025-02-15
 
+#define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Include.h"

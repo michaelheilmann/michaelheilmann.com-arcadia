@@ -1,4 +1,6 @@
-<h3 id="arcadia-realvalue">3.1.6. Real Types</h3>
+<h3 id="Arcadia_Real*Value">
+3.1.6. Arcadia_Real*Value
+</h3>
 <p>
 Arcadia Ring 1 provides IEEE754 real number types.
 </p>

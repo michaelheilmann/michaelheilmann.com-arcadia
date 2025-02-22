@@ -1,4 +1,6 @@
-<h3 id="arcadia-integervalue">3.1.3. Integer Types</h3>
+<h3 id="Arcadia_Integer*Value">
+3.1.3. Arcadia_Integer*Value
+</h3>
 <p>
 Arcadia Ring 1 provides a two's complement integer number types.
 </p>

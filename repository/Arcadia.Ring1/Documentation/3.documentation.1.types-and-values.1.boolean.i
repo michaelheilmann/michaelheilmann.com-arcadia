@@ -1,4 +1,4 @@
-<h3 id="arcadia-booleanvalue">3.1.1. Boolean Type</h3>
+<h3 id="Arcadia_BooleanValue">3.1.1. Arcadia_BooleanValue</h3>
 <p>
 Arcadia Ring 1 provides a boolean type.
 </p>

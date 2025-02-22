@@ -1,4 +1,4 @@
-<h4 id="arcadia-minimum">Arcadia_minimum</h4>
+<h4 id="Arcadia_minimum*">Arcadia_minimum*</h4>
 <p>Return the minimum of two values.</p>
 <p><code>
 <my-mv>Type</my-mv>

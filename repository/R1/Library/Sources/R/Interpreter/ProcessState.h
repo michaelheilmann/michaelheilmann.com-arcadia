@@ -18,9 +18,9 @@
 #if !defined(R_INTERPRETER_PROCESSSTATE_H_INCLUDED)
 #define R_INTERPRETER_PROCESSSTATE_H_INCLUDED
 
+#include "Arcadia/Ring2/Include.h"
 #include "R/Interpreter/Class.h"
 #include "R/Interpreter/Procedure.h"
-#include "Arcadia/Ring2/Implementation/String.h"
 #include "R/Interpreter/Instruction.h"
 
 /**

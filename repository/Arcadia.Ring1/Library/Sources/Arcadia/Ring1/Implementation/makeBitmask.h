@@ -28,7 +28,7 @@
 typedef struct Arcadia_Process1 Arcadia_Process1;
 
 /// @brief Create a bitmask.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param i The index of the first 1 bit.
 /// @param n The number of 1 bits.
 /// @return A bitmask such that the bits [i, i + n) are 1 and all other bits are zero.
@@ -42,7 +42,7 @@ Arcadia_makeBitmaskN16
   );
 
 /// @brief Create a bitmask.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param i The index of the first 1 bit.
 /// @param n The number of 1 bits.
 /// @return A bitmask such that the bits [i, i + n) are 1 and all other bits are zero.
@@ -56,7 +56,7 @@ Arcadia_makeBitmaskN32
   );
 
 /// @brief Create a bitmask.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param i The index of the first 1 bit.
 /// @param n The number of 1 bits.
 /// @return A bitmask such that the bits [i, i + n) are 1 and all other bits are zero.
@@ -70,7 +70,7 @@ Arcadia_makeBitmaskN64
   );
 
 /// @brief Create a bitmask.
-/// @param process A pointer to the Arcadia_Process1 object.
+/// @param process A pointer to the Arcadia_Process object.
 /// @param i The index of the first 1 bit.
 /// @param n The number of 1 bits.
 /// @return A bitmask such that the bits [i, i + n) are 1 and all other bits are zero.

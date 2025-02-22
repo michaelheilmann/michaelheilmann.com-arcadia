@@ -1,6 +1,6 @@
-<h3 id="arcadia-voidvalue">3.1.8. Void Type</h3>
+<h3 id="Arcadia_VoidValue">3.1.8. Arcadia_VoidValue</h3>
 <p>
-R provides a void type.
+Arcadia Ring 1 provides a void type.
 </p>
 <p><code>
 typedef <my-mv>implementation detail</my-mv> Arcadia_VoidValue
