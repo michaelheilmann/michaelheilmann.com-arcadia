@@ -40,7 +40,7 @@
   static inline Type##Value \
   R_maximum##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Type##Value x, \
       Type##Value y \
     ) \

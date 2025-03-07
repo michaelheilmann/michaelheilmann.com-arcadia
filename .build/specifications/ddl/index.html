@@ -1,0 +1,588 @@
+  <!DOCTYPE html>
+<html class='my-theme-1' lang='en'>
+<head>
+
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <link rel='icon' type='image/x-icon' href='https://michaelheilmann.com/assets/favicon/512x512.svg'>
+
+  <!-- Crap specific to Safari. SVG must be single color with transparent background. -->
+  <link rel='mask-icon' href='https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg' color = '#000000'>
+
+  <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
+  <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
+
+  <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=3'>
+  <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=3'>
+  <link rel='canonical' href='https://michaelheilmann.com/specifications/ddl/index.html'>
+  <title>Data Definition Language</title>
+  <style>
+  .box {
+    padding-bottom: 8px;
+    padding-top: 8px;
+    padding-left: 8xp;
+    padding-right: 8px;
+    background-color: rgb(215, 210, 203);
+  }
+  div.box code {
+    background-color: rgb(215, 210, 203);
+  }
+  </style>
+</head>
+<body class="my-content-page-1">
+  <header>
+  <div>
+  <a href="https://michaelheilmann.com/">Home</a>
+  </div>
+  </header>
+  <main>
+    <div class="left-column"></div>
+    <div class="center-column">
+    <h1>Data Definition Language</h1>
+    <h2>Introduction</h2>
+    <p>This document is the specification of the <em>Data Definition Language</em>.
+    Programs of this language describe data as text for the purpose of storing and exchanging that data between entities (humans and machines alike).
+    For the purpose of describing such data, the language offers built-in data types consisting of scalar values (boolean values, number values, string values, and void values)
+    as well as aggregate values (map values and list values).
+    </p>
+    
+    <p>
+    The language is insipired by JSON (see <a href="https://www.ecma-international.org/publications-and-standards/standards/ecma-404/">ECMA-404 The JSON interchange syntax, 2nd edition, December 2017</a> for more information).
+    A conversion between JSON and DDL is possible without the loss of data.
+    </p>
+
+    <h2>Grammars</h3>
+<p>This section describes context-free grammars used in this specification to define the lexical and syntactical structure of a <em>Data Definition Language</em> program.</p>
+
+<h3>Context-free grammars</h3>
+<p>A context-free grammar consists of a number of production. Each production has an abstract symbol called a non-terminal as its left-hand side, and a sequence of one or more
+non-terminal and terminal symbols as its right-hand side. For each grammar, the terminal symbols are drawn from a specified alphabet.</p>
+
+<p>Starting from a sequence consisting of a single distinguished non-terminal, called the goal symbol, a given context-free grammar specifies a language, namely, the set of possible
+sequences of terminal smbols that can result from repeatedly replacing any non-terminal in the sequence with a right-hand side of a production for which the non-terminal is the
+left-hand side.</p>
+
+<h3>Encoding</h3>
+<p>
+The <em>Data Definition Language</em> programs are encoded as UTF-8 NOBOM.
+Furthermore, only UTF8 sequences of length 1 are support in this version of the <em>Data Definition Language</em>.
+</p>
+
+<h3>Lexical grammars</h3>
+<p>The lexical grammar for the <em>Data Definition Language</em> uses Unicode code points as its terminal symbols.
+It defines a set of productions, starting from the goal symbol <my-mv>word</my-mv>, that describe how sequences of code points are translated into a word.
+</p>
+
+<h3>Syntactical grammars</h3>
+<p>The syntactical grammar for the <em>Data Definition Language</em> uses words of the lexical grammar as its terminal symbols.
+It defines a set of productions, starting from the goal symbol <my-mv>sentence</my-mv>, that describe how sequences of words are translated into a sentence.
+</p>
+
+<h3>Grammar notation</h3>
+<p>Productions are written in <code>fixed width</code> fonts.</p>
+
+<p>A production is defined by its left-hand side, followed by a colon <code:</code>, followed by its right-hand side definition. The left-hand side is the name of the non-terminal defined
+by the production.</p>
+
+<p>Multiple alternating definitions of a production may be defined.</p>
+
+<p>The right-hand side of a production consits of any sequence of terminals and non-terminals.</p>
+
+<p>In certain cases the right-hand side is replaced by a comment describing the right-hand side. This comment is opened by <code>/*</code> and closed by <code>*/</code>.
+
+<div class="box">
+<p>Example</p>
+<p>The following production denotes the non-terminal for a digit as used in the definitions of numerals:</p>
+<p><code>
+digit: /* A single Unicode symbol from the code point range +U0030 to +U0039 */    
+</code></p>
+</div>
+
+<p>A terminal is a sequence of Unicode symbols. A Unicode symbol is denoted by a shebang <code>#</code> followed by a hexadecimal number denoting its code point.<p>
+
+<div class="box">
+<p>Example</p>
+<p>The following productions denote the non-terminal for a sign as used in the definitions of numerals:</p>
+<p><code>
+/* #2b is also known as "PLUS SIGN" */<br/>
+plus_sign : #2b<br/>
+/* #2d is also known as "MINUS SIGN" */<br/>
+minus_sign : #2d sign : plus_sign<br/>
+sign : minus_sign  
+</code></p>
+</div>
+
+<p>The syntax <code>{x}</code> on the right-hand side of a production denotes zero or more occurrences of <code>x</code>.</p> 
+
+<div class="box">
+<p>Example</p>
+<p>The following production defines a possibly empty sequence of digits as used in the definitions of numerals:</p>
+<p><code>
+zero-or-more-digits : {digit} 
+</code></p>
+</div>
+
+<p>The syntax <code>[x]</code> on the right-hand side of a production denotes zero or one occurrences of <code>x</code>.</p>
+
+<div class="box">
+<p>Example</p>
+<p>The following productions denotes a possible definition of an integer numeral.
+It consists of an optional sign followed by a digit followed by zero-or-more-digits as defined in the preceeding examples):</p>
+<p><code>
+integer : [sign] digit zero-or-more-digits 
+</code></p>
+</div>
+
+<p>The empty string is denoted by <code>ε</code>.</p>
+
+<div class="box">
+<p>Example</p>
+<p>
+The following productions denotes a possibly empty list of integers (with integer as defined in the preceeding example).
+Note that this list may include a trailing comma.
+</p>
+<p><code>
+integer-list : integer integer-list-rest<br/>
+integer-list : ε<br/>
+<br/>
+integer-list-rest : comma integer integer-list-rest<br/>
+integer-list-rest : comma<br/>
+integer-list-rest : ε<br/>
+<br/>  
+/* #2c is also known as "COMMA" */<br/>
+comma : #2c 
+</code></p>
+</div>    
+
+    <h2>Lexical Structure</h2>
+<p>The lexical grammar describes the translation of Unicode code points into words. The goal non-terminal of the lexical grammar is the <code>word</code> symbol.</code>
+
+<h3>goal symbol</h3>
+<p>The goal symbol <code>word</code> is defined by</p>
+
+<div class="box">
+<p><code>
+word : delimiters<br/>
+word : boolean<br/>
+word : number<br/>
+word : string<br/>
+word : void<br/>
+word : name<br/>
+word : left_curly_bracket<br/>
+word : right_curly_bracket<br/>
+word : left_square_bracket<br/>
+word : right_square_bracket<br/>
+word : comma<br/>
+word : colon<br/>
+/*whitespace, newline, and comment are not considered the syntactical grammar*/
+word : whitespace<br/>
+word : newline<br/>
+word : comment<br/>
+</code></p>
+</div> 
+
+<h3>whitespace</h3>
+<p>The word <code>whitespace</code> is defined by</p>
+
+<div class="box">
+<p><code>
+/* #9 is also known as "CHARACTER TABULATION" */<br/>
+whitespace : #9<br/>
+/* #20 is also known as "SPACE" */<br/>
+whitespace : #20
+</code></p>
+</div>
+
+<h3>line terminator</h3>
+<p>The word <code>line_terminator</code> is defined by</p>
+
+<div class="box">
+<p><code>
+/* #a is also known as "LINEFEED (LF)" */<br/>
+/* #d is also known as "CARRIAGE RETURN (CR)" */<br/>
+line_terminator : #a {#d}<br/>
+line_terminator : #d {#a}
+</code></p>
+</div>
+
+<h3>comments</h3>
+<p>
+The language supports both single-line comments and multi-line comments. A <code>comment</code> is either a <code>single_line_comment</code> or a <code>multi_line_comment</code>.
+<code>multi_line_comment</code> is defined by
+</p>
+
+<div class="box">
+<p><code>
+comment : single_line_comment
+comment : multi_line_comment 
+</code></p>
+</div>
+
+<p>
+A <code>single_line_comment</code> starts with two solidi.
+It extends to the end of the line.
+<code>single_line_comment</code> is defined by:
+</code>
+
+<div class="box">
+<p><code>
+/* #2f is also known as SOLIDUS */
+single_line_comment :
+#2f #2f
+/* any sequence of characters except for line_terminator */  
+</code></p>
+</div>
+
+<p>The line_terminator is not considered as part of the comment text.</p>
+
+<p>
+A <code>multi_line_comment</code> is opened by a solidus and an asterisk and closed by an asterisk and a solidus.
+<code>multi_line_comment</code> is defined by
+</p>
+
+<div class="box">
+<p><code>
+/* #2f is also known as SOLIDUS */<br/>
+/* #2a is also known as ASTERISK */<br/>
+multi_line_comment :<br/>
+#2f #2a<br/>
+/* any sequence of characters except except for #2a #2f */<br/>
+#2a #2f  
+</code></p>
+</div>
+
+<p>The <code>#2f #2a</code> and <code>#2a #2f</code> sequences are not considered as part of the comment text.</p>
+
+<p>This implies:</p>
+
+<ul>
+  <li><code>#2f #2f</code> has no special meaning either comment.</li>
+  <li><code>#2f #2a</code> and <code>#2a #2f</code> have no special meaning in single-line comments.</li>
+  <li>Multi-line comments do not nest.</li>
+</ul>
+
+
+<h3>parentheses</h3>
+<p>The words <code>left_parenthesis</code> and <code>right_parenthesis</code>, respectively, are defined by</p>
+
+<div class="box">
+<p><code>
+/* #28 is also known as "LEFT PARENTHESIS" */<br/>
+left_parenthesis : #28<br/>
+/* #29 is also known as "RIGHT PARENTHESIS" */<br/>
+right_parenthesis : #29 
+</code></p>
+</div>
+
+<h3>curly brackets</h3>
+<p>The words <code>left_curly_bracket</code> and <code>right_curly_bracket</code>, respectively, are defined by</p>
+
+<div class="box">
+<p><code>
+/* #7b is also known as "LEFT CURLY BRACKET" */<br/>
+left_curly_bracket : #7b<br/>
+/* #7d is also known as "RIGHT CURLY BRACKET" */<br/>
+right_curly_bracket : #7d 
+</code></p>
+</div>
+
+<h3>colon</h3>
+<p>The word <code>colon</code> is defined by</code>
+
+<div class="box">
+<p><code>
+/* #3a is also known as "COLON" */<br/>
+colon : #3a 
+</code></p>
+</div>
+
+<h3>square brackets</h3>
+<p>The words <code>left_square_bracket</code> and <code>right_square_bracket</code>, respectively, are defined by</p>
+
+<div class="box">
+<p><code>
+/* #5b is also known as "LEFT SQUARE BRACKET" */<br/>
+left_square_bracket : #5b<br/>
+/* #5d is also known as "RIGHT SQUARE BRACKET" */<br/>
+right_square_bracket : #5d 
+</code></p>
+</div>
+
+<h3>alphanumeric literal</h3>
+<p>The word <code>alphanumeric</code> is reserved for future use.</p>
+
+<h3>comma</h3>
+<p>The word <code>comma</code> is defined by</p>
+
+<div class="box">
+<p><code>
+/* #2c is also known as "COMMA" */<br/>
+comma : #2c 
+</code></p>
+</div>
+
+<h3>name</h3>
+<p>The word <code>name</code> is defined by</p>
+
+<div class="box">
+<p><code>
+name : {underscore} alphabetic {name_suffix_character}<br/>
+<br/>
+/* #41 is also known as "LATIN CAPITAL LETTER A" */<br/>
+/* #5a is also known as "LATIN CAPITAL LETTER Z" */<br/>
+/* #61 is also known as "LATIN SMALL LETTER A" */<br/>
+/* #7a is also known as "LATIN SMALLER LETTER Z" */<br/>
+name_suffix_character : /* The unicode characters from #41 to #5a and from #61 to #7a. */<br/>
+<br/>
+/* #30 is also known as "DIGIT ZERO" */<br/>
+/* #39 is also known as "DIGIT NINE" */<br/>
+name_suffix_character : /* The unicode characters from #30 to #39. */<br/>
+<br/>
+/* #5f is also known as "LOW LINE" */<br/>
+name_suffix_character : #5f<br/> 
+</code></p>
+</div>
+
+<h3>number literal</h3>
+<p>The word <code>number</code> is defined by</p>
+
+<div class="box">
+<p><code>
+number : integer_number<br/>
+number : real_number<br/>
+integer_number : [sign] digit {digit}<br/>
+real_number : [sign] period digit {digit} [exponent]<br/>
+real_number : [sign] digit {digit} [period {digit}] [exponent]<br/>
+exponent : exponent_prefix [sign] digit {digit}<br/>
+<br/>
+/* #2b is also known as "PLUS SIGN" */<br/>
+sign : #2b<br/>
+/* #2d is also known as "MINUS SIGN" */<br/>
+sign : #2d<br/>
+/* #2e is also known as "FULL STOP" */<br/>
+period : 2e<br/>
+/* #65 is also known as "LATIN SMALL LETTER E" */<br/>
+exponent_prefix : #65<br/>
+/* #45 is also known as "LATIN CAPITAL LETTER E" */<br/>
+exponent_prefix : #45<br/>  
+</code></p>
+</div>
+
+<h3>string literal</h3>
+<p>The word <code>string</code> is defined by</p>
+
+<div class="box">
+<p><code>
+string : single_quoted_string<br/>
+stirng : double_quoted_string<br/>
+<br/>
+double_quoted_string : double_quote {double_quoted_string_character} double_quote<br/>
+double_quoted_string_character : /* any character except for newline and double_quote */<br/>
+double_quoted_string_character : escape_sequence<br/>
+double_quoted_string_character : #5c double_quote<br/>
+/* #22 is also known as "QUOTATION MARK" */<br/>
+double_quote : #22<br/>
+<br/>
+single_quoted_string : single_quote {single_quoted_string_character} single_quote<br/>
+single_quoted_string_character : /* any character except for newline and single quote */<br/>
+single_quoted_string_character : escape_sequence<br/>
+single_quoted_string_character : #5c single_quote<br/>
+/* #27 is also known as "APOSTROPHE" */<br/>
+single_quote : #27<br/>
+<br/>
+/* #5c is also known as "REVERSE SOLIDUS" */<br/>
+escape_sequence : #5c #5c<br/>
+/* #6e is also known as "LATIN SMALL LETTER N" */<br/>
+escape_sequence : #5c #6e<br/>
+/* #72 is also known as "LATIN SMALL LETTER R" */<br/>
+escape_sequence : #5c #72 
+</code></p>
+</div>
+
+<h3>boolean literals</h3>
+<p>The word <code>boolean</code> is defined by</p>
+
+<div class="box">
+<p><code>
+boolean : true<br/>
+boolean : false<br/>
+true : #74 #72 #75 #65<br/>
+false : #66 #61 #6c #73 #65
+</code></p>
+</div>
+
+<p>Remark: The word <code>boolean</code> is a so called <em>keyword</em>.
+It takes priority over the <code>name</code>.</p>
+
+<h3>void literal</h3>
+<p>The word <code>void</code> is defined by</p>
+
+<div class="box">
+<p><code>
+void : #76 #6f # #69 #64
+</code></p> 
+</div>
+
+<p>Remark: The word <code>boolean</code> is a so called <em>keyword</em>.
+It takes priority over the <code>name</code>.</p>
+
+<h3>digit literal</h3>
+<p>The wird <code>digit</code> is defined by</p>
+
+<div class="box">
+<p><code>
+digit : /* A single Unicode character from the code point range +U0030 to +U0039. */
+</code></p>
+</div>
+
+    <h2>Syntactical Structure</h2>
+<p>The syntactical grammar describes the translation of the words into sentences. The goal non-terminal of the syntactical grammar is the <code>sentence</code> symbol.</p>
+
+<p>The words <code>whitespace</code>, <code>line_terminator</code>, and <code>comment</code> are removed from the sequence of words before the translation to sentences is performed.</p>
+
+<p>The goal sentence <code>sentence</code> is defined by</p>
+
+<div class="box">
+<p><code>
+sentence : value 
+</code></p>
+</div>
+
+<p>The sentence <code>value</code> is defined by</p>
+
+<div class="box">
+<p><code>
+value : map<br/>
+value : list<br/>
+value : lexical:string<br/>
+value : lexical:number<br/>
+value : lexical:boolean<br/>
+value : lexical:void 
+</code></p>
+</div>
+
+<p>The sentence <code<map</code> is defined by</p> 
+
+<div class="box">
+<p><code>
+map : lexical:left_curly_bracket<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map_body<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lexical:right_curly_bracket<br/>
+<br/>
+map_body : map_body_element map_body_rest<br/>
+map_body : ε<br/>
+<br/>
+map_body_rest : lexical:comma map_body_element map_body_rest<br/>
+map_body_rest : lexical:comma<br/>
+map_body_rest : ε<br/>
+map_body_element : lexical:name lexical:colon value
+</code></p>
+</div>
+
+<p>The sentence <code>list</code> is defined by</p>
+
+<div class="box">
+<p><code>
+list : lexical:left_square_bracket<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_body<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lexical:right_square_bracket<br/>
+<br/>
+list_body : list_body_element list_body_rest<br/>
+list_body : ε<br/>
+<br/>
+list_body_rest : lexical:comma list_body_element list_body_rest<br/>
+list_body_rest : lexical:comma<br/>
+list_body_rest : ε<br/>
+<br/>
+list_body_element : value 
+</code></p>
+</div>
+
+    <h2>Semantical Structure</h2>
+<p>
+The <em>Data Definition Language</em> knows six basic types
+<em>List</em> and <em>Map</em>, which are the so called aggregate types, and
+<em>Boolean</em>, <em>Number</em>, <em>String</em>, and <em>Void</em>, which are the so called scalar types.
+</p>
+
+<h3>Boolean Type</h3>
+<p>
+The type <em>Boolean</em> type has two values <em>true</em> and <em>false</em> which are expressed in the language by the words <code>true</code> and <code>false</code>, respectively (as defined in the syntactical grammar). 
+</p>
+
+<h3>Number Type</h3>
+<p>
+The type <em>Number</em> type represents both two's complment integer numbers as well as IEEE754 floating-point numbers (without not-a-number values of infinity values).
+The values of type number are expressed in the language by the word <code>number</code> (as defined in the syntactical grammar).
+
+Note that the <code>Data Definition Language</code> does not impose restrictions on the size of the literals or the values.
+Implementations, however, may impose restrictions.  
+</p>
+
+<h3>String Type</h3>
+<p>
+The type <em>String</em> type represents UTF-8 strings. <em>String</em> values are expressed in the language by the word <code>string</code> (as defined in the syntactical grammar).
+At the end of the lexical translation of a String word, its escape sequences are replaced by the Unicode symbols they are representing. Furthermore, the opening and closing quotes are removed.
+
+Note that the <em>Data Definition Language</em> does not impose restrictions on the size of the literals or the values.
+Implementations, however, may impose restrictions. 
+</p>
+
+<h3>List Type</h3>
+<p>The type <em>List</em> represents lists of values. A value of type <em>List</em> is expressed in the language by the sentence <code>list</code> (as defined in the syntactical grammar).</p>
+
+<p><b>Example</b></p>
+<div class="box">
+<p><code>
+// A list with three numbers 1, 2, and 3.
+[ 1, 2, 3 ]
+</code></p>
+</div>
+
+<h3>Map Type</h3>
+<p>The type <em>Map</em> represents maps from names to values. A value of type <em>Map</em> is expressed in the language by the sentence <code<map</code> (as defined in the syntactical grammar).</p>
+
+<p><b>Example</b></p>
+<div class="box">
+<p><code>
+// A map of
+// text to 'Hello, World!'
+// action to 'Print', and
+// fontSize to 12.
+{ text : 'Hello World!', action : 'Print', fontSize: 12 } 
+</code></p>
+</div>
+
+<p> If two name/value pairs from the same name in a map are specified, then last specified name/value pair takes precedence. </p>
+
+<p><b>Example</b></p>
+<div class="box">
+<p>The following Data Definition Language program defines a Map value that contains two name/value pairs with the same name x. The first name/value pair maps to the value 0 and second name/value pair to the number 1.</p>
+
+<p><code>
+{ x : 0, x : 1 }
+</code></p>
+
+<p>The effective Map value defined by the program is hence</p>
+
+<p><code>
+{ x : 1 }
+</code></p>
+
+<p>as name/value pair mapping to the value 0 is specified before the name/value pair mapping to the value 1.</p>
+</div>
+
+   
+  </div>
+  <div class="right-column"></div>   
+  </main>
+  <footer>
+    <div class="left-column"></div>
+    <div class="center-column"></div>
+    <div class="right-column"></div>
+    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 25 Feburary 2025.</span>
+    </div>
+  </footer>
+</body>
+</html>

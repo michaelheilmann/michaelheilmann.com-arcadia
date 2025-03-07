@@ -24,7 +24,7 @@
 
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
-typedef struct Arcadia_Process1 Arcadia_Process1;
+typedef struct Arcadia_Process Arcadia_Process;
 
 /// @brief The immutable byte array representation native to Arcadia Ring 1.
 /// @warning Arcadia_ImmutableByteArray's precondition is an initialized type system.
@@ -40,7 +40,7 @@ typedef Arcadia_ImmutableByteArray* Arcadia_ImmutableByteArrayValue;
 Arcadia_ImmutableByteArray*
 Arcadia_ImmutableByteArray_create
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -48,7 +48,7 @@ Arcadia_ImmutableByteArray_create
 void
 Arcadia_ImmutableByteArray_visit
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_ImmutableByteArrayValue self
   );
 
@@ -58,7 +58,7 @@ Arcadia_ImmutableByteArray_visit
 Arcadia_Natural8Value const*
 Arcadia_ImmutableByteArray_getBytes
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_ImmutableByteArrayValue self
   );
 
@@ -68,7 +68,7 @@ Arcadia_ImmutableByteArray_getBytes
 Arcadia_SizeValue
 Arcadia_ImmutableByteArray_getNumberOfBytes
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_ImmutableByteArrayValue self
   );
 
@@ -76,7 +76,7 @@ Arcadia_ImmutableByteArray_getNumberOfBytes
 Arcadia_TypeValue
 _Arcadia_ImmutableByteArrayValue_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEBYTEARRAY_H_INCLUDED

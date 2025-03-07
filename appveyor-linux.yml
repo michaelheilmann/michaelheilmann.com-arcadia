@@ -19,22 +19,44 @@ install:
 before_build:
     - ps: |
         cmake CMakeLists.txt
+        
+        ${env:RELEASE_NAME}="michaelheilmann.com-linux-$(${env:APPVEYOR_REPO_BRANCH})-v$(${env:APPVEYOR_BUILD_VERSION}.ToLower())"
+        
+        ${env:ARCHIVE_FILENAME}="michaelheilmann.com-${env:APPVEYOR_REPO_BRANCH}";
+        ${env:ARCHIVE_FILENAME}="${env:ARCHIVE_FILENAME}-linux"
+                
+        ${env:ARCHIVE_FILENAME}="${env:ARCHIVE_FILENAME}-v$(${env:APPVEYOR_BUILD_VERSION}.ToLower())";
+        ${env:ARCHIVE_FILENAME}="${env:ARCHIVE_FILENAME}.tar.gz";
 
 build_script:
     - sh: make all
+
+after_build:
+    - ps: New-Item ${env:APPVEYOR_BUILD_FOLDER}/.keepme -type file
+    - ps: tar -czvf ${env:ARCHIVE_FILENAME} ${env:APPVEYOR_BUILD_FOLDER}/.keepme
        
 test_script:
-    - ps: ctest --output-junit test-results-${env:APPVEYOR_JOB_ID}.xml -C ${env:CONFIGURATION} 
+    - ps: ctest --output-junit test-results-${env:APPVEYOR_JOB_ID}.xml 
     - ps: |
         $webClient = New-Object 'System.Net.WebClient'
         $webClient.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test-results-${env:APPVEYOR_JOB_ID}.xml))
-
-after_build:
                                           
 # If one matrix entry fails, all entries fails (https://www.appveyor.com/docs/build-configuration#failing-strategy).
 matrix:
     fast_finish: true
 
 artifacts:
+    - path: $(ARCHIVE_FILENAME)
+      name: $(ARCHIVE_FILENAME)
 
 deploy:
+    release: $(RELEASE_NAME)
+    tag: $(RELEASE_NAME)
+    description: 'michaelheilmann.com $(APPVEYOR_REPO_BRANCH) branch v$(APPVEYOR_BUILD_VERSION)'
+    provider: GitHub
+    auth_token:
+        secure: iTg7jon0UCvoGT5y2flVxH0cFlkVZFPr9p3t4D4by8RJktpIOU08lu7K1ipChiotGYRzOrOQoUEuHja+BewAk0IQsQcXenF2tbYG837JKZz/s4xQ5GsqpD4q02BD3DIf # encrypted token from GitHub
+        artifact: $(ARCHIVE_FILENAME) # upload the artifact
+    draft: true
+    prerelease: false
+    force_update: true

@@ -37,13 +37,13 @@ struct Context {
 Context*
 Context_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 void
 Context_onRun
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   );
 

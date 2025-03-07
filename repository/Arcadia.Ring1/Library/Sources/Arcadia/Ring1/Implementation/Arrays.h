@@ -17,7 +17,7 @@
 #define ARCADIA_RING1_IMPLEMENTATION_ARRAYS_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Size.h"
-#include "Arcadia/Ring1/Implementation/Process1.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arms.h"
 
 /// @brief The strategy for a call to <code>Arcadia_Arrays_resizeBy*</code> functions.
@@ -83,7 +83,7 @@ typedef enum Arcadia_Arrays_ResizeStrategy {
 void
 Arcadia_Arrays_resizeByAdditionalCapacity
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arms_MemoryManager* memoryManager,
     void** elements,
     Arcadia_SizeValue elementSize,
@@ -108,7 +108,7 @@ Arcadia_Arrays_resizeByAdditionalCapacity
 void
 Arcadia_Arrays_resizeByFreeCapacity
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arms_MemoryManager* memoryManager,
     void** elements,
     Arcadia_SizeValue elementSize,

@@ -42,13 +42,13 @@ struct Arcadia_Mil_ModuleAst {
 Arcadia_Mil_ModuleAst*
 Arcadia_Mil_ModuleAst_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 void
 Arcadia_Mil_ModuleAst_appendDefinition
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_ModuleAst* self,
     Arcadia_Mil_DefinitionAst* definition
   );
@@ -56,14 +56,14 @@ Arcadia_Mil_ModuleAst_appendDefinition
 Arcadia_SizeValue
 Arcadia_Mil_ModuleAst_getNumberOfDefinitions
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_ModuleAst* self
   );
 
 Arcadia_Mil_DefinitionAst*
 Arcadia_Mil_ModuleAst_getDefinitionAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_ModuleAst* self,
     Arcadia_SizeValue index
   );

@@ -19,7 +19,6 @@
 #define R_INTERPRETER_CODE_CONSTANTS_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Include.h"
 
 /**
  * @brief A set of constants.
@@ -49,13 +48,13 @@ struct R_Interpreter_Code_Constants {
 R_Interpreter_Code_Constants*
 R_Interpreter_Code_Constants_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateBoolean
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_BooleanValue booleanValue
   );
@@ -63,7 +62,7 @@ R_Interpreter_Code_Constants_getOrCreateBoolean
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateForeignProcedure
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_ForeignProcedureValue foreignProcedureValue
   );
@@ -71,7 +70,7 @@ R_Interpreter_Code_Constants_getOrCreateForeignProcedure
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateInteger16
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_Integer16Value integer16Value
   );
@@ -79,7 +78,7 @@ R_Interpreter_Code_Constants_getOrCreateInteger16
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateInteger32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_Integer32Value integer32Value
   );
@@ -87,7 +86,7 @@ R_Interpreter_Code_Constants_getOrCreateInteger32
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateInteger64
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_Integer64Value integer64Value
   );
@@ -95,7 +94,7 @@ R_Interpreter_Code_Constants_getOrCreateInteger64
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateInteger8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_Integer8Value natural8Value
   );
@@ -103,7 +102,7 @@ R_Interpreter_Code_Constants_getOrCreateInteger8
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateNatural16
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_Natural16Value natural16Value
   );
@@ -111,7 +110,7 @@ R_Interpreter_Code_Constants_getOrCreateNatural16
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateNatural32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_Natural32Value natural32Value
   );
@@ -119,7 +118,7 @@ R_Interpreter_Code_Constants_getOrCreateNatural32
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateNatural64
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_Natural64Value natural64Value
   );
@@ -127,7 +126,7 @@ R_Interpreter_Code_Constants_getOrCreateNatural64
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateNatural8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_Natural8Value natural8Value
   );
@@ -135,7 +134,7 @@ R_Interpreter_Code_Constants_getOrCreateNatural8
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_SizeValue sizeValue
   );
@@ -143,7 +142,7 @@ R_Interpreter_Code_Constants_getOrCreateSize
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateString
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_String* stringValue
   );
@@ -151,7 +150,7 @@ R_Interpreter_Code_Constants_getOrCreateString
 Arcadia_Natural32Value
 R_Interpreter_Code_Constants_getOrCreateVoid
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants* self,
     Arcadia_VoidValue voidValue
   );
@@ -159,7 +158,7 @@ R_Interpreter_Code_Constants_getOrCreateVoid
 Arcadia_Value const*
 R_Interpreter_Code_Constants_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code_Constants const* self,
     Arcadia_Natural32Value index
   );

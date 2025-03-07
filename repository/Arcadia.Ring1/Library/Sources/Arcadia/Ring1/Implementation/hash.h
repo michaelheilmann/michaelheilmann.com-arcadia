@@ -50,13 +50,15 @@
 Arcadia_SizeValue
 Arcadia_hashAtomValue
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue x
   );
 
-// https://michaelheilmann.com/repository/R1/#r-hash
+// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_hash
 Arcadia_SizeValue
 Arcadia_hashTypeValue
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue x
   );
 

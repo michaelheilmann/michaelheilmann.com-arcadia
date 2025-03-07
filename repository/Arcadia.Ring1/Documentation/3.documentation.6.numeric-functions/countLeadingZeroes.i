@@ -1,10 +1,10 @@
 <h4 id="Arcadia_countLeadingZeroes*">Arcadia_countLeadingZeroes*</h4>
-<p>Return the number of leadin gzeroes of the binary representation of a value.</p>
+<p>Return the number of leading zeroes of the binary representation of a value.</p>
 <p><code>
 Arcadia_SizeValue
 Arcadia_countLeadingZeroes<my-mv>Suffix</my-mv>
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     <my-mv>Type</my-mv> value
   )
 </code></p>
@@ -27,7 +27,7 @@ Arcadia_countLeadingZeroes<my-mv>Suffix</my-mv>
 
 <h5>Parameters</h5>
 <table>
-  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><my-mv>Type</my-mv> value</td><td>The value.</td></tr>
 </table>
 

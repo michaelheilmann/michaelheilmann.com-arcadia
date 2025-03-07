@@ -33,7 +33,7 @@ Arcadia_Mil_RealLiteralOperandAst_constructImpl
 static void
 Arcadia_Mil_RealLiteralOperandAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_RealLiteralOperandAst* self
   );
 
@@ -74,49 +74,38 @@ Arcadia_Mil_RealLiteralOperandAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_RealLiteralOperandAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_IntegerLiteralOperandAst_getType(process);
-
+  Arcadia_TypeValue _type = _Arcadia_Mil_IntegerLiteralOperandAst_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
-
   if (1 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Value_isObjectReferenceValue(&argumentValues[0])) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
-  }
-  Arcadia_Object* objectValue = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
-  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectValue), _Arcadia_String_getType(process))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
-  }
-  Arcadia_String* stringValue = (Arcadia_String*)objectValue;
-  _self->value = stringValue;
-  Arcadia_Object_setType(process, _self, _type);
+  _self->value = (Arcadia_String*)R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 Arcadia_Mil_RealLiteralOperandAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_RealLiteralOperandAst* self
   )
-{ Arcadia_Object_visit(process, self->value); }
+{ Arcadia_Object_visit(thread, self->value); }
 
 Arcadia_Mil_RealLiteralOperandAst*
 Arcadia_Mil_RealLiteralOperandAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* value
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)value } };
-  Arcadia_Mil_RealLiteralOperandAst* self = R_allocateObject(process, _Arcadia_Mil_RealLiteralOperandAst_getType(process), 1, &argumentValues[0]);
+  Arcadia_Mil_RealLiteralOperandAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_RealLiteralOperandAst_getType(thread), 1, &argumentValues[0]);
   return self;
 }
 

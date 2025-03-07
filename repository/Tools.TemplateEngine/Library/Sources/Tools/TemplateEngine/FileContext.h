@@ -38,7 +38,7 @@ struct FileContext {
 FileContext*
 FileContext_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context,
     Arcadia_FilePath* sourceFilePath
   );
@@ -46,7 +46,7 @@ FileContext_create
 void
 FileContext_execute
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     FileContext* context
   );
 

@@ -39,7 +39,7 @@ struct R_Interpreter_Variable {
 R_Interpreter_Variable*
 R_Interpreter_Variable_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Class* class,
     Arcadia_String* name
   );
@@ -47,12 +47,14 @@ R_Interpreter_Variable_create
 R_Interpreter_Class*
 R_Interpreter_Variable_getClass
   (
+    Arcadia_Thread* thread,
     R_Interpreter_Variable* self
   );
 
 Arcadia_String*
 R_Interpreter_Variable_getName
   (
+    Arcadia_Thread* thread,
     R_Interpreter_Variable* self
   );
 

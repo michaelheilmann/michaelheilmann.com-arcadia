@@ -28,7 +28,7 @@ static Arcadia_SizeValue g_maximumCapacity = -1;
 static void
 Arcadia_List_ensureFreeCapacity
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue requiredFreeCapacity
   );
@@ -36,7 +36,7 @@ Arcadia_List_ensureFreeCapacity
 static void
 Arcadia_List_ensureInitialized
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 static void
@@ -51,14 +51,14 @@ Arcadia_List_constructImpl
 static void
 Arcadia_List_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   );
 
 static void
 Arcadia_List_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   );
 
@@ -93,7 +93,7 @@ Rex_defineObjectType(u8"Arcadia.List", Arcadia_List, u8"Arcadia.Object", Arcadia
 static void
 Arcadia_List_ensureFreeCapacity
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue requiredFreeCapacity
   )
@@ -108,8 +108,8 @@ Arcadia_List_ensureFreeCapacity
       // If oldCapacity > maximumCapacity / 2 holds then oldCapacity * 2 > maximumCapacity holds.
       // Consequently, we cannot double the capacity. Try to saturate the capacity.
       if (oldCapacity == g_maximumCapacity) {
-        Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
-        Arcadia_Process_jump(process);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+        Arcadia_Thread_jump(thread);
       } else {
         newCapacity = g_maximumCapacity;
       }
@@ -118,14 +118,14 @@ Arcadia_List_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  Arcadia_Process_reallocateUnmanaged(process, &self->elements, sizeof(Arcadia_Value) * newCapacity);
+  Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->elements, sizeof(Arcadia_Value) * newCapacity);
   self->capacity = newCapacity;
 }
 
 static void
 Arcadia_List_ensureInitialized
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   if (!g_initialized) {
@@ -135,8 +135,8 @@ Arcadia_List_ensureInitialized
       g_maximumCapacity = Arcadia_Integer32Value_Maximum;
     }
     if (g_minimumCapacity > g_maximumCapacity) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     }
     g_initialized = Arcadia_BooleanValue_True;
   }
@@ -151,9 +151,10 @@ Arcadia_List_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_List* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_List_getType(process);
-  Arcadia_List_ensureInitialized(process);
+  Arcadia_TypeValue _type = _Arcadia_List_getType(thread);
+  Arcadia_List_ensureInitialized(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -166,18 +167,18 @@ Arcadia_List_constructImpl
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void
 Arcadia_List_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 {
   if (self->elements) {
-    Arcadia_Process_deallocateUnmanaged(process, self->elements);
+    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->elements);
     self->elements = NULL;
   }
 }
@@ -185,13 +186,13 @@ Arcadia_List_destruct
 static void
 Arcadia_List_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 {
   if (self->elements) {
     for (Arcadia_SizeValue i = 0, n = self->size; i < n; ++i) {
-      Arcadia_Value_visit(process, self->elements + i);
+      Arcadia_Value_visit(thread, self->elements + i);
     }
   }
 }
@@ -199,19 +200,18 @@ Arcadia_List_visit
 Arcadia_List*
 Arcadia_List_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  Arcadia_List_ensureInitialized(process);
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  Arcadia_List* self = R_allocateObject(process, _Arcadia_List_getType(process), 0, &argumentValues[0]);
+  Arcadia_List* self = Arcadia_allocateObject(thread, _Arcadia_List_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
 void
 Arcadia_List_clear
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 { self->size = 0; }
@@ -219,7 +219,7 @@ Arcadia_List_clear
 Arcadia_SizeValue
 Arcadia_List_getSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 { return self->size; }
@@ -227,44 +227,44 @@ Arcadia_List_getSize
 void
 Arcadia_List_append
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   )
 {
-  Arcadia_List_insertAt(process, self, self->size, value);
+  Arcadia_List_insertAt(thread, self, self->size, value);
 }
 
 void
 Arcadia_List_prepend
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   )
 {
-  Arcadia_List_insertAt(process, self, Arcadia_SizeValue_Literal(0), value);
+  Arcadia_List_insertAt(thread, self, Arcadia_SizeValue_Literal(0), value);
 }
 
 void
 Arcadia_List_insertAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index,
     Arcadia_Value value
   )
 {
   if (index > self->size) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if (self->capacity == self->size) {
-    Arcadia_List_ensureFreeCapacity(process, self, Arcadia_SizeValue_Literal(1));
+    Arcadia_List_ensureFreeCapacity(thread, self, Arcadia_SizeValue_Literal(1));
   }
   if (index < self->size) {
-    Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), self->elements + index + 1,
-                                self->elements + index + 0, sizeof(Arcadia_Value) * (self->size - index));
+    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + index + 1,
+                               self->elements + index + 0, sizeof(Arcadia_Value) * (self->size - index));
   }
   self->elements[index] = value;
   self->size++;
@@ -273,14 +273,14 @@ Arcadia_List_insertAt
 Arcadia_Value
 Arcadia_List_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index
   )
 {
   if (index >= self->size) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
   }
   return self->elements[index];
 }
@@ -288,29 +288,29 @@ Arcadia_List_getAt
 void
 Arcadia_List_remove
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index,
     Arcadia_SizeValue count
   )
 {
   if (!self) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if ((Arcadia_SizeValue_Maximum - count) < index) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if ((index + count) > self->size) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_SizeValue tailLength = (self->size - index) - count;
   if (tailLength) {
     Arcadia_SizeValue tailStart = index + count;
-    Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), self->elements + index,
-                                self->elements + tailStart, tailLength * sizeof(Arcadia_Value));
+    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + index,
+                               self->elements + tailStart, tailLength * sizeof(Arcadia_Value));
   }
   self->size -= count;
 }
@@ -319,40 +319,40 @@ Arcadia_List_remove
   void \
   Arcadia_List_append##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Type##Value Variable##Value \
     ) \
   { \
     Arcadia_Value value; \
     Arcadia_Value_set##Suffix##Value(&value, Variable##Value); \
-    Arcadia_List_append(process, self, value); \
+    Arcadia_List_append(thread, self, value); \
   } \
 \
   void \
   Arcadia_List_prepend##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Type##Value Variable##Value \
     ) \
   { \
     Arcadia_Value value; \
     Arcadia_Value_set##Suffix##Value(&value, Variable##Value); \
-    Arcadia_List_prepend(process, self, value); \
+    Arcadia_List_prepend(thread, self, value); \
   } \
 \
   Arcadia_BooleanValue \
   Arcadia_List_is##Suffix##ValueAt \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Arcadia_SizeValue index \
     ) \
   { \
     if (index >= self->size) { \
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid); \
-      Arcadia_Process_jump(process); \
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid); \
+      Arcadia_Thread_jump(thread); \
     } \
     return Arcadia_Value_is##Suffix##Value(self->elements + index); \
   } \
@@ -360,19 +360,19 @@ Arcadia_List_remove
   Type##Value \
   Arcadia_List_get##Suffix##ValueAt \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Arcadia_SizeValue index \
     ) \
   { \
     if (index >= self->size) { \
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid); \
-      Arcadia_Process_jump(process); \
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid); \
+      Arcadia_Thread_jump(thread); \
     } \
     Arcadia_Value* element = self->elements + index; \
     if (!Arcadia_Value_is##Suffix##Value(element)) { \
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid); \
-      Arcadia_Process_jump(process); \
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid); \
+      Arcadia_Thread_jump(thread); \
     } \
     return Arcadia_Value_get##Suffix##Value(element); \
   }

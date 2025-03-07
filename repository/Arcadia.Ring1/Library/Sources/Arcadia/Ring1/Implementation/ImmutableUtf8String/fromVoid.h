@@ -18,14 +18,14 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_FROMVOID_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_FROMVOID_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Process1.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/Void.h"
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
 
 Arcadia_ImmutableUtf8String*
 _createFromVoid
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_VoidValue voidValue
   );
 

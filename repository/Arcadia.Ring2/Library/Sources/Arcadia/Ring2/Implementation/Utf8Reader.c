@@ -67,8 +67,9 @@ Arcadia_Utf8Reader_constructorImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Utf8Reader* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Utf8Reader_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Utf8Reader_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -76,44 +77,45 @@ Arcadia_Utf8Reader_constructorImpl
   _self->getCodePoint = NULL;
   _self->hasCodePoint = NULL;
   _self->next = NULL;
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 void
 Arcadia_Utf8Reader_next
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* self
   )
 {
-  self->next(process, self);
+  self->next(thread, self);
 }
 
 Arcadia_Natural32Value
 Arcadia_Utf8Reader_getCodePoint
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* self
   )
 {
-  return self->getCodePoint(process, self);
+  return self->getCodePoint(thread, self);
 }
 
 Arcadia_BooleanValue
 Arcadia_Utf8Reader_hasCodePoint
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* self
   )
 {
-  return self->hasCodePoint(process, self);
+  return self->hasCodePoint(thread, self);
 }
 
 Arcadia_SizeValue
 Arcadia_Utf8Reader_getByteIndex
   (
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* self
   )
 {
-  return self->getByteIndex(self);
+  return self->getByteIndex(thread, self);
 }

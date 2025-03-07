@@ -32,7 +32,7 @@ R_Interpreter_Variable_constructImpl
 static void
 R_Interpreter_Variable_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Variable* self
   );
 
@@ -73,38 +73,39 @@ R_Interpreter_Variable_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   R_Interpreter_Variable* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Interpreter_Variable_getType(process);
+  Arcadia_TypeValue _type = _R_Interpreter_Variable_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->ready = Arcadia_BooleanValue_False;
   _self->index = Arcadia_SizeValue_Literal(0);
-  _self->class = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _R_Interpreter_Class_getType(process));
-  _self->name = R_Argument_getObjectReferenceValue(process, &argumentValues[1], _Arcadia_String_getType(process));
-  Arcadia_Object_setType(process, _self, _type);
+  _self->class = R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _R_Interpreter_Class_getType(thread));
+  _self->name = R_Argument_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void
 R_Interpreter_Variable_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Variable* self
   )
 {
-  Arcadia_Object_visit(process, self->class);
-  Arcadia_Object_visit(process, self->name);
+  Arcadia_Object_visit(thread, self->class);
+  Arcadia_Object_visit(thread, self->name);
 }
 
 R_Interpreter_Variable*
 R_Interpreter_Variable_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Class* class,
     Arcadia_String* name
   )
@@ -113,13 +114,14 @@ R_Interpreter_Variable_create
     {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = class },
     {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name },
   };
-  R_Interpreter_Variable* self = R_allocateObject(process, _R_Interpreter_Variable_getType(process), 2, &argumentValues[0]);
+  R_Interpreter_Variable* self = Arcadia_allocateObject(thread, _R_Interpreter_Variable_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
 R_Interpreter_Class*
 R_Interpreter_Variable_getClass
   (
+    Arcadia_Thread* thread,
     R_Interpreter_Variable* self
   )
 { return self->class; }
@@ -127,6 +129,7 @@ R_Interpreter_Variable_getClass
 Arcadia_String*
 R_Interpreter_Variable_getName
   (
+    Arcadia_Thread* thread,
     R_Interpreter_Variable* self
   )
 { return self->name; }

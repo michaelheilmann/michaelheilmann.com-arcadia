@@ -2,37 +2,25 @@
 <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=3'>
 <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=3'>
 <link rel='canonical' href='@{siteAddress}/repository/R1/'>
-<title>Michael Heilmann's Runtime Mark 1</title>
+<title>Michael Heilmann's Arcadia Ring 1</title>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
   /* variable */
-  my-v {
+  body.my-constant-page-1 my-v {
     font-family: my-code-font;
     font-size: 0.9rem;
   }
 
   /* meta variable */
-  my-mv {
+  body.my-constant-page-1 my-mv {
     display: inline;
     font-family: my-code-font;
     font-size: 0.9rem;
   }
-  my-mv::before {
+  body.my-constant-page-1 my-mv::before {
     content: "<";
   }
-  my-mv::after {
-    content: ">";
-  }
-
-  /* meta variable */
-  .meta {
-    font-family: my-code-font;
-    font-size: 0.9rem;
-  }
-  .meta::before {
-    content: "<";
-  }
-  .meta::after {
+  body.my-constant-page-1 my-mv::after {
     content: ">";
   }
 </style>

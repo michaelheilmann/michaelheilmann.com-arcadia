@@ -12,7 +12,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSys
 Arcadia_FileSystem*
 Arcadia_FileSystem_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 </code></p>
 
@@ -20,7 +20,7 @@ Arcadia_FileSystem_create
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -35,7 +35,7 @@ Arcadia_FileSystem_create
 Arcadia_ByteBuffer*
 Arcadia_FileSystem_getFileContents
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   )
@@ -69,7 +69,7 @@ A pointer to a <code>Arcadia_ByteBuffer</code> object with the file contents.
 void
 Arcadia_FileSystem_setFileContents
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path,
     Arcadia_ByteBuffer* contents
@@ -80,7 +80,7 @@ Arcadia_FileSystem_setFileContents
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
   <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
   <tr><td>Arcadia_ByteBuffer* contents</td><td>A poiner to the Byte buffer with the file contents.</td></tr>
@@ -101,7 +101,7 @@ Arcadia_FileSystem_setFileContents
 Arcadia_BooleanValue
 Arcadia_FileSystem_regularFileExists
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   )
@@ -111,7 +111,7 @@ Arcadia_FileSystem_regularFileExists
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
   <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
 </table>
@@ -135,7 +135,7 @@ Arcadia_FileSystem_regularFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_directoryFileExists
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   )
@@ -145,7 +145,7 @@ Arcadia_FileSystem_directoryFileExists
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
   <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
 </table>

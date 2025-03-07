@@ -16,3 +16,33 @@
 // Last modified: 2025-02-19
 
 #include "Arcadia/Ring1/Support/ieee754.h"
+
+uint32_t
+flt_to_uint32
+  (
+    float v
+  )
+{
+  typedef union union_t {
+    float f32;
+    uint32_t uint32;
+  } union_t;
+  union_t u;
+  u.f32 = v;
+  return u.uint32;
+}
+
+uint64_t
+dbl_to_uint64
+  (
+    double v
+  )
+{
+  typedef union union_t {
+    double f64;
+    uint64_t uint64;
+  } union_t;
+  union_t u;
+  u.f64 = v;
+  return u.uint64;
+}

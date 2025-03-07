@@ -33,7 +33,7 @@ Arcadia_Mil_Ast_constructImpl
 static void
 Arcadia_Mil_Ast_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Ast* self
   );
 
@@ -74,8 +74,9 @@ Arcadia_Mil_Ast_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_Ast* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_Ast_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Mil_Ast_getType(thread);
 
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
@@ -83,16 +84,16 @@ Arcadia_Mil_Ast_constructImpl
   }
 
   if (0 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void
 Arcadia_Mil_Ast_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Ast* self
   )
 {/*Initially empty.*/}

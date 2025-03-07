@@ -37,9 +37,9 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 void
-Arcadia_safeAdd_n16
+Arcadia_safeAddNatural16Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural16Value augend,
     Arcadia_Natural16Value addend,
     Arcadia_Natural16Value* sumHigh,
@@ -47,33 +47,19 @@ Arcadia_safeAdd_n16
   );
 
 void
-Arcadia_safeAdd_n32
+Arcadia_safeAddNatural32Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural32Value augend,
     Arcadia_Natural32Value addend,
     Arcadia_Natural32Value* sumHigh,
     Arcadia_Natural32Value* sumLow
   );
 
-#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
-
 void
-Arcadia_safeAdd_n64_gcc
+Arcadia_safeAddNatural64Value
   (
-    Arcadia_Process1* process,
-    Arcadia_Natural64Value augend,
-    Arcadia_Natural64Value addend,
-    Arcadia_Natural64Value* sumHigh,
-    Arcadia_Natural64Value* sumLow
-  );
-
-#endif
-
-void
-Arcadia_safeAdd_n64
-  (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value augend,
     Arcadia_Natural64Value addend,
     Arcadia_Natural64Value* sumHigh,
@@ -81,9 +67,9 @@ Arcadia_safeAdd_n64
   );
 
 void
-Arcadia_safeAdd_n8
+Arcadia_safeAddNatural8Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value augend,
     Arcadia_Natural8Value addend,
     Arcadia_Natural8Value* sumHigh,

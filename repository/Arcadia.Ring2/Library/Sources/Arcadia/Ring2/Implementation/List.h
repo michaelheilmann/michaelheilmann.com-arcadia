@@ -37,14 +37,14 @@ struct Arcadia_List {
 Arcadia_List*
 Arcadia_List_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 // https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_clear
 void
 Arcadia_List_clear
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   );
 
@@ -52,7 +52,7 @@ Arcadia_List_clear
 Arcadia_SizeValue
 Arcadia_List_getSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   );
 
@@ -60,7 +60,7 @@ Arcadia_List_getSize
 void
 Arcadia_List_append
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   );
@@ -69,7 +69,7 @@ Arcadia_List_append
 void
 Arcadia_List_prepend
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   );
@@ -78,7 +78,7 @@ Arcadia_List_prepend
 void
 Arcadia_List_insertAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index,
     Arcadia_Value value
@@ -88,7 +88,7 @@ Arcadia_List_insertAt
 Arcadia_Value
 Arcadia_List_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index
   );
@@ -97,7 +97,7 @@ Arcadia_List_getAt
 void
 Arcadia_List_remove
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index,
     Arcadia_SizeValue count
@@ -107,18 +107,18 @@ Arcadia_List_remove
 static inline Arcadia_BooleanValue
 Arcadia_List_isEmpty
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 {
-  return Arcadia_SizeValue_Literal(0) == Arcadia_List_getSize(process, self);
+  return Arcadia_SizeValue_Literal(0) == Arcadia_List_getSize(thread, self);
 }
 
 #define Define(Type, Suffix, Variable) \
   void \
   Arcadia_List_append##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Type##Value Variable##Value \
     ); \
@@ -126,7 +126,7 @@ Arcadia_List_isEmpty
   void \
   Arcadia_List_prepend##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Type##Value Variable##Value \
     ); \
@@ -134,7 +134,7 @@ Arcadia_List_isEmpty
   void \
   Arcadia_List_insert##Suffix##ValueAt \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Arcadia_SizeValue index, \
       Type##Value Variable##Value \
@@ -143,7 +143,7 @@ Arcadia_List_isEmpty
   Arcadia_BooleanValue \
   Arcadia_List_is##Suffix##ValueAt \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Arcadia_SizeValue index \
     ); \
@@ -151,7 +151,7 @@ Arcadia_List_isEmpty
   Type##Value \
   Arcadia_List_get##Suffix##ValueAt \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_List* self, \
       Arcadia_SizeValue index \
     );

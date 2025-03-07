@@ -20,9 +20,10 @@
 
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include "Arcadia/Ring1/Implementation/hash.h"
-#include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+//#include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
+//#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
 #include "Arcadia/Ring1/Implementation/Object.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 // exit, EXIT_FAILURE
 #include <stdlib.h>
 
@@ -99,13 +100,16 @@ Arcadia_Object_isEqualTo
 void
 Arcadia_Value_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self
   )
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      Arcadia_Atom_visit(process, self->atomValue);
+      Arcadia_Atom_visit(thread, self->atomValue);
+    } break;
+    case Arcadia_ValueTag_BigInteger: {
+      Arcadia_BigInteger_visit(thread, self->bigIntegerValue);
     } break;
     case Arcadia_ValueTag_Boolean: {
       /* Intentionally empty. */
@@ -114,10 +118,10 @@ Arcadia_Value_visit
       /* Intentionally empty. */
     } break;
     case Arcadia_ValueTag_ImmutableByteArray: {
-      Arcadia_ImmutableByteArray_visit(Arcadia_Process_getProcess1(process), self->immutableByteArrayValue);
+      Arcadia_ImmutableByteArray_visit(thread, self->immutableByteArrayValue);
     } break;
     case Arcadia_ValueTag_ImmutableUtf8String: {
-      Arcadia_ImmutableUtf8String_visit(Arcadia_Process_getProcess1(process), self->immutableUtf8StringValue);
+      Arcadia_ImmutableUtf8String_visit(thread, self->immutableUtf8StringValue);
     } break;
     case Arcadia_ValueTag_Integer16: {
       /* Intentionally empty. */
@@ -144,7 +148,7 @@ Arcadia_Value_visit
       /* Intentionally empty. */
     } break;
     case Arcadia_ValueTag_ObjectReference: {
-      Arcadia_Object_visit(process, self->objectReferenceValue);
+      Arcadia_Object_visit(thread, self->objectReferenceValue);
     } break;
     case Arcadia_ValueTag_Real32: {
       /* Intentionally empty. */
@@ -156,7 +160,7 @@ Arcadia_Value_visit
       /* Intentionally empty. */
     } break;
     case Arcadia_ValueTag_Type: {
-      Arcadia_Type_visit(self->typeValue);
+      Arcadia_Type_visit(thread, self->typeValue);
     } break;
     case Arcadia_ValueTag_Void: {
       /* Intentionally empty. */
@@ -171,67 +175,70 @@ Arcadia_Value_visit
 Arcadia_TypeValue
 Arcadia_Value_getType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self
   )
 { 
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      return _Arcadia_AtomValue_getType(process);
+      return _Arcadia_AtomValue_getType(thread);
+    } break;
+    case Arcadia_ValueTag_BigInteger: {
+      return _Arcadia_BigIntegerValue_getType(thread);
     } break;
     case Arcadia_ValueTag_Boolean: {
-      return _Arcadia_BooleanValue_getType(process);
+      return _Arcadia_BooleanValue_getType(thread);
     } break;
     case Arcadia_ValueTag_ForeignProcedure: {
-      return _Arcadia_ForeignProcedureValue_getType(process);
+      return _Arcadia_ForeignProcedureValue_getType(thread);
     } break;
     case Arcadia_ValueTag_ImmutableByteArray: {
-      return _Arcadia_ImmutableByteArrayValue_getType(process);
+      return _Arcadia_ImmutableByteArrayValue_getType(thread);
     } break;
     case Arcadia_ValueTag_ImmutableUtf8String: {
-      return _Arcadia_ImmutableUtf8StringValue_getType(process);
+      return _Arcadia_ImmutableUtf8StringValue_getType(thread);
     } break;
     case Arcadia_ValueTag_Integer16: {
-      return _Arcadia_Integer16Value_getType(process);
+      return _Arcadia_Integer16Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Integer32: {
-      return _Arcadia_Integer32Value_getType(process);
+      return _Arcadia_Integer32Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Integer64: {
-      return _Arcadia_Integer64Value_getType(process);
+      return _Arcadia_Integer64Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Integer8: {
-      return _Arcadia_Integer8Value_getType(process);
+      return _Arcadia_Integer8Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Natural16: {
-      return _Arcadia_Natural16Value_getType(process);
+      return _Arcadia_Natural16Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Natural32: {
-      return _Arcadia_Natural32Value_getType(process);
+      return _Arcadia_Natural32Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Natural64: {
-      return _Arcadia_Natural64Value_getType(process);
+      return _Arcadia_Natural64Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Natural8: {
-      return _Arcadia_Natural8Value_getType(process);
+      return _Arcadia_Natural8Value_getType(thread);
     } break;
     case Arcadia_ValueTag_ObjectReference: {
       return Arcadia_Object_getType(self->objectReferenceValue);
     } break;
     case Arcadia_ValueTag_Real32: {
-      return _Arcadia_Real32Value_getType(process);
+      return _Arcadia_Real32Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Real64: {
-      return _Arcadia_Real64Value_getType(process);
+      return _Arcadia_Real64Value_getType(thread);
     } break;
     case Arcadia_ValueTag_Size: {
-      return _Arcadia_SizeValue_getType(process);
+      return _Arcadia_SizeValue_getType(thread);
     } break;
     case Arcadia_ValueTag_Type: {
-      return _Arcadia_Type_getType(process);
+      return _Arcadia_Type_getType(thread);
     } break;
     case Arcadia_ValueTag_Void: {
-      return _Arcadia_VoidValue_getType(process);
+      return _Arcadia_VoidValue_getType(thread);
     } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
@@ -242,29 +249,31 @@ Arcadia_Value_getType
 
 #define OnRelational(Type, Operation) \
   case Arcadia_ValueTag_##Type: { \
-      Arcadia_TypeValue type = _Arcadia_##Type##Value_getType(process); \
+      Arcadia_TypeValue type = _Arcadia_##Type##Value_getType(thread); \
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type); \
       Arcadia_Value result; \
       Arcadia_Value arguments[] = { *self, *other }; \
-      operations->Operation(process, &result, 2, &arguments[0]); \
+      operations->Operation(Arcadia_Thread_getProcess(thread), &result, 2, &arguments[0]); \
       return Arcadia_Value_getBooleanValue(&result); \
   } break;
   
 Arcadia_BooleanValue
 Arcadia_Value_isEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other 
   )
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
+      // TODO: Add and use equalTo similar to BigInteger, ImmutableByteArray, ImmutableUtf8String, etc.
       if (!Arcadia_Value_isAtomValue(other)) {
         return Arcadia_BooleanValue_False;
       }
       return self->atomValue == other->atomValue;
     } break;
+    OnRelational(BigInteger, equalTo);
     OnRelational(Boolean, equalTo);
     OnRelational(ForeignProcedure, equalTo);
     OnRelational(ImmutableByteArray, equalTo);
@@ -282,7 +291,7 @@ Arcadia_Value_isEqualTo
     OnRelational(Size, equalTo);
     OnRelational(Void, equalTo);
     case Arcadia_ValueTag_ObjectReference: {
-      return Arcadia_Object_isEqualTo(process, self->objectReferenceValue, other);
+      return Arcadia_Object_isEqualTo(Arcadia_Thread_getProcess(thread), self->objectReferenceValue, other);
     } break;
     case Arcadia_ValueTag_Type: {
       if (!Arcadia_Value_isTypeValue(other)) {
@@ -300,18 +309,20 @@ Arcadia_Value_isEqualTo
 Arcadia_BooleanValue
 Arcadia_Value_isNotEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   )
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
+      // TODO: Add and use notEqualTo similar to BigInteger, ImmutableByteArray, ImmutableUtf8String, etc.
       if (!Arcadia_Value_isAtomValue(other)) {
         return Arcadia_BooleanValue_True;
       }
       return self->atomValue != other->atomValue;
     } break;
+    OnRelational(BigInteger, notEqualTo);
     OnRelational(Boolean, notEqualTo);
     OnRelational(ForeignProcedure, notEqualTo);
     OnRelational(ImmutableByteArray, notEqualTo);
@@ -329,7 +340,7 @@ Arcadia_Value_isNotEqualTo
     OnRelational(Size, notEqualTo);
     OnRelational(Void, notEqualTo);
     case Arcadia_ValueTag_ObjectReference: {
-      return Arcadia_Object_isNotEqualTo(process, self->objectReferenceValue, other);
+      return Arcadia_Object_isNotEqualTo(Arcadia_Thread_getProcess(thread), self->objectReferenceValue, other);
     } break;
     case Arcadia_ValueTag_Type: {
       if (!Arcadia_Value_isTypeValue(other)) {
@@ -347,16 +358,14 @@ Arcadia_Value_isNotEqualTo
 Arcadia_BooleanValue
 Arcadia_Value_isLowerThan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   )
 {
   switch (self->tag) {
-    case Arcadia_ValueTag_Atom: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process_jump(process);
-    } break;
+    OnRelational(Atom, lowerThan);
+    OnRelational(BigInteger, lowerThan);
     OnRelational(Boolean, lowerThan);
     OnRelational(ForeignProcedure, lowerThan);
     OnRelational(ImmutableByteArray, lowerThan);
@@ -378,12 +387,12 @@ Arcadia_Value_isLowerThan
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
-      operations->lowerThan(process, &resultValue, 2, &args[0]);
+      operations->lowerThan(Arcadia_Thread_getProcess(thread), &resultValue, 2, &args[0]);
       return Arcadia_Value_getBooleanValue(&resultValue);
     } break;
     case Arcadia_ValueTag_Type: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+      Arcadia_Thread_jump(thread);
     } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
@@ -395,16 +404,14 @@ Arcadia_Value_isLowerThan
 Arcadia_BooleanValue
 Arcadia_Value_isLowerThanOrEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   )
 {
   switch (self->tag) {
-    case Arcadia_ValueTag_Atom: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process_jump(process);
-    } break;
+    OnRelational(Atom, lowerThanOrEqualTo);
+    OnRelational(BigInteger, lowerThanOrEqualTo);
     OnRelational(Boolean, lowerThanOrEqualTo);
     OnRelational(ForeignProcedure, lowerThanOrEqualTo);
     OnRelational(ImmutableByteArray, lowerThanOrEqualTo);
@@ -426,12 +433,12 @@ Arcadia_Value_isLowerThanOrEqualTo
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
-      operations->lowerThanOrEqualTo(process, &resultValue, 2, &args[0]);
+      operations->lowerThanOrEqualTo(Arcadia_Thread_getProcess(thread), &resultValue, 2, &args[0]);
       return Arcadia_Value_getBooleanValue(&resultValue);
     } break;
     case Arcadia_ValueTag_Type: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+      Arcadia_Thread_jump(thread);
     } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
@@ -443,16 +450,14 @@ Arcadia_Value_isLowerThanOrEqualTo
 Arcadia_BooleanValue
 Arcadia_Value_isGreaterThan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   )
 {
   switch (self->tag) {
-    case Arcadia_ValueTag_Atom: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process_jump(process);
-    } break;
+    OnRelational(Atom, greaterThan);
+    OnRelational(BigInteger, greaterThan);
     OnRelational(Boolean, greaterThan);
     OnRelational(ForeignProcedure, greaterThan);
     OnRelational(ImmutableByteArray, greaterThan);
@@ -474,12 +479,12 @@ Arcadia_Value_isGreaterThan
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
-      operations->greaterThan(process, &resultValue, 2, &args[0]);
+      operations->greaterThan(Arcadia_Thread_getProcess(thread), &resultValue, 2, &args[0]);
       return Arcadia_Value_getBooleanValue(&resultValue);
     } break;
     case Arcadia_ValueTag_Type: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+      Arcadia_Thread_jump(thread);
     } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
@@ -491,16 +496,14 @@ Arcadia_Value_isGreaterThan
 Arcadia_BooleanValue
 Arcadia_Value_isGreaterThanOrEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   )
 {
   switch (self->tag) {
-    case Arcadia_ValueTag_Atom: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process_jump(process);
-    } break;
+    OnRelational(Atom, greaterThanOrEqualTo);
+    OnRelational(BigInteger, greaterThanOrEqualTo);
     OnRelational(Boolean, greaterThanOrEqualTo);
     OnRelational(ForeignProcedure, greaterThanOrEqualTo);
     OnRelational(ImmutableByteArray, greaterThanOrEqualTo);
@@ -522,12 +525,12 @@ Arcadia_Value_isGreaterThanOrEqualTo
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
-      operations->greaterThanOrEqualTo(process, &resultValue, 2, &args[0]);
+      operations->greaterThanOrEqualTo(Arcadia_Thread_getProcess(thread), &resultValue, 2, &args[0]);
       return Arcadia_Value_getBooleanValue(&resultValue);
     } break;
     case Arcadia_ValueTag_Type: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+      Arcadia_Thread_jump(thread);
     } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
@@ -540,25 +543,24 @@ Arcadia_Value_isGreaterThanOrEqualTo
 
 #define OnHash(Type) \
   case Arcadia_ValueTag_##Type: { \
-    Arcadia_TypeValue type = _Arcadia_##Type##Value_getType(process); \
+    Arcadia_TypeValue type = _Arcadia_##Type##Value_getType(thread); \
     Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type); \
     Arcadia_Value result; \
     Arcadia_Value arguments[] = { *self }; \
-    operations->hash(process, &result, 1, &arguments[0]); \
+    operations->hash(Arcadia_Thread_getProcess(thread), &result, 1, &arguments[0]); \
     return Arcadia_Value_getSizeValue(&result); \
   } break;
 
 Arcadia_SizeValue
 Arcadia_Value_getHash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self
   )
 {
   switch (self->tag) {
-    case Arcadia_ValueTag_Atom: {
-      return Arcadia_hashAtomValue(self->typeValue);
-    } break;
+    OnHash(Atom);
+    OnHash(BigInteger);
     OnHash(Boolean);
     OnHash(ForeignProcedure);
     OnHash(ImmutableByteArray);
@@ -580,7 +582,7 @@ Arcadia_Value_getHash
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[1] = { *self };
-      operations->hash(process, &resultValue, 1, &args[0]);
+      operations->hash(Arcadia_Thread_getProcess(thread), &resultValue, 1, &args[0]);
       return Arcadia_Value_getSizeValue(&resultValue);
     } break;
     default: {

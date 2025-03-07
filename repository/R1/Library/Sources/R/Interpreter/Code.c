@@ -24,83 +24,83 @@
 static Arcadia_Value*
 R_InterpreterState_decodeTarget
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
-  R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
+  R_Interpreter_ThreadState* interpreterThread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
+  R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(interpreterThread);
   R_Interpreter_Code* code = call->procedure->code;
 
   R_Machine_Code_IndexKind indexKind;
   Arcadia_Natural32Value indexValue;
-  R_Interpreter_Code_decodeIndex(process, code, &call->instructionIndex, &indexKind, &indexValue);
+  R_Interpreter_Code_decodeIndex(thread, code, &call->instructionIndex, &indexKind, &indexValue);
   if (R_Machine_Code_IndexKind_Register != indexKind) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
   }
-  return R_Interpreter_ThreadState_getRegisterAt(thread, indexValue);
+  return R_Interpreter_ThreadState_getRegisterAt(interpreterThread, indexValue);
 }
 
 static Arcadia_Value const*
 R_InterpreterState_decodeOperand
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess
   )
 {
   R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
-  R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
+  R_Interpreter_ThreadState* interpreterThread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
+  R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(interpreterThread);
   R_Interpreter_Code* code = call->procedure->code;
 
   R_Machine_Code_IndexKind indexKind;
   Arcadia_Natural32Value indexValue;
-  R_Interpreter_Code_decodeIndex(process, code, &call->instructionIndex, &indexKind, &indexValue);
+  R_Interpreter_Code_decodeIndex(thread, code, &call->instructionIndex, &indexKind, &indexValue);
   Arcadia_Value const* value = indexKind == R_Machine_Code_IndexKind_Constant ?
-                         R_Interpreter_Code_Constants_getAt(process, constants, indexValue) : R_Interpreter_ThreadState_getRegisterAt(thread, indexValue);
+                               R_Interpreter_Code_Constants_getAt(thread, constants, indexValue) : R_Interpreter_ThreadState_getRegisterAt(interpreterThread, indexValue);
   return value;
 }
 
 static Arcadia_String*
 R_InterpreterState_decodeStringConstant
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess
   )
 {
   R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
-  R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
+  R_Interpreter_ThreadState* interpreterThread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
+  R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(interpreterThread);
   R_Interpreter_Code* code = call->procedure->code;
 
   R_Machine_Code_IndexKind indexKind;
   Arcadia_Natural32Value indexValue;
-  R_Interpreter_Code_decodeIndex(process, code, &call->instructionIndex, &indexKind, &indexValue);
+  R_Interpreter_Code_decodeIndex(thread, code, &call->instructionIndex, &indexKind, &indexValue);
   if (R_Machine_Code_IndexKind_Constant != indexKind) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, R_Interpreter_Code_Constants_getAt(process, constants, indexValue)), _Arcadia_String_getType(process))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-    Arcadia_Process_jump(process);
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, R_Interpreter_Code_Constants_getAt(thread, constants, indexValue)), _Arcadia_String_getType(thread))) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
   }
-  return (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(R_Interpreter_Code_Constants_getAt(process, constants, indexValue));
+  return (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(R_Interpreter_Code_Constants_getAt(thread, constants, indexValue));
 }
 
 static Arcadia_Natural32Value
 R_InterpreterState_decodeCount
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess
   )
 {
-  R_Interpreter_ThreadState* thread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
-  R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(thread);
+  R_Interpreter_ThreadState* interpreterThread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcess);
+  R_CallState* call = R_Interpreter_ThreadState_getCurrentCall(interpreterThread);
   R_Interpreter_Code* code = call->procedure->code;
 
   Arcadia_Natural32Value countValue;
-  R_Interpreter_Code_decodeCount(process, code, &call->instructionIndex, &countValue);
+  R_Interpreter_Code_decodeCount(thread, code, &call->instructionIndex, &countValue);
   return countValue;
 }
 
@@ -116,7 +116,7 @@ R_Interpreter_Code_constructImpl
 static void
 R_Interpreter_Code_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self
   );
 
@@ -157,32 +157,33 @@ R_Interpreter_Code_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   R_Interpreter_Code* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Interpreter_Code_getType(process);
+  Arcadia_TypeValue _type = _R_Interpreter_Code_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->p = NULL;
   _self->sz = 0;
   _self->cp = 0;
   Arcadia_Process_allocateUnmanaged(process, &_self->p, 0);
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void
 R_Interpreter_Code_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self
   )
 {
   if (self->p) {
-    Arcadia_Process_deallocateUnmanaged(process, self->p);
+    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->p);
     self->p = NULL;
   }
 }
@@ -190,56 +191,56 @@ R_Interpreter_Code_destruct
 R_Interpreter_Code*
 R_Interpreter_Code_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  R_Interpreter_Code* self = R_allocateObject(process, _R_Interpreter_Code_getType(process), 0, &argumentValues[0]);
+  R_Interpreter_Code* self = Arcadia_allocateObject(thread, _R_Interpreter_Code_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
 void
 R_Interpreter_Code_append
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getProcess1(process), Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, Arcadia_Arrays_ResizeStrategy_Type4);
-  Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), self->p + self->sz, bytes, numberOfBytes);
+  Arcadia_Arrays_resizeByFreeCapacity(thread, Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, Arcadia_Arrays_ResizeStrategy_Type4);
+  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->p + self->sz, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }
 
 void
 R_Interpreter_Code_appendIndexNatural8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
     Arcadia_Natural8Value indexValue
   )
 {
-  R_Interpreter_Code_appendIndexNatural32(process, self, indexKind, indexValue);
+  R_Interpreter_Code_appendIndexNatural32(thread, self, indexKind, indexValue);
 }
 
 void
 R_Interpreter_Code_appendIndexNatural16
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
     Arcadia_Natural16Value indexValue
   )
 {
-  R_Interpreter_Code_appendIndexNatural32(process, self, indexKind, indexValue);
+  R_Interpreter_Code_appendIndexNatural32(thread, self, indexKind, indexValue);
 }
 
 void
 R_Interpreter_Code_appendIndexNatural32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
     Arcadia_Natural16Value index
@@ -261,8 +262,8 @@ R_Interpreter_Code_appendIndexNatural32
     } break;
     default: {
       // Cannot be encoded.
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     } break;
   };
   if (index <= 31) {
@@ -270,7 +271,7 @@ R_Interpreter_Code_appendIndexNatural32
     // The Byte stores 5 Bits.
     uint8_t x = (index & 0b000011111);
     x |= a;
-    R_Interpreter_Code_append(process, self, &x, 1);
+    R_Interpreter_Code_append(thread, self, &x, 1);
   } else if (index <= 511) {
     // We must encode 9 Bits in two Bytes.
     // The first Byte stores 3 Bits, the 2nd Byte stores 6 Bits.
@@ -279,8 +280,8 @@ R_Interpreter_Code_appendIndexNatural32
     x |= 0b00110000;
     uint8_t y = (index & 0b000111111) >> 0;
     y |= 128/*0b10000000*/;
-    R_Interpreter_Code_append(process, self, &x, 1);
-    R_Interpreter_Code_append(process, self, &y, 1);
+    R_Interpreter_Code_append(thread, self, &x, 1);
+    R_Interpreter_Code_append(thread, self, &y, 1);
   } else if (index <= 16383) {
     // We must encode 14 Bits in three Bytes.
     // The first Byte uses 2 Bits, the 2nd to the 3rd Byte each use 6 Bits.
@@ -291,9 +292,9 @@ R_Interpreter_Code_appendIndexNatural32
     y |= 128;
     uint8_t z = (index & 0b00000000111111) >> 0;
     z |= 128;
-    R_Interpreter_Code_append(process, self, &x, 1);
-    R_Interpreter_Code_append(process, self, &y, 1);
-    R_Interpreter_Code_append(process, self, &z, 1);
+    R_Interpreter_Code_append(thread, self, &x, 1);
+    R_Interpreter_Code_append(thread, self, &y, 1);
+    R_Interpreter_Code_append(thread, self, &z, 1);
   } else if (index <= 524287) {
     // We must encode 19 Bits in four Bytes.
     // The first Byte uses 1 Byte, the 2nd to the 4th Byte each use 6 Bits.
@@ -306,54 +307,54 @@ R_Interpreter_Code_appendIndexNatural32
     z |= 128;
     uint8_t w = (index & 0b0000000000000111111) >> 0;
     w |= 128;
-    R_Interpreter_Code_append(process, self, &x, 1);
-    R_Interpreter_Code_append(process, self, &y, 1);
-    R_Interpreter_Code_append(process, self, &z, 1);
-    R_Interpreter_Code_append(process, self, &w, 1);
+    R_Interpreter_Code_append(thread, self, &x, 1);
+    R_Interpreter_Code_append(thread, self, &y, 1);
+    R_Interpreter_Code_append(thread, self, &z, 1);
+    R_Interpreter_Code_append(thread, self, &w, 1);
   } else {
     // Cannot be encoded.
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
 }
 
 void
 R_Interpreter_Code_appendCountNatural8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural8Value countValue
   )
 {
-  R_Interpreter_Code_appendCountNatural32(process, self, countValue);
+  R_Interpreter_Code_appendCountNatural32(thread, self, countValue);
 }
 
 void
 R_Interpreter_Code_appendCountNatural16
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural16Value countValue
   )
 {
-  R_Interpreter_Code_appendCountNatural32(process, self, countValue);
+  R_Interpreter_Code_appendCountNatural32(thread, self, countValue);
 }
 
 void
 R_Interpreter_Code_appendCountNatural32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural32Value countValue
   )
 {
-  R_Interpreter_Code_append(process, self, (Arcadia_Natural8Value const*)&countValue, sizeof(Arcadia_Natural32Value));
+  R_Interpreter_Code_append(thread, self, (Arcadia_Natural8Value const*)&countValue, sizeof(Arcadia_Natural32Value));
 }
 
 void
 R_Interpreter_Code_decodeCount
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural32Value* current,
     Arcadia_Natural32Value* countValue
@@ -361,8 +362,8 @@ R_Interpreter_Code_decodeCount
 {
   uint8_t* p = self->p + *current;
   if (self->sz - *current < 4) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   *countValue = 0;
 
@@ -380,7 +381,7 @@ R_Interpreter_Code_decodeCount
 void
 R_Interpreter_Code_decodeIndex
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural32Value* current,
     R_Machine_Code_IndexKind* indexKind,
@@ -403,8 +404,8 @@ R_Interpreter_Code_decodeIndex
       *indexKind = R_Machine_Code_IndexKind_Reserved;
     } break;
     default: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     } break;
   };
   uint8_t a = (*p) & (~0b11000000);
@@ -449,8 +450,8 @@ R_Interpreter_Code_decodeIndex
                | x3 << 0;
     *indexValue = v;
   } else {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   (*current) += p - oldp;
 }

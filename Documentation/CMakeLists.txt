@@ -96,12 +96,22 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
 add_custom_target(Website.ResetCss ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
-# Build "Specifications/Cil/index.html".
-set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Cil/index.i)
-set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/specifications/cil/index.html")
+# Build "Specifications/Mil/index.html".
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Mil/index.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mil/index.html")
 add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
-add_custom_target(Website.Specifications.Cil ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+add_custom_target(Website.Specifications.Mil ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+
+# Build "Specifications/Ddl/index.html".
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Ddl/index.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/specifications/ddl/index.html")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+add_custom_target(Website.Specifications.Ddl ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})

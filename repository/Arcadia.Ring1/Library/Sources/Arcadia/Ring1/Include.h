@@ -26,11 +26,17 @@
 
 #include "Arcadia/Ring1/Implementation/Atoms.h"
 
+#include "Arcadia/Ring1/Implementation/BigInteger/Include.h"
+
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 
 #include "Arcadia/Ring1/Implementation/clamp.h"
 
 #include "Arcadia/Ring1/Implementation/countLeadingZeroes.h"
+
+#include "Arcadia/Ring1/Implementation/countSignificandBits.h"
+
+#include "Arcadia/Ring1/Implementation/countTrailingZeroes.h"
 
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 
@@ -71,7 +77,6 @@
 #include "Arcadia/Ring1/Implementation/ObjectReference.h"
 
 #include "Arcadia/Ring1/Implementation/Process.h"
-#include "Arcadia/Ring1/Implementation/Process1.h"
 
 #include "Arcadia/Ring1/Implementation/Real32.h"
 #include "Arcadia/Ring1/Implementation/Real64.h"

@@ -31,8 +31,8 @@ typedef struct Arcadia_Value Arcadia_Value;
 /// Type operations for object types.
 typedef struct Arcadia_ObjectType_Operations {
   Arcadia_ForeignProcedure* construct;
-  void (*destruct)(Arcadia_Process* process, void* self);
-  void (*visit)(Arcadia_Process* process, void* self);
+  void (*destruct)(Arcadia_Thread* thread, void* self);
+  void (*visit)(Arcadia_Thread* thread, void* self);
 } Arcadia_ObjectType_Operations;
 
 /// Type operations for all types.
@@ -63,13 +63,13 @@ typedef struct Arcadia_Type_Operations {
 /// Each object type may have its own visit callback function.
 /// For an object of type A1 <: A2 <: ... <: An the callback functions are invoked from the bottom most to the top most type.
 /// @warning Such a function MAY set the by-thread status variable. Such a function MAY NOT jump.
-typedef void (Arcadia_Type_VisitObjectCallbackFunction)(Arcadia_Process* process, void* object);
+typedef void (Arcadia_Type_VisitObjectCallbackFunction)(Arcadia_Thread* thread, void* object);
 
 /// @brief Type of a destruct callback function.
 /// Each object type may have its own destruct callback function.
 /// For an object of type A1 <: A2 <: ... <: An the callback functions are invoked from the bottom most to the top most type.
 /// @warning Such a function MAY set the by-thread status variable. Such a function MAY NOT jump.
-typedef void (Arcadia_Type_DestructObjectCallbackFunction)(Arcadia_Process*, void* object);
+typedef void (Arcadia_Type_DestructObjectCallbackFunction)(Arcadia_Thread*, void* object);
 
 /// @brief Type of a type destructing callback function.
 /// Invoked when the type is destructing.
@@ -110,6 +110,7 @@ typedef enum Arcadia_TypeKind {
 static inline void
 Arcadia_Type_visit
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
 {/*Intentionally empty.*/}
@@ -117,6 +118,7 @@ Arcadia_Type_visit
 Arcadia_SizeValue
 Arcadia_Type_hash
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   );
 
@@ -126,6 +128,7 @@ Arcadia_Type_hash
 Arcadia_SizeValue
 Arcadia_Type_getValueSize
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   );
 
@@ -135,6 +138,7 @@ Arcadia_Type_getValueSize
 Arcadia_TypeValue
 Arcadia_Type_getParentObjectType
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   );
 
@@ -162,6 +166,7 @@ Arcadia_Type_getDestructObjectCallbackFunction
 Arcadia_BooleanValue
 Arcadia_Type_hasChildren
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   );
 
@@ -171,6 +176,7 @@ Arcadia_Type_hasChildren
 Arcadia_TypeKind
 Arcadia_Type_getKind
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   );
 
@@ -181,6 +187,7 @@ Arcadia_Type_getKind
 Arcadia_BooleanValue
 Arcadia_Type_isSubType
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self,
     Arcadia_TypeValue other
   );
@@ -191,9 +198,10 @@ Arcadia_Type_isSubType
 static inline Arcadia_BooleanValue
 Arcadia_Type_isInternalKind
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
-{ return Arcadia_TypeKind_Internal == Arcadia_Type_getKind(self); }
+{ return Arcadia_TypeKind_Internal == Arcadia_Type_getKind(thread, self); }
 
 /// @brief Get if this type is of the kind of type "scalar".
 /// @param self A pointer to this type.
@@ -201,9 +209,10 @@ Arcadia_Type_isInternalKind
 static inline Arcadia_BooleanValue
 Arcadia_Type_isScalarKind
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
-{ return Arcadia_TypeKind_Scalar == Arcadia_Type_getKind(self); }
+{ return Arcadia_TypeKind_Scalar == Arcadia_Type_getKind(thread, self); }
 
 /// @brief Get if this type is of the kind of type "object".
 /// @param self A pointer to this type.
@@ -211,15 +220,16 @@ Arcadia_Type_isScalarKind
 static inline Arcadia_BooleanValue
 Arcadia_Type_isObjectKind
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
-{ return Arcadia_TypeKind_Object == Arcadia_Type_getKind(self); }
+{ return Arcadia_TypeKind_Object == Arcadia_Type_getKind(thread, self); }
 
 /* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
 Arcadia_TypeValue
 Arcadia_registerInternalType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* name,
     size_t nameLength,
     Arcadia_Type_Operations const* typeOperations,
@@ -230,7 +240,7 @@ Arcadia_registerInternalType
 Arcadia_TypeValue
 Arcadia_registerScalarType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* name,
     size_t nameLength,
     Arcadia_Type_Operations const* typeOperations,
@@ -241,7 +251,7 @@ Arcadia_registerScalarType
 Arcadia_TypeValue
 Arcadia_registerObjectType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* name,
     size_t nameLength,
     size_t valueSize,
@@ -254,7 +264,7 @@ Arcadia_registerObjectType
 Arcadia_TypeValue
 Arcadia_getType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* name,
     size_t nameLength
   );
@@ -272,30 +282,30 @@ Arcadia_Type_getOperations
   );
 
 /// @brief Get the "Arcadia.Memory" type.
-/// @param process A pointer to the Arcadia_Process object.
+/// @param thread A pointer to the Arcadia_Thread object.
 /// @return The "Arcadia.Memory" type.
 Arcadia_TypeValue
 _Arcadia_Memory_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 /// @brief Get the "Arcadia.Type" type.
-/// @param process A pointer to the Arcadia_Proces object.
+/// @param thread A pointer to the Arcadia_Thread object.
 /// @return The "Arcadia.Type" type.
 Arcadia_TypeValue
 _Arcadia_Type_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 /// @brief Get the "Arcadia.Atom" type.
-/// @param process A pointer to the Arcadia_Proces object.
+/// @param thread A pointer to the Arcadia_Thread object.
 /// @return The "Arcadia.Atom" type.
 Arcadia_TypeValue
 _Arcadia_AtomValue_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_TYPES_H_INCLUDED

@@ -31,7 +31,7 @@ Arcadia_Mil_Pass_constructImpl
 static void
 Arcadia_Mil_Pass_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Pass* self
   );
 
@@ -72,23 +72,24 @@ Arcadia_Mil_Pass_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_Pass* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_Pass_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Mil_Pass_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 Arcadia_Mil_Pass_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Pass* self
   )
 {/*Initially empty.*/}

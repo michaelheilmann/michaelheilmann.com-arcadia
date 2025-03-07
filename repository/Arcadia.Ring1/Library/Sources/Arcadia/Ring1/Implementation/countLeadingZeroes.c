@@ -27,51 +27,51 @@
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesInteger8Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer8Value x
   )
 {
   // Cast is defined behavior: Two's complete cast signed to unsigned is Bit reinterpretation when 2-complement.
-  return Arcadia_countLeadingZeroesNatural8Value(process, (Arcadia_Natural8Value)x);
+  return Arcadia_countLeadingZeroesNatural8Value(thread, (Arcadia_Natural8Value)x);
 }
 
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesInteger16Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer16Value x
   )
 {
   // Cast is defined behavior: Two's complete cast signed to unsigned is Bit reinterpretation when 2-complement.
-  return Arcadia_countLeadingZeroesNatural16Value(process, (Arcadia_Natural16Value)x);
+  return Arcadia_countLeadingZeroesNatural16Value(thread, (Arcadia_Natural16Value)x);
 }
 
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesInteger32Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer32Value x
   )
 {
   // Cast is defined behavior: Two's complete cast signed to unsigned is Bit reinterpretation when 2-complement.
-  return Arcadia_countLeadingZeroesNatural32Value(process, (Arcadia_Natural32Value)x);
+  return Arcadia_countLeadingZeroesNatural32Value(thread, (Arcadia_Natural32Value)x);
 }
 
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesInteger64Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer64Value x
   )
 {
   // Cast is defined behavior: Two's complete cast signed to unsigned is Bit reinterpretation when 2-complement.
-  return Arcadia_countLeadingZeroesNatural64Value(process, (Arcadia_Natural64Value)x);
+  return Arcadia_countLeadingZeroesNatural64Value(thread, (Arcadia_Natural64Value)x);
 }
 
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesNatural8Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value x
   )
 {
@@ -102,21 +102,23 @@ Arcadia_countLeadingZeroesNatural8Value
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesNatural16Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural16Value x
   )
 {
-  Arcadia_Natural16Value t;
-  t = (x & 0xff00) >> 8;
-  if (t) return Arcadia_countLeadingZeroesNatural8Value(process, (Arcadia_Natural8Value)t);
-  t = (x & 0x00ff) >> 0;
-  return 8 + Arcadia_countLeadingZeroesNatural8Value(process, (Arcadia_Natural8Value)t);
+  Arcadia_Natural16Value upper = (x & 0xff00) >> 8;
+  if (upper) {
+    return Arcadia_countLeadingZeroesNatural8Value(thread, (Arcadia_Natural8Value)upper);
+  } else {
+    Arcadia_Natural16Value lower = (x & 0x00ff) >> 0;
+    return 8 + Arcadia_countLeadingZeroesNatural8Value(thread, (Arcadia_Natural8Value)lower);
+  }
 }
 
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesNatural32Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural32Value x
   )
 {
@@ -130,41 +132,43 @@ Arcadia_countLeadingZeroesNatural32Value
     return (short)32;
   }
 #else
-  Arcadia_Natural32Value t;
-  t = (x & 0xffff0000) >> 16;
-  if (t) return Arcadia_countLeadingZeroesNatural16Value(process, (Arcadia_Natural16Value)t);
-  t = (x & 0x0000ffff) >> 0;
-  return 16 + Arcadia_countLeadingZeroesNatural16Value(process, (Arcadia_Natural16Value)t);
+  Arcadia_Natural32Value upper = (x & 0xffff0000) >> 16;
+  if (upper) {
+    return Arcadia_countLeadingZeroesNatural16Value(thread, (Arcadia_Natural16Value)upper);
+  } else {
+    Arcadia_Natural32Value lower = (x & 0x0000ffff) >> 0;
+    return 16 + Arcadia_countLeadingZeroesNatural16Value(thread, (Arcadia_Natural16Value)lower);
+  }
 #endif
 }
 
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesNatural64Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value x
   )
 {
-  Arcadia_Natural32Value hi = (x & 0xffffffff00000000) >> 32;
-  Arcadia_Natural32Value lo = (x & 0x00000000ffffffff) >> 0;
-  if (hi) {
-    return Arcadia_countLeadingZeroesNatural32Value(process, hi);
+  Arcadia_Natural32Value upper = (x & 0xffffffff00000000) >> 32;
+  if (upper) {
+    return Arcadia_countLeadingZeroesNatural32Value(thread, upper);
   } else {
-    return 32 + Arcadia_countLeadingZeroesNatural32Value(process, lo);
+    Arcadia_Natural32Value lower = (x & 0x00000000ffffffff) >> 0;
+    return 32 + Arcadia_countLeadingZeroesNatural32Value(thread, lower);
   }
 }
 
 Arcadia_SizeValue
 Arcadia_countLeadingZeroesSizeValue
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_SizeValue x
   )
 {
 #if Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X64
-  return Arcadia_countLeadingZeroesNatural64Value(process, x);
+  return Arcadia_countLeadingZeroesNatural64Value(thread, x);
 #elif Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X86
-  return Arcadia_countLeadingZeroesNatural32Value(process, x);
+  return Arcadia_countLeadingZeroesNatural32Value(thread, x);
 #else
   #error("environment not (yet) supported")
 #endif

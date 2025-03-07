@@ -24,15 +24,15 @@
 Type##Value \
 Arcadia_nextPowerOfTwoGreaterThan##Suffix##Value \
   ( \
-    Arcadia_Process* process, \
+    Arcadia_Thread* thread, \
     Type##Value x \
   ) \
 { \
   /* i is Bits is x is 0. i is Bits - 1 if x is 1. i is Bits - 2 if x is 2 or 3. ... i is 0 if x >= greatestPowerOfTwo. Consequently the shift is Bits - i.*/ \
-  Arcadia_SizeValue numberOfLeadingZeroes = Arcadia_countLeadingZeroes##Suffix##Value(process, x); \
+  Arcadia_SizeValue numberOfLeadingZeroes = Arcadia_countLeadingZeroes##Suffix##Value(thread, x); \
   if (!numberOfLeadingZeroes) { \
-    Arcadia_Process_setStatus(process, Arcadia_Status_NotExists); \
-    Arcadia_Process_jump(process); \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists); \
+    Arcadia_Thread_jump(thread); \
   } \
   Arcadia_SizeValue shift = Bits - numberOfLeadingZeroes; \
   Type##Value t = Type##Value_Literal(1) << shift; \
@@ -49,14 +49,14 @@ Define(Arcadia_Natural64, Natural64, Arcadia_Natural64Value_NumberOfBits)
 Arcadia_SizeValue
 R_nextPowerOfTwoGreaterThanSizeValue
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_SizeValue x
   )
 {
 #if Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X64
-  return Arcadia_nextPowerOfTwoGreaterThanNatural64Value(process, x);
+  return Arcadia_nextPowerOfTwoGreaterThanNatural64Value(thread, x);
 #elif Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X86
-  return Arcadia_nextPowerOfTwoGreaterThanNatural32Value(process, x);
+  return Arcadia_nextPowerOfTwoGreaterThanNatural32Value(thread, x);
 #else
   #error("environment not (yet) supported")
 #endif

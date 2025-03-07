@@ -61,7 +61,7 @@ typedef enum Arcadia_Mil_TokenType {
   // A string literal.
   Arcadia_Mil_TokenType_StringLiteral,
   // A void literal.
-  // `void`.
+  // "void".
   Arcadia_Mil_TokenType_VoidLiteral,
 
   // "class"

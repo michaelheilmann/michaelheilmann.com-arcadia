@@ -37,20 +37,21 @@ struct R_Interpreter_Constructor {
 R_Interpreter_Constructor*
 R_Interpreter_Constructor_createForeign
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ForeignProcedureValue foreignProcedure
   );
 
 R_Interpreter_Constructor*
 R_Interpreter_Constructor_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* code
   );
 
 R_Interpreter_Code*
 R_Interpreter_Constructor_getCode
   (
+    Arcadia_Thread* thread,
     R_Interpreter_Constructor* self
   );
 

@@ -28,19 +28,35 @@
     <div class="left-column"></div>
     <div class="center-column">
     <h1>Roadmap Archive</h1>
-    <h2>Milestone "Banner Generator" 2: Tooling for generating banners</h2>
+    <h2>Milestone "Arbitrary Precision Arithmetic" 2: Add initial big integer implementation</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 4 December 2024</p>
-
 <p>
-Port the banner generator to Linux.
+A big integer type <code>Arcadia.BigInteger</code> provides arbitratry precision arithmetic for integers.
 </p>
 
-    <h2>Milestone "Icon Generator" 2: Tooling for generating icons</h2>
-<p>Percentage done: 100&percnt;, Due date: Week 4 December 2024</p>
+<p>The following operations are supported:</p>
+<ul>
+  <li>Add two <code>Arcadia.BigInteger</code> objects.</li>
+  <li>Subtract two <code>Arcadia.BigInteger</code> objects.</li>
+  <li>Negate a <code>Arcadia.BigInteger</code> object.</li>
+</ul>
 
+<p>Automated tests for the above functionality are provided.</p>
+
+    <h2>Milestone "Arbitrary Precision Arithmetic" 1: Add initial big integer implementation</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 4 December 2024</p>
 <p>
-Port the icon generator to Linux.
+A big integer type <code>Arcadia.BigInteger</code> provides arbitratry precision arithmetic for integers.
 </p>
+
+<p>The following operations are supported:</p>
+<ul>
+  <li>Create a <code>Arcadia.BigInteger</code> object from <code>Arcadia.Integer(8|16|32|64)</code> and <code>Arcadia.Natural(8|16|32|64)</code>.</li>
+  <li>Compare two <code>Arcadia.BigInteger</code> objects by magnitude.</li>
+  <li>Compare two <code>Arcadia.BigInteger</code> objects by value.</li>
+</ul>
+
+<p>Automated tests for the above functionality are provided.</p>
 
     <h2>Milestone "Machine Interface Language" 1: 1st iteration of a parser for the L1 language</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 3 October 2024</p>
@@ -72,14 +88,12 @@ That 1st iteration provides the following features:
   </li>
 </ul>
 
-    <h2>Milestone "Website" 4: Separate website sources and product</h2>
-<p>Percentage done: 100&percnt;, Due date: Week 1 October 2024</p>
-<p>The website shall be generated in a dedicated `.build` folder of the repository.
-This results in a size reduction of uploads to webhosts.</p>
+    <h2>Milestone "Banner Generator" 2: Tooling for generating banners</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 4 December 2024</p>
 
-    <h2>Milestone "Website" 3: Maintain roadmap on website</h2>
-<p>Percentage done: 100&percnt;, Due date: Week 1 October 2024</p>
-<p>The roadmap is maintained on the website.</p>
+<p>
+Port the banner generator to Linux.
+</p>
 
     <h2>Milestone "Banner Generator" 1: Tooling for generating icons (Windows only)</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 4 September 2024</p>
@@ -91,6 +105,13 @@ We require a tool to generate those.</p>
 The banner generator generates a "PNG" file.
 As parameters, it takes the width and the height of the banner and the path of the "PNG" file.
 The generated "PNG" file is an opaque black banner.
+</p>
+
+    <h2>Milestone "Icon Generator" 2: Tooling for generating icons</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 4 December 2024</p>
+
+<p>
+Port the icon generator to Linux.
 </p>
 
     <h2>Milestone "Icon Generator" 1: Tooling for generating icons (Windows only)</h2>
@@ -124,6 +145,28 @@ The directives are not written to the target file. Instead, they are interpreted
 Recursive include directives yield an error.
 The parser must support UTF-8-NO-BOM encoding.
 </p>
+
+    <h2>Milestone "Website" 6: Navigational elements</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 1 November 2024</p>
+<p>
+Each <em>content page</em> has navigational elements which enable the user to navigate the content of that page.
+</p>
+
+    <h2>Milestone "Website" 5: Navigational elements</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 1 November 2024</p>
+<p>
+Each page of this website has navigational elements to enable the user to navigate to the <em>landing</em> page.
+These elements are located on every <em>content page</em> and <em>error page</em> but not on the <em>landing page</em>.
+</p>
+
+    <h2>Milestone "Website" 4: Separate website sources and product</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 1 October 2024</p>
+<p>The website shall be generated in a dedicated `.build` folder of the repository.
+This results in a size reduction of uploads to webhosts.</p>
+
+    <h2>Milestone "Website" 3: Maintain roadmap on website</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 1 October 2024</p>
+<p>The roadmap is maintained on the website.</p>
 
     <h2>Milestone "Website" 2: Tooling for building the website | Tools.TemplateEngine</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 2 September 2024</p>

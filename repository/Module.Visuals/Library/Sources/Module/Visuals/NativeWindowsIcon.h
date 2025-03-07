@@ -41,7 +41,7 @@ struct NativeWindowsIcon {
 NativeWindowsIcon*
 NativeWindowsIcon_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height,
     Arcadia_Natural8Value red,

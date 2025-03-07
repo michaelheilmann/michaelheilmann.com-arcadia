@@ -31,7 +31,7 @@ struct NativeWindowsImageWriter {
 NativeWindowsImageWriter*
 NativeWindowsImageWriter_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 #endif // MODULE_VISUALS_NATIVEWINDOWSIMAGEWRITER_H_INCLUDED

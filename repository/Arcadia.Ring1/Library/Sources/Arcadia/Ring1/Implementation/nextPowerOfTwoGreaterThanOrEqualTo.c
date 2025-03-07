@@ -24,14 +24,14 @@
   Type##Value \
   Arcadia_nextPowerOfTwoGreaterThanOrEqualTo##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Type##Value x \
     ) \
   { \
-    if (Arcadia_isPowerOfTwo##Suffix##Value(process, x)) { \
+    if (Arcadia_isPowerOfTwo##Suffix##Value(thread, x)) { \
       return x; \
     } \
-    return Arcadia_nextPowerOfTwoGreaterThan##Suffix##Value(process, x); \
+    return Arcadia_nextPowerOfTwoGreaterThan##Suffix##Value(thread, x); \
   }
 
 Define(Arcadia_Natural8, Natural8, Arcadia_Natural8Value_NumberOfBits)
@@ -44,14 +44,14 @@ Define(Arcadia_Natural64, Natural64, Arcadia_Natural64Value_NumberOfBits)
 Arcadia_SizeValue
 R_nextPowerOfTwoGteSizeValue
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_SizeValue x
   )
 {
 #if Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X64
-  return Arcadia_nextPowerOfTwoGreaterThanOrEqualToNatural64Value(process, x);
+  return Arcadia_nextPowerOfTwoGreaterThanOrEqualToNatural64Value(thread, x);
 #elif Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X86
-  return Arcadia_nextPowerOfTwoGreaterThanOrEqualToNatural32Value(process, x);
+  return Arcadia_nextPowerOfTwoGreaterThanOrEqualToNatural32Value(thread, x);
 #else
   #error("environment not (yet) supported")
 #endif

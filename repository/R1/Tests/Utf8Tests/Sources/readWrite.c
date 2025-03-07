@@ -30,33 +30,33 @@
 static void
 onReadWrite
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* p,
     size_t n
   )
 {
-  Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_ByteBuffer_create(process);
-  Arcadia_ByteBuffer_append_pn(process, sourceByteBuffer, p, n);
-  Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(process);
-  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(process, sourceByteBuffer);
-  Arcadia_Utf8Writer* writer = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, targetByteBuffer);
-  while (Arcadia_Utf8Reader_hasCodePoint(process, reader)) {
-    Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(process, reader);
-    Arcadia_Utf8Writer_writeCodePoints(process, writer, &codePoint, 1);
-    Arcadia_Utf8Reader_next(process, reader);
+  Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteBuffer_append_pn(thread, sourceByteBuffer, p, n);
+  Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(thread);
+  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
+  Arcadia_Utf8Writer* writer = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, targetByteBuffer);
+  while (Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
+    Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
+    Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+    Arcadia_Utf8Reader_next(thread, reader);
   }
-  if (!Arcadia_ByteBuffer_isEqualTo(process, sourceByteBuffer, targetByteBuffer)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
+  if (!Arcadia_ByteBuffer_isEqualTo(thread, sourceByteBuffer, targetByteBuffer)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+    Arcadia_Thread_jump(thread);
   }
 }
 
 void
 Arcadia_Tests_Utf8_readWrite1
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  onReadWrite(process, u8"abc", sizeof(u8"abc") - 1);
-  onReadWrite(process, u8"xyz", sizeof(u8"xyz") - 1);
+  onReadWrite(thread, u8"abc", sizeof(u8"abc") - 1);
+  onReadWrite(thread, u8"xyz", sizeof(u8"xyz") - 1);
 }

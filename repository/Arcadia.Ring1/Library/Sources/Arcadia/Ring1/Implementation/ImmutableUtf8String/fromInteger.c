@@ -25,23 +25,23 @@
 Arcadia_ImmutableUtf8String*
 _createFromInteger16
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer16Value integer16Value
   )
-{ return _createFromInteger64(process, integer16Value); }
+{ return _createFromInteger64(thread, integer16Value); }
 
 Arcadia_ImmutableUtf8String*
 _createFromInteger32
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer32Value integer32Value
   )
-{ return _createFromInteger64(process, integer32Value); }
+{ return _createFromInteger64(thread, integer32Value); }
 
 Arcadia_ImmutableUtf8String*
 _createFromInteger64
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer64Value integer64Value
   )
 {
@@ -71,14 +71,14 @@ _createFromInteger64
   }
 
   if (SIZE_MAX - sizeof(Arcadia_ImmutableUtf8String) < numberOfBytes) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_AllocationFailed);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
   }
   
-  _ensureTypeRegistered(process);
+  _ensureTypeRegistered(thread);
   
   Arcadia_ImmutableUtf8String* string = NULL;
-  Arcadia_Process1_allocate(process, &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + numberOfBytes);
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + numberOfBytes);
 
   valueTemporary = integer64Value;
   char *p = string->bytes;
@@ -108,7 +108,7 @@ _createFromInteger64
   }
 
   string->numberOfBytes = numberOfBytes;
-  string->hash = _hashUtf8(process, string->bytes, string->numberOfBytes);
+  string->hash = _hashUtf8(thread, string->bytes, string->numberOfBytes);
   
   return string;
 }
@@ -116,7 +116,7 @@ _createFromInteger64
 Arcadia_ImmutableUtf8String*
 _createFromInteger8
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer8Value integer8Value
   )
-{ return _createFromInteger64(process, integer8Value); }
+{ return _createFromInteger64(thread, integer8Value); }

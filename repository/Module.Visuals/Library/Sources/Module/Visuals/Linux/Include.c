@@ -47,22 +47,25 @@ writeCallback
     int size
   )
 {
+  Arcadia_Process* process = context->process;
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(context->process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_ByteBuffer_append_pn(context->process, context->byteBuffer, data, size);
+    Arcadia_ByteBuffer_append_pn(thread, context->byteBuffer, data, size);
   }
-  Arcadia_Process_popJumpTarget(context->process);
+  Arcadia_Thread_popJumpTarget(thread);
 }
 
 void
 _Visuals_Linux_writeBmpToByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* pixelBuffer,
     Arcadia_ByteBuffer* byteBuffer
   )
 {
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   WriteContext context;
   context.process = process;
   context.byteBuffer = byteBuffer;
@@ -70,31 +73,31 @@ _Visuals_Linux_writeBmpToByteBuffer
   int components;
   switch (pixelBuffer->pixelFormat) {
     case PixelFormat_Rn8Gn8Bn8: {
-      PixelBuffer* pixelBuffer = PixelBuffer_createClone(process, pixelBuffer);
-      PixelBuffer_setLinePadding(process, pixelBuffer, 0);
+      PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, pixelBuffer);
+      PixelBuffer_setLinePadding(thread, pixelBuffer, 0);
       components = 3;
     } break;
     case PixelFormat_An8Rn8Gn8Bn8: {
-      PixelBuffer* pixelBuffer = PixelBuffer_createClone(process, pixelBuffer);
-      PixelBuffer_setPixelFormat(process, pixelBuffer, PixelFormat_Bn8Gn8Rn8An8);
-      PixelBuffer_setLinePadding(process, pixelBuffer, 0);
+      PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, pixelBuffer);
+      PixelBuffer_setPixelFormat(thread, pixelBuffer, PixelFormat_Bn8Gn8Rn8An8);
+      PixelBuffer_setLinePadding(thread, pixelBuffer, 0);
       components = 4;
     } break;
     default: {
-      Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+      Arcadia_Thread_jump(thread);
     } break;
   };
 
   if (!stbi_write_bmp_to_func((stbi_write_func*)&writeCallback, &context,
-                              PixelBuffer_getWidth(pixelBuffer),
-                              PixelBuffer_getHeight(pixelBuffer),
-                               components,
+                              PixelBuffer_getWidth(thread, pixelBuffer),
+                              PixelBuffer_getHeight(thread, pixelBuffer),
+                              components,
                               pixelBuffer->bytes)) {
     context.status = Arcadia_Status_EnvironmentFailed;
   }
   if (context.status) {
-    Arcadia_Process_setStatus(process, context.status);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, context.status);
+    Arcadia_Thread_jump(thread);
   }
 }

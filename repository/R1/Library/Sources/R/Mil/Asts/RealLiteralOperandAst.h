@@ -40,7 +40,7 @@ struct Arcadia_Mil_RealLiteralOperandAst {
 Arcadia_Mil_RealLiteralOperandAst*
 Arcadia_Mil_RealLiteralOperandAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* value
   );
 

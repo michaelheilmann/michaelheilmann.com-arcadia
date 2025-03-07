@@ -42,9 +42,9 @@
 
 #define Define(Type, Suffix) \
   static inline void \
-  Arcadia_swap_##Suffix \
+  Arcadia_swap##Suffix \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Type##Value* x, \
       Type##Value* y \
     ) \
@@ -54,28 +54,28 @@
     *y = t; \
   }
 
-Define(Arcadia_Boolean, b)
+Define(Arcadia_Boolean, Boolean)
 
-Define(Arcadia_Integer16, i16)
-Define(Arcadia_Integer32, i32)
-Define(Arcadia_Integer64, i64)
-Define(Arcadia_Integer8, i8)
+Define(Arcadia_Integer16, Integer16)
+Define(Arcadia_Integer32, Integer32)
+Define(Arcadia_Integer64, Integer64)
+Define(Arcadia_Integer8, Integer8)
 
-Define(Arcadia_Natural16, n16)
-Define(Arcadia_Natural32, n32)
-Define(Arcadia_Natural64, n64)
-Define(Arcadia_Natural8, n8)
+Define(Arcadia_Natural16, Natural16)
+Define(Arcadia_Natural32, Natural32)
+Define(Arcadia_Natural64, Natural64)
+Define(Arcadia_Natural8, Natural8)
 
-Define(Arcadia_Size, s)
+Define(Arcadia_Size, Size)
 
-Define(Arcadia_Void, v)
+Define(Arcadia_Void, Void)
 
 #undef Define
 
 static inline void
-Arcadia_swap_p
+Arcadia_swapPointer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void** x,
     void** y
   )

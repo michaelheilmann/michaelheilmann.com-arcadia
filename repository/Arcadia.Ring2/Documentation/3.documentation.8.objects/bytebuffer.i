@@ -13,7 +13,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuf
 Arcadia_ByteBuffer*
 Arcadia_ByteBuffer_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 </code></p>
 
@@ -21,7 +21,7 @@ Arcadia_ByteBuffer_create
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -38,6 +38,7 @@ Arcadia_ByteBuffer_create
 void
 Arcadia_ByteBuffer_clear
   (
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self
   )
 </code></p>
@@ -46,7 +47,7 @@ Arcadia_ByteBuffer_clear
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
@@ -57,6 +58,7 @@ Arcadia_ByteBuffer_clear
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_endsWith_pn
   (
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -67,10 +69,10 @@ Arcadia_ByteBuffer_endsWith_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -86,7 +88,7 @@ Arcadia_ByteBuffer_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_startsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -97,10 +99,10 @@ Arcadia_ByteBuffer_startsWith_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -117,8 +119,8 @@ Arcadia_ByteBuffer_startsWith_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo_pn
   (
-    Arcadia_Process* process,
-    R_ByteBuffer* self,
+    Arcadia_Thread* thread,
+    Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -128,16 +130,16 @@ Arcadia_ByteBuffer_isEqualTo_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -146,7 +148,7 @@ Arcadia_ByteBuffer_isEqualTo_pn
 void
 Arcadia_ByteBuffer_append_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -157,10 +159,10 @@ Arcadia_ByteBuffer_append_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadoa_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -176,7 +178,7 @@ Arcadia_ByteBuffer_append_pn
 void
 Arcadia_ByteBuffer_prepend_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* p,
     Arcadia_SizeValue n
@@ -187,10 +189,10 @@ Arcadia_ByteBuffer_prepend_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* p                           </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue n                     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* p                         </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue n                   </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -206,7 +208,7 @@ Arcadia_ByteBuffer_prepend_pn
 void
 Arcadia_ByteBuffer_insert_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     Arcadia_SizeValue index,
     void const* p,
@@ -218,11 +220,11 @@ Arcadia_ByteBuffer_insert_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_SizeValue index                 </td><td>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
-  <tr><td>void const* p                           </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue n                     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
+  <tr><td>void const* p                         </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue n                   </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -238,7 +240,7 @@ Arcadia_ByteBuffer_insert_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     Arcadia_ByteBuffer const* other
   )
@@ -248,9 +250,9 @@ Arcadia_ByteBuffer_isEqualTo
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer const* self </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_ByteBuffer const* other</td><td>A pointer to the other Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer const* self        </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_ByteBuffer const* other       </td><td>A pointer to the other Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -265,7 +267,7 @@ Arcadia_ByteBuffer_isEqualTo
 Arcadia_SizeValue
 Arcadia_ByteBuffer_getSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self
   )
 </code></p>
@@ -274,8 +276,8 @@ Arcadia_ByteBuffer_getSize
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -290,7 +292,7 @@ Arcadia_ByteBuffer_getSize
 Arcadia_Natural8Value
 Arcadia_ByteBuffer_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     Arcadia_SizeValue index
   )
@@ -300,9 +302,9 @@ Arcadia_ByteBuffer_getAt
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_SizeValue index               <td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -317,7 +319,7 @@ Arcadia_ByteBuffer_getAt
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEmpty
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self
   )
 </code></p>
@@ -326,12 +328,12 @@ Arcadia_ByteBuffer_isEmpty
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
-<p><code>R_BooleanValue_True</code> if this Byte buffer is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+<p><code>Arcadia_BooleanValue_True</code> if this Byte buffer is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
 
 <h6><b>Errors</b></h6>
 <table>
@@ -344,7 +346,7 @@ Arcadia_ByteBuffer_isEmpty
 void
 Arcadia_ByteBuffer_swap
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     Arcadia_ByteBuffer* other
   )
@@ -354,9 +356,9 @@ Arcadia_ByteBuffer_swap
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to the other Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to the other Byte buffer.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>

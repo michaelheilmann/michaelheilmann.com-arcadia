@@ -42,7 +42,7 @@ struct Arcadia_Mil_ReturnStatementAst {
 Arcadia_Mil_ReturnStatementAst*
 Arcadia_Mil_ReturnStatementAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_OperandAst* operand
   );
 

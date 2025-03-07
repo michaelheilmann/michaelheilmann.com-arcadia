@@ -48,7 +48,7 @@ struct Arcadia_Mil_UnaryExpressionAst {
 Arcadia_Mil_UnaryExpressionAst*
 Arcadia_Mil_UnaryExpressionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_UnaryExpressionAstType type,
     Arcadia_Mil_OperandAst* operand1
   );

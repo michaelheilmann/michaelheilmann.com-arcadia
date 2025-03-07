@@ -22,66 +22,66 @@
 static void
 execute1
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  R_Interpreter_ProcessState_startup(process);
+  R_Interpreter_ProcessState_startup(Arcadia_Thread_getProcess(thread));
   R_Interpreter_ProcessState* interpreterProcess = R_Interpreter_ProcessState_get();
-  R_Interpreter_Code* code = R_Interpreter_Code_create(process);
+  R_Interpreter_Code* code = R_Interpreter_Code_create(thread);
   uint8_t codeBytes[] = {
     R_Machine_Code_Opcode_Idle,  
   };
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    R_Interpreter_Code_append(process, code, codeBytes, 1);
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"main", sizeof(u8"main") - 1)), code));
-    R_Interpreter_ProcessState_shutdown(process);
+    R_Interpreter_Code_append(thread, code, codeBytes, 1);
+    R_executeProcedure(Arcadia_Thread_getProcess(thread), interpreterProcess, R_Interpreter_Procedure_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"main", sizeof(u8"main") - 1)), code));
+    R_Interpreter_ProcessState_shutdown(Arcadia_Thread_getProcess(thread));
     interpreterProcess = NULL;
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(thread);
   } else {
-    R_Interpreter_ProcessState_shutdown(process);
+    R_Interpreter_ProcessState_shutdown(Arcadia_Thread_getProcess(thread));
     interpreterProcess = NULL;
-    Arcadia_Process_popJumpTarget(process);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_jump(thread);
   }
 }
 
 static void
 execute2
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  R_Interpreter_ProcessState_startup(process);
+  R_Interpreter_ProcessState_startup(Arcadia_Thread_getProcess(thread));
   R_Interpreter_ProcessState* interpreterProcess = R_Interpreter_ProcessState_get();
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
-    R_Interpreter_Code* code = R_Interpreter_Code_create(process);
-    if (0 != R_Interpreter_Code_Constants_getOrCreateInteger32(process, constants, Arcadia_Integer32Value_Literal(5))) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
+    R_Interpreter_Code* code = R_Interpreter_Code_create(thread);
+    if (0 != R_Interpreter_Code_Constants_getOrCreateInteger32(thread, constants, Arcadia_Integer32Value_Literal(5))) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+      Arcadia_Thread_jump(thread);
     }
-    if (1 != R_Interpreter_Code_Constants_getOrCreateInteger32(process, constants, Arcadia_Integer32Value_Literal(7))) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
+    if (1 != R_Interpreter_Code_Constants_getOrCreateInteger32(thread, constants, Arcadia_Integer32Value_Literal(7))) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+      Arcadia_Thread_jump(thread);
     }
     uint8_t opcode = R_Machine_Code_Opcode_Add;
-    R_Interpreter_Code_append(process, code, &opcode, 1);
-    R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Register, 2);
-    R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0);
-    R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1);
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"main", sizeof(u8"main") - 1)), code));
-    R_Interpreter_ProcessState_shutdown(process);
+    R_Interpreter_Code_append(thread, code, &opcode, 1);
+    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Register, 2);
+    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Constant, 0);
+    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Constant, 1);
+    R_executeProcedure(Arcadia_Thread_getProcess(thread), interpreterProcess, R_Interpreter_Procedure_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"main", sizeof(u8"main") - 1)), code));
+    R_Interpreter_ProcessState_shutdown(Arcadia_Thread_getProcess(thread));
     interpreterProcess = NULL;
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(thread);
   } else {
-    R_Interpreter_ProcessState_shutdown(process);
+    R_Interpreter_ProcessState_shutdown(Arcadia_Thread_getProcess(thread));
     interpreterProcess = NULL;
-    Arcadia_Process_popJumpTarget(process);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_jump(thread);
   }
 }
 
@@ -100,39 +100,40 @@ print
 static void
 execute3
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   R_Interpreter_ProcessState_startup(process);
   R_Interpreter_ProcessState* interpreterProcess = R_Interpreter_ProcessState_get();
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
-    R_Interpreter_Code* code = R_Interpreter_Code_create(process);
-    if (0 != R_Interpreter_Code_Constants_getOrCreateForeignProcedure(process, constants, &print)) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
+    R_Interpreter_Code* code = R_Interpreter_Code_create(thread);
+    if (0 != R_Interpreter_Code_Constants_getOrCreateForeignProcedure(Arcadia_Process_getThread(process), constants, &print)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+      Arcadia_Thread_jump(thread);
     }
-    if (1 != R_Interpreter_Code_Constants_getOrCreateString(process, constants, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-      Arcadia_Process_jump(process);
+    if (1 != R_Interpreter_Code_Constants_getOrCreateString(Arcadia_Process_getThread(process), constants, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+      Arcadia_Thread_jump(thread);
     }
     uint8_t opcode = R_Machine_Code_Opcode_Invoke;
-    R_Interpreter_Code_append(process, code, &opcode, 1);
-    R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Register, 0); // target
-    R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 0); // calleee
-    R_Interpreter_Code_appendCountNatural8(process, code, 1); // number of arguments
-    R_Interpreter_Code_appendIndexNatural8(process, code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
-    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"main", sizeof(u8"main") - 1)), code));
+    R_Interpreter_Code_append(thread, code, &opcode, 1);
+    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Register, 0); // target
+    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Constant, 0); // calleee
+    R_Interpreter_Code_appendCountNatural8(thread, code, 1); // number of arguments
+    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
+    R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(thread);
   } else {
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;
-    Arcadia_Process_popJumpTarget(process);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_jump(thread);
   }
 }
 

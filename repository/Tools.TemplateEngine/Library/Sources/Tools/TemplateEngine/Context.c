@@ -31,14 +31,14 @@ Context_constructImpl
 static void
 Context_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* self
   );
 
 static void
 Context_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* self
   );
 
@@ -79,8 +79,9 @@ Context_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Context* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Context_getType(process);
+  Arcadia_TypeValue _type = _Context_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -90,14 +91,14 @@ Context_constructImpl
   _self->temporaryBuffer = NULL;
   _self->temporary = NULL;
   _self->stack = NULL;
-  _self->files = Arcadia_List_create(process);
-  Arcadia_Object_setType(process, _self, _type);
+  _self->files = Arcadia_List_create(Arcadia_Process_getThread(process));
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 Context_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* self
   )
 {/*Intentionally empty.*/}
@@ -105,67 +106,67 @@ Context_destruct
 static void
 Context_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* self
   )
 {
-  Arcadia_Object_visit(process, self->targetBuffer);
-  Arcadia_Object_visit(process, self->target);
+  Arcadia_Object_visit(thread, self->targetBuffer);
+  Arcadia_Object_visit(thread, self->target);
 
-  Arcadia_Object_visit(process, self->temporaryBuffer);
-  Arcadia_Object_visit(process, self->temporary);
+  Arcadia_Object_visit(thread, self->temporaryBuffer);
+  Arcadia_Object_visit(thread, self->temporary);
 
-  Arcadia_Object_visit(process, self->stack);
-  Arcadia_Object_visit(process, self->files);
+  Arcadia_Object_visit(thread, self->stack);
+  Arcadia_Object_visit(thread, self->files);
 }
 
 Context*
 Context_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  Context* self = R_allocateObject(process, _Context_getType(process), 0, &argumentValues[0]);
+  Context* self = Arcadia_allocateObject(thread, _Context_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
 static void
 recursionGuard
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context,
     Arcadia_FilePath* path
   )
 {
-  path = Arcadia_FilePath_getFullPath(process, path);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, context->files); i < n; ++i) {
-    Arcadia_FilePath* p = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueAt(process, context->files, i);
-    if (Arcadia_FilePath_isEqualTo(process, p, path)) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Process_jump(process);
+  path = Arcadia_FilePath_getFullPath(thread, path);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, context->files); i < n; ++i) {
+    Arcadia_FilePath* p = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueAt(thread, context->files, i);
+    if (Arcadia_FilePath_isEqualTo(thread, p, path)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     }
   }
-  Arcadia_List_appendObjectReferenceValue(process, context->files, path);
+  Arcadia_List_appendObjectReferenceValue(thread, context->files, path);
 }
 
 void
 Context_onRun
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   )
 {
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(process);
-  while (!Arcadia_Stack_isEmpty(context->stack)) {
-    Arcadia_Value elementValue = Arcadia_Stack_peek(process, context->stack);
-    Arcadia_Stack_pop(process, context->stack);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  while (!Arcadia_Stack_isEmpty(thread, context->stack)) {
+    Arcadia_Value elementValue = Arcadia_Stack_peek(thread, context->stack);
+    Arcadia_Stack_pop(thread, context->stack);
     Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_Value_getObjectReferenceValue(&elementValue);
-    FileContext* fileContext = FileContext_create(process, context, filePath);
-    Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_FileSystem_getFileContents(process, fileSystem, fileContext->sourceFilePath);
-    fileContext->source = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(process, sourceByteBuffer);
-    recursionGuard(process, context, filePath);
-    FileContext_execute(process, fileContext);
-    Arcadia_List_remove(process, context->files, Arcadia_List_getSize(process, context->files) - 1, 1);
+    FileContext* fileContext = FileContext_create(thread, context, filePath);
+    Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, fileContext->sourceFilePath);
+    fileContext->source = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
+    recursionGuard(thread, context, filePath);
+    FileContext_execute(thread, fileContext);
+    Arcadia_List_remove(thread, context->files, Arcadia_List_getSize(thread, context->files) - 1, 1);
   }
 }

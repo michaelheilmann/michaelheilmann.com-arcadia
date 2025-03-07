@@ -40,7 +40,7 @@ struct Arcadia_Mil_LoadExpressionAst {
 Arcadia_Mil_LoadExpressionAst*
 Arcadia_Mil_LoadExpressionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_OperandAst* operand
   );
 

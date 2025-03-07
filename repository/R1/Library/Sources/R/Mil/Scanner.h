@@ -30,7 +30,7 @@ Rex_declareObjectType(u8"Arcadia.Mil.Scanner", Arcadia_Mil_Scanner, u8"Arcadia.O
 Arcadia_Mil_Scanner*
 Arcadia_Mil_Scanner_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 /// @brief Get the text of the token.
@@ -39,7 +39,7 @@ Arcadia_Mil_Scanner_create
 Arcadia_String*
 Arcadia_Mil_Scanner_getTokenText
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Scanner* self
   );
 
@@ -49,6 +49,7 @@ Arcadia_Mil_Scanner_getTokenText
 Arcadia_Natural32Value
 Arcadia_Mil_Scanner_getTokenType
   (
+    Arcadia_Thread* thread,
     Arcadia_Mil_Scanner* self
   );
 
@@ -57,7 +58,7 @@ Arcadia_Mil_Scanner_getTokenType
 void
 Arcadia_Mil_Scanner_step
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Scanner* self
   );
 
@@ -67,7 +68,7 @@ Arcadia_Mil_Scanner_step
 void
 Arcadia_Mil_Scanner_setInput
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Scanner* self,
     Arcadia_Utf8Reader* input
   );

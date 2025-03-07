@@ -28,22 +28,23 @@ main1
     int argc,
     char** argv
   )
-{ 
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(process);
-  Context* context = Context_create(process);
-  context->stack = Arcadia_Stack_create(process);
-  context->targetBuffer = Arcadia_ByteBuffer_create(process);
-  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->targetBuffer);
-  context->temporaryBuffer = Arcadia_ByteBuffer_create(process);
-  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
+{
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  Context* context = Context_create(thread);
+  context->stack = Arcadia_Stack_create(thread);
+  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
+  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
+  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
 
-  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(process, u8"HelloWorld.t", strlen(u8"HelloWorld.t"));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, u8"HelloWorld.t", strlen(u8"HelloWorld.t"));
   Arcadia_Value filePathValue;
   Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
-  Arcadia_Stack_push(process, context->stack, filePathValue);
-  Context_onRun(process, context);
+  Arcadia_Stack_push(thread, context->stack, filePathValue);
+  Context_onRun(thread, context);
 
-  Arcadia_FileSystem_setFileContents(process, fileSystem, Arcadia_FilePath_parseGeneric(process, u8"HelloWorld.txt", strlen(u8"HelloWorld.txt")), context->targetBuffer);
+  Arcadia_FileSystem_setFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, u8"HelloWorld.txt", strlen(u8"HelloWorld.txt")), context->targetBuffer);
 }
 
 static void
@@ -54,27 +55,28 @@ recursiveInclude1
     char** argv
   )
 {
-  Context* context = Context_create(process);
-  context->stack = Arcadia_Stack_create(process);
-  context->targetBuffer = Arcadia_ByteBuffer_create(process);
-  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->targetBuffer);
-  context->temporaryBuffer = Arcadia_ByteBuffer_create(process);
-  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+  Context* context = Context_create(thread);
+  context->stack = Arcadia_Stack_create(thread);
+  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
+  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
+  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
 
-  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(process, u8"recursiveInclude1.t", strlen(u8"recursiveInclude1.t"));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude1.t", strlen(u8"recursiveInclude1.t"));
   Arcadia_Value filePathValue;
   Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
-  Arcadia_Stack_push(process, context->stack, filePathValue);
+  Arcadia_Stack_push(thread, context->stack, filePathValue);
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Context_onRun(process, context);
-    Arcadia_Process_popJumpTarget(process);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
+    Context_onRun(thread, context);
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+    Arcadia_Thread_jump(thread);
   } else {
-    Arcadia_Process_popJumpTarget(process);
-    Arcadia_Process_setStatus(process, Arcadia_Status_Success);
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
   }
 }
 
@@ -86,27 +88,28 @@ recursiveInclude2
     char** argv
   )
 {
-  Context* context = Context_create(process);
-  context->stack = Arcadia_Stack_create(process);
-  context->targetBuffer = Arcadia_ByteBuffer_create(process);
-  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->targetBuffer);
-  context->temporaryBuffer = Arcadia_ByteBuffer_create(process);
-  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(process, context->temporaryBuffer);
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+  Context* context = Context_create(thread);
+  context->stack = Arcadia_Stack_create(thread);
+  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
+  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
+  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
 
-  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(process, u8"recursiveInclude2.t", strlen(u8"recursiveInclude2.t"));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude2.t", strlen(u8"recursiveInclude2.t"));
   Arcadia_Value filePathValue;
   Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
-  Arcadia_Stack_push(process, context->stack, filePathValue);
+  Arcadia_Stack_push(thread, context->stack, filePathValue);
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Context_onRun(process, context);
-    Arcadia_Process_popJumpTarget(process);
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
+    Context_onRun(thread, context);
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+    Arcadia_Thread_jump(thread);
   } else {
-    Arcadia_Process_popJumpTarget(process);
-    Arcadia_Process_setStatus(process, Arcadia_Status_Success);
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
   }
 }
 
@@ -122,14 +125,14 @@ main
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
     recursiveInclude1(process, argc, argv);
     recursiveInclude2(process, argc, argv);
   }
-  Arcadia_Process_popJumpTarget(process);
-  Arcadia_Status status = Arcadia_Process_getStatus(process);
+  Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
+  Arcadia_Status status = Arcadia_Thread_getStatus(Arcadia_Process_getThread(process));
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

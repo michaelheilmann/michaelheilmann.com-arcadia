@@ -39,13 +39,13 @@ struct Arcadia_Mil_StringTable {
 Arcadia_Mil_StringTable*
 Arcadia_Mil_StringTable_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 Arcadia_String*
 Arcadia_Mil_StringTable_getOrCreateString
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_StringTable* self,
     Arcadia_StringBuffer* stringBuffer
   );

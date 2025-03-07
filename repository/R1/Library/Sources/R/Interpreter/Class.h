@@ -18,7 +18,6 @@
 #if !defined(R_INTERPRETER_CLASS_H_INCLUDED)
 #define R_INTERPRETER_CLASS_H_INCLUDED
 
-#include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Include.h"
 typedef struct R_Interpreter_Constructor R_Interpreter_Constructor;
 typedef struct R_Interpreter_Method R_Interpreter_Method;
@@ -84,7 +83,7 @@ struct R_Interpreter_Class {
 R_Interpreter_Class*
 R_Interpreter_Class_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* className,
     Arcadia_String* extendedClassName
   );

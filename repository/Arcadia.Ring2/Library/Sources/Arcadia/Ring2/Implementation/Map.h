@@ -30,33 +30,34 @@ Rex_declareObjectType(u8"Arcadia.Map", Arcadia_Map, u8"Arcadia.Object");
 Arcadia_Map*
 Arcadia_Map_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 Arcadia_Map*
 Arcadia_Map_clone
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self
   );
 
 void
 Arcadia_Map_clear
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self
   );
 
 Arcadia_SizeValue
 Arcadia_Map_getSize
   (
+    Arcadia_Thread* thread,
     Arcadia_Map const* self
   );
 
 void
 Arcadia_Map_set
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self,
     Arcadia_Value key,
     Arcadia_Value value
@@ -65,7 +66,7 @@ Arcadia_Map_set
 Arcadia_Value
 Arcadia_Map_get
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map const* self,
     Arcadia_Value key
   );
@@ -73,14 +74,14 @@ Arcadia_Map_get
 Arcadia_List*
 Arcadia_Map_getValues
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map const* self
   );
 
 Arcadia_List*
 Arcadia_Map_getKeys
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map const* self
   );
 

@@ -32,7 +32,7 @@ R_Interpreter_Method_constructImpl
 static void
 R_Interpreter_Method_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Method* self
   );
 
@@ -73,50 +73,51 @@ R_Interpreter_Method_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   R_Interpreter_Method* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Interpreter_Method_getType(process);
+  Arcadia_TypeValue _type = _R_Interpreter_Method_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->ready = Arcadia_BooleanValue_False;
   _self->index = Arcadia_SizeValue_Literal(0);
-  _self->parameterNames = Arcadia_List_create(process);
-  _self->unqualifiedName = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _Arcadia_String_getType(process));
-  if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _Arcadia_ForeignProcedureValue_getType(process))) {
+  _self->parameterNames = Arcadia_List_create(thread);
+  _self->unqualifiedName = R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+  if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[1]), _Arcadia_ForeignProcedureValue_getType(thread))) {
     _self->isForeign = Arcadia_BooleanValue_True;
     _self->foreignProcedure = Arcadia_Value_getForeignProcedureValue(&argumentValues[1]);
-  } else if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _R_Interpreter_Code_getType(process))) {
+  } else if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[1]), _R_Interpreter_Code_getType(thread))) {
     _self->isForeign = Arcadia_BooleanValue_False;
     _self->code = Arcadia_Value_getObjectReferenceValue(&argumentValues[1]);
   } else {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 R_Interpreter_Method_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Method* self
   )
 {
   if (!self->isForeign) {
-    Arcadia_Object_visit(process, self->code);
+    Arcadia_Object_visit(thread, self->code);
   }
-  Arcadia_Object_visit(process, self->unqualifiedName);
+  Arcadia_Object_visit(thread, self->unqualifiedName);
 }
 
 R_Interpreter_Method*
 R_Interpreter_Method_createForeign
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* unqualifiedName,
     Arcadia_ForeignProcedureValue foreignProcedure
   )
@@ -125,14 +126,14 @@ R_Interpreter_Method_createForeign
     {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = unqualifiedName },
     {.tag = Arcadia_ValueTag_ForeignProcedure, .foreignProcedureValue = foreignProcedure },
   };
-  R_Interpreter_Method* self = R_allocateObject(process, _R_Interpreter_Method_getType(process), 2, &argumentValues[0]);
+  R_Interpreter_Method* self = Arcadia_allocateObject(thread, _R_Interpreter_Method_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
 R_Interpreter_Method*
 R_Interpreter_Method_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* unqualifiedName,
     R_Interpreter_Code* code
   )
@@ -141,13 +142,14 @@ R_Interpreter_Method_create
     {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = unqualifiedName },
     {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = code },
   };
-  R_Interpreter_Method* self = R_allocateObject(process, _R_Interpreter_Method_getType(process), 2, &argumentValues[0]);
+  R_Interpreter_Method* self = Arcadia_allocateObject(thread, _R_Interpreter_Method_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
 R_Interpreter_Code*
 R_Interpreter_Method_getCode
   (
+    Arcadia_Thread* thread,
     R_Interpreter_Method* self
   )
 { return self->code; }

@@ -37,7 +37,7 @@ Arcadia_Mil_RaiseStatementAst_constructImpl
 static void
 Arcadia_Mil_RaiseStatementAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_RaiseStatementAst* self
   );
 
@@ -78,23 +78,24 @@ Arcadia_Mil_RaiseStatementAst_constructImpl
     Arcadia_Value* argumentValues 
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_RaiseStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_RaiseStatementAst_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Mil_RaiseStatementAst_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 Arcadia_Mil_RaiseStatementAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_RaiseStatementAst* self
   )
 {/*Intentionally empty.*/}
@@ -102,11 +103,11 @@ Arcadia_Mil_RaiseStatementAst_visit
 Arcadia_Mil_RaiseStatementAst*
 Arcadia_Mil_RaiseStatementAst_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
-  Arcadia_Mil_RaiseStatementAst* self = R_allocateObject(process, _Arcadia_Mil_RaiseStatementAst_getType(process), 0, &argumentValues[0]);
+  Arcadia_Mil_RaiseStatementAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_RaiseStatementAst_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 

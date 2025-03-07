@@ -37,13 +37,14 @@ struct Arcadia_Stack {
 Arcadia_Stack*
 Arcadia_Stack_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 // https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_clear
 void
 Arcadia_Stack_clear
   (
+    Arcadia_Thread* thread,
     Arcadia_Stack* self
   );
 
@@ -51,6 +52,7 @@ Arcadia_Stack_clear
 Arcadia_SizeValue
 Arcadia_Stack_getSize
   (
+    Arcadia_Thread* thread,
     Arcadia_Stack* self
   );
 
@@ -58,7 +60,7 @@ Arcadia_Stack_getSize
 void
 Arcadia_Stack_push
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Stack* self,
     Arcadia_Value value
   );
@@ -67,7 +69,7 @@ Arcadia_Stack_push
 void
 Arcadia_Stack_pop
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Stack* self
   );
 
@@ -75,20 +77,24 @@ Arcadia_Stack_pop
 Arcadia_Value
 Arcadia_Stack_peek
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Stack* self
   );
 
 // https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_isEmpty
-static inline Arcadia_BooleanValue Arcadia_Stack_isEmpty(Arcadia_Stack* self) {
-  return Arcadia_SizeValue_Literal(0) == Arcadia_Stack_getSize(self);
-}
+static inline Arcadia_BooleanValue
+Arcadia_Stack_isEmpty
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
+{ return Arcadia_SizeValue_Literal(0) == Arcadia_Stack_getSize(thread, self); }
 
 #define Define(Type, Suffix, Variable) \
   void \
   Arcadia_Stack_push##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_Stack* self, \
       Type##Value variable##Value \
     ); \
@@ -96,7 +102,7 @@ static inline Arcadia_BooleanValue Arcadia_Stack_isEmpty(Arcadia_Stack* self) {
   Arcadia_BooleanValue \
   Arcadia_Stack_is##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_Stack* self, \
       Arcadia_SizeValue index \
     ); \
@@ -104,7 +110,7 @@ static inline Arcadia_BooleanValue Arcadia_Stack_isEmpty(Arcadia_Stack* self) {
   Type##Value \
   Arcadia_Stack_get##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Arcadia_Stack* self, \
       Arcadia_SizeValue index \
     );

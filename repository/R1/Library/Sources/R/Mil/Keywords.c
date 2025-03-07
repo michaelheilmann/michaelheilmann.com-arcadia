@@ -44,21 +44,21 @@ Arcadia_Mil_Keywords_constructImpl
 static void
 Arcadia_Mil_Keywords_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Keywords* self
   );
 
 static void
 Arcadia_Mil_Keywords_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Keywords* self
   );
 
 static void
 Arcadia_Mil_Keywords_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Keywords* self
   )
 {
@@ -66,24 +66,24 @@ Arcadia_Mil_Keywords_destruct
     while (self->buckets[i]) {
       Keyword* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Process_deallocateUnmanaged(process, node);
+      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), node);
     }
   }
-  Arcadia_Process_deallocateUnmanaged(process, self->buckets);
+  Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->buckets);
   self->buckets = NULL;
 }
 
 static void
 Arcadia_Mil_Keywords_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Keywords* self
   )
 {
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     Keyword* node = self->buckets[i];
     while (node) {
-      Arcadia_Object_visit(process, node->string);
+      Arcadia_Object_visit(thread, node->string);
       node = node->next;
     }
   }
@@ -126,15 +126,16 @@ Arcadia_Mil_Keywords_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_Keywords* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_Keywords_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Mil_Keywords_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   _self->size = 0;
   _self->capacity = 8;
@@ -142,42 +143,42 @@ Arcadia_Mil_Keywords_constructImpl
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     _self->buckets[i] = NULL;
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 Arcadia_Mil_Keywords*
 Arcadia_Mil_Keywords_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
-  Arcadia_Mil_Keywords* self = R_allocateObject(process, _Arcadia_Mil_Keywords_getType(process), 0, &argumentValues[0]);
+  Arcadia_Mil_Keywords* self = Arcadia_allocateObject(thread, _Arcadia_Mil_Keywords_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
 void
 Arcadia_Mil_Keywords_add
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Keywords* self,
     Arcadia_String* string,
     Arcadia_Natural32Value type
   )
 {
   Arcadia_Value stringValue =  { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = string };
-  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &stringValue);
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &stringValue);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
     Arcadia_Value v[] = { { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = keyword->string },
                           stringValue };
-    if (Arcadia_Value_isEqualTo(process, &v[0], &v[1])) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
-      Arcadia_Process_jump(process);
+    if (Arcadia_Value_isEqualTo(thread, &v[0], &v[1])) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_Exists);
+      Arcadia_Thread_jump(thread);
     }
   }
   Keyword* keyword = NULL;
-  Arcadia_Process_allocateUnmanaged(process, &keyword, sizeof(Keyword));
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &keyword, sizeof(Keyword));
   keyword->string = string;
   keyword->type = type;
   keyword->next = self->buckets[index];
@@ -188,19 +189,19 @@ Arcadia_Mil_Keywords_add
 Arcadia_BooleanValue
 Arcadia_Mil_Keywords_scan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Keywords* self,
     Arcadia_String* string,
     Arcadia_Natural32Value* tokenType
   )
 {
   Arcadia_Value stringValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = string };
-  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &stringValue);
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &stringValue);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
     Arcadia_Value v[2] = { { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = keyword->string }, 
                            stringValue };
-    if (Arcadia_Value_isEqualTo(process, &v[0], &v[1])) {
+    if (Arcadia_Value_isEqualTo(thread, &v[0], &v[1])) {
       *tokenType = keyword->type;
       return Arcadia_BooleanValue_True;
     }

@@ -26,7 +26,7 @@ typedef struct Arcadia_Mil_CallableContext Arcadia_Mil_CallableContext;
 void
 Arcadia_Mil_EnterPass_onModule
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
@@ -46,7 +46,7 @@ struct Arcadia_Mil_EnterPass {
 Arcadia_Mil_EnterPass*
 Arcadia_Mil_EnterPass_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 #endif // R_MIL_ENTER_H_INCLUDED

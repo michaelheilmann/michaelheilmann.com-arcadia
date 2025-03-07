@@ -64,37 +64,38 @@ Arcadia_Utf8Writer_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Utf8Writer* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Utf8Writer_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Utf8Writer_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->writeBytes = NULL;
   _self->writeCodePoints = NULL;
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 void
 Arcadia_Utf8Writer_writeBytes
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Writer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
-  self->writeBytes(process, self, bytes, numberOfBytes);
+  self->writeBytes(thread, self, bytes, numberOfBytes);
 }
 
 void
 Arcadia_Utf8Writer_writeCodePoints
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Writer* self,
     Arcadia_Natural32Value const* codePoints,
     Arcadia_SizeValue numberOfCodePoints
   )
 {
-  self->writeCodePoints(process, self, codePoints, numberOfCodePoints);
+  self->writeCodePoints(thread, self, codePoints, numberOfCodePoints);
 }

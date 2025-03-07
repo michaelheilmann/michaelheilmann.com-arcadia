@@ -1,60 +1,79 @@
 <h4 id="Arcadia_FileHandle">Arcadia_FileHandle</h4>
 <p>
-<code>R_FileHandle</code> represents a operating system file handle.
-This type is allocated on the heap and values of this type are referenced by <code>R_FileHandle</code> pointers.
-A <code>R_FileHandle</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_FileHandle</code> value can be safely cast into a <code>R_FileHandle</code> pointer.
+<code>Arcadia_FileHandle</code> represents a operating system file handle.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FileHandle</code> pointers.
+A <code>Arcadia_FileHandle</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileHandle</code> value can be safely cast into a <code>Arcadia_FileHandle</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-create">create</h5>
+<h5 id="Arcadia_FileHandle_create">Arcadia_FileHandle_create</h5>
 
 <p><code>
-R_FileHandle* R_FileHandle_create(R_FileSystem* fileSystem)
+Arcadia_FileHandle*
+Arcadia_FileHandle_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* fileSystem
+  )
 </code></p>
 
 <p>Create a file handle. The file handle is closed.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_FileSystem* self</td><td>A pointer to the backing <code>R_FileSystem</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_FileSystem* self</td><td>A pointer to the backing <code>Arcadia_FileSystem</code> object.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>A pointer to the file handle.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-close">close</h5>
+<h5 id="Arcadia_FileHandle_close">Arcadia_FileHandle_close</h5>
 <p><code>
-void R_FileHandle_close(R_FileHandle* self)
+void
+Arcadia_FileHandle_close
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self
+  )
 </code></p>
 
 <p>Close this file handle.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-openforreading">openForReading</h5>
+<h5 id="Arcadia_FileHandle_openForReading">Arcadia_FileHandle_openForReading</h5>
 <p><code>
-void R_FileHandle_openForReading(R_FileHandle* self, R_FilePath* path)
+void
+Arcadia_FileHandle_openForReading
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
+    Arcadia_FilePath* path
+  )
 </code></p>
 
 <p>Open a file for reading. If the file is open, it is closed before trying to re-open it.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>R_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
+  <tr><td>Arcadia_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

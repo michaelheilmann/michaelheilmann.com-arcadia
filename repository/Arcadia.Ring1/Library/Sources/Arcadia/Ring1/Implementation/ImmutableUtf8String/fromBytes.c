@@ -28,7 +28,7 @@ Arcadia_StaticAssert(Arcadia_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximu
 static Arcadia_BooleanValue
 _isUtf8
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes,
     Arcadia_SizeValue* numberOfSymbols
@@ -37,7 +37,7 @@ _isUtf8
 static Arcadia_BooleanValue
 _isUtf8
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes,
     Arcadia_SizeValue* numberOfSymbols
@@ -120,28 +120,28 @@ _isUtf8
 Arcadia_ImmutableUtf8String*
 _createFromBytes
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
   if (!bytes) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);   
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if (SIZE_MAX - sizeof(Arcadia_ImmutableUtf8String) < numberOfBytes) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  if (!_isUtf8(process, bytes, numberOfBytes, NULL)) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_EncodingInvalid);
-    Arcadia_Process1_jump(process);
+  if (!_isUtf8(thread, bytes, numberOfBytes, NULL)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  _ensureTypeRegistered(process);
+  _ensureTypeRegistered(thread);
   Arcadia_ImmutableUtf8String* string = NULL;
-  Arcadia_Process1_allocate(process, &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + numberOfBytes);
-  Arcadia_Process1_copyMemory(process, string->bytes, bytes, numberOfBytes);
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + numberOfBytes);
+  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), string->bytes, bytes, numberOfBytes);
   string->numberOfBytes = numberOfBytes;
-  string->hash = _hashUtf8(process, string->bytes, string->numberOfBytes);
+  string->hash = _hashUtf8(thread, string->bytes, string->numberOfBytes);
   return string;
 }

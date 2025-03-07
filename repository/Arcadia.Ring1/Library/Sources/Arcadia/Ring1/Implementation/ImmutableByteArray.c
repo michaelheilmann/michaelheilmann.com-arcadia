@@ -27,7 +27,7 @@ static Arcadia_BooleanValue g_registered = Arcadia_BooleanValue_False;
 static void
 onTypeRemoved
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     const uint8_t* bytes,
     size_t numberOfBytes
   )
@@ -36,26 +36,26 @@ onTypeRemoved
 Arcadia_ImmutableByteArray*
 Arcadia_ImmutableByteArray_create
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
   if (!bytes) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);   
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if (SIZE_MAX - sizeof(Arcadia_ImmutableByteArray) < numberOfBytes) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if (!g_registered) {
-    Arcadia_Process1_registerType(process, TypeName, sizeof(TypeName) - 1, process, &onTypeRemoved, NULL, NULL);
+    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), TypeName, sizeof(TypeName) - 1, thread, &onTypeRemoved, NULL, NULL);
     g_registered = Arcadia_BooleanValue_True;
   }
   Arcadia_ImmutableByteArray*array = NULL;
-  Arcadia_Process1_allocate(process, &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableByteArray) + numberOfBytes);
-  Arcadia_Process1_copyMemory(process, array->bytes, bytes, numberOfBytes);
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableByteArray) + numberOfBytes);
+  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), array->bytes, bytes, numberOfBytes);
   array->numberOfBytes = numberOfBytes;
   return array;
 }
@@ -63,15 +63,15 @@ Arcadia_ImmutableByteArray_create
 void
 Arcadia_ImmutableByteArray_visit
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_ImmutableByteArrayValue self
   )
-{ Arcadia_Process1_visitObject(process, self); }
+{ Arcadia_Process_visitObject(Arcadia_Thread_getProcess(thread), self); }
 
 Arcadia_Natural8Value const*
 Arcadia_ImmutableByteArray_getBytes
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_ImmutableByteArrayValue self
   )
 { return self->bytes; }
@@ -79,7 +79,7 @@ Arcadia_ImmutableByteArray_getBytes
 Arcadia_SizeValue
 Arcadia_ImmutableByteArray_getNumberOfBytes
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_ImmutableByteArrayValue self
   )
 { return self->numberOfBytes; }
@@ -199,11 +199,11 @@ typeDestructing
 Arcadia_TypeValue
 _Arcadia_ImmutableByteArrayValue_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   if (!g_type) {
-    g_type = Arcadia_registerInternalType(process, TypeName, sizeof(TypeName) - 1, &_typeOperations, &typeDestructing);
+    g_type = Arcadia_registerInternalType(thread, TypeName, sizeof(TypeName) - 1, &_typeOperations, &typeDestructing);
   }
   return g_type;
 }

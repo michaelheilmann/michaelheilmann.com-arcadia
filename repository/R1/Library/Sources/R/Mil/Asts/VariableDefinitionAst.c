@@ -36,7 +36,7 @@ Arcadia_Mil_VariableDefinitionAst_constructImpl
 static void
 Arcadia_Mil_VariableDefinitionAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_VariableDefinitionAst* self
   );
 
@@ -77,43 +77,40 @@ Arcadia_Mil_VariableDefinitionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_VariableDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_VariableDefinitionAst_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Mil_VariableDefinitionAst_getType(thread);
   {
     Arcadia_Value argumentValues[] = { { .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_String_getType(process))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
-  }
-  _self->variableName = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
-  Arcadia_Object_setType(process, _self, _type);
+  _self->variableName = (Arcadia_String*)R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 Arcadia_Mil_VariableDefinitionAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_VariableDefinitionAst* self
   )
-{ Arcadia_Object_visit(process, self->variableName); }
+{ Arcadia_Object_visit(thread, self->variableName); }
 
 Arcadia_Mil_VariableDefinitionAst*
 Arcadia_Mil_VariableDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* variableName
   )
 {
   Arcadia_Value argumentValues[] = {
     {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)variableName },
   };
-  Arcadia_Mil_VariableDefinitionAst* self = R_allocateObject(process, _Arcadia_Mil_VariableDefinitionAst_getType(process), 1, &argumentValues[0]);
+  Arcadia_Mil_VariableDefinitionAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_VariableDefinitionAst_getType(thread), 1, &argumentValues[0]);
   return self;
 }
 

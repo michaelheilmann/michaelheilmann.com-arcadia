@@ -37,9 +37,9 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 void
-Arcadia_safeMultiply_n16
+Arcadia_safeMultiplyNatural16Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural16Value multiplier,
     Arcadia_Natural16Value multiplicand,
     Arcadia_Natural16Value* productHigh,
@@ -47,9 +47,9 @@ Arcadia_safeMultiply_n16
   );
 
 void
-Arcadia_safeMultiply_n32
+Arcadia_safeMultiplyNatural32Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural32Value multiplier,
     Arcadia_Natural32Value multiplicand,
     Arcadia_Natural32Value* productHigh,
@@ -60,9 +60,9 @@ Arcadia_safeMultiply_n32
     Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
 
 void
-Arcadia_safeMultiply_n64_x64msvc
+Arcadia_safeMultiplyNatural64ValueX64Msvc
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value multiplier,
     Arcadia_Natural64Value multiplicand,
     Arcadia_Natural64Value* productHigh,
@@ -74,9 +74,9 @@ Arcadia_safeMultiply_n64_x64msvc
 #if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
 
 void
-Arcadia_safeMultiply_n64_gcc
+Arcadia_safeMultiplyNatural64ValueGcc
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value multiplier,
     Arcadia_Natural64Value multiplicand,
     Arcadia_Natural64Value* productHigh,
@@ -86,9 +86,9 @@ Arcadia_safeMultiply_n64_gcc
 #endif
 
 void
-Arcadia_safeMultiply_n64_default
+Arcadia_safeMultiplyNatural64ValueDefault
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value multiplier,
     Arcadia_Natural64Value multiplicand,
     Arcadia_Natural64Value* productHigh,
@@ -96,9 +96,9 @@ Arcadia_safeMultiply_n64_default
   );
 
 void
-Arcadia_safeMultiply_n64
+Arcadia_safeMultiplyNatural64Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value multiplier,
     Arcadia_Natural64Value multiplicand,
     Arcadia_Natural64Value* productHigh,
@@ -106,9 +106,9 @@ Arcadia_safeMultiply_n64
   );
 
 void
-Arcadia_safeMultiply_n8
+Arcadia_safeMultiplyNatural8Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value multiplier,
     Arcadia_Natural8Value multiplicand,
     Arcadia_Natural8Value* productHigh,
@@ -116,9 +116,9 @@ Arcadia_safeMultiply_n8
   );
 
 void
-Arcadia_safeMultiply_sz
+Arcadia_safeMultiplySizeValue
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_SizeValue multiplier,
     Arcadia_SizeValue multiplicand,
     Arcadia_SizeValue* productHigh,

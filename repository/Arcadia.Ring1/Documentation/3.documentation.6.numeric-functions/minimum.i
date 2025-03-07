@@ -4,7 +4,7 @@
 <my-mv>Type</my-mv>
 Arcadia_minimum<my-mv>Suffix</my-mv>
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     <my-mv>Type</my-mv> x,
     <my-mv>Type</my-mv> y
   )
@@ -26,6 +26,7 @@ Arcadia_minimum<my-mv>Suffix</my-mv>
 
 <h5>Parameters</h5>
 <table>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><my-mv>Type</my-mv> x</td><td>The first value.</td></tr>
   <tr><td><my-mv>Type</my-mv> y</td><td>The second value.</td></tr>
 </table>

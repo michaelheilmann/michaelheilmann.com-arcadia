@@ -32,7 +32,7 @@ Arcadia_Mil_CallableContext_constructImpl
 static void
 Arcadia_Mil_CallableContext_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_CallableContext* self
   );
 
@@ -73,33 +73,34 @@ Arcadia_Mil_CallableContext_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_CallableContext* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_CallableContext_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Mil_CallableContext_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
-  _self->labels = Arcadia_Map_create(process);
-  _self->variables = Arcadia_List_create(process);
-  Arcadia_Object_setType(process, _self, _type);
+  _self->labels = Arcadia_Map_create(Arcadia_Process_getThread(process));
+  _self->variables = Arcadia_List_create(Arcadia_Process_getThread(process));
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 Arcadia_Mil_CallableContext_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_CallableContext* self
   )
 {
   if (self->labels) {
-    Arcadia_Object_visit(process, self->labels);
+    Arcadia_Object_visit(thread, self->labels);
   }
   if (self->variables) {
-    Arcadia_Object_visit(process, self->variables);
+    Arcadia_Object_visit(thread, self->variables);
   }
 }
 
@@ -109,8 +110,9 @@ Arcadia_Mil_CallableContext_create
     Arcadia_Process* process
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
-  Arcadia_Mil_CallableContext* self = R_allocateObject(process, _Arcadia_Mil_CallableContext_getType(process), 0, &argumentValues[0]);
+  Arcadia_Mil_CallableContext* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Arcadia_Mil_CallableContext_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
@@ -121,8 +123,8 @@ Arcadia_Mil_CallableContext_onReset
     Arcadia_Mil_CallableContext* self
   )
 {
-  Arcadia_Map_clear(process, self->labels);
-  Arcadia_List_clear(process, self->variables);
+  Arcadia_Map_clear(Arcadia_Process_getThread(process), self->labels);
+  Arcadia_List_clear(Arcadia_Process_getThread(process), self->variables);
   self->statementIndex = 0;
 }
 
@@ -138,13 +140,13 @@ Arcadia_Mil_CallableContext_onDefineLabel
 {
   Arcadia_Value k;
   Arcadia_Value_setObjectReferenceValue(&k, name);
-  Arcadia_Value v = Arcadia_Map_get(process, self->labels, k);
+  Arcadia_Value v = Arcadia_Map_get(Arcadia_Process_getThread(process), self->labels, k);
   if (!Arcadia_Value_isVoidValue(&v)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setObjectReferenceValue(&v, ast);
-  Arcadia_Map_set(process, self->labels, k, v);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->labels, k, v);
 }
 
 void
@@ -156,12 +158,13 @@ Arcadia_Mil_CallableContext_onParameterVariableDefinition
     Arcadia_Mil_Ast* ast
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, self->variables); i < n; ++i) {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(Arcadia_Process_getThread(process), self->variables); i < n; ++i) {
     Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name },
-                              Arcadia_List_getAt(process, self->variables, i) };
-    if (Arcadia_Value_isEqualTo(process, &args[0], &args[1])) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-      Arcadia_Process_jump(process);
+                              Arcadia_List_getAt(Arcadia_Process_getThread(process), self->variables, i) };
+    if (Arcadia_Value_isEqualTo(thread, &args[0], &args[1])) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
     }
   }
 }
@@ -175,12 +178,12 @@ Arcadia_Mil_CallableContext_onLocalVariableDefinition
     Arcadia_Mil_VariableDefinitionStatementAst* ast
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, context->variables); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(Arcadia_Process_getThread(process), context->variables); i < n; ++i) {
     Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name },
-                              Arcadia_List_getAt(process, context->variables, i) };
-    if (Arcadia_Value_isEqualTo(process, &args[0], &args[1])) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-      Arcadia_Process_jump(process);
+                              Arcadia_List_getAt(Arcadia_Process_getThread(process), context->variables, i) };
+    if (Arcadia_Value_isEqualTo(Arcadia_Process_getThread(process), &args[0], &args[1])) {
+      Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(Arcadia_Process_getThread(process));
     }
   }
 }

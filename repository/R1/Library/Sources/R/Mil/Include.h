@@ -23,6 +23,5 @@
 #include "R/Mil/Parser.h"
 #include "R/Mil/Scanner.h"
 #include "R/Mil/StringTable.h"
-#include "R/Mil/Symbols.h"
 
 #endif // R_MIL_INCLUDE_H_INCLUDED

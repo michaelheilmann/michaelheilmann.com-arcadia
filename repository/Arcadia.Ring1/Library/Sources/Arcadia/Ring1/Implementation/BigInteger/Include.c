@@ -1,0 +1,378 @@
+#define ARCADIA_RING1_PRIVATE (1)
+#include "Arcadia/Ring1/Implementation/BigInteger/Include.h"
+
+#include "Arcadia/Ring1/Include.h"
+
+#define TypeName u8"Arcadia.BigInteger"
+
+static Arcadia_BooleanValue g_registered = Arcadia_BooleanValue_False;
+
+static void
+onFinalize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self
+  )
+{
+  if (self->limps) {
+    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->limps);
+    self->limps = NULL;
+  }
+}
+
+static void
+onTypeRemoved
+  (
+    Arcadia_Thread* thread,
+    const uint8_t* bytes,
+    size_t numberOfBytes
+  )
+{
+  g_registered = Arcadia_BooleanValue_False;
+}
+
+Arcadia_BigInteger*
+Arcadia_BigInteger_create
+  (
+    Arcadia_Thread* thread
+  )
+{
+  if (!g_registered) {
+    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), TypeName, sizeof(TypeName) - 1, thread, &onTypeRemoved, NULL, &onFinalize);
+    g_registered = Arcadia_BooleanValue_True;
+  }
+  Arcadia_BigInteger* self = NULL;
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &self, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_BigInteger));
+  self->numberOfLimps = 0;
+  self->limps = NULL;
+
+  self->numberOfLimps = 1;
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Hidden(BigInteger_Limp)) * 1);
+  self->limps[0] = UINT32_C(0);
+  self->sign = 0;
+  return self;
+}
+
+void
+Arcadia_BigInteger_swap
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self,
+    Arcadia_BigInteger* other
+  )
+{
+  if (self != other) {
+    Arcadia_swapPointer(thread, &self->limps, &other->limps);
+    Arcadia_swapSize(thread, &self->numberOfLimps, &other->numberOfLimps);
+    Arcadia_swapInteger8(thread, &self->sign, &other->sign);
+  }
+}
+
+void
+Arcadia_BigInteger_copy
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self,
+    Arcadia_BigInteger* other
+  )
+{
+  if (self != other) {
+    Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
+    if (self->numberOfLimps < other->numberOfLimps) {
+      Arcadia_Process_reallocateUnmanaged(process, &self->limps, sizeof(Hidden(BigInteger_Limp)) * other->numberOfLimps);
+    }
+    Arcadia_Process_copyMemory(process, self->limps, other->limps, sizeof(Hidden(BigInteger_Limp)) * other->numberOfLimps);
+    self->numberOfLimps = other->numberOfLimps;
+    self->sign = other->sign;
+  }
+}
+
+void
+Arcadia_BigInteger_setZero
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self
+  )
+{ 
+  self->sign = 0;
+  self->limps[0] = 0;
+  self->numberOfLimps = 1;
+}
+
+Arcadia_BooleanValue
+Arcadia_BigInteger_isZero
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self
+  )
+{ return 0 == self->sign; }
+
+Arcadia_BooleanValue
+Arcadia_BigInteger_isPositive
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self
+  )
+{ return +1 == self->sign; }
+
+Arcadia_BooleanValue
+Arcadia_BigInteger_isNegative
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self
+  )
+{ return -1 == self->sign; }
+
+void
+Arcadia_BigInteger_visit
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigIntegerValue self
+  )
+{
+  Arcadia_Process_visitObject(Arcadia_Thread_getProcess(thread), self);
+}
+
+static void
+equalTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static void
+greaterThan
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static void
+greaterThanOrEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static void
+hash
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static void
+lowerThan
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static void
+lowerThanOrEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static void
+notEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static const Arcadia_Type_Operations _typeOperations = {
+  .objectTypeOperations = NULL,
+  .add = NULL,
+  .and = NULL,
+  .concatenate = NULL,
+  .divide = NULL,
+  .equalTo = &equalTo,
+  .greaterThan = &greaterThan,
+  .greaterThanOrEqualTo = &greaterThanOrEqualTo,
+  .hash = &hash,
+  .lowerThan = &lowerThan,
+  .lowerThanOrEqualTo = &lowerThanOrEqualTo,
+  .multiply = NULL,
+  .negate = NULL,
+  .not = NULL,
+  .notEqualTo = &notEqualTo,
+  .or = NULL,
+  .subtract = NULL,
+};
+
+static void
+equalTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (Arcadia_Value_isBigIntegerValue(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BigInteger_equalTo(Arcadia_Process_getThread(process), Arcadia_Value_getBigIntegerValue(A1),  Arcadia_Value_getBigIntegerValue(A2)));
+  } else {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+  }
+#undef A2
+#undef A1
+}
+
+static void
+greaterThan
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (Arcadia_Value_isBigIntegerValue(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BigInteger_greaterThan(Arcadia_Process_getThread(process), Arcadia_Value_getBigIntegerValue(A1), Arcadia_Value_getBigIntegerValue(A2)));
+  } else {
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+  }
+#undef A2
+#undef A1
+}
+
+static void
+greaterThanOrEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (Arcadia_Value_isBigIntegerValue(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BigInteger_greaterThanOrEqualTo(Arcadia_Process_getThread(process), Arcadia_Value_getBigIntegerValue(A1), Arcadia_Value_getBigIntegerValue(A2)));
+  } else {
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+  }
+#undef A2
+#undef A1
+}
+
+static void
+hash
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+  Arcadia_Value_setSizeValue(target, (Arcadia_SizeValue)(uintptr_t)Arcadia_Value_getBigIntegerValue(A1));
+#undef A1
+}
+
+static void
+lowerThan
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (Arcadia_Value_isBigIntegerValue(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BigInteger_lowerThan(Arcadia_Process_getThread(process), Arcadia_Value_getBigIntegerValue(A1), Arcadia_Value_getBigIntegerValue(A2)));
+  } else {
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+  }
+#undef A2
+#undef A1
+}
+
+static void
+lowerThanOrEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (Arcadia_Value_isBigIntegerValue(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BigInteger_lowerThanOrEqualTo(Arcadia_Process_getThread(process), Arcadia_Value_getBigIntegerValue(A1), Arcadia_Value_getBigIntegerValue(A2)));
+  } else {
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+  }
+#undef A2
+#undef A1
+}
+
+static void
+notEqualTo
+  (
+    Arcadia_Process* process,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (Arcadia_Value_isBigIntegerValue(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BigInteger_notEqualTo(Arcadia_Process_getThread(process), Arcadia_Value_getBigIntegerValue(A1), Arcadia_Value_getBigIntegerValue(A2)));
+  } else {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
+  }
+#undef A2
+#undef A1
+}
+
+static Arcadia_TypeValue g_type = NULL;
+
+static void
+typeDestructing
+  (
+    void* context
+  )
+{
+  g_type = NULL;
+}
+
+Arcadia_TypeValue
+_Arcadia_BigIntegerValue_getType
+  (
+    Arcadia_Thread* thread
+  )
+{
+  if (!g_type) {
+    g_type = Arcadia_registerInternalType(thread, TypeName, sizeof(TypeName) - 1, &_typeOperations, &typeDestructing);
+  }
+  return g_type;
+}

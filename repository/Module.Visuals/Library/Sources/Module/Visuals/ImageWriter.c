@@ -20,62 +20,62 @@
 void
 ImageWriter_writePngToPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   )
-{ self->writePngToPath(process, self, sourcePixelBuffer, targetPath); }
+{ self->writePngToPath(thread, self, sourcePixelBuffer, targetPath); }
 
 void
 ImageWriter_writePngToByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   )
-{ self->writePngToByteBuffer(process, self, sourcePixelBuffer, targetByteBuffer); }
+{ self->writePngToByteBuffer(thread, self, sourcePixelBuffer, targetByteBuffer); }
 
 void
 ImageWriter_writeBmpToPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   )
-{ self->writeBmpToPath(process, self, sourcePixelBuffer, targetPath); }
+{ self->writeBmpToPath(thread, self, sourcePixelBuffer, targetPath); }
 
 void
 ImageWriter_writeBmpToByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   )
-{ self->writeBmpToByteBuffer(process, self, sourcePixelBuffer, targetByteBuffer); }
+{ self->writeBmpToByteBuffer(thread, self, sourcePixelBuffer, targetByteBuffer); }
 
 void
 ImageWriter_writeIcoToPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
   )
-{ self->writeIcoToPath(process, self, sourcePixelBuffers, targetPath); }
+{ self->writeIcoToPath(thread, self, sourcePixelBuffers, targetPath); }
 
 void
 ImageWriter_writeIcoToByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     Arcadia_List* sourcePixelBuffers,
     Arcadia_ByteBuffer* targetByteBuffer
   )
-{ self->writeIcoToByteBuffer(process, self, sourcePixelBuffers, targetByteBuffer); }
+{ self->writeIcoToByteBuffer(thread, self, sourcePixelBuffers, targetByteBuffer); }
 
 static void
 ImageWriter_constructImpl
@@ -123,8 +123,9 @@ ImageWriter_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   ImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _ImageWriter_getType(process);
+  Arcadia_TypeValue _type = _ImageWriter_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -135,5 +136,5 @@ ImageWriter_constructImpl
   _self->writeIcoToPath = NULL;
   _self->writePngToByteBuffer = NULL;
   _self->writePngToPath = NULL;
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }

@@ -87,15 +87,15 @@ isEnd
 static void
 parseName
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const** current,
     char const* start,
     char const* end
   )
 {
   if (!isAlphabetic(*current, start, end) && !isUnderscore(*current, start, end)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   (*current)++;
   while (isAlphabetic(*current, start, end) || isUnderscore(*current, start, end) || isAlphanumeric(*current, start, end)) {
@@ -106,23 +106,23 @@ parseName
 static void
 parseQualifiedName
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const** current,
     char const* start,
     char const* end
   )
 {
-  parseName(process, current, start, end);
+  parseName(thread, current, start, end);
   while (isPeriod(*current, start, end)) {
     (*current)++;
-    parseName(process, current, start, end);
+    parseName(thread, current, start, end);
   }
 }
 
 void
-R_Names_parseTypeName
+Arcadia_Names_parseTypeName
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     const char *bytes,
     size_t numberOfBytes
   )
@@ -130,9 +130,9 @@ R_Names_parseTypeName
   char const* current = bytes,
             * start = bytes,
             * end = ((uint8_t const*)bytes) + numberOfBytes;
-  parseQualifiedName(process, &current, start, end);
+  parseQualifiedName(thread, &current, start, end);
   if (!isEnd(current, start, end)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
 }

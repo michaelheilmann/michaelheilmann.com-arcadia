@@ -35,7 +35,7 @@ struct Arcadia_Utf8ByteBufferWriter {
 Arcadia_Utf8ByteBufferWriter*
 Arcadia_Utf8ByteBufferWriter_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* target
   );
 

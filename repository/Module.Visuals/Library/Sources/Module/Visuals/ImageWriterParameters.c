@@ -36,14 +36,14 @@ ImageWriterParameters_constructImpl
 static void
 ImageWriterParameters_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   );
 
 static void
 ImageWriterParameters_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   );
 
@@ -84,41 +84,42 @@ ImageWriterParameters_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   ImageWriterParameters* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _ImageWriterParameters_getType(process);
+  Arcadia_TypeValue _type = _ImageWriterParameters_getType(thread);
   if (2 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
-  if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_String_getType(process))) {
+  if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_String_getType(thread))) {
     _self->object = (Arcadia_ObjectReferenceValue)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
     _self->format = Arcadia_Value_getInteger32Value(&argumentValues[1]);
-  } else if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_ByteBuffer_getType(process))) {
+  } else if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_ByteBuffer_getType(thread))) {
     _self->object = (Arcadia_ObjectReferenceValue)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
     _self->format = Arcadia_Value_getInteger32Value(&argumentValues[1]);
   } else {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 ImageWriterParameters_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   )
-{ Arcadia_Object_visit(process, self->object); }
+{ Arcadia_Object_visit(thread, self->object); }
 
 static void
 ImageWriterParameters_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   )
 {/*Intentionally empty.*/}
@@ -126,52 +127,52 @@ ImageWriterParameters_destruct
 ImageWriterParameters*
 ImageWriterParameters_createFile
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* path,
     ImageWriterFormat format
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = path },
                                {.tag = Arcadia_ValueTag_Integer32, .integer32Value = format }, };
-  ImageWriterParameters* self = R_allocateObject(process, _ImageWriterParameters_getType(process), 2, &argumentValues[0]);
+  ImageWriterParameters* self = Arcadia_allocateObject(thread, _ImageWriterParameters_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
 ImageWriterParameters*
 ImageWriterParameters_createByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* byteBuffer,
     ImageWriterFormat format
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = byteBuffer },
                                {.tag = Arcadia_ValueTag_Integer32, .integer32Value = format }, };
-  ImageWriterParameters* self = R_allocateObject(process, _ImageWriterParameters_getType(process), 2, &argumentValues[0]);
+  ImageWriterParameters* self = Arcadia_allocateObject(thread, _ImageWriterParameters_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
 Arcadia_BooleanValue
 ImageWriterParameters_hasPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(self->object);
-  return Arcadia_Type_isSubType(type, _Arcadia_String_getType(process));
+  return Arcadia_Type_isSubType(thread, type, _Arcadia_String_getType(thread));
 }
 
 Arcadia_String*
 ImageWriterParameters_getPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   )
 {
-  if (!ImageWriterParameters_hasPath(process, self)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process_jump(process);
+  if (!ImageWriterParameters_hasPath(thread, self)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
   }
   return (Arcadia_String*)self->object;
 }
@@ -179,24 +180,24 @@ ImageWriterParameters_getPath
 Arcadia_BooleanValue
 ImageWriterParameters_hasByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(self->object);
-  return Arcadia_Type_isSubType(type, _Arcadia_ByteBuffer_getType(process));
+  return Arcadia_Type_isSubType(thread, type, _Arcadia_ByteBuffer_getType(thread));
 }
 
 Arcadia_ByteBuffer*
 ImageWriterParameters_getByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   )
 {
-  if (!ImageWriterParameters_hasByteBuffer(process, self)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process_jump(process);
+  if (!ImageWriterParameters_hasByteBuffer(thread, self)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
   }
   return (Arcadia_ByteBuffer*)self->object;
 }
@@ -204,6 +205,7 @@ ImageWriterParameters_getByteBuffer
 ImageWriterFormat
 ImageWriterParameters_getFormat
   (
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   )
 {

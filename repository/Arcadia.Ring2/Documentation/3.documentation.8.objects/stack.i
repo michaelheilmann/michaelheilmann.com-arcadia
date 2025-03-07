@@ -1,9 +1,9 @@
 <h4 id="Arcadia_Stack">Stack</h4>
 <p>
-<code>R_Stack</code> represents a stack of <code>R_Value</code> objects.
-This type is allocated on the heap and values of this type are referenced by <code>R_Stack</code> pointers.
-A <code>R_Stack</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> value can be safely cast into a <code>R_Stack</code> pointer.
+<code>Arcadia_Stack</code> represents a stack of <code>Arcadia_Value</code> objects.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_Stack</code> pointers.
+A <code>Arcadia_Stack</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> value can be safely cast into a <code>Arcadia_Stack</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -12,7 +12,7 @@ An <code>R_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> 
 Arcadia_Stack*
 Arcadia_Stack_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 </code></p>
 
@@ -20,7 +20,7 @@ Arcadia_Stack_create
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -34,32 +34,42 @@ Arcadia_Stack_create
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_Stack_clear">clear</h5>
+<h5 id="Arcadia_Stack_clear">Arcadia_Stack_clear</h5>
 <p><code>
-void R_Stack_clear(R_Stack* self)
+void
+Arcadia_Stack_clear
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
 </code></p>
 
 <p>Clear this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <h5 id="Arcadia_Stack_getSize">Arcadia_Stack_getSize</h5>
 <p><code>
-R_SizeValue R_Stack_getSize(R_Stack const* self)
+Arcadia_SizeValue
+Arcadia_Stack_getSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack const* self
+  )
 </code></p>
 
 <p>Get the size of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -68,37 +78,47 @@ R_SizeValue R_Stack_getSize(R_Stack const* self)
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="Arcadia_Stack_isEmpty">Arcadia_Stack_isEmpty</h5>
 <p><code>
-R_BooleanValue R_Stack_isEmpty(R_Stack* self)
+Arcadia_BooleanValue
+Arcadia_Stack_isEmpty
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
 </code></p>
 
 <p>Get if this stack is empty.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
-<p><code>R_BooleanValue_True</code> if this stack is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+<p><code>Arcadia_BooleanValue_True</code> if this stack is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="Arcadia_Stack_peek">Arcadia_Stack_peek</h5>
 <p><code>
-R_Value R_Stack_peek(R_Stack* self)
+Arcadia_Value
+Arcadia_Stack_peek
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
 </code></p>
 
 <p>Peek at the value on top of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Stack self </td><td>A pointer to this stack.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -111,6 +131,7 @@ R_Value R_Stack_peek(R_Stack* self)
 Arcadia_Value
 Arcadia_Stack_pop
   (
+    Arcadia_Thread* thread,
     Arcadia_Stack* self
   )
 </code></p>
@@ -119,7 +140,7 @@ Arcadia_Stack_pop
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_Stack* self                     </td><td>A pointer to this stack.</td></tr>
 </table>
 
@@ -133,6 +154,7 @@ Arcadia_Stack_pop
 void
 Arcadia_Stack_push
   (
+    Arcadia_Thread* thread,
     Arcadia_Stack* self,
     Arcadia_Value value
   )
@@ -142,7 +164,7 @@ Arcadia_Stack_push
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_Stack* self            </td><td>A pointer to this stack.</td></tr>
   <tr><td>Arcadia_Value value            </td><td>The value to push.</td></tr>
 </table>

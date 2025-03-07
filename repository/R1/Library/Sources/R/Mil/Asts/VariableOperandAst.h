@@ -36,7 +36,7 @@ struct Arcadia_Mil_VariableOperandAst {
 Arcadia_Mil_VariableOperandAst*
 Arcadia_Mil_VariableOperandAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* value
   );
 

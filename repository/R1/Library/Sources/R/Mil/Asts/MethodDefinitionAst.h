@@ -36,7 +36,7 @@ struct Arcadia_Mil_MethodDefinitionAst {
 Arcadia_Mil_MethodDefinitionAst*
 Arcadia_Mil_MethodDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* nativeName,
     Arcadia_String* methodName,
     Arcadia_List* methodParameters,

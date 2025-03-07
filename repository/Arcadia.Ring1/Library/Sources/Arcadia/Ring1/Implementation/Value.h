@@ -20,6 +20,8 @@
 
 #include "Arcadia/Ring1/Implementation/Atoms.h"
 
+#include "Arcadia/Ring1/Implementation/BigInteger/Include.h"
+
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
@@ -51,31 +53,33 @@
 
 #define Arcadia_ValueTag_Atom (1)
 
-#define Arcadia_ValueTag_Boolean (2)
+#define Arcadia_ValueTag_BigInteger (2)
 
-#define Arcadia_ValueTag_ForeignProcedure (3)
+#define Arcadia_ValueTag_Boolean (3)
 
-#define Arcadia_ValueTag_ImmutableByteArray (4)
-#define Arcadia_ValueTag_ImmutableUtf8String (5)
+#define Arcadia_ValueTag_ForeignProcedure (4)
 
-#define Arcadia_ValueTag_Integer16 (6)
-#define Arcadia_ValueTag_Integer32 (7)
-#define Arcadia_ValueTag_Integer64 (8)
-#define Arcadia_ValueTag_Integer8 (9)
+#define Arcadia_ValueTag_ImmutableByteArray (5)
+#define Arcadia_ValueTag_ImmutableUtf8String (6)
 
-#define Arcadia_ValueTag_Natural16 (10)
-#define Arcadia_ValueTag_Natural32 (11)
-#define Arcadia_ValueTag_Natural64 (12)
-#define Arcadia_ValueTag_Natural8 (13)
+#define Arcadia_ValueTag_Integer16 (7)
+#define Arcadia_ValueTag_Integer32 (8)
+#define Arcadia_ValueTag_Integer64 (9)
+#define Arcadia_ValueTag_Integer8 (10)
 
-#define Arcadia_ValueTag_ObjectReference (14)
+#define Arcadia_ValueTag_Natural16 (11)
+#define Arcadia_ValueTag_Natural32 (12)
+#define Arcadia_ValueTag_Natural64 (13)
+#define Arcadia_ValueTag_Natural8 (14)
 
-#define Arcadia_ValueTag_Real32 (15)
-#define Arcadia_ValueTag_Real64 (16)
+#define Arcadia_ValueTag_ObjectReference (15)
 
-#define Arcadia_ValueTag_Size (17)
+#define Arcadia_ValueTag_Real32 (16)
+#define Arcadia_ValueTag_Real64 (17)
 
-#define Arcadia_ValueTag_Type (18)
+#define Arcadia_ValueTag_Size (18)
+
+#define Arcadia_ValueTag_Type (19)
 
 // The tag for type "Void" must be 0.
 #define Arcadia_ValueTag_Void (0)
@@ -88,6 +92,8 @@ typedef struct Arcadia_Value {
     Prefix##_##Suffix##Value Variable##Value;
 
     Define(Arcadia, Atom, atom)
+
+    Define(Arcadia, BigInteger, bigInteger)
 
     Define(Arcadia, Boolean, boolean)
 
@@ -156,6 +162,8 @@ Arcadia_Value_getTag
 
 Define(Arcadia, Atom, atom)
 
+Define(Arcadia, BigInteger, bigInteger)
+
 Define(Arcadia, Boolean, boolean)
 
 Define(Arcadia, ForeignProcedure, foreignProcedure)
@@ -189,21 +197,21 @@ Define(Arcadia, Void, void)
 void
 Arcadia_Value_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self
   );
 
 Arcadia_TypeValue
 Arcadia_Value_getType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self
   );
 
 Arcadia_BooleanValue
 Arcadia_Value_isEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   );
@@ -211,7 +219,7 @@ Arcadia_Value_isEqualTo
 Arcadia_BooleanValue
 Arcadia_Value_isNotEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   );
@@ -219,7 +227,7 @@ Arcadia_Value_isNotEqualTo
 Arcadia_BooleanValue
 Arcadia_Value_isLowerThan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   );
@@ -227,7 +235,7 @@ Arcadia_Value_isLowerThan
 Arcadia_BooleanValue
 Arcadia_Value_isLowerThanOrEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   );
@@ -235,7 +243,7 @@ Arcadia_Value_isLowerThanOrEqualTo
 Arcadia_BooleanValue
 Arcadia_Value_isGreaterThan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   );
@@ -243,7 +251,7 @@ Arcadia_Value_isGreaterThan
 Arcadia_BooleanValue
 Arcadia_Value_isGreaterThanOrEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* self,
     Arcadia_Value const* other
   );
@@ -251,7 +259,7 @@ Arcadia_Value_isGreaterThanOrEqualTo
 Arcadia_SizeValue
 Arcadia_Value_getHash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self
   );
 

@@ -65,6 +65,9 @@ macro(ConfigureWarningsAndErrors target)
     
     # C4029: declared formal parameter list different from definition
     list(APPEND ${target}.CompileOptions "/we4029")
+    
+    # C4717: 'function' : recursive on all control paths, function will cause runtime stack overflow
+    list(APPEND ${target}.CompileOptions "/we4717")
 
     # The quotes around "${${target}.CompileOptions}" concatenate the list elements to a single string separated by semicolons.
     set_source_files_properties(${${target}.SourceFiles} PROPERTIES COMPILE_OPTIONS "${${target}.CompileOptions}")

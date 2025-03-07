@@ -27,11 +27,11 @@ main1
     char** argv
   )
 {
-  Arcadia_String* s = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1));
-  Arcadia_Object_lock(process, s);
+  Arcadia_String* s = Arcadia_String_create_pn(Arcadia_Process_getThread(process), Arcadia_ImmutableByteArray_create(Arcadia_Process_getThread(process), u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1));
+  Arcadia_Object_lock(Arcadia_Process_getThread(process), s);
   Arcadia_Process_stepArms(process);
   Arcadia_Process_stepArms(process);
-  Arcadia_Object_unlock(process, s);
+  Arcadia_Object_unlock(Arcadia_Process_getThread(process), s);
 }
 
 int
@@ -46,12 +46,12 @@ main
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
   }
-  Arcadia_Process_popJumpTarget(process);
-  Arcadia_Status status = Arcadia_Process_getStatus(process);
+  Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
+  Arcadia_Status status = Arcadia_Thread_getStatus(Arcadia_Process_getThread(process));
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

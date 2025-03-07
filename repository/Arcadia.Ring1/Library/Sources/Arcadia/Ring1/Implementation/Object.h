@@ -26,7 +26,7 @@ typedef struct Arcadia_Object Arcadia_Object;
 Arcadia_TypeValue
 _Arcadia_Object_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 struct Arcadia_Object {
@@ -34,7 +34,7 @@ struct Arcadia_Object {
 };
 
 #define Rex_superTypeConstructor(_process, _type, ...) \
-  Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(_type))->objectTypeOperations->construct(_process, __VA_ARGS__)
+  Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(Arcadia_Process_getThread(_process), _type))->objectTypeOperations->construct(_process, __VA_ARGS__)
 
 /// R(untime) ex(tension) macro.
 /// @param _cilName, _cilParentName UTF8 string literals for the Common Intermediate Language type names of the type and its parent type.
@@ -43,7 +43,7 @@ struct Arcadia_Object {
   Arcadia_TypeValue \
   _##_cName##_getType \
     ( \
-      Arcadia_Process* process \
+      Arcadia_Thread* thread \
     );
 
 /// R(untime) ex(tension) macro.
@@ -63,12 +63,12 @@ struct Arcadia_Object {
   Arcadia_TypeValue \
   _##_cName##_getType \
     ( \
-      Arcadia_Process* process \
+      Arcadia_Thread* thread \
     ) \
   { \
     if (!g_##_cName##_type) { \
-      Arcadia_TypeValue parentType = _##_cParentName##_getType(process); \
-      g_##_cName##_type = Arcadia_registerObjectType(process, _cilName, sizeof(_cilName) - 1, sizeof(_cName), parentType, _cTypeOperations, &_##_cName##_typeDestructing); \
+      Arcadia_TypeValue parentType = _##_cParentName##_getType(thread); \
+      g_##_cName##_type = Arcadia_registerObjectType(thread, _cilName, sizeof(_cilName) - 1, sizeof(_cName), parentType, _cTypeOperations, &_##_cName##_typeDestructing); \
     } \
     return g_##_cName##_type; \
   }
@@ -84,9 +84,9 @@ struct Arcadia_Object {
 /// @error Core.Status.ArgumentValueInvalid if "type" is "NULL"
 /// @error Core.Status.AllocationFailed if step a) fails
 void*
-R_allocateObject
+Arcadia_allocateObject
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_TypeValue type,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -95,7 +95,7 @@ R_allocateObject
 void
 Arcadia_Object_setType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void* self,
     Arcadia_TypeValue type
   );
@@ -105,7 +105,7 @@ Arcadia_Object_setType
 void
 Arcadia_Object_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void* self
   );
 
@@ -114,7 +114,7 @@ Arcadia_Object_visit
 void
 Arcadia_Object_lock
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void* self
   );
 
@@ -123,7 +123,7 @@ Arcadia_Object_lock
 void
 Arcadia_Object_unlock
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void* self
   );
 

@@ -1,4 +1,4 @@
-procedure fibonacci (a) {
+procedure fibonacci (variable a) {
   b = isLowerThan a, 0
   b1 = isEqualTo a, 0
   b2 = isEqualTo a, 1

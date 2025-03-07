@@ -30,7 +30,7 @@ Rex_declareObjectType(u8"Arcadia.MilKeywords", Arcadia_Mil_Keywords, u8"Arcadia.
 Arcadia_Mil_Keywords*
 Arcadia_Mil_Keywords_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 /// @brief Add a MIL keyword.
@@ -40,7 +40,7 @@ Arcadia_Mil_Keywords_create
 void
 Arcadia_Mil_Keywords_add
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Keywords* self,
     Arcadia_String* string,
     Arcadia_Natural32Value type
@@ -54,7 +54,7 @@ Arcadia_Mil_Keywords_add
 Arcadia_BooleanValue
 Arcadia_Mil_Keywords_scan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Keywords* self,
     Arcadia_String* string,
     Arcadia_Natural32Value* tokenType

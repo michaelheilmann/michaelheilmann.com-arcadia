@@ -24,7 +24,7 @@
 void
 _Visuals_Linux_writeBmpToByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* pixelBuffer,
     Arcadia_ByteBuffer* byteBuffer
   );

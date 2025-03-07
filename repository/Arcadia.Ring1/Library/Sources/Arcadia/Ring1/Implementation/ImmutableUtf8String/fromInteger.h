@@ -22,34 +22,34 @@
 #include "Arcadia/Ring1/Implementation/Integer32.h"
 #include "Arcadia/Ring1/Implementation/Integer64.h"
 #include "Arcadia/Ring1/Implementation/Integer8.h"
-#include "Arcadia/Ring1/Implementation/Process1.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
 
 Arcadia_ImmutableUtf8String*
 _createFromInteger16
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer16Value integer16Value
   );
 
 Arcadia_ImmutableUtf8String*
 _createFromInteger32
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer32Value integer32Value
   );
 
 Arcadia_ImmutableUtf8String*
 _createFromInteger64
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer64Value integer64Value
   );  
 
 Arcadia_ImmutableUtf8String*
 _createFromInteger8
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer8Value integer8Value
   );
 

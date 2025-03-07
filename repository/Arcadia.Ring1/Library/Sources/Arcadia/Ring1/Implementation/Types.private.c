@@ -94,23 +94,23 @@ TypeNode_visitCallback
     TypeNode* typeNode
   )
 {
-  Arcadia_Atom_visit(process, typeNode->typeName);
+  Arcadia_Atom_visit(Arcadia_Process_getThread(process), typeNode->typeName);
 }
 
 static TypeNodes*
 TypeNodes_create
   (
-    Arcadia_Process1* process
+    Arcadia_Process* process
   )
 { 
   TypeNodes* typeNode = NULL;
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Process1_allocateUnmanaged(process, &typeNode, sizeof(TypeNodes));
-    Arcadia_Process1_popJumpTarget(process);
+    Arcadia_Process_allocateUnmanaged(process, &typeNode, sizeof(TypeNodes));
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
-    Arcadia_Process1_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
     return NULL;
   }
   typeNode->typeNodes = NULL;
@@ -120,7 +120,7 @@ TypeNodes_create
 static void
 TypeNodes_destroy
   (
-    Arcadia_Process1* process,
+    Arcadia_Process* process,
     TypeNodes* typeNodes
   )
 {
@@ -128,12 +128,12 @@ TypeNodes_destroy
     // At each iteration, remove the leaves of the type tree.
     TypeNode** previous = &typeNodes->typeNodes;
     TypeNode* current = typeNodes->typeNodes;
-    if (!Arcadia_Type_hasChildren(current)) {
+    if (!Arcadia_Type_hasChildren(Arcadia_Process_getThread(process), current)) {
       TypeNode* node = current;
       *previous = current->next;
       current = current->next;
       node->typeDestructing(NULL);
-      Arcadia_Process1_unlockObject(process, node);
+      Arcadia_Process_unlockObject(process, node);
     } else {
       previous = &current->next;
       current = current->next;
@@ -144,6 +144,7 @@ TypeNodes_destroy
 Arcadia_SizeValue
 Arcadia_Type_getValueSize
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
 { return ((TypeNode const*)self)->valueSize; }
@@ -151,6 +152,7 @@ Arcadia_Type_getValueSize
 Arcadia_TypeValue
 Arcadia_Type_getParentObjectType
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
 { return ((TypeNode const*)self)->parentObjectType; }
@@ -184,15 +186,16 @@ Arcadia_Type_getDestructObjectCallbackFunction
 Arcadia_BooleanValue
 Arcadia_Type_hasChildren
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
 {
-  if (!Arcadia_Type_isObjectKind(self)) {
+  if (!Arcadia_Type_isObjectKind(thread, self)) {
     return Arcadia_BooleanValue_False;
   }
   for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Type_isObjectKind(typeNode)) {
-      if (Arcadia_Type_getParentObjectType(typeNode) == (TypeNode const*)self) {
+    if (Arcadia_Type_isObjectKind(thread, typeNode)) {
+      if (Arcadia_Type_getParentObjectType(thread, typeNode) == (TypeNode const*)self) {
         return Arcadia_BooleanValue_True;
       }
     }
@@ -203,6 +206,7 @@ Arcadia_Type_hasChildren
 Arcadia_TypeKind
 Arcadia_Type_getKind
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
 { return ((TypeNode*)self)->kind; }
@@ -210,22 +214,22 @@ Arcadia_Type_getKind
 Arcadia_TypeValue
 Arcadia_registerInternalType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* name,
     size_t nameLength,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(process, Arcadia_AtomKind_Name, name, nameLength);
+  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
   for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Atom_isEqualTo(typeNode->typeName, typeName)) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TypeExists);
-      Arcadia_Process_jump(process);
+    if (Arcadia_Atom_isEqualTo(thread, typeNode->typeName, typeName)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
+      Arcadia_Thread_jump(thread);
     }
   }
   TypeNode* typeNode = NULL;
-  Arcadia_Process_allocate(process, &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
   typeNode->kind = Arcadia_TypeKind_Internal;
   typeNode->typeName = typeName;
   typeNode->typeOperations = typeOperations;
@@ -239,7 +243,7 @@ Arcadia_registerInternalType
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
 
-  Arcadia_Process_lockObject(process, typeNode);
+  Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode);
   
   return typeNode;
 }
@@ -247,22 +251,22 @@ Arcadia_registerInternalType
 Arcadia_TypeValue
 Arcadia_registerScalarType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* name,
     size_t nameLength,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(process, Arcadia_AtomKind_Name, name, nameLength);
+  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
   for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Atom_isEqualTo(typeNode->typeName, typeName)) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TypeExists);
-      Arcadia_Process_jump(process);
+    if (Arcadia_Atom_isEqualTo(thread, typeNode->typeName, typeName)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
+      Arcadia_Thread_jump(thread);
     }
   }
   TypeNode* typeNode = NULL;
-  Arcadia_Process_allocate(process, &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
   typeNode->kind = Arcadia_TypeKind_Scalar;
   typeNode->typeName = typeName;
   typeNode->typeOperations = typeOperations;
@@ -276,7 +280,7 @@ Arcadia_registerScalarType
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
 
-  Arcadia_Process_lockObject(process, typeNode);
+  Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode);
 
   return typeNode;
 }
@@ -284,7 +288,7 @@ Arcadia_registerScalarType
 Arcadia_TypeValue
 Arcadia_registerObjectType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* name,
     size_t nameLength,
     size_t valueSize,
@@ -293,21 +297,21 @@ Arcadia_registerObjectType
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(process, Arcadia_AtomKind_Name, name, nameLength);
+  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
   for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Atom_isEqualTo(typeNode->typeName, typeName)) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_TypeExists);
-      Arcadia_Process_jump(process);
+    if (Arcadia_Atom_isEqualTo(thread, typeNode->typeName, typeName)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
+      Arcadia_Thread_jump(thread);
     }
   }
   TypeNode* typeNode = NULL;
-  Arcadia_Process_allocate(process, &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
   typeNode->kind = Arcadia_TypeKind_Object;
   typeNode->typeName = typeName;
   typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = parentObjectType;
   if (typeNode->parentObjectType) {
-    if (Arcadia_Process_lockObject(process, typeNode->parentObjectType)) { /* @todo: Can raise due to allocation failure or lock count overflow. */
+    if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode->parentObjectType)) { /* @todo: Can raise due to allocation failure or lock count overflow. */
       fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
     }
   }
@@ -321,7 +325,7 @@ Arcadia_registerObjectType
   typeNode->next = g_typeNodes->typeNodes;
   g_typeNodes->typeNodes = typeNode;
 
-  Arcadia_Process_lockObject(process, typeNode); /* @todo Can raise due to allocation failure. Can we built-in a guarantee that at least one lock is always available? */
+  Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode); /* @todo Can raise due to allocation failure. Can we built-in a guarantee that at least one lock is always available? */
 
   return typeNode;
 }
@@ -329,6 +333,7 @@ Arcadia_registerObjectType
 Arcadia_BooleanValue
 Arcadia_Type_isSubType
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self,
     Arcadia_TypeValue other
   )
@@ -355,12 +360,12 @@ Arcadia_Type_isSubType
 Arcadia_TypeValue
 Arcadia_getType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* name,
     size_t nameLength
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(process, Arcadia_AtomKind_Name, name, nameLength);
+  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
   for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
     if (typeNode->typeName == typeName) {
       return typeNode;
@@ -370,8 +375,8 @@ Arcadia_getType
   fwrite(name, 1, nameLength, stderr);
   fwrite("` not found", 1, sizeof("` not found") - 1, stderr);
   fwrite("\n", 1, sizeof("\n") - 1, stderr);
-  Arcadia_Process_setStatus(process, Arcadia_Status_TypeNotExists);
-  Arcadia_Process_jump(process);
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeNotExists);
+  Arcadia_Thread_jump(thread);
 }
 
 Arcadia_AtomValue
@@ -397,9 +402,10 @@ Arcadia_Type_getOperations
 Arcadia_SizeValue
 Arcadia_Type_hash
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
-{ return Arcadia_Atom_getHash(Arcadia_Type_getName(self)); }
+{ return Arcadia_Atom_getHash(thread, Arcadia_Type_getName(self)); }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -415,11 +421,11 @@ memoryTypeDestructing
 Arcadia_TypeValue
 _Arcadia_Memory_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   if (!g_memoryType) {
-    g_memoryType = Arcadia_registerInternalType(process, u8"Arcadia.Memory", sizeof(u8"Arcadia.Memory") - 1, NULL, &memoryTypeDestructing);
+    g_memoryType = Arcadia_registerInternalType(thread, u8"Arcadia.Memory", sizeof(u8"Arcadia.Memory") - 1, NULL, &memoryTypeDestructing);
   }
   return g_memoryType;
 }
@@ -440,11 +446,11 @@ typeTypeDestructing
 Arcadia_TypeValue
 _Arcadia_Type_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   if (!g_typeType) {
-    g_typeType = Arcadia_registerInternalType(process, u8"Arcadia.Type", sizeof(u8"Arcadia.Type") - 1, NULL, &typeTypeDestructing);
+    g_typeType = Arcadia_registerInternalType(thread, u8"Arcadia.Type", sizeof(u8"Arcadia.Type") - 1, NULL, &typeTypeDestructing);
   }
   return g_typeType;
 }
@@ -465,11 +471,11 @@ atomTypeDestructing
 Arcadia_TypeValue
 _Arcadia_AtomValue_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 { 
   if (!g_atomType) {
-    g_atomType = Arcadia_registerInternalType(process, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, NULL, &atomTypeDestructing);
+    g_atomType = Arcadia_registerInternalType(thread, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, NULL, &atomTypeDestructing);
   }
   return g_atomType;
 }
@@ -481,7 +487,7 @@ Arcadia_DefineModule("Arcadia.Types", Arcadia_Types);
 static void
 _Arcadia_Types_onPreMark
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     bool purgeCache
   )
 {/*Intentionally empty.*/}
@@ -489,7 +495,7 @@ _Arcadia_Types_onPreMark
 static void
 _Arcadia_Types_onFinalize
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     size_t* destroyed
   )
 {
@@ -499,45 +505,46 @@ _Arcadia_Types_onFinalize
 static void
 _Arcadia_Types_onStartUp
   (
-    Arcadia_Process1* process
+    Arcadia_Thread* thread
   )
 {
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   if (g_referenceCount == UINT32_MAX) {
     Arcadia_logf(Arcadia_LogFlags_Error, "corrupted reference counter\n");
-    Arcadia_Process1_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if (g_referenceCount == 0) {
     if (!g_typeNodeRegistered) {
-      Arcadia_Process1_registerType(process, TypeNodeName, sizeof(TypeNodeName) - 1, process, &TypeNode_typeRemovedCallback, &TypeNode_visitCallback, &TypeNode_finalizeCallback);
+      Arcadia_Process_registerType(process, TypeNodeName, sizeof(TypeNodeName) - 1, process, &TypeNode_typeRemovedCallback, &TypeNode_visitCallback, &TypeNode_finalizeCallback);
       g_typeNodeRegistered = Arcadia_BooleanValue_True;
     }
-    Arcadia_Atoms_getModule(process)->onStartUp(process);
+    Arcadia_Atoms_getModule(process)->onStartUp(thread);
     g_typeNodes = TypeNodes_create(process);
     if (!g_typeNodes) {
-      Arcadia_Atoms_getModule(process)->onShutDown(process);
-      Arcadia_Process1_jump(process);
+      Arcadia_Atoms_getModule(process)->onShutDown(thread);
+      Arcadia_Thread_jump(thread);
     }
     Arcadia_JumpTarget jumpTarget;
-    Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Process1_addArmsPreMarkCallback(process, &_Arcadia_Types_onPreMark);
-      Arcadia_Process1_addArmsVisitCallback(process, &_Arcadia_Types_onVisit);
-      Arcadia_Process1_addArmsFinalizeCallback(process, &_Arcadia_Types_onFinalize);
-      Arcadia_Process1_popJumpTarget(process);
+      Arcadia_Process_addArmsPreMarkCallback(process, &_Arcadia_Types_onPreMark);
+      Arcadia_Process_addArmsVisitCallback(process, &_Arcadia_Types_onVisit);
+      Arcadia_Process_addArmsFinalizeCallback(process, &_Arcadia_Types_onFinalize);
+      Arcadia_Thread_popJumpTarget(thread);
     } else {
-      Arcadia_Process1_popJumpTarget(process);
-      Arcadia_Process1_removeArmsFinalizeCallback(process, &_Arcadia_Types_onFinalize);
-      Arcadia_Process1_removeArmsVisitCallback(process, &_Arcadia_Types_onVisit);
-      Arcadia_Process1_removeArmsPreMarkCallback(process, &_Arcadia_Types_onPreMark);
+      Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
+      Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Types_onFinalize);
+      Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Types_onVisit);
+      Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Types_onPreMark);
       TypeNodes_destroy(process, g_typeNodes);
       g_typeNodes = NULL;
-      Arcadia_Status status = Arcadia_Process1_runArms(process, true);
+      Arcadia_Status status = Arcadia_Process_runArms(process, true);
       if (status) {
         /*Intentionally empty.*/
       }
-      Arcadia_Atoms_getModule(process)->onShutDown(process);
-      Arcadia_Process1_jump(process);
+      Arcadia_Atoms_getModule(process)->onShutDown(thread);
+      Arcadia_Thread_jump(thread);
     }
   }
   g_referenceCount++;
@@ -546,37 +553,38 @@ _Arcadia_Types_onStartUp
 static void
 _Arcadia_Types_onShutDown
   (
-    Arcadia_Process1* process
+    Arcadia_Thread* thread
   )
 {
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   if (g_referenceCount == 0) {
     Arcadia_logf(Arcadia_LogFlags_Error, "corrupted reference counter\n");
-    Arcadia_Process1_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
   }
   g_referenceCount--;
   if (0 == g_referenceCount) {
     Arcadia_Status status;
-    status = Arcadia_Process1_runArms(process, true);
+    status = Arcadia_Process_runArms(process, true);
     if (status) {
       /* Intentionally empty.*/
     }
     TypeNodes_destroy(process, g_typeNodes);
     g_typeNodes = NULL;
-    Arcadia_Process1_removeArmsFinalizeCallback(process, &_Arcadia_Types_onFinalize);
-    Arcadia_Process1_removeArmsVisitCallback(process, &_Arcadia_Types_onVisit);
-    Arcadia_Process1_removeArmsPreMarkCallback(process, &_Arcadia_Types_onPreMark);
-    status = Arcadia_Process1_runArms(process, true);
+    Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Types_onFinalize);
+    Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Types_onVisit);
+    Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Types_onPreMark);
+    status = Arcadia_Process_runArms(process, true);
     if (status) {
       /* Intentionally empty.*/
     }
-    Arcadia_Atoms_getModule(process)->onShutDown(process);
+    Arcadia_Atoms_getModule(process)->onShutDown(thread);
   }
 }
 
 static void
 _Arcadia_Types_onVisit
   (
-    Arcadia_Process1* process
+    Arcadia_Thread* thread
   )
 {/*Intentionally empty.*/}

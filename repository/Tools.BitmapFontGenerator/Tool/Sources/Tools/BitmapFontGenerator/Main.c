@@ -28,50 +28,51 @@ main1
     char** argv
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value target;
   Arcadia_Value_setVoidValue(&target,Arcadia_VoidValue_Void);
-  Arcadia_List* arguments = Arcadia_List_create(process);
+  Arcadia_List* arguments = Arcadia_List_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
-    Arcadia_String* argument = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), argv[argi], strlen(argv[argi])));
-    Arcadia_List_appendObjectReferenceValue(process, arguments, (Arcadia_ObjectReferenceValue)argument);
+    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
+    Arcadia_List_appendObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, arguments); i < n; ++i) {
-    Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(process, arguments, i);
-    Arcadia_Utf8StringReader *r = Arcadia_Utf8StringReader_create(process, argument);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, arguments); i < n; ++i) {
+    Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
+    Arcadia_Utf8StringReader *r = Arcadia_Utf8StringReader_create(thread, argument);
     Arcadia_String *key = NULL,
              *value = NULL;
-    if (!Arcadia_CommandLine_parseArgument(process, (Arcadia_Utf8Reader*)r, &key, &value)) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Process_jump(process);
+    if (!Arcadia_CommandLine_parseArgument(thread, (Arcadia_Utf8Reader*)r, &key, &value)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     }
-    if (Arcadia_String_isEqualTo_pn(process, key, u8"target", sizeof(u8"target") - 1)) {
+    if (Arcadia_String_isEqualTo_pn(thread, key, u8"target", sizeof(u8"target") - 1)) {
       if (!value) {
-        Arcadia_CommandLine_raiseNoValueError(process, key);
+        Arcadia_CommandLine_raiseNoValueError(thread, key);
       }
       Arcadia_Value_setObjectReferenceValue(&target, value);
     } else {
-      Arcadia_CommandLine_raiseUnknownArgumentError(process, key, value);
+      Arcadia_CommandLine_raiseUnknownArgumentError(thread, key, value);
     }
-    fwrite(Arcadia_String_getBytes(process, key), 1, Arcadia_String_getNumberOfBytes(process, key), stdout);
+    fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
     if (value) {
       fwrite(u8"=", 1, sizeof(u8"=") - 1, stdout);
-      fwrite(Arcadia_String_getBytes(process, value), 1, Arcadia_String_getNumberOfBytes(process, value), stdout);
+      fwrite(Arcadia_String_getBytes(thread, value), 1, Arcadia_String_getNumberOfBytes(thread, value), stdout);
     }
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
   if (Arcadia_Value_isVoidValue(&target)) {
-    Arcadia_CommandLine_raiseRequiredArgumentMissingError(process, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"target", sizeof(u8"target") - 1)));
+    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"target", sizeof(u8"target") - 1)));
   }
-  TextureFontWindows* font = TextureFontWindows_create(process);
-  PixelBuffer* pixelBuffer = TextureFontWindows_getPixelBuffer(process, font);
+  TextureFontWindows* font = TextureFontWindows_create(thread);
+  PixelBuffer* pixelBuffer = TextureFontWindows_getPixelBuffer(thread, font);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(process);
+  ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(thread);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create();
+  ImageWriter* imageWriter = (ImageWriter*)NativeLinuxImageWriter_create(thread);
 #else
   #error("environment not (yet) supported")
 #endif
-  ImageWriter_writePngToPath(process, imageWriter, pixelBuffer, Arcadia_Value_getObjectReferenceValue(&target));
+  ImageWriter_writePngToPath(thread, imageWriter, pixelBuffer, Arcadia_Value_getObjectReferenceValue(&target));
 }
 
 int
@@ -85,13 +86,15 @@ main
   if (Arcadia_Process_get(&process)) {
     return EXIT_FAILURE;
   }
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
   }
-  Arcadia_Process_popJumpTarget(process);
-  Arcadia_Status status = Arcadia_Process_getStatus(process);
+  Arcadia_Thread_popJumpTarget(thread);
+  Arcadia_Status status = Arcadia_Thread_getStatus(thread);
+  thread = NULL;
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

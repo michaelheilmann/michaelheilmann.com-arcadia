@@ -19,7 +19,7 @@
 void
 Arcadia_Arrays_resizeByAdditionalCapacity
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arms_MemoryManager* memoryManager,
     void** elements,
     Arcadia_SizeValue elementSize,
@@ -30,8 +30,8 @@ Arcadia_Arrays_resizeByAdditionalCapacity
   )
 { 
   if (!elements || !elementSize || !capacity || size > (*capacity)) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_SizeValue oldCapacity = *capacity;
   Arcadia_SizeValue newCapacity;
@@ -39,13 +39,13 @@ Arcadia_Arrays_resizeByAdditionalCapacity
   switch (strategy) {
     case Arcadia_Arrays_ResizeStrategy_Type1: {
       if (maximalCapacity - oldCapacity < requiredAdditionalCapacity) {
-        Arcadia_Process1_setStatus(process, Arcadia_Status_NotExists);
-        Arcadia_Process1_jump(process);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+        Arcadia_Thread_jump(thread);
       }
       newCapacity = oldCapacity + requiredAdditionalCapacity;
       if (Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
-        Arcadia_Process1_setStatus(process, Arcadia_Status_AllocationFailed);
-        Arcadia_Process1_jump(process);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+        Arcadia_Thread_jump(thread);
       }
       *capacity = newCapacity;
     } break;
@@ -57,42 +57,42 @@ Arcadia_Arrays_resizeByAdditionalCapacity
         currentAdditionalCapacity = currentNewCapacity - oldCapacity;
       }
       if (currentAdditionalCapacity < requiredAdditionalCapacity) {
-        Arcadia_Process1_setStatus(process, Arcadia_Status_NotExists);
-        Arcadia_Process1_jump(process);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+        Arcadia_Thread_jump(thread);
       }
       newCapacity = currentNewCapacity;
       if (Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
-        Arcadia_Process1_setStatus(process, Arcadia_Status_AllocationFailed);
-        Arcadia_Process1_jump(process);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+        Arcadia_Thread_jump(thread);
       }
       *capacity = newCapacity;
     } break;
     case Arcadia_Arrays_ResizeStrategy_Type3: {
       Arcadia_SizeValue newCapacity = maximalCapacity;
       if (requiredAdditionalCapacity > newCapacity - oldCapacity) {
-        Arcadia_Process1_setStatus(process, Arcadia_Status_NotExists);
-        Arcadia_Process1_jump(process);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+        Arcadia_Thread_jump(thread);
       }
       if (Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
-        Arcadia_Process1_setStatus(process, Arcadia_Status_AllocationFailed);
-        Arcadia_Process1_jump(process);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+        Arcadia_Thread_jump(thread);
       }
       *capacity = newCapacity;
     } break;
     case Arcadia_Arrays_ResizeStrategy_Type4: {
       Arcadia_JumpTarget jumpTarget;
-      Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
+      Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
       if (Arcadia_JumpTarget_save(&jumpTarget)) {
-        Arcadia_Arrays_resizeByAdditionalCapacity(process, memoryManager, elements, elementSize, size, capacity, requiredAdditionalCapacity, Arcadia_Arrays_ResizeStrategy_Type2);
-        Arcadia_Process1_popJumpTarget(process);
+        Arcadia_Arrays_resizeByAdditionalCapacity(thread, memoryManager, elements, elementSize, size, capacity, requiredAdditionalCapacity, Arcadia_Arrays_ResizeStrategy_Type2);
+        Arcadia_Thread_popJumpTarget(thread);
       } else {
-        Arcadia_Process1_popJumpTarget(process);
-        Arcadia_Arrays_resizeByAdditionalCapacity(process, memoryManager, elements, elementSize, size, capacity, requiredAdditionalCapacity, Arcadia_Arrays_ResizeStrategy_Type3);
+        Arcadia_Thread_popJumpTarget(thread);
+        Arcadia_Arrays_resizeByAdditionalCapacity(thread, memoryManager, elements, elementSize, size, capacity, requiredAdditionalCapacity, Arcadia_Arrays_ResizeStrategy_Type3);
       }
     } break;
     default: {
-      Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Process1_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     } break;
   };
 }
@@ -100,7 +100,7 @@ Arcadia_Arrays_resizeByAdditionalCapacity
 void
 Arcadia_Arrays_resizeByFreeCapacity
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arms_MemoryManager* memoryManager,
     void** elements,
     Arcadia_SizeValue elementSize,
@@ -111,11 +111,11 @@ Arcadia_Arrays_resizeByFreeCapacity
   )
 {
   if (!capacity || size > (*capacity)) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_SizeValue availableFreeCapacity = (*capacity) - size;
   if (availableFreeCapacity < requiredFreeCapacity) {
-    Arcadia_Arrays_resizeByAdditionalCapacity(process, memoryManager, elements, elementSize, size, capacity, requiredFreeCapacity - availableFreeCapacity, strategy);
+    Arcadia_Arrays_resizeByAdditionalCapacity(thread, memoryManager, elements, elementSize, size, capacity, requiredFreeCapacity - availableFreeCapacity, strategy);
   }
 }

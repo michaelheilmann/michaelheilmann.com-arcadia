@@ -17,6 +17,8 @@
 
 #include "Module/Audials/Include.h"
 
+#include "R/ArgumentsValidation.h"
+
 #include <objbase.h>
 #include <xaudio2.h>
 
@@ -32,51 +34,52 @@ Audials_XAudio2_startup
     Arcadia_Process* process
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
   if (FAILED(hr)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
   hr = XAudio2Create(&g_xaudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
   if (FAILED(hr)) {
     CoUninitialize();
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
   hr = IXAudio2_CreateMasteringVoice(g_xaudio2, &g_xaudio2MasteringVoice, XAUDIO2_DEFAULT_CHANNELS, XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL, AudioCategory_Other);
   if (FAILED(hr)) {
     IXAudio2_Release(g_xaudio2);
     g_xaudio2 = NULL;
     CoUninitialize();
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_JumpTarget jumpTarget;
 
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    g_sourceVoiceBuffer = Arcadia_ByteBuffer_create(process);
-    Arcadia_Process_popJumpTarget(process);
+    g_sourceVoiceBuffer = Arcadia_ByteBuffer_create(thread);
+    Arcadia_Thread_popJumpTarget(thread);
   } else {
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(thread);
     IXAudio2_Release(g_xaudio2);
     g_xaudio2 = NULL;
     CoUninitialize();
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Object_lock(process, g_sourceVoiceBuffer);
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Object_lock(thread, g_sourceVoiceBuffer);
+    Arcadia_Thread_popJumpTarget(thread);
   } else {
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(thread);
     IXAudio2_Release(g_xaudio2);
     g_xaudio2 = NULL;
     CoUninitialize();
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 }
 
@@ -95,7 +98,7 @@ Audials_XAudio2_shutdown
   IXAudio2_Release(g_xaudio2);
   g_xaudio2 = NULL;
   CoUninitialize();
-  Arcadia_Object_unlock(process, g_sourceVoiceBuffer);
+  Arcadia_Object_unlock(Arcadia_Process_getThread(process), g_sourceVoiceBuffer);
   g_sourceVoiceBuffer = NULL;
 }
 
@@ -120,7 +123,7 @@ struct Source {
 static void
 Source_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Source* self
   )
 { 
@@ -178,28 +181,20 @@ Source_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Source* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Source_getType(process);
+  Arcadia_TypeValue _type = _Source_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Value_isObjectReferenceValue(&argumentValues[0])) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
-  }
-  Arcadia_Object* objectValue = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
-  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectValue), _Arcadia_ByteBuffer_getType(process))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
-  }
-  //Arcadia_ByteBuffer* byteBufferValue = (Arcadia_ByteBuffer*)objectValue;
+  (Arcadia_ByteBuffer*)R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_ByteBuffer_getType(thread));
   _self->xAudio2SourceVoice = NULL;
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 void
@@ -222,8 +217,9 @@ Source_create
     Arcadia_ByteBuffer* bytes
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)bytes } };
-  Source* self = R_allocateObject(process, _Source_getType(process), 1, &argumentValues[0]);
+  Source* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Source_getType(thread), 1, &argumentValues[0]);
   return self;
 }
 
@@ -249,8 +245,8 @@ Audials_playSine1
 
   HRESULT hr = IXAudio2_CreateSourceVoice(g_xaudio2, &g_xaudio2SourceVoice, &waveFormatEx, 0, 1.0, NULL, NULL, NULL);
   if (FAILED(hr)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   double phase = 0.0;
   uint32_t bufferIndex = 0;
@@ -258,14 +254,14 @@ Audials_playSine1
     phase += (2 * PI) / SAMPLESPERCYCLE;
     int16_t sample = (int16_t)(sin(phase) * INT16_MAX * VOLUME);
     uint8_t bytes[2] = { (uint8_t)(sample >> 0), (uint8_t)(sample >> 8) };
-    Arcadia_ByteBuffer_append_pn(process, g_sourceVoiceBuffer, bytes, 2);
+    Arcadia_ByteBuffer_append_pn(Arcadia_Process_getThread(process), g_sourceVoiceBuffer, bytes, 2);
     bufferIndex += 2;
   }
 
   XAUDIO2_BUFFER xAudio2Buffer;
   xAudio2Buffer.Flags = XAUDIO2_END_OF_STREAM;
   xAudio2Buffer.AudioBytes = AUDIOBUFFERSIZEINBYTES;
-  xAudio2Buffer.pAudioData = Arcadia_ByteBuffer_getBytes(process, g_sourceVoiceBuffer);
+  xAudio2Buffer.pAudioData = Arcadia_ByteBuffer_getBytes(Arcadia_Process_getThread(process), g_sourceVoiceBuffer);
   xAudio2Buffer.PlayBegin = 0;
   xAudio2Buffer.PlayLength = 0;
   xAudio2Buffer.LoopBegin = 0;
@@ -274,13 +270,13 @@ Audials_playSine1
 
   hr = IXAudio2SourceVoice_SubmitSourceBuffer(g_xaudio2SourceVoice, &xAudio2Buffer, NULL);
   if (FAILED(hr)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   hr = IXAudio2SourceVoice_Start(g_xaudio2SourceVoice, UINT32_C(0), UINT32_C(0));
   if (FAILED(hr)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
 }
 

@@ -63,8 +63,9 @@ NativeWindow_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   NativeWindow* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _NativeWindow_getType(process);
+  Arcadia_TypeValue _type = _NativeWindow_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -83,116 +84,127 @@ NativeWindow_constructImpl
   _self->getTitle = NULL;
   _self->setTitle  = NULL;
   _self->getCanvasSize = NULL;
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 void
 NativeWindow_open
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindow* self
   )
-{ self->open(process, self); }
+{ self->open(thread, self); }
 
 void
 NativeWindow_close
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindow* self
   ) 
-{ self->close(process, self); }
+{ self->close(thread, self); }
 
 Arcadia_BooleanValue
 NativeWindow_getQuitRequested
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   )
-{ return self->getQuitRequested(self); }
+{ return self->getQuitRequested(thread, self); }
 
 void
 NativeWindow_setQuitRequested
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_BooleanValue quitRequested
   )
-{ self->setQuitRequested(self, quitRequested); }
+{ self->setQuitRequested(thread, self, quitRequested); }
 
 void
 NativeWindow_update
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   )
-{ self->update(self); }
+{ self->update(thread, self); }
 
 void
 NativeWindow_getRequiredBigIconSize
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ self->getRequiredBigIconSize(self, width, height); }
+{ self->getRequiredBigIconSize(thread, self, width, height); }
 
 void
 NativeWindow_getRequiredSmallIconSize
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ self->getRequiredSmallIconSize(self, width, height); }
+{ self->getRequiredSmallIconSize(thread, self, width, height); }
 
 NativeIcon*
 NativeWindow_getBigIcon
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   )
-{ return self->getBigIcon(self); }
+{ return self->getBigIcon(thread, self); }
 
 void
 NativeWindow_setBigIcon
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     NativeIcon* icon
   )
-{ self->setBigIcon(self, icon); }
+{ self->setBigIcon(thread, self, icon); }
 
 NativeIcon*
 NativeWindow_getSmallIcon
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   )
-{ return self->getSmallIcon(self); }
+{ return self->getSmallIcon(thread, self); }
 
 void
 NativeWindow_setSmallIcon
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     NativeIcon* icon
   )
-{ self->setSmallIcon(self, icon); }
+{ self->setSmallIcon(thread, self, icon); }
 
 Arcadia_String*
 NativeWindow_getTitle
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   )
-{ return self->getTitle(self); }
+{ return self->getTitle(thread, self); }
 
 void
 NativeWindow_setTitle
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_String* title
   )
-{ self->setTitle(process, self, title); }
+{ self->setTitle(thread, self, title); }
 
 void
 NativeWindow_getCanvasSize
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ self->getCanvasSize(self, width, height); }
+{ self->getCanvasSize(thread, self, width, height); }

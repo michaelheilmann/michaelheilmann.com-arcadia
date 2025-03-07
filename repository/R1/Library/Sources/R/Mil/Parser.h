@@ -31,7 +31,7 @@ Rex_declareObjectType(u8"Arcadia.Mil.Parser", Arcadia_Mil_Parser, u8"Arcadia.Obj
 Arcadia_Mil_Parser*
 Arcadia_Mil_Parser_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 /// @brief Translate the token stream into an AST.
@@ -40,7 +40,7 @@ Arcadia_Mil_Parser_create
 Arcadia_Mil_ModuleAst*
 Arcadia_Mil_Parser_run
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Parser* self
   );
 
@@ -50,7 +50,7 @@ Arcadia_Mil_Parser_run
 void
 Arcadia_Mil_Parser_setInput
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_Parser* self,
     Arcadia_Utf8Reader* input
   );

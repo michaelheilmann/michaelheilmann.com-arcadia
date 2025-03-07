@@ -53,7 +53,7 @@ struct Arcadia_FilePath {
 Arcadia_FilePath*
 Arcadia_FilePath_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 // Parse a Windows file path.
@@ -67,7 +67,7 @@ Arcadia_FilePath_create
 Arcadia_FilePath*
 Arcadia_FilePath_parseWindows
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -80,7 +80,7 @@ Arcadia_FilePath_parseWindows
 Arcadia_FilePath*
 Arcadia_FilePath_parseUnix
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -89,7 +89,7 @@ Arcadia_FilePath_parseUnix
 Arcadia_FilePath*
 Arcadia_FilePath_parseNative
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -98,7 +98,7 @@ Arcadia_FilePath_parseNative
 Arcadia_FilePath*
 Arcadia_FilePath_parseGeneric
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -106,7 +106,7 @@ Arcadia_FilePath_parseGeneric
 Arcadia_String*
 Arcadia_FilePath_toNative
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* self
   );
 
@@ -115,14 +115,14 @@ Arcadia_FilePath_toNative
 Arcadia_FilePath*
 Arcadia_FilePath_getFullPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* self
   );
 
 Arcadia_BooleanValue
 Arcadia_FilePath_isEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* self,
     Arcadia_FilePath* other
   );
@@ -133,6 +133,7 @@ Arcadia_FilePath_isEqualTo
 Arcadia_BooleanValue
 Arcadia_FilePath_isAbsolute
   (
+    Arcadia_Thread* thread,
     Arcadia_FilePath* self
   );
 
@@ -142,6 +143,7 @@ Arcadia_FilePath_isAbsolute
 Arcadia_BooleanValue
 Arcadia_FilePath_isRelative
   (
+    Arcadia_Thread* thread,
     Arcadia_FilePath* self
   );
 
@@ -151,7 +153,7 @@ Arcadia_FilePath_isRelative
 void
 Arcadia_FilePath_append
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* self,
     Arcadia_FilePath* other
   );

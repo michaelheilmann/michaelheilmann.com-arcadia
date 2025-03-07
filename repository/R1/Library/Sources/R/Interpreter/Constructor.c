@@ -31,7 +31,7 @@ R_Interpreter_Constructor_constructImpl
 static void
 R_Interpreter_Constructor_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Constructor* self
   );
 
@@ -72,68 +72,70 @@ R_Interpreter_Constructor_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   R_Interpreter_Constructor* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Interpreter_Constructor_getType(process);
+  Arcadia_TypeValue _type = _R_Interpreter_Constructor_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_ForeignProcedureValue_getType(process))) {
+  if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_ForeignProcedureValue_getType(Arcadia_Process_getThread(process)))) {
     _self->isForeign = Arcadia_BooleanValue_True;
     _self->foreignProcedure = Arcadia_Value_getForeignProcedureValue(&argumentValues[0]);
-  } else if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _R_Interpreter_Code_getType(process))) {
+  } else if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _R_Interpreter_Code_getType(thread))) {
     _self->isForeign = Arcadia_BooleanValue_False;
     _self->code = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
   } else {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 R_Interpreter_Constructor_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Constructor* self
   )
 {
   if (!self->isForeign) {
-    Arcadia_Object_visit(process, self->code);
+    Arcadia_Object_visit(thread, self->code);
   }
 }
 
 R_Interpreter_Constructor*
 R_Interpreter_Constructor_createForeign
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ForeignProcedure, .foreignProcedureValue = foreignProcedure } };
-  R_Interpreter_Constructor* self = R_allocateObject(process, _R_Interpreter_Constructor_getType(process), 1, &argumentValues[0]);
+  R_Interpreter_Constructor* self = Arcadia_allocateObject(thread, _R_Interpreter_Constructor_getType(thread), 1, &argumentValues[0]);
   return self;
 }
 
 R_Interpreter_Constructor*
 R_Interpreter_Constructor_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* code
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = code } };
-  R_Interpreter_Constructor* self = R_allocateObject(process, _R_Interpreter_Constructor_getType(process), 1, &argumentValues[0]);
+  R_Interpreter_Constructor* self = Arcadia_allocateObject(thread, _R_Interpreter_Constructor_getType(thread), 1, &argumentValues[0]);
   return self;
 }
 
 R_Interpreter_Code*
 R_Interpreter_Constructor_getCode
   (
+    Arcadia_Thread* thread,
     R_Interpreter_Constructor* self
   )
 { return self->code; }

@@ -17,6 +17,7 @@
 @{include("3.documentation.6.numeric-functions.i")}
 @{include("3.documentation.6.numeric-functions/clamp.i")}
 @{include("3.documentation.6.numeric-functions/countLeadingZeroes.i")}
+@{include("3.documentation.6.numeric-functions/countSignificandBits.i")}
 @{include("3.documentation.6.numeric-functions/hash.i")}
 @{include("3.documentation.6.numeric-functions/isPowerOfTwo.i")}
 @{include("3.documentation.6.numeric-functions/maximum.i")}

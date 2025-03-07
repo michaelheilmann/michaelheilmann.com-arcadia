@@ -35,7 +35,7 @@ struct Arcadia_String {
 Arcadia_String*
 Arcadia_String_create_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ImmutableByteArray* immutableByteArray
   );
 
@@ -43,7 +43,7 @@ Arcadia_String_create_pn
 Arcadia_String*
 Arcadia_String_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value value
   );
 
@@ -51,7 +51,7 @@ Arcadia_String_create
 Arcadia_BooleanValue
 Arcadia_String_endsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -61,7 +61,7 @@ Arcadia_String_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_String_startsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -71,14 +71,14 @@ Arcadia_String_startsWith_pn
 Arcadia_SizeValue
 Arcadia_String_getNumberOfBytes
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
 Arcadia_Natural8Value const*
 Arcadia_String_getBytes
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -86,7 +86,7 @@ Arcadia_String_getBytes
 Arcadia_Natural8Value
 Arcadia_String_getByteAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self,
     Arcadia_SizeValue index
   );
@@ -95,7 +95,7 @@ Arcadia_String_getByteAt
 Arcadia_SizeValue
 Arcadia_String_getNumberOfSymbols
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -104,6 +104,7 @@ Arcadia_String_getNumberOfSymbols
 Arcadia_String*
 Arcadia_String_getSubString
   (
+    Arcadia_Thread* thread,
     Arcadia_String const* self,
     Arcadia_SizeValue index,
     Arcadia_SizeValue length
@@ -114,7 +115,7 @@ Arcadia_String_getSubString
 Arcadia_BooleanValue
 Arcadia_String_isEqualTo_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -124,7 +125,7 @@ Arcadia_String_isEqualTo_pn
 Arcadia_BooleanValue
 Arcadia_String_toBoolean
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -132,7 +133,7 @@ Arcadia_String_toBoolean
 Arcadia_Integer16Value
 Arcadia_String_toInteger16
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -140,7 +141,7 @@ Arcadia_String_toInteger16
 Arcadia_Integer32Value
 Arcadia_String_toInteger32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -148,7 +149,7 @@ Arcadia_String_toInteger32
 Arcadia_Integer64Value
 Arcadia_String_toInteger64
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -156,7 +157,7 @@ Arcadia_String_toInteger64
 Arcadia_Integer8Value
 Arcadia_String_toInteger8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -164,7 +165,7 @@ Arcadia_String_toInteger8
 Arcadia_Natural16Value
 Arcadia_String_toNatural16
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -172,7 +173,7 @@ Arcadia_String_toNatural16
 Arcadia_Natural32Value
 Arcadia_String_toNatural32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -180,7 +181,7 @@ Arcadia_String_toNatural32
 Arcadia_Natural64Value
 Arcadia_String_toNatural64
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -188,7 +189,7 @@ Arcadia_String_toNatural64
 Arcadia_Natural8Value
 Arcadia_String_toNatural8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -196,7 +197,7 @@ Arcadia_String_toNatural8
 Arcadia_Real32Value
 Arcadia_String_toReal32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -204,7 +205,7 @@ Arcadia_String_toReal32
 Arcadia_Real64Value
 Arcadia_String_toReal64
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 
@@ -212,7 +213,7 @@ Arcadia_String_toReal64
 Arcadia_VoidValue
 Arcadia_String_toVoid
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self
   );
 

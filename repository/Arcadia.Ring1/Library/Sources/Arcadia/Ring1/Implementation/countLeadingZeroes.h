@@ -40,7 +40,7 @@
   Arcadia_SizeValue \
   Arcadia_countLeadingZeroes##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Type##Value x \
     ); 
 

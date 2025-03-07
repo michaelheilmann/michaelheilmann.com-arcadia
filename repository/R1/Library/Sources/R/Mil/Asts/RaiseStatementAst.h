@@ -42,7 +42,7 @@ struct Arcadia_Mil_RaiseStatementAst {
 Arcadia_Mil_RaiseStatementAst*
 Arcadia_Mil_RaiseStatementAst_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

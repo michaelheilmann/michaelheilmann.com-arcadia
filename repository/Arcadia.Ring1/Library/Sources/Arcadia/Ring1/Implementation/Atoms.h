@@ -64,7 +64,7 @@ typedef Arcadia_Atom* Arcadia_AtomValue;
 Arcadia_AtomValue
 Arcadia_Atoms_getOrCreateAtom
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value flags,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -72,14 +72,14 @@ Arcadia_Atoms_getOrCreateAtom
 
 /// @brief
 /// Visit this Arcadia_Atom object.
-/// @param process
-/// A pointer to the Arcadia_Process object.
+/// @param thread
+/// A pointer to the Arcadia_Thread object.
 /// @param self
 /// A pointer to this Arcadia_Atom object.
 void
 Arcadia_Atom_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self
   );
 
@@ -92,6 +92,7 @@ Arcadia_Atom_visit
 const void*
 Arcadia_Atom_getBytes
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self
   );
 
@@ -104,6 +105,7 @@ Arcadia_Atom_getBytes
 Arcadia_SizeValue
 Arcadia_Atom_getNumberOfBytes
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self
   );
 
@@ -116,6 +118,7 @@ Arcadia_Atom_getNumberOfBytes
 Arcadia_SizeValue
 Arcadia_Atom_getHash
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self
   );
 
@@ -131,6 +134,7 @@ Arcadia_Atom_getHash
 Arcadia_BooleanValue
 Arcadia_Atom_isEqualTo
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self,
     Arcadia_AtomValue other
   );

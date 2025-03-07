@@ -35,7 +35,7 @@ struct Arcadia_Mil_BooleanLiteralOperandAst {
 Arcadia_Mil_BooleanLiteralOperandAst*
 Arcadia_Mil_BooleanLiteralOperandAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* value
   );
 

@@ -31,6 +31,7 @@
 Arcadia_Natural64Value
 Arcadia_getTickCount
   (
+    Arcadia_Thread* thread
   )
 {
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem

@@ -29,7 +29,7 @@
 void
 Arcadia_Tests_Utf8_read1
   (
-    Arcadia_Process* process
+    Arcadia_Thread* threadprocess
   );
 
 #endif // R1_TESTS_UTF8_READ_H_INCLUDED

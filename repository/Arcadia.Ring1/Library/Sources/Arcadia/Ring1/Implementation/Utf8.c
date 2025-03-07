@@ -168,8 +168,8 @@ Arcadia_Utf8_encodeCodePoints
       x[3] |= 0b10000000;
       (*callbackFunction)(process, callbackContext, &x[0], Arcadia_SizeValue_Literal(4));
     } else {
-      Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EncodingInvalid);
+      Arcadia_Thread_jump(Arcadia_Process_getThread(process));
     }
   }
 }
@@ -195,14 +195,14 @@ Arcadia_Utf8_encodeBytes
     } else if (x <= 0x7ff) {
       (*callbackFunction)(process, callbackContext, current, Arcadia_SizeValue_Literal(1));
       if (end - current < 2) {
-        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-        Arcadia_Process_jump(process);
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EncodingInvalid);
+        Arcadia_Thread_jump(Arcadia_Process_getThread(process));
       }
       current++;
       for (size_t i = 1; i < 2; ++i) {
         if (0x80 != (*current) & 0xc0) {
-          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-          Arcadia_Process_jump(process);
+          Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EncodingInvalid);
+          Arcadia_Thread_jump(Arcadia_Process_getThread(process));
         }
         (*callbackFunction)(process, callbackContext, current, Arcadia_SizeValue_Literal(1));
         current++;
@@ -210,14 +210,14 @@ Arcadia_Utf8_encodeBytes
     } else if (x <= 0xffff) {
       (*callbackFunction)(process, callbackContext, current, Arcadia_SizeValue_Literal(1));
       if (end - current < 3) {
-        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-        Arcadia_Process_jump(process);
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EncodingInvalid);
+        Arcadia_Thread_jump(Arcadia_Process_getThread(process));
       }
       current++;
       for (size_t i = 1; i < 3; ++i) {
         if (0x80 != (*current) & 0xc0) {
-          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-          Arcadia_Process_jump(process);
+          Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EncodingInvalid);
+          Arcadia_Thread_jump(Arcadia_Process_getThread(process));
         }
         (*callbackFunction)(process, callbackContext, current, Arcadia_SizeValue_Literal(1));
         current++;
@@ -225,21 +225,21 @@ Arcadia_Utf8_encodeBytes
     } else if (x <= 0x10ffff) {
       (*callbackFunction)(process, callbackContext, current, Arcadia_SizeValue_Literal(1));
       if (end - current < 4) {
-        Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-        Arcadia_Process_jump(process);
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EncodingInvalid);
+        Arcadia_Thread_jump(Arcadia_Process_getThread(process));
       }
       current++;
       for (size_t i = 1; i < 4; ++i) {
         if (0x80 != (*current) & 0xc0) {
-          Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-          Arcadia_Process_jump(process);
+          Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EncodingInvalid);
+          Arcadia_Thread_jump(Arcadia_Process_getThread(process));
         }
         (*callbackFunction)(process, callbackContext, current, Arcadia_SizeValue_Literal(1));
         current++;
       }
     } else {
-      Arcadia_Process_setStatus(process, Arcadia_Status_EncodingInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EncodingInvalid);
+      Arcadia_Thread_jump(Arcadia_Process_getThread(process));
     }
   }
 }

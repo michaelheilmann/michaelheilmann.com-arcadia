@@ -24,7 +24,7 @@
 void
 Arcadia_Ring1_Tests_Support_apint10_arithmetic
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 #endif // ARCADIA_RING1_TESTS_SUPPORT_APINT10_ARITHMETIC_H_INCLUDED

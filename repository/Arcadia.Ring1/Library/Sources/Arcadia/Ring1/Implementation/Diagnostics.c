@@ -29,19 +29,19 @@ Arcadia_logfv
   if (Arcadia_LogFlags_Error == (flags & Arcadia_LogFlags_Error)) {
     va_list argumentsCopy;
     va_copy(argumentsCopy, arguments);
-    fprintf(stderr, format, argumentsCopy);
+    vfprintf(stderr, format, argumentsCopy);
     va_end(argumentsCopy);
   }
   if (Arcadia_LogFlags_Info == (flags & Arcadia_LogFlags_Info)) {
     va_list argumentsCopy;
     va_copy(argumentsCopy, arguments);
-    fprintf(stdout, format, argumentsCopy);
+    vfprintf(stdout, format, argumentsCopy);
     va_end(argumentsCopy);
   }
   if (Arcadia_LogFlags_Trace == (flags & Arcadia_LogFlags_Trace)) {
     va_list argumentsCopy;
     va_copy(argumentsCopy, arguments);
-    fprintf(stdout, format, argumentsCopy);
+    vfprintf(stdout, format, argumentsCopy);
     va_end(argumentsCopy);
   }
 }

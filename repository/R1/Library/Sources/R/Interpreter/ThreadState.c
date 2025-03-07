@@ -18,7 +18,6 @@
 #include "R/Interpreter/ThreadState.private.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Include.h"
 
 #define R_Configuration_DefaultNumberOfArgumentRegisters 32
 #define R_Configuration_DefaultNumberOfRegisters 256
@@ -33,7 +32,7 @@ _RegisterStack_initialize
   )
 {
   if (!R_allocateUnmanaged_nojump(&self->elements, 0 * sizeof(Arcadia_Value))) {
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   self->size = 0;
   self->capacity = 0;
@@ -64,32 +63,32 @@ R_Interpreter_ThreadState_create
 
   Arcadia_JumpTarget jumpTarget;
 
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Arcadia_Process_allocateUnmanaged(process, &thread->registers, sizeof(Arcadia_Value) * thread->numberOfRegisters);
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
     Arcadia_Process_deallocateUnmanaged(process, thread);
     thread = NULL;
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
 
   for (Arcadia_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
     Arcadia_Value_setVoidValue(thread->registers + i, Arcadia_VoidValue_Void);
   }
 
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Arcadia_Process_allocateUnmanaged(process, &thread->calls.elements, sizeof(R_CallState));
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
     Arcadia_Process_deallocateUnmanaged(process, thread->registers);
     thread->registers = NULL;
     Arcadia_Process_deallocateUnmanaged(process, thread);
     thread = NULL;
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
 
   thread->calls.size = 0;
@@ -121,12 +120,12 @@ R_Interpreter_ThreadState_visit
   )
 {
   for (Arcadia_SizeValue i = 0, n = thread->numberOfRegisters; i < n; ++i) {
-    Arcadia_Value_visit(process, thread->registers + i);
+    Arcadia_Value_visit(Arcadia_Process_getThread(process), thread->registers + i);
   }
   for (Arcadia_SizeValue i = 0, n = thread->calls.size; i < n; ++i) {
     R_CallState* callState = &(thread->calls.elements[i]);
     if (callState->flags == R_CallState_Flags_Procedure) {
-      Arcadia_Object_visit(process, callState->procedure);
+      Arcadia_Object_visit(Arcadia_Process_getThread(process), callState->procedure);
     }
   }
 }
@@ -155,7 +154,7 @@ R_Interpreter_ThreadState_beginForeignProcedureCall
     Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
-  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getProcess1(process), Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
+  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getThread(process), Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
   R_CallState* callState = &(thread->calls.elements[thread->calls.size]);
   if (thread->calls.size) {
     callState->previous = &(thread->calls.elements[thread->calls.size - 1]);
@@ -178,7 +177,7 @@ R_Interpreter_ThreadState_beginProcedureCall
     R_Interpreter_Procedure* procedure
   )
 {
-  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getProcess1(process), Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
+  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getThread(process), Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
   R_CallState* callState = &(thread->calls.elements[thread->calls.size]);
   if (thread->calls.size) {
     callState->previous = &(thread->calls.elements[thread->calls.size - 1]);

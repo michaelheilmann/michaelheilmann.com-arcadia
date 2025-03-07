@@ -37,7 +37,7 @@ Arcadia_Mil_JumpStatementAst_constructImpl
 static void
 Arcadia_Mil_JumpStatementAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_JumpStatementAst* self
   );
 
@@ -78,42 +78,39 @@ Arcadia_Mil_JumpStatementAst_constructImpl
     Arcadia_Value* argumentValues 
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_JumpStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_JumpStatementAst_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Mil_JumpStatementAst_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[0]), _Arcadia_Integer32Value_getType(process))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
-  }
-  if (!Arcadia_Type_isSubType(Arcadia_Value_getType(process, &argumentValues[1]), _Arcadia_String_getType(process))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_Integer32Value_getType(thread))) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->type = Arcadia_Value_getInteger32Value(&argumentValues[0]);
   _self->labelAst = NULL;
-  _self->labelName = Arcadia_Value_getObjectReferenceValue(&argumentValues[1]);
-  Arcadia_Object_setType(process, _self, _type);
+  _self->labelName = (Arcadia_String*)R_Argument_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 Arcadia_Mil_JumpStatementAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_JumpStatementAst* self
   )
 {
   if (self->labelAst) {
-    Arcadia_Object_visit(process, self->labelAst);
+    Arcadia_Object_visit(thread, self->labelAst);
   }
   if (self->labelName) {
-    Arcadia_Object_visit(process, self->labelName);
+    Arcadia_Object_visit(thread, self->labelName);
   }
 }
 
@@ -125,11 +122,12 @@ Arcadia_Mil_JumpStatementAst_create
     Arcadia_String* labelName
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = { 
     { .tag = Arcadia_ValueTag_Integer32, .integer32Value = type },
     { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)labelName },
   };
-  Arcadia_Mil_JumpStatementAst* self = R_allocateObject(process, _Arcadia_Mil_ReturnStatementAst_getType(process), 2, &argumentValues[0]);
+  Arcadia_Mil_JumpStatementAst* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Arcadia_Mil_ReturnStatementAst_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 

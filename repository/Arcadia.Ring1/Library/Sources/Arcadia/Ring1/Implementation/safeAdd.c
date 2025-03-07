@@ -19,9 +19,9 @@
 #include "Arcadia/Ring1/Implementation/safeAdd.h"
 
 void
-Arcadia_safeAdd_n16
+Arcadia_safeAddNatural16Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural16Value augend,
     Arcadia_Natural16Value addend,
     Arcadia_Natural16Value* sumHigh,
@@ -29,8 +29,8 @@ Arcadia_safeAdd_n16
   )
 {
   if (!sumHigh | !sumLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   uint32_t temporary = (uint32_t)augend + (uint32_t)addend;
   *sumHigh = (uint16_t)(temporary >> 16);
@@ -38,9 +38,9 @@ Arcadia_safeAdd_n16
 }
 
 void
-Arcadia_safeAdd_n32
+Arcadia_safeAddNatural32Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural32Value augend,
     Arcadia_Natural32Value addend,
     Arcadia_Natural32Value* sumHigh,
@@ -48,20 +48,18 @@ Arcadia_safeAdd_n32
   )
 {
   if (!sumHigh | !sumLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   uint64_t temporary = (uint64_t)augend + (uint64_t)addend;
   *sumHigh = (uint32_t)(temporary >> 32);
   *sumLow = (uint32_t)(temporary & 0x00000000ffffffff);
 }
 
-#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
-
 void
-Arcadia_mulex_n64_gcc
+Arcadia_safeAddNatural64Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value augend,
     Arcadia_Natural64Value addend,
     Arcadia_Natural64Value* sumHigh,
@@ -69,29 +67,8 @@ Arcadia_mulex_n64_gcc
   )
 {
   if (!sumHigh | !sumLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
-  }
-  unsigned __int128 product = (unsigned __int128)augend + (unsigned __int128)addend;
-  *sumHigh = product >> 64;
-  *sumLow = (uint64_t)product;
-}
-
-#endif
-
-void
-Arcadia_safeAdd_n64
-  (
-    Arcadia_Process1* process,
-    Arcadia_Natural64Value augend,
-    Arcadia_Natural64Value addend,
-    Arcadia_Natural64Value* sumHigh,
-    Arcadia_Natural64Value* sumLow
-  )
-{
-  if (!sumHigh | !sumLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
 
   // if two unsigned n>0 bit values are added then the result is at most an unsigned n+1 bit value.
@@ -113,9 +90,9 @@ Arcadia_safeAdd_n64
 }
 
 void
-Arcadia_safeAdd_n8
+Arcadia_safeAddNatural8Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value augend,
     Arcadia_Natural8Value addend,
     Arcadia_Natural8Value* sumHigh,
@@ -123,8 +100,8 @@ Arcadia_safeAdd_n8
   )
 {
   if (!sumHigh | !sumLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   uint16_t temporary = (uint16_t)augend + (uint16_t)addend;
   *sumHigh = (uint8_t)(temporary >> 8);

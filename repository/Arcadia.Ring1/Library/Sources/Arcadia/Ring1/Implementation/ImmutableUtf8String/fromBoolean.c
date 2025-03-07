@@ -25,23 +25,23 @@
 Arcadia_ImmutableUtf8String*
 _createFromBoolean
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_BooleanValue booleanValue
   )
 {
   Arcadia_StaticAssert(SIZE_MAX - sizeof(Arcadia_ImmutableUtf8String) >= sizeof(u8"true") - 1, "<internal error>");
   Arcadia_StaticAssert(SIZE_MAX - sizeof(Arcadia_ImmutableUtf8String) >= sizeof(u8"false") - 1, "<internal error>");
-  _ensureTypeRegistered(process);
+  _ensureTypeRegistered(thread);
   Arcadia_ImmutableUtf8String* string = NULL;
   if (booleanValue) {
-    Arcadia_Process1_allocate(process, &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + (sizeof(u8"true") - 1));
-    Arcadia_Process1_copyMemory(process, string->bytes, u8"true", sizeof(u8"true") - 1);
+    Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + (sizeof(u8"true") - 1));
+    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), string->bytes, u8"true", sizeof(u8"true") - 1);
     string->numberOfBytes = sizeof(u8"true") - 1;
   } else {
-    Arcadia_Process1_allocate(process, &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + (sizeof(u8"false") - 1));
-    Arcadia_Process1_copyMemory(process, string->bytes, u8"false", sizeof(u8"false") - 1);
+    Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + (sizeof(u8"false") - 1));
+    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), string->bytes, u8"false", sizeof(u8"false") - 1);
     string->numberOfBytes = sizeof(u8"false") - 1;
   }
-  string->hash = _hashUtf8(process, string->bytes, string->numberOfBytes);
+  string->hash = _hashUtf8(thread, string->bytes, string->numberOfBytes);
   return string;
 }

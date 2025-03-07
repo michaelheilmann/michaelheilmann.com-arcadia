@@ -16,7 +16,6 @@
 #if !defined(R_INTERPRETER_PROCEDURE_H_INCLUDED)
 #define R_INTERPRETER_PROCEDURE_H_INCLUDED
 
-#include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Include.h"
 #include "R/Interpreter/Code.h"
 
@@ -40,7 +39,7 @@ struct R_Interpreter_Procedure {
 R_Interpreter_Procedure*
 R_Interpreter_Procedure_createForeign
   ( 
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* procedureName,
     Arcadia_ForeignProcedureValue foreignProcedure
   );
@@ -48,7 +47,7 @@ R_Interpreter_Procedure_createForeign
 R_Interpreter_Procedure*
 R_Interpreter_Procedure_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* name,
     R_Interpreter_Code* code
   );
@@ -56,6 +55,7 @@ R_Interpreter_Procedure_create
 R_Interpreter_Code*
 R_Interpreter_Procedure_getCode
   (
+    Arcadia_Thread* thread,
     R_Interpreter_Procedure* self
   );
 

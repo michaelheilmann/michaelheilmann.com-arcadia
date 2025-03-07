@@ -45,7 +45,7 @@ struct NativeWindowsWindow {
 NativeWindowsWindow*
 NativeWindowsWindow_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 #endif // MODULE_VISUALS_NATIVEWINDOWSWINDOW_H_INCLUDED

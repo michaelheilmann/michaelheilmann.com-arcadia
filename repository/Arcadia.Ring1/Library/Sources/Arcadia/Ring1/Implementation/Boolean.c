@@ -107,8 +107,8 @@ and
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   if (!Arcadia_Value_isBooleanValue(A2)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setBooleanValue(target, Arcadia_Value_getBooleanValue(A1) && Arcadia_Value_getBooleanValue(A2));
 #undef A2
@@ -195,8 +195,8 @@ or
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   if (!Arcadia_Value_isBooleanValue(A2)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setBooleanValue(target, Arcadia_Value_getBooleanValue(A1) || Arcadia_Value_getBooleanValue(A2));
 #undef A2

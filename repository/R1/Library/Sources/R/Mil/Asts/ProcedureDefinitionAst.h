@@ -48,7 +48,7 @@ struct Arcadia_Mil_ProcedureDefinitionAst {
 Arcadia_Mil_ProcedureDefinitionAst*
 Arcadia_Mil_ProcedureDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_BooleanValue entry,
     Arcadia_String* nativeName,
     Arcadia_String* procedureName,

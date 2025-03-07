@@ -4,7 +4,7 @@
 void
 Arcadia_safeAdd<my-mv>Suffix</my-mv>
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     <my-mv>Type</my-mv> augend,
     <my-mv>Type</my-mv> addend,
     <my-mv>Type</my-mv>* sumHigh,
@@ -24,7 +24,7 @@ Arcadia_safeAdd<my-mv>Suffix</my-mv>
 
 <h5>Parameters</h5>
 <table>
-  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><my-mv>Type</my-mv> augend</td>  <td>The augend value.</td></tr>
   <tr><td><my-mv>Type</my-mv> addend</td>  <td>The addend value.</td></tr>
   <tr><td><my-mv>Type</my-mv>* sumHigh</td><td>A pointer to a variable. The variable is assigned the high bits of the result.</td></tr>

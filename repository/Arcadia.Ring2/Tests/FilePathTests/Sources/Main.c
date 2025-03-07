@@ -22,32 +22,32 @@
 static void
 checkNormalized
   (
-    Arcadia_Process * process,
+    Arcadia_Thread* thread,
     char const* p,
     char const* q
   )
 {
-  Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(process, p, strlen(p));
-  Arcadia_String* filePathString = Arcadia_FilePath_toNative(process, filePath);
-  if (Arcadia_String_getNumberOfBytes(process, filePathString) != strlen(q) + 1) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, p, strlen(p));
+  Arcadia_String* filePathString = Arcadia_FilePath_toNative(thread, filePath);
+  if (Arcadia_String_getNumberOfBytes(thread, filePathString) != strlen(q) + 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+    Arcadia_Thread_jump(thread);
   }
-  if (memcmp(Arcadia_String_getBytes(process, filePathString), q, strlen(q))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-    Arcadia_Process_jump(process);
+  if (memcmp(Arcadia_String_getBytes(thread, filePathString), q, strlen(q))) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+    Arcadia_Thread_jump(thread);
   }
 }
 
 static void
 normalizationTests
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  checkNormalized(process, u8"Hello/..", ".");
-  checkNormalized(process, u8".", ".");
-  checkNormalized(process, u8"./", ".");
+  checkNormalized(thread, u8"Hello/..", ".");
+  checkNormalized(thread, u8".", ".");
+  checkNormalized(thread, u8"./", ".");
 }
 
 int

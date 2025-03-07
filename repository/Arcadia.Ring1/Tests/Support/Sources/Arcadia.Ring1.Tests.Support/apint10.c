@@ -26,7 +26,7 @@
 static void
 testFromI64
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   size_t k = 0;
@@ -51,8 +51,8 @@ Error:
   while (k > 0) {
     apint10_uninitialize(&v[--k]);
   }
-  Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-  Arcadia_Process_jump(process);
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+  Arcadia_Thread_jump(thread);
 }
 
 
@@ -62,7 +62,7 @@ Error:
 static void
 testFromU64
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   size_t k = 0;
@@ -87,16 +87,16 @@ Error:
   while (k > 0) {
     apint10_uninitialize(&v[--k]);
   }
-  Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-  Arcadia_Process_jump(process);
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+  Arcadia_Thread_jump(thread);
 }
 
 void
 Arcadia_Ring1_Tests_Support_apint10
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  testFromI64(process);
-  testFromU64(process);
+  testFromI64(thread);
+  testFromU64(thread);
 }

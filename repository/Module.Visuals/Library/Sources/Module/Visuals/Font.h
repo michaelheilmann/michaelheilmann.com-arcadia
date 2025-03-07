@@ -44,13 +44,13 @@ struct TextureFontWindows {
 TextureFontWindows*
 TextureFontWindows_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 void
 TextureFontWindows_setCodePoint
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     TextureFontWindows* self,
     Arcadia_Natural32Value codePoint
   );
@@ -58,7 +58,7 @@ TextureFontWindows_setCodePoint
 PixelBuffer*
 TextureFontWindows_getPixelBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     TextureFontWindows* self
   );
 

@@ -50,7 +50,7 @@ Arcadia_Map_ensureFreeCapacity
 static void
 Arcadia_Map_ensureInitialized
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 static void
@@ -65,14 +65,14 @@ Arcadia_Map_constructImpl
 static void
 Arcadia_Map_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self
   );
 
 static void
 Arcadia_Map_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self
   );
 
@@ -122,8 +122,8 @@ Arcadia_Map_ensureFreeCapacity
       // If oldCapacity > maximumCapacity / 2 holds then oldCapacity * 2 > maximumCapacity holds.
       // Consequently, we cannot double the capacity. Try to saturate the capacity.
       if (oldCapacity == g_maximumCapacity) {
-        Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
-        Arcadia_Process_jump(process);
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_AllocationFailed);
+        Arcadia_Thread_jump(Arcadia_Process_getThread(process));
       } else {
         newCapacity = g_maximumCapacity;
       }
@@ -155,7 +155,7 @@ Arcadia_Map_ensureFreeCapacity
 static void
 Arcadia_Map_ensureInitialized
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   if (!g_initialized) {
@@ -165,8 +165,8 @@ Arcadia_Map_ensureInitialized
       g_maximumCapacity = Arcadia_Integer32Value_Maximum;
     }
     if (g_minimumCapacity > g_maximumCapacity) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     }
     g_initialized = Arcadia_BooleanValue_True;
   }
@@ -175,7 +175,7 @@ Arcadia_Map_ensureInitialized
 static void
 Arcadia_Map_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self
   )
 {
@@ -183,12 +183,12 @@ Arcadia_Map_destruct
     while (self->buckets[i]) {
       Node* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Process_deallocateUnmanaged(process, node);
+      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), node);
       node = NULL;
     }
   }
   if (self->buckets) {
-    Arcadia_Process_deallocateUnmanaged(process, self->buckets);
+    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->buckets);
     self->buckets = NULL;
   }
 }
@@ -196,7 +196,7 @@ Arcadia_Map_destruct
 static void
 Arcadia_Map_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self
   )
 {
@@ -204,8 +204,8 @@ Arcadia_Map_visit
     for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
       Node* node = self->buckets[i];
       while (node) {
-        Arcadia_Value_visit(process, &node->key);
-        Arcadia_Value_visit(process, &node->value);
+        Arcadia_Value_visit(thread, &node->key);
+        Arcadia_Value_visit(thread, &node->value);
         node = node->next;
       }
     }
@@ -221,9 +221,10 @@ Arcadia_Map_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Map* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Map_getType(process);
-  Arcadia_Map_ensureInitialized(process);
+  Arcadia_TypeValue _type = _Arcadia_Map_getType(thread);
+  Arcadia_Map_ensureInitialized(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -236,31 +237,31 @@ Arcadia_Map_constructImpl
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     _self->buckets[i] = NULL;
   }
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 Arcadia_Map*
 Arcadia_Map_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  Arcadia_Map* self = R_allocateObject(process, _Arcadia_Map_getType(process), 0, &argumentValues[0]);
+  Arcadia_Map* self = Arcadia_allocateObject(thread, _Arcadia_Map_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
 Arcadia_Map*
 Arcadia_Map_clone
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self
   )
 {
-  Arcadia_Map* clone = Arcadia_Map_create(process);
+  Arcadia_Map* clone = Arcadia_Map_create(thread);
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     for (Node* node = self->buckets[i]; NULL != node; node = node->next) {
-      Arcadia_Map_set(process, clone, node->key, node->value);
+      Arcadia_Map_set(thread, clone, node->key, node->value);
     }
   }
   return clone;
@@ -269,7 +270,7 @@ Arcadia_Map_clone
 void
 Arcadia_Map_clear
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self
   )
 {
@@ -277,7 +278,7 @@ Arcadia_Map_clear
     while (self->buckets[i]) {
       Node* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Process_deallocateUnmanaged(process, node);
+      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), node);
       node = NULL;
     }
   }
@@ -288,6 +289,7 @@ Arcadia_Map_clear
 Arcadia_SizeValue
 Arcadia_Map_getSize
   (
+    Arcadia_Thread* thread,
     Arcadia_Map const* self
   )
 { return self->size; }
@@ -295,21 +297,21 @@ Arcadia_Map_getSize
 void
 Arcadia_Map_set
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* self,
     Arcadia_Value key,
     Arcadia_Value value
   )
 { 
   if (Arcadia_Value_isVoidValue(&key)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &key);
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &key);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Node* node = self->buckets[index]; NULL != node; node = node->next) {
     if (hash == node->hash) {
-      if (Arcadia_Value_isEqualTo(process, &key, &node->key)) {
+      if (Arcadia_Value_isEqualTo(thread, &key, &node->key)) {
         node->key = key;
         node->value = value;
         return;
@@ -317,7 +319,7 @@ Arcadia_Map_set
     }
   }
   Node* node = NULL;
-  Arcadia_Process_allocateUnmanaged(process, &node, sizeof(Node));
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &node, sizeof(Node));
   node->value = value;
   node->key = key;
   node->hash = hash;
@@ -329,21 +331,21 @@ Arcadia_Map_set
 Arcadia_Value
 Arcadia_Map_get
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map const* self,
     Arcadia_Value key
   )
 { 
   if (Arcadia_Value_isVoidValue(&key)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue hash = Arcadia_Value_getHash(process, &key);
+  Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &key);
   Arcadia_SizeValue index = hash % self->capacity;
 
   for (Node* node = self->buckets[index]; NULL != node; node = node->next) {
     if (hash == node->hash) {
-      if (Arcadia_Value_isEqualTo(process, &key, &node->key)) {
+      if (Arcadia_Value_isEqualTo(thread, &key, &node->key)) {
         return node->value;
       }
     }
@@ -356,15 +358,15 @@ Arcadia_Map_get
 Arcadia_List*
 Arcadia_Map_getValues
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map const* self
   )
 {
-  Arcadia_List* list = Arcadia_List_create(process);
+  Arcadia_List* list = Arcadia_List_create(thread);
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     Node* node = self->buckets[i];
     while (node) {
-      Arcadia_List_append(process, list, node->value);
+      Arcadia_List_append(thread, list, node->value);
       node = node->next;
     }
   }
@@ -374,15 +376,15 @@ Arcadia_Map_getValues
 Arcadia_List*
 Arcadia_Map_getKeys
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map const* self
   )
 {
-  Arcadia_List* list = Arcadia_List_create(process);
+  Arcadia_List* list = Arcadia_List_create(thread);
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     Node* node = self->buckets[i];
     while (node) {
-      Arcadia_List_append(process, list, node->key);
+      Arcadia_List_append(thread, list, node->key);
       node = node->next;
     }
   }

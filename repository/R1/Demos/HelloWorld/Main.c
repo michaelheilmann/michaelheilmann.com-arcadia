@@ -29,7 +29,7 @@ main
   if (Arcadia_Process_get(&process)) {
     return EXIT_FAILURE;
   }
-  Arcadia_Status status = Arcadia_Process_getStatus(process);
+  Arcadia_Status status = Arcadia_Thread_getStatus(Arcadia_Process_getThread(process));
   Arcadia_Process_relinquish(process);
   process = NULL;
   return status ? EXIT_FAILURE : EXIT_SUCCESS;

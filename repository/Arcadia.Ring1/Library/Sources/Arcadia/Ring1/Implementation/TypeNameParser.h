@@ -31,9 +31,9 @@
 /// @error Arcadia_Status_ArgumentValueInvald @a bytes is a  null pointer
 /// @error Arcadia_Status_EncodingError the Bytes are not a type name
 void
-R_Names_parseTypeName
+Arcadia_Names_parseTypeName
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     const char *bytes,
     size_t numberOfBytes
   );

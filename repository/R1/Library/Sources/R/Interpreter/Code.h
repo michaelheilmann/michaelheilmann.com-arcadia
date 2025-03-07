@@ -34,13 +34,13 @@ struct R_Interpreter_Code {
 R_Interpreter_Code*
 R_Interpreter_Code_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 void
 R_Interpreter_Code_append
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -49,7 +49,7 @@ R_Interpreter_Code_append
 void
 R_Interpreter_Code_appendIndexNatural8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
     Arcadia_Natural8Value indexValue
@@ -58,7 +58,7 @@ R_Interpreter_Code_appendIndexNatural8
 void
 R_Interpreter_Code_appendIndexNatural16
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
     Arcadia_Natural16Value indexValue
@@ -68,47 +68,41 @@ R_Interpreter_Code_appendIndexNatural16
 void
 R_Interpreter_Code_appendIndexNatural32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     R_Machine_Code_IndexKind indexKind,
     Arcadia_Natural16Value indexValue
   );
 
-/**
- * @brief Append a Natural8 value as a count.
- * @param self A pointer to this machine code.
- * @param countValue A Natural8 value as a count.
- */
+/// @brief Append a Natural8 value as a count.
+/// @param self A pointer to this machine code.
+/// @param countValue A Natural8 value as a count.
 void
 R_Interpreter_Code_appendCountNatural8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural8Value countValue
   );
 
-/**
- * @brief Append a Natural16 value as a count.
- * @param self A pointer to this machine code.
- * @param countValue A Natural16 value as a count.
- */
+/// @brief Append a Natural16 value as a count.
+/// @param self A pointer to this machine code.
+/// @param countValue A Natural16 value as a count.
 void
 R_Interpreter_Code_appendCountNatural16
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural16Value countValue
   );
 
-/**
- * @brief Append a Natural32 value as a count.
- * @param self A pointer to this machine code.
- * @param countValue A Natural32 value as a count.
- */
+/// @brief Append a Natural32 value as a count.
+/// @param self A pointer to this machine code.
+/// @param countValue A Natural32 value as a count.
 void
 R_Interpreter_Code_appendCountNatural32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural32Value countValue
   );
@@ -116,7 +110,7 @@ R_Interpreter_Code_appendCountNatural32
 void
 R_Interpreter_Code_decodeCount
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural32Value* current,
     Arcadia_Natural32Value* countValue
@@ -125,7 +119,7 @@ R_Interpreter_Code_decodeCount
 void
 R_Interpreter_Code_decodeIndex
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Code* self,
     Arcadia_Natural32Value* current,
     R_Machine_Code_IndexKind* indexKind,

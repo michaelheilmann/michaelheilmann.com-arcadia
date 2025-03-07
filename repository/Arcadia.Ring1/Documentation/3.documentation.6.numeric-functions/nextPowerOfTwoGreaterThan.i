@@ -4,7 +4,7 @@
 <my-mv>Type</my-mv>
 Arcadia_nextPowerOfTwoGreaterThan<my-mv>Suffix</my-mv>
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     <my-mv>Type</my-mv> x
   )
 </code></p>
@@ -25,7 +25,7 @@ Arcadia_nextPowerOfTwoGreaterThan<my-mv>Suffix</my-mv>
 
 <h5>Parameters</h5>
 <table>
-  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><my-mv>Type</my-mv> x</td><td>The value.</td></tr>
 </table>
 

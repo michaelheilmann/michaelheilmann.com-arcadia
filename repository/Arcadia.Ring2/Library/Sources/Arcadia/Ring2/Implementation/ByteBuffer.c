@@ -30,7 +30,7 @@ Arcadia_ByteBuffer_constructImpl
 static void
 Arcadia_ByteBuffer_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self
   );
 
@@ -71,8 +71,9 @@ Arcadia_ByteBuffer_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_ByteBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_ByteBuffer_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_ByteBuffer_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
@@ -81,18 +82,18 @@ Arcadia_ByteBuffer_constructImpl
   _self->sz = 0;
   _self->cp = 0;
   Arcadia_Process_allocateUnmanaged(process, &_self->p, 0);
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void
 Arcadia_ByteBuffer_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self
   )
 {
   if (self->p) {
-    Arcadia_Process_deallocateUnmanaged(process, self->p);
+    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->p);
     self->p = NULL;
   }
 }
@@ -100,18 +101,18 @@ Arcadia_ByteBuffer_destruct
 Arcadia_ByteBuffer*
 Arcadia_ByteBuffer_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  Arcadia_ByteBuffer* self = R_allocateObject(process, _Arcadia_ByteBuffer_getType(process), 0, &argumentValues[0]);
+  Arcadia_ByteBuffer* self = Arcadia_allocateObject(thread, _Arcadia_ByteBuffer_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_endsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -121,13 +122,13 @@ Arcadia_ByteBuffer_endsWith_pn
     return Arcadia_BooleanValue_False;
   }
   Arcadia_SizeValue d = self->sz - numberOfBytes;
-  return !Arcadia_Process1_compareMemory(Arcadia_Process_getProcess1(process), self->p + d, bytes, numberOfBytes);
+  return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->p + d, bytes, numberOfBytes);
 }
 
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_startsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -136,45 +137,45 @@ Arcadia_ByteBuffer_startsWith_pn
   if (self->sz < numberOfBytes) {
     return Arcadia_BooleanValue_False;
   }
-  return !Arcadia_Process1_compareMemory(Arcadia_Process_getProcess1(process), self->p, bytes, numberOfBytes);
+  return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->p, bytes, numberOfBytes);
 }
 
 void
 Arcadia_ByteBuffer_append_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
   if (!self) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_ByteBuffer_insert_pn(process, self, self->sz, bytes, numberOfBytes);
+  Arcadia_ByteBuffer_insert_pn(thread, self, self->sz, bytes, numberOfBytes);
 }
 
 void
 Arcadia_ByteBuffer_prepend_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
   if (!self) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_ByteBuffer_insert_pn(process, self, Arcadia_SizeValue_Literal(0), bytes, numberOfBytes);
+  Arcadia_ByteBuffer_insert_pn(thread, self, Arcadia_SizeValue_Literal(0), bytes, numberOfBytes);
 }
 
 void
 Arcadia_ByteBuffer_insert_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     Arcadia_SizeValue index,
     void const* bytes,
@@ -182,35 +183,36 @@ Arcadia_ByteBuffer_insert_pn
   )
 {
   if (!self || !bytes || index > self->sz) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if (!numberOfBytes) {
     return;
   }
+  // TODO: Use Arcadia_Arrays_* maybe?
   Arcadia_SizeValue freeCapacity = self->cp - self->sz;
   if (freeCapacity < numberOfBytes) {
     Arcadia_SizeValue additionalCapacity = numberOfBytes - freeCapacity;
     Arcadia_SizeValue oldCapacity = self->cp;
     if (SIZE_MAX - oldCapacity < additionalCapacity) {
-      Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+      Arcadia_Thread_jump(thread);
     }
     Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    Arcadia_Process_reallocateUnmanaged(process, &self->p, newCapacity);
+    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->p, newCapacity);
     self->cp = newCapacity;
   }
   if (index < self->sz) {
-    Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), self->p + index, self->p + index + numberOfBytes, self->sz - index);
+    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->p + index, self->p + index + numberOfBytes, self->sz - index);
   }
-  Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), self->p + index, bytes, numberOfBytes);
+  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->p + index, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }
 
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     Arcadia_ByteBuffer const* other
   )
@@ -219,7 +221,7 @@ Arcadia_ByteBuffer_isEqualTo
     return Arcadia_BooleanValue_True;
   }
   if (self->sz == other->sz) {
-    return !Arcadia_Process1_compareMemory(Arcadia_Process_getProcess1(process), self->p, other->p, self->sz);
+    return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->p, other->p, self->sz);
   } else {
     return Arcadia_BooleanValue_False;
   }
@@ -228,18 +230,18 @@ Arcadia_ByteBuffer_isEqualTo
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
   if (!self || !bytes) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if (self->sz == numberOfBytes) {
-    return !Arcadia_Process1_compareMemory(Arcadia_Process_getProcess1(process), self->p, bytes, numberOfBytes);
+    return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->p, bytes, numberOfBytes);
   } else {
     return Arcadia_BooleanValue_False;
   }
@@ -248,7 +250,7 @@ Arcadia_ByteBuffer_isEqualTo_pn
 void
 Arcadia_ByteBuffer_clear
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self
   )
 {
@@ -258,7 +260,7 @@ Arcadia_ByteBuffer_clear
 Arcadia_SizeValue
 Arcadia_ByteBuffer_getSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self
   )
 {
@@ -268,7 +270,7 @@ Arcadia_ByteBuffer_getSize
 Arcadia_SizeValue
 Arcadia_ByteBuffer_getNumberOfBytes
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self
   )
 { return self->sz; }
@@ -276,7 +278,7 @@ Arcadia_ByteBuffer_getNumberOfBytes
 Arcadia_Natural8Value const*
 Arcadia_ByteBuffer_getBytes
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self
   )
 { return self->p; }
@@ -284,14 +286,14 @@ Arcadia_ByteBuffer_getBytes
 Arcadia_Natural8Value
 Arcadia_ByteBuffer_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     Arcadia_SizeValue index
   )
 {
   if (index >= self->sz) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   return *(self->p + index);
 }

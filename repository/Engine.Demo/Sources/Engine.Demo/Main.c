@@ -30,6 +30,7 @@ main1
     char **argv
   )
 { 
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   // (1) Initialize Audials.
   Audials_startup(process);
   
@@ -37,42 +38,42 @@ main1
   Audials_playSine(process);
 
   // (3) Create a window.
-  NativeWindow* window = (NativeWindow*)NativeWindowsWindow_create(process);
-  Arcadia_Object_lock(process, window);
+  NativeWindow* window = (NativeWindow*)NativeWindowsWindow_create(thread);
+  Arcadia_Object_lock(thread, window);
 
   // (4) Ensure the window is opened.
-  NativeWindow_open(process, window);
+  NativeWindow_open(thread, window);
   
   Arcadia_Integer32Value width, height;
   NativeIcon* icon;
 
   // (5) Set the big icon.
-  NativeWindow_getRequiredBigIconSize(window, &width, &height);
-  icon = (NativeIcon*)NativeWindowsIcon_create(process, width, height, 47, 47, 47);
-  NativeWindow_setBigIcon(window, icon);
+  NativeWindow_getRequiredBigIconSize(thread, window, &width, &height);
+  icon = (NativeIcon*)NativeWindowsIcon_create(thread, width, height, 47, 47, 47);
+  NativeWindow_setBigIcon(thread, window, icon);
   
   // (6) Set the small icon.
-  NativeWindow_getRequiredSmallIconSize(window, &width, &height);
-  icon = (NativeIcon*)NativeWindowsIcon_create(process, width, height, 47, 47, 47);
-  NativeWindow_setSmallIcon(window, icon);
+  NativeWindow_getRequiredSmallIconSize(thread, window, &width, &height);
+  icon = (NativeIcon*)NativeWindowsIcon_create(thread, width, height, 47, 47, 47);
+  NativeWindow_setSmallIcon(thread, window, icon);
 
   // (7) Set the title.
-  NativeWindow_setTitle(process, window, Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
+  NativeWindow_setTitle(thread, window, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"Michael Heilmann's Liminality", sizeof(u8"Michael Heilmann's Liminality") - 1)));
 
   // (8) Enter the message loop.
-  while (!NativeWindow_getQuitRequested(window)) {
+  while (!NativeWindow_getQuitRequested(thread, window)) {
     Arcadia_Process_stepArms(process);
-    NativeWindow_update(window);
+    NativeWindow_update(thread, window);
   }
 
   // (9) Ensure the window is closed.
-  NativeWindow_close(process, window);
+  NativeWindow_close(thread, window);
 
   // (10) Shutdown audials.
   // TODO: Causes a leak if not invoked.
   Audials_shutdown(process);
 
-  Arcadia_Object_unlock(process, window);
+  Arcadia_Object_unlock(thread, window);
 }
 
 int
@@ -87,12 +88,12 @@ main
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
   }
-  Arcadia_Process_popJumpTarget(process);
-  Arcadia_Status status = Arcadia_Process_getStatus(process);
+  Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
+  Arcadia_Status status = Arcadia_Thread_getStatus(Arcadia_Process_getThread(process));
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

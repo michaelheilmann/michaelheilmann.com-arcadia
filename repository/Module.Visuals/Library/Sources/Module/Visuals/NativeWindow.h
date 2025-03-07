@@ -30,30 +30,30 @@ Rex_declareObjectType(u8"NativeWindow", NativeWindow, u8"Arcadia.Object");
 struct NativeWindow {
   Arcadia_Object _parent;
 
-  void (*open)(Arcadia_Process*, NativeWindow*);
+  void (*open)(Arcadia_Thread*, NativeWindow*);
 
-  void (*close)(Arcadia_Process* process, NativeWindow*);
+  void (*close)(Arcadia_Thread*, NativeWindow*);
 
-  Arcadia_BooleanValue (*getQuitRequested)(NativeWindow*);
+  Arcadia_BooleanValue (*getQuitRequested)(Arcadia_Thread*, NativeWindow*);
 
-  void (*setQuitRequested)(NativeWindow*, Arcadia_BooleanValue);
+  void (*setQuitRequested)(Arcadia_Thread*, NativeWindow*, Arcadia_BooleanValue);
 
-  void (*update)(NativeWindow*);
+  void (*update)(Arcadia_Thread*, NativeWindow*);
 
-  void (*getRequiredBigIconSize)(NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*getRequiredBigIconSize)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
-  void (*getRequiredSmallIconSize)(NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*getRequiredSmallIconSize)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
-  NativeIcon* (*getBigIcon)(NativeWindow*);
-  void (*setBigIcon)(NativeWindow*, NativeIcon*);
+  NativeIcon* (*getBigIcon)(Arcadia_Thread*, NativeWindow*);
+  void (*setBigIcon)(Arcadia_Thread*, NativeWindow*, NativeIcon*);
 
-  NativeIcon* (*getSmallIcon)(NativeWindow* self);
-  void (*setSmallIcon)(NativeWindow*, NativeIcon*);
+  NativeIcon* (*getSmallIcon)(Arcadia_Thread*, NativeWindow* self);
+  void (*setSmallIcon)(Arcadia_Thread*, NativeWindow*, NativeIcon*);
 
-  Arcadia_String* (*getTitle)(NativeWindow*);
-  void (*setTitle)(Arcadia_Process*, NativeWindow*, Arcadia_String*);
+  Arcadia_String* (*getTitle)(Arcadia_Thread*, NativeWindow*);
+  void (*setTitle)(Arcadia_Thread*, NativeWindow*, Arcadia_String*);
 
-  void (*getCanvasSize)(NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*getCanvasSize)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
 };
 
@@ -62,7 +62,7 @@ struct NativeWindow {
 void
 NativeWindow_open
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindow* self
   );
 
@@ -71,7 +71,7 @@ NativeWindow_open
 void
 NativeWindow_close
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindow* self
   );
 
@@ -81,6 +81,7 @@ NativeWindow_close
 Arcadia_BooleanValue
 NativeWindow_getQuitRequested
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   );
 
@@ -90,6 +91,7 @@ NativeWindow_getQuitRequested
 void
 NativeWindow_setQuitRequested
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_BooleanValue quitRequested
   );
@@ -99,6 +101,7 @@ NativeWindow_setQuitRequested
 void
 NativeWindow_update
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   );
 
@@ -112,6 +115,7 @@ NativeWindow_update
 void
 NativeWindow_getRequiredBigIconSize
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
@@ -127,6 +131,7 @@ NativeWindow_getRequiredBigIconSize
 void
 NativeWindow_getRequiredSmallIconSize
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
@@ -138,6 +143,7 @@ NativeWindow_getRequiredSmallIconSize
 NativeIcon*
 NativeWindow_getBigIcon 
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   );
 
@@ -148,6 +154,7 @@ NativeWindow_getBigIcon
 void
 NativeWindow_setBigIcon
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     NativeIcon* icon
   );
@@ -158,6 +165,7 @@ NativeWindow_setBigIcon
 NativeIcon*
 NativeWindow_getSmallIcon
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   );
 
@@ -168,6 +176,7 @@ NativeWindow_getSmallIcon
 void
 NativeWindow_setSmallIcon
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     NativeIcon* icon
   );
@@ -178,6 +187,7 @@ NativeWindow_setSmallIcon
 Arcadia_String*
 NativeWindow_getTitle
   (
+    Arcadia_Thread* thread,
     NativeWindow* self
   );
 
@@ -187,7 +197,7 @@ NativeWindow_getTitle
 void
 NativeWindow_setTitle
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_String* title
   );
@@ -201,6 +211,7 @@ NativeWindow_setTitle
 void
 NativeWindow_getCanvasSize
   (
+    Arcadia_Thread* thread,
     NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height

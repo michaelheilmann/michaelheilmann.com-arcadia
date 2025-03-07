@@ -28,24 +28,25 @@ main1
     char** argv
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (argc < 3) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_FilePath* firstFile = Arcadia_FilePath_parseNative(process, argv[1], strlen(argv[1]));
-  Arcadia_FilePath* secondFile = Arcadia_FilePath_parseNative(process, argv[2], strlen(argv[2]));
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(process);
-  if (!Arcadia_FileSystem_regularFileExists(process, fileSystem, firstFile)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NotExists);
-    Arcadia_Process_jump(process);
+  Arcadia_FilePath* firstFile = Arcadia_FilePath_parseNative(thread, argv[1], strlen(argv[1]));
+  Arcadia_FilePath* secondFile = Arcadia_FilePath_parseNative(thread, argv[2], strlen(argv[2]));
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  if (!Arcadia_FileSystem_regularFileExists(thread, fileSystem, firstFile)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+    Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_FileSystem_regularFileExists(process, fileSystem, secondFile)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NotExists);
-    Arcadia_Process_jump(process);
+  if (!Arcadia_FileSystem_regularFileExists(thread, fileSystem, secondFile)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_ByteBuffer* firstByteBuffer = Arcadia_FileSystem_getFileContents(process, fileSystem, firstFile);
-  Arcadia_ByteBuffer* secondByteBuffer = Arcadia_FileSystem_getFileContents(process, fileSystem, secondFile);
-  return Arcadia_ByteBuffer_isEqualTo(process, firstByteBuffer, secondByteBuffer);
+  Arcadia_ByteBuffer* firstByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, firstFile);
+  Arcadia_ByteBuffer* secondByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, secondFile);
+  return Arcadia_ByteBuffer_isEqualTo(thread, firstByteBuffer, secondByteBuffer);
 }
 
 int
@@ -61,12 +62,12 @@ main
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     areEqual = main1(process, argc, argv);
   }
-  Arcadia_Process_popJumpTarget(process);
-  Arcadia_Status status = Arcadia_Process_getStatus(process);
+  Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
+  Arcadia_Status status = Arcadia_Thread_getStatus(Arcadia_Process_getThread(process));
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

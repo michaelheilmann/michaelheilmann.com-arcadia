@@ -19,9 +19,9 @@
 #include "Arcadia/Ring1/Implementation/safeMultiply.h"
 
 void
-Arcadia_safeMultiply_n16
+Arcadia_safeMultiplyNatural16Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural16Value multiplier,
     Arcadia_Natural16Value multiplicand,
     Arcadia_Natural16Value* productHigh,
@@ -29,8 +29,8 @@ Arcadia_safeMultiply_n16
   )
 {
   if (!productHigh | !productLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Natural32Value a = multiplier;
   Arcadia_Natural32Value b = multiplicand;
@@ -40,9 +40,9 @@ Arcadia_safeMultiply_n16
 }
 
 void
-Arcadia_safeMultiply_n32
+Arcadia_safeMultiplyNatural32Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural32Value multiplier,
     Arcadia_Natural32Value multiplicand,
     Arcadia_Natural32Value* productHigh,
@@ -50,8 +50,8 @@ Arcadia_safeMultiply_n32
   )
 {
   if (!productHigh | !productLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Natural64Value a = multiplier;
   Arcadia_Natural64Value b = multiplicand;
@@ -66,9 +66,9 @@ Arcadia_safeMultiply_n32
 #include <intrin.h>
 
 void
-Arcadia_safeMultiply_n64_x64msvc
+Arcadia_safeMultiplyNatural64ValueX64Msvc
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value multiplier,
     Arcadia_Natural64Value multiplicand,
     Arcadia_Natural64Value* productHigh,
@@ -76,8 +76,8 @@ Arcadia_safeMultiply_n64_x64msvc
   )
 {
   if (!productHigh | !productLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   unsigned long long productLow_;
   unsigned long long productHigh_;
@@ -90,9 +90,9 @@ Arcadia_safeMultiply_n64_x64msvc
 #if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
 
 void
-Arcadia_safeMultiply_n64_gcc
+Arcadia_safeMultiplyNatural64ValueGcc
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value multiplier,
     Arcadia_Natural64Value multiplicand,
     Arcadia_Natural64Value* productHigh,
@@ -100,8 +100,8 @@ Arcadia_safeMultiply_n64_gcc
   )
 {
   if (!productHigh | !productLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   unsigned __int128 product = (unsigned __int128)multiplier * (unsigned __int128)multiplicand;
   *productHigh = product >> 64;
@@ -112,9 +112,9 @@ Arcadia_safeMultiply_n64_gcc
 
 // adapted from xmrig (https://github.com/xmrig/xmrig/blob/master/src/base/tools/cryptonote/umul128.h).
 void
-Arcadia_safeMultiply_n64_default
+Arcadia_safeMultiplyNatural64ValueDefault
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value multiplier,
     Arcadia_Natural64Value multiplicand,
     Arcadia_Natural64Value* productHigh,
@@ -122,8 +122,8 @@ Arcadia_safeMultiply_n64_default
   )
 {
   if (!productHigh | !productLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   // multiplier   = ab = a * 2^32 + b
   // multiplicand = cd = c * 2^32 + d
@@ -152,9 +152,9 @@ Arcadia_safeMultiply_n64_default
 }
 
 void
-Arcadia_safeMultiply_n64
+Arcadia_safeMultiplyNatural64Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value multiplier,
     Arcadia_Natural64Value multiplicand,
     Arcadia_Natural64Value* productHigh,
@@ -163,18 +163,18 @@ Arcadia_safeMultiply_n64
 {
 #if Arcadia_Configuration_CompilerC_Msvc == Arcadia_Configuration_CompilerC && \
     Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
-  Arcadia_safeMultiply_n64_x64msvc(process, multiplier, multiplicand, productHigh,  productLow);
+  Arcadia_safeMultiplyNatural64ValueX64Msvc(thread, multiplier, multiplicand, productHigh,  productLow);
 #elif Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
-  Arcadia_safeMultiply_n64_gcc(process, multiplier, multiplicand, productHigh, productLow);
+  Arcadia_safeMultiplyNatural64ValueGcc(thread, multiplier, multiplicand, productHigh, productLow);
 #else
-  Arcadia_safeMultiply_n64_default(process, multiplier, multiplicand, productHigh, productLow);
+  Arcadia_safeMultiplyNatural64ValueDefault(thread, multiplier, multiplicand, productHigh, productLow);
 #endif
 }
 
 void
-Arcadia_safeMultiply_n8
+Arcadia_safeMultiplyNatural8Value
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value multiplier,
     Arcadia_Natural8Value multiplicand,
     Arcadia_Natural8Value* productHigh,
@@ -182,8 +182,8 @@ Arcadia_safeMultiply_n8
   )
 {
   if (!productHigh | !productLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Natural16Value a = multiplier;
   Arcadia_Natural16Value b = multiplicand;
@@ -193,9 +193,9 @@ Arcadia_safeMultiply_n8
 }
 
 void
-Arcadia_safeMultiply_sz
+Arcadia_safeMultiplySizeValue
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_SizeValue multiplier,
     Arcadia_SizeValue multiplicand,
     Arcadia_SizeValue* productHigh,
@@ -203,36 +203,36 @@ Arcadia_safeMultiply_sz
   )
 {
   if (!productHigh | !productLow) {
-    Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #if Arcadia_Configuration_CompilerC_Msvc == Arcadia_Configuration_CompilerC
   #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural64Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural64Value_NumberOfBits, "environment not (yet) supported");
     Arcadia_Natural64Value productLow_, productHigh_;
-    Arcadia_safeMultiply_n64(process, multiplier, multiplicand, &productHigh_, &productLow_);
+    Arcadia_safeMultiplyNatural64Value(thread, multiplier, multiplicand, &productHigh_, &productLow_);
     *productHigh = productHigh_;
     *productLow = productLow_; 
   #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural32Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural32Value_NumberOfBits, "environment not (yet) supported");
     Arcadia_Natural32Value productLow_, productHigh_;
-    Arcadia_safeMultiply_n32(process, multiplier, multiplicand, &productHigh_, &productLow_);
+    Arcadia_safeMultiplyNatural32Value(thread, multiplier, multiplicand, &productHigh_, &productLow_);
     *productHigh = productHigh_;
     *productLow = productLow_;
   #else
     #error ("environemnt not (yet) supported");
   #endif
 #elif Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
-  #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture_X64
+  #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural64Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural64Value_NumberOfBits, "environment not (yet) supported");
     Arcadia_Natural64Value productLow_, productHigh_;
-    Arcadia_safeMultiply_n64(process, multiplier, multiplicand, &productHigh_, &productLow_);
+    Arcadia_safeMultiplyNatural64Value(thread, multiplier, multiplicand, &productHigh_, &productLow_);
     *productHigh = productHigh_;
     *productLow = productLow_;
   #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural32Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural32Value_NumberOfBits, "environment not (yet) supported");
     Arcadia_Natural32Value productLow_, productHigh_;
-    Arcadia_safeMultiply_n32(process, multiplier, multiplicand, &productHigh_, &productLow_);
+    Arcadia_safeMultiplyNatural32Value(thread, multiplier, multiplicand, &productHigh_, &productLow_);
     *productHigh = productHigh_;
     *productLow = productLow_;
   #else

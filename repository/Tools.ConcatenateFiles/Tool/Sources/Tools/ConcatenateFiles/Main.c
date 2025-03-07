@@ -28,28 +28,29 @@ main1
     char** argv
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (argc < 3) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(process);
-  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(process);
-  R_FileHandle* fileHandle = R_FileHandle_create(process, fileSystem);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
   for (int argi = 1; argi < argc - 1; ++argi) {
-    R_FileHandle_openForReading(process, fileHandle, Arcadia_FilePath_parseNative(process, argv[argi], strlen(argv[argi])));
+    Arcadia_FileHandle_openForReading(thread, fileHandle, Arcadia_FilePath_parseNative(thread, argv[argi], strlen(argv[argi])));
     char bytes[5012];
     Arcadia_SizeValue bytesToRead = 5012;
     Arcadia_SizeValue bytesRead = 0;
     do {
-      R_FileHandle_read(process, fileHandle, bytes, bytesToRead, &bytesRead);
-      Arcadia_ByteBuffer_append_pn(process, byteBuffer, bytes, bytesRead);
+      Arcadia_FileHandle_read(thread, fileHandle, bytes, bytesToRead, &bytesRead);
+      Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, bytesRead);
     } while (bytesRead > 0);
-    R_FileHandle_close(fileHandle);
+    Arcadia_FileHandle_close(thread, fileHandle);
   }
-  R_FileHandle_openForWriting(process, fileHandle, Arcadia_FilePath_parseNative(process, argv[argc - 1], strlen(argv[argc - 1])));
+  Arcadia_FileHandle_openForWriting(thread, fileHandle, Arcadia_FilePath_parseNative(thread, argv[argc - 1], strlen(argv[argc - 1])));
   Arcadia_SizeValue bytesWritten;
-  R_FileHandle_write(process, fileHandle, byteBuffer->p, byteBuffer->sz, &bytesWritten);
-  R_FileHandle_close(fileHandle);
+  Arcadia_FileHandle_write(thread, fileHandle, byteBuffer->p, byteBuffer->sz, &bytesWritten);
+  Arcadia_FileHandle_close(thread, fileHandle);
 }
 
 int
@@ -64,12 +65,12 @@ main
     return EXIT_FAILURE;
   }
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     main1(process, argc, argv);
   }
-  Arcadia_Process_popJumpTarget(process);
-  Arcadia_Status status = Arcadia_Process_getStatus(process);
+  Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
+  Arcadia_Status status = Arcadia_Thread_getStatus(Arcadia_Process_getThread(process));
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

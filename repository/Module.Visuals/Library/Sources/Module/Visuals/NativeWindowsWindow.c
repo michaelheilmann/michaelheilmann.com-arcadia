@@ -31,21 +31,21 @@ WindowProc
 static void
 NativeWindowsWindow_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static void
 NativeWindowsWindow_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static void
 NativeWindowsWindow_setTitleHelper
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     HWND windowHandle,
     Arcadia_String* title
   );
@@ -62,26 +62,28 @@ NativeWindowsWindow_constructImpl
 static void
 openImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static void
 closeImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static Arcadia_BooleanValue
 getQuitRequestedImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static void
 setQuitRequestedImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_BooleanValue quitRequested
   );
@@ -89,12 +91,14 @@ setQuitRequestedImpl
 static void
 updateImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static void
 getRequiredBigIconSizeImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
@@ -103,6 +107,7 @@ getRequiredBigIconSizeImpl
 static void
 getRequiredSmallIconSizeImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
@@ -111,12 +116,14 @@ getRequiredSmallIconSizeImpl
 static NativeWindowsIcon*
 getBigIconImpl 
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static void
 setBigIconImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     NativeWindowsIcon* icon
   );
@@ -124,12 +131,14 @@ setBigIconImpl
 static NativeWindowsIcon*
 getSmallIconImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static void
 setSmallIconImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     NativeWindowsIcon* icon
   );
@@ -137,13 +146,14 @@ setSmallIconImpl
 static Arcadia_String*
 getTitleImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   );
 
 static void
 setTitleImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_String* title
   );
@@ -151,7 +161,7 @@ setTitleImpl
 static void
 getCanvasSizeImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
@@ -220,7 +230,7 @@ WindowProc
 static void
 NativeWindowsWindow_destruct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   )
 {
@@ -238,36 +248,36 @@ NativeWindowsWindow_destruct
 static void
 NativeWindowsWindow_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   )
 {
   if (self->title) {
-    Arcadia_Object_visit(process, self->title);
+    Arcadia_Object_visit(thread, self->title);
   }
   if (self->smallIcon) {
-    Arcadia_Object_visit(process, self->smallIcon);
+    Arcadia_Object_visit(thread, self->smallIcon);
   }
   if (self->bigIcon) {
-    Arcadia_Object_visit(process, self->bigIcon);
+    Arcadia_Object_visit(thread, self->bigIcon);
   }
 }
 
 static void
 NativeWindowsWindow_setTitleHelper
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     HWND windowHandle,
     Arcadia_String* title
   )
 {
-  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(process);
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
   Arcadia_Value value;
   Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)title);
-  Arcadia_StringBuffer_append(process, stringBuffer, value);
-  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"", 1)));
-  Arcadia_StringBuffer_append(process, stringBuffer, value);
-  SendMessage(windowHandle, WM_SETTEXT, 0, (LPARAM)Arcadia_StringBuffer_getBytes(stringBuffer));
+  Arcadia_StringBuffer_append(thread, stringBuffer, value);
+  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", 1)));
+  Arcadia_StringBuffer_append(thread, stringBuffer, value);
+  SendMessage(windowHandle, WM_SETTEXT, 0, (LPARAM)Arcadia_StringBuffer_getBytes(thread, stringBuffer));
 }
 
 static void
@@ -279,48 +289,49 @@ NativeWindowsWindow_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   NativeWindowsWindow* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _NativeWindowsWindow_getType(process);
+  Arcadia_TypeValue _type = _NativeWindowsWindow_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   _self->instanceHandle = NULL;
   _self->windowHandle = NULL;
-  _self->title = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), g_title, sizeof(g_title) - 1));
+  _self->title = Arcadia_String_create_pn(Arcadia_Process_getThread(process), Arcadia_ImmutableByteArray_create(Arcadia_Process_getThread(process), g_title, sizeof(g_title) - 1));
   _self->bigIcon = NULL;
   _self->smallIcon = NULL;
 
-  ((NativeWindow*)_self)->open = (void(*)(Arcadia_Process*, NativeWindow*)) & openImpl;
+  ((NativeWindow*)_self)->open = (void(*)(Arcadia_Thread*, NativeWindow*)) & openImpl;
 
-  ((NativeWindow*)_self)->close = (void(*)(Arcadia_Process*, NativeWindow*)) & closeImpl;
+  ((NativeWindow*)_self)->close = (void(*)(Arcadia_Thread*, NativeWindow*)) & closeImpl;
 
-  ((NativeWindow*)_self)->getQuitRequested = (Arcadia_BooleanValue(*)(NativeWindow*)) & getQuitRequestedImpl;
-  ((NativeWindow*)_self)->setQuitRequested = (void(*)(NativeWindow*,Arcadia_BooleanValue)) & setQuitRequestedImpl;
+  ((NativeWindow*)_self)->getQuitRequested = (Arcadia_BooleanValue(*)(Arcadia_Thread*, NativeWindow*)) & getQuitRequestedImpl;
+  ((NativeWindow*)_self)->setQuitRequested = (void(*)(Arcadia_Thread*, NativeWindow*,Arcadia_BooleanValue)) & setQuitRequestedImpl;
 
-  ((NativeWindow*)_self)->update = (void(*)(NativeWindow*)) &updateImpl;
+  ((NativeWindow*)_self)->update = (void(*)(Arcadia_Thread*, NativeWindow*)) &updateImpl;
 
-  ((NativeWindow*)_self)->getRequiredBigIconSize = (void(*)(NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredBigIconSizeImpl;
-  ((NativeWindow*)_self)->getRequiredSmallIconSize = (void(*)(NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredSmallIconSizeImpl;
+  ((NativeWindow*)_self)->getRequiredBigIconSize = (void(*)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredBigIconSizeImpl;
+  ((NativeWindow*)_self)->getRequiredSmallIconSize = (void(*)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredSmallIconSizeImpl;
 
-  ((NativeWindow*)_self)->getBigIcon = (NativeIcon*(*)(NativeWindow*)) & getBigIconImpl;
-  ((NativeWindow*)_self)->setBigIcon = (void(*)(NativeWindow*, NativeIcon*)) & setBigIconImpl;
+  ((NativeWindow*)_self)->getBigIcon = (NativeIcon*(*)(Arcadia_Thread*, NativeWindow*)) & getBigIconImpl;
+  ((NativeWindow*)_self)->setBigIcon = (void(*)(Arcadia_Thread*, NativeWindow*, NativeIcon*)) & setBigIconImpl;
 
-  ((NativeWindow*)_self)->getSmallIcon = (NativeIcon*(*)(NativeWindow*)) & getSmallIconImpl;
-  ((NativeWindow*)_self)->setSmallIcon = (void(*)(NativeWindow*, NativeIcon*)) & setSmallIconImpl;
+  ((NativeWindow*)_self)->getSmallIcon = (NativeIcon*(*)(Arcadia_Thread*, NativeWindow*)) & getSmallIconImpl;
+  ((NativeWindow*)_self)->setSmallIcon = (void(*)(Arcadia_Thread*, NativeWindow*, NativeIcon*)) & setSmallIconImpl;
 
-  ((NativeWindow*)_self)->getTitle = (Arcadia_String*(*)(NativeWindow*)) & getTitleImpl;
-  ((NativeWindow*)_self)->setTitle = (void(*)(Arcadia_Process*, NativeWindow*, Arcadia_String*)) & setTitleImpl;
+  ((NativeWindow*)_self)->getTitle = (Arcadia_String*(*)(Arcadia_Thread*, NativeWindow*)) & getTitleImpl;
+  ((NativeWindow*)_self)->setTitle = (void(*)(Arcadia_Thread*, NativeWindow*, Arcadia_String*)) & setTitleImpl;
 
-  ((NativeWindow*)_self)->getCanvasSize = (void(*)(NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
+  ((NativeWindow*)_self)->getCanvasSize = (void(*)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
 
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 openImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   )
 { 
@@ -330,8 +341,8 @@ openImpl
 
   self->instanceHandle = GetModuleHandleA(NULL);
   if (!self->instanceHandle) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   // Register the window class.
@@ -344,8 +355,8 @@ openImpl
 
   if (!RegisterClass(&wc)) {
     self->instanceHandle = NULL;
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   self->windowHandle =
@@ -366,8 +377,8 @@ openImpl
   if (!self->windowHandle) {
     UnregisterClass(g_className, self->instanceHandle);
     self->instanceHandle = NULL;
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   if (!SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)) {
@@ -375,8 +386,8 @@ openImpl
     self->windowHandle = NULL;
     UnregisterClass(g_className, self->instanceHandle);
     self->instanceHandle = NULL;
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   self->windowDeviceContextHandle = GetDC(self->windowHandle);
@@ -385,22 +396,22 @@ openImpl
     self->windowHandle = NULL;
     UnregisterClass(g_className, self->instanceHandle);
     self->instanceHandle = NULL;
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    NativeWindowsWindow_setTitleHelper(process, self->windowHandle, self->title);
-    Arcadia_Process_popJumpTarget(process);
+    NativeWindowsWindow_setTitleHelper(thread, self->windowHandle, self->title);
+    Arcadia_Thread_popJumpTarget(thread);
   } else {
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(thread);
     DestroyWindow(self->windowHandle);
     self->windowHandle = NULL;
     UnregisterClass(g_className, self->instanceHandle);
     self->instanceHandle = NULL;
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_jump(thread);
   }
 
   ShowWindow(self->windowHandle, SW_SHOW);
@@ -409,7 +420,7 @@ openImpl
 static void
 closeImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   ) 
 {
@@ -426,6 +437,7 @@ closeImpl
 static Arcadia_BooleanValue
 getQuitRequestedImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   )
 { return g_quitRequested; }
@@ -433,6 +445,7 @@ getQuitRequestedImpl
 static void
 setQuitRequestedImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_BooleanValue quitRequested
   )
@@ -441,6 +454,7 @@ setQuitRequestedImpl
 static void
 updateImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   )
 {
@@ -457,6 +471,7 @@ updateImpl
 static void
 getRequiredBigIconSizeImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
@@ -469,6 +484,7 @@ getRequiredBigIconSizeImpl
 static void
 getRequiredSmallIconSizeImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
@@ -481,6 +497,7 @@ getRequiredSmallIconSizeImpl
 static NativeWindowsIcon*
 getBigIconImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   )
 { return self->bigIcon; }
@@ -488,6 +505,7 @@ getBigIconImpl
 static void
 setBigIconImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     NativeWindowsIcon* icon
   )
@@ -505,6 +523,7 @@ setBigIconImpl
 static NativeWindowsIcon*
 getSmallIconImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   )
 { return self->smallIcon; }
@@ -512,6 +531,7 @@ getSmallIconImpl
 static void
 setSmallIconImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     NativeWindowsIcon* icon
   )
@@ -529,6 +549,7 @@ setSmallIconImpl
 static Arcadia_String*
 getTitleImpl
   (
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self
   )
 { return self->title; }
@@ -536,38 +557,38 @@ getTitleImpl
 static void
 setTitleImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_String* title
   )
 {
   if (!title) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   self->title = title;
   if (self->windowHandle) {
-    NativeWindowsWindow_setTitleHelper(process, self->windowHandle, title);
+    NativeWindowsWindow_setTitleHelper(thread, self->windowHandle, title);
   }
 }
 
 static void
 getCanvasSizeImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
 { 
   if (!self->windowHandle) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
   }
   RECT clientRectangle;
   if (!GetClientRect(self->windowHandle, &clientRectangle)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_StaticAssert(LONG_MAX <= INT32_MAX, "<internal error>");
   *width = clientRectangle.right - clientRectangle.left;
@@ -577,10 +598,10 @@ getCanvasSizeImpl
 NativeWindowsWindow*
 NativeWindowsWindow_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  NativeWindowsWindow* self = R_allocateObject(process, _NativeWindowsWindow_getType(process), 0, &argumentValues[0]);
+  NativeWindowsWindow* self = Arcadia_allocateObject(thread, _NativeWindowsWindow_getType(thread), 0, &argumentValues[0]);
   return self;
 }

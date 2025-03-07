@@ -21,14 +21,14 @@
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Process1.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
   
 Arcadia_ImmutableUtf8String*
 _createFromBytes
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
   );

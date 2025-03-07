@@ -40,15 +40,15 @@
   static inline Type##Value \
   R_clamp##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Type##Value value, \
       Type##Value lower, \
       Type##Value upper  \
     ) \
   { \
     if (lower > upper) { \
-      Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid); \
-      Arcadia_Process_jump(process); \
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid); \
+      Arcadia_Thread_jump(thread); \
     } \
     if (value < lower) value = lower; \
     else if (value > upper) value = upper; \

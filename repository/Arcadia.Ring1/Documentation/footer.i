@@ -5,6 +5,7 @@
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_BooleanValue">Arcadia_BooleanValue</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_clamp*">Arcadia_clamp*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_countLeadingZeroes*">Arcadia_countLeadingZeroes*</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_countSignificandBits*">Arcadia_countSignificandBits*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_ForeignProcedureValue">Arcadia_ForeignProcedureValue</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_getTickCount">Arcadia_getTickCount</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_hash*">Arcadia_hash*</a></li>

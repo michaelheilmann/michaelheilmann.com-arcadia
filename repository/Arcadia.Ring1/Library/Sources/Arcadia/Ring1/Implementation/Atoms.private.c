@@ -19,7 +19,7 @@
 #include "Arcadia/Ring1/Implementation/Atoms.private.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring1/Implementation/Process1.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/TypeNameParser.h"
 #include "Arms.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
@@ -66,6 +66,7 @@ static Singleton* g_singleton = NULL;
 static Arcadia_Natural64Value
 getTickCount
   (
+    Arcadia_Thread* thread
   );
 
 static void
@@ -93,6 +94,7 @@ visitCallback
 static Arcadia_SizeValue
 hashBytes
   (
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -100,7 +102,7 @@ hashBytes
 static void
 resize
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 static Arcadia_BooleanValue g_typeRegistered = Arcadia_BooleanValue_False;
@@ -108,6 +110,7 @@ static Arcadia_BooleanValue g_typeRegistered = Arcadia_BooleanValue_False;
 static Arcadia_Natural64Value
 getTickCount
   (
+    Arcadia_Thread* thread
   )
 {
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
@@ -172,6 +175,7 @@ visitCallback
 static Arcadia_SizeValue
 hashBytes
   (
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -187,7 +191,7 @@ hashBytes
 static void
 resize
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   if (g_singleton->size == g_singleton->capacity) {
@@ -207,7 +211,7 @@ resize
     }
     Arcadia_Atom** oldBuckets = g_singleton->buckets;
     Arcadia_Atom** newBuckets = NULL;
-    Arcadia_Process_allocateUnmanaged(process, (void**)&newBuckets, newCapacity * sizeof(Arcadia_Atom*));
+    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&newBuckets, newCapacity * sizeof(Arcadia_Atom*));
     for (Arcadia_SizeValue i = 0, n = newCapacity; i < n; ++i) {
       newBuckets[i] = NULL;
     }
@@ -220,7 +224,7 @@ resize
         newBuckets[j] = node;
       }
     }
-    Arcadia_Process_deallocateUnmanaged(process, oldBuckets);
+    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), oldBuckets);
     g_singleton->buckets = newBuckets;
     g_singleton->capacity = newCapacity;
   }
@@ -237,22 +241,22 @@ Arcadia_StaticAssert(Arcadia_Ring1_Configuration_Atoms_InitialCapacity <= Arcadi
 Arcadia_AtomValue
 Arcadia_Atoms_getOrCreateAtom
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value flags,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {
   if (!bytes || (SIZE_MAX - sizeof(Arcadia_Atom)) < numberOfBytes) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
   
   if (Arcadia_AtomKind_Name == (flags & Arcadia_AtomKind_Name)) {
-    R_Names_parseTypeName(process, bytes, numberOfBytes);
+    Arcadia_Names_parseTypeName(thread, bytes, numberOfBytes);
   }
 
-  Arcadia_SizeValue hash = hashBytes(bytes, numberOfBytes);
+  Arcadia_SizeValue hash = hashBytes(thread, bytes, numberOfBytes);
   Arcadia_SizeValue index = hash % g_singleton->capacity;
   for (Arcadia_Atom* atom = g_singleton->buckets[index]; NULL != atom; atom = atom->next) {
     if (atom->numberOfBytes == numberOfBytes && atom->hash == hash) {
@@ -262,32 +266,33 @@ Arcadia_Atoms_getOrCreateAtom
     }
   }
   Arcadia_Atom* atom = NULL;
-  Arcadia_Process_allocate(process, &atom, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, sizeof(Arcadia_Atom) + numberOfBytes);
-  Arcadia_Process1_copyMemory(Arcadia_Process_getProcess1(process), atom->bytes, bytes, numberOfBytes);
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &atom, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, sizeof(Arcadia_Atom) + numberOfBytes);
+  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), atom->bytes, bytes, numberOfBytes);
   atom->numberOfBytes = numberOfBytes;
   atom->hash = hash;
-  atom->lastVisited = getTickCount();
+  atom->lastVisited = getTickCount(thread);
   atom->next = g_singleton->buckets[index];
   g_singleton->buckets[index] = atom;
   g_singleton->size++;
-  resize(process);
+  resize(thread);
   return atom;
 }
 
 void
 Arcadia_Atom_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self
   )
 { 
-  self->lastVisited = getTickCount();
+  self->lastVisited = getTickCount(thread);
   Arms_visit(self);
 }
 
 void const*
 Arcadia_Atom_getBytes
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self
   )
 { return self->bytes; }
@@ -295,6 +300,7 @@ Arcadia_Atom_getBytes
 Arcadia_SizeValue
 Arcadia_Atom_getNumberOfBytes
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self
   )
 { return self->numberOfBytes; }
@@ -302,6 +308,7 @@ Arcadia_Atom_getNumberOfBytes
 Arcadia_SizeValue
 Arcadia_Atom_getHash
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self
   )
 { return self->hash; }
@@ -309,6 +316,7 @@ Arcadia_Atom_getHash
 Arcadia_BooleanValue
 Arcadia_Atom_isEqualTo
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue self,
     Arcadia_AtomValue other
   )
@@ -319,14 +327,14 @@ Arcadia_DefineModule("Arcadia.Atoms", Arcadia_Atoms);
 static void
 _Arcadia_Atoms_onVisit
   (
-    Arcadia_Process1* process
+    Arcadia_Thread* thread
   )
 {/*Intentionally empty.*/}
 
 static void
 _Arcadia_Atoms_onFinalize
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     size_t* destroyed
   )
 {
@@ -336,17 +344,18 @@ _Arcadia_Atoms_onFinalize
 static void
 _Arcadia_Atoms_onStartUp
   (
-    Arcadia_Process1* process
+    Arcadia_Thread* thread
   )
 {
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   if (g_referenceCount == UINT32_MAX) {
     Arcadia_logf(Arcadia_LogFlags_Error, "corrupted reference counter\n");
-    Arcadia_Process1_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
   }
   if (0 == g_referenceCount) {
     Arcadia_JumpTarget jumpTarget;
-    Arcadia_Process1_allocateUnmanaged(process, (void**)&g_singleton, sizeof(Singleton));
+    Arcadia_Process_allocateUnmanaged(process, (void**)&g_singleton, sizeof(Singleton));
     g_singleton->buckets = NULL;
     g_singleton->size = 0;
     g_singleton->capacity = 0;
@@ -356,61 +365,61 @@ _Arcadia_Atoms_onStartUp
       g_singleton->maximumCapacity = Arcadia_Integer32Value_Maximum;
     }
     if (g_singleton->minimumCapacity > g_singleton->maximumCapacity) {
-      Arcadia_Process1_deallocateUnmanaged(process, g_singleton);
+      Arcadia_Process_deallocateUnmanaged(process, g_singleton);
       g_singleton = NULL;
-      Arcadia_Process1_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Process1_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     }
     // (1) create buckets
-    Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Process1_allocateUnmanaged(process, (void**)&g_singleton->buckets, Arcadia_Ring1_Configuration_Atoms_InitialCapacity * sizeof(Arcadia_Atom*));
+      Arcadia_Process_allocateUnmanaged(process, (void**)&g_singleton->buckets, Arcadia_Ring1_Configuration_Atoms_InitialCapacity * sizeof(Arcadia_Atom*));
       for (Arcadia_SizeValue i = 0, n = Arcadia_Ring1_Configuration_Atoms_InitialCapacity; i < n; ++i) {
         g_singleton->buckets[i] = NULL;
       }
       g_singleton->size = 0;
       g_singleton->capacity = Arcadia_Ring1_Configuration_Atoms_InitialCapacity;
-      Arcadia_Process1_popJumpTarget(process);
+      Arcadia_Thread_popJumpTarget(thread);
     } else {
-      Arcadia_Process1_popJumpTarget(process);
-      Arcadia_Process1_deallocateUnmanaged(process, g_singleton);
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_Process_deallocateUnmanaged(process, g_singleton);
       g_singleton = NULL;
-      Arcadia_Process1_jump(process);
+      Arcadia_Thread_jump(thread);
     }
 
-    Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Process1_addArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
-      Arcadia_Process1_addArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
-      Arcadia_Process1_addArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-      Arcadia_Process1_popJumpTarget(process);
+      Arcadia_Process_addArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+      Arcadia_Process_addArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
+      Arcadia_Process_addArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+      Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
     } else {
-      Arcadia_Process1_popJumpTarget(process);
-      Arcadia_Process1_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-      Arcadia_Process1_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
-      Arcadia_Process1_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
-      Arcadia_Process1_deallocateUnmanaged(process, g_singleton->buckets);
+      Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
+      Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+      Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
+      Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+      Arcadia_Process_deallocateUnmanaged(process, g_singleton->buckets);
       g_singleton->buckets = NULL;
-      Arcadia_Process1_deallocateUnmanaged(process, g_singleton);
+      Arcadia_Process_deallocateUnmanaged(process, g_singleton);
       g_singleton = NULL;
-      Arcadia_Process1_jump(process);
+      Arcadia_Thread_jump(thread);
     }
 
     if (!g_typeRegistered) {
-      Arcadia_Process1_pushJumpTarget(process, &jumpTarget);
+      Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
       if (Arcadia_JumpTarget_save(&jumpTarget)) {
-        Arcadia_Process1_registerType(process, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, NULL, &typeRemovedCallback, &visitCallback, &finalizeCallback);
-        Arcadia_Process1_popJumpTarget(process);
+        Arcadia_Process_registerType(process, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, NULL, &typeRemovedCallback, &visitCallback, &finalizeCallback);
+        Arcadia_Thread_popJumpTarget(thread);
       } else {
-        Arcadia_Process1_popJumpTarget(process);
-        Arcadia_Process1_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-        Arcadia_Process1_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
-        Arcadia_Process1_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
-        Arcadia_Process1_deallocateUnmanaged(process, g_singleton->buckets);
+        Arcadia_Thread_popJumpTarget(thread);
+        Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+        Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
+        Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+        Arcadia_Process_deallocateUnmanaged(process, g_singleton->buckets);
         g_singleton->buckets = NULL;
-        Arcadia_Process1_deallocateUnmanaged(process, g_singleton);
+        Arcadia_Process_deallocateUnmanaged(process, g_singleton);
         g_singleton = NULL;
-        Arcadia_Process1_jump(process);
+        Arcadia_Thread_jump(thread);
       }
     }
     g_typeRegistered = Arcadia_BooleanValue_True;
@@ -421,22 +430,23 @@ _Arcadia_Atoms_onStartUp
 static void
 _Arcadia_Atoms_onShutDown
   (
-    Arcadia_Process1* process
+    Arcadia_Thread* thread
   )
 {
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   if (g_referenceCount == 0) {
     Arcadia_logf(Arcadia_LogFlags_Error, "corrupted reference counter\n");
-    Arcadia_Process1_setStatus(process, Arcadia_Status_OperationInvalid);
-    Arcadia_Process1_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
   }
   g_referenceCount--;
   if (0 == g_referenceCount) {
-    Arcadia_Process1_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-    Arcadia_Process1_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
-    Arcadia_Process1_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
-    Arcadia_Process1_deallocateUnmanaged(process, g_singleton->buckets);
+    Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+    Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
+    Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+    Arcadia_Process_deallocateUnmanaged(process, g_singleton->buckets);
     g_singleton->buckets = NULL;
-    Arcadia_Process1_deallocateUnmanaged(process, g_singleton);
+    Arcadia_Process_deallocateUnmanaged(process, g_singleton);
     g_singleton = NULL;
   }
 }
@@ -444,11 +454,11 @@ _Arcadia_Atoms_onShutDown
 static void
 _Arcadia_Atoms_onPreMark
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     bool purgeCache
   )
 {
-  Arcadia_Natural64Value now = getTickCount();
+  Arcadia_Natural64Value now = getTickCount(thread);
   for (Arcadia_SizeValue i = 0, n = g_singleton->capacity; i < n; ++i) {
     Arcadia_Atom* current = g_singleton->buckets[i];
     while (current) {

@@ -25,7 +25,7 @@
 void
 _ensureTypeRegistered
   (
-    Arcadia_Process1* process
+    Arcadia_Thread* thread
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TYPE_H_INCLUDED

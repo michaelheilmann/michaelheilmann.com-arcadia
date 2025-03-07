@@ -24,7 +24,7 @@
 Arcadia_Real32Value
 R_toReal32
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* p,
     Arcadia_SizeValue n
   );
@@ -32,7 +32,7 @@ R_toReal32
 Arcadia_Real64Value
 R_toReal64
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     char const* p,
     Arcadia_SizeValue n
   );

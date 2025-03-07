@@ -23,6 +23,7 @@
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// the definition of a local, parameter, or object variable.
 Rex_declareObjectType(u8"Arcadia.Mil.VariableDefinitionAst", Arcadia_Mil_VariableDefinitionAst, u8"Arcadia.Mil.ClassMemberDefinitionAst");
 
 struct Arcadia_Mil_VariableDefinitionAst {
@@ -33,7 +34,7 @@ struct Arcadia_Mil_VariableDefinitionAst {
 Arcadia_Mil_VariableDefinitionAst*
 Arcadia_Mil_VariableDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* name
   );
 

@@ -33,11 +33,11 @@
   Arcadia_TypeValue \
   _##cName##Value_getType \
     ( \
-      Arcadia_Process* process \
+      Arcadia_Thread* thread \
     ) \
   { \
     if (!g_##cName##_type) { \
-      g_##cName##_type = Arcadia_registerScalarType(process, cilName, sizeof(cilName) - 1, typeOperations, &_##cName##_typeDestructing); \
+      g_##cName##_type = Arcadia_registerScalarType(thread, cilName, sizeof(cilName) - 1, typeOperations, &_##cName##_typeDestructing); \
     } \
     return g_##cName##_type; \
   }

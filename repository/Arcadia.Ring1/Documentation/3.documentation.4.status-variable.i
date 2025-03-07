@@ -1,19 +1,20 @@
   <h3 id="status-variable">3.4. Status Variable</h3>
-  <p>R provides a global status variable.</p>
+  <p><em>Arcadia.Ring1</em> provides by-thread status variable.</p>
 
   <p><code>
-  R_Status
-  R_getStatus
+  Arcadia_Status
+  Arcadia_Thread_getStatus
     (
+      Arcadia_Thread* thread
     );
   </code></p>
   <p>gets the value of the status variable. The initial value of the status variable is <code>Arcadia_Status_Success</code>.</p>
 
   <p><code>
   void
-  Arcadia_Process_setStatus
+  Arcadia_Thread_setStatus
     (
-      Arcadia_Process* process,
+      Arcadia_Thread* thread,
       Arcadia_Status status
     );
   </code></p>

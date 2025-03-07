@@ -41,7 +41,7 @@ struct Arcadia_Mil_VariableDefinitionStatementAst {
 Arcadia_Mil_VariableDefinitionStatementAst*
 Arcadia_Mil_VariableDefinitionStatementAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* variableName
   );
 

@@ -28,30 +28,30 @@ Rex_declareObjectType(u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader, u8"Arcadia.Obj
 
 struct Arcadia_Utf8Reader {
   Arcadia_Object _parent;
-  void (*next)(Arcadia_Process*, Arcadia_Utf8Reader* self);
-  Arcadia_Natural32Value (*getCodePoint)(Arcadia_Process*, Arcadia_Utf8Reader* self);
-  Arcadia_BooleanValue (*hasCodePoint)(Arcadia_Process*, Arcadia_Utf8Reader* self);
-  Arcadia_SizeValue (*getByteIndex)(Arcadia_Utf8Reader* self);
+  void (*next)(Arcadia_Thread*, Arcadia_Utf8Reader* self);
+  Arcadia_Natural32Value (*getCodePoint)(Arcadia_Thread* thread, Arcadia_Utf8Reader* self);
+  Arcadia_BooleanValue (*hasCodePoint)(Arcadia_Thread* thread, Arcadia_Utf8Reader* self);
+  Arcadia_SizeValue (*getByteIndex)(Arcadia_Thread* thread, Arcadia_Utf8Reader* self);
 };
 
 void
 Arcadia_Utf8Reader_next
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* self
   );
 
 Arcadia_Natural32Value
 Arcadia_Utf8Reader_getCodePoint
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* self
   );
 
 Arcadia_BooleanValue
 Arcadia_Utf8Reader_hasCodePoint
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* self
   );
 
@@ -59,6 +59,7 @@ Arcadia_Utf8Reader_hasCodePoint
 Arcadia_SizeValue
 Arcadia_Utf8Reader_getByteIndex
   (
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* self
   );
 

@@ -23,7 +23,7 @@
 static void
 additionTestFixture
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     int64_t x,
     int64_t y,
     int64_t z
@@ -58,14 +58,14 @@ Error:
   while (k > 0) {
     apint10_uninitialize(&v[--k]);
   }
-  Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-  Arcadia_Process_jump(process);
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+  Arcadia_Thread_jump(thread);
 }
 
 static void
 multiplicationTestFixture
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     int64_t x,
     int64_t y,
     int64_t z
@@ -100,57 +100,57 @@ Error:
   while (k > 0) {
     apint10_uninitialize(&v[--k]);
   }
-  Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-  Arcadia_Process_jump(process);
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+  Arcadia_Thread_jump(thread);
 }
 
 static void
 testAddition
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  additionTestFixture(process,  0,  0,  0); // TODO: Test negative zero and positive zero combinations.
+  additionTestFixture(thread,  0,  0,  0); // TODO: Test negative zero and positive zero combinations.
 
-  additionTestFixture(process,  0, +1, +1);
-  additionTestFixture(process, +1,  0, +1);
-  additionTestFixture(process, +1, +1, +2);
+  additionTestFixture(thread,  0, +1, +1);
+  additionTestFixture(thread, +1,  0, +1);
+  additionTestFixture(thread, +1, +1, +2);
 
-  additionTestFixture(process,  0, -1, -1);
-  additionTestFixture(process, -1,- 0, -1);
-  additionTestFixture(process, -1, -1, -2);
+  additionTestFixture(thread,  0, -1, -1);
+  additionTestFixture(thread, -1,- 0, -1);
+  additionTestFixture(thread, -1, -1, -2);
 
-  additionTestFixture(process, 10, -2, +8);
+  additionTestFixture(thread, 10, -2, +8);
 }
 
 static void
 testMultiplication
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  multiplicationTestFixture(process, 0, 0, 0); // TODO: Test negative zero and positive zero combinations.
-  multiplicationTestFixture(process, 0, +1, 0);
-  multiplicationTestFixture(process, 0, -1, 0);
-  multiplicationTestFixture(process, +1, 0, 0);
-  multiplicationTestFixture(process, -1, 0, 0);
-  multiplicationTestFixture(process, -1, -1, +1);
-  multiplicationTestFixture(process, -1, +1, -1);
-  multiplicationTestFixture(process, +1, -1, -1);
-  multiplicationTestFixture(process, +1, +1, +1);
+  multiplicationTestFixture(thread, 0, 0, 0); // TODO: Test negative zero and positive zero combinations.
+  multiplicationTestFixture(thread, 0, +1, 0);
+  multiplicationTestFixture(thread, 0, -1, 0);
+  multiplicationTestFixture(thread, +1, 0, 0);
+  multiplicationTestFixture(thread, -1, 0, 0);
+  multiplicationTestFixture(thread, -1, -1, +1);
+  multiplicationTestFixture(thread, -1, +1, -1);
+  multiplicationTestFixture(thread, +1, -1, -1);
+  multiplicationTestFixture(thread, +1, +1, +1);
 
-  multiplicationTestFixture(process, +3, +7, +21);
-  multiplicationTestFixture(process, +3, -7, -21);
-  multiplicationTestFixture(process, -3, +7, -21);
-  multiplicationTestFixture(process, -3, -7, +21);
+  multiplicationTestFixture(thread, +3, +7, +21);
+  multiplicationTestFixture(thread, +3, -7, -21);
+  multiplicationTestFixture(thread, -3, +7, -21);
+  multiplicationTestFixture(thread, -3, -7, +21);
 }
 
 void
 Arcadia_Ring1_Tests_Support_apint10_arithmetic
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  testAddition(process);
-  testMultiplication(process);
+  testAddition(thread);
+  testMultiplication(thread);
 }

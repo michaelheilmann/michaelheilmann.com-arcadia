@@ -24,7 +24,7 @@
 void
 Arcadia_Ring1_Tests_Support_ieee754
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 #endif // ARCADIA_RING1_TESTS_SUPPORT_IEEE754_H_INCLUDED

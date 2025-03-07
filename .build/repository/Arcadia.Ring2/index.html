@@ -16,37 +16,25 @@
 <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=3'>
 <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=3'>
 <link rel='canonical' href='https://michaelheilmann.com/repository/R1/'>
-<title>Michael Heilmann's Runtime Mark 1</title>
+<title>Michael Heilmann's Arcadia Ring 2</title>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
   /* variable */
-  my-v {
+  body.my-constant-page-1 my-v {
     font-family: my-code-font;
     font-size: 0.9rem;
   }
 
   /* meta variable */
-  my-mv {
+  body.my-constant-page-1 my-mv {
     display: inline;
     font-family: my-code-font;
     font-size: 0.9rem;
   }
-  my-mv::before {
+  body.my-constant-page-1 my-mv::before {
     content: "<";
   }
-  my-mv::after {
-    content: ">";
-  }
-
-  /* meta variable */
-  .meta {
-    font-family: my-code-font;
-    font-size: 0.9rem;
-  }
-  .meta::before {
-    content: "<";
-  }
-  .meta::after {
+  body.my-constant-page-1 my-mv::after {
     content: ">";
   }
 </style>
@@ -111,7 +99,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuf
 Arcadia_ByteBuffer*
 Arcadia_ByteBuffer_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 </code></p>
 
@@ -119,7 +107,7 @@ Arcadia_ByteBuffer_create
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -136,6 +124,7 @@ Arcadia_ByteBuffer_create
 void
 Arcadia_ByteBuffer_clear
   (
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self
   )
 </code></p>
@@ -144,7 +133,7 @@ Arcadia_ByteBuffer_clear
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
@@ -155,6 +144,7 @@ Arcadia_ByteBuffer_clear
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_endsWith_pn
   (
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -165,10 +155,10 @@ Arcadia_ByteBuffer_endsWith_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -184,7 +174,7 @@ Arcadia_ByteBuffer_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_startsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -195,10 +185,10 @@ Arcadia_ByteBuffer_startsWith_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -215,8 +205,8 @@ Arcadia_ByteBuffer_startsWith_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo_pn
   (
-    Arcadia_Process* process,
-    R_ByteBuffer* self,
+    Arcadia_Thread* thread,
+    Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -226,16 +216,16 @@ Arcadia_ByteBuffer_isEqualTo_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -244,7 +234,7 @@ Arcadia_ByteBuffer_isEqualTo_pn
 void
 Arcadia_ByteBuffer_append_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -255,10 +245,10 @@ Arcadia_ByteBuffer_append_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadoa_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -274,7 +264,7 @@ Arcadia_ByteBuffer_append_pn
 void
 Arcadia_ByteBuffer_prepend_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* p,
     Arcadia_SizeValue n
@@ -285,10 +275,10 @@ Arcadia_ByteBuffer_prepend_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* p                           </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue n                     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>void const* p                         </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue n                   </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -304,7 +294,7 @@ Arcadia_ByteBuffer_prepend_pn
 void
 Arcadia_ByteBuffer_insert_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     Arcadia_SizeValue index,
     void const* p,
@@ -316,11 +306,11 @@ Arcadia_ByteBuffer_insert_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_SizeValue index                 </td><td>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
-  <tr><td>void const* p                           </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue n                     </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
+  <tr><td>void const* p                         </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue n                   </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -336,7 +326,7 @@ Arcadia_ByteBuffer_insert_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     Arcadia_ByteBuffer const* other
   )
@@ -346,9 +336,9 @@ Arcadia_ByteBuffer_isEqualTo
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer const* self </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_ByteBuffer const* other</td><td>A pointer to the other Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer const* self        </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_ByteBuffer const* other       </td><td>A pointer to the other Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -363,7 +353,7 @@ Arcadia_ByteBuffer_isEqualTo
 Arcadia_SizeValue
 Arcadia_ByteBuffer_getSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self
   )
 </code></p>
@@ -372,8 +362,8 @@ Arcadia_ByteBuffer_getSize
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -388,7 +378,7 @@ Arcadia_ByteBuffer_getSize
 Arcadia_Natural8Value
 Arcadia_ByteBuffer_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     Arcadia_SizeValue index
   )
@@ -398,9 +388,9 @@ Arcadia_ByteBuffer_getAt
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_SizeValue index               <td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -415,7 +405,7 @@ Arcadia_ByteBuffer_getAt
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEmpty
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self
   )
 </code></p>
@@ -424,12 +414,12 @@ Arcadia_ByteBuffer_isEmpty
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
-<p><code>R_BooleanValue_True</code> if this Byte buffer is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+<p><code>Arcadia_BooleanValue_True</code> if this Byte buffer is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
 
 <h6><b>Errors</b></h6>
 <table>
@@ -442,7 +432,7 @@ Arcadia_ByteBuffer_isEmpty
 void
 Arcadia_ByteBuffer_swap
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     Arcadia_ByteBuffer* other
   )
@@ -452,9 +442,9 @@ Arcadia_ByteBuffer_swap
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self                </td><td>A pointer to the other Byte buffer.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
+  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to the other Byte buffer.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -465,61 +455,80 @@ Arcadia_ByteBuffer_swap
 
 <h4 id="Arcadia_FileHandle">Arcadia_FileHandle</h4>
 <p>
-<code>R_FileHandle</code> represents a operating system file handle.
-This type is allocated on the heap and values of this type are referenced by <code>R_FileHandle</code> pointers.
-A <code>R_FileHandle</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_FileHandle</code> value can be safely cast into a <code>R_FileHandle</code> pointer.
+<code>Arcadia_FileHandle</code> represents a operating system file handle.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FileHandle</code> pointers.
+A <code>Arcadia_FileHandle</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileHandle</code> value can be safely cast into a <code>Arcadia_FileHandle</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-create">create</h5>
+<h5 id="Arcadia_FileHandle_create">Arcadia_FileHandle_create</h5>
 
 <p><code>
-R_FileHandle* R_FileHandle_create(R_FileSystem* fileSystem)
+Arcadia_FileHandle*
+Arcadia_FileHandle_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* fileSystem
+  )
 </code></p>
 
 <p>Create a file handle. The file handle is closed.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_FileSystem* self</td><td>A pointer to the backing <code>R_FileSystem</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_FileSystem* self</td><td>A pointer to the backing <code>Arcadia_FileSystem</code> object.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>A pointer to the file handle.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-close">close</h5>
+<h5 id="Arcadia_FileHandle_close">Arcadia_FileHandle_close</h5>
 <p><code>
-void R_FileHandle_close(R_FileHandle* self)
+void
+Arcadia_FileHandle_close
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self
+  )
 </code></p>
 
 <p>Close this file handle.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-openforreading">openForReading</h5>
+<h5 id="Arcadia_FileHandle_openForReading">Arcadia_FileHandle_openForReading</h5>
 <p><code>
-void R_FileHandle_openForReading(R_FileHandle* self, R_FilePath* path)
+void
+Arcadia_FileHandle_openForReading
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
+    Arcadia_FilePath* path
+  )
 </code></p>
 
 <p>Open a file for reading. If the file is open, it is closed before trying to re-open it.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>R_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
+  <tr><td>Arcadia_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -657,34 +666,50 @@ The number of Bytes read is 0 if the end of the file was reached.
 
 <h4 id="Arcadia_FilePath">Arcadia_FilePath</h4>
 <p>
-<code>R_FilePath</code> represents a file path.
-This type is allocated on the heap and values of this type are referenced by <code>R_FilePath</code> pointers.
-A <code>R_FilePath</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>R_FilePath</code> value can be safely cast into a <code>R_FilePath</code> pointer.
+<code>Arcadia_FilePath</code> represents a file path.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FilePath</code> pointers.
+A <code>Arcadia_FilePath</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FilePath</code> value can be safely cast into a <code>Arcadia_FilePath</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="r-filepath-create">create</h5>
 
 <p><code>
-R_FilePath* R_Path_create()
+Arcadia_FilePath*
+Arcadia_FilePath_create
+  (
+    Arcadia_Thread* thread
+  )
 </code></p>
 
 <p>Create the empty file path.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+</table>
 
 <h6><b>Return Value</b></h6>
 <p>A pointer to the file path.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filepath-parsewindows">parseWindows</h5>
+<h5 id="Arcadia_FilePath_parseWindows">Arcadia_FilePath_parseWindows</h5>
 <p><code>
-R_FilePath* R_FilePath_parseWindows(void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_FilePath*
+Arcadia_FilePath_parseWindows
+  (
+    Arcadia_Thread* thread,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Parse a file path in the Windows format.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
   <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
 </table>
@@ -693,15 +718,22 @@ R_FilePath* R_FilePath_parseWindows(void const* bytes, R_SizeValue numberOfBytes
 <p>A pointer to the file path.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filepath-parseunix">parseUnix</h5>
+<h5 id="Arcadia_FilePath_parseUnix">Arcadi_FilePath_parseUnix</h5>
 <p><code>
-R_FilePath* R_FilePath_parseUnix(void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_FilePath*
+Arcadia_FilePath_parseUnix
+  (
+    Arcadia_Thread* thread,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Parse a file path in the Unix format.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
   <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
 </table>
@@ -710,15 +742,22 @@ R_FilePath* R_FilePath_parseUnix(void const* bytes, R_SizeValue numberOfBytes)
 <p>A pointer to the file path.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filepath-parsenative">parseNative</h5>
+<h5 id="Arcadia_FilePath-parseNative">Arcadia_FilePath_parseNative</h5>
 <p><code>
-R_FilePath* R_FilePath_parseNative(void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_FilePath*
+Arcadia_FilePath_parseNative
+  (
+    Arcadia_Thread* thread,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Parse a file path in the native format.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
   <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
 </table>
@@ -727,15 +766,21 @@ R_FilePath* R_FilePath_parseNative(void const* bytes, R_SizeValue numberOfBytes)
 <p>A pointer to the file path.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filepath-tonative">toNative</h5>
+<h5 id="Arcadia_FilePath_toNative">Arcadia_FilePath_toNative</h5>
 <p><code>
-R_String* R_FilePath_toNative(R_FilePath* self)
+Arcadia_String*
+Arcadia_FilePath_toNative
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  )
 </code></p>
 
 <p>Convert a file path to the native format.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>self</td><td>A pointer to this file path.</td></tr>
 </table>
 
@@ -756,7 +801,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSys
 Arcadia_FileSystem*
 Arcadia_FileSystem_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 </code></p>
 
@@ -764,7 +809,7 @@ Arcadia_FileSystem_create
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -779,7 +824,7 @@ Arcadia_FileSystem_create
 Arcadia_ByteBuffer*
 Arcadia_FileSystem_getFileContents
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   )
@@ -813,7 +858,7 @@ A pointer to a <code>Arcadia_ByteBuffer</code> object with the file contents.
 void
 Arcadia_FileSystem_setFileContents
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path,
     Arcadia_ByteBuffer* contents
@@ -824,7 +869,7 @@ Arcadia_FileSystem_setFileContents
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
   <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
   <tr><td>Arcadia_ByteBuffer* contents</td><td>A poiner to the Byte buffer with the file contents.</td></tr>
@@ -845,7 +890,7 @@ Arcadia_FileSystem_setFileContents
 Arcadia_BooleanValue
 Arcadia_FileSystem_regularFileExists
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   )
@@ -855,7 +900,7 @@ Arcadia_FileSystem_regularFileExists
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
   <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
 </table>
@@ -879,7 +924,7 @@ Arcadia_FileSystem_regularFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_directoryFileExists
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   )
@@ -889,7 +934,7 @@ Arcadia_FileSystem_directoryFileExists
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
   <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
 </table>
@@ -920,7 +965,7 @@ An <code>R_ObjectReferenceValue</code> pointing to a <code>R_List</code> value c
 Arcadia_List*
 Arcadia_List_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 </code></p>
 
@@ -946,7 +991,7 @@ Arcadia_List_create
 void
 Arcadia_List_append
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   )
@@ -968,7 +1013,7 @@ Arcadia_List_append
 void
 Arcadia_List_clear
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 </code></p>
@@ -987,7 +1032,7 @@ Arcadia_List_clear
 Arcadia_Value
 Arcadia_List_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index
   )
@@ -997,7 +1042,7 @@ Arcadia_List_getAt
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
   <tr><td>Arcadia_SizeValue index                 </td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
 </table>
@@ -1017,7 +1062,7 @@ Arcadia_List_getAt
 Arcadia_SizeValue
 Arcadia_List_getSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List const* self
   )
 </code></p>
@@ -1026,8 +1071,8 @@ Arcadia_List_getSize
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -1044,7 +1089,7 @@ Arcadia_List_getSize
 void
 Arcadia_List_insertAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index,
     Arcadia_Value value
@@ -1055,10 +1100,10 @@ Arcadia_List_insertAt
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_SizeValue index                 </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
-  <tr><td>Arcadia_Value value                      </td><td>The value to insert.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
+  <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
+  <tr><td>Arcadia_Value value                   </td><td>The value to insert.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -1072,7 +1117,7 @@ Arcadia_List_insertAt
 Arcadia_BooleanValue
 Arcadia_List_isEmpty
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 </code></p>
@@ -1081,8 +1126,8 @@ Arcadia_List_isEmpty
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1100,7 +1145,7 @@ Arcadia_List_isEmpty
 void
 Arcadia_List_prepend
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   )
@@ -1112,9 +1157,9 @@ Arcadia_List_prepend
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_List* self           </td><td>A pointer to this list.</td></tr>
-  <tr><td>R_Value value          </td><td>The value to prepend.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
+  <tr><td>Arcadia_Value value                   </td><td>The value to prepend.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -1123,7 +1168,7 @@ Arcadia_List_prepend
 void
 Arcadia_List_remove
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue start,
     Arcadia_SizeValue length
@@ -1134,7 +1179,7 @@ Arcadia_List_remove
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
   <tr><td>Arcadia_SizeValue start</td><td>The index of the first element to remove.</td></tr>
   <tr><td>Arcadia_SizeValue length</td><td>The number of elements to remove.</td></tr>
@@ -1148,10 +1193,10 @@ Arcadia_List_remove
 
 <h4 id="Arcadia_Stack">Stack</h4>
 <p>
-<code>R_Stack</code> represents a stack of <code>R_Value</code> objects.
-This type is allocated on the heap and values of this type are referenced by <code>R_Stack</code> pointers.
-A <code>R_Stack</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>R_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> value can be safely cast into a <code>R_Stack</code> pointer.
+<code>Arcadia_Stack</code> represents a stack of <code>Arcadia_Value</code> objects.
+This type is allocated on the heap and values of this type are referenced by <code>Arcadia_Stack</code> pointers.
+A <code>Arcadia_Stack</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> value can be safely cast into a <code>Arcadia_Stack</code> pointer.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -1160,7 +1205,7 @@ An <code>R_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> 
 Arcadia_Stack*
 Arcadia_Stack_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 </code></p>
 
@@ -1168,7 +1213,7 @@ Arcadia_Stack_create
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -1182,32 +1227,42 @@ Arcadia_Stack_create
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_Stack_clear">clear</h5>
+<h5 id="Arcadia_Stack_clear">Arcadia_Stack_clear</h5>
 <p><code>
-void R_Stack_clear(R_Stack* self)
+void
+Arcadia_Stack_clear
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
 </code></p>
 
 <p>Clear this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <h5 id="Arcadia_Stack_getSize">Arcadia_Stack_getSize</h5>
 <p><code>
-R_SizeValue R_Stack_getSize(R_Stack const* self)
+Arcadia_SizeValue
+Arcadia_Stack_getSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack const* self
+  )
 </code></p>
 
 <p>Get the size of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1216,37 +1271,47 @@ R_SizeValue R_Stack_getSize(R_Stack const* self)
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="Arcadia_Stack_isEmpty">Arcadia_Stack_isEmpty</h5>
 <p><code>
-R_BooleanValue R_Stack_isEmpty(R_Stack* self)
+Arcadia_BooleanValue
+Arcadia_Stack_isEmpty
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
 </code></p>
 
 <p>Get if this stack is empty.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_Stack* self</td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
-<p><code>R_BooleanValue_True</code> if this stack is empty. <code>R_BooleanValue_False</code> otherwise.</p>
+<p><code>Arcadia_BooleanValue_True</code> if this stack is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
 
 <h6><b>Errors</b></h6>
 <table>
-  <tr><td>R_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
+  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <h5 id="Arcadia_Stack_peek">Arcadia_Stack_peek</h5>
 <p><code>
-R_Value R_Stack_peek(R_Stack* self)
+Arcadia_Value
+Arcadia_Stack_peek
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
 </code></p>
 
 <p>Peek at the value on top of this stack.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_Stack self </td><td>A pointer to this stack.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Stack self </td><td>A pointer to this stack.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1259,6 +1324,7 @@ R_Value R_Stack_peek(R_Stack* self)
 Arcadia_Value
 Arcadia_Stack_pop
   (
+    Arcadia_Thread* thread,
     Arcadia_Stack* self
   )
 </code></p>
@@ -1267,7 +1333,7 @@ Arcadia_Stack_pop
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_Stack* self                     </td><td>A pointer to this stack.</td></tr>
 </table>
 
@@ -1281,6 +1347,7 @@ Arcadia_Stack_pop
 void
 Arcadia_Stack_push
   (
+    Arcadia_Thread* thread,
     Arcadia_Stack* self,
     Arcadia_Value value
   )
@@ -1290,7 +1357,7 @@ Arcadia_Stack_push
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_Stack* self            </td><td>A pointer to this stack.</td></tr>
   <tr><td>Arcadia_Value value            </td><td>The value to push.</td></tr>
 </table>
@@ -1316,7 +1383,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>R_String</code>
 Arcadia_String*
 Arcadia_String_create_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ImmutableByteArray* immutableByteArray
   )
 </code></p>
@@ -1325,7 +1392,7 @@ Arcadia_String_create_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_ImmutableByteBuffer* immutableByteArray</td><td>A pointer to the <code>Arcadia_ImmutableByteArray</code> object</td></tr>
 </table>
 
@@ -1344,7 +1411,7 @@ Arcadia_String_create_pn
 Arcadia_String*
 Arcadia_String_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value value
   )
 </code></p>
@@ -1379,7 +1446,7 @@ A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of 
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_Value value     </td><td>The value.</td></tr>
 </table>
 
@@ -1408,7 +1475,7 @@ A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of 
 Arcadia_BooleanValue
 Arcadia_String_endsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -1419,7 +1486,7 @@ Arcadia_String_endsWith_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_String* self                    </td><td>A pointer to this string.</td></tr>
   <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
   <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
@@ -1439,6 +1506,7 @@ Arcadia_String_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_String_startsWith_pn
   (
+    Arcadia_Thread* thread,
     Arcadia_String const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -1449,7 +1517,7 @@ Arcadia_String_startsWith_pn
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_String* self                    </td><td>A pointer to this string.</td></tr>
   <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
   <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
@@ -1462,70 +1530,96 @@ Arcadia_String_startsWith_pn
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-isequalto_pn">isEqualTo_pn</h5>
+<h5 id="Arcadia_String_isEqualTo_pn">Arcadia_String_isEqualTo_pn</h5>
 <p><code>
-R_BooleanValue R_String_isEqualTo_pn(R_String const* self, void const* bytes, R_SizeValue numberOfBytes)
+Arcadia_BooleanValue
+Arcadia_String_isEqualTo_pn
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 </code></p>
 
 <p>Get if a sequence of Bytes is this string's sequence of Bytes.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self           </td><td>A pointer to this string.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self                   </td><td>A pointer to this string.</td></tr>
+  <tr><td>void const* bytes                      </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
+  <tr><td>Arcadia_SizeValue numberOfBytes        </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>
-<code>R_BooleanValue_True</code> if the sequence of Bytes is this string's sequence of Bytes.
-<code>R_BooleanValue_False</code> otherwise.
+<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this string's sequence of Bytes.
+<code>Arcadia_BooleanValue_False</code> otherwise.
 </p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-getnumberofbytes">getNumberOfBytes</h5>
+<h5 id="Arcadia_String_getNumberOfBytes">Arcadia_String_getNumberOfBytes</h5>
 <p><code>
-R_SizeValue R_String_getNumberOfBytes(R_String const* self)
+Arcadia_SizeValue
+Arcadia_String_getNumberOfBytes
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
 <p>Get the size, in Bytes, of this string.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>The size, in Bytes, of this string.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-getbyteat">getByteAt</h5>
+<h5 id="Arcadia_String_getByteAt">Arcadia_String_getByteAt</h5>
 <p><code>
-R_Natural8Value R_String_getByteAt(R_String const* self, R_SizeValue index)
+Arcadia_Natural8Value
+Arcadia_String_getByteAt
+  (
+    Arcadia_String const* self,
+    Arcadia_SizeValue index
+  )
 </code></p>
 
 <p>Get the Byte value at the specified index.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
-  <tr><td>R_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size, in Bytes, of this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td>Arcadia_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size, in Bytes, of this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
 <p>The Byte value.</p>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-toboolean">toBoolean</h5>
+<h5 id="Arcadia_String_toBoolean">Arcadia_String_toBoolean</h5>
 <p><code>
-R_BooleanValue R_String_toBoolean(R_String const* self)
+Arcadia_BooleanValue
+Arcadia_String_toBoolean
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
-<p>Interprete the symbols of this string as boolean literal and convert the boolean represented by that literal into an <code>R_BooleanValue</code>.</p>
+<p>Interprete the symbols of this string as boolean literal and convert the boolean represented by that literal into an <code>Arcadia_BooleanValue</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1534,25 +1628,101 @@ R_BooleanValue R_String_toBoolean(R_String const* self)
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a boolean literal. Valid boolean literals are <code>true</code> and <code>false</code>, both case sensitve.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tointeger16">toInteger16</h5>
+<h5 id="Arcadia_String_toInteger16">Arcadia_String_toInteger16</h5>
 <p><code>
-R_Integer16Value R_String_toInteger16(R_String const* self)
+Arcadia_Integer16Value
+Arcadia_String_toInteger16
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>R_Integer16Value</code>.</p>
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>Arcadia_Integer16Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>Arcadia_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Integer16Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="Arcadia_String_toInteger32">Arcadia_String_toInteger32</h5>
+<p><code>
+Arcadia_Integer32Value
+Arcadia_String_toInteger32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer32Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
+</table>
+
+<h6><b>Return Value</b></h6>
+<p>The integer value.</p>
+
+<h6><b>Errors</b></h6>
+<table>
+  <tr>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
+    <td><code>self</code> is a null pointer.</td>
+  </tr>
+  <tr>
+    <td>Arcadia_Status_ConversionFailed</td>
+    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Integer32Value</code>.</td>
+  </tr>
+</table>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="Arcadia_String_toInteger64">Arcadia_String_toInteger64</h5>
+<p><code>
+Arcadia_Integer64Value
+Arcadia_String_toInteger64
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
+</code></p>
+
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer64Value</code>.</p>
+
+<h6><b>Parameters</b></h6>
+<table>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
@@ -1562,27 +1732,33 @@ R_Integer16Value R_String_toInteger16(R_String const* self)
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a decimal integer literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Integer16Value</code>.</td>
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Integer64Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tointeger32">toInteger32</h5>
+<h5 id="Arcadia_String_toInteger8">Arcadia_String_toInteger8</h5>
 <p><code>
-R_Integer32Value R_String_toInteger32(R_String const* self)
+Arcadia_Integer8Value
+Arcadia_String_toInteger8
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>R_Integer32Value</code>.</p>
+<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer8Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1591,85 +1767,33 @@ R_Integer32Value R_String_toInteger32(R_String const* self)
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a decimal integer literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Integer32Value</code>.</td>
+    the number represented by the integer literal cannot be represented a value of type <code>Arcadia_Integer8Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tointeger64">toInteger64</h5>
+<h5 id="Arcadia_String_toNatural16">Arcadia_String_toNatural16</h5>
 <p><code>
-R_Integer64Value R_String_toInteger64(R_String const* self)
+Arcadia_Natural16Value
+Arcadia_Stringg_toNatural16
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>R_Integer64Value</code>.</p>
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural16Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The integer value.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Integer64Value</code>.</td>
-  </tr>
-</table>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tointeger8">toInteger8</h5>
-<p><code>
-R_Integer8Value R_String_toInteger8(R_String const* self)
-</code></p>
-
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>R_Integer8Value</code>.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The integer value.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>R_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
-    the number represented by the integer literal cannot be represented a value of type <code>R_Integer8Value</code>.</td>
-  </tr>
-</table>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tonatural16">toNatural16</h5>
-<p><code>
-R_Natural16Value R_String_toNatural16(R_String const* self)
-</code></p>
-
-<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>R_Natural16Value</code>.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1678,27 +1802,33 @@ R_Natural16Value R_String_toNatural16(R_String const* self)
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a decimal natural literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Natural16Value</code>.</td>
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural16Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tonatural32">toNatural32</h5>
+<h5 id="Arcadia_String_toNatural32">Arcadia_String_toNatural32</h5>
 <p><code>
-R_Natural32Value R_String_toNatural16(R_String const* self)
+Arcadia_Natural32Value
+Arcadia_String_toNatural32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
-<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>R_Natural32Value</code>.</p>
+<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural32Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1707,27 +1837,33 @@ R_Natural32Value R_String_toNatural16(R_String const* self)
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a decimal natural literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Natural32Value</code>.</td>
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural32Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tonatural64">toNatural64</h5>
+<h5 id="Arcadia_String_toNatural64">Arcadia_String_toNatural64</h5>
 <p><code>
-R_Natural64Value R_String_toNatural16(R_String const* self)
+Arcadia_Natural64Value
+Arcadia_String_toNatural64
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
-<p>Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>R_Natural64Value</code>.</p>
+<p>Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural64Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1736,27 +1872,33 @@ R_Natural64Value R_String_toNatural16(R_String const* self)
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a decimal natural literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Natural64Value</code>.</td>
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural64Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-tonatural8">toNatural8</h5>
+<h5 id="Arcadia_String_toNatural8">Arcadia_String_toNatural8</h5>
 <p><code>
-R_Natural8Value R_String_toNatural8(R_String const* self)
+Arcadia_Natural8Value
+Arcadia_String_toNatural8
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
 <p>Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>R_Natural8Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1765,84 +1907,103 @@ R_Natural8Value R_String_toNatural8(R_String const* self)
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a decimal natural literal or
     the number represented by the literal cannot be represented a value of type <code>R_Natural8Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-toreal32">toReal32</h5>
+<h5 id="Arcadia_String_toReal32">Arcadia_String_toReal32</h5>
 <p><code>
-R_Real32Value R_String_toReal32(R_String const* self)
+Arcadia_Real32Value
+Arcadia_String_toReal32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
-<p>Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>R_Real32Value</code>.</p>
+<p>Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>Arcadia_Real32Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
-<p>The <code>R_Real32Value</code> value.</p>
+<p>The <code>Arcadia_Real32Value</code> value.</p>
 
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a decimal real literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Real32Value</code>.</td>
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Real32Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-string-toreal64">toReal64</h5>
+<h5 id="Arcadia_String_toReal64">Arcadia_String_toReal64</h5>
 <p><code>
-R_Real64Value R_String_toReal64(R_String const* self)
+Arcadia_Real64Value
+Arcadia_String_toReal64
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
-<p>Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>R_Real64Value</code>.</p>
+<p>Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>Arcadia_Real64Value</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
-<p>The <code>R_Real64Value</code> value.</p>
+<p>The <code>Arcadia_Real64Value</code> value.</p>
 
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a decimal real literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Real64Value</code>.</td>
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Real64Value</code>.</td>
   </tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h5 id="Arcadia_String_toVoid">Arcadia_String_toVoid</h5>
 <p><code>
-R_VoidValue R_String_toVoid(R_String const* self)
+Arcadia_VoidValue
+Arcadia_String_toVoid
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String const* self
+  )
 </code></p>
 
 <p>Interprete the symbols of this string as a void literal and convert the void value represented by that literal into an <code>R_VoidValue</code>.</p>
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -1851,11 +2012,11 @@ R_VoidValue R_String_toVoid(R_String const* self)
 <h6><b>Errors</b></h6>
 <table>
   <tr>
-    <td>R_Status_ArgumentTypeInvalid</td>
+    <td>Arcadia_Status_ArgumentTypeInvalid</td>
     <td><code>self</code> is a null pointer.</td>
   </tr>
   <tr>
-    <td>R_Status_ConversionFailed</td>
+    <td>Arcadia_Status_ConversionFailed</td>
     <td>The symbols of this string cannot be interpreted as a void literal. The valid void literal is <code>void</code>, case sensitve.</td>
   </tr>
 </table>

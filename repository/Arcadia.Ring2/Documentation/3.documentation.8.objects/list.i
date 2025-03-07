@@ -12,7 +12,7 @@ An <code>R_ObjectReferenceValue</code> pointing to a <code>R_List</code> value c
 Arcadia_List*
 Arcadia_List_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 </code></p>
 
@@ -38,7 +38,7 @@ Arcadia_List_create
 void
 Arcadia_List_append
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   )
@@ -60,7 +60,7 @@ Arcadia_List_append
 void
 Arcadia_List_clear
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 </code></p>
@@ -79,7 +79,7 @@ Arcadia_List_clear
 Arcadia_Value
 Arcadia_List_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index
   )
@@ -89,7 +89,7 @@ Arcadia_List_getAt
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
   <tr><td>Arcadia_SizeValue index                 </td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
 </table>
@@ -109,7 +109,7 @@ Arcadia_List_getAt
 Arcadia_SizeValue
 Arcadia_List_getSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List const* self
   )
 </code></p>
@@ -118,8 +118,8 @@ Arcadia_List_getSize
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -136,7 +136,7 @@ Arcadia_List_getSize
 void
 Arcadia_List_insertAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue index,
     Arcadia_Value value
@@ -147,10 +147,10 @@ Arcadia_List_insertAt
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_SizeValue index                 </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
-  <tr><td>Arcadia_Value value                      </td><td>The value to insert.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
+  <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
+  <tr><td>Arcadia_Value value                   </td><td>The value to insert.</td></tr>
 </table>
 
 <h6><b>Errors</b></h6>
@@ -164,7 +164,7 @@ Arcadia_List_insertAt
 Arcadia_BooleanValue
 Arcadia_List_isEmpty
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self
   )
 </code></p>
@@ -173,8 +173,8 @@ Arcadia_List_isEmpty
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
 </table>
 
 <h6><b>Return Value</b></h6>
@@ -192,7 +192,7 @@ Arcadia_List_isEmpty
 void
 Arcadia_List_prepend
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   )
@@ -204,9 +204,9 @@ Arcadia_List_prepend
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>R_List* self           </td><td>A pointer to this list.</td></tr>
-  <tr><td>R_Value value          </td><td>The value to prepend.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
+  <tr><td>Arcadia_Value value                   </td><td>The value to prepend.</td></tr>
 </table>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -215,7 +215,7 @@ Arcadia_List_prepend
 void
 Arcadia_List_remove
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_SizeValue start,
     Arcadia_SizeValue length
@@ -226,7 +226,7 @@ Arcadia_List_remove
 
 <h6><b>Parameters</b></h6>
 <table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
   <tr><td>Arcadia_SizeValue start</td><td>The index of the first element to remove.</td></tr>
   <tr><td>Arcadia_SizeValue length</td><td>The number of elements to remove.</td></tr>

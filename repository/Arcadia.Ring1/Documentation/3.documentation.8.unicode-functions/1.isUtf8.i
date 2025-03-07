@@ -4,7 +4,7 @@
 Arcadia_BooleanValue
 Arcadia_isUtf8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes,
     Arcadia_SizeValue* numberOfSymbols
@@ -13,7 +13,7 @@ Arcadia_isUtf8
 
 <h5>Parameters</h5>
 <table>
-  <tr><td>Arcadia_Process* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
   <tr><td>const void* bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
   <tr><td>Arcadia_SizeValue numberOfBytes</td><td>The number of Bytes in the array of Bytes pointed to by <code>bytes</code>.</td></tr>
   <tr><td>Arcadia_SizeValue* numberOfSymbols</td><td>

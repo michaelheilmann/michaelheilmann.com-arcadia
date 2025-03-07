@@ -93,8 +93,8 @@ Arcadia_Object_constructImpl
   )
 {
   Arcadia_Object* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = Arcadia_getType(process, u8"Arcadia.Object", sizeof(u8"Arcadia.Object") - 1);
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_TypeValue _type = Arcadia_getType(Arcadia_Process_getThread(process), u8"Arcadia.Object", sizeof(u8"Arcadia.Object") - 1);
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
@@ -206,16 +206,16 @@ onFinalizeObject
   if (Arcadia_Process_unlockObject(process, type)) {
     fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
   }
-  if (type == _Arcadia_Memory_getType(process)) {
+  if (type == _Arcadia_Memory_getType(Arcadia_Process_getThread(process))) {
     return;
   }
   while (type) {
     Arcadia_Type_DestructObjectCallbackFunction* destruct = Arcadia_Type_getDestructObjectCallbackFunction(type);
     if (destruct) {
-      destruct(process, ((ObjectTag*)object) + 1);
+      destruct(Arcadia_Process_getThread(process), ((ObjectTag*)object) + 1);
     }
 
-    type = Arcadia_Type_getParentObjectType(type);
+    type = Arcadia_Type_getParentObjectType(Arcadia_Process_getThread(process), type);
     objectTag->type = type;
   }
 }
@@ -229,50 +229,50 @@ onVisitObject
 {
   ObjectTag* objectTag = (ObjectTag*)object;
   Arcadia_TypeValue type = (Arcadia_TypeValue)objectTag->type;
-  if (type == _Arcadia_Memory_getType(process)) {
+  if (type == _Arcadia_Memory_getType(Arcadia_Process_getThread(process))) {
     return;
   }
   while (type) {
     Arcadia_Type_VisitObjectCallbackFunction* visit = Arcadia_Type_getVisitObjectCallbackFunction(type);
     if (visit) {
-      visit(process, ((ObjectTag*)object) + 1);
+      visit(Arcadia_Process_getThread(process), ((ObjectTag*)object) + 1);
     }
-    type = Arcadia_Type_getParentObjectType(type);
+    type = Arcadia_Type_getParentObjectType(Arcadia_Process_getThread(process), type);
   }
 }
 
 void*
-R_allocateObject
+Arcadia_allocateObject
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_TypeValue type,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
   if (!type) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Type_isObjectKind(type)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+  if (!Arcadia_Type_isObjectKind(thread, type)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_Type* memoryType = _Arcadia_Memory_getType(process);
+  Arcadia_Type* memoryType = _Arcadia_Memory_getType(thread);
 
   ObjectTag* tag = NULL;
-  if (SIZE_MAX - sizeof(ObjectTag) < Arcadia_Type_getValueSize(type)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_AllocationFailed);
-    Arcadia_Process_jump(process);
+  if (SIZE_MAX - sizeof(ObjectTag) < Arcadia_Type_getValueSize(thread, type)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_Process_allocate(process, &tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + Arcadia_Type_getValueSize(type));
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + Arcadia_Type_getValueSize(thread, type));
   tag->type = memoryType;
-  if (Arcadia_Process_lockObject(process, memoryType)) {
+  if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), memoryType)) {
     fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
   }
   Arcadia_Value selfValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)(Arcadia_Object*)(tag + 1) };
-  Arcadia_Type_getOperations(type)->objectTypeOperations->construct(process, &selfValue, numberOfArgumentValues, &argumentValues[0]);
+  Arcadia_Type_getOperations(type)->objectTypeOperations->construct(Arcadia_Thread_getProcess(thread), &selfValue, numberOfArgumentValues, &argumentValues[0]);
   return (void*)(tag + 1);
 }
 
@@ -288,15 +288,16 @@ typeDestructing
 Arcadia_TypeValue
 _Arcadia_Object_getType
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
   if (!g_objectRegistered) {
-    Arcadia_Process_registerType(process, ObjectTypeName, sizeof(ObjectTypeName) - 1, process, &onObjectTypeRemoved, &onVisitObject, &onFinalizeObject);
+    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), ObjectTypeName, sizeof(ObjectTypeName) - 1, Arcadia_Thread_getProcess(thread),
+                                 &onObjectTypeRemoved, &onVisitObject, &onFinalizeObject);
     g_objectRegistered = Arcadia_BooleanValue_True;
   }
   if (!g__Arcadia_Object_type) {
-    g__Arcadia_Object_type = Arcadia_registerObjectType(process, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(Arcadia_Object), NULL, &_typeOperations, &typeDestructing);
+    g__Arcadia_Object_type = Arcadia_registerObjectType(thread, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(Arcadia_Object), NULL, &_typeOperations, &typeDestructing);
   }
   return g__Arcadia_Object_type;
 }
@@ -304,11 +305,12 @@ _Arcadia_Object_getType
 void
 Arcadia_Object_setType
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void* self,
     Arcadia_TypeValue type
   )
 {
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   ObjectTag* objectTag = ((ObjectTag*)self) - 1;
   if (type) {
     if (Arcadia_Process_lockObject(process, type)) {
@@ -326,40 +328,40 @@ Arcadia_Object_setType
 void
 Arcadia_Object_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void* self
   )
 {
   ObjectTag* tag = ((ObjectTag*)self) - 1;
-  Arcadia_Process_visitObject(process, tag->type);
-  Arcadia_Process_visitObject(process, tag);
+  Arcadia_Process_visitObject(Arcadia_Thread_getProcess(thread), tag->type);
+  Arcadia_Process_visitObject(Arcadia_Thread_getProcess(thread), tag);
 }
 
 void
 Arcadia_Object_lock
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void* self
   )
 {
-  Arcadia_Status status = Arcadia_Process_lockObject(process, ((ObjectTag*)self) - 1);
+  Arcadia_Status status = Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), ((ObjectTag*)self) - 1);
   if (status) {
-    Arcadia_Process_setStatus(process, status);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, status);
+    Arcadia_Thread_jump(thread);
   }
 }
 
 void
 Arcadia_Object_unlock
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void* self
   )
 {
-  Arcadia_Status status = Arcadia_Process_unlockObject(process, ((ObjectTag*)self) - 1);
+  Arcadia_Status status = Arcadia_Process_unlockObject(Arcadia_Thread_getProcess(thread), ((ObjectTag*)self) - 1);
   if (status) {
-    Arcadia_Process_setStatus(process, status);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, status);
+    Arcadia_Thread_jump(thread);
   }
 }
 

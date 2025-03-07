@@ -23,19 +23,19 @@
 static inline Arcadia_ObjectReferenceValue
 R_Argument_getObjectReferenceValue
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* value,
     Arcadia_TypeValue type
   )
 {
   if (!Arcadia_Value_isObjectReferenceValue(value)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_Value_getObjectReferenceValue(value);
-  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectReferenceValue), type)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(objectReferenceValue), type)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   return objectReferenceValue;
 }
@@ -43,7 +43,7 @@ R_Argument_getObjectReferenceValue
 static inline Arcadia_ObjectReferenceValue
 R_Argument_getObjectReferenceValueOrNull
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value const* value,
     Arcadia_TypeValue type
   ) 
@@ -52,13 +52,13 @@ R_Argument_getObjectReferenceValueOrNull
     return NULL;
   }
   if (!Arcadia_Value_isObjectReferenceValue(value)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_Value_getObjectReferenceValue(value);
-  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(objectReferenceValue), type)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(objectReferenceValue), type)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   return objectReferenceValue;
 }

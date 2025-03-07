@@ -42,14 +42,14 @@ struct Arcadia_FileSystem {
 Arcadia_FileSystem*
 Arcadia_FileSystem_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 // https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_getFileContents
 Arcadia_ByteBuffer*
 Arcadia_FileSystem_getFileContents
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   );
@@ -58,17 +58,16 @@ Arcadia_FileSystem_getFileContents
 void
 Arcadia_FileSystem_setFileContents
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path,
     Arcadia_ByteBuffer * contents
   );
 
-
 void
 Arcadia_FileSystem_createDirectory
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   );
@@ -77,7 +76,7 @@ Arcadia_FileSystem_createDirectory
 Arcadia_BooleanValue
 Arcadia_FileSystem_regularFileExists
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   );
@@ -86,7 +85,7 @@ Arcadia_FileSystem_regularFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_directoryFileExists
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   );
@@ -94,7 +93,7 @@ Arcadia_FileSystem_directoryFileExists
 Arcadia_FilePath*
 Arcadia_FileSystem_getWorkingDirectory
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* self
   );
 

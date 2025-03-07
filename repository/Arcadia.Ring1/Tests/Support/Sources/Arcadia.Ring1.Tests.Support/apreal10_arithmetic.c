@@ -22,7 +22,7 @@
 static void
 multiplicativeTestFixture
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     const char* multiplier,
     const char* multiplicand,
     const char* product
@@ -64,14 +64,14 @@ Error:
   while (k > 0) {
     apreal10_uninitialize(&v[--k]);
   }
-  Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-  Arcadia_Process_jump(process);
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+  Arcadia_Thread_jump(thread);
 }
 
 static void
 additiveTestFixture
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     const char *augend,
     const char *addend,
     const char *sum
@@ -113,22 +113,22 @@ Error:
   while (k > 0) {
     apreal10_uninitialize(&v[--k]);
   }
-  Arcadia_Process_setStatus(process, Arcadia_Status_TestFailed);
-  Arcadia_Process_jump(process);
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+  Arcadia_Thread_jump(thread);
 }
 
 void
 Arcadia_Ring1_Tests_Support_apreal10_arithmetic
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  multiplicativeTestFixture(process, "0", "0",    "0");
-  multiplicativeTestFixture(process, "0", "+1",   "0");
-  multiplicativeTestFixture(process, "+1", "0",   "0");
-  multiplicativeTestFixture(process, "+1", "+1", "+1");
+  multiplicativeTestFixture(thread, "0", "0",    "0");
+  multiplicativeTestFixture(thread, "0", "+1",   "0");
+  multiplicativeTestFixture(thread, "+1", "0",   "0");
+  multiplicativeTestFixture(thread, "+1", "+1", "+1");
 
-  additiveTestFixture(process, "+1.0", "+0.2", "+1.2");
-  additiveTestFixture(process, "+1.0", "-0.2", "+0.8");
-  additiveTestFixture(process, "-1.0", "+1.0", "0");
+  additiveTestFixture(thread, "+1.0", "+0.2", "+1.2");
+  additiveTestFixture(thread, "+1.0", "-0.2", "+0.8");
+  additiveTestFixture(thread, "-1.0", "+1.0", "0");
 }

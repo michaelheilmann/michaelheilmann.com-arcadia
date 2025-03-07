@@ -36,7 +36,7 @@ Arcadia_Mil_MethodDefinitionAst_constructImpl
 static void
 Arcadia_Mil_MethodDefinitionAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_MethodDefinitionAst* self
   );
 
@@ -77,40 +77,41 @@ Arcadia_Mil_MethodDefinitionAst_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_MethodDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Mil_MethodDefinitionAst_getType(process);
+  Arcadia_TypeValue _type = _Arcadia_Mil_MethodDefinitionAst_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (4 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  _self->nativeName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[0], _Arcadia_String_getType(process));
-  _self->methodName = (Arcadia_String*)R_Argument_getObjectReferenceValue(process, &argumentValues[1], _Arcadia_String_getType(process));
-  _self->methodParameters = (Arcadia_List*)R_Argument_getObjectReferenceValue(process, &argumentValues[2], _Arcadia_List_getType(process));
-  _self->methodBody = (Arcadia_List*)R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[3], _Arcadia_List_getType(process));
-  Arcadia_Object_setType(process, _self, _type);
+  _self->nativeName = R_Argument_getObjectReferenceValueOrNull(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+  _self->methodName = (Arcadia_String*)R_Argument_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
+  _self->methodParameters = (Arcadia_List*)R_Argument_getObjectReferenceValue(thread, &argumentValues[2], _Arcadia_List_getType(thread));
+  _self->methodBody = (Arcadia_List*)R_Argument_getObjectReferenceValueOrNull(thread, &argumentValues[3], _Arcadia_List_getType(thread));
+  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
 }
 
 static void
 Arcadia_Mil_MethodDefinitionAst_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_MethodDefinitionAst* self
   )
 {
-  Arcadia_Object_visit(process, self->nativeName);
-  Arcadia_Object_visit(process, self->methodName);
-  Arcadia_Object_visit(process, self->methodParameters);
-  Arcadia_Object_visit(process, self->methodBody);
+  Arcadia_Object_visit(thread, self->nativeName);
+  Arcadia_Object_visit(thread, self->methodName);
+  Arcadia_Object_visit(thread, self->methodParameters);
+  Arcadia_Object_visit(thread, self->methodBody);
 }
 
 Arcadia_Mil_MethodDefinitionAst*
 Arcadia_Mil_MethodDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* nativeName,
     Arcadia_String* methodName,
     Arcadia_List* methodParameters,
@@ -127,7 +128,7 @@ Arcadia_Mil_MethodDefinitionAst_create
   if (methodBody) {
     Arcadia_Value_setObjectReferenceValue(&argumentValues[3], methodBody);
   }
-  Arcadia_Mil_MethodDefinitionAst* self = R_allocateObject(process, _Arcadia_Mil_MethodDefinitionAst_getType(process), 4, &argumentValues[0]);
+  Arcadia_Mil_MethodDefinitionAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_MethodDefinitionAst_getType(thread), 4, &argumentValues[0]);
   return self;
 }
 

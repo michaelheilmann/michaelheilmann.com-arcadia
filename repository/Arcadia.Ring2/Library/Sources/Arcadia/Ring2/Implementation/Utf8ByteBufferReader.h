@@ -38,7 +38,7 @@ struct Arcadia_Utf8ByteBufferReader {
 Arcadia_Utf8ByteBufferReader*
 Arcadia_Utf8ByteBufferReader_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* source
   );
 

@@ -23,16 +23,18 @@
 Arcadia_SizeValue
 Arcadia_hashAtomValue
   (
+    Arcadia_Thread* thread,
     Arcadia_AtomValue x
   )
-{ return Arcadia_Atom_getHash(x); }
+{ return Arcadia_Atom_getHash(thread, x); }
 
 Arcadia_SizeValue
 Arcadia_hashTypeValue
   (
+    Arcadia_Thread* thread,
     Arcadia_TypeValue x
   )
 {
-  return Arcadia_Type_hash(x);
+  return Arcadia_Type_hash(thread, x);
 }
 

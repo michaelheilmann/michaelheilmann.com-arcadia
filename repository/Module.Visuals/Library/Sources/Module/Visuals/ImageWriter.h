@@ -25,18 +25,18 @@ Rex_declareObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object");
 
 struct ImageWriter {
   Arcadia_Object _parent;
-  void (*writePngToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
-  void (*writePngToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
-  void (*writeBmpToPath)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
-  void (*writeBmpToByteBuffer)(Arcadia_Process* process, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
-  void (*writeIcoToPath)(Arcadia_Process* process, ImageWriter* self, Arcadia_List* sourcePixelBuffers, Arcadia_String* targetPath);
-  void (*writeIcoToByteBuffer)(Arcadia_Process* process, ImageWriter* self, Arcadia_List* sourcePixelBuffers, Arcadia_ByteBuffer* targetByteBuffer);
+  void (*writePngToPath)(Arcadia_Thread* thread, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
+  void (*writePngToByteBuffer)(Arcadia_Thread* thread, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
+  void (*writeBmpToPath)(Arcadia_Thread* thread, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
+  void (*writeBmpToByteBuffer)(Arcadia_Thread* thread, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
+  void (*writeIcoToPath)(Arcadia_Thread* thread, ImageWriter* self, Arcadia_List* sourcePixelBuffers, Arcadia_String* targetPath);
+  void (*writeIcoToByteBuffer)(Arcadia_Thread* thread, ImageWriter* self, Arcadia_List* sourcePixelBuffers, Arcadia_ByteBuffer* targetByteBuffer);
 };
 
 void
 ImageWriter_writePngToPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
@@ -45,7 +45,7 @@ ImageWriter_writePngToPath
 void
 ImageWriter_writePngToByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
@@ -54,7 +54,7 @@ ImageWriter_writePngToByteBuffer
 void
 ImageWriter_writeBmpToPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
@@ -63,7 +63,7 @@ ImageWriter_writeBmpToPath
 void
 ImageWriter_writeBmpToByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
@@ -72,7 +72,7 @@ ImageWriter_writeBmpToByteBuffer
 void
 ImageWriter_writeIcoToPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
@@ -81,7 +81,7 @@ ImageWriter_writeIcoToPath
 void
 ImageWriter_writeIcoToByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriter* self,
     Arcadia_List* sourcePixelBuffers,
     Arcadia_ByteBuffer* targetByteBuffer

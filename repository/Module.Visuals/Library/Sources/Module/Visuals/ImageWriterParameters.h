@@ -38,7 +38,7 @@ Rex_declareObjectType(u8"ImageWriterParameters", ImageWriterParameters, u8"Arcad
 ImageWriterParameters*
 ImageWriterParameters_createFile
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* path,
     ImageWriterFormat format
   );
@@ -46,7 +46,7 @@ ImageWriterParameters_createFile
 ImageWriterParameters*
 ImageWriterParameters_createByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* byteBuffer,
     ImageWriterFormat format
   );
@@ -54,34 +54,35 @@ ImageWriterParameters_createByteBuffer
 Arcadia_BooleanValue
 ImageWriterParameters_hasPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   );
 
 Arcadia_String*
 ImageWriterParameters_getPath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   );
 
 Arcadia_BooleanValue
 ImageWriterParameters_hasByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   );
 
 Arcadia_ByteBuffer*
 ImageWriterParameters_getByteBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   );
 
 ImageWriterFormat
 ImageWriterParameters_getFormat
   (
+    Arcadia_Thread* thread,
     ImageWriterParameters* self
   );
 

@@ -46,7 +46,7 @@ struct NativeWindowsBitmap {
 NativeWindowsBitmap*
 NativeWindowsBitmap_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
   );
@@ -54,7 +54,7 @@ NativeWindowsBitmap_create
 void
 NativeWindowsBitmap_fill
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsBitmap* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
@@ -64,7 +64,7 @@ NativeWindowsBitmap_fill
 PixelBuffer*
 NativeWindowsBitmap_toPixelBuffer
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     NativeWindowsBitmap* self
   );
 

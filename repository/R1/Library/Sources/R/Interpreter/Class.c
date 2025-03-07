@@ -33,7 +33,7 @@ R_Interpreter_Class_constructImpl
 static void
 R_Interpreter_Class_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Class* self
   );
 
@@ -74,45 +74,45 @@ R_Interpreter_Class_constructImpl
     Arcadia_Value* argumentValues
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   R_Interpreter_Class* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _R_Interpreter_Class_getType(process);
+  Arcadia_TypeValue _type = _R_Interpreter_Class_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  _self->className = R_Argument_getObjectReferenceValue(process, &argumentValues[0], _Arcadia_String_getType(process));
-  _self->extendedClassName = R_Argument_getObjectReferenceValueOrNull(process, &argumentValues[1], _Arcadia_String_getType(process));
-  _self->classMembers = Arcadia_Map_create(process);
+  _self->className = R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+  _self->extendedClassName = R_Argument_getObjectReferenceValueOrNull(thread, &argumentValues[1], _Arcadia_String_getType(thread));
+  _self->classMembers = Arcadia_Map_create(thread);
 
   _self->extendedClass = NULL;
 
   _self->complete = Arcadia_BooleanValue_False;
-  
 
-  Arcadia_Object_setType(process, _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void
 R_Interpreter_Class_visit
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     R_Interpreter_Class* self
   )
 {
-  Arcadia_Object_visit(process, self->className);
-  Arcadia_Object_visit(process, self->extendedClassName);
-  Arcadia_Object_visit(process, self->classMembers);
-  Arcadia_Object_visit(process, self->extendedClass);
+  Arcadia_Object_visit(thread, self->className);
+  Arcadia_Object_visit(thread, self->extendedClassName);
+  Arcadia_Object_visit(thread, self->classMembers);
+  Arcadia_Object_visit(thread, self->extendedClass);
 }
 
 R_Interpreter_Class*
 R_Interpreter_Class_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* className,
     Arcadia_String* extendedClassName
   )
@@ -124,7 +124,7 @@ R_Interpreter_Class_create
   if (extendedClassName) {
     Arcadia_Value_setObjectReferenceValue(&argumentValues[1], extendedClassName);
   }
-  R_Interpreter_Class* self = R_allocateObject(process, _R_Interpreter_Class_getType(process), 2, &argumentValues[0]);
+  R_Interpreter_Class* self = Arcadia_allocateObject(thread, _R_Interpreter_Class_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
@@ -150,15 +150,15 @@ R_Interpreter_Class_addConstructor
     R_Interpreter_Constructor* constructor
   )
 { 
-  Arcadia_String* name = Arcadia_String_create_pn(process, Arcadia_ImmutableByteArray_create(Arcadia_Process_getProcess1(process), u8"<constructor>", sizeof(u8"<constructor>") - 1));
+  Arcadia_String* name = Arcadia_String_create_pn(Arcadia_Process_getThread(process), Arcadia_ImmutableByteArray_create(Arcadia_Process_getThread(process), u8"<constructor>", sizeof(u8"<constructor>") - 1));
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
-  Arcadia_Value value = Arcadia_Map_get(process, self->classMembers, key);
+  Arcadia_Value value = Arcadia_Map_get(Arcadia_Process_getThread(process), self->classMembers, key);
   if (!Arcadia_Value_isVoidValue(&value)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_Exists);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setObjectReferenceValue(&value, constructor);
-  Arcadia_Map_set(process, self->classMembers, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value);
 }
 
 void
@@ -170,13 +170,13 @@ R_Interpreter_Class_addMethod
   )
 {
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = method->unqualifiedName };
-  Arcadia_Value value = Arcadia_Map_get(process, self->classMembers, key);
+  Arcadia_Value value = Arcadia_Map_get(Arcadia_Process_getThread(process), self->classMembers, key);
   if (!Arcadia_Value_isVoidValue(&value)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_Exists);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setObjectReferenceValue(&value, method);
-  Arcadia_Map_set(process, self->classMembers, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value);
 }
 
 void
@@ -188,13 +188,13 @@ R_Interpreter_Class_addVariable
   )
 {
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = variable->name };
-  Arcadia_Value value = Arcadia_Map_get(process, self->classMembers, key);
+  Arcadia_Value value = Arcadia_Map_get(Arcadia_Process_getThread(process), self->classMembers, key);
   if (!Arcadia_Value_isVoidValue(&value)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_Exists);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setObjectReferenceValue(&value, variable);
-  Arcadia_Map_set(process, self->classMembers, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value);
 }
 
 static R_Interpreter_Class*
@@ -204,14 +204,15 @@ getClass
     Arcadia_Value v
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (!Arcadia_Value_isObjectReferenceValue(&v)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue o = Arcadia_Value_getObjectReferenceValue(&v);
-  if (!Arcadia_Type_isSubType(Arcadia_Object_getType(o), _R_Interpreter_Class_getType(process))) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Process_jump(process);
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(o), _R_Interpreter_Class_getType(thread))) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   return o;
 }
@@ -233,18 +234,18 @@ completeExtendedClass
   if (self->extendedClassName) {
     self->extendedClass = getClass(process, R_Interpreter_ProcessState_getGlobal(process, processState, self->extendedClassName));
     R_Interpreter_Class_complete(process, self->extendedClass, processState);
-    Arcadia_Map* temporary = Arcadia_Map_create(process);
+    Arcadia_Map* temporary = Arcadia_Map_create(Arcadia_Process_getThread(process));
     R_Interpreter_Class* current = self;
     do {
       Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = current->className };
       Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self };
-      v = Arcadia_Map_get(process, temporary, v);
+      v = Arcadia_Map_get(Arcadia_Process_getThread(process), temporary, v);
       if (Arcadia_Value_isObjectReferenceValue(&v)) {
         /* "Y may not inherit from itself" */
-        Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-        Arcadia_Process_jump(process);
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_SemanticalError);
+        Arcadia_Thread_jump(Arcadia_Process_getThread(process));
       }
-      Arcadia_Map_set(process, temporary, v, k);
+      Arcadia_Map_set(Arcadia_Process_getThread(process), temporary, v, k);
       current = current->extendedClass;
     } while (current);
   }
@@ -258,22 +259,23 @@ completeVariables
     R_Interpreter_ProcessState* processState
   )
 {
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_SizeValue numberOfVariables = 0;
   if (self->extendedClass) {
     numberOfVariables = self->extendedClass->numberOfVariables;
   }
   // Complete class instance variables.
-  Arcadia_List* classMember = Arcadia_Map_getValues(process, self->classMembers);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, classMember); i < n; ++i) {
-    Arcadia_Value value = Arcadia_List_getAt(process, classMember, i);
-    Arcadia_TypeValue valueType = Arcadia_Value_getType(process, &value);
-    if (Arcadia_Type_isSubType(valueType, _R_Interpreter_Variable_getType(process))) {
+  Arcadia_List* classMember = Arcadia_Map_getValues(thread, self->classMembers);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, classMember); i < n; ++i) {
+    Arcadia_Value value = Arcadia_List_getAt(thread, classMember, i);
+    Arcadia_TypeValue valueType = Arcadia_Value_getType(thread, &value);
+    if (Arcadia_Type_isSubType(thread, valueType, _R_Interpreter_Variable_getType(thread))) {
       R_Interpreter_Variable* variable = Arcadia_Value_getObjectReferenceValue(&value);
       variable->index = numberOfVariables++;
       variable->ready = Arcadia_BooleanValue_True;
     } else {
-      Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-      Arcadia_Process_jump(process);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
     }
   }
   self->numberOfVariables = numberOfVariables;
@@ -287,6 +289,7 @@ R_Interpreter_Class_complete
     R_Interpreter_ProcessState* processState
   )
 { 
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (self->complete) {
     return;
   }
@@ -299,18 +302,18 @@ R_Interpreter_Class_complete
   if (self->extendedClassName) {
     self->extendedClass = getClass(process, R_Interpreter_ProcessState_getGlobal(process, processState, self->extendedClassName));
     R_Interpreter_Class_complete(process, self->extendedClass, processState);
-    Arcadia_Map* temporary = Arcadia_Map_create(process);
+    Arcadia_Map* temporary = Arcadia_Map_create(thread);
     R_Interpreter_Class* current = self;
     do {
       Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = current->className };
       Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self };
-      v = Arcadia_Map_get(process, temporary, v);
+      v = Arcadia_Map_get(thread, temporary, v);
       if (Arcadia_Value_isObjectReferenceValue(&v)) {
         /* "Y may not inherit from itself" */
-        Arcadia_Process_setStatus(process, Arcadia_Status_SemanticalError);
-        Arcadia_Process_jump(process);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+        Arcadia_Thread_jump(thread);
       }
-      Arcadia_Map_set(process, temporary, v, k);
+      Arcadia_Map_set(thread, temporary, v, k);
       current = current->extendedClass;
     } while (current);
   }
@@ -318,25 +321,25 @@ R_Interpreter_Class_complete
   completeVariables(process, self, processState);
 
   /* (4) complete the methods and the method dispatch */
-  self->methodDispatch = Arcadia_Map_create(process);
+  self->methodDispatch = Arcadia_Map_create(thread);
   if (self->extendedClass) {
-    self->methodDispatch = Arcadia_Map_clone(process, self->extendedClass->methodDispatch);
+    self->methodDispatch = Arcadia_Map_clone(thread, self->extendedClass->methodDispatch);
   } else {
-    self->methodDispatch = Arcadia_Map_create(process);
+    self->methodDispatch = Arcadia_Map_create(thread);
   }
-  Arcadia_List* members = Arcadia_Map_getValues(process, self->classMembers);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(process, members); i < n; ++i) {
-    Arcadia_Value v = Arcadia_List_getAt(process, members, i);
-    if (Arcadia_Type_isSubType(Arcadia_Value_getType(process, &v), _R_Interpreter_Method_getType(process))) {
+  Arcadia_List* members = Arcadia_Map_getValues(thread, self->classMembers);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, members); i < n; ++i) {
+    Arcadia_Value v = Arcadia_List_getAt(thread, members, i);
+    if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &v), _R_Interpreter_Method_getType(thread))) {
       R_Interpreter_Method *m = Arcadia_Value_getObjectReferenceValue(&v);
       Arcadia_Value k2 = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = m->unqualifiedName };
-      Arcadia_Value v2 = Arcadia_Map_get(process, self->methodDispatch, k2);
+      Arcadia_Value v2 = Arcadia_Map_get(thread, self->methodDispatch, k2);
       if (!Arcadia_Value_isVoidValue(&v2)) {
         R_Interpreter_Method* m2 = Arcadia_Value_getObjectReferenceValue(&v2);
         m->index = m2->index;
         m->ready = Arcadia_BooleanValue_True;
       } else {
-        m->index = Arcadia_Map_getSize(self->methodDispatch);
+        m->index = Arcadia_Map_getSize(thread, self->methodDispatch);
         m->ready = Arcadia_BooleanValue_True;
       }
     }

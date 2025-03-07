@@ -23,7 +23,7 @@
 Arcadia_SizeValue
 _hashUtf8
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,
     Arcadia_SizeValue numberOfBytes
   );

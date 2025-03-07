@@ -22,34 +22,34 @@
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Process1.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
 
 Arcadia_ImmutableUtf8String*
 _createFromNatural16
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural16Value natural16Value
   );
 
 Arcadia_ImmutableUtf8String*
 _createFromNatural32
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural32Value natural32Value
   );
 
 Arcadia_ImmutableUtf8String*
 _createFromNatural64
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value natural64Value
   );
 
 Arcadia_ImmutableUtf8String*
 _createFromNatural8
   (
-    Arcadia_Process1* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value natural8Value
   );
 

@@ -27,23 +27,23 @@
 static void
 listTest1
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  Arcadia_List* l = Arcadia_List_create(process);
+  Arcadia_List* l = Arcadia_List_create(thread);
 
   for (Arcadia_Integer32Value i = 1, n = 7; i <= n; ++i) {
-    Arcadia_List_appendInteger32Value(process, l, i);
-    Arcadia_Tests_assertTrue(i == Arcadia_List_getSize(process, l));
+    Arcadia_List_appendInteger32Value(thread, l, i);
+    Arcadia_Tests_assertTrue(thread, i == Arcadia_List_getSize(thread, l));
   }
-  Arcadia_Tests_assertTrue(7 == Arcadia_List_getSize(process, l));
-  Arcadia_Tests_assertTrue(Arcadia_BooleanValue_False == Arcadia_List_isEmpty(process, l));
+  Arcadia_Tests_assertTrue(thread, 7 == Arcadia_List_getSize(thread, l));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BooleanValue_False == Arcadia_List_isEmpty(thread, l));
   for (Arcadia_Integer32Value i = 1, n = 7; i <= n; ++i) {
-    Arcadia_Tests_assertTrue(i == Arcadia_List_getInteger32ValueAt(process, l, i - 1));
+    Arcadia_Tests_assertTrue(thread, i == Arcadia_List_getInteger32ValueAt(thread, l, i - 1));
   }
-  Arcadia_List_clear(process, l);
-  Arcadia_Tests_assertTrue(Arcadia_SizeValue_Literal(0) == Arcadia_List_getSize(process, l));
-  Arcadia_Tests_assertTrue(Arcadia_BooleanValue_True == Arcadia_List_isEmpty(process, l));
+  Arcadia_List_clear(thread, l);
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(0) == Arcadia_List_getSize(thread, l));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BooleanValue_True == Arcadia_List_isEmpty(thread, l));
 }
 
 int

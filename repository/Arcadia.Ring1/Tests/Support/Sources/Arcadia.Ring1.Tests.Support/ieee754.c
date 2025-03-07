@@ -23,45 +23,45 @@
 static void
 testFloatConstants
   (
-    Arcadia_Process * process
+    Arcadia_Thread* thread
   );
 
 static void
 testDoubleConstants
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 static void
 testFloatConstants
   (
-    Arcadia_Process * process
+    Arcadia_Thread* thread
   )
 {
-  Arcadia_Tests_assertTrue(FLT_FRAC_BITS == 23);
-  Arcadia_Tests_assertTrue(FLT_FRAC_MASK == 0b11111111111111111111111);
-  Arcadia_Tests_assertTrue(FLT_EXP_MASK == 0b1111111100000000000000000000000);
-  Arcadia_Tests_assertTrue(FLT_SGN_MASK == 0b10000000000000000000000000000000);
+  Arcadia_Tests_assertTrue(thread, FLT_SIGNIFICAND_BITS == 23);
+  Arcadia_Tests_assertTrue(thread, FLT_SIGNIFICAND_MASK == 0b11111111111111111111111);
+  Arcadia_Tests_assertTrue(thread, FLT_EXPONENT_MASK == 0b1111111100000000000000000000000);
+  Arcadia_Tests_assertTrue(thread, FLT_SIGN_MASK == 0b10000000000000000000000000000000);
 }
 
 static void
 testDoubleConstants
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  Arcadia_Tests_assertTrue(DBL_FRAC_BITS == 52);
-  Arcadia_Tests_assertTrue(DBL_FRAC_MASK == 0b1111111111111111111111111111111111111111111111111111);
-  Arcadia_Tests_assertTrue(DBL_EXP_MASK == 0b111111111110000000000000000000000000000000000000000000000000000);
-  Arcadia_Tests_assertTrue(DBL_SGN_MASK == 0b1000000000000000000000000000000000000000000000000000000000000000);
+  Arcadia_Tests_assertTrue(thread, DBL_SIGNIFICAND_BITS == 52);
+  Arcadia_Tests_assertTrue(thread, DBL_SIGNIFICAND_MASK == 0b1111111111111111111111111111111111111111111111111111);
+  Arcadia_Tests_assertTrue(thread, DBL_EXPONENT_MASK == 0b111111111110000000000000000000000000000000000000000000000000000);
+  Arcadia_Tests_assertTrue(thread, DBL_SIGN_MASK == 0b1000000000000000000000000000000000000000000000000000000000000000);
 }
 
 void
 Arcadia_Ring1_Tests_Support_ieee754
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  testFloatConstants(process);
-  testDoubleConstants(process);
+  testFloatConstants(thread);
+  testDoubleConstants(thread);
 }

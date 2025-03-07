@@ -44,7 +44,7 @@ struct Arcadia_StringBuffer {
 Arcadia_StringBuffer*
 Arcadia_StringBuffer_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 /// @brief Get if a sequence of Bytes is a suffix of this string buffer.
@@ -57,7 +57,7 @@ Arcadia_StringBuffer_create
 Arcadia_BooleanValue
 Arcadia_StringBuffer_endsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -73,7 +73,7 @@ Arcadia_StringBuffer_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_StringBuffer_startsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -88,7 +88,7 @@ Arcadia_StringBuffer_startsWith_pn
 void
 Arcadia_StringBuffer_append_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -100,7 +100,7 @@ Arcadia_StringBuffer_append_pn
 void
 Arcadia_StringBuffer_append
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_Value value
   );
@@ -108,7 +108,7 @@ Arcadia_StringBuffer_append
 void
 Arcadia_StringBuffer_appendCodePoints
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_Natural32Value const* codePoints,
     Arcadia_SizeValue numberOfCodePoints
@@ -126,7 +126,7 @@ Arcadia_StringBuffer_appendCodePoints
 Arcadia_BooleanValue
 Arcadia_StringBuffer_isEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_StringBuffer* other
   );
@@ -136,18 +136,21 @@ Arcadia_StringBuffer_isEqualTo
 void
 Arcadia_StringBuffer_clear
   (
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer* self
   );
 
 Arcadia_SizeValue
 Arcadia_StringBuffer_getNumberOfBytes
   (
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer const* self
   );
 
 Arcadia_Natural8Value const*
 Arcadia_StringBuffer_getBytes
   (
+    Arcadia_Thread* thread,
     Arcadia_StringBuffer const* self
   );
 

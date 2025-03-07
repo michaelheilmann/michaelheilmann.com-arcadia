@@ -37,14 +37,14 @@ struct Arcadia_ByteBuffer {
 Arcadia_ByteBuffer*
 Arcadia_ByteBuffer_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 // https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_endsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -54,7 +54,7 @@ Arcadia_ByteBuffer_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_startsWith_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -64,7 +64,7 @@ Arcadia_ByteBuffer_startsWith_pn
 void
 Arcadia_ByteBuffer_append_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -74,7 +74,7 @@ Arcadia_ByteBuffer_append_pn
 void
 Arcadia_ByteBuffer_prepend_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -84,7 +84,7 @@ Arcadia_ByteBuffer_prepend_pn
 void
 Arcadia_ByteBuffer_insert_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     Arcadia_SizeValue index,
     void const* bytes,
@@ -95,7 +95,7 @@ Arcadia_ByteBuffer_insert_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     Arcadia_ByteBuffer const* other
   );
@@ -104,7 +104,7 @@ Arcadia_ByteBuffer_isEqualTo
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo_pn
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -114,7 +114,7 @@ Arcadia_ByteBuffer_isEqualTo_pn
 void
 Arcadia_ByteBuffer_clear
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self
   );
 
@@ -122,7 +122,7 @@ Arcadia_ByteBuffer_clear
 Arcadia_SizeValue
 Arcadia_ByteBuffer_getSize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self
   );
 
@@ -130,7 +130,7 @@ Arcadia_ByteBuffer_getSize
 Arcadia_SizeValue
 Arcadia_ByteBuffer_getNumberOfBytes
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self
   );
 
@@ -138,7 +138,7 @@ Arcadia_ByteBuffer_getNumberOfBytes
 Arcadia_Natural8Value const*
 Arcadia_ByteBuffer_getBytes
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self
   );
 
@@ -146,7 +146,7 @@ Arcadia_ByteBuffer_getBytes
 Arcadia_Natural8Value
 Arcadia_ByteBuffer_getAt
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer const* self,
     Arcadia_SizeValue index
   );
@@ -155,14 +155,14 @@ Arcadia_ByteBuffer_getAt
 static inline void
 Arcadia_ByteBuffer_swap
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
     Arcadia_ByteBuffer* other
   )
 {
-  Arcadia_swap_p(process, &self->p, &other->p);
-  Arcadia_swap_s(process, &self->sz, &other->sz);
-  Arcadia_swap_s(process, &self->cp, &other->cp);
+  Arcadia_swapPointer(thread, &self->p, &other->p);
+  Arcadia_swapSize(thread, &self->sz, &other->sz);
+  Arcadia_swapSize(thread, &self->cp, &other->cp);
 }
 
 #endif // ARCADIA_RING2_IMPLEMENTATION_BYTEBUFFER_H_INCLUDED

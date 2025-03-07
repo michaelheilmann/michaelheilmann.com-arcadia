@@ -35,35 +35,35 @@ R_Interpreter_ProcessState_startup
   )
 {
   if (g_singleton) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_Initialized);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_Initialized);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   R_Interpreter_ProcessState* singleton = NULL;
   Arcadia_Process_allocateUnmanaged(process, &singleton, sizeof(R_Interpreter_ProcessState));
   Arcadia_JumpTarget jumpTarget;
 
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    singleton->constants = R_Interpreter_Code_Constants_create(process);
-    singleton->globals = Arcadia_Map_create(process);
-    Arcadia_Process_popJumpTarget(process);
+    singleton->constants = R_Interpreter_Code_Constants_create(Arcadia_Process_getThread(process));
+    singleton->globals = Arcadia_Map_create(Arcadia_Process_getThread(process));
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
     Arcadia_Process_deallocateUnmanaged(process, singleton);
     singleton = NULL;
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
 
-  Arcadia_Process_pushJumpTarget(process, &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     singleton->mainThread = R_Interpreter_ThreadState_create(process);
     singleton->currentThread = singleton->mainThread;
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
-    Arcadia_Process_popJumpTarget(process);
+    Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
     Arcadia_Process_deallocateUnmanaged(process, singleton);
     singleton = NULL;
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
 
   g_singleton = singleton;
@@ -76,8 +76,8 @@ R_Interpreter_ProcessState_shutdown
   )
 {
   if (!g_singleton) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NotInitialized);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_NotInitialized);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   R_Interpreter_ProcessState* singleton = g_singleton;
   g_singleton = NULL;
@@ -100,8 +100,9 @@ R_Interpreter_ProcessState_visit
     R_Interpreter_ProcessState* processState
   )
 {
-  Arcadia_Object_visit(process, processState->globals);
-  Arcadia_Object_visit(process, processState->constants);
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+  Arcadia_Object_visit(thread, processState->globals);
+  Arcadia_Object_visit(thread, processState->constants);
 
   R_Interpreter_ThreadState_visit(process, processState->currentThread);
   R_Interpreter_ThreadState_visit(process, processState->mainThread);
@@ -116,17 +117,17 @@ R_Interpreter_ProcessState_defineGlobalProcedure
   )
 { 
   if (!procedure) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = procedure->unqualifiedName };
-  Arcadia_Value value = Arcadia_Map_get(process, self->globals, key);
+  Arcadia_Value value = Arcadia_Map_get(Arcadia_Process_getThread(process), self->globals, key);
   if (!Arcadia_Value_isVoidValue(&value)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_Exists);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   value = (Arcadia_Value){ .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = procedure };
-  Arcadia_Map_set(process, self->globals, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->globals, key, value);
 }
 
 void
@@ -138,17 +139,17 @@ R_Interpreter_ProcessState_defineGlobalClass
   )
 {
   if (!class) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = class->className };
-  Arcadia_Value value = Arcadia_Map_get(process, self->globals, key);
+  Arcadia_Value value = Arcadia_Map_get(Arcadia_Process_getThread(process), self->globals, key);
   if (!Arcadia_Value_isVoidValue(&value)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_Exists);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_Exists);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   value = (Arcadia_Value){ .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = class };
-  Arcadia_Map_set(process, self->globals, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->globals, key, value);
 }
 
 Arcadia_Value
@@ -160,14 +161,14 @@ R_Interpreter_ProcessState_getGlobal
   )
 { 
   if (!name) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value key = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = name };
-  Arcadia_Value value = Arcadia_Map_get(process, self->globals, key);
+  Arcadia_Value value = Arcadia_Map_get(Arcadia_Process_getThread(process), self->globals, key);
   if (Arcadia_Value_isVoidValue(&value)) {
-    Arcadia_Process_setStatus(process, Arcadia_Status_NotExists);
-    Arcadia_Process_jump(process);
+    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_NotExists);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   return value;
 }

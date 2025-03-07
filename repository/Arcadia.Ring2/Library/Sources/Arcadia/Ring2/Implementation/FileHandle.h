@@ -29,97 +29,98 @@ typedef struct Arcadia_FileSystem Arcadia_FileSystem;
 // FILE
 #include <stdio.h>
 
-Rex_declareObjectType(u8"Arcadia.FileHandle", R_FileHandle, u8"Arcadia.Object");
+Rex_declareObjectType(u8"Arcadia.FileHandle", Arcadia_FileHandle, u8"Arcadia.Object");
 
-struct R_FileHandle {
+struct Arcadia_FileHandle {
   Arcadia_Object _parent;
   Arcadia_FileSystem* fileSystem;
   Arcadia_Natural8Value flags;
   FILE* fd;
 };
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-create
-R_FileHandle*
-R_FileHandle_create
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_create
+Arcadia_FileHandle*
+Arcadia_FileHandle_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FileSystem* fileSystem
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-isclosed
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_isClosed
 Arcadia_BooleanValue
-R_FileHandle_isClosed
+Arcadia_FileHandle_isClosed
   (
-    Arcadia_Process* process,
-    R_FileHandle const* self
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle const* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-isopened
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_isOpened
 Arcadia_BooleanValue
-R_FileHandle_isOpened
+Arcadia_FileHandle_isOpened
   (
-    Arcadia_Process* process,
-    R_FileHandle const* self
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle const* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-isopenedforreading
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_isOpenedForReading
 Arcadia_BooleanValue
-R_FileHandle_isOpenedForReading
+Arcadia_FileHandle_isOpenedForReading
   (
-    Arcadia_Process* process,
-    R_FileHandle const* self
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle const* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-isopenedforwriting
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_isOpenedForWriting
 Arcadia_BooleanValue
-R_FileHandle_isOpenedForWriting
+Arcadia_FileHandle_isOpenedForWriting
   (
-    Arcadia_Process* process,
-    R_FileHandle const* self
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle const* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-close
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_close
 void
-R_FileHandle_close
+Arcadia_FileHandle_close
   (
-    R_FileHandle* self
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-openforreading
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_openForReading
 void
-R_FileHandle_openForReading
+Arcadia_FileHandle_openForReading
   (
-    Arcadia_Process* process,
-    R_FileHandle* self,
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-openforwriting
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_openForWriting
 void
-R_FileHandle_openForWriting
+Arcadia_FileHandle_openForWriting
   (
-    Arcadia_Process* process,
-    R_FileHandle* self,
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/repository/R1/#r-filehandle-read
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_read
 void
-R_FileHandle_read
+Arcadia_FileHandle_read
   (
-    Arcadia_Process* process,
-    R_FileHandle* self,
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
     void* byes,
     Arcadia_SizeValue bytesToRead,
     Arcadia_SizeValue* bytesRead
   );
      
-// https://michaelheilmann.com/repository/R1/#r-filehandle-write    
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_write    
 void
-R_FileHandle_write
+Arcadia_FileHandle_write
   (
-    Arcadia_Process* process,
-    R_FileHandle* self,
+    Arcadia_Thread* thread,
+    Arcadia_FileHandle* self,
     void const* bytes,
     Arcadia_SizeValue bytesToWrite,
     Arcadia_SizeValue* bytesWritten

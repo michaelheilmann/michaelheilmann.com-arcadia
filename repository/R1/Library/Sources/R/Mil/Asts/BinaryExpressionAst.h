@@ -60,7 +60,7 @@ struct Arcadia_Mil_BinaryExpressionAst {
 Arcadia_Mil_BinaryExpressionAst*
 Arcadia_Mil_BinaryExpressionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_BinaryExpressionAstType type,
     Arcadia_Mil_OperandAst* operand1,
     Arcadia_Mil_OperandAst* operand2

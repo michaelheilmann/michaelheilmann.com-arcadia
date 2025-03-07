@@ -20,12 +20,11 @@
 #include <stdlib.h>
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring1/Implementation/Utf8ToIeee754/Include.h"
 
 void
 Arcadia_Ring1_Tests_Support_apreal10
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 #endif // ARCADIA_RING1_TESTS_SUPPORT_APREAL10_H_INCLUDED

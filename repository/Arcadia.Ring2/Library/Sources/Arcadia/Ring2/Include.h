@@ -24,7 +24,6 @@
 
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 
-#include "Arcadia/Ring2/Implementation/BigInteger.h"
 #include "Arcadia/Ring2/Implementation/CommandLine.h"
 
 #include "Arcadia/Ring1/Include.h"

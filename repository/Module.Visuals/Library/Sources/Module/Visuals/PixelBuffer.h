@@ -56,6 +56,7 @@ struct PixelBuffer {
 Arcadia_Natural8Value
 PixelBuffer_getPixelFormat
   (
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -70,7 +71,7 @@ PixelBuffer_getPixelFormat
 void
 PixelBuffer_setPixelFormat
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self,
     Arcadia_Natural8Value pixelFormat
   );
@@ -83,6 +84,7 @@ PixelBuffer_setPixelFormat
 Arcadia_Integer32Value
 PixelBuffer_getLinePadding
   (
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -94,7 +96,7 @@ PixelBuffer_getLinePadding
 void
 PixelBuffer_setLinePadding
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self,
     Arcadia_Integer32Value linePadding
   );
@@ -124,7 +126,7 @@ PixelBuffer_setLinePadding
 void
 PixelBuffer_getPixelRgba
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self,
     Arcadia_Integer32Value column,
     Arcadia_Integer32Value row,
@@ -156,7 +158,7 @@ PixelBuffer_getPixelRgba
 void
 PixelBuffer_setPixelRgba
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self,
     Arcadia_Integer32Value column,
     Arcadia_Integer32Value row,
@@ -186,7 +188,7 @@ PixelBuffer_setPixelRgba
 void
 PixelBuffer_fill
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
@@ -203,7 +205,7 @@ PixelBuffer_fill
 void
 PixelBuffer_swapColumns
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self,
     Arcadia_Integer32Value column1,
     Arcadia_Integer32Value column2
@@ -216,7 +218,7 @@ PixelBuffer_swapColumns
 void
 PixelBuffer_swapRows
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self,
     Arcadia_Integer32Value row1,
     Arcadia_Integer32Value row2
@@ -232,7 +234,7 @@ PixelBuffer_swapRows
 void
 PixelBuffer_reflectVertically
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -244,7 +246,7 @@ PixelBuffer_reflectVertically
 void
 PixelBuffer_reflectHorizontally
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -256,6 +258,7 @@ PixelBuffer_reflectHorizontally
 Arcadia_Integer32Value
 PixelBuffer_getNumberOfColumns
   (
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -265,6 +268,7 @@ PixelBuffer_getNumberOfColumns
 Arcadia_Integer32Value
 PixelBuffer_getNumberOfRows
   (
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -276,7 +280,7 @@ PixelBuffer_getNumberOfRows
 Arcadia_Integer32Value
 PixelBuffer_getLineStride
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -288,7 +292,7 @@ PixelBuffer_getLineStride
 Arcadia_Integer32Value
 PixelBuffer_getBytesPerPixel
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -299,7 +303,7 @@ PixelBuffer_getBytesPerPixel
 PixelBuffer*
 PixelBuffer_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer32Value linePadding,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height,
@@ -309,7 +313,7 @@ PixelBuffer_create
 PixelBuffer*
 PixelBuffer_createClone
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     PixelBuffer* other
   );
 
@@ -319,6 +323,7 @@ PixelBuffer_createClone
 Arcadia_Integer32Value
 PixelBuffer_getWidth
   (
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 
@@ -328,6 +333,7 @@ PixelBuffer_getWidth
 Arcadia_Integer32Value
 PixelBuffer_getHeight
   (
+    Arcadia_Thread* thread,
     PixelBuffer* self
   );
 

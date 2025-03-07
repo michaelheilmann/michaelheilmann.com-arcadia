@@ -23,7 +23,7 @@
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoInteger8Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer8Value x
   )
 {
@@ -34,7 +34,7 @@ Arcadia_isPowerOfTwoInteger8Value
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoInteger16Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer16Value x
   )
 {
@@ -45,7 +45,7 @@ Arcadia_isPowerOfTwoInteger16Value
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoInteger32Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer32Value x
   )
 {
@@ -56,7 +56,7 @@ Arcadia_isPowerOfTwoInteger32Value
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoInteger64Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Integer64Value x
   )
 {
@@ -67,7 +67,7 @@ Arcadia_isPowerOfTwoInteger64Value
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoNatural8Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural8Value x
   )
 {
@@ -78,7 +78,7 @@ Arcadia_isPowerOfTwoNatural8Value
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoNatural16Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural16Value x
   )
 {
@@ -89,7 +89,7 @@ Arcadia_isPowerOfTwoNatural16Value
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoNatural32Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural32Value x
   )
 {
@@ -100,7 +100,7 @@ Arcadia_isPowerOfTwoNatural32Value
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoNatural64Value
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Natural64Value x
   )
 {
@@ -111,14 +111,14 @@ Arcadia_isPowerOfTwoNatural64Value
 Arcadia_BooleanValue
 Arcadia_isPowerOfTwoSizeValue
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_SizeValue x
   )
 {
 #if Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X64
-  return Arcadia_isPowerOfTwoNatural64Value(process, (Arcadia_Natural64Value)x);
+  return Arcadia_isPowerOfTwoNatural64Value(thread, (Arcadia_Natural64Value)x);
 #elif Arcadia_Configuration_InstructionSetArchitecture == Arcadia_Configuration_InstructionSetArchitecture_X86
-  return Arcadia_isPowerOfTwoNatural32Value(process, (Arcadia_Natural32Value)x);
+  return Arcadia_isPowerOfTwoNatural32Value(thread, (Arcadia_Natural32Value)x);
 #else
   #error("instruction set architecture not (yet) supported")
 #endif 

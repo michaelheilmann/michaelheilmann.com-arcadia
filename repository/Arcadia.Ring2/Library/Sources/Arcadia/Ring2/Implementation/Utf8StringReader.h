@@ -37,7 +37,7 @@ struct Arcadia_Utf8StringReader {
 Arcadia_Utf8StringReader*
 Arcadia_Utf8StringReader_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* source
   );
 

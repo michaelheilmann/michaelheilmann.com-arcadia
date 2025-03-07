@@ -38,7 +38,7 @@
 Arcadia_BooleanValue
 Arcadia_CommandLine_parseArgument
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Utf8Reader* reader,
     Arcadia_String** key,
     Arcadia_String** value
@@ -47,14 +47,14 @@ Arcadia_CommandLine_parseArgument
 void
 Arcadia_CommandLine_raiseRequiredArgumentMissingError
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* key
   );
 
 void
 Arcadia_CommandLine_raiseUnknownArgumentError
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* key,
     Arcadia_String* value
   );
@@ -62,14 +62,14 @@ Arcadia_CommandLine_raiseUnknownArgumentError
 void
 Arcadia_CommandLine_raiseNoValueError
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* key
   );
 
 void
 Arcadia_CommandLine_raiseValueInvalidError
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* key,
     Arcadia_String* value
   );

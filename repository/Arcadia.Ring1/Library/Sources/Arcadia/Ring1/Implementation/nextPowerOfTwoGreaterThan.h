@@ -36,7 +36,7 @@
   Type##Value \
   Arcadia_nextPowerOfTwoGreaterThan##Suffix##Value \
     ( \
-      Arcadia_Process* process, \
+      Arcadia_Thread* thread, \
       Type##Value x \
     ); 
 
