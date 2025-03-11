@@ -32,13 +32,11 @@ endif()
 
 # Create library.
 if (NOT TARGET ${MyProjectName}.R)
-  BeginProduct(${MyProjectName}.R)
+  BeginProduct(${MyProjectName}.R library)
 
   FetchProduct(${MyProjectName}.Arms  "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
   FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring1/Library" "path to the Arcadia.Ring1 library directory")
   FetchProduct(${MyProjectName}.Ring2 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring2/Library" "path to the Arcadia.Ring2 library directory")
-
-  add_library(${MyProjectName}.R)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Configure.h @ONLY)
 
@@ -149,14 +147,13 @@ if (NOT TARGET ${MyProjectName}.R)
   list(APPEND ${MyProjectName}.R.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Include.c)
   list(APPEND ${MyProjectName}.R.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Include.h)
 
-  target_link_libraries(${MyProjectName}.R Arcadia.Ring2 Arcadia.Ring1 Arcadia.Arms)
+  list(APPEND ${MyProjectName}.R.Libraries ${MyProjectName}.Ring2 ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 
   if (${${MyProjectName}.R.OperatingSystem} STREQUAL ${${MyProjectName}.R.OperatingSystem.Linux})
-    target_link_libraries(${MyProjectName}.R m)
+    list(APPEND ${MyProjectName}.R.Libraries m)
   endif()
 
+  EndProduct(${MyProjectName}.R)
   set_target_properties(${MyProjectName}.R PROPERTIES FOLDER "R")
-
-  EndProduct(${MyProjectName}.R library)
 
 endif()

@@ -36,10 +36,7 @@ FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to t
 set(MyTestName ${MyProjectName}.R.Tests.Utf8)
 
 # Create test executable.
-add_executable(${MyTestName})
-BeginProduct(${MyTestName})
-
-add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+BeginProduct(${MyTestName} test)
 
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/readWrite.c)
@@ -47,8 +44,7 @@ list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/readWr
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/read.c)
 list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/read.h)
 
-target_link_libraries(${MyTestName} ${MyProjectName}.R ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
 
+EndProduct(${MyTestName})
 set_target_properties(${MyTestName} PROPERTIES FOLDER "R")
-
-EndProduct(${MyTestName} executable)

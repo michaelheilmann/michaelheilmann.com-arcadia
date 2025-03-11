@@ -34,16 +34,16 @@ FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "pat
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
 set(MyTargetName Integrations.Apache)
-add_executable(${MyTargetName})
-BeginProduct(${MyTargetName})
+
+# Add executable.
+BeginProduct(${MyTargetName} executable)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h @ONLY)
 
 list(APPEND ${MyTargetName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Main.c)
 list(APPEND ${MyTargetName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h)
 
-target_link_libraries(${MyTargetName} Arcadia.R Arcadia.Arms)
+list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
 
+EndProduct(${MyTargetName})
 set_target_properties(${MyTargetName} PROPERTIES OUTPUT_NAME "arcadia")
-
-EndProduct(${MyTargetName} executable)

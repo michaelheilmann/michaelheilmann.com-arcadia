@@ -34,9 +34,7 @@ endif()
 set(MyLibraryName ${MyProjectName}.Ring2)
 
 if (NOT TARGET ${MyLibraryName})
-  BeginProduct(${MyLibraryName})
-
-  add_library(${MyLibraryName})
+  BeginProduct(${MyLibraryName} library)
 
   FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
   FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring1/Library" "path to the Arcadia.Ring1 library directory")
@@ -95,14 +93,13 @@ if (NOT TARGET ${MyLibraryName})
   list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring2/Implementation/Utf8ByteBufferWriter.c)
   list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring2/Implementation/Utf8ByteBufferWriter.h)
 
-  target_link_libraries(${MyProjectName}.Ring2 Arcadia.Ring1 Arcadia.Arms)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 
-  if (${${MyLibraryName}OperatingSystem} STREQUAL ${${MyLibraryName}OperatingSystem.Linux})
-    target_link_libraries(${MyProjectName}.Ring2 m)
+  if (${${MyLibraryName}.OperatingSystem} STREQUAL ${${MyLibraryName}.OperatingSystem.Linux})
+    list(APPEND ${MyLibraryName}.Libraries m)
   endif()
 
-  set_target_properties(${MyProjectName}.Ring2 PROPERTIES FOLDER "Arcadia")
-
-  EndProduct(${MyProjectName}.Ring2 library)
+  EndProduct(${MyLibraryName})
+  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Arcadia")
 
 endif()

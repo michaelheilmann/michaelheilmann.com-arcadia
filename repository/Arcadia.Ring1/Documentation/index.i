@@ -15,17 +15,6 @@
 @{include("3.documentation.4.status-variable.i")}
 @{include("3.documentation.5.jumps-and-jump-targets.i")}
 @{include("3.documentation.6.numeric-functions.i")}
-@{include("3.documentation.6.numeric-functions/clamp.i")}
-@{include("3.documentation.6.numeric-functions/countLeadingZeroes.i")}
-@{include("3.documentation.6.numeric-functions/countSignificandBits.i")}
-@{include("3.documentation.6.numeric-functions/hash.i")}
-@{include("3.documentation.6.numeric-functions/isPowerOfTwo.i")}
-@{include("3.documentation.6.numeric-functions/maximum.i")}
-@{include("3.documentation.6.numeric-functions/minimum.i")}
-@{include("3.documentation.6.numeric-functions/nextPowerOfTwoGreaterThan.i")}
-@{include("3.documentation.6.numeric-functions/nextPowerOfTwoGreaterThanOrEqualTo.i")}
-@{include("3.documentation.6.numeric-functions/safeAdd.i")}
-@{include("3.documentation.6.numeric-functions/safeMultiply.i")}
 @{include("3.documentation.7.time-and-date-functions.i")}
 @{include("3.documentation.7.time-and-date-functions/1.getTickCount.i")}
 @{include("3.documentation.8.unicode-functions.i")}

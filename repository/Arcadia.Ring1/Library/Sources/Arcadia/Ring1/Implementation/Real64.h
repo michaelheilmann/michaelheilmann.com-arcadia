@@ -70,7 +70,7 @@ Rex_declareScalarType(Arcadia_Real64);
 // In other terms, if the 64 bits have indices from 0 to 63, then this is the index of the LSB of the exponent.
 // Usually 52.
 // TODO: Add to documentation.
-#define Arcadia_Real64Value_ExponentBitsShift Arcadia_Real64Value_NumberOfExplicitSignificandBits
+#define Arcadia_Real64Value_ExponentBitsShift Arcadia_Real64Value_NumberOfSignificandBits
 
 // The number of bits of the sign.
 // Usually 1.
@@ -80,7 +80,7 @@ Rex_declareScalarType(Arcadia_Real64);
 // In other terms, if the 64 bits have indices from 0 to 63, then this is the index of the LSB of the sign.
 // Usually 63.
 // TODO: Add to documentation.
-#define Arcadia_Real64Value_SignBitsShift (Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfExplicitSignificandBits)
+#define Arcadia_Real64Value_SignBitsShift (Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfSignificandBits)
 
 Arcadia_StaticAssert(Arcadia_Real64Value_NumberOfBits == Arcadia_Real64Value_NumberOfSignBits + Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfSignificandBits, "unsupported floating-point format");
 

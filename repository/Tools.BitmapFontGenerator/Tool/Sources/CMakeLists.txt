@@ -30,24 +30,25 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-BeginProduct(Tools.BitmapFontGenerator)
+set(MyTool Tools.BitmapFontGenerator)
+BeginProduct(${MyTool} executable)
 
-if (${Tools.BitmapFontGenerator.OperatingSystem} STREQUAL ${Tools.BitmapFontGenerator.OperatingSystem.Windows})
+if (${${MyTool}.OperatingSystem} STREQUAL ${${MyTool}.OperatingSystem.Windows})
 
   FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
   FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
-  add_executable(Tools.BitmapFontGenerator)
-
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/BitmapFontGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/BitmapFontGenerator/Configure.h @ONLY)
 
-  list(APPEND Tools.BitmapFontGenerator.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/BitmapFontGenerator/Main.c)
-  list(APPEND Tools.BitmapFontGenerator.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/BitmapFontGenerator/Configure.h)
+  list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/BitmapFontGenerator/Main.c)
+  list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/BitmapFontGenerator/Configure.h)
 
-  target_link_libraries(Tools.BitmapFontGenerator Module.Visuals Arcadia.R Arcadia.Arms)
+  list(APPEND ${MyTool}.PrivateLibraries Module.Visuals ${MyProjectName}.R ${MyProjectName}.Arms)
+else()
+  set(${MyTool}.Enabled FALSE)
+endif()
 
-  set_target_properties(Tools.BitmapFontGenerator PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.png\"")
-
-  EndProduct(Tools.BitmapFontGenerator executable)
-
+EndProduct(${MyTool})
+if (${${MyTool}.Enabled})
+    set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.png\"")
 endif()

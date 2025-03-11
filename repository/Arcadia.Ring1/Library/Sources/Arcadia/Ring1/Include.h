@@ -72,6 +72,8 @@
 
 #include "Arcadia/Ring1/Implementation/NoReturn.h"
 
+#include "Arcadia/Ring1/Implementation/NumberLiteral.h"
+
 #include "Arcadia/Ring1/Implementation/Object.h"
 
 #include "Arcadia/Ring1/Implementation/ObjectReference.h"

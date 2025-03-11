@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-22
+# Last modified: 2024-12-29
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -23,27 +23,28 @@ if (NOT MyProjectIsDefined)
   endif()
   project(${MyProjectName})
   enable_testing()
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
   include(FetchContent)
-  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../..)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
   set(MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring1/Library" "path to the Arcadia.Ring1 library directory")
 
-set(MyTestName ${MyProjectName}.R.Tests.Arms)
+set(MyTestName ${MyProjectName}.Ring1.Tests.LiteralTests) 
 
-if (NOT TARGET ${MyTestName})
-  BeginProduct(${MyTestName} test)
+# Create test executable.
+add_executable(${MyTestName})
+BeginProduct(${MyTestName})
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/R/Tests/Arms/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/R/Tests/Arms/Configure.h @ONLY)
+add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/R/Tests/Arms/Main.c)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/R/Tests/Arms/Configure.h)
+list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.LiteralTests/Main.c)
 
-  list(APPEND ${MyTestName}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
+target_link_libraries(${MyTestName} ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 
-  EndProduct(${MyTestName})
-  set_target_properties(${MyTestName} PROPERTIES FOLDER "R")
-endif()
+set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia")
+
+EndProduct(${MyTestName} executable)

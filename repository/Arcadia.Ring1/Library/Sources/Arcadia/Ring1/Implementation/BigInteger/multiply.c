@@ -2,6 +2,7 @@
 #include "Arcadia/Ring1/Implementation/BigInteger/multiply.h"
 
 #include "Arcadia/Ring1/Include.h"
+#include <assert.h>
 
 // This basically asserts that the digit multiplication is sound.
 #define PRODUCT_MAXIMUM ((uint64_t)UINT32_MAX * (uint64_t)UINT32_MAX)
@@ -25,7 +26,9 @@ Arcadia_BigInteger_multiply3
     return;
   }
   // Both a and b are non-zero.
-   
+  assert(!Arcadia_BigInteger_isZero(thread, a));
+  assert(!Arcadia_BigInteger_isZero(thread, b));
+
   // Determine which operand has the smaller length.
   Arcadia_BigInteger* large = a->numberOfLimps < b->numberOfLimps ? b : a;
   Arcadia_BigInteger* small = a->numberOfLimps < b->numberOfLimps ? a : b;

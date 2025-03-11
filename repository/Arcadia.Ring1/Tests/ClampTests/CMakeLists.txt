@@ -36,15 +36,11 @@ FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring1/Libr
 set(MyTestName ${MyProjectName}.Ring1.Tests.ClampTests) 
 
 # Create test executable.
-add_executable(${MyTestName})
-BeginProduct(${MyTestName})
-
-add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+BeginProduct(${MyTestName} test)
 
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.ClampTests/Main.c)
 
-target_link_libraries(${MyTestName} ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 
+EndProduct(${MyTestName})
 set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia")
-
-EndProduct(${MyTestName} executable)

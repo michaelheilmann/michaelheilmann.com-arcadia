@@ -36,15 +36,11 @@ FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to t
 set(MyTestName ${MyProjectName}.R.Tests.Execute)
 
 # Create test executable.
-add_executable(${MyTestName})
-BeginProduct(${MyTestName})
-
-add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+BeginProduct(${MyTestName} test)
 
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
-target_link_libraries(${MyTestName} ${MyProjectName}.R ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
 
+EndProduct(${MyTestName})
 set_target_properties(${MyTestName} PROPERTIES FOLDER "R")
-
-EndProduct(${MyTestName} executable)

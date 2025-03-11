@@ -32,8 +32,6 @@
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 
-#include "Arcadia/Ring1/Implementation/Process.h"
-
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 #define Define(Type, Suffix) \

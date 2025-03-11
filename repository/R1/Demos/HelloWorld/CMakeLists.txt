@@ -33,8 +33,8 @@ endif()
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
-add_executable(${MyProjectName}.R.HelloWorldDemo)
-BeginProduct(${MyProjectName}.R.HelloWorldDemo)
+# Add executable.
+BeginProduct(${MyProjectName}.R.HelloWorldDemo executable)
 
 # Create configuration file.
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Configure.h @ONLY)
@@ -42,8 +42,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Configure.h.i ${CMAKE_CURRENT_BINARY_
 list(APPEND ${MyProjectName}.R.HelloWorldDemo.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Configure.h)
 list(APPEND ${MyProjectName}.R.HelloWorldDemo.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Main.c)
                                                                             
-target_link_libraries(${MyProjectName}.R.HelloWorldDemo Arcadia.R Arcadia.Arms)
+list(APPEND ${MyProjectName}.R.HelloWorldDemo.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
 
+EndProduct(${MyProjectName}.R.HelloWorldDemo)
 set_target_properties(${MyProjectName}.R.HelloWorldDemo PROPERTIES FOLDER "R")
-
-EndProduct(${MyProjectName}.R.HelloWorldDemo executable)

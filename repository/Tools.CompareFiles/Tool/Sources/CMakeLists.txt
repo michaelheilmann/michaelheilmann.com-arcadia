@@ -32,16 +32,16 @@ endif()
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
 FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
-if (NOT TARGET Tools.CompareFiles)
-    add_executable(Tools.CompareFiles)
-    BeginProduct(Tools.CompareFiles)
+set(MyTool Tools.CompareFiles)
+if (NOT TARGET ${MyTool})
+    BeginProduct(${MyTool} executable)
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/CompareFiles/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/CompareFiles/Configure.h @ONLY)
 
-    list(APPEND Tools.CompareFiles.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/CompareFiles/Main.c)
-    list(APPEND Tools.CompareFiles.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/CompareFiles/Configure.h)
+    list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/CompareFiles/Main.c)
+    list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/CompareFiles/Configure.h)
 
-    target_link_libraries(Tools.CompareFiles Arcadia.R Arcadia.Arms)
+    list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.R ${MyProjectName}.Arms)
 
-    EndProduct(Tools.CompareFiles executable)
+    EndProduct(${MyTool})
 endif()

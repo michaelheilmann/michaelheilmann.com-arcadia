@@ -17,6 +17,7 @@
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_nextPowerOfTwoGreaterThan*">Arcadia_nextPowerOfTwoGreaterThan*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_ObjectReferenceValue">Arcadia_ObjectReferenceValue</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_quotiendRemainder*">Arcadia_quotientRemainder*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_Real*Value">Arcadia_Real*Value</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_safeAdd*">Arcadia_safeAdd*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_safeMultiply*">Arcadia_safeMultiply*</a></li>

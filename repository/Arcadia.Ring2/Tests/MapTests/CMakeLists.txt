@@ -36,15 +36,11 @@ FetchProduct(${MyProjectName}.Ring2 "${REPOSITORY_SOURCE_DIR}/R1/Library" "path 
 set(MyTestName ${MyProjectName}.Ring2.Tests.MapTests)
 
 # Create test executable.
-add_executable(${MyTestName})
-BeginProduct(${MyTestName})
-
-add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+BeginProduct(${MyTestName} test)
 
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
-target_link_libraries(${MyTestName} ${MyProjectName}.Ring2 ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Ring2 ${MyProjectName}.Arms)
 
+EndProduct(${MyTestName})
 set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia")
-
-EndProduct(${MyTestName} executable)

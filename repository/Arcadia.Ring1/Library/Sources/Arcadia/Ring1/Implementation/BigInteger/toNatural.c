@@ -55,10 +55,45 @@ Arcadia_BigInteger_toNatural64
   }
   Arcadia_Natural64Value v = 0;
   for (size_t i = self->numberOfLimps; i > 0; --i) {  // This loop is executed exactly one times or two times.
-    v = ((Arcadia_Natural64Value)self->limps[i - 1])
-      + v << 32;
+    v <<= 32;
+    v += ((Arcadia_Natural64Value)self->limps[i - 1]);
   }
            
+  if (self->sign == -1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
+    Arcadia_Thread_jump(thread);
+  } else {
+    return v;
+  }
+}
+
+Arcadia_Natural64Value
+Arcadia_BigInteger_toNatural64WithTruncation
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self,
+    Arcadia_BooleanValue* truncated
+  )
+ {
+  if (!self) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  if (isZero(thread, self)) {
+    *truncated = Arcadia_BooleanValue_False;
+    return Arcadia_Natural64Value_Literal(0);
+  }
+  if (self->sign == -1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_SizeValue truncatedLimps = self->numberOfLimps > 2 ?  self->numberOfLimps - 2 : 0;
+  *truncated = truncatedLimps;
+  Arcadia_Natural64Value v = 0;
+  for (size_t i = self->numberOfLimps; i > truncatedLimps; --i) {  // This loop is executed exactly one times or two times.
+    v <<= 32;
+    v += ((Arcadia_Natural64Value)self->limps[i - 1]);
+  }
   if (self->sign == -1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);

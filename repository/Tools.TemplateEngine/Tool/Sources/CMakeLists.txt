@@ -35,17 +35,15 @@ FetchProduct(${MyProjectName}.Tools.TemplateEngineLibrary "${REPOSITORY_SOURCE_D
 
 set(MyExecutableName ${MyProjectName}.Tools.TemplateEngine)
 if (NOT TARGET ${MyExecutableName})
-    add_executable(${MyExecutableName})
-    BeginProduct(${MyExecutableName})
+    BeginProduct(${MyExecutableName} executable)
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h @ONLY)
 
     list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Main.c)
     list(APPEND ${MyExecutableName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h)
 
-    target_link_libraries(${MyExecutableName} ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.R ${MyProjectName}.Arms)
+    list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.R ${MyProjectName}.Arms)
 
+    EndProduct(${MyExecutableName})
     set_target_properties(${MyExecutableName} PROPERTIES FOLDER "Tools/TemplateEngine")
-
-    EndProduct(${MyExecutableName} executable)
 endif()

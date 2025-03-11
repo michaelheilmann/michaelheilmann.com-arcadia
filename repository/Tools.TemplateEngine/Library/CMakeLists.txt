@@ -34,8 +34,7 @@ FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to t
 
 set(MyLibraryName ${MyProjectName}.Tools.TemplateEngineLibrary)
 if (NOT TARGET ${MyLibraryName})
-    add_library(${MyLibraryName})
-    BeginProduct(${MyLibraryName})
+    BeginProduct(${MyLibraryName} library)
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/TemplateEngine/Configure.h @ONLY)
 
@@ -45,9 +44,8 @@ if (NOT TARGET ${MyLibraryName})
     list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/FileContext.h)
     list(APPEND ${MyLibraryName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/TemplateEngine/Configure.h)
 
-    target_link_libraries(${MyLibraryName} ${MyProjectName}.R ${MyProjectName}.Arms)
+    list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
 
+    EndProduct(${MyLibraryName})
     set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Tools/TemplateEngine")
-
-    EndProduct(${MyLibraryName} library)
 endif()

@@ -36,8 +36,7 @@ set(MyLibrary ${MyProjectName}.Ring1)
 
 # Create library.
 if (NOT TARGET ${MyLibrary})
-  add_library(${MyLibrary})
-  BeginProduct(${MyLibrary})
+  BeginProduct(${MyLibrary} library)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Ring1/Implementation/Configure.h @ONLY)
   list(APPEND ${MyLibrary}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Ring1/Implementation/Configure.h)
@@ -95,6 +94,9 @@ if (NOT TARGET ${MyLibrary})
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/BigInteger/setDecimalDigits.h)
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/BigInteger/setHexadecimalDigits.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/BigInteger/setHexadecimalDigits.h)
+
+  list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/quotientRemainder.c)
+  list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/quotientRemainder.h)
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Arrays.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Arrays.h)
 
@@ -246,6 +248,9 @@ if (NOT TARGET ${MyLibrary})
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Utf8.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Utf8.h)
 
+  list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/NumberLiteral.c)
+  list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/NumberLiteral.h)
+
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Void.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Void.h)
 
@@ -255,14 +260,13 @@ if (NOT TARGET ${MyLibrary})
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Value.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Value.h)
 
-  target_link_libraries(${MyLibrary} Arcadia.Arms)
+  list(APPEND ${MyLibrary}.Libraries Arcadia.Arms)
 
   if (${${MyLibrary}.OperatingSystem} STREQUAL ${${MyLibrary}.OperatingSystem.Linux})
-    target_link_libraries(${MyLibrary} m)
+    list(APPEND ${MyLibrary}.Libraries m)
   endif()
 
+  EndProduct(${MyLibrary})
   set_target_properties(${MyLibrary} PROPERTIES FOLDER "Arcadia")
-
-  EndProduct(${MyLibrary} library)
 
 endif()

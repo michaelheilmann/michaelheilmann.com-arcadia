@@ -5,6 +5,7 @@
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
+#include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Natural16.h"
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural64.h"
@@ -38,6 +39,18 @@ Arcadia_BigInteger_toNatural64
   (
     Arcadia_Thread* thread,
     Arcadia_BigIntegerValue self
+  );
+
+// Convert this BigInteger intoa  Natural64.
+// If the value is negative, conversion fails.
+// If the magnitude is greater than what can be stored in a Natural64, then lower order bits are dropped and *truncated is set to true.
+// Otherwise *truncated is set to false.
+Arcadia_Natural64Value
+Arcadia_BigInteger_toNatural64WithTruncation
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigIntegerValue self,
+    Arcadia_BooleanValue* truncated
   );
   
 // Convert this BigInteger into a Natural8.

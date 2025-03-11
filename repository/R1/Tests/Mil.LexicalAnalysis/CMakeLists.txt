@@ -35,20 +35,15 @@ FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to t
 set(MyTestName ${MyProjectName}.Mil.Tests.LexicalAnalysis)
 
 if (NOT TARGET ${MyTestName})
-  add_executable(${MyTestName})
-  BeginProduct(${MyTestName})
-
-  add_test(NAME ${MyTestName} COMMAND ${MyTestName} WORKING_DIRECTORY $<TARGET_FILE_DIR:${MyTestName}>)
+  BeginProduct(${MyTestName} test)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Configure.h @ONLY)
 
   list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Main.c)
   list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Configure.h)
 
-  target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
-  target_link_libraries(${MyTestName} Arcadia.R Arcadia.Arms)
+  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.R ${MyProjectName}.Arms)
 
+  EndProduct(${MyTestName})
   set_target_properties(${MyTestName} PROPERTIES FOLDER "R")
-
-  EndProduct(${MyTestName} executable)
 endif()

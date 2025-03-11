@@ -33,7 +33,7 @@ endif()
 set(MyDemoName ${MyProjectName}.Engine.Demo)
 
 if (NOT TARGET ${MyDemoName})
-  BeginProduct(${MyDemoName})
+  BeginProduct(${MyDemoName} executable)
 
   if (${${MyDemoName}.OperatingSystem} STREQUAL ${${MyDemoName}.OperatingSystem.Windows})
 
@@ -42,17 +42,17 @@ if (NOT TARGET ${MyDemoName})
     FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Module.Audials/Library" "path to the Audials module source directory")
     FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Module.Visuals/Library" "path to the Visuals module source directory")
 
-    add_executable(${MyDemoName})
-
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Engine.Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Engine.Demo/Configure.h @ONLY)
 
     list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Engine.Demo/Main.c)
     list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Engine.Demo/Configure.h)
 
-    target_link_libraries(${MyDemoName} Module.Audials Module.Visuals Arcadia.R Arcadia.Arms)
+    list(APPEND ${MyDemoName}.PrivateLibraries Module.Audials Module.Visuals ${MyProjectName}.R ${MyProjectName}.Arms)
 
-    EndProduct(${MyDemoName} executable)
-
+  else()
+    set(${MyDemoName}.Enabled FALSE)
   endif()
+
+  EndProduct(${MyDemoName})
 
 endif()

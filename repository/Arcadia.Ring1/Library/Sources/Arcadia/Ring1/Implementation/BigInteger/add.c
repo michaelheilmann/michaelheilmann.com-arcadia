@@ -2,6 +2,7 @@
 #include "Arcadia/Ring1/Implementation/BigInteger/add.h"
 
 #include "Arcadia/Ring1/Include.h"
+#include <assert.h>
 
 void
 Arcadia_BigInteger_add3
@@ -13,16 +14,19 @@ Arcadia_BigInteger_add3
   )
 {
   // Special case: a is zero; result is b.
-  if (a->numberOfLimps == 1 && a->limps[0] == UINT32_C(0)) {
+  if (Arcadia_BigInteger_isZero(thread, a)) {
     Arcadia_BigInteger_copy(thread, result, b);
     return;
   }
   // Special case: b is zero; result is a.
-  if (b->numberOfLimps == 1 && b->limps[0] == UINT32_C(0)) {
+  if (Arcadia_BigInteger_isZero(thread, b)) {
     Arcadia_BigInteger_copy(thread, result, a);
     return;
   }
   // Both a and b are non-zero.
+  assert(!Arcadia_BigInteger_isZero(thread, a));
+  assert(!Arcadia_BigInteger_isZero(thread, b));
+
   if (a->sign == b->sign) {
     // a and b have the same sign and are non-zero.
     // Strategy: Add their magnitudes.

@@ -31,8 +31,7 @@ endif()
 
 # Create a library.
 if (NOT TARGET ${MyProjectName}.Arms)
-    add_library(${MyProjectName}.Arms)
-    BeginProduct(${MyProjectName}.Arms)
+    BeginProduct(${MyProjectName}.Arms library)
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arms/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arms/Configure.h @ONLY)
 
@@ -50,7 +49,6 @@ if (NOT TARGET ${MyProjectName}.Arms)
     list(APPEND ${MyProjectName}.Arms.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arms/SlabMemoryManager.h)
     list(APPEND ${MyProjectName}.Arms.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arms/Configure.h)
 
+    EndProduct(${MyProjectName}.Arms)
     set_target_properties(${MyProjectName}.Arms PROPERTIES FOLDER "Arms")
-
-    EndProduct(${MyProjectName}.Arms library)
 endif()

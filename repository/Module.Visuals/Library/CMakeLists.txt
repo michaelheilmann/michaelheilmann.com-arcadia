@@ -32,12 +32,10 @@ endif()
 set(MyModule Module.Visuals)
 
 if (NOT TARGET ${MyModule})
-  BeginProduct(${MyModule})
+  BeginProduct(${MyModule} library)
 
   FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
   FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
-
-  add_library(${MyModule})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Visuals/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Visuals/Configure.h @ONLY)
 
@@ -75,16 +73,16 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Visuals/NativeWindowsWindow.h)
   endif()
 
-  target_link_libraries(${MyModule} PRIVATE Arcadia.R Arcadia.Arms)
+  list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.R ${MyProjectName}.Arms)
 
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Linux})
     find_package(PNG)
     if (NOT TARGET PNG::PNG)
       message(FATAL_ERROR "libPNG not found")
     endif()
-    target_link_libraries(${MyModule} PRIVATE PNG::PNG)
+    list(APPEND ${MyModule}.PrivateLibraries PNG::PNG)
   endif()
 
-  EndProduct(${MyModule} library)
+  EndProduct(${MyModule})
 
 endif()
