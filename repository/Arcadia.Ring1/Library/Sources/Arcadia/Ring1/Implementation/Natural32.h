@@ -42,4 +42,10 @@ Arcadia_StaticAssert(Arcadia_Natural32Value_NumberOfBytes == 4, "Arcadia.Natural
 
 Rex_declareScalarType(Arcadia_Natural32);
 
+/// The maximum number of decimal digits which can safely be stored in an Arcadia.Natural32 value.
+/// The maximum value of an Arcadia.Natural32Value is Arcadia.Natural32Value.Maximum = 4 294 967 295.
+/// These are 10 decimal digits.
+/// Hence the number decimal digitis which can safely be stored in an Arcadia.Natural16 value is 9.
+#define Arcadia_Natural32Value_MaximumNumberOfDecimalDigits (9)
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_NATURAL32_H_INCLUDED

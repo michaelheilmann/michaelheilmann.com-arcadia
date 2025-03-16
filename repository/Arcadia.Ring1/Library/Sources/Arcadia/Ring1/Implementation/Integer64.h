@@ -41,4 +41,10 @@ Arcadia_StaticAssert(Arcadia_Integer64Value_NumberOfBytes == 8, "Arcadia.Integer
 
 Rex_declareScalarType(Arcadia_Integer64);
 
+/// The minimum value of an Arcadia.Integer64Value is -9 223 372 036 854 775 808,
+/// the maximum value of an Arcadia.Integer64Value is +9 223 372 036 854 775 807.
+/// These are 19 decimal digits.
+/// Hence the number of decimal digits which can be safely stored in an Arcadia.Integer64Value is 18.
+#define Arcadia_Integer64Value_MaximumNumberOfDecimalDigits (18)
+
 #endif // R_INTEGER64VALUE_H_INCLUDED

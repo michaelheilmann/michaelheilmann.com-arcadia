@@ -36,7 +36,7 @@
 
 #define Define(Type, Suffix) \
   static inline Type##Value \
-  R_maximum##Suffix##Value \
+  Arcadia_maximum##Suffix##Value \
     ( \
       Arcadia_Thread* thread, \
       Type##Value x, \

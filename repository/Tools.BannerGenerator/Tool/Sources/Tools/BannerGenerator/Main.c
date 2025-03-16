@@ -20,15 +20,14 @@
 #include "R/Include.h"
 #include "Module/Visuals/Include.h"
 
-void
+static void
 main1
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     int argc,
     char** argv
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value target, width, height;
   Arcadia_Value_setVoidValue(&target,Arcadia_VoidValue_Void);
   Arcadia_Value_setVoidValue(&width, Arcadia_VoidValue_Void);
@@ -123,7 +122,7 @@ main
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    main1(process, argc, argv);
+    main1(thread, argc, argv);
   }
   Arcadia_Thread_popJumpTarget(thread);
   Arcadia_Status status = Arcadia_Thread_getStatus(thread);

@@ -37,6 +37,7 @@ macro(BeginProduct target type)
   set(${target}.AssetFiles "")
   set(${target}.Libraries "")
   set(${target}.PrivateLibraries "")
+  set(${target}.IncludeDirectories "")
   set(${target}.Enabled TRUE)
   DetectCompilerC(${target})
   DetectOperatingSystem(${target})
@@ -76,11 +77,13 @@ macro(EndProduct target)
 
     if (${${target}.Type} STREQUAL library)
 
+      target_include_directories(${target} PRIVATE ${${target}.IncludeDirectories})
       target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
       target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Sources)
 
     elseif (${${target}.Type} STREQUAL executable)
 
+      target_include_directories(${target} PRIVATE ${${target}.IncludeDirectories})
       target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
       target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Sources)
 
@@ -88,7 +91,8 @@ macro(EndProduct target)
 
     elseif (${${target}.Type} STREQUAL test)
     
-    target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
+      target_include_directories(${target} PRIVATE ${${target}.IncludeDirectories})
+      target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
       target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Sources)
       
       # Possible alternative is `add_test(NAME ${target} COMMAND ${target} WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>)`.

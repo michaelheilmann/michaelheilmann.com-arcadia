@@ -52,11 +52,7 @@ Arcadia_BigInteger_setNatural64
   Hidden(BigInteger_Limp) hi = (other & 0xffffffff0000ffff) >> 32;
   Hidden(BigInteger_Limp) lo = (other & 0x00000000ffffffff) >> 0;
   if (hi) {
-    Hidden(BigInteger_Limp)* newLimps = realloc(self->limps, sizeof(Hidden(BigInteger_Limp)) * 2);
-    if (!newLimps) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
-      Arcadia_Thread_jump(thread);
-    }
+    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Hidden(BigInteger_Limp)) * 2);
     self->limps[1] = hi;
     self->limps[0] = lo;
     self->numberOfLimps = 2;

@@ -21,7 +21,7 @@ Arcadia_BigInteger_setDecimalDigits
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_BigInteger_multiplyInteger8(thread, self, 10);
-    Arcadia_BigInteger_addInteger8(thread, self, x);
+    Arcadia_BigInteger_multiplyNatural8(thread, self, 10);
+    Arcadia_BigInteger_addNatural8(thread, self, x);
   }
 }

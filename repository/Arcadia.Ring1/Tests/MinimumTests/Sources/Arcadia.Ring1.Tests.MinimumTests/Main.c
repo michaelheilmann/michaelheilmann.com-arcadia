@@ -26,10 +26,10 @@ minimumTests
   )
 {
 #define Do(Type, Suffix) \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum == R_minimum##Suffix##Value((thread), Type##Value_Minimum, Type##Value_Maximum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum == R_minimum##Suffix##Value((thread), Type##Value_Maximum, Type##Value_Minimum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum == R_minimum##Suffix##Value((thread), Type##Value_Literal(0), Type##Value_Minimum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum == R_minimum##Suffix##Value((thread), Type##Value_Minimum, Type##Value_Literal(0)));
+  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum == Arcadia_minimum##Suffix##Value((thread), Type##Value_Minimum, Type##Value_Maximum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum == Arcadia_minimum##Suffix##Value((thread), Type##Value_Maximum, Type##Value_Minimum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum == Arcadia_minimum##Suffix##Value((thread), Type##Value_Literal(0), Type##Value_Minimum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum == Arcadia_minimum##Suffix##Value((thread), Type##Value_Minimum, Type##Value_Literal(0)));
 
   Do(Arcadia_Integer8, Integer8);
   Do(Arcadia_Integer16, Integer16);

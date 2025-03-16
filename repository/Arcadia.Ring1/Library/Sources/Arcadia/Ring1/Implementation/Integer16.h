@@ -41,4 +41,10 @@ Arcadia_StaticAssert(Arcadia_Integer16Value_NumberOfBytes == 2, "Arcadia.Integer
 
 Rex_declareScalarType(Arcadia_Integer16);
 
+/// The minimum value of an Arcadia.Integer16Value is -32 768,
+/// the maximum value of an Arcadia.Integer16Value is +32 767.
+/// These are five decimal digits.
+/// Hence the number of decimal digits which can be safely stored in an Arcadia.Integer16Value is 4.
+#define Arcadia_Integer16Value_MaximumNumberOfDecimalDigits (4)
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_INTEGER16_H_INCLUDED

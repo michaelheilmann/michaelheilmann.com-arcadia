@@ -21,6 +21,7 @@
 #include "Arcadia.Ring1.Tests.BigInteger/Additive.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Multiplicative.h"
 #include "Arcadia.Ring1.Tests.BigInteger/PowersOf.h"
+#include "Arcadia.Ring1.Tests.BigInteger/QuotientRemainder.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Relational.h"
 
 int
@@ -40,6 +41,9 @@ main
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_relationalOperations)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_quotientRemainderOperations)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

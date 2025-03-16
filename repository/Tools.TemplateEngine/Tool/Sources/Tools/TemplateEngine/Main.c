@@ -23,12 +23,11 @@
 void
 main1
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     int argc,
     char** argv
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (argc < 3) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -63,7 +62,7 @@ main
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    main1(process, argc, argv);
+    main1(thread, argc, argv);
   }
   Arcadia_Thread_popJumpTarget(thread);
   Arcadia_Status status = Arcadia_Thread_getStatus(thread);

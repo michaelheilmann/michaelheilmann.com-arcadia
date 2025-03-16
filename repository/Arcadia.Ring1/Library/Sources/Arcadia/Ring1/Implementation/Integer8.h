@@ -41,4 +41,10 @@ Arcadia_StaticAssert(Arcadia_Integer8Value_NumberOfBytes == 1, "Arcadia.Integer8
 
 Rex_declareScalarType(Arcadia_Integer8);
 
+/// The minimum value of an Arcadia.Integer8Value is -128,
+/// the maximum value of an Arcadia.Integer8Value is +127.
+/// These are three decimal digits.
+/// Hence the number of decimal digits which can be safely stored in an Arcadia.Integer8Value is 2.
+#define Arcadia_Integer8Value_MaximumNumberOfDecimalDigits (2)
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_INTEGER8_H_INCLUDED

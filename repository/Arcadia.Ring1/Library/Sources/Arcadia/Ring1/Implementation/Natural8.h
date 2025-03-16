@@ -42,4 +42,10 @@ Arcadia_StaticAssert(Arcadia_Natural8Value_NumberOfBytes == 1, "Arcadia.Natural8
 
 Rex_declareScalarType(Arcadia_Natural8);
 
+/// The maximum number of decimal digits which can safely be stored in an Arcadia.Natural8Value.
+/// The maximum vaalue of an Arcadia.Natural8Value is Arcadia.Natural8Value.Maximum = 255.
+/// These are three decimal digits.
+/// Hence the number decimal digitis which can safely be stored in an Arcadia.Natural8 value is 2.
+#define Arcadia_Natural8Value_MaximumNumberOfDecimalDigits (2)
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_NATURAL8_H_INCLUDED

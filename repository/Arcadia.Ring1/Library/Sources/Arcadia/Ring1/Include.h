@@ -42,6 +42,8 @@
 
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 
+#include "Arcadia/Ring1/Implementation/quotientRemainder.h"
+
 #include "Arcadia/Ring1/Implementation/hash.h"
 
 #include "Arcadia/Ring1/Implementation/getTickCount.h"

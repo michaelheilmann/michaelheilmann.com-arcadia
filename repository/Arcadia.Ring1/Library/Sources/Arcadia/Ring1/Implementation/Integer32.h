@@ -41,4 +41,10 @@ Arcadia_StaticAssert(Arcadia_Integer32Value_NumberOfBytes == 4, "Arcadia.Integer
 
 Rex_declareScalarType(Arcadia_Integer32);
 
+/// The minimum value of an Arcadia.Integer32Value is -2 147 483 648,
+/// the maximum value of an Arcadia.Integer32Value is +2 147 483 647.
+/// These are 10 decimal digits.
+/// Hence the number of decimal digits which can be safely stored in an Arcadia.Integer32Value is 9.
+#define Arcadia_Integer32Value_MaximumNumberOfDecimalDigits (9)
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_INTEGER32_H_INCLUDED

@@ -24,12 +24,11 @@
 static void
 main1
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     int argc,
     char** argv
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
   Context* context = Context_create(thread);
   context->stack = Arcadia_Stack_create(thread);
@@ -50,12 +49,11 @@ main1
 static void
 recursiveInclude1
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     int argc,
     char** argv
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Context* context = Context_create(thread);
   context->stack = Arcadia_Stack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
@@ -83,12 +81,11 @@ recursiveInclude1
 static void
 recursiveInclude2
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     int argc,
     char** argv
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Context* context = Context_create(thread);
   context->stack = Arcadia_Stack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
@@ -124,15 +121,16 @@ main
   if (Arcadia_Process_get(&process)) {
     return EXIT_FAILURE;
   }
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    main1(process, argc, argv);
-    recursiveInclude1(process, argc, argv);
-    recursiveInclude2(process, argc, argv);
+    main1(thread, argc, argv);
+    recursiveInclude1(thread, argc, argv);
+    recursiveInclude2(thread, argc, argv);
   }
-  Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-  Arcadia_Status status = Arcadia_Thread_getStatus(Arcadia_Process_getThread(process));
+  Arcadia_Thread_popJumpTarget(thread);
+  Arcadia_Status status = Arcadia_Thread_getStatus(thread);
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

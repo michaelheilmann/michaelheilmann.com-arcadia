@@ -36,7 +36,7 @@
 
 #define Define(Type, Suffix) \
   static inline Type##Value \
-  R_minimum##Suffix##Value \
+  Arcadia_minimum##Suffix##Value \
     ( \
       Arcadia_Thread* thread, \
       Type##Value x, \

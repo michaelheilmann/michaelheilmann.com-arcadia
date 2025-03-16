@@ -26,10 +26,10 @@ maximumTests
   )
 {
 #define Do(Type, Suffix) \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Maximum == R_maximum##Suffix##Value(thread, Type##Value_Minimum, Type##Value_Maximum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Maximum == R_maximum##Suffix##Value(thread, Type##Value_Maximum, Type##Value_Minimum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == R_maximum##Suffix##Value(thread, Type##Value_Literal(0), Type##Value_Minimum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == R_maximum##Suffix##Value(thread, Type##Value_Minimum, Type##Value_Literal(0)));
+  Arcadia_Tests_assertTrue(thread, Type##Value_Maximum == Arcadia_maximum##Suffix##Value(thread, Type##Value_Minimum, Type##Value_Maximum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Maximum == Arcadia_maximum##Suffix##Value(thread, Type##Value_Maximum, Type##Value_Minimum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == Arcadia_maximum##Suffix##Value(thread, Type##Value_Literal(0), Type##Value_Minimum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == Arcadia_maximum##Suffix##Value(thread, Type##Value_Minimum, Type##Value_Literal(0)));
 
   Do(Arcadia_Integer8, Integer8);
   Do(Arcadia_Integer16, Integer16);

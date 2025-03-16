@@ -23,12 +23,11 @@
 static Arcadia_BooleanValue
 main1
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     int argc,
     char** argv
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (argc < 3) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -61,13 +60,14 @@ main
   if (Arcadia_Process_get(&process)) {
     return EXIT_FAILURE;
   }
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    areEqual = main1(process, argc, argv);
+    areEqual = main1(thread, argc, argv);
   }
-  Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-  Arcadia_Status status = Arcadia_Thread_getStatus(Arcadia_Process_getThread(process));
+  Arcadia_Thread_popJumpTarget(thread);
+  Arcadia_Status status = Arcadia_Thread_getStatus(thread);
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {

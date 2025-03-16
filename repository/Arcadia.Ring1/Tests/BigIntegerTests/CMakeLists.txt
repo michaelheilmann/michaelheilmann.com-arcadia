@@ -47,6 +47,8 @@ list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadi
 list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.BigInteger/Multiplicative.h)
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.BigInteger/PowersOf.c)
 list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.BigInteger/PowersOf.h)
+list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.BigInteger/QuotientRemainder.c)
+list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.BigInteger/QuotientRemainder.h)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 

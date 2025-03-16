@@ -55,7 +55,7 @@ Rex_declareScalarType(Arcadia_Real64);
 // The number of bits of the significand.
 // Usually 52 = Arcadia_Real64Value_NumberOfSignificandBitsIncludingImplicit - 1.
 // TODO: Add to documentation.
-#define Arcadia_Real64Value_NumberOfSignificandBits (52)
+#define Arcadia_Real64Value_NumberOfExplicitSignificandBits (52)
 // The shift of the bits of the significand.
 // In other terms, if the 64 bits have indices from 0 to 63, then this is the index of the LSB of the significand.
 // Usually 0.
@@ -70,7 +70,7 @@ Rex_declareScalarType(Arcadia_Real64);
 // In other terms, if the 64 bits have indices from 0 to 63, then this is the index of the LSB of the exponent.
 // Usually 52.
 // TODO: Add to documentation.
-#define Arcadia_Real64Value_ExponentBitsShift Arcadia_Real64Value_NumberOfSignificandBits
+#define Arcadia_Real64Value_ExponentBitsShift Arcadia_Real64Value_NumberOfExplicitSignificandBits
 
 // The number of bits of the sign.
 // Usually 1.
@@ -80,13 +80,13 @@ Rex_declareScalarType(Arcadia_Real64);
 // In other terms, if the 64 bits have indices from 0 to 63, then this is the index of the LSB of the sign.
 // Usually 63.
 // TODO: Add to documentation.
-#define Arcadia_Real64Value_SignBitsShift (Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfSignificandBits)
+#define Arcadia_Real64Value_SignBitsShift (Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfExplicitSignificandBits)
 
-Arcadia_StaticAssert(Arcadia_Real64Value_NumberOfBits == Arcadia_Real64Value_NumberOfSignBits + Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfSignificandBits, "unsupported floating-point format");
+Arcadia_StaticAssert(Arcadia_Real64Value_NumberOfBits == Arcadia_Real64Value_NumberOfSignBits + Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfExplicitSignificandBits, "unsupported floating-point format");
 
 // The bits mask for the bits of the significand.
 // TODO: Add to documentation.
-#define Arcadia_Real64Value_SignificandBitsMask ((((UINT64_C(1) << Arcadia_Real64Value_NumberOfSignificandBits) - 1)) << Arcadia_Real64Value_SignificandBitsShift)
+#define Arcadia_Real64Value_SignificandBitsMask ((((UINT64_C(1) << Arcadia_Real64Value_NumberOfExplicitSignificandBits) - 1)) << Arcadia_Real64Value_SignificandBitsShift)
 // The bits mask for the bits of the exponent.
 // TODO: Add to documentation.
 #define Arcadia_Real64Value_ExponentBitsMask (((UINT64_C(1) << Arcadia_Real64Value_NumberOfExponentBits) - 1) << Arcadia_Real64Value_ExponentBitsShift)
