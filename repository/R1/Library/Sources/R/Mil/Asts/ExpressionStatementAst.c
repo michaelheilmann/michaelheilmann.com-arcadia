@@ -28,7 +28,7 @@
 static void
 Arcadia_Mil_ExpressionStatementAst_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -72,18 +72,17 @@ Rex_defineObjectType(u8"Arcadia.Mil.ExpressionStatementAst", Arcadia_Mil_Express
 static void
 Arcadia_Mil_ExpressionStatementAst_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_ExpressionStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_ExpressionStatementAst_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
      Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -91,7 +90,7 @@ Arcadia_Mil_ExpressionStatementAst_constructImpl
   }
   _self->targetVariableName = (Arcadia_String*)R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
   _self->expression = (Arcadia_Mil_ExpressionAst*)R_Argument_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_Mil_ExpressionAst_getType(thread));
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void

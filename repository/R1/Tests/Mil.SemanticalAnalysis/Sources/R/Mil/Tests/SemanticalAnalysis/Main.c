@@ -25,7 +25,7 @@
 static void
 _Library_KeyboardKeyMessage_construct
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
     Arcadia_Value* argumentValues
@@ -35,7 +35,7 @@ _Library_KeyboardKeyMessage_construct
 static void
 _Library_KeyboardKeyMessage_getAction
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
     Arcadia_Value* argumentValues
@@ -45,7 +45,7 @@ _Library_KeyboardKeyMessage_getAction
 static void
 _Library_KeyboardKeyMessage_getKey
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
     Arcadia_Value* argumentValues
@@ -55,7 +55,7 @@ _Library_KeyboardKeyMessage_getKey
 static void
 _Library_print
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
     Arcadia_Value* argumentValues
@@ -65,7 +65,7 @@ _Library_print
 static void
 _Library_main
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgument,
     Arcadia_Value* argumentValues

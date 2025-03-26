@@ -61,7 +61,7 @@ Arcadia_Object_hash
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
   Arcadia_Value resultValue;
   Arcadia_Value args[1] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, };
-  operations->hash(process, &resultValue, 1, &args[0]);
+  operations->hash(Arcadia_Process_getThread(process), &resultValue, 1, &args[0]);
   return Arcadia_Value_getSizeValue(&resultValue);
 }
 
@@ -77,7 +77,7 @@ Arcadia_Object_isNotEqualTo
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
   Arcadia_Value resultValue;
   Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, *other };
-  operations->notEqualTo(process, &resultValue, 2, &args[0]);
+  operations->notEqualTo(Arcadia_Process_getThread(process), &resultValue, 2, &args[0]);
   return Arcadia_Value_getBooleanValue(&resultValue);
 }
 
@@ -93,7 +93,7 @@ Arcadia_Object_isEqualTo
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
   Arcadia_Value resultValue;
   Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, *other };
-  operations->equalTo(process, &resultValue, 2, &args[0]);
+  operations->equalTo(Arcadia_Process_getThread(process), &resultValue, 2, &args[0]);
   return Arcadia_Value_getBooleanValue(&resultValue);
 }
 
@@ -253,7 +253,7 @@ Arcadia_Value_getType
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type); \
       Arcadia_Value result; \
       Arcadia_Value arguments[] = { *self, *other }; \
-      operations->Operation(Arcadia_Thread_getProcess(thread), &result, 2, &arguments[0]); \
+      operations->Operation(thread, &result, 2, &arguments[0]); \
       return Arcadia_Value_getBooleanValue(&result); \
   } break;
   
@@ -387,7 +387,7 @@ Arcadia_Value_isLowerThan
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
-      operations->lowerThan(Arcadia_Thread_getProcess(thread), &resultValue, 2, &args[0]);
+      operations->lowerThan(thread, &resultValue, 2, &args[0]);
       return Arcadia_Value_getBooleanValue(&resultValue);
     } break;
     case Arcadia_ValueTag_Type: {
@@ -433,7 +433,7 @@ Arcadia_Value_isLowerThanOrEqualTo
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
-      operations->lowerThanOrEqualTo(Arcadia_Thread_getProcess(thread), &resultValue, 2, &args[0]);
+      operations->lowerThanOrEqualTo(thread, &resultValue, 2, &args[0]);
       return Arcadia_Value_getBooleanValue(&resultValue);
     } break;
     case Arcadia_ValueTag_Type: {
@@ -479,7 +479,7 @@ Arcadia_Value_isGreaterThan
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
-      operations->greaterThan(Arcadia_Thread_getProcess(thread), &resultValue, 2, &args[0]);
+      operations->greaterThan(thread, &resultValue, 2, &args[0]);
       return Arcadia_Value_getBooleanValue(&resultValue);
     } break;
     case Arcadia_ValueTag_Type: {
@@ -525,7 +525,7 @@ Arcadia_Value_isGreaterThanOrEqualTo
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
-      operations->greaterThanOrEqualTo(Arcadia_Thread_getProcess(thread), &resultValue, 2, &args[0]);
+      operations->greaterThanOrEqualTo(thread, &resultValue, 2, &args[0]);
       return Arcadia_Value_getBooleanValue(&resultValue);
     } break;
     case Arcadia_ValueTag_Type: {
@@ -547,7 +547,7 @@ Arcadia_Value_isGreaterThanOrEqualTo
     Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type); \
     Arcadia_Value result; \
     Arcadia_Value arguments[] = { *self }; \
-    operations->hash(Arcadia_Thread_getProcess(thread), &result, 1, &arguments[0]); \
+    operations->hash(thread, &result, 1, &arguments[0]); \
     return Arcadia_Value_getSizeValue(&result); \
   } break;
 
@@ -582,7 +582,7 @@ Arcadia_Value_getHash
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[1] = { *self };
-      operations->hash(Arcadia_Thread_getProcess(thread), &resultValue, 1, &args[0]);
+      operations->hash(thread, &resultValue, 1, &args[0]);
       return Arcadia_Value_getSizeValue(&resultValue);
     } break;
     default: {

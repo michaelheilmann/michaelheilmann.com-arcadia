@@ -25,7 +25,7 @@
 static void
 Arcadia_String_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -41,7 +41,7 @@ hash
 static void
 equalToImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -50,7 +50,7 @@ equalToImpl
 static void
 hashImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -59,7 +59,7 @@ hashImpl
 static void
 notEqualToImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -169,13 +169,12 @@ fromImmutableUtf8String
 static void
 Arcadia_String_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (1 != numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -184,7 +183,7 @@ Arcadia_String_constructImpl
   Arcadia_TypeValue _type = _Arcadia_String_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (Arcadia_Value_isBooleanValue(&arguments[0])) {
     fromBoolean(thread, &_self->immutableUtf8String, Arcadia_Value_getBooleanValue(&arguments[0]));
@@ -256,13 +255,12 @@ hash
 static void
 equalToImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   Arcadia_String* self1 = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(A1);
@@ -281,7 +279,7 @@ equalToImpl
   }
   Arcadia_String* otherString1 = (Arcadia_String*)other1;
   if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self1->immutableUtf8String) == Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, otherString1->immutableUtf8String)) {
-    Arcadia_Value_setBooleanValue(target, !Arcadia_Process_compareMemory(process, Arcadia_ImmutableUtf8String_getBytes(thread, self1->immutableUtf8String),
+    Arcadia_Value_setBooleanValue(target, !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), Arcadia_ImmutableUtf8String_getBytes(thread, self1->immutableUtf8String),
                                           Arcadia_ImmutableUtf8String_getBytes(thread, otherString1->immutableUtf8String),
                                           Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self1->immutableUtf8String)));
   } else {
@@ -294,7 +292,7 @@ equalToImpl
 static void
 hashImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -302,20 +300,19 @@ hashImpl
 {
 #define A1 &(arguments[0])
   Arcadia_String* self1 = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(A1);
-  Arcadia_Value_setSizeValue(target, Arcadia_ImmutableUtf8String_getHash(Arcadia_Process_getThread(process), self1->immutableUtf8String));
+  Arcadia_Value_setSizeValue(target, Arcadia_ImmutableUtf8String_getHash(thread, self1->immutableUtf8String));
 #undef A1
 }
 
 static void
 notEqualToImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   Arcadia_String* self1 = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(A1);
@@ -333,12 +330,12 @@ notEqualToImpl
     return;
   }
   Arcadia_String* otherString1 = (Arcadia_String*)other1;
-  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(Arcadia_Process_getThread(process), self1->immutableUtf8String) != Arcadia_ImmutableUtf8String_getNumberOfBytes(Arcadia_Process_getThread(process), otherString1->immutableUtf8String)) {
+  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self1->immutableUtf8String) != Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, otherString1->immutableUtf8String)) {
     Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
     return;
   }
   Arcadia_Value_setBooleanValue(target,
-                                Arcadia_Process_compareMemory(process,
+                                Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread),
                                                               Arcadia_ImmutableUtf8String_getBytes(thread, self1->immutableUtf8String),
                                                               Arcadia_ImmutableUtf8String_getBytes(thread, otherString1->immutableUtf8String),
                                                               Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self1->immutableUtf8String)));

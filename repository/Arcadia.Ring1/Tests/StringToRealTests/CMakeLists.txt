@@ -12,3 +12,35 @@
 # WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+# Last modified: 2024-12-29
+
+cmake_minimum_required(VERSION 3.20)
+
+if (NOT MyProjectIsDefined)
+  if (NOT DEFINED MyProjectName)
+    set(MyProjectName "Arcadia")
+  endif()
+  project(${MyProjectName})
+  enable_testing()
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+  include(FetchContent)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  set(MyProjectIsDefined)
+endif()
+
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
+FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring1/Library" "path to the Arcadia.Ring1 library directory")
+
+set(MyTestName ${MyProjectName}.Ring1.Tests.StringToRealTests) 
+
+# Create test executable.
+BeginProduct(${MyTestName} test)
+
+list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.StringToReal/Main.c)
+
+list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
+
+EndProduct(${MyTestName})
+set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia")

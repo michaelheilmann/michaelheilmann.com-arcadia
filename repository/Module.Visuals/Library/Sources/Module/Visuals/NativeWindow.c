@@ -20,7 +20,7 @@
 static void
 NativeWindow_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -57,18 +57,17 @@ Rex_defineObjectType(u8"NativeWindow", NativeWindow, u8"Arcadia.Object", Arcadia
 static void
 NativeWindow_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   NativeWindow* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _NativeWindow_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->open = NULL;
   _self->close = NULL;
@@ -84,6 +83,8 @@ NativeWindow_constructImpl
   _self->getTitle = NULL;
   _self->setTitle  = NULL;
   _self->getCanvasSize = NULL;
+  _self->beginRender = NULL;
+  _self->endRender = NULL;
   Arcadia_Object_setType(thread, _self, _type);
 }
 
@@ -208,3 +209,19 @@ NativeWindow_getCanvasSize
     Arcadia_Integer32Value* height
   )
 { self->getCanvasSize(thread, self, width, height); }
+
+void
+NativeWindow_beginRender
+  (
+    Arcadia_Thread* thread,
+    NativeWindow* self
+  )
+{ self->beginRender(thread, self); }
+
+void
+NativeWindow_endRender
+  (
+    Arcadia_Thread* thread,
+    NativeWindow* self
+  )
+{ self->endRender(thread, self); }

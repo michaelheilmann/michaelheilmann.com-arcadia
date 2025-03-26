@@ -33,8 +33,8 @@ struct Arcadia_Object {
   int dummy;
 };
 
-#define Rex_superTypeConstructor(_process, _type, ...) \
-  Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(Arcadia_Process_getThread(_process), _type))->objectTypeOperations->construct(_process, __VA_ARGS__)
+#define Rex_superTypeConstructor(_thread, _type, ...) \
+  Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(thread, _type))->objectTypeOperations->construct(_thread, __VA_ARGS__)
 
 /// R(untime) ex(tension) macro.
 /// @param _cilName, _cilParentName UTF8 string literals for the Common Intermediate Language type names of the type and its parent type.

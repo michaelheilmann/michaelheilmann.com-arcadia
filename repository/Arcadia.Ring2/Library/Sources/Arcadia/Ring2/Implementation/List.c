@@ -42,7 +42,7 @@ Arcadia_List_ensureInitialized
 static void
 Arcadia_List_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -145,25 +145,24 @@ Arcadia_List_ensureInitialized
 static void
 Arcadia_List_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_List* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_List_getType(thread);
   Arcadia_List_ensureInitialized(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->elements = NULL;
   _self->capacity = 0;
   _self->size = 0;
   _self->capacity = g_minimumCapacity;
-  Arcadia_Process_allocateUnmanaged(process, &_self->elements, sizeof(Arcadia_Value) * _self->capacity);
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->elements, sizeof(Arcadia_Value) * _self->capacity);
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
   }

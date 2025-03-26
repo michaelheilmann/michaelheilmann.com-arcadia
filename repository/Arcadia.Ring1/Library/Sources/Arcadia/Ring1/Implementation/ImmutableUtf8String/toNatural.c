@@ -20,6 +20,8 @@
 
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/NumeralParser.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/safeMultiply.h"
+#include "Arcadia/Ring1/Implementation/safeAdd.h"
 
 static Arcadia_Natural64Value
 _toNatural64Internal
@@ -47,7 +49,7 @@ _toNatural64Internal
     Arcadia_Thread_jump(thread);
   }
   while (isDigit(state)) {
-    Arcadia_Integer64Value w = 0;
+    Arcadia_Natural64Value w = 0;
     // We accumulate up to 19 decimal digits in w.
     Arcadia_SizeValue i = 0, n = SAFEDIGITSBASE10;
     for (; isDigit(state) && i < n; ++i) {
@@ -55,20 +57,19 @@ _toNatural64Internal
       w = w * BASE + digit;
       next(state);
     }
-    // We would have to multiply v by the number of digits in w.
-    while (i > 0) {
-      if (v < Arcadia_Integer64Value_Minimum / 10) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
-        Arcadia_Thread_jump(thread);
-      }
-      v = v * i;
-      i--;
-    }
-    if (v > Arcadia_Natural64Value_Maximum - w) {
+    // Multiply v by the number of digits accumulated in w, then add w to v.
+    // Both operations might overflow.
+    Arcadia_Natural64Value hi;
+    Arcadia_safeMultiplyNatural64Value(thread, v, i, &hi, &v);
+    if (hi) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
       Arcadia_Thread_jump(thread);
     }
-    v = v + w;
+    Arcadia_safeAddNatural64Value(thread, v, w, &hi, &v);
+    if (hi) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
+      Arcadia_Thread_jump(thread);
+    }
   }
   if (!isEnd(state)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);

@@ -3,6 +3,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 
+
 void
 Arcadia_BigInteger_setDecimalDigits
   (

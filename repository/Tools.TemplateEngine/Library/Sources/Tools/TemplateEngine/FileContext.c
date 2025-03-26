@@ -281,7 +281,7 @@ FileContext_visit
 static void
 FileContext_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -339,18 +339,17 @@ FileContext_visit
 static void
 FileContext_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   FileContext* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _FileContext_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -364,7 +363,7 @@ FileContext_constructImpl
   Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
   Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
   Arcadia_Map_set(thread, _self->environment, k, v);
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 FileContext*

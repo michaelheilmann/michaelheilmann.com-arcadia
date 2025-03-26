@@ -166,10 +166,12 @@ Arcadia_parseNumberLiteral
   number.significand.fractional.trailingZeroes.start = number.significand.fractional.start + number.significand.fractional.length;
   number.significand.fractional.trailingZeroes.length = 0;
   for (Arcadia_SizeValue i = number.significand.fractional.start + number.significand.fractional.length; i > number.significand.fractional.start; --i) {
-    if (source[i - 1] == '0') {
-      number.significand.fractional.trailingZeroes.start--;
-      number.significand.fractional.trailingZeroes.length++;
+    if (source[i - 1] != '0') {
+      break;
     }
+    number.significand.fractional.trailingZeroes.start--;
+    number.significand.fractional.trailingZeroes.length++;
+    
   }
   if (i == n) {
     number.exponent = Arcadia_NumberLiteral_Exponent_empty(i);

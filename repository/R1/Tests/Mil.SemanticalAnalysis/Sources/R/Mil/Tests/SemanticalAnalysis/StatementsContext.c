@@ -23,7 +23,7 @@
 static void
 Arcadia_Mil_CallableContext_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -67,26 +67,25 @@ Rex_defineObjectType(u8"Arcadia.Mil.CallableContext", Arcadia_Mil_CallableContex
 static void
 Arcadia_Mil_CallableContext_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_CallableContext* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_CallableContext_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  _self->labels = Arcadia_Map_create(Arcadia_Process_getThread(process));
-  _self->variables = Arcadia_List_create(Arcadia_Process_getThread(process));
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  _self->labels = Arcadia_Map_create(thread);
+  _self->variables = Arcadia_List_create(thread);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void

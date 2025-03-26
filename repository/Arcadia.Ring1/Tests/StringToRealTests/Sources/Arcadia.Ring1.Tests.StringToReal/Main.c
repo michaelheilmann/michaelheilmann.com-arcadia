@@ -23,53 +23,33 @@
 #include <stdio.h>
 #include <string.h>
 
-// TODO: Move to big integer tests.
+// integers from -2^53 to +2^53 can be exactly represented.
 static void
-test1
+testFixtureInteger64ToStringToReal64
   (
-    Arcadia_Thread* thread
+    Arcadia_Thread* thread,
+    Arcadia_Integer64Value value
   )
 {
-  int64_t u = INT64_C(9007199254740992);
-  Arcadia_Tests_assertTrue(thread, u <= UINT64_MAX);
-  Arcadia_Tests_assertTrue(thread, u <= INT64_MAX);
-  Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
-  Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
-  int64_t v = Arcadia_BigInteger_toInteger64(thread, bigInteger);
-  Arcadia_Tests_assertTrue(thread, u == v);
+  char buffer[19 + 2];
+  snprintf(buffer, 19 + 1, "%"PRId64, value);
+  Arcadia_Real64Value v = Arcadia_toReal64(thread, buffer, strlen(buffer));
+  Arcadia_Tests_assertTrue(thread, value == v);
 }
 
-// TODO: Move to big integer tests.
+// integers from -2^53 to +2^53 can be exactly represented.
 static void
-test2
+safeRangeTests
   (
     Arcadia_Thread* thread
   )
 {
-  uint64_t u = UINT64_C(9007199254740992);
-  Arcadia_Tests_assertTrue(thread, u <= UINT64_MAX);
-  Arcadia_Tests_assertTrue(thread, u <= INT64_MAX);
-  Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
-  Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
-  uint64_t v = Arcadia_BigInteger_toNatural64(thread, bigInteger);
-  Arcadia_Tests_assertTrue(thread, u == v);
-}
-
-// TODO: Move to big integer tests.
-static void
-test3
-  (
-    Arcadia_Thread* thread
-  )
-{
-  uint64_t u = UINT64_C(9007199254740992);
-  Arcadia_Tests_assertTrue(thread, u <= UINT64_MAX);
-  Arcadia_Tests_assertTrue(thread, u <= INT64_MAX);
-  Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
-  Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
-  Arcadia_BooleanValue w;
-  uint64_t v = Arcadia_BigInteger_toNatural64WithTruncation(thread, bigInteger, &w);
-  Arcadia_Tests_assertTrue(thread, !w && u == v);
+  Arcadia_Integer64Value minimum = -9007199254740992;
+  Arcadia_Integer64Value maximum = +9007199254740992;
+  
+  testFixtureInteger64ToStringToReal64(thread, minimum);
+  testFixtureInteger64ToStringToReal64(thread, maximum);
+  testFixtureInteger64ToStringToReal64(thread, Arcadia_Integer64Value_Literal(0));
 }
 
 // Parses a strig into a real64 value using Arcadia.Ring1 functionality.
@@ -97,17 +77,27 @@ test
     Arcadia_Thread* thread
   )
 {
-#define On(Text, Number) \
+#define On(Text) \
   testFixtureStringToReal64(thread, Text); \
-  
-  On(u8"0", 0.);
-  On(u8"00", 0.);
-  On(u8"9007199254740992", 9007199254740992.);
-  On(u8"0e-325", 0.);
-  On(u8"+1e+309", Arcadia_Real64Value_PositiveInfinity);
-  On(u8"-1e+309", Arcadia_Real64Value_NegativeInfinity);
-  On(u8"-1.0", -1.);
-  On(u8"1.e1000", 1.e1000);
+ 
+  On(u8"0");
+  On(u8"00");
+  On(u8"0.5e-20");
+  On(u8"1"); // works with gay if clinger & lemire disabled
+  On(u8"+1e+309"); // works with gay if clinger & lemire disabled, infinity
+  On(u8"-1e+309"); // works with gay if clinger & lemire disabled, infinity
+  On(u8"-1.0"); // works with gay if clinger & lemire disabled, -1.0
+  On(u8"0e-325"); // works with gay if clinger & lemire disabled
+  On(u8"1e-309"); // slow path
+  On(u8"9007199254740992"); // works with gay if clinger & lemire disabled
+  On(u8"1.e1000"); // works with gay if clinger & lemire disabled, infinity
+  On(u8"5.4e-309");
+  On(u8"5.4702222260027245111818947e-309");
+  On(u8"2.2250738585072013e-308"); // fast path
+  On(u8"1.00000000000000188558920870223463870174566020691753515394643550663070558368373221972569761144603605635692374830246134201063722058e-309"); // slow path
+
+  // Typical values from data files.
+  On(u8"0.5"); On(u8"-0.5"); On(u8"+0.5");
 
 #undef On
 }
@@ -119,13 +109,7 @@ main
     char **argv
   )
 {
-  if (!Arcadia_Tests_safeExecute(&test1)) {
-    return EXIT_FAILURE;
-  }
-  if (!Arcadia_Tests_safeExecute(&test2)) {
-    return EXIT_FAILURE;
-  }
-  if (!Arcadia_Tests_safeExecute(&test3)) {
+  if (!Arcadia_Tests_safeExecute(&safeRangeTests)) {
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&test)) {

@@ -24,7 +24,7 @@
 static void
 Arcadia_Object_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -33,7 +33,7 @@ Arcadia_Object_constructImpl
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -42,7 +42,7 @@ equalTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -51,7 +51,7 @@ hash
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -86,21 +86,21 @@ static const Arcadia_Type_Operations _typeOperations = {
 void
 Arcadia_Object_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
   Arcadia_Object* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = Arcadia_getType(Arcadia_Process_getThread(process), u8"Arcadia.Object", sizeof(u8"Arcadia.Object") - 1);
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_TypeValue _type = Arcadia_getType(thread, u8"Arcadia.Object", sizeof(u8"Arcadia.Object") - 1);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -120,7 +120,7 @@ equalTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -134,7 +134,7 @@ hash
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -272,7 +272,7 @@ Arcadia_allocateObject
     fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
   }
   Arcadia_Value selfValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)(Arcadia_Object*)(tag + 1) };
-  Arcadia_Type_getOperations(type)->objectTypeOperations->construct(Arcadia_Thread_getProcess(thread), &selfValue, numberOfArgumentValues, &argumentValues[0]);
+  Arcadia_Type_getOperations(type)->objectTypeOperations->construct(thread, &selfValue, numberOfArgumentValues, &argumentValues[0]);
   return (void*)(tag + 1);
 }
 

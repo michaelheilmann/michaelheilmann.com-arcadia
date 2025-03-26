@@ -10,5 +10,6 @@ Arcadia_BigInteger_getBitLength
     Arcadia_BigInteger* self
   )
 {
-  return self->numberOfLimps * Arcadia_Natural32Value_NumberOfBits - Arcadia_countLeadingZeroesNatural32Value(thread, self->limps[self->numberOfLimps]);
+  return self->numberOfLimps * Arcadia_Natural32Value_NumberOfBits - Arcadia_countLeadingZeroesNatural32Value(thread, self->limps[self->numberOfLimps - 1]);
 }
+

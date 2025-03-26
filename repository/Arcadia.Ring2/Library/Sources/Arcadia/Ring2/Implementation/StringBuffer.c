@@ -23,7 +23,7 @@
 static void
 Arcadia_StringBuffer_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -85,23 +85,22 @@ Rex_defineObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer, u8"Arcadia.
 static void
 Arcadia_StringBuffer_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_StringBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_StringBuffer_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->elements = NULL;
   _self->size = 0;
   _self->capacity = 0;
-  Arcadia_Process_allocateUnmanaged(process, &_self->elements, 0);
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->elements, 0);
   Arcadia_Object_setType(thread, _self, _type);
 }
 

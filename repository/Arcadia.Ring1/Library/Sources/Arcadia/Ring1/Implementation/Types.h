@@ -28,11 +28,15 @@
 #include "Arcadia/Ring1/Implementation/Value.h"
 typedef struct Arcadia_Value Arcadia_Value;
 
+typedef void (Arcadia_Object_ConstructorCallbackFunction)(Arcadia_Thread* thread, Arcadia_Value* self, Arcadia_SizeValue numberOfArguments, Arcadia_Value* arguments);
+typedef void (Arcadia_Object_DestructorCallbackFunction)(Arcadia_Thread* thread, void* self);
+typedef void (Arcadia_Object_VisitCallbackFunction)(Arcadia_Thread* thread, void* self);
+
 /// Type operations for object types.
 typedef struct Arcadia_ObjectType_Operations {
-  Arcadia_ForeignProcedure* construct;
-  void (*destruct)(Arcadia_Thread* thread, void* self);
-  void (*visit)(Arcadia_Thread* thread, void* self);
+  Arcadia_Object_ConstructorCallbackFunction* construct;
+  Arcadia_Object_DestructorCallbackFunction* destruct;
+  Arcadia_Object_VisitCallbackFunction* visit;
 } Arcadia_ObjectType_Operations;
 
 /// Type operations for all types.

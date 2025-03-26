@@ -113,7 +113,7 @@ execute1
           Arcadia_JumpTarget jumpTarget;
           Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
           if (Arcadia_JumpTarget_save(&jumpTarget)) {
-            (*foreignProcedureValue)(process, targetValue, count, &(argumentValues[0]));
+            (*foreignProcedureValue)(thread, targetValue, count, &(argumentValues[0]));
             Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
             R_Interpreter_ThreadState_endCall(interpreterThread); // Must not fail.
           } else {

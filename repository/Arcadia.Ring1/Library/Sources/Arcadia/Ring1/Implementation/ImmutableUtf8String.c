@@ -27,6 +27,7 @@
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toBoolean.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toNatural.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toInteger.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toReal.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toVoid.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/type.h"
 
@@ -237,7 +238,7 @@ Arcadia_ImmutableUtf8String_toVoid
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -246,7 +247,7 @@ equalTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -255,7 +256,7 @@ hash
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -284,7 +285,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -304,7 +305,7 @@ equalTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -318,7 +319,7 @@ hash
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments

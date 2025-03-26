@@ -22,7 +22,6 @@
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Process.h"
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
 
 Arcadia_ImmutableUtf8String*

@@ -18,10 +18,7 @@
 #if !defined(ARCADIA_RING1_IMMUTABLEUTF8STRING_FROMBYTES_H_INCLUDED)
 #define ARCADIA_RING1_IMMUTABLEUTF8STRING_FROMBYTES_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
   

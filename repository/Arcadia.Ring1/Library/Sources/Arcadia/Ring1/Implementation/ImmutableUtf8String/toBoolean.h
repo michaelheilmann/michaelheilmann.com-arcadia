@@ -19,7 +19,6 @@
 #define ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TOBOOLEAN_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Process.h"
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
 
 Arcadia_BooleanValue

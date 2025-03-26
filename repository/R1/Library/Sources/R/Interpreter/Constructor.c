@@ -22,7 +22,7 @@
 static void
 R_Interpreter_Constructor_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -66,24 +66,23 @@ Rex_defineObjectType(u8"R.Interpreter.Constructor", R_Interpreter_Constructor, u
 static void
 R_Interpreter_Constructor_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   R_Interpreter_Constructor* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Constructor_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_ForeignProcedureValue_getType(Arcadia_Process_getThread(process)))) {
+  if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_ForeignProcedureValue_getType(thread))) {
     _self->isForeign = Arcadia_BooleanValue_True;
     _self->foreignProcedure = Arcadia_Value_getForeignProcedureValue(&argumentValues[0]);
   } else if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _R_Interpreter_Code_getType(thread))) {
@@ -93,7 +92,7 @@ R_Interpreter_Constructor_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void

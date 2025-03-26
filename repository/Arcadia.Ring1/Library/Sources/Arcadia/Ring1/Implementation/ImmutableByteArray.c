@@ -87,7 +87,7 @@ Arcadia_ImmutableByteArray_getNumberOfBytes
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -96,7 +96,7 @@ equalTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -105,7 +105,7 @@ hash
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -134,7 +134,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -154,7 +154,7 @@ equalTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -168,7 +168,7 @@ hash
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments

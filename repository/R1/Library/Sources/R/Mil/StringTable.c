@@ -22,7 +22,7 @@
 static void
 Arcadia_Mil_StringTable_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -88,24 +88,23 @@ Rex_defineObjectType(u8"Arcadia.Mil.StringTable", Arcadia_Mil_StringTable, u8"Ar
 static void
 Arcadia_Mil_StringTable_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_StringTable* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_StringTable_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->buckets = NULL;
   _self->size = Arcadia_SizeValue_Literal(0);
   _self->capacity = Arcadia_SizeValue_Literal(0);
   static Arcadia_SizeValue const g_defaultCapacity = 8;
-  Arcadia_Process_allocateUnmanaged(process, (void**)&_self->buckets, sizeof(Arcadia_Mil_StringTable_Node*) * g_defaultCapacity);
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&_self->buckets, sizeof(Arcadia_Mil_StringTable_Node*) * g_defaultCapacity);
   for (Arcadia_SizeValue i = 0, n = g_defaultCapacity; i < n; ++i) {
     _self->buckets[i] = NULL;
   }

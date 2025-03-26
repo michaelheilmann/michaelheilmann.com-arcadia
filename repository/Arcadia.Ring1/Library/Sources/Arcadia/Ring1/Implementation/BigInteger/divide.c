@@ -147,9 +147,12 @@ Arcadia_BigInteger_divide3
     if (remainder) Arcadia_BigInteger_setNatural32(thread, remainder, remainderNatural32);
     return;
   }
+  Arcadia_BigInteger *quotient1 = NULL,
+                     *remainder1 = NULL;
+  quotient1 = Arcadia_BigInteger_create(thread);
+  remainder1 = Arcadia_BigInteger_create(thread);
   // b is of length 1.
   if (b->numberOfLimps == 1) {
-    Arcadia_BigInteger* quotient1 = Arcadia_BigInteger_create(thread);
     Arcadia_SizeValue quotientLength = a->numberOfLimps;
     quotient1->sign = a->sign != b->sign ? -1 : +1;
     Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &quotient1->limps, sizeof(Hidden(BigInteger_Limp)) * quotientLength);
@@ -169,14 +172,11 @@ Arcadia_BigInteger_divide3
         quotient1->limps[i - 1] = (Arcadia_Natural32Value)digit;
       }
     }
-    if (remainder) Arcadia_BigInteger_setNatural32(thread, remainder, carry);
-    if (quotient) Arcadia_BigInteger_swap(thread, quotient, quotient1);
+
+    Arcadia_BigInteger_setNatural32(thread, remainder1, carry);
   } else {
-    Arcadia_BigInteger* remainder1 = Arcadia_BigInteger_create(thread);
     Arcadia_BigInteger_copy(thread, remainder1, a);
     Arcadia_SizeValue remainderLength = a->numberOfLimps;
-
-    Arcadia_BigInteger* quotient1 = Arcadia_BigInteger_create(thread);
     Arcadia_SizeValue quotientLength = (a->numberOfLimps - b->numberOfLimps) + 1; // a->numberOfLimps >= b->numberOfLimps by the above.
     Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &quotient1->limps, sizeof(Hidden(BigInteger_Limp)) * quotientLength);
     Arcadia_Process_fillMemory(Arcadia_Thread_getProcess(thread), quotient1->limps, sizeof(Hidden(BigInteger_Limp)) * quotientLength, 0);
@@ -243,27 +243,34 @@ Arcadia_BigInteger_divide3
     quotient1->sign = a->sign != b->sign ? -1 : +1;
     quotient1->numberOfLimps = quotientLength;
     remainder1->numberOfLimps = remainderLength;
-
-    // We need to check for the case where remainder is zero.
-    for (Arcadia_SizeValue i = remainder1->numberOfLimps; i > 1; --i) {
-      if (remainder1->limps[i - 1] == 0) {
-        remainder1->numberOfLimps--;
-      } else {
-        // As soon as we find a non-zero limp, the rest of the remainder is significand.
-        break;
-      }
-    }
-
-    if (quotient1->numberOfLimps == 1 && quotient1->limps[0] == 0) {
-      quotient1->sign = 0;
-    }
-    if (remainder1->numberOfLimps == 1 && remainder1->limps[0] == 0) {
-      remainder1->sign = 0;
-    }
-
-    if (quotient) Arcadia_BigInteger_copy(thread, quotient, quotient1);
-    if (remainder) Arcadia_BigInteger_copy(thread, remainder, remainder1);
   }
+  // Check leading zero limps in the quotient.
+  for (Arcadia_SizeValue i = quotient1->numberOfLimps; i > 1; --i) {
+    if (quotient1->limps[i - 1] == 0) {
+      quotient1->numberOfLimps--;
+    } else {
+      // As soon as we find a non-zero limp, stop.
+      break;
+    }
+  }
+  if (quotient1->numberOfLimps == 1 && quotient1->limps[0] == 0) {
+    quotient1->sign = 0;
+  }
+  // Check leading zero limps in the remainder.
+  for (Arcadia_SizeValue i = remainder1->numberOfLimps; i > 1; --i) {
+    if (remainder1->limps[i - 1] == 0) {
+      remainder1->numberOfLimps--;
+    } else {
+      // As soon as we find a non-zero limp, stop.
+      break;
+    }
+  }
+  if (remainder1->numberOfLimps == 1 && remainder1->limps[0] == 0) {
+    remainder1->sign = 0;
+  }
+
+  if (quotient) Arcadia_BigInteger_copy(thread, quotient, quotient1);
+  if (remainder) Arcadia_BigInteger_copy(thread, remainder, remainder1);
 }
 
 void

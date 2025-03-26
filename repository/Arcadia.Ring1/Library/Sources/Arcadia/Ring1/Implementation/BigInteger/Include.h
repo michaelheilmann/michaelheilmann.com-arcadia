@@ -115,4 +115,11 @@ _Arcadia_BigIntegerValue_getType
     Arcadia_Thread* thread
   );
 
+void
+Arcadia_BigInteger_toStdoutDebug
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger* self
+  );
+
 #endif // ARCADIA_RING1_BIGINTEGER_INCLUDE_H_INCLUDED

@@ -68,7 +68,7 @@ struct Arcadia_Mil_Scanner {
 static void
 Arcadia_Mil_Scanner_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -170,19 +170,18 @@ Rex_defineObjectType(u8"Arcadia.Mil.Scanner", Arcadia_Mil_Scanner, u8"Arcadia.Ob
 static void
 Arcadia_Mil_Scanner_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_Scanner* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_Scanner_getType(thread);
   //
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   //
   _self->token.type = Arcadia_Mil_TokenType_StartOfInput;
@@ -254,7 +253,7 @@ Arcadia_Mil_Scanner_constructImpl
   On(u8"false", BooleanLiteral);
 #undef On
   //
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void

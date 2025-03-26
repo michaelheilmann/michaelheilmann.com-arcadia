@@ -24,7 +24,7 @@
 static void
 and
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -33,7 +33,7 @@ and
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -42,7 +42,7 @@ equalTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -51,7 +51,7 @@ hash
 static void
 not
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -60,7 +60,7 @@ not
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -69,7 +69,7 @@ notEqualTo
 static void
 or
   (
-    Arcadia_Process * process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value * arguments
@@ -98,7 +98,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 static void
 and
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -107,8 +107,8 @@ and
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   if (!Arcadia_Value_isBooleanValue(A2)) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Value_setBooleanValue(target, Arcadia_Value_getBooleanValue(A1) && Arcadia_Value_getBooleanValue(A2));
 #undef A2
@@ -118,7 +118,7 @@ and
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -138,7 +138,7 @@ equalTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -152,7 +152,7 @@ hash
 static void
 not
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -166,7 +166,7 @@ not
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -186,7 +186,7 @@ notEqualTo
 static void
 or
   (
-    Arcadia_Process * process,
+    Arcadia_Thread * thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -195,8 +195,8 @@ or
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   if (!Arcadia_Value_isBooleanValue(A2)) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Value_setBooleanValue(target, Arcadia_Value_getBooleanValue(A1) || Arcadia_Value_getBooleanValue(A2));
 #undef A2

@@ -88,7 +88,7 @@ execute2
 static void
 print
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* targetValue,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues

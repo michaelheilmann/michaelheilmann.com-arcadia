@@ -35,7 +35,7 @@ struct Arcadia_Mil_Keywords {
 static void
 Arcadia_Mil_Keywords_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -120,30 +120,29 @@ Rex_defineObjectType(u8"Arcadia.Mil.Keywords", Arcadia_Mil_Keywords, u8"Arcadia.
 static void
 Arcadia_Mil_Keywords_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_Keywords* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_Keywords_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_jump(thread);
   }
   _self->size = 0;
   _self->capacity = 8;
-  Arcadia_Process_allocateUnmanaged(process, (void**)&_self->buckets, sizeof(Keyword*) * _self->capacity);
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&_self->buckets, sizeof(Keyword*) * _self->capacity);
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     _self->buckets[i] = NULL;
   }
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 Arcadia_Mil_Keywords*

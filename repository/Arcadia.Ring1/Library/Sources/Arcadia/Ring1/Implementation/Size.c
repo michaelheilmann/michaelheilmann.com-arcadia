@@ -24,7 +24,7 @@
 static void
 add
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -33,7 +33,7 @@ add
 static void
 divide
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -42,7 +42,7 @@ divide
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -51,7 +51,7 @@ equalTo
 static void
 greaterThan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -60,7 +60,7 @@ greaterThan
 static void
 greaterThanOrEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -69,7 +69,7 @@ greaterThanOrEqualTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -78,7 +78,7 @@ hash
 static void
 lowerThan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -87,7 +87,7 @@ lowerThan
 static void
 lowerThanOrEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -96,7 +96,7 @@ lowerThanOrEqualTo
 static void
 multiply
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -105,7 +105,7 @@ multiply
 static void
 negate
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -114,7 +114,7 @@ negate
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -123,7 +123,7 @@ notEqualTo
 static void
 subtract
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -152,7 +152,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 static void
 add
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -179,8 +179,8 @@ add
     Arcadia_Value_setSizeValue(target, Arcadia_Value_getSizeValue(A1) + (Arcadia_SizeValue)Arcadia_Value_getNatural64Value(A2));
   #endif
   } else {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #undef A2
 #undef A1
@@ -189,7 +189,7 @@ add
 static void
 divide
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -201,39 +201,39 @@ divide
   if (Arcadia_Value_isSizeValue(A2)) {
     Arcadia_SizeValue x = Arcadia_Value_getSizeValue(A2);
     if (Arcadia_SizeValue_Literal(0) == x) {
-      Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_DivisionByZero);
-      Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
+      Arcadia_Thread_jump(thread);
     }
     Arcadia_Value_setSizeValue(target, Arcadia_Value_getSizeValue(A1) / x);
   } else if (Arcadia_Value_isNatural8Value(A2)) {
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum >= Arcadia_Natural8Value_Maximum, "environment not (yet) supported");
     Arcadia_Natural8Value x = Arcadia_Value_getNatural8Value(A2);
     if (Arcadia_Natural8Value_Literal(0) == x) {
-      Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_DivisionByZero);
-      Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
+      Arcadia_Thread_jump(thread);
     }
     Arcadia_Value_setNatural64Value(target, Arcadia_Value_getSizeValue(A1) / (Arcadia_SizeValue)x);
   } else if (Arcadia_Value_isNatural16Value(A2)) {
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum >= Arcadia_Natural16Value_Maximum, "environment not (yet) supported");
     Arcadia_Natural16Value x = Arcadia_Value_getNatural16Value(A2);
     if (Arcadia_Natural16Value_Literal(0) == x) {
-      Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_DivisionByZero);
-      Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
+      Arcadia_Thread_jump(thread);
     }
     Arcadia_Value_setNatural64Value(target, Arcadia_Value_getSizeValue(A1) / (Arcadia_SizeValue)x);
   } else if (Arcadia_Value_isNatural32Value(A2)) {
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum >= Arcadia_Natural32Value_Maximum, "environment not (yet) supported");
     Arcadia_Natural32Value x = Arcadia_Value_getNatural32Value(A2);
     if (Arcadia_Natural32Value_Literal(0) == x) {
-      Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_DivisionByZero);
-      Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
+      Arcadia_Thread_jump(thread);
     }
     Arcadia_Value_setSizeValue(target, Arcadia_Value_getSizeValue(A1) / (Arcadia_SizeValue)x);
   } else if (Arcadia_Value_isNatural64Value(A2)) {
     Arcadia_Natural64Value x = Arcadia_Value_getNatural64Value(A2);
     if (Arcadia_Natural64Value_Literal(0) == x) {
-      Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_DivisionByZero);
-      Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
+      Arcadia_Thread_jump(thread);
     }
   #if Arcadia_SizeValue_Maximum < Arcadia_Natural64Value_Maximum
     Arcadia_Value_setNatural64Value(target, (Arcadia_Natural64Value)Arcadia_Value_getSizeValue(A1) / x);
@@ -241,8 +241,8 @@ divide
     Arcadia_Value_setSizeValue(target, Arcadia_Value_getSizeValue(A1) / (Arcadia_SizeValue)x);
   #endif
   } else {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #undef A2
 #undef A1
@@ -251,7 +251,7 @@ divide
 static void
 equalTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -286,7 +286,7 @@ equalTo
 static void
 greaterThan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -312,8 +312,8 @@ greaterThan
     Arcadia_Value_setBooleanValue(target, Arcadia_Value_getSizeValue(A1) > (Arcadia_SizeValue)Arcadia_Value_getNatural64Value(A2));
   #endif
   } else {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #undef A2
 #undef A1
@@ -322,7 +322,7 @@ greaterThan
 static void
 greaterThanOrEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -348,8 +348,8 @@ greaterThanOrEqualTo
     Arcadia_Value_setBooleanValue(target, Arcadia_Value_getSizeValue(A1) >= (Arcadia_SizeValue)Arcadia_Value_getNatural64Value(A2));
   #endif
   } else {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #undef A2
 #undef A1
@@ -358,7 +358,7 @@ greaterThanOrEqualTo
 static void
 hash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -372,7 +372,7 @@ hash
 static void
 lowerThan
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -398,8 +398,8 @@ lowerThan
     Arcadia_Value_setBooleanValue(target, Arcadia_Value_getSizeValue(A1) < (Arcadia_SizeValue)Arcadia_Value_getNatural64Value(A2));
   #endif
   } else {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #undef A2
 #undef A1
@@ -408,7 +408,7 @@ lowerThan
 static void
 lowerThanOrEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -434,8 +434,8 @@ lowerThanOrEqualTo
     Arcadia_Value_setBooleanValue(target, Arcadia_Value_getSizeValue(A1) <= (Arcadia_SizeValue)Arcadia_Value_getNatural64Value(A2));
   #endif
   } else {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #undef A2
 #undef A1
@@ -444,7 +444,7 @@ lowerThanOrEqualTo
 static void
 multiply
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -471,8 +471,8 @@ multiply
     Arcadia_Value_setSizeValue(target, Arcadia_Value_getSizeValue(A1) * (Arcadia_SizeValue)Arcadia_Value_getNatural64Value(A2));
   #endif
   } else {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #undef A2
 #undef A1
@@ -481,7 +481,7 @@ multiply
 static void
 negate
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -495,7 +495,7 @@ negate
 static void
 notEqualTo
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -530,7 +530,7 @@ notEqualTo
 static void
 subtract
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* target,
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
@@ -557,8 +557,8 @@ subtract
     Arcadia_Value_setSizeValue(target, Arcadia_Value_getSizeValue(A1) - (Arcadia_SizeValue)Arcadia_Value_getNatural64Value(A2));
   #endif
   } else {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
 #undef A2
 #undef A1

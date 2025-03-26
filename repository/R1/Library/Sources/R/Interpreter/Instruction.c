@@ -142,7 +142,7 @@ R_Instructions_add
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->add(process, targetValue, 2, &args[0]);
+  operations->add(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -170,7 +170,7 @@ R_Instructions_and
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->and(process, targetValue, 2, &args[0]);
+  operations->and(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -198,7 +198,7 @@ R_Instructions_concatenate
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->concatenate(process, targetValue, 2, &args[0]);
+  operations->concatenate(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -226,7 +226,7 @@ R_Instructions_divide
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->divide(process, targetValue, 2, &args[0]);
+  operations->divide(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -254,7 +254,7 @@ R_Instructions_isEqualTo
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->equalTo(process, targetValue, 2, &args[0]);
+  operations->equalTo(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -282,7 +282,7 @@ R_Instructions_isGreaterThan
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->greaterThan(process, targetValue, 2, &args[0]);
+  operations->greaterThan(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -310,7 +310,7 @@ R_Instructions_isGreaterThanOrEqualTo
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->greaterThanOrEqualTo(process, targetValue, 2, &args[0]);
+  operations->greaterThanOrEqualTo(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -352,7 +352,7 @@ R_Instructions_isLowerThan
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->lowerThan(process, targetValue, 2, &args[0]);
+  operations->lowerThan(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -380,7 +380,7 @@ R_Instructions_isLowerThanOrEqualTo
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->lowerThanOrEqualTo(process, targetValue, 2, &args[0]);
+  operations->lowerThanOrEqualTo(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -408,7 +408,7 @@ R_Instructions_multiply
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] ={ *firstOperandValue, *secondOperandValue };
-  operations->multiply(process, targetValue, 2, &args[0]);
+  operations->multiply(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -438,7 +438,7 @@ R_Instructions_negate
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value args[1] = { *operandValue };
-  operations->negate(process, targetValue, 1, &args[0]);
+  operations->negate(thread, targetValue, 1, &args[0]);
 }
 
 void
@@ -468,7 +468,7 @@ R_Instructions_not
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[1] = { *operandValue };
-  operations->not(process, targetValue, 1, &args[0]);
+  operations->not(thread, targetValue, 1, &args[0]);
 }
 
 void
@@ -496,7 +496,7 @@ R_Instructions_isNotEqualTo
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->notEqualTo(process, targetValue, 2, &args[0]);
+  operations->notEqualTo(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -524,7 +524,7 @@ R_Instructions_or
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->or(process, targetValue, 2, &args[0]);
+  operations->or(thread, targetValue, 2, &args[0]);
 }
 
 void
@@ -552,5 +552,5 @@ R_Instructions_subtract
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->subtract(process, targetValue, 2, &args[0]);
+  operations->subtract(thread, targetValue, 2, &args[0]);
 }

@@ -27,7 +27,7 @@ struct ImageWriterParameters {
 static void
 ImageWriterParameters_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -78,13 +78,12 @@ Rex_defineObjectType(u8"ImageWriterParameters", ImageWriterParameters, u8"Arcadi
 static void
 ImageWriterParameters_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   ImageWriterParameters* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _ImageWriterParameters_getType(thread);
   if (2 != numberOfArgumentValues) {
@@ -93,7 +92,7 @@ ImageWriterParameters_constructImpl
   }
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_String_getType(thread))) {
     _self->object = (Arcadia_ObjectReferenceValue)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
@@ -105,7 +104,7 @@ ImageWriterParameters_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void

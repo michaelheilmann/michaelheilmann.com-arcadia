@@ -21,7 +21,7 @@
 static void
 Arcadia_ByteBuffer_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -65,23 +65,22 @@ Rex_defineObjectType(u8"Arcadia.ByteBuffer", Arcadia_ByteBuffer, u8"Arcadia.Obje
 static void
 Arcadia_ByteBuffer_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_ByteBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_ByteBuffer_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->p = NULL;
   _self->sz = 0;
   _self->cp = 0;
-  Arcadia_Process_allocateUnmanaged(process, &_self->p, 0);
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->p, 0);
   Arcadia_Object_setType(thread, _self, _type);
 }
 

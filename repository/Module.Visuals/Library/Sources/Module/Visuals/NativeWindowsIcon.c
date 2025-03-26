@@ -20,7 +20,7 @@
 static void
 NativeWindowsIcon_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -69,52 +69,51 @@ Rex_defineObjectType(u8"NativeWindowsIcon", NativeWindowsIcon, u8"Arcadia.Object
 static void
 NativeWindowsIcon_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   NativeWindowsIcon* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _NativeWindowsIcon_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
 
   if (5 != numberOfArgumentValues) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
 
   if (!Arcadia_Value_isInteger32Value(&argumentValues[0])) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Integer32Value width = Arcadia_Value_getInteger32Value(&argumentValues[0]);
 
   if (!Arcadia_Value_isInteger32Value(&argumentValues[1])) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Integer32Value height = Arcadia_Value_getInteger32Value(&argumentValues[1]);
 
   if (!Arcadia_Value_isNatural8Value(&argumentValues[2])) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Natural8Value red = Arcadia_Value_getNatural8Value(&argumentValues[2]);
 
   if (!Arcadia_Value_isNatural8Value(&argumentValues[3])) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Natural8Value green = Arcadia_Value_getNatural8Value(&argumentValues[3]);
 
   if (!Arcadia_Value_isNatural8Value(&argumentValues[4])) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Natural8Value blue = Arcadia_Value_getNatural8Value(&argumentValues[4]);
 
@@ -140,8 +139,8 @@ NativeWindowsIcon_constructImpl
 
   HDC hDC = GetDC(NULL);
   if (!hDC) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   // Create the DIB section with an alpha channel.
@@ -149,8 +148,8 @@ NativeWindowsIcon_constructImpl
   if (!hBitmap) {
     ReleaseDC(NULL, hDC);
     hDC = NULL;
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   hMemDC = CreateCompatibleDC(hDC);
@@ -159,8 +158,8 @@ NativeWindowsIcon_constructImpl
     hBitmap = NULL;
     ReleaseDC(NULL, hDC);
     hDC = NULL;
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
   ReleaseDC(NULL, hDC);
   hDC = NULL;
@@ -172,8 +171,8 @@ NativeWindowsIcon_constructImpl
     hBitmap = NULL;
     DeleteDC(hMemDC);
     hMemDC = NULL;
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
   PatBlt(hMemDC, 0, 0, width, height, WHITENESS);
   if (HGDI_ERROR == SelectObject(hMemDC, hOldBitmap)) {
@@ -181,8 +180,8 @@ NativeWindowsIcon_constructImpl
     hBitmap = NULL;
     DeleteDC(hMemDC);
     hMemDC = NULL;
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
   DeleteDC(hMemDC);
   hMemDC = NULL;
@@ -192,8 +191,8 @@ NativeWindowsIcon_constructImpl
   if (!hMonoBitmap) {
     DeleteObject(hBitmap);
     hBitmap = NULL;
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   // Set the alpha values for each pixel in the cursor so that
@@ -231,12 +230,12 @@ NativeWindowsIcon_constructImpl
   hBitmap = NULL;
 
   if (!hIcon) {
-    Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
   }
 
   _self->hIcon = hIcon;
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void

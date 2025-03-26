@@ -27,7 +27,7 @@
 static void
 Arcadia_Mil_ProcedureDefinitionAst_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -71,18 +71,17 @@ Rex_defineObjectType(u8"Arcadia.Mil.ProcedureDefinitionAst", Arcadia_Mil_Procedu
 static void
 Arcadia_Mil_ProcedureDefinitionAst_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_ProcedureDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_ProcedureDefinitionAst_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
 
   if (5 != numberOfArgumentValues) {
@@ -94,7 +93,7 @@ Arcadia_Mil_ProcedureDefinitionAst_constructImpl
   _self->procedureName = R_Argument_getObjectReferenceValue(thread, &argumentValues[2], _Arcadia_String_getType(thread));
   _self->procedureParameters = R_Argument_getObjectReferenceValue(thread, &argumentValues[3], _Arcadia_List_getType(thread));
   _self->procedureBody = R_Argument_getObjectReferenceValueOrNull(thread, &argumentValues[4], _Arcadia_List_getType(thread));
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 static void

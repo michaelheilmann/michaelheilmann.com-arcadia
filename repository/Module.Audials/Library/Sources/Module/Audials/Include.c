@@ -137,7 +137,7 @@ Source_destruct
 static void
 Source_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -175,18 +175,17 @@ Rex_defineObjectType(u8"Audials.Xaudio2.Source", Source, u8"Arcadia.Object", Arc
 static void
 Source_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Source* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Source_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -194,7 +193,7 @@ Source_constructImpl
   }
   (Arcadia_ByteBuffer*)R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_ByteBuffer_getType(thread));
   _self->xAudio2SourceVoice = NULL;
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 void

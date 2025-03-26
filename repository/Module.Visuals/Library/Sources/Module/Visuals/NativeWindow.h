@@ -55,6 +55,9 @@ struct NativeWindow {
 
   void (*getCanvasSize)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
+  void (*beginRender)(Arcadia_Thread*, NativeWindow*);
+  void (*endRender)(Arcadia_Thread*, NativeWindow*);
+
 };
 
 /// @brief Ensure this window is opened.
@@ -215,6 +218,26 @@ NativeWindow_getCanvasSize
     NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
+  );
+
+/// @brief Begin rendering to a window.
+/// @param self A pointer to ths window.
+/// @warning The successful calls to Window_beginRender and Window_endRender must be balanced.
+void
+NativeWindow_beginRender
+  (
+    Arcadia_Thread* thread,
+    NativeWindow* self
+  );
+
+/// @brief End rendering to a window.
+/// @param self A pointer to this window.
+/// @warning The successful calls to Window_beginRender and Window_endRender must be balanced.
+void
+NativeWindow_endRender
+  (
+    Arcadia_Thread* thread,
+    NativeWindow* self
   );
 
 #endif // MODULE_VISUALS_NATIVEWINDOW_H_INCLUDED

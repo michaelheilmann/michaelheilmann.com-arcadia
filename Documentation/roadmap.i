@@ -22,6 +22,7 @@
     @{include("./Roadmap/Milestone-Arcadia.Ring2-1.i")}
     @{include("./Roadmap/Milestone-Mil-2.i")}
     @{include("./Roadmap/Milestone-Cicd-1.i")}
+    @{include("./Roadmap/Milestone-Website-9.i")}
     @{include("./Roadmap/Milestone-Website-8.i")}
     @{include("./Roadmap/Milestone-Website-7.i")}
     <h2>Archive of completed milestones</h2>
