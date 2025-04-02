@@ -1,4 +1,4 @@
-<h2>Semantical Structure</h2>
+<h2 id="semantical-specification">4. Semantical Specification</h2>
 <p>
 The <em>Data Definition Language</em> knows six basic types
 <em>List</em> and <em>Map</em>, which are the so called aggregate types, and

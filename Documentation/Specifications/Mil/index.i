@@ -3,6 +3,15 @@
   <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=3'>
   <link rel='canonical' href='@{siteAddress}/specifications/mil/index.html'>
   <title>Machine Interface Language</title>
+  <style>
+  my-lhs {
+    display: block;
+  }
+  my-rhs {
+    display: block;
+    margin-left: 1rem;
+  }
+  </style>
 </head>
 <body class="my-content-page-1">
   <header>

@@ -48,3 +48,5 @@ The following table denotes the value of the constant for the respective <code><
 <tr><td>32                                </td><td><code>+FLT_MAX</code></td></tr>
 <tr><td>64                                </td><td><code>+DBL_MAX</code></td></tr>
 </table>
+
+@{include("./3.documentation.1.types-and-values.6.real/getBits.i")}

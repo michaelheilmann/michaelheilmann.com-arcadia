@@ -6,21 +6,21 @@
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
   /* variable */
-  body.my-constant-page-1 my-v {
+  body.my-content-page-1 my-v {
     font-family: my-code-font;
     font-size: 0.9rem;
   }
 
   /* meta variable */
-  body.my-constant-page-1 my-mv {
+  body.my-content-page-1 my-mv {
     display: inline;
     font-family: my-code-font;
     font-size: 0.9rem;
   }
-  body.my-constant-page-1 my-mv::before {
+  body.my-content-page-1 my-mv::before {
     content: "<";
   }
-  body.my-constant-page-1 my-mv::after {
+  body.my-content-page-1 my-mv::after {
     content: ">";
   }
 </style>

@@ -33,6 +33,18 @@
         <priority>0.3</priority>
     </url>
     <url>
+        <loc>https://michaelheilmann.com/specifications/common-lexical-specification</loc>
+        <lastmod>2025-02-14</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
+        <loc>https://michaelheilmann.com/specifications/data-definition-language</loc>
+        <lastmod>2025-02-14</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
         <loc>https://michaelheilmann.com/roadmap-archive</loc>
         <lastmod>2025-02-14</lastmod>
         <changefreq>daily</changefreq>

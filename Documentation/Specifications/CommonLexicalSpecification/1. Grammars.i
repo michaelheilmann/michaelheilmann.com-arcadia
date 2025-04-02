@@ -1,7 +1,14 @@
-<h2>Grammars</h3>
-<p>This section describes context-free grammars used in this specification to define the lexical and syntactical structure of a <em>Data Definition Language</em> program.</p>
+<h1 id="unicode">1. Unicode</h1>
+<p>
+A program is a sequence of Unicode code points encoded into a sequence of Bytes using an Unicode encoding.
+In this version, only UTF-8 NOBOM with sequences of length 1 is supported.
+The Unicode encoding of a particular program must be determined by consumers of this specification.
+</p>
 
-<h3>Context-free grammars</h3>
+<h1 id="grammars">2. Grammars</h1>
+<p>This section describes context-free grammars used in this specification to define the lexical and syntactical structure of a language.</p>
+
+<h2 id="context-free-grammars">2.1 Context-free grammars</h2>
 <p>A context-free grammar consists of a number of production. Each production has an abstract symbol called a non-terminal as its left-hand side, and a sequence of one or more
 non-terminal and terminal symbols as its right-hand side. For each grammar, the terminal symbols are drawn from a specified alphabet.</p>
 
@@ -9,46 +16,45 @@ non-terminal and terminal symbols as its right-hand side. For each grammar, the 
 sequences of terminal smbols that can result from repeatedly replacing any non-terminal in the sequence with a right-hand side of a production for which the non-terminal is the
 left-hand side.</p>
 
-<h3>Encoding</h3>
-<p>
-The <em>Data Definition Language</em> programs are encoded as UTF-8 NOBOM.
-Furthermore, only UTF8 sequences of length 1 are support in this version of the <em>Data Definition Language</em>.
-</p>
+<h3 id="lexical-grammars">2.3 Lexical grammars</h3>
+<p>The lexical grammar uses the Unicode code points from the Unicode decoding phase as its terminal symbols.
 
-<h3>Lexical grammars</h3>
-<p>The lexical grammar for the <em>Data Definition Language</em> uses Unicode code points as its terminal symbols.
 It defines a set of productions, starting from the goal symbol <my-mv>word</my-mv>, that describe how sequences of code points are translated into a word.
 </p>
 
-<h3>Syntactical grammars</h3>
+<h3 id="syntactical-grammars">2.4 Syntactical grammars</h3>
 <p>The syntactical grammar for the <em>Data Definition Language</em> uses words of the lexical grammar as its terminal symbols.
 It defines a set of productions, starting from the goal symbol <my-mv>sentence</my-mv>, that describe how sequences of words are translated into a sentence.
 </p>
 
-<h3>Grammar notation</h3>
+<h3 id="grammar-notation">2.5 Grammar notation</h3>
 <p>Productions are written in <code>fixed width</code> fonts.</p>
 
-<p>A production is defined by its left-hand side, followed by a colon <code:</code>, followed by its right-hand side definition. The left-hand side is the name of the non-terminal defined
-by the production.</p>
-
-<p>Multiple alternating definitions of a production may be defined.</p>
-
-<p>The right-hand side of a production consits of any sequence of terminals and non-terminals.</p>
-
-<p>In certain cases the right-hand side is replaced by a comment describing the right-hand side. This comment is opened by <code>/*</code> and closed by <code>*/</code>.
+<p>A production is defined by its left-hand side, followed by a colon <code:</code>, followed by its right-hand side definition. The
+left-hand side is the name of the non-terminal defined by the production. Multiple alternating definitions of a production may be
+defined. The right-hand side of a production consits of any sequence of terminals and non-terminals. In certain cases the right-hand
+side is replaced by a comment describing the right-hand side. This comment is opened by <code>/*</code> and closed by <code>*/</code>.
+</p>
 
 <div class="box">
-<p>Example</p>
+<div class="header">
+Example
+</div>
+<div class="body">
 <p>The following production denotes the non-terminal for a digit as used in the definitions of numerals:</p>
 <p><code>
 digit: /* A single Unicode symbol from the code point range +U0030 to +U0039 */    
 </code></p>
 </div>
+</div>
 
 <p>A terminal is a sequence of Unicode symbols. A Unicode symbol is denoted by a shebang <code>#</code> followed by a hexadecimal number denoting its code point.<p>
 
 <div class="box">
-<p>Example</p>
+<div class="header">
+Example
+</div>
+<div class="body">
 <p>The following productions denote the non-terminal for a sign as used in the definitions of numerals:</p>
 <p><code>
 /* #2b is also known as "PLUS SIGN" */<br/>
@@ -58,32 +64,40 @@ minus_sign : #2d sign : plus_sign<br/>
 sign : minus_sign  
 </code></p>
 </div>
+</div>
 
 <p>The syntax <code>{x}</code> on the right-hand side of a production denotes zero or more occurrences of <code>x</code>.</p> 
 
 <div class="box">
-<p>Example</p>
+<div class="header">
+Example
+</div>
+<div class="body">
 <p>The following production defines a possibly empty sequence of digits as used in the definitions of numerals:</p>
 <p><code>
 zero-or-more-digits : {digit} 
 </code></p>
 </div>
+</div>
 
 <p>The syntax <code>[x]</code> on the right-hand side of a production denotes zero or one occurrences of <code>x</code>.</p>
 
 <div class="box">
-<p>Example</p>
+<div class="header">Example</div>
+<div class="body">
 <p>The following productions denotes a possible definition of an integer numeral.
 It consists of an optional sign followed by a digit followed by zero-or-more-digits as defined in the preceeding examples):</p>
 <p><code>
 integer : [sign] digit zero-or-more-digits 
 </code></p>
 </div>
+</div>
 
 <p>The empty string is denoted by <code>ε</code>.</p>
 
 <div class="box">
-<p>Example</p>
+<div class="header">Example</div>
+<div class="body">
 <p>
 The following productions denotes a possibly empty list of integers (with integer as defined in the preceeding example).
 Note that this list may include a trailing comma.
@@ -99,4 +113,5 @@ integer-list-rest : ε<br/>
 /* #2c is also known as "COMMA" */<br/>
 comma : #2c 
 </code></p>
+</div>
 </div>    

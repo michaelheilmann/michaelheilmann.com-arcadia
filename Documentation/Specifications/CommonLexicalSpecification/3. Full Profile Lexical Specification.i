@@ -1,10 +1,14 @@
-<h2>Lexical Structure</h2>
-<p>The lexical grammar describes the translation of Unicode code points into words. The goal non-terminal of the lexical grammar is the <code>word</code> symbol.</code>
+<h1 id="full-profile-lexical-specification">3. Full Profile Lexical Specification</h1>
+<p>
+The lexical grammar describes the translation of Unicode code points into words.
+The goal non-terminal of the lexical grammar is the <code>word</code> symbol.
+</p>
 
-<h3>goal symbol</h3>
-<p>The goal symbol <code>word</code> is defined by</p>
+<h2 id="full-profile-lexical-specification-word">3.1. word</h2>
+<p>The word <code>word</code> is defined by</p>
 
 <div class="box">
+<div class="body">
 <p><code>
 word : delimiters<br/>
 word : boolean<br/>
@@ -23,12 +27,14 @@ word : whitespace<br/>
 word : newline<br/>
 word : comment<br/>
 </code></p>
-</div> 
+</div>
+</div>
 
-<h3>whitespace</h3>
+<h2 id="full-profile-lexical-specification-whitespace">3.2. whitespace</h2>
 <p>The word <code>whitespace</code> is defined by</p>
 
 <div class="box">
+<div class="body">
 <p><code>
 /* #9 is also known as "CHARACTER TABULATION" */<br/>
 whitespace : #9<br/>
@@ -36,11 +42,13 @@ whitespace : #9<br/>
 whitespace : #20
 </code></p>
 </div>
+</div>
 
-<h3>line terminator</h3>
+<h2 id="full-profile-lexical-specification-line-terminator">3,3, line terminator</h2>
 <p>The word <code>line_terminator</code> is defined by</p>
 
 <div class="box">
+<div class="body">
 <p><code>
 /* #a is also known as "LINEFEED (LF)" */<br/>
 /* #d is also known as "CARRIAGE RETURN (CR)" */<br/>
@@ -48,18 +56,22 @@ line_terminator : #a {#d}<br/>
 line_terminator : #d {#a}
 </code></p>
 </div>
+</div>
 
-<h3>comments</h3>
+<h2 id="full-profile-lexical-specification-comments">3,4, comments</h2>
 <p>
-The language supports both single-line comments and multi-line comments. A <code>comment</code> is either a <code>single_line_comment</code> or a <code>multi_line_comment</code>.
+The language using the Common Lexical Specification may use both single-line comments and multi-line comments.
+A <code>comment</code> is either a <code>single_line_comment</code> or a <code>multi_line_comment</code>.
 <code>multi_line_comment</code> is defined by
 </p>
 
 <div class="box">
+<div class="body">
 <p><code>
 comment : single_line_comment
 comment : multi_line_comment 
 </code></p>
+</div>
 </div>
 
 <p>
@@ -69,12 +81,14 @@ It extends to the end of the line.
 </code>
 
 <div class="box">
+<div class="body">
 <p><code>
 /* #2f is also known as SOLIDUS */
 single_line_comment :
 #2f #2f
 /* any sequence of characters except for line_terminator */  
 </code></p>
+</div>
 </div>
 
 <p>The line_terminator is not considered as part of the comment text.</p>
@@ -85,6 +99,7 @@ A <code>multi_line_comment</code> is opened by a solidus and an asterisk and clo
 </p>
 
 <div class="box">
+<div class="body">
 <p><code>
 /* #2f is also known as SOLIDUS */<br/>
 /* #2a is also known as ASTERISK */<br/>
@@ -93,6 +108,7 @@ multi_line_comment :<br/>
 /* any sequence of characters except except for #2a #2f */<br/>
 #2a #2f  
 </code></p>
+</div>
 </div>
 
 <p>The <code>#2f #2a</code> and <code>#2a #2f</code> sequences are not considered as part of the comment text.</p>
@@ -103,13 +119,13 @@ multi_line_comment :<br/>
   <li><code>#2f #2f</code> has no special meaning either comment.</li>
   <li><code>#2f #2a</code> and <code>#2a #2f</code> have no special meaning in single-line comments.</li>
   <li>Multi-line comments do not nest.</li>
-</ul>
+</ul> 
 
-
-<h3>parentheses</h3>
+<h2 id="full-profile-lexical-specification-parentheses">3.5. parentheses</h2>
 <p>The words <code>left_parenthesis</code> and <code>right_parenthesis</code>, respectively, are defined by</p>
 
 <div class="box">
+<div class="body">
 <p><code>
 /* #28 is also known as "LEFT PARENTHESIS" */<br/>
 left_parenthesis : #28<br/>
@@ -117,11 +133,13 @@ left_parenthesis : #28<br/>
 right_parenthesis : #29 
 </code></p>
 </div>
+</div>
 
-<h3>curly brackets</h3>
+<h2 id="full-profile-lexical-specification-curly-brackets">3.6. curly brackets</h2>
 <p>The words <code>left_curly_bracket</code> and <code>right_curly_bracket</code>, respectively, are defined by</p>
 
 <div class="box">
+<div class="body">
 <p><code>
 /* #7b is also known as "LEFT CURLY BRACKET" */<br/>
 left_curly_bracket : #7b<br/>
@@ -129,8 +147,9 @@ left_curly_bracket : #7b<br/>
 right_curly_bracket : #7d 
 </code></p>
 </div>
+</div>
 
-<h3>colon</h3>
+<h2 id="full-profile-lexical-specification-colon">3.7. colon</h2>
 <p>The word <code>colon</code> is defined by</code>
 
 <div class="box">
@@ -140,7 +159,7 @@ colon : #3a
 </code></p>
 </div>
 
-<h3>square brackets</h3>
+<h2 id="full-profile-lexical-specification-square-brackets">3.8. square brackets</h2>
 <p>The words <code>left_square_bracket</code> and <code>right_square_bracket</code>, respectively, are defined by</p>
 
 <div class="box">
@@ -152,10 +171,7 @@ right_square_bracket : #5d
 </code></p>
 </div>
 
-<h3>alphanumeric literal</h3>
-<p>The word <code>alphanumeric</code> is reserved for future use.</p>
-
-<h3>comma</h3>
+<h2 id="full-profile-lexical-specification-comma">3.9. comma</h2>
 <p>The word <code>comma</code> is defined by</p>
 
 <div class="box">
@@ -165,10 +181,11 @@ comma : #2c
 </code></p>
 </div>
 
-<h3>name</h3>
+<h2 id="full-profile-lexical-specification-name">name</h2>
 <p>The word <code>name</code> is defined by</p>
 
 <div class="box">
+<div class="body">
 <p><code>
 name : {underscore} alphabetic {name_suffix_character}<br/>
 <br/>
@@ -186,8 +203,9 @@ name_suffix_character : /* The unicode characters from #30 to #39. */<br/>
 name_suffix_character : #5f<br/> 
 </code></p>
 </div>
+</div>
 
-<h3>number literal</h3>
+<h2 id="full-profile-lexical-specification-number">3.10. number literal</h2>
 <p>The word <code>number</code> is defined by</p>
 
 <div class="box">
@@ -212,7 +230,7 @@ exponent_prefix : #45<br/>
 </code></p>
 </div>
 
-<h3>string literal</h3>
+<h2 id="full-profile-lexical-specification-string-literal">3.11. string literal</h2>
 <p>The word <code>string</code> is defined by</p>
 
 <div class="box">
@@ -243,7 +261,7 @@ escape_sequence : #5c #72
 </code></p>
 </div>
 
-<h3>boolean literals</h3>
+<h2 id="full-profile-lexical-specification-boolean">3.12. boolean literal</h2>
 <p>The word <code>boolean</code> is defined by</p>
 
 <div class="box">
@@ -258,23 +276,30 @@ false : #66 #61 #6c #73 #65
 <p>Remark: The word <code>boolean</code> is a so called <em>keyword</em>.
 It takes priority over the <code>name</code>.</p>
 
-<h3>void literal</h3>
+<h2 id="full-profile-lexical-specification-void">3.13. void literal</h3>
 <p>The word <code>void</code> is defined by</p>
 
 <div class="box">
+<div class="body">
 <p><code>
 void : #76 #6f # #69 #64
 </code></p> 
 </div>
+</div>
 
-<p>Remark: The word <code>boolean</code> is a so called <em>keyword</em>.
+<p>Remark: The word <code>void</code> is a so called <em>keyword</em>.
 It takes priority over the <code>name</code>.</p>
 
-<h3>digit literal</h3>
-<p>The wird <code>digit</code> is defined by</p>
+<h2 id="full-profile-lexical-specification-digit">3.14. digit</h3>
+<p>The word <code>digit</code> is defined by</p>
 
 <div class="box">
+<div class="body">
 <p><code>
 digit : /* A single Unicode character from the code point range +U0030 to +U0039. */
 </code></p>
 </div>
+</div>
+
+<h2 id="full-profile-lexical-specification-alphanumeric">3.15. alphanumeric</h3>
+<p>The word <code>alphanumeric</code> is reserved for future use.</p>

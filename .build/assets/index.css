@@ -322,7 +322,7 @@ body.my-error-page-1 ul li, body.my-content-page-1 ul li {
 }
 
 body.my-error-page-1 p, body.my-content-page-1 p {
-  margin-top: 1rem;
+  /*margin-top: 1rem;*/
 }
 
 body.my-error-page-1 div.left-column, body.my-content-page-1 div.left-column {

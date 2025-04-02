@@ -19,6 +19,7 @@
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_ObjectReferenceValue">Arcadia_ObjectReferenceValue</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_quotiendRemainder*">Arcadia_quotientRemainder*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_Real*Value">Arcadia_Real*Value</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_Real*Value_getBits">Arcadia_Real*Value_getBits</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_safeAdd*">Arcadia_safeAdd*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_safeMultiply*">Arcadia_safeMultiply*</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Ring1/#Arcadia_SizeValue">Arcadia_SizeValue</a></li>

@@ -58,23 +58,25 @@ add_custom_target(Website.ErrorPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "roadmap.html".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
+file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/Roadmap/*)
 set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/roadmap.html")
 add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i => ${DOCUMENTATION_TARGET_FILE}"
-                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_DEPENDENCIES})
 add_custom_target(Website.RoadmapPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "roadmap-archive.html".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
+file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/Roadmap/Archive/*)
 set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/roadmap-archive.html")
 add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
-add_custom_target(Website.RoadmapArchivePage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+add_custom_target(Website.RoadmapArchivePage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE} ${DOCUMENTATION_DEPENDENCIES})
 
 # Build "assets/index.css".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/index.css.i)
@@ -98,20 +100,33 @@ add_custom_target(Website.ResetCss ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "Specifications/Mil/index.html".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Mil/index.i)
+file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Mil/*)
 set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mil/index.html")
 add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
-                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_DEPENDENCIES})
 add_custom_target(Website.Specifications.Mil ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
 
 # Build "Specifications/Ddl/index.html".
-set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Ddl/index.i)
-set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/specifications/ddl/index.html")
+set(DOCUMENTATION_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Specifications/DataDefinitionLanguage/index.i")
+file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES "${CMAKE_CURRENT_SOURCE_DIR}/Specifications/DataDefinitionLanguage/*")
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/specifications/data-definition-language/index.html")
 add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
-                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
-add_custom_target(Website.Specifications.Ddl ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_DEPENDENCIES})
+add_custom_target(Website.Specifications.DataDefinitionLanguage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+
+# Build "Specifications/Common-Lexical-Specification/index.html".
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/index.i)
+file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/*)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/specifications/common-lexical-specification/index.html")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_DEPENDENCIES})
+add_custom_target(Website.Specifications.CommonLexicalSpecification ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})

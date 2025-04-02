@@ -7,7 +7,7 @@
 @{include("3.documentation.1.types-and-values.3.integer.i")}
 @{include("3.documentation.1.types-and-values.4.natural.i")}
 @{include("3.documentation.1.types-and-values.5.objectreference.i")}
-@{include("3.documentation.1.types-and-values.6.real.i")}
+@{include("3.documentation.1.types-and-values.6.real/include.i")}
 @{include("3.documentation.1.types-and-values.7.size.i")}
 @{include("3.documentation.1.types-and-values.8.void.i")}
 @{include("3.documentation.2.value.i")}

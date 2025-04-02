@@ -20,21 +20,21 @@
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
   /* variable */
-  body.my-constant-page-1 my-v {
+  body.my-content-page-1 my-v {
     font-family: my-code-font;
     font-size: 0.9rem;
   }
 
   /* meta variable */
-  body.my-constant-page-1 my-mv {
+  body.my-content-page-1 my-mv {
     display: inline;
     font-family: my-code-font;
     font-size: 0.9rem;
   }
-  body.my-constant-page-1 my-mv::before {
+  body.my-content-page-1 my-mv::before {
     content: "<";
   }
-  body.my-constant-page-1 my-mv::after {
+  body.my-content-page-1 my-mv::after {
     content: ">";
   }
 </style>
@@ -345,6 +345,34 @@ The following table denotes the value of the constant for the respective <code><
 <tr><td>32                                </td><td><code>+FLT_MAX</code></td></tr>
 <tr><td>64                                </td><td><code>+DBL_MAX</code></td></tr>
 </table>
+
+<h4 id="Arcadia_Real*Value_getBits">Arcadia_Real*Value_getBits</h4>
+<p>Get the bits of a Real value.</p>
+<p><code>
+Arcadia_Natural<my-mv>Bits</my-mv>
+Arcadia_Real<my-mv>Bits</my-mv>Value_getBits
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Real<my-mv>Bits</my-mv>Value self
+  )
+</code></p>
+<p>The following table lists the value of <my-mv>Bits</my-mv> for which functions are defined</p>
+
+<table>
+<tr><td><my-mv>Bits</my-mv></td></tr>
+<tr><td><code>32</code></td></tr>
+<tr><td><code>64</code></td></tr>
+</table>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>Arcadia_Real<my-mv>Bits</my-mv> self</td><td>The Real value.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>Return the bits of the Real value as a Natural value.</p>
+
 
 <h3 id="Arcadia_SizeValue">3.1.7. Size Type</h3>
 <p>
@@ -1317,6 +1345,7 @@ The type of the value of this <code>Arcadia_Value</code> object.
         <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_ObjectReferenceValue">Arcadia_ObjectReferenceValue</a></li>
         <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotiendRemainder*">Arcadia_quotientRemainder*</a></li>
         <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_Real*Value">Arcadia_Real*Value</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_Real*Value_getBits">Arcadia_Real*Value_getBits</a></li>
         <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_safeAdd*">Arcadia_safeAdd*</a></li>
         <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_safeMultiply*">Arcadia_safeMultiply*</a></li>
         <li><a href="https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_SizeValue">Arcadia_SizeValue</a></li>
