@@ -15,8 +15,8 @@
 
 // Last modified: 2024-09-22
 
-#if !defined(R_MIL_KEYWORDS_H_INCLUDED)
-#define R_MIL_KEYWORDS_H_INCLUDED
+#if !defined(ARCADIA_MIL_KEYWORDS_H_INCLUDED)
+#define ARCADIA_MIL_KEYWORDS_H_INCLUDED
 
 #include "R/Mil/TokenType.h"
 
@@ -60,5 +60,5 @@ Arcadia_Mil_Keywords_scan
     Arcadia_Natural32Value* tokenType
   );
 
-#endif // R_MIL_KEYWORDS_H_INCLUDED
+#endif // ARCADIA_MIL_KEYWORDS_H_INCLUDED
 

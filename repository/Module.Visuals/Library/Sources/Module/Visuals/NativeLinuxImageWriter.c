@@ -466,7 +466,7 @@ NativeLinuxImageWriter_writeIcoToByteBufferImpl
 static void
 NativeLinuxImageWriter_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
@@ -503,17 +503,17 @@ Rex_defineObjectType(u8"NativeLinuxImageWriter", NativeLinuxImageWriter, u8"Imag
 static void
 NativeLinuxImageWriter_constructImpl
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
 {
   NativeLinuxImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_Type* _type = _NativeLinuxImageWriter_getType(Arcadia_Process_getThread(process));
+  Arcadia_Type* _type = _NativeLinuxImageWriter_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(process, _type, self, 0, &argumentValues[0]);
+    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   ((ImageWriter*)_self)->writeBmpToByteBuffer = (void (*)(Arcadia_Thread*, ImageWriter*, PixelBuffer*,Arcadia_ByteBuffer*))NativeLinuxImageWriter_writeBmpToByteBufferImpl;
   ((ImageWriter*)_self)->writeBmpToPath = (void (*)(Arcadia_Thread*, ImageWriter*, PixelBuffer*, Arcadia_String*))NativeLinuxImageWriter_writeBmpToPathImpl;
@@ -521,7 +521,7 @@ NativeLinuxImageWriter_constructImpl
   ((ImageWriter*)_self)->writeIcoToPath = (void (*)(Arcadia_Thread*, ImageWriter*, Arcadia_List*, Arcadia_String*))NativeLinuxImageWriter_writeIcoToPathImpl;
   ((ImageWriter*)_self)->writePngToByteBuffer = (void (*)(Arcadia_Thread*, ImageWriter*, PixelBuffer*, Arcadia_ByteBuffer*))NativeLinuxImageWriter_writePngToByteBufferImpl;
   ((ImageWriter*)_self)->writePngToPath = (void (*)(Arcadia_Thread*, ImageWriter*, PixelBuffer*, Arcadia_String*))NativeLinuxImageWriter_writePngToPathImpl;
-  Arcadia_Object_setType(Arcadia_Process_getThread(process), _self, _type);
+  Arcadia_Object_setType(thread, _self, _type);
 }
 
 NativeLinuxImageWriter*

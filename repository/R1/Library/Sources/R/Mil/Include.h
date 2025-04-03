@@ -15,8 +15,8 @@
 
 // Last modified: 2024-12-10
 
-#if !defined(R_MIL_INCLUDE_H_INCLUDED)
-#define R_MIL_INCLUDE_H_INCLUDED
+#if !defined(ARCAIDA_MIL_INCLUDE_H_INCLUDED)
+#define ARCAIDA_MIL_INCLUDE_H_INCLUDED
 
 #include "R/Mil/Ast.h"
 #include "R/Mil/Keywords.h"
@@ -24,4 +24,4 @@
 #include "R/Mil/Scanner.h"
 #include "R/Mil/StringTable.h"
 
-#endif // R_MIL_INCLUDE_H_INCLUDED
+#endif // ARCAIDA_MIL_INCLUDE_H_INCLUDED

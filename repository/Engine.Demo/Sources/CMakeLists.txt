@@ -38,7 +38,7 @@ if (NOT TARGET ${MyDemoName})
   if (${${MyDemoName}.OperatingSystem} STREQUAL ${${MyDemoName}.OperatingSystem.Windows})
 
     FetchProduct(${MyDemoName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-    FetchProduct(${MyDemoName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+    FetchProduct(${MyDemoName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
     FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Module.Audials/Library" "path to the Audials module source directory")
     FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Module.Visuals/Library" "path to the Visuals module source directory")
 
@@ -47,7 +47,7 @@ if (NOT TARGET ${MyDemoName})
     list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Engine.Demo/Main.c)
     list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Engine.Demo/Configure.h)
 
-    list(APPEND ${MyDemoName}.PrivateLibraries Module.Audials Module.Visuals ${MyProjectName}.R ${MyProjectName}.Arms)
+    list(APPEND ${MyDemoName}.PrivateLibraries Module.Audials Module.Visuals ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
   else()
     set(${MyDemoName}.Enabled FALSE)

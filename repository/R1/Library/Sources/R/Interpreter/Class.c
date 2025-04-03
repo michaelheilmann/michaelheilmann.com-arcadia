@@ -236,8 +236,10 @@ completeExtendedClass
     Arcadia_Map* temporary = Arcadia_Map_create(Arcadia_Process_getThread(process));
     R_Interpreter_Class* current = self;
     do {
-      Arcadia_Value k = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = current->className };
-      Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self };
+      Arcadia_Value k = Arcadia_Value_Initializer(),
+                    v = Arcadia_Value_Initializer();
+      Arcadia_Value_setObjectReferenceValue(&k, current->className);
+      Arcadia_Value_setObjectReferenceValue(&v, self);
       v = Arcadia_Map_get(Arcadia_Process_getThread(process), temporary, v);
       if (Arcadia_Value_isObjectReferenceValue(&v)) {
         /* "Y may not inherit from itself" */

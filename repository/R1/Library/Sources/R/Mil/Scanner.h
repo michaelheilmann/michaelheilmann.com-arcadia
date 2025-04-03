@@ -15,8 +15,8 @@
 
 // Last modified: 2024-09-22
 
-#if !defined(R_MIL_SCANNER_H_INCLUDED)
-#define R_MIL_SCANNER_H_INCLUDED
+#if !defined(ARCADIA_MIL_SCANNER_H_INCLUDED)
+#define ARCADIA_MIL_SCANNER_H_INCLUDED
 
 #include "R/Mil/TokenType.h"
 
@@ -73,4 +73,4 @@ Arcadia_Mil_Scanner_setInput
     Arcadia_Utf8Reader* input
   );
 
-#endif // R_MIL_SCANNER_H_INCLUDED
+#endif // ARCADIA_MIL_SCANNER_H_INCLUDED

@@ -23,7 +23,8 @@ Arcadia_Value_fromBigIntegerValue
     Arcadia_BigIntegerValue v
   )
 {
-  Arcadia_Value w = { .tag = Arcadia_ValueTag_BigInteger, .bigIntegerValue = v };
+  Arcadia_Value w = Arcadia_Value_Initializer();
+  Arcadia_Value_setBigIntegerValue(&w, v);
   return w;
 }
 

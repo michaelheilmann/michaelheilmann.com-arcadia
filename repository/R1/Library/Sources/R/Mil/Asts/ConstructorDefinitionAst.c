@@ -108,13 +108,12 @@ Arcadia_Mil_ConstructorDefinitionAst_visit
 Arcadia_Mil_ConstructorDefinitionAst*
 Arcadia_Mil_ConstructorDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* nativeName,
     Arcadia_List* constructorParameters,
     Arcadia_List* constructorBody
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = {
     {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
     {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)constructorParameters },
@@ -126,7 +125,7 @@ Arcadia_Mil_ConstructorDefinitionAst_create
   if (constructorBody) {
     Arcadia_Value_setObjectReferenceValue(&argumentValues[2], constructorBody);
   }
-  Arcadia_Mil_ConstructorDefinitionAst* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Arcadia_Mil_ConstructorDefinitionAst_getType(thread), 3, &argumentValues[0]);
+  Arcadia_Mil_ConstructorDefinitionAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_ConstructorDefinitionAst_getType(thread), 3, &argumentValues[0]);
   return self;
 }
 

@@ -30,7 +30,6 @@ if (NOT MyProjectIsDefined)
 endif()
 
 add_subdirectory(ArmsTests)
-add_subdirectory(Utf8Tests)
 add_subdirectory(Mil.LexicalAnalysis)
 add_subdirectory(Mil.SyntacticalAnalysis)
 add_subdirectory(Mil.SemanticalAnalysis)

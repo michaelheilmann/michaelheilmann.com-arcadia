@@ -15,8 +15,8 @@
 
 // Last modified: 2024-10-14
 
-#if !defined(R_MIL_STRINGTABLE_H_INCLUDED)
-#define R_MIL_STRINGTABLE_H_INCLUDED
+#if !defined(ARCADIA_MIL_STRINGTABLE_H_INCLUDED)
+#define ARCADIA_MIL_STRINGTABLE_H_INCLUDED
 
 #include "R/Include.h"
 
@@ -50,4 +50,4 @@ Arcadia_Mil_StringTable_getOrCreateString
     Arcadia_StringBuffer* stringBuffer
   );
 
-#endif // R_MIL_STRINGTABLE_H_INCLUDED
+#endif // ARCADIA_MIL_STRINGTABLE_H_INCLUDED

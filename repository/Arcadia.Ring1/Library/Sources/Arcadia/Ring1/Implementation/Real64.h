@@ -36,6 +36,7 @@ typedef double Arcadia_Real64Value;
 #define Arcadia_Real64Value_NumberOfBytes (sizeof(double))
 Arcadia_StaticAssert(Arcadia_Real64Value_NumberOfBytes == 8, "R.Real64Value.NumberOfBytes must be 8");
 
+// the number of bits of a double (https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
 #define Arcadia_Real64Value_NumberOfBits (Arcadia_Real64Value_NumberOfBytes * 8)
 
 #define Arcadia_Real64Value_Literal(x) (x)
@@ -82,7 +83,10 @@ Rex_declareScalarType(Arcadia_Real64);
 // TODO: Add to documentation.
 #define Arcadia_Real64Value_SignBitsShift (Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfExplicitSignificandBits)
 
-Arcadia_StaticAssert(Arcadia_Real64Value_NumberOfBits == Arcadia_Real64Value_NumberOfSignBits + Arcadia_Real64Value_NumberOfExponentBits + Arcadia_Real64Value_NumberOfExplicitSignificandBits, "unsupported floating-point format");
+Arcadia_StaticAssert(Arcadia_Real64Value_NumberOfBits ==
+                     Arcadia_Real64Value_NumberOfSignBits +
+                     Arcadia_Real64Value_NumberOfExponentBits +
+                     Arcadia_Real64Value_NumberOfExplicitSignificandBits, "unsupported floating-point format");
 
 // The bits mask for the bits of the significand.
 // TODO: Add to documentation.

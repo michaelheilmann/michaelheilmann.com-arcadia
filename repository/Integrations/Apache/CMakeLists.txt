@@ -31,7 +31,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the Mil library directory")
 
 set(MyTargetName Integrations.Apache)
 
@@ -43,7 +43,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Configure
 list(APPEND ${MyTargetName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Main.c)
 list(APPEND ${MyTargetName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h)
 
-list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
+list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
 EndProduct(${MyTargetName})
 set_target_properties(${MyTargetName} PROPERTIES OUTPUT_NAME "arcadia")

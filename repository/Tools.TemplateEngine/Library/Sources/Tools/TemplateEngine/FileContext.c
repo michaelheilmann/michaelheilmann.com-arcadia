@@ -189,7 +189,7 @@ onIncludeDirective
   Arcadia_Utf8Reader_next(thread, context->source);
   Arcadia_ByteBuffer_clear(thread, context->context->temporaryBuffer);
   onString(thread, context);
-  Arcadia_FilePath* filePath = Arcadia_FilePath_parseWindows(thread, context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz);
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz);
   Arcadia_Value value;
   Arcadia_Value_setObjectReferenceValue(&value, filePath);
   Arcadia_Stack_push(thread, context->context->stack, value);
@@ -213,16 +213,39 @@ onStatement
     onIncludeDirective(thread, context);
     Context_onRun(thread, context->context);
   } else {
-    Arcadia_Value t;
-    Arcadia_Value_setObjectReferenceValue(&t, (Arcadia_ObjectReferenceValue)context->context->temporaryBuffer);
-    Arcadia_Value_setObjectReferenceValue(&t, (Arcadia_ObjectReferenceValue)Arcadia_String_create(thread, t));
-    t = Arcadia_Map_get(thread, context->environment, t);
-    if (!Arcadia_Value_isObjectReferenceValue(&t)) {
+    Arcadia_String* nameString = NULL;
+    Arcadia_Value k, v;
+    Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)context->context->temporaryBuffer);
+    nameString = Arcadia_String_create(thread, k);
+    Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)nameString);
+    v = Arcadia_Map_get(thread, context->environment, k);
+    if (Arcadia_Value_isVoidValue(&v)) {
+      // Error.
+      Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+      Arcadia_StringBuffer_append(thread, sb, k);
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"` not defined\n\0", sizeof(u8"` not defined\n\0") - 1);
+      fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+      Arcadia_Thread_jump(thread);
+    } else  if (!Arcadia_Value_isObjectReferenceValue(&v)) {
+      // Error.
+      Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+      Arcadia_StringBuffer_append(thread, sb, k);
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"` is not of type string\n\0", sizeof(u8"` is not of type string\n\0") - 1);
+      fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&t);
+    Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&v);
     if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(object), _Arcadia_String_getType(thread))) {
+      // Error.
+      Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+      Arcadia_StringBuffer_append(thread, sb, k);
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"` is not of type string\n\0", sizeof(u8"` is not of type string\n\0") - 1);
+      fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
     }

@@ -271,7 +271,8 @@ Arcadia_allocateObject
   if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), memoryType)) {
     fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
   }
-  Arcadia_Value selfValue = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)(Arcadia_Object*)(tag + 1) };
+  Arcadia_Value selfValue = Arcadia_Value_Initializer();
+  Arcadia_Value_setObjectReferenceValue(&selfValue, (Arcadia_ObjectReferenceValue)(Arcadia_Object*)(tag + 1));
   Arcadia_Type_getOperations(type)->objectTypeOperations->construct(thread, &selfValue, numberOfArgumentValues, &argumentValues[0]);
   return (void*)(tag + 1);
 }

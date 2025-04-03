@@ -15,8 +15,8 @@
 
 // Last modified: 2024-09-22
 
-#if !defined(R_MIL_TOKENTYPE_H_INCLUDED)
-#define R_MIL_TOKENTYPE_H_INCLUDED
+#if !defined(ARCADIA_MIL_TOKENTYPE_H_INCLUDED)
+#define ARCADIA_MIL_TOKENTYPE_H_INCLUDED
 
 #include "R/Include.h"
 
@@ -141,4 +141,4 @@ typedef enum Arcadia_Mil_TokenType {
 
 } Arcadia_Mil_TokenType;
 
-#endif // R_MIL_TOKENTYPE_H_INCLUDED
+#endif // ARCADIA_MIL_TOKENTYPE_H_INCLUDED

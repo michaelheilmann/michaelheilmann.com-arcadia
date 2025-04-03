@@ -238,7 +238,7 @@ Arcadia_Thread_initializeValueStack
     Arcadia_Thread_jump(thread);
   }
   for (Arcadia_SizeValue i = 0; i < 8; ++i) {
-    thread->stack.elements[i] = (Arcadia_Value){ .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void };
+    thread->stack.elements[i] = Arcadia_Value_Initializer();
   }
   thread->stack.size = 0;
   thread->stack.capacity = 8;
@@ -304,7 +304,7 @@ Arcadia_Thread_increaseValueStackCapacity
     Arcadia_Thread_jump(thread);
   }
   for (Arcadia_SizeValue i = oldCapacity; i < newCapacity; ++i) {
-    thread->stack.elements[i] = (Arcadia_Value){ .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void };
+    thread->stack.elements[i] = Arcadia_Value_Initializer();
   }
   thread->stack.capacity = newCapacity;
 }
@@ -333,7 +333,7 @@ void
 Arcadia_Thread_pushValue
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* value
+    Arcadia_Value const* value
   )
 {
   Arcadia_Thread_ensureValueStackFreeCapacity(thread, 1);
@@ -342,7 +342,7 @@ Arcadia_Thread_pushValue
 }
 
 void
-Arcadia_Thread_popValue
+Arcadia_Thread_popValues
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue count

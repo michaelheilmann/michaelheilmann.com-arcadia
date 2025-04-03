@@ -30,7 +30,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
 
 set(MyTestName ${MyProjectName}.Mil.Tests.LexicalAnalysis)
 
@@ -42,7 +42,7 @@ if (NOT TARGET ${MyTestName})
   list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Main.c)
   list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/LexicalAnalysis/Configure.h)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.R ${MyProjectName}.Arms)
+  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
   EndProduct(${MyTestName})
   set_target_properties(${MyTestName} PROPERTIES FOLDER "R")

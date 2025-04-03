@@ -34,7 +34,7 @@ set(MyTool Tools.ConcatenateFiles)
 if (NOT TARGET ${MyTool})
 
   FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-  FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+  FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
 
   BeginProduct(${MyTool} executable)
 
@@ -43,7 +43,7 @@ if (NOT TARGET ${MyTool})
   list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/ConcatenateFiles/Main.c)
   list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/ConcatenateFiles/Configure.h)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.R ${MyProjectName}.Arms)
+  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
   EndProduct(${MyTool})
 

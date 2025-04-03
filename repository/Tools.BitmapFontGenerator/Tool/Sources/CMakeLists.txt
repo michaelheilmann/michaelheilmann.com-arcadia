@@ -36,14 +36,14 @@ BeginProduct(${MyTool} executable)
 if (${${MyTool}.OperatingSystem} STREQUAL ${${MyTool}.OperatingSystem.Windows})
 
   FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-  FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+  FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/BitmapFontGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/BitmapFontGenerator/Configure.h @ONLY)
 
   list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/BitmapFontGenerator/Main.c)
   list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/BitmapFontGenerator/Configure.h)
 
-  list(APPEND ${MyTool}.PrivateLibraries Module.Visuals ${MyProjectName}.R ${MyProjectName}.Arms)
+  list(APPEND ${MyTool}.PrivateLibraries Module.Visuals ${MyProjectName}.Mil ${MyProjectName}.Arms)
 else()
   set(${MyTool}.Enabled FALSE)
 endif()

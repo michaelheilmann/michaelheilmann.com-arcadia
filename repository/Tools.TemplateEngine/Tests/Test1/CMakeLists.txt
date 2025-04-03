@@ -30,7 +30,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
 
 set(MyTestName ${MyProjectName}.Tools.TemplateEngine.Tests.Test1)
 
@@ -43,7 +43,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools.TemplateEngine.Tests.Te
 list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Configure.h)
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.R ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
 EndProduct(${MyTestName})
 # Copy assets.

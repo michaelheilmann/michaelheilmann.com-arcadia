@@ -36,7 +36,7 @@ if (NOT TARGET ${MyModule})
 
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows})
     FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-    FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+    FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Audials/Configure.h @ONLY)
 
@@ -44,7 +44,7 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Include.h)
     list(APPEND ${MyModule}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Audials/Configure.h)
 
-    list(APPEND ${MyModule}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
+    list(APPEND ${MyModule}.Libraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
     EndProduct(${MyModule})
 

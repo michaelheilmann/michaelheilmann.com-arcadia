@@ -35,7 +35,7 @@ struct Arcadia_Mil_ConstructorDefinitionAst {
 Arcadia_Mil_ConstructorDefinitionAst*
 Arcadia_Mil_ConstructorDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* nativeName,
     Arcadia_List* constructorParameters,
     Arcadia_List* constructorBody

@@ -35,7 +35,7 @@ if (NOT TARGET ${MyModule})
   BeginProduct(${MyModule} library)
 
   FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-  FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+  FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Visuals/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Visuals/Configure.h @ONLY)
 
@@ -73,7 +73,7 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Visuals/NativeWindowsWindow.h)
   endif()
 
-  list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.R ${MyProjectName}.Arms)
+  list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Linux})
     find_package(PNG)

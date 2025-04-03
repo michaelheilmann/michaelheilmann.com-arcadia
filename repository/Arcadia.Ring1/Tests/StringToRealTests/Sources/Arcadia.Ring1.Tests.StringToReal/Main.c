@@ -16,12 +16,11 @@
 // Last modified: 2024-09-28
 
 #include <stdlib.h>
-
-#include "Arcadia/Ring1/Include.h"
-
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "Arcadia/Ring1/Include.h"
 
 // integers from -2^53 to +2^53 can be exactly represented.
 static void

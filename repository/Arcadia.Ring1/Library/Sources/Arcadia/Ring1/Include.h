@@ -81,6 +81,7 @@
 #include "Arcadia/Ring1/Implementation/ObjectReference.h"
 
 #include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/ProcessExtensions.h"
 
 #include "Arcadia/Ring1/Implementation/Real32.h"
 #include "Arcadia/Ring1/Implementation/Real64.h"
@@ -96,6 +97,9 @@
 
 #include "Arcadia/Ring1/Implementation/Tests.h"
 
+#include "Arcadia/Ring1/Implementation/ToInteger/Include.h"
+#include "Arcadia/Ring1/Implementation/ToNatural/Include.h"
+#include "Arcadia/Ring1/Implementation/ToReal/toReal32.h"
 #include "Arcadia/Ring1/Implementation/ToReal/toReal64.h"
 
 #include "Arcadia/Ring1/Implementation/Types.h"

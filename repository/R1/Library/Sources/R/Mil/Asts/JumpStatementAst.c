@@ -116,17 +116,16 @@ Arcadia_Mil_JumpStatementAst_visit
 Arcadia_Mil_JumpStatementAst*
 Arcadia_Mil_JumpStatementAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_JumpStatementAstType type,
     Arcadia_String* labelName
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = { 
     { .tag = Arcadia_ValueTag_Integer32, .integer32Value = type },
     { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)labelName },
   };
-  Arcadia_Mil_JumpStatementAst* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Arcadia_Mil_ReturnStatementAst_getType(thread), 2, &argumentValues[0]);
+  Arcadia_Mil_JumpStatementAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_ReturnStatementAst_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 

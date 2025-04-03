@@ -47,7 +47,7 @@ struct Arcadia_Mil_ClassDefinitionAst {
 Arcadia_Mil_ClassDefinitionAst*
 Arcadia_Mil_ClassDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* className,
     Arcadia_String* extendedClassName,
     Arcadia_List* classBody

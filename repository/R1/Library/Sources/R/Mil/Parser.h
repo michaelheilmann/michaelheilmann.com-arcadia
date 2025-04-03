@@ -15,8 +15,8 @@
 
 // Last modified: 2024-09-22
 
-#if !defined(R_MIL_PARSER_H_INCLUDED)
-#define R_MIL_PARSER_H_INCLUDED
+#if !defined(ARCADIA_MIL_PARSER_H_INCLUDED)
+#define ARCADIA_MIL_PARSER_H_INCLUDED
 
 #include "R/Include.h"
 #include "R/Mil/Ast.h"
@@ -55,5 +55,5 @@ Arcadia_Mil_Parser_setInput
     Arcadia_Utf8Reader* input
   );
 
-#endif // R_MIL_PARSER_H_INCLUDED
+#endif // ARCADIA_MIL_PARSER_H_INCLUDED
 

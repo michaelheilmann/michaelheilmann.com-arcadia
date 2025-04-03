@@ -75,7 +75,14 @@ typedef struct Approximation {
 /// - If we were decided for either, then result.exponent, result.significand, result.negative accordingly.
 ///   Furthermore, set result.failure to Arcadia_BooleanValue_False.
 /// - If we were not able to decide, set result.failure to Arcadia_BooleanValue_True.
-static inline void fastFlow(Arcadia_Thread* thread, Arcadia_ToReal64_Result* target, Approximation const* source) {
+static inline void
+fastFlow
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ToReal64_Result* target,
+    Approximation const* source
+  )
+{
   Arcadia_Integer64Value e = source->exponent + source->shift;
   // THEOREM
   // 2^-1074 is the least positive value representable by a double.

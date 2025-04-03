@@ -31,7 +31,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
 
 set(MyTestName ${MyProjectName}.R.Tests.Execute)
 
@@ -40,7 +40,7 @@ BeginProduct(${MyTestName} test)
 
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
-list(APPEND ${MyTestName}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
 EndProduct(${MyTestName})
 set_target_properties(${MyTestName} PROPERTIES FOLDER "R")

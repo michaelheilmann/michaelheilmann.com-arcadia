@@ -29,6 +29,7 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
+add_subdirectory(Utf8Tests)
 add_subdirectory(FilePathTests)
 add_subdirectory(ListTests)
 add_subdirectory(MapTests)

@@ -30,7 +30,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
 
 set(MyTestName ${MyProjectName}.Mil.Tests.SemanticalAnalysis)
 
@@ -48,7 +48,7 @@ if (NOT TARGET ${MyTestName})
   list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Pass.h)
   list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Mil/Tests/SemanticalAnalysis/Configure.h)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.R ${MyProjectName}.Arms)
+  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
   EndProduct(${MyTestName})
   target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

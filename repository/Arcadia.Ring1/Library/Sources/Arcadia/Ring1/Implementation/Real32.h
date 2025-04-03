@@ -36,6 +36,7 @@ typedef float Arcadia_Real32Value;
 #define Arcadia_Real32Value_NumberOfBytes (sizeof(float))
 Arcadia_StaticAssert(Arcadia_Real32Value_NumberOfBytes == 4, "Arcadia.Real32Value.NumberOfByes must be 4");
 
+// the number of bits of a float (https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
 #define Arcadia_Real32Value_NumberOfBits (Arcadia_Real32Value_NumberOfBytes * 8)
 
 #define Arcadia_Real32Value_Literal(x) (x##f)
@@ -82,14 +83,17 @@ Rex_declareScalarType(Arcadia_Real32);
 // TODO: Add to documentation.
 #define Arcadia_Real32Value_SignBitsShift (Arcadia_Real32Value_NumberOfExponentBits + Arcadia_Real32Value_NumberOfExplicitSignificandBits)
 
-Arcadia_StaticAssert(Arcadia_Real32Value_NumberOfBits == Arcadia_Real32Value_NumberOfSignBits + Arcadia_Real32Value_NumberOfExponentBits + Arcadia_Real32Value_NumberOfExplicitSignificandBits, "unsupported floating-point format");
+Arcadia_StaticAssert(Arcadia_Real32Value_NumberOfBits ==
+                     Arcadia_Real32Value_NumberOfSignBits +
+                     Arcadia_Real32Value_NumberOfExponentBits +
+                     Arcadia_Real32Value_NumberOfExplicitSignificandBits, "unsupported floating-point format");
 
 // The bits mask for the bits of the significand.
 // TODO: Add to documentation.
 #define Arcadia_Real32Value_SignificandBitsMask (((UINT32_C(1) << Arcadia_Real32Value_NumberOfExplicitSignificandBits) - 1) << Arcadia_Real32Value_SignificandBitsShift)
 // The bits mask for the bits of the exponent.
 // TODO: Add to documentation.
-#define Arcdadia_Real32Value_ExponentBitsMask (((UINT32_C(1) << Arcadia_Real32Value_NumberOfExponentBits) - 1) << Arcadia_Real32Value_ExponentBitsShift)
+#define Arcadia_Real32Value_ExponentBitsMask (((UINT32_C(1) << Arcadia_Real32Value_NumberOfExponentBits) - 1) << Arcadia_Real32Value_ExponentBitsShift)
 // The bits mask for the bits of the sign.
 // TODO: Add to documentation.
 #define Arcadia_Real32Value_SignBitsMask (((UINT32_C(1) << Arcadia_Real32Value_NumberOfSignBits) - 1) << Arcadia_Real32Value_SignBitsShift)

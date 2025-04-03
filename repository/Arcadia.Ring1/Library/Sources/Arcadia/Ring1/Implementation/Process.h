@@ -101,13 +101,13 @@ void
 Arcadia_Thread_pushValue
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* value
+    Arcadia_Value const* value
   );
 
 /// @error Arcadia_Status_ArgumentValueInvalid @a self is a null pointer
 /// @error Arcadia_Status_ArgumentValueInvalid @a coutn is greater than the size of the stack
 void
-Arcadia_Thread_popValue
+Arcadia_Thread_popValues
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue count

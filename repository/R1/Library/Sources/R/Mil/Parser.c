@@ -286,7 +286,7 @@ onOperand
       return operandAst;
     } break;
     case Arcadia_Mil_TokenType_IntegerLiteral: {
-      Arcadia_Mil_OperandAst* operandAst = (Arcadia_Mil_OperandAst*)Arcadia_Mil_IntegerLiteralOperandAst_create(Arcadia_Thread_getProcess(thread), getText(thread, self));
+      Arcadia_Mil_OperandAst* operandAst = (Arcadia_Mil_OperandAst*)Arcadia_Mil_IntegerLiteralOperandAst_create(thread, getText(thread, self));
       next(thread, self);
       return operandAst;
     } break;
@@ -365,7 +365,7 @@ onInvokeExpression
     Arcadia_Thread_jump(thread);
   }
   next(thread, self);
-  Arcadia_Mil_InvokeExpressionAst* invokeExpressionAst = Arcadia_Mil_InvokeExpressionAst_create(Arcadia_Thread_getProcess(thread), calleeAst, operands);
+  Arcadia_Mil_InvokeExpressionAst* invokeExpressionAst = Arcadia_Mil_InvokeExpressionAst_create(thread, calleeAst, operands);
   return invokeExpressionAst;
 }
 
@@ -661,7 +661,7 @@ onStatement
     Arcadia_String* labelName = getText(thread, self);
     next(thread, self);
     onEndOfStatement(thread, self);
-    Arcadia_Mil_JumpStatementAst* statementAst = Arcadia_Mil_JumpStatementAst_create(Arcadia_Thread_getProcess(thread), Arcadia_Mil_JumpStatementAstType_Jump, labelName);
+    Arcadia_Mil_JumpStatementAst* statementAst = Arcadia_Mil_JumpStatementAst_create(thread, Arcadia_Mil_JumpStatementAstType_Jump, labelName);
     return (Arcadia_Mil_StatementAst*)statementAst;
   } else if (is(thread, self, Arcadia_Mil_TokenType_JumpIfTrue)) {
     if (!is(thread, self, Arcadia_Mil_TokenType_Name)) {
@@ -671,7 +671,7 @@ onStatement
     Arcadia_String* labelName = getText(thread, self);
     next(thread, self);
     onEndOfStatement(thread, self);
-    Arcadia_Mil_JumpStatementAst* statementAst = Arcadia_Mil_JumpStatementAst_create(Arcadia_Thread_getProcess(thread), Arcadia_Mil_JumpStatementAstType_JumpIfTrue, labelName);
+    Arcadia_Mil_JumpStatementAst* statementAst = Arcadia_Mil_JumpStatementAst_create(thread, Arcadia_Mil_JumpStatementAstType_JumpIfTrue, labelName);
     return (Arcadia_Mil_StatementAst*)statementAst;
   } else if (is(thread, self, Arcadia_Mil_TokenType_JumpIfFalse)) {
     if (!is(thread, self, Arcadia_Mil_TokenType_Name)) {
@@ -681,7 +681,7 @@ onStatement
     Arcadia_String* labelName = getText(thread, self);
     next(thread, self);
     onEndOfStatement(thread, self);
-    Arcadia_Mil_JumpStatementAst* statementAst = Arcadia_Mil_JumpStatementAst_create(Arcadia_Thread_getProcess(thread), Arcadia_Mil_JumpStatementAstType_JumpIfFalse, labelName);
+    Arcadia_Mil_JumpStatementAst* statementAst = Arcadia_Mil_JumpStatementAst_create(thread, Arcadia_Mil_JumpStatementAstType_JumpIfFalse, labelName);
     return (Arcadia_Mil_StatementAst*)statementAst;
   }
   // return statement
@@ -712,7 +712,7 @@ onStatement
     case Arcadia_Mil_TokenType_EqualsSign: {
       next(thread, self);
       Arcadia_Mil_ExpressionAst* expressionAst = onExpression(thread, self);
-      statementAst = (Arcadia_Mil_StatementAst*)Arcadia_Mil_ExpressionStatementAst_create(Arcadia_Thread_getProcess(thread), nameString, expressionAst);
+      statementAst = (Arcadia_Mil_StatementAst*)Arcadia_Mil_ExpressionStatementAst_create(thread, nameString, expressionAst);
       onEndOfStatement(thread, self);
     } break;
     case Arcadia_Mil_TokenType_Colon: {
@@ -858,7 +858,7 @@ onConstructorDefinition
       Arcadia_Thread_jump(thread);
     }
   }
-  Arcadia_Mil_ConstructorDefinitionAst* constructorDefinitionAst = Arcadia_Mil_ConstructorDefinitionAst_create(Arcadia_Thread_getProcess(thread), nativeName, constructorParameters, constructorBody);
+  Arcadia_Mil_ConstructorDefinitionAst* constructorDefinitionAst = Arcadia_Mil_ConstructorDefinitionAst_create(thread, nativeName, constructorParameters, constructorBody);
   return constructorDefinitionAst;
 }
 
@@ -1028,7 +1028,7 @@ onClassDefinition
   while (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
     next(thread, self);
   }
-  Arcadia_Mil_ClassDefinitionAst* classDefinitionAst = Arcadia_Mil_ClassDefinitionAst_create(Arcadia_Thread_getProcess(thread), className, extendedClassName, classBody);
+  Arcadia_Mil_ClassDefinitionAst* classDefinitionAst = Arcadia_Mil_ClassDefinitionAst_create(thread, className, extendedClassName, classBody);
   return classDefinitionAst;
 }
 

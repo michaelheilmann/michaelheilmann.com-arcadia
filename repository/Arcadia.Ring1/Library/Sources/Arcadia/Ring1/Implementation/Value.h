@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-27
+// Last modified: 2025-01-01
 
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_VALUE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_VALUE_H_INCLUDED
@@ -27,6 +27,7 @@
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 
 #include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
 
 #include "Arcadia/Ring1/Implementation/Integer16.h"
 #include "Arcadia/Ring1/Implementation/Integer32.h"
@@ -46,8 +47,6 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 #include "Arcadia/Ring1/Implementation/Types.h"
-
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
 
 #include "Arcadia/Ring1/Implementation/Void.h"
 
@@ -133,6 +132,9 @@ Arcadia_Value_getTag
     Arcadia_Value const* value
   )
 { return value->tag; }
+
+#define Arcadia_Value_Initializer() \
+  (Arcadia_Value){ .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }
 
 #define Define(Prefix, Suffix, Variable) \
   static inline Prefix##_##Suffix##Value \

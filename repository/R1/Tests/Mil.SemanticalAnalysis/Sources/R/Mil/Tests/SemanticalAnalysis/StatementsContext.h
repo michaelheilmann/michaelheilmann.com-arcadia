@@ -38,7 +38,7 @@ struct Arcadia_Mil_CallableContext {
 Arcadia_Mil_CallableContext*
 Arcadia_Mil_CallableContext_create
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 /// @brief Reset the statements context to is initial state.
@@ -47,41 +47,41 @@ Arcadia_Mil_CallableContext_create
 void
 Arcadia_Mil_CallableContext_onReset
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_CallableContext* self
   );
 
 /// @brief Add an entry name -> ast.
-/// @param process A pointer to this process.
+/// @param thread A pointer to this thread.
 /// @param self A pointer to this context.
 /// @error Arcadia_Status_SemanticalError an entry with the specified name already exists
 void
 Arcadia_Mil_CallableContext_onDefineLabel
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_CallableContext* self,
     Arcadia_String* name,
     Arcadia_Mil_LabelStatementAst* ast,
     Arcadia_Natural32Value instructionIndex
   );
 
-/// @param process A pointer to this process.
+/// @param thread A pointer to this thread.
 /// @param self A pointer to this context.
 void
 Arcadia_Mil_CallableContext_onParameterVariableDefinition
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_CallableContext* self,
     Arcadia_String* name,
     Arcadia_Mil_Ast* ast
   );
 
-/// @param process A pointer to this process.
+/// @param thread A pointer to this thread.
 /// @param self A pointer to this context.
 void
 Arcadia_Mil_CallableContext_onLocalVariableDefinition
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_CallableContext* self,
     Arcadia_String* name,
     Arcadia_Mil_VariableDefinitionStatementAst* ast

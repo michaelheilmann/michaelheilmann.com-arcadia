@@ -99,13 +99,12 @@ Arcadia_Mil_IntegerLiteralOperandAst_visit
 Arcadia_Mil_IntegerLiteralOperandAst*
 Arcadia_Mil_IntegerLiteralOperandAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* value
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)value } };
-  Arcadia_Mil_IntegerLiteralOperandAst* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Arcadia_Mil_IntegerLiteralOperandAst_getType(thread), 1, &argumentValues[0]);
+  Arcadia_Mil_IntegerLiteralOperandAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_IntegerLiteralOperandAst_getType(thread), 1, &argumentValues[0]);
   return self;
 }
 

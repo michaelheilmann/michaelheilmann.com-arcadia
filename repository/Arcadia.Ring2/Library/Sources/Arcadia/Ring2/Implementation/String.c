@@ -18,7 +18,6 @@
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/String.h"
 
-#include "R/Convert/Include.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 #include "Arcadia/Ring2/Implementation/StringBuffer.h"
 
@@ -758,7 +757,7 @@ Arcadia_String_toReal32
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return R_toReal32(thread, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self)); }
+{ return Arcadia_toReal32(thread, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self)); }
 
 Arcadia_Real64Value
 Arcadia_String_toReal64
@@ -766,7 +765,7 @@ Arcadia_String_toReal64
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return R_toReal64(thread, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self)); }
+{ return Arcadia_toReal64(thread, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self)); }
 
 Arcadia_VoidValue
 Arcadia_String_toVoid

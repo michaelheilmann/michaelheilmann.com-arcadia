@@ -112,13 +112,12 @@ Arcadia_Mil_ClassDefinitionAst_visit
 Arcadia_Mil_ClassDefinitionAst*
 Arcadia_Mil_ClassDefinitionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* className,
     Arcadia_String* extendedClassName,
     Arcadia_List* classBody
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = {
     {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = className },
     {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void },
@@ -127,7 +126,7 @@ Arcadia_Mil_ClassDefinitionAst_create
   if (extendedClassName) {
     Arcadia_Value_setObjectReferenceValue(&argumentValues[1], extendedClassName);
   }
-  Arcadia_Mil_ClassDefinitionAst* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Arcadia_Mil_ClassDefinitionAst_getType(thread), 3, &argumentValues[0]);
+  Arcadia_Mil_ClassDefinitionAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_ClassDefinitionAst_getType(thread), 3, &argumentValues[0]);
   return self;
 }
 

@@ -310,7 +310,8 @@ R_Interpreter_Code_Constants_getOrCreateVoid
     Arcadia_VoidValue voidValue
   )
 {
-  Arcadia_Value const constant = { .tag = Arcadia_ValueTag_Void, .voidValue = voidValue };
+  Arcadia_Value constant = Arcadia_Value_Initializer();
+  Arcadia_Value_setVoidValue(&constant, Arcadia_VoidValue_Void);
   return getOrCreate(thread, self, &constant);
 }
 

@@ -41,7 +41,7 @@ struct Arcadia_Mil_InvokeExpressionAst {
 Arcadia_Mil_InvokeExpressionAst*
 Arcadia_Mil_InvokeExpressionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_VariableOperandAst* callee,
     Arcadia_List* operands
   );

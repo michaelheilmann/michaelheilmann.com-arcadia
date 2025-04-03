@@ -124,7 +124,7 @@ Approximation_fromNumeral
     Arcadia_SizeValue n
   )
 {
-  target->negative = source->significand.sign.length ? '-' == p[source->significand.sign.start] : false;
+  target->negative = source->significand.sign.length ? '-' == p[source->significand.sign.start] : Arcadia_BooleanValue_False;
   target->significand = Arcadia_NumberLiteral_approximateSignificand(thread, source, p, &target->shift, &target->significandTruncated);
   target->exponent = Arcadia_NumberLiteral_approximateExponent(thread, source, p, &target->exponentTruncated);
 }

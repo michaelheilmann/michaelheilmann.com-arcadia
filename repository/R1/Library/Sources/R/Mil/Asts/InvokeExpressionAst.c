@@ -81,7 +81,7 @@ Arcadia_Mil_InvokeExpressionAst_constructImpl
   Arcadia_Mil_InvokeExpressionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_InvokeExpressionAst_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { { .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+    Arcadia_Value argumentValues[] = { Arcadia_Value_Initializer() };
     Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
@@ -107,15 +107,14 @@ Arcadia_Mil_InvokeExpressionAst_visit
 Arcadia_Mil_InvokeExpressionAst*
 Arcadia_Mil_InvokeExpressionAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_VariableOperandAst* callee,
     Arcadia_List* operands
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)callee },
                                {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)operands }, };
-  Arcadia_Mil_InvokeExpressionAst* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Arcadia_Mil_InvokeExpressionAst_getType(thread), 2, &argumentValues[0]);
+  Arcadia_Mil_InvokeExpressionAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_InvokeExpressionAst_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 

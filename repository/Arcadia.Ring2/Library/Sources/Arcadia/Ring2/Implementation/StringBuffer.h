@@ -96,7 +96,7 @@ Arcadia_StringBuffer_append_pn
 
 /// @brief Append Bytes to this string buffer.
 /// @param value The Bytes.
-/// Either R.ByteBuffer, Arcadia.StringBuffer, or Arcadia.String.
+/// Either Arcadia.ByteBuffer, Arcadia.StringBuffer, or Arcadia.String.
 void
 Arcadia_StringBuffer_append
   (

@@ -228,7 +228,7 @@ Arcadia_Utf8ByteBufferReader_constructImpl
   Arcadia_Utf8ByteBufferReader* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Utf8ByteBufferReader_getType(thread);
   {
-    Arcadia_Value argumentValues[] =  { { .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
+    Arcadia_Value argumentValues[] =  { Arcadia_Value_Initializer() };
     Rex_superTypeConstructor(thread, _type, self, 0, & argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {

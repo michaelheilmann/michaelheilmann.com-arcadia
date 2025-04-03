@@ -42,7 +42,7 @@ struct Arcadia_Mil_ExpressionStatementAst {
 Arcadia_Mil_ExpressionStatementAst*
 Arcadia_Mil_ExpressionStatementAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* targetVariableName,
     Arcadia_Mil_ExpressionAst* expression
   );
@@ -53,6 +53,7 @@ Arcadia_Mil_ExpressionStatementAst_create
 Arcadia_String*
 Arcadia_Mil_ExpressionStatementAst_getTargetVariableName
   (
+    Arcadia_Thread* thread,
     Arcadia_Mil_ExpressionStatementAst* self
   );
 
@@ -62,6 +63,7 @@ Arcadia_Mil_ExpressionStatementAst_getTargetVariableName
 Arcadia_Mil_ExpressionAst*
 Arcadia_Mil_ExpressionStatementAst_getExpression
   (
+    Arcadia_Thread* thread,
     Arcadia_Mil_ExpressionStatementAst* self
   );
 

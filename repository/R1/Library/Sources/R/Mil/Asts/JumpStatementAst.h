@@ -57,7 +57,7 @@ struct Arcadia_Mil_JumpStatementAst {
 Arcadia_Mil_JumpStatementAst*
 Arcadia_Mil_JumpStatementAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Mil_JumpStatementAstType type,
     Arcadia_String* labelName
   );

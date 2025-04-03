@@ -94,6 +94,13 @@ Arcadia_FilePath_parseNative
     Arcadia_SizeValue numberOfBytes
   );
 
+Arcadia_String*
+Arcadia_FilePath_toNative
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  );
+
 // Parse a Generic file path.
 Arcadia_FilePath*
 Arcadia_FilePath_parseGeneric
@@ -104,7 +111,7 @@ Arcadia_FilePath_parseGeneric
   );
 
 Arcadia_String*
-Arcadia_FilePath_toNative
+Arcadia_FilePath_toGeneric
   (
     Arcadia_Thread* thread,
     Arcadia_FilePath* self

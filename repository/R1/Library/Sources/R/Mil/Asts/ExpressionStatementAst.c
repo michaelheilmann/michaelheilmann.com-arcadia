@@ -107,21 +107,21 @@ Arcadia_Mil_ExpressionStatementAst_visit
 Arcadia_Mil_ExpressionStatementAst*
 Arcadia_Mil_ExpressionStatementAst_create
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_String* targetVariableName,
     Arcadia_Mil_ExpressionAst* expression
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)targetVariableName },
                                {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)expression } };
-  Arcadia_Mil_ExpressionStatementAst* self = Arcadia_allocateObject(Arcadia_Process_getThread(process), _Arcadia_Mil_ExpressionStatementAst_getType(thread), 2, &argumentValues[0]);
+  Arcadia_Mil_ExpressionStatementAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_ExpressionStatementAst_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
 Arcadia_String*
 Arcadia_Mil_ExpressionStatementAst_getTargetVariableName
   (
+    Arcadia_Thread* thread,
     Arcadia_Mil_ExpressionStatementAst* self
   )
 { return self->targetVariableName; }
@@ -129,6 +129,7 @@ Arcadia_Mil_ExpressionStatementAst_getTargetVariableName
 Arcadia_Mil_ExpressionAst*
 Arcadia_Mil_ExpressionStatementAst_getExpression
   (
+    Arcadia_Thread* thread,
     Arcadia_Mil_ExpressionStatementAst* self
   )
 { return self->expression; }

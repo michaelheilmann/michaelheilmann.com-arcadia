@@ -142,6 +142,13 @@ recursionGuard
   for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, context->files); i < n; ++i) {
     Arcadia_FilePath* p = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueAt(thread, context->files, i);
     if (Arcadia_FilePath_isEqualTo(thread, p, path)) {
+      Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, p);
+      Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+      Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)ps };
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"recursive include of file `", sizeof(u8"recursive include of file `") - 1);
+      Arcadia_StringBuffer_append(thread, sb, v);
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"`\0", sizeof(u8"`\0") - 1);
+      fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
@@ -162,7 +169,23 @@ Context_onRun
     Arcadia_Stack_pop(thread, context->stack);
     Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_Value_getObjectReferenceValue(&elementValue);
     FileContext* fileContext = FileContext_create(thread, context, filePath);
-    Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, fileContext->sourceFilePath);
+    Arcadia_ByteBuffer* sourceByteBuffer = NULL;
+    Arcadia_JumpTarget jumpTarget;
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      sourceByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, fileContext->sourceFilePath);
+      Arcadia_Thread_popJumpTarget(thread);
+    } else {
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, filePath);
+      Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+      Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)ps };
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"failed to read file `", sizeof(u8"failed to read file `") - 1);
+      Arcadia_StringBuffer_append(thread, sb, v);
+      Arcadia_StringBuffer_append_pn(thread, sb, u8"`\0", sizeof(u8"`\0") - 1);
+      fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+      Arcadia_Thread_jump(thread);
+    }
     fileContext->source = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
     recursionGuard(thread, context, filePath);
     FileContext_execute(thread, fileContext);

@@ -30,7 +30,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.R "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
 
 set(MyLibraryName ${MyProjectName}.Tools.TemplateEngineLibrary)
 if (NOT TARGET ${MyLibraryName})
@@ -44,7 +44,7 @@ if (NOT TARGET ${MyLibraryName})
     list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/FileContext.h)
     list(APPEND ${MyLibraryName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/TemplateEngine/Configure.h)
 
-    list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.R ${MyProjectName}.Arms)
+    list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
 
     EndProduct(${MyLibraryName})
     set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Tools/TemplateEngine")

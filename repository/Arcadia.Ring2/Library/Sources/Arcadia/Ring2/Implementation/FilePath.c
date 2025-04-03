@@ -527,7 +527,7 @@ Arcadia_FilePath_parseWindows
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
-  Arcadia_Value argumentValues[] = { { .tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { Arcadia_Value_Initializer() };
   Arcadia_FilePath* self = Arcadia_allocateObject(thread, _type, 0, &argumentValues[0]);
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
@@ -578,29 +578,6 @@ Arcadia_FilePath_parseNative
 #else
   #error("operating system not (yet) supported")
 #endif
-}
-
-Arcadia_FilePath*
-Arcadia_FilePath_parseGeneric
-  (
-    Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-{
-  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
-  Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  Arcadia_FilePath* self = Arcadia_allocateObject(thread, _type, 0, &argumentValues[0]);
-  self->fileNames = NULL;
-  self->relative = Arcadia_BooleanValue_False;
-  self->root = NULL;
-  self->fileNames = Arcadia_List_create(thread);
-  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
-  parseGenericFilePath(process, self, byteBuffer);
-  normalize(process, self);
-  return self;
 }
 
 Arcadia_String*
@@ -681,6 +658,65 @@ Arcadia_FilePath_toNative
 #endif
 }
 
+Arcadia_FilePath*
+Arcadia_FilePath_parseGeneric
+  (
+    Arcadia_Thread* thread,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
+{
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
+  Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
+  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_FilePath* self = Arcadia_allocateObject(thread, _type, 0, &argumentValues[0]);
+  self->fileNames = NULL;
+  self->relative = Arcadia_BooleanValue_False;
+  self->root = NULL;
+  self->fileNames = Arcadia_List_create(thread);
+  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
+  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
+  parseGenericFilePath(process, self, byteBuffer);
+  normalize(process, self);
+  return self;
+}
+
+Arcadia_String*
+Arcadia_FilePath_toGeneric
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  )
+{
+  Arcadia_ByteBuffer* temporaryBuffer = Arcadia_ByteBuffer_create(thread);
+  Arcadia_Utf8Writer* temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, temporaryBuffer);
+  Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, self->fileNames);
+  if (self->root) {
+    Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, self->root), Arcadia_String_getNumberOfBytes(thread, self->root));
+  }
+  if (n > 0) {
+    Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, 0);
+    Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
+    Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
+    i++;
+
+    for (; i < n; ++i) {
+      Arcadia_Natural32Value x;
+      x = '/';
+      Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+
+      Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, i);
+      Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
+      Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
+    }
+  }
+  Arcadia_Natural32Value x = '\0';
+  Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+  Arcadia_Value temporaryValue;
+  Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
+  return Arcadia_String_create(thread, temporaryValue);
+}
+
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #define WIN32_LEAN_AND_MEAN
   #include <Windows.h> // for GetFullPathName
@@ -751,8 +787,10 @@ Arcadia_FilePath_isEqualTo
     return Arcadia_BooleanValue_False;
   }
   if (self->root != NULL) {
-    Arcadia_Value args[2] = { { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self->root },
-                              { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = other->root } };
+    Arcadia_Value args[2] = { Arcadia_Value_Initializer(),
+                              Arcadia_Value_Initializer() };
+    Arcadia_Value_setObjectReferenceValue(&args[0], self->root);
+    Arcadia_Value_setObjectReferenceValue(&args[1], other->root);
     if (!Arcadia_Value_isEqualTo(thread, &args[0], &args[1])) {
       return Arcadia_BooleanValue_False;
     }
