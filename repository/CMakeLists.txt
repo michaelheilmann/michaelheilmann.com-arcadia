@@ -33,7 +33,7 @@ endif()
 add_subdirectory(Arms1)
 add_subdirectory(Arcadia.Ring1)
 add_subdirectory(Arcadia.Ring2)
-add_subdirectory(R1)
+add_subdirectory(Arcadia.Machine)
 
 add_subdirectory(Integrations)
 

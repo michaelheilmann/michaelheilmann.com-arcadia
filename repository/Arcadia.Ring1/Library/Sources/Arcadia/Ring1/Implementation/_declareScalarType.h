@@ -25,7 +25,7 @@ typedef struct Arcadia_Process Arcadia_Process;
 typedef void Arcadia_Type;
 typedef Arcadia_Type* Arcadia_TypeValue;
 
-#define Rex_declareScalarType(cName) \
+#define Arcadia_declareScalarType(cName) \
   Arcadia_TypeValue \
   _##cName##Value_getType \
     ( \

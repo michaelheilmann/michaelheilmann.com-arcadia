@@ -39,7 +39,7 @@ Arcadia_StaticAssert(Arcadia_Integer64Value_NumberOfBytes == 8, "Arcadia.Integer
 
 #define Arcadia_Integer64Value_Literal(x) INT64_C(x)
 
-Rex_declareScalarType(Arcadia_Integer64);
+Arcadia_declareScalarType(Arcadia_Integer64);
 
 /// The minimum value of an Arcadia.Integer64Value is -9 223 372 036 854 775 808,
 /// the maximum value of an Arcadia.Integer64Value is +9 223 372 036 854 775 807.

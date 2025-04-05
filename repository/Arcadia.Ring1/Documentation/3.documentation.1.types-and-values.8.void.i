@@ -1,26 +1,42 @@
-<h3 id="Arcadia_VoidValue">3.1.8. Arcadia_VoidValue</h3>
-<p>
-Arcadia Ring 1 provides a void type.
-</p>
-<p><code>
-typedef <my-mv>implementation detail</my-mv> Arcadia_VoidValue
-</code></p>
-<p>
-The only value of this type is <code>Arcadia_VoidValue_Void</code>.
-Arcadia_VoidValue is an unsigned integral type.
-</p>
+<h3 id="Arcadia_VoidValue">Arcadia_VoidValue</h3>
 
-<p><code>
-#define Arcadia_VoidValue_Void <my-mv>implementation detail</my-mv>
-</code><p>
-<p>The single value of the type.</p>
+  <my-signature><code>
+  typedef <my-mv>implementation detail</my-mv> Arcadia_VoidValue
+  </code></my-signature>
+  
+  <my-summary>
+  The only value of this type is <code>Arcadia_VoidValue_Void</code>.
+  Arcadia_VoidValue is an unsigned integral type.
+  </my-summary>
 
-<p><code>
-#define Arcadia_VoidValue_NumberOfBits <my-mv>implementation detail</my-mv>
-</code><p>
-<p>denotes the number of Bits of the type.</p>
+<h3 id="Arcadia_VoidValue_Void">Arcadia_VoidValue_Void</h3>
 
-<p><code>
-#define Arcadia_VoidValue_NumberOfBytes <my-mv>implementation detail</my-mv>
-</code><p>
-<p>denotes the number of Bytes of the type which is usually <code>Arcadia_VoidValue_NumberOfBits</code> divided by 8.</p>
+  <my-signature><code>
+  #define Arcadia_VoidValue_Void <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  The single value of the type <code>Arcadia_VoidValue</code>.
+  </my-summary>
+
+<h3 id="Arcadia_VoidValue_NumberOfBits">Arcadia_VoidValue_NumberOfBits</h3>
+
+  <my-signature><code>
+  #define Arcadia_VoidValue_NumberOfBits <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  The number of Bits of a value of the type <code>Arcadia_VoidValue</code> occupies.
+  This is a positive multiple of 8.
+  </my-summary>
+
+<h3 id="Arcadia_VoidValue_NumberOfBytes">Arcadia_VoidValue_NumberOfBytes</h3>
+
+  <my-signature><code>
+  #define Arcadia_VoidValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  The number of Bytes a value of the type <code>Arcadia_VoidValue</code> occupies.
+  The value is always equal to <code>Arcadia_VoidValue</code> divided by 8.
+  </my-summary>

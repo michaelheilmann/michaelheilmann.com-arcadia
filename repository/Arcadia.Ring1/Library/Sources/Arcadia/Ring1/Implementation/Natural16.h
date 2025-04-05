@@ -40,7 +40,7 @@ Arcadia_StaticAssert(Arcadia_Natural16Value_NumberOfBytes == 2, "Arcadia.Natural
 
 #define Arcadia_Natural16Value_Literal(x) UINT16_C(x)
 
-Rex_declareScalarType(Arcadia_Natural16);
+Arcadia_declareScalarType(Arcadia_Natural16);
 
 // The maximum number of decimal digits which can safely be stored in an Arcadia.Natural16 value.
 // The maximum value of an Arcadia.Natural16Value is Arcadia_Natural16Value_Maximum = 65 535.

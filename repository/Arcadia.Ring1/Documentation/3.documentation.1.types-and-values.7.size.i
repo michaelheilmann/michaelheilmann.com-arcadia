@@ -1,32 +1,63 @@
-<h3 id="Arcadia_SizeValue">3.1.7. Size Type</h3>
-<p>
-Arcadia Ring 1 provides an alias for builtin <code>size_t</code> type.
-</p>
-<p><code>
-typedef <my-mv>implementation detail</my-mv> Arcadia_SizeValue
-</code></p>
+<h3 id="Arcadia_SizeValue">Size Type</h3>
 
-<p><code>
-#define Arcadia_SizeValue_NumberOfBits <my-mv>implementation detail</my-mv>
-</code><p>
-<p>
-denotes the number of Bits of the type.
-<b>
-This number must one of 32 or 64, otherwise the environment is not supported by <em>Arcadia Ring 1</em>.
-This restriction may be relaxed in future versions of <em>Arcadia Ring 1</em>.
-</b></p>
+  <my-signature><code>
+  typedef <my-mv>implementation detail</my-mv> Arcadia_SizeValue
+  </code></my-signature>
 
-<p><code>
-#define Arcadia_SizeValue_NumberOfBytes <my-mv>implementation detail</my-mv>
-</code><p>
-<p>denotes the number of Bytes of the type which is usually <code>Arcadia_SizeValue_NumberOfBits</code> divided by 8.</p>
+  <my-summary>
+  An alias for the builtin <code>size_t</code> type.
+  </my-summary>
+  
+<h3 id="Arcadia_SizeValue_NumberOfBits">Arcadia_SizeValue_NumberOfBits</h3>
 
-<p><code>
-#define Arcadia_SizeValue_Minimum <my-mv>implementation detail</my-mv>
-</code><p>
-<p>denotes the least value (in terms of its magnitude) representable by a the <code>Arcadia_Size</code> type.</p>
+  <my-signature><code>
+  #define Arcadia_SizeValue_NumberOfBits <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  The number of Bits of a value of the type <code>Arcadia_SizeValue</code> occupies.
+  This is a positive multiple of 8.
+  This number must one of 32 or 64, otherwise the environment is not supported by <em>Arcadia Ring 1</em>.
+  This restriction may be relaxed in future versions of <em>Arcadia Ring 1</em>.
+  </my-summary>
 
-<p><code>
-#define Arcadia_SizeValue_Literal(x) <my-mv>implementation detail</my-mv>
-</code><p>
-<p>is used to write a literal of type <code>Arcadia_SizeValue</code> in C source code.</p>
+<h3 id="Arcadia_SizeValue_NumberOfBytes">Arcadia_SizeValue_NumberOfBytes</h3>
+
+  <my-signature><code>
+  #define Arcadia_SizeValue_NumberOfBytes <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  The number of Bytes a value of the type <code>Arcadia_SizeValue</code> occupies.
+  The value is always equal to <code>Arcadia_SizeValue</code> divided by 8.
+  </my-summary>
+
+<h3 id="Arcadia_SizeValue_Minimum">Arcadia_SizeValue_Minimum</h3>
+
+  <my-signature><code>
+  #define Arcadia_SizeValue_Minimum <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-signature>
+  The least value representable by a the <code>Arcadia_SizeValue</code> type.
+  </my-signature>
+
+<h3 id="Arcadia_SizeValue_Maximum">Arcadia_SizeValue_Maximum</h3>
+
+  <my-signature><code>
+  #define Arcadia_SizeValue_Maximum <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  The greatest value representable by a the <code>Arcadia_SizeValue</code> type.
+  </my-summary>
+
+<h3 id="Arcadia_SizeValue_Maximum">Arcadia_SizeValue_Maximum</h3>
+
+  <my-signature><code>
+  #define Arcadia_SizeValue_Literal(x) <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  Macro used to write a literal of the type <code>Arcadia_SizeValue</code> in C source code.
+  </my-summary>

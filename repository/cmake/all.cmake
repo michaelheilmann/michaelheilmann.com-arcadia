@@ -120,7 +120,7 @@ macro(FetchProduct target directory help)
   endif()
 endmacro()
 
-macro(CopyProductAssets target sourceDirectory targetDirectory)
+macro(CopyProductAssets target folder sourceDirectory targetDirectory)
  #message(STATUS "=> target directory ${targetDirectory}")
  file(GLOB_RECURSE sourceFiles RELATIVE ${sourceDirectory} "${sourceDirectory}/*")
  set(targetFiles "")
@@ -141,6 +141,6 @@ macro(CopyProductAssets target sourceDirectory targetDirectory)
  endforeach()
 
  add_custom_target(${target} ALL DEPENDS ${targetFiles})
- set_target_properties(${target} PROPERTIES FOLDER "R")
+ set_target_properties(${target} PROPERTIES FOLDER ${folder})
 
 endmacro()

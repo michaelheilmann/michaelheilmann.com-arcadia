@@ -44,6 +44,6 @@ typedef Arcadia_ForeignProcedure* Arcadia_ForeignProcedureValue;
 
 #define Arcadia_ForeignProcedureValue_NumberOfBits (Arcadia_ForeignProcedureValue_NumberOfBytes * 8)
 
-Rex_declareScalarType(Arcadia_ForeignProcedure);
+Arcadia_declareScalarType(Arcadia_ForeignProcedure);
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_FOREIGNPROCEDURE_H_INCLUDED

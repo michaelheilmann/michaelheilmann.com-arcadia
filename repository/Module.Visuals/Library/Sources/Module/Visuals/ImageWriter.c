@@ -112,7 +112,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 ImageWriter_constructImpl
@@ -127,7 +127,7 @@ ImageWriter_constructImpl
   Arcadia_TypeValue _type = _ImageWriter_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->writeBmpToByteBuffer = NULL;
   _self->writeBmpToPath = NULL;

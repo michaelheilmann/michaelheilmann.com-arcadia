@@ -1,26 +1,36 @@
-<h4 id="Arcadia_Real*Value_getBits">Arcadia_Real*Value_getBits</h4>
-<p>Get the bits of a Real value.</p>
-<p><code>
-Arcadia_Natural<my-mv>Bits</my-mv>
-Arcadia_Real<my-mv>Bits</my-mv>Value_getBits
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Real<my-mv>Bits</my-mv>Value self
-  )
-</code></p>
-<p>The following table lists the value of <my-mv>Bits</my-mv> for which functions are defined</p>
+<section class="cxx entity procedure">
 
-<table>
-<tr><td><my-mv>Bits</my-mv></td></tr>
-<tr><td><code>32</code></td></tr>
-<tr><td><code>64</code></td></tr>
-</table>
+  <h1 id="Arcadia_Real*Value_getBits">Arcadia_Real*Value_getBits</h1>
 
-<h5>Parameters</h5>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_Real<my-mv>Bits</my-mv> self</td><td>The Real value.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_Natural<my-mv>Bits</my-mv><br>
+  Arcadia_Real<my-mv>Bits</my-mv>Value_getBits<br>
+    (<br>
+      Arcadia_Thread* thread,<br>
+      Arcadia_Real<my-mv>Bits</my-mv>Value self<br>
+    )
+  </code></my-signature>
 
-<h5>Return value</h5>
-<p>Return the bits of the Real value as a Natural value.</p>
+  <my-summary>
+  Get the bits of an <code>Arcadia_Real<my-mv>Suffix</my-mv>Value</code>
+  where <my-mv>Suffix</my-mv> denotes the number of Bits of the type and can be one of <code>32</code> or <code>64</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_Real<my-mv>Bits</my-mv> self</div>
+      <div>The Real value.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>Return the bits of the Real value as a Natural value.</p>
+  </section>
+
+</section>

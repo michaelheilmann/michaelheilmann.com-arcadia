@@ -1,52 +1,77 @@
-<h3 id="Arcadia_Real*Value">
-3.1.6. Arcadia_Real*Value
-</h3>
-<p>
-Arcadia Ring 1 provides IEEE754 real number types.
-</p>
-<p><code>
-typedef <my-mv>implementation detail</my-mv> Arcadia_Real<my-mv>Suffix</my-mv>Value
-</code></p>
-<p>
-where <my-mv>Suffix</my-mv> denotes the number of Bits of the integer and can be one of
-<code>32</code> or <code>64</code>.
-</p>
+<h3 id="Arcadia_Real*Value">Arcadia_Real*Value</h3>
 
-<p>The macros in this section all include the <my-mv>Suffix</my-mv> metavariable and are defined for the
-values <code>32</code> and <code>64</code>.</p>
+  <my-signature><code>
+  typedef <my-mv>implementation detail</my-mv> Arcadia_Real<my-mv>Suffix</my-mv>Value
+  </code></my-signature>
 
-<p><code>
-#define Arcadia_Real<my-mv>Suffix</my-mv>Value_NumberOfBits <my-mv>implementation detail</my-mv>
-</code><p>
-<p>denotes the number of Bits of the type. The value is always equal to the value of the respective <my-mv>Suffix</my-mv>.</p>
+  <my-summary>
+  IEEE 754 binary real number type where <my-mv>Suffix</my-mv> denotes the number of Bits of the type and can be one of <code>32</code> or <code>64</code>.
+  </my-summary>
+  
+<h3 id="Arcadia_Real*Value_NumberOfBits">Arcadia_Real*Value_NumberOfBits</h3>
 
-<p><code>
-#define Arcadia_Real<my-mv>Suffix</my-mv>Value_NumberOfBytes <my-mv>implementation detail</my-mv>
-</code><p>
-<p>denotes the number of Bytes of the type which is usually <code>Arcadia_Real<my-mv>Suffix</my-mv>Value_NumberOfBits</code> divided by 8.</p>
+  <p>The macros in this section all include the <my-mv>Suffix</my-mv> metavariable and are defined for the
+  values <code>32</code> and <code>64</code>.</p>
 
-<p><code>
-#define Arcadia_Real<my-mv>Suffix</my-mv>Value_Minimum <my-mv>implementation detail</my-mv>
-</code><p>
-<p>denotes the least value (in terms of its magnitude) representable by a the <code>Arcadia_Real<my-mv>Suffix</my-mv>Value</code> type.
-The following table denotes the value of the constant for the respective <code><my-mv>Suffix</my-mv></code>
-</p>
-<table>
-<tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
-<tr><td>32                   </td><td><code>-FLT_MAX</code></td></tr>
-<tr><td>64                   </td><td><code>-DBL_MAX</code></td></tr>
-</table>
+  <my-signature><code>
+  #define Arcadia_Real<my-mv>Suffix</my-mv>Value_NumberOfBits <my-mv>implementation detail</my-mv>
+  </code></my-signature>
 
-<p><code>
-#define Arcadia_Real<my-mv>Suffix</my-mv>Value_Maximum <my-mv>implementation detail</my-mv>
-</code><p>
-<p>denotes the greatest value (in terms of its magnitude) representable by a the <code>Arcadia_Real<span>Suffix</span>Value</code> type.
-The following table denotes the value of the constant for the respective <code><span>Suffix</span></code>
-</p>
-<table>
-<tr><td><code><span>Constant</span></code></td><td>Value</td></tr>
-<tr><td>32                                </td><td><code>+FLT_MAX</code></td></tr>
-<tr><td>64                                </td><td><code>+DBL_MAX</code></td></tr>
-</table>
+  <my-summary>
+  The number of Bits of a value of the type <code>Arcadia_VoidValue</code> occupies
+  where <my-mv>Suffix</my-mv> denotes the number of Bits of the type and can be one of <code>32</code> or <code>64</code>.
+  This is a positive multiple of 8.
+  </my-summary>
+
+<h3 id="Arcadia_Real*Value_NumberOfBytes">Arcadia_Real*Value_NumberOfBytes</h3>
+
+  <my-signature><code>
+  #define Arcadia_Real<my-mv>Suffix</my-mv>Value_NumberOfBytes <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+
+  <my-summary>
+  The number of Bytes a value of the type <code>Arcadia_Real<my-mv>Suffix</my-mv>Value</code> occupies
+  where <my-mv>Suffix</my-mv> denotes the number of Bits of the type and can be one of <code>32</code> or <code>64</code>.
+  The value is always equal to <code>Arcadia_Real<my-mv>Suffix</my-mv>Value_NumberOfBits</code> divided by 8.
+  </my-summary>
+
+<h3 id="Arcadia_Real*Value_Minimum">Arcadia_Real*Value_Minimum</h3>
+
+  <my-signature><code>
+  #define Arcadia_Real<my-mv>Suffix</my-mv>Value_Minimum <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  The least value representable by a the <code>Arcadia_Real<my-mv>Suffix</my-mv>Value</code> type
+  where <my-mv>Suffix</my-mv> denotes the number of Bits of the type and can be one of <code>32</code> or <code>64</code>.
+  </my->summary>
+  
+  <p>
+  The following table denotes the value of the constant for the respective <code><my-mv>Suffix</my-mv></code>
+  </p>
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td>Value</td></tr>
+  <tr><td>32                   </td><td><code>-FLT_MAX</code></td></tr>
+  <tr><td>64                   </td><td><code>-DBL_MAX</code></td></tr>
+  </table>
+
+<h3 id="Arcadia_Real*Value_Maximum">Arcadia_Real*Value_Maximum</h3>
+
+  <my-signature><code>
+  #define Arcadia_Real<my-mv>Suffix</my-mv>Value_Maximum <my-mv>implementation detail</my-mv>
+  </code></my-signature>
+  
+  <my-summary>
+  The greatest value representable by a the <code>Arcadia_Real<my-mv>Suffix</my-mv>Value</code> type.
+  </my-summary>
+  
+  <p>
+  The following table denotes the value of the constant for the respective <code><span>Suffix</span></code>
+  </p>
+  <table>
+  <tr><td><code><span>Constant</span></code></td><td>Value</td></tr>
+  <tr><td>32                                </td><td><code>+FLT_MAX</code></td></tr>
+  <tr><td>64                                </td><td><code>+DBL_MAX</code></td></tr>
+  </table>
 
 @{include("./3.documentation.1.types-and-values.6.real/getBits.i")}

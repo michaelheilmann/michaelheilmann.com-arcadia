@@ -155,6 +155,9 @@ if (NOT TARGET ${MyLibrary})
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Diagnostics.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Diagnostics.h)
 
+  list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Enumeration.c)
+  list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Enumeration.h)
+
   list(APPEND ${MyLibrary}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/ForeignProcedure.c)
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/ForeignProcedure.h)
 
@@ -293,6 +296,6 @@ if (NOT TARGET ${MyLibrary})
   endif()
 
   EndProduct(${MyLibrary})
-  set_target_properties(${MyLibrary} PROPERTIES FOLDER "Arcadia")
+  set_target_properties(${MyLibrary} PROPERTIES FOLDER "Arcadia.Ring1")
 
 endif()

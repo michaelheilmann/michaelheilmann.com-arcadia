@@ -29,14 +29,14 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-set(MyModule Module.Audials)
+set(MyModule ${MyProjectName}.Audials)
 
 if (NOT TARGET ${MyModule})
   BeginProduct(${MyModule} library)
 
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows})
     FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-    FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
+    FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Audials/Configure.h @ONLY)
 
@@ -44,9 +44,11 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Include.h)
     list(APPEND ${MyModule}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Audials/Configure.h)
 
-    list(APPEND ${MyModule}.Libraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
+    list(APPEND ${MyModule}.Libraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
 
     EndProduct(${MyModule})
+
+    set_target_properties(${MyModule} PROPERTIES FOLDER "Arcadia.Modules")
 
   endif()
 

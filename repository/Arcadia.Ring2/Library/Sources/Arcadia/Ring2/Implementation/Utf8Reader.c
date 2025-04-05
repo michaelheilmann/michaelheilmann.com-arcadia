@@ -56,7 +56,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 Arcadia_Utf8Reader_constructorImpl
@@ -71,7 +71,7 @@ Arcadia_Utf8Reader_constructorImpl
   Arcadia_TypeValue _type = _Arcadia_Utf8Reader_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->getCodePoint = NULL;
   _self->hasCodePoint = NULL;

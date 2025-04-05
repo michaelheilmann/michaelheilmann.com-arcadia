@@ -94,6 +94,6 @@ if (NOT TARGET ${MyLibraryName})
   endif()
 
   EndProduct(${MyLibraryName})
-  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Arcadia")
+  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Arcadia.Ring2")
 
 endif()

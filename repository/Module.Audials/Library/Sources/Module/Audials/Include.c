@@ -111,7 +111,7 @@ static const double PI = 3.14159265358979323846;
 
 #include <math.h>
 
-Rex_declareObjectType(u8"Audials.Xaudio2.Source", Source, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Audials.Xaudio2.Source", Source, u8"Arcadia.Object");
 
 struct Source {
   Arcadia_Object _parent;
@@ -169,7 +169,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"Audials.Xaudio2.Source", Source, u8"Arcadia.Object", Arcadia_Object, &_typeOperations)
+Arcadia_defineObjectType(u8"Audials.Xaudio2.Source", Source, u8"Arcadia.Object", Arcadia_Object, &_typeOperations)
 
 // bytes : ByteBuffer
 static void
@@ -185,7 +185,7 @@ Source_constructImpl
   Arcadia_TypeValue _type = _Source_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);

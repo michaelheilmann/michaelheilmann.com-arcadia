@@ -10,6 +10,22 @@
   div.topic:first-child {
     margin-left: 0px;
   }
+  div.topic > div.body > ul {
+    list-style: none;
+  }
+  div.topic > div.body > ul > li {
+    margin-left: 2rem;
+    display: block;
+    line-height: 1rem;
+  }
+  div.topic > div.body > ul > li > a {
+    text-decoration: none;
+    font-size: small;
+  }
+  div.topic > div.body > ul > li > div {
+    display: inline;
+    font-size: small;
+  }
   </style>
 </head>
 <body class="my-index-page-1">
@@ -28,35 +44,59 @@
           <div class="header">
             <span>Software</span>
           </div>
-          <div class="body" style="display: flex; flex-direction: row;">
-            <a href = '@{siteAddress}/repository/Arms1'>ARMS</a>
-            <a href = '@{siteAddress}/repository/Arcadia.Ring1'>Arcadia Ring1</a>
-            <a href = '@{siteAddress}/repository/Arcadia.Ring2'>Arcadia Ring2</a>
-            <a href = '@{siteAddress}/repository/R1'>R1</a>
+          <div class="body">
+            <ul>
+              <li>
+                <a href='@{siteAddress}/repository/Arms1'>ARMS</a>
+              </li>
+              <li>
+                <a href='@{siteAddress}/repository/Arcadia.Ring1'>Arcadia Ring1</a>
+              </li>
+              <li>
+                <a href='@{siteAddress}/repository/Arcadia.Ring2'>Arcadia Ring2</a>
+              </li>
+              <li>
+                <div>Arcadia Machine [coming soon]</div>
+              </li>
+              <li>
+                <a href='@{siteAddress}/repository/Arcadia.Visuals'>Arcadia Visuals</a>
+              </li>
+              <li>
+                <div>Arcadia Audials [coming soon]</div>
+              </li>
+            </ul>
           </div>
         </div>
-        
+
         <div class="topic">
           <div class="header">
             <span>Specifications</span>
           </div>
-          <div class="body" style="display: flex; flex-direction: row;">
-            <a href = '@{siteAddress}/specifications/common-lexical-specification'>Common Lexical Specification</a>
-          </div>
-          <div class="body" style="display: flex; flex-direction: row;">
-            <a href = '@{siteAddress}/specifications/data-definition-language'>Data Definition Language</a>
+          <div class="body">
+            <ul>
+              <li>
+                <a href='@{siteAddress}/specifications/common-lexical-specification'>Common Lexical Specification</a>
+              </li>
+              <li>
+                <a href='@{siteAddress}/specifications/data-definition-language'>Data Definition Language</a>
+              </li>
+            </ul>
           </div>
         </div>
-        
+
         <div class="topic">
           <div class="header">
             <span>Organizational</span>
           </div>
-          <div class="body" style="display: flex; flex-direction: row;">
-            <a href = '@{siteAddress}/roadmap'>Roadmap</a>
+          <div class="body">
+            <ul>
+              <li>
+                <a href='@{siteAddress}/roadmap'>Roadmap</a>
+              </li>
+            </ul>
           </div>
         </div>
-        
+
       </div>
     </div>
 

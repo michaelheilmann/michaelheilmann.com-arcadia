@@ -18,14 +18,8 @@
 #if !defined(MODULE_VISUALS_PIXELBUFFER_H_INCLUDED)
 #define MODULE_VISUALS_PIXELBUFFER_H_INCLUDED
 
-#include "R/Include.h"
-
-#define PixelFormat_An8Rn8Gn8Bn8 (1)
-#define PixelFormat_An8Bn8Gn8Rn8 (2)
-#define PixelFormat_Bn8Gn8Rn8 (3)
-#define PixelFormat_Bn8Gn8Rn8An8 (4)
-#define PixelFormat_Rn8Gn8Bn8 (5)
-#define PixelFormat_Rn8Gn8Bn8An8 (6)
+#include "Arcadia/Ring2/Include.h"
+#include "Module/Visuals/PixelFormat.h"
 
 /// - number of columns: The number of columns of the image.
 ///   A column is adressed by zero-based consecutive integral ascending indices (0,1,2,...)
@@ -37,7 +31,7 @@
 ///                number of columns * bytesPerPixel + line padding
 /// - cell: A cell is uniquely adressed by its column index and its row index.
 ///         Each cell accomodates one pixel.
-Rex_declareObjectType(u8"PixelBuffer", PixelBuffer, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"PixelBuffer", PixelBuffer, u8"Arcadia.Object");
 
 struct PixelBuffer {
   Arcadia_Object _parent;

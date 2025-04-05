@@ -17,6 +17,7 @@
 
 #include "Module/Visuals/NativeWindowsWindow.h"
 
+#include "Module/Visuals/Windows/WglIntermediateWindow.h"
 #include <limits.h>
 
 static LRESULT CALLBACK
@@ -167,6 +168,28 @@ getCanvasSizeImpl
     Arcadia_Integer32Value* height
   );
 
+static void
+createContext
+  (
+    Arcadia_Thread* thread,
+    NativeWindowsWindow* self,
+    Visuals_Window_WglIntermediateWindow* intermediateWindow
+  );
+
+static void
+beginRender
+  (
+    Arcadia_Thread* thread,
+    NativeWindowsWindow* self
+  );
+
+static void
+endRender
+  (
+    Arcadia_Thread* thread,
+    NativeWindowsWindow* self
+  );
+
 static const char g_title[] = "Liminality";
 
 static const char g_className[] = "Liminality Window Class";
@@ -199,7 +222,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"NativeWindowsWindow", NativeWindowsWindow, u8"NativeWindow", NativeWindow, &_typeOperations);
+Arcadia_defineObjectType(u8"NativeWindowsWindow", NativeWindowsWindow, u8"NativeWindow", NativeWindow, &_typeOperations);
 
 static LRESULT CALLBACK
 WindowProc
@@ -293,13 +316,14 @@ NativeWindowsWindow_constructImpl
   Arcadia_TypeValue _type = _NativeWindowsWindow_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
 
   _self->instanceHandle = NULL;
   _self->classAtom = 0;
   _self->windowHandle = NULL;
   _self->deviceContextHandle = NULL;
+  _self->glResourceContextHandle = NULL;
   _self->bigIcon = NULL;
   _self->smallIcon = NULL;
   _self->title = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, g_title, sizeof(g_title) - 1));
@@ -327,8 +351,8 @@ NativeWindowsWindow_constructImpl
 
   ((NativeWindow*)_self)->getCanvasSize = (void(*)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
 
-  ((NativeWindow*)_self)->beginRender = (void(*)(Arcadia_Thread*,NativeWindow*))NULL;
-  ((NativeWindow*)_self)->endRender = (void(*)(Arcadia_Thread*,NativeWindow*))NULL;
+  ((NativeWindow*)_self)->beginRender = (void(*)(Arcadia_Thread*, NativeWindow*))&beginRender;
+  ((NativeWindow*)_self)->endRender = (void(*)(Arcadia_Thread*,NativeWindow*))&endRender;
 
   Arcadia_Object_setType(thread, _self, _type);
 }
@@ -416,6 +440,10 @@ openImpl
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     NativeWindowsWindow_setTitleHelper(thread, self->windowHandle, self->title);
+    Visuals_Window_WglIntermediateWindow* intermediateWindow = Visuals_Window_WglIntermediateWindow_create(thread);
+    Visuals_Window_WglIntermediateWindow_open(thread, intermediateWindow);
+    createContext(thread, self, intermediateWindow);
+    Visuals_Window_WglIntermediateWindow_close(thread, intermediateWindow);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -440,6 +468,13 @@ closeImpl
 {
   if (!self->windowHandle) {
     return;
+  }
+  if (self->glResourceContextHandle) {
+    if (self->glResourceContextHandle == wglGetCurrentContext()) {
+      wglMakeCurrent(self->deviceContextHandle, NULL);
+    }
+    wglDeleteContext(self->glResourceContextHandle);
+    self->glResourceContextHandle = NULL;
   }
   if (self->deviceContextHandle) {
     ReleaseDC(self->windowHandle, self->deviceContextHandle);
@@ -615,6 +650,96 @@ getCanvasSizeImpl
   Arcadia_StaticAssert(LONG_MAX <= INT32_MAX, "<internal error>");
   *width = clientRectangle.right - clientRectangle.left;
   *height = clientRectangle.bottom - clientRectangle.top;
+}
+
+static void
+createContext
+  (
+    Arcadia_Thread* thread,
+    NativeWindowsWindow* self,
+    Visuals_Window_WglIntermediateWindow* intermediateWindow
+  )
+{
+  static int pixelFormatAttribs[] = {
+    0x2003, // WGL_ACCELERATION_ARB
+    0x2027, // WGL_FULL_ACCELERATION_ARB
+    0x201b, 8, // WGL_ALPHA_BITS_ARB
+    0x2022, 24, // WGL_DEPTH_BITS_ARB
+    0x2001, 1, // WGL_DRAW_TO_WINDOW_ARB
+    0x2015, 8, // WGL_RED_BITS_ARB
+    0x2017, 8, // WGL_GREEN_BITS_ARB
+    0x2019, 8, // WGL_BLUE_BITS_ARB
+    0x2013, 0x202B, // WGL_PIXEL_TYPE_ARB,  WGL_TYPE_RGBA_ARB
+    0x2010, 1, // WGL_SUPPORT_OPENGL_ARB
+    0x2014,	32, // WGL_COLOR_BITS_ARB
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  };
+  PIXELFORMATDESCRIPTOR pfd = (PIXELFORMATDESCRIPTOR){ sizeof(pfd), 1, PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER, PFD_TYPE_RGBA, 32, 8, PFD_MAIN_PLANE,
+                                                      24, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+  int pixelFormat;
+  UINT numFormats;
+  intermediateWindow->choosePixelFormat(self->deviceContextHandle, &pixelFormatAttribs[0], NULL, 1, &pixelFormat, &numFormats);
+  if (!numFormats) {
+    fprintf(stderr, "%s:%d: failed to select pixel format\n", __FILE__, __LINE__);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  if (!DescribePixelFormat(self->deviceContextHandle, pixelFormat, sizeof(pfd), &pfd)) {
+    fprintf(stderr, "%s:%d: failed to describe pixel format\n", __FILE__, __LINE__);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  if (!SetPixelFormat(self->deviceContextHandle, pixelFormat, &pfd)) {
+    fprintf(stderr, "%s:%d: failed to set pixel format\n", __FILE__, __LINE__);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  static int contextAttribs[] = {
+    WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
+    WGL_CONTEXT_MINOR_VERSION_ARB, 6,
+    WGL_CONTEXT_FLAGS_ARB, 0,
+    0
+  };
+  self->glResourceContextHandle = intermediateWindow->createContextAttribs(self->deviceContextHandle, NULL, &contextAttribs[0]);
+  if (!self->glResourceContextHandle) {
+    fprintf(stderr, "%s:%d: failed to create wgl context\n", __FILE__, __LINE__);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+}
+
+static void
+beginRender
+  (
+    Arcadia_Thread* thread,
+    NativeWindowsWindow* self
+  )
+{ 
+  if (!wglMakeCurrent(self->deviceContextHandle, self->glResourceContextHandle)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Integer32Value width, height;
+  NativeWindow_getCanvasSize(thread, (NativeWindow*)self, &width, &height);
+  glViewport(0, 0, width, height);
+  glClearColor(193.0f/255.0f, 216.0f/255.0f, 195.0f/255.0f, 255.0f/255.0f);
+  glClearDepth(1.f);
+  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+}
+
+static void
+endRender
+  (
+    Arcadia_Thread* thread,
+    NativeWindowsWindow* self
+  )
+{ 
+  if (self->glResourceContextHandle == wglGetCurrentContext()) {
+    if (!SwapBuffers(self->deviceContextHandle)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+      Arcadia_Thread_jump(thread);
+    }
+  }
 }
 
 NativeWindowsWindow*

@@ -40,7 +40,7 @@ Arcadia_StaticAssert(Arcadia_Natural8Value_NumberOfBytes == 1, "Arcadia.Natural8
 
 #define Arcadia_Natural8Value_Literal(x) UINT8_C(x)
 
-Rex_declareScalarType(Arcadia_Natural8);
+Arcadia_declareScalarType(Arcadia_Natural8);
 
 /// The maximum number of decimal digits which can safely be stored in an Arcadia.Natural8Value.
 /// The maximum vaalue of an Arcadia.Natural8Value is Arcadia.Natural8Value.Maximum = 255.

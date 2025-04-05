@@ -43,4 +43,4 @@ list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadi
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 
 EndProduct(${MyTestName})
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia")
+set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia.Ring1")

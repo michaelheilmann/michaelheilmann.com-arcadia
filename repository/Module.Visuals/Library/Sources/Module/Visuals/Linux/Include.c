@@ -72,14 +72,14 @@ _Visuals_Linux_writeBmpToByteBuffer
 
   int components;
   switch (pixelBuffer->pixelFormat) {
-    case PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
       PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, pixelBuffer);
       PixelBuffer_setLinePadding(thread, pixelBuffer, 0);
       components = 3;
     } break;
-    case PixelFormat_An8Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
       PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, pixelBuffer);
-      PixelBuffer_setPixelFormat(thread, pixelBuffer, PixelFormat_Bn8Gn8Rn8An8);
+      PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8);
       PixelBuffer_setLinePadding(thread, pixelBuffer, 0);
       components = 4;
     } break;

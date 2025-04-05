@@ -1,32 +1,44 @@
-<h4 id="Arcadia_safeAdd*">Arcadia_safeAdd*</h4>
-<p>Get the sum of two values.</p>
-<p><code>
-void
-Arcadia_safeAdd<my-mv>Suffix</my-mv>
-  (
-    Arcadia_Thread* thread,
-    <my-mv>Type</my-mv> augend,
-    <my-mv>Type</my-mv> addend,
-    <my-mv>Type</my-mv>* sumHigh,
-    <my-mv>Type</my-mv>* sumLow
-  )
-</code></p>
-<p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+<section class="cxx entity procedure">
 
-<table>
-<tr><td><my-mv>Suffix</my-mv></td>      <td><my-mv>Type</my-mv></td></tr>
-<tr><td><code>Natural16Value</code></td><td><code>Arcadia_Natural16Value</code></td></tr>
-<tr><td><code>Natural32Value</code></td><td><code>Arcadia_Natural32Value</code></td></tr>
-<tr><td><code>Natural64Value</code></td><td><code>Arcadia_Natural64Value</code></td></tr>
-<tr><td><code>Natural8Value</code></td> <td><code>Arcadia_Natural8Value</code></td></tr>
-<tr><td><code>SizeValue</code></td>     <td><code>Arcadia_SizeValue</code></td></tr>
-</table>
+  <h1 id="Arcadia_safeAdd*">Arcadia_safeAdd*</h1>
 
-<h5>Parameters</h5>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td><my-mv>Type</my-mv> augend</td>  <td>The augend value.</td></tr>
-  <tr><td><my-mv>Type</my-mv> addend</td>  <td>The addend value.</td></tr>
-  <tr><td><my-mv>Type</my-mv>* sumHigh</td><td>A pointer to a variable. The variable is assigned the high bits of the result.</td></tr>
-  <tr><td><my-mv>Type</my-mv>* sumLow</td> <td>A pointer to a variable. The variable is assigned the low bits of the result.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_safeAdd<my-mv>Suffix</my-mv><br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;<my-mv>Type</my-mv> augend,<br>
+  &nbsp;&nbsp;<my-mv>Type</my-mv> addend,<br>
+  &nbsp;&nbsp;<my-mv>Type</my-mv>* sumHigh,<br>
+  &nbsp;&nbsp;<my-mv>Type</my-mv>* sumLow<br>
+  &nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Compute the sum of two values.
+  </my-summary>
+  
+  <p>
+  The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined
+  </p>
+
+  <table>
+    <tr><td><my-mv>Suffix</my-mv></td>      <td><my-mv>Type</my-mv></td></tr>
+    <tr><td><code>Natural16Value</code></td><td><code>Arcadia_Natural16Value</code></td></tr>
+    <tr><td><code>Natural32Value</code></td><td><code>Arcadia_Natural32Value</code></td></tr>
+    <tr><td><code>Natural64Value</code></td><td><code>Arcadia_Natural64Value</code></td></tr>
+    <tr><td><code>Natural8Value</code></td> <td><code>Arcadia_Natural8Value</code></td></tr>
+    <tr><td><code>SizeValue</code></td>     <td><code>Arcadia_SizeValue</code></td></tr>
+  </table>
+
+  <section class="cxx parameters">
+  
+    <div><div>Arcadia_Thread* thread</div><div>A pointer to the <code>Arcadia_Thread</code> object.</div></div>
+    <div><div><my-mv>Type</my-mv> augend</div>  <div>The augend value.</div></div>
+    <div><div><my-mv>Type</my-mv> addend</div>  <div>The addend value.</div></div>
+    <div><div><my-mv>Type</my-mv>* sumHigh</div><div>A pointer to a variable. The variable is assigned the high bits of the result.</div></div>
+    <div><div><my-mv>Type</my-mv>* sumLow</div> <div>A pointer to a variable. The variable is assigned the low bits of the result.</div></div>
+
+  </section>
+
+</section>

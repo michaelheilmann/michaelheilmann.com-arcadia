@@ -29,4 +29,5 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
+add_subdirectory(Documentation)
 add_subdirectory(Library)

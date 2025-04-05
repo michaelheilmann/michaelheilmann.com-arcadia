@@ -186,20 +186,20 @@ NativeLinuxImageWriter_writePngToPathImpl
   int colorType;
 
   switch (PixelBuffer_getPixelFormat(thread, sourcePixelBuffer)) {
-    case PixelFormat_An8Rn8Gn8Bn8:
-    case PixelFormat_An8Bn8Gn8Rn8:
-    case PixelFormat_Bn8Gn8Rn8An8:
-    case PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
+    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
       PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, sourcePixelBuffer);
-      PixelBuffer_setPixelFormat(thread, pixelBuffer, PixelFormat_Rn8Gn8Bn8An8);
+      PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8);
       sourcePixelBuffer = pixelBuffer;
       bitDepth = 8;
       colorType = PNG_COLOR_TYPE_RGBA;
     } break;
-    case PixelFormat_Bn8Gn8Rn8:
-    case PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
       PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, sourcePixelBuffer);
-      PixelBuffer_setPixelFormat(thread, pixelBuffer, PixelFormat_Rn8Gn8Bn8);
+      PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8);
       sourcePixelBuffer = pixelBuffer;
       bitDepth = 8;
       colorType = PNG_COLOR_TYPE_RGB;
@@ -280,20 +280,20 @@ NativeLinuxImageWriter_writePngToByteBufferImpl
   int colorType;
 
   switch (PixelBuffer_getPixelFormat(thread, sourcePixelBuffer)) {
-    case PixelFormat_An8Rn8Gn8Bn8:
-    case PixelFormat_An8Bn8Gn8Rn8:
-    case PixelFormat_Bn8Gn8Rn8An8:
-    case PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
+    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
       PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, sourcePixelBuffer);
-      PixelBuffer_setPixelFormat(thread, pixelBuffer, PixelFormat_Rn8Gn8Bn8An8);
+      PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8);
       sourcePixelBuffer = pixelBuffer;
       bitDepth = 8;
       colorType = PNG_COLOR_TYPE_RGBA;
     } break;
-    case PixelFormat_Bn8Gn8Rn8:
-    case PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
       PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, sourcePixelBuffer);
-      PixelBuffer_setPixelFormat(thread, pixelBuffer, PixelFormat_Rn8Gn8Bn8);
+      PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8);
       sourcePixelBuffer = pixelBuffer;
       bitDepth = 8;
       colorType = PNG_COLOR_TYPE_RGB;
@@ -422,7 +422,7 @@ NativeLinuxImageWriter_writeIcoToByteBufferImpl
     PixelBuffer* pixelBuffer = (PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
     Arcadia_ByteBuffer_clear(thread, temporary);
     ImageWriter_writePngToByteBuffer(thread, (ImageWriter*)self, pixelBuffer, temporary);
-    if (PixelFormat_An8Rn8Gn8Bn8 != PixelBuffer_getPixelFormat(thread, pixelBuffer)) {
+    if (Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8 != PixelBuffer_getPixelFormat(thread, pixelBuffer)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
@@ -498,7 +498,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"NativeLinuxImageWriter", NativeLinuxImageWriter, u8"ImageWriter", ImageWriter, &_typeOperations);
+Arcadia_defineObjectType(u8"NativeLinuxImageWriter", NativeLinuxImageWriter, u8"ImageWriter", ImageWriter, &_typeOperations);
 
 static void
 NativeLinuxImageWriter_constructImpl
@@ -513,7 +513,7 @@ NativeLinuxImageWriter_constructImpl
   Arcadia_Type* _type = _NativeLinuxImageWriter_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   ((ImageWriter*)_self)->writeBmpToByteBuffer = (void (*)(Arcadia_Thread*, ImageWriter*, PixelBuffer*,Arcadia_ByteBuffer*))NativeLinuxImageWriter_writeBmpToByteBufferImpl;
   ((ImageWriter*)_self)->writeBmpToPath = (void (*)(Arcadia_Thread*, ImageWriter*, PixelBuffer*, Arcadia_String*))NativeLinuxImageWriter_writeBmpToPathImpl;

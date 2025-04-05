@@ -30,7 +30,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
+FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
 
 set(MyTool Tools.CompareFiles)
 if (NOT TARGET ${MyTool})
@@ -41,7 +41,7 @@ if (NOT TARGET ${MyTool})
     list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/CompareFiles/Main.c)
     list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/CompareFiles/Configure.h)
 
-    list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Mil ${MyProjectName}.Arms)
+    list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
 
     EndProduct(${MyTool})
 endif()

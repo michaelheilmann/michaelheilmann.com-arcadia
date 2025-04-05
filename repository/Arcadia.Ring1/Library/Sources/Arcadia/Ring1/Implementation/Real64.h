@@ -41,7 +41,7 @@ Arcadia_StaticAssert(Arcadia_Real64Value_NumberOfBytes == 8, "R.Real64Value.Numb
 
 #define Arcadia_Real64Value_Literal(x) (x)
 
-Rex_declareScalarType(Arcadia_Real64);
+Arcadia_declareScalarType(Arcadia_Real64);
 
 // TODO: Add to documentation.
 #define Arcadia_Real64Value_NegativeInfinity (-INFINITY)

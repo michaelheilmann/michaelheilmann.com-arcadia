@@ -1,4 +1,4 @@
-<h2>1. Files</h2>
+<h2>Files</h2>
 <p>
 You can find the sources of Arcadia Ring 2 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
 The subdirectory of Arcadia Ring 2 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2</a>.</p>

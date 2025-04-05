@@ -63,4 +63,49 @@ R_Argument_getObjectReferenceValueOrNull
   return objectReferenceValue;
 }
 
+static inline Arcadia_Integer32Value
+R_Argument_getInteger32Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* value
+  )
+{ 
+  if (!Arcadia_Value_isInteger32Value(value)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return Arcadia_Value_getInteger32Value(value);
+}
+
+static inline Arcadia_ImmutableUtf8StringValue
+R_Argument_getImmutableUtf8StringValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* value
+  )
+{
+  if (!Arcadia_Value_isImmutableUtf8StringValue(value)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return Arcadia_Value_getImmutableUtf8StringValue(value);
+}
+
+static inline Arcadia_ImmutableUtf8StringValue
+R_Argument_getImmutableUtf8StringValueOrNull
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* value
+  )
+{
+  if (Arcadia_Value_isVoidValue(value)) {
+    return NULL;
+  }
+  if (!Arcadia_Value_isImmutableUtf8StringValue(value)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return Arcadia_Value_getImmutableUtf8StringValue(value);
+}
+
 #endif // R_ARGUMENTSVALIDATION_H_INCLUDED

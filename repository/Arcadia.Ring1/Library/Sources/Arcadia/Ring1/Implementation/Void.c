@@ -120,4 +120,4 @@ notEqualTo
 #undef A1
 }
 
-Rex_defineScalarType(Arcadia_Void, u8"Arcadia.Void", &_typeOperations);
+Arcadia_defineScalarType(Arcadia_Void, u8"Arcadia.Void", &_typeOperations);

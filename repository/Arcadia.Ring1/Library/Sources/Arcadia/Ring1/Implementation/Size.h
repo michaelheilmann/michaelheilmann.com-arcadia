@@ -42,6 +42,6 @@ Arcadia_StaticAssert(Arcadia_SizeValue_NumberOfBytes == 4 || Arcadia_SizeValue_N
 
 #define Arcadia_SizeValue_Literal(x) ((size_t)x)
 
-Rex_declareScalarType(Arcadia_Size);
+Arcadia_declareScalarType(Arcadia_Size);
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_SIZE_H_INCLUDED

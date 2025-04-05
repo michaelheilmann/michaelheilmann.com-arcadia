@@ -31,7 +31,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.Ring2 "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the R1 library directory")
+FetchProduct(${MyProjectName}.Ring2 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring2/Library" "path to the Arcadia Ring 2 library directory")
 
 set(MyTestName ${MyProjectName}.Ring2.Tests.MapTests)
 
@@ -43,4 +43,4 @@ list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c
 list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Ring2 ${MyProjectName}.Arms)
 
 EndProduct(${MyTestName})
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia")
+set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia.Ring2")

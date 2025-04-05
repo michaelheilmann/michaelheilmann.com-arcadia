@@ -102,7 +102,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"Arcadia.Map", Arcadia_Map, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Map", Arcadia_Map, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 Arcadia_Map_ensureFreeCapacity
@@ -226,7 +226,7 @@ Arcadia_Map_constructImpl
   Arcadia_Map_ensureInitialized(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->buckets = NULL;
   _self->capacity = 0;

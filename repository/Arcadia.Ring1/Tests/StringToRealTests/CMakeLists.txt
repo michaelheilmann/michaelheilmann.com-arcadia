@@ -44,4 +44,4 @@ list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectNam
 
 EndProduct(${MyTestName})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia")
+set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia.Ring1")

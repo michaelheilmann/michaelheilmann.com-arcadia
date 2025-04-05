@@ -29,7 +29,7 @@
 // The window is in "closed" state when it is creeated by NativeWindowsWindow_create.
 // A successful call to NativeWindowsWindow_open puts the window in "opened" state.
 // The window is put in "closed" state if it is destructed or by a successful call to NativeWindowsWindow_close.
-Rex_declareObjectType(u8"NativeWindowsWindow", NativeWindowsWindow, u8"NativeWindow");
+Arcadia_declareObjectType(u8"NativeWindowsWindow", NativeWindowsWindow, u8"NativeWindow");
 
 struct NativeWindowsWindow {
   NativeWindow _parent;
@@ -37,6 +37,7 @@ struct NativeWindowsWindow {
   HINSTANCE instanceHandle;
   HWND windowHandle;
   HDC deviceContextHandle;
+  HGLRC glResourceContextHandle;
 
   Arcadia_String* title;
   NativeWindowsIcon* smallIcon;

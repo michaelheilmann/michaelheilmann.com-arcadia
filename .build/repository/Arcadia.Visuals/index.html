@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html class='my-theme-1' lang='en'>
+<head>
+
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <link rel='icon' type='image/x-icon' href='https://michaelheilmann.com/assets/favicon/512x512.svg'>
+
+  <!-- Crap specific to Safari. SVG must be single color with transparent background. -->
+  <link rel='mask-icon' href='https://michaelheilmann.com/assets/favicon/safari-mask-icon-512x512.svg' color = '#000000'>
+
+  <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
+  <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
+
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=1'>
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=1'>
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/cxx-doc.css?v=1'>
+<link rel='canonical' href='https://michaelheilmann.com/repository/Arcadia.Visuals/'>
+<title>Michael Heilmann's Arcadia Visuals</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+</style>
+</head>
+<body class="my-content-page-1">
+  <header>
+    <div>
+    <a href="https://michaelheilmann.com/">Home</a>
+    </div>
+  </header>
+<main>
+  <div class="left-column"></div>
+  <div class="center-column">
+  <h1>Michael Heilmann's Arcadia Visuals</h1>
+  <p>
+  This is the documentation for Michael  Heilmann's Arcadia Visuals.
+  Arcadia Ring 1 provides</p>
+  <ul>
+    <li>an uniform interface to modern graphics APIs like OpenGL 4.x, DirectX12, and Vulkan</li>
+    <li>visual asset (e.g., images, meshes) loading, saving, and synthesis functionality</li>
+  </ul>
+
+<h2>Documentation</h2>
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_CullMode">Arcadia_Visuals_CullMode</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_CullMode Arcadia_Visuals_CullMode;
+</code></my-signature>
+
+<my-summary>
+An enumeration of cull modes.
+A cull mode identifies a technique for deciding wether a fragment is removed based on its facing towards the viewer.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+  
+  <h1>Elements</h1>
+  
+  <div>
+    <div><code>Arcadia_Visuals_CullMode_None</code></div>
+    <div>Neither front-facing nor back-facing fragments are culled.</div>
+  </div>
+  <div>
+    <div><code>Arcadia_Visuals_CullMode_Front</code></div>
+    <div>Front-facing fragments are culled.</div>
+  </div>
+  <div>
+    <div><code>Arcadia_Visuals_CullMode_Back</code></div>
+    <div>Back-facing fragments are culled.</div>
+  </div>
+  <div>
+    <div><code>Arcadia_Visuals_CullMode_FrontAndBack</code></div>
+    <div>
+    Both front-facing and back-facing fragments are culled.
+    This is an alias of <code>Arcadia_Visuals_CullMode_BackAndFront</code>.
+    </div>
+  </div>
+  <div>
+    <div><code>Arcadia_Visuals_CullMode_BackAndFront</code></div>
+    <div>
+    Both back-facing and front-facing fragments are culled.
+    This is an alias of <code>Arcadia_Visuals_CullMode_FrontAndBack</code>.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_DepthCompareFunction">Arcadia_Visuals_DepthCompareFunction</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_DepthCompareFunction Arcadia_Visuals_DepthCompareFunction;
+</code></my-signature>
+
+<my-summary>
+An enumeration of depth compare functions.
+A depth compare function identifies a technique that compares depth value of an incoming fragment to its corresponding depth value in the depth buffer.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+
+  <h1>Elements</h1>
+
+  <div>
+    <div><code>Arcadia_Visuals_DepthComparefunction_Always</code></div>
+    <div>
+    The incoming fragment always passes.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_DepthCompareFunction_Never</code></div>
+    <div>
+    The incoming fragment never passes.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_DepthCompareFunction_EqualTo</code></div>
+    <div>
+    The incoming fragment passes if its depth value is equal to its corresponding depth value in the depth buffer.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_DepthCompareFunction_NotEqualTo</code></div>
+    <div>
+    The incoming fragment passes if its depth value is not equal to its corresponding depth value in the depth buffer.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_DepthCompareFunction_LessThan</code></div>
+    <div>
+    The incoming fragment passes if its depth value is less than its corresponding depth value in the depth buffer.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_DepthCompareFunction_LessThanOrEqualTo</code></div>
+    <div>
+    The incoming fragment passes if its depth value is less than or equal to its corresponding depth value in the depth buffer.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_DepthCompareFunction_GreaterThan</code></div>
+    <div>
+    The incoming fragment passes if its depth value is greater than its corresponding depth value in the depth buffer.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_DepthCompareFunction_GreaterThanOrEqualTo</code></div>
+    <div>
+    The incoming fragment passes if its depth value is greater than or equal to its corresponding depth value in the depth buffer.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_FillMode">Arcadia_Visuals_FillMode</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_FillMode Arcadia_Visuals_FillMode;
+</code></my-signature>
+
+<my-summary>
+An enumeration of fill modes.
+A fill mode identifies a technique for deciding wether a fragment is removed based on its facing towards the viewer.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+
+  <h1>Elements</h1>
+
+  <div>
+    <div><code>Arcadia_Visuals_FillMode_Point</code></div>
+    <div>Polygon vertices that are marked as the start of a boundary edge are drawn as points.</div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_FillMode_Line</code></div>
+    <div>Boundary edges of the polygon are drawn as line segments.</div>
+  </div>
+
+  <div class="enumeration-element">
+    <div><code>Arcadia_Visuals_FillMode_Solid</code></div>
+    <div>The interior of the polygon is filled.</div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_PixelFormat">Arcadia_Visuals_PixelFormat</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_PixelFormat Arcadia_Visuals_PixelFormat;
+</code></my-signature>
+
+<my-summary>
+An enumeration of pixel formats.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+  
+  <h1>Elements</h1>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_An8Ln8</code>
+    </div>
+    <div>
+    Two Arcadia_Natural8Value values layout out consecutively in memory.
+    The first value denotes the intensity of the alpha component.
+    The second value denotes the intensity of the luminance component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8</code>
+    </div>
+    <div>
+    Four Arcadia_Natural8Value values layed out consecutively in memory.
+    The first value denotes the intensity of the alpha component.
+    The second value denotes the intensity of the blue component,
+    the third value denotes the intensity of the green component, and
+    the fourth value denotes the intensity of the red component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8</code>
+    </div>
+    <div>
+    Four Arcadia_Natural8Value values layed out consecutively in memory.
+    The first value denotes the intensity of the alpha component.
+    The second value denotes the intensity of the red component,
+    the third value denotes the intensity of the green component, and
+    the fourth value denotes the intensity of the blue component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8</code>
+    </div>
+    <div>
+    Three Arcadia_Natural8Value values layed out consecutively in memory.
+    The first value denotes the intensity of the blue component,
+    the second value denotes the intensity of the green component, and
+    the third value denotes the intensity of the red component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+  
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8</code>
+    </div>
+    <div>
+    Four Arcadia_Natural8Value values layed out consecutively in memory.
+    The first value denotes the intensity of the blue component,
+    the second value denotes the intensity of the green component, and
+    the third value denotes the intensity of the red component.
+    The fourth value denotes the intensity of the alpha component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+  
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_Ln8</code>
+    </div>
+    <div>
+    One Arcadia_Natural8Value value.
+    The value denotes the intensity of the luminance component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_Ln8An8</code>
+    </div>
+    <div>
+    Two Arcadia_Natural8Value values layout out consecutively in memory.
+    The first value denotes the intensity of the luminance component.
+    The second value denotes the intensity of the alpha component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+  
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8</code>
+    </div>
+    <div>
+    Three Arcadia_Natural8Value values layed out consecutively in memory.
+    The first value denotes the intensity of the red component,
+    the second value denotes the intensity of the green component, and
+    the third value denotes the intensity of the blue component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+  
+  <div>
+    <div>
+      <code>Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8</code>
+    </div>
+    <div>
+    Four Arcadia_Natural8Value values layed out consecutively in memory.
+    The first value denotes the intensity of the red component,
+    the second value denotes the intensity of the green component, and
+    the third value denotes the intensity of the blue component.
+    The fourth value denotes the intensity of the alpha component.
+    A component value of 0 indicates least intensity.
+    A component value of 255 indicates greatest intensity.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity procedure">
+<h1 id="Arcadia_Visuals_PixelFormat_getNumberOfComponents">Arcadia_Visuals_PixelFormat_getNumberOfComponents</h1>
+<my-signature><code>
+Arcadia_SizeValue
+Arcadia_Visuals_PixelFormat_getNumberOfComponents<br>
+&nbsp;&nbsp;(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Visuals_PixelFormat self<br>
+&nbsp;&nbsp;)
+</code></my-signature>
+
+<my-summary>
+Get the number of components of a pixel of a pixel format.
+</my-summary>
+
+<section class="cxx parameters">
+
+  <h1>Parameters</h1>
+
+  <div>
+    <div><a href="#">Arcadia_Thread</a>* thread</div>
+    <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+  </div>
+  <div>
+    <div>Arcadia_Visuals_PixelFormat self</div>
+    <div>This pixel format.</div>
+  </div>
+
+</section>
+
+<section class="cxx return-value">
+<h1>Return value</h1>
+<p>The number of components of a pixel of this pixel format.</p>
+</section>
+
+</section>
+
+<section class="cxx entity procedure">
+<h1 id="Arcadia_Visuals_PixelFormat_getNumberOfBytes">Arcadia_Visuals_PixelFormat_getNumberOfBytes</h1>
+<my-signature><code>
+Arcadia_SizeValue
+Arcadia_Visuals_PixelFormat_getNumberOfBytes<br>
+&nbsp;&nbsp;(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Visuals_PixelFormat self<br>
+&nbsp;&nbsp;)
+</code></my-signature>
+
+<my-summary>
+Get the number of Bytes of a pixel of a pixel format.
+</my-summary>
+
+<section class="cxx parameters">
+
+  <h1>Parameters</h1>
+
+  <div>
+    <div><a href="#">Arcadia_Thread</a>* thread</div>
+    <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+  </div>
+  <div>
+    <div>Arcadia_Visuals_PixelFormat self</div>
+    <div>This pixel format.</div>
+  </div>
+
+</section>
+
+<section class="cxx return-value">
+<h1>Return value</h1>
+<p>The number of Bytes of a pixel of this pixel format.</p>
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_TextureAddressMode">Arcadia_Visuals_TextureAddressMode</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_TextureAddressMode Arcadia_Visuals_TextureAddressMode;
+</code></my-signature>
+
+<my-summary>
+An enumeration of texture address modes.
+A texture address mode identifies a technique for resolving uv coordinates that are outside of the boundaries of a texture.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+
+  <h1>Elements</h1>
+
+  <div>
+    <div><code>Arcadia_Visuals_TextureAddressMode_ClampToEdge</code></div>
+    <div>
+    uv coordinates outside of the range of [0,1] are assigned the color of the uv coordinate at 0 or 1, respectively.
+    This usually corresponds to GL_TEXTURE_WRAP_S/GL_TEXTURE_WRAP_T with GL_CLAMP_TO_EDGE in OpenGL and D3D12_TEXTURE_ADDRESS_MODE_CLAMP in Direct3D 12.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_TextureAddressMode_ClampToBorder</code></div>
+    <div>
+    uv coordinates outside of the range of [0,1] are assigned the border color of the texture.
+    This usually corresponds to GL_TEXTURE_WRAP_S/GL_TEXTURE_WRAP_T with GL_CLAMP_TO_BORDER in OpenGL and D3D12_TEXTURE_ADDRESS_MODE_BORDER in Direct3D 12.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_TextureAddressMode_Repeat</code></div>
+    <div>
+    Tile the texture at every uv coordinate integer junction.
+    For example, for the u coordinates between 0 and 3, the texture is repeated three times.
+    This usually corresponds to GL_TEXTURE_WRAP_S/GL_TEXTURE_WRAP_T with GL_REPEAT in OpenGL and D3D12_TEXTURE_ADDRESS_MODE_WRAP in Direct3D 12.
+    </div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_TextureAddressMode_MirroredRepeat</code></div>
+    <div>
+    Tile and flip the texture at every uv coordinate integer junction.
+    For example, for the u coordinates between 0 and 3, the texture is repeated three times.
+    For the u coordinates between 0 and 1 and 2 and 3 the texture is address normally.
+    For the u coordinates between 1 and 2, the texture flipped.
+    This usually corresponds to GL_TEXTURE_WRAP_S/GL_TEXTURE_WRAP_T with GL_MIRRORED_REPEAT in OpenGL, D3D12_TEXTURE_ADDRESS_MODE_MIRROR in Direct3D 12.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_TextureFilter">Arcadia_Visuals_TextureFilter</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_TextureFilter Arcadia_Visuals_TextureFilter;
+</code></my-signature>
+
+<my-summary>
+An enumeration of texture filters.
+A texture filter identifies a technique to compute the pixel value closed to the specified uv coordinates.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+
+  <h1>Elements</h1>
+
+  <div>
+    <div><code>Arcadia_Visuals_TextureFilter_Nearest</code></div>
+    <div>
+    Filter using the texture element that is nearest (in Manhatten distance) to the specified uv coordinates.
+    </div>
+  </div>
+  <div>
+    <div><code>Arcadia_Visuals_TextureFilter_Linear</code></div>
+    <div>
+    Returns the weighted average of the four texture elements that are closest to the specified uv coordinates.
+    These can include items wrapped or repeated from other parts of the texture, depending on the
+    <a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_TextureAddressMode">texture address mode</a>.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_VertexElementSemantics">Arcadia_Visuals_VertexElementSemantics</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_VertexElementSemantics Arcadia_Visuals_VertexElementSemantics;
+</code></my-signature>
+
+<my-summary>
+An enumeration of pixel formats.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+  <h1>Elements</h1>
+  
+  <div>
+    <div>
+      <code>Arcadia_Visuals_VertexElementSemantics_PositionXyz</code>
+    </div>
+    <div>
+    The vertex element denotes a position coordinate.
+    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32, then this the position coordinate is in XY space (model, local, or global).
+    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32, then this the position coordinate is in XYZ space (model, local, or global).
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_VertexElementSemantics_AmbientRgba</code>
+    </div>
+    <div>
+    The vertex element denotes an ambient color coordinate.
+    <ul>
+      <li>If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32, then the color is in [0,1] RGB space.
+      The first Arcadia_Real32Value indicates the intensity of the red component,
+      the second Arcadia_Real32Value indicates the intensity of the green component,
+      the third Arcadia_Real32Value indicates the intensity of the blue component.
+      0 indicates minimum intensity, 1 indicates maximum intensity.
+      </li>
+      <li>If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32Real32, then the color is in [0,1] RGBA space.
+      The first Arcadia_Real32Value indicates the intensity of the red component,
+      the second Arcadia_Real32Value indicates the intensity of the green component,
+      the third Arcadia_Real32Value indicates the intensity of the blue component.
+      0 indicates minimum intensity, 1 indicates maximum intensity.
+      The fourth Arcadia_Real32Value indicates the intensity of the alpha component.
+      0 indicates fully transparent, 1 indicates fully opaque.
+      </li>
+    </ul>
+    </</div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_VertexElementSemantics_TextureUv</code>
+    </div>
+    <div>
+    The vertex element denotes a texture coordinate.
+    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32, then this the texture coordinate is in UV space.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_VertexElementSyntax">Arcadia_Visuals_VertexElementSyntaxt</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_VertexElementSyntaxt Arcadia_Visuals_VertexElementSyntaxt;
+</code></my-signature>
+
+<my-summary>
+An enumeration of pixel formats.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+
+  <h1>Elements</h1>
+  
+  <div>
+    <div>
+      <code>Arcadia_Visuals_VertexElementSyntax_Real32Real32</code>
+    </div>
+    <div>
+    The vertex element consists of two consecutive Arcadia_Real32Value values.
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32</code>
+    </div>
+    <div>
+    The vertex element consists of three consecutive Arcadia_Real32Value values.
+    </div>
+  </div>
+
+  <div>
+    <div>
+      <code>Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32Real32</code>
+    </div>
+    <div>
+    The vertex element consists of four consecutive Arcadia_Real32Value values.
+    </div>
+  </div>
+
+</section>
+
+</section>
+
+<section class="cxx entity enumeration">
+<h1 id="Arcadia_Visuals_WindingMode">Arcadia_Visuals_WindingMode</h1>
+<my-signature><code>
+typedef enum Arcadia_Visuals_WindingMode Arcadia_Visuals_WindingMode;
+</code></my-signature>
+
+<my-summary>
+An enumeration of winding modes.
+</my-summary>
+
+<section class="cxx enumeration-elements">
+  
+  <h1>Elements</h1>
+
+  <div>
+    <div><code>Arcadia_Visuals_WindingMode_Clockwise</code></div>
+    <div>Clockwise winding mode.</div>
+  </div>
+
+  <div>
+    <div><code>Arcadia_Visuals_WindingMode_CounterClockwise</code></div>
+    <div>Counter clockwise winding mode.</div>
+  </div>
+
+</section>
+
+</section>
+
+  </div>
+  <div class="right-column">
+    <nav>
+      <ul style="list-style: none">
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_CullMode">Arcadia_Visuals_CullMode</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_DepthCompareFunction">Arcadia_Visuals_DepthCompareFunction</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_FillMode">Arcadia_Visuals_FillMode</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_PixelFormat">Arcadia_Visuals_PixelFormat</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfComponents">Arcadia_Visuals_PixelFormat_getNumberOfComponents</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfBytes">Arcadia_Visuals_PixelFormat_getNumberOfBytes</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_TextureFilter">Arcadia_Visuals_TextureAddressMode</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_TextureFilter">Arcadia_Visuals_TextureFilter</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_VertexElementSemantics">Arcadia_Visuals_VertexElementSemantics</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_VertexElementSyntax">Arcadia_Visuals_VertexElementSyntax</a></li>
+        <li><a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_WindingMode">Arcadia_Visuals_WindingMode</a></li>
+      </ul>
+    </nav>
+  </div>
+  </main>
+  <footer>
+    <div class="left-column"></div>
+    <div class="center-column"></div>
+    <div class="right-column"></div>
+      <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 14 February 2025.</span>
+    </div>
+  </footer>
+  </body>
+</html>
+

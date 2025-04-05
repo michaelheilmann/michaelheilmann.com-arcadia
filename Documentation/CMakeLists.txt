@@ -31,7 +31,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
+FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Machine library directory")
 FetchProduct(${MyProjectName}.ConcatenateFiles "${REPOSITORY_SOURCE_DIR}/Tools.ConcatenateFiles/Tool/Sources" "path to the Tools.ConcatenateFiles source directory")
 FetchProduct(${MyProjectName}.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library/Sources" "path to the Tools.TemplateEngine Library source directory")
 FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Tools.TemplateEngine Tool source directory")
@@ -45,6 +45,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
 add_custom_target(Website.IndexPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.IndexPage PROPERTIES FOLDER "Arcadia.Website")
 
 # Build "error.html".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/error.i)
@@ -55,6 +56,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
 add_custom_target(Website.ErrorPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.ErrorPage PROPERTIES FOLDER "Arcadia.Website")
 
 # Build "roadmap.html".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
@@ -66,6 +68,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_DEPENDENCIES})
 add_custom_target(Website.RoadmapPage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.RoadmapPage PROPERTIES FOLDER "Arcadia.Website")
 
 # Build "roadmap-archive.html".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/roadmap.i)
@@ -77,6 +80,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.i => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
 add_custom_target(Website.RoadmapArchivePage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE} ${DOCUMENTATION_DEPENDENCIES})
+set_target_properties(Website.RoadmapArchivePage PROPERTIES FOLDER "Arcadia.Website")
 
 # Build "assets/index.css".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/index.css.i)
@@ -87,6 +91,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
 add_custom_target(Website.IndexCss ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.IndexCss PROPERTIES FOLDER "Arcadia.Website")
 
 # Build "assets/reset.css".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/reset.css.i)
@@ -97,6 +102,18 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
 add_custom_target(Website.ResetCss ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.ResetCss PROPERTIES FOLDER "Arcadia.Website")
+
+# Build "assets/cxx-doc.css".
+set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cxx-doc.css.i)
+set(DOCUMENTATION_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/assets/cxx-doc.css")
+add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
+                   COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_TARGET_FILE}
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                   COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
+                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE})
+add_custom_target(Website.CxxDocCss ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.CxxDocCss PROPERTIES FOLDER "Arcadia.Website")
 
 # Build "Specifications/Mil/index.html".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Mil/index.i)
@@ -108,6 +125,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_DEPENDENCIES})
 add_custom_target(Website.Specifications.Mil ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.Specifications.Mil PROPERTIES FOLDER "Arcadia.Website")
 
 # Build "Specifications/Ddl/index.html".
 set(DOCUMENTATION_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Specifications/DataDefinitionLanguage/index.i")
@@ -119,6 +137,7 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_DEPENDENCIES})
 add_custom_target(Website.Specifications.DataDefinitionLanguage ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.Specifications.DataDefinitionLanguage PROPERTIES FOLDER "Arcadia.Website")
 
 # Build "Specifications/Common-Lexical-Specification/index.html".
 set(DOCUMENTATION_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/index.i)
@@ -130,3 +149,4 @@ add_custom_command(OUTPUT ${DOCUMENTATION_TARGET_FILE}
                    COMMENT "${DOCUMENTATION_SOURCE_FILE} => ${DOCUMENTATION_TARGET_FILE}"
                    DEPENDS ${MyProjectName}.Tools.TemplateEngine ${DOCUMENTATION_SOURCE_FILE} ${DOCUMENTATION_DEPENDENCIES})
 add_custom_target(Website.Specifications.CommonLexicalSpecification ALL DEPENDS ${DOCUMENTATION_TARGET_FILE})
+set_target_properties(Website.Specifications.CommonLexicalSpecification PROPERTIES FOLDER "Arcadia.Website")

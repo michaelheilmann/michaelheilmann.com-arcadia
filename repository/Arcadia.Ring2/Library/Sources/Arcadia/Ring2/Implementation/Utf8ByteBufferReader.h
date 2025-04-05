@@ -26,7 +26,7 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
 
-Rex_declareObjectType(u8"Arcadia.Utf8ByteBufferReader", Arcadia_Utf8ByteBufferReader, u8"Arcadia.Utf8Reader");
+Arcadia_declareObjectType(u8"Arcadia.Utf8ByteBufferReader", Arcadia_Utf8ByteBufferReader, u8"Arcadia.Utf8Reader");
 
 struct Arcadia_Utf8ByteBufferReader {
   Arcadia_Utf8Reader parent;

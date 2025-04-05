@@ -1,4 +1,4 @@
-<h3 id="value-type">3.2. Value Type</h3>
+<h3 id="value-type">Value Type</h3>
 <p>
 <code>Arcadia_Value</code> is a tagged union of values supported by the
 runtime. It consists of a tag indicating the value stored in the

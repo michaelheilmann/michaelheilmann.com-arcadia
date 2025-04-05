@@ -64,6 +64,8 @@ main1
   while (!NativeWindow_getQuitRequested(thread, window)) {
     Arcadia_Process_stepArms(process);
     NativeWindow_update(thread, window);
+    NativeWindow_beginRender(thread, window);
+    NativeWindow_endRender(thread, window);
   }
 
   // (9) Ensure the window is closed.

@@ -1,1 +1,1 @@
-<h3>3.7. Time and Date Functions</h3>
+<h3>Time and Date Functions</h3>

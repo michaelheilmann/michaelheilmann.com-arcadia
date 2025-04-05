@@ -1,4 +1,4 @@
-<h3>3.6. Numeric functions</h3>
+<h3>Numeric functions</h3>
 @{include("3.documentation.6.numeric-functions/clamp.i")}
 @{include("3.documentation.6.numeric-functions/countLeadingZeroes.i")}
 @{include("3.documentation.6.numeric-functions/countSignificandBits.i")}

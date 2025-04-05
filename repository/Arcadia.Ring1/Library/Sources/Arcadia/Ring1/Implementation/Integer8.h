@@ -39,7 +39,7 @@ Arcadia_StaticAssert(Arcadia_Integer8Value_NumberOfBytes == 1, "Arcadia.Integer8
 
 #define Arcadia_Integer8Value_Literal(x) INT8_C(x)
 
-Rex_declareScalarType(Arcadia_Integer8);
+Arcadia_declareScalarType(Arcadia_Integer8);
 
 /// The minimum value of an Arcadia.Integer8Value is -128,
 /// the maximum value of an Arcadia.Integer8Value is +127.

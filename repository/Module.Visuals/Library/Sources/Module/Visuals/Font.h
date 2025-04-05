@@ -31,7 +31,7 @@
 ///   construct()
 /// }
 /// @endcode
-Rex_declareObjectType(u8"TextureFontWindows", TextureFontWindows, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"TextureFontWindows", TextureFontWindows, u8"Arcadia.Object");
 
 struct TextureFontWindows {
   Arcadia_Object _parent;

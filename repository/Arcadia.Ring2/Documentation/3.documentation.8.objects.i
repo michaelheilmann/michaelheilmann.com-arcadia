@@ -1,1 +1,1 @@
-<h3>3.8. Objects</h3>
+<h3>Objects</h3>

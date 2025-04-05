@@ -40,7 +40,7 @@
 /// trailing slashes are ignored
 /// For Windows, `/a` is translated to `a:\` and `/a(/<dir1>)(/<dir2>)*` is translated to `a:\<dir1>(\<dir2>)*`
 /// For Linux, `/a(/<dir>)* is translated to `/a(/<dir>)*`
-Rex_declareObjectType(u8"Arcadia.FilePath", Arcadia_FilePath, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.FilePath", Arcadia_FilePath, u8"Arcadia.Object");
 
 struct Arcadia_FilePath {
   Arcadia_Object _parent;

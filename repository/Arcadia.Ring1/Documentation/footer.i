@@ -30,7 +30,11 @@
   </div>
   </main>
   <footer>
-    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 14 January 2025.</span>
+    <div class="left-column"></div>
+    <div class="center-column"></div>
+    <div class="right-column"></div>
+      <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 14 March 2025.</span>
+    </div>
   </footer>
   </body>
 </html>

@@ -122,4 +122,4 @@ notEqualTo
 #undef A1
 }
 
-Rex_defineScalarType(Arcadia_ForeignProcedure, u8"Arcadia.ForeignProcedure", &_typeOperations);
+Arcadia_defineScalarType(Arcadia_ForeignProcedure, u8"Arcadia.ForeignProcedure", &_typeOperations);

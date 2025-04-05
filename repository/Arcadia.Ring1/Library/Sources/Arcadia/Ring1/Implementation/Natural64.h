@@ -40,7 +40,7 @@ Arcadia_StaticAssert(Arcadia_Natural64Value_NumberOfBytes == 8, "Arcadia.Natural
 
 #define Arcadia_Natural64Value_Literal(x) UINT64_C(x)
 
-Rex_declareScalarType(Arcadia_Natural64);
+Arcadia_declareScalarType(Arcadia_Natural64);
 
 /// The maximum number of decimal digits which can safely be stored in an Arcadia.Natural64 value.
 /// The maximum value of an Arcadia.Natural64Value is Arcadia.Natural64Value.Maximum = 18 446 744 073 709 551 615.

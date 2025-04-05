@@ -14,6 +14,26 @@
   }
 }
 
+:root {
+  --h1-margin: 0.67em 0;
+  --h1-font-size: 2.5rem !important;
+  
+  --h2-margin: 0.75em 0;
+  --h2-font-size: 2rem !important;
+  
+  --h3-margin: 0.83em 0;
+  --h3-font-size: 1.75rem !important;
+  
+  --h4-margin: 1.12em 0;
+  --h4-font-size: 1.5rem !important;
+  
+  --h5-margin: 1.50em 0;
+  --h5-font-size: 1.25rem !important;
+  
+  --h6-margin: 1.67em 0;
+  --h6-font-size: 1rem !important;
+}
+
 a {
   color: var(--blue);
 }
@@ -253,6 +273,7 @@ default code font
   font-style: normal;
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 html.my-theme-1 {
   font-family: 'my-default-font';
@@ -378,27 +399,33 @@ body.my-content-page-1 h3 {
 }
 
 body.my-error-page-1 h1, body.my-content-page-1 h1 {
-  margin: .67em 0
+  margin: var(--h1-margin);
+  font-size: var(--h1-font-size);
 }
 
 body.my-error-page-1 h2, body.my-content-page-1 h2 {
-  margin: .75em 0
+  margin: var(--h2-margin);
+  font-size: var(--h2-font-size);
 }
 
 body.my-error-page-1 h3, body.my-content-page-1 h3 {
-  margin: .83em 0
+  margin: var(--h3-margin);
+  font-size: var(--h3-font-size);
 }
 
 body.my-error-page-1 h4, body.my-content-page-1 h4 {
-  margin: 1.12em 0
+  margin: var(--h4-margin);
+  font-size: var(--h4-font-size);
 }
 
 body.my-error-page-1 h5, body.my-content-page-1 h5 {
-  margin: 1.5em 0
+  margin: var(--h5-margin);
+  font-size: var(--h5-font-size);
 }
 
 body.my-error-page-1 h6, body.my-content-page-1 h6 {
-  margin: 1.67em 0
+  margin: var(--h6-margin);
+  font-size: var(--h6-font-size);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -475,4 +502,123 @@ body.my-index-page-1 footer > div:last-child {
   flex-grow:0;
   padding-right: 2rem;
   padding-bottom: 2rem;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* The following are used in the documentation of C elements. */
+
+/* Signatures of C elements.*/
+my-signature {
+  display: block;
+}
+
+/* Summaries of C elements. */
+my-summary {
+  display: block;
+  margin: var(--h6-margin);
+}
+
+/* Parameters of a C function. */
+my-parameters {
+  display: block;
+  margin: var(--h6-margin);
+  font-weight: bold;
+}
+
+/* Return value of a C function. */
+my-return-value {
+  display: block;
+  margin: var(--h6-margin);
+  font-weight: bold;
+}
+
+/* Errors of a C function. */
+my-errors {
+  display: block;
+  margin: var(--h6-margin);
+  font-weight: bold;
+}
+
+/* Elements of a C enumeration. */
+my-elements {
+  display: block;
+  margin: var(--h6-margin);
+  font-weight: bold;
+}
+
+/* Meta variables used in documentation of C elements. */
+body.my-content-page-1 my-mv {
+  display: inline;
+  font-family: my-code-font;
+  font-size: 0.9rem;
+}
+
+/* Meta variables used in documentation of C elements. */
+body.my-content-page-1 my-mv::before {
+  content: "<";
+}
+
+/* Meta variables used in documentation of C elements. */
+body.my-content-page-1 my-mv::after {
+  content: ">";
+}
+
+body {
+  counter-reset: section-level-1 0 section-level-2 0 section-level-3 0 section-level-4 0;
+}
+
+body.my-content-page-1 h1
+{}
+
+body.my-content-page-1 h1::before
+{} 
+
+body.my-content-page-1 h2 {
+  counter-increment: section-level-1;
+  counter-reset: section-level-2 0;
+}
+
+body.my-content-page-1 h2::before {
+  content: counter(section-level-1) ". ";
+}
+
+body.my-content-page-1 h3 {
+ counter-increment: section-level-2;
+ counter-reset: section-level-3 0;
+}  
+
+body.my-content-page-1 h3::before {
+ content: counter(section-level-1) "." counter(section-level-2) ". ";
+}
+
+body.my-content-page-1 h4 {
+ counter-increment: section-level-3;
+ counter-reset: section-level-4 0;
+}  
+
+body.my-content-page-1 h4::before {
+ content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) ". ";
+}
+
+body.my-content-page-1 h5 {
+ counter-increment: section-level-4;
+} 
+
+body.my-content-page-1 h5::before {
+ content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) "." counter(section-level-4) ". ";
+} 
+
+/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
+/*h4 ~ my-signature, h4 ~ my-summary,*/h4 ~ my-parameters, h4 ~ my-errors, h4 ~ my-return-value {
+  font-size: var(--h4-font-size);
+}
+
+/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
+/*h5 ~ my-signature, h5 ~ my-summary,*/h5 ~ my-parameters, h5 ~ my-errors, h5 ~ my-return-value {
+  font-size: var(--h5-font-size);
+}
+
+/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
+/*h6 ~ my-signature, h6 ~ my-summary,*/h6 ~ my-parameters, h6 ~ my-errors, h6 ~ my-return-value {
+  font-size: var(--h6-font-size);
 }

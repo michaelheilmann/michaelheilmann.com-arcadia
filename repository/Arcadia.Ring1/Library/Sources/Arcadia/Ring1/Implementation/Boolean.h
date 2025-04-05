@@ -31,6 +31,6 @@ typedef bool Arcadia_BooleanValue;
 
 #define Arcadia_BooleanValue_False (false)
 
-Rex_declareScalarType(Arcadia_Boolean);
+Arcadia_declareScalarType(Arcadia_Boolean);
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_BOOLEAN_H_INCLUDED

@@ -1,1 +1,1 @@
-  <h2>3. Documentation</h2>
+<h2>Documentation</h2>

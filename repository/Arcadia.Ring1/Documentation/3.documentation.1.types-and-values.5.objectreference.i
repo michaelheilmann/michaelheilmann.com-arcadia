@@ -1,4 +1,4 @@
-<h3 id="Arcadia_ObjectReferenceValue">3.1.5. Arcadia_ObjectReferenceValue</h3>
+<h3 id="Arcadia_ObjectReferenceValue">Arcadia_ObjectReferenceValue</h3>
 <p>
 Arcadia Ring 1 provides a ObjectReference type.
 </p>

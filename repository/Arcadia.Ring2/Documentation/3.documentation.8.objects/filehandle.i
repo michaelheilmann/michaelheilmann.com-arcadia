@@ -1,210 +1,434 @@
-<h4 id="Arcadia_FileHandle">Arcadia_FileHandle</h4>
+<section class="cxx entity object">
+<h1 id="Arcadia_FileHandle">Arcadia_FileHandle</h1>
 <p>
 <code>Arcadia_FileHandle</code> represents a operating system file handle.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FileHandle</code> pointers.
 A <code>Arcadia_FileHandle</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
 An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileHandle</code> value can be safely cast into a <code>Arcadia_FileHandle</code> pointer.
 </p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FileHandle_create">Arcadia_FileHandle_create</h5>
+<section class="cxx entity method">
 
-<p><code>
-Arcadia_FileHandle*
-Arcadia_FileHandle_create
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* fileSystem
-  )
-</code></p>
+  <h1 id="Arcadia_FileHandle_create">
+    Arcadia_FileHandle_create
+  </h1>
 
-<p>Create a file handle. The file handle is closed.</p>
+  <my-signature><code>
+    Arcadia_FileHandle*<br>
+    Arcadia_FileHandle_create<br>
+    &nbsp;&nbsp;(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* fileSystem<br>
+    &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_FileSystem* self</td><td>A pointer to the backing <code>Arcadia_FileSystem</code> object.</td></tr>
-</table>
+  <my-summary>
+    Create a file handle. The file handle is closed.
+  </my-summary>
 
-<h6><b>Return Value</b></h6>
-<p>A pointer to the file handle.</p>
+  <section class="cxx parameters">
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FileHandle_close">Arcadia_FileHandle_close</h5>
-<p><code>
-void
-Arcadia_FileHandle_close
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileHandle* self
-  )
-</code></p>
+    <h1>Parameters</h1>
 
-<p>Close this file handle.</p>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FileSystem* self</div>
+      <div>A pointer to the backing <code>Arcadia_FileSystem</code> object.</div>
+    </div>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-</table>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FileHandle_openForReading">Arcadia_FileHandle_openForReading</h5>
-<p><code>
-void
-Arcadia_FileHandle_openForReading
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileHandle* self,
-    Arcadia_FilePath* path
-  )
-</code></p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the file handle.</p>
+  </section>
 
-<p>Open a file for reading. If the file is open, it is closed before trying to re-open it.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>Arcadia_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-openforwriting">openForWriting</h5>
-<p><code>
-void R_FileHandle_openForWriting(R_FileHandle* self, R_FilePath* path)
-</code></p>
+<section class="cxx entity method">
 
-<p>Open a file for writing. If the file is open, it is closed before trying to re-open it.</p>
+  <h1 id="Arcadia_FileHandle_close">Arcadia_FileHandle_close</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>R_FilePath* path  </td><td>The file path of the file to write to.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_FileHandle_close<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
-</table>
+  <my-summary>
+  Close this file handle.
+  </my-summary>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-isclosed">isClosed</h5>
-<p><code>
-R_BooleanValue R_FileHandle_isClosed(R_FileHandle const* self)
-</code></p>
+  <section class="cxx parameters">
 
-<p>Get if this file handle is closed.</p>
+    <h1>Parameters</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
-</table>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FileHandle* self</div>
+      <div>A pointer to this file handle.</div>
+    </div>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-isopened">isOpened</h5>
-<p><code>
-R_BooleanValue R_FileHandle_isOpened(R_FileHandle const* self)
-</code></p>
+  </section>
 
-<p>Get if this file handle is opened.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-isopenedforreading">isOpenedForReading</h5>
-<p><code>
-R_BooleanValue R_FileHandle_isOpenedForReading(R_FileHandle const* self)
-</code></p>
+<section class="cxx entity method">
 
-<p>Get if this file handle is opened for reading.</p>
+  <h1 id="Arcadia_FileHandle_openForReading">Arcadia_FileHandle_openForReading</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
-</table>
+  <my-signature><code>
+    void<br>
+    Arcadia_FileHandle_openForReading<br>
+    &nbsp;&nbsp;(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle* self,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+    &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+    Open a file for reading. If the file is open, it is closed before trying to re-open it.
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FileHandle* self</div>
+      <div>A pointer to this file handle.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The file path of the file to read from.</div>
+    </div>
+
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_FileSystemOperationFailed</div>
+      <div>Opening the file failed.</div>
+    </div>
+
+  </ section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-isopenedforwriting">isOpenedForWriting</h5>
-<p><code>
-R_BooleanValue R_FileHandle_isOpenedForWriting(R_FileHandle const* self)
-</code></p>
+<section class="cxx entity method">
 
-<p>Get if this file handle is opened for writing.</p>
+  <h1 id="Arcadia_FileHandle_openForWriting">Arcadia_FileHandle_openForWriting</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_FileHandle_openForWriting<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-write">write</h5>
-<p><code>
-void R_FileHandle_write(R_FileHandle* self, void const* p, R_SizeValue bytesToWrite)
-</code></p>
+  <my-summary>
+  Open a file for writing. If the file is open, it is closed before trying to re-open it.
+  </my-summary>
 
-<p>Write Bytes to this file handle.</p>
+  <section class="cxx parameters">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle* self       </td><td>A pointer to this file handle.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>bytesToWrite</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue bytesToWrite </td><td>The number of Bytes in the array pointed to by <code>bytes</code>.</td></tr>
-  <tr><td>R_SizeValue* bytesWritten</td><td>A pointer to a <code>R_SizeValue</code> variable.</td></tr>
-</table>
+    <h1>Parameters</h1>
 
-<h6><b>Success</b></h6>
-<p>
-On success <code>*bytesWritten</code> is assigned the actual number of Bytes written.
-</p>
+    <div><div>Arcadia_FileHandle* self</div><div>A pointer to this file handle.</div></div>
+    <div><div>Arcadia_FilePath* path  </div><div>The file path of the file to write to.</div></div>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer. </td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_OperationInvalid         </td><td>The file is not opened for writing.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Writing failed.</td></tr>
-</table>
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>self</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>path</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_FileSystemOperationFailed</div><div>Opening the file failed.            </div></div>
+
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-read">read</h5>
-<p><code>
-void R_FileHandle_read(R_FileHandle* self, void const* bytes, R_SizeValue bytesToRead, R_SizeValue* bytesRead)
-</code></p>
+<section class="cxx entity method">
 
-<p>Read Bytes from this file handle.</p>
+  <h1 id="Arcadia_FileHandle_isClosed">Arcadia_FileHandle_isClosed</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle* self      </td><td>A pointer to this file handle.</td></tr>
-  <tr><td>void const* bytes       </td><td>A pointer to an array of <code>bytesToWrite</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue bytesToRead </td><td>The number of Bytes to read from the the array pointed to by <code>bytes</code>.</td></tr>
-  <tr><td>R_SizeValue* bytesRead  </td><td>A pointer to a <code>R_SizeValue</code> variable.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileHandle_isClosed<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Success</b></h6>
-<p>
-On success <code>*bytesRead</code> is assigned the actual number of Bytes read.
-The number of Bytes read is 0 if the end of the file was reached.
-</p>
+  <my-summary>
+  Get if this file handle is closed.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytesRead</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_OperationInvalid         </td><td>The file is not opened for writing.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Writing failed.</td></tr>
-</table>
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle const* self </div><div>A pointer to this file handle.</div></div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this file handle is closed.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_isOpened">Arcadia_FileHandle_isOpened</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileHandle_isOpened<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Get if this file handle is opened.</my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle const* self </div><div>A pointer to this file handle.</div></div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this file handle is opened.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_isOpenedForReading">Arcadia_FileHandle_isOpenedForReading</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileHandle_isOpenedForReading<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Get if this file handle is opened for reading.</my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle const* self </div><div>A pointer to this file handle.</div></div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this file handle is opened for reading.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_isOpenedForWriting">Arcadia_FileHandle_isOpenedForWriting</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileHandle_isOpenedForWriting<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get if this file handle is opened for writing.
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle const* self </div><div>A pointer to this file handle.</div></div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this file handle is opened for writing.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_write">Arcadia_FileHandle_write</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_FileHandle_write<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue bytesToWrite<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Write Bytes to this file handle.
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle* self       </div><div>A pointer to this file handle.</div></div>
+    <div><div>void const* bytes              </div><div>A pointer to an array of <code>bytesToWrite</code> Bytes.</div></div>
+    <div><div>Arcadia_SizeValue bytesToWrite </div><div>The number of Bytes in the array pointed to by <code>bytes</code>.</div></div>
+    <div><div>Arcadia_SizeValue* bytesWritten</div><div>A pointer to a <code>Arcadia_SizeValue</code> variable.</div></div>
+
+  </section>
+
+  <section class="cxx success-condition">
+    <h1>Success</h1>
+    <p><code>*bytesWritten</code> is assigned the actual number of Bytes written.</p>
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>self</code> is a null pointer. </div></div>
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>bytes</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_OperationInvalid         </div><div>The file is not opened for writing.</div></div>
+    <div><div>Arcadia_Status_FileSystemOperationFailed</div><div>Writing failed.</div></div>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_read">Arcadia_FileHandle_read</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_FileHandle_read<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_FileHandle* self,<br>
+  &nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;Arcadia_SizeValue bytesToRead,<br>
+  &nbsp;&nbsp;Arcadia_SizeValue* bytesRead<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Read Bytes from this file handle.</my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle* self     </div><div>A pointer to this file handle.</div></div>
+    <div><div>void const* bytes            </div><div>A pointer to an array of <code>bytesToWrite</code> Bytes.</div></div>
+    <div><div>Arcadia_SizeValue bytesToRead</div><div>The number of Bytes to read from the the array pointed to by <code>bytes</code>.</div></div>
+    <div><div>Arcadia_SizeValue* bytesRead </div><div>A pointer to a <code>Arcadia_SizeValue</code> variable.</div></div>
+
+  </section>
+
+  <section class="cxx success-condition">
+
+    <h1>Success</h1>
+
+    <p>
+    <code>*bytesRead</code> is assigned the actual number of Bytes read.
+    The number of Bytes read is 0 if the end of the file was reached.
+    </p>
+
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>self</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>bytes</code> is a null pointer.</div></div>
+    <div><div>Arcadia                                 </div><div><code>bytesRead</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_OperationInvalid         </div><div>The file is not opened for writing.</div></div>
+    <div><div>Arcadia_Status_FileSystemOperationFailed</div><div>Writing failed.</div></div>
+
+  </section>
+
+</section>

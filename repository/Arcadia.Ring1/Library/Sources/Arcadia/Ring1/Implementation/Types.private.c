@@ -330,6 +330,42 @@ Arcadia_registerObjectType
   return typeNode;
 }
 
+Arcadia_TypeValue
+Arcadia_registerEnumerationType
+  (
+    Arcadia_Thread* thread,
+    char const* name,
+    size_t nameLength,
+    size_t valueSize,
+    Arcadia_Type_Operations const* typeOperations,
+    Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
+  )
+{
+  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
+  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+    if (Arcadia_Atom_isEqualTo(thread, typeNode->typeName, typeName)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
+      Arcadia_Thread_jump(thread);
+    }
+  }
+  TypeNode* typeNode = NULL;
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
+  typeNode->kind = Arcadia_TypeKind_Enumeration;
+  typeNode->typeName = typeName;
+  typeNode->typeOperations = typeOperations;
+  typeNode->valueSize = valueSize;
+  typeNode->typeDestructing = typeDestructing;
+
+  assert(NULL != typeNode->typeOperations);
+
+  typeNode->next = g_typeNodes->typeNodes;
+  g_typeNodes->typeNodes = typeNode;
+
+  Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode); /* @todo Can raise due to allocation failure. Can we built-in a guarantee that at least one lock is always available? */
+
+  return typeNode;
+}
+
 Arcadia_BooleanValue
 Arcadia_Type_isSubType
   (

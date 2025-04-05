@@ -20,6 +20,16 @@
 
 #include "R/Include.h"
 
+#include "Module/Visuals/CullMode.h"
+#include "Module/Visuals/ImageWriterParameters.h"
+#include "Module/Visuals/PixelBuffer.h"
+#include "Module/Visuals/PixelFormat.h"
+#include "Module/Visuals/TextureAddressMode.h"
+#include "Module/Visuals/TextureFilter.h"
+#include "Module/Visuals/VertexElementSemantics.h"
+#include "Module/Visuals/VertexElementSyntax.h"
+#include "Module/Visuals/WindingMode.h"
+
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #include "Module/Visuals/Font.h"
   #include "Module/Visuals/NativeWindowsImageWriter.h"
@@ -30,8 +40,5 @@
 #else
   #error("environment not (yet) supported")
 #endif
-#include "Module/Visuals/ImageWriterParameters.h"
-#include "Module/Visuals/PixelBuffer.h"
-
 
 #endif // MODULE_VISUALS_INCLUDE_H_INCLUDED

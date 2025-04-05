@@ -21,7 +21,7 @@
 #include "R/Include.h"
 #include "Module/Visuals/PixelBuffer.h"
 
-Rex_declareObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object");
 
 struct ImageWriter {
   Arcadia_Object _parent;

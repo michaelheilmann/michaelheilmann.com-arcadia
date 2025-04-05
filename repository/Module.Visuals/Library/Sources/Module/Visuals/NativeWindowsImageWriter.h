@@ -22,7 +22,7 @@
 #include "Module/Visuals/ImageWriter.h"
 #include "Module/Visuals/PixelBuffer.h"
 
-Rex_declareObjectType(u8"NativeWindowsImageWriter", NativeWindowsImageWriter, u8"ImageWriter");
+Arcadia_declareObjectType(u8"NativeWindowsImageWriter", NativeWindowsImageWriter, u8"ImageWriter");
 
 struct NativeWindowsImageWriter {
   ImageWriter _parent;

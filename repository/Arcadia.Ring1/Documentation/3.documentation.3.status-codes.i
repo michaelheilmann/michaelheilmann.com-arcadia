@@ -1,4 +1,4 @@
-  <h3 id="status-codes">3.3. Status Codes</h3>
+  <h3 id="status-codes">Status Codes</h3>
   <p>
   R provides a status type and symbolic constants for its values. That type denotes success or failure of program (or a part of it)
   as well as information on the reason for the failure.</p>

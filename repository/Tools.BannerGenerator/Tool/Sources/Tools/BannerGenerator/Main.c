@@ -103,7 +103,7 @@ main1
 #else
   #error("environment not (yet) supported")
 #endif
-  PixelBuffer* pixelBuffer = PixelBuffer_create(thread, 0, Arcadia_Value_getInteger32Value(&width), Arcadia_Value_getInteger32Value(&height), PixelFormat_An8Rn8Gn8Bn8);
+  PixelBuffer* pixelBuffer = PixelBuffer_create(thread, 0, Arcadia_Value_getInteger32Value(&width), Arcadia_Value_getInteger32Value(&height), Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8);
   ImageWriter_writePngToPath(thread, imageWriter, pixelBuffer, Arcadia_Value_getObjectReferenceValue(&target));
 }
 

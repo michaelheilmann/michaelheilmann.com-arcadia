@@ -59,7 +59,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"TextureFontWindows", TextureFontWindows, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"TextureFontWindows", TextureFontWindows, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 TextureFontWindows_constructImpl
@@ -74,7 +74,7 @@ TextureFontWindows_constructImpl
   Arcadia_TypeValue _type = _TextureFontWindows_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   //
   HDC hScreenDeviceContext = GetDC(NULL);

@@ -25,7 +25,7 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/List.h"
 
-Rex_declareObjectType(u8"Arcadia.Map", Arcadia_Map, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Map", Arcadia_Map, u8"Arcadia.Object");
 
 Arcadia_Map*
 Arcadia_Map_create

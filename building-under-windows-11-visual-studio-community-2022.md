@@ -24,3 +24,36 @@ An out of source build is the recommended way of building *michaelheilmann.com*.
 *Remarks* The above instructions will build the target architecture that is the default of your machine.
 To generate the build files for the target architecture x86, add the parameter `-A Win32` to the cmake command.
 To generate the build files for the target architecture x64, add the parameter `-A x64` to the cmake command.
+
+## Integrating external libraries
+*Arcadia.Ring1*, *Arcadia.Ring2*, *Arcadia.Mil* and many other parts have minimal external dependencies which are provided by the operating systems,
+here are interesting modules from fields of expertise like audials, visuals, haptics, etc. which - nowadays - require the integration of certain
+external libraries. **michaelheilmann.com does not store these external dependencies inside its repository. Instead, it provides an easy way to place
+them outside of the source directory and integrate them into the build. Such ordeals are not necessary if proper operating systems - like Linux - are
+used instead of Windows.**
+
+### OpenGL support
+*Arcadia.Visuals* may utilize OpenGL for accelerated graphics.
+
+```
+-D"Arcadia.Visuals.OpenGl.Enabled"=TRUE -D"Arcadia.Visuals.OpenGl.Directory"=<path to OpenGL directory>
+```
+The OpenGL directory is expected to contain the following folders and files
+
+```
+GL\glcorearb.h
+GL\glext.h
+GL\glxext.h
+GL\wglext.h
+KHR\khrplatform.h
+```
+
+These files can be obtained from [https://registry.khronos.org/OpenGL/index_gl.php](https://registry.khronos.org/OpenGL/index_gl.php).
+
+### Future additions: Vulkan, Direct3D
+Vulkan and Direct3D support might be added in future.
+
+### Convenience: Repository for building all dependencies
+A repository [https://github.com/michaelheilmann/michaelheilmann.com-dependencies](https://github.com/michaelheilmann/michaelheilmann.com-dependencies)
+allows for building the *opengl*, *openal*, *zlib*, *libpng*, and *freetype* dependencies and packages them as a convenient zip file. Under Linux,
+of course, such ordeals are not necessary.

@@ -20,7 +20,7 @@
 
 #include "R/Include.h"
 
-Rex_declareObjectType(u8"Tools.TemplateEngine.Context", Context, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Tools.TemplateEngine.Context", Context, u8"Arcadia.Object");
 
 struct Context {
   Arcadia_Object _parent;

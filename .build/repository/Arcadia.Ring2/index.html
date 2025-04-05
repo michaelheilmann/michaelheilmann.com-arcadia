@@ -13,30 +13,13 @@
   <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
   <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
 
-<link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=3'>
-<link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=3'>
-<link rel='canonical' href='https://michaelheilmann.com/repository/R1/'>
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=1'>
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=1'>
+<link rel='stylesheet' href='https://michaelheilmann.com/assets/cxx-doc.css?v=1'>
+<link rel='canonical' href='https://michaelheilmann.com/repository/Arcadia.Ring2/'>
 <title>Michael Heilmann's Arcadia Ring 2</title>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
-  /* variable */
-  body.my-constant-page-1 my-v {
-    font-family: my-code-font;
-    font-size: 0.9rem;
-  }
-
-  /* meta variable */
-  body.my-constant-page-1 my-mv {
-    display: inline;
-    font-family: my-code-font;
-    font-size: 0.9rem;
-  }
-  body.my-constant-page-1 my-mv::before {
-    content: "<";
-  }
-  body.my-constant-page-1 my-mv::after {
-    content: ">";
-  }
 </style>
 </head>
 <body class="my-content-page-1">
@@ -53,7 +36,7 @@
   This is the documentation for Michael  Heilmann's Arcadia Ring 2.
   Arcadia Ring 2 facilitates the creation of C programs - in particular interpreters - that are portable, maintainable, as well as safe.
 
-<h2>1. Files</h2>
+<h2>Files</h2>
 <p>
 You can find the sources of Arcadia Ring 2 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
 The subdirectory of Arcadia Ring 2 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2</a>.</p>
@@ -77,1297 +60,2260 @@ For instructions on how to build, test, and use Arcadia Ring 1,
 refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/README.md">README.md</a> in the root folder of the repository.
 </p>
 
-<h2>2. Further References</h2>
+<h2>Further References</h2>
 <p>Arcadia Ring 2 relies on <a href="https://michaelheilmann.com/repository/Arms1">ARMS1</a> and <a href="https://michaelheilmann.com/repository/Arcadia.Ring1">Arcadia Ring1</a>.</p>
 
-  <h2>3. Documentation</h2>
+  <h2>Documentation</h2>
 
-<h3>3.8. Objects</h3>
+<h3>Objects</h3>
 
-<h4 id="Arcadia_ByteBuffer">Arcadia_ByteBuffer</h4>
+<section class="cxx entity object">
+<h1 id="Arcadia_ByteBuffer">Arcadia_ByteBuffer</h1>
 <p>
 <code>Arcadia_ByteBuffer</code> represents a mutable sequence of Bytes.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_ByteBuffer</code> pointers.
 A <code>Arcadia_ByteBuffer</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuffer</code> value can be safely cast into a <code>R_ByteBuffer</code> pointer.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuffer</code> value can be safely cast into a <code>Arcadia_ByteBuffer</code> pointer.
 </p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_create">Arcadia_ByteBuffer_create</h5>
-
-<p><code>
-Arcadia_ByteBuffer*
-Arcadia_ByteBuffer_create
-  (
-    Arcadia_Thread* thread
-  )
-</code></p>
-
-<p>Create a Byte buffer.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>A pointer to the Byte buffer.</p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</h5>
-<p><code>
-void
-Arcadia_ByteBuffer_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* self
-  )
-</code></p>
-
-<p>Set the number of elements of this Byte buffer to zero.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self</td><td>A pointer to this Byte buffer.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_ByteBuffer_endsWith_pn">Arcadia_ByteBuffer_endsWith_pn</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_ByteBuffer_endsWith_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer const* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Get if a sequence of Bytes is a suffix of this Byte buffer's sequence of Bytes.</p>
+  <h1 id="Arcadia_ByteBuffer_create">Arcadia_ByteBuffer_create</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_ByteBuffer*<br>
+  Arcadia_ByteBuffer_create<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this byte buffer's sequence of Bytes.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
+  <my-summary>
+  Create a Byte buffer.
+  </my-summary>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+  </section>
 
-<h5 id="Arcadia_ByteBuffer_startsWith_pn">Arcadia_ByteBuffer_startsWith_pn</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_ByteBuffer_startsWith_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
+  
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the Byte buffer.</p>
+  </section>
 
-<p>Get if a sequence of Bytes is a prefix of this Byte buffer's sequence of Bytes.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
-
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_ByteBuffer_isEqualTo_pn">Arcadia_isEqualTo_pn</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_ByteBuffer_isEqualTo_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</h1>
 
-<p>Get if a sequence of Bytes is this Byte buffer's sequence of Bytes.</p>
+  <my-signature><code>
+  void<br>
+  Arcadia_ByteBuffer_clear<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
+  <my-summary>
+  Set the number of elements of this Byte buffer to zero.
+  </my-summary>
 
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_append_pn">Arcadia_ByteBuffer_append_pn</h5>
-<p><code>
-void
-Arcadia_ByteBuffer_append_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
-
-<p>Append Bytes to this Byte buffer.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* bytes                     </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes       </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_prepend_pn">Arcadia_ByteBuffer_prepend_pn</h5>
-<p><code>
-void
-Arcadia_ByteBuffer_prepend_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* self,
-    void const* p,
-    Arcadia_SizeValue n
-  )
-</code></p>
 
-<p>Prepend Bytes to this Byte buffer.</p>
+<section class="cxx entity method">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>void const* p                         </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue n                   </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
+  <h1 id="Arcadia_ByteBuffer_endsWith_pn">Arcadia_ByteBuffer_endsWith_pn</h1>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteBuffer_endsWith_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_insert_pn">Arcadia_ByteBuffer_insert_pn</h5>
-<p><code>
-void
-Arcadia_ByteBuffer_insert_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* self,
-    Arcadia_SizeValue index,
-    void const* p,
-    Arcadia_SizeValue n
-  )
-</code></p>
+  <my-summary>
+  Get if a sequence of Bytes is a suffix of this Byte buffer's sequence of Bytes.
+  </my-summary>
 
-<p>Insert Bytes into this Byte buffer.</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
-  <tr><td>void const* p                         </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue n                   </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this byte buffer's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer. </td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_AllocationFailed    </td><td>An allocation failed.                </td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_isEqualTo">Arcadia_ByteBuffer_isEqualTo</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_ByteBuffer_isEqualTo
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer const* self,
-    Arcadia_ByteBuffer const* other
-  )
-</code></p>
 
-<p>Compare this Byte buffer with another Byte buffer for equality.</p>
+<section class="cxx entity method">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer const* self        </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_ByteBuffer const* other       </td><td>A pointer to the other Byte buffer.</td></tr>
-</table>
+  <h1 id="Arcadia_ByteBuffer_startsWith_pn">Arcadia_ByteBuffer_startsWith_pn</h1>
 
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if this Byte buffer is equal to the other Byte buffer.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteBuffer_startsWith_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getSize</h5>
-<p><code>
-Arcadia_SizeValue
-Arcadia_ByteBuffer_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer const* self
-  )
-</code></p>
+  <my-summary>
+  Get if a sequence of Bytes is a prefix of this Byte buffer's sequence of Bytes.
+  </my-summary>
 
-<p>Get the size of this Byte buffer.</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-</table>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this byte buffer's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
 
-<h6><b>Return Value</b></h6>
-<p>The size of this Byte buffer.</p>
-
-<h6><b>Remarks</b></h6>
-<p> The size of a Byte buffer is the length of the Byte sequence it contains.</p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_getAt">Arcadia_ByteBuffer_getat</h5>
-<p><code>
-Arcadia_Natural8Value
-Arcadia_ByteBuffer_getAt
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer const* self,
-    Arcadia_SizeValue index
-  )
-</code></p>
-
-<p>Get the Byte value at the specified index.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_SizeValue index               <td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The Byte value.</p>
-
-<h6><b>Remarks</b></h6>
-<p> The size of a Byte buffer is the length of the Byte sequence it contains.</p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_isEmpty">Arcadia_ByteBuffer_isEmpty</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_ByteBuffer_isEmpty
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* self
-  )
-</code></p>
 
-<p>Get if this Byte buffer is empty.</p>
+<section class="cxx entity method">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-</table>
+  <h1 id="Arcadia_ByteBuffer_isEqualTo_pn">Arcadia_isEqualTo_pn</h1>
 
-<h6><b>Return Value</b></h6>
-<p><code>Arcadia_BooleanValue_True</code> if this Byte buffer is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteBuffer_isEqualTo_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-</table>
+  <my-summary>
+  Get if a sequence of Bytes is this Byte buffer's sequence of Bytes.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this byte buffer's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_ByteBuffer_swap">Arcadia_ByteBuffer_swap</h5>
-<p><code>
-void
-Arcadia_ByteBuffer_swap
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ByteBuffer* self,
-    Arcadia_ByteBuffer* other
-  )
-</code></p>
 
-<p>Swap the contents of this Byte buffer with the contents of another Byte buffer.</p>
+<section class="cxx entity method">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to this Byte buffer.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* self              </td><td>A pointer to the other Byte buffer.</td></tr>
-</table>
+  <h1 id="Arcadia_ByteBuffer_append_pn">Arcadia_ByteBuffer_append_pn</h1>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>other</code> is a null pointer.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_ByteBuffer_append_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h4 id="Arcadia_FileHandle">Arcadia_FileHandle</h4>
+  <my-summary>
+  Append Bytes to this Byte buffer.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>bytes</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_ByteBuffer_prepend_pn">Arcadia_ByteBuffer_prepend_pn</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_ByteBuffer_prepend_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue n<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Prepend Bytes to this Byte buffer.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* p</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue n</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>bytes</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteBuffer_insert_pn">Arcadia_ByteBuffer_insert_pn</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_ByteBuffer_insert_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue n<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Insert Bytes into this Byte buffer.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* p</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue n</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>bytes</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteBuffer_isEqualTo">Arcadia_ByteBuffer_isEqualTo</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteBuffer_isEqualTo<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* other<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Compare this Byte buffer with another Byte buffer for equality.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer const* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer const* other</div>
+      <div>A pointer to the other Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this Byte buffer is equal to the other Byte buffer.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getSize</h1>
+
+  <my-signature><code>
+  Arcadia_SizeValue<br>
+  Arcadia_ByteBuffer_getSize<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get the size of this Byte buffer.
+  Remarks: The size of a Byte buffer is the length of the Byte sequence it contains.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The size of this Byte buffer.</p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteBuffer_getAt">Arcadia_ByteBuffer_getAt</h1>
+
+  <my-signature><code>
+  Arcadia_Natural8Value<br>
+  Arcadia_ByteBuffer_getAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get the Byte value at the specified index.
+  Remarks: The size of a Byte buffer is the length of the Byte sequence it contains.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The Byte value.</p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteBuffer_isEmpty">Arcadia_ByteBuffer_isEmpty</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_ByteBuffer_isEmpty<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Get if this Byte buffer is empty.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p><code>Arcadia_BooleanValue_True</code> if this Byte buffer is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteBuffer_swap">Arcadia_ByteBuffer_swap</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_ByteBuffer_swap<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* other<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Swap the contents of this Byte buffer with the contents of another Byte buffer.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to the other Byte buffer.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>other</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity object">
+<h1 id="Arcadia_FileHandle">Arcadia_FileHandle</h1>
 <p>
 <code>Arcadia_FileHandle</code> represents a operating system file handle.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FileHandle</code> pointers.
 A <code>Arcadia_FileHandle</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
 An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileHandle</code> value can be safely cast into a <code>Arcadia_FileHandle</code> pointer.
 </p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FileHandle_create">Arcadia_FileHandle_create</h5>
+<section class="cxx entity method">
 
-<p><code>
-Arcadia_FileHandle*
-Arcadia_FileHandle_create
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* fileSystem
-  )
-</code></p>
+  <h1 id="Arcadia_FileHandle_create">
+    Arcadia_FileHandle_create
+  </h1>
 
-<p>Create a file handle. The file handle is closed.</p>
+  <my-signature><code>
+    Arcadia_FileHandle*<br>
+    Arcadia_FileHandle_create<br>
+    &nbsp;&nbsp;(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* fileSystem<br>
+    &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_FileSystem* self</td><td>A pointer to the backing <code>Arcadia_FileSystem</code> object.</td></tr>
-</table>
+  <my-summary>
+    Create a file handle. The file handle is closed.
+  </my-summary>
 
-<h6><b>Return Value</b></h6>
-<p>A pointer to the file handle.</p>
+  <section class="cxx parameters">
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FileHandle_close">Arcadia_FileHandle_close</h5>
-<p><code>
-void
-Arcadia_FileHandle_close
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileHandle* self
-  )
-</code></p>
+    <h1>Parameters</h1>
 
-<p>Close this file handle.</p>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FileSystem* self</div>
+      <div>A pointer to the backing <code>Arcadia_FileSystem</code> object.</div>
+    </div>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-</table>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FileHandle_openForReading">Arcadia_FileHandle_openForReading</h5>
-<p><code>
-void
-Arcadia_FileHandle_openForReading
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileHandle* self,
-    Arcadia_FilePath* path
-  )
-</code></p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the file handle.</p>
+  </section>
 
-<p>Open a file for reading. If the file is open, it is closed before trying to re-open it.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>Arcadia_FilePath* path  </td><td>The file path of the file to read from.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-openforwriting">openForWriting</h5>
-<p><code>
-void R_FileHandle_openForWriting(R_FileHandle* self, R_FilePath* path)
-</code></p>
+<section class="cxx entity method">
 
-<p>Open a file for writing. If the file is open, it is closed before trying to re-open it.</p>
+  <h1 id="Arcadia_FileHandle_close">Arcadia_FileHandle_close</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle* self</td><td>A pointer to this file handle.</td></tr>
-  <tr><td>R_FilePath* path  </td><td>The file path of the file to write to.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_FileHandle_close<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Opening the file failed.            </td></tr>
-</table>
+  <my-summary>
+  Close this file handle.
+  </my-summary>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-isclosed">isClosed</h5>
-<p><code>
-R_BooleanValue R_FileHandle_isClosed(R_FileHandle const* self)
-</code></p>
+  <section class="cxx parameters">
 
-<p>Get if this file handle is closed.</p>
+    <h1>Parameters</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
-</table>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FileHandle* self</div>
+      <div>A pointer to this file handle.</div>
+    </div>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-isopened">isOpened</h5>
-<p><code>
-R_BooleanValue R_FileHandle_isOpened(R_FileHandle const* self)
-</code></p>
+  </section>
 
-<p>Get if this file handle is opened.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-isopenedforreading">isOpenedForReading</h5>
-<p><code>
-R_BooleanValue R_FileHandle_isOpenedForReading(R_FileHandle const* self)
-</code></p>
+<section class="cxx entity method">
 
-<p>Get if this file handle is opened for reading.</p>
+  <h1 id="Arcadia_FileHandle_openForReading">Arcadia_FileHandle_openForReading</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
-</table>
+  <my-signature><code>
+    void<br>
+    Arcadia_FileHandle_openForReading<br>
+    &nbsp;&nbsp;(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle* self,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+    &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+    Open a file for reading. If the file is open, it is closed before trying to re-open it.
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FileHandle* self</div>
+      <div>A pointer to this file handle.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The file path of the file to read from.</div>
+    </div>
+
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_FileSystemOperationFailed</div>
+      <div>Opening the file failed.</div>
+    </div>
+
+  </ section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-isopenedforwriting">isOpenedForWriting</h5>
-<p><code>
-R_BooleanValue R_FileHandle_isOpenedForWriting(R_FileHandle const* self)
-</code></p>
+<section class="cxx entity method">
 
-<p>Get if this file handle is opened for writing.</p>
+  <h1 id="Arcadia_FileHandle_openForWriting">Arcadia_FileHandle_openForWriting</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle const* self </td><td>A pointer to this file handle.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_FileHandle_openForWriting<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-write">write</h5>
-<p><code>
-void R_FileHandle_write(R_FileHandle* self, void const* p, R_SizeValue bytesToWrite)
-</code></p>
+  <my-summary>
+  Open a file for writing. If the file is open, it is closed before trying to re-open it.
+  </my-summary>
 
-<p>Write Bytes to this file handle.</p>
+  <section class="cxx parameters">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle* self       </td><td>A pointer to this file handle.</td></tr>
-  <tr><td>void const* bytes        </td><td>A pointer to an array of <code>bytesToWrite</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue bytesToWrite </td><td>The number of Bytes in the array pointed to by <code>bytes</code>.</td></tr>
-  <tr><td>R_SizeValue* bytesWritten</td><td>A pointer to a <code>R_SizeValue</code> variable.</td></tr>
-</table>
+    <h1>Parameters</h1>
 
-<h6><b>Success</b></h6>
-<p>
-On success <code>*bytesWritten</code> is assigned the actual number of Bytes written.
-</p>
+    <div><div>Arcadia_FileHandle* self</div><div>A pointer to this file handle.</div></div>
+    <div><div>Arcadia_FilePath* path  </div><div>The file path of the file to write to.</div></div>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer. </td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_OperationInvalid         </td><td>The file is not opened for writing.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Writing failed.</td></tr>
-</table>
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>self</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>path</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_FileSystemOperationFailed</div><div>Opening the file failed.            </div></div>
+
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filehandle-read">read</h5>
-<p><code>
-void R_FileHandle_read(R_FileHandle* self, void const* bytes, R_SizeValue bytesToRead, R_SizeValue* bytesRead)
-</code></p>
+<section class="cxx entity method">
 
-<p>Read Bytes from this file handle.</p>
+  <h1 id="Arcadia_FileHandle_isClosed">Arcadia_FileHandle_isClosed</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>R_FileHandle* self      </td><td>A pointer to this file handle.</td></tr>
-  <tr><td>void const* bytes       </td><td>A pointer to an array of <code>bytesToWrite</code> Bytes.</td></tr>
-  <tr><td>R_SizeValue bytesToRead </td><td>The number of Bytes to read from the the array pointed to by <code>bytes</code>.</td></tr>
-  <tr><td>R_SizeValue* bytesRead  </td><td>A pointer to a <code>R_SizeValue</code> variable.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileHandle_isClosed<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Success</b></h6>
-<p>
-On success <code>*bytesRead</code> is assigned the actual number of Bytes read.
-The number of Bytes read is 0 if the end of the file was reached.
-</p>
+  <my-summary>
+  Get if this file handle is closed.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_ArgumentValueInvalid     </td><td><code>bytesRead</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_OperationInvalid         </td><td>The file is not opened for writing.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed</td><td>Writing failed.</td></tr>
-</table>
+  <section class="cxx parameters">
 
-<h4 id="Arcadia_FilePath">Arcadia_FilePath</h4>
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle const* self </div><div>A pointer to this file handle.</div></div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this file handle is closed.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_isOpened">Arcadia_FileHandle_isOpened</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileHandle_isOpened<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Get if this file handle is opened.</my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle const* self </div><div>A pointer to this file handle.</div></div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this file handle is opened.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_isOpenedForReading">Arcadia_FileHandle_isOpenedForReading</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileHandle_isOpenedForReading<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Get if this file handle is opened for reading.</my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle const* self </div><div>A pointer to this file handle.</div></div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this file handle is opened for reading.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_isOpenedForWriting">Arcadia_FileHandle_isOpenedForWriting</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileHandle_isOpenedForWriting<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get if this file handle is opened for writing.
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle const* self </div><div>A pointer to this file handle.</div></div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if this file handle is opened for writing.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_write">Arcadia_FileHandle_write</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_FileHandle_write<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileHandle* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue bytesToWrite<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Write Bytes to this file handle.
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle* self       </div><div>A pointer to this file handle.</div></div>
+    <div><div>void const* bytes              </div><div>A pointer to an array of <code>bytesToWrite</code> Bytes.</div></div>
+    <div><div>Arcadia_SizeValue bytesToWrite </div><div>The number of Bytes in the array pointed to by <code>bytes</code>.</div></div>
+    <div><div>Arcadia_SizeValue* bytesWritten</div><div>A pointer to a <code>Arcadia_SizeValue</code> variable.</div></div>
+
+  </section>
+
+  <section class="cxx success-condition">
+    <h1>Success</h1>
+    <p><code>*bytesWritten</code> is assigned the actual number of Bytes written.</p>
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>self</code> is a null pointer. </div></div>
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>bytes</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_OperationInvalid         </div><div>The file is not opened for writing.</div></div>
+    <div><div>Arcadia_Status_FileSystemOperationFailed</div><div>Writing failed.</div></div>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileHandle_read">Arcadia_FileHandle_read</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_FileHandle_read<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_FileHandle* self,<br>
+  &nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;Arcadia_SizeValue bytesToRead,<br>
+  &nbsp;&nbsp;Arcadia_SizeValue* bytesRead<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>Read Bytes from this file handle.</my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div><div>Arcadia_FileHandle* self     </div><div>A pointer to this file handle.</div></div>
+    <div><div>void const* bytes            </div><div>A pointer to an array of <code>bytesToWrite</code> Bytes.</div></div>
+    <div><div>Arcadia_SizeValue bytesToRead</div><div>The number of Bytes to read from the the array pointed to by <code>bytes</code>.</div></div>
+    <div><div>Arcadia_SizeValue* bytesRead </div><div>A pointer to a <code>Arcadia_SizeValue</code> variable.</div></div>
+
+  </section>
+
+  <section class="cxx success-condition">
+
+    <h1>Success</h1>
+
+    <p>
+    <code>*bytesRead</code> is assigned the actual number of Bytes read.
+    The number of Bytes read is 0 if the end of the file was reached.
+    </p>
+
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>self</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_ArgumentValueInvalid     </div><div><code>bytes</code> is a null pointer.</div></div>
+    <div><div>Arcadia                                 </div><div><code>bytesRead</code> is a null pointer.</div></div>
+    <div><div>Arcadia_Status_OperationInvalid         </div><div>The file is not opened for writing.</div></div>
+    <div><div>Arcadia_Status_FileSystemOperationFailed</div><div>Writing failed.</div></div>
+
+  </section>
+
+</section>
+
+<section class="cxx entity object">
+<h1 id="Arcadia_FilePath">Arcadia_FilePath</h1>
 <p>
 <code>Arcadia_FilePath</code> represents a file path.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FilePath</code> pointers.
-A <code>Arcadia_FilePath</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
+A <code>Arcadia_FilePath</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
 An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FilePath</code> value can be safely cast into a <code>Arcadia_FilePath</code> pointer.
 </p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="r-filepath-create">create</h5>
 
-<p><code>
-Arcadia_FilePath*
-Arcadia_FilePath_create
-  (
-    Arcadia_Thread* thread
-  )
-</code></p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_FilePath_create">create</h1>
 
-<p>Create the empty file path.</p>
+  <my-signature><code>
+  Arcadia_FilePath*<br>
+  Arcadia_FilePath_create<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-</table>
+  <my-summary>
+  Create the empty file path.
+  </my-summary>
 
-<h6><b>Return Value</b></h6>
-<p>A pointer to the file path.</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+  </section>
+  
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the file path.</p>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FilePath_parseWindows">Arcadia_FilePath_parseWindows</h5>
-<p><code>
-Arcadia_FilePath*
-Arcadia_FilePath_parseWindows
-  (
-    Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
-
-<p>Parse a file path in the Windows format.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
-  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>A pointer to the file path.</p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FilePath_parseUnix">Arcadi_FilePath_parseUnix</h5>
-<p><code>
-Arcadia_FilePath*
-Arcadia_FilePath_parseUnix
-  (
-    Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
 
-<p>Parse a file path in the Unix format.</p>
+<section class="cxx entity method">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
-  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
-</table>
+  <h1 id="Arcadia_FilePath_parseWindows">Arcadia_FilePath_parseWindows</h1>
 
-<h6><b>Return Value</b></h6>
-<p>A pointer to the file path.</p>
+  <my-signature><code>
+  Arcadia_FilePath*<br>
+  Arcadia_FilePath_parseWindows<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FilePath-parseNative">Arcadia_FilePath_parseNative</h5>
-<p><code>
-Arcadia_FilePath*
-Arcadia_FilePath_parseNative
-  (
-    Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
+  <my-summary>
+  Parse a file path in the Windows format.
+  </my-summary>
 
-<p>Parse a file path in the native format.</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>bytes</div>
+      <div>A pointer to an array of <code>numberOfBytes</code> Bytes.</div>
+    </div>
+    <div>
+      <div>numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</div>
+    </div>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>bytes</td><td>A pointer to an array of <code>numberOfBytes</code> Bytes.</td></tr>
-  <tr><td>numberOfBytes</td><td>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</td></tr>
-</table>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the file path.</p>
+  </section>
 
-<h6><b>Return Value</b></h6>
-<p>A pointer to the file path.</p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FilePath_toNative">Arcadia_FilePath_toNative</h5>
-<p><code>
-Arcadia_String*
-Arcadia_FilePath_toNative
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FilePath* self
-  )
-</code></p>
 
-<p>Convert a file path to the native format.</p>
+<section class="cxx entity method">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>self</td><td>A pointer to this file path.</td></tr>
-</table>
+  <h1 id="Arcadia_FilePath_parseUnix">Arcadi_FilePath_parseUnix</h1>
 
-<h6><b>Return Value</b></h6>
-<p>A pointer to the string.</p>
+  <my-signature><code>
+  Arcadia_FilePath*<br>
+  Arcadia_FilePath_parseUnix<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h4 id="Arcadia_FileSystem">Arcadia_FileSystem</h4>
+  <my-summary>
+  Parse a file path in the Unix format.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>bytes</div>
+      <div>A pointer to an array of <code>numberOfBytes</code> Bytes.</div>
+    </div>
+    <div>
+      <div>numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the file path.</p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FilePath-parseNative">Arcadia_FilePath_parseNative</h1>
+
+  <my-signature><code>
+  Arcadia_FilePath*<br>
+  Arcadia_FilePath_parseNative<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Parse a file path in the native format.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>bytes</div>
+      <div>A pointer to an array of <code>numberOfBytes</code> Bytes.</div>
+    </div>
+    <div>
+      <div>numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>bytes</code> Bytes.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the file path.</p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_FilePath_toNative">Arcadia_FilePath_toNative</h1>
+
+  <my-signature><code>
+  Arcadia_String*<br>
+  Arcadia_FilePath_toNative<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Convert a file path to the native format.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>self</div>
+      <div>A pointer to this file path.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the string.</p>
+  </section>
+
+</section>
+
+<section class="cxx entity object">
+<h1 id="Arcadia_FileSystem">Arcadia_FileSystem</h1>
 <p>
 <code>Arcadia_FileSystem</code> provides access to the file system.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FileSystem</code> pointers.
 A <code>Arcadia_FileSystem</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
 An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSystem</code> value can be safely cast into a <code>Arcadia_FileSystem</code> pointer.
 </p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_FileSystem_create">Arcadia_FileSystem_create</h5>
-<p><code>
-Arcadia_FileSystem*
-Arcadia_FileSystem_create
-  (
-    Arcadia_Thread* thread
-  )
-</code></p>
-
-<p>Create a file system.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</h5>
-<p><code>
-Arcadia_ByteBuffer*
-Arcadia_FileSystem_getFileContents
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
-  )
-</code></p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_FileSystem_create">Arcadia_FileSystem_create</h1>
 
-<p>Get the contents of a file.</p>
+  <my-signature><code>
+  Arcadia_FileSystem*<br>
+  Arcadia_FileSystem_create<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
-  <tr><td><a href="#">Arcadia_FilePath</a>* path</td><td>The file path of the file.</td></tr>
-</table>
+  <my-summary>
+  Create a file system.
+  </my-summary>
 
-<h6><b>Return Value</b></h6>
-<p>
-A pointer to a <code>Arcadia_ByteBuffer</code> object with the file contents.
-</p>
+  <section clas="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+  </section>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Status_ArgumentValueInvalid</a>     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td><a href="#">Arcadia_Status_ArgumentValueInvalid</a>     </td><td><code>path</code> is a null pointer.</td></tr>
-  <tr><td><a href="#">Arcadia_Status_FileSystemOperationFailed</a></td><td>Opening the file failed.            </td></tr>
-</table>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<h5 id="Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</h5>
-<p><code>
-void
-Arcadia_FileSystem_setFileContents
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path,
-    Arcadia_ByteBuffer* contents
-  )
-</code></p>
-
-<p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
-  <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
-  <tr><td>Arcadia_ByteBuffer* contents</td><td>A poiner to the Byte buffer with the file contents.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>sekf</code> is a null pointer.    </td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>path</code> is a null pointer.    </td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>contents</code> is a null pointer.</td></tr>
-  <tr><td>R_Status_FileSystemOperationFailed </td><td>Opening the file failed.                </td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_FileSystem_regularFileExists">Arcadia_FileSystem_regularFileExists</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_FileSystem_regularFileExists
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Get if a file exists and is a regular file.</p>
+  <h1 id="Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
-  <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_ByteBuffer*<br>
+  Arcadia_FileSystem_getFileContents<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if the file exists and is a regular file.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
+  <my-summary>
+  Get the contents of a file.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid     </td><td><code>path</code> is a null pointer.</td></tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Process</a>* process</div>
+      <div>A pointer to the <code>Arcadia_Process</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FilePath</a>* path</div>
+      <div>The file path of the file.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    A pointer to a <code>Arcadia_ByteBuffer</code> object with the file contents.
+    </p>
+  </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div><a href="#">Arcadia_Status_ArgumentValueInvalid</a></div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_Status_ArgumentValueInvalid</a></div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_Status_FileSystemOperationFailed</a></div>
+      <div>Opening the file failed.</div>
+    </div>
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_FileSystem_directoryFileExists
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Get if a file exists and is a directory file.</p>
+  <h1 id="Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td><a href="#">Arcadia_FileSystem</a>* self</td><td>A pointer to this <code>Arcadia_FileSystem</code> object.</td></tr>
-  <tr><td>Arcadia_FilePath* path</td><td>The file path of the file.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_FileSystem_setFileContents<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* contents<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if the file exists and is a directory file.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
+  <my-summary>
+  Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>path</code> is a null pointer.</td></tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The file path of the file.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* contents</div>
+      <div>A poiner to the Byte buffer with the file contents.</div>
+    </div>
+  </section>
 
-<h4 id="Arcadia_List">Arcadia_List</h4>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>sekf</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>contents</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_FileSystemOperationFailed</div>
+      <div>Opening the file failed.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_regularFileExists">Arcadia_FileSystem_regularFileExists</h1>
+  
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileSystem_regularFileExists<br>
+  &nbsp;&nbsp;(
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get if a file exists and is a regular file.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The file path of the file.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the file exists and is a regular file.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</td><td><code>path</code> is a null pointer.</td></tr>
+  </section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</h1>
+  
+  <my-summary><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileSystem_directoryFileExists<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Get if a file exists and is a directory file.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The file path of the file.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the file exists and is a directory file.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity object">
+<h1 id="Arcadia_List">Arcadia_List</h1>
 <p>
 <code>Arcadia_List</code> represents a list of <code>Arcadia_Value</code> objects.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_List</code> pointers.
 A <code>R_List</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
 An <code>R_ObjectReferenceValue</code> pointing to a <code>R_List</code> value can be safely cast into a <code>Arcadia_List</code> pointer.
 </p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_create">Arcadia_List_create</h5>
-<p><code>
-Arcadia_List*
-Arcadia_List_create
-  (
-    Arcadia_Thread* thread
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Create a list.</p>
+  <h1 id="Arcadia_List_create">Arcadia_List_create</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_List*<br>
+  Arcadia_List_create<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
-</table>
+  <my-summary>
+  Create a list.
+  </my-summary>
 
-<h6><b>Return value</b></h6>
-<p>A pointer to the <code>Arcadia_List</code> value.</p>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Process</a>* process</div>
+      <div>A pointer to the <code>Arcadia_Process</code> object.</div>
+    </div>
+  </section>
 
-<h5 id="Arcadia_List_append">Arcadia_List_append</h5>
-<p><code>
-void
-Arcadia_List_append
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_Value value
-  )
-</code></p>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
 
-<p>Append a value to this list.</p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the <code>Arcadia_List</code> value.</p>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_Value value                     </td><td>The value to append.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
 
-<h5 id="Arcadia_List_clear">Arcadia_List_clear</h5>
-<p><code>
-void
-Arcadia_List_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  )
-</code></p>
+  <h1 id="Arcadia_List_append">Arcadia_List_append</h1>
 
-<p>Clear this list.</p>
+  <my-signature><code>
+  void<br>
+  Arcadia_List_append<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
-</table>
+  <my-summary>
+  Append a value to this list.
+  </my-summary>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_getAt">Arcadia_List_getAt</h5>
-<p><code>
-Arcadia_Value
-Arcadia_List_getAt
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_SizeValue index
-  )
-</code></p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Process</a>* process</div>
+      <div>A pointer to the <code>Arcadia_Process</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+    <div>
+      <div>Arcadia_Value value</div>
+      <div>The value to append.</div>
+    </div>
+  </<section>
 
-<p>Get the value at the specifie index in this list.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_SizeValue index                 </td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The value.</p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
 
-<h5 id="Arcadia_List_getSize">Arcadia_List_getSize</h5>
-<p><code>
-Arcadia_SizeValue
-Arcadia_List_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List const* self
-  )
-</code></p>
+  <h1 id="Arcadia_List_clear">Arcadia_List_clear</h1>
 
-<p>Get the size of this list.</p>
+  <my-signature><code>
+  void<br>
+  Arcadia_List_clear<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
-</table>
+  <my-summary>
+  Clear this list.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Process</a>* process</div>
+      <div>A pointer to the <code>Arcadia_Process</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+  </section>
 
-<h6><b>Return Value</b></h6>
-<p>The size of this list.</p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_insertAt">Arcadia_List_insert</h5>
-<p><code>
-void
-Arcadia_List_insertAt
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_SizeValue index,
-    Arcadia_Value value
-  )
-</code></p>
-
-<p>Insert a value at the specified position in this list.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
-  <tr><td>Arcadia_Value value                   </td><td>The value to insert.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_isEmpty">Arcadia_List_isEmpty</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_List_isEmpty
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  )
-</code></p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_List_getAt">Arcadia_List_getAt</h1>
 
-<p>Get if this list is empty.</p>
+  <my-signature><code>
+  Arcadia_Value<br>
+  Arcadia_List_getAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
-</table>
+  <my-summary>
+  Get the value at the specifie index in this list.
+  </my-summary>
 
-<h6><b>Return Value</b></h6>
-<p><code>Arcadia_BooleanValue_True</code> if this list is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div><div>A pointer to this list.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</div>
+    </div>
+  </section>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-</table>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>index</code> is out of bounds.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The value.</p>
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_List_prepend">Arcadia_List_prepend</h5>
-<p><code>
-void
-Arcadia_List_prepend
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_Value value
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Prepend a value to this list.</p>
+  <h1 id="Arcadia_List_getSize">Arcadia_List_getSize</h1>
 
-<p>Prepend a <code>R_Value</code> to a list.</p>
+  <my-signature><code>
+  Arcadia_SizeValue<br>
+  Arcadia_List_getSize<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_Value value                   </td><td>The value to prepend.</td></tr>
-</table>
+  <my-summary>
+  Get the size of this list.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>index</code> is out of bounds.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The size of this list.</p>
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_remove">Arcadia_List_remove</h5>
-<p><code>
-void
-Arcadia_List_remove
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_SizeValue start,
-    Arcadia_SizeValue length
-  )
-</code></p>
 
-<p>Remove <code>length</code> values starting with element at index <code>start</code>.</p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_List_insertAt">Arcadia_List_insert</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_SizeValue start</td><td>The index of the first element to remove.</td></tr>
-  <tr><td>Arcadia_SizeValue length</td><td>The number of elements to remove.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_List_insertAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index + length &gt; n</code> where <code>n</code> is the length of the list.</td></tr>
-</table>
+  <my-summary>
+  Insert a value at the specified position in this list.
+  </my-summary>
 
-<h4 id="Arcadia_Stack">Stack</h4>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+    <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
+    <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
+    <tr><td>Arcadia_Value value                   </td><td>The value to insert.</td></tr>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>index</code> is out of bounds.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_List_isEmpty">Arcadia_List_isEmpty</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_List_isEmpty<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get if this list is empty.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p><code>Arcadia_BooleanValue_True</code> if this list is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_List_prepend">Arcadia_List_prepend</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_List_prepend<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Prepend a value to this list.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+    <div>
+      <div>Arcadia_Value value</div>
+      <div>The value to prepend.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_List_remove">Arcadia_List_remove</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_List_remove
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue start,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue length<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Remove <code>length</code> values starting with element at index <code>start</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue start</div>
+      <div>The index of the first element to remove.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue length</div>
+      <div>The number of elements to remove.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>index + length &gt; n</code> where <code>n</code> is the length of the list.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity object">
+<h1 id="Arcadia_Stack">Stack</h1>
 <p>
 <code>Arcadia_Stack</code> represents a stack of <code>Arcadia_Value</code> objects.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_Stack</code> pointers.
 A <code>Arcadia_Stack</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
 An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> value can be safely cast into a <code>Arcadia_Stack</code> pointer.
 </p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_Stack_create">Arcadia_Stack_create</h5>
-<p><code>
-Arcadia_Stack*
-Arcadia_Stack_create
-  (
-    Arcadia_Thread* thread
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Create a stack.</p>
+  <h1 id="Arcadia_Stack_create">Arcadia_Stack_create</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_Stack*<br>
+  Arcadia_Stack_create<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>bytes</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
-</table>
+  <my-summary>
+  Create a stack.
+  </my-summary>
 
-<h6><b>Return value</b></h6>
-<p>A pointer to the <code>R_Stack</code> value.</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>bytes</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_EncodingInvalid</div>
+      <div>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</div>
+    </div>
+  </section>
 
-<h5 id="Arcadia_Stack_clear">Arcadia_Stack_clear</h5>
-<p><code>
-void
-Arcadia_Stack_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
-  )
-</code></p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the <code>Arcadia_Stack</code> value.</p>
+  </section>
 
-<p>Clear this stack.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
 
-<h5 id="Arcadia_Stack_getSize">Arcadia_Stack_getSize</h5>
-<p><code>
-Arcadia_SizeValue
-Arcadia_Stack_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack const* self
-  )
-</code></p>
+  <h1 id="Arcadia_Stack_clear">Arcadia_Stack_clear</h1>
 
-<p>Get the size of this stack.</p>
+  <my-signature><code>
+  void<br>
+  Arcadia_Stack_clear<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
-</table>
+  <my-summary>
+  Clear this stack.
+  </my-summary>
 
-<h6><b>Return Value</b></h6>
-<p>The size of this stack.</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_Stack* self</div>
+      <div>A pointer to this stack.</div>
+    </div>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_Stack_isEmpty">Arcadia_Stack_isEmpty</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_Stack_isEmpty
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
-  )
-</code></p>
-
-<p>Get if this stack is empty.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_Stack* self</td><td>A pointer to this stack.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p><code>Arcadia_BooleanValue_True</code> if this stack is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_Stack_peek">Arcadia_Stack_peek</h5>
-<p><code>
-Arcadia_Value
-Arcadia_Stack_peek
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Peek at the value on top of this stack.</p>
+  <h1 id="Arcadia_Stack_getSize">Arcadia_Stack_getSize</h1>
+  
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_Stack self </td><td>A pointer to this stack.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_SizeValue<br>
+  Arcadia_Stack_getSize<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>The value.</p>
+  <my-summary>
+  Get the size of this stack.
+  </my-summary>
 
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_Stack* self</div>
+      <div>A pointer to this stack.</div>
+    </div
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_Stack_pop">Arcadia_Stack_pop</h5>
-<p><code>
-Arcadia_Value
-Arcadia_Stack_pop
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
-  )
-</code></p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The size of this stack.</p>
+  </section>
 
-<p>Pop the value from the top of this stack.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_Stack* self                     </td><td>A pointer to this stack.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The value.</p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
 
-<h5 id="Arcadia_Stack_push">Arcadia_Stack_push</h5>
-<p><code>
-void
-Arcadia_Stack_push
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self,
-    Arcadia_Value value
-  )
-</code></p>
+  <h1 id="Arcadia_Stack_isEmpty">Arcadia_Stack_isEmpty</h1>
 
-<p>Push a value on the top of this stack.</p>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_Stack_isEmpty<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_Stack* self            </td><td>A pointer to this stack.</td></tr>
-  <tr><td>Arcadia_Value value            </td><td>The value to push.</td></tr>
-</table>
+  <my-summary>
+  Get if this stack is empty.
+  </my-summary>
 
-<h4 id="Arcadia_String">Arcadia_String</h4>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_Stack* self</div>
+      <div>A pointer to this stack.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p><code>Arcadia_BooleanValue_True</code> if this stack is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_Stack_peek">Arcadia_Stack_peek</h1>
+  
+  <my-signature><code>
+  Arcadia_Value<br>
+  Arcadia_Stack_peek<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Peek at the value on top of this stack.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_Stack* self</div>
+      <div>A pointer to this stack.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The value.</p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_Stack_pop">Arcadia_Stack_pop</h1>
+
+  <my-signature><code>
+  Arcadia_Value<br>
+  Arcadia_Stack_pop
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Pop the value from the top of this stack.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_Stack* self</div>
+      <div>A pointer to this stack.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The value.</p>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_Stack_push">Arcadia_Stack_push</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_Stack_push<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Push a value on the top of this stack.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_Stack* self</div>
+      <div>A pointer to this stack.</div>
+    </div>
+    <div>
+      <div>Arcadia_Value value</div>
+      <div>The value to push.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity object">
+<h1 id="Arcadia_String">Arcadia_String</h1>
 <p>
 <code>Arcadia_String</code> represents an Unicode string encoded as UTF-8-NO-BOM.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_String</code> pointers.
 A <code>Arcadia_String</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>R_String</code> value can be safely cast into a <code>R_String</code> pointer.
+An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String</code> value can be safely cast into a <code>Arcadia_String</code> pointer.
 </p>
 
 <p>Arcadia_String derives fro Arcadia_Object and overrides the following methods:</p>
@@ -1376,650 +2322,976 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>R_String</code>
   <li>Arcadia_Object_hash</li>
   <li>Arcadia_Object_notEqualTo</li>
 </ul>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_create_pn">Arcadia_String_create_pn</h5>
-<p><code>
-Arcadia_String*
-Arcadia_String_create_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ImmutableByteArray* immutableByteArray
-  )
-</code></p>
-
-<p>Create a string from an immutable Byte array.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_ImmutableByteBuffer* immutableByteArray</td><td>A pointer to the <code>Arcadia_ImmutableByteArray</code> object</td></tr>
-</table>
-
-<h6><b>Return value</b></h6>
-<p>A pointer to the <code>Arcadia_String</code> object.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>immutableByteArray</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
-</table>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_create">Arcadia_String_create</h5>
-<p><code>
-Arcadia_String*
-Arcadia_String_create
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Value value
-  )
-</code></p>
-
-<p>
-Create a string from a value.
-</p>
-
-<p>The following values are accepted:</p>
-
-<p>
-The specified value may contain a <code>Arcadia_ByteBuffer</code> object.
-In that case, the string is created from the Bytes of the Byte buffer object.
-A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ByteBuffer</code> object is not a UTF8 Byte sequence.
-</p>
-
-<p>
-The specified value may contain a <code>Arcadia_String</code> object.
-In that case, the string is created from the <code>Arcadia_String</code> object.
-</p>
-
-<p>
-The specified value may contain a <code>Arcadia_StringBuffer</code> object.
-In that case, the string is created from the <code>Arcadia_StringBuffer</code> object.
-</p>
-
-<p>
-The specified value may contain a <code>Arcadia_ImmutableByteArray</code> object.
-In that case, the string is created from the <code>Arcadia_ImmutableByteArray</code> object.
-A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
-</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_Value value     </td><td>The value.</td></tr>
-</table>
-
-<h6><b>Return value</b></h6>
-<p>A pointer to the string. </p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td>The value is not of type <code>Arcadia_ByteBuffer</code>, <code>Arcadia_String</code>, <code>Arcadia_StringBuffer</code>, or <code>Arcadia_ImmutableByteArray</code>.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_EncodingInvalid</td>
-    <td>
-    The value is a <code>Arcadia_ByteBuffer</code> or <code>Arcadia_ImmutableByteArray</code>.
-    However, the Byte sequence of that <code>Arcadia_ByteBuffer</code> or <code>Arcadia_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
-    </td>
-  </tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_String_endsWith_pn">Arcadia_String_endsWith_pn</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_String_endsWith_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Get if a sequence of Bytes is a suffix of this string's sequence of Bytes.</p>
+  <h1 id="Arcadia_String_create_pn">
+    Arcadia_String_create_pn
+  </h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self                    </td><td>A pointer to this string.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
+  <my-signature><code>
+    Arcadia_String*<br>
+    Arcadia_String_create_pn<br>
+    &nbsp;&nbsp;(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ImmutableByteArray* immutableByteArray<br>
+    &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this string's sequence of Bytes.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
+  <my-summary>
+    Create a string from an immutable Byte array.
+  </my-summary>
 
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+    <tr><td>Arcadia_ImmutableByteBuffer* immutableByteArray</td><td>A pointer to the <code>Arcadia_ImmutableByteArray</code> object</td></tr>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+    <p>A pointer to the <code>Arcadia_String</code> object.</p>
+
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>immutableByteArray</code> is a null pointer.</td></tr>
+    <tr><td>Arcadia_Status_EncodingInvalid     </td><td>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</td></tr>
+
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_String_create">
+    Arcadia_String_create
+  </h1>
+
+  <my-signature><code>
+    Arcadia_String*<br>
+    Arcadia_String_create<br>
+    &nbsp;&nbsp;(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
+    &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+
+    <p>Create a string from a value.</p>
+
+    <p>The following values are accepted:</p>
+
+    <p>
+    The specified value may contain a <code>Arcadia_ByteBuffer</code> object.
+    In that case, the string is created from the Bytes of the Byte buffer object.
+    A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ByteBuffer</code> object is not a UTF8 Byte sequence.
+    </p>
+
+    <p>
+    The specified value may contain a <code>Arcadia_String</code> object.
+    In that case, the string is created from the <code>Arcadia_String</code> object.
+    </p>
+
+    <p>
+    The specified value may contain a <code>Arcadia_StringBuffer</code> object.
+    In that case, the string is created from the <code>Arcadia_StringBuffer</code> object.
+    </p>
+
+    <p>
+    The specified value may contain a <code>Arcadia_ImmutableByteArray</code> object.
+    In that case, the string is created from the <code>Arcadia_ImmutableByteArray</code> object.
+    A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
+    </p>
+
+  </my-summary>
+
+  <section class="cxx parameters">
+
+    <h1>Parameters</h1>
+
+    <div>
+      <div>
+        <a href="#">Arcadia_Thread</a>* thread
+      </div>
+      <div>
+        A pointer to the <code>Arcadia_Thread</code> object.
+      </div>
+    </div>
+    <div>
+      <div>Arcadia_Value value</div>
+      <div>The value.</div>
+    </div>
+
+  </section>
+
+  <section class="cxx return-value">
+
+    <h1>Return value</h1>
+    <p>A pointer to the string.</p>
+
+  </section>
+
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div>
+      <div>
+        Arcadia_Status_ArgumentTypeInvalid
+      </div>
+      <div>
+        The value is not of type <code>Arcadia_ByteBuffer</code>, <code>Arcadia_String</code>, <code>Arcadia_StringBuffer</code>, or <code>Arcadia_ImmutableByteArray</code>.
+      </div>
+    </div>
+    <div>
+      <div>
+        Arcadia_Status_EncodingInvalid
+      </div>
+      <div>
+        The value is a <code>Arcadia_ByteBuffer</code> or <code>Arcadia_ImmutableByteArray</code>.
+        However, the Byte sequence of that <code>Arcadia_ByteBuffer</code> or <code>Arcadia_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
+      </div>
+    </div>
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_String_startsWith_pn">Arcadia_String_startsWith_pn</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_String_startsWith_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_endsWith_pn">Arcadia_String_endsWith_pn</h1>
+  
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_String_endsWith_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<p>Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.</p>
+  <my-summary>
+  Get if a sequence of Bytes is a suffix of this string's sequence of Bytes.
+  </my-summary>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self                    </td><td>A pointer to this string.</td></tr>
-  <tr><td>void const* bytes                       </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes         </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
 
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this string's sequence of Bytes.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
+  <section class="cxx return-value">
+    <h1>Return value</my-return-value>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a suffix of this string's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_isEqualTo_pn">Arcadia_String_isEqualTo_pn</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_String_isEqualTo_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-</code></p>
-
-<p>Get if a sequence of Bytes is this string's sequence of Bytes.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self                   </td><td>A pointer to this string.</td></tr>
-  <tr><td>void const* bytes                      </td><td>A pointer to an array of <code>n</code> Bytes.</td></tr>
-  <tr><td>Arcadia_SizeValue numberOfBytes        </td><td>The number of Bytes in the array pointed to by <code>p</code>.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>
-<code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this string's sequence of Bytes.
-<code>Arcadia_BooleanValue_False</code> otherwise.
-</p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_getNumberOfBytes">Arcadia_String_getNumberOfBytes</h5>
-<p><code>
-Arcadia_SizeValue
-Arcadia_String_getNumberOfBytes
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
 
-<p>Get the size, in Bytes, of this string.</p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_startsWith_pn">Arcadia_String_startsWith_pn</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_String_startsWith_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>The size, in Bytes, of this string.</p>
+  <my-summary>
+  Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.
+  </my-summary>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_getByteAt">Arcadia_String_getByteAt</h5>
-<p><code>
-Arcadia_Natural8Value
-Arcadia_String_getByteAt
-  (
-    Arcadia_String const* self,
-    Arcadia_SizeValue index
-  )
-</code></p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
 
-<p>Get the Byte value at the specified index.</p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is a prefix of this string's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-  <tr><td>Arcadia_SizeValue index</td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size, in Bytes, of this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The Byte value.</p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toBoolean">Arcadia_String_toBoolean</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_String_toBoolean
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
-
-<p>Interprete the symbols of this string as boolean literal and convert the boolean represented by that literal into an <code>Arcadia_BooleanValue</code>.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The boolean value.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a boolean literal. Valid boolean literals are <code>true</code> and <code>false</code>, both case sensitve.</td>
-  </tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toInteger16">Arcadia_String_toInteger16</h5>
-<p><code>
-Arcadia_Integer16Value
-Arcadia_String_toInteger16
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>Arcadia_Integer16Value</code>.</p>
+<section class="cxx entity method">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
+  <h1 id="Arcadia_String_isEqualTo_pn">Arcadia_String_isEqualTo_pn</h1>
 
-<h6><b>Return Value</b></h6>
-<p>The integer value.</p>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_String_isEqualTo_pn<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* bytes,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Integer16Value</code>.</td>
-  </tr>
-</table>
+  <my-summary>
+  Get if a sequence of Bytes is this string's sequence of Bytes.
+  </my-summary>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toInteger32">Arcadia_String_toInteger32</h5>
-<p><code>
-Arcadia_Integer32Value
-Arcadia_String_toInteger32
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+    <div>
+      <div>void const* bytes</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue numberOfBytes</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer32Value</code>.</p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the sequence of Bytes is this string's sequence of Bytes.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The integer value.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Integer32Value</code>.</td>
-  </tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toInteger64">Arcadia_String_toInteger64</h5>
-<p><code>
-Arcadia_Integer64Value
-Arcadia_String_toInteger64
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer64Value</code>.</p>
+<section class="cxx entity method">
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>R_String* self</td><td>A pointer to this string.</td></tr>
-</table>
+  <h1 id="Arcadia_String_getNumberOfBytes">Arcadia_String_getNumberOfBytes</h1>
 
-<h6><b>Return Value</b></h6>
-<p>The integer value.</p>
+  <my-signature><code>
+  Arcadia_SizeValue<br>
+  Arcadia_String_getNumberOfBytes<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Integer64Value</code>.</td>
-  </tr>
-</table>
+  <my-summary>
+  Get the size, in Bytes, of this string.
+  </my-summary>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toInteger8">Arcadia_String_toInteger8</h5>
-<p><code>
-Arcadia_Integer8Value
-Arcadia_String_toInteger8
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
 
-<p>Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer8Value</code>.</p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The size, in Bytes, of this string.</p>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The integer value.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal integer literal or
-    the number represented by the integer literal cannot be represented a value of type <code>Arcadia_Integer8Value</code>.</td>
-  </tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toNatural16">Arcadia_String_toNatural16</h5>
-<p><code>
-Arcadia_Natural16Value
-Arcadia_Stringg_toNatural16
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
 
-<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural16Value</code>.</p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_getByteAt">Arcadia_String_getByteAt</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_Natural8Value<br>
+  Arcadia_String_getByteAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>The natural value.</p>
+  <my-summary>
+  Get the Byte value at the specified index.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal natural literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural16Value</code>.</td>
-  </tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size, in Bytes, of this string.</div>
+    </div>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toNatural32">Arcadia_String_toNatural32</h5>
-<p><code>
-Arcadia_Natural32Value
-Arcadia_String_toNatural32
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The Byte value.</p>
+  </section>
 
-<p>Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural32Value</code>.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The natural value.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal natural literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural32Value</code>.</td>
-  </tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toNatural64">Arcadia_String_toNatural64</h5>
-<p><code>
-Arcadia_Natural64Value
-Arcadia_String_toNatural64
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
 
-<p>Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural64Value</code>.</p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_toBoolean">Arcadia_String_toBoolean</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_String_toBoolean<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>The natural value.</p>
+  <my-summary>
+  Interprete the symbols of this string as boolean literal and convert the boolean represented by that literal into an <code>Arcadia_BooleanValue</code>.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal natural literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural64Value</code>.</td>
-  </tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toNatural8">Arcadia_String_toNatural8</h5>
-<p><code>
-Arcadia_Natural8Value
-Arcadia_String_toNatural8
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The boolean value.</p>
+  </section>
 
-<p>Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>R_Natural8Value</code>.</p>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <tr>
+      <td>Arcadia_Status_ArgumentTypeInvalid</td>
+      <td><code>self</code> is a null pointer.</td>
+    </tr>
+    <tr>
+      <td>Arcadia_Status_ConversionFailed</td>
+      <td>The symbols of this string cannot be interpreted as a boolean literal. Valid boolean literals are <code>true</code> and <code>false</code>, both case sensitve.</td>
+    </tr>
+  </<section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The natural value.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal natural literal or
-    the number represented by the literal cannot be represented a value of type <code>R_Natural8Value</code>.</td>
-  </tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toReal32">Arcadia_String_toReal32</h5>
-<p><code>
-Arcadia_Real32Value
-Arcadia_String_toReal32
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
 
-<p>Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>Arcadia_Real32Value</code>.</p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_toInteger16">Arcadia_String_toInteger16</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_Integer16Value<br>
+  Arcadia_String_toInteger16<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>The <code>Arcadia_Real32Value</code> value.</p>
+  <my-summary>
+  Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>Arcadia_Integer16Value</code>.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal real literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Real32Value</code>.</td>
-  </tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+    <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
+  </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toReal64">Arcadia_String_toReal64</h5>
-<p><code>
-Arcadia_Real64Value
-Arcadia_String_toReal64
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The integer value.</p>
+  </section>
 
-<p>Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>Arcadia_Real64Value</code>.</p>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</div>
+      <div>The symbols of this string cannot be interpreted as a decimal integer literal or
+      the number represented by the literal cannot be represented a value of type <code>Arcadia_Integer16Value</code>.</div>
+    </div>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The <code>Arcadia_Real64Value</code> value.</p>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a decimal real literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Real64Value</code>.</td>
-  </tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_String_toVoid">Arcadia_String_toVoid</h5>
-<p><code>
-Arcadia_VoidValue
-Arcadia_String_toVoid
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self
-  )
-</code></p>
 
-<p>Interprete the symbols of this string as a void literal and convert the void value represented by that literal into an <code>R_VoidValue</code>.</p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_toInteger32">Arcadia_String_toInteger32</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_Integer32Value<br>
+  Arcadia_String_toInteger32<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Return Value</b></h6>
-<p>The void value.</p>
+  <my-summary>
+  Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer32Value</code>.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr>
-    <td>Arcadia_Status_ArgumentTypeInvalid</td>
-    <td><code>self</code> is a null pointer.</td>
-  </tr>
-  <tr>
-    <td>Arcadia_Status_ConversionFailed</td>
-    <td>The symbols of this string cannot be interpreted as a void literal. The valid void literal is <code>void</code>, case sensitve.</td>
-  </tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The integer value.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</div>
+      <div>The symbols of this string cannot be interpreted as a decimal integer literal or
+      the number represented by the literal cannot be represented a value of type <code>
+      Arcadia_Integer32Value</code>.
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_String_toInteger64">Arcadia_String_toInteger64</h1>
+
+  <my-signature><code>
+  Arcadia_Integer64Value<br>
+  Arcadia_String_toInteger64<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer64Value</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The integer value.</p>
+  </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</div>
+      <div>The symbols of this string cannot be interpreted as a decimal integer literal or
+           the number represented by the literal cannot be represented a value of type <code>
+           Arcadia_Integer64Value</code>.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_toInteger8">Arcadia_String_toInteger8</h1>
+
+  <my-signature><code>
+  Arcadia_Integer8Value<br>
+  Arcadia_String_toInteger8<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer8Value</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+    <div>
+      <div>Arcadia_String* self</div><div>A pointer to this string.</div>
+    </div>
+  </section>
+  
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The integer value.</p>
+  </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</dov>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</div>
+      <div>The symbols of this string cannot be interpreted as a decimal integer literal or
+      the number represented by the integer literal cannot be represented a value of type <code>Arcadia_Integer8Value</code>.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_String_toNatural16">Arcadia_String_toNatural16</h1>
+
+  <my-signature><code>
+  Arcadia_Natural16Value<br>
+  Arcadia_Stringg_toNatural16<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural16Value</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The natural value.</p>
+  </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</td>
+      <div>The symbols of this string cannot be interpreted as a decimal natural literal or
+      the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural16Value</code>.</div>
+    </div>
+  </section>
+  
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_String_toNatural32">Arcadia_String_toNatural32</h1>
+
+  <my-signature><code>
+  Arcadia_Natural32Value<br>
+  Arcadia_String_toNatural32<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural32Value</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+    <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The natural value.</p>
+  </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</div>
+      <div>The symbols of this string cannot be interpreted as a decimal natural literal or
+      the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural32Value</code>.</div>
+    </div>
+  </section>
+  
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_String_toNatural64">Arcadia_String_toNatural64</h1>
+
+  <my-signature><code>
+  Arcadia_Natural64Value<br>
+  Arcadia_String_toNatural64<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural64Value</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The natural value.</p>
+  </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+    <div>Arcadia_Status_ArgumentTypeInvalid</div>
+    <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+    <div>Arcadia_Status_ConversionFailed</td>
+    <div>The symbols of this string cannot be interpreted as a decimal natural literal or
+    the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural64Value</code>.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_String_toNatural8">Arcadia_String_toNatural8</h1>
+
+  <my-signature><code>
+  Arcadia_Natural8Value<br>
+  Arcadia_String_toNatural8<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural8Value</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The natural value.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</td>
+      <div>The symbols of this string cannot be interpreted as a decimal natural literal or
+      the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural8Value</code>.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_toReal32">Arcadia_String_toReal32</h1>
+
+  <my-signature><code>
+  Arcadia_Real32Value<br>
+  Arcadia_String_toReal32<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>Arcadia_Real32Value</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The <code>Arcadia_Real32Value</code> value.</p>
+  </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</div>
+      <div>The symbols of this string cannot be interpreted as a decimal real literal or
+      the number represented by the literal cannot be represented a value of type <code>Arcadia_Real32Value</code>.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_String_toReal64">Arcadia_String_toReal64</h1>
+
+  <my-signature><code>
+  Arcadia_Real64Value<br>
+  Arcadia_String_toReal64<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>Arcadia_Real64Value</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_String* self</div>
+      <div>A pointer to this string.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The <code>Arcadia_Real64Value</code> value.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</div>
+      <div>The symbols of this string cannot be interpreted as a decimal real literal or
+      the number represented by the literal cannot be represented a value of type <code>Arcadia_Real64Value</code>.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_String_toVoid">Arcadia_String_toVoid</h1>
+
+  <my-signature><code>
+  Arcadia_VoidValue<br>
+  Arcadia_String_toVoid<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Interprete the symbols of this string as a void literal and convert the void value represented by that literal into an <code>Arcadia_VoidValue</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+    <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The void value.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ConversionFailed</div>
+      <div>The symbols of this string cannot be interpreted as a void literal. The valid void literal is <code>void</code>, case sensitve.</div>
+    </div>
+  </section>
+
+</section>
 
   </div>
   <div class="right-column">
@@ -2037,7 +3309,11 @@ Arcadia_String_toVoid
   </div>
   </main>
   <footer>
-    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 6 October 2024.</span>
+    <div class="left-column"></div>
+    <div class="center-column"></div>
+    <div class="right-column"></div>
+      <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 14 March 2025.</span>
+    </div>
   </footer>
   </body>
 </html>

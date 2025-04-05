@@ -39,7 +39,7 @@ Arcadia_StaticAssert(Arcadia_Integer32Value_NumberOfBytes == 4, "Arcadia.Integer
 
 #define Arcadia_Integer32Value_Literal(x) INT32_C(x)
 
-Rex_declareScalarType(Arcadia_Integer32);
+Arcadia_declareScalarType(Arcadia_Integer32);
 
 /// The minimum value of an Arcadia.Integer32Value is -2 147 483 648,
 /// the maximum value of an Arcadia.Integer32Value is +2 147 483 647.

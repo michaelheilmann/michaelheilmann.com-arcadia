@@ -203,4 +203,4 @@ or
 #undef A1
 }
 
-Rex_defineScalarType(Arcadia_Boolean, "Arcadia.Boolean", &_typeOperations);
+Arcadia_defineScalarType(Arcadia_Boolean, "Arcadia.Boolean", &_typeOperations);

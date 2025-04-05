@@ -33,12 +33,12 @@ struct Arcadia_Object {
   int dummy;
 };
 
-#define Rex_superTypeConstructor(_thread, _type, ...) \
+#define Arcadia_superTypeConstructor(_thread, _type, ...) \
   Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(thread, _type))->objectTypeOperations->construct(_thread, __VA_ARGS__)
 
 /// R(untime) ex(tension) macro.
 /// @param _cilName, _cilParentName UTF8 string literals for the Common Intermediate Language type names of the type and its parent type.
-#define Rex_declareObjectType(_cilName, _cName, _cilParentName) \
+#define Arcadia_declareObjectType(_cilName, _cName, _cilParentName) \
   typedef struct _cName _cName; \
   Arcadia_TypeValue \
   _##_cName##_getType \
@@ -48,7 +48,7 @@ struct Arcadia_Object {
 
 /// R(untime) ex(tension) macro.
 /// @param _cilName, _cilParentName UTF8 string literals for the Common Intermediate Language type names of the type and its parent type.
-#define Rex_defineObjectType(_cilName, _cName, _cilParentName, _cParentName, _cTypeOperations) \
+#define Arcadia_defineObjectType(_cilName, _cName, _cilParentName, _cParentName, _cTypeOperations) \
   static Arcadia_TypeValue g_##_cName##_type = NULL; \
   \
   static void \

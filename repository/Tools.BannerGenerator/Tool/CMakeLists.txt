@@ -34,14 +34,14 @@ set(MyTool Tools.BannerGenerator)
 BeginProduct(${MyTool} executable)
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
+FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BannerGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/BannerGenerator/Configure.h @ONLY)
 
 list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BannerGenerator/Main.c)
 list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/BannerGenerator/Configure.h)
 
-list(APPEND ${MyTool}.PrivateLibraries Module.Visuals ${MyProjectName}.Mil ${MyProjectName}.Arms)
+list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Visuals ${MyProjectName}.Machine ${MyProjectName}.Arms)
 
 EndProduct(${MyTool})
 set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.png\" --width=320 --height=240")

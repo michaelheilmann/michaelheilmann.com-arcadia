@@ -1,239 +1,392 @@
-<h4 id="Arcadia_List">Arcadia_List</h4>
+<section class="cxx entity object">
+<h1 id="Arcadia_List">Arcadia_List</h1>
 <p>
 <code>Arcadia_List</code> represents a list of <code>Arcadia_Value</code> objects.
 This type is allocated on the heap and values of this type are referenced by <code>Arcadia_List</code> pointers.
 A <code>R_List</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
 An <code>R_ObjectReferenceValue</code> pointing to a <code>R_List</code> value can be safely cast into a <code>Arcadia_List</code> pointer.
 </p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_create">Arcadia_List_create</h5>
-<p><code>
-Arcadia_List*
-Arcadia_List_create
-  (
-    Arcadia_Thread* thread
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Create a list.</p>
+  <h1 id="Arcadia_List_create">Arcadia_List_create</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_List*<br>
+  Arcadia_List_create<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_AllocationFailed</td><td>An allocation failed.</td></tr>
-</table>
+  <my-summary>
+  Create a list.
+  </my-summary>
 
-<h6><b>Return value</b></h6>
-<p>A pointer to the <code>Arcadia_List</code> value.</p>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Process</a>* process</div>
+      <div>A pointer to the <code>Arcadia_Process</code> object.</div>
+    </div>
+  </section>
 
-<h5 id="Arcadia_List_append">Arcadia_List_append</h5>
-<p><code>
-void
-Arcadia_List_append
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_Value value
-  )
-</code></p>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
 
-<p>Append a value to this list.</p>
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>A pointer to the <code>Arcadia_List</code> value.</p>
+  </section>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_Value value                     </td><td>The value to append.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
 
-<h5 id="Arcadia_List_clear">Arcadia_List_clear</h5>
-<p><code>
-void
-Arcadia_List_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  )
-</code></p>
+  <h1 id="Arcadia_List_append">Arcadia_List_append</h1>
 
-<p>Clear this list.</p>
+  <my-signature><code>
+  void<br>
+  Arcadia_List_append<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Process</a>* process</td><td>A pointer to the <code>Arcadia_Process</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
-</table>
+  <my-summary>
+  Append a value to this list.
+  </my-summary>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_getAt">Arcadia_List_getAt</h5>
-<p><code>
-Arcadia_Value
-Arcadia_List_getAt
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_SizeValue index
-  )
-</code></p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Process</a>* process</div>
+      <div>A pointer to the <code>Arcadia_Process</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+    <div>
+      <div>Arcadia_Value value</div>
+      <div>The value to append.</div>
+    </div>
+  </<section>
 
-<p>Get the value at the specifie index in this list.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                      </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_SizeValue index                 </td><td>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
-</table>
-
-<h6><b>Return Value</b></h6>
-<p>The value.</p>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
 
-<h5 id="Arcadia_List_getSize">Arcadia_List_getSize</h5>
-<p><code>
-Arcadia_SizeValue
-Arcadia_List_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List const* self
-  )
-</code></p>
+  <h1 id="Arcadia_List_clear">Arcadia_List_clear</h1>
 
-<p>Get the size of this list.</p>
+  <my-signature><code>
+  void<br>
+  Arcadia_List_clear<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
-</table>
+  <my-summary>
+  Clear this list.
+  </my-summary>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
-</table>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Process</a>* process</div>
+      <div>A pointer to the <code>Arcadia_Process</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+  </section>
 
-<h6><b>Return Value</b></h6>
-<p>The size of this list.</p>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_insertAt">Arcadia_List_insert</h5>
-<p><code>
-void
-Arcadia_List_insertAt
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_SizeValue index,
-    Arcadia_Value value
-  )
-</code></p>
-
-<p>Insert a value at the specified position in this list.</p>
-
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
-  <tr><td>Arcadia_Value value                   </td><td>The value to insert.</td></tr>
-</table>
-
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index</code> is out of bounds.</td></tr>
-</table>
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_isEmpty">Arcadia_List_isEmpty</h5>
-<p><code>
-Arcadia_BooleanValue
-Arcadia_List_isEmpty
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  )
-</code></p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_List_getAt">Arcadia_List_getAt</h1>
 
-<p>Get if this list is empty.</p>
+  <my-signature><code>
+  Arcadia_Value<br>
+  Arcadia_List_getAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
-</table>
+  <my-summary>
+  Get the value at the specifie index in this list.
+  </my-summary>
 
-<h6><b>Return Value</b></h6>
-<p><code>Arcadia_BooleanValue_True</code> if this list is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div><div>A pointer to this list.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size of this list.</div>
+    </div>
+  </section>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-</table>
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>index</code> is out of bounds.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The value.</p>
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<h5 id="Arcadia_List_prepend">Arcadia_List_prepend</h5>
-<p><code>
-void
-Arcadia_List_prepend
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_Value value
-  )
-</code></p>
+<section class="cxx entity method">
 
-<p>Prepend a value to this list.</p>
+  <h1 id="Arcadia_List_getSize">Arcadia_List_getSize</h1>
 
-<p>Prepend a <code>R_Value</code> to a list.</p>
+  <my-signature><code>
+  Arcadia_SizeValue<br>
+  Arcadia_List_getSize<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List const* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_Value value                   </td><td>The value to prepend.</td></tr>
-</table>
+  <my-summary>
+  Get the size of this list.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>index</code> is out of bounds.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The size of this list.</p>
+  </section>
+
+</section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<h5 id="Arcadia_List_remove">Arcadia_List_remove</h5>
-<p><code>
-void
-Arcadia_List_remove
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self,
-    Arcadia_SizeValue start,
-    Arcadia_SizeValue length
-  )
-</code></p>
 
-<p>Remove <code>length</code> values starting with element at index <code>start</code>.</p>
+<section class="cxx entity method">
+  
+  <h1 id="Arcadia_List_insertAt">Arcadia_List_insert</h1>
 
-<h6><b>Parameters</b></h6>
-<table>
-  <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-  <tr><td>Arcadia_List* self</td><td>A pointer to this list.</td></tr>
-  <tr><td>Arcadia_SizeValue start</td><td>The index of the first element to remove.</td></tr>
-  <tr><td>Arcadia_SizeValue length</td><td>The number of elements to remove.</td></tr>
-</table>
+  <my-signature><code>
+  void<br>
+  Arcadia_List_insertAt<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
 
-<h6><b>Errors</b></h6>
-<table>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>self</code> is a null pointer.</td></tr>
-  <tr><td>Arcadia_Status_ArgumentValueInvalid</td><td><code>index + length &gt; n</code> where <code>n</code> is the length of the list.</td></tr>
-</table>
+  <my-summary>
+  Insert a value at the specified position in this list.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+    <tr><td>Arcadia_List* self                    </td><td>A pointer to this list.</td></tr>
+    <tr><td>Arcadia_SizeValue index               </td><td>The index at which to insert the value. Must be within the bounds of <code>[0,n]</code> where <code>n</code> is the size of thie list.</td></tr>
+    <tr><td>Arcadia_Value value                   </td><td>The value to insert.</td></tr>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>index</code> is out of bounds.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_List_isEmpty">Arcadia_List_isEmpty</h1>
+
+  <my-signature><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_List_isEmpty<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Get if this list is empty.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p><code>Arcadia_BooleanValue_True</code> if this list is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_List_prepend">Arcadia_List_prepend</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_List_prepend<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Value value<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Prepend a value to this list.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+    <div>
+      <div>Arcadia_Value value</div>
+      <div>The value to prepend.</div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_List_remove">Arcadia_List_remove</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_List_remove
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_List* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue start,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue length<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Remove <code>length</code> values starting with element at index <code>start</code>.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_List* self</div>
+      <div>A pointer to this list.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue start</div>
+      <div>The index of the first element to remove.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue length</div>
+      <div>The number of elements to remove.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>index + length &gt; n</code> where <code>n</code> is the length of the list.</div>
+    </div>
+  </section>
+
+</section>

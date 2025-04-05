@@ -34,6 +34,6 @@ typedef uint8_t Arcadia_VoidValue;
 
 #define Arcadia_VoidValue_NumberOfBits (Arcadia_VoidValue_NumberOfBytes * 8)
 
-Rex_declareScalarType(Arcadia_Void);
+Arcadia_declareScalarType(Arcadia_Void);
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_VOID_H_INCLUDED

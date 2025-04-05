@@ -21,7 +21,7 @@
 #include "R/Include.h"
 #include "Tools/TemplateEngine/Context.h"
 
-Rex_declareObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"Arcadia.Object");
 
 struct FileContext {
   Arcadia_Object _parent;

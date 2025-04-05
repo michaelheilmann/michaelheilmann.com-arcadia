@@ -20,7 +20,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 
-#define Rex_defineScalarType(cName, cilName, typeOperations) \
+#define Arcadia_defineScalarType(cName, cilName, typeOperations) \
   static Arcadia_Type* g_##cName##_type = NULL; \
 \
   static void \

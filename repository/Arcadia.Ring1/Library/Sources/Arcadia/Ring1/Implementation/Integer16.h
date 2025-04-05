@@ -39,7 +39,7 @@ Arcadia_StaticAssert(Arcadia_Integer16Value_NumberOfBytes == 2, "Arcadia.Integer
 
 #define Arcadia_Integer16Value_Literal(x) INT16_C(x)
 
-Rex_declareScalarType(Arcadia_Integer16);
+Arcadia_declareScalarType(Arcadia_Integer16);
 
 /// The minimum value of an Arcadia.Integer16Value is -32 768,
 /// the maximum value of an Arcadia.Integer16Value is +32 767.

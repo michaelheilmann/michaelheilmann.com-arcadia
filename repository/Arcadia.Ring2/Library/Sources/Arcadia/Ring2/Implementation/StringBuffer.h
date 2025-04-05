@@ -29,7 +29,7 @@
 ///   constructor()
 /// }
 /// @endcode
-Rex_declareObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer, u8"Arcadia.Object");
 
 struct Arcadia_StringBuffer {
   Arcadia_Object _parent;

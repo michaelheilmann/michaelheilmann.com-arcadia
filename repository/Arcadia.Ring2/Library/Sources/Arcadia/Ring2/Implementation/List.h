@@ -24,7 +24,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 
-Rex_declareObjectType(u8"Arcadia.List", Arcadia_List, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.List", Arcadia_List, u8"Arcadia.Object");
 
 struct Arcadia_List {
   Arcadia_Object _parent;

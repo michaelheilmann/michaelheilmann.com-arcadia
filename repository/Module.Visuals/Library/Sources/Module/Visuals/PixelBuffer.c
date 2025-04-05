@@ -217,12 +217,12 @@ getTranscodeCallbacks
   } Entry;
 
   static const Entry g_entries[] = {
-    { PixelFormat_An8Bn8Gn8Rn8, 4, &DECODE_ABGR, &ENCODE_ABGR },
-    { PixelFormat_An8Rn8Gn8Bn8, 4, &DECODE_ARGB, &ENCODE_ARGB },
-    { PixelFormat_Bn8Gn8Rn8,    3, &DECODE_BGR,  &ENCODE_BGR  },
-    { PixelFormat_Bn8Gn8Rn8An8, 4, &DECODE_BGRA, &ENCODE_BGRA },
-    { PixelFormat_Rn8Gn8Bn8,    3, &DECODE_RGB,  &ENCODE_RGB  },
-    { PixelFormat_Rn8Gn8Bn8An8, 4, &DECODE_RGBA, &ENCODE_RGBA },
+    { Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8, 4, &DECODE_ABGR, &ENCODE_ABGR },
+    { Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8, 4, &DECODE_ARGB, &ENCODE_ARGB },
+    { Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8,    3, &DECODE_BGR,  &ENCODE_BGR  },
+    { Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8, 4, &DECODE_BGRA, &ENCODE_BGRA },
+    { Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8,    3, &DECODE_RGB,  &ENCODE_RGB  },
+    { Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8, 4, &DECODE_RGBA, &ENCODE_RGBA },
   };
 
   static const size_t g_numberOfEntries = sizeof(g_entries) / sizeof(Entry);
@@ -303,7 +303,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"PixelBuffer", PixelBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"PixelBuffer", PixelBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 PixelBuffer_constructImpl
@@ -319,7 +319,7 @@ PixelBuffer_constructImpl
     Arcadia_TypeValue _type = _PixelBuffer_getType(thread);
     {
       Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-      Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+      Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
     }
     if (!Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _PixelBuffer_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -340,7 +340,7 @@ PixelBuffer_constructImpl
     PixelBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
     {
       Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-      Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+      Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
     }
     if (!Arcadia_Value_isInteger32Value(&argumentValues[0])) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -365,14 +365,14 @@ PixelBuffer_constructImpl
     _self->linePadding = Arcadia_Value_getInteger32Value(&argumentValues[0]);
     Arcadia_SizeValue bytesPerPixel = 0;
     switch (_self->pixelFormat) {
-      case PixelFormat_An8Bn8Gn8Rn8:
-      case PixelFormat_An8Rn8Gn8Bn8:
-      case PixelFormat_Bn8Gn8Rn8An8:
-      case PixelFormat_Rn8Gn8Bn8An8: {
+      case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
+      case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
+      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
+      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
         bytesPerPixel = 4;
       } break;
-      case PixelFormat_Bn8Gn8Rn8:
-      case PixelFormat_Rn8Gn8Bn8: {
+      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
+      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
         bytesPerPixel = 3;
       } break;
       default: {
@@ -382,7 +382,7 @@ PixelBuffer_constructImpl
     };
     Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->bytes, (_self->numberOfColumns * bytesPerPixel + _self->linePadding) * _self->numberOfRows);
     switch (_self->pixelFormat) {
-      case PixelFormat_An8Bn8Gn8Rn8: {
+      case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
         for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
           Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
@@ -392,7 +392,7 @@ PixelBuffer_constructImpl
           }
         }
       } break;
-      case PixelFormat_An8Rn8Gn8Bn8: {
+      case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
         for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
           Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
@@ -402,7 +402,7 @@ PixelBuffer_constructImpl
           }
         }
       } break;
-      case PixelFormat_Bn8Gn8Rn8: {
+      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
         for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
           Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
@@ -412,7 +412,7 @@ PixelBuffer_constructImpl
           }
         }
       } break;
-      case PixelFormat_Rn8Gn8Bn8: {
+      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
         for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
           Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
@@ -527,15 +527,15 @@ PixelBuffer_setLinePadding
     }
     Arcadia_Integer32Value bytesPerPixel = 0;
     switch (self->pixelFormat) {
-      case PixelFormat_An8Bn8Gn8Rn8:
-      case PixelFormat_An8Rn8Gn8Bn8: 
-      case PixelFormat_Bn8Gn8Rn8An8:
-      case PixelFormat_Rn8Gn8Bn8An8:
+      case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
+      case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
+      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
+      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8:
       {
         bytesPerPixel = 4;
       } break;
-      case PixelFormat_Bn8Gn8Rn8:
-      case PixelFormat_Rn8Gn8Bn8: {
+      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
+      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
         bytesPerPixel = 3;
       } break;
       default: {
@@ -586,22 +586,22 @@ PixelBuffer_getPixelRgba
   Arcadia_Natural8Value* bytes = self->bytes + offset;
   PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
   switch (self->pixelFormat) {
-    case PixelFormat_An8Bn8Gn8Rn8: {
+    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
       DECODE_ABGR(bytes, &pixel);
     } break;
-    case PixelFormat_An8Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
       DECODE_ARGB(bytes, &pixel);
     } break;
-    case PixelFormat_Bn8Gn8Rn8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8: {
       DECODE_BGR(bytes, &pixel);
     } break;
-    case PixelFormat_Bn8Gn8Rn8An8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8: {
       DECODE_BGRA(bytes, &pixel);
     } break;
-    case PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
       DECODE_RGB(bytes, &pixel);
     } break;
-    case PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
       DECODE_RGBA(bytes, &pixel);
     } break;
     default: {
@@ -640,22 +640,22 @@ PixelBuffer_setPixelRgba
   Arcadia_Natural8Value* bytes = self->bytes + offset;
   PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
   switch (self->pixelFormat) {
-    case PixelFormat_An8Bn8Gn8Rn8: {
+    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
       ENCODE_ABGR(bytes, &pixel);
     } break;
-    case PixelFormat_An8Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
       ENCODE_ARGB(bytes, &pixel);
     } break;
-    case PixelFormat_Bn8Gn8Rn8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8: {
       ENCODE_BGR(bytes, &pixel);
     } break;
-    case PixelFormat_Bn8Gn8Rn8An8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8: {
       ENCODE_BGRA(bytes, &pixel);
     } break;
-    case PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
       ENCODE_RGB(bytes, &pixel);
     } break;
-    case PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
       ENCODE_RGBA(bytes, &pixel);
     } break;
     default: {
@@ -679,7 +679,7 @@ PixelBuffer_fill
   )
 {
   switch (self->pixelFormat) {
-    case PixelFormat_An8Bn8Gn8Rn8: {
+    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
       Arcadia_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -691,7 +691,7 @@ PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case PixelFormat_An8Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
       Arcadia_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -703,7 +703,7 @@ PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case PixelFormat_Bn8Gn8Rn8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8: {
       Arcadia_SizeValue bytesPerPixel = 3;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -715,7 +715,7 @@ PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case PixelFormat_Bn8Gn8Rn8An8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8: {
       Arcadia_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -727,7 +727,7 @@ PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
       Arcadia_SizeValue bytesPerPixel = 3;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -739,7 +739,7 @@ PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
       Arcadia_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -885,14 +885,14 @@ PixelBuffer_getBytesPerPixel
 {
   size_t bytesPerPixel = 0;
   switch (self->pixelFormat) {
-    case PixelFormat_An8Bn8Gn8Rn8:
-    case PixelFormat_An8Rn8Gn8Bn8:
-    case PixelFormat_Bn8Gn8Rn8An8:
-    case PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
+    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
       bytesPerPixel = 4;
     } break;
-    case PixelFormat_Bn8Gn8Rn8:
-    case PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
+    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
       bytesPerPixel = 3;
     } break;
     default: {

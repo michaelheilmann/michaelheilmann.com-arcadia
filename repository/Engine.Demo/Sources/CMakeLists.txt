@@ -33,26 +33,27 @@ endif()
 set(MyDemoName ${MyProjectName}.Engine.Demo)
 
 if (NOT TARGET ${MyDemoName})
-  BeginProduct(${MyDemoName} executable)
+    if (${${MyProjectName}.Visuals.OpenGl.Enabled})
+      BeginProduct(${MyDemoName} executable)
 
-  if (${${MyDemoName}.OperatingSystem} STREQUAL ${${MyDemoName}.OperatingSystem.Windows})
+      if (${${MyDemoName}.OperatingSystem} STREQUAL ${${MyDemoName}.OperatingSystem.Windows})
 
-    FetchProduct(${MyDemoName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-    FetchProduct(${MyDemoName}.Mil "${REPOSITORY_SOURCE_DIR}/R1/Library" "path to the MIL library directory")
-    FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Module.Audials/Library" "path to the Audials module source directory")
-    FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Module.Visuals/Library" "path to the Visuals module source directory")
+        FetchProduct(${MyDemoName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
+        FetchProduct(${MyDemoName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
+        FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Module.Audials/Library" "path to the Audials module source directory")
+        FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Module.Visuals/Library" "path to the Visuals module source directory")
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Engine.Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Engine.Demo/Configure.h @ONLY)
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Engine.Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Engine.Demo/Configure.h @ONLY)
 
-    list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Engine.Demo/Main.c)
-    list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Engine.Demo/Configure.h)
+        list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Engine.Demo/Main.c)
+        list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Engine.Demo/Configure.h)
 
-    list(APPEND ${MyDemoName}.PrivateLibraries Module.Audials Module.Visuals ${MyProjectName}.Mil ${MyProjectName}.Arms)
+        list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Audials ${MyProjectName}.Visuals ${MyProjectName}.Machine ${MyProjectName}.Arms)
 
-  else()
-    set(${MyDemoName}.Enabled FALSE)
-  endif()
+      else()
+        set(${MyDemoName}.Enabled FALSE)
+      endif()
 
-  EndProduct(${MyDemoName})
-
+      EndProduct(${MyDemoName})
+    endif()
 endif()

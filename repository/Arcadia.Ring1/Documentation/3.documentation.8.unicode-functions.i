@@ -1,1 +1,1 @@
-<h3>3.8. Unicode Functions</h3>
+<h3>Unicode Functions</h3>

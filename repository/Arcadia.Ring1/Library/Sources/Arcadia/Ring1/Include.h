@@ -40,6 +40,8 @@
 
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 
+#include "Arcadia/Ring1/Implementation/Enumeration.h"
+
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 
 #include "Arcadia/Ring1/Implementation/quotientRemainder.h"

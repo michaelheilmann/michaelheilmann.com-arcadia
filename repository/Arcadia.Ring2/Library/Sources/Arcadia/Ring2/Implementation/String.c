@@ -109,7 +109,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"Arcadia.String", Arcadia_String, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.String", Arcadia_String, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 #define On(Type, Suffix) \
   static void \
@@ -182,7 +182,7 @@ Arcadia_String_constructImpl
   Arcadia_TypeValue _type = _Arcadia_String_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (Arcadia_Value_isBooleanValue(&arguments[0])) {
     fromBoolean(thread, &_self->immutableUtf8String, Arcadia_Value_getBooleanValue(&arguments[0]));

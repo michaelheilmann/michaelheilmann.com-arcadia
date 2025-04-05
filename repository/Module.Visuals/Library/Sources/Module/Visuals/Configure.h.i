@@ -18,4 +18,6 @@
 #if !defined(MODULE_VISUALS_CONFIGURE_H_INCLUDED)
 #define MODULE_VISUALS_CONFIGURE_H_INCLUDED
 
+#define Arcadia_Visuals_OpenGl_Enabled (@Arcadia.Visuals.OpenGl.Enabled@)
+
 #endif // MODULE_VISUALS_CONFIGURE_H_INCLUDED

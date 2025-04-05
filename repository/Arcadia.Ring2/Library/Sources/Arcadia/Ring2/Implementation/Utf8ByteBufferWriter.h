@@ -25,7 +25,7 @@
 #include "Arcadia/Ring2/Implementation/Utf8Writer.h"
 typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
 
-Rex_declareObjectType(u8"Arcadia.Utf8ByteBufferWriter", Arcadia_Utf8ByteBufferWriter, u8"Arcadia.Utf8Writer");
+Arcadia_declareObjectType(u8"Arcadia.Utf8ByteBufferWriter", Arcadia_Utf8ByteBufferWriter, u8"Arcadia.Utf8Writer");
 
 struct Arcadia_Utf8ByteBufferWriter {
   Arcadia_Utf8Writer parent;

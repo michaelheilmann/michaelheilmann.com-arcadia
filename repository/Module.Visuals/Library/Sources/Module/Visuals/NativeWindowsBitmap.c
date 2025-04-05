@@ -59,7 +59,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Rex_defineObjectType(u8"NativeWindowsBitmap", NativeWindowsBitmap, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"NativeWindowsBitmap", NativeWindowsBitmap, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 NativeWindowsBitmap_constructImpl
@@ -74,7 +74,7 @@ NativeWindowsBitmap_constructImpl
   Arcadia_TypeValue _type = _NativeWindowsBitmap_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
-    Rex_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
  
   if (2 != numberOfArgumentValues) {
@@ -147,7 +147,7 @@ NativeWindowsBitmap_constructImpl
   _self->lineStride = (int32_t)lineStride;
   _self->linePadding = (uint32_t)linePadding;
   _self->numberOfBitsPerPixel = 24;
-  _self->pixelFormat = PixelFormat_Bn8Gn8Rn8;
+  _self->pixelFormat = Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8;
 
   HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
   if (!hBrush) {
@@ -234,7 +234,7 @@ NativeWindowsBitmap_toPixelBuffer
   }
   uint8_t* sourceBytes = dibSection.dsBm.bmBits;
   // Currently, we assume that NativeWindowsBitmap is BGR format.
-  PixelBuffer* pixelBuffer = PixelBuffer_create(thread, 0, self->width, self->height, PixelFormat_An8Rn8Gn8Bn8);
+  PixelBuffer* pixelBuffer = PixelBuffer_create(thread, 0, self->width, self->height, Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8);
   for (int32_t y = 0; y < self->height; ++y) {
     for (int32_t x = 0; x < self->width; ++x) {
       int32_t sourceOffset = self->lineStride * y + (x * self->numberOfBitsPerPixel) / 8;

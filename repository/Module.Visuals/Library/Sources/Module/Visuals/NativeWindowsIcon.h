@@ -31,7 +31,7 @@
 ///   construct(width:Integer32, height:Integer32, red:Natural8, green:Natural8, blue:Natural8)
 /// }
 /// @endcode
-Rex_declareObjectType(u8"NativeWindowsIcon", NativeWindowsIcon, u8"Arcadia.Object")
+Arcadia_declareObjectType(u8"NativeWindowsIcon", NativeWindowsIcon, u8"Arcadia.Object")
 
 struct NativeWindowsIcon {
   NativeIcon _parent;

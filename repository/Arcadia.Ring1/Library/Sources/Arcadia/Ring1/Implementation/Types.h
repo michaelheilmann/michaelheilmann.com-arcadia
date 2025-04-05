@@ -109,6 +109,9 @@ typedef enum Arcadia_TypeKind {
   /// The "object" type kind.
   Arcadia_TypeKind_Object,
 
+  /// The "enumeration" type kind.
+  Arcadia_TypeKind_Enumeration,
+
 } Arcadia_TypeKind;
 
 static inline void
@@ -229,6 +232,17 @@ Arcadia_Type_isObjectKind
   )
 { return Arcadia_TypeKind_Object == Arcadia_Type_getKind(thread, self); }
 
+/// @brief Get if this type is of the kind of type "enumeration".
+/// @param self A pointer to this type.
+/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "enumeration". #Arcadia_BooleanValue_False otherwise.
+static inline Arcadia_BooleanValue
+Arcadia_Type_isEnumerationtKind
+  (
+    Arcadia_Thread* thread,
+    Arcadia_TypeValue self
+  )
+{ return Arcadia_TypeKind_Enumeration == Arcadia_Type_getKind(thread, self); }
+
 /* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
 Arcadia_TypeValue
 Arcadia_registerInternalType
@@ -260,6 +274,18 @@ Arcadia_registerObjectType
     size_t nameLength,
     size_t valueSize,
     Arcadia_TypeValue parentObjectType,
+    Arcadia_Type_Operations const* typeOperations,
+    Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
+  );
+
+/* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
+Arcadia_TypeValue
+Arcadia_registerEnumerationType
+  (
+    Arcadia_Thread* thread,
+    char const* name,
+    size_t nameLength,
+    size_t valueSize,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   );

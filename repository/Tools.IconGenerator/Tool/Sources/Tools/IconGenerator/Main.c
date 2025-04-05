@@ -81,7 +81,7 @@ main1
   #error("environment not (yet) supported")
 #endif
   for (Arcadia_SizeValue i = 0, n = sizeof(sizes) / sizeof(size_t); i < n; ++i) {
-    PixelBuffer* pixelBuffer = PixelBuffer_create(thread, 0, sizes[i], sizes[i], PixelFormat_An8Rn8Gn8Bn8);
+    PixelBuffer* pixelBuffer = PixelBuffer_create(thread, 0, sizes[i], sizes[i], Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8);
     Arcadia_List_appendObjectReferenceValue(thread, pixelBufferList, (Arcadia_ObjectReferenceValue)pixelBuffer);
   }
   ImageWriter_writeIcoToPath(thread, imageWriter, pixelBufferList, Arcadia_Value_getObjectReferenceValue(&target));

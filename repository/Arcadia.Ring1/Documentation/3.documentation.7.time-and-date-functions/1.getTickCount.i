@@ -1,18 +1,28 @@
-<h4 id="Arcadia_getTickCount">Arcadia_getTickCount</h4>
-<p>Get the time, in milliseconds, since an unspecified moment in the past.</p>
-<p><code>
-Arcadia_Natural64Value
-Arcadia_getTickCount
-  (
-    Arcadia_Thread* thread
-  )
-</code></p>
+<section class="cxx entity procedure">
 
+  <h1 id="Arcadia_getTickCount">Arcadia_getTickCount</h1>
 
-<h5>Parameters</h5>
-<table>
-  <tr><td>Arcadia_Thread* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-</table>
+  <my-signature><code>
+  Arcadia_Natural64Value<br>
+  Arcadia_getTickCount<br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread<br>
+   &nbsp;)
+  </code></my-signature>
 
-<h5>Return value</h5>
-<p>The time, in milliseconds, since an unspecified momentn in the past.</p>
+  <my-summary>Get the time, in milliseconds, since an unspecified moment in the past.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The time, in milliseconds, since an unspecified momentn in the past.</p>
+  </section>
+
+</section>

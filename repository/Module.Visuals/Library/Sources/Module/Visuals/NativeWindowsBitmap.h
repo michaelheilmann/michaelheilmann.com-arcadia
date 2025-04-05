@@ -29,7 +29,7 @@
 ///   construct(width:Integer32, height: Integer32)
 /// }
 /// @endcode
-Rex_declareObjectType(u8"NativeWindowsBitmap", NativeWindowsBitmap, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"NativeWindowsBitmap", NativeWindowsBitmap, u8"Arcadia.Object");
 
 struct NativeWindowsBitmap {
   Arcadia_Object _parent;

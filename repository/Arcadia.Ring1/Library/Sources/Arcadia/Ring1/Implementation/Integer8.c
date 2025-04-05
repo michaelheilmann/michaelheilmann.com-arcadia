@@ -461,4 +461,4 @@ subtract
 #undef A1
 }
 
-Rex_defineScalarType(Arcadia_Integer8, u8"Arcadia.Integer8", &_typeOperations);
+Arcadia_defineScalarType(Arcadia_Integer8, u8"Arcadia.Integer8", &_typeOperations);
