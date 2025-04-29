@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,13 +18,13 @@
 #if !defined(MODULE_VISUALS_NATIVEWINDOW_H_INCLUDED)
 #define MODULE_VISUALS_NATIVEWINDOW_H_INCLUDED
 
-#include "R/Include.h"
+#include "Arcadia/Ring2/Include.h"
 #include "Module/Visuals/NativeIcon.h"
 #include "Module/Visuals/PixelBuffer.h"
 
-// The window is in "closed" state when it is creeated by NativeWindowsWindow_create.
-// A successful call to NativeWindowsWindow_open puts the window in "opened" state.
-// The window is put in "closed" state if it is destructed or by a successful call to NativeWindowsWindow_close.
+// An instance of "NativeWindow" is in "closed" state when it is created.
+// A successful call to "NativeWindow_open" puts the window in "opened" state.
+// The window is put in "closed" state if it is destructed or by a successful call to "NativeWindow_close".
 Arcadia_declareObjectType(u8"NativeWindow", NativeWindow, u8"Arcadia.Object");
 
 struct NativeWindow {

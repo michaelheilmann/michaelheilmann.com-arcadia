@@ -1,4 +1,4 @@
-/* Copyright (c) 2024 Michael Heilmann. All rights reserved. */
+/* Copyright (c) 2024-2025 Michael Heilmann. All rights reserved. */
 @@media not print {
   :root {
     --black: rgb(3,3,3);

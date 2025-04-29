@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,10 +15,10 @@
 
 // Last modified: 2024-11-11
 
-#include "Module/Visuals/NativeWindowsBitmap.h"
+#include "Module/Visuals/Windows/NativeBitmap.h"
 
 static void
-NativeWindowsBitmap_constructImpl
+Windows_NativeBitmap_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -27,15 +27,15 @@ NativeWindowsBitmap_constructImpl
   );
 
 static void
-NativeWindowsBitmap_destruct
+Windows_NativeBitmap_destruct
   (
     Arcadia_Thread* thread,
-    NativeWindowsBitmap* self
+    Windows_NativeBitmap* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &NativeWindowsBitmap_constructImpl,
-  .destruct = &NativeWindowsBitmap_destruct,
+  .construct = &Windows_NativeBitmap_constructImpl,
+  .destruct = &Windows_NativeBitmap_destruct,
   .visit = NULL,
 };
 
@@ -59,10 +59,10 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"NativeWindowsBitmap", NativeWindowsBitmap, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Windows.NativeBitmap", Windows_NativeBitmap, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
-NativeWindowsBitmap_constructImpl
+Windows_NativeBitmap_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -70,8 +70,8 @@ NativeWindowsBitmap_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  NativeWindowsBitmap* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _NativeWindowsBitmap_getType(thread);
+  Windows_NativeBitmap* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Windows_NativeBitmap_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
@@ -168,10 +168,10 @@ NativeWindowsBitmap_constructImpl
 }
 
 static void
-NativeWindowsBitmap_destruct
+Windows_NativeBitmap_destruct
   (
     Arcadia_Thread* thread,
-    NativeWindowsBitmap* self
+    Windows_NativeBitmap* self
   )
 {
   if (NULL != self->hBitmap) {
@@ -184,8 +184,8 @@ NativeWindowsBitmap_destruct
   }
 }
 
-NativeWindowsBitmap*
-NativeWindowsBitmap_create
+Windows_NativeBitmap*
+Windows_NativeBitmap_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
@@ -194,15 +194,15 @@ NativeWindowsBitmap_create
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Integer32, .integer32Value = width },
                                    {.tag = Arcadia_ValueTag_Integer32, .integer32Value = height } };
-  NativeWindowsBitmap* self = Arcadia_allocateObject(thread, _NativeWindowsBitmap_getType(thread), 2, &argumentValues[0]);
+  Windows_NativeBitmap* self = Arcadia_allocateObject(thread, _Windows_NativeBitmap_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
 void
-NativeWindowsBitmap_fill
+Windows_NativeBitmap_fill
   (
     Arcadia_Thread* thread,
-    NativeWindowsBitmap* self,
+    Windows_NativeBitmap* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
     Arcadia_Natural8Value b
@@ -221,10 +221,10 @@ NativeWindowsBitmap_fill
 }
 
 PixelBuffer*
-NativeWindowsBitmap_toPixelBuffer
+Windows_NativeBitmap_toPixelBuffer
   (
     Arcadia_Thread* thread,
-    NativeWindowsBitmap* self
+    Windows_NativeBitmap* self
   )
 {
   DIBSECTION dibSection;

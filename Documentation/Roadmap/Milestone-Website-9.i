@@ -5,5 +5,5 @@ A <em>news page</em> is reachable from the <em>landing page</em>.
 </p>
 
 <p>
-The <em>news page</e,> displays news on the site and the projects.
+The <em>news page</em> displays news on the site and the projects.
 </p>

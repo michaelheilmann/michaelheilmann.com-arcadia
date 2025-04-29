@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -36,7 +36,9 @@
 
 #include "Arcadia/Ring1/Implementation/Size.h"
 
-void
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+Arcadia_BooleanValue
 Arcadia_safeMultiplyNatural16Value
   (
     Arcadia_Thread* thread,
@@ -46,7 +48,7 @@ Arcadia_safeMultiplyNatural16Value
     Arcadia_Natural16Value* productLow
   );
 
-void
+Arcadia_BooleanValue
 Arcadia_safeMultiplyNatural32Value
   (
     Arcadia_Thread* thread,
@@ -56,46 +58,7 @@ Arcadia_safeMultiplyNatural32Value
     Arcadia_Natural32Value* productLow
   );
 
-#if Arcadia_Configuration_CompilerC_Msvc == Arcadia_Configuration_CompilerC && \
-    Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
-
-void
-Arcadia_safeMultiplyNatural64ValueX64Msvc
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Natural64Value multiplier,
-    Arcadia_Natural64Value multiplicand,
-    Arcadia_Natural64Value* productHigh,
-    Arcadia_Natural64Value* productLow
-  );
-
-#endif
-
-#if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
-
-void
-Arcadia_safeMultiplyNatural64ValueGcc
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Natural64Value multiplier,
-    Arcadia_Natural64Value multiplicand,
-    Arcadia_Natural64Value* productHigh,
-    Arcadia_Natural64Value* productLow
-  );
-
-#endif
-
-void
-Arcadia_safeMultiplyNatural64ValueDefault
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Natural64Value multiplier,
-    Arcadia_Natural64Value multiplicand,
-    Arcadia_Natural64Value* productHigh,
-    Arcadia_Natural64Value* productLow
-  );
-
-void
+Arcadia_BooleanValue
 Arcadia_safeMultiplyNatural64Value
   (
     Arcadia_Thread* thread,
@@ -105,7 +68,7 @@ Arcadia_safeMultiplyNatural64Value
     Arcadia_Natural64Value* productLow
   );
 
-void
+Arcadia_BooleanValue
 Arcadia_safeMultiplyNatural8Value
   (
     Arcadia_Thread* thread,
@@ -115,7 +78,9 @@ Arcadia_safeMultiplyNatural8Value
     Arcadia_Natural8Value* productLow
   );
 
-void
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+Arcadia_BooleanValue
 Arcadia_safeMultiplySizeValue
   (
     Arcadia_Thread* thread,
@@ -124,5 +89,62 @@ Arcadia_safeMultiplySizeValue
     Arcadia_SizeValue* productHigh,
     Arcadia_SizeValue* productLow
   );
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/// @brief Perform a safe multiplication of two integer values.
+/// @param multiplier The multiplier.
+/// @param multiplicand The multiplicand.
+/// @param [out] product A pointer to an Arcadia_Integer8Value variable.
+/// @return
+/// #Arcadia_BooleanValue_True if the result fits into *product.
+/// #Arcadia_BooleanValue_False otherwise.
+/// @post
+/// If this function returns #Arcadia_BooleanValue_True then *product is assigned the mathematical result of the operation.
+/// Otherwise *product represents the mathematical result of the operation wrapped around to the width of *result.if the result fits into *product.
+/// Note: Wrapped around means:
+/// If an integer multiplication overflows, then the result is the low-order bits of the mathematical product as represented in some sufficiently large two's-complement format.
+/// As a result, if overflow occurs, then the sign of the result may not be the same as the sign of the mathematical product of the two operand values. 
+Arcadia_BooleanValue
+Arcadia_safeMultiplyInteger16Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Integer16Value multiplier,
+    Arcadia_Integer16Value multiplicand,
+    Arcadia_Integer16Value* upperProduct,
+    Arcadia_Integer16Value* lowerProduct
+  );
+
+Arcadia_BooleanValue
+Arcadia_safeMultiplyInteger32Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Integer32Value multiplier,
+    Arcadia_Integer32Value multiplicand,
+    Arcadia_Integer32Value* upperProduct,
+    Arcadia_Integer32Value* lowerProduct
+  );
+
+Arcadia_BooleanValue
+Arcadia_safeMultiplyInteger64Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Integer64Value multiplier,
+    Arcadia_Integer64Value multiplicand,
+    Arcadia_Integer64Value* upperProduct,
+    Arcadia_Integer64Value* lowerProduct
+  );
+
+Arcadia_BooleanValue
+Arcadia_safeMultiplyInteger8Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Integer8Value multiplier,
+    Arcadia_Integer8Value multiplicand,
+    Arcadia_Integer8Value* upperProduct,
+    Arcadia_Integer8Value* lowerProduct
+  );
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #endif // ARCADIA_RING1_SAFEMULTIPLY_H_INCLUDED

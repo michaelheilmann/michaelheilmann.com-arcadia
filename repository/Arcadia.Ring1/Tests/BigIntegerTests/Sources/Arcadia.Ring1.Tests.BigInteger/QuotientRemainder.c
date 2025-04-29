@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -182,14 +182,14 @@ Arcadia_Test_BigInteger_quotientRemainderRegression
   dividend = 72057594037927935;
   divisor = 1;
   Arcadia_Test_BigInteger_quotientRemainderTestFixtureNatural64(thread, &context, dividend / divisor, dividend % divisor, dividend, divisor);
-  dividend = 72057594037927935;
-  divisor = 72057594037927936;
+  dividend = Arcadia_Natural64Value_Literal(72057594037927935);
+  divisor = Arcadia_Natural64Value_Literal(72057594037927936);
   Arcadia_Test_BigInteger_quotientRemainderTestFixtureNatural64(thread, &context, dividend / divisor, dividend % divisor, dividend, divisor);
-  dividend = 144115188075855870;
-  divisor = 72057594037927936;
+  dividend = Arcadia_Natural64Value_Literal(144115188075855870);
+  divisor = Arcadia_Natural64Value_Literal(72057594037927936);
   Arcadia_Test_BigInteger_quotientRemainderTestFixtureNatural64(thread, &context, dividend / divisor, dividend % divisor, dividend, divisor);
-  dividend = 18446744073709551615;
-  divisor = 18446744073709551615;
+  dividend = Arcadia_Natural64Value_Literal(18446744073709551615);
+  divisor = Arcadia_Natural64Value_Literal(18446744073709551615);
   Arcadia_Test_BigInteger_quotientRemainderTestFixtureNatural64(thread, &context, dividend / divisor, dividend % divisor, dividend, divisor);
 }
 

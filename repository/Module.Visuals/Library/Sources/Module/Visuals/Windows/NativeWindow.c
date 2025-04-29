@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,10 +15,12 @@
 
 // Last modified: 2024-11-11
 
-#include "Module/Visuals/NativeWindowsWindow.h"
+#include "Module/Visuals/Windows/NativeWindow.h"
 
 #include "Module/Visuals/Windows/WglIntermediateWindow.h"
 #include <limits.h>
+
+static const char g_title[] = "Liminality";
 
 static LRESULT CALLBACK
 WindowProc
@@ -30,21 +32,21 @@ WindowProc
   );
 
 static void
-NativeWindowsWindow_destruct
+Windows_NativeWindow_destruct
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
-NativeWindowsWindow_visit
+Windows_NativeWindow_visit
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
-NativeWindowsWindow_setTitleHelper
+Windows_NativeWindow_setTitleHelper
   (
     Arcadia_Thread* thread,
     HWND windowHandle,
@@ -52,7 +54,7 @@ NativeWindowsWindow_setTitleHelper
   );
 
 static void
-NativeWindowsWindow_constructImpl
+Windows_NativeWindow_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -64,28 +66,28 @@ static void
 openImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
 closeImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static Arcadia_BooleanValue
 getQuitRequestedImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
 setQuitRequestedImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_BooleanValue quitRequested
   );
 
@@ -93,14 +95,14 @@ static void
 updateImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
 getRequiredBigIconSizeImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -109,53 +111,53 @@ static void
 getRequiredSmallIconSizeImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
 
-static NativeWindowsIcon*
+static Windows_NativeIcon*
 getBigIconImpl 
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
 setBigIconImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
-    NativeWindowsIcon* icon
+    Windows_NativeWindow* self,
+    Windows_NativeIcon* icon
   );
 
-static NativeWindowsIcon*
+static Windows_NativeIcon*
 getSmallIconImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
 setSmallIconImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
-    NativeWindowsIcon* icon
+    Windows_NativeWindow* self,
+    Windows_NativeIcon* icon
   );
 
 static Arcadia_String*
 getTitleImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
 setTitleImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_String* title
   );
 
@@ -163,7 +165,7 @@ static void
 getCanvasSizeImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -172,34 +174,32 @@ static void
 createContext
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Visuals_Window_WglIntermediateWindow* intermediateWindow
   );
 
 static void
-beginRender
+beginRenderImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
 static void
-endRender
+endRenderImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   );
 
-static const char g_title[] = "Liminality";
-
-static const char g_className[] = "Liminality Window Class";
+static const char g_className[] = "Aracadia.Visuals.Windows.NativeWindow Window Class";
 
 static Arcadia_BooleanValue g_quitRequested = Arcadia_BooleanValue_False;
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &NativeWindowsWindow_constructImpl,
-  .destruct = &NativeWindowsWindow_destruct,
-  .visit = &NativeWindowsWindow_visit,
+  .construct = &Windows_NativeWindow_constructImpl,
+  .destruct = &Windows_NativeWindow_destruct,
+  .visit = &Windows_NativeWindow_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -222,7 +222,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"NativeWindowsWindow", NativeWindowsWindow, u8"NativeWindow", NativeWindow, &_typeOperations);
+Arcadia_defineObjectType(u8"Windows.NativeWindow", Windows_NativeWindow, u8"NativeWindow", NativeWindow, &_typeOperations);
 
 static LRESULT CALLBACK
 WindowProc
@@ -251,10 +251,10 @@ WindowProc
 }
 
 static void
-NativeWindowsWindow_destruct
+Windows_NativeWindow_destruct
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 {
   if (NULL != self->deviceContextHandle) {
@@ -269,10 +269,10 @@ NativeWindowsWindow_destruct
 }
 
 static void
-NativeWindowsWindow_visit
+Windows_NativeWindow_visit
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 {
   if (self->title) {
@@ -287,7 +287,7 @@ NativeWindowsWindow_visit
 }
 
 static void
-NativeWindowsWindow_setTitleHelper
+Windows_NativeWindow_setTitleHelper
   (
     Arcadia_Thread* thread,
     HWND windowHandle,
@@ -304,7 +304,7 @@ NativeWindowsWindow_setTitleHelper
 }
 
 static void
-NativeWindowsWindow_constructImpl
+Windows_NativeWindow_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -312,8 +312,8 @@ NativeWindowsWindow_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  NativeWindowsWindow* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _NativeWindowsWindow_getType(thread);
+  Windows_NativeWindow* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Windows_NativeWindow_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
@@ -329,7 +329,6 @@ NativeWindowsWindow_constructImpl
   _self->title = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, g_title, sizeof(g_title) - 1));
 
   ((NativeWindow*)_self)->open = (void(*)(Arcadia_Thread*, NativeWindow*)) & openImpl;
-
   ((NativeWindow*)_self)->close = (void(*)(Arcadia_Thread*, NativeWindow*)) & closeImpl;
 
   ((NativeWindow*)_self)->getQuitRequested = (Arcadia_BooleanValue(*)(Arcadia_Thread*, NativeWindow*)) & getQuitRequestedImpl;
@@ -351,8 +350,8 @@ NativeWindowsWindow_constructImpl
 
   ((NativeWindow*)_self)->getCanvasSize = (void(*)(Arcadia_Thread*, NativeWindow*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
 
-  ((NativeWindow*)_self)->beginRender = (void(*)(Arcadia_Thread*, NativeWindow*))&beginRender;
-  ((NativeWindow*)_self)->endRender = (void(*)(Arcadia_Thread*,NativeWindow*))&endRender;
+  ((NativeWindow*)_self)->beginRender = (void(*)(Arcadia_Thread*, NativeWindow*))&beginRenderImpl;
+  ((NativeWindow*)_self)->endRender = (void(*)(Arcadia_Thread*,NativeWindow*))&endRenderImpl;
 
   Arcadia_Object_setType(thread, _self, _type);
 }
@@ -361,7 +360,7 @@ static void
 openImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 { 
   if (self->windowHandle) {
@@ -399,7 +398,7 @@ openImpl
         (
           0,                               // Optional window styles.
           g_className,                     // Window class
-          "Windows Window",                // Window text
+          g_title,                         // Window text
           WS_OVERLAPPEDWINDOW,             // Window style
           CW_USEDEFAULT, CW_USEDEFAULT,    // Default position
           CW_USEDEFAULT, CW_USEDEFAULT,    // Default size
@@ -439,7 +438,7 @@ openImpl
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    NativeWindowsWindow_setTitleHelper(thread, self->windowHandle, self->title);
+    Windows_NativeWindow_setTitleHelper(thread, self->windowHandle, self->title);
     Visuals_Window_WglIntermediateWindow* intermediateWindow = Visuals_Window_WglIntermediateWindow_create(thread);
     Visuals_Window_WglIntermediateWindow_open(thread, intermediateWindow);
     createContext(thread, self, intermediateWindow);
@@ -463,7 +462,7 @@ static void
 closeImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   ) 
 {
   if (!self->windowHandle) {
@@ -495,7 +494,7 @@ static Arcadia_BooleanValue
 getQuitRequestedImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 { return g_quitRequested; }
 
@@ -503,7 +502,7 @@ static void
 setQuitRequestedImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_BooleanValue quitRequested
   )
 { g_quitRequested = quitRequested; }
@@ -512,7 +511,7 @@ static void
 updateImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 {
   MSG msg = { 0 };
@@ -529,7 +528,7 @@ static void
 getRequiredBigIconSizeImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
@@ -542,7 +541,7 @@ static void
 getRequiredSmallIconSizeImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
@@ -551,11 +550,11 @@ getRequiredSmallIconSizeImpl
   *height = GetSystemMetrics(SM_CYSMICON);
 }
 
-static NativeWindowsIcon*
+static Windows_NativeIcon*
 getBigIconImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 { return self->bigIcon; }
 
@@ -563,8 +562,8 @@ static void
 setBigIconImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
-    NativeWindowsIcon* icon
+    Windows_NativeWindow* self,
+    Windows_NativeIcon* icon
   )
 {
   self->bigIcon = icon;
@@ -577,11 +576,11 @@ setBigIconImpl
   }
 }
 
-static NativeWindowsIcon*
+static Windows_NativeIcon*
 getSmallIconImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 { return self->smallIcon; }
 
@@ -589,8 +588,8 @@ static void
 setSmallIconImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
-    NativeWindowsIcon* icon
+    Windows_NativeWindow* self,
+    Windows_NativeIcon* icon
   )
 {
   self->smallIcon = icon;
@@ -607,7 +606,7 @@ static Arcadia_String*
 getTitleImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 { return self->title; }
 
@@ -615,7 +614,7 @@ static void
 setTitleImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_String* title
   )
 {
@@ -625,7 +624,7 @@ setTitleImpl
   }
   self->title = title;
   if (self->windowHandle) {
-    NativeWindowsWindow_setTitleHelper(thread, self->windowHandle, title);
+    Windows_NativeWindow_setTitleHelper(thread, self->windowHandle, title);
   }
 }
 
@@ -633,7 +632,7 @@ static void
 getCanvasSizeImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
@@ -656,7 +655,7 @@ static void
 createContext
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self,
+    Windows_NativeWindow* self,
     Visuals_Window_WglIntermediateWindow* intermediateWindow
   )
 {
@@ -709,10 +708,10 @@ createContext
 }
 
 static void
-beginRender
+beginRenderImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 { 
   if (!wglMakeCurrent(self->deviceContextHandle, self->glResourceContextHandle)) {
@@ -728,10 +727,10 @@ beginRender
 }
 
 static void
-endRender
+endRenderImpl
   (
     Arcadia_Thread* thread,
-    NativeWindowsWindow* self
+    Windows_NativeWindow* self
   )
 { 
   if (self->glResourceContextHandle == wglGetCurrentContext()) {
@@ -742,13 +741,13 @@ endRender
   }
 }
 
-NativeWindowsWindow*
-NativeWindowsWindow_create
+Windows_NativeWindow*
+Windows_NativeWindow_create
   (
     Arcadia_Thread* thread
   )
 {
   Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
-  NativeWindowsWindow* self = Arcadia_allocateObject(thread, _NativeWindowsWindow_getType(thread), 0, &argumentValues[0]);
+  Windows_NativeWindow* self = Arcadia_allocateObject(thread, _Windows_NativeWindow_getType(thread), 0, &argumentValues[0]);
   return self;
 }

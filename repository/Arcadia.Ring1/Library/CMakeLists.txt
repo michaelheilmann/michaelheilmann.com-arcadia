@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -22,9 +22,6 @@ if (NOT MyProjectIsDefined)
     set(MyProjectName "Arcadia")
   endif()
   project(${MyProjectName})
-  enable_testing()
-  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-  include(FetchContent)
   set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
   set(MyProjectIsDefined)
@@ -290,6 +287,15 @@ if (NOT TARGET ${MyLibrary})
   list(APPEND ${MyLibrary}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Value.h)
 
   list(APPEND ${MyLibrary}.Libraries Arcadia.Arms)
+  
+  if (${${MyLibrary}.Compiler.Masm} STREQUAL ${${MyLibrary}.Compiler.Masm.Ms})
+	  if (${${MyLibrary}.InstructionSetArchitecture} STREQUAL ${${MyLibrary}.InstructionSetArchitecture.X64})
+	  elseif (${${MyLibrary}.InstructionSetArchitecture} STREQUAL ${${MyLibrary}.InstructionSetArchitecture.X86})   
+	  endif()
+	  if (${${MyLibrary}.InstructionSetArchitecture} STREQUAL ${${MyLibrary}.InstructionSetArchitecture.X64})
+	  elseif (${${MyLibrary}.InstructionSetArchitecture} STREQUAL ${${MyLibrary}.InstructionSetArchitecture.X86}) 
+	  endif()
+  endif()
 
   if (${${MyLibrary}.OperatingSystem} STREQUAL ${${MyLibrary}.OperatingSystem.Linux})
     list(APPEND ${MyLibrary}.Libraries m)

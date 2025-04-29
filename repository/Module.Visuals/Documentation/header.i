@@ -20,7 +20,7 @@
   <h1>Michael Heilmann's Arcadia Visuals</h1>
   <p>
   This is the documentation for Michael  Heilmann's Arcadia Visuals.
-  Arcadia Ring 1 provides</p>
+  Arcadia Visuals provides</p>
   <ul>
     <li>an uniform interface to modern graphics APIs like OpenGL 4.x, DirectX12, and Vulkan</li>
     <li>visual asset (e.g., images, meshes) loading, saving, and synthesis functionality</li>

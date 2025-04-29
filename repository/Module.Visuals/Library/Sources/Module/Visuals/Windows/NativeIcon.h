@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,10 +15,10 @@
 
 // Last modified: 2024-11-13
 
-#if !defined(MODULE_VISUALS_NATIVEWINDOWSICON_H_INCLUDED)
-#define MODULE_VISUALS_NATIVEWINDOWSICON_H_INCLUDED
+#if !defined(MODULE_VISUALS_WINDOWS_NATIVEICON_H_INCLUDED)
+#define MODULE_VISUALS_WINDOWS_NATIVEICON_H_INCLUDED
  
-#include "R/Include.h"
+#include "Arcadia/Ring2/Include.h"
 #include "Module/Visuals/NativeIcon.h"
 
 #include <stdint.h>
@@ -27,26 +27,27 @@
 #include <windows.h>
 
 /// @code
-/// class NativeWindowsIcon {
-///   construct(width:Integer32, height:Integer32, red:Natural8, green:Natural8, blue:Natural8)
+/// class Windows.NativeIcon {
+///   construct(width:Integer32, height:Integer32, red:Natural8, green:Natural8, blue:Natural8, alpha:Natural8)
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"NativeWindowsIcon", NativeWindowsIcon, u8"Arcadia.Object")
+Arcadia_declareObjectType(u8"Windows.NativeIcon", Windows_NativeIcon, u8"Arcadia.Object")
 
-struct NativeWindowsIcon {
+struct Windows_NativeIcon {
   NativeIcon _parent;
   HICON hIcon;
 };
 
-NativeWindowsIcon*
-NativeWindowsIcon_create
+Windows_NativeIcon*
+Windows_NativeIcon_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height,
     Arcadia_Natural8Value red,
     Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue
+    Arcadia_Natural8Value blue,
+    Arcadia_Natural8Value alpha
   );
 
-#endif // MODULE_VISUALS_NATIVEWINDOWSICON_H_INCLUDED
+#endif // MODULE_VISUALS_WINDOWS_NATIVEICON_H_INCLUDED

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -103,7 +103,7 @@ TextureFontWindows_constructImpl
   DeleteDC(hDeviceContext);
   hDeviceContext = NULL;
   // Create a bitmap of that size. Draw the symbol to the bitmap.
-  _self->bitmap = NativeWindowsBitmap_create(thread, width, height);
+  _self->bitmap = Windows_NativeBitmap_create(thread, width, height);
   DrawTextA(_self->bitmap->hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   //
   Arcadia_Object_setType(thread, _self, _type);
@@ -168,7 +168,7 @@ TextureFontWindows_setCodePoint
     DeleteDC(hDeviceContext);
     hDeviceContext = NULL;
     // Create a bitmap of that size. Draw the symbol to the bitmap.
-    self->bitmap = NativeWindowsBitmap_create(thread, width, height);
+    self->bitmap = Windows_NativeBitmap_create(thread, width, height);
     DrawTextA(self->bitmap->hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   }
 }
@@ -180,5 +180,5 @@ TextureFontWindows_getPixelBuffer
     TextureFontWindows* self
   )
 {
-  return NativeWindowsBitmap_toPixelBuffer(thread, self->bitmap);
+  return Windows_NativeBitmap_toPixelBuffer(thread, self->bitmap);
 }

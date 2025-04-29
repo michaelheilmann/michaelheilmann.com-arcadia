@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,23 +15,23 @@
 
 // Last modified: 2024-11-11
 
-#if !defined(MODULE_VISUALS_NATIVEWINDOWSBITMAP_H_INCLUDED)
-#define MODULE_VISUALS_NATIVEWINDOWSBITMAP_H_INCLUDED
+#if !defined(MODULE_VISUALS_WINDOWS_NATIVEBITMAP_H_INCLUDED)
+#define MODULE_VISUALS_WINDOWS_NATIVEBITMAP_H_INCLUDED
 
-#include "R/Include.h"
+#include "Arcadia/Ring2/Include.h"
 #include "Module/Visuals/PixelBuffer.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 /// @code
-/// class NativeWindowsBitmap {
+/// class Windows.NativeBitmap {
 ///   construct(width:Integer32, height: Integer32)
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"NativeWindowsBitmap", NativeWindowsBitmap, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Windows.NativeBitmap", Windows_NativeBitmap, u8"Arcadia.Object");
 
-struct NativeWindowsBitmap {
+struct Windows_NativeBitmap {
   Arcadia_Object _parent;
   HDC hDeviceContext;
   HBITMAP hBitmap;
@@ -43,8 +43,8 @@ struct NativeWindowsBitmap {
   Arcadia_Natural8Value pixelFormat;
 };
 
-NativeWindowsBitmap*
-NativeWindowsBitmap_create
+Windows_NativeBitmap*
+Windows_NativeBitmap_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
@@ -52,20 +52,20 @@ NativeWindowsBitmap_create
   );
 
 void
-NativeWindowsBitmap_fill
+Windows_NativeBitmap_fill
   (
     Arcadia_Thread* thread,
-    NativeWindowsBitmap* self,
+    Windows_NativeBitmap* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
     Arcadia_Natural8Value b
   );
 
 PixelBuffer*
-NativeWindowsBitmap_toPixelBuffer
+Windows_NativeBitmap_toPixelBuffer
   (
     Arcadia_Thread* thread,
-    NativeWindowsBitmap* self
+    Windows_NativeBitmap* self
   );
 
-#endif // MODULE_VISUALS_NATIVEWINDOWSBITMAP_H_INCLUDED
+#endif // MODULE_VISUALS_WINDOWS_NATIVEBITMAP_H_INCLUDED

@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -20,6 +20,23 @@ include(${CMAKE_CURRENT_LIST_DIR}/detect_compiler.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_instruction_set_architecture.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_operating_system.cmake)
 
+enable_testing()
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+include(FetchContent)
+include(CheckLanguage)
+
+check_language(C)
+if (CMAKE_C_COMPILER)
+  enable_language(C)
+endif()
+
+check_language(ASM_MASM)
+if (CMAKE_ASM_MASM_COMPILER)
+  enable_language(ASM_MASM)
+endif()
+
 # Begin a product (library, executable, or test).
 # The following variables are defined
 # - ${target}.SourceFiles      List of C/C++ source files
@@ -35,11 +52,13 @@ macro(BeginProduct target type)
   set(${target}.HeaderFiles "")
   set(${target}.ConfigurationFiles "")
   set(${target}.AssetFiles "")
+  set(${target}.AssemblerFiles "")
   set(${target}.Libraries "")
   set(${target}.PrivateLibraries "")
   set(${target}.IncludeDirectories "")
   set(${target}.Enabled TRUE)
   DetectCompilerC(${target})
+  DetectCompilerMasm(${target})
   DetectOperatingSystem(${target})
   DetectInstructionSetArchitecture(${target})
 
@@ -64,11 +83,12 @@ macro(EndProduct target)
 
     ConfigureWarningsAndErrors(${target})
 
-    target_sources(${target} PRIVATE ${${target}.ConfigurationFiles} ${${target}.SourceFiles} ${${target}.HeaderFiles})
+    target_sources(${target} PRIVATE ${${target}.ConfigurationFiles} ${${target}.SourceFiles} ${${target}.HeaderFiles} ${${target}.AssemblerFiles})
 
     source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${${target}.ConfigurationFiles})
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.HeaderFiles})
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.SourceFiles})
+    source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.AssemblerFiles})
 
     set_property(TARGET ${target} PROPERTY C_STANDARD 17)
     
@@ -105,6 +125,12 @@ macro(EndProduct target)
     else()
       message(FATAL_ERROR "unknown/unsupported product type")
     endif()
+  endif()
+
+  if( CMAKE_SIZEOF_VOID_P EQUAL 4 AND CMAKE_ASM_MASM_COMPILER)
+    set_source_files_properties(${${target}.AssemblerFiles}}
+                                PROPERTIES
+                                COMPILE_FLAGS "/safeseh")
   endif()
 
 endmacro()

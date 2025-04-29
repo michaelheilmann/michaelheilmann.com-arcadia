@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,19 +23,25 @@
 void
 Audials_startup
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 void
 Audials_shutdown
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   );
 
 void
 Audials_playSine
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
+  );
+
+void
+Audials_stopSine
+  (
+    Arcadia_Thread* thread
   );
 
 #endif // MODULE_AUDIALS_INCLUDE_H_INCLUDED

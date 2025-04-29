@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,8 +16,6 @@
 // Last modified: 2025-03-30
 
 #include "Module/Visuals/DepthCompareFunction.h"
-
-#include "Arcadia/Ring2/Include.h"
 
 static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = NULL,

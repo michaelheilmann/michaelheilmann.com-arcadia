@@ -14,6 +14,7 @@ branches:
 skip_tags: true
 
 install:
+    - sh: sudo apt-get --assume-yes install libopenal-dev
 
 # Generate solution and project files.
 before_build:

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -564,8 +564,8 @@ Arcadia_Process_copyMemory
   //
   // Now let s.start = ((uintptr_t)p), a.end = ((uintptr_t)p) + n, b.start = ((uintptr_t)q), b.end = ((uintptr_t)q) + n to obtain
   bool overlapping = (((uintptr_t)p) <= ((uintptr_t)q) + n)
-                  || (((uintptr_t)q) <= ((uintptr_t)p) + n);
-  if (overlapping) {
+                  && (((uintptr_t)q) <= ((uintptr_t)p) + n);
+  if (!overlapping) {
     memmove(p, q, n);
   } else {
     memcpy(p, q, n);

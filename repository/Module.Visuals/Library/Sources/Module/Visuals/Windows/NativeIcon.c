@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,10 +15,10 @@
 
 // Last modified: 2024-11-13
 
-#include "Module/Visuals/NativeWindowsIcon.h"
+#include "Module/Visuals/Windows/NativeIcon.h"
 
 static void
-NativeWindowsIcon_constructImpl
+Windows_NativeIcon_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -27,15 +27,15 @@ NativeWindowsIcon_constructImpl
   );
 
 static void
-NativeWindowsIcon_destruct
+Windows_NativeIcon_destruct
   (
     Arcadia_Thread* thread,
-    NativeWindowsIcon* self
+    Windows_NativeIcon* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &NativeWindowsIcon_constructImpl,
-  .destruct = &NativeWindowsIcon_destruct,
+  .construct = &Windows_NativeIcon_constructImpl,
+  .destruct = &Windows_NativeIcon_destruct,
   .visit = NULL,
 };
 
@@ -59,15 +59,10 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"NativeWindowsIcon", NativeWindowsIcon, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Windows.NativeIcon", Windows_NativeIcon, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
-// Arcadia_Integer32Value width
-// Arcadia_Integer32Value height
-// Arcadia_Natural8Value red
-// Arcadia_Natural8Value green
-// Arcadia_Natural8Value blue
 static void
-NativeWindowsIcon_constructImpl
+Windows_NativeIcon_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -75,14 +70,14 @@ NativeWindowsIcon_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  NativeWindowsIcon* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _NativeWindowsIcon_getType(thread);
+  Windows_NativeIcon* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Windows_NativeIcon_getType(thread);
   {
     Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
 
-  if (5 != numberOfArgumentValues) {
+  if (6 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -116,6 +111,12 @@ NativeWindowsIcon_constructImpl
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Natural8Value blue = Arcadia_Value_getNatural8Value(&argumentValues[4]);
+
+  if (!Arcadia_Value_isNatural8Value(&argumentValues[5])) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Natural8Value alpha = Arcadia_Value_getNatural8Value(&argumentValues[5]);
 
   HDC hMemDC;
   BITMAPV5HEADER bi;
@@ -204,7 +205,7 @@ NativeWindowsIcon_constructImpl
       // Clear the alpha bits
       uint32_t pixel = 0x000000000;
       // Set the alpha bits to 0x9F (semi-transparent) or 0xFF000000 (opaque).
-      pixel |= /*0x9F000000*/0xFF000000;
+      pixel |= alpha << 24;
       pixel |= red << 16;
       pixel |= green << 8;
       pixel |= blue << 0;
@@ -239,10 +240,10 @@ NativeWindowsIcon_constructImpl
 }
 
 static void
-NativeWindowsIcon_destruct
+Windows_NativeIcon_destruct
   (
     Arcadia_Thread* thread,
-    NativeWindowsIcon* self
+    Windows_NativeIcon* self
   )
 {
   if (self->hIcon) {
@@ -251,22 +252,26 @@ NativeWindowsIcon_destruct
   }
 }
 
-NativeWindowsIcon*
-NativeWindowsIcon_create
+Windows_NativeIcon*
+Windows_NativeIcon_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height,
     Arcadia_Natural8Value red,
     Arcadia_Natural8Value green,  
-    Arcadia_Natural8Value blue
+    Arcadia_Natural8Value blue,
+    Arcadia_Natural8Value alpha
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Integer32, .integer32Value = width },
-                               {.tag = Arcadia_ValueTag_Integer32, .integer32Value = height },
-                               {.tag = Arcadia_ValueTag_Natural8, .natural8Value = red },
-                               {.tag = Arcadia_ValueTag_Natural8, .natural8Value = green },
-                               {.tag = Arcadia_ValueTag_Natural8, .natural8Value = blue } };
-  NativeWindowsIcon* self = Arcadia_allocateObject(thread, _NativeWindowsIcon_getType(thread), 5, &argumentValues[0]);
+  Arcadia_Value argumentValues[] = {
+    { .tag = Arcadia_ValueTag_Integer32, .integer32Value = width },
+    { .tag = Arcadia_ValueTag_Integer32, .integer32Value = height },
+    { .tag = Arcadia_ValueTag_Natural8, .natural8Value = red },
+    { .tag = Arcadia_ValueTag_Natural8, .natural8Value = green },
+    { .tag = Arcadia_ValueTag_Natural8, .natural8Value = blue },
+    { .tag = Arcadia_ValueTag_Natural8, .natural8Value = alpha },
+  };
+  Windows_NativeIcon* self = Arcadia_allocateObject(thread, _Windows_NativeIcon_getType(thread), 6, &argumentValues[0]);
   return self;
 }

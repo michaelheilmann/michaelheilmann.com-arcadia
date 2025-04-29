@@ -1,7 +1,7 @@
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_VertexElementSyntax">Arcadia_Visuals_VertexElementSyntaxt</h1>
+<h1 id="Arcadia_Visuals_VertexElementSyntax">Arcadia_Visuals_VertexElementSyntax</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_VertexElementSyntaxt Arcadia_Visuals_VertexElementSyntaxt;
+typedef enum Arcadia_Visuals_VertexElementSyntaxt Arcadia_Visuals_VertexElementSyntax;
 </code></my-signature>
 
 <my-summary>

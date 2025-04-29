@@ -1,7 +1,7 @@
 <section class="cxx entity procedure">
 <h1 id="Arcadia_Visuals_PixelFormat_getNumberOfComponents">Arcadia_Visuals_PixelFormat_getNumberOfComponents</h1>
 <my-signature><code>
-Arcadia_SizeValue
+Arcadia_SizeValue<br>
 Arcadia_Visuals_PixelFormat_getNumberOfComponents<br>
 &nbsp;&nbsp;(<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>

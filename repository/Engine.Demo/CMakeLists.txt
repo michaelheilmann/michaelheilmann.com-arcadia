@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-12-29
+# Last modified: 2024-09-26
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -30,4 +30,22 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Sources)
+set(MyDemoName ${MyProjectName}.Engine.Demo)
+
+if (NOT TARGET ${MyDemoName})
+  message(STATUS "${MyDemoName}: ${MyProjectName}.Visuals.OpenGl.Enabled = ${${MyProjectName}.Visuals.OpenGl.Enabled}")
+	if (${${MyProjectName}.Visuals.OpenGl.Enabled})
+	  BeginProduct(${MyDemoName} executable)
+	  
+	  FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Module.Audials/Library" "path to the Audials module source directory")
+	  FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Module.Visuals/Library" "path to the Visuals module source directory")
+
+	  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Engine.Demo/Configure.h @ONLY)
+	  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Main.c)
+	  list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Engine.Demo/Configure.h)
+	  
+	  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Audials ${MyProjectName}.Visuals)
+
+	  EndProduct(${MyDemoName})
+	endif()
+endif()

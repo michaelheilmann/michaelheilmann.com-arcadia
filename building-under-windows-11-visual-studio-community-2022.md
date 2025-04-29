@@ -6,6 +6,21 @@
   *Microsoft Visual Studio Community 2022* is available at [https://visualstudio.microsoft.com/vs/community/](https://visualstudio.microsoft.com/vs/community/).
 - *Kitware CMake* version 3.29.6 or better.
   *Kitware CMake* is available at [https://cmake.org/](https://cmake.org/).
+- *PowerShell*
+
+## Integrating external libraries
+*Arcadia.Ring1*, *Arcadia.Ring2*, *Arcadia.Mil* and many other parts have minimal external dependencies which are provided by the operating systems.
+There are interesting modules related to audials, visuals, haptics, etc. which - nowadays - require the integration of certain external libraries.
+These dependencies include "OpenAL", "OpenGL", "libpng", "freetype", and "zlib".
+
+To facilitate building and integrating these dependencies under *Windows*, the PowerShell script
+[https://github.com/michaelheilmann/michaelheilmann.com/blob/main/install-dependencies.ps1](https://github.com/michaelheilmann/michaelheilmann.com/blob/main/install-dependencies.ps1)
+which downloads precompiled dependencies and installs them to `C:\arcadia-dependencies`.
+
+The dependencies are downloaded from the [releases](https://github.com/michaelheilmann/michaelheilmann.com-dependencies/releases) of
+[https://github.com/michaelheilmann/michaelheilmann.com-dependencies](https://github.com/michaelheilmann/michaelheilmann.com-dependencies).
+
+Under Linux, of course, such ordeals are not necessary.
 
 ## Building the program
 The following instructions will perform an out-of-source build. An out-of-source build does not modify the source directory
@@ -21,39 +36,20 @@ An out of source build is the recommended way of building *michaelheilmann.com*.
 - Enter `cmake <source-directory>`.
 - The Visual Studio Community 2022 solution file `Arcadia.sln` should have been generated in `<build-directory>`.
 
-*Remarks* The above instructions will build the target architecture that is the default of your machine.
-To generate the build files for the target architecture x86, add the parameter `-A Win32` to the cmake command.
-To generate the build files for the target architecture x64, add the parameter `-A x64` to the cmake command.
+#### Adding support for non-default instruction set architecture
+By default, the cmake command to generate the build files will create those files for the default instruction set architecture based on the machine your are building on
+which is either x64 or x86 for Windows. You can explicitly select one of these two instruction set architectures by adding parameters to the cmake command: 
+- To generate the build files for the target architecture x86, add the parameter `-A Win32` to the cmake command.
+- To generate the build files for the target architecture x64, add the parameter `-A x64` to the cmake command.
 
-## Integrating external libraries
-*Arcadia.Ring1*, *Arcadia.Ring2*, *Arcadia.Mil* and many other parts have minimal external dependencies which are provided by the operating systems,
-here are interesting modules from fields of expertise like audials, visuals, haptics, etc. which - nowadays - require the integration of certain
-external libraries. **michaelheilmann.com does not store these external dependencies inside its repository. Instead, it provides an easy way to place
-them outside of the source directory and integrate them into the build. Such ordeals are not necessary if proper operating systems - like Linux - are
-used instead of Windows.**
+#### Adding OpenGL support
+*Important*: Ensure that the dependencies are install by executing the script [https://github.com/michaelheilmann/michaelheilmann.com/blob/main/install-dependencies.ps1].
 
-### OpenGL support
-*Arcadia.Visuals* may utilize OpenGL for accelerated graphics.
+By default, the cmake command to generate the build files will disable OpenGL support.
+To enable support OpenGL support, add the parameter `-D"Arcadia.Visuals.OpenGl.Enabled"=TRUE` to the cmake command.
 
-```
--D"Arcadia.Visuals.OpenGl.Enabled"=TRUE -D"Arcadia.Visuals.OpenGl.Directory"=<path to OpenGL directory>
-```
-The OpenGL directory is expected to contain the following folders and files
+#### Adding OpenAL support
+*Important*: Ensure that the dependencies are install by executing the script [https://github.com/michaelheilmann/michaelheilmann.com/blob/main/install-dependencies.ps1].~~
 
-```
-GL\glcorearb.h
-GL\glext.h
-GL\glxext.h
-GL\wglext.h
-KHR\khrplatform.h
-```
-
-These files can be obtained from [https://registry.khronos.org/OpenGL/index_gl.php](https://registry.khronos.org/OpenGL/index_gl.php).
-
-### Future additions: Vulkan, Direct3D
-Vulkan and Direct3D support might be added in future.
-
-### Convenience: Repository for building all dependencies
-A repository [https://github.com/michaelheilmann/michaelheilmann.com-dependencies](https://github.com/michaelheilmann/michaelheilmann.com-dependencies)
-allows for building the *opengl*, *openal*, *zlib*, *libpng*, and *freetype* dependencies and packages them as a convenient zip file. Under Linux,
-of course, such ordeals are not necessary.
+By default, the cmake command to generate the build files will disable OpenAL support.~~
+To enable support OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=TRUE` to the cmake command.

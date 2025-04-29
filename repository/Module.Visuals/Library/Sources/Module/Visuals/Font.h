@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,8 +18,8 @@
 #if !defined(MODULE_VISUALS_FONT_H_INCLUDED)
 #define MODULE_VISUALS_FONT_H_INCLUDED
 
-#include "R/Include.h"
-#include "Module/Visuals/NativeWindowsBitmap.h"
+#include "Arcadia/Ring2/Include.h"
+#include "Module/Visuals/Windows/NativeBitmap.h"
 #include "Module/Visuals/PixelBuffer.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -35,7 +35,7 @@ Arcadia_declareObjectType(u8"TextureFontWindows", TextureFontWindows, u8"Arcadia
 
 struct TextureFontWindows {
   Arcadia_Object _parent;
-  NativeWindowsBitmap* bitmap;
+  Windows_NativeBitmap* bitmap;
   HFONT hFont;
   HDC hDeviceContext;
   Arcadia_Natural32Value codePoint;

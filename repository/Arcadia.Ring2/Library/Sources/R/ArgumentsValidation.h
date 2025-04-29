@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -63,6 +63,21 @@ R_Argument_getObjectReferenceValueOrNull
   return objectReferenceValue;
 }
 
+static inline Arcadia_BooleanValue
+R_Argument_getBooleanValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* value
+  )
+{
+  if (!Arcadia_Value_isBooleanValue(value)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_BooleanValue booleanValue = Arcadia_Value_getBooleanValue(value);
+  return booleanValue;
+}
+
 static inline Arcadia_Integer32Value
 R_Argument_getInteger32Value
   (
@@ -75,6 +90,48 @@ R_Argument_getInteger32Value
     Arcadia_Thread_jump(thread);
   }
   return Arcadia_Value_getInteger32Value(value);
+}
+
+static inline Arcadia_Natural64Value
+R_Argument_getNatural16Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* value
+  )
+{
+  if (!Arcadia_Value_isNatural16Value(value)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return Arcadia_Value_getNatural16Value(value);
+}
+
+static inline Arcadia_Natural64Value
+R_Argument_getNatural32Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* value
+  )
+{
+  if (!Arcadia_Value_isNatural32Value(value)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return Arcadia_Value_getNatural32Value(value);
+}
+
+static inline Arcadia_Natural64Value
+R_Argument_getNatural64Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* value
+  )
+{
+  if (!Arcadia_Value_isNatural64Value(value)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return Arcadia_Value_getNatural64Value(value);
 }
 
 static inline Arcadia_ImmutableUtf8StringValue

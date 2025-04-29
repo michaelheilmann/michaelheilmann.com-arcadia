@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -22,8 +22,6 @@ if (NOT MyProjectIsDefined)
     set(MyProjectName "Arcadia")
   endif()
   project(${MyProjectName})
-  enable_testing()
-  include(FetchContent)
   set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
   set(MyProjectIsDefined)

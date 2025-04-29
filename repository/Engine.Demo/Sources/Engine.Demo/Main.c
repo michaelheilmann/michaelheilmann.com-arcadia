@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -31,14 +31,21 @@ main1
   )
 { 
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+
   // (1) Initialize Audials.
-  Audials_startup(process);
+  Audials_startup(thread);
   
   // (2) Play sine wave.
-  Audials_playSine(process);
+  Audials_playSine(thread);
 
   // (3) Create a window.
-  NativeWindow* window = (NativeWindow*)NativeWindowsWindow_create(thread);
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+  NativeWindow* window = (NativeWindow*)Windows_NativeWindow_create(thread);
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  NativeWindow* window = (NativeWindow*)Linux_NativeWindow_create(thread);
+#else
+  #error("environment system not (yet) supported")
+#endif
   Arcadia_Object_lock(thread, window);
 
   // (4) Ensure the window is opened.
@@ -49,12 +56,24 @@ main1
 
   // (5) Set the big icon.
   NativeWindow_getRequiredBigIconSize(thread, window, &width, &height);
-  icon = (NativeIcon*)NativeWindowsIcon_create(thread, width, height, 47, 47, 47);
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+  icon = (NativeIcon*)Windows_NativeIcon_create(thread, width, height, 47, 47, 47, 255);
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  icon = (NativeIcon*)Linux_NativeIcon_create(thread, width, height, 47, 47, 47, 255);
+#else
+  #error("environment system not (yet) supported")
+#endif
   NativeWindow_setBigIcon(thread, window, icon);
   
   // (6) Set the small icon.
   NativeWindow_getRequiredSmallIconSize(thread, window, &width, &height);
-  icon = (NativeIcon*)NativeWindowsIcon_create(thread, width, height, 47, 47, 47);
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+  icon = (NativeIcon*)Windows_NativeIcon_create(thread, width, height, 47, 47, 47, 255);
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  icon = (NativeIcon*)Linux_NativeIcon_create(thread, width, height, 47, 47, 47, 255);
+#else
+  #error("environment system not (yet) supported")
+#endif
   NativeWindow_setSmallIcon(thread, window, icon);
 
   // (7) Set the title.
@@ -73,7 +92,7 @@ main1
 
   // (10) Shutdown audials.
   // TODO: Causes a leak if not invoked.
-  Audials_shutdown(process);
+  Audials_shutdown(thread);
 
   Arcadia_Object_unlock(thread, window);
 }

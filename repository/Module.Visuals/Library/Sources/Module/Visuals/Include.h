@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024 - 2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -33,10 +33,12 @@
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #include "Module/Visuals/Font.h"
   #include "Module/Visuals/NativeWindowsImageWriter.h"
-  #include "Module/Visuals/NativeWindowsIcon.h"
-  #include "Module/Visuals/NativeWindowsWindow.h"
+  #include "Module/Visuals/Windows/NativeIcon.h"
+  #include "Module/Visuals/Windows/NativeWindow.h"
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   #include "Module/Visuals/NativeLinuxImageWriter.h"
+  #include "Module/Visuals/Linux/NativeIcon.h"
+  #include "Module/Visuals/Linux/NativeWindow.h"
 #else
   #error("environment not (yet) supported")
 #endif
