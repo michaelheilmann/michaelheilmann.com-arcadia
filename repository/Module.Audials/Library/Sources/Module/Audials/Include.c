@@ -17,17 +17,25 @@
 
 #include "Module/Audials/Include.h"
 
+#if Arcadia_Audials_Configuration_Backend_OpenAl == Arcadia_Audials_Configuration_Backend
+
 #define AL_LIBTYPE_STATIC
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <math.h>
 
+#endif
+
 #include "R/ArgumentsValidation.h"
+
+#if Arcadia_Audials_Configuration_Backend_OpenAl == Arcadia_Audials_Configuration_Backend
 
 static ALCdevice* g_device = NULL;
 static ALCcontext* g_context = NULL;
 static ALuint g_bufferId  = 0;
 static ALuint g_sourceId = 0;
+
+#endif
 
 void
 Audials_playSine
@@ -35,6 +43,8 @@ Audials_playSine
     Arcadia_Thread* thread
   )
 {
+#if Arcadia_Audials_Configuration_Backend_OpenAl == Arcadia_Audials_Configuration_Backend
+
   alcMakeContextCurrent(g_context);
 
   // Set the position of the listener.
@@ -54,6 +64,10 @@ Audials_playSine
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
+#else
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+  Arcadia_Thread_jump(thread);
+#endif
 }
 
 void
@@ -62,6 +76,7 @@ Audials_startup
     Arcadia_Thread* thread
   )
 {
+#if Arcadia_Audials_Configuration_Backend_OpenAl == Arcadia_Audials_Configuration_Backend
   // Select the default audio device on the system.
   g_device = alcOpenDevice(NULL);
   if (!g_device) {
@@ -124,6 +139,10 @@ Audials_startup
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
+#else
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+  Arcadia_Thread_jump(thread);
+#endif
 }
 
 void
@@ -132,6 +151,7 @@ Audials_shutdown
     Arcadia_Thread* thread
   )
 {
+#if Arcadia_Audials_Configuration_Backend_OpenAl == Arcadia_Audials_Configuration_Backend
   if (g_sourceId) {
     alSourceStop(g_sourceId);
     alDeleteSources(1, &g_sourceId);
@@ -154,4 +174,8 @@ Audials_shutdown
     alcCloseDevice(g_device);
     g_device = NULL;
   }
+#else
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+  Arcadia_Thread_jump(thread);
+#endif
 }

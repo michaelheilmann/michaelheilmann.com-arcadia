@@ -18,4 +18,9 @@
 #if !defined(MODULE_AUDIALS_CONFIGURE_H_INCLUDED)
 #define MODULE_AUDIALS_CONFIGURE_H_INCLUDED
 
+#define Arcadia_Audials_Configuration_Backend_None (@Arcadia.Audials.Backend.None@)
+#define Arcadia_Audials_Configuration_Backend_OpenAl (@Arcadia.Audials.Backend.OpenAl@)
+
+#define Arcadia_Audials_Configuration_Backend @Arcadia.Audials.Backend@
+
 #endif // MODULE_AUDIALS_CONFIGURE_H_INCLUDED

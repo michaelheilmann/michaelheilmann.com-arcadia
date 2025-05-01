@@ -28,7 +28,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
+FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 
 set(MyTestName ${MyProjectName}.Tools.TemplateEngine.Tests.Test1)
 

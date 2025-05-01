@@ -33,7 +33,7 @@ BeginProduct(${MyTool} executable)
 if (${${MyTool}.OperatingSystem} STREQUAL ${${MyTool}.OperatingSystem.Windows})
 
   FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-  FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
+  FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/BitmapFontGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/BitmapFontGenerator/Configure.h @ONLY)
 

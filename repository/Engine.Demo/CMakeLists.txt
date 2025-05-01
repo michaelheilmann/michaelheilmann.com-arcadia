@@ -22,9 +22,6 @@ if (NOT MyProjectIsDefined)
     set(MyProjectName "Arcadia")
   endif()
   project(${MyProjectName})
-  enable_testing()
-  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-  include(FetchContent)
   set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
   set(MyProjectIsDefined)
@@ -36,14 +33,14 @@ if (NOT TARGET ${MyDemoName})
   message(STATUS "${MyDemoName}: ${MyProjectName}.Visuals.OpenGl.Enabled = ${${MyProjectName}.Visuals.OpenGl.Enabled}")
 	if (${${MyProjectName}.Visuals.OpenGl.Enabled})
 	  BeginProduct(${MyDemoName} executable)
-	  
+
 	  FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Module.Audials/Library" "path to the Audials module source directory")
 	  FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Module.Visuals/Library" "path to the Visuals module source directory")
 
 	  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Engine.Demo/Configure.h @ONLY)
 	  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Main.c)
 	  list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Engine.Demo/Configure.h)
-	  
+
 	  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Audials ${MyProjectName}.Visuals)
 
 	  EndProduct(${MyDemoName})

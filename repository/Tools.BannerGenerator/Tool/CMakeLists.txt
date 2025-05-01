@@ -31,7 +31,7 @@ set(MyTool Tools.BannerGenerator)
 BeginProduct(${MyTool} executable)
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
+FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BannerGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/BannerGenerator/Configure.h @ONLY)
 

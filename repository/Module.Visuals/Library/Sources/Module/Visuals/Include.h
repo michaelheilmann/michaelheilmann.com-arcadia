@@ -20,6 +20,7 @@
 
 #include "R/Include.h"
 
+#include "Module/Visuals/Events/CanvasEvent.h"
 #include "Module/Visuals/CullMode.h"
 #include "Module/Visuals/ImageWriterParameters.h"
 #include "Module/Visuals/PixelBuffer.h"
@@ -29,14 +30,14 @@
 #include "Module/Visuals/VertexElementSemantics.h"
 #include "Module/Visuals/VertexElementSyntax.h"
 #include "Module/Visuals/WindingMode.h"
+#include "Module/Visuals/LibpngImageWriter.h"
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #include "Module/Visuals/Font.h"
-  #include "Module/Visuals/NativeWindowsImageWriter.h"
+  #include "Module/Visuals/Windows/NativeWindowsImageWriter.h"
   #include "Module/Visuals/Windows/NativeIcon.h"
   #include "Module/Visuals/Windows/NativeWindow.h"
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  #include "Module/Visuals/NativeLinuxImageWriter.h"
   #include "Module/Visuals/Linux/NativeIcon.h"
   #include "Module/Visuals/Linux/NativeWindow.h"
 #else

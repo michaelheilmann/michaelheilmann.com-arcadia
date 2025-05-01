@@ -17,7 +17,7 @@
 
 #include "Module/Visuals/Windows/NativeWindow.h"
 
-#include "Module/Visuals/Windows/WglIntermediateWindow.h"
+#include "Module/Visuals/Windows/WglDeviceInfo.h"
 #include <limits.h>
 
 static const char g_title[] = "Liminality";
@@ -175,7 +175,7 @@ createContext
   (
     Arcadia_Thread* thread,
     Windows_NativeWindow* self,
-    Visuals_Window_WglIntermediateWindow* intermediateWindow
+    Arcadia_Visuals_Windows_WglDeviceInfo* deviceInfo
   );
 
 static void
@@ -439,10 +439,10 @@ openImpl
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Windows_NativeWindow_setTitleHelper(thread, self->windowHandle, self->title);
-    Visuals_Window_WglIntermediateWindow* intermediateWindow = Visuals_Window_WglIntermediateWindow_create(thread);
-    Visuals_Window_WglIntermediateWindow_open(thread, intermediateWindow);
-    createContext(thread, self, intermediateWindow);
-    Visuals_Window_WglIntermediateWindow_close(thread, intermediateWindow);
+    Arcadia_Visuals_Windows_WglDeviceInfo* deviceInfo = Arcadia_Visuals_Windows_WglDeviceInfo_create(thread);
+    Arcadia_Visuals_Windows_WglDeviceInfo_open(thread, deviceInfo);
+    createContext(thread, self, deviceInfo);
+    Arcadia_Visuals_Windows_WglDeviceInfo_close(thread, deviceInfo);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -656,9 +656,16 @@ createContext
   (
     Arcadia_Thread* thread,
     Windows_NativeWindow* self,
-    Visuals_Window_WglIntermediateWindow* intermediateWindow
+    Arcadia_Visuals_Windows_WglDeviceInfo* deviceInfo
   )
 {
+  for (Arcadia_Natural8Value majorVersion = 0; majorVersion < 10; majorVersion++) {
+    for (Arcadia_Natural8Value minorVersion = 0; minorVersion < 10; minorVersion++) {
+      if (Arcadia_Visuals_Windows_WglDeviceInfo_isVersionSupported(thread, deviceInfo, majorVersion, minorVersion)) {
+        fprintf(stdout, "OpenGL version %"PRIu8". %"PRIu8" supported\n", majorVersion, minorVersion);
+      }
+    }
+  }
   static int pixelFormatAttribs[] = {
     0x2003, // WGL_ACCELERATION_ARB
     0x2027, // WGL_FULL_ACCELERATION_ARB
@@ -677,7 +684,7 @@ createContext
                                                       24, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   int pixelFormat;
   UINT numFormats;
-  intermediateWindow->choosePixelFormat(self->deviceContextHandle, &pixelFormatAttribs[0], NULL, 1, &pixelFormat, &numFormats);
+  deviceInfo->_wglChoosePixelFormat(self->deviceContextHandle, &pixelFormatAttribs[0], NULL, 1, &pixelFormat, &numFormats);
   if (!numFormats) {
     fprintf(stderr, "%s:%d: failed to select pixel format\n", __FILE__, __LINE__);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -699,7 +706,7 @@ createContext
     WGL_CONTEXT_FLAGS_ARB, 0,
     0
   };
-  self->glResourceContextHandle = intermediateWindow->createContextAttribs(self->deviceContextHandle, NULL, &contextAttribs[0]);
+  self->glResourceContextHandle = deviceInfo->_wglCreateContextAttribs(self->deviceContextHandle, NULL, &contextAttribs[0]);
   if (!self->glResourceContextHandle) {
     fprintf(stderr, "%s:%d: failed to create wgl context\n", __FILE__, __LINE__);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);

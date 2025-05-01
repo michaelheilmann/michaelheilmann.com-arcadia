@@ -30,11 +30,15 @@ endif()
 set(MyModule ${MyProjectName}.Audials)
 
 if (NOT TARGET ${MyModule})
+  option(${MyModule}.OpenAl.Enabled "TRUE enables OpenAL support. FALSE disables OpenAL support. Default is FALSE" FALSE)
+
   BeginProduct(${MyModule} library)
 
-  FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
+  FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Audials/Configure.h @ONLY)
+  set(${MyModule}.Backend.None 0)
+  set(${MyModule}.Backend.OpenAl 1)
+  set(${MyModule}.Backend ${${MyModule}.Backend.None}) 
 
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Include.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Include.h)
@@ -42,6 +46,7 @@ if (NOT TARGET ${MyModule})
 
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows} AND ${${MyModule}.OpenAl.Enabled})
     # Use OpenAL under Windows if enabled.
+    set(${MyModule}.Backend ${${MyModule}.Backend.OpenAl}) 
     set(MyDependenciesDirectory "C:/arcadia-dependencies")
     list(APPEND ${MyModule}.PrivateLibraries ${OPENGL_LIBRARIES})
     if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
@@ -71,6 +76,8 @@ if (NOT TARGET ${MyModule})
       list(APPEND ${MyModule}.IncludeDirectories ${OPENAL_INCLUDE_DIR})
     endif()
   endif()
+
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Audials/Configure.h @ONLY)
 
   list(APPEND ${MyModule}.Libraries ${MyProjectName}.Machine)
   EndProduct(${MyModule})

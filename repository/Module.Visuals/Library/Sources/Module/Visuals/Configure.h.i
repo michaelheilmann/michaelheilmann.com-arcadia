@@ -18,6 +18,9 @@
 #if !defined(MODULE_VISUALS_CONFIGURE_H_INCLUDED)
 #define MODULE_VISUALS_CONFIGURE_H_INCLUDED
 
-#define Arcadia_Visuals_OpenGl_Enabled (@Arcadia.Visuals.OpenGl.Enabled@)
+#define Arcadia_Visuals_Configuration_Backend_None (@Arcadia.Visuals.Backend.None@)
+#define Arcadia_Visuals_Configuration_Backend_OpenGl (@Arcadia.Visuals.Backend.OpenGl@)
+
+#define Arcadia_Visuals_Configuration_Backend @Arcadia.Visuals.Backend@
 
 #endif // MODULE_VISUALS_CONFIGURE_H_INCLUDED

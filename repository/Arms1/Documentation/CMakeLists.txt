@@ -28,7 +28,7 @@ if (NOT MyProjectIsDefined)
 endif()
 
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
-FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Arcadia.Machine/Library" "path to the Arcadia Machine library directory")
+FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 FetchProduct(${MyProjectName}.ConcatenateFiles "${REPOSITORY_SOURCE_DIR}/Tools.ConcatenateFiles/Tool/Sources" "path to the Tools.ConcatenateFiles source directory")
 FetchProduct(${MyProjectName}.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library/Sources" "path to the Tools.TemplateEngine Library source directory")
 FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Tools.TemplateEngine Tool source directory")

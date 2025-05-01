@@ -24,6 +24,7 @@
 #include "Module/Visuals/PixelBuffer.h"
 
 #define WIN32_LEAN_AND_MEAN
+#define NOCOMM
 #include <Windows.h>
 
 // @todo Rename to Windows_NativeWindow.
