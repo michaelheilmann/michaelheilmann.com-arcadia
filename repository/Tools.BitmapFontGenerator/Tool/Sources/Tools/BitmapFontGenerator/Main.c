@@ -13,11 +13,9 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-28
-
 #include <stdlib.h>
 #include <string.h>
-#include "R/Include.h"
+#include "Arcadia/Include.h"
 #include "Module/Visuals/Include.h"
 
 void
@@ -33,7 +31,7 @@ main1
   Arcadia_List* arguments = Arcadia_List_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
     Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
-    Arcadia_List_appendObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
+    Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, arguments); i < n; ++i) {
     Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
@@ -63,7 +61,7 @@ main1
     Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"target", sizeof(u8"target") - 1)));
   }
   TextureFontWindows* font = TextureFontWindows_create(thread);
-  PixelBuffer* pixelBuffer = TextureFontWindows_getPixelBuffer(thread, font);
+  Arcadia_Visuals_PixelBuffer* pixelBuffer = TextureFontWindows_getPixelBuffer(thread, font);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(thread);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem

@@ -1,18 +1,18 @@
 <h2>Files</h2>
 <p>
 You can find the sources of Arcadia Ring 2 in my GitHub repository <a href="https://github.com/michaelheilmann/michaelheilmann.com">https://github.com/michaelheilmann/michaelheilmann.com</a>.
-The subdirectory of Arcadia Ring 2 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2</a>.</p>
+The subdirectory of Arcadia Ring 2 in the repository is here <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Ring2">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Ring2</a>.</p>
 </p>
 
 <ul>
   <li>The (sources of the) library resides in the directory
-  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Sources">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Sources</a>
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Ring2/Library">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Ring2/Library</a>
   </li>
   <li>The (sources of) tests reside in the directory
-  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Tests</a>
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Ring2/Tests">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Ring2/Tests</a>
   </li>
   <li>The (sources of this very documentation you are reading) documentation reside in the directory
-  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Arcadia.Ring2/Documentation</a>
+  <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Ring2/Documentation">https://github.com/michaelheilmann/michaelheilmann.com/tree/main/repository/Ring2/Documentation</a>
   </li>
 </ul>
 

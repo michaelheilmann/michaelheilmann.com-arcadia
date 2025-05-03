@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-01-01
-
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_VALUE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_VALUE_H_INCLUDED
 
@@ -160,6 +158,16 @@ Arcadia_Value_getTag
   { \
     value->tag = Arcadia_ValueTag_##Suffix; \
     value->Variable##Value = Variable##Value; \
+  } \
+  \
+  static inline Arcadia_Value \
+  Arcadia_Value_make##Suffix##Value \
+    ( \
+      Prefix##_##Suffix##Value const Variable##Value \
+    ) \
+  { \
+    Arcadia_Value value = { .tag = Arcadia_ValueTag_##Suffix, .Variable##Value = Variable##Value, };  \
+    return value; \
   }
 
 Define(Arcadia, Atom, atom)

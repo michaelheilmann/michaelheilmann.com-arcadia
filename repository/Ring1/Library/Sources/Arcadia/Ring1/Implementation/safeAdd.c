@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-01-26
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/safeAdd.h"
 
@@ -32,9 +30,15 @@ Arcadia_safeAddNatural16Value
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  uint32_t temporary = (uint32_t)augend + (uint32_t)addend;
-  *sumHigh = (uint16_t)(temporary >> 16);
-  *sumLow = (uint16_t)(temporary & 0x0000ffff);
+#if 0
+  Arcadia_Natural16Value temporary = augend + addend;
+  *sumHigh = temporary < augend ? 1 : 0; /*Alternatively temporary < addend would also work.*/
+  *sumLow = temporary;
+#else
+  Arcadia_Natural32Value temporary = (Arcadia_Natural32Value)augend + (Arcadia_Natural32Value)addend;
+  *sumHigh = (Arcadia_Natural16Value)(temporary >> 16);
+  *sumLow = (Arcadia_Natural16Value)(temporary & 0x0000ffff);
+#endif
 }
 
 void
@@ -51,9 +55,15 @@ Arcadia_safeAddNatural32Value
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  uint64_t temporary = (uint64_t)augend + (uint64_t)addend;
-  *sumHigh = (uint32_t)(temporary >> 32);
-  *sumLow = (uint32_t)(temporary & 0x00000000ffffffff);
+#if 0
+  Arcadia_Natural32Value temporary = augend + addend;
+  *sumHigh = temporary < augend ? 1 : 0; /*Alternatively temporary < addend would also work.*/
+  *sumLow = temporary;
+#else
+  Arcadia_Natural64Value temporary = (Arcadia_Natural64Value)augend + (Arcadia_Natural64Value)addend;
+  *sumHigh = (Arcadia_Natural32Value)(temporary >> 32);
+  *sumLow = (Arcadia_Natural32Value)(temporary & 0x00000000ffffffff);
+#endif
 }
 
 void
@@ -103,7 +113,13 @@ Arcadia_safeAddNatural8Value
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  uint16_t temporary = (uint16_t)augend + (uint16_t)addend;
-  *sumHigh = (uint8_t)(temporary >> 8);
-  *sumLow = (uint8_t)(temporary & 0x00ff);
+#if 0
+  Arcadia_Natural8Value temporary = augend + addend;
+  *sumHigh = temporary < augend ? 1 : 0; /*Alternatively temporary < addend would also work.*/
+  *sumLow = temporary;
+#else
+  Arcadia_Natural16Value temporary = (Arcadia_Natural16Value)augend + (Arcadia_Natural16Value)addend;
+  *sumHigh = (Arcadia_Natural8Value)(temporary >> 8);
+  *sumLow = (Arcadia_Natural8Value)(temporary & 0x00ff);
+#endif
 }

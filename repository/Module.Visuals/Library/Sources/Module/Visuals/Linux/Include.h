@@ -13,19 +13,17 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-02-02
-
 #if !defined(VISUALS_IMAGEMAGICK_H_INCLUDED)
 #define VISUALS_IMAGEMAGICK_H_INCLUDED
 
-#include "R/Include.h"
+#include "Arcadia/Include.h"
 #include "Module/Visuals/PixelBuffer.h"
 
 void
 _Visuals_Linux_writeBmpToByteBuffer
   (
     Arcadia_Thread* thread,
-    PixelBuffer* pixelBuffer,
+    Arcadia_Visuals_PixelBuffer* pixelBuffer,
     Arcadia_ByteBuffer* byteBuffer
   );
 

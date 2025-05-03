@@ -13,94 +13,130 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-02-16
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Utf8.h"
 
 #include "Arcadia/Ring1/Include.h"
 
+/// @brief Classify the first Byte of an UTF8 sequence to determine the length of the sequence.
+/// @param RETURN A pointer to a <code>Core_Size</code> variable.
+/// @param x The Byte.
+/// @success <code>*RETURN</code> was assigned the length of the sequence.
+/// @error Arcadia_Status_InvalidEncoding @a x can not be classified.
+static Arcadia_SizeValue
+classifyFirstByte
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Natural8Value x
+  ) {
+#pragma push_macro("Version")
+#undef Version
+#define Version (2)
+#if Version == 2
+  if ((x & 0x80) == 0x00) {
+    // To determine if the first Byte is in the range 0xxx xxxx,
+    // mask the Byte with 1000 0000 / 0x80. If the result is 0,
+    // then the first Byte is in the range 0xxx xxxx.
+    return 1;
+  } else if ((x & 0xE0) == 0xC0) {
+    // To determine if the first Byte is in the range 110x xxxx,
+    // mask the Byte with 11100000 / 0xE0. If the result is 1100 0000 / 0xC0,
+    // then the first Byte is in the range 110x xxxx.
+    return 2;
+  } else if ((x & 0xF0) == 0xE0) {
+    // To determine if the first Byte is in the range 1110 xxxx,
+    // mask the Byte with 1111 0000 / 0xF0. If the result is 1110 0000 / 0xE0,
+    // then the first Byte is in the range 1110 xxxx.
+    return 3;
+  } else if ((x & 0xF8) == 0xF0) {
+    // To determine if the first Byte is in the range 1111 0xxx,
+    // mask the Byte with 1111 1000 / 0xF8. If the result is 1111 0000 / 0xF0,
+    // then the first Byte is in th range 1111 0xxx.
+    return 4;
+  } else {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+#elif Version == 1
+  if (x <= 0x7F) {
+    // To determine if the first Byte is in the range 0xxx xxxx, we must ensure that the first Bit is 0.
+    // If x is smaller than or equal to 0111 1111 / 0x7f then the first Bit is 0.
+    return 1;
+  } else if(x <= 0xDF) {
+    // To determine if the first Byte is in the range 110x xxxx, we must ensure that the first three Bit are 110.
+    // If x is smaller than or equal to 1101 1111 / 0xDF then the first three Bit are 110. 
+    return 2;
+  } else if (x <= 0xEF) {
+    // To determine if the first Byte is in the range 1110 xxxx, we must ensure that the first four Bit are 1110.
+    // If x is smaller than or equal to 1110 1111 / 0xEF the the first four Bit are 1110.
+    return 3;
+  } else if (x <= 0xF7) {
+    // To determine if the first Byte is in the range 1111 0xxx, we must ensure that the first five Bit are 1111 0.
+    // If x is smaller than or equal to 1111 0111 / 0xF7, then the first five Bit are 1111 0.
+    return 4;
+  } else {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+#endif
+#undef Version
+#pragma pop_macro("Version")
+}
+
 Arcadia_BooleanValue
 Arcadia_isUtf8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes,
     Arcadia_SizeValue* numberOfSymbols
   )
 {
   Arcadia_SizeValue numberOfSymbols1 = 0;
-  uint8_t const* start = (uint8_t const*)bytes;
-  uint8_t const* end = start + numberOfBytes;
-  uint8_t const* current = start;
+  Arcadia_Natural8Value const* start = (Arcadia_Natural8Value const*)bytes;
+  Arcadia_Natural8Value const* end = start + numberOfBytes;
+  Arcadia_Natural8Value const* current = start;
 
-  while (current != end) {
-    uint8_t x = (*current);
-    if (x <= 0x7f) {
-      current += 1;
-      numberOfSymbols1++;
-    } else if (x <= 0x7ff) {
-      if (end - current < 2) {
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    while (current != end) {
+      Arcadia_SizeValue k = classifyFirstByte(thread, (*current));
+      if (end - current < k) {
         if (numberOfSymbols) {
           *numberOfSymbols = numberOfSymbols1;
         }
+        Arcadia_Thread_popJumpTarget(thread);
         return Arcadia_BooleanValue_False;
       }
-      for (Arcadia_SizeValue i = 1; i < 2; ++i) {
-        current++;
-        x = *current;
-        if (0x80 != (x & 0xc0)) {
+      current++;
+      for (Arcadia_SizeValue i = 1; i < k; ++i) {
+        if (0x80 != ((*current) & 0xC0)) {
           if (numberOfSymbols) {
             *numberOfSymbols = numberOfSymbols1;
           }
+          Arcadia_Thread_popJumpTarget(thread);
           return Arcadia_BooleanValue_False;
         }
-      }
-      current++;
-      numberOfSymbols1++;
-    } else if (x <= 0xffff) {
-      if (end - current < 3) {
-        return Arcadia_BooleanValue_False;
-      }
-      for (Arcadia_SizeValue i = 1; i < 3; ++i) {
         current++;
-        x = *current;
-        if (0x80 != (x & 0xc0)) {
-          if (numberOfSymbols) {
-            *numberOfSymbols = numberOfSymbols1;
-          }
-         return Arcadia_BooleanValue_False;
-        }
       }
-      current++;
-      numberOfSymbols1++;
-    } else if (x <= 0x10ffff) {
-      if (end - current < 4) {
-        if (numberOfSymbols) {
-          *numberOfSymbols = numberOfSymbols1;
-        }
-        return Arcadia_BooleanValue_False;
+    }
+    Arcadia_Thread_popJumpTarget(thread);
+    if (numberOfSymbols) {
+      *numberOfSymbols = numberOfSymbols1;
+    }
+    return Arcadia_BooleanValue_True;
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    if (Arcadia_Thread_getStatus(thread) == Arcadia_Status_EncodingInvalid) {
+      if (numberOfSymbols) {
+        *numberOfSymbols = numberOfSymbols1;
       }
-      for (Arcadia_SizeValue i = 1; i < 4; ++i) {
-        current++;
-        x = *current;
-        if (0x80 != (x & 0xc0)) {
-          if (numberOfSymbols) {
-            *numberOfSymbols = numberOfSymbols1;
-          }
-          return Arcadia_BooleanValue_False;
-        }
-      }
-      current++;
-      numberOfSymbols1++;
-    } else {
       return Arcadia_BooleanValue_False;
+    } else {
+      Arcadia_Thread_jump(thread);
     }
   }
-  if (numberOfSymbols) {
-    *numberOfSymbols = numberOfSymbols1;
-  }
-  return Arcadia_BooleanValue_True;
 }
 
 void

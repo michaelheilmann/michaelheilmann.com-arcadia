@@ -13,11 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-19
-
 #include "Module/Visuals/Events/CanvasDpiChangedEvent.h"
-
-#include "R/ArgumentsValidation.h"
 
 static void
 Arcadia_Visuals_CanvasDpiChangedEvent_constructImpl
@@ -75,24 +71,26 @@ Arcadia_Visuals_CanvasDpiChangedEvent_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
   }
   //
-  _self->horizontalDpi = R_Argument_getInteger32Value(thread, &argumentValues[1]);
-  _self->verticalDpi = R_Argument_getInteger32Value(thread, &argumentValues[2]);
+  _self->horizontalDpi = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[1]);
+  _self->verticalDpi = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[2]);
   //
-  Arcadia_Object_setType(thread, _self, _type);  
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 Arcadia_Visuals_CanvasDpiChangedEvent*
 Arcadia_Visuals_CanvasDpiChangedEvent_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Natural64Value timeStamp,
+    Arcadia_Natural64Value timestamp,
     Arcadia_Integer32Value horizontalDpi,
     Arcadia_Integer32Value verticalDpi
   )
 {
-  Arcadia_Value argumentValues[] = { { .tag = Arcadia_ValueTag_Natural64, .natural64Value = timeStamp },
-                                     { .tag = Arcadia_ValueTag_Integer32, .integer32Value = horizontalDpi },
-                                     { .tag = Arcadia_ValueTag_Integer32, .integer32Value = verticalDpi } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeNatural64Value(timestamp),
+    Arcadia_Value_makeInteger32Value(horizontalDpi),
+    Arcadia_Value_makeInteger32Value(verticalDpi),
+  };
   Arcadia_Visuals_CanvasDpiChangedEvent* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_CanvasDpiChangedEvent_getType(thread), 3, &argumentValues[0]);
   return self;
 }

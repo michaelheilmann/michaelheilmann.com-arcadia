@@ -13,8 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-09
-
 cmake_minimum_required(VERSION 3.20)
 
 if (NOT MyProjectIsDefined)
@@ -27,4 +25,4 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-add_subdirectory(Tool/Sources)
+add_subdirectory(Tool)

@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-01-01
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Object.h"
 
@@ -28,6 +26,15 @@ Arcadia_Object_constructImpl
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
+  );
+
+static void
+identical
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
   );
 
 static void
@@ -69,6 +76,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .and = NULL,
   .concatenate = NULL,
   .divide = NULL,
+  .identical = &identical,
   .equalTo = &equalTo,
   .greaterThan = NULL,
   .greaterThanOrEqualTo = NULL,
@@ -95,6 +103,26 @@ Arcadia_Object_constructImpl
   Arcadia_Object* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = Arcadia_getType(thread, u8"Arcadia.Object", sizeof(u8"Arcadia.Object") - 1);
   Arcadia_Object_setType(thread, _self, _type);
+}
+
+static void
+identical
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (!Arcadia_Value_isObjectReferenceValue(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getObjectReferenceValue(A1) == Arcadia_Value_getObjectReferenceValue(A2));
+  } else {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+  }
+#undef A2
+#undef A1
 }
 
 static void
@@ -307,7 +335,7 @@ void
 Arcadia_Object_setType
   (
     Arcadia_Thread* thread,
-    void* self,
+    Arcadia_Object* self,
     Arcadia_TypeValue type
   )
 {
@@ -330,7 +358,7 @@ void
 Arcadia_Object_visit
   (
     Arcadia_Thread* thread,
-    void* self
+    Arcadia_Object* self
   )
 {
   ObjectTag* tag = ((ObjectTag*)self) - 1;
@@ -342,10 +370,11 @@ void
 Arcadia_Object_lock
   (
     Arcadia_Thread* thread,
-    void* self
+    Arcadia_Object* self
   )
 {
-  Arcadia_Status status = Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), ((ObjectTag*)self) - 1);
+  ObjectTag* tag = ((ObjectTag*)self) - 1;
+  Arcadia_Status status = Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), tag);
   if (status) {
     Arcadia_Thread_setStatus(thread, status);
     Arcadia_Thread_jump(thread);
@@ -356,10 +385,11 @@ void
 Arcadia_Object_unlock
   (
     Arcadia_Thread* thread,
-    void* self
+    Arcadia_Object* self
   )
 {
-  Arcadia_Status status = Arcadia_Process_unlockObject(Arcadia_Thread_getProcess(thread), ((ObjectTag*)self) - 1);
+  ObjectTag* tag = ((ObjectTag*)self) - 1;
+  Arcadia_Status status = Arcadia_Process_unlockObject(Arcadia_Thread_getProcess(thread), tag);
   if (status) {
     Arcadia_Thread_setStatus(thread, status);
     Arcadia_Thread_jump(thread);
@@ -369,9 +399,86 @@ Arcadia_Object_unlock
 Arcadia_TypeValue
 Arcadia_Object_getType
   (
-    void* self
+    Arcadia_Thread* thread,
+    Arcadia_Object* self
   )
 {
   ObjectTag* objectTag = ((ObjectTag*)self) - 1;
   return objectTag->type;
+}
+
+
+
+Arcadia_BooleanValue
+Arcadia_Object_isEqualTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  )
+{
+  Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+  Arcadia_Value resultValue;
+  Arcadia_Value args[2] = { 
+    Arcadia_Value_makeObjectReferenceValue(self),
+    *other
+  };
+  operations->equalTo(thread, &resultValue, 2, &args[0]);
+  return Arcadia_Value_getBooleanValue(&resultValue);
+}
+
+Arcadia_BooleanValue
+Arcadia_Object_isNotEqualTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  )
+{
+  Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+  Arcadia_Value resultValue;
+  Arcadia_Value args[2] = {
+    Arcadia_Value_makeObjectReferenceValue(self),
+    *other
+  };
+  operations->notEqualTo(thread, &resultValue, 2, &args[0]);
+  return Arcadia_Value_getBooleanValue(&resultValue);
+}
+
+Arcadia_SizeValue
+Arcadia_Object_hash
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self
+  )
+{
+  Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+  Arcadia_Value resultValue;
+  Arcadia_Value args[1] = {
+    Arcadia_Value_makeObjectReferenceValue(self),
+  };
+  operations->hash(thread, &resultValue, 1, &args[0]);
+  return Arcadia_Value_getSizeValue(&resultValue);
+}
+
+Arcadia_BooleanValue
+Arcadia_Object_isIdenticalTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  )
+{
+  Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+  Arcadia_Value resultValue;
+  Arcadia_Value args[2] = {
+    Arcadia_Value_makeObjectReferenceValue(self),
+    *other,
+  };
+  operations->identical(thread, &resultValue, 2, &args[0]);
+  return Arcadia_Value_getBooleanValue(&resultValue);
 }

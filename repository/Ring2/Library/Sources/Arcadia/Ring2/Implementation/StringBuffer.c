@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-22
-
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/StringBuffer.h"
 
@@ -94,14 +92,16 @@ Arcadia_StringBuffer_constructImpl
   Arcadia_StringBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_StringBuffer_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->elements = NULL;
   _self->size = 0;
   _self->capacity = 0;
   Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->elements, 0);
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
@@ -161,7 +161,9 @@ Arcadia_StringBuffer_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_StringBuffer* self = Arcadia_allocateObject(thread, _Arcadia_StringBuffer_getType(thread), 0, &argumentValues[0]);
   return self;
 }
@@ -210,7 +212,7 @@ Arcadia_StringBuffer_append_pn
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_isUtf8(Arcadia_Thread_getProcess(thread), bytes, numberOfBytes, NULL)) {
+  if (!Arcadia_isUtf8(thread, bytes, numberOfBytes, NULL)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -220,7 +222,7 @@ Arcadia_StringBuffer_append_pn
 }
 
 void
-Arcadia_StringBuffer_append
+Arcadia_StringBuffer_insertBack
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
@@ -232,22 +234,22 @@ Arcadia_StringBuffer_append
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue referenceValue = Arcadia_Value_getObjectReferenceValue(&value);
-  if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(referenceValue), _Arcadia_ByteBuffer_getType(thread))) {
+  if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_ByteBuffer_getType(thread))) {
     Arcadia_ByteBuffer* object = (Arcadia_ByteBuffer*)referenceValue;
-    if (!Arcadia_isUtf8(Arcadia_Thread_getProcess(thread), Arcadia_ByteBuffer_getBytes(thread, object), Arcadia_ByteBuffer_getNumberOfBytes(thread, object), NULL)) {
+    if (!Arcadia_isUtf8(thread, Arcadia_ByteBuffer_getBytes(thread, object), Arcadia_ByteBuffer_getNumberOfBytes(thread, object), NULL)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
       Arcadia_Thread_jump(thread);
     }
     ensureFreeCapacityBytes(thread, self, Arcadia_ByteBuffer_getNumberOfBytes(thread, object));
     Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + self->size, Arcadia_ByteBuffer_getBytes(thread, object), Arcadia_ByteBuffer_getNumberOfBytes(thread, object));
     self->size += Arcadia_ByteBuffer_getNumberOfBytes(thread, object);
-  } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(referenceValue), _Arcadia_String_getType(thread))) {
+  } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_String_getType(thread))) {
     Arcadia_String* object = (Arcadia_String*)referenceValue;
     // The Byte sequence of Arcadia.String is guaranteed to be an UTF8 Byte sequence.
     ensureFreeCapacityBytes(thread, self, Arcadia_String_getNumberOfBytes(thread, object));
     Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + self->size, Arcadia_String_getBytes(thread, object), Arcadia_String_getNumberOfBytes(thread, object));
     self->size += Arcadia_String_getNumberOfBytes(thread, object);
-  } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(referenceValue), _Arcadia_StringBuffer_getType(thread))) {
+  } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_StringBuffer_getType(thread))) {
     Arcadia_StringBuffer* object = (Arcadia_StringBuffer*)referenceValue;
     // The Byte sequence of Arcadia.StringBuffer is guaranteed to be an UTF8 Byte sequence.
     ensureFreeCapacityBytes(thread, self, Arcadia_StringBuffer_getNumberOfBytes(thread, object));

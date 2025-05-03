@@ -9,19 +9,25 @@
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://michaelheilmann.com/repository/Arcadia.Ring1/</loc>
+        <loc>https://michaelheilmann.com/Arcadia/Ring1/</loc>
         <lastmod>2025-02-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://michaelheilmann.com/repository/Arcadia.Ring2/</loc>
+        <loc>https://michaelheilmann.com/Arcadia/Ring2/</loc>
         <lastmod>2025-02-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://michaelheilmann.com/repository/Arms1/</loc>
+        <loc>https://michaelheilmann.com/Arcadia/Arms/</loc>
+        <lastmod>2025-02-14</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
+        <loc>https://michaelheilmann.com/Arcadia/Visuals/</loc>
         <lastmod>2025-02-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
@@ -47,13 +53,6 @@
     <url>
         <loc>https://michaelheilmann.com/roadmap-archive</loc>
         <lastmod>2025-02-14</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.3</priority>
-    </url>
-
-    <url>
-        <loc>https://michaelheilmann.com/repository/R1/</loc>
-        <lastmod>2025-01-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>

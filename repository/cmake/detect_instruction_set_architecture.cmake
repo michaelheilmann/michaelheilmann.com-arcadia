@@ -13,8 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-08-27
-
 # SUMMARY
 # Define an enumeration of instruction set architectures and detect the instruction set architecture.
 #

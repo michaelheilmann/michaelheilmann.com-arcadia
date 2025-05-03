@@ -13,11 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-09
-
 #include "Tools/TemplateEngine/Ast.h"
-
-#include "R/ArgumentsValidation.h"
 
 static void
 Ast_destruct
@@ -86,10 +82,10 @@ Ast_visit
   )
 {
   if (self->name) {
-    Arcadia_Object_visit(thread, self->name);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->name);
   }
   if (self->argument) {
-    Arcadia_Object_visit(thread, self->argument);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->argument);
   }
 }
 
@@ -105,17 +101,19 @@ Ast_constructImpl
   Ast* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Ast_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (3 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->type = R_Argument_getInteger32Value(thread, &argumentValues[0]);
-  _self->name = R_Argument_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
-  _self->argument = R_Argument_getObjectReferenceValueOrNull(thread, &argumentValues[2], _Arcadia_String_getType(thread));
-  Arcadia_Object_setType(thread, _self, _type);
+  _self->type = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[0]);
+  _self->name = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
+  _self->argument = Arcadia_ArgumentsValidation_getObjectReferenceValueOrNull(thread, &argumentValues[2], _Arcadia_String_getType(thread));
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 Ast*

@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-11-11
-
 #include "Module/Visuals/Windows/TemporaryWindow.h"
 
 #define WindowClassName "Arcadia.Visuals.Windows.TemporaryWindow"
@@ -116,14 +114,16 @@ Arcadia_Visuals_Windows_TemporaryWindow_constructImpl
   Arcadia_Visuals_Windows_TemporaryWindow* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_TemporaryWindow_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->instanceHandle = NULL;
   _self->classAtom = 0;
   _self->windowHandle = NULL;
   _self->deviceContextHandle = NULL;
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 Arcadia_Visuals_Windows_TemporaryWindow*
@@ -132,7 +132,9 @@ Arcadia_Visuals_Windows_TemporaryWindow_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_Visuals_Windows_TemporaryWindow* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_TemporaryWindow_getType(thread), 0, &argumentValues[0]);
   return self;
 }

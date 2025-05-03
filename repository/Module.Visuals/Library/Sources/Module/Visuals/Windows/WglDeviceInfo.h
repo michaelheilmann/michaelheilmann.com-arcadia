@@ -13,12 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-11-11
-
 #if !defined(MODULE_VISUALS_WINDOWS_WGLINTERMEDIATEWINDOW_H_INCLUDED)
 #define MODULE_VISUALS_WINDOWS_WGLINTERMEDIATEWINDOW_H_INCLUDED
 
 #include "Module/Visuals/Windows/TemporaryWindow.h"
+#include "Module/Visuals/Configuration.h"
 #include <GL/GL.h>
 #include <GL/wglext.h>
 
@@ -57,21 +56,15 @@ Arcadia_Visuals_Windows_WglDeviceInfo_close
     Arcadia_Visuals_Windows_WglDeviceInfo* self
   );
 
-/// @brief Get if a particular OpenGL version is supported.
-/// @param thread This thread.
-/// @param self This OpenGL factory.
-/// @param majorVersion The major version number.
-/// @param minorVersion The minor version number.
-/// @return
-/// #Arcadia_BooleanValue_True if the OpenGL version supported.
-/// #Arcadia_BooleanValue_False otherwise.
-Arcadia_BooleanValue
-Arcadia_Visuals_Windows_WglDeviceInfo_isVersionSupported
+/// @brief Get all available configurations.
+/// @param thread Thiss thread.
+/// @param self This OpenGL/WGL device information.
+/// @return A list of Arcadia_Visuals_Configuration objects.
+Arcadia_List*
+Arcadia_Visuals_Windows_WglDeviceInfo_getConfigurations
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_WglDeviceInfo* self,
-    Arcadia_Natural8Value majorVersion,
-    Arcadia_Natural8Value minorVersion
+    Arcadia_Visuals_Windows_WglDeviceInfo* self
   );
 
 #endif // MODULE_VISUALS_WINDOWS_WGLINTERMEDIATEWINDOW_H_INCLUDED

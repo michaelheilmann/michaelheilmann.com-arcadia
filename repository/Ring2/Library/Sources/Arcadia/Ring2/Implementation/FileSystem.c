@@ -13,11 +13,10 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-10-07
-
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/FileSystem.h"
 
+#include "Arcadia/Arms/Include.h"
 #include "Arcadia/Ring2/Implementation/FileHandle.h"
 #include "Arcadia/Ring2/Implementation/FilePath.h"
 #include "Arcadia/Ring2/Implementation/String.h"
@@ -34,8 +33,6 @@
 #else
   #error("operating system not (yet) supported")
 #endif
-
-#include "Arms.h"
 
 static void
 Arcadia_FileSystem_constructImpl
@@ -100,10 +97,12 @@ Arcadia_FileSystem_constructImpl
   Arcadia_FileSystem* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_FileSystem_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
@@ -128,7 +127,9 @@ Arcadia_FileSystem_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_FileSystem* self = Arcadia_allocateObject(thread, _Arcadia_FileSystem_getType(thread), 0, &argumentValues[0]);
   return self;
 }

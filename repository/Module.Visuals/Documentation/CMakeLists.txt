@@ -13,8 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-12-29
-
 cmake_minimum_required(VERSION 3.20)
 
 if (NOT MyProjectIsDefined)
@@ -30,7 +28,7 @@ endif()
 FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Tools.TemplateEngine Tool source directory")
 
 # Build the documentation.
-set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/repository/Arcadia.Visuals/index.html")
+set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Visuals/index.html")
 file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/*)
 add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
                    COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${DOCUMENT_TARGET_FILE}
@@ -40,4 +38,4 @@ add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
 
 add_custom_target(${MyProjectName}.Visuals.BuildDocs ALL DEPENDS ${DOCUMENT_TARGET_FILE})
 
-set_target_properties(${MyProjectName}.Visuals.BuildDocs PROPERTIES FOLDER "Arcadia.Modules")
+set_target_properties(${MyProjectName}.Visuals.BuildDocs PROPERTIES FOLDER "Arcadia.Visuals")

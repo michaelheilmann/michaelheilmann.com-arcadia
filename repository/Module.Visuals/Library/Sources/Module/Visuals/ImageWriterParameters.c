@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-16
-
 #include "Module/Visuals/ImageWriterParameters.h"
 
 struct ImageWriterParameters {
@@ -91,7 +89,9 @@ ImageWriterParameters_constructImpl
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_String_getType(thread))) {
@@ -104,7 +104,7 @@ ImageWriterParameters_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
@@ -131,8 +131,10 @@ ImageWriterParameters_createFile
     ImageWriterFormat format
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = path },
-                               {.tag = Arcadia_ValueTag_Integer32, .integer32Value = format }, };
+  Arcadia_Value argumentValues[] = { 
+    Arcadia_Value_makeObjectReferenceValue(path),
+    Arcadia_Value_makeInteger32Value(format),
+  };
   ImageWriterParameters* self = Arcadia_allocateObject(thread, _ImageWriterParameters_getType(thread), 2, &argumentValues[0]);
   return self;
 }
@@ -145,8 +147,10 @@ ImageWriterParameters_createByteBuffer
     ImageWriterFormat format
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = byteBuffer },
-                               {.tag = Arcadia_ValueTag_Integer32, .integer32Value = format }, };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeObjectReferenceValue(byteBuffer),
+    Arcadia_Value_makeInteger32Value(format),
+  };
   ImageWriterParameters* self = Arcadia_allocateObject(thread, _ImageWriterParameters_getType(thread), 2, &argumentValues[0]);
   return self;
 }
@@ -158,7 +162,7 @@ ImageWriterParameters_hasPath
     ImageWriterParameters* self
   )
 {
-  Arcadia_TypeValue type = Arcadia_Object_getType(self->object);
+  Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->object);
   return Arcadia_Type_isSubType(thread, type, _Arcadia_String_getType(thread));
 }
 
@@ -183,7 +187,7 @@ ImageWriterParameters_hasByteBuffer
     ImageWriterParameters* self
   )
 {
-  Arcadia_TypeValue type = Arcadia_Object_getType(self->object);
+  Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->object);
   return Arcadia_Type_isSubType(thread, type, _Arcadia_ByteBuffer_getType(thread));
 }
 

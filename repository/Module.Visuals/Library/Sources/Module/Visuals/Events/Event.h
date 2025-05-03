@@ -13,10 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-19
-
-#if !defined(MODULE_VISUALS_EVENTS_EVENT_H_INCLUDED)
-#define MODULE_VISUALS_EVENTS_EVENT_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_EVENTS_EVENT_H_INCLUDED)
+#define ARCADIA_VISUALS_EVENTS_EVENT_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
 
@@ -25,7 +23,7 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Event", Arcadia_Visuals_Event, u8"A
 
 struct Arcadia_Visuals_Event {
   Arcadia_Object _parent;
-  Arcadia_Natural64Value timeStamp;
+  Arcadia_Natural64Value timestamp;
 };
 
-#endif // MODULE_VISUALS_EVENTS_EVENT_H_INCLUDED
+#endif // ARCADIA_VISUALS_EVENTS_EVENT_H_INCLUDED

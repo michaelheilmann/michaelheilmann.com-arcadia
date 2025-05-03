@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-11-13
-
 #include "Module/Audials/Include.h"
 
 #if Arcadia_Audials_Configuration_Backend_OpenAl == Arcadia_Audials_Configuration_Backend
@@ -25,8 +23,6 @@
 #include <math.h>
 
 #endif
-
-#include "R/ArgumentsValidation.h"
 
 #if Arcadia_Audials_Configuration_Backend_OpenAl == Arcadia_Audials_Configuration_Backend
 

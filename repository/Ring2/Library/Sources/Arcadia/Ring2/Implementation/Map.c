@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-10-07
-
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/Map.h"
 
@@ -225,7 +223,9 @@ Arcadia_Map_constructImpl
   Arcadia_TypeValue _type = _Arcadia_Map_getType(thread);
   Arcadia_Map_ensureInitialized(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->buckets = NULL;
@@ -236,7 +236,7 @@ Arcadia_Map_constructImpl
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     _self->buckets[i] = NULL;
   }
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 Arcadia_Map*
@@ -245,7 +245,9 @@ Arcadia_Map_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_Map* self = Arcadia_allocateObject(thread, _Arcadia_Map_getType(thread), 0, &argumentValues[0]);
   return self;
 }
@@ -365,7 +367,7 @@ Arcadia_Map_getValues
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     Node* node = self->buckets[i];
     while (node) {
-      Arcadia_List_append(thread, list, node->value);
+      Arcadia_List_insertBack(thread, list, node->value);
       node = node->next;
     }
   }
@@ -383,7 +385,7 @@ Arcadia_Map_getKeys
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     Node* node = self->buckets[i];
     while (node) {
-      Arcadia_List_append(thread, list, node->key);
+      Arcadia_List_insertBack(thread, list, node->key);
       node = node->next;
     }
   }

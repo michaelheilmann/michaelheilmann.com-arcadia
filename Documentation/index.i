@@ -47,19 +47,19 @@
           <div class="body">
             <ul>
               <li>
-                <a href='@{siteAddress}/repository/Arms1'>ARMS</a>
+                <a href='@{siteAddress}/Arcadia/Arms'>Arcadia ARMS</a>
               </li>
               <li>
-                <a href='@{siteAddress}/repository/Arcadia.Ring1'>Arcadia Ring1</a>
+                <a href='@{siteAddress}/Arcadia/Ring1'>Arcadia Ring1</a>
               </li>
               <li>
-                <a href='@{siteAddress}/repository/Arcadia.Ring2'>Arcadia Ring2</a>
+                <a href='@{siteAddress}/Arcadia/Ring2'>Arcadia Ring2</a>
               </li>
               <li>
                 <div>Arcadia Machine [coming soon]</div>
               </li>
               <li>
-                <a href='@{siteAddress}/repository/Arcadia.Visuals'>Arcadia Visuals</a>
+                <a href='@{siteAddress}/Arcadia/Visuals'>Arcadia Visuals</a>
               </li>
               <li>
                 <div>Arcadia Audials [coming soon]</div>

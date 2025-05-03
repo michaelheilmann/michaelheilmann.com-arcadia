@@ -13,22 +13,20 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-19
-
 #if !defined(MODULE_VISUALS_IMAGEWRITER_H_INCLUDED)
 #define MODULE_VISUALS_IMAGEWRITER_H_INCLUDED
 
-#include "R/Include.h"
+#include "Arcadia/Include.h"
 #include "Module/Visuals/PixelBuffer.h"
 
 Arcadia_declareObjectType(u8"ImageWriter", ImageWriter, u8"Arcadia.Object");
 
 struct ImageWriter {
   Arcadia_Object _parent;
-  void (*writePngToPath)(Arcadia_Thread* thread, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
-  void (*writePngToByteBuffer)(Arcadia_Thread* thread, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
-  void (*writeBmpToPath)(Arcadia_Thread* thread, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
-  void (*writeBmpToByteBuffer)(Arcadia_Thread* thread, ImageWriter* self, PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
+  void (*writePngToPath)(Arcadia_Thread* thread, ImageWriter* self, Arcadia_Visuals_PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
+  void (*writePngToByteBuffer)(Arcadia_Thread* thread, ImageWriter* self, Arcadia_Visuals_PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
+  void (*writeBmpToPath)(Arcadia_Thread* thread, ImageWriter* self, Arcadia_Visuals_PixelBuffer* sourcePixelBuffer, Arcadia_String* targetPath);
+  void (*writeBmpToByteBuffer)(Arcadia_Thread* thread, ImageWriter* self, Arcadia_Visuals_PixelBuffer* sourcePixelBuffer, Arcadia_ByteBuffer* targetByteBuffer);
   void (*writeIcoToPath)(Arcadia_Thread* thread, ImageWriter* self, Arcadia_List* sourcePixelBuffers, Arcadia_String* targetPath);
   void (*writeIcoToByteBuffer)(Arcadia_Thread* thread, ImageWriter* self, Arcadia_List* sourcePixelBuffers, Arcadia_ByteBuffer* targetByteBuffer);
 };
@@ -38,7 +36,7 @@ ImageWriter_writePngToPath
   (
     Arcadia_Thread* thread,
     ImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   );
 
@@ -47,7 +45,7 @@ ImageWriter_writePngToByteBuffer
   (
     Arcadia_Thread* thread,
     ImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   );
 
@@ -56,7 +54,7 @@ ImageWriter_writeBmpToPath
   (
     Arcadia_Thread* thread,
     ImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   );
 
@@ -65,7 +63,7 @@ ImageWriter_writeBmpToByteBuffer
   (
     Arcadia_Thread* thread,
     ImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   );
 

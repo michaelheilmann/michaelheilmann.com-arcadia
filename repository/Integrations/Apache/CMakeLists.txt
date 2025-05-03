@@ -13,8 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-16
-
 cmake_minimum_required(VERSION 3.20)
 
 if (NOT MyProjectIsDefined)
@@ -27,7 +25,7 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms1/Library" "path to the ARMS1 library directory")
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
 FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 
 set(MyTargetName Integrations.Apache)
@@ -36,9 +34,10 @@ set(MyTargetName Integrations.Apache)
 BeginProduct(${MyTargetName} executable)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h @ONLY)
+list(APPEND ${MyTargetName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Configure.h.i)
+list(APPEND ${MyTargetName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h)
 
 list(APPEND ${MyTargetName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Main.c)
-list(APPEND ${MyTargetName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Integrations/Apache/Configure.h)
 
 list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
 

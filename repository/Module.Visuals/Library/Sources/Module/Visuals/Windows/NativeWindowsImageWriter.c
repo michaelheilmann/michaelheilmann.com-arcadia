@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-19
-
 #include "Module/Visuals/Windows/NativeWindowsImageWriter.h"
 
 // WIC header
@@ -30,7 +28,7 @@ NativeWindowsImageWriter_writePngToPathImpl
   (
     Arcadia_Thread* thread,
     NativeWindowsImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   );
 
@@ -39,7 +37,7 @@ NativeWindowsImageWriter_writePngToByteBufferImpl
   (
     Arcadia_Thread* thread,
     NativeWindowsImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   );
 
@@ -48,7 +46,7 @@ NativeWindowsImageWriter_writeBmpToPathImpl
   (
     Arcadia_Thread* thread,
     NativeWindowsImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   );
 
@@ -57,7 +55,7 @@ NativeWindowsImageWriter_writeBmpToByteBufferImpl
   (
     Arcadia_Thread* thread,
     NativeWindowsImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   );
 
@@ -150,7 +148,7 @@ static void
 startupFactory
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 {
@@ -187,7 +185,7 @@ static void
 shutdownFactory
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 {
@@ -204,7 +202,7 @@ static void
 startup1
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 {
@@ -243,7 +241,7 @@ static void
 shutdown1
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 {
@@ -261,7 +259,7 @@ static void
 startupEncoder
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 {
@@ -378,7 +376,7 @@ static void
 shutdownEncoder
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 {
@@ -394,14 +392,14 @@ static void
 startup3
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 {
   HRESULT hr;
   //
-  size_t sourceWidth = PixelBuffer_getNumberOfColumns(thread, sourcePixelBuffer);
-  size_t sourceHeight = PixelBuffer_getNumberOfRows(thread, sourcePixelBuffer);
+  size_t sourceWidth = Arcadia_Visuals_PixelBuffer_getNumberOfColumns(thread, sourcePixelBuffer);
+  size_t sourceHeight = Arcadia_Visuals_PixelBuffer_getNumberOfRows(thread, sourcePixelBuffer);
   hr = IWICBitmapFrameEncode_SetSize(g_piBitmapFrame, (UINT)sourceWidth, (UINT)sourceHeight);
   if (FAILED(hr)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -414,8 +412,8 @@ startup3
       formatGUID = GUID_WICPixelFormat24bppBGR;
     } break;
     case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
-      PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, sourcePixelBuffer);
-      PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8);
+      Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_createClone(thread, sourcePixelBuffer);
+      Arcadia_Visuals_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8);
       sourcePixelBuffer = pixelBuffer;
       formatGUID = GUID_WICPixelFormat32bppBGRA;
     } break;
@@ -429,7 +427,7 @@ startup3
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  size_t sourceLineStride = PixelBuffer_getLineStride(thread, sourcePixelBuffer);
+  size_t sourceLineStride = Arcadia_Visuals_PixelBuffer_getLineStride(thread, sourcePixelBuffer);
   size_t sourceSizeInPixels = sourceLineStride * sourceHeight;
   hr = IWICBitmapFrameEncode_WritePixels(g_piBitmapFrame, (UINT)sourceHeight, (UINT)sourceLineStride, (UINT)sourceSizeInPixels, (void*)sourcePixelBuffer->bytes);
   if (FAILED(hr)) {
@@ -479,21 +477,21 @@ static void
 shutdown3
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 { }
 
 typedef struct Module {
-  void (*startup)(Arcadia_Thread* thread, PixelBuffer* sourcePixelBuffer, ImageWriterParameters* parameters);
-  void (*shutdown)(Arcadia_Thread* thread, PixelBuffer* sourcePixelBuffer, ImageWriterParameters* parameters);
+  void (*startup)(Arcadia_Thread* thread, Arcadia_Visuals_PixelBuffer* sourcePixelBuffer, ImageWriterParameters* parameters);
+  void (*shutdown)(Arcadia_Thread* thread, Arcadia_Visuals_PixelBuffer* sourcePixelBuffer, ImageWriterParameters* parameters);
 } Module;
 
 static
 write
   (
     Arcadia_Thread* thread,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     ImageWriterParameters* parameters
   )
 {
@@ -531,7 +529,7 @@ NativeWindowsImageWriter_writePngToPathImpl
   (
     Arcadia_Thread* thread,
     NativeWindowsImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   )
 {
@@ -544,7 +542,7 @@ NativeWindowsImageWriter_writePngToByteBufferImpl
   (
     Arcadia_Thread* thread,
     NativeWindowsImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   )
 {
@@ -557,7 +555,7 @@ NativeWindowsImageWriter_writeBmpToPathImpl
   (
     Arcadia_Thread* thread,
     NativeWindowsImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   )
 {
@@ -570,7 +568,7 @@ NativeWindowsImageWriter_writeBmpToByteBufferImpl
   (
     Arcadia_Thread* thread,
     NativeWindowsImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   )
 {
@@ -627,15 +625,15 @@ NativeWindowsImageWriter_writeIcoToByteBufferImpl
 
   Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(thread);
   for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_List_getSize(thread, sourcePixelBuffers); i < n; ++i) {
-    PixelBuffer* pixelBuffer = (PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
+    Arcadia_Visuals_PixelBuffer* pixelBuffer = (Arcadia_Visuals_PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
     Arcadia_ByteBuffer_clear(thread, temporary);
     ImageWriter_writePngToByteBuffer(thread, (ImageWriter*)self, pixelBuffer, temporary);
-    if (Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8 != PixelBuffer_getPixelFormat(thread, pixelBuffer)) {
+    if (Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8 != Arcadia_Visuals_PixelBuffer_getPixelFormat(thread, pixelBuffer)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
-    size_t width = PixelBuffer_getNumberOfColumns(thread, pixelBuffer),
-           height = PixelBuffer_getNumberOfRows(thread, pixelBuffer);
+    size_t width = Arcadia_Visuals_PixelBuffer_getNumberOfColumns(thread, pixelBuffer),
+           height = Arcadia_Visuals_PixelBuffer_getNumberOfRows(thread, pixelBuffer);
     if (width > 256) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
@@ -663,7 +661,7 @@ NativeWindowsImageWriter_writeIcoToByteBufferImpl
     offset += Arcadia_ByteBuffer_getSize(thread, temporary);
   }
   for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_List_getSize(thread, sourcePixelBuffers); i < n; ++i) {
-    PixelBuffer* pixelBuffer = (PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
+    Arcadia_Visuals_PixelBuffer* pixelBuffer = (Arcadia_Visuals_PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
     Arcadia_ByteBuffer_clear(thread, temporary);
     ImageWriter_writePngToByteBuffer(thread, (ImageWriter*)self, pixelBuffer, temporary);
     Arcadia_ByteBuffer_append_pn(thread, targetByteBuffer, temporary->p, temporary->sz);
@@ -720,16 +718,18 @@ NativeWindowsImageWriter_constructImpl
   NativeWindowsImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _NativeWindowsImageWriter_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  ((ImageWriter*)_self)->writeBmpToByteBuffer = (void (*)(Arcadia_Thread*, ImageWriter*, PixelBuffer*,Arcadia_ByteBuffer*))NativeWindowsImageWriter_writeBmpToByteBufferImpl;
-  ((ImageWriter*)_self)->writeBmpToPath = (void (*)(Arcadia_Thread*, ImageWriter*, PixelBuffer*, Arcadia_String*))NativeWindowsImageWriter_writeBmpToPathImpl;
+  ((ImageWriter*)_self)->writeBmpToByteBuffer = (void (*)(Arcadia_Thread*, ImageWriter*, Arcadia_Visuals_PixelBuffer*,Arcadia_ByteBuffer*))NativeWindowsImageWriter_writeBmpToByteBufferImpl;
+  ((ImageWriter*)_self)->writeBmpToPath = (void (*)(Arcadia_Thread*, ImageWriter*, Arcadia_Visuals_PixelBuffer*, Arcadia_String*))NativeWindowsImageWriter_writeBmpToPathImpl;
   ((ImageWriter*)_self)->writeIcoToByteBuffer = (void (*)(Arcadia_Thread*,ImageWriter*, Arcadia_List*, Arcadia_ByteBuffer*))NativeWindowsImageWriter_writeIcoToByteBufferImpl;
   ((ImageWriter*)_self)->writeIcoToPath = (void (*)(Arcadia_Thread*,ImageWriter*, Arcadia_List*, Arcadia_String*))NativeWindowsImageWriter_writeIcoToPathImpl;
-  ((ImageWriter*)_self)->writePngToByteBuffer = (void (*)(Arcadia_Thread*,ImageWriter*, PixelBuffer*, Arcadia_ByteBuffer*))NativeWindowsImageWriter_writePngToByteBufferImpl;
-  ((ImageWriter*)_self)->writePngToPath = (void (*)(Arcadia_Thread*,ImageWriter*, PixelBuffer*, Arcadia_String*))NativeWindowsImageWriter_writePngToPathImpl;
-  Arcadia_Object_setType(thread, _self, _type);
+  ((ImageWriter*)_self)->writePngToByteBuffer = (void (*)(Arcadia_Thread*,ImageWriter*, Arcadia_Visuals_PixelBuffer*, Arcadia_ByteBuffer*))NativeWindowsImageWriter_writePngToByteBufferImpl;
+  ((ImageWriter*)_self)->writePngToPath = (void (*)(Arcadia_Thread*,ImageWriter*, Arcadia_Visuals_PixelBuffer*, Arcadia_String*))NativeWindowsImageWriter_writePngToPathImpl;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 NativeWindowsImageWriter*
@@ -738,7 +738,9 @@ NativeWindowsImageWriter_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   NativeWindowsImageWriter* self = Arcadia_allocateObject(thread, _NativeWindowsImageWriter_getType(thread), 0, &argumentValues[0]);
   return self;
 }

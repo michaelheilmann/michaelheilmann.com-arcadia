@@ -13,89 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-10-07
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Value.h"
 
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
-#include "Arcadia/Ring1/Implementation/hash.h"
-//#include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
-//#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
 #include "Arcadia/Ring1/Implementation/Object.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
 // exit, EXIT_FAILURE
 #include <stdlib.h>
-
-static Arcadia_SizeValue
-Arcadia_Object_hash
-  (
-    Arcadia_Process* process,
-    Arcadia_Object* self
-  );
-
-static Arcadia_BooleanValue
-Arcadia_Object_isNotEqualTo
-  (
-    Arcadia_Process* process,
-    Arcadia_Object* self,
-    Arcadia_Value const* other
-  );
-
-static Arcadia_BooleanValue
-Arcadia_Object_isEqualTo
-  (
-    Arcadia_Process* process,
-    Arcadia_Object* self,
-    Arcadia_Value const* other
-  );
-
-static Arcadia_SizeValue
-Arcadia_Object_hash
-  (
-    Arcadia_Process* process,
-    Arcadia_Object* self
-  )
-{
-  Arcadia_TypeValue type = Arcadia_Object_getType(self);
-  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value resultValue;
-  Arcadia_Value args[1] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, };
-  operations->hash(Arcadia_Process_getThread(process), &resultValue, 1, &args[0]);
-  return Arcadia_Value_getSizeValue(&resultValue);
-}
-
-static Arcadia_BooleanValue
-Arcadia_Object_isNotEqualTo
-  (
-    Arcadia_Process* process,
-    Arcadia_Object* self,
-    Arcadia_Value const* other
-  )
-{
-  Arcadia_TypeValue type = Arcadia_Object_getType(self);
-  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value resultValue;
-  Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, *other };
-  operations->notEqualTo(Arcadia_Process_getThread(process), &resultValue, 2, &args[0]);
-  return Arcadia_Value_getBooleanValue(&resultValue);
-}
-
-static Arcadia_BooleanValue
-Arcadia_Object_isEqualTo
-  (
-    Arcadia_Process* process,
-    Arcadia_Object* self,
-    Arcadia_Value const* other
-  )
-{
-  Arcadia_TypeValue type = Arcadia_Object_getType(self);
-  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value resultValue;
-  Arcadia_Value args[2] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = self }, *other };
-  operations->equalTo(Arcadia_Process_getThread(process), &resultValue, 2, &args[0]);
-  return Arcadia_Value_getBooleanValue(&resultValue);
-}
 
 void
 Arcadia_Value_visit
@@ -223,7 +148,7 @@ Arcadia_Value_getType
       return _Arcadia_Natural8Value_getType(thread);
     } break;
     case Arcadia_ValueTag_ObjectReference: {
-      return Arcadia_Object_getType(self->objectReferenceValue);
+      return Arcadia_Object_getType(thread, self->objectReferenceValue);
     } break;
     case Arcadia_ValueTag_Real32: {
       return _Arcadia_Real32Value_getType(thread);
@@ -291,7 +216,7 @@ Arcadia_Value_isEqualTo
     OnRelational(Size, equalTo);
     OnRelational(Void, equalTo);
     case Arcadia_ValueTag_ObjectReference: {
-      return Arcadia_Object_isEqualTo(Arcadia_Thread_getProcess(thread), self->objectReferenceValue, other);
+      return Arcadia_Object_isEqualTo(thread, self->objectReferenceValue, other);
     } break;
     case Arcadia_ValueTag_Type: {
       if (!Arcadia_Value_isTypeValue(other)) {
@@ -340,7 +265,7 @@ Arcadia_Value_isNotEqualTo
     OnRelational(Size, notEqualTo);
     OnRelational(Void, notEqualTo);
     case Arcadia_ValueTag_ObjectReference: {
-      return Arcadia_Object_isNotEqualTo(Arcadia_Thread_getProcess(thread), self->objectReferenceValue, other);
+      return Arcadia_Object_isNotEqualTo(thread, self->objectReferenceValue, other);
     } break;
     case Arcadia_ValueTag_Type: {
       if (!Arcadia_Value_isTypeValue(other)) {
@@ -383,7 +308,7 @@ Arcadia_Value_isLowerThan
     OnRelational(Size, lowerThan);
     OnRelational(Void, lowerThan);
     case Arcadia_ValueTag_ObjectReference: {
-      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
@@ -429,7 +354,7 @@ Arcadia_Value_isLowerThanOrEqualTo
     OnRelational(Size, lowerThanOrEqualTo);
     OnRelational(Void, lowerThanOrEqualTo);
     case Arcadia_ValueTag_ObjectReference: {
-      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
@@ -475,7 +400,7 @@ Arcadia_Value_isGreaterThan
     OnRelational(Size, greaterThan);
     OnRelational(Void, greaterThan);
     case Arcadia_ValueTag_ObjectReference: {
-      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
@@ -521,7 +446,7 @@ Arcadia_Value_isGreaterThanOrEqualTo
     OnRelational(Size, greaterThanOrEqualTo);
     OnRelational(Void, greaterThanOrEqualTo);
     case Arcadia_ValueTag_ObjectReference: {
-      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[2] = { *self, *other };
@@ -578,7 +503,7 @@ Arcadia_Value_getHash
     OnHash(Size);
     OnHash(Void);
     case Arcadia_ValueTag_ObjectReference: {
-      Arcadia_TypeValue type = Arcadia_Object_getType(self->objectReferenceValue);
+      Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
       Arcadia_Value resultValue;
       Arcadia_Value args[1] = { *self };

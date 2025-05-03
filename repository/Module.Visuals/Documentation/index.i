@@ -12,8 +12,11 @@
 @{include("FillMode.i")}
 @{include("KeyboardKey.i")}
 @{include("KeyboardKeyAction.i")}
+@{include("KeyboardKeyEvent.i")}
 @{include("MouseButtonAction.i")}
+@{include("MouseButtonEvent.i")}
 @{include("MousePointerAction.i")}
+@{include("MousePointerEvent.i")}
 @{include("PixelFormat.i")}
 @{include("PixelFormat_getNumberOfComponents.i")}
 @{include("PixelFormat_getNumberOfBytes.i")}

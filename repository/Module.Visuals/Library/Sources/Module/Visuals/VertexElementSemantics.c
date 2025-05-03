@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-01
-
 #include "Module/Visuals/VertexElementSemantics.h"
 
 #include "Arcadia/Ring2/Include.h"

@@ -13,8 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-08-29
-
 include(${CMAKE_CURRENT_LIST_DIR}/configure_warnings_and_errors.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_compiler.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_instruction_set_architecture.cmake)
@@ -50,6 +48,7 @@ endif()
 macro(BeginProduct target type)
   set(${target}.SourceFiles "")
   set(${target}.HeaderFiles "")
+  set(${target}.ConfigurationTemplateFiles "")
   set(${target}.ConfigurationFiles "")
   set(${target}.AssetFiles "")
   set(${target}.AssemblerFiles "")
@@ -83,15 +82,16 @@ macro(EndProduct target)
 
     ConfigureWarningsAndErrors(${target})
 
-    target_sources(${target} PRIVATE ${${target}.ConfigurationFiles} ${${target}.SourceFiles} ${${target}.HeaderFiles} ${${target}.AssemblerFiles})
+    target_sources(${target} PRIVATE ${${target}.ConfigurationTemplateFiles} ${${target}.ConfigurationFiles} ${${target}.SourceFiles} ${${target}.HeaderFiles} ${${target}.AssemblerFiles})
 
+    source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.ConfigurationTemplateFiles})
     source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${${target}.ConfigurationFiles})
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.HeaderFiles})
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.SourceFiles})
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.AssemblerFiles})
 
     set_property(TARGET ${target} PROPERTY C_STANDARD 17)
-    
+
     target_link_libraries(${target} PRIVATE ${${target}.PrivateLibraries})
     target_link_libraries(${target} PUBLIC ${${target}.Libraries})
 
@@ -110,18 +110,18 @@ macro(EndProduct target)
       set_property(TARGET ${target} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${${target}.WorkingDirectory})
 
     elseif (${${target}.Type} STREQUAL test)
-    
+
       target_include_directories(${target} PRIVATE ${${target}.IncludeDirectories})
       target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
       target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Sources)
-      
+
       # Possible alternative is `add_test(NAME ${target} COMMAND ${target} WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>)`.
       add_test(NAME ${target} COMMAND ${target} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
       set_property(TARGET ${target} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${${target}.WorkingDirectory})
-      
+
       # `add_test` must already have been invoked for `set_test_properties` to be successful.
       set_tests_properties(${target} PROPERTIES WORKING_DIRECTORY ${${target}.WorkingDirectory})
-    
+
     else()
       message(FATAL_ERROR "unknown/unsupported product type")
     endif()

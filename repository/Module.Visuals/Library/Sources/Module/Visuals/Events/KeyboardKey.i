@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-19
-
 // Keep the entries in this file in alphabetical order.
 // Key names must be unique. If two keys names have the same number, then they are aliases of each other.
 

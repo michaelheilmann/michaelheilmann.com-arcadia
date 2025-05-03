@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-01
-
 #include "Arcadia.Ring2.Tests.Utf8/readWrite.h"
 
 #include "Arcadia/Ring2/Include.h"

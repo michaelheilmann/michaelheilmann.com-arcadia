@@ -13,8 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-12-29
-
 cmake_minimum_required(VERSION 3.20)
 
 if (NOT MyProjectIsDefined)
@@ -29,5 +27,6 @@ endif()
 
 add_subdirectory(Utf8Tests)
 add_subdirectory(FilePathTests)
+add_subdirectory(DequeTests)
 add_subdirectory(ListTests)
 add_subdirectory(MapTests)

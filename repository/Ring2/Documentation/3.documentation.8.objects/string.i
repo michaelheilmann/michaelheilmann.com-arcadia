@@ -92,6 +92,12 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
     </p>
 
     <p>
+    The specified value may contain a <code>Arcadia_ImmutableByteArray</code> object.
+    In that case, the string is created from the <code>Arcadia_ImmutableByteArray</code> object.
+    A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
+    </p>
+
+    <p>
     The specified value may contain a <code>Arcadia_String</code> object.
     In that case, the string is created from the <code>Arcadia_String</code> object.
     </p>
@@ -102,9 +108,8 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
     </p>
 
     <p>
-    The specified value may contain a <code>Arcadia_ImmutableByteArray</code> object.
-    In that case, the string is created from the <code>Arcadia_ImmutableByteArray</code> object.
-    A <code>Arcadia_Status_EncodingInvalid</code> is raised if the Byte sequence of that <code>Arcada_ImmutableByteArray</code> object is not a UTF8 Byte sequence.
+    The specified value may contain a <code>Arcadia_ImmutableUtf8String</code> object.
+    In that case, the string is created from the <code>Arcadia_ImmutableUtf8String</code> object.
     </p>
 
   </my-summary>
@@ -163,9 +168,9 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_endsWith_pn">Arcadia_String_endsWith_pn</h1>
-  
+
   <my-signature><code>
   Arcadia_BooleanValue<br>
   Arcadia_String_endsWith_pn<br>
@@ -214,7 +219,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_startsWith_pn">Arcadia_String_startsWith_pn</h1>
 
   <my-signature><code>
@@ -354,7 +359,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_getByteAt">Arcadia_String_getByteAt</h1>
 
   <my-signature><code>
@@ -396,7 +401,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_toBoolean">Arcadia_String_toBoolean</h1>
 
   <my-signature><code>
@@ -446,7 +451,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_toInteger16">Arcadia_String_toInteger16</h1>
 
   <my-signature><code>
@@ -491,7 +496,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_toInteger32">Arcadia_String_toInteger32</h1>
 
   <my-signature><code>
@@ -575,7 +580,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
     <h1>Return value</h1>
     <p>The integer value.</p>
   </section>
-  
+
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
@@ -595,7 +600,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_toInteger8">Arcadia_String_toInteger8</h1>
 
   <my-signature><code>
@@ -619,12 +624,12 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
       <div>Arcadia_String* self</div><div>A pointer to this string.</div>
     </div>
   </section>
-  
+
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>The integer value.</p>
   </section>
-  
+
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
@@ -675,7 +680,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
     <h1>Return value</h1>
     <p>The natural value.</p>
   </section>
-  
+
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
@@ -688,7 +693,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
       the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural16Value</code>.</div>
     </div>
   </section>
-  
+
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -720,7 +725,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
     <h1>Return value</h1>
     <p>The natural value.</p>
   </section>
-  
+
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
@@ -733,7 +738,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
       the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural32Value</code>.</div>
     </div>
   </section>
-  
+
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -771,7 +776,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
     <h1>Return value</h1>
     <p>The natural value.</p>
   </section>
-  
+
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
@@ -841,7 +846,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_toReal32">Arcadia_String_toReal32</h1>
 
   <my-signature><code>
@@ -873,7 +878,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
     <h1>Return value</h1>
     <p>The <code>Arcadia_Real32Value</code> value.</p>
   </section>
-  
+
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
@@ -892,7 +897,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String<
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_String_toReal64">Arcadia_String_toReal64</h1>
 
   <my-signature><code>

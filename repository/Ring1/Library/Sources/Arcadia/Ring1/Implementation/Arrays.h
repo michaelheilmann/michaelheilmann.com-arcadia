@@ -18,7 +18,7 @@
 
 #include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
-#include "Arms.h"
+#include "Arcadia/Arms/Include.h"
 
 /// @brief The strategy for a call to <code>Arcadia_Arrays_resizeBy*</code> functions.
 typedef enum Arcadia_Arrays_ResizeStrategy {

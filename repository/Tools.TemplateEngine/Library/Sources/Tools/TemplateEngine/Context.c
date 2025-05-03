@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-09
-
 #include "Tools/TemplateEngine/Context.h"
 
 #include "Tools/TemplateEngine/FileContext.h"
@@ -82,7 +80,9 @@ Context_constructImpl
   Context* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Context_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->targetBuffer = NULL;
@@ -91,7 +91,7 @@ Context_constructImpl
   _self->temporary = NULL;
   _self->stack = NULL;
   _self->files = Arcadia_List_create(thread);
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
@@ -109,14 +109,14 @@ Context_visit
     Context* self
   )
 {
-  Arcadia_Object_visit(thread, self->targetBuffer);
-  Arcadia_Object_visit(thread, self->target);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->targetBuffer);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->target);
 
-  Arcadia_Object_visit(thread, self->temporaryBuffer);
-  Arcadia_Object_visit(thread, self->temporary);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporaryBuffer);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporary);
 
-  Arcadia_Object_visit(thread, self->stack);
-  Arcadia_Object_visit(thread, self->files);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->stack);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->files);
 }
 
 Context*
@@ -125,7 +125,9 @@ Context_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = { 
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Context* self = Arcadia_allocateObject(thread, _Context_getType(thread), 0, &argumentValues[0]);
   return self;
 }
@@ -144,16 +146,16 @@ recursionGuard
     if (Arcadia_FilePath_isEqualTo(thread, p, path)) {
       Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, p);
       Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-      Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)ps };
+      Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue(ps);
       Arcadia_StringBuffer_append_pn(thread, sb, u8"recursive include of file `", sizeof(u8"recursive include of file `") - 1);
-      Arcadia_StringBuffer_append(thread, sb, v);
+      Arcadia_StringBuffer_insertBack(thread, sb, v);
       Arcadia_StringBuffer_append_pn(thread, sb, u8"`\0", sizeof(u8"`\0") - 1);
       fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
   }
-  Arcadia_List_appendObjectReferenceValue(thread, context->files, path);
+  Arcadia_List_insertBackObjectReferenceValue(thread, context->files, path);
 }
 
 void
@@ -179,9 +181,9 @@ Context_onRun
       Arcadia_Thread_popJumpTarget(thread);
       Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, filePath);
       Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-      Arcadia_Value v = { .tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)ps };
+      Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ps);
       Arcadia_StringBuffer_append_pn(thread, sb, u8"failed to read file `", sizeof(u8"failed to read file `") - 1);
-      Arcadia_StringBuffer_append(thread, sb, v);
+      Arcadia_StringBuffer_insertBack(thread, sb, v);
       Arcadia_StringBuffer_append_pn(thread, sb, u8"`\0", sizeof(u8"`\0") - 1);
       fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
       Arcadia_Thread_jump(thread);
@@ -189,6 +191,6 @@ Context_onRun
     fileContext->source = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
     recursionGuard(thread, context, filePath);
     FileContext_execute(thread, fileContext);
-    Arcadia_List_remove(thread, context->files, Arcadia_List_getSize(thread, context->files) - 1, 1);
+    Arcadia_List_removeAt(thread, context->files, Arcadia_List_getSize(thread, context->files) - 1, 1);
   }
 }

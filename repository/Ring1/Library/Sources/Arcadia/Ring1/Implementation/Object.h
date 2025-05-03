@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-08-27
-
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED
 
@@ -96,7 +94,7 @@ void
 Arcadia_Object_setType
   (
     Arcadia_Thread* thread,
-    void* self,
+    Arcadia_Object* self,
     Arcadia_TypeValue type
   );
 
@@ -106,7 +104,7 @@ void
 Arcadia_Object_visit
   (
     Arcadia_Thread* thread,
-    void* self
+    Arcadia_Object* self
   );
 
 /// @brief Increment the lock count of the object.
@@ -115,7 +113,7 @@ void
 Arcadia_Object_lock
   (
     Arcadia_Thread* thread,
-    void* self
+    Arcadia_Object* self
   );
 
 /// @brief Decrement the lock count of the object.
@@ -124,7 +122,7 @@ void
 Arcadia_Object_unlock
   (
     Arcadia_Thread* thread,
-    void* self
+    Arcadia_Object* self
   );
 
 /// @brief Get the type of an object.
@@ -133,7 +131,45 @@ Arcadia_Object_unlock
 Arcadia_TypeValue
 Arcadia_Object_getType
   (
-    void* self
+    Arcadia_Thread* thread,
+    Arcadia_Object* self
   );
 
+
+  
+/// "isEqualTo"
+Arcadia_BooleanValue
+Arcadia_Object_isEqualTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  );
+
+/// "isNotEqualTo"
+Arcadia_BooleanValue
+Arcadia_Object_isNotEqualTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  );
+
+/// "hash"
+Arcadia_SizeValue
+Arcadia_Object_hash
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self
+  );
+  
+/// "isIdenticalTo"
+Arcadia_BooleanValue
+Arcadia_Object_isIdenticalTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    Arcadia_Value const* other
+  );
+  
 #endif // ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED

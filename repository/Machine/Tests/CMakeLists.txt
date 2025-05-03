@@ -13,8 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-12-29
-
 cmake_minimum_required(VERSION 3.20)
 
 if (NOT MyProjectIsDefined)
@@ -27,7 +25,5 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-add_subdirectory(LexicalAnalysis)
-add_subdirectory(SyntacticalAnalysis)
-add_subdirectory(SemanticalAnalysis)
 add_subdirectory(ExecuteTests)
+add_subdirectory(SemanticalAnalysis)

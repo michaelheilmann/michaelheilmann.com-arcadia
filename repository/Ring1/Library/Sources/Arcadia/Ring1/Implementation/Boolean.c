@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-10-27
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 
@@ -41,6 +39,15 @@ equalTo
 
 static void
 hash
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static void
+identical
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -85,6 +92,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .greaterThan = NULL,
   .greaterThanOrEqualTo = NULL,
   .hash = &hash,
+  .identical = &identical,
   .lowerThan = NULL,
   .lowerThanOrEqualTo = NULL,
   .multiply = NULL,
@@ -146,6 +154,26 @@ hash
 {
 #define A1 &(arguments[0])
   Arcadia_Value_setSizeValue(target, Arcadia_Value_getBooleanValue(A1) ? 1231 : 1237);
+#undef A1
+}
+
+static void
+identical
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (!Arcadia_Value_isBooleanValue(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+  } else {
+    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getBooleanValue(A1) == Arcadia_Value_getBooleanValue(A2));
+  }
+#undef A2
 #undef A1
 }
 

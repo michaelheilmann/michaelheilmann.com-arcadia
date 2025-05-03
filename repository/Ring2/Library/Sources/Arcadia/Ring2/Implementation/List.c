@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-10-07
-
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/List.h"
 
@@ -155,7 +153,9 @@ Arcadia_List_constructImpl
   Arcadia_TypeValue _type = _Arcadia_List_getType(thread);
   Arcadia_List_ensureInitialized(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->elements = NULL;
@@ -166,7 +166,7 @@ Arcadia_List_constructImpl
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
   }
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
@@ -202,7 +202,9 @@ Arcadia_List_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_List* self = Arcadia_allocateObject(thread, _Arcadia_List_getType(thread), 0, &argumentValues[0]);
   return self;
 }
@@ -224,7 +226,7 @@ Arcadia_List_getSize
 { return self->size; }
 
 void
-Arcadia_List_append
+Arcadia_List_insertBack
   (
     Arcadia_Thread* thread,
     Arcadia_List* self,
@@ -235,7 +237,7 @@ Arcadia_List_append
 }
 
 void
-Arcadia_List_prepend
+Arcadia_List_insertFront
   (
     Arcadia_Thread* thread,
     Arcadia_List* self,
@@ -285,7 +287,7 @@ Arcadia_List_getAt
 }
 
 void
-Arcadia_List_remove
+Arcadia_List_removeAt
   (
     Arcadia_Thread* thread,
     Arcadia_List* self,
@@ -316,7 +318,7 @@ Arcadia_List_remove
 
 #define Define(Type, Suffix, Variable) \
   void \
-  Arcadia_List_append##Suffix##Value \
+  Arcadia_List_insertBack##Suffix##Value \
     ( \
       Arcadia_Thread* thread, \
       Arcadia_List* self, \
@@ -325,11 +327,11 @@ Arcadia_List_remove
   { \
     Arcadia_Value value; \
     Arcadia_Value_set##Suffix##Value(&value, Variable##Value); \
-    Arcadia_List_append(thread, self, value); \
+    Arcadia_List_insertBack(thread, self, value); \
   } \
 \
   void \
-  Arcadia_List_prepend##Suffix##Value \
+  Arcadia_List_insertFront##Suffix##Value \
     ( \
       Arcadia_Thread* thread, \
       Arcadia_List* self, \
@@ -338,7 +340,7 @@ Arcadia_List_remove
   { \
     Arcadia_Value value; \
     Arcadia_Value_set##Suffix##Value(&value, Variable##Value); \
-    Arcadia_List_prepend(thread, self, value); \
+    Arcadia_List_insertFront(thread, self, value); \
   } \
 \
   Arcadia_BooleanValue \

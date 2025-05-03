@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-27
-
 #if !defined(ARCADIA_RING2_IMPLEMENTATION_LIST_H_INCLUDED)
 #define ARCADIA_RING2_IMPLEMENTATION_LIST_H_INCLUDED
 
@@ -56,18 +54,18 @@ Arcadia_List_getSize
     Arcadia_List* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_append
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_insertFront
 void
-Arcadia_List_append
+Arcadia_List_insertBack
   (
     Arcadia_Thread* thread,
     Arcadia_List* self,
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_prepend
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_insertBack
 void
-Arcadia_List_prepend
+Arcadia_List_insertFront
   (
     Arcadia_Thread* thread,
     Arcadia_List* self,
@@ -93,9 +91,9 @@ Arcadia_List_getAt
     Arcadia_SizeValue index
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_remove
+// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_removeAt
 void
-Arcadia_List_remove
+Arcadia_List_removeAt
   (
     Arcadia_Thread* thread,
     Arcadia_List* self,
@@ -116,7 +114,7 @@ Arcadia_List_isEmpty
 
 #define Define(Type, Suffix, Variable) \
   void \
-  Arcadia_List_append##Suffix##Value \
+  Arcadia_List_insertBack##Suffix##Value \
     ( \
       Arcadia_Thread* thread, \
       Arcadia_List* self, \
@@ -124,7 +122,7 @@ Arcadia_List_isEmpty
     ); \
 \
   void \
-  Arcadia_List_prepend##Suffix##Value \
+  Arcadia_List_insertFront##Suffix##Value \
     ( \
       Arcadia_Thread* thread, \
       Arcadia_List* self, \

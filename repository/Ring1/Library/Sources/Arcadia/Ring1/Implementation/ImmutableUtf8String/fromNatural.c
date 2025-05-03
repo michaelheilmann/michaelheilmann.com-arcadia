@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-02-16
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/fromNatural.h"
 
@@ -80,7 +78,7 @@ _createFromNatural64
     char* q = p + numberOfDigits;
     while (valueTemporary > 0) {
       Arcadia_Natural64Value digit = valueTemporary % 10;
-      *(--q) = (char)digit;
+      *(--q) = (char)digit + '0';
       valueTemporary /= 10;
     }
     p += numberOfDigits;

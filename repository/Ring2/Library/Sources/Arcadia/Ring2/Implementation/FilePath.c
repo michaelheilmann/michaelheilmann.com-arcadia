@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-10-07
-
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/FilePath.h"
 
@@ -210,10 +208,10 @@ normalize
         !Arcadia_String_isEqualTo_pn(thread, previousString, u8".", sizeof(u8".")) &&
          Arcadia_String_isEqualTo_pn(thread, currentString, u8"..", sizeof(u8"..") - 1)) {
    // Remove previous and current.
-      Arcadia_List_remove(thread, self->fileNames, previous, 2);
+      Arcadia_List_removeAt(thread, self->fileNames, previous, 2);
     } else if (Arcadia_String_isEqualTo_pn(thread, currentString, u8".", sizeof(u8".") - 1)) {
       // Remove current.
-      Arcadia_List_remove(thread, self->fileNames, current, 1);
+      Arcadia_List_removeAt(thread, self->fileNames, current, 1);
     } else {
       previous++;
       current++;
@@ -221,7 +219,7 @@ normalize
   }
   if (!self->root && Arcadia_List_isEmpty(thread, self->fileNames)) {
     // If the path is empty, then the path is `.`.
-    Arcadia_List_appendObjectReferenceValue(thread, self->fileNames, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8".", sizeof(u8".") - 1)));
+    Arcadia_List_insertBackObjectReferenceValue(thread, self->fileNames, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8".", sizeof(u8".") - 1)));
   }
 }
 
@@ -273,7 +271,7 @@ parseWindowsFilePath
         Arcadia_Value temporary;
         Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
         Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(Arcadia_Process_getThread(process), temporary));
-        Arcadia_List_append(thread, context.target->fileNames, temporary);
+        Arcadia_List_insertBack(thread, context.target->fileNames, temporary);
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
       target->relative = Arcadia_BooleanValue_True;
@@ -294,7 +292,7 @@ parseWindowsFilePath
         Arcadia_Value temporary;
         Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
         Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(thread, temporary));
-        Arcadia_List_append(thread, context.target->fileNames, temporary);
+        Arcadia_List_insertBack(thread, context.target->fileNames, temporary);
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
     } else {
@@ -305,7 +303,7 @@ parseWindowsFilePath
     Arcadia_Value temporary;
     Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
     Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(thread, temporary));
-    Arcadia_List_append(thread, context.target->fileNames, temporary);
+    Arcadia_List_insertBack(thread, context.target->fileNames, temporary);
     Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
   }
 }
@@ -344,7 +342,7 @@ parseUnixFilePath
         Arcadia_Value temporary;
         Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
         Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(thread, temporary));
-        Arcadia_List_append(thread, context.target->fileNames, temporary);
+        Arcadia_List_insertBack(thread, context.target->fileNames, temporary);
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
     } else {
@@ -355,7 +353,7 @@ parseUnixFilePath
     Arcadia_Value temporary;
     Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
     Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(thread, temporary));
-    Arcadia_List_append(thread, context.target->fileNames, temporary);
+    Arcadia_List_insertBack(thread, context.target->fileNames, temporary);
     Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
   }
 }
@@ -394,7 +392,7 @@ parseGenericFilePath
         Arcadia_Value temporary;
         Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
         Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(thread, temporary));
-        Arcadia_List_append(thread, context.target->fileNames, temporary);
+        Arcadia_List_insertBack(thread, context.target->fileNames, temporary);
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
     } else {
@@ -405,7 +403,7 @@ parseGenericFilePath
     Arcadia_Value temporary;
     Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
     Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(thread, temporary));
-    Arcadia_List_append(thread, context.target->fileNames, temporary);
+    Arcadia_List_insertBack(thread, context.target->fileNames, temporary);
     Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
   }
 }
@@ -473,7 +471,9 @@ Arcadia_FilePath_constructImpl
   Arcadia_FilePath* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (0 != numberOfArgumentValues) {
@@ -484,7 +484,7 @@ Arcadia_FilePath_constructImpl
   _self->relative = Arcadia_BooleanValue_False;
   _self->root = NULL;
   _self->fileNames = Arcadia_List_create(thread);
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
@@ -502,8 +502,8 @@ Arcadia_FilePath_visit
     Arcadia_FilePath* self
   )
 {
-  Arcadia_Object_visit(thread, self->fileNames);
-  Arcadia_Object_visit(thread, self->root);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->fileNames);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->root);
 }
 
 Arcadia_FilePath*
@@ -512,7 +512,9 @@ Arcadia_FilePath_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_FilePath* self = Arcadia_allocateObject(thread, _Arcadia_FilePath_getType(thread), 0, &argumentValues[0]);
   return self;
 }
@@ -550,7 +552,9 @@ Arcadia_FilePath_parseUnix
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_FilePath* self = Arcadia_allocateObject(thread, _type, 0, &argumentValues[0]);
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
@@ -668,7 +672,9 @@ Arcadia_FilePath_parseGeneric
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_FilePath* self = Arcadia_allocateObject(thread, _type, 0, &argumentValues[0]);
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
@@ -828,6 +834,6 @@ Arcadia_FilePath_append
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, other->fileNames); i < n; ++i) {
     Arcadia_Value v = Arcadia_List_getAt(thread, other->fileNames, i);
-    Arcadia_List_append(thread, self->fileNames, v);
+    Arcadia_List_insertBack(thread, self->fileNames, v);
   }
 }

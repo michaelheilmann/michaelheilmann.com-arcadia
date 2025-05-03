@@ -13,18 +13,16 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-01-01
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Process.h"
 
+#include "Arcadia/Arms/Include.h"
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include "Arcadia/Ring1/Implementation/Atoms.private.h"
 #include "Arcadia/Ring1/Implementation/Types.private.h"
 #include <stdbool.h>
 #include <string.h>
-#include "Arms.h"
 
 typedef const ModuleInfo* (GetModuleInfo)();
 static GetModuleInfo* g_modules[] = {

@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-19
-
 #include "Module/Visuals/Events/CanvasEvent.h"
 
 static void
@@ -73,5 +71,5 @@ Arcadia_Visuals_CanvasEvent_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
   }
   //
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }

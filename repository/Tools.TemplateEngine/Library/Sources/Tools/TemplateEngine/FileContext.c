@@ -13,11 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-03-30
-
 #include "Tools/TemplateEngine/FileContext.h"
-
-#include "R/ArgumentsValidation.h"
 
 static Arcadia_BooleanValue
 is
@@ -204,7 +200,7 @@ evalAst
         // Error.
         Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
         Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
-        Arcadia_StringBuffer_append(thread, sb, k);
+        Arcadia_StringBuffer_insertBack(thread, sb, k);
         Arcadia_StringBuffer_append_pn(thread, sb, u8"` not defined\n\0", sizeof(u8"` not defined\n\0") - 1);
         fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -213,18 +209,18 @@ evalAst
         // Error.
         Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
         Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
-        Arcadia_StringBuffer_append(thread, sb, k);
+        Arcadia_StringBuffer_insertBack(thread, sb, k);
         Arcadia_StringBuffer_append_pn(thread, sb, u8"` is not of type string\n\0", sizeof(u8"` is not of type string\n\0") - 1);
         fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
         Arcadia_Thread_jump(thread);
       }
       Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&v);
-      if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(object), _Arcadia_String_getType(thread))) {
+      if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, object), _Arcadia_String_getType(thread))) {
         // Error.
         Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
         Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
-        Arcadia_StringBuffer_append(thread, sb, k);
+        Arcadia_StringBuffer_insertBack(thread, sb, k);
         Arcadia_StringBuffer_append_pn(thread, sb, u8"` is not of type string\n\0", sizeof(u8"` is not of type string\n\0") - 1);
         fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -417,10 +413,10 @@ FileContext_visit
     FileContext* self
   )
 {
-  Arcadia_Object_visit(thread, self->context);
-  Arcadia_Object_visit(thread, self->sourceFilePath);
-  Arcadia_Object_visit(thread, self->source);
-  Arcadia_Object_visit(thread, self->environment);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->context);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->sourceFilePath);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->source);
+  Arcadia_Object_visit(thread, (Arcadia_Object*)self->environment);
 }
 
 static void
@@ -435,15 +431,17 @@ FileContext_constructImpl
   FileContext* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _FileContext_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->context = (Context*)R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Context_getType(thread));
-  _self->sourceFilePath = (Arcadia_FilePath*)R_Argument_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_FilePath_getType(thread));
+  _self->context = (Context*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Context_getType(thread));
+  _self->sourceFilePath = (Arcadia_FilePath*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_FilePath_getType(thread));
   _self->source = NULL;
   _self->environment = Arcadia_Map_create(thread);
   Arcadia_Value k, v;
@@ -460,7 +458,7 @@ FileContext_constructImpl
   Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
   Arcadia_Map_set(thread, _self->environment, k, v);
 
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 FileContext*
@@ -471,8 +469,10 @@ FileContext_create
     Arcadia_FilePath* sourceFilePath
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)context },
-                               {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)sourceFilePath }, };
+  Arcadia_Value argumentValues[] = { 
+    Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)context),
+    Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)sourceFilePath),
+  };
   FileContext* self = Arcadia_allocateObject(thread, _FileContext_getType(thread), 2, &argumentValues[0]);
   return self;
 }

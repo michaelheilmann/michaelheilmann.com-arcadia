@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-19
-
 #include "Module/Visuals/ImageWriter.h"
 
 void
@@ -22,7 +20,7 @@ ImageWriter_writePngToPath
   (
     Arcadia_Thread* thread,
     ImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   )
 { self->writePngToPath(thread, self, sourcePixelBuffer, targetPath); }
@@ -32,7 +30,7 @@ ImageWriter_writePngToByteBuffer
   (
     Arcadia_Thread* thread,
     ImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   )
 { self->writePngToByteBuffer(thread, self, sourcePixelBuffer, targetByteBuffer); }
@@ -42,7 +40,7 @@ ImageWriter_writeBmpToPath
   (
     Arcadia_Thread* thread,
     ImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   )
 { self->writeBmpToPath(thread, self, sourcePixelBuffer, targetPath); }
@@ -52,7 +50,7 @@ ImageWriter_writeBmpToByteBuffer
   (
     Arcadia_Thread* thread,
     ImageWriter* self,
-    PixelBuffer* sourcePixelBuffer,
+    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   )
 { self->writeBmpToByteBuffer(thread, self, sourcePixelBuffer, targetByteBuffer); }
@@ -126,7 +124,9 @@ ImageWriter_constructImpl
   ImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _ImageWriter_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->writeBmpToByteBuffer = NULL;
@@ -135,5 +135,5 @@ ImageWriter_constructImpl
   _self->writeIcoToPath = NULL;
   _self->writePngToByteBuffer = NULL;
   _self->writePngToPath = NULL;
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }

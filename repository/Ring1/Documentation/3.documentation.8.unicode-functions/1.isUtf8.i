@@ -1,6 +1,6 @@
 <section class="cxx entity procedure">
 
-  <h1 id="arcadia-isutf8">Arcadia_isUtf8</h1>
+  <h1 id="Arcadia_isUtf8">Arcadia_isUtf8</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>

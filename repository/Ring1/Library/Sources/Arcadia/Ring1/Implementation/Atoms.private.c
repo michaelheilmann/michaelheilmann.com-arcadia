@@ -13,15 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-01-06
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Atoms.private.h"
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/TypeNameParser.h"
-#include "Arms.h"
+#include "Arcadia/Arms/Include.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include <string.h> /*TODO: Add and use Arcadia_Process functionality.*/
 

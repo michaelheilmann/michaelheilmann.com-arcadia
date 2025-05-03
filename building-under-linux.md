@@ -29,14 +29,19 @@ An out of source build is the recommended way of building *michaelheilmann.com*.
 
 *Remarks* The above builds *michaelheilmann.com* without debug information. To build *michaelheilmann.com* with debug information add the parameter `-DCMAKE_BUILD_TYPE="Debug"` to the cmake command.
 
-#### Adding OpenGL support
-*Important*: Ensure that the *OpenGL/GLX development headers and libraries* are installed.
+#### Further Options
 
-By default, the cmake command to generate the build files will disable OpenGL support.
-To enable support OpenGL support, add the parameter `-D"Arcadia.Visuals.OpenGl.Enabled"=TRUE` to the cmake command.
+- `Arcadia.Arms.Statistics.Enabled`
+`TRUE` enables statistics for *Arcadia ARMS*, `FALSE` disables them. Default is `FALSE`.
 
-#### Adding OpenAL support
-*Important*: Ensure that the *OpenAL developlment headers and libraries* are installed.
-
-By default, the cmake command to generate the build files will disable OpenAL support.~~
-To enable support OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=TRUE` to the cmake command.
+- `Arcadia.Visuals.OpenGl.Enabled`
+`TRUE` enables OpenGL support in *Arcadia Visuals*, `FALSE` disables it. Default is `FALSE`.
+\
+To enable OpenGL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=TRUE` to the cmake command.
+To disable OpenGL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=FALSE` to the cmake command.
+                                                                                                           
+- `Arcadia.Audials.OpenAl.Enabled`
+`TRUE` enables OpenAL support in *Arcadia Audials*, `FALSE` disables it. Default is `FALSE`.
+\
+To enable OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=TRUE` to the cmake command.
+To disable OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=FALSE` to the cmake command.

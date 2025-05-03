@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-19
-
 #include "Module/Visuals/Events/MouseButtonAction.h"
 
 static const Arcadia_Type_Operations _typeOperations = {

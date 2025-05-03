@@ -17,19 +17,19 @@
 :root {
   --h1-margin: 0.67em 0;
   --h1-font-size: 2.5rem !important;
-  
+
   --h2-margin: 0.75em 0;
   --h2-font-size: 2rem !important;
-  
+
   --h3-margin: 0.83em 0;
   --h3-font-size: 1.75rem !important;
-  
+
   --h4-margin: 1.12em 0;
   --h4-font-size: 1.5rem !important;
-  
+
   --h5-margin: 1.50em 0;
   --h5-font-size: 1.25rem !important;
-  
+
   --h6-margin: 1.67em 0;
   --h6-font-size: 1rem !important;
 }
@@ -343,7 +343,9 @@ body.my-error-page-1 ul li, body.my-content-page-1 ul li {
 }
 
 body.my-error-page-1 p, body.my-content-page-1 p {
-  /*margin-top: 1rem;*/
+  &:not(:last-child)  {
+    margin-bottom: 1rem;
+  }
 }
 
 body.my-error-page-1 div.left-column, body.my-content-page-1 div.left-column {
@@ -571,7 +573,7 @@ body.my-content-page-1 h1
 {}
 
 body.my-content-page-1 h1::before
-{} 
+{}
 
 body.my-content-page-1 h2 {
   counter-increment: section-level-1;
@@ -585,7 +587,7 @@ body.my-content-page-1 h2::before {
 body.my-content-page-1 h3 {
  counter-increment: section-level-2;
  counter-reset: section-level-3 0;
-}  
+}
 
 body.my-content-page-1 h3::before {
  content: counter(section-level-1) "." counter(section-level-2) ". ";
@@ -594,7 +596,7 @@ body.my-content-page-1 h3::before {
 body.my-content-page-1 h4 {
  counter-increment: section-level-3;
  counter-reset: section-level-4 0;
-}  
+}
 
 body.my-content-page-1 h4::before {
  content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) ". ";
@@ -602,11 +604,11 @@ body.my-content-page-1 h4::before {
 
 body.my-content-page-1 h5 {
  counter-increment: section-level-4;
-} 
+}
 
 body.my-content-page-1 h5::before {
  content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) "." counter(section-level-4) ". ";
-} 
+}
 
 /* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
 /*h4 ~ my-signature, h4 ~ my-summary,*/h4 ~ my-parameters, h4 ~ my-errors, h4 ~ my-return-value {

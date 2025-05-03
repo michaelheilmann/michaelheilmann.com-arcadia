@@ -3,7 +3,7 @@
 
 <p>
 The *Template Engine* tool supports directives to load the values of predefined variables.
-A load variable directive is of the form 
+A load variable directive is of the form
 <code>@@{&lt;name&gt;}</code>
 where
 <code>&lt;name&gt;</code>

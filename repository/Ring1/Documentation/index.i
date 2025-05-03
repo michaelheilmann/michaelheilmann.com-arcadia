@@ -14,10 +14,8 @@
 @{include("3.documentation.3.status-codes.i")}
 @{include("3.documentation.4.status-variable.i")}
 @{include("3.documentation.5.jumps-and-jump-targets.i")}
-@{include("3.documentation.6.numeric-functions.i")}
-@{include("3.documentation.7.time-and-date-functions.i")}
-@{include("3.documentation.7.time-and-date-functions/1.getTickCount.i")}
-@{include("3.documentation.8.unicode-functions.i")}
-@{include("3.documentation.8.unicode-functions/1.isUtf8.i")}
-@{include("3.documentation.9.value.i")}
+@{include("3.documentation.6.numeric-functions/_include.i")}
+@{include("3.documentation.7.time-and-date-functions/_include.i")}
+@{include("3.documentation.8.unicode-functions/_include.i")}
+@{include("3.documentation.9.miscellaneous-functions/_include.i")}
 @{include("footer.i")}

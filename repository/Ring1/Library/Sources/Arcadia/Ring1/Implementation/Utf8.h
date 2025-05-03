@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-01
-
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_UTF8_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_UTF8_H_INCLUDED
 
@@ -31,7 +29,7 @@ Arcadia_StaticAssert(Arcadia_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximu
 Arcadia_BooleanValue
 Arcadia_isUtf8
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes,
     Arcadia_SizeValue* numberOfSymbols

@@ -13,8 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# Last modified: 2024-09-16
-
 cmake_minimum_required(VERSION 3.20)
 
 if (NOT MyProjectIsDefined)
@@ -27,10 +25,12 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-add_subdirectory(Arms1)
+add_subdirectory(Arms)
 add_subdirectory(Ring1)
 add_subdirectory(Ring2)
 add_subdirectory(Machine)
+add_subdirectory(Mil.Frontend)
+add_subdirectory(DataDefinitionLanguage)
 
 add_subdirectory(Integrations)
 
@@ -39,6 +39,7 @@ add_subdirectory(Engine.Demo)
 add_subdirectory(Tools.ConcatenateFiles)
 add_subdirectory(Tools.CompareFiles)
 add_subdirectory(Tools.TemplateEngine)
+add_subdirectory(Tools.Compiler)
 
 add_subdirectory(Module.Visuals)
 add_subdirectory(Module.Audials)

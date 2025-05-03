@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-01
-
 #if !defined(ARCADIA_VISUALS_VERTEXELEMENTSEMANTICS_H_INCLUDED)
 #define ARCADIA_VISUALS_VERTEXELEMENTSEMANTICS_H_INCLUDED
 
@@ -25,11 +23,12 @@ Arcadia_declareEnumerationType(u8"Arcadia.Visuals.VertexElementSemantics", Arcad
 
 enum Arcadia_Visuals_VertexElementSemantics {
   
-  Arcadia_Visuals_VertexElementSemantics_Position = 1,
+  Arcadia_Visuals_VertexElementSemantics_PositionXyz = 1,
   
-  Arcadia_Visuals_VertexElementSemantics_AmbientColor = 2,
-
-  Arcadia_Visuals_VertexElementSemantics_TextureCoordinates = 3
+  Arcadia_Visuals_VertexElementSemantics_AmbientRgba = 2,
+  
+  Arcadia_Visuals_VertexElementSemantics_AmbientUv = 3,
+  
 };
 
 #endif // ARCADIA_VISUALS_VERTEXELEMENTSEMANTICS_H_INCLUDED

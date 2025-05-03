@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-26
-
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/hash.h"
 
 #include "Arcadia/Ring1/Include.h"

@@ -13,11 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-02-02
-
 #include "Module/Visuals/Linux/Include.h"
 
-#include "R/Include.h"
 #include "Module/Visuals/PixelBuffer.h"
 
 #define STB_IMAGE_WRITE_STATIC static
@@ -61,7 +58,7 @@ void
 _Visuals_Linux_writeBmpToByteBuffer
   (
     Arcadia_Thread* thread,
-    PixelBuffer* pixelBuffer,
+    Arcadia_Visuals_PixelBuffer* pixelBuffer,
     Arcadia_ByteBuffer* byteBuffer
   )
 {
@@ -73,14 +70,14 @@ _Visuals_Linux_writeBmpToByteBuffer
   int components;
   switch (pixelBuffer->pixelFormat) {
     case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
-      PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, pixelBuffer);
-      PixelBuffer_setLinePadding(thread, pixelBuffer, 0);
+      Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_createClone(thread, pixelBuffer);
+      Arcadia_Visuals_PixelBuffer_setLinePadding(thread, pixelBuffer, 0);
       components = 3;
     } break;
     case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
-      PixelBuffer* pixelBuffer = PixelBuffer_createClone(thread, pixelBuffer);
-      PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8);
-      PixelBuffer_setLinePadding(thread, pixelBuffer, 0);
+      Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_createClone(thread, pixelBuffer);
+      Arcadia_Visuals_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8);
+      Arcadia_Visuals_PixelBuffer_setLinePadding(thread, pixelBuffer, 0);
       components = 4;
     } break;
     default: {
@@ -90,8 +87,8 @@ _Visuals_Linux_writeBmpToByteBuffer
   };
 
   if (!stbi_write_bmp_to_func((stbi_write_func*)&writeCallback, &context,
-                              PixelBuffer_getWidth(thread, pixelBuffer),
-                              PixelBuffer_getHeight(thread, pixelBuffer),
+                              Arcadia_Visuals_PixelBuffer_getWidth(thread, pixelBuffer),
+                              Arcadia_Visuals_PixelBuffer_getHeight(thread, pixelBuffer),
                               components,
                               pixelBuffer->bytes)) {
     context.status = Arcadia_Status_EnvironmentFailed;

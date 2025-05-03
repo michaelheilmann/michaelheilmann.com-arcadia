@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-22
-
 #if !defined(ARCADIA_RING2_IMPLEMENTATION_STRINGBUFFER_H_INCLUDED)
 #define ARCADIA_RING2_IMPLEMENTATION_STRINGBUFFER_H_INCLUDED
 
@@ -38,6 +36,7 @@ struct Arcadia_StringBuffer {
   Arcadia_SizeValue capacity;
 };
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_create
 /// @brief Create a string buffer.
 /// @return The string buffer.
 /// @remarks The string buffer is empty.
@@ -98,7 +97,7 @@ Arcadia_StringBuffer_append_pn
 /// @param value The Bytes.
 /// Either Arcadia.ByteBuffer, Arcadia.StringBuffer, or Arcadia.String.
 void
-Arcadia_StringBuffer_append
+Arcadia_StringBuffer_insertBack
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
@@ -131,6 +130,7 @@ Arcadia_StringBuffer_isEqualTo
     Arcadia_StringBuffer* other
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_clear
 /// @brief Set the number of UTF-8 symbols in this string buffer to zero.
 /// @param self A pointer to this string buffer.
 void
@@ -140,6 +140,7 @@ Arcadia_StringBuffer_clear
     Arcadia_StringBuffer* self
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_getNumberOfBytes
 Arcadia_SizeValue
 Arcadia_StringBuffer_getNumberOfBytes
   (

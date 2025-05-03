@@ -18,10 +18,18 @@
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_DepthCompareFunction">Arcadia_Visuals_DepthCompareFunction</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_Event">[MIL] Arcadia.Visuals.Event</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_FillMode">Arcadia_Visuals_FillMode</a></li>
-        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_KeyboardKeyAction">Arcadia_Visuals_KeyboardKeyAction</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_KeyboardKey">Arcadia_Visuals_KeyboardKey</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_KeyboardKeyAction">Arcadia_Visuals_KeyboardKeyAction</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_KeyboardKeyEvent">[MIL] Arcadia.Visuals.KeyboardKeyEvent</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_KeyboardKeyEvent_construct">[MIL] Arcadia.Visuals.KeyboardKeyEvent.construct</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_KeyboardKeyEvent_getAction">[MIL] Arcadia.Visuals.KeyboardKeyEvent.getAction</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_KeyboardKeyEvent_getKey">[MIL] Arcadia.Visuals.KeyboardKeyEvent.getKey</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_MouseButtonAction">Arcadia_Visuals_MouseButtonAction</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_MouseButtonEvent">[MIL] Arcadia.Visuals.MouseButtonEvent</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_MouseButtonEvent_construct">[MIL] Arcadia.Visuals.MouseButtonEvent.construct</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_MousePointerAction">Arcadia_Visuals_MousePointerAction</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_MousePointerEvent">[MIL] Arcadia.Visuals.MousePointerEvent</a></li>
+        <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_MousePointerEvent_construct">[MIL] Arcadia.Visuals.MousePointerEvent.construct</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_PixelFormat">Arcadia_Visuals_PixelFormat</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfComponents">Arcadia_Visuals_PixelFormat_getNumberOfComponents</a></li>
         <li><a href="@{siteAddress}/repository/Arcadia.Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfBytes">Arcadia_Visuals_PixelFormat_getNumberOfBytes</a></li>
@@ -38,7 +46,7 @@
     <div class="left-column"></div>
     <div class="center-column"></div>
     <div class="right-column"></div>
-      <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 20 April 2025.</span>
+      <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 02 May 2025.</span>
     </div>
   </footer>
   </body>

@@ -1,4 +1,4 @@
-<h3 id="value-type">Value Type</h3>
+<h3 id="Arcadia_Value">Arcadia_Value</h3>
 <p>
 <code>Arcadia_Value</code> is a tagged union of values supported by the
 runtime. It consists of a tag indicating the value stored in the
@@ -6,8 +6,8 @@ union and the union of the values. The following table lists all
 possible tags and their corresponding type.
 </p>
 <table>
-  <tr><td>Tag                       </td><td>Type                  </td></tr>
-
+  <tr><td>Tag                             </td><td>Type                        </td></tr>
+  <tr><td>Arcadia_ValueTag_Atom           </td><td>Arcadia_AtomValue           </td></tr>
   <tr><td>Arcadia_ValueTag_Boolean        </td><td>Arcadia_BooleanValue        </td></tr>
 
   <tr><td>Arcadia_ValueTag_Integer16      </td><td>Arcadia_Integer16Value      </td></tr>
@@ -22,7 +22,12 @@ possible tags and their corresponding type.
 
   <tr><td>Arcadia_ValueTag_ObjectReference</td><td>Arcadia_ObjectReferenceValue</td></tr>
 
+  <tr><td>Arcadia_ValueTag_Real32         </td><td>Arcadia_Real32Value         </td></tr>
+  <tr><td>Arcadia_ValueTag_Real64         </td><td>Arcadia_Real64Value         </td></tr>
+
   <tr><td>Arcadia_ValueTag_Size           </td><td>Arcadia_SizeValue           </td></tr>
+
+  <tr><td>Arcadia_ValueTag_Type           </td><td>Arcadia_TypeValue           </td></tr>
 
   <tr><td>Arcadia_ValueTag_Void           </td><td>Arcadia_VoidValue           </td></tr>
 </table>
@@ -38,6 +43,7 @@ void Arcadia_Value_set<my-mv>Suffix</my-mv>(Arcadia_Value* value, Arcadia_<my-mv
 <p>The following table lists the valid combinations of <my-mv>Suffix</my-mv> and <my-mv>Variable</my-mv></p>
 
 <table>
+  <tr><td>Atom           </td><td>atom           </td></tr>
   <tr><td>Boolean        </td><td>boolean        </td></tr>
 
   <tr><td>Integer16      </td><td>integer16      </td></tr>
@@ -49,10 +55,15 @@ void Arcadia_Value_set<my-mv>Suffix</my-mv>(Arcadia_Value* value, Arcadia_<my-mv
   <tr><td>Natural32      </td><td>natural32      </td></tr>
   <tr><td>Natural64      </td><td>natural64      </td></tr>
   <tr><td>Natural8       </td><td>natural8       </td></tr>
+
+  <tr><td>Real32         </td><td>reall32        </td></tr>
+  <tr><td>Real64         </td><td>real64         </td></tr>
   
   <tr><td>ObjectReference</td><td>objectReference</td></tr>
 
   <tr><td>Size           </td><td>size           </td></tr>
+
+  <tr><td>Type           </td><td>type           </td></tr>
 
   <tr><td>Void           </td><td>void           </td></tr>
 </table>
@@ -67,3 +78,72 @@ a value of the type corresponding to <my-mv>Suffix</my-mv>.</p>
 the <code>Arcadia_Value</code>. The behavior of <code>Arcadia_Value_set<my-mv>Suffix
 </my-mv></code> is undefined if the value does not store a value of  the
 type corresponding to <my-mv>Suffix</my-mv>.</p>
+
+
+<h4>hash</h4>
+<p><code>
+Arcadia_Size
+Arcadia_Value_hash
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* self
+  );
+</code></p>
+<p>Get the hash value of this <code>Arcadia_Value</code>.</p>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td>thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>self</td><td>A pointer to this <code>Arcadia_Value</code> object.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>The hash of the value of the value of this<code>Arcadia_Value</code> object.</p>
+
+<h4>isEqualTo</h4>
+<p><code>
+Arcadia_BooleanValue
+Arcadia_Value_isEqualTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* self,
+    Arcadia_Value* other
+  );
+</code></p>
+<p>Compare the value of this <code>Arcadia_Value</code> object to the value of another <code>Arcadia_Value</code> object.</p>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td>thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>self</td><td>A pointer to this <code>Arcadia_Value</code> object.</td></tr>
+  <tr><td>object</td><td>A pointer to the other <code>Arcadia_Value</code> object.</td></tr>
+</table>
+
+<h5>Return value</h5>
+<p>
+<code>Arcadia_BooleanValue_True</code> if the value of this <code>Arcadia_Value</code> object is equal to the value of the other <code>Arcadia_Value</code> object.
+<code>Arcadia_BooleanValue_False</code> otherwise.
+</p>
+
+
+<h4>isEqualTo</h4>
+<p><code>
+Arcadia_TypeValue
+Arcadia_Value_isEqualTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* self
+  );
+</code></p>
+<p>Get thet type of the value of this <code>Arcadia_Value</code> object.</p>
+
+<h5>Parameters</h5>
+<table>
+  <tr><td>thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
+  <tr><td>self</td><td>A pointer to this <code>Arcadia_Value</code> object.</td></tr>
+ </table>
+
+<h5>Return value</h5>
+<p>
+The type of the value of this <code>Arcadia_Value</code> object.
+</p>

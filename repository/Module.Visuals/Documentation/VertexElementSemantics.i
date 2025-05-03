@@ -49,10 +49,10 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSemantics_TextureUv</code>
+      <code>Arcadia_Visuals_VertexElementSemantics_AmbientUv</code>
     </div>
     <div>
-    The vertex element denotes a texture coordinate.
+    The vertex element denotes a texture coordinates for an ambient texture.
     If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32, then this the texture coordinate is in UV space.
     </div>
   </div>

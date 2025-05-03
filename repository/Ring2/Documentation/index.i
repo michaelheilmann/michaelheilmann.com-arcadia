@@ -7,7 +7,8 @@
 @{include("3.documentation.8.objects/filehandle.i")}
 @{include("3.documentation.8.objects/filepath.i")}
 @{include("3.documentation.8.objects/filesystem.i")}
-@{include("3.documentation.8.objects/list.i")}
-@{include("3.documentation.8.objects/stack.i")}
+@{include("3.documentation.8.objects/list/include.content")}
+@{include("3.documentation.8.objects/stack/include.content")}
+@{include("3.documentation.8.objects/stringbuffer/include.content")}
 @{include("3.documentation.8.objects/string.i")}
 @{include("footer.i")}

@@ -13,11 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-04-19
-
 #include "Module/Visuals/Events/Event.h"
-
-#include "R/ArgumentsValidation.h"
 
 static void
 Arcadia_Visuals_Event_constructImpl
@@ -68,7 +64,9 @@ Arcadia_Visuals_Event_constructImpl
   Arcadia_Visuals_Event* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Event_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   //
@@ -77,7 +75,7 @@ Arcadia_Visuals_Event_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  _self->timeStamp = R_Argument_getNatural64Value(thread, &argumentValues[0]);
+  _self->timestamp = Arcadia_ArgumentsValidation_getNatural64Value(thread, &argumentValues[0]);
   //
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }

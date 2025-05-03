@@ -13,13 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-02-15
-
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Implementation/Utf8ByteBufferWriter.h"
 
+#include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
-#include "R/ArgumentsValidation.h"
 
 static void
 Arcadia_Utf8ByteBufferWriter_constructImpl
@@ -95,17 +93,19 @@ Arcadia_Utf8ByteBufferWriter_constructImpl
   Arcadia_Utf8ByteBufferWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Utf8ByteBufferWriter_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void }, };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->target = (Arcadia_ByteBuffer*)R_Argument_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_ByteBuffer_getType(thread));
+  _self->target = (Arcadia_ByteBuffer*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_ByteBuffer_getType(thread));
   ((Arcadia_Utf8Writer*)_self)->writeBytes = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, void const*, Arcadia_SizeValue)) & Arcadia_Utf8ByteBufferWriter_writeBytesImpl;
   ((Arcadia_Utf8Writer*)_self)->writeCodePoints = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & Arcadia_Utf8ByteBufferWriter_writeCodePointsImpl;
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
@@ -116,7 +116,7 @@ Arcadia_Utf8ByteBufferWriter_visit
   )
 {
   if (self->target) {
-    Arcadia_Object_visit(thread, self->target);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->target);
   }
 }
 
@@ -151,7 +151,9 @@ Arcadia_Utf8ByteBufferWriter_create
     Arcadia_ByteBuffer* target
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_ObjectReference, .objectReferenceValue = (Arcadia_ObjectReferenceValue)target } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeObjectReferenceValue(target),
+  };
   Arcadia_Utf8ByteBufferWriter* self = Arcadia_allocateObject(thread, _Arcadia_Utf8ByteBufferWriter_getType(thread), 1, &argumentValues[0]);
   return self;
 }

@@ -13,12 +13,10 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-09-16
-
 #if !defined(MODULE_VISUALS_INCLUDE_H_INCLUDED)
 #define MODULE_VISUALS_INCLUDE_H_INCLUDED
 
-#include "R/Include.h"
+#include "Arcadia/Include.h"
 
 #include "Module/Visuals/Events/CanvasEvent.h"
 #include "Module/Visuals/CullMode.h"
@@ -30,16 +28,14 @@
 #include "Module/Visuals/VertexElementSemantics.h"
 #include "Module/Visuals/VertexElementSyntax.h"
 #include "Module/Visuals/WindingMode.h"
-#include "Module/Visuals/LibpngImageWriter.h"
+#include "Module/Visuals/LibPngImageWriter.h"
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  #include "Module/Visuals/Font.h"
+  #include "Module/Visuals/Windows/Application.h"
+  #include "Module/Visuals/Windows/TextureFont.h"
   #include "Module/Visuals/Windows/NativeWindowsImageWriter.h"
-  #include "Module/Visuals/Windows/NativeIcon.h"
-  #include "Module/Visuals/Windows/NativeWindow.h"
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  #include "Module/Visuals/Linux/NativeIcon.h"
-  #include "Module/Visuals/Linux/NativeWindow.h"
+  #include "Module/Visuals/Linux/Application.h"
 #else
   #error("environment not (yet) supported")
 #endif

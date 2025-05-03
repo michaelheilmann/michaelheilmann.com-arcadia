@@ -28,7 +28,7 @@
     void<br>
     Arcadia.Visuals.Event.construct<br>
     &nbsp;&nbsp;(<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia.Natural64 timeStamp<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Arcadia.Natural64 timestamp<br>
     &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -41,7 +41,7 @@
     <h1>Parameters</h1>
 
     <div>
-      <div>Arcadia.Natural64 timeStamp</div>
+      <div>Arcadia.Natural64 timestamp</div>
       <div>The timestamp of this event.</div>
     </div>
 

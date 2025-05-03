@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-10-27
-
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Natural16.h"
 
@@ -68,6 +66,15 @@ greaterThanOrEqualTo
 
 static void
 hash
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  );
+
+static void
+identical
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -145,6 +152,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .greaterThan = &greaterThan,
   .greaterThanOrEqualTo = &greaterThanOrEqualTo,
   .hash = &hash,
+  .identical = &identical,
   .lowerThan = &lowerThan,
   .lowerThanOrEqualTo = &lowerThanOrEqualTo,
   .multiply = &multiply,
@@ -316,6 +324,26 @@ hash
 {
 #define A1 &(arguments[0])
   Arcadia_Value_setSizeValue(target, (Arcadia_SizeValue)Arcadia_Value_getNatural16Value(A1));
+#undef A1
+}
+
+static void
+identical
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* target,
+    Arcadia_SizeValue numberOfArguments,
+    Arcadia_Value* arguments
+  )
+{
+#define A1 &(arguments[0])
+#define A2 &(arguments[1])
+  if (Arcadia_Value_isNatural16Value(A2)) {
+    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) == Arcadia_Value_getNatural16Value(A2));
+  } else {
+    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+  }
+#undef A2
 #undef A1
 }
 

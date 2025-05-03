@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-02-14
-
 #include <stdlib.h>
 
 #include "Arcadia/Ring2/Include.h"
@@ -33,7 +31,7 @@ listTest1
   Arcadia_List* l = Arcadia_List_create(thread);
 
   for (Arcadia_Integer32Value i = 1, n = 7; i <= n; ++i) {
-    Arcadia_List_appendInteger32Value(thread, l, i);
+    Arcadia_List_insertBackInteger32Value(thread, l, i);
     Arcadia_Tests_assertTrue(thread, i == Arcadia_List_getSize(thread, l));
   }
   Arcadia_Tests_assertTrue(thread, 7 == Arcadia_List_getSize(thread, l));

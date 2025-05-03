@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2025-02-19
-
 #if !defined(ARCADIA_RING1_INCLUDE_H_INCLUDED)
 #define ARCADIA_RING1_INCLUDE_H_INCLUDED
 
@@ -30,23 +28,11 @@
 
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 
-#include "Arcadia/Ring1/Implementation/clamp.h"
-
-#include "Arcadia/Ring1/Implementation/countLeadingZeroes.h"
-
-#include "Arcadia/Ring1/Implementation/countSignificandBits.h"
-
-#include "Arcadia/Ring1/Implementation/countTrailingZeroes.h"
-
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 
 #include "Arcadia/Ring1/Implementation/Enumeration.h"
 
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
-
-#include "Arcadia/Ring1/Implementation/quotientRemainder.h"
-
-#include "Arcadia/Ring1/Implementation/hash.h"
 
 #include "Arcadia/Ring1/Implementation/getTickCount.h"
 
@@ -57,26 +43,22 @@
 #include "Arcadia/Ring1/Implementation/Integer64.h"
 #include "Arcadia/Ring1/Implementation/Integer8.h"
 
-#include "Arcadia/Ring1/Implementation/isPowerOfTwo.h"
-
 #include "Arcadia/Ring1/Implementation/Utf8.h"
 
 #include "Arcadia/Ring1/Implementation/makeBitmask.h"
-
-#include "Arcadia/Ring1/Implementation/maximum.h"
-#include "Arcadia/Ring1/Implementation/minimum.h"
 
 #include "Arcadia/Ring1/Implementation/Natural16.h"
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 
-#include "Arcadia/Ring1/Implementation/nextPowerOfTwoGreaterThan.h"
-#include "Arcadia/Ring1/Implementation/nextPowerOfTwoGreaterThanOrEqualTo.h"
-
 #include "Arcadia/Ring1/Implementation/NoReturn.h"
 
+#include "Arcadia/Ring1/Implementation/NoWarnUnused.h"
+
 #include "Arcadia/Ring1/Implementation/NumberLiteral.h"
+
+#include "Arcadia/Ring1/Implementation/Numerics/Include.h"
 
 #include "Arcadia/Ring1/Implementation/Object.h"
 

@@ -42,14 +42,23 @@ which is either x64 or x86 for Windows. You can explicitly select one of these t
 - To generate the build files for the target architecture x86, add the parameter `-A Win32` to the cmake command.
 - To generate the build files for the target architecture x64, add the parameter `-A x64` to the cmake command.
 
-#### Adding OpenGL support
-*Important*: Ensure that the dependencies are install by executing the script [https://github.com/michaelheilmann/michaelheilmann.com/blob/main/install-dependencies.ps1].
+#### Further Options
 
-By default, the cmake command to generate the build files will disable OpenGL support.
-To enable support OpenGL support, add the parameter `-D"Arcadia.Visuals.OpenGl.Enabled"=TRUE` to the cmake command.
+- `Arcadia.Arms.Statistics.Enabled`
+`TRUE` enables statistics for *Arcadia ARMS*, `FALSE` disables them. Default is `FALSE`.
 
-#### Adding OpenAL support
-*Important*: Ensure that the dependencies are install by executing the script [https://github.com/michaelheilmann/michaelheilmann.com/blob/main/install-dependencies.ps1].~~
-
-By default, the cmake command to generate the build files will disable OpenAL support.~~
-To enable support OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=TRUE` to the cmake command.
+- `Arcadia.Visuals.OpenGl.Enabled`
+`TRUE` enables OpenGL support in *Arcadia Visuals*, `FALSE` disables it. Default is `FALSE`.
+\
+To enable OpenGL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=TRUE` to the cmake command.
+To disable OpenGL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=FALSE` to the cmake command.
+\
+*Important*: Ensure that the dependencies are installed by executing the script [/install-dependencies.ps1](/install-dependencies.ps1).
+                                                                                                             
+- `Arcadia.Audials.OpenAl.Enabled`
+`TRUE` enables OpenAL support in *Arcadia Audials*, `FALSE` disables it. Default is `FALSE`.
+\
+To enable OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=TRUE` to the cmake command.
+To disable OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=FALSE` to the cmake command.
+\
+*Important*: Ensure that the dependencies are installed by executing the script [/install-dependencies.ps1](/install-dependencies.ps1).

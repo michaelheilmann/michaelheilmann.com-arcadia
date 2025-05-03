@@ -19,7 +19,7 @@ install:
 # Generate solution and project files.
 before_build:
     - ps: |
-        cmake CMakeLists.txt
+        cmake -D"Arcadia.Visuals.OpenGl.Enabled"=TRUE -D"Arcadia.Audials.OpenAl.Enabled"=TRUE CMakeLists.txt
         
         ${env:RELEASE_NAME}="michaelheilmann.com-linux-$(${env:APPVEYOR_REPO_BRANCH})-v$(${env:APPVEYOR_BUILD_VERSION}.ToLower())"
         

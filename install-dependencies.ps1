@@ -1,5 +1,5 @@
 # The source URL prefix.
-$urlPrefix="https://github.com/michaelheilmann/michaelheilmann.com-dependencies/releases/download/michaelheilmann.com-dependencies-v1.0.29"
+$urlPrefix="https://github.com/michaelheilmann/michaelheilmann.com-dependencies/releases/download/michaelheilmann.com-dependencies-v1.0.31"
 
 # The target file prefix.
 $target = "C:/arcadia-dependencies"

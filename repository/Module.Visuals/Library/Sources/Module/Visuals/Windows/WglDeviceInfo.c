@@ -13,8 +13,6 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-// Last modified: 2024-11-11
-
 #include "Module/Visuals/Windows/WglDeviceInfo.h"
 
 // Pass the names (from left to right) to wglGetProcAddress.
@@ -169,7 +167,9 @@ Arcadia_Visuals_Windows_WglDeviceInfo_constructImpl
   Arcadia_Visuals_Windows_WglDeviceInfo* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_WglDeviceInfo_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void} };
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->window = NULL;
@@ -179,7 +179,7 @@ Arcadia_Visuals_Windows_WglDeviceInfo_constructImpl
   _self->_wglGetExtensionsString = NULL;
   _self->_wglGetPixelFormatAttribfv = NULL;
   _self->_wglGetPixelFormatAttribiv = NULL;
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 Arcadia_Visuals_Windows_WglDeviceInfo*
@@ -188,7 +188,9 @@ Arcadia_Visuals_Windows_WglDeviceInfo_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { {.tag = Arcadia_ValueTag_Void, .voidValue = Arcadia_VoidValue_Void } };
+  Arcadia_Value argumentValues[] = {
+    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+  };
   Arcadia_Visuals_Windows_WglDeviceInfo* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_WglDeviceInfo_getType(thread), 0, &argumentValues[0]);
   return self;
 }
@@ -319,73 +321,168 @@ Arcadia_Visuals_Windows_WglDeviceInfo_close
   self->window = NULL;
 }
 
-Arcadia_BooleanValue
-Arcadia_Visuals_Windows_WglDeviceInfo_isVersionSupported
+static int toInteger(Arcadia_Thread* thread, Arcadia_String* stringValue) {
+  Arcadia_Integer64Value integer64Value = Arcadia_String_toInteger64(thread, stringValue);
+  if (integer64Value < INT_MIN || integer64Value > INT_MAX) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  return (int)integer64Value;
+}
+
+static Arcadia_String* integerToString(Arcadia_Thread* thread, Arcadia_Integer32Value integer32Value) {
+  Arcadia_ImmutableUtf8String* immutableUtf8StringValue = Arcadia_ImmutableUtf8String_createFromInteger32(thread, integer32Value);
+  Arcadia_Value value = Arcadia_Value_makeImmutableUtf8StringValue(immutableUtf8StringValue);
+  return Arcadia_String_create(thread, value);
+}
+
+static Arcadia_Integer32Value getIntegerAttribute(Arcadia_Thread* thread, Arcadia_Visuals_Windows_WglDeviceInfo* self, Arcadia_Visuals_Windows_TemporaryWindow* targetWindow, int pixelFormatIndex, int attributeKey) {
+  int attributeValue;
+  if (!self->_wglGetPixelFormatAttribiv(targetWindow->deviceContextHandle, pixelFormatIndex, 0, 1, &attributeKey, &attributeValue)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  if (attributeValue < Arcadia_Integer32Value_Minimum || attributeValue > Arcadia_Integer32Value_Maximum) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  return attributeValue;
+}
+
+static void add(Arcadia_Thread* thread, Arcadia_List* configurations, Arcadia_Visuals_Configuration* configuration) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, configurations); i < n; ++i) {
+    Arcadia_Visuals_Configuration* element = Arcadia_List_getObjectReferenceValueAt(thread, configurations, i);
+    Arcadia_Value a, b;
+    a = Arcadia_Value_makeObjectReferenceValue(element->opengl.version.major);
+    b = Arcadia_Value_makeObjectReferenceValue(configuration->opengl.version.major);
+    if (!Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      continue;
+    }
+    a = Arcadia_Value_makeObjectReferenceValue(element->opengl.version.minor);
+    b = Arcadia_Value_makeObjectReferenceValue(configuration->opengl.version.minor);
+    if (!Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      continue;
+    }
+    a = Arcadia_Value_makeObjectReferenceValue(element->colorBuffer.redBits);
+    b = Arcadia_Value_makeObjectReferenceValue(configuration->colorBuffer.redBits);
+    if (!Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      continue;
+    }
+    a = Arcadia_Value_makeObjectReferenceValue(element->colorBuffer.greenBits);
+    b = Arcadia_Value_makeObjectReferenceValue(configuration->colorBuffer.greenBits);
+    if (!Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      continue;
+    }
+    a = Arcadia_Value_makeObjectReferenceValue(element->colorBuffer.blueBits);
+    b = Arcadia_Value_makeObjectReferenceValue(configuration->colorBuffer.blueBits);
+    if (!Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      continue;
+    }
+    a = Arcadia_Value_makeObjectReferenceValue(element->colorBuffer.alphaBits);
+    b = Arcadia_Value_makeObjectReferenceValue(configuration->colorBuffer.alphaBits);
+    if (!Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      continue;
+    }
+    a = Arcadia_Value_makeObjectReferenceValue(element->depthBuffer.depthBits);
+    b = Arcadia_Value_makeObjectReferenceValue(configuration->depthBuffer.depthBits);
+    if (!Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      continue;
+    }
+    // Already in the list.
+    return;
+  }
+  // Not in the list yet. Add.
+  Arcadia_List_insertBackObjectReferenceValue(thread, configurations, (Arcadia_ObjectReferenceValue)configuration);
+}
+
+Arcadia_List*
+Arcadia_Visuals_Windows_WglDeviceInfo_getConfigurations
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_WglDeviceInfo* self,
-    Arcadia_Natural8Value majorVersion,
-    Arcadia_Natural8Value minorVersion
+    Arcadia_Visuals_Windows_WglDeviceInfo* self
   )
 {
-  Arcadia_Visuals_Windows_TemporaryWindow* temporaryWindow = Arcadia_Visuals_Windows_TemporaryWindow_create(thread);
-  Arcadia_Visuals_Windows_TemporaryWindow_open(thread, temporaryWindow);
-  HGLRC temporaryGlResourceContext = NULL;
-  static int pixelFormatAttribs[] = {
-    0x2003, // WGL_ACCELERATION_ARB
-    0x2027, // WGL_FULL_ACCELERATION_ARB
-    0x201b, 8, // WGL_ALPHA_BITS_ARB
-    0x2022, 24, // WGL_DEPTH_BITS_ARB
-    0x2001, 1, // WGL_DRAW_TO_WINDOW_ARB
-    0x2015, 8, // WGL_RED_BITS_ARB
-    0x2017, 8, // WGL_GREEN_BITS_ARB
-    0x2019, 8, // WGL_BLUE_BITS_ARB
-    0x2013, 0x202B, // WGL_PIXEL_TYPE_ARB,  WGL_TYPE_RGBA_ARB
-    0x2010, 1, // WGL_SUPPORT_OPENGL_ARB
-    0x2014,	32, // WGL_COLOR_BITS_ARB
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-  };
-  PIXELFORMATDESCRIPTOR pfd = (PIXELFORMATDESCRIPTOR){ sizeof(pfd),
-                                                        1,
-                                                        PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER, PFD_TYPE_RGBA, 32, 8, PFD_MAIN_PLANE,
-                                                        24, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-  int pixelFormat;
-  UINT numFormats;
-  self->_wglChoosePixelFormat(temporaryWindow->deviceContextHandle, &pixelFormatAttribs[0], NULL, 1, &pixelFormat, &numFormats);
-  if (!numFormats) {
-    //fprintf(stderr, "%s:%d: failed to select pixel format\n", __FILE__, __LINE__);
-    Arcadia_Visuals_Windows_TemporaryWindow_close(thread, temporaryWindow);
-    return Arcadia_BooleanValue_False;
+  Arcadia_List* configurations = Arcadia_List_create(thread);
+  Arcadia_Visuals_Windows_TemporaryWindow* window = Arcadia_Visuals_Windows_TemporaryWindow_create(thread);
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    // (1) iterate over the versions.
+    for (Arcadia_Integer32Value majorVersion = 1; majorVersion < 5; majorVersion++) {
+      for (Arcadia_Integer32Value minorVersion = 0; minorVersion < 9; minorVersion++) {
+        Arcadia_Visuals_Windows_TemporaryWindow_close(thread, window);
+        Arcadia_Visuals_Windows_TemporaryWindow_open(thread, window);
+        // (1.1) Get the number of pixel formats.
+        Arcadia_Integer32Value numberOfFormats = getIntegerAttribute(thread, self, window, 1, WGL_NUMBER_PIXEL_FORMATS_ARB);
+        // (1.2) Iterate over the formats.
+        for (Arcadia_Integer32Value i = 1, n = numberOfFormats; i < n; ++i) {
+          Arcadia_Integer32Value supportOpenGl = getIntegerAttribute(thread, self, window, i, WGL_SUPPORT_OPENGL_ARB);
+          if (supportOpenGl != 1) {
+            continue;
+          }
+          Arcadia_Integer32Value pixelType = getIntegerAttribute(thread, self, window, i, WGL_PIXEL_TYPE_ARB);
+          if (pixelType != WGL_TYPE_RGBA_ARB) {
+            continue;
+          }
+          Arcadia_Integer32Value redBits = getIntegerAttribute(thread, self, window, i, WGL_RED_BITS_ARB);
+          if (redBits < 8) {
+            continue;
+          }
+          Arcadia_Integer32Value greenBits = getIntegerAttribute(thread, self, window, i, WGL_GREEN_BITS_ARB);
+          if (greenBits < 8) {
+            continue;
+          }
+          Arcadia_Integer32Value blueBits = getIntegerAttribute(thread, self, window, i, WGL_BLUE_BITS_ARB);
+          if (blueBits < 8) {
+            continue;
+          }
+          Arcadia_Integer32Value alphaBits = getIntegerAttribute(thread, self, window, i, WGL_ALPHA_BITS_ARB);
+          if (alphaBits < 8) {
+            continue;
+          }
+          Arcadia_Integer32Value depthBits = getIntegerAttribute(thread, self, window, i, WGL_DEPTH_BITS_ARB);
+          if (depthBits < 8 || depthBits > Arcadia_Integer32Value_Maximum) {
+            continue;
+          }
+          PIXELFORMATDESCRIPTOR pixelFormatDescriptor;
+          if (!DescribePixelFormat(window->deviceContextHandle, i, sizeof(pixelFormatDescriptor), &pixelFormatDescriptor)) {
+            continue;
+          }
+          if (!SetPixelFormat(window->deviceContextHandle, i, &pixelFormatDescriptor)) {
+            continue;
+          }
+          int contextAttributes[] = {
+            WGL_CONTEXT_MAJOR_VERSION_ARB, majorVersion,
+            WGL_CONTEXT_MINOR_VERSION_ARB, minorVersion,
+            WGL_CONTEXT_FLAGS_ARB, 0,
+            0
+          };
+          HGLRC glrc = self->_wglCreateContextAttribs(window->deviceContextHandle, NULL, &contextAttributes[0]);
+          if (!glrc) {
+            continue;
+          }
+          wglDeleteContext(glrc);
+          glrc = NULL; 
+
+          Arcadia_Visuals_Configuration* configuration = Arcadia_Visuals_Configuration_create(thread);
+          configuration->opengl.version.major = integerToString(thread, majorVersion);
+          configuration->opengl.version.minor = integerToString(thread, minorVersion);
+          configuration->colorBuffer.redBits = integerToString(thread, redBits);
+          configuration->colorBuffer.greenBits = integerToString(thread, greenBits);
+          configuration->colorBuffer.blueBits = integerToString(thread, blueBits);
+          configuration->colorBuffer.alphaBits = integerToString(thread, alphaBits);
+          configuration->depthBuffer.depthBits = integerToString(thread, depthBits);
+          add(thread, configurations, configuration);
+        }
+      }
+    }
+    Arcadia_Visuals_Windows_TemporaryWindow_close(thread, window);
+    Arcadia_Thread_popJumpTarget(thread);
+    return configurations;
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Visuals_Windows_TemporaryWindow_open(thread, window);
+    Arcadia_Thread_jump(thread);
   }
-  if (!DescribePixelFormat(temporaryWindow->deviceContextHandle, pixelFormat, sizeof(pfd), &pfd)) {
-    //fprintf(stderr, "%s:%d: failed to describe pixel format\n", __FILE__, __LINE__);
-    Arcadia_Visuals_Windows_TemporaryWindow_close(thread, temporaryWindow);
-    return Arcadia_BooleanValue_False;
-  }
-  if (!SetPixelFormat(temporaryWindow->deviceContextHandle, pixelFormat, &pfd)) {
-    //fprintf(stderr, "%s:%d: failed to set pixel format\n", __FILE__, __LINE__);
-    Arcadia_Visuals_Windows_TemporaryWindow_close(thread, temporaryWindow);
-    return Arcadia_BooleanValue_False;
-  }
-  if (majorVersion > INT_MAX || minorVersion > INT_MAX) {
-    Arcadia_Visuals_Windows_TemporaryWindow_close(thread, temporaryWindow);
-    return Arcadia_BooleanValue_False;
-  }
-  const int contextAttribs[] = {
-    WGL_CONTEXT_MAJOR_VERSION_ARB, majorVersion,
-    WGL_CONTEXT_MINOR_VERSION_ARB, minorVersion,
-    WGL_CONTEXT_FLAGS_ARB, 0,
-    0
-  };
-  temporaryGlResourceContext = self->_wglCreateContextAttribs(temporaryWindow->deviceContextHandle, NULL, &contextAttribs[0]);
-  if (!temporaryGlResourceContext) {
-    //fprintf(stderr, "%s:%d: failed to create wgl context\n", __FILE__, __LINE__);
-    Arcadia_Visuals_Windows_TemporaryWindow_close(thread, temporaryWindow);
-    return Arcadia_BooleanValue_False;
-  }
-  wglDeleteContext(temporaryGlResourceContext);
-  temporaryGlResourceContext = NULL;
-  Arcadia_Visuals_Windows_TemporaryWindow_close(thread, temporaryWindow);
-  temporaryWindow = NULL;
-  return Arcadia_BooleanValue_True;
 }
+
