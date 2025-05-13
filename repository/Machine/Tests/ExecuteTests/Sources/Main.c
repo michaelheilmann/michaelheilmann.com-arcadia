@@ -27,7 +27,7 @@ execute1
   R_Interpreter_ProcessState* interpreterProcess = R_Interpreter_ProcessState_get();
   R_Interpreter_Code* code = R_Interpreter_Code_create(thread);
   uint8_t codeBytes[] = {
-    R_Machine_Code_Opcode_Idle,  
+    R_Machine_Code_Opcode_Idle,
   };
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);

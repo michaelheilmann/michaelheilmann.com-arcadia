@@ -23,8 +23,6 @@
 
 #include "Arcadia/Ring1/Implementation/Size.h"
 
-typedef struct Arcadia_Thread Arcadia_Thread;
-
 /// @brief Create a bitmask.
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param i The index of the first 1 bit.

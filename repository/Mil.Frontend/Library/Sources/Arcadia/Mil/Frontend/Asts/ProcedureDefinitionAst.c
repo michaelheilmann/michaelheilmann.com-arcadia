@@ -120,7 +120,7 @@ Arcadia_Mil_ProcedureDefinitionAst_create
     Arcadia_List* procedureBody
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeBooleanValue(entry),
     Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     Arcadia_Value_makeObjectReferenceValue(procedureName),

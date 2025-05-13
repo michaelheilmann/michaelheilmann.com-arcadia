@@ -17,6 +17,7 @@
 #include "Arcadia/Ring1/Implementation/getNumberOfCores.h"
 
 #include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Thread.h"
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   // SYSTEM_INFO, GetSystemInfo

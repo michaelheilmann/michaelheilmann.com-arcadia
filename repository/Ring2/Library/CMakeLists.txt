@@ -31,8 +31,7 @@ set(MyLibraryName ${MyProjectName}.Ring2)
 if (NOT TARGET ${MyLibraryName})
   BeginProduct(${MyLibraryName} library)
 
-  FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
-  FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Ring1/Library" "path to the Ring1 library directory")
+  FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Ring1/Library" "path to the Ring 1 library directory")
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring2/Implementation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Ring2/Implementation/Configure.h @ONLY)
   list(APPEND ${MyLibraryName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring2/Implementation/Configure.h.i)
@@ -93,6 +92,7 @@ if (NOT TARGET ${MyLibraryName})
   endif()
 
   EndProduct(${MyLibraryName})
-  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Arcadia.Ring2")
+
+  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Ring2")
 
 endif()

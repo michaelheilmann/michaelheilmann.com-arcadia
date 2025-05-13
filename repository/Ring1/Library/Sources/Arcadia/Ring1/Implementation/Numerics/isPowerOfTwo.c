@@ -119,5 +119,5 @@ Arcadia_isPowerOfTwoSizeValue
   return Arcadia_isPowerOfTwoNatural32Value(thread, (Arcadia_Natural32Value)x);
 #else
   #error("instruction set architecture not (yet) supported")
-#endif 
+#endif
 }

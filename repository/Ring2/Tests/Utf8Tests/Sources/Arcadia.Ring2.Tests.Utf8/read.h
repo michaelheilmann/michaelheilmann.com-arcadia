@@ -24,7 +24,7 @@
 /// This test then performs for each x[i] the followin test:
 /// - store x[i].a in a Byte buffer
 /// - decode the Byte buffer into a sequence of Unicode code points using an UTF-8 Byte buffer reader
-/// - compare the decoded sequence to b[i] 
+/// - compare the decoded sequence to b[i]
 /// - success if they are equal
 /// - failure otherwise
 void

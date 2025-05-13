@@ -32,7 +32,7 @@ Arcadia_BigInteger_multiply3
   // Determine which operand has the smaller length.
   Arcadia_BigInteger* large = a->numberOfLimps < b->numberOfLimps ? b : a;
   Arcadia_BigInteger* small = a->numberOfLimps < b->numberOfLimps ? a : b;
-    
+
   Arcadia_SizeValue largeLength = large->numberOfLimps;
   Arcadia_SizeValue smallLength = small->numberOfLimps;
   Arcadia_SizeValue temporaryLength = largeLength + smallLength; // TODO: Use safeadd
@@ -46,7 +46,7 @@ Arcadia_BigInteger_multiply3
   result->numberOfLimps = temporaryLength;
 
   Arcadia_SizeValue smallIndex = 0, resultStartIndex = 0;
-    
+
   // Sum over the blocks that exists in both operands.
   while (smallIndex < smallLength) {
     if (small->limps[smallIndex]) {

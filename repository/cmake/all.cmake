@@ -15,6 +15,7 @@
 
 include(${CMAKE_CURRENT_LIST_DIR}/configure_warnings_and_errors.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_compiler.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/detect_byte_order.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_instruction_set_architecture.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_operating_system.cmake)
 
@@ -58,6 +59,7 @@ macro(BeginProduct target type)
   set(${target}.Enabled TRUE)
   DetectCompilerC(${target})
   DetectCompilerMasm(${target})
+  DetectByteOrder(${target})
   DetectOperatingSystem(${target})
   DetectInstructionSetArchitecture(${target})
 
@@ -170,3 +172,34 @@ macro(CopyProductAssets target folder sourceDirectory targetDirectory)
  set_target_properties(${target} PROPERTIES FOLDER ${folder})
 
 endmacro()
+
+# sourceRoot Source directory root (absolute).
+# targetRoot Target directory root (absolute).
+# sourceFiles List of documentation files (absolute).
+function(MyBuildDocs projectName targetName sourceRoot targetRoot sourceFiles)
+  set(_targetFiles "")
+
+  foreach (_sourceFile ${sourceFiles})
+
+    # Compute target file from source file.
+    file(RELATIVE_PATH _targetFile ${sourceRoot} ${_sourceFile})
+    set(_targetFile ${targetRoot}/${_targetFile})
+    cmake_path(GET _targetFile PARENT_PATH _path)
+    cmake_path(GET _targetFile STEM LAST_ONLY _fileNameWithoutExtension)
+    set(_targetFile ${_path}/${_fileNameWithoutExtension})
+    message(STATUS " - - ${_sourceFile} -> ${_targetFile}")
+    list(APPEND _targetFiles "${_targetFile}")
+
+    # Add command to build the target file.
+    add_custom_command(OUTPUT ${_targetFile}
+                       COMMAND $<TARGET_FILE:${projectName}.Tools.TemplateEngine> ${_sourceFile} ${_targetFile}
+                       WORKING_DIRECTORY ${sourceRoot}
+                       COMMENT "${_sourceFile} => ${_targetFile}"
+                       DEPENDS ${projectName}.Tools.TemplateEngine ${_sourceFile})
+
+  endforeach()
+
+  # Make target.
+  add_custom_target(${targetName} ALL DEPENDS ${_targetFiles})
+
+endfunction()

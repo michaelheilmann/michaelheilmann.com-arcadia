@@ -25,7 +25,7 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the Arcadia ARMS library directory")
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
 
 # Create an executable.
 BeginProduct(${MyProjectName}.Arms.Demo1 executable)
@@ -35,4 +35,4 @@ list(APPEND ${MyProjectName}.Arms.Demo1.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/
 list(APPEND ${MyProjectName}.Arms.Demo1.Libraries ${MyProjectName}.Arms)
 
 EndProduct(${MyProjectName}.Arms.Demo1)
-set_target_properties(${MyProjectName}.Arms.Demo1 PROPERTIES FOLDER "Arcadia.Arms")
+set_target_properties(${MyProjectName}.Arms.Demo1 PROPERTIES FOLDER "Arms")

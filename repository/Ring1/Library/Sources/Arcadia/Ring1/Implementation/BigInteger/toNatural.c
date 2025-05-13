@@ -58,7 +58,7 @@ Arcadia_BigInteger_toNatural64
     v <<= 32;
     v += ((Arcadia_Natural64Value)self->limps[i - 1]);
   }
-           
+
   if (self->sign == -1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);

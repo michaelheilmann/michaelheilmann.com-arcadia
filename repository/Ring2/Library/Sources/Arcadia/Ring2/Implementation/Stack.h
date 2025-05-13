@@ -31,14 +31,14 @@ struct Arcadia_Stack {
   Arcadia_SizeValue capacity;
 };
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_create
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_create
 Arcadia_Stack*
 Arcadia_Stack_create
   (
     Arcadia_Thread* thread
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_clear
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_clear
 void
 Arcadia_Stack_clear
   (
@@ -46,7 +46,7 @@ Arcadia_Stack_clear
     Arcadia_Stack* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_getSize
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_getSize
 Arcadia_SizeValue
 Arcadia_Stack_getSize
   (
@@ -54,7 +54,7 @@ Arcadia_Stack_getSize
     Arcadia_Stack* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_push
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_push
 void
 Arcadia_Stack_push
   (
@@ -63,7 +63,7 @@ Arcadia_Stack_push
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_pop
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_pop
 void
 Arcadia_Stack_pop
   (
@@ -71,7 +71,7 @@ Arcadia_Stack_pop
     Arcadia_Stack* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_peek
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_peek
 Arcadia_Value
 Arcadia_Stack_peek
   (
@@ -79,7 +79,7 @@ Arcadia_Stack_peek
     Arcadia_Stack* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Stack_isEmpty
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_isEmpty
 static inline Arcadia_BooleanValue
 Arcadia_Stack_isEmpty
   (

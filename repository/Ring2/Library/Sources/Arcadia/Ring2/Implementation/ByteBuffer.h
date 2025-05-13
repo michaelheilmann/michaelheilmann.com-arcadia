@@ -31,14 +31,14 @@ struct Arcadia_ByteBuffer {
   Arcadia_SizeValue cp;
 };
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_create
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_create
 Arcadia_ByteBuffer*
 Arcadia_ByteBuffer_create
   (
     Arcadia_Thread* thread
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_endsWith_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_endsWith_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_endsWith_pn
   (
@@ -48,7 +48,7 @@ Arcadia_ByteBuffer_endsWith_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_startsWith_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_startsWith_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_startsWith_pn
   (
@@ -58,7 +58,7 @@ Arcadia_ByteBuffer_startsWith_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_append_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_append_pn
 void
 Arcadia_ByteBuffer_append_pn
   (
@@ -68,7 +68,7 @@ Arcadia_ByteBuffer_append_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_prepend_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_prepend_pn
 void
 Arcadia_ByteBuffer_prepend_pn
   (
@@ -78,7 +78,7 @@ Arcadia_ByteBuffer_prepend_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_insert_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_insert_pn
 void
 Arcadia_ByteBuffer_insert_pn
   (
@@ -89,7 +89,7 @@ Arcadia_ByteBuffer_insert_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_isEqualTo
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_isEqualTo
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo
   (
@@ -98,7 +98,7 @@ Arcadia_ByteBuffer_isEqualTo
     Arcadia_ByteBuffer const* other
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_isEqualTo_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_isEqualTo_pn
 Arcadia_BooleanValue
 Arcadia_ByteBuffer_isEqualTo_pn
   (
@@ -108,7 +108,7 @@ Arcadia_ByteBuffer_isEqualTo_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_Bytebuffer_clear
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Bytebuffer_clear
 void
 Arcadia_ByteBuffer_clear
   (
@@ -116,7 +116,7 @@ Arcadia_ByteBuffer_clear
     Arcadia_ByteBuffer* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_getSize
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_getSize
 Arcadia_SizeValue
 Arcadia_ByteBuffer_getSize
   (
@@ -124,7 +124,7 @@ Arcadia_ByteBuffer_getSize
     Arcadia_ByteBuffer const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_getNumberOfBytes
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_getNumberOfBytes
 Arcadia_SizeValue
 Arcadia_ByteBuffer_getNumberOfBytes
   (
@@ -132,7 +132,7 @@ Arcadia_ByteBuffer_getNumberOfBytes
     Arcadia_ByteBuffer const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_getBytes
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_getBytes
 Arcadia_Natural8Value const*
 Arcadia_ByteBuffer_getBytes
   (
@@ -140,7 +140,7 @@ Arcadia_ByteBuffer_getBytes
     Arcadia_ByteBuffer const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_getAt
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_getAt
 Arcadia_Natural8Value
 Arcadia_ByteBuffer_getAt
   (
@@ -149,7 +149,7 @@ Arcadia_ByteBuffer_getAt
     Arcadia_SizeValue index
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_ByteBuffer_swap
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_swap
 static inline void
 Arcadia_ByteBuffer_swap
   (

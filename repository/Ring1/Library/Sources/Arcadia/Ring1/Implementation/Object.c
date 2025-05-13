@@ -420,7 +420,7 @@ Arcadia_Object_isEqualTo
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
   Arcadia_Value resultValue;
-  Arcadia_Value args[2] = { 
+  Arcadia_Value args[2] = {
     Arcadia_Value_makeObjectReferenceValue(self),
     *other
   };

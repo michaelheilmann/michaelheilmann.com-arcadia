@@ -98,7 +98,7 @@ typedef struct Arcadia_Value {
 
     Define(Arcadia, ImmutableByteArray, immutableByteArray)
     Define(Arcadia, ImmutableUtf8String, immutableUtf8String)
-    
+
     Define(Arcadia, Integer16, integer16)
     Define(Arcadia, Integer32, integer32)
     Define(Arcadia, Integer64, integer64)
@@ -117,7 +117,7 @@ typedef struct Arcadia_Value {
     Define(Arcadia, Size, size)
 
     Define(Arcadia, Type, type)
-    
+
     Define(Arcadia, Void, void)
 
   #undef Define

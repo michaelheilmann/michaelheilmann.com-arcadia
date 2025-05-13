@@ -20,6 +20,7 @@
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include "Arcadia/Ring1/Implementation/Atoms.private.h"
+#include "Arcadia/Ring1/Implementation/Thread.private.h"
 #include "Arcadia/Ring1/Implementation/Types.private.h"
 #include <stdbool.h>
 #include <string.h>
@@ -96,18 +97,18 @@ startupArms
   (
   )
 {
-  Arms_Status status = Arms_startup();
+  Arcadia_Arms_Status status = Arms_startup();
   switch (status) {
-    case Arms_Status_Success: {
+    case Arcadia_Arms_Status_Success: {
       return Arcadia_Status_Success;
     } break;
-    case Arms_Status_AllocationFailed: {
+    case Arcadia_Arms_Status_AllocationFailed: {
       return Arcadia_Status_AllocationFailed;
     } break;
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_TypeExists:
-    case Arms_Status_TypeNotExists:
+    case Arcadia_Arms_Status_OperationInvalid:
+    case Arcadia_Arms_Status_ArgumentValueInvalid:
+    case Arcadia_Arms_Status_TypeExists:
+    case Arcadia_Arms_Status_TypeNotExists:
     default: {
       // This should not happen.
       // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
@@ -122,18 +123,18 @@ shutdownArms
   (
   )
 {
-  Arms_Status status = Arms_shutdown();
+  Arcadia_Arms_Status status = Arms_shutdown();
   switch (status) {
-    case Arms_Status_Success: {
+    case Arcadia_Arms_Status_Success: {
       return Arcadia_Status_Success;
     } break;
-    case Arms_Status_AllocationFailed: {
+    case Arcadia_Arms_Status_AllocationFailed: {
       return Arcadia_Status_AllocationFailed;
     } break;
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_TypeExists:
-    case Arms_Status_TypeNotExists:
+    case Arcadia_Arms_Status_OperationInvalid:
+    case Arcadia_Arms_Status_ArgumentValueInvalid:
+    case Arcadia_Arms_Status_TypeExists:
+    case Arcadia_Arms_Status_TypeNotExists:
     default: {
       // This should not happen.
       // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
@@ -167,242 +168,6 @@ static inline ReferenceCount ReferenceCount_increment(ReferenceCount* referenceC
 static inline ReferenceCount ReferenceCount_decrement(ReferenceCount* referenceCount) {
   return --(*referenceCount);
 }
-
-struct Arcadia_Thread {
-  Arcadia_Status status;
-  Arcadia_JumpTarget* jumpTarget;
-  struct {
-    Arcadia_Value* elements;
-    Arcadia_SizeValue size;
-    Arcadia_SizeValue capacity;
-  } stack;
-  // Weak reference to the process object which owns this thread object.
-  // When the thread is constructed, this is NULL.
-  // The constructing process assigns itself to this variable after the thread is constructed.
-  Arcadia_Process* process1;
-};
-
-/*@undefined thread does not point to an uninitialized Arcadia_Thread object*/
-static void
-Arcadia_Thread_initializeValueStack
-  (
-    Arcadia_Thread* thread
-  );
-
-/*@undefined thread does not point to an uninitialized Arcadia_Thread object*/
-static void
-Arcadia_Thread_uninitializeValueStack
-  (
-    Arcadia_Thread* thread
-  );
-
-/*@undefined thread does not point to an uninitialized Arcadia_Thread object*/
-static void
-Arcadia_Thread_initialize
-  (
-    Arcadia_Thread* thread
-  );
-
-/*@undefined thread does not point to an initialized Arcadia_Thread object*/
-static void
-Arcadia_Thread_uninitialize
-  (
-    Arcadia_Thread* thread
-  );
-
-/*@undefined thread does not point to an initialized Arcadia_Thread object*/
-static void
-Arcadia_Thread_increaseValueStackCapacity
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue additionalCapacity
-  );
-
-static void
-Arcadia_Thread_ensureValueStackFreeCapacity
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue requiredFreeCapacity
-  );
-
-static void
-Arcadia_Thread_initializeValueStack
-  (
-    Arcadia_Thread* thread
-  )
-{ 
-  if (Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), &thread->stack.elements, sizeof(Arcadia_Value) * 8)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  for (Arcadia_SizeValue i = 0; i < 8; ++i) {
-    thread->stack.elements[i] = Arcadia_Value_Initializer();
-  }
-  thread->stack.size = 0;
-  thread->stack.capacity = 8;
-}
-
-static void
-Arcadia_Thread_uninitializeValueStack
-  (
-    Arcadia_Thread* thread
-  )
-{
-  Arms_MemoryManager_deallocate(Arms_getDefaultMemoryManager(), thread->stack.elements);
-  thread->stack.elements = NULL;
-}
-
-static void
-Arcadia_Thread_initialize
-  (
-    Arcadia_Thread* thread
-  )
-{
-  thread->process1 = NULL;
-  thread->status = Arcadia_Status_Success;
-  thread->jumpTarget = NULL;
-  Arcadia_Thread_initializeValueStack(thread);
-}
-
-static void
-Arcadia_Thread_uninitialize
-  (
-    Arcadia_Thread* thread
-  )
-{
-  Arcadia_Thread_uninitializeValueStack(thread);
-  thread->jumpTarget = NULL;
-  thread->status = Arcadia_Status_Success;
-  thread->process1 = NULL;
-}
-
-static void
-Arcadia_Thread_increaseValueStackCapacity
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue additionalCapacity
-  )  
-{
-  static const Arcadia_SizeValue maximumCapacity = Arcadia_SizeValue_Maximum / sizeof(Arcadia_Value);
-  static const Arcadia_SizeValue desiredAdditionalCapacity = 64;
-  Arcadia_SizeValue oldCapacity = thread->stack.capacity;
-  if (maximumCapacity - oldCapacity < additionalCapacity) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue maximumAdditionalCapacity = maximumCapacity - oldCapacity;
-  // We want to grow in steps of desiredAdditionalCapacity.
-  if (additionalCapacity < desiredAdditionalCapacity && maximumAdditionalCapacity >= desiredAdditionalCapacity) {
-    additionalCapacity = desiredAdditionalCapacity;
-  }
-
-  Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-  if (Arms_MemoryManager_reallocate(Arms_getDefaultMemoryManager(), &thread->stack.elements, newCapacity * sizeof(Arcadia_Value))) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  for (Arcadia_SizeValue i = oldCapacity; i < newCapacity; ++i) {
-    thread->stack.elements[i] = Arcadia_Value_Initializer();
-  }
-  thread->stack.capacity = newCapacity;
-}
-
-static void
-Arcadia_Thread_ensureValueStackFreeCapacity
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue requiredFreeCapacity
-  )
-{
-  Arcadia_SizeValue availableFreeCapacity = thread->stack.capacity - thread->stack.size;
-  if (availableFreeCapacity < requiredFreeCapacity) {
-    Arcadia_Thread_increaseValueStackCapacity(thread, requiredFreeCapacity - availableFreeCapacity);
-  }
-}
-
-Arcadia_SizeValue
-Arcadia_Thread_getValueStackSize
-  (
-    Arcadia_Thread* thread
-  )
-{ return thread->stack.size; }
-
-void
-Arcadia_Thread_pushValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Value const* value
-  )
-{
-  Arcadia_Thread_ensureValueStackFreeCapacity(thread, 1);
-  thread->stack.elements[thread->stack.size] = *value;
-  thread->stack.size++;
-}
-
-void
-Arcadia_Thread_popValues
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue count
-  )
-{
-  if (count < thread->stack.size) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  thread->stack.size -= count;
-}
-
-void
-Arcadia_Thread_pushJumpTarget
-  (
-    Arcadia_Thread* thread,
-    Arcadia_JumpTarget* jumpTarget
-  )
-{
-  jumpTarget->previous = thread->jumpTarget;
-  thread->jumpTarget = jumpTarget;
-}
-
-void
-Arcadia_Thread_popJumpTarget
-  (
-    Arcadia_Thread* thread
-  )
-{
-  thread->jumpTarget = thread->jumpTarget->previous;
-}
-
-Arcadia_NoReturn() void
-Arcadia_Thread_jump
-  (
-    Arcadia_Thread* thread
-  )
-{ 
-  longjmp(thread->jumpTarget->environment, -1);
-}
-
-Arcadia_Status
-Arcadia_Thread_getStatus
-  (
-    Arcadia_Thread* thread
-  )
-{ return thread->status; }
-
-void
-Arcadia_Thread_setStatus
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Status status
-  )
-{ thread->status = status; }
-
-Arcadia_Process*
-Arcadia_Thread_getProcess
-  (
-    Arcadia_Thread* thread
-  )
-{ return thread->process1; }
 
 struct Arcadia_Process {
   ReferenceCount referenceCount;
@@ -483,7 +248,7 @@ Arcadia_Process_get
     Arcadia_Thread_initialize(&g_process->thread);
     g_process->armsCallbackNodes = NULL;
     g_process->thread.process1 = g_process;
-    
+
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(&g_process->thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -570,13 +335,13 @@ Arcadia_Process_copyMemory
   }
 }
 
-int
+Arcadia_Integer32Value
 Arcadia_Process_compareMemory
   (
     Arcadia_Process* process,
     const void* p,
     const void* q,
-    size_t n
+    Arcadia_SizeValue n
   )
 {
   if (!p || !q) {
@@ -594,11 +359,11 @@ Arcadia_Process_allocateUnmanaged
     size_t n
   )
 {
-  Arms_Status status = Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), p, n);
+  Arcadia_Arms_Status status = Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), p, n);
   if (status) {
-    if (status == Arms_Status_ArgumentValueInvalid) {
+    if (status == Arcadia_Arms_Status_ArgumentValueInvalid) {
       Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
-    } else if (status == Arms_Status_AllocationFailed) {
+    } else if (status == Arcadia_Arms_Status_AllocationFailed) {
       Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_AllocationFailed);
     } else {
       Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use Arcadia_Status_EnvironmentInvalid.*/
@@ -665,18 +430,18 @@ Arcadia_Process_lockObject
     void* object
   )
 {
-  Arms_Status status = Arms_lock(object);
+  Arcadia_Arms_Status status = Arms_lock(object);
   switch (status) {
-    case Arms_Status_Success: {
+    case Arcadia_Arms_Status_Success: {
       return Arcadia_Status_Success;
     } break;
-    case Arms_Status_AllocationFailed: {
+    case Arcadia_Arms_Status_AllocationFailed: {
       return Arcadia_Status_AllocationFailed;
     } break;
-    case Arms_Status_OperationInvalid: {
+    case Arcadia_Arms_Status_OperationInvalid: {
       return Arcadia_Status_OperationInvalid;
     } break;
-    case Arms_Status_ArgumentValueInvalid: {
+    case Arcadia_Arms_Status_ArgumentValueInvalid: {
       return Arcadia_Status_ArgumentValueInvalid;
     } break;
     default: {
@@ -693,18 +458,18 @@ Arcadia_Process_unlockObject
     void* object
   )
 {
-  Arms_Status status = Arms_unlock(object);
+  Arcadia_Arms_Status status = Arms_unlock(object);
   switch (status) {
-    case Arms_Status_Success: {
+    case Arcadia_Arms_Status_Success: {
       return Arcadia_Status_Success;
     } break;
-    case Arms_Status_AllocationFailed: {
+    case Arcadia_Arms_Status_AllocationFailed: {
       return Arcadia_Status_AllocationFailed;
     } break;
-    case Arms_Status_OperationInvalid: {
+    case Arcadia_Arms_Status_OperationInvalid: {
       return Arcadia_Status_OperationInvalid;
     } break;
-    case Arms_Status_ArgumentValueInvalid: {
+    case Arcadia_Arms_Status_ArgumentValueInvalid: {
       return Arcadia_Status_ArgumentValueInvalid;
     } break;
     default: {
@@ -721,16 +486,16 @@ Arcadia_Process_stepArms
   )
 {
   Arms_RunStatistics statistics = { .destroyed = 0 };
-  Arms_Status status = Arms_run(&statistics);
+  Arcadia_Arms_Status status = Arms_run(&statistics);
   switch (status) {
-    case Arms_Status_Success:
+    case Arcadia_Arms_Status_Success:
     { return Arcadia_Status_Success; }
     break;
-    case Arms_Status_AllocationFailed:
-    case Arms_Status_OperationInvalid:
-    case Arms_Status_ArgumentValueInvalid:
-    case Arms_Status_TypeExists:
-    case Arms_Status_TypeNotExists:
+    case Arcadia_Arms_Status_AllocationFailed:
+    case Arcadia_Arms_Status_OperationInvalid:
+    case Arcadia_Arms_Status_ArgumentValueInvalid:
+    case Arcadia_Arms_Status_TypeExists:
+    case Arcadia_Arms_Status_TypeNotExists:
     default: {
       // This should not happen.
       // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
@@ -755,16 +520,16 @@ Arcadia_Process_runArms
         node->onPreMark(thread, purgeCaches);
       }
     }
-    Arms_Status status = Arms_run(&statistics);
+    Arcadia_Arms_Status status = Arms_run(&statistics);
     switch (status) {
-      case Arms_Status_Success:
+      case Arcadia_Arms_Status_Success:
       {/*Intentionally empty.*/ }
       break;
-      case Arms_Status_AllocationFailed:
-      case Arms_Status_OperationInvalid:
-      case Arms_Status_ArgumentValueInvalid:
-      case Arms_Status_TypeExists:
-      case Arms_Status_TypeNotExists:
+      case Arcadia_Arms_Status_AllocationFailed:
+      case Arcadia_Arms_Status_OperationInvalid:
+      case Arcadia_Arms_Status_ArgumentValueInvalid:
+      case Arcadia_Arms_Status_TypeExists:
+      case Arcadia_Arms_Status_TypeNotExists:
       default: {
         // This should not happen.
         // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
@@ -913,19 +678,19 @@ Arcadia_Process_registerType
     void (*finalize)(void*, void*)
   )
 {
-  Arms_Status status = Arms_addType(name, nameLength, context, typeRemoved, visit, finalize);
+  Arcadia_Arms_Status status = Arms_addType(name, nameLength, context, typeRemoved, visit, finalize);
   if (status) {
     switch (status) {
-      case Arms_Status_AllocationFailed: {
+      case Arcadia_Arms_Status_AllocationFailed: {
         Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_AllocationFailed);
       } break;
-      case Arms_Status_ArgumentValueInvalid: {
+      case Arcadia_Arms_Status_ArgumentValueInvalid: {
         Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
       } break;
-      case Arms_Status_OperationInvalid: {
+      case Arcadia_Arms_Status_OperationInvalid: {
         Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_OperationInvalid);
       } break;
-      case Arms_Status_TypeExists: {
+      case Arcadia_Arms_Status_TypeExists: {
         Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_OperationInvalid);
       } break;
       default: {
@@ -944,26 +709,26 @@ Arcadia_Process_allocate
     const char* name,
     size_t nameLength,
     size_t size
-  ) 
+  )
 {
   void* q = NULL;
-  Arms_Status status = Arms_allocate(&q, name, nameLength, size);
+  Arcadia_Arms_Status status = Arms_allocate(&q, name, nameLength, size);
   if (status) {
     switch (status) {
-      case Arms_Status_AllocationFailed: {
-        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arms_Status_AllocationFailed);
+      case Arcadia_Arms_Status_AllocationFailed: {
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_AllocationFailed);
       } break;
-      case Arms_Status_TypeNotExists: {
-        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arms_Status_TypeNotExists);
+      case Arcadia_Arms_Status_TypeNotExists: {
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_TypeNotExists);
       } break;
-      case Arms_Status_ArgumentValueInvalid: {
-        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arms_Status_ArgumentValueInvalid);
+      case Arcadia_Arms_Status_ArgumentValueInvalid: {
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
       } break;
-      case Arms_Status_OperationInvalid: {
-        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arms_Status_OperationInvalid);
+      case Arcadia_Arms_Status_OperationInvalid: {
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_OperationInvalid);
       } break;
       default: {
-        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arms_Status_OperationInvalid);
+        Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_OperationInvalid);
       } break;
     };
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));

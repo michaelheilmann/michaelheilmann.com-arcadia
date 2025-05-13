@@ -26,13 +26,13 @@
 // A non-negative binary integer.
 // Its width, in Bits, is at least 16.
 // It is large enough to fit the result of Arms_SizeOf, Arms_AlignOf, and Arms_OffsetOf.
-typedef size_t Arms_Size;
+typedef size_t Arcadia_Arms_Size;
 
 /// The minimum value of Arms_Size.
 /// Guaranteed to be @a 0.
-#define Arms_Size_Minimum ((Arms_Size)0)
+#define Arcadia_Arms_Size_Minimum ((Arcadia_Arms_Size)0)
 
 /// The maximum value of Arms_Size.
-#define Arms_Size_Maximum (SIZE_MAX)
+#define Arcadia_Arms_Size_Maximum (SIZE_MAX)
 
 #endif // ARCADIA_ARMS_SIZETYPE_H_INCLUDED

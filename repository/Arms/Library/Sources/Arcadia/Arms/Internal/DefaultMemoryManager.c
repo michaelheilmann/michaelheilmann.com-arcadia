@@ -26,7 +26,7 @@ allocate
   (
     Arms_DefaultMemoryManager* self,
     void** p,
-    Arms_Size n
+    Arcadia_Arms_Size n
   )
 {
   if (!p) {
@@ -45,18 +45,18 @@ reallocate
   (
     Arms_DefaultMemoryManager* self,
     void** p,
-    Arms_Size n
+    Arcadia_Arms_Size n
   )
 {
   if (!p) {
-    return Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
   void* q = realloc(*p, n > 0 ? n : 1);
   if (!q) {
-    return Arms_Status_AllocationFailed;
+    return Arcadia_Arms_Status_AllocationFailed;
   }
   *p = q;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
 static Arms_MemoryManager_Status
@@ -67,10 +67,10 @@ deallocate
   )
 {
   if (!p) {
-    return Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
   free(p);
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
 static Arms_MemoryManagerStartupShutdown_Status
@@ -88,7 +88,7 @@ Arms_DefaultMemoryManager_create
   (
     Arms_DefaultMemoryManager** result
   )
-{ 
+{
   if (!result) {
     return Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid;
   }
@@ -96,8 +96,8 @@ Arms_DefaultMemoryManager_create
   if (!self) {
     return Arms_MemoryManagerStartupShutdown_Status_AllocationFailed;
   }
-  ((Arms_MemoryManager*)self)->allocate = (Arms_MemoryManager_Status (*)(Arms_MemoryManager*, void**, Arms_Size)) & allocate;
-  ((Arms_MemoryManager*)self)->reallocate = (Arms_MemoryManager_Status(*)(Arms_MemoryManager*, void**, Arms_Size)) &reallocate;
+  ((Arms_MemoryManager*)self)->allocate = (Arms_MemoryManager_Status (*)(Arms_MemoryManager*, void**, Arcadia_Arms_Size)) & allocate;
+  ((Arms_MemoryManager*)self)->reallocate = (Arms_MemoryManager_Status(*)(Arms_MemoryManager*, void**, Arcadia_Arms_Size)) &reallocate;
   ((Arms_MemoryManager*)self)->deallocate = (Arms_MemoryManager_Status(*)(Arms_MemoryManager*, void*)) &deallocate;
   ((Arms_MemoryManager*)self)->destroy = (Arms_MemoryManagerStartupShutdown_Status(*)(Arms_MemoryManager*)) &destroy;
   *result = self;

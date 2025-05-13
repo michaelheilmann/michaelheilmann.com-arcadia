@@ -228,7 +228,7 @@ evalAst
       }
       Arcadia_ByteBuffer_append_pn(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(thread, (Arcadia_String*)object));
     } break;
-    case INVOKE: {  
+    case INVOKE: {
       if (Arcadia_String_isEqualTo_pn(thread, ast->name, u8"include", sizeof(u8"include") - 1)) {
         Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, ast->argument), Arcadia_String_getNumberOfBytes(thread, ast->argument));
         Arcadia_Value value;
@@ -273,7 +273,7 @@ onExpression
       Arcadia_Thread_jump(thread);
     }
     Arcadia_Utf8Reader_next(thread, context->source);
-  } 
+  }
   Ast* ast = Ast_create(thread, type, name, argument);
   return ast;
 }
@@ -469,7 +469,7 @@ FileContext_create
     Arcadia_FilePath* sourceFilePath
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)context),
     Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)sourceFilePath),
   };

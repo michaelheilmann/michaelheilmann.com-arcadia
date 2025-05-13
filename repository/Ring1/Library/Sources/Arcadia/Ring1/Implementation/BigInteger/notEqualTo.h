@@ -46,7 +46,7 @@ Arcadia_BigInteger_notEqualToInteger32
   );
 
 // Get if this BigInteger is not equal to the an Integer64.
-Arcadia_BooleanValue               
+Arcadia_BooleanValue
 Arcadia_BigInteger_notEqualToInteger64
   (
     Arcadia_Thread* thread,

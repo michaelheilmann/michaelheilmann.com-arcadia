@@ -16,6 +16,8 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/safeMultiply.h"
 
+#include "Arcadia/Ring1/Implementation/Thread.h"
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Arcadia_BooleanValue
@@ -107,7 +109,7 @@ Arcadia_safeMultiplyNatural64Value
   Arcadia_Natural64Value b = multiplier & 0xffffffff;
   Arcadia_Natural64Value c = multiplicand >> 32;
   Arcadia_Natural64Value d = multiplicand & 0xffffffff;
-  
+
   // Compute the partial products.
   // The products cannot overflow:
   // a, b, c, d are all smaller than or equal to 2^32-1 and hence a product of two of these has the maximal value of (2^32-1)^2 = 2^64 - 2^33 + 1 which is strictly smaller than 2^64 - 1.
@@ -115,15 +117,15 @@ Arcadia_safeMultiplyNatural64Value
   Arcadia_Natural64Value ad = a * d;
   Arcadia_Natural64Value bc = b * c;
   Arcadia_Natural64Value bd = b * d;
-  
+
   // Compute the middle part.
   Arcadia_Natural64Value mi = ad + bc; // CAN overflow. However, it's bitwise value is proper.
   Arcadia_Natural64Value miCarry = mi < ad ? 1 : 0;
-    
+
   // Compute the low part.
   Arcadia_Natural64Value lo = bd + (mi << 32); // CAN overflow. However, it's bitwise value is proper.
   Arcadia_Natural64Value loCarry = lo < bd ? 1 : 0;
-  
+
   // Compute the high part.
   Arcadia_Natural64Value hi = ac + (mi >> 32) + (miCarry << 32) + loCarry;
 

@@ -100,7 +100,7 @@ Arcadia_BigInteger_isNegative
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self
   );
-  
+
 void
 Arcadia_BigInteger_visit
   (

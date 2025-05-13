@@ -36,7 +36,7 @@
     ( \
       Arcadia_Thread* thread, \
       Type##Value x \
-    ); 
+    );
 
 Define(Arcadia_Integer16, Integer16)
 Define(Arcadia_Integer32, Integer32)

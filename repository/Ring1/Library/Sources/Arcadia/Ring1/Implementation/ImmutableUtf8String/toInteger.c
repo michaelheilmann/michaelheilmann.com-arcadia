@@ -19,6 +19,8 @@
 #include "Arcadia/Ring1/Implementation/NumberLiteral.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/NumeralParser.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Thread.h"
 
 static Arcadia_Integer64Value
 _toInteger64Internal

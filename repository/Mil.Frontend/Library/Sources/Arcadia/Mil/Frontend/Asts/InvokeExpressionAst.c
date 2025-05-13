@@ -107,7 +107,7 @@ Arcadia_Mil_InvokeExpressionAst_create
     Arcadia_List* operands
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)callee),
     Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)operands),
   };

@@ -303,7 +303,7 @@ Arcadia_Map_set
     Arcadia_Value key,
     Arcadia_Value value
   )
-{ 
+{
   if (Arcadia_Value_isVoidValue(&key)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
@@ -336,7 +336,7 @@ Arcadia_Map_get
     Arcadia_Map const* self,
     Arcadia_Value key
   )
-{ 
+{
   if (Arcadia_Value_isVoidValue(&key)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);

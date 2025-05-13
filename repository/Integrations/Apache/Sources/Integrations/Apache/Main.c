@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
     u8"Content-Type: text/html\n\n"
     ;
   fwrite(header, 1, strlen(header), stdout);
-  const char *content = 
+  const char *content =
     u8"<!DOCTYPE html>\n"
     u8"<html>\n"
     u8"<head>\n"

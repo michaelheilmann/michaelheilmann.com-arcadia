@@ -25,17 +25,12 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Tools.TemplateEngine Tool source directory")
+FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Template Engine tool source directory")
 
 # Build the documentation.
-set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Ring2/index.html")
-file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/*)
-add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${DOCUMENT_TARGET_FILE}
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/index.i => ${DOCUMENT_TARGET_FILE}"
-                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${DOCUMENTATION_DEPENDENCIES})
+set(${MyProjectName}.Ring2.DocFiles)
+list(APPEND ${MyProjectName}.Ring2.DocFiles "${CMAKE_CURRENT_SOURCE_DIR}/index.html.i")
 
-add_custom_target(${MyProjectName}.Ring2.BuildDocs ALL DEPENDS ${DOCUMENT_TARGET_FILE})
+MyBuildDocs(${MyProjectName} ${MyProjectName}.Ring2.BuildDocs "${CMAKE_CURRENT_SOURCE_DIR}" "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Ring2" "${${MyProjectName}.Ring2.DocFiles}")
 
-set_target_properties(${MyProjectName}.Ring2.BuildDocs PROPERTIES FOLDER "Arcadia.Ring2")
+set_target_properties(${MyProjectName}.Ring2.BuildDocs PROPERTIES FOLDER "Ring2")

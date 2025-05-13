@@ -100,7 +100,7 @@ TypeNodes_create
   (
     Arcadia_Process* process
   )
-{ 
+{
   TypeNodes* typeNode = NULL;
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
@@ -242,7 +242,7 @@ Arcadia_registerInternalType
   g_typeNodes->typeNodes = typeNode;
 
   Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode);
-  
+
   return typeNode;
 }
 
@@ -507,7 +507,7 @@ _Arcadia_AtomValue_getType
   (
     Arcadia_Thread* thread
   )
-{ 
+{
   if (!g_atomType) {
     g_atomType = Arcadia_registerInternalType(thread, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, NULL, &atomTypeDestructing);
   }

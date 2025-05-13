@@ -36,7 +36,7 @@ struct Arcadia_FileHandle {
   FILE* fd;
 };
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_create
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_create
 Arcadia_FileHandle*
 Arcadia_FileHandle_create
   (
@@ -44,7 +44,7 @@ Arcadia_FileHandle_create
     Arcadia_FileSystem* fileSystem
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_isClosed
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_isClosed
 Arcadia_BooleanValue
 Arcadia_FileHandle_isClosed
   (
@@ -52,7 +52,7 @@ Arcadia_FileHandle_isClosed
     Arcadia_FileHandle const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_isOpened
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_isOpened
 Arcadia_BooleanValue
 Arcadia_FileHandle_isOpened
   (
@@ -60,7 +60,7 @@ Arcadia_FileHandle_isOpened
     Arcadia_FileHandle const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_isOpenedForReading
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_isOpenedForReading
 Arcadia_BooleanValue
 Arcadia_FileHandle_isOpenedForReading
   (
@@ -68,7 +68,7 @@ Arcadia_FileHandle_isOpenedForReading
     Arcadia_FileHandle const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_isOpenedForWriting
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_isOpenedForWriting
 Arcadia_BooleanValue
 Arcadia_FileHandle_isOpenedForWriting
   (
@@ -76,7 +76,7 @@ Arcadia_FileHandle_isOpenedForWriting
     Arcadia_FileHandle const* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_close
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_close
 void
 Arcadia_FileHandle_close
   (
@@ -84,7 +84,7 @@ Arcadia_FileHandle_close
     Arcadia_FileHandle* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_openForReading
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_openForReading
 void
 Arcadia_FileHandle_openForReading
   (
@@ -93,7 +93,7 @@ Arcadia_FileHandle_openForReading
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_openForWriting
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_openForWriting
 void
 Arcadia_FileHandle_openForWriting
   (
@@ -102,7 +102,7 @@ Arcadia_FileHandle_openForWriting
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_read
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_read
 void
 Arcadia_FileHandle_read
   (
@@ -112,8 +112,8 @@ Arcadia_FileHandle_read
     Arcadia_SizeValue bytesToRead,
     Arcadia_SizeValue* bytesRead
   );
-     
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileHandle_write    
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_write
 void
 Arcadia_FileHandle_write
   (

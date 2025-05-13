@@ -36,14 +36,14 @@ struct Arcadia_FileSystem {
   Arcadia_Object _parent;
 };
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/Arcadia_FileSystem_create
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_create
 Arcadia_FileSystem*
 Arcadia_FileSystem_create
   (
     Arcadia_Thread* thread
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_getFileContents
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents
 Arcadia_ByteBuffer*
 Arcadia_FileSystem_getFileContents
   (
@@ -52,7 +52,7 @@ Arcadia_FileSystem_getFileContents
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_setFileContents
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents
 void
 Arcadia_FileSystem_setFileContents
   (
@@ -70,7 +70,7 @@ Arcadia_FileSystem_createDirectory
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_regularFileExists
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_regularFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_regularFileExists
   (
@@ -79,7 +79,7 @@ Arcadia_FileSystem_regularFileExists
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_FileSystem_directoryFileExists
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_directoryFileExists
   (

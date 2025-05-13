@@ -41,11 +41,11 @@ Arcadia_Test_BigInteger_assertMultiplicative
   Arcadia_BigInteger* leftOperandBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger64(thread, leftOperandBigInteger, leftOperand);
   Arcadia_Value leftOperandValue = Arcadia_Value_fromBigIntegerValue(leftOperandBigInteger);
-  
+
   Arcadia_BigInteger* rightOperandBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger64(thread, rightOperandBigInteger, rightOperand);
   Arcadia_Value rightOperandValue = Arcadia_Value_fromBigIntegerValue(rightOperandBigInteger);
-  
+
   Arcadia_BigInteger* expectedResultBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger64(thread, expectedResultBigInteger, expectedResult);
   Arcadia_Value expectedResultValue = Arcadia_Value_fromBigIntegerValue(expectedResultBigInteger);

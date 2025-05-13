@@ -86,7 +86,7 @@ R_Interpreter_ProcessState_shutdown
 
   singleton->globals = NULL;
   singleton->constants = NULL;
-  
+
   Arcadia_Process_deallocateUnmanaged(process, singleton);
   singleton = NULL;
 }
@@ -113,7 +113,7 @@ R_Interpreter_ProcessState_defineGlobalProcedure
     R_Interpreter_ProcessState* self,
     R_Interpreter_Procedure* procedure
   )
-{ 
+{
   if (!procedure) {
     Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
@@ -157,7 +157,7 @@ R_Interpreter_ProcessState_getGlobal
     R_Interpreter_ProcessState* self,
     Arcadia_String* name
   )
-{ 
+{
   if (!name) {
     Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));

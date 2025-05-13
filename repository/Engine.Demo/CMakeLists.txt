@@ -32,8 +32,8 @@ if (NOT TARGET ${MyDemoName})
 	if (${${MyProjectName}.Visuals.OpenGl.Enabled})
 	  BeginProduct(${MyDemoName} executable)
 
-	  FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Module.Audials/Library" "path to the Audials module source directory")
-	  FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Module.Visuals/Library" "path to the Visuals module source directory")
+	  FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Audials/Library" "path to the Audials module source directory")
+	  FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Visuals/Library" "path to the Visuals module source directory")
 
 	  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Engine.Demo/Configure.h @ONLY)
 	  list(APPEND ${MyDemoName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Configure.h.i)

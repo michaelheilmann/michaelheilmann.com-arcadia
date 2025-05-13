@@ -70,7 +70,7 @@ Arcadia_Mil_JumpStatementAst_constructImpl
     Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues 
+    Arcadia_Value* argumentValues
   )
 {
   Arcadia_Mil_JumpStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
@@ -118,7 +118,7 @@ Arcadia_Mil_JumpStatementAst_create
     Arcadia_String* labelName
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeInteger32Value(type),
     Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)labelName),
   };

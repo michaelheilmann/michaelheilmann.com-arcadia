@@ -159,8 +159,8 @@ getRegisterOfVariable
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, context->variables); i < n; ++i) {
-    Arcadia_Value args[2] = { 
-        Arcadia_Value_makeObjectReferenceValue(name), 
+    Arcadia_Value args[2] = {
+        Arcadia_Value_makeObjectReferenceValue(name),
         Arcadia_List_getAt(thread, context->variables, i),
       };
     if (Arcadia_Value_isEqualTo(thread, &args[0], &args[1])) {
@@ -626,7 +626,7 @@ onMethodDefinition
     Arcadia_Value variableNameValue = Arcadia_List_getAt(thread, definitionAst->methodParameters, i);
     Arcadia_String* variableNameString = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &variableNameValue, _Arcadia_String_getType(thread));
     Arcadia_Mil_CallableContext_onParameterVariableDefinition(thread, context,
-                                                              variableNameString, 
+                                                              variableNameString,
                                                               (Arcadia_Mil_Ast*)definitionAst);
   }
   if (definitionAst->nativeName) {

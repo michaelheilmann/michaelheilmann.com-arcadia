@@ -56,7 +56,7 @@ struct Singleton {
   Arcadia_Atom **buckets;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
-}; 
+};
 
 static uint32_t g_referenceCount = 0;
 static Singleton* g_singleton = NULL;
@@ -116,7 +116,7 @@ getTickCount
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   // This is incorrect. It provides the time since some unspecified point in the past and not since the start of the process.
   struct timespec t;
-  //t = (struct timespec *)malloc(sizeof(t)); 
+  //t = (struct timespec *)malloc(sizeof(t));
   clock_gettime(CLOCK_MONOTONIC, &t);
   Arcadia_Natural64Value milliseconds = 0;
   // Nanoseconds to milliseconds.
@@ -249,7 +249,7 @@ Arcadia_Atoms_getOrCreateAtom
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  
+
   if (Arcadia_AtomKind_Name == (flags & Arcadia_AtomKind_Name)) {
     Arcadia_Names_parseTypeName(thread, bytes, numberOfBytes);
   }
@@ -282,7 +282,7 @@ Arcadia_Atom_visit
     Arcadia_Thread* thread,
     Arcadia_AtomValue self
   )
-{ 
+{
   self->lastVisited = getTickCount(thread);
   Arms_visit(self);
 }

@@ -171,7 +171,7 @@ Arcadia_Mil_Keywords_add
   Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &stringValue);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
-    Arcadia_Value v[] = { 
+    Arcadia_Value v[] = {
       Arcadia_Value_makeObjectReferenceValue(keyword->string),
       stringValue
     };
@@ -202,7 +202,7 @@ Arcadia_Mil_Keywords_scan
   Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &stringValue);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
-    Arcadia_Value v[2] = { 
+    Arcadia_Value v[2] = {
       Arcadia_Value_makeObjectReferenceValue(keyword->string),
       stringValue
     };

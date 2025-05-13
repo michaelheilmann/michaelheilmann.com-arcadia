@@ -37,7 +37,7 @@ macro(DetectOperatingSystem target)
 
   set(${target}.OperatingSystem.Cygwin 1)
   set(${${target}.OperatingSystem.Cygwin}.Help "CYGWIN")
-  
+
   set(${target}.OperatingSystem.Ios 2)
   set(${${target}.OperatingSystem.Ios}.Help "IOS")
 
@@ -49,7 +49,7 @@ macro(DetectOperatingSystem target)
 
   set(${target}.OperatingSystem.Macos 5)
   set(${${target}.OperatingSystem.Macos}.Help "MACOS")
-  
+
   set(${target}.OperatingSystem.Mingw 6)
   set(${${target}.OperatingSystem.Mingw}.Help "MINGW")
 
@@ -62,26 +62,21 @@ macro(DetectOperatingSystem target)
   set(${target}.OperatingSystem.Unix 9)
   set(${${target}.OperatingSystem.Unix}.Help "UNIX")
 
-  if (NOT DEFINED ${target}.OperatingSystem)  
+  if (NOT DEFINED ${target}.OperatingSystem)
     set(${target}.OperatingSystem ${${target}.OperatingSystem.Unknown})
     if (WIN32)
       set(${target}.OperatingSystem ${${target}.OperatingSystem.Windows})
-      set(${target}.Configuration.OperatingSystem ${${target}.OperatingSystem.Windows})
     elseif (CYGWIN)
       set(${target}.OperatingSystem ${${target}.OperatingSystem.Cygwin})
-      set(${target}.Configuration.OperatingSystem ${${target}.OperatingSystem.Cygwin})      
     elseif (MSYS)
       set(${target}.OperatingSystem ${${target}.OperatingSystem.Msys})
-      set(${target}.Configuration.OperatingSystem ${${target}.OperatingSystem.Msys})
     endif()
 
     if (${${target}.OperatingSystem} STREQUAL ${${target}.OperatingSystem.Unknown})
       if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
         set(${target}.OperatingSystem ${${target}.OperatingSystem.Linux})
-        set(${target}.Configuration.OperatingSystem ${${target}.OperatingSystem.Linux})
       elseif ("${CMAKE_SYSTEM_NAME}" MATCHES "Darwin")
         set(${target}.OperatingSystem ${${target}.OperatingSystem.Macos})
-        set(${target}.Configuration.OperatingSystem ${${target}.OperatingSystem.Macos})
       endif()
     endif()
   endif()

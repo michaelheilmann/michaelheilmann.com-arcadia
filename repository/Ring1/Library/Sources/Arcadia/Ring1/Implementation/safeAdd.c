@@ -16,6 +16,8 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/safeAdd.h"
 
+#include "Arcadia/Ring1/Implementation/Thread.h"
+
 void
 Arcadia_safeAddNatural16Value
   (
@@ -83,17 +85,17 @@ Arcadia_safeAddNatural64Value
 
   // if two unsigned n>0 bit values are added then the result is at most an unsigned n+1 bit value.
   // more precisely, the maximum value of the result is 2^(n + 1) - 2.
-  // 
+  //
   // Proof:
   //   2^n - 1 + 2^n - 1
   // = 2 x 2^n - 2
   // = 2^(n+1) - 2
   // q.e.d.
-  // 
+  //
   // Given unconstrained arithmetic:
   // (x + y) / n will return the topmost bit which is either 0 or 1 and is hi.
   // (x + y) % n will return the lower 64 bit which are lo.
-  // Given the rules of C/C++ uintx_t arithmetic, (x + y) % n is actually computed by the standard addition so we can simply x + y to compute lo. 
+  // Given the rules of C/C++ uintx_t arithmetic, (x + y) % n is actually computed by the standard addition so we can simply x + y to compute lo.
   Arcadia_Natural64Value x = augend + addend;
   *sumHigh = x < augend ? 1 : 0;
   *sumLow = x;

@@ -129,7 +129,7 @@ Arcadia_Utf8ByteBufferWriter_writeBytesImpl
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Utf8_encodeBytes(Arcadia_Thread_getProcess(thread), bytes, numberOfBytes, self->target, (void (*)(Arcadia_Process*, void*, Arcadia_Natural8Value const*, Arcadia_SizeValue)) & Arcadia_ByteBuffer_append_pn);
+  Arcadia_Unicode_encodeBytesUtf8(thread, bytes, numberOfBytes, self->target, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&Arcadia_ByteBuffer_append_pn);
 }
 
 static void
@@ -141,7 +141,7 @@ Arcadia_Utf8ByteBufferWriter_writeCodePointsImpl
     Arcadia_SizeValue numberOfCodePoints
   )
 {
-  Arcadia_Utf8_encodeCodePoints(Arcadia_Thread_getProcess(thread), codePoints, numberOfCodePoints, self->target, (void (*)(Arcadia_Process*, void*, Arcadia_Natural8Value const*, Arcadia_SizeValue)) & Arcadia_ByteBuffer_append_pn);
+  Arcadia_Unicode_encodeCodePointsUtf8(thread, codePoints, numberOfCodePoints, self->target, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&Arcadia_ByteBuffer_append_pn);
 }
 
 Arcadia_Utf8ByteBufferWriter*

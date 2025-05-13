@@ -31,6 +31,7 @@
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 
 #include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Thread.h"
 
 #include "Arcadia/Ring1/Implementation/Size.h"
 

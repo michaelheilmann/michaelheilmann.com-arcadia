@@ -11,7 +11,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSys
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_FileSystem_create">Arcadia_FileSystem_create</h1>
 
   <my-signature><code>
@@ -86,7 +86,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSys
     A pointer to a <code>Arcadia_ByteBuffer</code> object with the file contents.
     </p>
   </section>
-  
+
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
@@ -173,7 +173,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSys
 <section class="cxx entity method">
 
   <h1 id="Arcadia_FileSystem_regularFileExists">Arcadia_FileSystem_regularFileExists</h1>
-  
+
   <my-signature><code>
   Arcadia_BooleanValue<br>
   Arcadia_FileSystem_regularFileExists<br>
@@ -227,7 +227,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSys
 <section class="cxx entity method">
 
   <h1 id="Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</h1>
-  
+
   <my-summary><code>
   Arcadia_BooleanValue<br>
   Arcadia_FileSystem_directoryFileExists<br>

@@ -29,14 +29,14 @@ testFixtureNatural16
   )
 {
   Arcadia_Natural16Value receivedUpperProduct, receivedLowerProduct;
-  
+
   Arcadia_safeMultiplyNatural16Value(thread, multiplier, multiplicand, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
   Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
 
   Arcadia_safeMultiplyNatural16Value(thread, multiplicand, multiplier, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
-  Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct); 
+  Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
 }
 
 // Test a*b and b*a using all available functions.
@@ -51,14 +51,14 @@ testFixtureNatural32
   )
 {
   Arcadia_Natural32Value receivedUpperProduct, receivedLowerProduct;
-  
+
   Arcadia_safeMultiplyNatural32Value(thread, multiplier, multiplicand, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
   Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
 
   Arcadia_safeMultiplyNatural32Value(thread, multiplicand, multiplier, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
-  Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct); 
+  Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
 }
 
 // Test a*b and b*a using all available functions.
@@ -73,7 +73,7 @@ testFixtureNatural64
   )
 {
   Arcadia_Natural64Value receivedUpperProduct, receivedLowerProduct;
-  
+
   Arcadia_safeMultiplyNatural64Value(thread, multiplier, multiplicand, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
   Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
@@ -81,14 +81,14 @@ testFixtureNatural64
   Arcadia_safeMultiplyNatural64Value(thread, multiplicand, multiplier, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
   Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
-  
+
   Arcadia_safeMultiplyNatural64Value(thread, multiplier, multiplicand, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
   Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
 
   Arcadia_safeMultiplyNatural64Value(thread, multiplicand, multiplier, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
-  Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);    
+  Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
 }
 
 // Test a*b and b*a using all available functions.
@@ -103,14 +103,14 @@ testFixtureNatural8
   )
 {
   Arcadia_Natural8Value receivedUpperProduct, receivedLowerProduct;
-  
+
   Arcadia_safeMultiplyNatural8Value(thread, multiplier, multiplicand, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
   Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
 
   Arcadia_safeMultiplyNatural8Value(thread, multiplicand, multiplier, &receivedUpperProduct, &receivedLowerProduct);
   Arcadia_Tests_assertTrue (thread, receivedUpperProduct == expectedUpperProduct);
-  Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);  
+  Arcadia_Tests_assertTrue (thread, receivedLowerProduct == expectedLowerProduct);
 }
 
 #define Define(Type, A, B, H, L) \
@@ -344,7 +344,7 @@ safeMultiplyInteger16Tests
   (
     Arcadia_Thread* thread
   )
-{ 
+{
   Define(Integer16, Arcadia_Integer16Value_Literal(0),    Arcadia_Integer16Value_Literal(0),  false, Arcadia_Integer16Value_Literal(0), Arcadia_Integer16Value_Literal(0));
   Define(Integer16, Arcadia_Integer16Value_Maximum,       Arcadia_Integer16Value_Literal(0),  false, Arcadia_Integer16Value_Literal(0), Arcadia_Integer16Value_Literal(0));
   Define(Integer16, Arcadia_Integer16Value_Minimum,       Arcadia_Integer16Value_Literal(0),  false, Arcadia_Integer16Value_Literal(0), Arcadia_Integer16Value_Literal(0));
@@ -360,7 +360,7 @@ safeMultiplyInteger32Tests
   (
     Arcadia_Thread* thread
   )
-{ 
+{
   Define(Integer32, Arcadia_Integer32Value_Literal(0),  Arcadia_Integer32Value_Literal(0),     false, Arcadia_Integer32Value_Literal(0),  Arcadia_Integer32Value_Literal(0));
   Define(Integer32, Arcadia_Integer32Value_Maximum,     Arcadia_Integer32Value_Literal(0),     false, Arcadia_Integer32Value_Literal(0),  Arcadia_Integer32Value_Literal(0));
   Define(Integer32, Arcadia_Integer32Value_Minimum,     Arcadia_Integer32Value_Literal(0),     false, Arcadia_Integer32Value_Literal(0),  Arcadia_Integer32Value_Literal(0));
@@ -376,7 +376,7 @@ safeMultiplyInteger64Tests
   (
     Arcadia_Thread* thread
   )
-{ 
+{
   {
     // Regression.
     Arcadia_Integer64Value multiplier = -1, multiplicand = +1;

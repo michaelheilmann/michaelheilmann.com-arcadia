@@ -342,7 +342,7 @@ body.my-error-page-1 ul li, body.my-content-page-1 ul li {
   margin-left: 1rem;
 }
 
-body.my-error-page-1 p, body.my-content-page-1 p {
+body.my-error-page-1 p, body.my-content-page-1 p, body.my-error-page-1 ul, body.my-content-page-1 ul {
   &:not(:last-child)  {
     margin-bottom: 1rem;
   }

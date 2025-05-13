@@ -10,7 +10,7 @@
 
 typedef struct Arcadia_BigInteger Arcadia_BigInteger;
 typedef Arcadia_BigInteger* Arcadia_BigIntegerValue;
-  
+
 // @brief Assign a big integer a sequence of decimal digits.
 // @param p A pointer to an array of UTF8 symbols. The supported symbols are '0' through '9'.
 // @param n The number of UTF8 symbols in the array pointed to by @a p.

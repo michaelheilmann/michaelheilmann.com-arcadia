@@ -115,7 +115,7 @@ Arcadia_Mil_MethodDefinitionAst_create
     Arcadia_List* methodBody
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     NULL != nativeName ? Arcadia_Value_makeObjectReferenceValue(nativeName) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     Arcadia_Value_makeObjectReferenceValue(methodName),
     Arcadia_Value_makeObjectReferenceValue(methodParameters),

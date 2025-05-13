@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_DATADEFINITIONLANGUAGE_SCANNER_H_INCLUDED)
 #define ARCADIA_DATADEFINITIONLANGUAGE_SCANNER_H_INCLUDED
 
-#include "Arcadia/DataDefinitionLanguage/TokenType.h"
+#include "Arcadia/DataDefinitionLanguage/WordType.h"
 
 /// @code
 /// class Arcadia.DataDefinitionLanguage.Scanner
@@ -31,21 +31,21 @@ Arcadia_DataDefinitionLanguage_Scanner_create
     Arcadia_Thread* thread
   );
 
-/// @brief Get the text of the token.
+/// @brief Get the text of the word.
 /// @param self A pointer to this Data Definition Language scanner.
-/// @return The text of the token.
+/// @return The text of the wordn.
 Arcadia_String*
-Arcadia_DataDefinitionLanguage_Scanner_getTokenText
+Arcadia_DataDefinitionLanguage_Scanner_getWordText
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Scanner* self
   );
 
-/// @brief Get the type of the token.
+/// @brief Get the type of the word.
 /// @param self A pointer to this Data Definition Language scanner.
-/// @return The type of the token.
+/// @return The type of the word.
 Arcadia_Natural32Value
-Arcadia_DataDefinitionLanguage_Scanner_getTokenType
+Arcadia_DataDefinitionLanguage_Scanner_getWordType
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Scanner* self

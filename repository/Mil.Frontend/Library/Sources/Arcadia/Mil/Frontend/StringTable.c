@@ -111,7 +111,7 @@ Arcadia_Mil_StringTable_constructImpl
   _self->capacity = g_defaultCapacity;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
-                              
+
 static void
 Arcadia_Mil_StringTable_maybeResize_nojump
   (
@@ -249,7 +249,7 @@ Arcadia_Mil_StringTable_getOrCreateString
   node->next = self->buckets[index];
   self->buckets[index] = node;
   self->size++;
-  
+
   Arcadia_Mil_StringTable_maybeResize_nojump(thread, self);
 
   return string;

@@ -25,13 +25,13 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
-FetchProduct(${MyProjectName}.DataDefinitionLanguage "${REPOSITORY_SOURCE_DIR}/DataDefinitionLanguage/Library" "path to the Data Definition Language library directory")
-
-set(MyTestFolder ${MyProjectName}.DataDefinitionLanguage)
+set(MyTestFolder DataDefinitionLanguage)
 set(MyTestName ${MyProjectName}.DataDefinitionLanguage.Tests.LexicalAnalysis)
 
 if (NOT TARGET ${MyTestName})
+
+  FetchProduct(${MyProjectName}.DataDefinitionLanguage "${REPOSITORY_SOURCE_DIR}/DataDefinitionLanguage/Library" "path to the Data Definition Language library directory")
+
   BeginProduct(${MyTestName} test)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DataDefinitionLanguage/Tests/LexicalAnalysis/Configure.h.i

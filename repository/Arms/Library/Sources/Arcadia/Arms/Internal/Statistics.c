@@ -15,65 +15,61 @@
 
 #include "Arcadia/Arms/Internal/Statistics.h"
 
-Arms_Status
+Arcadia_Arms_Status
 Arcadia_Arms_AllocatorStatistics_initialize
   (
     Arcadia_Arms_AllocatorStatistics* statistics
   )
-{ 
+{
   statistics->numberOfBlocks = 0;
-  statistics->smallestBlock = 0;
-  statistics->greatestBlock = 0;
   statistics->numberOfBytes = 0;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
-Arms_Status
+Arcadia_Arms_Status
 Arcadia_Arms_AllocatorStatistics_uninitialize
   (
     Arcadia_Arms_AllocatorStatistics* statistics
   )
 {
   statistics->numberOfBlocks = 0;
-  statistics->smallestBlock = 0;
-  statistics->greatestBlock = 0;
   statistics->numberOfBytes = 0;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
-Arms_Status
+Arcadia_Arms_Status
 Arcadia_Arms_AllocatorStatistics_onBlockAllocated
   (
     Arcadia_Arms_AllocatorStatistics* statistics,
-    Arms_Size numberOfBytes
+    Arcadia_Arms_Size numberOfBytes
   )
 {
   if (!statistics) {
-    return Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
   // It is possible to have n > 0 blocks with m = 0 Bytes as zero-sized allocations are allowed.
-  if (Arms_Size_Maximum - statistics->numberOfBytes < numberOfBytes || Arms_Size_Maximum - statistics->numberOfBlocks < 1) {
-    return Arms_Status_ArgumentValueInvalid;
+  if (Arcadia_Arms_Size_Maximum - statistics->numberOfBytes < numberOfBytes || Arcadia_Arms_Size_Maximum - statistics->numberOfBlocks < 1) {
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
   statistics->numberOfBytes += numberOfBytes;
   statistics->numberOfBlocks += 1;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
-Arms_Status
+Arcadia_Arms_Status
 Arcadia_Arms_AllocatorStatistics_onBlockDeallocated
   (
     Arcadia_Arms_AllocatorStatistics* statistics,
-    Arms_Size numberOfBytes
+    Arcadia_Arms_Size numberOfBytes
   )
 {
   if (!statistics) {
-    return Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
   if (statistics->numberOfBytes < numberOfBytes || statistics->numberOfBlocks < 1) {
-    return Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
   statistics->numberOfBytes -= numberOfBytes;
   statistics->numberOfBlocks -= 1;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }

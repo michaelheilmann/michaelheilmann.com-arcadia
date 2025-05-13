@@ -17,7 +17,7 @@
 #define ARCADIA_ARMS_SLABMEMORYMANAGER_PRIVATE_H_INCLUDED
 
 #include "Arcadia/Arms/Internal/MemoryManager.private.h"
-                   
+
 typedef struct Arms_SlabMemoryManager Arms_SlabMemoryManager;
 
 Arms_MemoryManagerStartupShutdown_Status

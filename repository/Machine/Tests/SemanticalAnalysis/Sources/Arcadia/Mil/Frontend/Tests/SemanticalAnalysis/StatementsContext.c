@@ -159,7 +159,7 @@ Arcadia_Mil_CallableContext_onParameterVariableDefinition
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, self->variables); i < n; ++i) {
-    Arcadia_Value args[2] = { 
+    Arcadia_Value args[2] = {
       Arcadia_Value_makeObjectReferenceValue(name),
       Arcadia_List_getAt(thread, self->variables, i),
     };
@@ -180,7 +180,7 @@ Arcadia_Mil_CallableContext_onLocalVariableDefinition
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, context->variables); i < n; ++i) {
-    Arcadia_Value args[2] = { 
+    Arcadia_Value args[2] = {
       Arcadia_Value_makeObjectReferenceValue(name),
       Arcadia_List_getAt(thread, context->variables, i),
     };

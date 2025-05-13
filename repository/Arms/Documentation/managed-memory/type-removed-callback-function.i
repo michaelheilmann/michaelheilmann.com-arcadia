@@ -23,11 +23,11 @@ int main(int argc, char**argv) {<br>
 &nbsp;Arms_startup();<br>
 &nbsp;if (!g_registered) {<br>
 &nbsp;&nbsp;Arms_addType("File", strlen("File"), NULL, &typeRemovedCallback, NULL, NULL);<br>
-&nbsp;&nbsp;g_registered = true;<br>  
+&nbsp;&nbsp;g_registered = true;<br>
 &nbsp;}</br>
 &nbsp;Arms_shutdown();<br>
 &nbsp;return EXIT_SUCCESS;<br>
 }
 </code>
-</p> 
+</p>
 <p>Note that types can be created with a null pointer for the finalize function.</p>

@@ -31,9 +31,7 @@ set(MyLibraryName ${MyProjectName}.Mil.Frontend)
 if (NOT TARGET ${MyLibraryName})
   BeginProduct(${MyLibraryName} library)
 
-  FetchProduct(${MyProjectName}.Arms  "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
-  FetchProduct(${MyLibraryName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Ring1/Library" "path to the Ring1 library directory")
-  FetchProduct(${MyLibraryName}.Ring2 "${REPOSITORY_SOURCE_DIR}/Ring2/Library" "path to the Ring2 library directory")
+  FetchProduct(${MyLibraryName}.Ring2 "${REPOSITORY_SOURCE_DIR}/Ring2/Library" "path to the Ring 2 library directory")
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h @ONLY)
   list(APPEND ${MyLibraryName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h.i)
@@ -116,6 +114,6 @@ if (NOT TARGET ${MyLibraryName})
   endif()
 
   EndProduct(${MyLibraryName})
-  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Arcadia.Mil")
+  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Mil/Frontend")
 
 endif()

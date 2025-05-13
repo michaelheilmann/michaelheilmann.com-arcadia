@@ -241,7 +241,7 @@ Arcadia_Stack_push
 
 void
 Arcadia_Stack_pop
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_Stack* self
   )

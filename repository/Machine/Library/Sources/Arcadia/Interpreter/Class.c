@@ -115,7 +115,7 @@ R_Interpreter_Class_create
     Arcadia_String* extendedClassName
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue(className),
     extendedClassName ? Arcadia_Value_makeObjectReferenceValue(extendedClassName) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
   };
@@ -144,7 +144,7 @@ R_Interpreter_Class_addConstructor
     R_Interpreter_Class* self,
     R_Interpreter_Constructor* constructor
   )
-{ 
+{
   Arcadia_String* name = Arcadia_String_create_pn(Arcadia_Process_getThread(process), Arcadia_ImmutableByteArray_create(Arcadia_Process_getThread(process), u8"<constructor>", sizeof(u8"<constructor>") - 1));
   Arcadia_Value key = Arcadia_Value_makeObjectReferenceValue(name);
   Arcadia_Value value = Arcadia_Map_get(Arcadia_Process_getThread(process), self->classMembers, key);
@@ -219,7 +219,7 @@ completeExtendedClass
     R_Interpreter_Class* self,
     R_Interpreter_ProcessState* processState
   )
-{ 
+{
   /* (1) if an extended class name is specified, resolve and complete the class. */
   if (self->extendedClassName) {
     self->extendedClass = getClass(process, R_Interpreter_ProcessState_getGlobal(process, processState, self->extendedClassName));
@@ -285,7 +285,7 @@ R_Interpreter_Class_complete
     R_Interpreter_Class* self,
     R_Interpreter_ProcessState* processState
   )
-{ 
+{
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (self->complete) {
     return;

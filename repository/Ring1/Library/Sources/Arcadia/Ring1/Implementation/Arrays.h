@@ -28,7 +28,7 @@ typedef enum Arcadia_Arrays_ResizeStrategy {
   /// Let capacity denote the capacity of the array, size denote the size of the array.
   /// Let maximalCapacity denote the maximal capacity.
   /// Let additionalCapacity be the amount to increase the capacity by.
-  /// 
+  ///
   /// The growth strategy computes:
   /// - capacity@new = capacity@old + additionalCapacity if maximalCapacity - capacity@old >= additionalCapacity
   /// - fail otherwise
@@ -39,7 +39,7 @@ typedef enum Arcadia_Arrays_ResizeStrategy {
   /// Let capacity denote the capacity of the array, size denote the size of the array.
   /// Let maximalCapacity denote the maximal capacity.
   /// Let additionalCapacity be the amount to increase the capacity by.
-  /// 
+  ///
   /// This growth strategy computes:
   /// - capacity@new = 2^n * 1 if capacity@old = 0
   /// - capacity@new = 2^n * capacity@old
@@ -53,7 +53,7 @@ typedef enum Arcadia_Arrays_ResizeStrategy {
   /// Let capacity denote the capacity of the array, size denote the size of the array.
   /// Let maximalCapacity denote the maximal capacity.
   /// Let additionalCapacity be the amount to increase the capacity by.
-  /// 
+  ///
   /// This growth strategy computes:
   /// - capacity@new = maximalCapacity if maximalCapacity - size >= additionalCapacity
   /// - fail otherwise

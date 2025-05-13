@@ -28,7 +28,7 @@
 }
 
 // Compile time assertion.
-#if __STDC_VERSION__ < 202311L 
+#if __STDC_VERSION__ < 202311L
   #define Cxx_staticAssert(expression, message) _Static_assert(expression, message)
 #else
   #define Cxx_staticAssert(expression, message) static_assert(expression, message)

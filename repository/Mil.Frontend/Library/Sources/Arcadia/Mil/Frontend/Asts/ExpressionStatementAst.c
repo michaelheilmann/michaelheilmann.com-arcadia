@@ -109,7 +109,7 @@ Arcadia_Mil_ExpressionStatementAst_create
     Arcadia_Mil_ExpressionAst* expression
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue(targetVariableName),
     Arcadia_Value_makeObjectReferenceValue(expression),
   };

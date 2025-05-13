@@ -194,7 +194,7 @@ R_Interpreter_ThreadState_endCall
   (
     R_Interpreter_ThreadState* thread
   )
-{ 
+{
   thread->calls.size--;
 }
 

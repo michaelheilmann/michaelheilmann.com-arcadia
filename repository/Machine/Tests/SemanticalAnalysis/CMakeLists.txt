@@ -25,10 +25,9 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
 FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 
-set(MyTestFolder ${MyProjectName}.Mil.Frontend)
+set(MyTestFolder Mil/Frontend)
 set(MyTestName ${MyProjectName}.Mil.Frontend.Tests.SemanticalAnalysis)
 
 if (NOT TARGET ${MyTestName})

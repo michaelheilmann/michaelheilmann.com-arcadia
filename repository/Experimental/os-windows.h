@@ -4,7 +4,7 @@
 // bool, true, false
 #include <stdbool.h>
 
-// uint8_t 
+// uint8_t
 #include <stdint.h>
 
 #include "sg.h"
@@ -25,7 +25,7 @@ int window_render(struct sg_list_t* list);
  * @param width A pointer to a <code>int</code> variable.
  * @param height A pointer to a <code>int</code> variable.
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
- * @post On Success, <code>*width</code> was assigned the width, in pixels, required for a big window icon and <code>*height</code> was assigned the height, in pixels, required for a big window icon. 
+ * @post On Success, <code>*width</code> was assigned the width, in pixels, required for a big window icon and <code>*height</code> was assigned the height, in pixels, required for a big window icon.
  */
 int window_get_big_icon_size(int *width, int *height);
 

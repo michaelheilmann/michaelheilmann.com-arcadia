@@ -45,7 +45,7 @@
 
 #include "Arcadia/Ring1/Implementation/Void.h"
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_hash*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_hash*
 Arcadia_SizeValue
 Arcadia_hashAtomValue
   (
@@ -53,7 +53,7 @@ Arcadia_hashAtomValue
     Arcadia_AtomValue x
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_hash*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_hash*
 Arcadia_SizeValue
 Arcadia_hashTypeValue
   (

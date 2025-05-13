@@ -93,7 +93,7 @@ Arcadia_BigInteger_setZero
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self
   )
-{ 
+{
   self->sign = 0;
   self->limps[0] = 0;
   self->numberOfLimps = 1;

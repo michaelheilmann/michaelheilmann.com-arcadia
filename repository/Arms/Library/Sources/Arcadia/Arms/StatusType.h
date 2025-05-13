@@ -19,14 +19,14 @@
 #include "Arcadia/Arms/Configure.h"
 
 /// An enumeration of status codes.
-typedef enum Arms_Status {
-  Arms_Status_Success = 0,
-  Arms_Status_ArgumentValueInvalid = 1,
-  Arms_Status_AllocationFailed = 2,
-  Arms_Status_TypeExists = 3,
-  Arms_Status_TypeNotExists = 4,
-  Arms_Status_OperationInvalid = 5,
-  Arms_Status_EnvironmentFailed = 6,
-} Arms_Status;
+typedef enum Arcadia_Arms_Status {
+  Arcadia_Arms_Status_Success = 0,
+  Arcadia_Arms_Status_ArgumentValueInvalid = 1,
+  Arcadia_Arms_Status_AllocationFailed = 2,
+  Arcadia_Arms_Status_TypeExists = 3,
+  Arcadia_Arms_Status_TypeNotExists = 4,
+  Arcadia_Arms_Status_OperationInvalid = 5,
+  Arcadia_Arms_Status_EnvironmentFailed = 6,
+} Arcadia_Arms_Status;
 
 #endif // ARCADIA_ARMS_STATUSTYPE_H_INCLUDED

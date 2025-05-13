@@ -11,7 +11,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FilePat
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_FilePath_create">create</h1>
 
   <my-signature><code>
@@ -33,7 +33,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FilePat
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
   </section>
-  
+
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>A pointer to the file path.</p>
@@ -173,7 +173,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FilePat
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_FilePath_toNative">Arcadia_FilePath_toNative</h1>
 
   <my-signature><code>

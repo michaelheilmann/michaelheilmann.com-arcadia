@@ -61,7 +61,7 @@ struct R_Interpreter_ThreadState {
   struct {
     R_CallState* elements;
     Arcadia_SizeValue size;
-    Arcadia_SizeValue capacity; 
+    Arcadia_SizeValue capacity;
   } calls;
 
 #if defined(R_Interpreter_ThreadState_withRegisterStack) && 1 == R_Interpreter_ThreadState_withRegisterStack

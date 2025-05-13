@@ -17,7 +17,7 @@
 #define ARCADIA_ARMS_DEFAULTMEMORYMANAGER_PRIVATE_H_INCLUDED
 
 #include "Arcadia/Arms/Internal/MemoryManager.private.h"
-                   
+
 typedef struct Arms_DefaultMemoryManager Arms_DefaultMemoryManager;
 
 Arms_MemoryManagerStartupShutdown_Status

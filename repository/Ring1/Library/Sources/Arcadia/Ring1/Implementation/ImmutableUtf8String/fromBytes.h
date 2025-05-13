@@ -19,7 +19,7 @@
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
-  
+
 Arcadia_ImmutableUtf8String*
 _createFromBytes
   (

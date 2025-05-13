@@ -22,7 +22,7 @@ Arcadia_BigInteger_toNatural16
     Arcadia_Thread* thread,
     Arcadia_BigIntegerValue self
   );
-  
+
 // Convert this BigInteger into a Natural32.
 // Raise an Arcadia_Status_ConversionFailed error if the conversion fails.
 Arcadia_Natural32Value
@@ -33,7 +33,7 @@ Arcadia_BigInteger_toNatural32
   );
 
 // Convert this BigInteger into a Natural64.
-// Raise an Arcadia_Status_ConversionFailed error if the conversion fails. 
+// Raise an Arcadia_Status_ConversionFailed error if the conversion fails.
 Arcadia_Natural64Value
 Arcadia_BigInteger_toNatural64
   (
@@ -52,7 +52,7 @@ Arcadia_BigInteger_toNatural64WithTruncation
     Arcadia_BigIntegerValue self,
     Arcadia_BooleanValue* truncated
   );
-  
+
 // Convert this BigInteger into a Natural8.
 // Raise an Arcadia_Status_ConversionFailed error if the conversion fails.
 Arcadia_Natural8Value

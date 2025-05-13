@@ -72,7 +72,7 @@ Arcadia_Mil_ReturnStatementAst_constructImpl
     Arcadia_Thread* thread,
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues 
+    Arcadia_Value* argumentValues
   )
 {
   Arcadia_Mil_ReturnStatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);

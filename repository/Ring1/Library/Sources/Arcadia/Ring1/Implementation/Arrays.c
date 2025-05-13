@@ -14,7 +14,9 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING1_PRIVATE (1)
-#include "Arcadia/Ring1/Implementation//Arrays.h"
+#include "Arcadia/Ring1/Implementation/Arrays.h"
+
+#include "Arcadia/Ring1/Implementation/Thread.h"
 
 void
 Arcadia_Arrays_resizeByAdditionalCapacity
@@ -28,7 +30,7 @@ Arcadia_Arrays_resizeByAdditionalCapacity
     Arcadia_SizeValue requiredAdditionalCapacity,
     Arcadia_Arrays_ResizeStrategy strategy
   )
-{ 
+{
   if (!elements || !elementSize || !capacity || size > (*capacity)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);

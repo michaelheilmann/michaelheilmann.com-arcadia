@@ -79,7 +79,7 @@ Arcadia_Mil_StringLiteralOperandAst_constructImpl
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
-  } 
+  }
   if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);

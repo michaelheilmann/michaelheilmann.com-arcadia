@@ -169,7 +169,7 @@ Arcadia_parseNumberLiteral
     }
     number.significand.fractional.trailingZeroes.start--;
     number.significand.fractional.trailingZeroes.length++;
-    
+
   }
   if (i == n) {
     number.exponent = Arcadia_NumberLiteral_Exponent_empty(i);

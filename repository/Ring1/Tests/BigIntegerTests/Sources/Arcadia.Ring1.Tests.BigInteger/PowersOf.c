@@ -39,11 +39,11 @@ Arcadia_Test_BigInteger_assertPowersOf
   Arcadia_BigInteger* leftOperandBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setPowerOfFiveNatural64(thread, leftOperandBigInteger, power);
   Arcadia_Value leftOperandValue = Arcadia_Value_fromBigIntegerValue(leftOperandBigInteger);
-  
+
   Arcadia_BigInteger* rightOperandBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setPowerOfTwoNatural64(thread, rightOperandBigInteger, power);
   Arcadia_Value rightOperandValue = Arcadia_Value_fromBigIntegerValue(rightOperandBigInteger);
-  
+
   Arcadia_BigInteger* expectedResultBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setPowerOfTenNatural64(thread, expectedResultBigInteger, power);
   Arcadia_Value expectedResultValue = Arcadia_Value_fromBigIntegerValue(expectedResultBigInteger);

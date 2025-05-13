@@ -46,7 +46,7 @@ Arcadia_Test_BigInteger_assertRelational
   Arcadia_BigInteger* leftOperandBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger64(thread, leftOperandBigInteger, leftOperand);
   Arcadia_Value leftOperandValue = Arcadia_Value_fromBigIntegerValue(leftOperandBigInteger);
-  
+
   Arcadia_BigInteger* rightOperandBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger64(thread, rightOperandBigInteger, rightOperand);
   Arcadia_Value rightOperandValue = Arcadia_Value_fromBigIntegerValue(rightOperandBigInteger);
@@ -126,7 +126,7 @@ Arcadia_Ring1_Tests_BigInteger_relationalOperations
 
     { .result = Arcadia_BooleanValue_True, Test_Op_isGreaterThanOrEqualTo, 2, 1 },
     { .result = Arcadia_BooleanValue_True, Test_Op_isGreaterThanOrEqualTo, 2, 2 },
-  
+
     { .result = Arcadia_BooleanValue_True, Test_Op_isLowerThan, 1, 2 },
     { .result = Arcadia_BooleanValue_False, Test_Op_isLowerThan, 2, 2 },
 

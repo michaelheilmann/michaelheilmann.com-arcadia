@@ -134,7 +134,7 @@ R_Interpreter_Procedure_create
     R_Interpreter_Code* code
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue(name),
     Arcadia_Value_makeObjectReferenceValue(code),
   };

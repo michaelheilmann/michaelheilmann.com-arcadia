@@ -28,7 +28,7 @@ endif()
 FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
 FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Arcadia.Ring1/Library" "path to the Arcadia.Ring1 library directory")
 
-set(MyTestName ${MyProjectName}.Ring1.Tests.LiteralTests) 
+set(MyTestName ${MyProjectName}.Ring1.Tests.LiteralTests)
 
 # Create test executable.
 add_executable(${MyTestName})

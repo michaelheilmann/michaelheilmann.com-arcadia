@@ -66,7 +66,7 @@ static void
 Arcadia_String_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_String* string 
+    Arcadia_String* string
   );
 
 static void
@@ -141,7 +141,7 @@ fromImmutableByteArray
     Arcadia_Thread* thread,
     Arcadia_ImmutableUtf8String** pImmutableUtf8String,
     Arcadia_ImmutableByteArray* value
-  ) 
+  )
 {
   *pImmutableUtf8String =
     Arcadia_ImmutableUtf8String_create
@@ -348,7 +348,7 @@ Arcadia_String_visit
     Arcadia_Thread* thread,
     Arcadia_String* string
   )
-{ 
+{
   Arcadia_ImmutableUtf8String_visit(thread, string->immutableUtf8String);
 }
 
@@ -561,7 +561,7 @@ Arcadia_String_create
     Arcadia_Thread* thread,
     Arcadia_Value value
   )
-{ 
+{
   Arcadia_Value argumentValues[] = { value };
   Arcadia_String* self = Arcadia_allocateObject(thread, _Arcadia_String_getType(thread), 1, &argumentValues[0]);
   return self;
@@ -645,7 +645,7 @@ Arcadia_String_getNumberOfSymbols
   )
 {
   Arcadia_SizeValue numberOfSymbols;
-  Arcadia_isUtf8(thread, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self), &numberOfSymbols);
+  Arcadia_Unicode_isUtf8(thread, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self), &numberOfSymbols);
   return numberOfSymbols;
 }
 

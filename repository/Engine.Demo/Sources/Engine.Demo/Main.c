@@ -15,7 +15,7 @@
 
 #include <stdlib.h>
 
-#include "Arcadia/Include.h"
+#include "Arcadia/Ring2/Include.h"
 #include "Module/Audials/Include.h"
 #include "Module/Visuals/Include.h"
 #include "Arcadia/Ring1/Include.h"
@@ -27,7 +27,7 @@ main1
     int argc,
     char **argv
   )
-{ 
+{
   Arcadia_Visuals_Application* application = NULL;
   Arcadia_Visuals_Window* window = NULL;
   Arcadia_BooleanValue audialsInitialized = Arcadia_BooleanValue_False;
@@ -49,7 +49,7 @@ main1
     // (1) Initialize Audials.
     Audials_startup(thread);
     audialsInitialized = Arcadia_BooleanValue_True;
-  
+
     // (2) Play sine wave.
     Audials_playSine(thread);
 
@@ -59,7 +59,7 @@ main1
 
     // (4) Ensure the window is opened.
     Arcadia_Visuals_Window_open(thread, window);
-  
+
     Arcadia_Integer32Value width, height;
     Arcadia_Visuals_Icon* icon;
 
@@ -67,7 +67,7 @@ main1
     Arcadia_Visuals_Window_getRequiredBigIconSize(thread, window, &width, &height);
     icon = Arcadia_Visuals_Application_createIcon(thread, application, width, height, 47, 47, 47, 255);
     Arcadia_Visuals_Window_setBigIcon(thread, window, icon);
-  
+
     // (6) Set the small icon.
     Arcadia_Visuals_Window_getRequiredSmallIconSize(thread, window, &width, &height);
     icon = Arcadia_Visuals_Application_createIcon(thread, application, width, height, 47, 47, 47, 255);

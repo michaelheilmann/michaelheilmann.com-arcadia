@@ -83,7 +83,7 @@ int draw_list(struct drawing_context_t* context, struct sg_list_t* node) {
 int draw_text(struct drawing_context_t* context, struct sg_text_t* node) {
   struct sg_color_t* color_node;
   if (sg_text_get_color(&color_node, node)) {
-    return EXIT_FAILURE;  
+    return EXIT_FAILURE;
   }
   uint32_t hColor;
   sg_color_pack_xbgr(&hColor, color_node, 0);
@@ -274,7 +274,7 @@ int window_create() {
         WS_OVERLAPPEDWINDOW,            // Window style
         CW_USEDEFAULT, CW_USEDEFAULT,   // Default position
         CW_USEDEFAULT, CW_USEDEFAULT,   // Default size
-        NULL,                           // Parent window    
+        NULL,                           // Parent window
         NULL,                           // Menu
         g_hInstance,                    // Instance handle
         NULL                            // Additional application data

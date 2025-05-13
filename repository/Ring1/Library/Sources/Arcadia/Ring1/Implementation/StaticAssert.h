@@ -22,7 +22,7 @@
 
 #include "Arcadia/Ring1/Implementation/Configure.h"
 
-#if __STDC_VERSION__ < 202311L 
+#if __STDC_VERSION__ < 202311L
   #define Arcadia_StaticAssert(expression, message) _Static_assert(expression, message)
 #else
   #define Arcadia_StaticAssert(expression, message) static_assert(expression, message)

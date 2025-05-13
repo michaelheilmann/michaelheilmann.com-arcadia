@@ -43,7 +43,7 @@ safeRangeTests
 {
   Arcadia_Integer64Value minimum = -9007199254740992;
   Arcadia_Integer64Value maximum = +9007199254740992;
-  
+
   testFixtureInteger64ToStringToReal64(thread, minimum);
   testFixtureInteger64ToStringToReal64(thread, maximum);
   testFixtureInteger64ToStringToReal64(thread, Arcadia_Integer64Value_Literal(0));
@@ -76,7 +76,7 @@ test
 {
 #define On(Text) \
   testFixtureStringToReal64(thread, Text); \
- 
+
   On(u8"0");
   On(u8"00");
   On(u8"0.5e-20");

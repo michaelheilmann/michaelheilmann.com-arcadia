@@ -32,7 +32,7 @@ dequeTest1
 }
 
 // Create a deque.
-// 
+//
 // Assert the create function does not return null.
 // Assert the size of the deque is zero.
 static void

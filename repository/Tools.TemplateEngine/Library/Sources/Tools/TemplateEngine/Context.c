@@ -24,7 +24,7 @@ Context_constructImpl
     Arcadia_Value* self,
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
-  );  
+  );
 
 static void
 Context_destruct
@@ -125,7 +125,7 @@ Context_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
   };
   Context* self = Arcadia_allocateObject(thread, _Context_getType(thread), 0, &argumentValues[0]);

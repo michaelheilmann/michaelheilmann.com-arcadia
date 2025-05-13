@@ -20,7 +20,7 @@ execute1
   while (true) {
     R_Interpreter_ThreadState* interpreterThread = R_Interpreter_ProcessState_getCurrentThread(interpreterProcessState);
     currentCallState = R_Interpreter_ThreadState_getCurrentCall(interpreterThread);
-  
+
     if (currentCallState->instructionIndex == currentCallState->procedure->code->sz) {
       interpreterThread->calls.size--;
       if (currentCallState->previous) {

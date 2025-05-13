@@ -16,11 +16,15 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_CONFIGURE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_CONFIGURE_H_INCLUDED
 
+
+
 #define Arcadia_Configuration_InstructionSetArchitecture_Unknown @Arcadia.Ring1.InstructionSetArchitecture.Unknown@
 #define Arcadia_Configuration_InstructionSetArchitecture_X86 @Arcadia.Ring1.InstructionSetArchitecture.X86@
 #define Arcadia_Configuration_InstructionSetArchitecture_X64 @Arcadia.Ring1.InstructionSetArchitecture.X64@
 
-#define Arcadia_Configuration_InstructionSetArchitecture @Arcadia.Ring1.Configuration.InstructionSetArchitecture@
+#define Arcadia_Configuration_InstructionSetArchitecture @Arcadia.Ring1.InstructionSetArchitecture@
+
+
 
 #define Arcadia_Configuration_OperatingSystem_Unknown @Arcadia.Ring1.OperatingSystem.Unknown@
 #define Arcadia_Configuration_OperatingSystem_Cygwin @Arcadia.Ring1.OperatingSystem.Cygwin@
@@ -33,13 +37,25 @@
 #define Arcadia_Configuration_OperatingSystem_Unix @Arcadia.Ring1.OperatingSystem.Unix@
 #define Arcadia_Configuration_OperatingSystem_Windows @Arcadia.Ring1.OperatingSystem.Windows@
 
-#define Arcadia_Configuration_OperatingSystem @Arcadia.Ring1.Configuration.OperatingSystem@
+#define Arcadia_Configuration_OperatingSystem @Arcadia.Ring1.OperatingSystem@
+
+
 
 #define Arcadia_Configuration_CompilerC_Unknown @Arcadia.Ring1.Compiler.C.Unknown@
 #define Arcadia_Configuration_CompilerC_Clang @Arcadia.Ring1.Compiler.C.Clang@
 #define Arcadia_Configuration_CompilerC_Gcc @Arcadia.Ring1.Compiler.C.Gcc@
 #define Arcadia_Configuration_CompilerC_Msvc @Arcadia.Ring1.Compiler.C.Msvc@
 
-#define Arcadia_Configuration_CompilerC @Arcadia.Ring1.Configuration.Compiler.C@
+#define Arcadia_Configuration_CompilerC @Arcadia.Ring1.Compiler.C@
+
+
+
+#define Arcadia_Configuration_ByteOrder_Unknown @Arcadia.Ring1.ByteOrder.Unknown@
+#define Arcadia_Configuration_ByteOrder_BigEndian @Arcadia.Ring1.ByteOrder.BigEndian@
+#define Arcadia_Configuration_ByteOrder_LittleEndian @Arcadia.Ring1.ByteOrder.LittleEndian@
+
+#define Arcadia_Configuration_ByteOrder @Arcadia.Ring1.ByteOrder@
+
+
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_CONFIGURE_H_INCLUDED

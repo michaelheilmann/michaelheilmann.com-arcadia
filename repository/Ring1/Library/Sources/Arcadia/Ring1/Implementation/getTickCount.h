@@ -21,9 +21,8 @@
 #endif
 
 #include "Arcadia/Ring1/Implementation/Natural64.h"
-typedef struct Arcadia_Thread Arcadia_Thread;
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_getTickCount
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_getTickCount
 Arcadia_Natural64Value
 Arcadia_getTickCount
   (

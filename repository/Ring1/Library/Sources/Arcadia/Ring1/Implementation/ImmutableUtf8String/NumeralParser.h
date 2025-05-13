@@ -33,7 +33,7 @@ _State_init
     const uint8_t* start,
     size_t length
   )
-{ 
+{
   state->start = start;
   state->current = start;
   state->end = start + length;
@@ -82,7 +82,7 @@ isZero
   (
     _State* state
   )
-{ 
+{
   return ('0' == state->codePoint);
 }
 

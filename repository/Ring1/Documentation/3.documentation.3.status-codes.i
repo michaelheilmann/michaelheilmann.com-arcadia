@@ -38,16 +38,16 @@
 
   <tr><td><code>EncodingInvalid</code>          </td><td>An encoding is invalid.</td></tr>
   <tr><td><code>Exists</code>                   </td><td>Something exists (but should not).</td></tr>
-  <tr><td><code>FileSystemOperationFailed</code></td><td>A file system operation failed.</td></tr>  
-  
-  
+  <tr><td><code>FileSystemOperationFailed</code></td><td>A file system operation failed.</td></tr>
+
+
   <tr><td><code>Initialized</code>              </td><td>Something was initialized (but should not have been initialized).</td></tr>
   <tr><td><code>NotExists</code>                </td><td>Something does not exist.</td></tr>
   <tr><td><code>NumberOfArgumentsInvalid</code> </td><td>The number of arguments is invalid.</td></tr>
   <tr><td><code>OperationInvalid</code>         </td><td>An operation is invalid.</td></tr>
   <tr><td><code>SemanticalError</code>          </td><td></td></tr>
   <tr><td><code>SyntacticalError</code>         </td><td></td></tr>
-  
+
   <tr><td><code>TestFailed</code>               </td><td>A test failed. This is used by the built-in tests that ensure correctness.</td></tr>
   <tr><td><code>TypeExists</code>               </td><td>A type exists (but should not).</td></tr>
   <tr><td><code>TypeNotExists</code>            </td><td>A type does not exist (but should).</td></tr>

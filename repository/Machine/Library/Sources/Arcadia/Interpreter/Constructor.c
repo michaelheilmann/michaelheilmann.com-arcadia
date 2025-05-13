@@ -114,7 +114,7 @@ R_Interpreter_Constructor_createForeign
     Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeForeignProcedureValue(foreignProcedure),
   };
   R_Interpreter_Constructor* self = Arcadia_allocateObject(thread, _R_Interpreter_Constructor_getType(thread), 1, &argumentValues[0]);

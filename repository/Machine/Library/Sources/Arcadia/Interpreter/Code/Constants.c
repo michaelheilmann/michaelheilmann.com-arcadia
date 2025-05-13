@@ -149,7 +149,7 @@ getOrCreate
     R_Interpreter_Code_Constants* self,
     Arcadia_Value const* constant
   )
-{ 
+{
   for (Arcadia_SizeValue i = 0, n = self->cp; i < n; ++i) {
     if (Arcadia_Value_isEqualTo(thread, self->p + i, constant)) {
       return i;

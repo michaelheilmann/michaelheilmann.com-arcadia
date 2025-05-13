@@ -108,7 +108,7 @@ recursiveInclude2
   }
 }
 
-int 
+int
 main
   (
     int argc,

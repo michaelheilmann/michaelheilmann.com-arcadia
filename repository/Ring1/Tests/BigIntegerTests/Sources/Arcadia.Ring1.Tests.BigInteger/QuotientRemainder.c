@@ -39,7 +39,7 @@ Arcadia_Test_BigInteger_quotientRemainderTestFixtureNatural64
 {
   fprintf(stdout, "dividend = %"PRIu64", divisor = %"PRIu64", quotient = %"PRIu64", remainder = %"PRIu64"\n", dividend, divisor, quotient, remainder);
 
-  Arcadia_BigInteger_setNatural64(thread, context->dividend, dividend); 
+  Arcadia_BigInteger_setNatural64(thread, context->dividend, dividend);
   Arcadia_BigInteger_setNatural64(thread, context->divisor, divisor);
   Arcadia_Tests_assertTrue(thread, dividend == Arcadia_BigInteger_toNatural64(thread, context->dividend));
   Arcadia_Tests_assertTrue(thread, divisor == Arcadia_BigInteger_toNatural64(thread, context->divisor));
@@ -196,7 +196,7 @@ Arcadia_Ring1_Tests_BigInteger_quotientRemainderOperations
   (
     Arcadia_Thread* thread
   )
-{ 
+{
   Arcadia_Test_BigInteger_quotientRemainderRegression(thread);
   Arcadia_Test_BigInteger_quotientRemainderFull(thread);
 }

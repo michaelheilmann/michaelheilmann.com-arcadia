@@ -84,10 +84,10 @@ Arcadia_BigInteger_setPowerOfTwoNatural64
     } while (other > 31);
   }
   if (other) {
-    Arcadia_BigInteger_setNatural32(thread, b, PowersOfTwoTable[other]);    
+    Arcadia_BigInteger_setNatural32(thread, b, PowersOfTwoTable[other]);
     Arcadia_BigInteger_multiply3(thread, a, a, b);
   }
-  Arcadia_BigInteger_swap(thread, self, a);  
+  Arcadia_BigInteger_swap(thread, self, a);
 }
 
 void

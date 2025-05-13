@@ -17,10 +17,11 @@
 #define R_INTERPRETER_CODE_CONSTANTS_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Include.h"
 
 /**
  * @brief A set of constants.
- * @details 
+ * @details
  * Each array element contains a constant. A constant is one of the following values
  * - boolean values
  * - integer(8|16|32|64) values

@@ -25,8 +25,7 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
-FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Ring1/Library" "path to the Ring1 library directory")
+FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Ring1/Library" "path to the Ring 1 library directory")
 
 set(MyTestName ${MyProjectName}.Ring1.Tests.StringToIntegerTests)
 
@@ -39,4 +38,4 @@ list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectNam
 
 EndProduct(${MyTestName})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia.Ring1")
+set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring1")

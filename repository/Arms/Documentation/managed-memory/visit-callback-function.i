@@ -36,5 +36,5 @@ int main(int argc, char**argv) {<br>
 &nbsp;return EXIT_SUCCESS;<br>
 }
 </code>
-</p> 
+</p>
 <p>Note that types can be created with a null pointer for the visit function.</p>

@@ -4,7 +4,7 @@
 // bool, true, false
 #include <stdbool.h>
 
-// uint8_t 
+// uint8_t
 #include <stdint.h>
 
 #include "os-commons.h"

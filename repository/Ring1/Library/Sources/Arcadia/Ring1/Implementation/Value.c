@@ -19,6 +19,8 @@
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include "Arcadia/Ring1/Implementation/Object.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Thread.h"
+
 // exit, EXIT_FAILURE
 #include <stdlib.h>
 
@@ -103,7 +105,7 @@ Arcadia_Value_getType
     Arcadia_Thread* thread,
     Arcadia_Value const* self
   )
-{ 
+{
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
       return _Arcadia_AtomValue_getType(thread);
@@ -181,13 +183,13 @@ Arcadia_Value_getType
       operations->Operation(thread, &result, 2, &arguments[0]); \
       return Arcadia_Value_getBooleanValue(&result); \
   } break;
-  
+
 Arcadia_BooleanValue
 Arcadia_Value_isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value const* self,
-    Arcadia_Value const* other 
+    Arcadia_Value const* other
   )
 {
   switch (self->tag) {

@@ -31,7 +31,6 @@
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/Void.h"
-typedef struct Arcadia_Process Arcadia_Process;
 
 typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
 
@@ -169,7 +168,7 @@ Arcadia_ImmutableUtf8String_createFromVoid
   );
 
 /// @brief Visit this immutable UTF8 string object.
-/// @param self A pointer to this immutable UTF8 string object. 
+/// @param self A pointer to this immutable UTF8 string object.
 void
 Arcadia_ImmutableUtf8String_visit
   (
@@ -179,7 +178,7 @@ Arcadia_ImmutableUtf8String_visit
 
 /// @brief Get a pointer to the Bytes of this immutable UTF8 string object.
 /// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object. 
+/// @param self A pointer to this immutable UTF8 string object.
 /// @return A pointer to the Bytes of this immutable UTF8 stirng object.
 /// @warning The Bytes of the array must not be modified.
 Arcadia_Natural8Value const*
@@ -191,7 +190,7 @@ Arcadia_ImmutableUtf8String_getBytes
 
 /// @brief Get the number of Bytes in this immutable UTF8 string object.
 /// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object. 
+/// @param self A pointer to this immutable UTF8 string object.
 /// @return The number of Bytes in this immutable UTF8 string object.
 Arcadia_SizeValue
 Arcadia_ImmutableUtf8String_getNumberOfBytes

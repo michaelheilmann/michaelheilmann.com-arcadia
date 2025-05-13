@@ -21,11 +21,11 @@
 // i is the zero-based index of the Byte at which the current UTF8 symbol starts in the input stream.
 // n is the length, in Bytes, of the current UTF8 symbol in the input stream.
 // s denotes the current symbol.
-// 
+//
 // There are three symbols different from all UTF8 symbols. These are START, END, and ERROR each of a size, in Bytes, of 0.
-// 
+//
 // The initial values of a scanner is (0,0,START).
-// 
+//
 // When the scanner is in some state (i,n,s) and is advanced to the next symbol,
 // then there are two possible outcomes:
 // - if the next 1-4 Bytes form a valid next symbol:
@@ -114,11 +114,11 @@ saveAndNext
   );
 
 static void
-onEndToken
+onEndWord
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Scanner* self,
-    Arcadia_DataDefinitionLanguage_TokenType type
+    Arcadia_DataDefinitionLanguage_WordType type
   );
 
 static Arcadia_BooleanValue
@@ -182,7 +182,7 @@ Arcadia_DataDefinitionLanguage_Scanner_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   //
-  _self->token.type = Arcadia_DataDefinitionLanguage_TokenType_StartOfInput;
+  _self->token.type = Arcadia_DataDefinitionLanguage_WordType_StartOfInput;
   _self->token.text = NULL;
   _self->stringTable = NULL;
   _self->keywords = NULL;
@@ -191,7 +191,7 @@ Arcadia_DataDefinitionLanguage_Scanner_constructImpl
   //
   _self->keywords = Arcadia_DataDefinitionLanguage_Keywords_create(thread);
   //
-  _self->token.type = Arcadia_DataDefinitionLanguage_TokenType_StartOfInput;
+  _self->token.type = Arcadia_DataDefinitionLanguage_WordType_StartOfInput;
   _self->stringTable = Arcadia_DataDefinitionLanguage_StringTable_create(thread);
   _self->input = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
   _self->token.text = Arcadia_StringBuffer_create(thread);
@@ -203,7 +203,7 @@ Arcadia_DataDefinitionLanguage_Scanner_constructImpl
   { \
     Arcadia_StringBuffer_clear(thread, temporary); \
     Arcadia_StringBuffer_append_pn(thread, temporary, text, sizeof(text) - 1); \
-    Arcadia_DataDefinitionLanguage_Keywords_add(thread, _self->keywords, Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString(thread, _self->stringTable, temporary), Arcadia_DataDefinitionLanguage_TokenType_##type); \
+    Arcadia_DataDefinitionLanguage_Keywords_add(thread, _self->keywords, Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString(thread, _self->stringTable, temporary), Arcadia_DataDefinitionLanguage_WordType_##type); \
   }
   //
   // literals
@@ -283,11 +283,11 @@ saveAndNext
 }
 
 static void
-onEndToken
+onEndWord
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Scanner* self,
-    Arcadia_DataDefinitionLanguage_TokenType type
+    Arcadia_DataDefinitionLanguage_WordType type
   )
 {
   self->token.type = type;
@@ -328,7 +328,7 @@ Arcadia_DataDefinitionLanguage_Scanner_create
 }
 
 Arcadia_String*
-Arcadia_DataDefinitionLanguage_Scanner_getTokenText
+Arcadia_DataDefinitionLanguage_Scanner_getWordText
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Scanner* self
@@ -336,7 +336,7 @@ Arcadia_DataDefinitionLanguage_Scanner_getTokenText
 { return Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString(thread, self->stringTable, self->token.text); }
 
 Arcadia_Natural32Value
-Arcadia_DataDefinitionLanguage_Scanner_getTokenType
+Arcadia_DataDefinitionLanguage_Scanner_getWordType
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Scanner* self
@@ -355,12 +355,12 @@ onEndOfLine
     if ('\n' == self->symbol) {
       next(thread, self);
     }
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_LineTerminator);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_LineTerminator);
     Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   } else if ('\n' == self->symbol) {
     next(thread, self);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_LineTerminator);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_LineTerminator);
     Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
     return;
   }
@@ -378,16 +378,16 @@ Arcadia_DataDefinitionLanguage_Scanner_step
     next(thread, self);
   }
   if (CodePoint_End == self->symbol) {
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_EndOfInput);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_EndOfInput);
     Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<end of input>", sizeof(u8"<end of input>") - 1);
     return;
-  } 
+  }
   // Whitespace :  <Whitespace> | <Tabulator>
   if (' ' == self->symbol || '\t' == self->symbol) {
     do {
       saveAndNext(thread, self);
     } while (' ' == self->symbol || '\t' == self->symbol);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_WhiteSpace);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_WhiteSpace);
     return;
   }
   // LineTerminator : <LineFeed>
@@ -398,45 +398,45 @@ Arcadia_DataDefinitionLanguage_Scanner_step
     if ('\n' == self->symbol) {
       saveAndNext(thread, self);
     }
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_LineTerminator);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_LineTerminator);
     return;
   } else if ('\n' == self->symbol) {
     saveAndNext(thread, self);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_LineTerminator);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_LineTerminator);
     return;
   }
   if (':' == self->symbol) {
      // <colon>
     saveAndNext(thread, self);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_Colon);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_Colon);
     return;
   } else if (',' == self->symbol) {
      // <comma>
     saveAndNext(thread, self);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_Comma);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_Comma);
     return;
   } else if ('{' == self->symbol) {
      // <left curly bracket>
     saveAndNext(thread, self);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_LeftCurlyBracket);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_LeftCurlyBracket);
     return;
   } else if ('}' == self->symbol) {
      // <right curly bracket>
     saveAndNext(thread, self);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_RightCurlyBracket);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_RightCurlyBracket);
     return;
   } else if ('[' == self->symbol) {
      // <left square bracket>
     saveAndNext(thread, self);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_LeftSquareBracket);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_LeftSquareBracket);
     return;
   } else if (']' == self->symbol) {
      // <right square bracket>
     saveAndNext(thread, self);
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_RightSquareBracket);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_RightSquareBracket);
     return;
   } else if ('"' == self->symbol) {
-    // <string>    
+    // <string>
     next(thread, self);
     Arcadia_BooleanValue lastWasSlash = Arcadia_BooleanValue_False;
     while (Arcadia_BooleanValue_True) {
@@ -479,7 +479,7 @@ Arcadia_DataDefinitionLanguage_Scanner_step
         }
       }
     }
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_StringLiteral);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_StringLiteral);
     return;
   } else if ('_' == self->symbol || isAlphabetic(thread, self)) {
     // <name>
@@ -487,8 +487,8 @@ Arcadia_DataDefinitionLanguage_Scanner_step
     while ('_' == self->symbol || isAlphabetic(thread, self) || isDigit(thread, self)) {
       saveAndNext(thread, self);
     }
-    onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_Name);
-    Arcadia_DataDefinitionLanguage_Keywords_scan(thread, self->keywords, Arcadia_DataDefinitionLanguage_Scanner_getTokenText(thread, self), &self->token.type);
+    onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_Name);
+    Arcadia_DataDefinitionLanguage_Keywords_scan(thread, self->keywords, Arcadia_DataDefinitionLanguage_Scanner_getWordText(thread, self), &self->token.type);
     return;
   } else if (isDigit(thread, self)) {
     do {
@@ -512,9 +512,9 @@ Arcadia_DataDefinitionLanguage_Scanner_step
           saveAndNext(thread, self);
         } while (isDigit(thread, self));
       }
-      onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_RealLiteral);
+      onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_RealLiteral);
     } else {
-      onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_IntegerLiteral);
+      onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_IntegerLiteral);
     }
   } else if ('/' == self->symbol) {
     next(thread, self);
@@ -542,14 +542,14 @@ Arcadia_DataDefinitionLanguage_Scanner_step
           }
         }
       }
-      onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_MultiLineComment);
+      onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_MultiLineComment);
     } else if ('/' == self->symbol) {
       // single line comment
       next(thread, self);
       while (CodePoint_End != self->symbol && '\n' != self->symbol && '\r' != self->symbol) {
         saveAndNext(thread, self);
       }
-      onEndToken(thread, self, Arcadia_DataDefinitionLanguage_TokenType_SingleLineComment);
+      onEndWord(thread, self, Arcadia_DataDefinitionLanguage_WordType_SingleLineComment);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_LexicalError);
       Arcadia_Thread_jump(thread);
@@ -570,7 +570,7 @@ Arcadia_DataDefinitionLanguage_Scanner_setInput
 {
   self->input = input;
   self->symbol = CodePoint_Start;
-  self->token.type = Arcadia_DataDefinitionLanguage_TokenType_StartOfInput;
+  self->token.type = Arcadia_DataDefinitionLanguage_WordType_StartOfInput;
   Arcadia_StringBuffer_clear(thread, self->token.text);
   Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
 }

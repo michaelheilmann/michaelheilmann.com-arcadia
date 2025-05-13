@@ -27,18 +27,24 @@ endif()
 
 set(MyTool Tools.IconGenerator)
 
-BeginProduct(${MyTool} executable)
+if (NOT TARGET ${MyTool})
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
-FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
+  FetchProduct(${MyProjectName}.Visuals "${REPOSITORY_SOURCE_DIR}/Visuals/Library" "path to the Visuals library directory")
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h @ONLY)
-list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i)
-list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h)
+  BeginProduct(${MyTool} executable)
 
-list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Main.c)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h @ONLY)
+  list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i)
+  list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h)
 
-list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Visuals ${MyProjectName}.Machine ${MyProjectName}.Arms)
+  list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Main.c)
 
-EndProduct(${MyTool})
-set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.ico\"")
+  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Visuals ${MyProjectName}.Machine ${MyProjectName}.Arms)
+
+  EndProduct(${MyTool})
+
+  set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.ico\"")
+
+  set_target_properties(${MyTool} PROPERTIES FOLDER "Tools")
+
+endif()

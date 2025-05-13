@@ -97,7 +97,7 @@ typedef enum Arcadia_TypeKind {
   /// The "scalar" type kind.
   /// Examples of this type are:
   /// - <code>Arcadia.Boolean</code>
-  /// - <code>Arcadia.ForeignProcedure</code> 
+  /// - <code>Arcadia.ForeignProcedure</code>
   /// - <code>Arcadia.Integer(8|16|32|64)</code>
   /// - <code>Arcadia.Natural(8|16|32|64)</code>
   /// - <code>Arcadia.Real(32|64)</code>

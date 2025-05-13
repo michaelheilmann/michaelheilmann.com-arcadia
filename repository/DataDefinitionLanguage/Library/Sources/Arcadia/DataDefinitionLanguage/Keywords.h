@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_DATADEFINITIONLANGUAGE_KEYWORDS_H_INCLUDED)
 #define ARCADIA_DATADEFINITIONLANGUAGE_KEYWORDS_H_INCLUDED
 
-#include "Arcadia/DataDefinitionLanguage/TokenType.h"
+#include "Arcadia/DataDefinitionLanguage/WordType.h"
 
 /// @code
 /// class Arcadia.DataDefinitionLanguage.Keywords

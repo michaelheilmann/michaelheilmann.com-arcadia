@@ -259,7 +259,7 @@ Arcadia_Deque_clone
     Arcadia_Deque* self
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue(self),
   };
   Arcadia_Deque* clone = Arcadia_allocateObject(thread, _Arcadia_Deque_getType(thread), 1, &argumentValues[0]);
@@ -313,7 +313,7 @@ Arcadia_Deque_insertAt
   )
 {
   Arcadia_Deque_ensureFreeCapacity(thread, self, 1);
-  
+
   Arcadia_SizeValue const capacity = self->capacity; // The capacity does not change anymore for the rest of this
                                                      // function but is frequently referenced, hence it is cached
                                                      // here.
@@ -393,7 +393,7 @@ Arcadia_Deque_getBack
   return Arcadia_Deque_getAt(thread, self, self->size - 1);
 }
 
-Arcadia_Value 
+Arcadia_Value
 Arcadia_Deque_getAt
   (
     Arcadia_Thread* thread,
@@ -450,7 +450,7 @@ Arcadia_Deque_removeAt
   }
   Arcadia_SizeValue const capacity = self->capacity;
   if (index < self->size / 2) {
-    // - a'[read] = a[read-1], ..., a'[read + index] = a[read + index - 1] 
+    // - a'[read] = a[read-1], ..., a'[read + index] = a[read + index - 1]
     // - read' = read + 1
     // - size' = size - 1
     Arcadia_SizeValue offset = self->read;

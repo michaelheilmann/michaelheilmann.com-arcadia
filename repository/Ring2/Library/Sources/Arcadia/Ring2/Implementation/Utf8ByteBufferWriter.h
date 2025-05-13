@@ -27,7 +27,7 @@ Arcadia_declareObjectType(u8"Arcadia.Utf8ByteBufferWriter", Arcadia_Utf8ByteBuff
 
 struct Arcadia_Utf8ByteBufferWriter {
   Arcadia_Utf8Writer parent;
-  Arcadia_ByteBuffer* target; 
+  Arcadia_ByteBuffer* target;
 };
 
 Arcadia_Utf8ByteBufferWriter*

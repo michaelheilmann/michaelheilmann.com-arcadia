@@ -18,7 +18,7 @@
     <tr><td><code>Arms_Status_OperationInvalid</code></td><td>if there are objects in \(U\). This is usually the result of illicit usage of Arcadia ARMS.</td></tr>
     <tr><td><code>Arms_Status_OperationInvalid</code></td><td>if the last handle was already relinquished. This is usually the result of illicit usage of Arcadia ARMS</td></tr>
   </table>
-  
+
   <p><b>Warning:</b>
   Using the services of Arcadia ARMS without a handle is undefined behavior.
   </p>

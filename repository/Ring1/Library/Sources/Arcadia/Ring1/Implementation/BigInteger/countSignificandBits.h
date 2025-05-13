@@ -30,6 +30,6 @@ Arcadia_BigInteger_countSignificandBits
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self
-  ); 
+  );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_BIGINTEGER_COUNTSIGNIFICANDBITS_H_INCLUDED

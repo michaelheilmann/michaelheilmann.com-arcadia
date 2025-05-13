@@ -96,7 +96,7 @@ struct R_CallState {
    * @brief Must be one of R_CallState_Flags_Procedure or R_CallState_Flags_ForeignProcedure.
    */
   Arcadia_Natural8Value flags;
-  /** 
+  /**
    * The instruction index of this call.
    */
   Arcadia_Natural32Value instructionIndex;

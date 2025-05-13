@@ -20,7 +20,7 @@
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
-#include "Arcadia/Ring1/Implementation/NoReturn.h"
+#include "Arcadia/Ring1/Implementation/Annotations/NoReturn.h"
 
 #if Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
 #include <stddef.h>
@@ -28,55 +28,19 @@
 
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Implementation/Status.h"
 #include "Arcadia/Ring1/Implementation/Value.h"
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <inttypes.h>
 #include <setjmp.h>
-
-typedef struct Arcadia_JumpTarget Arcadia_JumpTarget;
-
-/// the thread object provides access to a thread.
-typedef struct Arcadia_Thread Arcadia_Thread;
+typedef struct Arcadia_JumpTarget Arcadia_JumpTarget; // Forward declaration.
+typedef struct Arcadia_Thread Arcadia_Thread; // Forward declaration.
 
 /// the process object provides access to the current thread.
 /// the current thread provides access to the thread's jump target stack and the thread's status variable.
 typedef struct Arcadia_Process Arcadia_Process;
-
-struct Arcadia_JumpTarget {
-  Arcadia_JumpTarget* previous;
-  jmp_buf environment;
-};
-
-#define Arcadia_JumpTarget_save(jumpTarget) (!setjmp((jumpTarget)->environment))
-
-#define Arcadia_Status_Success (0)
-
-#define Arcadia_Status_AllocationFailed (1)
-#define Arcadia_Status_ArgumentTypeInvalid (2)
-#define Arcadia_Status_ArgumentValueInvalid (3)
-#define Arcadia_Status_ConversionFailed (4)
-#define Arcadia_Status_DivisionByZero (5)
-#define Arcadia_Status_EncodingInvalid (6)
-#define Arcadia_Status_Exists (7)
-#define Arcadia_Status_FileSystemOperationFailed (8)
-#define Arcadia_Status_Initialized (9)
-#define Arcadia_Status_LexicalError (10)
-#define Arcadia_Status_NotExists (11)
-#define Arcadia_Status_NumberOfArgumentsInvalid (12)
-#define Arcadia_Status_OperationInvalid (13)
-#define Arcadia_Status_SemanticalError (14)
-#define Arcadia_Status_SyntacticalError (15)
-#define Arcadia_Status_TestFailed (16)
-#define Arcadia_Status_TypeExists (17)
-#define Arcadia_Status_TypeNotExists (18)
-#define Arcadia_Status_Uninitialized (19)
-#define Arcadia_Status_EnvironmentFailed (20)
-#define Arcadia_Status_NotInitialized (21)
-#define Arcadia_Status_NotImplemented (22)
-
-typedef uint32_t Arcadia_Status;
 
 typedef uint32_t Arcadia_ProcessStatus;
 #define Arcadia_ProcessStatus_Success (0)
@@ -84,100 +48,6 @@ typedef uint32_t Arcadia_ProcessStatus;
 #define Arcadia_ProcessStatus_AllocationFailed (2)
 #define Arcadia_ProcessStatus_OperationInvalid (3)
 #define Arcadia_ProcessStatus_EnvironmentFailed (4)
-
-/// @error Arcadia_Status_ArgumentValueInvalid @a self is a null pointer
-Arcadia_SizeValue
-Arcadia_Thread_getValueStackSize
-  (
-    Arcadia_Thread* thread
-  );
-
-/// @error Arcadia_Status_ArgumentValueInvalid @a self is a null pointer
-/// @error Arcadia_Status_ArgumentValueInvalid @a value is a null pointer
-/// @error Arcadia_Status_AllocationFailed an allocation failed
-void
-Arcadia_Thread_pushValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Value const* value
-  );
-
-/// @error Arcadia_Status_ArgumentValueInvalid @a self is a null pointer
-/// @error Arcadia_Status_ArgumentValueInvalid @a coutn is greater than the size of the stack
-void
-Arcadia_Thread_popValues
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue count
-  );
-
-/// @brief Push a jump target on the top of the jump target stack of this thread
-/// @param thread A pointer to this Arcadia_Thread object
-/// @undefined @a process does not refer to a Arcadia_Thread object
-/// @undefined @a jumpTarget does not point to an Arcadia_JumpTarget object
-/// @undefined Invoked without having the exclusive lock to the thread
-void
-Arcadia_Thread_pushJumpTarget
-  (
-    Arcadia_Thread* thread,
-    Arcadia_JumpTarget* jumpTarget
-  );
-
-/// @brief Pop a jump target from the top of the jump target stack of this thread
-/// @param thread A pointer to this Arcadia_Thread object
-/// @undefined @a thread does not refer to a Arcadia_Thread object
-/// @undefined the jump target stack of the Arcadia_Thread object is empty
-/// @undefined Invoked without having the exclusive lock to the thread
-void
-Arcadia_Thread_popJumpTarget
-  (
-    Arcadia_Thread* thread
-  );
-
-/// @brief Jump to the jump target on the top of the jump target stack of this thread
-/// @param thread A pointer to this Arcadia_Thread object
-/// @undefined @a thread does not refer to a Arcadia_Thread object
-/// @undefined the jump target stack of the Arcadia_Process object is empty
-/// @undefined Invoked without having the exclusive lock to the thread
-Arcadia_NoReturn() void
-Arcadia_Thread_jump
-  (
-    Arcadia_Thread* thread
-  );
-
-/// @brief Get the status variable value of this thread
-/// @param thread A pointer to this Arcadia_Thread object
-/// @return the status value
-/// @undefined @a thread does not refer to a Arcadia_Thread object
-/// @undefined Invoked without having the exclusive lock to the thread
-Arcadia_Status
-Arcadia_Thread_getStatus
-  (
-    Arcadia_Thread* thread
-  );
-
-/// @brief Set the status variable value of this thread
-/// @param thread A pointer to this Arcadia_Thread object
-/// @param status the status value
-/// @undefined @a thread does not refer to a Arcadia_Thread object
-/// @undefined Invoked without having the exclusive lock to the thread
-void
-Arcadia_Thread_setStatus
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Status status
-  );
-
-/// @brief Get the process of this thread
-/// @param thread A pointer to this Arcadia_Thread object
-/// @retur A pointer to the process of this thread
-/// @undefined @a thread does not refer to a Arcadia_Thread object
-/// @undefined Invoked without having the exclusive lock to the thread
-Arcadia_Process*
-Arcadia_Thread_getProcess
-  (
-    Arcadia_Thread* thread
-  );
 
 /// @brief Get the thread of this process.
 /// @param process A pointer to this Arcadia_Process object.
@@ -251,13 +121,13 @@ Arcadia_Process_copyMemory
     size_t n
   );
 
-int
+Arcadia_Integer32Value
 Arcadia_Process_compareMemory
   (
     Arcadia_Process* process,
     const void *p,
-    const void* q, 
-    size_t n
+    const void* q,
+    Arcadia_SizeValue n
   );
 
 /// @brief
@@ -514,4 +384,4 @@ typedef struct ModuleInfo {
     ) \
   { return &_##cName##_moduleInfo; }
 
-#endif // ARCADIA_RING1_IMPLEMENTATION_PROCESS1_H_INCLUDED
+#endif // ARCADIA_RING1_IMPLEMENTATION_PROCESS_H_INCLUDED

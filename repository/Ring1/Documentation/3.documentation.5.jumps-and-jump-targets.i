@@ -29,12 +29,12 @@
   Jump to the jump target on top of the jump target stack.
   The jump target stack must not be empty.
   </p>
-  
+
   <p><code>
   #define Arcadia_JumpTarget_save(jumpTarget) <my-mv>implementation detail</my-mv>
   </code></p>
   <p>Macro to save the current C program state into a jump target.</p>
-  
+
   <p>The canonical way of using <code>Arcadia_Thread_pushJumpTarget</code>, <code>Arcadia_Thread_popJumpTarget</code>, and
   <code>Arcadia_Thread_jump</code> is the following.</p>
   <p><code>
@@ -57,8 +57,8 @@
   logically false and <code>Arcadia_Thread_popJumpTarget();<my-mv>(2)</my-mv></code> and <my-mv>(4)</my-mv>
   is executed.
   </p>
-  
-  <p>One usage example is the implementation of the <code>Arcadia_safeExecute</code> function.</p> 
+
+  <p>One usage example is the implementation of the <code>Arcadia_safeExecute</code> function.</p>
   <p><code>
   void Arcadia_safeExecute(Arcadia_Thread* thread, void (*f)(Arcadia_Thread*)) {<br>
   &nbsp;Arcadia_JumpTarget jumpTarget;<br>

@@ -64,7 +64,7 @@ int map_render(struct map_t* self, int canvas_width, int canvas_height) {
       list = NULL;
       return EXIT_FAILURE;
     }
-    if (sg_rectangle_create(&floor_rectangle, 0 - 256, 0 - 256, 512, 512, floor_color)) { 
+    if (sg_rectangle_create(&floor_rectangle, 0 - 256, 0 - 256, 512, 512, floor_color)) {
       sg_node_unref((struct sg_node_t*)floor_color);
       floor_color = NULL;
       sg_node_unref((struct sg_node_t*)list);
@@ -82,7 +82,7 @@ int map_render(struct map_t* self, int canvas_width, int canvas_height) {
     }
     sg_node_unref((struct sg_node_t*)floor_rectangle);
     floor_rectangle = NULL;
-  
+
     if (sg_list_append(self->sg_scene, (struct sg_node_t*)list)) {
       sg_node_unref((struct sg_node_t*)list);
       list = NULL;

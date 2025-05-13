@@ -36,7 +36,7 @@ Arms_MemoryManager_allocate
   (
     Arms_MemoryManager* memoryManager,
     void** p,
-    Arms_Size n
+    Arcadia_Arms_Size n
   );
 
 Arms_MemoryManager_Status
@@ -44,7 +44,7 @@ Arms_MemoryManager_reallocate
   (
     Arms_MemoryManager* memoryManager,
     void** p,
-    Arms_Size n
+    Arcadia_Arms_Size n
   );
 
 Arms_MemoryManager_Status

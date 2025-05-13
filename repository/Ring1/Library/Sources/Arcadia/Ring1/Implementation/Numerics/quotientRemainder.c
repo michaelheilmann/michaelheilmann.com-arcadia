@@ -191,5 +191,5 @@ Arcadia_quotientRemainderNatural8
     Arcadia_Thread_jump(thread);
   }
   *quotient = dividend / divisor;
-  *remainder = dividend - (*quotient) * divisor; 
+  *remainder = dividend - (*quotient) * divisor;
 }

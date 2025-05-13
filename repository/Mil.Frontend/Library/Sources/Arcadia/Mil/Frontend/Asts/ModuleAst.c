@@ -121,7 +121,7 @@ Arcadia_Mil_ModuleAst_appendDefinition
     Arcadia_Mil_ModuleAst* self,
     Arcadia_Mil_DefinitionAst* definition
   )
-{ 
+{
   Arcadia_List_insertBackObjectReferenceValue(thread, self->definitions, (Arcadia_ObjectReferenceValue)definition);
 }
 

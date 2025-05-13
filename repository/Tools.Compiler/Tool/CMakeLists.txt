@@ -29,8 +29,7 @@ set(MyTool Tools.Compiler)
 
 if (NOT TARGET ${MyTool})
 
-  FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
-FetchProduct(${MyProjectName}.Mil.Frontend "${REPOSITORY_SOURCE_DIR}/Mil.Frontend/Library" "path to the MIL frontend library directory")
+  FetchProduct(${MyProjectName}.Mil.Frontend "${REPOSITORY_SOURCE_DIR}/Mil.Frontend/Library" "path to the MIL Frontend library directory")
 
   BeginProduct(${MyTool} executable)
 
@@ -43,5 +42,7 @@ FetchProduct(${MyProjectName}.Mil.Frontend "${REPOSITORY_SOURCE_DIR}/Mil.Fronten
   list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
 
   EndProduct(${MyTool})
+
+  set_target_properties(${MyTool} PROPERTIES FOLDER "Tools")
 
 endif()

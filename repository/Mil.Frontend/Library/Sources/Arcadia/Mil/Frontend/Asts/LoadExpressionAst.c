@@ -105,8 +105,8 @@ Arcadia_Mil_LoadExpressionAst_create
     Arcadia_Thread* thread,
     Arcadia_Mil_OperandAst* operand
   )
-{ 
-  Arcadia_Value argumentValues[] = { 
+{
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue(operand)
   };
   Arcadia_Mil_LoadExpressionAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_LoadExpressionAst_getType(thread), 1, &argumentValues[0]);

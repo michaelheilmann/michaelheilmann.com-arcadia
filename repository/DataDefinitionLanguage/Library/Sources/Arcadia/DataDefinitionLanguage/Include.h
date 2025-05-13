@@ -17,7 +17,7 @@
 #define ARCAIDA_DATADEFINITIONLANGUAGE_INCLUDE_H_INCLUDED
 
 #include "Arcadia/DataDefinitionLanguage/Keywords.h"
-#include "Arcadia/DataDefinitionLanguage/TokenType.h"
+#include "Arcadia/DataDefinitionLanguage/WordType.h"
 #include "Arcadia/DataDefinitionLanguage/Scanner.h"
 #include "Arcadia/DataDefinitionLanguage/StringTable.h"
 

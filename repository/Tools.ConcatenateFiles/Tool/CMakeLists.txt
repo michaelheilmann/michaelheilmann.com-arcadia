@@ -29,7 +29,6 @@ set(MyTool Tools.ConcatenateFiles)
 
 if (NOT TARGET ${MyTool})
 
-  FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
   FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 
   BeginProduct(${MyTool} executable)
@@ -43,5 +42,7 @@ if (NOT TARGET ${MyTool})
   list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
 
   EndProduct(${MyTool})
+
+  set_target_properties(${MyTool} PROPERTIES FOLDER "Tools")
 
 endif()

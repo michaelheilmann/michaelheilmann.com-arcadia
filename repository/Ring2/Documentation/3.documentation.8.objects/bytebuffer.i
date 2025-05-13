@@ -41,7 +41,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuf
       <div>An allocation failed.</div>
     </div>
   </section>
-  
+
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>A pointer to the Byte buffer.</p>
@@ -52,7 +52,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuf
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</h1>
 
   <my-signature><code>
@@ -297,7 +297,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuf
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity method">
-  
+
   <h1 id="Arcadia_ByteBuffer_prepend_pn">Arcadia_ByteBuffer_prepend_pn</h1>
 
   <my-signature><code>

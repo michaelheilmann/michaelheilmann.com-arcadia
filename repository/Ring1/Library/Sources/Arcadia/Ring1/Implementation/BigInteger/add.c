@@ -30,21 +30,21 @@ Arcadia_BigInteger_add3
   if (a->sign == b->sign) {
     // a and b have the same sign and are non-zero.
     // Strategy: Add their magnitudes.
-    
+
     // Determine which operand has the smaller length.
     Arcadia_BigInteger* large = a->numberOfLimps < b->numberOfLimps ? b : a;
     Arcadia_BigInteger* small = a->numberOfLimps < b->numberOfLimps ? a : b;
-    
+
     Arcadia_SizeValue largeLength = large->numberOfLimps;
     Arcadia_SizeValue smallLength = small->numberOfLimps;
-    
+
     // The output will be at least as long a the largest input.
     Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &result->limps, sizeof(Hidden(BigInteger_Limp)) * largeLength);
     result->numberOfLimps = largeLength;
 
-    uint64_t carry = 0;   
+    uint64_t carry = 0;
     Arcadia_SizeValue index = 0;
-    
+
     // Sum over the blocks that exists in both operands.
     while (index < smallLength) {
       uint64_t sum = carry + large->limps[index] + small->limps[index];
@@ -56,10 +56,10 @@ Arcadia_BigInteger_add3
     while (index < largeLength) {
       uint64_t sum = carry + large->limps[index];
       carry = sum >> 32;
-      result->limps[index] = (uint32_t)sum;     
+      result->limps[index] = (uint32_t)sum;
       index++;
     }
-    
+
     if (carry) {
       // If there is stil a cary, we must append a limp.
       Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &result->limps, sizeof(Hidden(BigInteger_Limp)) * (result->numberOfLimps + 1));
@@ -82,15 +82,15 @@ Arcadia_BigInteger_add3
 
     Arcadia_SizeValue largeLength = large->numberOfLimps;
     Arcadia_SizeValue smallLength = small->numberOfLimps;
-    
+
     // The output will be at least as long a the largest input.
     Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &result->limps, sizeof(Hidden(BigInteger_Limp)) * largeLength);
     result->numberOfLimps = largeLength;
-    
+
     // Invariant magnitude(large) >= magnitude(small).
-    uint64_t carry = 0;   
+    uint64_t carry = 0;
     Arcadia_SizeValue index = 0;
-    
+
     // Difference over the blocks that exists in both operands.
     while (index < smallLength) {
       uint64_t x = large->limps[index];
@@ -112,17 +112,17 @@ Arcadia_BigInteger_add3
       // If there is stil a cary, we must append a limp.
       Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &result->limps, sizeof(Hidden(BigInteger_Limp)) * (result->numberOfLimps + 1));
       result->limps[index] = carry;
-      result->numberOfLimps++;      
+      result->numberOfLimps++;
     }
-    
+
     while (result->numberOfLimps > 1 && !result->limps[result->numberOfLimps - 1]) {
       result->numberOfLimps--;
     }
-    
+
     // Also use the sign of the larger operand.
     result->sign = result->numberOfLimps == 1 && result->limps[0] == UINT32_C(0) ? UINT8_C(0) : large->sign;
   }
- 
+
 }
 
 void

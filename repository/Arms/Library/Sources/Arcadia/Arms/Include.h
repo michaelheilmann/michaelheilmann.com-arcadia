@@ -27,48 +27,48 @@
 #define Arms_AlignOf(x) _Alignof(x)
 #define Arms_OffsetOf(x) offsetof(x)
 
-typedef void (Arms_TypeRemovedCallbackFunction)(void* context, Arms_Natural8 const* name, Arms_Size nameLength);
+typedef void (Arms_TypeRemovedCallbackFunction)(void* context, Arms_Natural8 const* name, Arcadia_Arms_Size nameLength);
 
 typedef void (Arms_VisitCallbackFunction)(void* context, void* object);
 
 typedef void (Arms_FinalizeCallbackFunction)(void* context, void* object);
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_startup
   (
   );
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_shutdown
   (
   );
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_addType
   (
     Arms_Natural8 const* name,
-    Arms_Size nameLength,
+    Arcadia_Arms_Size nameLength,
     void* contex,
     Arms_TypeRemovedCallbackFunction* typeRemoved,
     Arms_VisitCallbackFunction* visit,
     Arms_FinalizeCallbackFunction* finalize
   );
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_allocate
   (
     void** pObject,
     Arms_Natural8 const* name,
-    Arms_Size nameLength,
-    Arms_Size size
+    Arcadia_Arms_Size nameLength,
+    Arcadia_Arms_Size size
   );
 
 typedef struct Arms_RunStatistics {
   /// The number of objects destroyed in this run.
-  Arms_Size destroyed;
+  Arcadia_Arms_Size destroyed;
 } Arms_RunStatistics;
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_run
   (
     Arms_RunStatistics* statistics
@@ -79,16 +79,16 @@ Arms_visit
   (
     void* object
   );
-  
+
 #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_lock
   (
     void* object
   );
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_unlock
   (
     void* object

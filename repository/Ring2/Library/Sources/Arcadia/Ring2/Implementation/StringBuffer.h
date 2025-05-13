@@ -37,13 +37,63 @@ struct Arcadia_StringBuffer {
 };
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_create
-/// @brief Create a string buffer.
-/// @return The string buffer.
-/// @remarks The string buffer is empty.
 Arcadia_StringBuffer*
 Arcadia_StringBuffer_create
   (
     Arcadia_Thread* thread
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_insertAt
+void
+Arcadia_StringBuffer_insertAt
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue codePointIndex,
+    Arcadia_Value value
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_insertBack
+void
+Arcadia_StringBuffer_insertBack
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_Value value
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_insertBack
+void
+Arcadia_StringBuffer_insertFront
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_Value value
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_compareTo
+Arcadia_Integer32Value
+Arcadia_StringBuffer_compareTo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_Value other
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_clear
+void
+Arcadia_StringBuffer_clear
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_getNumberOfBytes
+Arcadia_SizeValue
+Arcadia_StringBuffer_getNumberOfBytes
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer const* self
   );
 
 /// @brief Get if a sequence of Bytes is a suffix of this string buffer.
@@ -93,17 +143,6 @@ Arcadia_StringBuffer_append_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-/// @brief Append Bytes to this string buffer.
-/// @param value The Bytes.
-/// Either Arcadia.ByteBuffer, Arcadia.StringBuffer, or Arcadia.String.
-void
-Arcadia_StringBuffer_insertBack
-  (
-    Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
-    Arcadia_Value value
-  );
-
 void
 Arcadia_StringBuffer_appendCodePoints
   (
@@ -111,41 +150,6 @@ Arcadia_StringBuffer_appendCodePoints
     Arcadia_StringBuffer* self,
     Arcadia_Natural32Value const* codePoints,
     Arcadia_SizeValue numberOfCodePoints
-  );
-
-/// @brief
-/// Compare the contents of two string buffer for lexicographic equivalence.
-/// @param self
-/// A pointer to this string buffer.
-/// @param other
-/// A pointer to the other string buffer.
-/// @return
-/// Arcadia_BooleanValue_True if the contents of this string buffer is lexicographically equal to the contents of the other string buffer string buffer.
-/// Arcadia_BooleanValue_False otherwise.
-Arcadia_BooleanValue
-Arcadia_StringBuffer_isEqualTo
-  (
-    Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
-    Arcadia_StringBuffer* other
-  );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_clear
-/// @brief Set the number of UTF-8 symbols in this string buffer to zero.
-/// @param self A pointer to this string buffer.
-void
-Arcadia_StringBuffer_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self
-  );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_getNumberOfBytes
-Arcadia_SizeValue
-Arcadia_StringBuffer_getNumberOfBytes
-  (
-    Arcadia_Thread* thread,
-    Arcadia_StringBuffer const* self
   );
 
 Arcadia_Natural8Value const*

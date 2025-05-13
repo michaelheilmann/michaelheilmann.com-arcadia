@@ -25,10 +25,9 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
-FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Ring1/Library" "path to the Ring1 library directory")
+FetchProduct(${MyProjectName}.Ring1 "${REPOSITORY_SOURCE_DIR}/Ring1/Library" "path to the Ring 1 library directory")
 
-set(MyTestName ${MyProjectName}.Ring1.Tests.MaximumTests) 
+set(MyTestName ${MyProjectName}.Ring1.Tests.MaximumTests)
 
 # Create test executable.
 BeginProduct(${MyTestName} test)
@@ -38,4 +37,5 @@ list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadi
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 
 EndProduct(${MyTestName})
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Arcadia.Ring1")
+
+set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring1")

@@ -41,7 +41,7 @@ _createFromInteger64
   (
     Arcadia_Thread* thread,
     Arcadia_Integer64Value integer64Value
-  );  
+  );
 
 Arcadia_ImmutableUtf8String*
 _createFromInteger8

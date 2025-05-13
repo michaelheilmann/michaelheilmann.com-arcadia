@@ -17,7 +17,6 @@
 #define ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Types.h"
-typedef struct Arcadia_String Arcadia_String;
 typedef struct Arcadia_Value Arcadia_Value;
 
 typedef struct Arcadia_Object Arcadia_Object;
@@ -136,7 +135,7 @@ Arcadia_Object_getType
   );
 
 
-  
+
 /// "isEqualTo"
 Arcadia_BooleanValue
 Arcadia_Object_isEqualTo
@@ -162,7 +161,7 @@ Arcadia_Object_hash
     Arcadia_Thread* thread,
     Arcadia_Object* self
   );
-  
+
 /// "isIdenticalTo"
 Arcadia_BooleanValue
 Arcadia_Object_isIdenticalTo
@@ -171,5 +170,5 @@ Arcadia_Object_isIdenticalTo
     Arcadia_Object* self,
     Arcadia_Value const* other
   );
-  
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED

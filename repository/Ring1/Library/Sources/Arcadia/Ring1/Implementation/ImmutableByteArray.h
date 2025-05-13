@@ -22,11 +22,10 @@
 
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
-typedef struct Arcadia_Process Arcadia_Process;
 
 /// @brief The immutable byte array representation native to Arcadia Ring 1.
 /// @warning Arcadia_ImmutableByteArray's precondition is an initialized type system.
-typedef struct Arcadia_ImmutableByteArray Arcadia_ImmutableByteArray; 
+typedef struct Arcadia_ImmutableByteArray Arcadia_ImmutableByteArray;
 
 struct Arcadia_ImmutableByteArray {
   Arcadia_SizeValue numberOfBytes;
@@ -61,7 +60,7 @@ Arcadia_ImmutableByteArray_getBytes
   );
 
 /// @brief Get the number of Bytes in an immutable Byte array.
-/// @param immutableByteArrayA pointer to the immutable Byte array. 
+/// @param immutableByteArrayA pointer to the immutable Byte array.
 /// @return The number of Bytes in the imumutable Byte array.
 Arcadia_SizeValue
 Arcadia_ImmutableByteArray_getNumberOfBytes

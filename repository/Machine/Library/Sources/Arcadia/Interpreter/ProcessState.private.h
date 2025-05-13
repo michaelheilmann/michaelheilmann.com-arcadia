@@ -22,7 +22,7 @@
 struct R_Interpreter_ProcessState {
   // Global classe and global procedures.
   Arcadia_Map* globals;
-  
+
   R_Interpreter_Code_Constants* constants;
   R_Interpreter_ThreadState* mainThread;
   R_Interpreter_ThreadState* currentThread;

@@ -131,7 +131,7 @@ equalTo
     Arcadia_SizeValue numberOfArguments,
     Arcadia_Value* arguments
   )
-{ 
+{
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   if (!Arcadia_Value_isBooleanValue(A2)) {

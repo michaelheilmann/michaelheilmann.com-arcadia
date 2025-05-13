@@ -18,7 +18,6 @@
 
 #include "Arcadia/Ring1/Implementation/Configure.h"
 typedef struct Arcadia_Thread Arcadia_Thread;
-typedef struct Arcadia_Process Arcadia_Process;
 
 typedef void Arcadia_Type;
 typedef Arcadia_Type* Arcadia_TypeValue;

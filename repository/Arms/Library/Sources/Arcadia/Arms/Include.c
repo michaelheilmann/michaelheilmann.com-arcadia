@@ -18,6 +18,8 @@
 #include "Arcadia/Arms/Internal/MemoryManager.private.h"
 #include "Arcadia/Arms/Internal/DefaultMemoryManager.h"
 #include "Arcadia/Arms/Internal/SlabMemoryManager.h"
+#include "Arcadia/Arms/Internal/Statistics.h"
+
 #include "Arcadia/Arms/Internal/Common.h"
 
 // malloc, free, realloc
@@ -62,14 +64,14 @@ struct Arms_Type {
 #define Arms_TagFlags_Black (2)
 #define Arms_TagFlags_Gray (Arms_TagFlags_White|Arms_TagFlags_Black)
 
-#if Arms_Configuration_InstructionSetArchitecture_X64 == Arms_Configuration_InstructionSetArchitecture
+#if Arcadia_Arms_Configuration_InstructionSetArchitecture_X64 == Arcadia_Arms_Configuration_InstructionSetArchitecture
 
   // We must make sure that this thing is 64 bit aligned.
   #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Msvc
     #pragma pack(push, 8)
   #endif
 
-#elif Arms_Configuration_InstructionSetArchitecture_X32 == Arms_Configuration_InstructionSetArchitecture
+#elif Arcadia_Arms_Configuration_InstructionSetArchitecture_X32 == Arcadia_Arms_Configuration_InstructionSetArchitecture
 
   // We must make sure that this thing is 32 bit aligned.
   #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Msvc
@@ -84,12 +86,12 @@ struct Arms_Tag {
   Arms_Tag* universeNext;
   Arms_Tag* grayNext;
 }
-#if Arms_Configuration_InstructionSetArchitecture_X64 == Arms_Configuration_InstructionSetArchitecture
+#if Arcadia_Arms_Configuration_InstructionSetArchitecture_X64 == Arcadia_Arms_Configuration_InstructionSetArchitecture
   // We must make sure that this thing is 64 bit aligned.
   #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Gcc
     __attribute__((aligned(16)))
   #endif
-#elif Arms_Configuration_InstructionSetArchitecture_X32 == Arms_Configuration_InstructionSetArchitecture
+#elif Arcadia_Arms_Configuration_InstructionSetArchitecture_X32 == Arcadia_Arms_Configuration_InstructionSetArchitecture
   // We must make sure that this thing is 32 bit aligned.
   #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Gcc
     __attribute__((aligned(16)))
@@ -101,9 +103,9 @@ struct Arms_Tag {
   #pragma pack(pop)
 #endif
 
-#if Arms_Configuration_InstructionSetArchitecture_X64 == Arms_Configuration_InstructionSetArchitecture
+#if Arcadia_Arms_Configuration_InstructionSetArchitecture_X64 == Arcadia_Arms_Configuration_InstructionSetArchitecture
   Cxx_staticAssert(sizeof(Arms_Tag) % 8 == 0, "Arms_Tag size not 8 Byte aligned");
-#elif Arms_Configuration_InstructionSetArchitecture_X32 == Arms_Configuration_InstructionSetArchitecture
+#elif Arcadia_Arms_Configuration_InstructionSetArchitecture_X32 == Arcadia_Arms_Configuration_InstructionSetArchitecture
   Cxx_staticAssert(sizeof(Arms_Tag) % 4 == 0, "Arms_Tag size not 4 Byte aligned");
 #endif
 
@@ -117,9 +119,10 @@ struct Arms_Lock {
 
 #endif
 
-#define REFERENCECOUNT_MINIMUM (Arms_Size_Minimum)
-#define REFERENCECOUNT_MAXIMUM (Arms_Size_Maximum)
-static Arms_Size g_referenceCount = 0;
+typedef Arcadia_Arms_Size Arcadia_Arms_ReferenceCount;
+#define Arcadia_Arms_ReferenceCount_Minimum (Arcadia_Arms_Size_Minimum)
+#define Arcadia_Arms_ReferenceCount_Maximum (Arcadia_Arms_Size_Maximum)
+static Arcadia_Arms_ReferenceCount g_referenceCount = 0;
 
 static Arms_Type* g_types = NULL;
 static Arms_Tag* g_universe = NULL;
@@ -176,40 +179,40 @@ Arms_Tag_setBlack
 static Arms_DefaultMemoryManager* g_defaultMemoryManager = NULL;
 static Arms_SlabMemoryManager* g_slabMemoryManager = NULL;
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_startup
   (
   )
 {
-  if (g_referenceCount == REFERENCECOUNT_MAXIMUM) {
+  if (g_referenceCount == Arcadia_Arms_ReferenceCount_Maximum) {
     // Cannot increment further.
-    return Arms_Status_OperationInvalid;
+    return Arcadia_Arms_Status_OperationInvalid;
   }
   if (!g_referenceCount) {
     switch (Arms_DefaultMemoryManager_create(&g_defaultMemoryManager)) {
       case Arms_MemoryManagerStartupShutdown_Status_AllocationFailed: {
-        return Arms_Status_AllocationFailed;
+        return Arcadia_Arms_Status_AllocationFailed;
       } break;
       case Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid: {
-        return Arms_Status_ArgumentValueInvalid;
+        return Arcadia_Arms_Status_ArgumentValueInvalid;
       } break;
       case Arms_MemoryManagerStartupShutdown_Status_Success: {
         /* Intentionally empty.*/
       } break;
       default: {
-        return Arms_Status_EnvironmentFailed;
+        return Arcadia_Arms_Status_EnvironmentFailed;
       } break;
     };
     switch (Arms_SlabMemoryManager_create(&g_slabMemoryManager)) {
       case Arms_MemoryManagerStartupShutdown_Status_AllocationFailed: {
         Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
         g_defaultMemoryManager = NULL;
-        return Arms_Status_AllocationFailed;
+        return Arcadia_Arms_Status_AllocationFailed;
       } break;
       case Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid: {
         Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
         g_defaultMemoryManager = NULL;
-        return Arms_Status_ArgumentValueInvalid;
+        return Arcadia_Arms_Status_ArgumentValueInvalid;
       } break;
       case Arms_MemoryManagerStartupShutdown_Status_Success: {
         /* Intentionally empty.*/
@@ -217,7 +220,7 @@ Arms_startup
       default: {
         Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
         g_defaultMemoryManager = NULL;
-        return Arms_Status_EnvironmentFailed;
+        return Arcadia_Arms_Status_EnvironmentFailed;
       } break;
     };
 
@@ -229,19 +232,20 @@ Arms_startup
   #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
     g_locks = NULL;
   #endif
+
   }
   g_referenceCount++;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_shutdown
   (
   )
 {
-  if (REFERENCECOUNT_MINIMUM == g_referenceCount) {
+  if (Arcadia_Arms_ReferenceCount_Minimum == g_referenceCount) {
     // Cannot decrement further.
-    return Arms_Status_OperationInvalid;
+    return Arcadia_Arms_Status_OperationInvalid;
   }
   int32_t referenceCount = g_referenceCount - 1;
   if (!referenceCount) {
@@ -251,7 +255,10 @@ Arms_shutdown
   #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
     if (g_locks) {
       Cxx_fatalError();
-    }  
+    }
+  #endif
+  #if defined(Arcadia_Arms_Configuration_WithNotifyDestroy) && 1 == Arcadia_Arms_Configuration_WithNotifyDestroy
+    Arms_NotifyDestroyModule_shutdown();
   #endif
     while (g_types) {
       Arms_Type* type = g_types;
@@ -270,14 +277,14 @@ Arms_shutdown
     g_defaultMemoryManager = NULL;
   }
   g_referenceCount = referenceCount;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_addType
   (
     Arms_Natural8 const* name,
-    Arms_Size nameLength,
+    Arcadia_Arms_Size nameLength,
     void* context,
     Arms_TypeRemovedCallbackFunction* typeRemoved,
     Arms_VisitCallbackFunction* visit,
@@ -285,20 +292,20 @@ Arms_addType
   )
 {
   if (!name) {
-    return Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
 
   for (Arms_Type* type = g_types; NULL != type; type = type->next) {
     if (type->nameLength == nameLength){
       if (!memcmp(type->name, name, nameLength)) {
-        return Arms_Status_TypeExists;
+        return Arcadia_Arms_Status_TypeExists;
       }
     }
   }
 
   Arms_Type* type = malloc(sizeof(Arms_Type));
   if (!type) {
-    return Arms_Status_AllocationFailed;
+    return Arcadia_Arms_Status_AllocationFailed;
   }
 
   type->nameLength = nameLength;
@@ -306,7 +313,7 @@ Arms_addType
   if (!type->name) {
     free(type);
     type = NULL;
-    return Arms_Status_AllocationFailed;
+    return Arcadia_Arms_Status_AllocationFailed;
   }
   memcpy(type->name, name, nameLength);
 
@@ -314,24 +321,24 @@ Arms_addType
   type->typeRemoved = typeRemoved;
   type->visit = visit;
   type->finalize = finalize;
-  
+
   type->next = g_types;
   g_types = type;
 
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_allocate
   (
     void** pObject,
     Arms_Natural8 const* name,
-    Arms_Size nameLength,
-    Arms_Size size
+    Arcadia_Arms_Size nameLength,
+    Arcadia_Arms_Size size
   )
 {
   if (!pObject || !name) {
-    return Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
   Arms_Type* type;
   for (type = g_types; NULL != type; type = type->next) {
@@ -342,24 +349,24 @@ Arms_allocate
     }
   }
   if (!type) {
-    return Arms_Status_TypeNotExists;
+    return Arcadia_Arms_Status_TypeNotExists;
   }
   if (SIZE_MAX - sizeof(Arms_Tag) < size) {
-    return Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_Status_ArgumentValueInvalid;
   }
   Arms_Tag* object = malloc(sizeof(Arms_Tag) + size);
   if (!object) {
-    return Arms_Status_AllocationFailed;
+    return Arcadia_Arms_Status_AllocationFailed;
   }
   object->flags = Arms_TagFlags_White;
   object->type = type;
   object->universeNext = g_universe;
   g_universe = object;
   *pObject = object + 1;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_run
   (
     Arms_RunStatistics* statistics
@@ -417,7 +424,7 @@ Arms_run
     }
   }
   statistics->destroyed = destroyed;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
 void
@@ -440,7 +447,7 @@ Arms_visit
 
 #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_lock
   (
     void* object
@@ -449,25 +456,25 @@ Arms_lock
   for (Arms_Lock* lock = g_locks; NULL != lock; lock = lock->next) {
     if (lock->object == object) {
       if (lock->count == INT_MAX) {
-         return Arms_Status_OperationInvalid;
+         return Arcadia_Arms_Status_OperationInvalid;
       } else {
          lock->count++;
-         return Arms_Status_Success;
+         return Arcadia_Arms_Status_Success;
       }
     }
   }
   Arms_Lock *lock = malloc(sizeof(Arms_Lock));
   if (!lock) {
-    return Arms_Status_AllocationFailed;
+    return Arcadia_Arms_Status_AllocationFailed;
   }
   lock->next = g_locks;
   g_locks = lock;
   lock->object = object;
   lock->count = 1;
-  return Arms_Status_Success;
+  return Arcadia_Arms_Status_Success;
 }
 
-Arms_Status
+Arcadia_Arms_Status
 Arms_unlock
   (
     void* object
@@ -476,14 +483,14 @@ Arms_unlock
   for (Arms_Lock* lock = g_locks; NULL != lock; lock = lock->next) {
     if (lock->object == object) {
       if (lock->count == 0) {
-         return Arms_Status_OperationInvalid;
+         return Arcadia_Arms_Status_OperationInvalid;
       } else {
          lock->count--;
-         return Arms_Status_Success;
+         return Arcadia_Arms_Status_Success;
       }
     }
   }
-  return Arms_Status_OperationInvalid;  
+  return Arcadia_Arms_Status_OperationInvalid;
 }
 
 #endif

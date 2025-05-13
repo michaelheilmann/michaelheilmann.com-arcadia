@@ -116,7 +116,7 @@ Arcadia_Mil_BinaryExpressionAst_create
     Arcadia_Mil_OperandAst* operand2
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeInteger32Value(type),
     Arcadia_Value_makeObjectReferenceValue(operand1),
     Arcadia_Value_makeObjectReferenceValue(operand2),

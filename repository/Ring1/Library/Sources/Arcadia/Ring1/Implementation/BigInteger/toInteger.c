@@ -58,7 +58,7 @@ Arcadia_BigInteger_toInteger64
     v = v << 32;
     v += ((Arcadia_Natural64Value)self->limps[i - 1]);
   }
-           
+
   if (self->sign == -1) {
     if (v > ((Arcadia_Natural64Value)(-(Arcadia_Integer64Value_Minimum + 1))) + 1) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
@@ -68,7 +68,7 @@ Arcadia_BigInteger_toInteger64
   } else {
     if (v > Arcadia_Integer64Value_Maximum) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
-      Arcadia_Thread_jump(thread);     
+      Arcadia_Thread_jump(thread);
     }
     return (Arcadia_Integer64Value)v;
   }

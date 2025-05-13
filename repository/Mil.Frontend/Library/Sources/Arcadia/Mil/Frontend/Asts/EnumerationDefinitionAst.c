@@ -69,7 +69,7 @@ Arcadia_Mil_EnumerationDefinitionAst_constructImpl
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
-{ 
+{
   Arcadia_Mil_EnumerationDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_EnumerationDefinitionAst_getType(thread);
   {

@@ -7,7 +7,7 @@
 static Arcadia_Natural32Value
 addDivisor
   (
-    Arcadia_Thread* thread, 
+    Arcadia_Thread* thread,
     Arcadia_BigInteger* lhs,
     Arcadia_SizeValue lhsStartIndex,
     Arcadia_BigInteger* rhs)
@@ -47,7 +47,7 @@ subtractDivisor
   )
 {
 #if !defined(NDEBUG)
-  Arcadia_SizeValue lhsLength = (Arcadia_Integer64Value)lhs->numberOfLimps - lhsStartIndex; 
+  Arcadia_SizeValue lhsLength = (Arcadia_Integer64Value)lhs->numberOfLimps - lhsStartIndex;
 #endif
   Arcadia_SizeValue rhsLength = rhs->numberOfLimps;
 

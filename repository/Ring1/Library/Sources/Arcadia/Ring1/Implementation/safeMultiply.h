@@ -102,7 +102,7 @@ Arcadia_safeMultiplySizeValue
 /// Otherwise *product represents the mathematical result of the operation wrapped around to the width of *result.if the result fits into *product.
 /// Note: Wrapped around means:
 /// If an integer multiplication overflows, then the result is the low-order bits of the mathematical product as represented in some sufficiently large two's-complement format.
-/// As a result, if overflow occurs, then the sign of the result may not be the same as the sign of the mathematical product of the two operand values. 
+/// As a result, if overflow occurs, then the sign of the result may not be the same as the sign of the mathematical product of the two operand values.
 Arcadia_BooleanValue
 Arcadia_safeMultiplyInteger16Value
   (

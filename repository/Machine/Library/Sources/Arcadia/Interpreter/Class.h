@@ -34,7 +34,7 @@ typedef struct R_Interpreter_Variable R_Interpreter_Variable;
 ///   - "R_Interpreter_Class_complete" is successful for Y
 /// - an index is assigned to the variables described in "CLASS INSTANCE VARIABLES"
 /// - an index is assigned to the methods as described in "CLASS INSTANCE METHODS"
-/// 
+///
 /// CLASS INSTANCE VARIABLES
 /// A class X defines variables Vd(X) := { vd(X)[1], vd(x)[2], ..., vd(x)[n] }.
 /// The set of variables defined by a class X and all of its ancestor classes is denoted by V(X) := Vd(X) + V(Y).
@@ -42,14 +42,14 @@ typedef struct R_Interpreter_Variable R_Interpreter_Variable;
 /// When class instance x such that type(x) = X is created, then an array of size |V(X)| is allocated in which the i-th element contains the value of the variable with index i.
 /// If we want to load the value of a variable then we simply load the value from the array element of its index.
 /// Likewise, if we want to store a value in a variable then we simply store the value in the array element of its index.
-/// 
+///
 /// CLASS INSTANCE METHODS
 /// When the class A1 <: ... <: An is readied, then any propertiy the set of properties U_i members(Ai)
 /// is assigned an index 1, 2, 3, ..., m such that no two methods p_i and p_j with p_i != p_j have
 /// the same index. When an instance o with type(o) = A1 is created, the representation of o in memory
 /// holds a reference to an array of length m. Invoking a method is simply a matter of searching
 /// the method in the list of methods and accessing the index of that method in the array.
-/// 
+///
 /// PARAMETER VARIABLES
 /// The parameter variables x1, x2, ..., xn of a procedure or method or constructor are stored in the registers 0, ..., n - 1.
 Arcadia_declareObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"Arcadia.Object");

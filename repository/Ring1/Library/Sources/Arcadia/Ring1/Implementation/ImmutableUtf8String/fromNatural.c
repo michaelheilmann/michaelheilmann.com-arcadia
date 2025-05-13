@@ -63,9 +63,9 @@ _createFromNatural64
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }
-  
+
   _ensureTypeRegistered(thread);
-  
+
   Arcadia_ImmutableUtf8String* string = NULL;
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUtf8String) + numberOfBytes);
 

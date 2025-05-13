@@ -69,7 +69,7 @@ Arcadia_Mil_ClassDefinitionAst_constructImpl
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   )
-{ 
+{
   Arcadia_Mil_ClassDefinitionAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Mil_ClassDefinitionAst_getType(thread);
   {

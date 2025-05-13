@@ -82,7 +82,7 @@ onPhase1
   Arcadia_Mil_EnterPass_onModule(Arcadia_Process_getThread(process), R_Interpreter_ProcessState_get(), symbolTable, foreignProcedures, moduleAst);
 }
 
-static void 
+static void
 compile
   (
     Arcadia_Process* process,

@@ -31,14 +31,14 @@ struct Arcadia_List {
   Arcadia_SizeValue capacity;
 };
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_create
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_create
 Arcadia_List*
 Arcadia_List_create
   (
     Arcadia_Thread* thread
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_clear
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_clear
 void
 Arcadia_List_clear
   (
@@ -46,7 +46,7 @@ Arcadia_List_clear
     Arcadia_List* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_getSize
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_getSize
 Arcadia_SizeValue
 Arcadia_List_getSize
   (
@@ -54,7 +54,7 @@ Arcadia_List_getSize
     Arcadia_List* self
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_insertFront
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_insertFront
 void
 Arcadia_List_insertBack
   (
@@ -63,7 +63,7 @@ Arcadia_List_insertBack
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_insertBack
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_insertBack
 void
 Arcadia_List_insertFront
   (
@@ -72,7 +72,7 @@ Arcadia_List_insertFront
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_insertAt
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_insertAt
 void
 Arcadia_List_insertAt
   (
@@ -82,7 +82,7 @@ Arcadia_List_insertAt
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_getAt
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_getAt
 Arcadia_Value
 Arcadia_List_getAt
   (
@@ -91,7 +91,7 @@ Arcadia_List_getAt
     Arcadia_SizeValue index
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_removeAt
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_removeAt
 void
 Arcadia_List_removeAt
   (
@@ -101,7 +101,7 @@ Arcadia_List_removeAt
     Arcadia_SizeValue count
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring2/#Arcadia_List_isEmpty
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_isEmpty
 static inline Arcadia_BooleanValue
 Arcadia_List_isEmpty
   (

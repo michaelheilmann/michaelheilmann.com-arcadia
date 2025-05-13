@@ -44,7 +44,7 @@ Arcadia_ArgumentsValidation_getObjectReferenceValueOrNull
     Arcadia_Thread* thread,
     Arcadia_Value const* value,
     Arcadia_TypeValue type
-  ) 
+  )
 {
   if (Arcadia_Value_isVoidValue(value)) {
     return NULL;
@@ -82,7 +82,7 @@ Arcadia_ArgumentsValidation_getInteger32Value
     Arcadia_Thread* thread,
     Arcadia_Value const* value
   )
-{ 
+{
   if (!Arcadia_Value_isInteger32Value(value)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);

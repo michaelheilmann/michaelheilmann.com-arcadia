@@ -374,10 +374,10 @@ onInvokeExpression
 //   unaryExpression
 //   binaryExpression
 //   invokeExpression
-// 
+//
 // invokeExpression :
 //  'invoke' variableOperand '(' ( operand (',' operand)* )? ')'
-// 
+//
 // binaryExpression :
 //   'add' <op1>, <op2>
 //   'and' <op1>, <op2>
@@ -392,7 +392,7 @@ onInvokeExpression
 //   'isLowerThanOrEqualTo' <op1>, <op2>
 //   'isGreaterThan' <op1>, <op2>
 //   'isGreaterThanOrEqualTo' <op1>, <op2>
-//   
+//
 // unaryExpression:
 //   <op1>
 //   'negate' <op1>
@@ -410,7 +410,7 @@ onExpression
     case Arcadia_Mil_TokenType_IntegerLiteral:
     case Arcadia_Mil_TokenType_RealLiteral:
     case Arcadia_Mil_TokenType_StringLiteral:
-    case Arcadia_Mil_TokenType_VoidLiteral: 
+    case Arcadia_Mil_TokenType_VoidLiteral:
     case Arcadia_Mil_TokenType_Name: {
       Arcadia_Mil_OperandAst* operand = onOperand(thread, self);
       return (Arcadia_Mil_ExpressionAst*)Arcadia_Mil_LoadExpressionAst_create(thread, operand);
@@ -642,7 +642,7 @@ onStatement
     Arcadia_Mil_Parser* self
   )
 {
-  // skip empty statement 
+  // skip empty statement
   while (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
     next(thread, self);
   }
@@ -743,7 +743,7 @@ onParameter
   (
     Arcadia_Thread* thread,
     Arcadia_Mil_Parser* self
-  ) 
+  )
 {
   if (!is(thread, self, Arcadia_Mil_TokenType_Variable)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -766,7 +766,7 @@ onParameters
     Arcadia_Thread* thread,
     Arcadia_Mil_Parser* self
   )
-{ 
+{
   Arcadia_List* parameters = Arcadia_List_create(thread);
   while (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
     next(thread, self);
@@ -955,7 +955,7 @@ onClassMemberDefinition
     Arcadia_Thread* thread,
     Arcadia_Mil_Parser* self
   )
-{ 
+{
   switch (getType(thread, self)) {
     case Arcadia_Mil_TokenType_Constructor: {
       return (Arcadia_Mil_Ast*)onConstructorDefinition(thread, self);
@@ -1144,7 +1144,7 @@ Arcadia_Mil_Parser_run
     Arcadia_Thread* thread,
     Arcadia_Mil_Parser* self
   )
-{ 
+{
   Arcadia_Mil_ModuleAst* moduleAst = onModule(thread, self);
   return moduleAst;
 }

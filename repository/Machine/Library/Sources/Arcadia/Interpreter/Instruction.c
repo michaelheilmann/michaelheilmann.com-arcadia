@@ -107,7 +107,7 @@ R_InterpreterState_decodeCount
   return countValue;
 }
 
-#if defined(_DEBUG) 
+#if defined(_DEBUG)
   #define OnAssertOpcode(Name) \
     R_Interpreter_Code* code = call->procedure->code; \
     assert(R_Machine_Code_Opcode_##Name == (*code->p + call->instructionIndex));

@@ -302,7 +302,7 @@
       <div>Arcadia.Natural64 timeStamp</div>
       <div>The timestamp of this event.</div>
     </div>
-    
+
     <div>
       <div>Arcadia.Integer32 horizontalDpi</div>
       <div>The horizontal DPI of the canvas.</div>
@@ -395,9 +395,9 @@ A cull mode identifies a technique for deciding wether a fragment is removed bas
 </my-summary>
 
 <section class="cxx enumeration-elements">
-  
+
   <h1>Elements</h1>
-  
+
   <div>
     <div><code>Arcadia_Visuals_CullMode_None</code></div>
     <div>Neither front-facing nor back-facing fragments are culled.</div>
@@ -558,36 +558,38 @@ A depth compare function identifies a technique that compares depth value of an 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_FillMode">Arcadia_Visuals_FillMode</h1>
-<my-signature><code>
-typedef enum Arcadia_Visuals_FillMode Arcadia_Visuals_FillMode;
-</code></my-signature>
 
-<my-summary>
-An enumeration of fill modes.
-A fill mode identifies a technique for deciding wether a fragment is removed based on its facing towards the viewer.
-</my-summary>
+  <h1 id="Arcadia_Visuals_FillMode">Arcadia_Visuals_FillMode</h1>
 
-<section class="cxx enumeration-elements">
+  <my-signature><code>
+  typedef enum Arcadia_Visuals_FillMode Arcadia_Visuals_FillMode;
+  </code></my-signature>
 
-  <h1>Elements</h1>
+  <my-summary>
+  An enumeration of fill modes.
+  The fill mode determines how the vertices, edges, and/or surfaces of a polygon are rendered.
+  </my-summary>
 
-  <div>
-    <div><code>Arcadia_Visuals_FillMode_Point</code></div>
-    <div>Polygon vertices that are marked as the start of a boundary edge are drawn as points.</div>
-  </div>
+  <section class="cxx enumeration-elements">
 
-  <div>
-    <div><code>Arcadia_Visuals_FillMode_Line</code></div>
-    <div>Boundary edges of the polygon are drawn as line segments.</div>
-  </div>
+    <h1>Elements</h1>
 
-  <div class="enumeration-element">
-    <div><code>Arcadia_Visuals_FillMode_Solid</code></div>
-    <div>The interior of the polygon is filled.</div>
-  </div>
+    <div>
+      <div><code>Arcadia_Visuals_FillMode_Point</code></div>
+      <div>Polygon vertices that are marked as the start of a boundary edge are drawn as points.</div>
+    </div>
 
-</section>
+    <div>
+      <div><code>Arcadia_Visuals_FillMode_Line</code></div>
+      <div>Boundary edges of the polygon are drawn as line segments.</div>
+    </div>
+
+    <div class="enumeration-element">
+      <div><code>Arcadia_Visuals_FillMode_Solid</code></div>
+      <div>The interior of the polygon is filled.</div>
+    </div>
+
+  </section>
 
 </section>
 
@@ -1023,7 +1025,7 @@ Furthermore, the numpad digit key constant of a lower number has a lower value t
     <div><code>Arcadia_Visuals_KeyboardKey_L</code></div>
     <div>The L key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Left</code></div>
     <div>The Left Arrow key. This is an alias of <code>Arcadia_Visuals_KeyboardKey_LeftArrow</code>.</div>
@@ -1176,117 +1178,117 @@ Furthermore, the numpad digit key constant of a lower number has a lower value t
     <div><code>Arcadia_Visuals_KeyboardKey_Period</code></div>
     <div>The Period key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Print</code></div>
     <div>The Print key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Plus</code></div>
     <div>The Plus key.</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Q</code></div>
     <div>The Q key.</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_R</code></div>
     <div>The R key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Return</code></div>
     <div>The Return key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Right</code></div>
     <div>The Right Arrow key. This is an alias of Arcadia_Visuals_KeyboardKey_RightArrow.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_RightArrow</code></div>
     <div>The Right Arrow key. This is an alias of Arcadia_Visuals_KeyboardKey_Right.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_RightControl</code></div>
     <div>The Right Control key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_RightMenu</code></div>
     <div>The Right Menu key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_RightShift</code></div>
     <div>The Right Shift key.</div>
   </div>
- 
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_RightWindows</code></div>
     <div>The Right Windows key (on Microsoft Natural Keyboard).</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_S</code></div>
     <div>The S key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_ScrollLock</code></div>
     <div>The Scroll Lock key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Sleep</code></div>
     <div>The Sleep key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Space</code></div>
     <div>The Space key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Subtract</code></div>
     <div>The Subtract key.</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_T</code></div>
     <div>The T key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Tabulator</code></div>
     <div>The Tabulator key.</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_U</code></div>
     <div>The U key.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Up</code></div>
     <div>The Up Arrow key. This is an alias of Arcadia_Visuals_KeyboardKey_UpArrow.</div>
   </div>
-  
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_UpArrow</code></div>
     <div>The Up Arrow key. This is an alias of Arcadia_Visuals_KeyboardKey_Up.</div>
@@ -1298,30 +1300,30 @@ Furthermore, the numpad digit key constant of a lower number has a lower value t
     <div><code>Arcadia_Visuals_KeyboardKey_V</code></div>
     <div>The V key.</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_W</code></div>
     <div>The W key.</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_X</code></div>
     <div>The X key.</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Y</code></div>
     <div>The Y key.</div>
   </div>
-  
-  
-  
+
+
+
   <div>
     <div><code>Arcadia_Visuals_KeyboardKey_Z</code></div>
     <div>The Z key.</div>
@@ -1579,12 +1581,12 @@ An enumeration of actions of a mouse button.
       <div>Arcadia.Natural64 button</div>
       <div>The zero-based index of the mouse button.</div>
     </div>
-    
+
     <div>
       <div>Arcadia.Integer32 x</div>
       <div>The position along the x-axis of the mouse pointer..</div>
     </div>
-    
+
     <div>
       <div>Arcadia.Integer32 y</div>
       <div>The position along the y-axis of the mouse pointer..</div>
@@ -1683,7 +1685,7 @@ An enumeration of actions of a mouse pointer.
       <div>Arcadia.Natural64 timestamp</div>
       <div>The timestamp of this event.</div>
     </div>
-    
+
     <div>
       <div>Arcadia.Visuals.MousePointerAction action</div>
       <div>The mouse pointer action.</div>
@@ -1693,7 +1695,7 @@ An enumeration of actions of a mouse pointer.
       <div>Arcadia.Integer32 x</div>
       <div>The position along the x-axis of the mouse pointer.</div>
     </div>
-    
+
     <div>
       <div>Arcadia.Integer32 y</div>
       <div>The position along the y-axis of the mouse pointer.</div>
@@ -1716,7 +1718,7 @@ An enumeration of pixel formats.
 </my-summary>
 
 <section class="cxx enumeration-elements">
-  
+
   <h1>Elements</h1>
 
   <div>
@@ -1775,7 +1777,7 @@ An enumeration of pixel formats.
     A component value of 255 indicates greatest intensity.
     </div>
   </div>
-  
+
   <div>
     <div>
       <code>Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8</code>
@@ -1790,7 +1792,7 @@ An enumeration of pixel formats.
     A component value of 255 indicates greatest intensity.
     </div>
   </div>
-  
+
   <div>
     <div>
       <code>Arcadia_Visuals_PixelFormat_Ln8</code>
@@ -1815,7 +1817,7 @@ An enumeration of pixel formats.
     A component value of 255 indicates greatest intensity.
     </div>
   </div>
-  
+
   <div>
     <div>
       <code>Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8</code>
@@ -1829,7 +1831,7 @@ An enumeration of pixel formats.
     A component value of 255 indicates greatest intensity.
     </div>
   </div>
-  
+
   <div>
     <div>
       <code>Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8</code>
@@ -2024,7 +2026,7 @@ An enumeration of pixel formats.
 
 <section class="cxx enumeration-elements">
   <h1>Elements</h1>
-  
+
   <div>
     <div>
       <code>Arcadia_Visuals_VertexElementSemantics_PositionXyz</code>
@@ -2088,7 +2090,7 @@ An enumeration of pixel formats.
 <section class="cxx enumeration-elements">
 
   <h1>Elements</h1>
-  
+
   <div>
     <div>
       <code>Arcadia_Visuals_VertexElementSyntax_Real32Real32</code>
@@ -2131,7 +2133,7 @@ An enumeration of winding modes.
 </my-summary>
 
 <section class="cxx enumeration-elements">
-  
+
   <h1>Elements</h1>
 
   <div>

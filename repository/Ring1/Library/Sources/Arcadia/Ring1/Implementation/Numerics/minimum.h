@@ -40,7 +40,7 @@
       Type##Value x, \
       Type##Value y \
     ) \
-  { return x < y ? x : y; } 
+  { return x < y ? x : y; }
 
 Define(Arcadia_Integer16, Integer16)
 Define(Arcadia_Integer32, Integer32)

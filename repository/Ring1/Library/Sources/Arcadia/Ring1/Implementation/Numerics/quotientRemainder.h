@@ -32,7 +32,7 @@
 
 #include "Arcadia/Ring1/Implementation/Size.h"
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotientRemainder*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_quotientRemainder*
 void
 Arcadia_quotientRemainderInteger16
   (
@@ -43,7 +43,7 @@ Arcadia_quotientRemainderInteger16
     Arcadia_Integer16Value* remainder
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotientRemainder*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_quotientRemainder*
 void
 Arcadia_quotientRemainderIntegerl32
   (
@@ -54,7 +54,7 @@ Arcadia_quotientRemainderIntegerl32
     Arcadia_Integer32Value* remainder
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotientRemainder*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_quotientRemainder*
 void
 Arcadia_quotientRemainderInteger64
   (
@@ -65,7 +65,7 @@ Arcadia_quotientRemainderInteger64
     Arcadia_Integer64Value* remainder
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotientRemainder*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_quotientRemainder*
 void
 Arcadia_quotientRemainderInteger8
   (
@@ -78,7 +78,7 @@ Arcadia_quotientRemainderInteger8
 
 
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotientRemainder*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_quotientRemainder*
 void
 Arcadia_quotientRemainderNatural16
   (
@@ -89,7 +89,7 @@ Arcadia_quotientRemainderNatural16
     Arcadia_Natural16Value* remainder
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotientRemainder*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_quotientRemainder*
 void
 Arcadia_quotientRemainderNatural32
   (
@@ -100,7 +100,7 @@ Arcadia_quotientRemainderNatural32
     Arcadia_Natural32Value* remainder
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotientRemainder*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_quotientRemainder*
 void
 Arcadia_quotientRemainderNatural64
   (
@@ -111,7 +111,7 @@ Arcadia_quotientRemainderNatural64
     Arcadia_Natural64Value* remainder
   );
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_quotientRemainder*
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_quotientRemainder*
 void
 Arcadia_quotientRemainderNatural8
   (

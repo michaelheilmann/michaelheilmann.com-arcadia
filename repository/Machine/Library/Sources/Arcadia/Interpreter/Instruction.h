@@ -35,37 +35,37 @@ typedef enum R_Machine_Code_Opcode {
 
   // load <target> <operand>
   R_Machine_Code_Opcode_Load,
-  
+
   // add <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Add,
-  
+
   // and <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_And,
-  
+
   // concatenate <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Concatenate,
-  
+
   // divide <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Divide,
-  
+
   // isEqualTo <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_IsEqualTo,
-  
+
   // isGreaterThan <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_IsGreaterThan,
-  
+
   // isGreaterThanOrEqualTo <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_IsGreaterThanOrEqualTo,
-  
+
   // idle
   R_Machine_Code_Opcode_Idle,
-  
+
   // isLowerThan <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_IsLowerThan,
-  
+
   // isLowerThanOrEqualTo <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_IsLowerThanOrEqualTo,
-  
+
   // multiply <target> <firstOperand> <secondOperand>
   R_Machine_Code_Opcode_Multiply,
 
@@ -82,7 +82,7 @@ typedef enum R_Machine_Code_Opcode {
   R_Machine_Code_Opcode_Or,
 
   // raise
-  R_Machine_Code_Opcode_Raise, 
+  R_Machine_Code_Opcode_Raise,
 
   // return
   R_Machine_Code_Opcode_Return,
@@ -103,7 +103,7 @@ typedef enum R_Machine_Code_Opcode {
 
 // INDICES
 // An index in an instruction is a multi-byte sequuence.
-// 
+//
 // The first Byte of the sequence is of one of the following four forms.
 // 00xx xxxx denotes an invalid index.
 // 01xx xxxx denotes 00xx xxxx is a register index.
@@ -111,13 +111,13 @@ typedef enum R_Machine_Code_Opcode {
 // 11xx xxxx is reserved for future use.
 //
 // If the index is a constant index or register index,
-// 
+//
 // Given the xx xxxx Bits, we can decode the register index / constant index.
 // - 0a aa aa is a single byte index.
 //   Used to encode indices [0 0000, 1 1111] in binary / [0, 31] in decimal.
 //
 // - 11 0a aa is the beginning two-byte sequence of the form
-//   11 0a aa 10 bb bb bb 
+//   11 0a aa 10 bb bb bb
 //   A := aaa can encode [000, 111] in binary / [0,7] in decimal.
 //   B := bb bbbb can encode [00 0000, 11 1111] in binary / [0,63] in decimal.
 //   The final index is computed by A << 6 | B = A * 64 + B.

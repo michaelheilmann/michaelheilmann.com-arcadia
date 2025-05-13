@@ -45,7 +45,7 @@ _toVoid
     check('i');
     check('d');
     check(_Unicode_CodePoint_End);
-      
+
     #undef check
     _State_uninit(&state);
     Arcadia_Thread_popJumpTarget(thread);

@@ -21,6 +21,8 @@
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
 #include "Arcadia/Ring1/Implementation/safeMultiply.h"
 #include "Arcadia/Ring1/Implementation/safeAdd.h"
+#include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Thread.h"
 
 static Arcadia_Natural64Value
 _toNatural64Internal

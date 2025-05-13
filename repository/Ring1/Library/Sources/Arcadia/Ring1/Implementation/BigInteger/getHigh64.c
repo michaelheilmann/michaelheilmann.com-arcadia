@@ -6,7 +6,7 @@
 
 // shl = clz(a)
 // truncated = false
-// return a << shl 
+// return a << shl
 static Arcadia_Natural64Value
 high64_64_1
   (
@@ -157,7 +157,7 @@ Arcadia_BigInteger_getHigh64
                        self->limps[self->numberOfLimps - 2],
                        truncated);
   } else {
-    Arcadia_Natural64Value x = high64_32_3(thread, 
+    Arcadia_Natural64Value x = high64_32_3(thread,
                                            self->limps[self->numberOfLimps - 1],
                                            self->limps[self->numberOfLimps - 2],
                                            self->limps[self->numberOfLimps - 3],

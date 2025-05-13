@@ -106,7 +106,7 @@ Arcadia_Mil_VariableOperandAst_create
     Arcadia_String* value
   )
 {
-  Arcadia_Value argumentValues[] = { 
+  Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue(value),
   };
   Arcadia_Mil_VariableOperandAst* self = Arcadia_allocateObject(thread, _Arcadia_Mil_VariableOperandAst_getType(thread), 1, &argumentValues[0]);

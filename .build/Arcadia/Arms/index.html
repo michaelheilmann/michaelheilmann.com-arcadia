@@ -90,7 +90,7 @@
     <tr><td><code>Arms_Status_OperationInvalid</code></td><td>if there are objects in \(U\). This is usually the result of illicit usage of Arcadia ARMS.</td></tr>
     <tr><td><code>Arms_Status_OperationInvalid</code></td><td>if the last handle was already relinquished. This is usually the result of illicit usage of Arcadia ARMS</td></tr>
   </table>
-  
+
   <p><b>Warning:</b>
   Using the services of Arcadia ARMS without a handle is undefined behavior.
   </p>
@@ -98,7 +98,7 @@
   <h2>Managed Memory</h2>
 
 <h3>Creating types</h3>
-<p>The user adds a type to the Arcadia ARMS by invoking <code>Arms_Status Arms_addType(const char* name, size_t nameLength, 
+<p>The user adds a type to the Arcadia ARMS by invoking <code>Arms_Status Arms_addType(const char* name, size_t nameLength,
 void* context, Arms_TypeRemovedCallbackFunction* typeRemoved, Arms_VisitCallbackFunction *visit, Arms_FinalizeCallbackFunction* finalize)</code>. The first argument <code>name</code> is
 a pointer to an array of <code>nameLength</code> Bytes denoting the type name. No two types of the same name can be
 registered and this function fails with <code>Arms_Status_TypeExists</code> if an attempt is made to do so. <code>visit</code>
@@ -142,13 +142,13 @@ int main(int argc, char**argv) {<br>
 &nbsp;Arms_startup();<br>
 &nbsp;if (!g_registered) {<br>
 &nbsp;&nbsp;Arms_addType("File", strlen("File"), NULL, &typeRemovedCallback, NULL, NULL);<br>
-&nbsp;&nbsp;g_registered = true;<br>  
+&nbsp;&nbsp;g_registered = true;<br>
 &nbsp;}</br>
 &nbsp;Arms_shutdown();<br>
 &nbsp;return EXIT_SUCCESS;<br>
 }
 </code>
-</p> 
+</p>
 <p>Note that types can be created with a null pointer for the finalize function.</p>
 
 <h4>Visit callback function</h4>
@@ -189,7 +189,7 @@ int main(int argc, char**argv) {<br>
 &nbsp;return EXIT_SUCCESS;<br>
 }
 </code>
-</p> 
+</p>
 <p>Note that types can be created with a null pointer for the visit function.</p>
 
 <h4>Finalize callback function</h4>
@@ -226,7 +226,7 @@ int main(int argc, char**argv) {<br>
 &nbsp;return EXIT_SUCCESS;<br>
 }
 </code>
-</p> 
+</p>
 <p>Note that types can be created with a null pointer for the finalize function.</p>
 
 
@@ -236,7 +236,7 @@ To create an object, the user of Arcadia ARMS creates an object by invoking <cod
 char const* name, size_t nameLength, size_t size)</code>. <code>name</code> is a pointer to an array of <code>nameLength</code> Bytes
 denoting the type name of the type to be assigned to object. <code>size</code> denotes the size, in Bytes, of the object to allocated
 (0 is a valid size). If this function is invoked successfully, the <code>*pObject</code> is assigned a pointer to an object of the
-specified size. The contents of the Bytes are unspecified. The object is assigned the type of the specified name. 
+specified size. The contents of the Bytes are unspecified. The object is assigned the type of the specified name.
 If this function fails it returns a value different from  <code>Arms_Status_Success</code>.
 The following table lists the possible values returned in case of failure
 </p>

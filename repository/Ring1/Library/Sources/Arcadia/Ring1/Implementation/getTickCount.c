@@ -37,7 +37,7 @@ Arcadia_getTickCount
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   // This is incorrect. It provides the time since some unspecified point in the past and not since the start of the process.
   struct timespec t;
-  //t = (struct timespec *)malloc(sizeof(t)); 
+  //t = (struct timespec *)malloc(sizeof(t));
   clock_gettime(CLOCK_MONOTONIC, &t);
   Arcadia_Natural64Value milliseconds = 0;
   // Nanoseconds to milliseconds.

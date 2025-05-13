@@ -38,7 +38,7 @@ struct R_Interpreter_Procedure {
 
 R_Interpreter_Procedure*
 R_Interpreter_Procedure_createForeign
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_String* procedureName,
     Arcadia_ForeignProcedureValue foreignProcedure

@@ -102,7 +102,7 @@ R_Interpreter_ProcessState_defineGlobalClass
  * @param name The name of the global.
  * @return The global.
  * @error Arcadia_Status_ArgumentValueInvalid @a name is a null pointer
- * @error Arcadia_Status_NotExists no global of name @a name was found 
+ * @error Arcadia_Status_NotExists no global of name @a name was found
  */
 Arcadia_Value
 R_Interpreter_ProcessState_getGlobal

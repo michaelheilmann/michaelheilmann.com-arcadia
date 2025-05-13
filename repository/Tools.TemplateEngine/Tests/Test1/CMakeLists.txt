@@ -25,7 +25,6 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
 FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
 
 set(MyTestName ${MyProjectName}.Tools.TemplateEngine.Tests.Test1)
@@ -47,7 +46,7 @@ list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine
 EndProduct(${MyTestName})
 # Copy assets.
 add_custom_command(TARGET ${MyTestName} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${${MyTestName}.WorkingDirectory}) 
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${${MyTestName}.WorkingDirectory})
 # Adjust working directory.
 set(${MyTestName}.WorkingDirectory $<TARGET_FILE_DIR:${MyTestName}>)
 set_target_properties(${MyTestName} PROPERTIES FOLDER "Tools/TemplateEngine")

@@ -31,10 +31,11 @@ section.cxx.entity > h2 {
 }
 
 section.cxx.enumeration-elements > h1,
+section.cxx.errors > h1,
 section.cxx.parameters > h1,
-section.cxx.success-condition > h1,
+section.cxx.remarks > h1,
 section.cxx.return-value > h1,
-section.cxx.errors > h1
+section.cxx.success-condition > h1
 {
   font-size: var(--h2-font-size);
 }
@@ -42,7 +43,7 @@ section.cxx.errors > h1
 
 
 
-/* Separate the entity fro by a margin and by a border. */
+/* Separate the entity by a margin and by a border. */
 section.cxx.entity {
   border-top-width: 8px;
   border-top-color: lightgray;
@@ -61,8 +62,12 @@ section.cxx-entity > h2::before {
   content: '';
 }
 
-/* display of parameter lists, error lists, and enumeration element lists. */
-section.cxx.parameters > div, section.cxx.errors > div, section.cxx.enumeration-elements > div {
+/* display of remarks, parameter lists, error lists, and enumeration element lists. */
+section.cxx.enumeration-elements > div
+section.cxx.errors > div,
+section.cxx.parameters > div,
+section.cxx.remarks > div
+{
   border-bottom-width: 2px;
   border-bottom-style: solid;
   border-bottom-color: lightgray;
@@ -78,7 +83,11 @@ section.cxx.parameters > div, section.cxx.errors > div, section.cxx.enumeration-
 }
 
 /* 2nd child because the first child is the headline. */
-section.cxx.parameters > div:nth-child(2), section.cxx.errors > div:nth-child(2), section.cxx.enumeration-elements > div:nth-child(2) {
+section.cxx.enumeration-elements > div:nth-child(2)
+section.cxx.errors > div:nth-child(2),
+section.cxx.parameters > div:nth-child(2),
+section.cxx.remarks > div:nth-child(2)
+{
   border-top-width: 2px;
   border-top-style: solid;
   border-top-color: lightgray;

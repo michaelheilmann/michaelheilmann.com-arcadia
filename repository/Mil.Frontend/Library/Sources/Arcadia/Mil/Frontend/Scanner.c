@@ -23,11 +23,11 @@
 // i is the zero-based index of the Byte at which the current UTF8 symbol starts in the input stream.
 // n is the length, in Bytes, of the current UTF8 symbol in the input stream.
 // s denotes the current symbol.
-// 
+//
 // There are three symbols different from all UTF8 symbols. These are START, END, and ERROR each of a size, in Bytes, of 0.
-// 
+//
 // The initial values of a scanner is (0,0,START).
-// 
+//
 // When the scanner is in some state (i,n,s) and is advanced to the next symbol,
 // then there are two possible outcomes:
 // - if the next 1-4 Bytes form a valid next symbol:
@@ -421,7 +421,7 @@ Arcadia_Mil_Scanner_step
     onEndToken(thread, self, Arcadia_Mil_TokenType_EndOfInput);
     Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<end of input>", sizeof(u8"<end of input>") - 1);
     return;
-  } 
+  }
   // Whitespace :  <Whitespace> | <Tabulator>
   if (' ' == self->symbol || '\t' == self->symbol) {
     do {
@@ -484,7 +484,7 @@ Arcadia_Mil_Scanner_step
     onEndToken(thread, self, Arcadia_Mil_TokenType_RightParenthesis);
     return;
   } else if ('"' == self->symbol) {
-    // <string>    
+    // <string>
     next(thread, self);
     Arcadia_BooleanValue lastWasSlash = Arcadia_BooleanValue_False;
     while (Arcadia_BooleanValue_True) {

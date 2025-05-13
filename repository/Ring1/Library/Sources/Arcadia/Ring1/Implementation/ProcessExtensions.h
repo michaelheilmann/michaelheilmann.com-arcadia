@@ -14,7 +14,7 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 // Convenient but not essential extensions to the functionality provided by Process.(h|c).
-// Not essential but 
+// Not essential but
 
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_PROCESSEXTENSIONS_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_PROCESSEXTENSIONS_H_INCLUDED
@@ -46,6 +46,7 @@
 #include "Arcadia/Ring1/Implementation/Value.h"
 
 #include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Thread.h"
 
 /// @summary Push an Arcadia_Atom value on the value stack of this thread.
 /// @param thread A pointer to this thread.
@@ -62,7 +63,7 @@ Arcadia_Thread_pushAtomValue
   Arcadia_Value_setAtomValue(&value, atomValue);
   Arcadia_Thread_pushValue(thread, &value);
 }
-  
+
 /// @summary Push an Arcadia_BigIntegerValue value on the value stack of this thread.
 /// @param thread A pointer to this thread.
 /// @param bigIntegerValue The Arcadia_BigIntegerValue value.
@@ -364,7 +365,7 @@ Arcadia_ValueStack_pushVoidValue
 {
   Arcadia_Value value = Arcadia_Value_Initializer();
   Arcadia_Value_setVoidValue(&value, voidValue);
-  Arcadia_Thread_pushValue(thread, &value); 
+  Arcadia_Thread_pushValue(thread, &value);
 }
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_PROCESSEXTENSIONS_H_INCLUDED

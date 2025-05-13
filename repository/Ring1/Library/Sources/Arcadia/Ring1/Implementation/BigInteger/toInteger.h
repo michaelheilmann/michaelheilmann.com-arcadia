@@ -21,7 +21,7 @@ Arcadia_BigInteger_toInteger16
     Arcadia_Thread* thread,
     Arcadia_BigIntegerValue self
   );
-  
+
 // Convert this BigInteger into a Integer32.
 // Raise an Arcadia_Status_ConversionFailed error if the conversion fails.
 Arcadia_Integer32Value
@@ -32,14 +32,14 @@ Arcadia_BigInteger_toInteger32
   );
 
 // Convert this BigInteger into a Integer64.
-// Raise an Arcadia_Status_ConversionFailed error if the conversion fails. 
+// Raise an Arcadia_Status_ConversionFailed error if the conversion fails.
 Arcadia_Integer64Value
 Arcadia_BigInteger_toInteger64
   (
     Arcadia_Thread* thread,
     Arcadia_BigIntegerValue self
   );
-  
+
 // Convert this BigInteger into a Integer8.
 // Raise an Arcadia_Status_ConversionFailed error if the conversion fails.
 Arcadia_Integer8Value

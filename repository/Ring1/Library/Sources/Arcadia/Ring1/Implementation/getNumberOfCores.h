@@ -23,7 +23,7 @@
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 typedef struct Arcadia_Thread Arcadia_Thread;
 
-// https://michaelheilmann.com/repository/Arcadia.Ring1/#Arcadia_getNumberOfCores
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_getNumberOfCores
 Arcadia_Natural64Value
 Arcadia_getNumberOfCores
   (

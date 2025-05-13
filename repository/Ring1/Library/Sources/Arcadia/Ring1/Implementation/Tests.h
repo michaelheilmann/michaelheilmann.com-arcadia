@@ -23,6 +23,7 @@
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Thread.h"
 
 #define Arcadia_Tests_assertTrue(thread, expression) \
   if (!(expression)) { \
