@@ -188,10 +188,10 @@ Arcadia_safeMultiplySizeValue
 #elif Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
   #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural64Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural64Value_NumberOfBits, "environment not (yet) supported");
-    Arcadia_safeMultiplyNatural64Value(thread, multiplier, multiplicand, (Arcadia_Natural64Value*)productHigh, (Arcadia_Natural64Value*)productLow);
+    return Arcadia_safeMultiplyNatural64Value(thread, multiplier, multiplicand, (Arcadia_Natural64Value*)productHigh, (Arcadia_Natural64Value*)productLow);
   #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural32Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural32Value_NumberOfBits, "environment not (yet) supported");
-    Arcadia_safeMultiplyNatural32Value(thread, multiplier, multiplicand, (Arcadia_Natural32Value*)productHigh_, (Arcadia_Natural32Value*)productLow);
+    return Arcadia_safeMultiplyNatural32Value(thread, multiplier, multiplicand, (Arcadia_Natural32Value*)productHigh, (Arcadia_Natural32Value*)productLow);
   #else
     #error("environemnt not (yet) supported");
   #endif

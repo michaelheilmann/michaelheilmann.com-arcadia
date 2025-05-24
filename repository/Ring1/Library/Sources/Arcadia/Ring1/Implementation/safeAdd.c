@@ -125,3 +125,41 @@ Arcadia_safeAddNatural8Value
   *sumLow = (Arcadia_Natural8Value)(temporary & 0x00ff);
 #endif
 }
+
+void
+Arcadia_safeAddSizeValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_SizeValue augend,
+    Arcadia_SizeValue addend,
+    Arcadia_SizeValue* sumHigh,
+    Arcadia_SizeValue* sumLow
+  ) {
+  if (!sumHigh | !sumLow) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+#if Arcadia_Configuration_CompilerC_Msvc == Arcadia_Configuration_CompilerC
+  #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
+    Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural64Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural64Value_NumberOfBits, "environment not (yet) supported");
+    Arcadia_safeAddNatural64Value(thread, augend, addend, (Arcadia_Natural64Value*)sumHigh, (Arcadia_Natural64Value*)sumLow);
+  #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
+    Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural32Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural32Value_NumberOfBits, "environment not (yet) supported");
+    Arcadia_safeAdddNatural32Value(thread, augend, addend, (Arcadia_Natural32Value*)productHigh, (Arcadia_Natural32Value*)sumLow);
+  #else
+    #error ("environemnt not (yet) supported");
+  #endif
+#elif Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
+  #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
+    Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural64Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural64Value_NumberOfBits, "environment not (yet) supported");
+    Arcadia_safeAddNatural64Value(thread, augend, addend, (Arcadia_Natural64Value*)sumHigh, (Arcadia_Natural64Value*)sumLow);
+  #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
+    Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural32Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural32Value_NumberOfBits, "environment not (yet) supported");
+    Arcadia_safeAddNatural32Value(thread, augend, addend, (Arcadia_Natural32Value*)sumHigh, (Arcadia_Natural32Value*)sumLow);
+  #else
+    #error("environemnt not (yet) supported");
+  #endif
+#else
+  #error ("environemnt not (yet) supported");
+#endif
+}

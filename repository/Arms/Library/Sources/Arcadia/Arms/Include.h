@@ -80,6 +80,29 @@ Arms_visit
     void* object
   );
 
+#if defined(Arcadia_Arms_Configuration_WithNotifyDestroy) && 1 ==  Arcadia_Arms_Configuration_WithNotifyDestroy
+
+typedef void Arms_NotifyDestroyContext;
+typedef void (Arms_NotifyDestroyCallback)(Arms_NotifyDestroyContext* context, void* object);
+
+Arcadia_Arms_Status
+Arms_addNotifyDestroy
+  (
+    void* object,
+    Arms_NotifyDestroyContext* context,
+    Arms_NotifyDestroyCallback* callback
+  );
+
+Arcadia_Arms_Status
+Arms_removeNotifyDestroy
+  (
+    void* object,
+    Arms_NotifyDestroyContext* context,
+    Arms_NotifyDestroyCallback* callback
+  );
+
+#endif // Arcadia_Arms_Configuration_WithNotifyDestroy
+
 #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
 
 Arcadia_Arms_Status

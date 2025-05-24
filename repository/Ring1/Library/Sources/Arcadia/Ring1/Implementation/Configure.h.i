@@ -56,6 +56,13 @@
 
 #define Arcadia_Configuration_ByteOrder @Arcadia.Ring1.ByteOrder@
 
+// Least significand at lowest array index, most significand at highest array index.
+#define Arcadia_Configuration_BigInteger_LimpOrder_LittleEndian (1)
+// Most significand at lowest array index, least significand at highest array index.
+#define Arcadia_Configuration_BigInteger_LimpOrder_BigEndian (2)
+
+// The limp order used by the big integer implementation is little endian.
+#define Arcadia_Configuration_BigInteger_LimpOrder Arcadia_Configuration_BigInteger_LimpOrder_LittleEndian
 
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_CONFIGURE_H_INCLUDED

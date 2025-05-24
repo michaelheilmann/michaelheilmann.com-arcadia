@@ -1,3 +1,18 @@
+// The author of this software is Michael Heilmann (contact@michaelheilmann.com).
+//
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/BigInteger/compareTo.h"
 
@@ -11,29 +26,20 @@ Arcadia_BigInteger_compareTo
     Arcadia_BigInteger* other
   )
 {
+  if (self->sign == other->sign) {
+    switch (self->sign) {
+      case +1: return Arcadia_BigInteger_compareByMagnitudeTo(thread, self, other);
+      case -1: return Arcadia_BigInteger_compareByMagnitudeTo(thread, other, self);
+      case  0: return 0;
+    };
+  }
   if (self->sign < other->sign) {
     // self is negative and other is zero or positive / self is zero and other is positive.
     return Arcadia_Integer8Value_Literal(-1);
-  } else if (self->sign > other->sign) {
+  } else /*if (self->sign > other->sign)*/ {
     // other is negative and self is zero or positive / other is zero and self is positive.
     return Arcadia_Integer8Value_Literal(+1);
   }
-  // self and other have the same signedness.
-  // Compare their magnitudes.
-  if (self->numberOfLimps < other->numberOfLimps) {
-    return self->sign == +1 ? Arcadia_Integer8Value_Literal(-1) : Arcadia_Integer8Value_Literal(+1);
-  } else if (self->numberOfLimps > other->numberOfLimps) {
-    return self->sign == +1 ? Arcadia_Integer8Value_Literal(+1) : Arcadia_Integer8Value_Literal(-1);
-  } else {
-    for (Arcadia_SizeValue i = self->numberOfLimps; i > 0; --i) {
-      if (self->limps[i - 1] < other->limps[i - 1]) {
-        return self->sign == +1 ? Arcadia_Integer8Value_Literal(-1) : Arcadia_Integer8Value_Literal(+1);
-      } else if (self->limps[i - 1] > other->limps[i - 1]) {
-        return self->sign == +1 ? Arcadia_Integer8Value_Literal(+1) : Arcadia_Integer8Value_Literal(-1);
-      }
-    }
-  }
-  return Arcadia_Integer8Value_Literal(0);
 }
 
 Arcadia_Integer8Value

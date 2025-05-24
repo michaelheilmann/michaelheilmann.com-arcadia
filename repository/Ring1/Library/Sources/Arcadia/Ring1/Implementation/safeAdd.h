@@ -74,4 +74,14 @@ Arcadia_safeAddNatural8Value
     Arcadia_Natural8Value* sumLow
   );
 
+void
+Arcadia_safeAddSizeValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_SizeValue augend,
+    Arcadia_SizeValue addend,
+    Arcadia_SizeValue* sumHigh,
+    Arcadia_SizeValue* sumLow
+  );
+
 #endif // ARCADIA_RING1_SAFEADD_H_INCLUDED

@@ -154,6 +154,3 @@ Arcadia_Ring1_Tests_BigInteger_relationalOperations
     Arcadia_Test_BigInteger_assertRelational(thread, test->result, test->operation, test->a, test->b);
   }
 }
-
-#if 0
-#endif

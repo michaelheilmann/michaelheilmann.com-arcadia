@@ -379,6 +379,7 @@ Arcadia_List_removeAt
   }
 
 Define(Arcadia_Boolean, Boolean, boolean)
+Define(Arcadia_BigInteger, BigInteger, bigInteger)
 Define(Arcadia_ForeignProcedure, ForeignProcedure, foreignProcedure)
 Define(Arcadia_Integer8, Integer8, integer8)
 Define(Arcadia_Integer16, Integer16, integer16)

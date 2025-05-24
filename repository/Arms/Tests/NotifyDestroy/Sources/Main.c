@@ -17,104 +17,83 @@
 #include <stdlib.h>
 // strlen
 #include <string.h>
+// true, false, bool
+#include <stdbool.h>
 
 #include "Arcadia/Arms/Include.h"
 
-typedef struct Sender {
+typedef struct Object {
   char* name;
-} Sender;
+} Object;
+
+static bool g_notifyDestroyCalled = false;
+static bool g_visitCalled = false;
+static bool g_finalizeCalled = false;
 
 static void
-Sender_visit
+Object_notifyDestroy
   (
-    Sender* p
-  )
-{ }
-
-static void
-Sender_finalize
-  (
-    Sender* p
+    void* context,
+    Object* object
   )
 {
-  if (p->name) {
-    free(p->name);
-    p->name = NULL;
-  }
-}
-
-typedef struct Message {
-  char* text;
-  Sender* sender;
-} Message;
-
-static void
-Message_visit
-  (
-    Message* p
-  )
-{
-  if (p->sender) {
-    Arms_visit(p->sender);
-  }
+  g_notifyDestroyCalled = true;
 }
 
 static void
-Message_finalize
+Object_visit
   (
-    Message* p
+    void* context,
+    Object* object
   )
 {
-  if (p->text) {
-    free(p->text);
-    p->text = NULL;
-  }
-  p->sender = NULL; // Not required but good style.
+  g_visitCalled = true;
 }
 
-int main(int argc, char **argv) {
+static void
+Object_finalize
+  (
+    void* context,
+    Object* object
+  )
+{
+  g_finalizeCalled = true;
+}
+
+int
+main
+  (
+    int argc,
+    char **argv
+  )
+{
   if (Arms_startup()) {
     return EXIT_FAILURE;
   }
-  if (Arms_addType("Sender", strlen("Sender"), NULL, NULL, (Arms_VisitCallbackFunction*)&Sender_visit, (Arms_FinalizeCallbackFunction*)&Sender_finalize)) {
+  if (Arms_addType("Object", strlen("Object"), NULL, NULL, (Arms_VisitCallbackFunction*)&Object_visit, (Arms_FinalizeCallbackFunction*)&Object_finalize)) {
     Arms_RunStatistics statistics = { .destroyed = 0 };
     Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
-  if (Arms_addType("Message", strlen("Message"), NULL, NULL, (Arms_VisitCallbackFunction*) & Message_visit, (Arms_FinalizeCallbackFunction*) & Message_finalize)) {
+  Object* sender = NULL;
+  if (Arms_allocate(&sender, "Object", strlen("Object"), sizeof(Object))) {
     Arms_RunStatistics statistics = { .destroyed = 0 };
     Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
-  Sender* sender = NULL;
-  if (Arms_allocate(&sender, "Sender", strlen("Sender"), sizeof(Sender))) {
+  if (Arms_addNotifyDestroy(sender, NULL, (Arms_NotifyDestroyCallback*)&Object_notifyDestroy)) {
     Arms_RunStatistics statistics = { .destroyed = 0 };
     Arms_run(&statistics);
     Arms_shutdown();
     return EXIT_FAILURE;
   }
-  Message* message = NULL;
-  if (Arms_allocate(&message, "Message", strlen("Message"), sizeof(Message))) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
-    return EXIT_FAILURE;
-  }
-  message->text = strdup("Hello, World!\n");
-  if (!message->text) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
-    return EXIT_FAILURE;
-  }
-  message->sender = sender;
-  Arms_lock(message);
   Arms_RunStatistics statistics = { .destroyed = 0 };
   Arms_run(&statistics);
-  Arms_unlock(message);
-  Arms_run(&statistics);
   Arms_shutdown();
+  if (g_visitCalled || !g_finalizeCalled || !g_notifyDestroyCalled) {
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }

@@ -1,3 +1,18 @@
+// The author of this software is Michael Heilmann (contact@michaelheilmann.com).
+//
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/BigInteger/divide.h"
 
@@ -155,8 +170,8 @@ Arcadia_BigInteger_divide3
   if (b->numberOfLimps == 1) {
     Arcadia_SizeValue quotientLength = a->numberOfLimps;
     quotient1->sign = a->sign != b->sign ? -1 : +1;
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &quotient1->limps, sizeof(Hidden(BigInteger_Limp)) * quotientLength);
-    Arcadia_Process_fillMemory(Arcadia_Thread_getProcess(thread), quotient1->limps, sizeof(Hidden(BigInteger_Limp)) * quotientLength, 0);
+    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &quotient1->limps, sizeof(Arcadia_BigInteger_Limp) * quotientLength);
+    Arcadia_Process_fillMemory(Arcadia_Thread_getProcess(thread), quotient1->limps, sizeof(Arcadia_BigInteger_Limp) * quotientLength, 0);
     quotient1->numberOfLimps = quotientLength;
 
     Arcadia_Natural64Value bValue = b->limps[0];
@@ -178,8 +193,8 @@ Arcadia_BigInteger_divide3
     Arcadia_BigInteger_copy(thread, remainder1, a);
     Arcadia_SizeValue remainderLength = a->numberOfLimps;
     Arcadia_SizeValue quotientLength = (a->numberOfLimps - b->numberOfLimps) + 1; // a->numberOfLimps >= b->numberOfLimps by the above.
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &quotient1->limps, sizeof(Hidden(BigInteger_Limp)) * quotientLength);
-    Arcadia_Process_fillMemory(Arcadia_Thread_getProcess(thread), quotient1->limps, sizeof(Hidden(BigInteger_Limp)) * quotientLength, 0);
+    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &quotient1->limps, sizeof(Arcadia_BigInteger_Limp) * quotientLength);
+    Arcadia_Process_fillMemory(Arcadia_Thread_getProcess(thread), quotient1->limps, sizeof(Arcadia_BigInteger_Limp) * quotientLength, 0);
     quotient1->sign = 0;
 
     // We accumulate as many bits from b into (divHi, divLo).

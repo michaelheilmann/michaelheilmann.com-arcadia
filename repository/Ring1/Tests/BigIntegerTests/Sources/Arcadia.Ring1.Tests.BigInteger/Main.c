@@ -14,6 +14,7 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Additive.h"
@@ -21,6 +22,19 @@
 #include "Arcadia.Ring1.Tests.BigInteger/PowersOf.h"
 #include "Arcadia.Ring1.Tests.BigInteger/QuotientRemainder.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Relational.h"
+#include "Arcadia.Ring1.Tests.BigInteger/SetInteger.h"
+#include "Arcadia.Ring1.Tests.BigInteger/Shift.h"
+
+// Regression.
+static void
+test0
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_BigInteger* x = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setInteger8(thread, x, Arcadia_Natural8Value_Literal(0));
+}
 
 // Regression.
 static void
@@ -29,12 +43,12 @@ test1
     Arcadia_Thread* thread
   )
 {
-  int64_t u = INT64_C(9007199254740992);
-  Arcadia_Tests_assertTrue(thread, u <= UINT64_MAX);
-  Arcadia_Tests_assertTrue(thread, u <= INT64_MAX);
+  Arcadia_Integer64Value u = Arcadia_Integer64Value_Literal(9007199254740992);
+  Arcadia_Tests_assertTrue(thread, u <= Arcadia_Natural64Value_Maximum);
+  Arcadia_Tests_assertTrue(thread, u <= Arcadia_Integer64Value_Maximum);
   Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
-  int64_t v = Arcadia_BigInteger_toInteger64(thread, bigInteger);
+  Arcadia_Integer64Value v = Arcadia_BigInteger_toInteger64(thread, bigInteger);
   Arcadia_Tests_assertTrue(thread, u == v);
 }
 
@@ -45,12 +59,12 @@ test2
     Arcadia_Thread* thread
   )
 {
-  uint64_t u = UINT64_C(9007199254740992);
-  Arcadia_Tests_assertTrue(thread, u <= UINT64_MAX);
-  Arcadia_Tests_assertTrue(thread, u <= INT64_MAX);
+  Arcadia_Natural64Value u = Arcadia_Natural64Value_Literal(9007199254740992);
+  Arcadia_Tests_assertTrue(thread, u <= Arcadia_Natural64Value_Maximum);
+  Arcadia_Tests_assertTrue(thread, u <= Arcadia_Integer64Value_Maximum);
   Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
-  uint64_t v = Arcadia_BigInteger_toNatural64(thread, bigInteger);
+  Arcadia_Natural64Value v = Arcadia_BigInteger_toNatural64(thread, bigInteger);
   Arcadia_Tests_assertTrue(thread, u == v);
 }
 
@@ -61,14 +75,42 @@ test3
     Arcadia_Thread* thread
   )
 {
-  uint64_t u = UINT64_C(9007199254740992);
-  Arcadia_Tests_assertTrue(thread, u <= UINT64_MAX);
-  Arcadia_Tests_assertTrue(thread, u <= INT64_MAX);
+  Arcadia_Natural64Value u = Arcadia_Natural64Value_Literal(9007199254740992);
+  Arcadia_Tests_assertTrue(thread, u <= Arcadia_Natural64Value_Maximum);
+  Arcadia_Tests_assertTrue(thread, u <= Arcadia_Integer64Value_Maximum);
   Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
   Arcadia_BooleanValue w;
-  uint64_t v = Arcadia_BigInteger_toNatural64WithTruncation(thread, bigInteger, &w);
+  Arcadia_Natural64Value v = Arcadia_BigInteger_toNatural64WithTruncation(thread, bigInteger, &w);
   Arcadia_Tests_assertTrue(thread, !w && u == v);
+}
+
+// Regression.
+static void
+test3_1
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_BigInteger* a = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setInteger8(thread, a, 3);
+  Arcadia_BigInteger_multiplyInteger8(thread, a, 10);
+  Arcadia_Natural64Value v = Arcadia_BigInteger_toNatural64(thread, a);
+  Arcadia_Tests_assertTrue(thread, v == 30);
+}
+
+// Regression.
+static void
+test3_2
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_BigInteger* a = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setInteger8(thread, a, 3);
+  Arcadia_BigInteger_addInteger8(thread, a, 27);
+  Arcadia_Natural64Value v = Arcadia_BigInteger_toNatural64(thread, a);
+  Arcadia_Tests_assertTrue(thread, v == 30);
 }
 
 // Regression.
@@ -81,11 +123,9 @@ test4
   Arcadia_BigInteger* a = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_addInteger8(thread, a, 3);
   Arcadia_BigInteger_multiplyInteger8(thread, a, 10);
-  uint64_t v = Arcadia_BigInteger_toNatural64(thread, a);
+  Arcadia_Natural64Value v = Arcadia_BigInteger_toNatural64(thread, a);
   Arcadia_Tests_assertTrue(thread, v == 30);
 }
-
-#include <string.h>
 
 static void
 test5
@@ -127,6 +167,54 @@ test6
   Arcadia_BigInteger_toStdoutDebug(thread, v);
 }
 
+static void
+checkTwosComplementIntegers
+  (
+    Arcadia_Thread* thread
+  )
+{
+  {
+    // Every implicit conversion as if by assignment is allowed. (https://en.cppreference.com/w/c/language/cast.html)
+    // If the target type can represent the value, the value is unchanged. (https://en.cppreference.com/w/c/language/conversion.html)
+    int8_t x;
+    uint8_t z;
+    x = 0;
+    z = (uint8_t)x;
+    Arcadia_Tests_assertTrue(thread, z == 0);
+  }
+  {
+    // Every implicit conversion as if by assignment is allowed. (https://en.cppreference.com/w/c/language/cast.html)
+    // If the target type can represent the value, the value is unchanged. (https://en.cppreference.com/w/c/language/conversion.html)
+    int8_t x;
+    uint8_t z;
+    x = INT8_MAX;
+    z = (uint8_t)x;
+    Arcadia_Tests_assertTrue(thread, z == 127);
+  }
+  {
+    // Every implicit conversion as if by assignment is allowed.* (https://en.cppreference.com/w/c/language/cast.html)
+    // If the target type is unsigned, the value 2^b, where b is the number of value bits in the target type, is
+    // repeatedly subtracted or added to the source value until the result fits in the target type.
+    // (https://en.cppreference.com/w/c/language/conversion.html)
+    int8_t x;
+    uint8_t z;
+    x = INT8_MIN;
+    z = (uint8_t)x;
+    Arcadia_Tests_assertTrue(thread, z == (x + UINT8_MAX + 1));
+  }
+  {
+    // Every implicit conversion as if by assignment is allowed.* (https://en.cppreference.com/w/c/language/cast.html)
+    // If the target type is unsigned, the value 2^b, where b is the number of value bits in the target type, is
+    // repeatedly subtracted or added to the source value until the result fits in the target type.
+    // (https://en.cppreference.com/w/c/language/conversion.html)
+    int8_t x;
+    uint8_t z;
+    x = INT8_MIN + 3;
+    z = (uint8_t)x;
+    Arcadia_Tests_assertTrue(thread, z == (x + UINT8_MAX + 1));
+  }
+}
+
 int
 main
   (
@@ -134,6 +222,12 @@ main
     char **argv
   )
 {
+  if (!Arcadia_Tests_safeExecute(&checkTwosComplementIntegers)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&test0)) {
+    return EXIT_FAILURE;
+  }
   if (!Arcadia_Tests_safeExecute(&test1)) {
     return EXIT_FAILURE;
   }
@@ -141,6 +235,12 @@ main
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&test3)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&test3_1)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&test3_2)) {
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&test4)) {
@@ -152,6 +252,9 @@ main
   if (!Arcadia_Tests_safeExecute(&test6)) {
     return EXIT_FAILURE;
   }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_setIntegerOperations)) {
+    return EXIT_FAILURE;
+  }
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_additiveOperations)) {
     return EXIT_FAILURE;
   }
@@ -161,10 +264,13 @@ main
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_powersOfOperations)) {
     return EXIT_FAILURE;
   }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_quotientRemainderOperations)) {
+    return EXIT_FAILURE;
+  }
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_relationalOperations)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_quotientRemainderOperations)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_shiftOperations)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

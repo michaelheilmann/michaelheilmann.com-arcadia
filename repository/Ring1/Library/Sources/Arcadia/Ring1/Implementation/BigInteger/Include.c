@@ -1,3 +1,18 @@
+// The author of this software is Michael Heilmann (contact@michaelheilmann.com).
+//
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/BigInteger/Include.h"
 
@@ -45,11 +60,8 @@ Arcadia_BigInteger_create
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &self, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_BigInteger));
   self->numberOfLimps = 0;
   self->limps = NULL;
-
-  self->numberOfLimps = 1;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Hidden(BigInteger_Limp)) * 1);
-  self->limps[0] = UINT32_C(0);
   self->sign = 0;
+  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Arcadia_BigInteger_Limp) * 0);
   return self;
 }
 
@@ -79,9 +91,9 @@ Arcadia_BigInteger_copy
   if (self != other) {
     Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
     if (self->numberOfLimps < other->numberOfLimps) {
-      Arcadia_Process_reallocateUnmanaged(process, &self->limps, sizeof(Hidden(BigInteger_Limp)) * other->numberOfLimps);
+      Arcadia_Process_reallocateUnmanaged(process, &self->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
     }
-    Arcadia_Process_copyMemory(process, self->limps, other->limps, sizeof(Hidden(BigInteger_Limp)) * other->numberOfLimps);
+    Arcadia_Process_copyMemory(process, self->limps, other->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
     self->numberOfLimps = other->numberOfLimps;
     self->sign = other->sign;
   }
@@ -95,8 +107,7 @@ Arcadia_BigInteger_setZero
   )
 {
   self->sign = 0;
-  self->limps[0] = 0;
-  self->numberOfLimps = 1;
+  self->numberOfLimps = 0;
 }
 
 Arcadia_BooleanValue
@@ -429,5 +440,18 @@ Arcadia_BigInteger_toStdoutDebug
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), p);
     p = NULL;
+  }
+}
+
+void
+_Arcadia_BigInteger_stripLeadingZeroes
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigInteger_Limp** limps,
+    Arcadia_SizeValue* numberOfLimps
+  )
+{
+  while ((*numberOfLimps)> 0 && !(*limps)[(*numberOfLimps) - 1]) {
+    (*numberOfLimps)--;
   }
 }

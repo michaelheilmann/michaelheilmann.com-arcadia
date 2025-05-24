@@ -26,5 +26,5 @@ if (NOT MyProjectIsDefined)
 endif()
 
 add_subdirectory(Library)
-add_subdirectory(Demos)
+add_subdirectory(Tests)
 add_subdirectory(Documentation)

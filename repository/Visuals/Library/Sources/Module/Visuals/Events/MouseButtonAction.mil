@@ -17,7 +17,7 @@
 enumeration Arcadia.Visuals.MouseButtonAction {
 
   Pressed = 1,
-  
+
   Released,
 
 };

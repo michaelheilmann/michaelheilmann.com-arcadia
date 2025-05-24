@@ -25,24 +25,17 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
-set(MyExecutableName ${MyProjectName}.Tools.TemplateEngine)
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
 
-if (NOT TARGET ${MyExecutableName})
+set(MyTest ${MyProjectName}.Arms.Tests.NotifyDestroyTest)
 
-  FetchProduct(${MyProjectName}.Tools.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library" "path to the Template Engine library directory")
+# Create test executable.
+BeginProduct(${MyTest} test)
 
-  BeginProduct(${MyExecutableName} executable)
+list(APPEND ${MyTest}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h @ONLY)
-  list(APPEND ${MyExecutableName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Configure.h.i)
-  list(APPEND ${MyExecutableName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/TemplateEngine/Configure.h)
+list(APPEND ${MyTest}.Libraries ${MyProjectName}.Arms)
 
-  list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/TemplateEngine/Main.c)
+EndProduct(${MyTest})
 
-  list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.Machine ${MyProjectName}.Arms)
-
-  EndProduct(${MyExecutableName})
-
-  set_target_properties(${MyExecutableName} PROPERTIES FOLDER "Tools/TemplateEngine")
-
-endif()
+set_target_properties(${MyTest} PROPERTIES FOLDER "Arms")

@@ -20,10 +20,22 @@ if (NOT MyProjectIsDefined)
     set(MyProjectName "Arcadia")
   endif()
   project(${MyProjectName})
-  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
   set(MyProjectIsDefined)
 endif()
-set(MyProjectName "Arcadia")
 
-add_subdirectory(Demo1)
+FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
+
+set(MyTest ${MyProjectName}.Arms.Tests.StartupShutdownTest)
+
+# Create test executable.
+BeginProduct(${MyTest} test)
+
+list(APPEND ${MyTest}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
+
+list(APPEND ${MyTest}.Libraries ${MyProjectName}.Arms)
+
+EndProduct(${MyTest})
+
+set_target_properties(${MyTest} PROPERTIES FOLDER "Arms")
