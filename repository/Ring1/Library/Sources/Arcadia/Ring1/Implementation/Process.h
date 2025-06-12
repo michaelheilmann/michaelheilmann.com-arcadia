@@ -192,6 +192,46 @@ Arcadia_Process_reallocateUnmanaged
     size_t n
   );
 
+/// p pointer to an array with elements a[0], ..., a[n]. Each element is 16 bit wide.
+/// These value of the array are swapped such that a[i] = a[n - 1 - i] holds for all 0 <= i < n.
+void
+Arcadia_Process_reverseMemory16
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  );
+
+/// p pointer to an array with elements a[0], ..., a[n]. Each element is 32 bit wide.
+/// These value of the array are swapped such that a[i] = a[n - 1 - i] holds for all 0 <= i < n.
+void
+Arcadia_Process_reverseMemory32
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  );
+
+/// p pointer to an array with elements a[0], ..., a[n]. Each element is 64 bit wide.
+/// These value of the array are swapped such that a[i] = a[n - 1 - i] holds for all 0 <= i < n.
+void
+Arcadia_Process_reverseMemory64
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  );
+
+/// p pointer to an array with elements a[0], ..., a[n]. Each element is 8 bit wide.
+/// These value of the array are swapped such that a[i] = a[n - 1 - i] holds for all 0 <= i < n.
+void
+Arcadia_Process_reverseMemory8
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  );
+
 /// @param process A pointer to the Arcadia_Process object
 void
 Arcadia_Process_visitObject
@@ -307,8 +347,6 @@ Arcadia_Process_allocate
     size_t nameLength,
     size_t size
   );
-
-/// @brief Get the time, in milliseconds, since some undef
 
 typedef struct ModuleInfo {
   /// @brief Pointer to the name of the module. The name is a static constant C string.

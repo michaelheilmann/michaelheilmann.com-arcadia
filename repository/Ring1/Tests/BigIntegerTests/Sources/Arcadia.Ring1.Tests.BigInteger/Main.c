@@ -18,12 +18,15 @@
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Additive.h"
+#include "Arcadia.Ring1.Tests.BigInteger/And.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Multiplicative.h"
+#include "Arcadia.Ring1.Tests.BigInteger/Or.h"
 #include "Arcadia.Ring1.Tests.BigInteger/PowersOf.h"
 #include "Arcadia.Ring1.Tests.BigInteger/QuotientRemainder.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Relational.h"
 #include "Arcadia.Ring1.Tests.BigInteger/SetInteger.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Shift.h"
+#include "Arcadia.Ring1.Tests.BigInteger/TwosComplement.h"
 
 // Regression.
 static void
@@ -258,7 +261,13 @@ main
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_additiveOperations)) {
     return EXIT_FAILURE;
   }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_andOperations)) {
+    return EXIT_FAILURE;
+  }
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_multiplicativeOperations)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_orOperations)) {
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_powersOfOperations)) {
@@ -271,6 +280,9 @@ main
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_shiftOperations)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_twosComplementOperations)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

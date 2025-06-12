@@ -56,6 +56,8 @@
 
 #define Arcadia_Configuration_ByteOrder @Arcadia.Ring1.ByteOrder@
 
+// The size, in Bytes, of a limp.
+#define Arcadia_Configuration_BigInteger_LimpSize 4
 // Least significand at lowest array index, most significand at highest array index.
 #define Arcadia_Configuration_BigInteger_LimpOrder_LittleEndian (1)
 // Most significand at lowest array index, least significand at highest array index.

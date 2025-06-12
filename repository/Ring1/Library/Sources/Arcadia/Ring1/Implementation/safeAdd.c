@@ -145,7 +145,7 @@ Arcadia_safeAddSizeValue
     Arcadia_safeAddNatural64Value(thread, augend, addend, (Arcadia_Natural64Value*)sumHigh, (Arcadia_Natural64Value*)sumLow);
   #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural32Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural32Value_NumberOfBits, "environment not (yet) supported");
-    Arcadia_safeAdddNatural32Value(thread, augend, addend, (Arcadia_Natural32Value*)productHigh, (Arcadia_Natural32Value*)sumLow);
+    Arcadia_safeAddNatural32Value(thread, augend, addend, (Arcadia_Natural32Value*)sumHigh, (Arcadia_Natural32Value*)sumLow);
   #else
     #error ("environemnt not (yet) supported");
   #endif

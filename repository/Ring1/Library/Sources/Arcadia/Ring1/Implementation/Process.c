@@ -735,3 +735,87 @@ Arcadia_Process_allocate
   }
   *p = q;
 }
+
+void
+Arcadia_Process_reverseMemory16
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  )
+{
+  if (n) {
+    Arcadia_Natural16Value* front = p;
+    Arcadia_Natural16Value* back = front + (n - 1);
+    for (Arcadia_SizeValue i = 0, m = n / 2; i < m; ++i) {
+      Arcadia_Natural16Value temporary = *front;
+      *front = *back;
+      *back = temporary;
+      ++front;
+      --back;
+    }
+  }
+}
+
+void
+Arcadia_Process_reverseMemory32
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  )
+{
+  if (n) {
+    Arcadia_Natural32Value* front = p;
+    Arcadia_Natural32Value* back = front + (n - 1);
+    for (Arcadia_SizeValue i = 0, m = n / 2; i < m; ++i) {
+      Arcadia_Natural32Value temporary = *front;
+      *front = *back;
+      *back = temporary;
+      ++front;
+      --back;
+    }
+  }
+}
+
+void
+Arcadia_Process_reverseMemory64
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  )
+{
+  if (n) {
+    Arcadia_Natural64Value* front = p;
+    Arcadia_Natural64Value* back = front + (n - 1);
+    for (Arcadia_SizeValue i = 0, m = n / 2; i < m; ++i) {
+      Arcadia_Natural64Value temporary = *front;
+      *front = *back;
+      *back = temporary;
+      ++front;
+      --back;
+    }
+  }
+}
+
+void
+Arcadia_Process_reverseMemory8
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  )
+{
+  if (n) {
+    Arcadia_Natural8Value* front = p;
+    Arcadia_Natural8Value* back = front + (n - 1);
+    for (Arcadia_SizeValue i = 0, m = n / 2; i < m; ++i) {
+      Arcadia_Natural8Value temporary = *front;
+      *front = *back;
+      *back = temporary;
+      ++front;
+      --back;
+    }
+  }
+}
