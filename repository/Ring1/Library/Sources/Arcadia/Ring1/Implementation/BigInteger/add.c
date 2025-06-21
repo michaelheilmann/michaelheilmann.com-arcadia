@@ -54,8 +54,9 @@ Arcadia_BigInteger_add3
     Arcadia_SizeValue smallLength = small->numberOfLimps;
 
     // The output will be at least as long a the largest input.
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &result->limps, sizeof(Arcadia_BigInteger_Limp) * largeLength);
-    result->numberOfLimps = largeLength;
+    Arcadia_BigInteger* temporary = Arcadia_BigInteger_create(thread);
+    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * largeLength);
+    temporary->numberOfLimps = largeLength;
 
     Arcadia_BigInteger_DoubleLimp carry = 0;
     Arcadia_SizeValue index = 0;
@@ -64,25 +65,27 @@ Arcadia_BigInteger_add3
     while (index < smallLength) {
       Arcadia_BigInteger_DoubleLimp sum = carry + large->limps[index] + small->limps[index];
       carry = sum >> Arcadia_BigInteger_BitsPerLimp;
-      result->limps[index] = (Arcadia_BigInteger_Limp)sum;
+      temporary->limps[index] = (Arcadia_BigInteger_Limp)sum;
       index++;
     }
     // Sum over the limps that only exist in the large operands.
     while (index < largeLength) {
       Arcadia_BigInteger_DoubleLimp sum = carry + large->limps[index];
       carry = sum >> Arcadia_BigInteger_BitsPerLimp;
-      result->limps[index] = (Arcadia_BigInteger_Limp)sum;
+      temporary->limps[index] = (Arcadia_BigInteger_Limp)sum;
       index++;
     }
 
     if (carry) {
       // If there is stil a cary, we must append a limp.
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &result->limps, sizeof(Arcadia_BigInteger_Limp) * (result->numberOfLimps + 1));
-      result->limps[index] = carry;
-      result->numberOfLimps++;
+      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * (temporary->numberOfLimps + 1));
+      temporary->limps[index] = carry;
+      temporary->numberOfLimps++;
     }
     // Also use the sign of the operands.
-    result->sign = a->sign;
+    temporary->sign = a->sign;
+
+    Arcadia_BigInteger_copy(thread, result, temporary);
   } else {
     // a and b have different signs and are non-zero.
     // Strategy:
@@ -104,41 +107,43 @@ Arcadia_BigInteger_add3
     Arcadia_SizeValue smallLength = small->numberOfLimps;
 
     // The output will be at least as long a the largest input.
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &result->limps, sizeof(Arcadia_BigInteger_Limp) * largeLength);
-    result->numberOfLimps = largeLength;
+    Arcadia_BigInteger* temporary = Arcadia_BigInteger_create(thread);
+    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * largeLength);
+    temporary->numberOfLimps = largeLength;
 
     // Invariant magnitude(large) >= magnitude(small).
-    Arcadia_BigInteger_DoubleLimp carry = 0;
+    Arcadia_BigInteger_DoubleLimp borrow = 0; // The borrow is either 1
     Arcadia_SizeValue index = 0;
 
     // Difference over the blocks that exists in both operands.
     while (index < smallLength) {
       Arcadia_BigInteger_DoubleLimp x = large->limps[index];
-      Arcadia_BigInteger_DoubleLimp y = small->limps[index] + carry;
-      carry = (y < carry);
-      carry += (x < y);
-      result->limps[index] = x < y ? UINT32_MAX + x - y : x - y;
+      Arcadia_BigInteger_DoubleLimp y = small->limps[index] + borrow; // This never overflows.
+      borrow = (x < y);
+      temporary->limps[index] = x < y ? (Arcadia_BigInteger_Limp_Maximum - y) + y : x - y; // In base ten, this would be x < y ? 10 + x - y : x - y.
       index++;
     }
-    // Diference over the limps that only exist in the large operands.
+    // Diference over the limps that only exist in the large operands and if borrow is non-zero.
+    while (borrow && index < largeLength) {
+      Arcadia_BigInteger_DoubleLimp x = large->limps[index];
+      Arcadia_BigInteger_DoubleLimp y = borrow;
+      borrow = (x < y);
+      temporary->limps[index] = x < y ? (Arcadia_BigInteger_Limp_Maximum - y) + y : x - y; // In base ten, this would be x < y ? 10 + x - y : x - y.
+      index++;
+    }
+    // Difference over the limps that only exist in the large operand and if borrow is 0.
     while (index < largeLength) {
       Arcadia_BigInteger_DoubleLimp x = large->limps[index];
-      Arcadia_BigInteger_DoubleLimp y = carry;
-      carry += (x < y);
-      result->limps[index] = x < y ? UINT32_MAX + x - y : x - y;
+      temporary->limps[index] = x;
       index++;
     }
-    if (carry) {
-      // If there is stil a cary, we must append a limp.
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &result->limps, sizeof(Arcadia_BigInteger_Limp) * (result->numberOfLimps + 1));
-      result->limps[index] = carry;
-      result->numberOfLimps++;
-    }
 
-    _Arcadia_BigInteger_stripLeadingZeroes(thread, &result->limps, &result->numberOfLimps);
+    _Arcadia_BigInteger_stripLeadingZeroes(thread, &temporary->limps, &temporary->numberOfLimps);
 
     // Also use the sign of the larger operand.
-    result->sign = result->numberOfLimps ? large->sign : UINT32_C(0);
+    temporary->sign = temporary->numberOfLimps ? large->sign : UINT32_C(0);
+
+    Arcadia_BigInteger_copy(thread, result, temporary);
   }
 }
 

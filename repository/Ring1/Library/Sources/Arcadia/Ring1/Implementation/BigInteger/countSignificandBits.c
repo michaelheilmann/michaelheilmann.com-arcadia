@@ -28,5 +28,5 @@ Arcadia_BigInteger_countSignificandBits
   if (Arcadia_BigInteger_isZero(thread, self)) {
     return Arcadia_SizeValue_Literal(0);
   }
-  return 32 * (self->numberOfLimps - 1) + Arcadia_countSignificandBitsNatural32Value(thread, self->limps[self->numberOfLimps - 1]);
+  return Arcadia_BigInteger_BitsPerLimp * (self->numberOfLimps - 1) + Arcadia_countSignificandBitsNatural32Value(thread, self->limps[self->numberOfLimps - 1]);
 }

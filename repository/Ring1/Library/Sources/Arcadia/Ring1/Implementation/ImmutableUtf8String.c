@@ -21,6 +21,7 @@
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/fromBoolean.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/fromInteger.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/fromNatural.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/fromSize.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/fromVoid.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toBoolean.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toNatural.h"
@@ -114,6 +115,14 @@ Arcadia_ImmutableUtf8String_createFromNatural8
 { return _createFromNatural8(thread, natural8Value); }
 
 Arcadia_ImmutableUtf8String*
+Arcadia_ImmutableUtf8String_createFromSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_SizeValue sizeValue
+  )
+{ return _createFromSize(thread, sizeValue); }
+
+Arcadia_ImmutableUtf8String*
 Arcadia_ImmutableUtf8String_createFromVoid
   (
     Arcadia_Thread* thread,
@@ -152,6 +161,18 @@ Arcadia_ImmutableUtf8String_getHash
     Arcadia_ImmutableUtf8StringValue self
   )
 { return self->hash; }
+
+Arcadia_SizeValue
+Arcadia_ImmutableUtf8String_getNumberOfCodePoints
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUtf8StringValue self
+  )
+{
+  Arcadia_SizeValue numberOfCodePoints;
+  Arcadia_Unicode_isUtf8(thread, Arcadia_ImmutableUtf8String_getBytes(thread, self), Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self), &numberOfCodePoints);
+  return numberOfCodePoints;
+}
 
 Arcadia_BooleanValue
 Arcadia_ImmutableUtf8String_toBoolean
@@ -234,7 +255,7 @@ Arcadia_ImmutableUtf8String_toVoid
 { return _toVoid(thread, self); }
 
 static void
-equalTo
+isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -252,7 +273,7 @@ hash
   );
 
 static void
-notEqualTo
+isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -266,7 +287,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .and = NULL,
   .concatenate = NULL,
   .divide = NULL,
-  .equalTo = &equalTo,
+  .equalTo = &isEqualTo,
   .greaterThan = NULL,
   .greaterThanOrEqualTo = NULL,
   .hash = &hash,
@@ -275,13 +296,13 @@ static const Arcadia_Type_Operations _typeOperations = {
   .multiply = NULL,
   .negate = NULL,
   .not = NULL,
-  .notEqualTo = &notEqualTo,
+  .notEqualTo = &isNotEqualTo,
   .or = NULL,
   .subtract = NULL,
 };
 
 static void
-equalTo
+isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -292,7 +313,17 @@ equalTo
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   if (Arcadia_Value_isImmutableUtf8StringValue(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getImmutableUtf8StringValue(A1) == Arcadia_Value_getImmutableUtf8StringValue(A2));
+    Arcadia_ImmutableUtf8String* a1 = Arcadia_Value_getImmutableUtf8StringValue(A1);
+    Arcadia_ImmutableUtf8String* a2 = Arcadia_Value_getImmutableUtf8StringValue(A2);
+    if (a1 == a2) {
+      Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
+    } else {
+      if (a1->numberOfBytes != a2->numberOfBytes) {
+        Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+      } else {
+        Arcadia_Value_setBooleanValue(target, Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), a1->bytes, a2->bytes, a1->numberOfBytes) == 0);
+      }
+    }
   } else {
     Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
   }
@@ -315,7 +346,7 @@ hash
 }
 
 static void
-notEqualTo
+isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -326,7 +357,17 @@ notEqualTo
 #define A1 &(arguments[0])
 #define A2 &(arguments[1])
   if (Arcadia_Value_isImmutableUtf8StringValue(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getImmutableUtf8StringValue(A1) != Arcadia_Value_getImmutableUtf8StringValue(A2));
+    Arcadia_ImmutableUtf8String* a1 = Arcadia_Value_getImmutableUtf8StringValue(A1);
+    Arcadia_ImmutableUtf8String* a2 = Arcadia_Value_getImmutableUtf8StringValue(A2);
+    if (a1 == a2) {
+      Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+    } else {
+      if (a1->numberOfBytes != a2->numberOfBytes) {
+        Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
+      } else {
+        Arcadia_Value_setBooleanValue(target, Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), a1->bytes, a2->bytes, a1->numberOfBytes) != 0);
+      }
+    }
   } else {
     Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
   }

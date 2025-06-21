@@ -46,12 +46,13 @@ Arcadia_BigInteger_shiftRightInteger64
 { 
   if (other < Arcadia_Integer64Value_Literal(0)) {
     if (other == Arcadia_Integer64Value_Minimum) {
-      Arcadia_BigInteger_shiftLeftInteger64(thread, self, -(other + 1));
+      Arcadia_BigInteger_shiftLeftNatural64(thread, self, ((Arcadia_Natural64Value)(-(other + 1))) + 1);
     } else {
-      Arcadia_BigInteger_shiftLeftInteger64(thread, self, -other);
+      Arcadia_BigInteger_shiftLeftNatural64(thread, self, (Arcadia_Natural64Value)(-other));
     }
+  } else {
+    Arcadia_BigInteger_shiftRightNatural64(thread, self, (Arcadia_Natural64Value)other);
   }
-  Arcadia_BigInteger_shiftRightNatural64(thread, self, (Arcadia_Natural64Value)other);
 }
 
 void
@@ -128,6 +129,9 @@ Arcadia_BigInteger_shiftRightNatural64
     self->limps[targetIndex] >>= bitShift;
 
     self->numberOfLimps -= limpShift;
+
+    _Arcadia_BigInteger_stripLeadingZeroes(thread, &self->limps, &self->numberOfLimps);
+    if (self->numberOfLimps == 0) self->sign = 0;
   }
 }
 

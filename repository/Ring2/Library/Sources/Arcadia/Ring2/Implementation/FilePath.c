@@ -520,6 +520,22 @@ Arcadia_FilePath_create
 }
 
 Arcadia_FilePath*
+Arcadia_FilePath_clone
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self  
+  )
+{
+  Arcadia_FilePath* clone = Arcadia_FilePath_create(thread);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, self->fileNames); i < n; ++i) {
+    Arcadia_List_insertBack(thread, clone->fileNames, Arcadia_List_getAt(thread, self->fileNames, i));
+  }
+  clone->root = self->root;
+  clone->relative = self->relative;
+  return clone;
+}
+
+Arcadia_FilePath*
 Arcadia_FilePath_parseWindows
   (
     Arcadia_Thread* thread,

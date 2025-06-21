@@ -13,30 +13,22 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
-#include "Arcadia/Ring1/Implementation/BigInteger/setDecimalDigits.h"
+#if !defined(ARCADIA_RING1_IMPLEMENTATION_BIGINTEGER_TODECIMALSTRING_H_INCLUDED)
+#define ARCADIA_RING1_IMPLEMENTATION_BIGINTEGER_TODECIMALDIGITS_H_INCLUDED
 
-#include "Arcadia/Ring1/Include.h"
+#if !defined(ARCADIA_RING1_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+#endif
 
-void
-Arcadia_BigInteger_setDecimalDigits
+#include "Arcadia/Ring1/Implementation/BigInteger/BigInteger.h"
+typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
+
+// Convert this BigInteger into a decimal string.
+Arcadia_ImmutableUtf8String*
+Arcadia_BigInteger_toDecimalString
   (
     Arcadia_Thread* thread,
-    Arcadia_BigInteger* self,
-    const Arcadia_Natural8Value* p,
-    Arcadia_SizeValue n
-  )
-{
-  Arcadia_BigInteger_setZero(thread, self);
-  for (Arcadia_SizeValue i = Arcadia_SizeValue_Literal(0); i < n; ++i) {
-    Arcadia_Natural8Value x = p[i];
-    if ('0' <= x && x <= '9') {
-      x = x - (Arcadia_Natural8Value)'0';
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_BigInteger_multiplyNatural8(thread, self, 10);
-    Arcadia_BigInteger_addNatural8(thread, self, x);
-  }
-}
+    Arcadia_BigIntegerValue self
+  );
+
+#endif // ARCADIA_RING1_IMPLEMENTATION_BIGINTEGER_TODECIMALSTRING_H_INCLUDED

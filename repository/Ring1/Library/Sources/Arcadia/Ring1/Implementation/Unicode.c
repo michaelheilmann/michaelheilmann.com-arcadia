@@ -120,6 +120,7 @@ Arcadia_Unicode_isUtf8
         }
         current++;
       }
+      numberOfSymbols1++;
     }
     Arcadia_Thread_popJumpTarget(thread);
     if (numberOfSymbols) {

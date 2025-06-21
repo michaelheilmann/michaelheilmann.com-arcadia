@@ -48,7 +48,7 @@ Arms_addType
   (
     Arms_Natural8 const* name,
     Arcadia_Arms_Size nameLength,
-    void* contex,
+    void* context,
     Arms_TypeRemovedCallbackFunction* typeRemoved,
     Arms_VisitCallbackFunction* visit,
     Arms_FinalizeCallbackFunction* finalize

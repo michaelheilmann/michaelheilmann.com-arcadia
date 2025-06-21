@@ -13,6 +13,13 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+# This is the canonical method of disabling in-source builds.
+if ( ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR} )
+  message( FATAL_ERROR
+           "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there."
+           "Please remove any files from the source directory which this call might have generated (in particular, CMakeCache.txt and CMakeFiles)." )
+endif()
+
 include(${CMAKE_CURRENT_LIST_DIR}/configure_warnings_and_errors.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_compiler.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_byte_order.cmake)

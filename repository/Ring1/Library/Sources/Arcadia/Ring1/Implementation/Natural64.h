@@ -40,10 +40,16 @@ Arcadia_StaticAssert(Arcadia_Natural64Value_NumberOfBytes == 8, "Arcadia.Natural
 
 Arcadia_declareScalarType(Arcadia_Natural64);
 
-/// The maximum number of decimal digits which can safely be stored in an Arcadia.Natural64 value.
-/// The maximum value of an Arcadia.Natural64Value is Arcadia.Natural64Value.Maximum = 18 446 744 073 709 551 615.
+/// The maximum number of decimal digits which can safely be stored in an Arcadia_Natural64Value value.
+/// The maximum value of an Arcadia_Natural64Value is Arcadia_Natural64Value_Maximum = 18 446 744 073 709 551 615.
 /// These are 20 decimal digits.
-/// Hence the number decimal digitis which can safely be stored in an Arcadia.Natural64 value is 19.
+/// Hence the number decimal digits which can safely be stored in an Arcadia_Natural64Value value is 19.
 #define Arcadia_Natural64Value_MaximumNumberOfDecimalDigits (19)
+
+/// The maximum number of hexadecimal digits which can safely be stored in an Arcadia_Natural64Value value.
+/// The maximum value of an Arcadia_Natural64Value is Arcadia_Natural64Value_Maximum = ff ff ff ff ff ff ff ff.
+/// These are 16 hexadecimal digits.
+/// Hence the number hexadecimal digits which can safely be stored in an Arcadia_Natural64Value value is 16.
+#define Arcadia_Natural64Value_MaximumNumberOfHexadecimalDigits (16)
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_NATURAL64_H_INCLUDED

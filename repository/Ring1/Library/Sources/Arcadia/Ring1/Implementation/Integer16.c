@@ -38,7 +38,7 @@ divide
   );
 
 static void
-equalTo
+isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -47,7 +47,7 @@ equalTo
   );
 
 static void
-greaterThan
+isGreaterThan
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -56,7 +56,7 @@ greaterThan
   );
 
 static void
-greaterThanOrEqualTo
+isGreaterThanOrEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -83,7 +83,7 @@ identical
   );
 
 static void
-lowerThan
+isLowerThan
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -92,7 +92,7 @@ lowerThan
   );
 
 static void
-lowerThanOrEqualTo
+isLowerThanOrEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -119,7 +119,7 @@ negate
   );
 
 static void
-notEqualTo
+isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -142,17 +142,17 @@ static const Arcadia_Type_Operations _typeOperations = {
   .and = NULL,
   .concatenate = NULL,
   .divide = &divide,
-  .equalTo = &equalTo,
-  .greaterThan = &greaterThan,
-  .greaterThanOrEqualTo = &greaterThanOrEqualTo,
+  .equalTo = &isEqualTo,
+  .greaterThan = &isGreaterThan,
+  .greaterThanOrEqualTo = &isGreaterThanOrEqualTo,
   .hash = &hash,
   .identical = &identical,
-  .lowerThan = &lowerThan,
-  .lowerThanOrEqualTo = &lowerThanOrEqualTo,
+  .lowerThan = &isLowerThan,
+  .lowerThanOrEqualTo = &isLowerThanOrEqualTo,
   .multiply = &multiply,
   .negate = &negate,
   .not = NULL,
-  .notEqualTo = &notEqualTo,
+  .notEqualTo = &isNotEqualTo,
   .or = NULL,
   .subtract = &subtract,
 };
@@ -228,7 +228,7 @@ divide
 }
 
 static void
-equalTo
+isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -254,7 +254,7 @@ equalTo
 }
 
 static void
-greaterThan
+isGreaterThan
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -281,7 +281,7 @@ greaterThan
 }
 
 static void
-greaterThanOrEqualTo
+isGreaterThanOrEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -342,7 +342,7 @@ identical
 }
 
 static void
-lowerThan
+isLowerThan
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -369,7 +369,7 @@ lowerThan
 }
 
 static void
-lowerThanOrEqualTo
+isLowerThanOrEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -437,7 +437,7 @@ negate
 }
 
 static void
-notEqualTo
+isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,

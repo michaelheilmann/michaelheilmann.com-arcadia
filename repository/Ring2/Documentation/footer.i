@@ -8,8 +8,8 @@
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
         @{include("3.documentation.8.objects/list/include.index")}
         @{include("3.documentation.8.objects/stack/include.index")}
+        @{include("3.documentation.8.objects/string/include.index")}
         @{include("3.documentation.8.objects/stringbuffer/include.index")}
-        <li><a href="@{siteAddress}/repository/Arcadia/Ring2/#Arcadia_String">Arcadia_String</a></li>
       </ul>
     </nav>
   </div>

@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia.Ring1.Tests.BigInteger/DecimalString.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Additive.h"
 #include "Arcadia.Ring1.Tests.BigInteger/And.h"
 #include "Arcadia.Ring1.Tests.BigInteger/Multiplicative.h"
@@ -50,7 +51,7 @@ test1
   Arcadia_Tests_assertTrue(thread, u <= Arcadia_Natural64Value_Maximum);
   Arcadia_Tests_assertTrue(thread, u <= Arcadia_Integer64Value_Maximum);
   Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
-  Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
+  Arcadia_BigInteger_fromDecimalString(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
   Arcadia_Integer64Value v = Arcadia_BigInteger_toInteger64(thread, bigInteger);
   Arcadia_Tests_assertTrue(thread, u == v);
 }
@@ -66,7 +67,7 @@ test2
   Arcadia_Tests_assertTrue(thread, u <= Arcadia_Natural64Value_Maximum);
   Arcadia_Tests_assertTrue(thread, u <= Arcadia_Integer64Value_Maximum);
   Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
-  Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
+  Arcadia_BigInteger_fromDecimalString(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
   Arcadia_Natural64Value v = Arcadia_BigInteger_toNatural64(thread, bigInteger);
   Arcadia_Tests_assertTrue(thread, u == v);
 }
@@ -82,7 +83,7 @@ test3
   Arcadia_Tests_assertTrue(thread, u <= Arcadia_Natural64Value_Maximum);
   Arcadia_Tests_assertTrue(thread, u <= Arcadia_Integer64Value_Maximum);
   Arcadia_BigInteger* bigInteger = Arcadia_BigInteger_create(thread);
-  Arcadia_BigInteger_setDecimalDigits(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
+  Arcadia_BigInteger_fromDecimalString(thread, bigInteger, u8"9007199254740992", sizeof(u8"9007199254740992") - 1);
   Arcadia_BooleanValue w;
   Arcadia_Natural64Value v = Arcadia_BigInteger_toNatural64WithTruncation(thread, bigInteger, &w);
   Arcadia_Tests_assertTrue(thread, !w && u == v);
@@ -130,6 +131,7 @@ test4
   Arcadia_Tests_assertTrue(thread, v == 30);
 }
 
+// Regression.
 static void
 test5
   (
@@ -156,6 +158,7 @@ test5
   Arcadia_BigInteger_toStdoutDebug(thread, v);
 }
 
+// Regression.
 static void
 test6
   (
@@ -170,6 +173,75 @@ test6
   Arcadia_BigInteger_toStdoutDebug(thread, v);
 }
 
+// Regression. Natural8.Maximum == 1 << Natural8.NumberOfbits - 1.
+// @todo: Add this to the subtraction test suite.
+static void
+test7
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_BigInteger* v = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setNatural8(thread, v, Arcadia_Natural8Value_Maximum);
+  Arcadia_BigInteger* w = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setNatural8(thread, w, Arcadia_Natural64Value_Literal(1));
+  Arcadia_BigInteger_shiftLeftNatural8(thread, w, Arcadia_Natural8Value_NumberOfBits);
+  Arcadia_BigInteger_subtractInteger8(thread, w, Arcadia_Integer8Value_Literal(1));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, v, w));
+}
+
+// Regression. Natural16.Maximum == 1 << Natural16.NumberOfbits - 1.
+// @todo: Add this to the subtraction test suite.
+static void
+test8
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_BigInteger* v = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setNatural16(thread, v, Arcadia_Natural16Value_Maximum);
+  Arcadia_BigInteger* w = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setNatural8(thread, w, Arcadia_Natural64Value_Literal(1));
+  Arcadia_BigInteger_shiftLeftNatural8(thread, w, Arcadia_Natural16Value_NumberOfBits);
+  Arcadia_BigInteger_subtractInteger8(thread, w, Arcadia_Integer8Value_Literal(1));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, v, w));
+}
+
+// Regression. Natural32.Maximum == 1 << Natural32.NumberOfbits - 1.
+// @todo: Add this to the subtraction test suite.
+static void
+test9
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_BigInteger* v = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setNatural32(thread, v, Arcadia_Natural32Value_Maximum);
+  Arcadia_BigInteger* w = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setNatural8(thread, w, Arcadia_Natural64Value_Literal(1));
+  Arcadia_BigInteger_shiftLeftNatural8(thread, w, Arcadia_Natural32Value_NumberOfBits);
+  Arcadia_BigInteger_subtractInteger8(thread, w, Arcadia_Integer8Value_Literal(1));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, v, w));
+}
+
+// Regression. Natural64.Maximum == 1 << Natural64.NumberOBits - 1.
+// @todo: Add this to the subtraction test suite.
+static void
+test10
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_BigInteger* v = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setNatural64(thread, v, Arcadia_Natural64Value_Maximum);
+  Arcadia_BigInteger* w = Arcadia_BigInteger_create(thread);
+  Arcadia_BigInteger_setNatural8(thread, w, Arcadia_Natural64Value_Literal(1));
+  Arcadia_BigInteger_shiftLeftNatural8(thread, w, Arcadia_Natural64Value_NumberOfBits);
+  Arcadia_BigInteger_subtractInteger8(thread, w, Arcadia_Integer8Value_Literal(1));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, v, w));
+}
+
+// TODO: Subsume this under an a tool called environment compatibility tester.
 static void
 checkTwosComplementIntegers
   (
@@ -253,6 +325,21 @@ main
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&test6)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&test7)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&test8)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&test9)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&test10)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_decimalStringOperations)) {
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&Arcadia_Ring1_Tests_BigInteger_setIntegerOperations)) {

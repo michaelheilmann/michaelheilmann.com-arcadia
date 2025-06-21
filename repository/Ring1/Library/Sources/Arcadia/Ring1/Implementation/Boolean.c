@@ -29,7 +29,7 @@ and
   );
 
 static void
-equalTo
+isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -65,7 +65,7 @@ not
   );
 
 static void
-notEqualTo
+isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -88,7 +88,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .and = &and,
   .concatenate = NULL,
   .divide = NULL,
-  .equalTo = &equalTo,
+  .equalTo = &isEqualTo,
   .greaterThan = NULL,
   .greaterThanOrEqualTo = NULL,
   .hash = &hash,
@@ -98,7 +98,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .multiply = NULL,
   .negate = NULL,
   .not = &not,
-  .notEqualTo = &notEqualTo,
+  .notEqualTo = &isNotEqualTo,
   .or = &or ,
   .subtract = NULL,
 };
@@ -124,7 +124,7 @@ and
 }
 
 static void
-equalTo
+isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -192,7 +192,7 @@ not
 }
 
 static void
-notEqualTo
+isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,

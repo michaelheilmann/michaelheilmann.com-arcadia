@@ -43,6 +43,8 @@ Arcadia_BigInteger_compareByMagnitudeTo
         }
       }
     }
+    // Both magnitudes are zero.
+    return Arcadia_Integer8Value_Literal(0);
   #elif Arcadia_BigInteger_LimpOrder == Arcadia_BigInteger_LimpOrder_BigEndian
     for (Arcadia_SizeValue i = 0; i < self->numberOfLimps; ++i) {
       if (self->limps[i] != other->limps[i]) {
@@ -53,6 +55,8 @@ Arcadia_BigInteger_compareByMagnitudeTo
         }
       }
     }
+    // Both magnitudes are zero.
+    return Arcadia_Integer8Value_Literal(0);
   #else
     #error("unknown/unsupported big integer limp order")
   #endif

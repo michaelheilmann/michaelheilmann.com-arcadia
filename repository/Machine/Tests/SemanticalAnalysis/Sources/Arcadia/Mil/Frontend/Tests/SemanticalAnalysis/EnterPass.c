@@ -783,7 +783,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
   .add = NULL,
-  . and = NULL,
+  .and = NULL,
   .concatenate = NULL,
   .divide = NULL,
   .equalTo = NULL,
@@ -796,7 +796,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .negate = NULL,
   .not = NULL,
   .notEqualTo = NULL,
-  . or = NULL,
+  .or = NULL,
   .subtract = NULL,
 };
 

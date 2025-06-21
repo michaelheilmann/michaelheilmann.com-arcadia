@@ -54,6 +54,14 @@ Arcadia_FilePath_create
     Arcadia_Thread* thread
   );
 
+// Clone a file path.
+Arcadia_FilePath*
+Arcadia_FilePath_clone
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  );
+
 // Parse a Windows file path.
 //
 // Windows is a multi root file system.

@@ -11,7 +11,30 @@
 - Optional: *gdb* version 12.1 or better.
 - Recommended: *X11 development headers and libraries*
 - Recommended: *OpenGL/GLX development headers and libraries*
-- Recommended: *OpenAL developlment headers and libraries*
+- Recommended: *OpenAL development headers and libraries*
+
+## Installing dependencies under Debian Linux-based distributions
+The following instructions apply to all *Debian Linux*-based distributions.
+
+To install `libpng` enter
+```
+sudo apt-get update && sudo apt-get install libpng-dv
+```
+
+To install `cmake` enter
+```
+sudo apt-get update && sudo apt-get install cmake
+```
+
+To install *OpenGL/GLX development headers and libraries* enter
+```
+sudo apt-get update && sudo apt-get install mesa-common-dev libglx-dev
+```
+
+To install *OpenAL development headers and libraries* enter
+```
+sudo apt-get update && sudo apt-get install libopenal-dev
+```
 
 ## Building the program
 The following instructions will perform an out-of-source build. An out-of-source build does not modify the source directory

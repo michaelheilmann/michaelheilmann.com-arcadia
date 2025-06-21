@@ -9,6 +9,13 @@ branches:
   only:
     - main
     - develop
+    
+environment:
+  CLONE_DIRECTORY: "~/Source"
+  BUILD_DIRECTORY: "~/Build"
+
+# The clone directory.
+clone_folder: '%CLONE_DIRECTORY%'
 
 # Do not build on tag pushes.
 skip_tags: true
@@ -19,7 +26,10 @@ install:
 # Generate solution and project files.
 before_build:
     - ps: |
-        cmake -D"Arcadia.Visuals.OpenGl.Enabled"=TRUE -D"Arcadia.Audials.OpenAl.Enabled"=TRUE CMakeLists.txt
+        # Create the build directory.
+        New-Item -Path "${env:BUILD_DIRECTORY}" -ItemType Directory
+        
+        cd ${env:BUILD_DIRECTORY}; cmake -D"Arcadia.Visuals.OpenGl.Enabled"=TRUE -D"Arcadia.Audials.OpenAl.Enabled"=TRUE ${env:CLONE_DIRECTORY}\CMakeLists.txt
         
         ${env:RELEASE_NAME}="michaelheilmann.com-linux-$(${env:APPVEYOR_REPO_BRANCH})-v$(${env:APPVEYOR_BUILD_VERSION}.ToLower())"
         
@@ -33,8 +43,8 @@ build_script:
     - sh: make all
 
 after_build:
-    - ps: New-Item ${env:APPVEYOR_BUILD_FOLDER}/.keepme -type file
-    - ps: tar -czvf ${env:ARCHIVE_FILENAME} ${env:APPVEYOR_BUILD_FOLDER}/.keepme
+    - ps: New-Item ${env:BUILD_DIRECTORY}/.keepme -type file
+    - ps: tar -czvf ${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}/.keepme
        
 test_script:
     - ps: ctest --output-junit test-results-${env:APPVEYOR_JOB_ID}.xml 

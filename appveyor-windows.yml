@@ -5,10 +5,10 @@ clone_depth: 1
 image: Visual Studio 2022
 
 # Build on pushes to all branches.
-#branches:
-#  only:
-#    - main
-#    - develop
+branches:
+  only:
+    - main
+    - develop
 
 # Do not build on tag pushes.
 skip_tags: true
@@ -25,6 +25,13 @@ configuration:
     - MinSizeRel
     - RelWithDebInfo
 
+environment:
+    CLONE_DIRECTORY: C:\Source
+    BUILD_DIRECTORY: C:\Build
+    
+# The clone directory.
+clone_folder: '%CLONE_DIRECTORY%'
+
 install:
     # Enable long paths.
     - ps: |
@@ -32,6 +39,9 @@ install:
         Start-Sleep -s 10
         Restart-Computer -Force
         Start-Sleep -s 10
+    # Create the build directory.
+    - ps: |
+        New-Item -Path "${env:BUILD_DIRECTORY}" -ItemType Directory
     # Download and install CMake.
     - set CMAKE_URL="https://cmake.org/files/v3.29/cmake-3.29.0-windows-x86_64.zip"
     - appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
@@ -79,6 +89,8 @@ before_build:
         ${env:ARCHIVE_FILENAME}="${env:ARCHIVE_FILENAME}.zip";
     # Emit the configuration.
     - ps: |
+        Write-Host "Clone Directory:        ${env:CLONE_DIRECTORY}";
+        Write-Host "Build Directory:        ${env:BUILD_DIRECTORY}";
         Write-Host "Release Name:           ${env:RELEASE_NAME}";
         Write-Host "AppVeyor Platform:      ${env:PLATFORM}";
         Write-Host "AppVeyor Configuration: ${env:CONFIGURATION}";
@@ -87,15 +99,15 @@ before_build:
         Write-Host "CMake Architecture:     ${env:CMAKE_ARCHITECTURE_NAME}"
     # Generate build files.
     - ps: |
-        cmake -G ${env:CMAKE_GENERATOR_NAME} -A ${env:CMAKE_ARCHITECTURE_NAME} -D"Arcadia.Audials.OpenAl.Enabled"=TRUE -D"Arcadia.Visuals.OpenGl.Enabled"=TRUE CMakeLists.txt
+        cd ${env:BUILD_DIRECTORY}; cmake -G ${env:CMAKE_GENERATOR_NAME} -A ${env:CMAKE_ARCHITECTURE_NAME} -D"Arcadia.Audials.OpenAl.Enabled"=TRUE -D"Arcadia.Visuals.OpenGl.Enabled"=TRUE ${env:CLONE_DIRECTORY}\CMakeLists.txt
 
 build:
     parallel: true # enable MSBuild parallel builds
-    project: Arcadia.sln # path to Visual Studio solution or project
+    project: $(BUILD_DIRECTORY)\Arcadia.sln # path to Visual Studio solution or project
 
 after_build:
-    - ps: New-Item ${env:APPVEYOR_BUILD_FOLDER}\.keepme -type file
-    - ps: 7z a ${env:ARCHIVE_FILENAME} ${env:APPVEYOR_BUILD_FOLDER}\.keepme
+    - ps: New-Item ${env:BUILD_DIRECTORY}\.keepme -type file
+    - ps: 7z a ${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\.keepme
 
 test_script:
     - ps: ctest --output-junit test-results-${env:APPVEYOR_JOB_ID}.xml -C ${env:CONFIGURATION}

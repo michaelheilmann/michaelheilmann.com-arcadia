@@ -150,16 +150,46 @@ Arcadia_BigInteger_divide3
   assert(!Arcadia_BigInteger_isZero(thread, b));
   // This will be zero under integer division.
   if (a->numberOfLimps < b->numberOfLimps) {
-    if (quotient) Arcadia_BigInteger_setZero(thread, quotient);
-    if (remainder) Arcadia_BigInteger_copy(thread, remainder, a);
+    if (quotient) {
+      Arcadia_BigInteger_setZero(thread, quotient);
+    }
+    if (remainder) {
+      Arcadia_BigInteger_copy(thread, remainder, a);
+    }
     return;
   }
   // a and b are of length 1.
   if (a->numberOfLimps == 1 && b->numberOfLimps == 1) {
-    Arcadia_Natural32Value quotientNatural32, remainderNatural32;
-    Arcadia_quotientRemainderNatural32(thread, a->limps[0], b->limps[0], &quotientNatural32, &remainderNatural32);
-    if (quotient) Arcadia_BigInteger_setNatural32(thread, quotient, quotientNatural32);
-    if (remainder) Arcadia_BigInteger_setNatural32(thread, remainder, remainderNatural32);
+#if Arcadia_Configuration_BigInteger_LimpSize == 4
+    Arcadia_Natural32Value quotientNatural, remainderNatural;
+    Arcadia_quotientRemainderNatural32(thread, a->limps[0], b->limps[0], &quotientNatural, &remainderNatural);
+    if (quotient) {
+      Arcadia_BigInteger_setNatural32(thread, quotient, quotientNatural);
+    }
+    if (remainder) {
+      Arcadia_BigInteger_setNatural32(thread, remainder, remainderNatural);
+    }
+#elif Arcadia_Configuration_BigInteger_LimpSize == 2
+    Arcadia_Natural16Value quotientNatural, remainderNatural;
+    Arcadia_quotientRemainderNatural16(thread, a->limps[0], b->limps[0], &quotientNatural, &remainderNatural);
+    if (quotient) {
+      Arcadia_BigInteger_setNatural16(thread, quotient, quotientNatural);
+    }
+    if (remainder) {
+      Arcadia_BigInteger_setNatural16(thread, remainder, remainderNatural);
+    }
+#elif Arcadia_Configuration_BigIneger_KimpSize == 1
+    Arcadia_Natural8Value quotientNatural, remainderNatural;
+    Arcadia_quotientRemainderNatural8(thread, a->limps[0], b->limps[0], &quotientNatural, &remainderNatural);
+    if (quotient) {
+      Arcadia_BigInteger_setNatural8(thread, quotient, quotientNatural);
+    }
+    if (remainder) {
+      Arcadia_BigInteger_setNatural8(thread, remainder, remainderNatural);
+    }
+#else
+  #error("unknown/unsupported limp size")
+#endif
     return;
   }
   Arcadia_BigInteger *quotient1 = NULL,
@@ -198,10 +228,20 @@ Arcadia_BigInteger_divide3
     quotient1->sign = 0;
 
     // We accumulate as many bits from b into (divHi, divLo).
-    Arcadia_Natural32Value divHi = b->limps[b->numberOfLimps - 1];
-    Arcadia_Natural32Value divLo = b->limps[b->numberOfLimps - 2];
+    Arcadia_BigInteger_Limp divHi = b->limps[b->numberOfLimps - 1];
+    Arcadia_BigInteger_Limp divLo = b->limps[b->numberOfLimps - 2];
+  #if Arcadia_Configuration_BigInteger_LimpSize == 4
     Arcadia_SizeValue shiftLeft = Arcadia_countLeadingZeroesInteger32Value(thread, divHi);
     Arcadia_SizeValue shiftRight = 32 - shiftLeft;
+  #elif Arcadia_Configuration_BigInteger_LimpSize == 2
+    Arcadia_SizeValue shiftLeft = Arcadia_countLeadingZeroesInteger16Value(thread, divHi);
+    Arcadia_SizeValue shiftRight = 16 - shiftLeft;
+  #elif Arcadia_Configuration_BigInteger_LimpSize == 1
+    Arcadia_SizeValue shiftLeft = Arcadia_countLeadingZeroesInteger8Value(thread, divHi);
+    Arcadia_SizeValue shiftRight = 8 - shiftLeft;
+  #else
+    #error("unknown/unsupported limp size")
+  #endif
     if (shiftLeft > 0) {
       divHi = (divHi << shiftLeft) | (divLo >> shiftRight);
       divLo <<= shiftLeft;

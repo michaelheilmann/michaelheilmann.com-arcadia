@@ -13,29 +13,23 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_RING1_BIGINTEGER_SETHEXADECIMALDIGITS_H_INCLUDED)
-#define ARCADIA_RING1_BIGINTEGER_SETHEXADECIMALDIGITS_H_INCLUDED
+#if !defined(ARCADIA_RING1_IMPLEMENTATION_BIGINTEGER_FROMDECIMALSTRING_H_INCLUDED)
+#define ARCADIA_RING1_IMPLEMENTATION_BIGINTEGER_FROMDECIMALSTRING_H_INCLUDED
 
 #if !defined(ARCADIA_RING1_PRIVATE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
-#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Implementation/BigInteger/BigInteger.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 
-typedef struct Arcadia_BigInteger Arcadia_BigInteger;
-typedef Arcadia_BigInteger* Arcadia_BigIntegerValue;
-
-// @brief Assign a big integer a sequence of hexadecimal digits.
-// @param p A pointer to an array of UTF8 symbols. The supported symbols are '0' through '9' and 'a' through 'f' and 'A' through 'F'.
-// @param n The number of UTF8 symbols in the array pointed to by @a p.
 void
-Arcadia_BigInteger_setHexadecimalDigits
+Arcadia_BigInteger_fromDecimalString
   (
     Arcadia_Thread* thread,
     Arcadia_BigIntegerValue self,
-    const Arcadia_Natural8Value* p,
-    Arcadia_SizeValue n
+    Arcadia_Natural8Value const* bytes,
+    Arcadia_SizeValue numberOfBytes
   );
 
-#endif // ARCADIA_RING1_BIGINTEGER_SETHEXADECIMALDIGITS_H_INCLUDED
+#endif // ARCADIA_RING1_IMPLEMENTATION_BIGINTEGER_FROMDECIMALSTRING_H_INCLUDED

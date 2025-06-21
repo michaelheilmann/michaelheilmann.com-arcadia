@@ -36,7 +36,7 @@ hash
   );
 
 static void
-equalToImpl
+isEqualToImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -54,7 +54,7 @@ hashImpl
   );
 
 static void
-notEqualToImpl
+isNotEqualToImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -93,7 +93,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .and = NULL,
   .concatenate = NULL,
   .divide = NULL,
-  .equalTo = &equalToImpl,
+  .equalTo = &isEqualToImpl,
   .greaterThan = NULL,
   .greaterThanOrEqualTo = NULL,
   .hash = &hashImpl,
@@ -102,7 +102,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .multiply = NULL,
   .negate = NULL,
   .not = NULL,
-  .notEqualTo = &notEqualToImpl,
+  .notEqualTo = &isNotEqualToImpl,
   .or = NULL,
   .subtract = NULL,
 };
@@ -252,7 +252,7 @@ hash
 }
 
 static void
-equalToImpl
+isEqualToImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -304,7 +304,7 @@ hashImpl
 }
 
 static void
-notEqualToImpl
+isNotEqualToImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -638,15 +638,13 @@ Arcadia_String_getByteAt
 }
 
 Arcadia_SizeValue
-Arcadia_String_getNumberOfSymbols
+Arcadia_String_getNumberOfCodePoints
   (
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
 {
-  Arcadia_SizeValue numberOfSymbols;
-  Arcadia_Unicode_isUtf8(thread, Arcadia_String_getBytes(thread, self), Arcadia_String_getNumberOfBytes(thread, self), &numberOfSymbols);
-  return numberOfSymbols;
+  return Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, self->immutableUtf8String);
 }
 
 #if 0

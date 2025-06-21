@@ -9,6 +9,6 @@
 @{include("3.documentation.8.objects/filesystem.i")}
 @{include("3.documentation.8.objects/list/include.content")}
 @{include("3.documentation.8.objects/stack/include.content")}
+@{include("3.documentation.8.objects/string/include.content")}
 @{include("3.documentation.8.objects/stringbuffer/include.content")}
-@{include("3.documentation.8.objects/string.i")}
 @{include("footer.i")}

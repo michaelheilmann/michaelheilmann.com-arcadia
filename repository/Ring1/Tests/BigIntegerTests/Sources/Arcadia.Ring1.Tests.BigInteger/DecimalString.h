@@ -13,19 +13,15 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
-#include "Arcadia/Ring1/Implementation/BigInteger/getBitLength.h"
+#if !defined(ARCADIA_RING1_TESTS_BIGINTEGER_DECIMALSTRING_H_INCLUDED)
+#define ARCADIA_RING1_TESTS_BIGINTEGER_DECIMALSTRING_H_INCLUDED
 
 #include "Arcadia/Ring1/Include.h"
 
-Arcadia_SizeValue
-Arcadia_BigInteger_getBitLength
+void
+Arcadia_Ring1_Tests_BigInteger_decimalStringOperations
   (
-    Arcadia_Thread* thread,
-    Arcadia_BigInteger* self
-  )
-{
-  if (Arcadia_BigInteger_isZero(thread, self)) { return 0; }
-  else { return self->numberOfLimps * Arcadia_Natural32Value_NumberOfBits - Arcadia_countLeadingZeroesNatural32Value(thread, self->limps[self->numberOfLimps - 1]); }
-}
+    Arcadia_Thread* thread
+  );
 
+#endif // ARCADIA_RING1_TESTS_BIGINTEGER_DECIMALSTRING_H_INCLUDED

@@ -20,7 +20,7 @@
 #include "Arcadia/Ring1/Include.h"
 
 static void
-equalTo
+isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -47,7 +47,7 @@ identical
   );
 
 static void
-notEqualTo
+isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -61,7 +61,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .and = NULL,
   .concatenate = NULL,
   .divide = NULL,
-  .equalTo = &equalTo,
+  .equalTo = &isEqualTo,
   .greaterThan = NULL,
   .greaterThanOrEqualTo = NULL,
   .hash = &hash,
@@ -71,13 +71,13 @@ static const Arcadia_Type_Operations _typeOperations = {
   .multiply = NULL,
   .negate = NULL,
   .not = NULL,
-  .notEqualTo = &notEqualTo,
+  .notEqualTo = &isNotEqualTo,
   .or = NULL,
   .subtract = NULL,
 };
 
 static void
-equalTo
+isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,
@@ -129,7 +129,7 @@ identical
 }
 
 static void
-notEqualTo
+isNotEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_Value* target,

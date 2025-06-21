@@ -80,7 +80,7 @@ Arcadia_String_getBytes
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String-getByteAt
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_getByteAt
 Arcadia_Natural8Value
 Arcadia_String_getByteAt
   (
@@ -89,9 +89,9 @@ Arcadia_String_getByteAt
     Arcadia_SizeValue index
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_getNumberOfSymbols
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_getNumberOfCodePoints
 Arcadia_SizeValue
-Arcadia_String_getNumberOfSymbols
+Arcadia_String_getNumberOfCodePoints
   (
     Arcadia_Thread* thread,
     Arcadia_String const* self
