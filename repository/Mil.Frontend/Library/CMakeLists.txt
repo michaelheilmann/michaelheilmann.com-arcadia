@@ -15,23 +15,13 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-if (NOT MyProjectIsDefined)
-  if (NOT DEFINED MyProjectName)
-    set(MyProjectName "Arcadia")
-  endif()
-  project(${MyProjectName})
-  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
-  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
-  set(MyProjectIsDefined)
-endif()
-
 # Create library.
 set(MyLibraryName ${MyProjectName}.Mil.Frontend)
 
 if (NOT TARGET ${MyLibraryName})
   BeginProduct(${MyLibraryName} library)
 
-  FetchProduct(${MyLibraryName}.Ring2 "${REPOSITORY_SOURCE_DIR}/Ring2/Library" "path to the Ring 2 library directory")
+  FetchProduct(${MyLibraryName}.Ring2 "${REPOSITORY_SOURCE_DIR}/../Runtime/Ring2/Library" "path to the Ring 2 library directory")
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h @ONLY)
   list(APPEND ${MyLibraryName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h.i)

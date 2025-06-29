@@ -25,5 +25,8 @@ if (NOT MyProjectIsDefined)
   set(MyProjectIsDefined)
 endif()
 
+add_subdirectory(Runtime/Arms)
+add_subdirectory(Runtime/Ring1)
+add_subdirectory(Runtime/Ring2)
 add_subdirectory(repository)
 add_subdirectory(Documentation)
