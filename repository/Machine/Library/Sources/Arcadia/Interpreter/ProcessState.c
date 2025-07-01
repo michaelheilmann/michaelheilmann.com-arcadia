@@ -36,8 +36,7 @@ R_Interpreter_ProcessState_startup
     Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_Initialized);
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
-  R_Interpreter_ProcessState* singleton = NULL;
-  Arcadia_Process_allocateUnmanaged(process, &singleton, sizeof(R_Interpreter_ProcessState));
+  R_Interpreter_ProcessState* singleton = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(R_Interpreter_ProcessState));
   Arcadia_JumpTarget jumpTarget;
 
   Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
@@ -47,7 +46,7 @@ R_Interpreter_ProcessState_startup
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-    Arcadia_Process_deallocateUnmanaged(process, singleton);
+    Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), singleton);
     singleton = NULL;
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
@@ -59,7 +58,7 @@ R_Interpreter_ProcessState_startup
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-    Arcadia_Process_deallocateUnmanaged(process, singleton);
+    Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), singleton);
     singleton = NULL;
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
@@ -87,7 +86,7 @@ R_Interpreter_ProcessState_shutdown
   singleton->globals = NULL;
   singleton->constants = NULL;
 
-  Arcadia_Process_deallocateUnmanaged(process, singleton);
+  Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), singleton);
   singleton = NULL;
 }
 

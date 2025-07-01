@@ -49,8 +49,7 @@ Arcadia_BigInteger_toTwosComplement
   if (self->sign == 0) {
     // case [1]
     Arcadia_SizeValue numberOfLimps0 = 1;
-    Arcadia_BigInteger_Limp* limps0 = NULL;
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+    Arcadia_BigInteger_Limp* limps0 = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
     limps0[0] = 0;
     *limps = limps0;
     *numberOfLimps = numberOfLimps0;
@@ -58,11 +57,11 @@ Arcadia_BigInteger_toTwosComplement
     // case [2]
     Arcadia_SizeValue numberOfLimps0 = self->numberOfLimps;
     Arcadia_BigInteger_Limp* limps0 = NULL;
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+    limps0 = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
   #if Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_LittleEndian
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), limps0, self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+    Arcadia_Memory_copy(thread, limps0, self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
   #elif Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_BigEndian
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), limps0, self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+    Arcadia_Memory_copy(thread, limps0, self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
     for (Arcadia_SizeValue i = 0; i < numberOfLimps0 / 2; ++i) {
       Arcadia_BigInteger_Limp temporary = limps0[numberOfLimps0 - 1 - i];
       limps0[numberOfLimps0 - 1 - i] = limps0[i];
@@ -73,7 +72,7 @@ Arcadia_BigInteger_toTwosComplement
   #endif
     if (limps0[numberOfLimps0 - 1] & (1 << (Arcadia_BigInteger_BitsPerLimp - 1)) == 1) {
       numberOfLimps0++;
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+      Arcadia_Memory_reallocateUnmanaged(thread, &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
       limps0[numberOfLimps0 - 1] = 0;
     }
     *limps = limps0;
@@ -81,9 +80,8 @@ Arcadia_BigInteger_toTwosComplement
   } else /*if (self->sign == -1)*/ {
     // case [3]
     Arcadia_SizeValue numberOfLimps0 = self->numberOfLimps;
-    Arcadia_BigInteger_Limp* limps0 = NULL;
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), limps0, self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+    Arcadia_BigInteger_Limp* limps0 = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+    Arcadia_Memory_copy(thread, limps0, self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
   #if Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_LittleEndian
   #elif Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_BigEndian
     for (Arcadia_SizeValue i = 0; i < numberOfLimps0 / 2; ++i) {
@@ -108,7 +106,7 @@ Arcadia_BigInteger_toTwosComplement
     }
     if (limps0[numberOfLimps0 - 1] & (1 << (Arcadia_BigInteger_BitsPerLimp - 1)) == 0) {
       numberOfLimps0++;
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+      Arcadia_Memory_reallocateUnmanaged(thread, &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
       limps0[numberOfLimps0 - 1] = Arcadia_BigInteger_Limp_Maximum;
     }
   #elif Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_BigEndian

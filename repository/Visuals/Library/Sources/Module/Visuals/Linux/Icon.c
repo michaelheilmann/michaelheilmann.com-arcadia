@@ -142,8 +142,7 @@ Arcadia_Visuals_Linux_Icon_constructImpl
   _self->numberOfBytes = numberOfBytes;
   _self->width = width;
   _self->height = height;
-  _self->bytes = NULL;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->bytes, numberOfBytes);
+  _self->bytes = Arcadia_Memory_allocateUnmanaged(thread, numberOfBytes);
   _self->bytes[0] = (Arcadia_Natural32Value)width;
   _self->bytes[1] = (Arcadia_Natural32Value)height;
   unsigned long* p = &_self->bytes[2];
@@ -164,7 +163,7 @@ Arcadia_Visuals_Linux_Icon_destruct
   )
 {
   if (self->bytes) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->bytes);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->bytes);
     self->bytes = NULL;
   }
 }

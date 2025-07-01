@@ -3,6 +3,7 @@
 #include "Arcadia/Ring1/Implementation/Integer8.h"
 #include "Arcadia/Ring1/Implementation/Integer32.h"
 #include "Arcadia/Ring1/Implementation/Integer64.h"
+#include "Arcadia/Ring1/Implementation/Memory.h"
 #include "Arcadia/Ring1/Implementation/safeMultiply.h"
 #include "Arcadia/Ring1/Implementation/Thread.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
@@ -283,4 +284,52 @@ Natural32_multipleOfPowerOf2
   assert(p < 32);
   // __builtin_ctz doesn't appear to be faster here.
   return (v & ((Arcadia_Natural32Value_Literal(1) << p) - 1)) == 0;
+}
+
+typedef struct Buffer {
+  char* p;
+  size_t n, m;
+} Buffer;
+
+static inline void
+Buffer_init
+  (
+    Arcadia_Thread* thread,
+    Buffer* buffer,
+    size_t initialCapacity
+  )
+{
+  buffer->n = 0;
+  buffer->m = initialCapacity;
+  buffer->p = Arcadia_Memory_allocateUnmanaged(thread, initialCapacity);
+  Arcadia_Memory_fill(thread, buffer->p, initialCapacity, 0);
+}
+
+static inline void
+Buffer_uninit
+  (
+    Arcadia_Thread* thread,
+    Buffer* buffer
+  )
+{
+  if (buffer->p) {
+    Arcadia_Memory_deallocateUnmanaged(thread, buffer->p);
+    buffer->p = NULL;
+  }
+}
+
+static inline void
+Buffer_append
+  (
+    Arcadia_Thread* thread,
+    Buffer* buffer,
+    const Arcadia_Natural8Value* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
+{
+  if (buffer->m - buffer->n < numberOfBytes) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+  }
+  Arcadia_Memory_copy(thread, buffer->p + buffer->n, bytes, numberOfBytes);
+  buffer->n += numberOfBytes;
 }

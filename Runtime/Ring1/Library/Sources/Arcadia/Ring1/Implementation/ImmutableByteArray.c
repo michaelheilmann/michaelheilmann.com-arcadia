@@ -53,7 +53,7 @@ Arcadia_ImmutableByteArray_create
   }
   Arcadia_ImmutableByteArray*array = NULL;
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableByteArray) + numberOfBytes);
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), array->bytes, bytes, numberOfBytes);
+  Arcadia_Memory_copy(thread, array->bytes, bytes, numberOfBytes);
   array->numberOfBytes = numberOfBytes;
   return array;
 }

@@ -2065,6 +2065,242 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
 </section>
 
 
+<h2>Memory functions</h2>
+<section class="cxx entity procedure">
+
+  <h1 id="Arcadia_Memory_allocateUnmanaged">Arcadia_Memory_allocateUnmanaged</h1>
+
+  <my-signature><code>
+  void*<br>
+  Arcadia_Memory_allocateUnmanaged<br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;)
+  </code></my-signature>
+
+  <my-summary>Allocate an unnamanged memory region.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div><div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue size</div>
+      <div>The size, in Bytes, of the memory region to allocate. Memory regions of zero Bytes are supported.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    A pointer to the first Byte of the memory region.
+    </p>
+  </section>
+  
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+
+  </ section>
+
+</section>
+
+<section class="cxx entity procedure">
+
+  <h1 id="Arcadia_Memory_coompare">Arcadia_Memory_coompare</h1>
+
+  <my-signature><code>
+  Arcadia_Integer8Value<br>
+  Arcadia_Memory_compare<br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;const void* p,<br>
+  &nbsp;&nbsp;const void* q,<br>
+  &nbsp;&nbsp;Arcadia_SizeValue n<br>
+  &nbsp;)
+  </code></my-signature>
+
+  <my-summary>Compare two memory regions.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div><div>Arcadia_Thread* thread</div><div>A pointer to the <code>Arcadia_Thread</code> object.</div></div>
+    <div><div>const void* p</div><div>A pointer to the first Byte of the first memory region.</div></div>
+    <div><div>const void* q</div><div>A pointer to the first Byte of the second memory region.</div></div>
+    <div><div>Arcadia_SizeValue n</div><div>The number of Bytes to compare.</div></div>
+  </section>
+  
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    A positive value if the first memory region is greater than the first memory region.
+    A negative value if the first memory region is less than the second memory region.
+    Zero if both memory regions are equal.
+    </p>
+  </section>
+  
+  <section class="cxx remarks">
+    <h1>Remarks</h1>
+    <p>
+    A memory region <code>(p,n)</code> is equal to a memory region <code>(q,n)</code> if for all <code>0&lte; i &lt;</code> <code>p[i] = q[i]</code> holds.
+    Otherwise there exists a least <code>0&lte; i &lt; n</code> such that <code>p[i] &neq; q[i]</code> holds and consequently either <code>p[i] &lt; q[i]</code> or <code>p[i] &gt; q[i]</code> holds:
+    if <code>p[i] &neq; q[i]</code> holds then p is less than q and if <code>p[i] &gt; q[i]</code> holds then p is greater than q.
+    </p>
+  </section>
+
+</section>
+
+<section class="cxx entity procedure">
+
+  <h1 id="Arcadia_Memory_copy">Arcadia_Memory_copy</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_Memory_copy<br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;void* target,<br>
+  &nbsp;&nbsp;const void* source,<br>
+  &nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;)
+  </code></my-signature>
+
+  <my-summary>Copy the Bytes from one memory region to another memory region. The memory regions may overlap.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div><div>Arcadia_Thread* thread</div><div>A pointer to the <code>Arcadia_Thread</code> object.</div></div>
+    <div><div>void* target</div><div>A pointer to the first Byte of the target memory region.</div></div>
+    <div><div>const void* source</div><div>A pointer to the first Byte of the source memory region.</div></div>
+    <div><div>Arcadia_SizeValue numberOfBytes</div><div>The number of Bytes to copy.</div></div>
+  </section>
+
+</section>
+
+<section class="cxx entity procedure">
+
+  <h1 id="Arcadia_Memory_deallocateUnmanaged">Arcadia_Memory_deallocateUnmanaged</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_Memory_deallocateUnmanaged<br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;void* p<br>
+  &nbsp;)
+  </code></my-signature>
+
+  <my-summary>Deallocate an unmanaged region of memory.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>void* p</div>
+      <div>A pointer to the first Byte of the memory region.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity procedure">
+
+  <h1 id="Arcadia_Memory_fill">Arcadia_Memory_fill</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_Memory_fill<br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;void* bytes,<br>
+  &nbsp;&nbsp;Arcadia_SizeValue numberOfBytes<br>
+  &nbsp;&nbsp;Arcadia_Natural8Value value<br>
+  &nbsp;)
+  </code></my-signature>
+
+  <my-summary>Assignt the Bytes of a memory region a value.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div><div>Arcadia_Thread* thread</div><div>A pointer to the <code>Arcadia_Thread</code> object.</div></div>
+    <div><div>void* p</div><div>A pointer to the first Byte of the target memory region.</div></div>
+    <div><div>Arcadia_SizeValue n</div><div>The size, in Bytes, of the memory region.</div></div>
+    <div><div>Arcadia_Natural8Value v</div><div>The value to assign to each Byte of the memory region.</div></div>
+  </section>
+
+</section>
+
+<section class="cxx entity procedure">
+
+  <h1 id="Arcadia_Memory_reallocateUnmanaged">Arcadia_Memory_reallocateUnmanaged</h1>
+
+  <my-signature><code>
+  void*<br>
+  Arcadia_Memory_reallocateUnmanaged<br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;)
+  </code></my-signature>
+
+  <my-summary>Reallocate a memory region.</my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div>Arcadia_Thread* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>void* p</div>
+      <div>A pointer to the first Byte of the old memory region.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue n</div>
+      <div>The size, in Bytes, of the new memory region.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    A pointer to the first Byte of the new memory region.
+    </p>
+  </section>
+  
+  <section class="cxx errors">
+
+    <h1>Errors</h1>
+
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+
+  </ section>
+  
+  <section class="cxx remarks">
+    <h1>Remarks</h1>
+    <p>
+    The succesful reallocation of a memory region (p,n) to a memory region (q,m) effectively means:
+    The old memory region p of size n was deallocated, the new memory region q of size m was allocated.
+    Furthermore, the first bytes <code>k = min(n,m)</code> Bytes of the old memory region and the new memory region have the same values.
+    </p>
+    <p>If the reallocation fails, then the memory region (p,n) is not modified.</p>
+  </section>
+
+
+</section>
+
+
 <h2>Miscellaneous functions</h2>
 <section class="cxx entity procedure">
 
@@ -2532,6 +2768,14 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_encodeCodePointsUtf8">Arcadia_Unicode_encodeCodePointsUtf8</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_isUtf8">Arcadia_Unicode_isUtf8</a></li>
 
+        <li>Memory functions</li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Memory_allocateUnmanaged">Arcadia_Memory_allocateUnmanaged</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Memory_compare">Arcadia_Memory_compare</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Memory_copy">Arcadia_Memory_copy</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Memory_deallocateUnmanaged">Arcadia_Memory_deallocateUnmanaged</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Memory_fill">Arcadia_Memory_fill</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Memory_reallocateUnmanaged">Arcadia_Memory_reallocateUnmanaged</a></li>
+
         <li>Miscellaneous functions</li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_getNumberOfCores">Arcadia_getNumberOfCores</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_getPageSize">Arcadia_getPageSize</a></li>
@@ -2543,7 +2787,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
 
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Configuration_Version_Major">Arcadia_Configuration_Version_Major</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Configuration_Version_Minor">Arcadia_Configuration_Version_Minor</a></li>
-        
+
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Configuration_OperatingSystem">Arcadia_Configuration_OperatingSystem</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Configuration_OperatingSystem_Cygwin">Arcadia_Configuration_OperatingSystem_Cygwin</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Configuration_OperatingSystem_Ios">Arcadia_Configuration_OperatingSystem_Ios</a></li>

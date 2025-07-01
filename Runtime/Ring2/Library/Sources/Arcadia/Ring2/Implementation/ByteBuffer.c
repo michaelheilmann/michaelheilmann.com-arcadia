@@ -80,7 +80,7 @@ Arcadia_ByteBuffer_constructImpl
   _self->p = NULL;
   _self->sz = 0;
   _self->cp = 0;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->p, 0);
+  _self->p = Arcadia_Memory_allocateUnmanaged(thread, 0);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -92,7 +92,7 @@ Arcadia_ByteBuffer_destruct
   )
 {
   if (self->p) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->p);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->p);
     self->p = NULL;
   }
 }
@@ -123,7 +123,7 @@ Arcadia_ByteBuffer_endsWith_pn
     return Arcadia_BooleanValue_False;
   }
   Arcadia_SizeValue d = self->sz - numberOfBytes;
-  return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->p + d, bytes, numberOfBytes);
+  return !Arcadia_Memory_compare(thread, self->p + d, bytes, numberOfBytes);
 }
 
 Arcadia_BooleanValue
@@ -138,7 +138,7 @@ Arcadia_ByteBuffer_startsWith_pn
   if (self->sz < numberOfBytes) {
     return Arcadia_BooleanValue_False;
   }
-  return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->p, bytes, numberOfBytes);
+  return !Arcadia_Memory_compare(thread, self->p, bytes, numberOfBytes);
 }
 
 void
@@ -200,13 +200,13 @@ Arcadia_ByteBuffer_insert_pn
       Arcadia_Thread_jump(thread);
     }
     Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->p, newCapacity);
+    Arcadia_Memory_reallocateUnmanaged(thread, &self->p, newCapacity);
     self->cp = newCapacity;
   }
   if (index < self->sz) {
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->p + index, self->p + index + numberOfBytes, self->sz - index);
+    Arcadia_Memory_copy(thread, self->p + index, self->p + index + numberOfBytes, self->sz - index);
   }
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->p + index, bytes, numberOfBytes);
+  Arcadia_Memory_copy(thread, self->p + index, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }
 
@@ -222,7 +222,7 @@ Arcadia_ByteBuffer_isEqualTo
     return Arcadia_BooleanValue_True;
   }
   if (self->sz == other->sz) {
-    return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->p, other->p, self->sz);
+    return !Arcadia_Memory_compare(thread, self->p, other->p, self->sz);
   } else {
     return Arcadia_BooleanValue_False;
   }
@@ -242,7 +242,7 @@ Arcadia_ByteBuffer_isEqualTo_pn
     Arcadia_Thread_jump(thread);
   }
   if (self->sz == numberOfBytes) {
-    return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->p, bytes, numberOfBytes);
+    return !Arcadia_Memory_compare(thread, self->p, bytes, numberOfBytes);
   } else {
     return Arcadia_BooleanValue_False;
   }

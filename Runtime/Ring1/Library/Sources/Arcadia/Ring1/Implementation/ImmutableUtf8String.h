@@ -29,6 +29,8 @@
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
+#include "Arcadia/Ring1/Implementation/Real32.h"
+#include "Arcadia/Ring1/Implementation/Real64.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/Void.h"
 
@@ -154,6 +156,28 @@ Arcadia_ImmutableUtf8String_createFromNatural8
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value natural8Value
+  );
+
+/// @brief Create an immutable UTF8 string object from Arcadia_Real32Value value.
+/// @param thread A pointer to the Arcadia_Thread object.
+/// @param voidValue The Arcadia_Real32Value value.
+/// @return A pointer to the immmutable UTF8 string object.
+Arcadia_ImmutableUtf8String*
+Arcadia_ImmutableUtf8String_createFromReal32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Real32Value real32Value
+  );
+
+/// @brief Create an immutable UTF8 string object from Arcadia_Real64Value value.
+/// @param thread A pointer to the Arcadia_Thread object.
+/// @param voidValue The Arcadia_Real64Value value.
+/// @return A pointer to the immmutable UTF8 string object.
+Arcadia_ImmutableUtf8String*
+Arcadia_ImmutableUtf8String_createFromReal64
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Real64Value real64Value
   );
 
 /// @brief Create an immutable UTF8 string object from Arcadia_SizeValue value.
@@ -335,6 +359,42 @@ Arcadia_ImmutableUtf8String_toNatural64
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural8 literal
 Arcadia_Natural8Value
 Arcadia_ImmutableUtf8String_toNatural8
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUtf8StringValue self
+  );
+
+/// @brief Convert this immutable UTF8 string object into an Real32 value.
+/// @param thread A pointer to the Arcadia_Thread object.
+/// @param self A pointer to this immutable UTF8 string object.
+/// @return The Real32 value.
+/// @error #Arcadia_Status_ConversionFailed the string is not an Real32 literal
+Arcadia_Real32Value
+Arcadia_ImmutableUtf8String_toReal32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUtf8StringValue self
+  );
+
+/// @brief Convert this immutable UTF8 string object into an Real64 value.
+/// @param thread A pointer to the Arcadia_Thread object.
+/// @param self A pointer to this immutable UTF8 string object.
+/// @return The Real64 value.
+/// @error #Arcadia_Status_ConversionFailed the string is not an Real64 literal
+Arcadia_Real64Value
+Arcadia_ImmutableUtf8String_toReal64
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUtf8StringValue self
+  );
+
+/// @brief Convert this immutable UTF8 string object into an Size value.
+/// @param thread A pointer to the Arcadia_Thread object.
+/// @param self A pointer to this immutable UTF8 string object.
+/// @return The Size value.
+/// @error #Arcadia_Status_ConversionFailed the string is not an Size literal
+Arcadia_SizeValue
+Arcadia_ImmutableUtf8String_toSize
   (
     Arcadia_Thread* thread,
     Arcadia_ImmutableUtf8StringValue self

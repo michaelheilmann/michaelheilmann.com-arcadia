@@ -183,7 +183,7 @@ static void to_extended(Arcadia_Thread* thread, Arcadia_ToReal64_Result* result,
   int32_t bias = Arcadia_Real64Value_NumberOfExplicitSignificandBits -
                  (Arcadia_Real64Value_MinimalExponent - 1);
   uint64_t bits;
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &bits, &value, sizeof(Arcadia_Real64Value));
+  Arcadia_Memory_copy(thread, &bits, &value, sizeof(Arcadia_Real64Value));
   if ((bits & exponent_mask) == 0) {
     // denormal
     result->exponent = 1 - bias;

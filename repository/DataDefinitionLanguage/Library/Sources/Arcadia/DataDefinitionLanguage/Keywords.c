@@ -64,10 +64,10 @@ Arcadia_DataDefinitionLanguage_Keywords_destruct
     while (self->buckets[i]) {
       Keyword* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), node);
+      Arcadia_Memory_deallocateUnmanaged(thread, node);
     }
   }
-  Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->buckets);
+  Arcadia_Memory_deallocateUnmanaged(thread, self->buckets);
   self->buckets = NULL;
 }
 
@@ -138,7 +138,7 @@ Arcadia_DataDefinitionLanguage_Keywords_constructImpl
   }
   _self->size = 0;
   _self->capacity = 8;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&_self->buckets, sizeof(Keyword*) * _self->capacity);
+  _self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Keyword*) * _self->capacity);
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     _self->buckets[i] = NULL;
   }
@@ -180,8 +180,7 @@ Arcadia_DataDefinitionLanguage_Keywords_add
       Arcadia_Thread_jump(thread);
     }
   }
-  Keyword* keyword = NULL;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &keyword, sizeof(Keyword));
+  Keyword* keyword = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Keyword));
   keyword->string = string;
   keyword->type = type;
   keyword->next = self->buckets[index];

@@ -51,45 +51,6 @@ decimalLength17
   return 1;
 }
 
-typedef struct Buffer {
-  char p[25];
-  size_t n, m;
-} Buffer;
-
-static inline void
-Buffer_init
-(
-  Arcadia_Thread* thread,
-  Buffer* buffer
-) {
-  buffer->n = 0;
-  buffer->m = 25;
-  Arcadia_Process_fillMemory(Arcadia_Thread_getProcess(thread), buffer->p, 25, 0);
-}
-
-static inline void
-Buffer_uninit
-(
-  Arcadia_Thread* thread,
-  Buffer* buffer
-) {/* Intentionally empty.*/
-}
-
-static inline void
-Buffer_append
-(
-  Arcadia_Thread* thread,
-  Buffer* buffer,
-  const Arcadia_Natural8Value* bytes,
-  Arcadia_SizeValue numberOfBytes
-) {
-  if (buffer->m - buffer->n < numberOfBytes) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-  }
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), buffer->p + buffer->n, bytes, numberOfBytes);
-  buffer->n += numberOfBytes;
-}
-
 // A floating decimal representing m * 10^e.
 typedef struct FloatingDecimal64 {
   bool sign; // true ~ +, false ~ -
@@ -122,7 +83,6 @@ toChars64
     Buffer* dst
   )
 {
-  int index = 0;
   if (!src->sign) {
     Buffer_append(thread, dst, u8"-", sizeof(u8"-") - 1);
   }
@@ -142,10 +102,10 @@ toChars64
     const uint32_t c1 = (c / 100) << 1;
     const uint32_t d0 = (d % 100) << 1;
     const uint32_t d1 = (d / 100) << 1;
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength /* - i */ - 1]), DIGIT_TABLE + c0, 2);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength /* - i */ - 3]), DIGIT_TABLE + c1, 2);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength /* - i */ - 5]), DIGIT_TABLE + d0, 2);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength /* - i */ - 7]), DIGIT_TABLE + d1, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength /* - i */ - 1]), DIGIT_TABLE + c0, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength /* - i */ - 3]), DIGIT_TABLE + c1, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength /* - i */ - 5]), DIGIT_TABLE + d0, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength /* - i */ - 7]), DIGIT_TABLE + d1, 2);
     i += 8;
   }
   uint32_t output2 = (uint32_t)output;
@@ -158,51 +118,51 @@ toChars64
     output2 /= 10000;
     const uint32_t c0 = (c % 100) << 1;
     const uint32_t c1 = (c / 100) << 1;
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength - i - 1]), DIGIT_TABLE + c0, 2);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength - i - 3]), DIGIT_TABLE + c1, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength - i - 1]), DIGIT_TABLE + c0, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength - i - 3]), DIGIT_TABLE + c1, 2);
     i += 4;
   }
   if (output2 >= 100) {
     const uint32_t c = (output2 % 100) << 1;
     output2 /= 100;
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength - i - 1]), DIGIT_TABLE + c, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength - i - 1]), DIGIT_TABLE + c, 2);
     i += 2;
   }
   if (output2 >= 10) {
     const uint32_t c = output2 << 1;
     // We can't use memcpy here: the decimal dot goes between these two digits.
-    dst->p[index + outputLength - i] = DIGIT_TABLE[c + 1];
-    dst->p[index] = DIGIT_TABLE[c];
+    dst->p[dst->n + outputLength - i] = DIGIT_TABLE[c + 1];
+    dst->p[dst->n] = DIGIT_TABLE[c];
   } else {
-    dst->p[index] = (char)('0' + output2);
+    dst->p[dst->n] = (char)('0' + output2);
   }
 
   // Print decimal point if needed.
   if (outputLength > 1) {
-    dst->p[index + 1] = '.';
-    index += outputLength + 1;
+    dst->p[dst->n + 1] = '.';
+    dst->n += outputLength + 1;
   } else {
-    ++index;
+    ++dst->n;
   }
 
   // Print the exponent.
-  dst->p[index++] = 'E';
+  dst->p[dst->n++] = 'E';
   int32_t exp = src->exponent + (int32_t)outputLength - 1;
   if (exp < 0) {
-    dst->p[index++] = '-';
+    dst->p[dst->n++] = '-';
     exp = -exp;
   }
 
   if (exp >= 100) {
     const int32_t c = exp % 10;
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index]), DIGIT_TABLE + 2 * (exp / 10), 2);
-    dst->p[index + 2] = (char)('0' + c);
-    index += 3;
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n]), DIGIT_TABLE + 2 * (exp / 10), 2);
+    dst->p[dst->n + 2] = (char)('0' + c);
+    dst->n += 3;
   } else if (exp >= 10) {
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index]), DIGIT_TABLE + 2 * exp, 2);
-    index += 2;
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n]), DIGIT_TABLE + 2 * exp, 2);
+    dst->n += 2;
   } else {
-    dst->p[index++] = (char)('0' + exp);
+    dst->p[dst->n++] = (char)('0' + exp);
   }
 }
 
@@ -411,7 +371,7 @@ toString64
 }
 
 void
-Arcadia_Real64_toString
+Arcadia_Real64Value_toUtf8String
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value value,
@@ -420,7 +380,7 @@ Arcadia_Real64_toString
   )
 {
   Buffer buffer;
-  Buffer_init(thread, &buffer);
+  Buffer_init(thread, &buffer, 25);
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -428,6 +388,7 @@ Arcadia_Real64_toString
     toString64(thread, value, &buffer);
     (*function)(thread, context, buffer.p, buffer.n);
     Arcadia_Thread_popJumpTarget(thread);
+    Buffer_uninit(thread, &buffer);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     Buffer_uninit(thread, &buffer);

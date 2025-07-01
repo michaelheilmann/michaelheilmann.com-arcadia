@@ -88,6 +88,28 @@ Arcadia_FileSystem_directoryFileExists
     Arcadia_FilePath* path
   );
 
+// Get the folder in which configuration files are stored.
+// The following table lists the values for a given operating system
+// - Windows: `C:\Users\<Username>\AppData\Local\<Organization Name>\<Game Name>`
+// - Linux: `<Home>\<Organization Name>\<Game Name>`
+Arcadia_FilePath*
+Arcadia_FileSystem_getConfigurationFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+// Get the folder in which save files are stored.
+// The following table lists the values for a given operating system
+// - Windows: `C:\Users\<Username>\AppData\Roaming\<Organization Name>\<Game Name>`
+// - Linux: `<Home>\<Organization Name>\<Game Name>`
+Arcadia_FilePath*
+Arcadia_FileSystem_getSaveFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
 Arcadia_FilePath*
 Arcadia_FileSystem_getWorkingDirectory
   (

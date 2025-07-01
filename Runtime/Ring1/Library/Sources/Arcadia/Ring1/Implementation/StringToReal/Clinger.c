@@ -89,7 +89,7 @@ Arcadia_clingerReal64
   // Unfortunate but inevitable.
   // We do not return floats, rather we return their bit patterns.
   Arcadia_Natural64Value u;
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &u, &v, 8);
+  Arcadia_Memory_copy(thread, &u, &v, 8);
   result->negative = (Arcadia_Real64Value_SignBitsMask & u) >> Arcadia_Real64Value_SignBitsShift;
   result->exponent = (Arcadia_Real64Value_ExponentBitsMask & u) >> Arcadia_Real64Value_ExponentBitsShift;
   result->significand = (Arcadia_Real64Value_SignificandBitsMask & u) >> Arcadia_Real64Value_SignificandBitsShift;

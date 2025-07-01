@@ -190,7 +190,7 @@ Arcadia_StringBuffer_constructImpl
   _self->elements = NULL;
   _self->size = 0;
   _self->capacity = 0;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->elements, 0);
+  _self->elements = Arcadia_Memory_allocateUnmanaged(thread, 0);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -202,7 +202,7 @@ Arcadia_StringBuffer_destruct
   )
 {
   if (self->elements) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->elements);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->elements);
     self->elements = NULL;
   }
 }
@@ -215,7 +215,6 @@ ensureFreeCapacityBytes
     Arcadia_SizeValue requiredFreeCapacity
   )
 {
-  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   Arcadia_SizeValue availableFreeCapacity = self->capacity - self->size;
   if (availableFreeCapacity < requiredFreeCapacity) {
     Arcadia_SizeValue additionalCapacity = requiredFreeCapacity - availableFreeCapacity;
@@ -225,7 +224,7 @@ ensureFreeCapacityBytes
       Arcadia_Thread_jump(thread);
     }
     Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    Arcadia_Process_reallocateUnmanaged(process, &self->elements, newCapacity);
+    Arcadia_Memory_reallocateUnmanaged(thread, &self->elements, newCapacity);
     self->capacity = newCapacity;
   }
 }
@@ -239,9 +238,8 @@ appendBytesInternal
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   ensureFreeCapacityBytes(thread, self, numberOfBytes);
-  Arcadia_Process_copyMemory(process, self->elements + self->size, bytes, numberOfBytes);
+  Arcadia_Memory_copy(thread, self->elements + self->size, bytes, numberOfBytes);
   self->size += numberOfBytes;
 }
 
@@ -271,7 +269,7 @@ Arcadia_StringBuffer_endsWith_pn
     return Arcadia_BooleanValue_False;
   }
   Arcadia_SizeValue d = self->size - numberOfBytes;
-  return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->elements + d, bytes, numberOfBytes);
+  return !Arcadia_Memory_compare(thread, self->elements + d, bytes, numberOfBytes);
 }
 
 Arcadia_BooleanValue
@@ -286,7 +284,7 @@ Arcadia_StringBuffer_startsWith_pn
   if (self->size < numberOfBytes) {
     return Arcadia_BooleanValue_False;
   }
-  return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->elements, bytes, numberOfBytes);
+  return !Arcadia_Memory_compare(thread, self->elements, bytes, numberOfBytes);
 }
 
 void
@@ -307,7 +305,7 @@ Arcadia_StringBuffer_append_pn
     Arcadia_Thread_jump(thread);
   }
   ensureFreeCapacityBytes(thread, self, numberOfBytes);
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + self->size, bytes, numberOfBytes);
+  Arcadia_Memory_copy(thread, self->elements + self->size, bytes, numberOfBytes);
   self->size += numberOfBytes;
 }
 
@@ -366,9 +364,9 @@ Arcadia_StringBuffer_insertAt
   }
   ensureFreeCapacityBytes(thread, self, n);
   if (byteIndex < self->size) {
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + byteIndex, self->elements + byteIndex + n, self->size - byteIndex);
+    Arcadia_Memory_copy(thread, self->elements + byteIndex, self->elements + byteIndex + n, self->size - byteIndex);
   }
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + byteIndex, p, n);
+  Arcadia_Memory_copy(thread, self->elements + byteIndex, p, n);
   self->size += n;
 }
 
@@ -419,7 +417,7 @@ Arcadia_StringBuffer_insertBack
     Arcadia_Thread_jump(thread);
   }
   ensureFreeCapacityBytes(thread, self, n);
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + self->size, p, n);
+  Arcadia_Memory_copy(thread, self->elements + self->size, p, n);
   self->size += n;
 }
 
@@ -470,8 +468,8 @@ Arcadia_StringBuffer_insertFront
     Arcadia_Thread_jump(thread);
   }
   ensureFreeCapacityBytes(thread, self, n);
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + n, self->elements, self->size);
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements, p, n);
+  Arcadia_Memory_copy(thread, self->elements + n, self->elements, self->size);
+  Arcadia_Memory_copy(thread, self->elements, p, n);
   self->size += n;
 }
 
@@ -518,7 +516,7 @@ Arcadia_StringBuffer_compareTo
     Arcadia_Thread_jump(thread);
   }
   Arcadia_SizeValue k = n <= self->size ? n : self->size;
-  Arcadia_Integer32Value result = Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), self->elements, p, k);
+  Arcadia_Integer32Value result = Arcadia_Memory_compare(thread, self->elements, p, k);
   if (result) {
     return result;
   }

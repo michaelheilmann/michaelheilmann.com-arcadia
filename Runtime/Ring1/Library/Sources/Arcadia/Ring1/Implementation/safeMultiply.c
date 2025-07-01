@@ -39,7 +39,7 @@ Arcadia_safeMultiplyNatural16Value
   Arcadia_Natural32Value c = a * b;
   *productHigh = (c & 0xffff0000) >> 16;
   *productLow = (Arcadia_Natural16Value)(c & 0x0000ffff);
-  return (*productHigh);
+  return !(*productHigh);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -63,7 +63,7 @@ Arcadia_safeMultiplyNatural32Value
   Arcadia_Natural64Value c = a * b;
   *productHigh = (c & 0xffffffff00000000) >> 32;
   *productLow = (Arcadia_Natural32Value)(c & 0x00000000ffffffff);
-  return (*productHigh);
+  return !(*productHigh);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -101,10 +101,6 @@ Arcadia_safeMultiplyNatural64Value
     Arcadia_Natural64Value* productLow
   )
 {
-  if (!productHigh | !productLow) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
   Arcadia_Natural64Value a = multiplier >> 32;
   Arcadia_Natural64Value b = multiplier & 0xffffffff;
   Arcadia_Natural64Value c = multiplicand >> 32;
@@ -129,10 +125,14 @@ Arcadia_safeMultiplyNatural64Value
   // Compute the high part.
   Arcadia_Natural64Value hi = ac + (mi >> 32) + (miCarry << 32) + loCarry;
 
-  *productHigh = hi;
-  *productLow = lo;
+  if (productHigh) {
+    *productHigh = hi;
+  }
+  if (productLow) {
+    *productLow = lo;
+  }
 
-  return (*productHigh);
+  return !hi;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -154,9 +154,15 @@ Arcadia_safeMultiplyNatural8Value
   Arcadia_Natural16Value a = multiplier;
   Arcadia_Natural16Value b = multiplicand;
   Arcadia_Natural16Value c = a * b;
-  *productHigh = (c & 0xff00) >> 8;
-  *productLow = (Arcadia_Natural8Value)(c & 0x00ff);
-  return (*productHigh);
+  Arcadia_Natural8Value hi = (c & 0xff00) >> 8;
+  Arcadia_Natural8Value lo = (Arcadia_Natural8Value)(c & 0x00ff);
+  if (productHigh) {
+    *productHigh = hi;
+  }
+  if (productLow) {
+    *productLow = lo;
+  }
+  return !hi;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -171,10 +177,6 @@ Arcadia_safeMultiplySizeValue
     Arcadia_SizeValue* productLow
   )
 {
-  if (!productHigh | !productLow) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
 #if Arcadia_Configuration_CompilerC_Msvc == Arcadia_Configuration_CompilerC
   #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural64Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural64Value_NumberOfBits, "environment not (yet) supported");
@@ -213,9 +215,15 @@ Arcadia_safeMultiplyInteger16Value
   )
 {
   Arcadia_Integer16Value product = ((Arcadia_Integer16Value)multiplier) * ((Arcadia_Integer16Value)multiplicand);
-  *upperProduct = (Arcadia_Integer16Value)((product & 0xffff0000) >> 16);
-  *lowerProduct = (Arcadia_Integer16Value)((product & 0x0000ffff) >> 0);
-  if (((*lowerProduct) < 0 && (*upperProduct) != -1) || ((*lowerProduct) >= 0 && (*upperProduct) != 0)) {
+  Arcadia_Integer16Value hi = (Arcadia_Integer16Value)((product & 0xffff0000) >> 16);
+  Arcadia_Integer16Value lo = (Arcadia_Integer16Value)((product & 0x0000ffff) >> 0);
+  if (upperProduct) {
+    *upperProduct = hi;
+  }
+  if (lowerProduct) {
+    *lowerProduct = lo;
+  }
+  if ((lo < 0 && hi != -1) || (lo >= 0 && hi != 0)) {
     return Arcadia_BooleanValue_True;
   } else {
     return Arcadia_BooleanValue_False;
@@ -233,9 +241,15 @@ Arcadia_safeMultiplyInteger32Value
   )
 {
   Arcadia_Integer64Value product = ((Arcadia_Integer64Value)multiplier) * ((Arcadia_Integer64Value)multiplicand);
-  *upperProduct = (Arcadia_Integer32Value)((product & 0xffffffff00000000) >> 32);
-  *lowerProduct = (Arcadia_Integer32Value)((product & 0x00000000ffffffff) >> 0);
-  if (((*lowerProduct) < 0 && (*upperProduct) != -1) || ((*lowerProduct) >= 0 && (*upperProduct) != 0)) {
+  Arcadia_Integer32Value hi = (Arcadia_Integer32Value)((product & 0xffffffff00000000) >> 32);
+  Arcadia_Integer32Value lo = (Arcadia_Integer32Value)((product & 0x00000000ffffffff) >> 0);
+  if (upperProduct) {
+    *upperProduct = hi;
+  }
+  if (lowerProduct) {
+    *lowerProduct = lo;
+  }
+  if ((lo < 0 && hi != -1) || (lo >= 0 && hi != 0)) {
     return Arcadia_BooleanValue_True;
   } else {
     return Arcadia_BooleanValue_False;
@@ -328,8 +342,15 @@ Arcadia_safeMultiplyInteger64Value
     Arcadia_Integer64Value* lowerProduct
   )
 {
-  *lowerProduct = __imul128(multiplier, multiplicand, upperProduct);
-  if (((*lowerProduct) < 0 && (*upperProduct) != -1) || ((*lowerProduct) >= 0 && (*upperProduct) != 0)) {
+  Arcadia_Integer64Value hi, lo;
+  lo = __imul128(multiplier, multiplicand, &hi);
+  if (upperProduct) {
+    *upperProduct = hi;
+  }
+  if (lowerProduct) {
+    *lowerProduct = lo;
+  }
+  if ((lo < 0 && hi != -1) || (lo >= 0 && hi != 0)) {
     return Arcadia_BooleanValue_True;
   } else {
     return Arcadia_BooleanValue_False;
@@ -347,9 +368,15 @@ Arcadia_safeMultiplyInteger8Value
   )
 {
   Arcadia_Integer16Value product = ((Arcadia_Integer16Value)multiplier) * ((Arcadia_Integer16Value)multiplicand);
-  *upperProduct = (Arcadia_Integer8Value)((product & 0xff00) >> 8);
-  *lowerProduct = (Arcadia_Integer8Value)((product & 0x00ff) >> 0);
-  if (((*lowerProduct) < 0 && (*upperProduct) != -1) || ((*lowerProduct) >= 0 && (*upperProduct) != 0)) {
+  Arcadia_Integer8Value hi = (Arcadia_Integer8Value)((product & 0xff00) >> 8);
+  Arcadia_Integer8Value lo = (Arcadia_Integer8Value)((product & 0x00ff) >> 0);
+  if (upperProduct) {
+    *upperProduct = hi;
+  }
+  if (lowerProduct) {
+    *lowerProduct = lo;
+  }
+  if ((lo < 0 && hi != -1) || (lo >= 0 && hi != 0)) {
     return Arcadia_BooleanValue_True;
   } else {
     return Arcadia_BooleanValue_False;

@@ -278,7 +278,7 @@ isEqualToImpl
   }
   Arcadia_String* otherString1 = (Arcadia_String*)other1;
   if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self1->immutableUtf8String) == Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, otherString1->immutableUtf8String)) {
-    Arcadia_Value_setBooleanValue(target, !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), Arcadia_ImmutableUtf8String_getBytes(thread, self1->immutableUtf8String),
+    Arcadia_Value_setBooleanValue(target, !Arcadia_Memory_compare(thread, Arcadia_ImmutableUtf8String_getBytes(thread, self1->immutableUtf8String),
                                           Arcadia_ImmutableUtf8String_getBytes(thread, otherString1->immutableUtf8String),
                                           Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self1->immutableUtf8String)));
   } else {
@@ -334,10 +334,10 @@ isNotEqualToImpl
     return;
   }
   Arcadia_Value_setBooleanValue(target,
-                                Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread),
-                                                              Arcadia_ImmutableUtf8String_getBytes(thread, self1->immutableUtf8String),
-                                                              Arcadia_ImmutableUtf8String_getBytes(thread, otherString1->immutableUtf8String),
-                                                              Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self1->immutableUtf8String)));
+                                Arcadia_Memory_compare(thread,
+                                                       Arcadia_ImmutableUtf8String_getBytes(thread, self1->immutableUtf8String),
+                                                       Arcadia_ImmutableUtf8String_getBytes(thread, otherString1->immutableUtf8String),
+                                                       Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self1->immutableUtf8String)));
 #undef A2
 #undef A1
 }
@@ -580,9 +580,9 @@ Arcadia_String_endsWith_pn
     return Arcadia_BooleanValue_False;
   }
   Arcadia_SizeValue d = Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self->immutableUtf8String) - numberOfBytes;
-  return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread),
-                                        Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String) + d,
-                                        bytes, numberOfBytes);
+  return !Arcadia_Memory_compare(thread,
+                                 Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String) + d,
+                                 bytes, numberOfBytes);
 }
 
 Arcadia_BooleanValue
@@ -597,9 +597,9 @@ Arcadia_String_startsWith_pn
   if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self->immutableUtf8String) < numberOfBytes) {
     return Arcadia_BooleanValue_False;
   }
-  return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread),
-                                        Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String),
-                                        bytes, numberOfBytes);
+  return !Arcadia_Memory_compare(thread,
+                                 Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String),
+                                 bytes, numberOfBytes);
 }
 
 Arcadia_SizeValue
@@ -672,8 +672,8 @@ Arcadia_String_isEqualTo_pn
   )
 {
   if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self->immutableUtf8String) == numberOfBytes) {
-    return !Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String),
-                                          bytes, numberOfBytes);
+    return !Arcadia_Memory_compare(thread, Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String),
+                                   bytes, numberOfBytes);
   } else {
     return Arcadia_BooleanValue_False;
   }

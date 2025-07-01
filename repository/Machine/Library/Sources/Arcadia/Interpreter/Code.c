@@ -169,7 +169,7 @@ R_Interpreter_Code_constructImpl
   _self->p = NULL;
   _self->sz = 0;
   _self->cp = 0;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->p, 0);
+  _self->p = Arcadia_Memory_allocateUnmanaged(thread, 0);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -181,7 +181,7 @@ R_Interpreter_Code_destruct
   )
 {
   if (self->p) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->p);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->p);
     self->p = NULL;
   }
 }
@@ -209,7 +209,7 @@ R_Interpreter_Code_append
   )
 {
   Arcadia_Arrays_resizeByFreeCapacity(thread, Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, Arcadia_Arrays_ResizeStrategy_Type4);
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->p + self->sz, bytes, numberOfBytes);
+  Arcadia_Memory_copy(thread, self->p + self->sz, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }
 

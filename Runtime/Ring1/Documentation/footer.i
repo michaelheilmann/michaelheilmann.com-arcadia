@@ -79,6 +79,14 @@
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_encodeCodePointsUtf8">Arcadia_Unicode_encodeCodePointsUtf8</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_isUtf8">Arcadia_Unicode_isUtf8</a></li>
 
+        <li>Memory functions</li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Memory_allocateUnmanaged">Arcadia_Memory_allocateUnmanaged</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Memory_compare">Arcadia_Memory_compare</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Memory_copy">Arcadia_Memory_copy</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Memory_deallocateUnmanaged">Arcadia_Memory_deallocateUnmanaged</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Memory_fill">Arcadia_Memory_fill</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Memory_reallocateUnmanaged">Arcadia_Memory_reallocateUnmanaged</a></li>
+
         <li>Miscellaneous functions</li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getNumberOfCores">Arcadia_getNumberOfCores</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getPageSize">Arcadia_getPageSize</a></li>
@@ -90,7 +98,7 @@
 
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Configuration_Version_Major">Arcadia_Configuration_Version_Major</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Configuration_Version_Minor">Arcadia_Configuration_Version_Minor</a></li>
-        
+
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Configuration_OperatingSystem">Arcadia_Configuration_OperatingSystem</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Configuration_OperatingSystem_Cygwin">Arcadia_Configuration_OperatingSystem_Cygwin</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Configuration_OperatingSystem_Ios">Arcadia_Configuration_OperatingSystem_Ios</a></li>

@@ -30,5 +30,5 @@ Arcadia_ToReal64_BitsToValue
   if (source->negative) {
     temporary |= Arcadia_Natural64Value_Literal(1) << Arcadia_Real64Value_SignBitsShift;
   }
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), target, &temporary, Arcadia_Real64Value_NumberOfBytes);
+  Arcadia_Memory_copy(thread, target, &temporary, Arcadia_Real64Value_NumberOfBytes);
 }

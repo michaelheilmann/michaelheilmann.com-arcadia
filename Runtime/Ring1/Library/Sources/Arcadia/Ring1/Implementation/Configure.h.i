@@ -50,11 +50,18 @@
 
 
 
+#define Arcadia_Configuration_Version_Major 0
+#define Arcadia_Configuration_Version_Minor 1
+
+
+
 #define Arcadia_Configuration_ByteOrder_Unknown @Arcadia.Ring1.ByteOrder.Unknown@
 #define Arcadia_Configuration_ByteOrder_BigEndian @Arcadia.Ring1.ByteOrder.BigEndian@
 #define Arcadia_Configuration_ByteOrder_LittleEndian @Arcadia.Ring1.ByteOrder.LittleEndian@
 
 #define Arcadia_Configuration_ByteOrder @Arcadia.Ring1.ByteOrder@
+
+
 
 // The size, in Bytes, of a limp.
 #define Arcadia_Configuration_BigInteger_LimpSize 4
@@ -65,6 +72,7 @@
 
 // The limp order used by the big integer implementation is little endian.
 #define Arcadia_Configuration_BigInteger_LimpOrder Arcadia_Configuration_BigInteger_LimpOrder_LittleEndian
+
 
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_CONFIGURE_H_INCLUDED

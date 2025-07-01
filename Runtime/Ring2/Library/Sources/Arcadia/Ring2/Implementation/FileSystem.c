@@ -30,9 +30,40 @@
   #include <errno.h> // errno
   #include <unistd.h> // getcwd
   #include <linux/limits.h> // PATH_MAX
+  #include <pwd.h> // struct passwd
 #else
   #error("operating system not (yet) supported")
 #endif
+
+#if Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+
+static Arcadia_FilePath*
+Arcadia_FileSystem_getHomeFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+#endif
+
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+
+static Arcadia_FilePath*
+Arcadia_FileSystem_getLocal
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+static Arcadia_FilePath*
+Arcadia_FileSystem_getRoaming
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+#endif
+
 
 static void
 Arcadia_FileSystem_constructImpl
@@ -312,6 +343,165 @@ Arcadia_FileSystem_getWorkingDirectory
     Arcadia_Thread_jump(thread);
   }
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseUnix(thread, cwd, strlen(cwd));
+  return filePath;
+#else
+  #error("environment not (yet) supported")
+#endif
+}
+
+#if Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+
+static Arcadia_FilePath*
+Arcadia_FileSystem_getHomeFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  )
+{
+  size_t n = sysconf(_SC_GETPW_R_SIZE_MAX);
+  if (n == -1) {
+    n = 0x4000; // = all zeroes with the 14th bit set (1 << 14)
+  }
+  char* p = malloc(n);
+  if (NULL == p) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  struct passwd pwd;
+  struct passwd* ppwd;
+  int s = getpwuid_r(getuid(), &pwd, p, n, &ppwd);
+  if (ppwd == NULL) {
+    // if s is 0 the no entry for this user id was found.
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_FilePath* filePath = NULL;
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_FilePath_parseUnix(thread, ppwd->pw_dir, strlen(ppwd->pw_dir));
+    Arcadia_Thread_popJumpTarget(thread);
+    free(p);
+    p = NULL;
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    free(p);
+    p = NULL;
+    Arcadia_Thread_jump(thread);
+  }
+  return filePath;
+}
+
+#endif
+
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+
+#include <Shlobj.h>
+
+static Arcadia_FilePath*
+Arcadia_FileSystem_getLocal
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  )
+{
+  PWSTR p = NULL;
+  HRESULT hResult = SHGetKnownFolderPath(&FOLDERID_LocalAppData, 0, NULL, &p);
+  if (FAILED(hResult)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_FilePath* filePath = NULL;
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    filePath = Arcadia_FilePath_parseWindows(thread, p, wcslen(p));
+    Arcadia_Thread_popJumpTarget(thread);
+    CoTaskMemFree(p);
+    p = NULL;
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    CoTaskMemFree(p);
+    p = NULL;
+    Arcadia_Thread_jump(thread);
+  }
+  return filePath;
+}
+
+static Arcadia_FilePath*
+Arcadia_FileSystem_getRoaming
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  )
+{
+  PWSTR p = NULL;
+  HRESULT hResult = SHGetKnownFolderPath(&FOLDERID_RoamingAppData, 0, NULL, &p);
+  if (FAILED(hResult)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_FilePath* filePath = NULL;
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    filePath = Arcadia_FilePath_parseWindows(thread, p, wcslen(p));
+    Arcadia_Thread_popJumpTarget(thread);
+    CoTaskMemFree(p);
+    p = NULL;
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    CoTaskMemFree(p);
+    p = NULL;
+    Arcadia_Thread_jump(thread);
+  }
+  return filePath;
+}
+
+#endif
+
+// Get the folder in which configuration files are stored.
+// The following table lists the values for a given operating system
+// - Windows: `C:\Users\<Username>\AppData\Local\<Organization Name>\<Game Name>`
+// - Linux: `<Home>\<Organization Name>\<Game Name>`
+Arcadia_FilePath*
+Arcadia_FileSystem_getConfigurationFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  )
+{
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+  Arcadia_FilePath* filePath = Arcadia_FileSystem_getLocal(thread, self);
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia", sizeof(u8"Michael Heilmann's Arcadia") - 1));
+  return filePath;
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  Arcadia_FilePath* filePath = Arcadia_FileSystem_getHomeFolder(thread, self);
+  Arcadia_FilePath_append(thread, Arcadia_FileSystem_getHomeFolder(thread, self), Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia", sizeof(u8"Michael Heilmann's Arcadia") - 1));
+  return filePath;
+#else
+  #error("environment not (yet) supported")
+#endif
+}
+
+// Get the folder in which save files are stored.
+// The following table lists the values for a given operating system
+// - Windows: `C:\Users\<Username>\AppData\Roaming\<Organization Name>\<Game Name>`
+// - Linux: `<Home>\<Organization Name>\<Game Name>`
+Arcadia_FilePath*
+Arcadia_FileSystem_getSaveFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  )
+{
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+  Arcadia_FilePath* filePath = Arcadia_FileSystem_getRoaming(thread, self);
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia", sizeof(u8"Michael Heilmann's Arcadia") - 1));
+  return filePath;
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  Arcadia_FilePath* filePath  = Arcadia_FileSystem_getHomeFolder(thread, self);
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia", sizeof(u8"Michael Heilmann's Arcadia") - 1));
   return filePath;
 #else
   #error("environment not (yet) supported")

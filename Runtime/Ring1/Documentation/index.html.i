@@ -53,6 +53,14 @@
 @{include("unicode-functions/Arcadia_Unicode_encodeCodePointsUtf8.i")}
 @{include("unicode-functions/Arcadia_Unicode_isUtf8.i")}
 
+<h2>Memory functions</h2>
+@{include("memory-functions/Memory_allocateUnmanaged.i")}
+@{include("memory-functions/Memory_compare.i")}
+@{include("memory-functions/Memory_copy.i")}
+@{include("memory-functions/Memory_deallocateUnmanaged.i")}
+@{include("memory-functions/Memory_fill.i")}
+@{include("memory-functions/Memory_reallocateUnmanaged.i")}
+
 <h2>Miscellaneous functions</h2>
 @{include("miscellaneous-functions/getNumberOfCores.i")}
 @{include("miscellaneous-functions/getPageSize.i")}

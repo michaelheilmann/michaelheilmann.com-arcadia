@@ -104,7 +104,7 @@ Arcadia_DataDefinitionLanguage_StringTable_constructImpl
   _self->size = Arcadia_SizeValue_Literal(0);
   _self->capacity = Arcadia_SizeValue_Literal(0);
   static Arcadia_SizeValue const g_defaultCapacity = 8;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&_self->buckets, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node*) * g_defaultCapacity);
+  _self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node*) * g_defaultCapacity);
   for (Arcadia_SizeValue i = 0, n = g_defaultCapacity; i < n; ++i) {
     _self->buckets[i] = NULL;
   }
@@ -136,7 +136,7 @@ Arcadia_DataDefinitionLanguage_StringTable_maybeResize_nojump
       }
       Arcadia_DataDefinitionLanguage_StringTable_Node** oldBuckets = self->buckets;
       Arcadia_DataDefinitionLanguage_StringTable_Node** newBuckets = NULL;
-      Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&newBuckets, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node*) * newCapacity);
+      newBuckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node*) * newCapacity);
       for (Arcadia_SizeValue i = 0, n = newCapacity; i < n; ++i) {
         newBuckets[i] = NULL;
       }
@@ -151,7 +151,7 @@ Arcadia_DataDefinitionLanguage_StringTable_maybeResize_nojump
           newBuckets[newIndex] = node;
         }
       }
-      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), oldBuckets);
+      Arcadia_Memory_deallocateUnmanaged(thread, oldBuckets);
       self->buckets = newBuckets;
       self->capacity = newCapacity;
       Arcadia_Thread_popJumpTarget(thread);
@@ -204,7 +204,7 @@ Arcadia_DataDefinitionLanguage_StringTable_destruct
     while (self->buckets[i]) {
       Arcadia_DataDefinitionLanguage_StringTable_Node* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), node);
+      Arcadia_Memory_deallocateUnmanaged(thread, node);
     }
   }
 }
@@ -235,7 +235,7 @@ Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString
   for (Arcadia_DataDefinitionLanguage_StringTable_Node* node = self->buckets[index]; NULL != node; node = node->next) {
     Arcadia_Value nodeValue = Arcadia_Value_makeObjectReferenceValue(node->string);
     if (Arcadia_Value_getHash(thread, &nodeValue) == hash && Arcadia_String_getNumberOfBytes(thread, node->string)) {
-      if (!Arcadia_Process_compareMemory(Arcadia_Thread_getProcess(thread), Arcadia_String_getBytes(thread, node->string), Arcadia_StringBuffer_getBytes(thread, stringBuffer), Arcadia_String_getNumberOfBytes(thread, node->string))) {
+      if (!Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, node->string), Arcadia_StringBuffer_getBytes(thread, stringBuffer), Arcadia_String_getNumberOfBytes(thread, node->string))) {
         return node->string;
       }
     }
@@ -243,8 +243,7 @@ Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString
   Arcadia_Value temporary;
   Arcadia_Value_setObjectReferenceValue(&temporary, stringBuffer);
   Arcadia_String* string = Arcadia_String_create(thread, temporary);
-  Arcadia_DataDefinitionLanguage_StringTable_Node* node = NULL;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &node, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node));
+  Arcadia_DataDefinitionLanguage_StringTable_Node* node = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node));
   node->string = string;
   node->next = self->buckets[index];
   self->buckets[index] = node;

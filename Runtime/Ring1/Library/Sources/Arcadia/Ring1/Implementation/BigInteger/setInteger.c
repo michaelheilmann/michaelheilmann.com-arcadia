@@ -33,7 +33,7 @@ Arcadia_BigInteger_setInteger16
   if (!other) {
     Arcadia_BigInteger_setZero(thread, self);
   } else {
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Arcadia_BigInteger_Limp) * 1);
+    Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * 1);
     self->limps[0] = other < 0 ? -(Arcadia_Integer32Value)other : other;
     self->numberOfLimps = 1;
     self->sign = other ? (other < 0 ? -1 : +1) : 0;
@@ -55,7 +55,7 @@ Arcadia_BigInteger_setInteger32
   if (!other) {
     Arcadia_BigInteger_setZero(thread, self);
   } else {
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Arcadia_BigInteger_Limp) * 1);
+    Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * 1);
     self->limps[0] = other < 0 ? -(Arcadia_Integer64Value)other : other;
     self->numberOfLimps = 1;
     self->sign = other ? (other < 0 ? -1 : +1) : 0;
@@ -87,12 +87,12 @@ Arcadia_BigInteger_setInteger64
     Arcadia_BigInteger_Limp hi = (other & 0xffffffff0000ffff) >> 32;
     Arcadia_BigInteger_Limp lo = (other & 0x00000000ffffffff) >> 0;
     if (hi) {
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Arcadia_BigInteger_Limp) * 2);
+      Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * 2);
       self->limps[1] = hi;
       self->limps[0] = lo;
       self->numberOfLimps = 2;
     } else {
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Arcadia_BigInteger_Limp) * 1);
+      Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * 1);
       self->limps[0] = lo;
       self->numberOfLimps = 1;
     }
@@ -114,7 +114,7 @@ Arcadia_BigInteger_setInteger8
   if (!other) {
     Arcadia_BigInteger_setZero(thread, self);
   } else {
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Arcadia_BigInteger_Limp) * 1);
+    Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * 1);
     self->limps[0] = other < 0 ? -(Arcadia_Integer16Value)other : other;
     self->numberOfLimps = 1;
     self->sign = other ? (other < 0 ? -1 : +1) : 0;

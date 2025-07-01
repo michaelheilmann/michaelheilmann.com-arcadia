@@ -27,9 +27,9 @@
 
 typedef float Arcadia_Real32Value;
 
-#define Arcadia_Real32Value_Minimum (-FLOAT_MAX)
+#define Arcadia_Real32Value_Minimum (-FLT_MAX)
 
-#define Arcadia_Real32Value_Maximum (+FLOAT_MAX)
+#define Arcadia_Real32Value_Maximum (+FLT_MAX)
 
 #define Arcadia_Real32Value_NumberOfBytes (sizeof(float))
 Arcadia_StaticAssert(Arcadia_Real32Value_NumberOfBytes == 4, "Arcadia.Real32Value.NumberOfByes must be 4");

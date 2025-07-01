@@ -28,7 +28,7 @@ testFixtureStringToInteger64
     Arcadia_SizeValue n
   )
 {
-  if (n > SIZE_MAX - 1) {
+  if (n > Arcadia_SizeValue_Maximum - 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_ProcessStatus_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }

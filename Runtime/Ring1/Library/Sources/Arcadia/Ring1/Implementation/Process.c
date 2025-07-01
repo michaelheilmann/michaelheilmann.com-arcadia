@@ -276,6 +276,7 @@ Arcadia_Process_get
   return Arcadia_ProcessStatus_Success;
 }
 
+#if 0
 void
 Arcadia_Process_fillMemory
   (
@@ -293,7 +294,9 @@ Arcadia_Process_fillMemory
   }
   memset(p, v, n);
 }
+#endif
 
+#if 0
 void
 Arcadia_Process_copyMemory
   (
@@ -334,7 +337,9 @@ Arcadia_Process_copyMemory
     memcpy(p, q, n);
   }
 }
+#endif
 
+#if 0
 Arcadia_Integer32Value
 Arcadia_Process_compareMemory
   (
@@ -350,16 +355,18 @@ Arcadia_Process_compareMemory
   }
   return memcmp(p, q, n);
 }
+#endif
 
-void
+#if 0
+void*
 Arcadia_Process_allocateUnmanaged
   (
     Arcadia_Process* process,
-    void** p,
     size_t n
   )
 {
-  Arcadia_Arms_Status status = Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), p, n);
+  void* q = NULL;
+  Arcadia_Arms_Status status = Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), &q, n);
   if (status) {
     if (status == Arcadia_Arms_Status_ArgumentValueInvalid) {
       Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
@@ -370,8 +377,11 @@ Arcadia_Process_allocateUnmanaged
     }
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
+  return q;
 }
+#endif
 
+#if 0
 void
 Arcadia_Process_deallocateUnmanaged
   (
@@ -389,7 +399,9 @@ Arcadia_Process_deallocateUnmanaged
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
 }
+#endif
 
+#if 0
 void
 Arcadia_Process_reallocateUnmanaged
   (
@@ -410,6 +422,7 @@ Arcadia_Process_reallocateUnmanaged
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
 }
+#endif
 
 void
 Arcadia_Process_visitObject
@@ -559,8 +572,7 @@ Arcadia_Process_addArmsPreMarkCallback
     Arcadia_Process_PreMarkCallback* callback
   )
 {
-  ArmsCallbackNode* armsCallbackNode = NULL;
-  Arcadia_Process_allocateUnmanaged(process, &armsCallbackNode, sizeof(ArmsCallbackNode));
+  ArmsCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ArmsCallbackNode));
   armsCallbackNode->onFinalize = NULL;
   armsCallbackNode->onPreMark = callback;
   armsCallbackNode->onVisit = NULL;
@@ -581,7 +593,7 @@ Arcadia_Process_removeArmsPreMarkCallback
     if (current->onPreMark == callback) {
       *previous = current->next;
       ArmsCallbackNode* node = current;
-      Arcadia_Process_deallocateUnmanaged(process, node);
+      Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), node);
       break;
     } else {
       previous = &current->next;
@@ -597,8 +609,7 @@ Arcadia_Process_addArmsVisitCallback
     Arcadia_Process_VisitCallback* callback
   )
 {
-  ArmsCallbackNode* armsCallbackNode = NULL;
-  Arcadia_Process_allocateUnmanaged(process, &armsCallbackNode, sizeof(ArmsCallbackNode));
+  ArmsCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ArmsCallbackNode));
   armsCallbackNode->onFinalize = NULL;
   armsCallbackNode->onPreMark = NULL;
   armsCallbackNode->onVisit = callback;
@@ -619,7 +630,7 @@ Arcadia_Process_removeArmsVisitCallback
     if (current->onVisit == callback) {
       *previous = current->next;
       ArmsCallbackNode* node = current;
-      Arcadia_Process_deallocateUnmanaged(process, node);
+      Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), node);
       break;
     } else {
       previous = &current->next;
@@ -635,8 +646,7 @@ Arcadia_Process_addArmsFinalizeCallback
     Arcadia_Process_FinalizeCallback* callback
   )
 {
-  ArmsCallbackNode* armsCallbackNode = NULL;
-  Arcadia_Process_allocateUnmanaged(process, &armsCallbackNode, sizeof(ArmsCallbackNode));
+  ArmsCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ArmsCallbackNode));
   armsCallbackNode->onFinalize = callback;
   armsCallbackNode->onPreMark = NULL;
   armsCallbackNode->onVisit = NULL;
@@ -657,7 +667,7 @@ Arcadia_Process_removeArmsFinalizeCallback
     if (current->onFinalize == callback) {
       *previous = current->next;
       ArmsCallbackNode* node = current;
-      Arcadia_Process_deallocateUnmanaged(process, node);
+      Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), node);
       break;
     } else {
       previous = &current->next;

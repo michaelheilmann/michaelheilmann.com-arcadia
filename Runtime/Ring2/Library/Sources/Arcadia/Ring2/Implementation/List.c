@@ -116,7 +116,7 @@ Arcadia_List_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->elements, sizeof(Arcadia_Value) * newCapacity);
+  Arcadia_Memory_reallocateUnmanaged(thread, &self->elements, sizeof(Arcadia_Value) * newCapacity);
   self->capacity = newCapacity;
 }
 
@@ -162,7 +162,7 @@ Arcadia_List_constructImpl
   _self->capacity = 0;
   _self->size = 0;
   _self->capacity = g_minimumCapacity;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->elements, sizeof(Arcadia_Value) * _self->capacity);
+  _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * _self->capacity);
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
   }
@@ -177,7 +177,7 @@ Arcadia_List_destruct
   )
 {
   if (self->elements) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->elements);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->elements);
     self->elements = NULL;
   }
 }
@@ -264,8 +264,8 @@ Arcadia_List_insertAt
     Arcadia_List_ensureFreeCapacity(thread, self, Arcadia_SizeValue_Literal(1));
   }
   if (index < self->size) {
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + index + 1,
-                               self->elements + index + 0, sizeof(Arcadia_Value) * (self->size - index));
+    Arcadia_Memory_copy(thread, self->elements + index + 1,
+                        self->elements + index + 0, sizeof(Arcadia_Value) * (self->size - index));
   }
   self->elements[index] = value;
   self->size++;
@@ -310,8 +310,8 @@ Arcadia_List_removeAt
   Arcadia_SizeValue tailLength = (self->size - index) - count;
   if (tailLength) {
     Arcadia_SizeValue tailStart = index + count;
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->elements + index,
-                               self->elements + tailStart, tailLength * sizeof(Arcadia_Value));
+    Arcadia_Memory_copy(thread, self->elements + index,
+                        self->elements + tailStart, tailLength * sizeof(Arcadia_Value));
   }
   self->size -= count;
 }

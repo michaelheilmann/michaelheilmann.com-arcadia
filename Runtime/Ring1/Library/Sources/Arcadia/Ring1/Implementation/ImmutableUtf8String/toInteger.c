@@ -16,10 +16,12 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toInteger.h"
 
-#include "Arcadia/Ring1/Implementation/NumberLiteral.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/NumeralParser.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/NumberLiteral.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/safeAdd.h"
+#include "Arcadia/Ring1/Implementation/safeMultiply.h"
 #include "Arcadia/Ring1/Implementation/Thread.h"
 
 static Arcadia_Integer64Value
@@ -66,17 +68,17 @@ _toInteger64Internal
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
         Arcadia_Thread_jump(thread);
       }
-      v = v * i;
+      v = v * 10;
       i--;
     }
     // If we cannot subtract w from v, then this number is not representable.
-    if (v < Arcadia_Integer16Value_Minimum + w) {
+    if (v < Arcadia_Integer64Value_Minimum + w) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
       Arcadia_Thread_jump(thread);
     }
     v -= w;
   }
-  if (_Unicode_CodePoint_End != state->codePoint) {
+  if (!isEnd(state)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);
   }

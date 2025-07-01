@@ -47,6 +47,8 @@
 
 #include "Arcadia/Ring1/Implementation/makeBitmask.h"
 
+#include "Arcadia/Ring1/Implementation/Memory.h"
+
 #include "Arcadia/Ring1/Implementation/Natural16.h"
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural64.h"

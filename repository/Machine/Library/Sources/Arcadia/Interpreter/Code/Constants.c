@@ -100,7 +100,7 @@ constructImpl
   _self->p = NULL;
   _self->sz = 0;
   _self->cp = 0;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->p, 0);
+  _self->p = Arcadia_Memory_allocateUnmanaged(thread, 0);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -112,7 +112,7 @@ destructImpl
   )
 {
   if (self->p) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->p);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->p);
     self->p = NULL;
   }
 }

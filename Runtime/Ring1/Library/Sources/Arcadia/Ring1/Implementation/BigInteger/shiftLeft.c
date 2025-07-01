@@ -117,9 +117,9 @@ Arcadia_BigInteger_shiftLeftNatural64
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread),
-                                        &self->limps,
-                                        sizeof(Arcadia_BigInteger_Limp) * (limpsToAllocate));
+    Arcadia_Memory_reallocateUnmanaged(thread,
+                                       &self->limps,
+                                       sizeof(Arcadia_BigInteger_Limp) * (limpsToAllocate));
     // Shift the limps [0, n) up by limpShift.
     while (sourceIndex > 0) {
       self->limps[targetIndex] = self->limps[sourceIndex];
@@ -144,9 +144,9 @@ Arcadia_BigInteger_shiftLeftNatural64
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread),
-                                        &self->limps,
-                                        sizeof(Arcadia_BigInteger_Limp) * (limpsToAllocate));
+    Arcadia_Memory_reallocateUnmanaged(thread,
+                                       &self->limps,
+                                       sizeof(Arcadia_BigInteger_Limp) * (limpsToAllocate));
 
     // 
     Arcadia_SizeValue lowBitsShift = (Arcadia_BigInteger_BitsPerLimp - bitShift);

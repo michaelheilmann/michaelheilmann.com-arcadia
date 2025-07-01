@@ -55,7 +55,7 @@ Arcadia_BigInteger_add3
 
     // The output will be at least as long a the largest input.
     Arcadia_BigInteger* temporary = Arcadia_BigInteger_create(thread);
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * largeLength);
+    Arcadia_Memory_reallocateUnmanaged(thread, &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * largeLength);
     temporary->numberOfLimps = largeLength;
 
     Arcadia_BigInteger_DoubleLimp carry = 0;
@@ -78,7 +78,7 @@ Arcadia_BigInteger_add3
 
     if (carry) {
       // If there is stil a cary, we must append a limp.
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * (temporary->numberOfLimps + 1));
+      Arcadia_Memory_reallocateUnmanaged(thread, &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * (temporary->numberOfLimps + 1));
       temporary->limps[index] = carry;
       temporary->numberOfLimps++;
     }
@@ -108,7 +108,7 @@ Arcadia_BigInteger_add3
 
     // The output will be at least as long a the largest input.
     Arcadia_BigInteger* temporary = Arcadia_BigInteger_create(thread);
-    Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * largeLength);
+    Arcadia_Memory_reallocateUnmanaged(thread, &temporary->limps, sizeof(Arcadia_BigInteger_Limp) * largeLength);
     temporary->numberOfLimps = largeLength;
 
     // Invariant magnitude(large) >= magnitude(small).

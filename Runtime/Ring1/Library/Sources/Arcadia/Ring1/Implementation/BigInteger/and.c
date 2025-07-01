@@ -48,32 +48,32 @@ Arcadia_BigInteger_and3
       Arcadia_BigInteger_toTwosComplement(thread, a, &x, &xl);
       Arcadia_BigInteger_toTwosComplement(thread, b, &y, &yl);
       zl = Arcadia_maximumSizeValue(thread, xl, yl);
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &z, sizeof(Arcadia_BigInteger_Limp) * zl);
+      Arcadia_Memory_reallocateUnmanaged(thread, &z, sizeof(Arcadia_BigInteger_Limp) * zl);
       for (Arcadia_SizeValue i = 0; i < zl; ++i) {
         Arcadia_BigInteger_Limp xu = i < xl ? x[i] : xextension;
         Arcadia_BigInteger_Limp yu = i < yl ? y[i] : yextension;
         z[i] = xu & yu;
       }
       Arcadia_BigInteger_fromTwosComplement(thread, result, z, zl);
-      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), z);
+      Arcadia_Memory_deallocateUnmanaged(thread, z);
       z = NULL;
-      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), y);
+      Arcadia_Memory_deallocateUnmanaged(thread, y);
       y = NULL;
-      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), x);
+      Arcadia_Memory_deallocateUnmanaged(thread, x);
       x = NULL;
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
       if (z) {
-        Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), z);
+        Arcadia_Memory_deallocateUnmanaged(thread, z);
         z = NULL;
       }
       if (y) {
-        Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), y);
+        Arcadia_Memory_deallocateUnmanaged(thread, y);
         y = NULL;
       }
       if (x) {
-        Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), x);
+        Arcadia_Memory_deallocateUnmanaged(thread, x);
         x = NULL;
       }
       Arcadia_Thread_jump(thread);

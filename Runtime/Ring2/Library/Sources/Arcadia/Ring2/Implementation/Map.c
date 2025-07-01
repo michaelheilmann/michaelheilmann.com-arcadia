@@ -131,8 +131,7 @@ Arcadia_Map_ensureFreeCapacity
     newAvailableFreeCapacity = newCapacity - self->size;
   }
   Node** oldBuckets = self->buckets;
-  Node** newBuckets = NULL;
-  Arcadia_Process_allocateUnmanaged(process, (void**)&newBuckets, sizeof(Node*) * newCapacity);
+  Node** newBuckets = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(Node*) * newCapacity);
   for (Arcadia_SizeValue i = 0, n = newCapacity; i < n; ++i) {
     newBuckets[i] = NULL;
   }
@@ -145,7 +144,7 @@ Arcadia_Map_ensureFreeCapacity
       newBuckets[j] = node;
     }
   }
-  Arcadia_Process_deallocateUnmanaged(process, oldBuckets);
+  Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), oldBuckets);
   self->buckets = newBuckets;
   self->capacity = newCapacity;
 }
@@ -181,12 +180,12 @@ Arcadia_Map_destruct
     while (self->buckets[i]) {
       Node* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), node);
+      Arcadia_Memory_deallocateUnmanaged(thread, node);
       node = NULL;
     }
   }
   if (self->buckets) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->buckets);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->buckets);
     self->buckets = NULL;
   }
 }
@@ -232,7 +231,7 @@ Arcadia_Map_constructImpl
   _self->capacity = 0;
   _self->size = 0;
   _self->capacity = g_minimumCapacity;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&_self->buckets, sizeof(Node*) * _self->capacity);
+  _self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Node*) * _self->capacity);
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     _self->buckets[i] = NULL;
   }
@@ -279,7 +278,7 @@ Arcadia_Map_clear
     while (self->buckets[i]) {
       Node* node = self->buckets[i];
       self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), node);
+      Arcadia_Memory_deallocateUnmanaged(thread, node);
       node = NULL;
     }
   }
@@ -319,8 +318,7 @@ Arcadia_Map_set
       }
     }
   }
-  Node* node = NULL;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &node, sizeof(Node));
+  Node* node = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Node));
   node->value = value;
   node->key = key;
   node->hash = hash;

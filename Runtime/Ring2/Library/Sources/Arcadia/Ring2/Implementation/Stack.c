@@ -116,7 +116,7 @@ Arcadia_Stack_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->elements, sizeof(Arcadia_Value) * newCapacity);
+  Arcadia_Memory_reallocateUnmanaged(thread, &self->elements, sizeof(Arcadia_Value) * newCapacity);
   self->capacity = newCapacity;
 }
 
@@ -162,7 +162,7 @@ Arcadia_Stack_constructImpl
   _self->capacity = 0;
   _self->size = 0;
   _self->capacity = g_minimumCapacity;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->elements, sizeof(Arcadia_Value) * _self->capacity);
+  _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * _self->capacity);
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
   }
@@ -177,7 +177,7 @@ Arcadia_Stack_destruct
   )
 {
   if (self->elements) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->elements);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->elements);
     self->elements = NULL;
   }
 }

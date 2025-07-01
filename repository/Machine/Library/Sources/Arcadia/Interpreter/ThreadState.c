@@ -55,19 +55,18 @@ R_Interpreter_ThreadState_create
     Arcadia_Process* process
   )
 {
-  R_Interpreter_ThreadState* thread = NULL;
-  Arcadia_Process_allocateUnmanaged(process, &thread, sizeof(R_Interpreter_ThreadState));
+  R_Interpreter_ThreadState* thread = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(R_Interpreter_ThreadState));
   thread->numberOfRegisters = R_Configuration_DefaultNumberOfRegisters;
 
   Arcadia_JumpTarget jumpTarget;
 
   Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Process_allocateUnmanaged(process, &thread->registers, sizeof(Arcadia_Value) * thread->numberOfRegisters);
+    thread->registers = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(Arcadia_Value) * thread->numberOfRegisters);
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-    Arcadia_Process_deallocateUnmanaged(process, thread);
+    Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), thread);
     thread = NULL;
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
@@ -78,13 +77,13 @@ R_Interpreter_ThreadState_create
 
   Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Process_allocateUnmanaged(process, &thread->calls.elements, sizeof(R_CallState));
+    thread->calls.elements = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(R_CallState));
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-    Arcadia_Process_deallocateUnmanaged(process, thread->registers);
+    Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), thread->registers);
     thread->registers = NULL;
-    Arcadia_Process_deallocateUnmanaged(process, thread);
+    Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), thread);
     thread = NULL;
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
@@ -102,11 +101,11 @@ R_Interpreter_ThreadState_destroy
     R_Interpreter_ThreadState* thread
   )
 {
-  Arcadia_Process_deallocateUnmanaged(process, thread->calls.elements);
+  Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), thread->calls.elements);
   thread->calls.elements = NULL;
-  Arcadia_Process_deallocateUnmanaged(process, thread->registers);
+  Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), thread->registers);
   thread->registers = NULL;
-  Arcadia_Process_deallocateUnmanaged(process, thread);
+  Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), thread);
   thread = NULL;
 }
 

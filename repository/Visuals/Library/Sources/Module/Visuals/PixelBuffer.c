@@ -332,8 +332,8 @@ Arcadia_Visuals_PixelBuffer_constructImpl
     _self->pixelFormat = Arcadia_Visuals_PixelBuffer_getPixelFormat(thread, other);
     Arcadia_SizeValue bytesPerPixel = Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, other);
     Arcadia_SizeValue bytes = (bytesPerPixel * _self->numberOfColumns + _self->linePadding) * _self->numberOfRows;
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->bytes, bytes);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), _self->bytes, other->bytes, bytes);
+    _self->bytes = Arcadia_Memory_allocateUnmanaged(thread, bytes);
+    Arcadia_Memory_copy(thread, _self->bytes, other->bytes, bytes);
     Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
   } else if (4 == numberOfArgumentValues) {
     Arcadia_TypeValue _type = _Arcadia_Visuals_PixelBuffer_getType(thread);
@@ -382,7 +382,7 @@ Arcadia_Visuals_PixelBuffer_constructImpl
         Arcadia_Thread_jump(thread);
       } break;
     };
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &_self->bytes, (_self->numberOfColumns * bytesPerPixel + _self->linePadding) * _self->numberOfRows);
+    _self->bytes = Arcadia_Memory_allocateUnmanaged(thread, (_self->numberOfColumns * bytesPerPixel + _self->linePadding) * _self->numberOfRows);
     switch (_self->pixelFormat) {
       case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
@@ -444,7 +444,7 @@ Arcadia_Visuals_PixelBuffer_destruct
   )
 {
   if (self->bytes) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->bytes);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->bytes);
     self->bytes = NULL;
   }
 }
@@ -481,7 +481,7 @@ Arcadia_Visuals_PixelBuffer_setPixelFormat
   Arcadia_Natural8Value* sourceBytes = self->bytes;
   Arcadia_Natural8Value* targetBytes = NULL;
   if (sourceNumberOfBytesPerPixel != targetNumberOfBytesPerPixel) {
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &targetBytes, (self->numberOfColumns * sourceNumberOfBytesPerPixel + self->linePadding) * self->numberOfRows);
+    targetBytes = Arcadia_Memory_allocateUnmanaged(thread, (self->numberOfColumns * sourceNumberOfBytesPerPixel + self->linePadding) * self->numberOfRows);
   } else {
     targetBytes = self->bytes;
   }
@@ -498,7 +498,7 @@ Arcadia_Visuals_PixelBuffer_setPixelFormat
     }
   }
   if (sourceNumberOfBytesPerPixel != targetNumberOfBytesPerPixel) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), sourceBytes);
+    Arcadia_Memory_deallocateUnmanaged(thread, sourceBytes);
     self->bytes = targetBytes;
   }
   self->pixelFormat = pixelFormat;
@@ -549,13 +549,13 @@ Arcadia_Visuals_PixelBuffer_setLinePadding
     Arcadia_Integer32Value newLinePadding = linePadding;
     Arcadia_Natural8Value* oldBytes = self->bytes;
     Arcadia_Natural8Value* newBytes = NULL;
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &newBytes, (self->numberOfColumns * bytesPerPixel + newLinePadding) * self->numberOfRows);
+    newBytes = Arcadia_Memory_allocateUnmanaged(thread, (self->numberOfColumns * bytesPerPixel + newLinePadding) * self->numberOfRows);
     for (Arcadia_SizeValue rowIndex = 0; rowIndex < self->numberOfRows; ++rowIndex) {
       Arcadia_Natural8Value* oldLine = oldBytes + rowIndex * (self->numberOfColumns * bytesPerPixel + oldLinePadding);
       Arcadia_Natural8Value* newLine = newBytes + rowIndex * (self->numberOfColumns * bytesPerPixel + newLinePadding);
-      Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), newLine, oldLine, self->numberOfColumns * bytesPerPixel);
+      Arcadia_Memory_copy(thread, newLine, oldLine, self->numberOfColumns * bytesPerPixel);
     }
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), oldBytes);
+    Arcadia_Memory_deallocateUnmanaged(thread, oldBytes);
     self->bytes = newBytes;
     self->linePadding = linePadding;
   }

@@ -16,12 +16,12 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toNatural.h"
 
-#include "Arcadia/Ring1/Implementation/NumberLiteral.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/NumeralParser.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
-#include "Arcadia/Ring1/Implementation/safeMultiply.h"
-#include "Arcadia/Ring1/Implementation/safeAdd.h"
+#include "Arcadia/Ring1/Implementation/NumberLiteral.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/safeAdd.h"
+#include "Arcadia/Ring1/Implementation/safeMultiply.h"
 #include "Arcadia/Ring1/Implementation/Thread.h"
 
 static Arcadia_Natural64Value
@@ -31,38 +31,64 @@ _toNatural64Internal
     _State* state
   )
 {
-  static const Arcadia_Natural64Value BASE = 10;
+  static const Arcadia_Natural64Value baseTen = 10;
   // The maximum decimal value of an Arcadia_Natural64Value is +18,446,744,073,709,551,615. These are 20 decimal digits.
   // The minimum decimal value of an Arcadia_Integer64Value is +0. This 1 one decimal digit.
   // 19 = 20 - 1 is the number of decimal digits which always fit into an Arcadia_Integer64Value.
-  static const Arcadia_SizeValue SAFEDIGITSBASE10 = 19;
+  static const Arcadia_SizeValue safeDigitsBaseTen = 19;
   next(state);
   if (isPlus(state)) {
     next(state);
   }
-  // Skip leading zeroes.
-  while (isZero(state)) {
-    next(state);
-  }
+  static const Arcadia_Natural64Value powersOfTen[] = {
+    Arcadia_Natural64Value_Literal(1),
+    Arcadia_Natural64Value_Literal(10),
+    Arcadia_Natural64Value_Literal(100),
+
+    Arcadia_Natural64Value_Literal(1000),
+    Arcadia_Natural64Value_Literal(10000),
+    Arcadia_Natural64Value_Literal(100000),
+
+    Arcadia_Natural64Value_Literal(1000000),
+    Arcadia_Natural64Value_Literal(10000000),
+    Arcadia_Natural64Value_Literal(100000000),
+
+    Arcadia_Natural64Value_Literal(1000000000),
+    Arcadia_Natural64Value_Literal(10000000000),
+    Arcadia_Natural64Value_Literal(100000000000),
+
+    Arcadia_Natural64Value_Literal(1000000000000),
+    Arcadia_Natural64Value_Literal(10000000000000),
+    Arcadia_Natural64Value_Literal(100000000000000),
+
+    Arcadia_Natural64Value_Literal(1000000000000000),
+    Arcadia_Natural64Value_Literal(10000000000000000),
+    Arcadia_Natural64Value_Literal(100000000000000000),
+
+    Arcadia_Natural64Value_Literal(1000000000000000000),
+  };
   Arcadia_Natural64Value v = 0;
   if (!isDigit(state)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);
   }
+  // Skip leading zeroes.
+  while (isZero(state)) {
+    next(state);
+  }
   while (isDigit(state)) {
     Arcadia_Natural64Value w = 0;
     // We accumulate up to 19 decimal digits in w.
-    Arcadia_SizeValue i = 0, n = SAFEDIGITSBASE10;
+    Arcadia_SizeValue i = 0, n = safeDigitsBaseTen;
     for (; isDigit(state) && i < n; ++i) {
       Arcadia_Natural64Value digit = (Arcadia_Natural64Value)(state->codePoint - '0');
-      w = w * BASE + digit;
+      w = w * baseTen + digit;
       next(state);
     }
-    // Multiply v by the number of digits accumulated in w, then add w to v.
+    // Multiply v by 10 raised to the power equal to the number of digits accumulated in w, then add w to v.
     // Both operations might overflow.
     Arcadia_Natural64Value hi;
-    Arcadia_safeMultiplyNatural64Value(thread, v, i, &hi, &v);
-    if (hi) {
+    if (!Arcadia_safeMultiplyNatural64Value(thread, v, powersOfTen[i], &hi, &v)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
       Arcadia_Thread_jump(thread);
     }

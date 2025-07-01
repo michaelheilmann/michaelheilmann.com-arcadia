@@ -24,8 +24,14 @@
 #include "Arcadia/Ring1/Implementation/Real64.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 
+// @brief Convert a Real64 value to an UTF-8 string.
+// @param function A pointer to a function receiving the string.
+// This function is called if a call to this function successfull converted the specified Real32 value @a value to an UTF-8 string.
+// It receives as its first argument and second argument @a thread and @a context passed to the call.
+// The third argument is a pointer to a constant array of Bytes. The fourth argument is the number of Bytes in that array.
+// The Bytes are the conversion of the Real32 value @a value to an UTF-8 string.
 void
-Arcadia_Real64_toString
+Arcadia_Real64Value_toUtf8String
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value value,

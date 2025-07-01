@@ -149,12 +149,11 @@ Arcadia_Deque_ensureFreeCapacity
     newAvailableFreeCapacity = newCapacity - self->size;
   }
   Arcadia_Value* oldElements = self->elements;
-  Arcadia_Value* newElements = NULL;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&newElements, sizeof(Arcadia_Value) * newCapacity);
+  Arcadia_Value* newElements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * newCapacity);
   for (Arcadia_SizeValue i = 0, n = self->size; i < n; ++i) {
     newElements[i] = oldElements[MOD(self->read + i, self->capacity)];
   }
-  Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), oldElements);
+  Arcadia_Memory_deallocateUnmanaged(thread, oldElements);
   self->elements = newElements;
   self->capacity = newCapacity;
 }
@@ -187,7 +186,7 @@ Arcadia_Deque_destruct
   )
 {
   if (self->elements) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->elements);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->elements);
     self->elements = NULL;
   }
 }
@@ -224,8 +223,8 @@ Arcadia_Deque_constructImpl
   }
   if (numberOfArgumentValues) {
     Arcadia_Deque* other = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_Deque_getType(thread));
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&_self->elements, sizeof(Arcadia_Value) * other->capacity);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), _self->elements, other->elements, sizeof(Arcadia_Value) * other->capacity);
+    _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * other->capacity);
+    Arcadia_Memory_copy(thread, _self->elements, other->elements, sizeof(Arcadia_Value) * other->capacity);
     _self->read = other->read;
     _self->size = other->size;
     _self->capacity = other->capacity;
@@ -234,7 +233,7 @@ Arcadia_Deque_constructImpl
     _self->read = 0;
     _self->size = 0;
     _self->capacity = g_minimumCapacity;
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), (void**)&_self->elements, sizeof(Arcadia_Value) * _self->capacity);
+    _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * _self->capacity);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }

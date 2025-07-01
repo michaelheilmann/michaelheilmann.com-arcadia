@@ -22,12 +22,12 @@
 #include "Arcadia/Ring1/Implementation/RealToString/TablesReal32.i"
 
 // A floating decimal representing m * 10^e.
-typedef struct floating_decimal_32 {
+typedef struct FloatingDecimal32 {
   bool sign; // true ~ +, false ~ -
   uint32_t mantissa;
   // Decimal exponent's range is -45 to 38 inclusive, and can fit in a short if needed.
   int32_t exponent;
-} floating_decimal_32;
+} FloatingDecimal32;
 
 static inline uint32_t decimalLength9(const uint32_t v) {
   // Function precondition: v is not a 10-digit number.
@@ -100,56 +100,14 @@ mulPowFiveDivPowTwoNatural32
   )
 { return mulShift32(m, REAL32_POW5_SPLIT[q], j); }
 
-typedef struct Buffer {
-  char p[16];
-  size_t n, m;
-} Buffer;
-
-static inline void
-Buffer_init
-  (
-    Arcadia_Thread* thread,
-    Buffer* buffer
-  )
-{
-  buffer->n = 0;
-  buffer->m = 16;
-  Arcadia_Process_fillMemory(Arcadia_Thread_getProcess(thread), buffer->p, 16, 0);
-}
-
-static inline void
-Buffer_uninit
-  (
-    Arcadia_Thread* thread,
-    Buffer* buffer
-  )
-{/* Intentionally empty.*/}
-
-static inline void
-Buffer_append
-  (
-    Arcadia_Thread* thread,
-    Buffer* buffer,
-    const Arcadia_Natural8Value* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-{
-  if (buffer->m - buffer->n < numberOfBytes) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-  }
-  Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), buffer->p + buffer->n, bytes, numberOfBytes);
-  buffer->n += numberOfBytes;
-}
-
 static void
 toChars32
   (
     Arcadia_Thread* thread,
-    floating_decimal_32 const* src,
+    FloatingDecimal32 const* src,
     Buffer* dst
   )
 {
-  int index = 0;
   if (!src->sign) {
     Buffer_append(thread, dst, u8"-", sizeof(u8"-") - 1);
   }
@@ -162,52 +120,43 @@ toChars32
     output /= 10000;
     const uint32_t c0 = (c % 100) << 1;
     const uint32_t c1 = (c / 100) << 1;
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength - i - 1]), DIGIT_TABLE + c0, 2);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength - i - 3]), DIGIT_TABLE + c1, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength - i - 1]), DIGIT_TABLE + c0, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength - i - 3]), DIGIT_TABLE + c1, 2);
     i += 4;
   }
   if (output >= 100) {
-    const uint32_t c = output << 1;
+    const uint32_t c = (output % 100) << 1;
     output /= 100;
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index + outputLength - i - 1]), DIGIT_TABLE + c, 2);
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n + outputLength - i - 1]), DIGIT_TABLE + c, 2);
     i += 2;
   }
   if (output >= 10) {
     const uint32_t c = output << 1;
     // We can't use memcpy here, the decimal dot goes between these two digits.
-    dst->p[index + outputLength - 1] =  DIGIT_TABLE[c + 1];
-    dst->p[index] = DIGIT_TABLE[c];
+    dst->p[dst->n + outputLength - i] =  DIGIT_TABLE[c + 1];
+    dst->p[dst->n] = DIGIT_TABLE[c];
   } else {
-    dst->p[index] = (char)('0' + output);
+    dst->p[dst->n] = (char)('0' + output);
   }
   // Print decimal point if neded.
   if (outputLength > 1) {
-    dst->p[index + 1] = '.';
-    index += outputLength + 1;
+    dst->p[dst->n + 1] = '.';
+    dst->n += outputLength + 1;
   } else {
-    index++;
+    ++dst->n;
   }
   // Print the exponent.
-  dst->p[index++] = 'E';
+  dst->p[dst->n++] = 'E';
   int32_t exp = src->exponent + (int32_t)outputLength - 1;
   if (exp < 0) {
-    dst->p[index++] = '-';
+    dst->p[dst->n++] = '-';
     exp = -exp;
   }
-
-#if 0
-  if (exp >= 100) {
-    const int32_t c = exp % 10;
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index]), DIGIT_TABLE + 2 * (exp / 10), 2);
-    dst->p[index + 2] = (char)('0' + c);
-    index += 3;
-  } else 
-#endif
   if (exp >= 10) {
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), &(dst->p[index]), DIGIT_TABLE + 2 * exp, 2);
-    index += 2;
+    Arcadia_Memory_copy(thread, &(dst->p[dst->n]), DIGIT_TABLE + 2 * exp, 2);
+    dst->n += 2;
   } else {
-    dst->p[index++] = (char)('0' + exp);
+    dst->p[dst->n++] = (char)('0' + exp);
   }
 }
 
@@ -261,8 +210,8 @@ toString32
   // Implicit bool -> int conversion. True is 1, false is 0.
   const uint32_t mmShift = ieeeSignificandBits != 0 || ieeeExponentBits <= 1;
   const uint32_t mv = 4 * m2;
-  const uint32_t mp = 4 * mv + 2;
-  const uint32_t mm = mv - 1 - mmShift;
+  const uint32_t mp = 4 * m2 + 2;
+  const uint32_t mm = 4 * m2 - 1 - mmShift;
 
   uint32_t vr, vp, vm;
   int32_t e10;
@@ -273,7 +222,7 @@ toString32
   if (e2 >= 0) {
     // This expression is slightly faster than max(0, log10Pow2(e2) - 1).
     // e2 becomes 1 if e2 is greater than 3. In the case of e2 greater than 3 lo10Pow2(e2) is at least 1 so the subtraction cannot underflow.
-    const uint32_t q = log10Pow2(e2) - (e2 > 3);
+    const uint32_t q = log10Pow2(e2)/*- (e2 > 3)*/;
     e10 = (int32_t)q;
     const int32_t k = REAL32_POW5_INV_BITCOUNT + pow5bits((int32_t)q) - 1;
     const int32_t i = -e2 + (int32_t)q + k;
@@ -372,7 +321,7 @@ toString32
     output = vr + (vr == vm || lastRemovedDigit >= 5);
   }
   const int32_t exp = e10 + removed;
-  floating_decimal_32 fd;
+  FloatingDecimal32 fd;
   fd.sign = !ieeeSignBits;
   fd.exponent = exp;
   fd.mantissa = output;
@@ -381,7 +330,7 @@ toString32
 }
 
 void
-Arcadia_Real32_toString
+Arcadia_Real32Value_toUtf8String
   (
     Arcadia_Thread* thread,
     Arcadia_Real32Value value,
@@ -390,7 +339,7 @@ Arcadia_Real32_toString
   )
 {
   Buffer buffer;
-  Buffer_init(thread, &buffer);
+  Buffer_init(thread, &buffer, 16);
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -398,6 +347,7 @@ Arcadia_Real32_toString
     toString32(thread, value, &buffer);
     (*function)(thread, context, buffer.p, buffer.n);
     Arcadia_Thread_popJumpTarget(thread);
+    Buffer_uninit(thread, &buffer);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     Buffer_uninit(thread, &buffer);

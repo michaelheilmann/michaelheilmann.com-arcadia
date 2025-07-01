@@ -105,7 +105,7 @@ TypeNodes_create
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Process_allocateUnmanaged(process, &typeNode, sizeof(TypeNodes));
+    typeNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(TypeNodes));
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));

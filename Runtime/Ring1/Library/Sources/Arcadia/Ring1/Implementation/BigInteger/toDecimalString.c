@@ -57,17 +57,17 @@ Arcadia_BigInteger_toDecimalString
         Arcadia_Natural8Value digitValue = Arcadia_BigInteger_toNatural8(thread, remainder) + '0';
         if (i == n) {
           Arcadia_SizeValue a, b;
-          if (Arcadia_safeMultiplySizeValue(thread, n, 2, &a, &b)) {
+          if (!Arcadia_safeMultiplySizeValue(thread, n, 2, &a, &b)) {
             Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
             Arcadia_Thread_jump(thread);
           }
-          Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &p, b);
+          Arcadia_Memory_reallocateUnmanaged(thread, &p, b);
           n = b;
         }
         p[i++] = digitValue;
       } while (!Arcadia_BigInteger_isZero(thread, quotient));
       Arcadia_SizeValue numberOfDigits = i - firstDigitIndex;
-      Arcadia_Process_reverseMemory8(thread, p + firstDigitIndex, numberOfDigits);
+      Arcadia_Memory_reverseMemory8(thread, p + firstDigitIndex, numberOfDigits);
     }
     string = Arcadia_ImmutableUtf8String_create(thread, p, i);
     Arcadia_Thread_popJumpTarget(thread);

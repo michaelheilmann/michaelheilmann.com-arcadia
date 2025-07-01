@@ -22,7 +22,11 @@ add_subdirectory(CountTrailingZeroesTests)
 add_subdirectory(MaximumTests)
 add_subdirectory(MinimumTests)
 add_subdirectory(RealTypesTests)
+
+add_subdirectory(IntegerToStringTests)
+add_subdirectory(NaturalToStringTests)
 add_subdirectory(RealToStringTests)
+
 add_subdirectory(SafeAddTests)
 add_subdirectory(SafeMultiplyTests)
 add_subdirectory(StringToIntegerTests)

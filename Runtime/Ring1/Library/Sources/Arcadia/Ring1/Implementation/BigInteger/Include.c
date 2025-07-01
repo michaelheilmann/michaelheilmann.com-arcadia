@@ -30,7 +30,7 @@ onFinalize
   )
 {
   if (self->limps) {
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), self->limps);
+    Arcadia_Memory_deallocateUnmanaged(thread, self->limps);
     self->limps = NULL;
   }
 }
@@ -61,7 +61,7 @@ Arcadia_BigInteger_create
   self->numberOfLimps = 0;
   self->limps = NULL;
   self->sign = 0;
-  Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Arcadia_BigInteger_Limp) * 0);
+  self->limps = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_BigInteger_Limp) * 0);
   return self;
 }
 
@@ -89,11 +89,10 @@ Arcadia_BigInteger_copy
   )
 {
   if (self != other) {
-    Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
     if (self->numberOfLimps < other->numberOfLimps) {
-      Arcadia_Process_reallocateUnmanaged(process, &self->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
+      Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
     }
-    Arcadia_Process_copyMemory(process, self->limps, other->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
+    Arcadia_Memory_copy(thread, self->limps, other->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
     self->numberOfLimps = other->numberOfLimps;
     self->sign = other->sign;
   }
@@ -408,9 +407,8 @@ Arcadia_BigInteger_toStdoutDebug
     if (Arcadia_BigInteger_isNegative(thread, self)) {
       fprintf(stdout, "-");
     }
-    char* p;
     Arcadia_SizeValue i = 0, n = 1024;
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &p, 1024);
+    char* p = Arcadia_Memory_allocateUnmanaged(thread, 1024);
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -423,7 +421,7 @@ Arcadia_BigInteger_toStdoutDebug
             Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
             Arcadia_Thread_jump(thread);
           }
-          Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &p, m);
+          Arcadia_Memory_reallocateUnmanaged(thread, &p, m);
           n = m;
         }
         p[i++] = (char)(digit + '0');
@@ -438,7 +436,7 @@ Arcadia_BigInteger_toStdoutDebug
       fprintf(stdout, "%s\n", p);
     }
     Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Process_deallocateUnmanaged(Arcadia_Thread_getProcess(thread), p);
+    Arcadia_Memory_deallocateUnmanaged(thread, p);
     p = NULL;
   }
 }

@@ -36,6 +36,17 @@
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+/// @brief Perform a safe multiplication of two Arcadia_Natural(16|32|64|8)Value values.
+/// @param multiplier The multiplier.
+/// @param multiplicand The multiplicand.
+/// @param [out] productHigh A pointer to an Arcadia_Natural(16|32|64|8)Value variable.
+/// @param [out] productLow A pointer to an Arcadia_Natural(16|32|64|8)Value variable.
+/// @return
+/// #Arcadia_BooleanValue_True if the result fits into *productLow.
+/// #Arcadia_BooleanValue_False otherwise.
+/// @post
+/// If the mathemamtical product can be represented by Arcadia_Natural(16|32|64|8)Value then its bits are stored in *productLow, *productHigh is set to zero, and #Arcadia_BooleanValue_True is returned.
+/// Otherwise the upper bits of the mathematical product are stored in *productHigh, its lower bits in *productLow, and #Arcadia_BooleanValue_False is returned.
 Arcadia_BooleanValue
 Arcadia_safeMultiplyNatural16Value
   (
@@ -90,17 +101,19 @@ Arcadia_safeMultiplySizeValue
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/// @brief Perform a safe multiplication of two integer values.
+/// @brief Perform a safe multiplication of two Arcadia_Integer(8|16|32|64)Value values.
 /// @param multiplier The multiplier.
 /// @param multiplicand The multiplicand.
-/// @param [out] product A pointer to an Arcadia_Integer8Value variable.
+/// @param [out] productHigh A pointer to an Arcadia_Integer(8|16|32|64)Value variable.
+/// @param [out] productLow A pointer to an Arcadia_Integer(8|16|32|64)Value variable.
 /// @return
 /// #Arcadia_BooleanValue_True if the result fits into *product.
 /// #Arcadia_BooleanValue_False otherwise.
 /// @post
-/// If this function returns #Arcadia_BooleanValue_True then *product is assigned the mathematical result of the operation.
-/// Otherwise *product represents the mathematical result of the operation wrapped around to the width of *result.if the result fits into *product.
-/// Note: Wrapped around means:
+/// If the mathemamtical product can be represented by Arcadia_Integer(8|16|32|64)Value then its bits are stored in *productLow, *productHigh is set to zero, and #Arcadia_BooleanValue_True is returned.
+/// Otherwise the upper bits of the mathematical product are stored in *productHigh, its lower bits in *productLow, and #Arcadia_BooleanValue_False is returned.
+/// @remarks
+/// Wrapped around means:
 /// If an integer multiplication overflows, then the result is the low-order bits of the mathematical product as represented in some sufficiently large two's-complement format.
 /// As a result, if overflow occurs, then the sign of the result may not be the same as the sign of the mathematical product of the two operand values.
 Arcadia_BooleanValue

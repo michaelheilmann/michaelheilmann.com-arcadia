@@ -43,7 +43,7 @@ Arcadia_BigInteger_fromTwosComplement
       Arcadia_BigInteger_setZero(thread, self);
     } else {
       // We can copy the limps.
-      Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps);
+      Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps);
       #if Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_BigEndian
         Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->limps, limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps);
         #if Arcadia_Configuration_BigInteger_LimpSize == 1
@@ -56,7 +56,7 @@ Arcadia_BigInteger_fromTwosComplement
           #error("unknown/unsupported limp size")
         #endif
       #elif Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_LittleEndian
-        Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->limps, limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps);
+        Arcadia_Memory_copy(thread, self->limps, limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps);
       #else
         #error("unknown/unsupported limp order")
       #endif
@@ -64,10 +64,9 @@ Arcadia_BigInteger_fromTwosComplement
       self->sign = 1;
     }
   } else {
-    Arcadia_BigInteger_Limp* p = NULL;
     Arcadia_SizeValue n = numberOfLimps;  
-    Arcadia_Process_allocateUnmanaged(Arcadia_Thread_getProcess(thread), &p, sizeof(Arcadia_BigInteger_Limp) * n);
-    Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), p, limps, sizeof(Arcadia_BigInteger_Limp) * n);
+    Arcadia_BigInteger_Limp* p = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_BigInteger_Limp) * n);
+    Arcadia_Memory_copy(thread, p, limps, sizeof(Arcadia_BigInteger_Limp) * n);
     // The value is positive or negative.
     Arcadia_BooleanValue isNegative = mostSignificandLimp & (1 << (Arcadia_BigInteger_BitsPerLimp - 1));
     if (isNegative) {
@@ -83,7 +82,7 @@ Arcadia_BigInteger_fromTwosComplement
       }
       if (p[n - 1] & (1 << (Arcadia_BigInteger_BitsPerLimp - 1)) == 0) {
         n++;
-        Arcadia_Process_reallocateUnmanaged(Arcadia_Thread_getProcess(thread), &p, sizeof(Arcadia_BigInteger_Limp) * n);
+        Arcadia_Memory_reallocateUnmanaged(thread, &p, sizeof(Arcadia_BigInteger_Limp) * n);
         p[n - 1] = Arcadia_BigInteger_Limp_Maximum;
       }
     }
