@@ -142,9 +142,44 @@ Arcadia_StringBuffer_append_pn
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
+  
+/// @brief Remove code points from the front of this string buffer.
+/// @param thread A pointer to this thread. 
+/// @param self A pointer to this string buffer.
+/// @param numberOfCodePoints The number of code points to remove.
+/// @error Arcadia_Status_ArgumentValueInvalid @a numberOfCodePoints is greater than the number of code points in this string buffer
+void
+Arcadia_StringBuffer_removeCodePointsFront
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue numberOfCodePoints
+  );
+
+/// @brief Remove code points from the back of this string buffer.
+/// @param thread A pointer to this thread. 
+/// @param self A pointer to this string buffer.
+/// @param numberOfCodePoints The number of code points to remove.
+/// @error Arcadia_Status_ArgumentValueInvalid @a numberOfCodePoints is greater than the number of code points in this string buffer
+void
+Arcadia_StringBuffer_removeCodePointsBack
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue numberOfCodePoints
+  );
 
 void
-Arcadia_StringBuffer_appendCodePoints
+Arcadia_StringBuffer_insertCodePointsBack
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_Natural32Value const* codePoints,
+    Arcadia_SizeValue numberOfCodePoints
+  );
+
+void
+Arcadia_StringBuffer_insertCodePointsFront
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,

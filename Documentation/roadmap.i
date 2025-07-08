@@ -14,10 +14,6 @@
     <div class="left-column"></div>
     <div class="center-column">
     <h1>Roadmap</h1>
-    @{include("./Roadmap/Milestone-Template_Engine-2.i")}
-    @{include("./Roadmap/Milestone-Arcadia.Ring1-3.i")}
-    @{include("./Roadmap/Milestone-Arcadia.Ring1-2.i")}
-    @{include("./Roadmap/Milestone-Arcadia.Ring1-1.i")}
     @{include("./Roadmap/Milestone-Arcadia.Ring2-2.i")}
     @{include("./Roadmap/Milestone-Arcadia.Ring2-1.i")}
     @{include("./Roadmap/Milestone-Mil-2.i")}

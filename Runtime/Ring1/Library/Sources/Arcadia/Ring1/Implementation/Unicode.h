@@ -19,11 +19,12 @@
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
+#include "Arcadia/Ring1/Implementation/Unicode/Unicode.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 
-#define Arcadia_Utf8CodePoint_Last (0x0010ffff)
-Arcadia_StaticAssert(Arcadia_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximum - 3, "<internal error>");
+#include "Arcadia/Ring1/Implementation/Unicode/Unicode.h"
+#include "Arcadia/Ring1/Implementation/Unicode/Utf8.h"
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_isUtf8
 Arcadia_BooleanValue

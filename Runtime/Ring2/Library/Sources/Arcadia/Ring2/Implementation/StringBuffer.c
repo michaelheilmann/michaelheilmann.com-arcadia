@@ -18,7 +18,7 @@
 
 #include "Arcadia/Ring2/Include.h"
 
-/// @param byteIndex [out] Pointer to an Arcadia_SizeValue variable.
+/// @param offset [out] Pointer to an Arcadia_SizeValue variable.
 /// That variable is assigned
 /// - the offset of the first Byte of the code point at the code point index if that code point index is within bounds.
 /// - @a n otherwise where @a n is the number of Bytes in the buffer.
@@ -29,10 +29,10 @@ getOffsetFromFront
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_SizeValue codePointIndex,
-    Arcadia_SizeValue* byteIndex
+    Arcadia_SizeValue* offset
   );
 
-/// @param byteIndex [out] Pointer to an Arcadia_SizeValue variable.
+/// @param offset [out] Pointer to an Arcadia_SizeValue variable.
 /// That variable is assigned
 /// - the offset of the first Byte behind the Bytes of the code point at the code point index if that code point index is within bounds.
 /// - @a 0 otherwise.
@@ -43,7 +43,7 @@ getOffsetFromBack
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_SizeValue codePointIndex,
-    Arcadia_SizeValue* byteIndex
+    Arcadia_SizeValue* offset
   );
 
 static void
@@ -114,7 +114,7 @@ getOffsetFromFront
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_SizeValue codePointIndex,
-    Arcadia_SizeValue* byteIndex
+    Arcadia_SizeValue* offset
   )
 {
   // Warning: This assumes valid UTF-8 Byte sequences. However: Arcadia_StringBuffer only holds valid UTF-8 Byte sequences.
@@ -122,10 +122,7 @@ getOffsetFromFront
   const Arcadia_Natural8Value* end = self->elements + self->size;
   const Arcadia_Natural8Value* current = self->elements;
   Arcadia_SizeValue currentCodePointIndex = 0;
-  while (true) {
-    if (current == end || currentCodePointIndex == codePointIndex) {
-      break;
-    }
+  while (currentCodePointIndex != codePointIndex && current != end) {
     const Arcadia_Natural8Value x = *current;
     if ((x & 0x80) == 0x00) {
       current += 1;
@@ -136,8 +133,9 @@ getOffsetFromFront
     } else /*if ((x & 0xF8) == 0xF0)*/ {
       current += 4;
     }
+    currentCodePointIndex++;
   }
-  *byteIndex = current - start;
+  *offset = current - start;
   return currentCodePointIndex == codePointIndex;
 }
 
@@ -147,26 +145,23 @@ getOffsetFromBack
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_SizeValue codePointIndex,
-    Arcadia_SizeValue* byteIndex
+    Arcadia_SizeValue* offset
   )
 {
   // Warning: This assumes valid UTF-8 Byte sequences. However: Arcadia_StringBuffer only holds valid UTF-8 Byte sequences.
-  const Arcadia_Natural8Value* start = self->elements;
-  const Arcadia_Natural8Value* end = self->elements + self->size;
-  const Arcadia_Natural8Value* current = end;
+  const Arcadia_Natural8Value* end = self->elements;
+  const Arcadia_Natural8Value* start = self->elements + self->size;
+  const Arcadia_Natural8Value* current = start;
 
   Arcadia_SizeValue currentCodePointIndex = 0;
-  while (true) {
+  while (currentCodePointIndex != codePointIndex && current != end) {
     current--;
-    if (current == start || currentCodePointIndex == codePointIndex) {
-      break;
-    }
     while (((*current) & 0xC0) == 0x80) {
       current--;
     }
     currentCodePointIndex++;
   }
-  *byteIndex = current - start;
+  *offset = start - current;
   return currentCodePointIndex == codePointIndex;
 }
 
@@ -474,7 +469,7 @@ Arcadia_StringBuffer_insertFront
 }
 
 void
-Arcadia_StringBuffer_appendCodePoints
+Arcadia_StringBuffer_insertCodePointsBack
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
@@ -552,3 +547,38 @@ Arcadia_StringBuffer_getBytes
     Arcadia_StringBuffer const* self
   )
 { return self->elements; }
+
+void
+Arcadia_StringBuffer_removeCodePointsFront
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue numberOfCodePoints
+  )
+{
+  Arcadia_SizeValue offset;
+  if (!getOffsetFromFront(thread, self, numberOfCodePoints, &offset)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  if (offset < self->size) {
+    Arcadia_Memory_copy(thread, self->elements, self->elements + offset, self->size - offset);
+  }
+  self->size -= offset;
+}
+
+void
+Arcadia_StringBuffer_removeCodePointsBack
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue numberOfCodePoints
+  )
+{
+  Arcadia_SizeValue offset;
+  if (!getOffsetFromBack(thread, self, numberOfCodePoints, &offset)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  self->size -= offset;
+}

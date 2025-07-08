@@ -566,7 +566,8 @@ body.my-content-page-1 my-mv::after {
 }
 
 body {
-  counter-reset: section-level-1 0 section-level-2 0 section-level-3 0 section-level-4 0;
+  /*Do not use CSS counters.*/
+  /*counter-reset: section-level-1 0 section-level-2 0 section-level-3 0 section-level-4 0;*/
 }
 
 body.my-content-page-1 h1
@@ -576,38 +577,46 @@ body.my-content-page-1 h1::before
 {}
 
 body.my-content-page-1 h2 {
-  counter-increment: section-level-1;
-  counter-reset: section-level-2 0;
+  /*Do not use CSS counters.*/
+  /*counter-increment: section-level-1;*/
+  /*counter-reset: section-level-2 0;*/
 }
 
 body.my-content-page-1 h2::before {
-  content: counter(section-level-1) ". ";
+  /*Do not use CSS counters.*/
+  /*content: counter(section-level-1) ". ";*/
 }
 
 body.my-content-page-1 h3 {
- counter-increment: section-level-2;
- counter-reset: section-level-3 0;
+  /*Do not use CSS counters.*/
+  /*counter-increment: section-level-2;*/
+  /*counter-reset: section-level-3 0;*/
 }
 
 body.my-content-page-1 h3::before {
- content: counter(section-level-1) "." counter(section-level-2) ". ";
+  /*Do not use CSS counters.*/
+  /*content: counter(section-level-1) "." counter(section-level-2) ". ";
 }
 
 body.my-content-page-1 h4 {
- counter-increment: section-level-3;
- counter-reset: section-level-4 0;
+  /*Do not use CSS counters.*/
+  /*counter-increment: section-level-3;*/
+  /*counter-reset: section-level-4 0;*/
 }
 
 body.my-content-page-1 h4::before {
- content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) ". ";
+  /*Do not use CSS counters.*/
+  /*content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) ". ";*/
 }
 
 body.my-content-page-1 h5 {
- counter-increment: section-level-4;
+  /*Do not use CSS counters.*/
+  /*counter-increment: section-level-4;*/
 }
 
 body.my-content-page-1 h5::before {
- content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) "." counter(section-level-4) ". ";
+  /*Do not use CSS counters.*/
+  /*content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) "." counter(section-level-4) ". ";*/
 }
 
 /* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */

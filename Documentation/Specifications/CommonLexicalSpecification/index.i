@@ -36,21 +36,22 @@
         <li><a href="#lexical-grammars">2.2 Lexical grammars</a></li>
         <li><a href="#syntactical-grammars">2.3. Syntactical grammars</a></li>
         <li><a href="#grammar-notation">2.4. Grammar notation</a></li>
-        <li><a href="#full-profile-lexical-specification">3. Full Profile Lexical Specification</a></li>
+        <li><a href="#full-profile-lexical-specification">3 Full Profile Lexical Specification</a></li>
         <li><a href="#full-profile-lexical-specification-word">3.1 word</a></li>
         <li><a href="#full-profile-lexical-specification-whitespace">3.2 whitespace</a></li>
-        <li><a href="#full-profile-lexical-specification-line-terminator">3.3. line terminator</a></li>
-        <li><a href="#full-profile-lexical-specification-comment">3.4. comment</a></li>
-        <li><a href="#full-profile-lexical-specification-parentheses">3.5. parentheses</a></li>
-        <li><a href="#full-profile-lexical-specification-curly-brackets">3.6. curly brackets</a></li>
-        <li><a href="#full-profile-lexical-specification-colon">3.7. colon</a></li>
-        <li><a href="#full-profile-lexical-specification-comma">3.9. comma</a></li>
-        <li><a href="#full-profile-lexical-specification-number-literal">3.10. number literal</a></li>
-        <li><a href="#full-profile-lexical-specification-string-literal">3.11. string literal</a></li>
-        <li><a href="#full-profile-lexical-specification-boolean-literal">3.12. boolean literal</a></li>
-        <li><a href="#full-profile-lexical-specification-void-literal">3.13. void literal</a></li>
-        <li><a href="#full-profile-lexical-specification-digit">3.14. digit</a></li>
-        <li><a href="#full-profile-lexical-specification-alphanumeric">3.15. alphanumeric</a></li>
+        <li><a href="#full-profile-lexical-specification-line-terminator">3.3 line terminator</a></li>
+        <li><a href="#full-profile-lexical-specification-comment">3.4 comment</a></li>
+        <li><a href="#full-profile-lexical-specification-parentheses">3.5 parentheses</a></li>
+        <li><a href="#full-profile-lexical-specification-curly-brackets">3.6 curly brackets</a></li>
+        <li><a href="#full-profile-lexical-specification-colon">3.7 colon</a></li>
+        <li><a href="#full-profile-lexical-specification-comma">3.9 comma</a></li>
+        <li><a href="#full-profile-lexical-specification-number-literal">3.10 number literal</a></li>
+        <li><a href="#full-profile-lexical-specification-string-literal">3.11 string literal</a></li>
+        <li><a href="#full-profile-lexical-specification-boolean-literal">3.12 boolean literal</a></li>
+        <li><a href="#full-profile-lexical-specification-void-literal">3.13 void literal</a></li>
+        <li><a href="#full-profile-lexical-specification-digit">3.14 decimal digit</a></li>
+        <li><a href="#full-profile-lexical-specification-digit">3.15 hexadecimal digit</a></li>
+        <li><a href="#full-profile-lexical-specification-alphanumeric">3.16 alphanumeric</a></li>
       </ul>
     </nav>
   </div>   
@@ -59,7 +60,7 @@
     <div class="left-column"></div>
     <div class="center-column"></div>
     <div class="right-column"></div>
-    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 25 Feburary 2025.</span>
+    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 09 July 2025.</span>
     </div>
   </footer>
 </body>

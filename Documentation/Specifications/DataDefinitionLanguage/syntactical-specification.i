@@ -1,4 +1,4 @@
-<h2 id="syntactical-specification">3. Syntactical Specification</h2>
+<h2 id="syntactical-specification">3 Syntactical Specification</h2>
 <p>The syntactical grammar describes the translation of the words into sentences. The goal non-terminal of the syntactical grammar is the sentence <code>sentence</code> symbol.</p>
 
 <p>The words <code>whitespace</code> and <code>line_terminator</code> are removed from the sequence of words before the translation to sentences is performed.</p>

@@ -41,9 +41,9 @@
 // This allows for efficient creation of strings (see Arcadia_String_create).
 // Furthermore, it avoids to create a string twice by using a string table (see Arcadia_Mil_StringTable).
 
-#define CodePoint_Start (Arcadia_Utf8CodePoint_Last + 1)
-#define CodePoint_End (Arcadia_Utf8CodePoint_Last + 2)
-#define CodePoint_Error (Arcadia_Utf8CodePoint_Last + 3)
+#define CodePoint_Start (Arcadia_Unicode_CodePoint_Last + 1)
+#define CodePoint_End (Arcadia_Unicode_CodePoint_Last + 2)
+#define CodePoint_Error (Arcadia_Unicode_CodePoint_Last + 3)
 
 struct Arcadia_Mil_Scanner {
   Arcadia_Object _parent;
@@ -285,7 +285,7 @@ write
     Arcadia_Natural32Value codePoint
   )
 {
-  Arcadia_StringBuffer_appendCodePoints(thread, self->token.text, &codePoint, Arcadia_SizeValue_Literal(1));
+  Arcadia_StringBuffer_insertCodePointsBack(thread, self->token.text, &codePoint, Arcadia_SizeValue_Literal(1));
 }
 
 static void

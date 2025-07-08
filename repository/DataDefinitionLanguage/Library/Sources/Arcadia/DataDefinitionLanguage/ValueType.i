@@ -1,7 +1,0 @@
-Define(Error, u8"<error>")
-Define(List, u8"<list>")
-Define(Map, u8"<map>")
-Define(Number, u8"<number>")
-Define(String, u8"<string>")
-Define(Boolean, u8"<boolean>")
-Define(Void, u8"<void>")

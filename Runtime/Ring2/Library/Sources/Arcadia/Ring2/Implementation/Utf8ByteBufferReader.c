@@ -18,9 +18,9 @@
 
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 
-#define CodePoint_Start (Arcadia_Utf8CodePoint_Last + 1)
-#define CodePoint_End (Arcadia_Utf8CodePoint_Last + 2)
-#define CodePoint_Error (Arcadia_Utf8CodePoint_Last + 3)
+#define CodePoint_Start (Arcadia_Unicode_CodePoint_Last + 1)
+#define CodePoint_End (Arcadia_Unicode_CodePoint_Last + 2)
+#define CodePoint_Error (Arcadia_Unicode_CodePoint_Last + 3)
 
 /// @code
 /// construct(source:ByteBuffer)
@@ -83,71 +83,35 @@ Arcadia_Utf8ByteBufferReader_nextImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue n = Arcadia_ByteBuffer_getSize(thread, self->source);
-  if (self->byteIndex == n) {
+  Arcadia_SizeValue numberOfBytes = Arcadia_ByteBuffer_getSize(thread, self->source);
+  if (self->byteIndex == numberOfBytes) {
     self->codePoint = CodePoint_End;
-    return;
-  }
-  Arcadia_Natural32Value codePoint;
-  Arcadia_Natural8Value x = Arcadia_ByteBuffer_getAt(thread, self->source, self->byteIndex);
-  if (x <= 0b01111111) {
-    codePoint = x;
-    self->byteIndex += 1;
-    self->codePoint = codePoint;
-  } else if (x <= 0b11011111) {
-    codePoint = x & 0b00011111;
-    if (n - self->byteIndex < 2) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    for (size_t i = 1; i < 2; ++i) {
-      x = Arcadia_ByteBuffer_getAt(thread, self->source, self->byteIndex + i);
-      if (0x80 != (x & 0xc0)) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-        Arcadia_Thread_jump(thread);
-      }
-      codePoint <<= 6;
-      codePoint |= x;
-    }
-    self->byteIndex += 2;
-    self->codePoint = codePoint;
-  } else if (x <= 0b11101111) {
-    codePoint = x & 0b00001111;
-    if (n - self->byteIndex < 3) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    for (size_t i = 1; i < 3; ++i) {
-      x = Arcadia_ByteBuffer_getAt(thread, self->source, self->byteIndex + i);
-      if (0x80 != x & 0xc0) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-        Arcadia_Thread_jump(thread);
-      }
-      codePoint <<= 6;
-      codePoint |= x & 0b00111111;
-    }
-    self->byteIndex += 3;
-    self->codePoint = codePoint;
-  } else if (x <= 0b11110111) {
-    codePoint = x & 0b00000111;
-    if (n - self->byteIndex < 4) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    for (size_t i = 1; i < 4; ++i) {
-      x = Arcadia_ByteBuffer_getAt(thread, self->source, self->byteIndex + i);
-      if (0x80 != x & 0xc0) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-        Arcadia_Thread_jump(thread);
-      }
-      codePoint <<= 6;
-      codePoint |= x;
-    }
-    self->byteIndex += 4;
-    self->codePoint = codePoint;
   } else {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-    Arcadia_Thread_jump(thread);
+    Arcadia_Natural8Value byte = Arcadia_ByteBuffer_getAt(thread, self->source, self->byteIndex);
+    Arcadia_SizeValue expectedNumberOfBytes = Arcadia_Unicode_Utf8_classifyFirstByte(thread, byte);
+    if (expectedNumberOfBytes == Arcadia_SizeValue_Maximum || numberOfBytes - self->byteIndex < expectedNumberOfBytes) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+    // The masks to remove the prefix bits from the first Byte.
+    static const Arcadia_Natural8Value mask[] = {
+      0b11111111,
+      0b00011111,
+      0b00001111,
+      0b00000111,
+    };
+    Arcadia_Natural32Value codePoint = byte & mask[expectedNumberOfBytes - 1];
+    for (Arcadia_SizeValue i = 1; i < expectedNumberOfBytes; ++i) {
+      byte = Arcadia_ByteBuffer_getAt(thread, self->source, self->byteIndex + i);
+      if (0x80 != (byte & 0xc0)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+        Arcadia_Thread_jump(thread);
+      }
+      codePoint <<= 6;
+      codePoint |= (byte & 0b00111111);
+    }
+    self->byteIndex += expectedNumberOfBytes;
+    self->codePoint = codePoint;
   }
 }
 

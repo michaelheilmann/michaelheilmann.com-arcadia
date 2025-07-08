@@ -128,6 +128,24 @@ As parameter, it takes the path of the "ICO" file.
 The generated "ICO" file contains opaque black black icons of the sizes 8x8, 16x16, 24x24, 32x32, 48x48, 64x64, 96x96, 128x128, and 256x256.
 </p>
 
+    <h2>Milestone "Template Engine" 2: Load variable directives</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 4 November 2024</p>
+
+<p>
+The *Template Engine* tool supports directives to load the values of predefined variables.
+A load variable directive is of the form
+<code>@{&lt;name&gt;}</code>
+where
+<code>&lt;name&gt;</code>
+is a placeholder for an name of the form
+<code>(alphabetic|'_')(alphanumeric|alphabetic|'_')*</code>.
+<code>include</code> is forbidden as a name.
+</p>
+
+<p>
+The value of the variable <code>siteUrl</code> is the URL of the site.
+</p>
+
     <h2>Milestone "Template Engine" 1: Template Engine: Ampersand- and Include-directives</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 2 September 2024</p>
 
@@ -145,6 +163,30 @@ The directives are not written to the target file. Instead, they are interpreted
 Recursive include directives yield an error.
 The parser must support UTF-8-NO-BOM encoding.
 </p>
+
+    <h2>Milestone "Arcadia.Ring1" 3: UTF8 floating-point literal strings To IEEE754 floating-point conversion</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 1 March 2025</p>
+<p>
+<em>Arcadia.Ring1</em> (<a href="https://michaelheilmann.com/repository/Arcadia.Ring1">Arcadia.Ring1</a>) provides means to convert UTF8 floating-point literal strings to IEEE754 floating-point values.
+A combination of the algorithms of Gay, Clinger, and Mushtak and Lemire shall be used.
+</p>
+
+    <h2>Milestone "Arcadia.Ring1" 2: Count Trailing Zeroes</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 4 February 2025</p>
+<p>
+<a href="https://michaelheilmann.com/repository/Arcadia.Ring1"><em>Arcadia.Ring1</em></a> provides means to count the number of trailing zeroes of integer types.
+</p>
+
+    <h2>Milestone "Arcadia.Ring1" 1: Linux support</h2>
+<p>Percentage done: 100&percnt;, Due date: Week 4 December 2024</p>
+<p>
+<a href="https://michaelheilmann.com/repository/Arcadia.Ring1"><em>Arcadia.Ring1</em></a> supports Linux environments.
+This means:
+</p>
+<ul
+  <li><em>Arcadia.Ring1</em> compiles under Linux</li>
+  <li>the automated tests run and terminate with success under Linux</li>
+</ul>
 
     <h2>Milestone "Website" 6: Navigational elements</h2>
 <p>Percentage done: 100&percnt;, Due date: Week 1 November 2024</p>

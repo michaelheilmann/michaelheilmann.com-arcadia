@@ -20,101 +20,6 @@
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/hash.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/type.h"
 
-#define Arcadia_Utf8CodePoint_Last (0x0010ffff)
-Arcadia_StaticAssert(Arcadia_Utf8CodePoint_Last <= Arcadia_Natural32Value_Maximum - 3, "<internal error>");
-
-static Arcadia_BooleanValue
-_isUtf8
-  (
-    Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes,
-    Arcadia_SizeValue* numberOfSymbols
-  );
-
-static Arcadia_BooleanValue
-_isUtf8
-  (
-    Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes,
-    Arcadia_SizeValue* numberOfSymbols
-  )
-{
-  Arcadia_SizeValue numberOfSymbols1 = 0;
-  uint8_t const* start = (uint8_t const*)bytes;
-  uint8_t const* end = start + numberOfBytes;
-  uint8_t const* current = start;
-
-  while (current != end) {
-    uint8_t x = (*current);
-    if (x <= 0x7f) {
-      current += 1;
-      numberOfSymbols1++;
-    } else if (x <= 0x7ff) {
-      if (end - current < 2) {
-        if (numberOfSymbols) {
-          *numberOfSymbols = numberOfSymbols1;
-        }
-        return Arcadia_BooleanValue_False;
-      }
-      for (Arcadia_SizeValue i = 1; i < 2; ++i) {
-        current++;
-        x = *current;
-        if (0x80 != (x & 0xc0)) {
-          if (numberOfSymbols) {
-            *numberOfSymbols = numberOfSymbols1;
-          }
-          return Arcadia_BooleanValue_False;
-        }
-      }
-      current++;
-      numberOfSymbols1++;
-    } else if (x <= 0xffff) {
-      if (end - current < 3) {
-        return Arcadia_BooleanValue_False;
-      }
-      for (Arcadia_SizeValue i = 1; i < 3; ++i) {
-        current++;
-        x = *current;
-        if (0x80 != (x & 0xc0)) {
-          if (numberOfSymbols) {
-            *numberOfSymbols = numberOfSymbols1;
-          }
-         return Arcadia_BooleanValue_False;
-        }
-      }
-      current++;
-      numberOfSymbols1++;
-    } else if (x <= 0x10ffff) {
-      if (end - current < 4) {
-        if (numberOfSymbols) {
-          *numberOfSymbols = numberOfSymbols1;
-        }
-        return Arcadia_BooleanValue_False;
-      }
-      for (Arcadia_SizeValue i = 1; i < 4; ++i) {
-        current++;
-        x = *current;
-        if (0x80 != (x & 0xc0)) {
-          if (numberOfSymbols) {
-            *numberOfSymbols = numberOfSymbols1;
-          }
-          return Arcadia_BooleanValue_False;
-        }
-      }
-      current++;
-      numberOfSymbols1++;
-    } else {
-      return Arcadia_BooleanValue_False;
-    }
-  }
-  if (numberOfSymbols) {
-    *numberOfSymbols = numberOfSymbols1;
-  }
-  return Arcadia_BooleanValue_True;
-}
-
 Arcadia_ImmutableUtf8String*
 _createFromBytes
   (
@@ -127,11 +32,11 @@ _createFromBytes
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (SIZE_MAX - sizeof(Arcadia_ImmutableUtf8String) < numberOfBytes) {
+  if (Arcadia_SizeValue_Maximum - sizeof(Arcadia_ImmutableUtf8String) < numberOfBytes) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (!_isUtf8(thread, bytes, numberOfBytes, NULL)) {
+  if (!Arcadia_Unicode_isUtf8(thread, bytes, numberOfBytes, NULL)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
     Arcadia_Thread_jump(thread);
   }

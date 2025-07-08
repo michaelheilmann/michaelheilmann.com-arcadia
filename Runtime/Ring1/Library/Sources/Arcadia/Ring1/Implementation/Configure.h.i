@@ -63,6 +63,11 @@
 
 
 
+// If the C language supports binary literals.
+#define Arcadia_Configuration_C_HasBinaryLiterals (1)
+
+
+
 // The size, in Bytes, of a limp.
 #define Arcadia_Configuration_BigInteger_LimpSize 4
 // Least significand at lowest array index, most significand at highest array index.
