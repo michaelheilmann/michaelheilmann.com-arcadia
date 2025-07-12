@@ -33,7 +33,7 @@ struct Arcadia_Thread {
   // Weak reference to the process object which owns this thread object.
   // When the thread is constructed, this is NULL.
   // The constructing process assigns itself to this variable after the thread is constructed.
-  Arcadia_Process* process1;
+  Arcadia_Process* process;
 };
 
 /*@undefined thread does not point to an uninitialized Arcadia_Thread object*/

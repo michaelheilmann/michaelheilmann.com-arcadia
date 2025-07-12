@@ -14,8 +14,9 @@
     <div class="left-column"></div>
     <div class="center-column">
     <h1>Roadmap</h1>
+    @{include("./Roadmap/Milestone-Arcadia.Ring2-4.i")}
+    @{include("./Roadmap/Milestone-Arcadia.Ring2-3.i")}
     @{include("./Roadmap/Milestone-Arcadia.Ring2-2.i")}
-    @{include("./Roadmap/Milestone-Arcadia.Ring2-1.i")}
     @{include("./Roadmap/Milestone-Mil-2.i")}
     @{include("./Roadmap/Milestone-Cicd-1.i")}
     @{include("./Roadmap/Milestone-Website-9.i")}

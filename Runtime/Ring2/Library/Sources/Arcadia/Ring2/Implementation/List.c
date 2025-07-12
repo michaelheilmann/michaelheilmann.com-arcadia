@@ -60,6 +60,20 @@ Arcadia_List_visit
     Arcadia_List* self
   );
 
+static void
+Arcadia_List_clearImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self
+  );
+
+static Arcadia_SizeValue
+Arcadia_List_getSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &Arcadia_List_constructImpl,
   .destruct = &Arcadia_List_destruct,
@@ -67,26 +81,11 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.List", Arcadia_List, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.List", Arcadia_List, u8"Arcadia.Collection", Arcadia_Collection, &_typeOperations);
 
 static void
 Arcadia_List_ensureFreeCapacity
@@ -166,6 +165,8 @@ Arcadia_List_constructImpl
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
   }
+  ((Arcadia_Collection*)_self)->clear = (void (*)(Arcadia_Thread*,Arcadia_Collection*))&Arcadia_List_clearImpl;
+  ((Arcadia_Collection*)_self)->getSize = (Arcadia_SizeValue (*)(Arcadia_Thread*,Arcadia_Collection*))&Arcadia_List_getSizeImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -196,6 +197,22 @@ Arcadia_List_visit
   }
 }
 
+static void
+Arcadia_List_clearImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self
+  )
+{ self->size = 0; }
+
+static Arcadia_SizeValue
+Arcadia_List_getSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self
+  )
+{ return self->size; }
+
 Arcadia_List*
 Arcadia_List_create
   (
@@ -208,22 +225,6 @@ Arcadia_List_create
   Arcadia_List* self = Arcadia_allocateObject(thread, _Arcadia_List_getType(thread), 0, &argumentValues[0]);
   return self;
 }
-
-void
-Arcadia_List_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  )
-{ self->size = 0; }
-
-Arcadia_SizeValue
-Arcadia_List_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  )
-{ return self->size; }
 
 void
 Arcadia_List_insertBack
@@ -259,6 +260,9 @@ Arcadia_List_insertAt
   if (index > self->size) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
+  }
+  if (Arcadia_Value_isVoidValue(&value)) {
+    return;
   }
   if (self->capacity == self->size) {
     Arcadia_List_ensureFreeCapacity(thread, self, Arcadia_SizeValue_Literal(1));
@@ -394,3 +398,22 @@ Define(Arcadia_Size, Size, size)
 Define(Arcadia_Void, Void, void)
 
 #undef Define
+
+Arcadia_List*
+Arcadia_List_filter
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self,
+    Arcadia_Value context,
+    Arcadia_BooleanValue(*predicate)(Arcadia_Thread* thread, Arcadia_Value context, Arcadia_Value value)
+  )
+{
+  Arcadia_List* result = Arcadia_List_create(thread);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self); i < n; ++i) {
+    Arcadia_Value v = Arcadia_List_getAt(thread, self, i);
+    if ((*predicate)(thread, context, v)) {
+      Arcadia_List_insertBack(thread, result, v);
+    }
+  }
+  return result;
+}

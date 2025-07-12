@@ -16,23 +16,7 @@
 #include "Module/Visuals/Events/MousePointerAction.h"
 
 static const Arcadia_Type_Operations _typeOperations = {
-  .objectTypeOperations = NULL,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
+  Arcadia_Type_Operations_Initializer,
 };
 
 Arcadia_defineEnumerationType(u8"Arcadia.Visuals.Events.MousePointerAction", Arcadia_Visuals_MousePointerAction, &_typeOperations);

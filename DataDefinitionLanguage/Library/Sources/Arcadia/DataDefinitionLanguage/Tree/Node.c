@@ -39,23 +39,8 @@ static const Arcadia_ObjectType_Operations _Arcadia_DataDefinitionLanguage_Tree_
 };
 
 static const Arcadia_Type_Operations _Arcadia_DataDefinitionLanguage_Tree_Node_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_DataDefinitionLanguage_Tree_Node_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.Node", Arcadia_DataDefinitionLanguage_Tree_Node, u8"Arcadia.Object", Arcadia_Object, &_Arcadia_DataDefinitionLanguage_Tree_Node_typeOperations);

@@ -31,23 +31,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -85,6 +70,10 @@ Arcadia_Visuals_Window_constructImpl
   _self->getCanvasSize = NULL;
   _self->beginRender = NULL;
   _self->endRender = NULL;
+  _self->setPosition = NULL;
+  _self->getPosition = NULL;
+  _self->setSize = NULL;
+  _self->getSize = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -225,3 +214,43 @@ Arcadia_Visuals_Window_endRender
     Arcadia_Visuals_Window* self
   )
 { self->endRender(thread, self); }
+
+void
+Arcadia_Visuals_Window_setPosition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value left,
+    Arcadia_Integer32Value top
+  )
+{ self->setPosition(thread, self, left, top); }
+
+void
+Arcadia_Visuals_Window_getPosition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top
+  )
+{ self->getPosition(thread, self, left, top); }
+
+void
+Arcadia_Visuals_Window_setSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height
+  )
+{ self->setSize(thread, self, width, height); }
+
+void
+Arcadia_Visuals_Window_getSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* width,
+    Arcadia_Integer32Value* height
+  )
+{ self->getSize(thread, self, width, height); }

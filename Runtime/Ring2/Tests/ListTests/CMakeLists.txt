@@ -15,8 +15,6 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-FetchProduct(${MyProjectName}.Ring2 "${REPOSITORY_SOURCE_DIR}/Ring2/Library" "path to the Ring 2 library directory")
-
 set(MyTestName ${MyProjectName}.Ring2.Tests.ListTests)
 
 # Create test executable.

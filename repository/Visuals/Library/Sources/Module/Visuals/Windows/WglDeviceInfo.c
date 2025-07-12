@@ -114,23 +114,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.WglDeviceInfo", Arcadia_Visuals_Windows_WglDeviceInfo, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -350,7 +335,7 @@ static Arcadia_Integer32Value getIntegerAttribute(Arcadia_Thread* thread, Arcadi
 }
 
 static void add(Arcadia_Thread* thread, Arcadia_List* configurations, Arcadia_Visuals_Configuration* configuration) {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, configurations); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)configurations); i < n; ++i) {
     Arcadia_Visuals_Configuration* element = Arcadia_List_getObjectReferenceValueAt(thread, configurations, i);
     Arcadia_Value a, b;
     a = Arcadia_Value_makeObjectReferenceValue(element->opengl.version.major);

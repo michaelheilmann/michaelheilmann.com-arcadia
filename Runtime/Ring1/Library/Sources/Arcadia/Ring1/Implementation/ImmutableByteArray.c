@@ -110,24 +110,10 @@ isNotEqualTo
   );
 
 static const Arcadia_Type_Operations _typeOperations = {
-  .objectTypeOperations = NULL,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
+  Arcadia_Type_Operations_Initializer,
   .equalTo = &isEqualTo,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
   .hash = &hash,
-  .identical = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
   .notEqualTo = &isNotEqualTo,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 static void

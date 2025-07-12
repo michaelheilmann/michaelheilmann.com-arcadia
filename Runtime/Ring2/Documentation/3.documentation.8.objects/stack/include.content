@@ -1,44 +1,7 @@
 <section class="cxx entity object">
 <h1 id="Arcadia_Stack">Stack</h1>
-<p>
-<code>Arcadia_Stack</code> represents a stack of <code>Arcadia_Value</code> objects.
-This type is allocated on the heap and values of this type are referenced by <code>Arcadia_Stack</code> pointers.
-A <code>Arcadia_Stack</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</code> value can be safely cast into a <code>Arcadia_Stack</code> pointer.
-</p>
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_Stack_clear">Arcadia_Stack_clear</h1>
-
-  <my-signature><code>
-  void<br>
-  Arcadia_Stack_clear<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Clear this stack.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div>Arcadia_Thread* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_Stack* self</div>
-      <div>A pointer to this stack.</div>
-    </div>
-  </section>
-
+<p><code>Arcadia_Stack</code> extends <code>Arcadia_Collection</code>.</p>
+<p><code>Arcadia_Stack</code> represents a stack of <code>Arcadia_Value</code> objects.</p>
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -70,103 +33,14 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>bytes</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_EncodingInvalid</div>
-      <div>The sequence of Bytes does not represented a UTF-8-NO-BOM string.</div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
     </div>
   </section>
 
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>A pointer to the <code>Arcadia_Stack</code> value.</p>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_Stack_getSize">Arcadia_Stack_getSize</h1>
-
-
-  <my-signature><code>
-  Arcadia_SizeValue<br>
-  Arcadia_Stack_getSize<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get the size of this stack.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div>Arcadia_Thread* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_Stack* self</div>
-      <div>A pointer to this stack.</div>
-    </div
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The size of this stack.</p>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_Stack_isEmpty">Arcadia_Stack_isEmpty</h1>
-
-  <my-signature><code>
-  Arcadia_BooleanValue<br>
-  Arcadia_Stack_isEmpty<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Stack* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get if this stack is empty.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div>Arcadia_Thread* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_Stack* self</div>
-      <div>A pointer to this stack.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p><code>Arcadia_BooleanValue_True</code> if this stack is empty. <code>Arcadia_BooleanValue_False</code> otherwise.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
   </section>
 
 </section>
@@ -206,6 +80,14 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</
     <p>The value.</p>
   </section>
 
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_OperationInvalid</div>
+      <div>The stack is empty.</div>
+    </div>
+  </section>
+
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -242,6 +124,14 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</
     <h1>Return value</h1>
     <p>The value.</p>
   </section>
+  
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_OperationInvalid</div>
+      <div>The stack is empty.</div>
+    </div>
+  </section>
 
 </section>
 
@@ -277,6 +167,14 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_Stack</
     <div>
       <div>Arcadia_Value value</div>
       <div>The value to push.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentTypeInvalid</div>
+      <div><code>value</code> is a <em>Void</em> value.</div>
     </div>
   </section>
 

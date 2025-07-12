@@ -39,4 +39,10 @@ Arcadia_Visuals_Linux_Application_create
     Arcadia_Thread* thread
   );
 
+Arcadia_Visuals_Linux_Application*
+Arcadia_Visuals_Linux_Application_getOrCreate
+  (
+    Arcadia_Thread* thread
+  );
+
 #endif // MODULE_VISUALS_LINUX_APPLICATION_H_INCLUDED

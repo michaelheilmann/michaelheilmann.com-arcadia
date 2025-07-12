@@ -15,8 +15,6 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-FetchProduct(${MyProjectName}.Arms "${REPOSITORY_SOURCE_DIR}/Arms/Library" "path to the ARMS library directory")
-
 set(MyTest ${MyProjectName}.Arms.Tests.VisitFinalizeTest)
 
 # Create test executable.

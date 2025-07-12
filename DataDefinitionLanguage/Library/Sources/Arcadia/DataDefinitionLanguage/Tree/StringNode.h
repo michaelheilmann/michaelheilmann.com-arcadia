@@ -24,14 +24,14 @@ Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.StringNode", Ar
 
 struct Arcadia_DataDefinitionLanguage_Tree_StringNode {
   Arcadia_DataDefinitionLanguage_Tree_Node parent;
-  Arcadia_ImmutableUtf8String* value;
+  Arcadia_String* value;
 };
 
 Arcadia_DataDefinitionLanguage_Tree_StringNode*
 Arcadia_DataDefinitionLanguage_Tree_StringNode_createString
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8String
+    Arcadia_String* stringValue
   );
 
 #endif // ARCADIA_DATADEFINITIONLANGUAGE_TREE_STRINGNODE_H_INCLUDED

@@ -127,7 +127,7 @@ Arcadia_Visuals_Linux_Icon_constructImpl
   Arcadia_Natural8Value alpha = Arcadia_Value_getNatural8Value(&argumentValues[5]);
 
   Arcadia_Natural32Value dummy, numberOfPixels, numberOfBytes;
-  if (Arcadia_safeMultiplyNatural32Value(thread, (Arcadia_Natural32Value)width, (Arcadia_Natural32Value)height, &dummy, &numberOfPixels)) {
+  if (!Arcadia_safeMultiplyNatural32Value(thread, (Arcadia_Natural32Value)width, (Arcadia_Natural32Value)height, &dummy, &numberOfPixels)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -135,7 +135,7 @@ Arcadia_Visuals_Linux_Icon_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_safeMultiplyNatural32Value(thread, numberOfPixels + 2, sizeof(unsigned long), &dummy, &numberOfBytes)) {
+  if (!Arcadia_safeMultiplyNatural32Value(thread, numberOfPixels + 2, sizeof(unsigned long), &dummy, &numberOfBytes)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }

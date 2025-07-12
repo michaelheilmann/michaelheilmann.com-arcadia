@@ -247,7 +247,7 @@ Arcadia_Process_get
     g_process->referenceCount = ReferenceCount_Minimum + 1;
     Arcadia_Thread_initialize(&g_process->thread);
     g_process->armsCallbackNodes = NULL;
-    g_process->thread.process1 = g_process;
+    g_process->thread.process = g_process;
 
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(&g_process->thread, &jumpTarget);

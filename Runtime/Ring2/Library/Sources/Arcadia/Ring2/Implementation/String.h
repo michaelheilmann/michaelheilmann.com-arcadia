@@ -215,4 +215,95 @@ Arcadia_String_toVoid
     Arcadia_String const* self
   );
 
+Arcadia_String*
+Arcadia_String_createFromBoolean
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BooleanValue booleanValue
+  );
+
+Arcadia_String*
+Arcadia_String_createFromInteger16
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Integer16Value integer16Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromInteger32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Integer32Value integer32Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromInteger64
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Integer64Value integer64Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromInteger8
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Integer8Value integer8Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromNatural16
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Natural16Value natural16Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromNatural32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Natural32Value natural32Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromNatural64
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Natural64Value natural64Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromNatural8
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Natural8Value natural8Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromReal32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Real32Value real32Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromReal64
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Real64Value real64Value
+  );
+
+Arcadia_String*
+Arcadia_String_createFromSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_SizeValue sizeValue
+  );
+
+Arcadia_String*
+Arcadia_String_createFromVoid
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VoidValue voidValue
+  );
+
 #endif // ARCADIA_RING2_IMPLEMENTATION_STRING_H_INCLUDED

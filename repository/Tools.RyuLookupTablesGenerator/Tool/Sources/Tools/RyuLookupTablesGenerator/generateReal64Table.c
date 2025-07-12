@@ -37,11 +37,11 @@ static Arcadia_BigInteger* TWO = NULL;
 static void
 onNotifyDestroy
   (
-    Arms_NotifyDestroyContext* context,
-    void* object
+    void* argument1,
+    void* argument2
   )
 {
-  Arcadia_BigInteger** variable = (Arcadia_BigInteger**)context;
+  Arcadia_BigInteger** variable = (Arcadia_BigInteger**)argument2;
   *variable = NULL;
 }
 
@@ -148,7 +148,7 @@ printTable
   )
 {
   static const Arcadia_BooleanValue pad = Arcadia_BooleanValue_True;
-  Arcadia_SizeValue length = Arcadia_List_getSize(thread, table);
+  Arcadia_SizeValue length = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)table);
   Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8"static const Arcadia_Natural64Value ", sizeof(u8"static const Arcadia_Natural64Value ") - 1);
   Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(name));
   Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8"[", sizeof(u8"[") - 1);
@@ -215,7 +215,7 @@ printOffsets
     Arcadia_SizeValue entriesPerLine
   )
 {
-  Arcadia_SizeValue length = (Arcadia_List_getSize(thread, table) + 15) / 16;
+  Arcadia_SizeValue length = (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)table) + 15) / 16;
   Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8"static const Arcadia_Natural32Value ", sizeof(u8"static const Arcadia_Natural32Value ") - 1);
   Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(name));
   Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8"[", sizeof(u8"[") - 1);
@@ -225,7 +225,7 @@ printOffsets
   for (Arcadia_SizeValue i = 0; i < length; ++i) {
     Arcadia_Natural32Value value = 0;
     for (Arcadia_SizeValue j = 0; j < 16; ++j) {
-      Arcadia_SizeValue offset = i * 16 + j < Arcadia_List_getSize(thread, table) ? Arcadia_List_getNatural32ValueAt(thread, table, i * 16 + j) : 0;
+      Arcadia_SizeValue offset = i * 16 + j < Arcadia_Collection_getSize(thread, (Arcadia_Collection*)table) ? Arcadia_List_getNatural32ValueAt(thread, table, i * 16 + j) : 0;
       value |= offset << (j << 1);
     }
     if (i % entriesPerLine == 0) {
@@ -375,7 +375,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table
   // 1
   a = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger8(thread, a, 1);
-  if (Arms_addNotifyDestroy(a, &ONE, &onNotifyDestroy)) {
+  if (Arms_addNotifyDestroy(a, NULL, &ONE, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -385,7 +385,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table
   // 2
   a = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger8(thread, a, 2);
-  if (Arms_addNotifyDestroy(a, &TWO, &onNotifyDestroy)) {
+  if (Arms_addNotifyDestroy(a, NULL, &TWO, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -403,7 +403,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table
 #if _DEBUG
   //Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, a));
 #endif
-  if (Arms_addNotifyDestroy(a, &MASK64, &onNotifyDestroy)) {
+  if (Arms_addNotifyDestroy(a, NULL, &MASK64, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }

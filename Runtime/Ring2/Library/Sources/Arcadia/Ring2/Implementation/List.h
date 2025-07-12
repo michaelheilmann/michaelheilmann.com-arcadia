@@ -21,11 +21,12 @@
 #endif
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Implementation/Collection.h"
 
-Arcadia_declareObjectType(u8"Arcadia.List", Arcadia_List, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.List", Arcadia_List, u8"Arcadia.Collection");
 
 struct Arcadia_List {
-  Arcadia_Object _parent;
+  Arcadia_Collection parent;
   Arcadia_Value* elements;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
@@ -38,21 +39,6 @@ Arcadia_List_create
     Arcadia_Thread* thread
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_clear
-void
-Arcadia_List_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_getSize
-Arcadia_SizeValue
-Arcadia_List_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  );
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_insertFront
 void
@@ -100,17 +86,6 @@ Arcadia_List_removeAt
     Arcadia_SizeValue index,
     Arcadia_SizeValue count
   );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_isEmpty
-static inline Arcadia_BooleanValue
-Arcadia_List_isEmpty
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* self
-  )
-{
-  return Arcadia_SizeValue_Literal(0) == Arcadia_List_getSize(thread, self);
-}
 
 #define Define(Type, Suffix, Variable) \
   void \
@@ -170,5 +145,14 @@ Define(Arcadia_Size, Size, size)
 Define(Arcadia_Void, Void, void)
 
 #undef Define
+
+Arcadia_List*
+Arcadia_List_filter
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self,
+    Arcadia_Value context,
+    Arcadia_BooleanValue (*predicate)(Arcadia_Thread* thread, Arcadia_Value context, Arcadia_Value value)
+  );
 
 #endif // ARCADIA_RING2_IMPLEMENTATION_LIST_H_INCLUDED

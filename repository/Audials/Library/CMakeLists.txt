@@ -22,8 +22,6 @@ if (NOT TARGET ${MyModule})
 
   BeginProduct(${MyModule} library)
 
-  FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
-
   set(${MyModule}.Backend.None 0)
   set(${MyModule}.Backend.OpenAl 1)
   set(${MyModule}.Backend ${${MyModule}.Backend.None})

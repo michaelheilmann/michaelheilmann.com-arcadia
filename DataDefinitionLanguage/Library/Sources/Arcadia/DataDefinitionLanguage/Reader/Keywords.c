@@ -19,7 +19,7 @@ typedef struct Keyword Keyword;
 
 struct Keyword {
   Keyword* next;
-  Arcadia_ImmutableUtf8String* string;
+  Arcadia_String* string;
   Arcadia_Natural32Value type;
 };
 
@@ -81,7 +81,7 @@ Arcadia_DataDefinitionLanguage_Keywords_visit
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     Keyword* node = self->buckets[i];
     while (node) {
-      Arcadia_ImmutableUtf8String_visit(thread, node->string);
+      Arcadia_Object_visit(thread, (Arcadia_Object*)node->string);
       node = node->next;
     }
   }
@@ -94,23 +94,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Keywords", Arcadia_DataDefinitionLanguage_Keywords, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -163,16 +148,16 @@ Arcadia_DataDefinitionLanguage_Keywords_add
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Keywords* self,
-    Arcadia_ImmutableUtf8String* string,
+    Arcadia_String* string,
     Arcadia_Natural32Value type
   )
 {
-  Arcadia_Value stringValue = Arcadia_Value_makeImmutableUtf8StringValue(string);
+  Arcadia_Value stringValue = Arcadia_Value_makeObjectReferenceValue(string);
   Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &stringValue);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
     Arcadia_Value v[] = {
-      Arcadia_Value_makeImmutableUtf8StringValue(keyword->string),
+      Arcadia_Value_makeObjectReferenceValue(keyword->string),
       stringValue
     };
     if (Arcadia_Value_isEqualTo(thread, &v[0], &v[1])) {
@@ -193,16 +178,16 @@ Arcadia_DataDefinitionLanguage_Keywords_scan
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Keywords* self,
-    Arcadia_ImmutableUtf8String* string,
+    Arcadia_String* string,
     Arcadia_Natural32Value* tokenType
   )
 {
-  Arcadia_Value stringValue = Arcadia_Value_makeImmutableUtf8StringValue(string);
+  Arcadia_Value stringValue = Arcadia_Value_makeObjectReferenceValue(string);
   Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &stringValue);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Keyword* keyword = self->buckets[index]; NULL != keyword; keyword = keyword->next) {
     Arcadia_Value v[2] = {
-      Arcadia_Value_makeImmutableUtf8StringValue(keyword->string),
+      Arcadia_Value_makeObjectReferenceValue(keyword->string),
       stringValue
     };
     if (Arcadia_Value_isEqualTo(thread, &v[0], &v[1])) {

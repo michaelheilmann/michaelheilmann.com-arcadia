@@ -33,3 +33,5 @@ add_subdirectory(StringToIntegerTests)
 add_subdirectory(StringToNaturalTests)
 add_subdirectory(StringToRealTests)
 add_subdirectory(NextPowerOfTwoTests)
+
+add_subdirectory(WeakReferences)

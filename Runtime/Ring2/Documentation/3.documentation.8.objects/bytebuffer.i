@@ -1,11 +1,7 @@
 <section class="cxx entity object">
 <h1 id="Arcadia_ByteBuffer">Arcadia_ByteBuffer</h1>
-<p>
-<code>Arcadia_ByteBuffer</code> represents a mutable sequence of Bytes.
-This type is allocated on the heap and values of this type are referenced by <code>Arcadia_ByteBuffer</code> pointers.
-A <code>Arcadia_ByteBuffer</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuffer</code> value can be safely cast into a <code>Arcadia_ByteBuffer</code> pointer.
-</p>
+<p><code>Arcadia_ByteBuffer</code> extends <code>Arcadia_Object</code>.</p>
+<p><code>Arcadia_ByteBuffer</code> represents a mutable sequence of Bytes.</p>
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -44,7 +40,7 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_ByteBuf
 
   <section class="cxx return-value">
     <h1>Return value</h1>
-    <p>A pointer to the Byte buffer.</p>
+    <p>A pointer to the <code>Arcadia_ByteBuffer</code> object.</p>
   </section>
 
 </section>

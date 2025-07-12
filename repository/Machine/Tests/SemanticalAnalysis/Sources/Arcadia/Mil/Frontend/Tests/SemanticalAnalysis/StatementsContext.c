@@ -41,23 +41,8 @@ static const Arcadia_ObjectType_Operations _Arcadia_Mil_CallableContext_objectTy
 };
 
 static const Arcadia_Type_Operations _Arcadia_Mil_CallableContext_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_Mil_CallableContext_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Mil.CallableContext", Arcadia_Mil_CallableContext, u8"Arcadia.Object", Arcadia_Object, &_Arcadia_Mil_CallableContext_typeOperations);
@@ -123,8 +108,8 @@ Arcadia_Mil_CallableContext_onReset
     Arcadia_Mil_CallableContext* self
   )
 {
-  Arcadia_Map_clear(thread, self->labels);
-  Arcadia_List_clear(thread, self->variables);
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->labels);
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->variables);
   self->statementIndex = 0;
 }
 
@@ -146,7 +131,7 @@ Arcadia_Mil_CallableContext_onDefineLabel
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Value_setObjectReferenceValue(&v, ast);
-  Arcadia_Map_set(thread, self->labels, k, v);
+  Arcadia_Map_set(thread, self->labels, k, v, NULL, NULL);
 }
 
 void
@@ -158,7 +143,7 @@ Arcadia_Mil_CallableContext_onParameterVariableDefinition
     Arcadia_Mil_Ast* ast
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, self->variables); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->variables); i < n; ++i) {
     Arcadia_Value args[2] = {
       Arcadia_Value_makeObjectReferenceValue(name),
       Arcadia_List_getAt(thread, self->variables, i),
@@ -179,7 +164,7 @@ Arcadia_Mil_CallableContext_onLocalVariableDefinition
     Arcadia_Mil_VariableDefinitionStatementAst* ast
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, context->variables); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->variables); i < n; ++i) {
     Arcadia_Value args[2] = {
       Arcadia_Value_makeObjectReferenceValue(name),
       Arcadia_List_getAt(thread, context->variables, i),

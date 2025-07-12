@@ -41,23 +41,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -153,7 +138,7 @@ R_Interpreter_Class_addConstructor
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setObjectReferenceValue(&value, constructor);
-  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value, NULL, NULL);
 }
 
 void
@@ -171,7 +156,7 @@ R_Interpreter_Class_addMethod
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setObjectReferenceValue(&value, method);
-  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value, NULL, NULL);
 }
 
 void
@@ -189,7 +174,7 @@ R_Interpreter_Class_addVariable
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   Arcadia_Value_setObjectReferenceValue(&value, variable);
-  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->classMembers, key, value, NULL, NULL);
 }
 
 static R_Interpreter_Class*
@@ -242,7 +227,7 @@ completeExtendedClass
         Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_SemanticalError);
         Arcadia_Thread_jump(Arcadia_Process_getThread(process));
       }
-      Arcadia_Map_set(Arcadia_Process_getThread(process), temporary, v, k);
+      Arcadia_Map_set(Arcadia_Process_getThread(process), temporary, v, k, NULL, NULL);
       current = current->extendedClass;
     } while (current);
   }
@@ -263,7 +248,7 @@ completeVariables
   }
   // Complete class instance variables.
   Arcadia_List* classMember = Arcadia_Map_getValues(thread, self->classMembers);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, classMember); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)classMember); i < n; ++i) {
     Arcadia_Value value = Arcadia_List_getAt(thread, classMember, i);
     Arcadia_TypeValue valueType = Arcadia_Value_getType(thread, &value);
     if (Arcadia_Type_isSubType(thread, valueType, _R_Interpreter_Variable_getType(thread))) {
@@ -310,7 +295,7 @@ R_Interpreter_Class_complete
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_Map_set(thread, temporary, v, k);
+      Arcadia_Map_set(thread, temporary, v, k, NULL, NULL);
       current = current->extendedClass;
     } while (current);
   }
@@ -325,7 +310,7 @@ R_Interpreter_Class_complete
     self->methodDispatch = Arcadia_Map_create(thread);
   }
   Arcadia_List* members = Arcadia_Map_getValues(thread, self->classMembers);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, members); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)members); i < n; ++i) {
     Arcadia_Value v = Arcadia_List_getAt(thread, members, i);
     if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &v), _R_Interpreter_Method_getType(thread))) {
       R_Interpreter_Method *m = Arcadia_Value_getObjectReferenceValue(&v);
@@ -336,7 +321,7 @@ R_Interpreter_Class_complete
         m->index = m2->index;
         m->ready = Arcadia_BooleanValue_True;
       } else {
-        m->index = Arcadia_Map_getSize(thread, self->methodDispatch);
+        m->index = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->methodDispatch);
         m->ready = Arcadia_BooleanValue_True;
       }
     }

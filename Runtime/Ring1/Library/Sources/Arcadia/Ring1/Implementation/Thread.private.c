@@ -51,7 +51,7 @@ Arcadia_Thread_initialize
     Arcadia_Thread* thread
   )
 {
-  thread->process1 = NULL;
+  thread->process = NULL;
   thread->status = Arcadia_Status_Success;
   thread->jumpTarget = NULL;
   Arcadia_Thread_initializeValueStack(thread);
@@ -66,7 +66,7 @@ Arcadia_Thread_uninitialize
   Arcadia_Thread_uninitializeValueStack(thread);
   thread->jumpTarget = NULL;
   thread->status = Arcadia_Status_Success;
-  thread->process1 = NULL;
+  thread->process = NULL;
 }
 
 void

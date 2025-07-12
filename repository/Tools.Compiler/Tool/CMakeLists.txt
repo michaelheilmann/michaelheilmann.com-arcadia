@@ -19,8 +19,6 @@ set(MyTool Tools.Compiler)
 
 if (NOT TARGET ${MyTool})
 
-  FetchProduct(${MyProjectName}.Mil.Frontend "${REPOSITORY_SOURCE_DIR}/Mil.Frontend/Library" "path to the MIL Frontend library directory")
-
   BeginProduct(${MyTool} executable)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Compiler/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Compiler/Configure.h @ONLY)

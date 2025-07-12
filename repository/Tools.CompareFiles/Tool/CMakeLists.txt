@@ -19,8 +19,6 @@ set(MyTool Tools.CompareFiles)
 
 if (NOT TARGET ${MyTool})
 
-  FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
-
   BeginProduct(${MyTool} executable)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/CompareFiles/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/CompareFiles/Configure.h @ONLY)

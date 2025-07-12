@@ -19,16 +19,16 @@ static void
 assertText
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* v,
+    Arcadia_String* v,
     const char* p,
     size_t n
   )
 {
-  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, v) != n) {
+  if (Arcadia_String_getNumberOfBytes(thread, v) != n) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_Memory_compare(thread, Arcadia_ImmutableUtf8String_getBytes(thread, v), p, n)) {
+  if (Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, v), p, n)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }

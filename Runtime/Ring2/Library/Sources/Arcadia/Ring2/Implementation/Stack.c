@@ -60,6 +60,20 @@ Arcadia_Stack_constructImpl
     Arcadia_Value* argumentValues
   );
 
+static void
+Arcadia_Stack_clearImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  );
+
+static Arcadia_SizeValue
+Arcadia_Stack_getSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &Arcadia_Stack_constructImpl,
   .destruct = &Arcadia_Stack_destruct,
@@ -67,26 +81,11 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Stack", Arcadia_Stack, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Stack", Arcadia_Stack, u8"Arcadia.Collection", Arcadia_Collection, &_typeOperations);
 
 static void
 Arcadia_Stack_ensureFreeCapacity
@@ -166,6 +165,8 @@ Arcadia_Stack_constructImpl
   for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
     Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
   }
+  ((Arcadia_Collection*)_self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_Stack_clearImpl;
+  ((Arcadia_Collection*)_self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_Stack_getSizeImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -196,6 +197,22 @@ Arcadia_Stack_visit
   }
 }
 
+static void
+Arcadia_Stack_clearImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
+{ self->size = 0; }
+
+static Arcadia_SizeValue
+Arcadia_Stack_getSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self
+  )
+{ return self->size; }
+
 Arcadia_Stack*
 Arcadia_Stack_create
   (
@@ -210,22 +227,6 @@ Arcadia_Stack_create
 }
 
 void
-Arcadia_Stack_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
-  )
-{ self->size = 0; }
-
-Arcadia_SizeValue
-Arcadia_Stack_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
-  )
-{ return self->size; }
-
-void
 Arcadia_Stack_push
   (
     Arcadia_Thread* thread,
@@ -233,6 +234,9 @@ Arcadia_Stack_push
     Arcadia_Value value
   )
 {
+  if (Arcadia_Value_isVoidValue(&value)) {
+    return;
+  }
   if (self->capacity == self->size) {
     Arcadia_Stack_ensureFreeCapacity(thread, self, Arcadia_SizeValue_Literal(1));
   }

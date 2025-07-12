@@ -83,24 +83,15 @@ or
   );
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = NULL,
-  .add = NULL,
   .and = &and,
-  .concatenate = NULL,
-  .divide = NULL,
   .equalTo = &isEqualTo,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
   .hash = &hash,
   .identical = &identical,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
   .not = &not,
   .notEqualTo = &isNotEqualTo,
-  .or = &or ,
-  .subtract = NULL,
+  .or = &or,
 };
 
 static void

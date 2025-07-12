@@ -39,23 +39,8 @@ static const Arcadia_ObjectType_Operations _Arcadia_DataDefinitionLanguage_Tree_
 };
 
 static const Arcadia_Type_Operations _Arcadia_DataDefinitionLanguage_Tree_VoidNode_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_DataDefinitionLanguage_Tree_VoidNode_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.VoidNode", Arcadia_DataDefinitionLanguage_Tree_VoidNode,
@@ -85,13 +70,13 @@ Arcadia_DataDefinitionLanguage_Tree_VoidNode_constructImpl
   }
   switch (Arcadia_Value_getTag(&argumentValues[0])) {
     case Arcadia_ValueTag_Void: {
-      _self->value = Arcadia_ImmutableUtf8String_createFromBoolean(thread, Arcadia_Value_getVoidValue(&argumentValues[0]));
+      _self->value = Arcadia_String_createFromVoid(thread, Arcadia_Value_getVoidValue(&argumentValues[0]));
     } break;
-    case Arcadia_ValueTag_ImmutableUtf8String: {
-      _self->value = Arcadia_Value_getImmutableUtf8StringValue(&argumentValues[0]);
+    case Arcadia_ValueTag_ObjectReference: {
+      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
       static const Arcadia_Natural8Value voidString[] = u8"void";
-      if (sizeof(voidString) - 1 != Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, _self->value) ||
-          0 != Arcadia_Memory_compare(thread, voidString, Arcadia_ImmutableUtf8String_getBytes(thread, _self->value), sizeof(voidString) - 1)) {
+      if (sizeof(voidString) - 1 != Arcadia_String_getNumberOfBytes(thread, _self->value) ||
+          0 != Arcadia_Memory_compare(thread, voidString, Arcadia_String_getBytes(thread, _self->value), sizeof(voidString) - 1)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
           Arcadia_Thread_jump(thread);
       }
@@ -112,7 +97,7 @@ Arcadia_DataDefinitionLanguage_Tree_VoidNode_visit
   )
 {
   if (self->value) {
-    Arcadia_ImmutableUtf8String_visit(thread, self->value);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->value);
   }
 }
 
@@ -134,11 +119,11 @@ Arcadia_DataDefinitionLanguage_Tree_VoidNode*
 Arcadia_DataDefinitionLanguage_Tree_VoidNode_createString
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* stringValue
+    Arcadia_String* stringValue
   )
 {
   Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeImmutableUtf8StringValue(stringValue),
+    Arcadia_Value_makeObjectReferenceValue(stringValue),
   };
   Arcadia_DataDefinitionLanguage_Tree_VoidNode* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_Tree_VoidNode_getType(thread), 1, &argumentValues[0]);
   return self;

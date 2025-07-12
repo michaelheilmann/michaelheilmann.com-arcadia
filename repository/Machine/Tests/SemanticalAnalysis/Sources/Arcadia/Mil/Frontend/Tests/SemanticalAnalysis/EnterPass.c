@@ -158,7 +158,7 @@ getRegisterOfVariable
     Arcadia_String* name
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, context->variables); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->variables); i < n; ++i) {
     Arcadia_Value args[2] = {
         Arcadia_Value_makeObjectReferenceValue(name),
         Arcadia_List_getAt(thread, context->variables, i),
@@ -168,7 +168,7 @@ getRegisterOfVariable
     }
   }
   Arcadia_List_insertBackObjectReferenceValue(thread, context->variables, name);
-  return Arcadia_List_getSize(thread, context->variables) - 1;
+  return Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->variables) - 1;
 }
 
 static void
@@ -439,7 +439,7 @@ onStatements
   )
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, statements); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)statements); i < n; ++i) {
     Arcadia_Value elementValue = Arcadia_List_getAt(thread, statements, i);
     Arcadia_ObjectReferenceValue objectElementValue = Arcadia_Value_getObjectReferenceValue(&elementValue);
     Arcadia_Mil_StatementAst* statement = (Arcadia_Mil_StatementAst*)objectElementValue;
@@ -523,7 +523,7 @@ onProcedureDefinition
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Mil_CallableContext* context = Arcadia_Mil_CallableContext_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, definitionAst->procedureParameters); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->procedureParameters); i < n; ++i) {
     Arcadia_Value variableNameValue = Arcadia_List_getAt(thread, definitionAst->procedureParameters, i);
     Arcadia_String* variableNameString = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &variableNameValue, _Arcadia_String_getType(thread));
     Arcadia_Mil_CallableContext_onParameterVariableDefinition(thread, context,
@@ -573,7 +573,7 @@ onConstructorDefinition
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Mil_CallableContext* context = Arcadia_Mil_CallableContext_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, definitionAst->constructorParameters); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->constructorParameters); i < n; ++i) {
     Arcadia_Value variableNameValue = Arcadia_List_getAt(thread, definitionAst->constructorParameters, i);
     Arcadia_String* variableNameString = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &variableNameValue, _Arcadia_String_getType(thread));
     Arcadia_Mil_CallableContext_onParameterVariableDefinition(thread, context,
@@ -622,7 +622,7 @@ onMethodDefinition
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Mil_CallableContext* context = Arcadia_Mil_CallableContext_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, definitionAst->methodParameters); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->methodParameters); i < n; ++i) {
     Arcadia_Value variableNameValue = Arcadia_List_getAt(thread, definitionAst->methodParameters, i);
     Arcadia_String* variableNameString = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &variableNameValue, _Arcadia_String_getType(thread));
     Arcadia_Mil_CallableContext_onParameterVariableDefinition(thread, context,
@@ -700,7 +700,7 @@ onClassBodyDefinition
     Arcadia_List* classBodyAst
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, classBodyAst); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)classBodyAst); i < n; ++i) {
     Arcadia_ObjectReferenceValue element = Arcadia_List_getObjectReferenceValueAt(thread, classBodyAst, i);
     if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, element), _Arcadia_Mil_ConstructorDefinitionAst_getType(thread))) {
       onConstructorDefinition(thread, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
@@ -781,23 +781,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Mil.EnterPass", Arcadia_Mil_EnterPass, u8"Arcadia.Mil.Pass", Arcadia_Mil_Pass, &_typeOperations);

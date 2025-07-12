@@ -39,23 +39,8 @@ static const Arcadia_ObjectType_Operations _Arcadia_DataDefinitionLanguage_Tree_
 };
 
 static const Arcadia_Type_Operations _Arcadia_DataDefinitionLanguage_Tree_ListNode_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_DataDefinitionLanguage_Tree_ListNode_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.ListNode", Arcadia_DataDefinitionLanguage_Tree_ListNode,
@@ -118,4 +103,4 @@ Arcadia_DataDefinitionLanguage_Tree_ListNode_getNumberOfElements
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Tree_ListNode* self
   )
-{ return Arcadia_List_getSize(thread, self->elements); }
+{ return Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->elements); }

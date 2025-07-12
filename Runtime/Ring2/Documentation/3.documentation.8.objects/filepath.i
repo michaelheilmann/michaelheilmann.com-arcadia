@@ -1,11 +1,7 @@
 <section class="cxx entity object">
 <h1 id="Arcadia_FilePath">Arcadia_FilePath</h1>
-<p>
-<code>Arcadia_FilePath</code> represents a file path.
-This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FilePath</code> pointers.
-A <code>Arcadia_FilePath</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FilePath</code> value can be safely cast into a <code>Arcadia_FilePath</code> pointer.
-</p>
+<p><code>Arcadia_FilePath</code> extends <code>Arcadia_Object</code>.</p>
+<p><code>Arcadia_FilePath</code> represents a file path.</p>
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

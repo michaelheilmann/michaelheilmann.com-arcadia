@@ -62,23 +62,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.StringTable", Arcadia_DataDefinitionLanguage_StringTable, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -144,7 +129,7 @@ Arcadia_DataDefinitionLanguage_StringTable_maybeResize_nojump
         while (oldBuckets[oldIndex]) {
           Arcadia_DataDefinitionLanguage_StringTable_Node* node = oldBuckets[oldIndex];
           oldBuckets[oldIndex] = oldBuckets[oldIndex]->next;
-          Arcadia_Value v = Arcadia_Value_makeImmutableUtf8StringValue(node->string);
+          Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue(node->string);
           Arcadia_SizeValue hash = Arcadia_Value_getHash(thread, &v);
           Arcadia_SizeValue newIndex = hash % newCapacity;
           node->next = newBuckets[newIndex];
@@ -187,7 +172,7 @@ Arcadia_DataDefinitionLanguage_StringTable_visit
   for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
     Arcadia_DataDefinitionLanguage_StringTable_Node* node = self->buckets[i];
     while (node) {
-      Arcadia_ImmutableUtf8String_visit(thread, node->string);
+      Arcadia_Object_visit(thread, (Arcadia_Object*)node->string);
       node = node->next;
     }
   }
@@ -222,7 +207,7 @@ Arcadia_DataDefinitionLanguage_StringTable_create
   return self;
 }
 
-Arcadia_ImmutableUtf8String*
+Arcadia_String*
 Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString
   (
     Arcadia_Thread* thread,
@@ -235,17 +220,18 @@ Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString
   Arcadia_SizeValue hash = Arcadia_DataDefinitionLanguage_StringTable_hashBytes(thread, bytes, numberOfBytes);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Arcadia_DataDefinitionLanguage_StringTable_Node* node = self->buckets[index]; NULL != node; node = node->next) {
-    Arcadia_Value nodeValue = Arcadia_Value_makeImmutableUtf8StringValue(node->string);
-    if (Arcadia_ImmutableUtf8String_getHash(thread, node->string) == hash && 
-        Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, node->string) == numberOfBytes) {
-      if (!Arcadia_Memory_compare(thread, Arcadia_ImmutableUtf8String_getBytes(thread, node->string), bytes, numberOfBytes)) {
+    Arcadia_Value nodeValue = Arcadia_Value_makeObjectReferenceValue(node->string);
+    if (node->hash == hash && 
+        Arcadia_String_getNumberOfBytes(thread, node->string) == numberOfBytes) {
+      if (!Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, node->string), bytes, numberOfBytes)) {
         return node->string;
       }
     }
   }
-  Arcadia_ImmutableUtf8String* string = Arcadia_ImmutableUtf8String_create(thread, Arcadia_StringBuffer_getBytes(thread, stringBuffer), Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer));
+  Arcadia_String* string = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, Arcadia_StringBuffer_getBytes(thread, stringBuffer), Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer))));
   Arcadia_DataDefinitionLanguage_StringTable_Node* node = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node));
   node->string = string;
+  node->hash = Arcadia_DataDefinitionLanguage_StringTable_hashBytes(thread, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
   node->next = self->buckets[index];
   self->buckets[index] = node;
   self->size++;

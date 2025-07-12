@@ -24,7 +24,7 @@ Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.NumberNode", Ar
 
 struct Arcadia_DataDefinitionLanguage_Tree_NumberNode {
   Arcadia_DataDefinitionLanguage_Tree_Node parent;
-  Arcadia_ImmutableUtf8String* value;
+  Arcadia_String* value;
 };
 
 Arcadia_DataDefinitionLanguage_Tree_NumberNode*
@@ -97,13 +97,11 @@ Arcadia_DataDefinitionLanguage_Tree_NumberNode_createReal64
     Arcadia_Real64Value real64Value
   );
 
-// A writer which consumes a number node always checks if the string is a valid number literal string.
-// If a reader produces a number node, its string is valid number literal string.
 Arcadia_DataDefinitionLanguage_Tree_NumberNode*
 Arcadia_DataDefinitionLanguage_Tree_NumberNode_createString
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* stringValue
+    Arcadia_String* stringValue
   );
 
 #endif // ARCADIA_DATADEFINITIONLANGUAGE_TREE_NUMBERNODE_H_INCLUDED

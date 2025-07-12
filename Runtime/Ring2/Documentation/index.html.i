@@ -3,11 +3,15 @@
 @{include("2.further-references.i")}
 @{include("3.documentation.i")}
 @{include("3.documentation.8.objects.i")}
+@{include("3.documentation.8.objects/object.i")}
 @{include("3.documentation.8.objects/bytebuffer.i")}
 @{include("3.documentation.8.objects/filehandle.i")}
 @{include("3.documentation.8.objects/filepath.i")}
 @{include("3.documentation.8.objects/filesystem.i")}
+@{include("3.documentation.8.objects/collection/include.content")}
 @{include("3.documentation.8.objects/list/include.content")}
+@{include("3.documentation.8.objects/map/include.content")}
+@{include("3.documentation.8.objects/set/include.content")}
 @{include("3.documentation.8.objects/stack/include.content")}
 @{include("3.documentation.8.objects/string/include.content")}
 @{include("3.documentation.8.objects/stringbuffer/include.content")}

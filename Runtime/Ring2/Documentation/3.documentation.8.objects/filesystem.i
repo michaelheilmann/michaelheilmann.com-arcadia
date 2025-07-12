@@ -1,11 +1,7 @@
 <section class="cxx entity object">
 <h1 id="Arcadia_FileSystem">Arcadia_FileSystem</h1>
-<p>
-<code>Arcadia_FileSystem</code> provides access to the file system.
-This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FileSystem</code> pointers.
-A <code>Arcadia_FileSystem</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSystem</code> value can be safely cast into a <code>Arcadia_FileSystem</code> pointer.
-</p>
+<p><code>Arcadia_FileSystem</code> extends <code>Arcadia_Object</code>.</p>
+<p><code>Arcadia_FileSystem</code> provides access to the file system.</p>
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -67,8 +63,8 @@ An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileSys
   <section class="cxx parameters">
     <h1>Parameters</h1>
     <div>
-      <div><a href="#">Arcadia_Process</a>* process</div>
-      <div>A pointer to the <code>Arcadia_Process</code> object.</div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
     <div>
       <div><a href="#">Arcadia_FileSystem</a>* self</div>

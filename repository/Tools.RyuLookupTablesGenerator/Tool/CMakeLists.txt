@@ -19,9 +19,6 @@ set(MyTool ${MyProjectName}.Tools.GenerateRyuLookupTables)
 
 if (NOT TARGET ${MyTool})
 
-  FetchProduct(${MyTool}.Ring1 "${REPOSITORY_SOURCE_DIR}/../Runtime/Ring1/Library" "path to the Ring 1 library directory")
-  FetchProduct(${MyTool}.Ring2 "${REPOSITORY_SOURCE_DIR}/../Runtime/Ring2/Library" "path to the Ring 2 library directory")
-
   BeginProduct(${MyTool} executable)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/RyuLookupTablesGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/RyuLookupTablesGenerator/Configure.h @ONLY)

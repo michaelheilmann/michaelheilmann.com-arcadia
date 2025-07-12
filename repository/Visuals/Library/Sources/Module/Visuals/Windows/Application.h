@@ -39,4 +39,10 @@ Arcadia_Visuals_Windows_Application_create
     Arcadia_Thread* thread
   );
 
+Arcadia_Visuals_Windows_Application*
+Arcadia_Visuals_Windows_Application_getOrCreate
+  (
+    Arcadia_Thread* thread
+  );
+
 #endif // ARCADIA_VISUALS_WINDOWS_APPLICATION_H_INCLUDED

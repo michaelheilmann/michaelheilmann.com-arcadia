@@ -89,23 +89,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Parser", Arcadia_DataDefinitionLanguage_Parser,
@@ -161,7 +146,7 @@ Arcadia_DataDefinitionLanguage_Parser_create
   return self;
 }
 
-Arcadia_ImmutableUtf8String*
+Arcadia_String*
 Arcadia_DataDefinitionLanguage_Parser_getWordText
   (
     Arcadia_Thread* thread,
@@ -186,7 +171,8 @@ Arcadia_DataDefinitionLanguage_Parser_next
 {
   do {
     Arcadia_DataDefinitionLanguage_Scanner_step(thread, self->scanner);
-  } while (Arcadia_DataDefinitionLanguage_WordType_WhiteSpace == Arcadia_DataDefinitionLanguage_Parser_getWordType(thread, self));
+  } while (Arcadia_DataDefinitionLanguage_WordType_WhiteSpace == Arcadia_DataDefinitionLanguage_Parser_getWordType(thread, self) ||
+           Arcadia_DataDefinitionLanguage_WordType_LineTerminator == Arcadia_DataDefinitionLanguage_Parser_getWordType(thread, self));
 }
 
 static Arcadia_DataDefinitionLanguage_Tree_ListNode*
@@ -310,14 +296,12 @@ Arcadia_DataDefinitionLanguage_Parser_onValue
       Arcadia_DataDefinitionLanguage_Tree_Node* node = NULL;
       node = (Arcadia_DataDefinitionLanguage_Tree_Node*)
         Arcadia_DataDefinitionLanguage_Parser_onMapValue(thread, self);
-      Arcadia_DataDefinitionLanguage_Parser_next(thread, self);
       return node;
     } break;
     case Arcadia_DataDefinitionLanguage_WordType_LeftSquareBracket: {
       Arcadia_DataDefinitionLanguage_Tree_Node* node = NULL;
       node = (Arcadia_DataDefinitionLanguage_Tree_Node*)
         Arcadia_DataDefinitionLanguage_Parser_onListValue(thread, self);
-      Arcadia_DataDefinitionLanguage_Parser_next(thread, self);
       return node;
     } break;
     case Arcadia_DataDefinitionLanguage_WordType_RealLiteral: {

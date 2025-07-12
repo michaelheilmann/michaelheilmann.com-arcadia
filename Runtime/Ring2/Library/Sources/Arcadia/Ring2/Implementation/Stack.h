@@ -21,11 +21,12 @@
 #endif
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Implementation/Collection.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Stack", Arcadia_Stack, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Stack", Arcadia_Stack, u8"Arcadia.Collection");
 
 struct Arcadia_Stack {
-  Arcadia_Object _parent;
+  Arcadia_Collection _parent;
   Arcadia_Value* elements;
   Arcadia_SizeValue size;
   Arcadia_SizeValue capacity;
@@ -36,22 +37,6 @@ Arcadia_Stack*
 Arcadia_Stack_create
   (
     Arcadia_Thread* thread
-  );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_clear
-void
-Arcadia_Stack_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
-  );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_getSize
-Arcadia_SizeValue
-Arcadia_Stack_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
   );
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_push
@@ -78,15 +63,6 @@ Arcadia_Stack_peek
     Arcadia_Thread* thread,
     Arcadia_Stack* self
   );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Stack_isEmpty
-static inline Arcadia_BooleanValue
-Arcadia_Stack_isEmpty
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Stack* self
-  )
-{ return Arcadia_SizeValue_Literal(0) == Arcadia_Stack_getSize(thread, self); }
 
 #define Define(Type, Suffix, Variable) \
   void \

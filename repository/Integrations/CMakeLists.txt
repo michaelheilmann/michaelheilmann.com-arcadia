@@ -15,14 +15,4 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-if (NOT MyProjectIsDefined)
-  if (NOT DEFINED MyProjectName)
-    set(MyProjectName "Arcadia")
-  endif()
-  project(${MyProjectName})
-  set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
-  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
-  set(MyProjectIsDefined)
-endif()
-
 add_subdirectory(Apache)

@@ -24,7 +24,8 @@ typedef struct NotifyDestroyListNode NotifyDestroyListNode;
 
 struct NotifyDestroyListNode {
   NotifyDestroyListNode* next;
-  Arms_NotifyDestroyContext* context;
+  void* argument1;
+  void* argument2;
   Arms_NotifyDestroyCallback* callback;
 };
 
@@ -33,7 +34,7 @@ typedef struct NotifyDestroyMapNode NotifyDestroyMapNode;
 
 struct NotifyDestroyMapNode {
   NotifyDestroyMapNode* next;
-  void* object;
+  void* observed;
   NotifyDestroyListNode* list;
 };
 
@@ -46,6 +47,60 @@ struct NotifyDestroyMap {
 };
 
 static NotifyDestroyMap* g_notifyDestroyMap = NULL;
+
+// Clear the node list of a map node.
+static void
+NodeList_clear
+  (
+    NotifyDestroyMapNode* node
+  )
+{
+  while (node->list) {
+    NotifyDestroyListNode* node1 = node->list;
+    node->list = node->list->next;
+    //node1->callback(node1->argument1, node1->argument2);
+    free(node1);
+  }
+}
+
+// Remove all occurrences of (argument1, argument2, callback) from the node list of a map node.
+static void
+NodeList_remove
+  (
+    NotifyDestroyMapNode* node,
+    void* argument1,
+    void* argument2,
+    Arms_NotifyDestroyCallback* callback
+  )
+{
+  NotifyDestroyListNode** previous1 = &node->list;
+  NotifyDestroyListNode* current1 = node->list;
+  while (current1) {
+    if (current1->argument1 == argument1 && current1->argument2 == argument2 && current1->callback == callback) {
+      NotifyDestroyListNode* node1 = current1;
+      *previous1 = current1->next;
+      current1 = current1->next;
+      free(node1);
+    } else {
+      previous1 = &current1->next;
+      current1 = current1->next;
+    }
+  }
+}
+
+static void
+NodeList_notify
+  (
+    NotifyDestroyMapNode* node
+  )
+{
+  while (node->list) {
+    NotifyDestroyListNode* node1 = node->list;
+    node->list = node->list->next;
+    node1->callback(node1->argument1, node1->argument2);
+    free(node1);
+  }
+}
 
 Arcadia_Arms_Status
 Arms_NotifyDestroyModule_startup
@@ -85,25 +140,21 @@ Arms_NotifyDestroyModule_shutdown
 void
 Arms_NotifyDestroyModule_notifyDestroy
   (
-    void* object
+    void* observed
   )
 {
-  size_t hashValue = (size_t)(uintptr_t)object;
+  size_t hashValue = (size_t)(uintptr_t)observed;
   size_t hashIndex = hashValue % g_notifyDestroyMap->capacity;
   NotifyDestroyMapNode** previous = &g_notifyDestroyMap->buckets[hashIndex];
   NotifyDestroyMapNode* current = g_notifyDestroyMap->buckets[hashIndex];
   while (current) {
-    if (current->object == object) {
+    if (current->observed == observed) {
       NotifyDestroyMapNode* node = current;
+      NodeList_notify(node);
       *previous = current->next;
       current = current->next;
-      while (node->list) {
-        NotifyDestroyListNode* listNode = node->list;
-        node->list = node->list->next;
-        listNode->callback(listNode->context, object);
-        free(listNode);
-      }
       free(node);
+      g_notifyDestroyMap->size--;
     } else {
       previous = &current->next;
       current = current->next;
@@ -114,16 +165,17 @@ Arms_NotifyDestroyModule_notifyDestroy
 Arcadia_Arms_Status
 Arms_addNotifyDestroy
   (
-    void* object,
-    Arms_NotifyDestroyContext* context,
+    void* observed,
+    void* argument1,
+    void* argument2,
     Arms_NotifyDestroyCallback* callback
   )
 {
-  size_t hashValue = (size_t)(uintptr_t)object;
+  size_t hashValue = (size_t)(uintptr_t)observed;
   size_t hashIndex = hashValue % g_notifyDestroyMap->capacity;
   NotifyDestroyMapNode *node = NULL;
   for (node = g_notifyDestroyMap->buckets[hashIndex]; NULL != node; node = node->next) {
-    if (node->object == object) {
+    if (node->observed == observed) {
       break;
     }
   }
@@ -132,7 +184,7 @@ Arms_addNotifyDestroy
     if (!node) {
       return Arcadia_Arms_Status_AllocationFailed;
     }
-    node->object = object;
+    node->observed = observed;
     node->list = NULL;
     node->next = g_notifyDestroyMap->buckets[hashIndex];
     g_notifyDestroyMap->buckets[hashIndex] = node;
@@ -145,33 +197,63 @@ Arms_addNotifyDestroy
   listNode->next = node->list;
   node->list = listNode;
   listNode->callback = callback;
-  listNode->context = context;
+  listNode->argument1 = argument1;
+  listNode->argument2 = argument2;
+  return Arcadia_Arms_Status_Success;
+}
+
+Arcadia_Arms_Status
+Arms_removeNotifyDestroyAll
+  (
+    void* observed
+  )
+{
+  size_t hashValue = (size_t)(uintptr_t)observed;
+  size_t hashIndex = hashValue % g_notifyDestroyMap->capacity;
+  NotifyDestroyMapNode** previous = &g_notifyDestroyMap->buckets[hashIndex];
+  NotifyDestroyMapNode* current = g_notifyDestroyMap->buckets[hashIndex];
+  while (current) {
+    if (current->observed == observed) {
+      NotifyDestroyMapNode* node = current;
+      NodeList_clear(node);
+      *previous = current->next;
+      current = current->next;
+      free(node);
+      g_notifyDestroyMap->size--;
+    } else {
+      previous = &current->next;
+      current = current->next;
+    }
+  }
   return Arcadia_Arms_Status_Success;
 }
 
 Arcadia_Arms_Status
 Arms_removeNotifyDestroy
   (
-    void* object,
-    Arms_NotifyDestroyContext* notifyDestroyContext,
+    void* observed,
+    void* argument1,
+    void* argument2,
     Arms_NotifyDestroyCallback* callback
   )
 {
-  size_t hashValue = (size_t)(uintptr_t)object;
+  size_t hashValue = (size_t)(uintptr_t)observed;
   size_t hashIndex = hashValue % g_notifyDestroyMap->capacity;
   NotifyDestroyMapNode** previous = &g_notifyDestroyMap->buckets[hashIndex];
   NotifyDestroyMapNode* current = g_notifyDestroyMap->buckets[hashIndex];
   while (current) {
-    if (current->object == object) {
+    if (current->observed == observed) {
       NotifyDestroyMapNode* node = current;
-      *previous = current->next;
-      current = current->next;
-      while (node->list) {
-        NotifyDestroyListNode* listNode = node->list;
-        node->list = node->list->next;
-        free(listNode);
+      NodeList_remove(node, argument1, argument2, callback);
+      if (node->list) {
+        previous = &current->next;
+        current = current->next;
+      } else {
+        *previous = current->next;
+        current = current->next;
+        free(node);
+        g_notifyDestroyMap->size--;
       }
-      free(node);
     } else {
       previous = &current->next;
       current = current->next;

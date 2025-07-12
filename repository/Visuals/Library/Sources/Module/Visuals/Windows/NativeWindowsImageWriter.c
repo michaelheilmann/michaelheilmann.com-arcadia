@@ -619,12 +619,12 @@ NativeWindowsImageWriter_writeIcoToByteBufferImpl
   ICONDIR iconDir = {
     .reserved1 = 0,
     .type = 1,
-    .numberOfImages = Arcadia_List_getSize(thread, sourcePixelBuffers)
+    .numberOfImages = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers)
   };
   Arcadia_ByteBuffer_append_pn(thread, targetByteBuffer, &iconDir, sizeof(ICONDIR));
 
   Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(thread);
-  for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_List_getSize(thread, sourcePixelBuffers); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers); i < n; ++i) {
     Arcadia_Visuals_PixelBuffer* pixelBuffer = (Arcadia_Visuals_PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
     Arcadia_ByteBuffer_clear(thread, temporary);
     ImageWriter_writePngToByteBuffer(thread, (ImageWriter*)self, pixelBuffer, temporary);
@@ -656,11 +656,11 @@ NativeWindowsImageWriter_writeIcoToByteBufferImpl
                                   .numberOfColorPlanes = 1,
                                   .numberOfBitsPerPixel = 32,
                                   .imageSize = Arcadia_ByteBuffer_getSize(thread, temporary),
-                                  .offset = sizeof(ICONDIR) + Arcadia_List_getSize(thread, sourcePixelBuffers) * sizeof(ICONDIRENTRY) + offset };
+                                  .offset = sizeof(ICONDIR) + Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers) * sizeof(ICONDIRENTRY) + offset };
     Arcadia_ByteBuffer_append_pn(thread, targetByteBuffer, &iconDirEntry, sizeof(ICONDIRENTRY));
     offset += Arcadia_ByteBuffer_getSize(thread, temporary);
   }
-  for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_List_getSize(thread, sourcePixelBuffers); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers); i < n; ++i) {
     Arcadia_Visuals_PixelBuffer* pixelBuffer = (Arcadia_Visuals_PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
     Arcadia_ByteBuffer_clear(thread, temporary);
     ImageWriter_writePngToByteBuffer(thread, (ImageWriter*)self, pixelBuffer, temporary);
@@ -685,23 +685,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"NativeWindowsImageWriter", NativeWindowsImageWriter, u8"ImageWriter", ImageWriter, &_typeOperations);

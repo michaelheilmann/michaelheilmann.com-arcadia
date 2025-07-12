@@ -43,23 +43,8 @@ static const Arcadia_ObjectType_Operations _Arcadia_Mil_LabelStatementAst_object
 };
 
 static const Arcadia_Type_Operations _Arcadia_Mil_LabelStatementAst_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_Mil_LabelStatementAst_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Mil.LabelStatementAst", Arcadia_Mil_LabelStatementAst, u8"Arcadia.Mil.StatementAst", Arcadia_Mil_StatementAst, &_Arcadia_Mil_LabelStatementAst_typeOperations);

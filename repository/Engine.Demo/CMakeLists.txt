@@ -22,16 +22,16 @@ if (NOT TARGET ${MyDemoName})
 	if (${${MyProjectName}.Visuals.OpenGl.Enabled})
 	  BeginProduct(${MyDemoName} executable)
 
-	  FetchProduct(${MyDemoName}.Audials "${REPOSITORY_SOURCE_DIR}/Audials/Library" "path to the Audials module source directory")
-	  FetchProduct(${MyDemoName}.Visuals "${REPOSITORY_SOURCE_DIR}/Visuals/Library" "path to the Visuals module source directory")
+	  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Engine/Demo/Configure.h @ONLY)
+	  list(APPEND ${MyDemoName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configure.h.i)
+	  list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Engine/Demo/Configure.h)
 
-	  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Engine.Demo/Configure.h @ONLY)
-	  list(APPEND ${MyDemoName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Configure.h.i)
-	  list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Engine.Demo/Configure.h)
+	  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Main.c)
+    
+    list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.c)
+    list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.h)   
 
-	  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Engine.Demo/Main.c)
-
-	  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Audials ${MyProjectName}.Visuals)
+	  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.Audials ${MyProjectName}.Visuals)
 
 	  EndProduct(${MyDemoName})
 	endif()

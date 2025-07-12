@@ -152,7 +152,7 @@ addIfNotExisting
     Arcadia_Visuals_Configuration* configuration
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, configurations); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)configurations); i < n; ++i) {
     Arcadia_Visuals_Configuration* element = Arcadia_List_getObjectReferenceValueAt(thread, configurations, i);
     Arcadia_Value a, b;
     a = Arcadia_Value_makeObjectReferenceValue(element->opengl.version.major);

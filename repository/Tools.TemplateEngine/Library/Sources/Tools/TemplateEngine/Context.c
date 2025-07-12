@@ -47,23 +47,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Tools.TemplateEngine.Context", Context, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -141,7 +126,7 @@ recursionGuard
   )
 {
   path = Arcadia_FilePath_getFullPath(thread, path);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, context->files); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->files); i < n; ++i) {
     Arcadia_FilePath* p = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueAt(thread, context->files, i);
     if (Arcadia_FilePath_isEqualTo(thread, p, path)) {
       Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, p);
@@ -166,7 +151,7 @@ Context_onRun
   )
 {
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
-  while (!Arcadia_Stack_isEmpty(thread, context->stack)) {
+  while (!Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)context->stack)) {
     Arcadia_Value elementValue = Arcadia_Stack_peek(thread, context->stack);
     Arcadia_Stack_pop(thread, context->stack);
     Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_Value_getObjectReferenceValue(&elementValue);
@@ -191,6 +176,6 @@ Context_onRun
     fileContext->source = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
     recursionGuard(thread, context, filePath);
     FileContext_execute(thread, fileContext);
-    Arcadia_List_removeAt(thread, context->files, Arcadia_List_getSize(thread, context->files) - 1, 1);
+    Arcadia_List_removeAt(thread, context->files, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->files) - 1, 1);
   }
 }

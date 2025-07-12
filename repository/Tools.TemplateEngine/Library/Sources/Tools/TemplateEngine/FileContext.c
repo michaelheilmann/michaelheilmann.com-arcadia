@@ -377,23 +377,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -448,15 +433,15 @@ FileContext_constructImpl
 
   Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
   Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
-  Arcadia_Map_set(thread, _self->environment, k, v);
+  Arcadia_Map_set(thread, _self->environment, k, v, NULL, NULL);
 
   Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"generatorName", sizeof(u8"generatorName") - 1)));
   Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"Michael Heilmann's Arcadia Template Engine", sizeof(u8"Michael Heilmann's Arcadia Template Engine") - 1)));
-  Arcadia_Map_set(thread, _self->environment, k, v);
+  Arcadia_Map_set(thread, _self->environment, k, v, NULL, NULL);
 
   Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"generatorHome", sizeof(u8"generatorHome") - 1)));
   Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
-  Arcadia_Map_set(thread, _self->environment, k, v);
+  Arcadia_Map_set(thread, _self->environment, k, v, NULL, NULL);
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }

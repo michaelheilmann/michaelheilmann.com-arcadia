@@ -101,4 +101,4 @@ Arcadia_Thread_getProcess
   (
     Arcadia_Thread* thread
   )
-{ return thread->process1; }
+{ return thread->process; }

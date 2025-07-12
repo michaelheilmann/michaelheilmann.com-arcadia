@@ -24,7 +24,7 @@
 Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Parser", Arcadia_DataDefinitionLanguage_Parser, u8"Arcadia.Object");
 
 /// @brief Create a Data Definition Language parser.
-/// @return A pointer to this thread.
+/// @return A pointer to the Data Definition Language parser.
 Arcadia_DataDefinitionLanguage_Parser*
 Arcadia_DataDefinitionLanguage_Parser_create
   (
@@ -32,9 +32,10 @@ Arcadia_DataDefinitionLanguage_Parser_create
   );
 
 /// @brief Get the text of the word.
+/// @param thread A pointer to this thread.
 /// @param self A pointer to this Data Definition Language parser.
 /// @return The text of the wordn.
-Arcadia_ImmutableUtf8String*
+Arcadia_String*
 Arcadia_DataDefinitionLanguage_Parser_getWordText
   (
     Arcadia_Thread* thread,
@@ -42,6 +43,7 @@ Arcadia_DataDefinitionLanguage_Parser_getWordText
   );
 
 /// @brief Get the type of the word.
+/// @param thread A pointer to this thread.
 /// @param self A pointer to this Data Definition Language parser.
 /// @return The type of the word.
 Arcadia_Natural32Value
@@ -52,6 +54,7 @@ Arcadia_DataDefinitionLanguage_Parser_getWordType
   );
 
 /// @brief Move to next token.
+/// @param thread A pointer to this thread.
 /// @param self A pointer to this Data Definition Language parser.
 Arcadia_DataDefinitionLanguage_Tree_Node*
 Arcadia_DataDefinitionLanguage_Parser_run
@@ -61,6 +64,7 @@ Arcadia_DataDefinitionLanguage_Parser_run
   );
 
 /// @brief Set the input.
+/// @param thread A pointer to this thread.
 /// @param self A pointer to this Data Definition Language parser.
 /// @param input A pointer to the UTF8 reader.
 void

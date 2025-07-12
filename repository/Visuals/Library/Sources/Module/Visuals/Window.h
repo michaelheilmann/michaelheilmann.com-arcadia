@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_NATIVEWINDOW_H_INCLUDED)
-#define ARCADIA_VISUALS_NATIVEWINDOW_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_WINDOW_H_INCLUDED)
+#define ARCADIA_VISUALS_WINDOW_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
 #include "Module/Visuals/Icon.h"
@@ -55,6 +55,12 @@ struct Arcadia_Visuals_Window {
 
   void (*beginRender)(Arcadia_Thread*, Arcadia_Visuals_Window*);
   void (*endRender)(Arcadia_Thread*, Arcadia_Visuals_Window*);
+
+  void (*setPosition)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value, Arcadia_Integer32Value);
+  void (*getPosition)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+
+  void (*setSize)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value, Arcadia_Integer32Value);
+  void (*getSize)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
 };
 
@@ -218,7 +224,7 @@ Arcadia_Visuals_Window_getCanvasSize
     Arcadia_Integer32Value* height
   );
 
-/// @brief Begin rendering to a window.
+/// @brief Begin rendering to this window.
 /// @param self A pointer to ths window.
 /// @warning The successful calls to Window_beginRender and Window_endRender must be balanced.
 void
@@ -228,7 +234,7 @@ Arcadia_Visuals_Window_beginRender
     Arcadia_Visuals_Window* self
   );
 
-/// @brief End rendering to a window.
+/// @brief End rendering to this window.
 /// @param self A pointer to this window.
 /// @warning The successful calls to Window_beginRender and Window_endRender must be balanced.
 void
@@ -238,4 +244,65 @@ Arcadia_Visuals_Window_endRender
     Arcadia_Visuals_Window* self
   );
 
-#endif // ARCADIA_VISUALS_NATIVEWINDOW_H_INCLUDED
+/// @brief Set the position of this window.
+/// @param self A pointer to this window.
+/// @param left, top Arcadia_Integer32Value values.
+/// @post
+/// This window was assigned the left position @a left.
+/// This window was assigned the top position @ top.
+void
+Arcadia_Visuals_Window_setPosition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value left,
+    Arcadia_Integer32Value top
+  );
+
+
+/// @brief Set the position of this window.
+/// @param self A pointer to this window.
+/// @param left, top Pointers to Arcadia_Integer32Value variables.
+/// @post
+/// <code>*left</code> was assigned the left position of this window.
+/// <code>*top</code> was assigned the top position of this window.
+void
+Arcadia_Visuals_Window_getPosition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top
+  );
+
+/// @brief Set the position of this window.
+/// @param self A pointer to this window.
+/// @param width, height Arcadia_Integer32Value values.
+/// @post
+/// This window was assigned the width @a width.
+/// This window was assigned the height @ height.
+void
+Arcadia_Visuals_Window_setSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height
+  );
+
+/// @brief Set the position of this window.
+/// @param self A pointer to this window.
+/// @param width, height Pointers to Arcadia_Integer32Value variables.
+/// @post
+/// <code>*width</code> was assigned the width of this window.
+/// <code>*height</code> was assigned the height of this window.
+void
+Arcadia_Visuals_Window_getSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* width,
+    Arcadia_Integer32Value* height
+  );
+
+#endif // ARCADIA_VISUALS_WINDOW_H_INCLUDED

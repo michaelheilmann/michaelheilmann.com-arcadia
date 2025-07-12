@@ -22,6 +22,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
+typedef struct Arcadia_String Arcadia_String;
 
 Arcadia_declareObjectType(u8"Arcadia.Utf8Writer", Arcadia_Utf8Writer, u8"Arcadia.Object");
 
@@ -29,6 +30,7 @@ struct Arcadia_Utf8Writer {
   Arcadia_Object _parent;
   void (*writeBytes)(Arcadia_Thread*, Arcadia_Utf8Writer* self, const void* bytes, Arcadia_SizeValue numberOfBytes);
   void (*writeCodePoints)(Arcadia_Thread*, Arcadia_Utf8Writer* self, Arcadia_Natural32Value const* codePoints, Arcadia_SizeValue numberOfCodePoints);
+  void (*writeString)(Arcadia_Thread* thread, Arcadia_Utf8Writer* self, Arcadia_String* string);
 };
 
 void
@@ -47,6 +49,14 @@ Arcadia_Utf8Writer_writeCodePoints
     Arcadia_Utf8Writer* self,
     Arcadia_Natural32Value const* codePoints,
     Arcadia_SizeValue numberOfCodePoints
+  );
+
+void
+Arcadia_Utf8Writer_writeString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Utf8Writer* self,
+    Arcadia_String* string
   );
 
 #endif // ARCADIA_RING2_IMPLEMENTATION_UTF8WRITER_H_INCLUDED

@@ -22,6 +22,6 @@
 #include "Arcadia/DataDefinitionLanguage/Reader/StringTable.h"
 #include "Arcadia/DataDefinitionLanguage/Reader/WordType.h"
 #include "Arcadia/DataDefinitionLanguage/SemanticalAnalysis.h"
-#include "Arcadia/DataDefinitionLanguage/Writer.h"
+#include "Arcadia/DataDefinitionLanguage/Writer/Unparser.h"
 
 #endif // ARCAIDA_DATADEFINITIONLANGUAGE_INCLUDE_H_INCLUDED

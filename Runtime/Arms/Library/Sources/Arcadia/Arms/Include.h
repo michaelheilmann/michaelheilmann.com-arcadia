@@ -82,23 +82,36 @@ Arms_visit
 
 #if defined(Arcadia_Arms_Configuration_WithNotifyDestroy) && 1 ==  Arcadia_Arms_Configuration_WithNotifyDestroy
 
-typedef void Arms_NotifyDestroyContext;
-typedef void (Arms_NotifyDestroyCallback)(Arms_NotifyDestroyContext* context, void* object);
+typedef void (Arms_NotifyDestroyCallback)(void* argument1, void *argument2);
+
+Arcadia_Arms_Status
+Arms_removeNotifyDestroyAll
+  (
+    void* observed
+  );
 
 Arcadia_Arms_Status
 Arms_addNotifyDestroy
   (
-    void* object,
-    Arms_NotifyDestroyContext* context,
+    void* observed,
+    void* argument1,
+    void* argument2,
     Arms_NotifyDestroyCallback* callback
   );
 
 Arcadia_Arms_Status
 Arms_removeNotifyDestroy
   (
-    void* object,
-    Arms_NotifyDestroyContext* context,
+    void* observed,
+    void* argument1,
+    void* argument2,
     Arms_NotifyDestroyCallback* callback
+  );
+
+Arcadia_Arms_Status
+Arms_removeNotifyDestroyAll
+  (
+    void* observed
   );
 
 #endif // Arcadia_Arms_Configuration_WithNotifyDestroy

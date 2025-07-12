@@ -21,8 +21,6 @@ set(MyLibraryName ${MyProjectName}.Machine)
 if (NOT TARGET ${MyLibraryName})
   BeginProduct(${MyLibraryName} library)
 
-  FetchProduct(${MyLibraryName}.Mil.Frontend "${REPOSITORY_SOURCE_DIR}/Mil.Frontend/Library" "path to the MIL Frontend library directory")
-
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Configure.h @ONLY)
   list(APPEND ${MyLibraryName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Configure.h.i)
   list(APPEND ${MyLibraryName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/R/Configure.h)

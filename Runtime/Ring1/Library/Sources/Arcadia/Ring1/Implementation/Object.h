@@ -106,6 +106,24 @@ Arcadia_Object_visit
     Arcadia_Object* self
   );
 
+void
+Arcadia_Object_addNotifyDestroyCallback
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    void* observer,
+    void (*callback)(void* observer, Arcadia_Object*)
+  );
+
+void
+Arcadia_Object_removeNotifyDestroyCallback
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    void* observer,
+    void (*callback)(void* observer, Arcadia_Object*)
+  );
+
 /// @brief Increment the lock count of the object.
 /// @param self A pointer to the object.
 void
@@ -156,7 +174,7 @@ Arcadia_Object_isNotEqualTo
 
 /// "hash"
 Arcadia_SizeValue
-Arcadia_Object_hash
+Arcadia_Object_getHash
   (
     Arcadia_Thread* thread,
     Arcadia_Object* self

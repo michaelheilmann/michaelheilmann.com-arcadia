@@ -33,6 +33,7 @@
 #include "Arcadia/Ring2/Implementation/Deque.h"
 #include "Arcadia/Ring2/Implementation/List.h"
 #include "Arcadia/Ring2/Implementation/Map.h"
+#include "Arcadia/Ring2/Implementation/Set.h"
 #include "Arcadia/Ring2/Implementation/Stack.h"
 
 #include "Arcadia/Ring2/Implementation/Utf8Reader.h"

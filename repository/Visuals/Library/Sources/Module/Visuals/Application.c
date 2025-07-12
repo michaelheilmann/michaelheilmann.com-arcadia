@@ -31,23 +31,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Application", Arcadia_Visuals_Application, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -75,6 +60,7 @@ Arcadia_Visuals_Application_constructImpl
   }
   _self->createIcon = NULL;
   _self->createWindow = NULL;
+  _self->getDisplayDevices = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -99,3 +85,11 @@ Arcadia_Visuals_Application_createWindow
     Arcadia_Visuals_Application* self
   )
 { return self->createWindow(thread, self); }
+
+Arcadia_List*
+Arcadia_Visuals_Application_getDisplayDevices
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Application* self
+  )
+{ return self->getDisplayDevices(thread, self); }

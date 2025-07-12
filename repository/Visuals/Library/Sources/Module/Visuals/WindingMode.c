@@ -18,23 +18,7 @@
 #include "Arcadia/Ring2/Include.h"
 
 static const Arcadia_Type_Operations _typeOperations = {
-  .objectTypeOperations = NULL,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
+  Arcadia_Type_Operations_Initializer,
 };
 
 Arcadia_defineEnumerationType(u8"Arcadia.Visuals.WindingMode", Arcadia_Visuals_WindingMode, &_typeOperations);

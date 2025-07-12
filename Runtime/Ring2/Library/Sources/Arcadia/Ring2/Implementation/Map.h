@@ -21,52 +21,64 @@
 #endif
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Implementation/List.h"
+#include "Arcadia/Ring2/Implementation/Collection.h"
+typedef struct Arcadia_List Arcadia_List;
 
-Arcadia_declareObjectType(u8"Arcadia.Map", Arcadia_Map, u8"Arcadia.Object");
+typedef struct _Arcadia_Map_Node _Arcadia_Map_Node;
 
+Arcadia_declareObjectType(u8"Arcadia.Map", Arcadia_Map, u8"Arcadia.Collection");
+
+struct Arcadia_Map {
+  Arcadia_Collection _parent;
+  _Arcadia_Map_Node** buckets;
+  Arcadia_SizeValue size;
+  Arcadia_SizeValue capacity;
+};
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Map_create
 Arcadia_Map*
 Arcadia_Map_create
   (
     Arcadia_Thread* thread
   );
 
-Arcadia_Map*
-Arcadia_Map_clone
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Map* self
-  );
-
-void
-Arcadia_Map_clear
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Map* self
-  );
-
-Arcadia_SizeValue
-Arcadia_Map_getSize
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Map const* self
-  );
-
-void
-Arcadia_Map_set
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Map* self,
-    Arcadia_Value key,
-    Arcadia_Value value
-  );
-
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Map_get
 Arcadia_Value
 Arcadia_Map_get
   (
     Arcadia_Thread* thread,
     Arcadia_Map const* self,
     Arcadia_Value key
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Map_set
+void
+Arcadia_Map_set
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Map* self,
+    Arcadia_Value key,
+    Arcadia_Value value,
+    Arcadia_Value* oldKey,
+    Arcadia_Value* oldValue
+  );
+
+void
+Arcadia_Map_remove
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Map* self,
+    Arcadia_Value key,
+    Arcadia_Value* oldKey,
+    Arcadia_Value* oldValue
+  );
+
+// @todo Add and use Arcadia_Object_clone.
+Arcadia_Map*
+Arcadia_Map_clone
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Map* self
   );
 
 Arcadia_List*

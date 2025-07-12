@@ -101,23 +101,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.SemanticalAnalysis", Arcadia_DataDefinitionLanguage_SemanticalAnalysis,
@@ -141,7 +126,7 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visitListValue
     Arcadia_DataDefinitionLanguage_Tree_ListNode* node
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, node->elements); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->elements); i < n; ++i) {
     Arcadia_DataDefinitionLanguage_Tree_Node* elementNode = Arcadia_List_getObjectReferenceValueAt(thread, node->elements, i);
     Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visitValue(thread, self, elementNode);
   }
@@ -155,18 +140,18 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visitMapValue
     Arcadia_DataDefinitionLanguage_Tree_MapNode* node
   )
 {
-  Arcadia_Map_clear(thread, self->map);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, node->entries); i < n; ++i) {
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->map);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->entries); i < n; ++i) {
     Arcadia_DataDefinitionLanguage_Tree_MapEntryNode* mapEntryNode = (Arcadia_DataDefinitionLanguage_Tree_MapEntryNode*)Arcadia_List_getObjectReferenceValueAt(thread, node->entries, i);
-    Arcadia_Value existing = Arcadia_Map_get(thread, self->map, Arcadia_Value_makeImmutableUtf8StringValue(mapEntryNode->key->value));
+    Arcadia_Value existing = Arcadia_Map_get(thread, self->map, Arcadia_Value_makeObjectReferenceValue(mapEntryNode->key->value));
     if (!Arcadia_Value_isVoidValue(&existing)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Map_set(thread, self->map, Arcadia_Value_makeImmutableUtf8StringValue(mapEntryNode->key->value), Arcadia_Value_makeObjectReferenceValue(mapEntryNode->value));
+    Arcadia_Map_set(thread, self->map, Arcadia_Value_makeObjectReferenceValue(mapEntryNode->key->value), Arcadia_Value_makeObjectReferenceValue(mapEntryNode->value), NULL, NULL);
   }
-  Arcadia_Map_clear(thread, self->map);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, node->entries); i < n; ++i) {
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->map);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->entries); i < n; ++i) {
     Arcadia_DataDefinitionLanguage_Tree_MapEntryNode* mapEntryNode = (Arcadia_DataDefinitionLanguage_Tree_MapEntryNode*)Arcadia_List_getObjectReferenceValueAt(thread, node->entries, i);
     Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visitValue(thread, self, mapEntryNode->value);
   }

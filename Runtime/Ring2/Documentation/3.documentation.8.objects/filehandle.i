@@ -1,11 +1,7 @@
 <section class="cxx entity object">
 <h1 id="Arcadia_FileHandle">Arcadia_FileHandle</h1>
-<p>
-<code>Arcadia_FileHandle</code> represents a operating system file handle.
-This type is allocated on the heap and values of this type are referenced by <code>Arcadia_FileHandle</code> pointers.
-A <code>Arcadia_FileHandle</code> pointer can be safely cast into a <code>R_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_FileHandle</code> value can be safely cast into a <code>Arcadia_FileHandle</code> pointer.
-</p>
+<p><code>Arcadia_FileHandle</code> extends <code>Arcadia_Object</code>.</p>
+<p><code>Arcadia_FileHandle</code> represents a operating system file handle.</p>
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

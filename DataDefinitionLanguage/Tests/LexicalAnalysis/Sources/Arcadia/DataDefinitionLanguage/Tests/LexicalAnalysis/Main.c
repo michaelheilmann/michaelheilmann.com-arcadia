@@ -31,9 +31,9 @@ expectAndNext
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ImmutableUtf8String* wordText = Arcadia_DataDefinitionLanguage_Scanner_getWordText(thread, scanner);
-  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, wordText) != wordTextNumberOfBytes || 
-      Arcadia_Memory_compare(thread, Arcadia_ImmutableUtf8String_getBytes(thread, wordText), wordTextBytes, wordTextNumberOfBytes)) {
+  Arcadia_String* wordText = Arcadia_DataDefinitionLanguage_Scanner_getWordText(thread, scanner);
+  if (Arcadia_String_getNumberOfBytes(thread, wordText) != wordTextNumberOfBytes || 
+      Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, wordText), wordTextBytes, wordTextNumberOfBytes)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }

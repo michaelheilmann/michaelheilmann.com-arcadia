@@ -23,7 +23,10 @@ typedef struct Arcadia_DataDefinitionLanguage_StringTable_Node Arcadia_DataDefin
 
 struct Arcadia_DataDefinitionLanguage_StringTable_Node {
   Arcadia_DataDefinitionLanguage_StringTable_Node* next;
-  Arcadia_ImmutableUtf8String* string;
+  // We need to compare the hash of the Bytes in a string buffer with the hash of the Bytes in a string.
+  // The hash function of string buffer and string cannot be used for that.
+  Arcadia_SizeValue hash;
+  Arcadia_String* string;
 };
 
 Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.StringTable", Arcadia_DataDefinitionLanguage_StringTable, u8"Arcadia.Object");
@@ -41,7 +44,7 @@ Arcadia_DataDefinitionLanguage_StringTable_create
     Arcadia_Thread* thread
   );
 
-Arcadia_ImmutableUtf8String*
+Arcadia_String*
 Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString
   (
     Arcadia_Thread* thread,

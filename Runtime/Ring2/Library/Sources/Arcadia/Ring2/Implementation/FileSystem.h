@@ -88,6 +88,18 @@ Arcadia_FileSystem_directoryFileExists
     Arcadia_FilePath* path
   );
 
+/// @brief Get the path of the executing executable.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this file system.
+/// @return A pointer to the executable path.
+/// @success The caller acquired a reference to the string.
+Arcadia_FilePath*
+Arcadia_FileSystem_getExecutablePath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
 // Get the folder in which configuration files are stored.
 // The following table lists the values for a given operating system
 // - Windows: `C:\Users\<Username>\AppData\Local\<Organization Name>\<Game Name>`

@@ -42,23 +42,8 @@ static const Arcadia_ObjectType_Operations _Arcadia_Mil_StringLiteralOperandAst_
 };
 
 static const Arcadia_Type_Operations _Arcadia_Mil_StringLiteralOperandAst_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_Mil_StringLiteralOperandAst_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Mil.StringLiteralOperandAst", Arcadia_Mil_StringLiteralOperandAst, u8"Arcadia.Mil.OperandAst", Arcadia_Mil_OperandAst, &_Arcadia_Mil_StringLiteralOperandAst_typeOperations);

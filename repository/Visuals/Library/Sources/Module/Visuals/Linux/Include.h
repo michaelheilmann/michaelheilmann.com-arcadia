@@ -16,7 +16,7 @@
 #if !defined(VISUALS_IMAGEMAGICK_H_INCLUDED)
 #define VISUALS_IMAGEMAGICK_H_INCLUDED
 
-#include "Arcadia/Include.h"
+#include "Arcadia/Ring2/Include.h"
 #include "Module/Visuals/PixelBuffer.h"
 
 void

@@ -20,6 +20,8 @@
 
 #include "Module/Visuals/Events/CanvasEvent.h"
 #include "Module/Visuals/CullMode.h"
+#include "Module/Visuals/DisplayDevice.h"
+#include "Module/Visuals/DisplayMode.h"
 #include "Module/Visuals/ImageWriterParameters.h"
 #include "Module/Visuals/PixelBuffer.h"
 #include "Module/Visuals/PixelFormat.h"

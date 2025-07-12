@@ -62,6 +62,26 @@ typedef struct Arcadia_Type_Operations {
   Arcadia_ForeignProcedure* toString;
 } Arcadia_Type_Operations;
 
+#define Arcadia_Type_Operations_Initializer \
+  .objectTypeOperations = NULL, \
+  .add = NULL, \
+  .and = NULL, \
+  .concatenate = NULL, \
+  .divide = NULL, \
+  .equalTo = NULL, \
+  .greaterThan = NULL, \
+  .greaterThanOrEqualTo = NULL, \
+  .hash = NULL, \
+  .lowerThan = NULL, \
+  .lowerThanOrEqualTo = NULL, \
+  .multiply = NULL, \
+  .negate = NULL, \
+  .not = NULL, \
+  .notEqualTo = NULL, \
+  .or = NULL, \
+  .subtract = NULL, \
+  .toString = NULL
+
 /// @brief Type of a visti callback function.
 /// Each object type may have its own visit callback function.
 /// For an object of type A1 <: A2 <: ... <: An the callback functions are invoked from the bottom most to the top most type.

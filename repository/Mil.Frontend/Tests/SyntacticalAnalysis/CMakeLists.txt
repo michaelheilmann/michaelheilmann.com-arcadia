@@ -20,8 +20,6 @@ set(MyTestName ${MyProjectName}.Mil.Frontend.Tests.SyntacticalAnalysis)
 
 if (NOT TARGET ${MyTestName})
 
-  FetchProduct(${MyProjectName}.Mil.Frontend "${REPOSITORY_SOURCE_DIR}/Mil.Frontend/Library" "path to the MIL Frontend library directory")
-
   BeginProduct(${MyTestName} test)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SyntacticalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SyntacticalAnalysis/Configure.h @ONLY)

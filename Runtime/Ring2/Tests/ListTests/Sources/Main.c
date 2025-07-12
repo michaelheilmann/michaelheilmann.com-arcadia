@@ -32,16 +32,16 @@ listTest1
 
   for (Arcadia_Integer32Value i = 1, n = 7; i <= n; ++i) {
     Arcadia_List_insertBackInteger32Value(thread, l, i);
-    Arcadia_Tests_assertTrue(thread, i == Arcadia_List_getSize(thread, l));
+    Arcadia_Tests_assertTrue(thread, i == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)l));
   }
-  Arcadia_Tests_assertTrue(thread, 7 == Arcadia_List_getSize(thread, l));
-  Arcadia_Tests_assertTrue(thread, Arcadia_BooleanValue_False == Arcadia_List_isEmpty(thread, l));
+  Arcadia_Tests_assertTrue(thread, 7 == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)l));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BooleanValue_False == Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)l));
   for (Arcadia_Integer32Value i = 1, n = 7; i <= n; ++i) {
     Arcadia_Tests_assertTrue(thread, i == Arcadia_List_getInteger32ValueAt(thread, l, i - 1));
   }
-  Arcadia_List_clear(thread, l);
-  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(0) == Arcadia_List_getSize(thread, l));
-  Arcadia_Tests_assertTrue(thread, Arcadia_BooleanValue_True == Arcadia_List_isEmpty(thread, l));
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)l);
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(0) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)l));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BooleanValue_True == Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)l));
 }
 
 int

@@ -95,7 +95,7 @@ compile
   Arcadia_Mil_Parser* parser = Arcadia_Mil_Parser_create(thread);
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
   Arcadia_List* moduleAsts = Arcadia_List_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, paths); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)paths); i < n; ++i) {
     Arcadia_FilePath* sourceFilePath = Arcadia_List_getObjectReferenceValueAt(thread, paths, i);
     Arcadia_FilePath* absoluteSourceFilePath = NULL;
     if (Arcadia_FilePath_isRelative(thread, sourceFilePath)) {
@@ -110,7 +110,7 @@ compile
     Arcadia_Mil_ModuleAst* moduleAst = Arcadia_Mil_Parser_run(thread, parser);
     Arcadia_List_insertBackObjectReferenceValue(thread, moduleAsts, moduleAst);
   }
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, moduleAsts); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)moduleAsts); i < n; ++i) {
     Arcadia_Mil_ModuleAst* moduleAst = Arcadia_List_getObjectReferenceValueAt(thread, moduleAsts, i);
     onPhase1(process, symbolTable, foreignProcedures, moduleAst);
   }
@@ -129,7 +129,7 @@ testNativePrintProcedure
   { \
     Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, Name, sizeof(Name) - 1))); \
     Arcadia_Value v = Arcadia_Value_makeForeignProcedureValue(&Function); \
-    Arcadia_Map_set(thread, foreignProcedures, k, v); \
+    Arcadia_Map_set(thread, foreignProcedures, k, v, NULL, NULL); \
   }
   Define(u8"KeyboardKeyMessage_construct", _Library_KeyboardKeyMessage_construct)
   Define(u8"KeyboardKeyMessage_getAction", _Library_KeyboardKeyMessage_getAction)

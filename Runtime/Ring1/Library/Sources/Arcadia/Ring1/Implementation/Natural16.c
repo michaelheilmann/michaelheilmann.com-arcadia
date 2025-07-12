@@ -143,10 +143,9 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
   .add = &add,
-  .and = NULL,
-  .concatenate = NULL,
   .divide = &divide,
   .equalTo = &equalTo,
   .greaterThan = &greaterThan,
@@ -157,9 +156,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .lowerThanOrEqualTo = &lowerThanOrEqualTo,
   .multiply = &multiply,
   .negate = &negate,
-  .not = NULL,
   .notEqualTo = &notEqualTo,
-  .or = NULL,
   .subtract = &subtract,
 };
 

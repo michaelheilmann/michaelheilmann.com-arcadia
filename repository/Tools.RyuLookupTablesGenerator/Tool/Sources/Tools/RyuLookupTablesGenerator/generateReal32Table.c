@@ -33,11 +33,11 @@ static Arcadia_BigInteger* TWO = NULL;
 static void
 onNotifyDestroy
   (
-    Arms_NotifyDestroyContext* context,
-    void* object
+    void* argument1,
+    void* argument2
   )
 {
-  Arcadia_BigInteger** variable = (Arcadia_BigInteger**)context;
+  Arcadia_BigInteger** variable = (Arcadia_BigInteger**)argument2;
   *variable = NULL;
 }
 
@@ -53,7 +53,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal32Table
   // 1
   a = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger8(thread, a, 1);
-  if (Arms_addNotifyDestroy(a, &ONE, &onNotifyDestroy)) {
+  if (Arms_addNotifyDestroy(a, NULL, &ONE, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -63,7 +63,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal32Table
   // 2
   a = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger8(thread, a, 2);
-  if (Arms_addNotifyDestroy(a, &TWO, &onNotifyDestroy)) {
+  if (Arms_addNotifyDestroy(a, NULL, &TWO, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }

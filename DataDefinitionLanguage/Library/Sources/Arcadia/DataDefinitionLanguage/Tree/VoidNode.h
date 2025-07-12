@@ -24,7 +24,7 @@ Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.VoidNode", Arca
 
 struct Arcadia_DataDefinitionLanguage_Tree_VoidNode {
   Arcadia_DataDefinitionLanguage_Tree_Node parent;
-  Arcadia_ImmutableUtf8String* value;
+  Arcadia_String* value;
 };
 
 Arcadia_DataDefinitionLanguage_Tree_VoidNode*
@@ -40,7 +40,7 @@ Arcadia_DataDefinitionLanguage_Tree_VoidNode*
 Arcadia_DataDefinitionLanguage_Tree_VoidNode_createString
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* stringValue
+    Arcadia_String* stringValue
   );
 
 #endif // ARCADIA_DATADEFINITIONLANGUAGE_TREE_VOIDNODE_H_INCLUDED

@@ -124,7 +124,7 @@ R_Interpreter_ProcessState_defineGlobalProcedure
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   value = Arcadia_Value_makeObjectReferenceValue(procedure);
-  Arcadia_Map_set(Arcadia_Process_getThread(process), self->globals, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->globals, key, value, NULL, NULL);
 }
 
 void
@@ -146,7 +146,7 @@ R_Interpreter_ProcessState_defineGlobalClass
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
   value = Arcadia_Value_makeObjectReferenceValue(class);
-  Arcadia_Map_set(Arcadia_Process_getThread(process), self->globals, key, value);
+  Arcadia_Map_set(Arcadia_Process_getThread(process), self->globals, key, value, NULL, NULL);
 }
 
 Arcadia_Value

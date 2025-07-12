@@ -2,7 +2,7 @@
   <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=1'>
   <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=1'>
   <link rel='canonical' href='@{siteAddress}/'>
-  <title>Michael Heilmann Contact Information</title>
+  <title>Michael Heilmann's Arcadia</title>
   <style>
   div.topic {
     margin-left: 8px;

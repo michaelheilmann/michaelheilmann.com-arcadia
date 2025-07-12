@@ -70,7 +70,17 @@ ensureFreeCapacityBytes
     Arcadia_SizeValue requiredFreeCapacity
   );
 
-// Warning: This function does not validate parameters.
+// Warning: This function does not check if the Bytes are UTF-8 Bytes.
+static void
+prependBytesInternal
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  );
+
+// Warning: This function does not check if the Bytes are UTF-8 Bytes.
 static void
 appendBytesInternal
   (
@@ -87,23 +97,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
@@ -222,6 +217,21 @@ ensureFreeCapacityBytes
     Arcadia_Memory_reallocateUnmanaged(thread, &self->elements, newCapacity);
     self->capacity = newCapacity;
   }
+}
+
+static void
+prependBytesInternal
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    void const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
+{
+  ensureFreeCapacityBytes(thread, self, numberOfBytes);
+  Arcadia_Memory_copy(thread, self->elements + numberOfBytes, self->elements, self->size);
+  Arcadia_Memory_copy(thread, self->elements, bytes, numberOfBytes);
+  self->size += numberOfBytes;
 }
 
 static void

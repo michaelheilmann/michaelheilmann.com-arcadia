@@ -15,7 +15,7 @@
 
 #include "Module/Visuals/PixelBuffer.h"
 
-#include "Arcadia/Include.h"
+#include "Arcadia/Ring2/Include.h"
 
 /* TODO: Add this to Arcadia_Process_swapMemory. */
 static inline void
@@ -282,23 +282,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.PixelBuffer", Arcadia_Visuals_PixelBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);

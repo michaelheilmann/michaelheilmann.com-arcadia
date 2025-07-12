@@ -15,8 +15,6 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Template Engine tool source directory")
-
 # Build the documentation.
 set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/repository/Arcadia.Mil/index.html")
 add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}

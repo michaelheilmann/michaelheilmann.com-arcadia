@@ -15,9 +15,20 @@
 
 #include "Module/Visuals/Linux/Application.h"
 
+#include "Module/Visuals/Linux/DisplayDevice.h"
 #include "Module/Visuals/Linux/GlxDeviceInfo.h"
 #include "Module/Visuals/Linux/Icon.h"
 #include "Module/Visuals/Linux/Window.h"
+
+#include <string.h>
+
+#include "Module/Visuals/Linux/_edid.h"
+
+// https://www.x.org/releases/current/doc/index.html
+// https://www.x.org/releases/current/doc/randrproto/randrproto.txt
+#include <X11/extensions/Xrandr.h>
+
+static Arcadia_Visuals_Linux_Application* g_instance = NULL;
 
 static int
 errorHandler
@@ -41,6 +52,22 @@ Arcadia_Visuals_Linux_Application_createIconImpl
 
 static Arcadia_Visuals_Linux_Window*
 Arcadia_Visuals_Linux_Application_createWindowImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Application* self
+  );
+  
+static Arcadia_Visuals_Linux_DisplayDevice*
+getDisplayDevice
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Application* self,
+    RROutput outputId,
+    RRMode modeId
+  );
+
+static Arcadia_List*
+Arcadia_Visuals_Linux_Application_getDisplayDevicesImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_Application* self
@@ -118,6 +145,140 @@ Arcadia_Visuals_Linux_Application_createWindowImpl
   return window;
 }
 
+static Arcadia_Visuals_Linux_DisplayDevice*
+getDisplayDevice
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Application* self,
+    RROutput outputId,
+    RRMode modeId
+  )
+{
+  Atom EDID = XInternAtom(self->display, "EDID", False);
+  int numberOfProperties;
+  Atom* properties = XRRListOutputProperties(self->display, outputId, &numberOfProperties);
+  if (!properties) {
+    return NULL;
+  }
+  MonitorInfo* monitorInfo = NULL;
+  for (int i = 0, n = numberOfProperties; i < n; ++i) {
+    if (properties[i] == EDID) {
+      unsigned char *property;
+      int actualFormat;
+      unsigned long numberOfItems, bytesAfter;
+      Atom actualType;
+      if  (Success != XRRGetOutputProperty(self->display, outputId, properties[i], 0, 100, False, False, AnyPropertyType,
+                                           &actualType, &actualFormat, &numberOfItems, &bytesAfter, &property)) {
+        XFree(properties);
+        properties = NULL;
+        return NULL;
+      }
+      monitorInfo = decode_edid(property);
+      XFree(property);
+      property = NULL;
+      if (!monitorInfo) {
+        XFree(properties);
+        properties = NULL;
+        return NULL;
+      }
+      break;
+    }
+  }
+  
+  Arcadia_Visuals_Linux_DisplayDevice* displayDevice = NULL;
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_String* id =
+      Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(
+        Arcadia_ImmutableUtf8String_create(thread, monitorInfo->dsc_product_name,
+                                           strlen(monitorInfo->dsc_product_name))));
+    Arcadia_String* name =
+      Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(
+        Arcadia_ImmutableUtf8String_create(thread, monitorInfo->dsc_product_name,
+                                           strlen(monitorInfo->dsc_product_name))));
+    displayDevice =
+      Arcadia_Visuals_Linux_DisplayDevice_create(thread, self, id, name);
+    displayDevice->output = outputId;
+    displayDevice->mode = modeId;
+    Arcadia_Thread_popJumpTarget(thread);
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
+  }
+  free(monitorInfo);
+  monitorInfo = NULL;
+  XFree(properties);
+  properties = NULL;
+  return displayDevice;
+}
+
+static Arcadia_List*
+Arcadia_Visuals_Linux_Application_getDisplayDevicesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Application* self
+  )
+{
+  Arcadia_List* displayDevices = Arcadia_List_create(thread);
+  int dummy;
+  if (!XQueryExtension(self->display, "RANDR", &dummy, &dummy, &dummy)) {
+    return displayDevices;
+  }
+  Window rootWindow = XDefaultRootWindow(self->display);
+  XRRScreenResources* screenResources = XRRGetScreenResources(self->display, rootWindow);
+  for (int i = 0, n = screenResources->noutput; i < n; ++i) {
+    RROutput output = screenResources->outputs[i];
+
+    XRROutputInfo* outputInfo = XRRGetOutputInfo(self->display, screenResources, output);
+    if (!outputInfo || !outputInfo->crtc || outputInfo->connection == RR_Disconnected) {
+      XRRFreeOutputInfo(outputInfo);
+      outputInfo = NULL;
+
+      continue;
+    }  
+
+    XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(self->display, screenResources, outputInfo->crtc);
+    if (!crtcInfo) {
+      XRRFreeOutputInfo(outputInfo);
+      outputInfo = NULL;
+
+      continue;
+    }
+    
+    Arcadia_JumpTarget jumpTarget;
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_Visuals_Linux_DisplayDevice* displayDevice = getDisplayDevice(thread, self, output, crtcInfo->mode);
+      if (displayDevice) {
+        Arcadia_List_insertBackObjectReferenceValue(thread, displayDevices, (Arcadia_ObjectReferenceValue)displayDevice);
+      }
+      Arcadia_Thread_popJumpTarget(thread);
+    } else {
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
+
+      XRRFreeCrtcInfo(crtcInfo);
+      crtcInfo = NULL;
+
+      XRRFreeOutputInfo(outputInfo);
+      outputInfo = NULL;
+    
+      continue;
+    }
+    
+    XRRFreeCrtcInfo(crtcInfo);
+    crtcInfo = NULL;
+    
+    XRRFreeOutputInfo(outputInfo);
+    outputInfo = NULL;
+  }
+  XRRFreeScreenResources(screenResources);
+  screenResources = NULL;
+  
+  return displayDevices;
+}
+
 static void
 Arcadia_Visuals_Linux_Application_destruct
   (
@@ -129,7 +290,6 @@ Arcadia_Visuals_Linux_Application_destruct
     XCloseDisplay(self->display);
     self->display = NULL;
   }
-  fprintf(stdout, "%s:%d: GLX application destroyed\n", __FILE__, __LINE__);
 }
 
 static void
@@ -181,6 +341,7 @@ Arcadia_Visuals_Linux_Application_constructImpl
 
   ((Arcadia_Visuals_Application*)_self)->createIcon = (Arcadia_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Visuals_Application*, Arcadia_Integer32Value, Arcadia_Integer32Value, Arcadia_Natural8Value, Arcadia_Natural8Value, Arcadia_Natural8Value, Arcadia_Natural8Value))&Arcadia_Visuals_Linux_Application_createIconImpl;
   ((Arcadia_Visuals_Application*)_self)->createWindow = (Arcadia_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Visuals_Application*))&Arcadia_Visuals_Linux_Application_createWindowImpl;
+  ((Arcadia_Visuals_Application*)_self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_Application*)) & Arcadia_Visuals_Linux_Application_getDisplayDevicesImpl;
   Arcadia_Object_setType(thread, _self, _type);
 }
 
@@ -195,4 +356,28 @@ Arcadia_Visuals_Linux_Application_create
   };
   Arcadia_Visuals_Linux_Application* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Linux_Application_getType(thread), 0, &argumentValues[0]);
   return self;
+}
+
+static void
+destroyCallback
+  (
+    void* argument1,
+    void* argument2
+  )
+{
+  g_instance = NULL;
+}
+
+Arcadia_Visuals_Linux_Application*
+Arcadia_Visuals_Linux_Application_getOrCreate
+  (
+    Arcadia_Thread* thread
+  )
+{ 
+  if (!g_instance) {
+    Arcadia_Visuals_Linux_Application* instance = Arcadia_Visuals_Linux_Application_create(thread);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &destroyCallback);
+    g_instance = instance;
+  }
+  return g_instance;
 }

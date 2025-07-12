@@ -25,7 +25,7 @@ Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Scanner", Arcadia_Da
 
 /// @brief Create a Data Definition Language scanner.
 /// @param thread A pointer to this thread.
-/// @return A pointer to this thread.
+/// @return A pointer to the Data Definition Language scanner.
 Arcadia_DataDefinitionLanguage_Scanner*
 Arcadia_DataDefinitionLanguage_Scanner_create
   (
@@ -36,7 +36,7 @@ Arcadia_DataDefinitionLanguage_Scanner_create
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this Data Definition Language scanner.
 /// @return The text of the word.
-Arcadia_ImmutableUtf8String*
+Arcadia_String*
 Arcadia_DataDefinitionLanguage_Scanner_getWordText
   (
     Arcadia_Thread* thread,
@@ -49,28 +49,6 @@ Arcadia_DataDefinitionLanguage_Scanner_getWordText
 /// @return The type of the word.
 Arcadia_Natural32Value
 Arcadia_DataDefinitionLanguage_Scanner_getWordType
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Scanner* self
-  );
-
-/// @brief Get the position of the word as a zero-based index into the input Bytes.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this Data Defintion Language scanner.
-/// @return The position.
-Arcadia_Natural32Value
-Arcadia_DataDefinitionLanguage_Scanner_getWordPosition
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Scanner* self
-  );
-
-/// @brief Get the length in input Bytes of the word.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this Data Definition Language scanner.
-/// @return The length.
-Arcadia_Natural32Value
-Arcadia_DataDefinitionLanguage_Scanner_getWordlength
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Scanner* self

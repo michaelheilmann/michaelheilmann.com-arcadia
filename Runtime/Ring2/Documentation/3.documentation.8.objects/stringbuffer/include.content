@@ -1,10 +1,8 @@
 <section class="cxx entity object">
 <h1 id="Arcadia_StringBuffer">Arcadia_StringBuffer</h1>
+<p><code>Arcadia_StringBuffer</code> extends <code>Arcadia_Object</code>.</p>
 <p>
-<code>Arcadia_StringBuffer</code> represents a mutable UTF-8 Byte sequence.
-This type is allocated on the heap and values of this type are referenced by <code>Arcadia_StringBuffer</code> pointers.
-A <code>Arcadia_StringBuffer</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_StringBuffer</code> value can be safely cast into a <code>Arcadia_StringBuffer</code> pointer.
+<code>Arcadia_StringBuffer</code> represents a mutable sequence of code points in UTF8 encoding.
 </p>
 </section>
 

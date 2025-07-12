@@ -19,8 +19,6 @@ set(MyTool Tools.IconGenerator)
 
 if (NOT TARGET ${MyTool})
 
-  FetchProduct(${MyProjectName}.Visuals "${REPOSITORY_SOURCE_DIR}/Visuals/Library" "path to the Visuals library directory")
-
   BeginProduct(${MyTool} executable)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/IconGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/IconGenerator/Configure.h @ONLY)

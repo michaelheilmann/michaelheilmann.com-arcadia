@@ -23,8 +23,6 @@ if (NOT TARGET ${MyTool})
 
   if (${${MyTool}.OperatingSystem} STREQUAL ${${MyTool}.OperatingSystem.Windows})
 
-    FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Visuals/Library" "path to the Visuals library directory")
-
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Tools/BitmapFontGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Tools/BitmapFontGenerator/Configure.h @ONLY)
     list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Tools/BitmapFontGenerator/Configure.h.i)
     list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Tools/BitmapFontGenerator/Configure.h)

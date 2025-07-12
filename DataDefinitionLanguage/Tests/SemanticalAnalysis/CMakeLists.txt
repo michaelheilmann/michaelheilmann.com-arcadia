@@ -20,8 +20,6 @@ set(MyTestName ${MyProjectName}.DataDefinitionLanguage.Tests.SemanticalAnalysis)
 
 if (NOT TARGET ${MyTestName})
 
-  FetchProduct(${MyProjectName}.DataDefinitionLanguage "${REPOSITORY_SOURCE_DIR}/DataDefinitionLanguage/Library" "path to the Data Definition Language library directory")
-
   BeginProduct(${MyTestName} test)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DataDefinitionLanguage/Tests/SemanticalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DataDefinitionLanguage/Tests/SemanticalAnalysis/Configure.h @ONLY)

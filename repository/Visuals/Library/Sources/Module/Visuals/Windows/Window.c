@@ -202,23 +202,8 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Window", Arcadia_Visuals_Windows_Window, u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window, &_typeOperations);
@@ -325,19 +310,22 @@ Arcadia_Visuals_Windows_Window_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->application = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_Visuals_Windows_Application_getType(thread));
-  Arcadia_Object_lock(thread, (Arcadia_Object*)_self->application);
+  _self->application = NULL;
+  _self->title = NULL;
   _self->classAtom = 0;
   _self->windowHandle = NULL;
   _self->deviceContextHandle = NULL;
   _self->glResourceContextHandle = NULL;
   _self->bigIcon = NULL;
   _self->smallIcon = NULL;
+
   _self->title = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, g_title, sizeof(g_title) - 1));
+  _self->application = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_Visuals_Windows_Application_getType(thread));
+  Arcadia_Object_lock(thread, (Arcadia_Object*)_self->application);
 
   ((Arcadia_Visuals_Window*)_self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & openImpl;
   ((Arcadia_Visuals_Window*)_self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & closeImpl;
@@ -671,7 +659,7 @@ isConfigurationSupported
     Arcadia_Visuals_Configuration* configuration
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, configurations); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)configurations); i < n; ++i) {
     Arcadia_Visuals_Configuration* element = Arcadia_List_getObjectReferenceValueAt(thread, configurations, i);
     Arcadia_Value a, b;
     a = Arcadia_Value_makeObjectReferenceValue(element->opengl.version.major);
@@ -725,7 +713,7 @@ createContext
   // (1) Get supported configuration.
   Arcadia_List* supportedConfigurations = Arcadia_Visuals_Windows_WglDeviceInfo_getConfigurations(thread, deviceInfo);
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, supportedConfigurations); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)supportedConfigurations); i < n; ++i) {
     Arcadia_Visuals_Configuration* supportedConfiguration = Arcadia_List_getObjectReferenceValueAt(thread, supportedConfigurations, i);
     Arcadia_StringBuffer_clear(thread, stringBuffer);
 
@@ -863,15 +851,14 @@ Arcadia_Visuals_Windows_Window*
 Arcadia_Visuals_Windows_Window_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Application* application
+    Arcadia_Visuals_Windows_Application* application,
+    Arcadia_Visuals_Windows_DisplayDevice* displayDevice
   )
 {
   Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    application ? Arcadia_Value_makeObjectReferenceValue(application) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    displayDevice ? Arcadia_Value_makeObjectReferenceValue(displayDevice) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
   };
-  if (application) {
-    Arcadia_Value_setObjectReferenceValue(&argumentValues[0], application);
-  }
-  Arcadia_Visuals_Windows_Window* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_Window_getType(thread), 1, &argumentValues[0]);
+  Arcadia_Visuals_Windows_Window* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_Window_getType(thread), 2, &argumentValues[0]);
   return self;
 }

@@ -15,8 +15,6 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-FetchProduct(${MyProjectName}.TemplateEngine "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Tool/Sources" "path to the Template Engine tool source directory")
-
 # Build the documentation.
 set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Visuals/index.html")
 file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/*)

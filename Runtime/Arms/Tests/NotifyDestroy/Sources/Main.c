@@ -83,7 +83,7 @@ main
     Arms_shutdown();
     return EXIT_FAILURE;
   }
-  if (Arms_addNotifyDestroy(sender, NULL, (Arms_NotifyDestroyCallback*)&Object_notifyDestroy)) {
+  if (Arms_addNotifyDestroy(sender, NULL, NULL, (Arms_NotifyDestroyCallback*)&Object_notifyDestroy)) {
     Arms_RunStatistics statistics = { .destroyed = 0 };
     Arms_run(&statistics);
     Arms_shutdown();

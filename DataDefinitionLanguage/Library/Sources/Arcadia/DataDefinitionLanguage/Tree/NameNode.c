@@ -39,36 +39,21 @@ static const Arcadia_ObjectType_Operations _Arcadia_DataDefinitionLanguage_Tree_
 };
 
 static const Arcadia_Type_Operations _Arcadia_DataDefinitionLanguage_Tree_NameNode_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_DataDefinitionLanguage_Tree_NameNode_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.NameNode", Arcadia_DataDefinitionLanguage_Tree_NameNode,
                          u8"Arcadia.DataDefinitionLanguage.Tree.Node", Arcadia_DataDefinitionLanguage_Tree_Node,
                          &_Arcadia_DataDefinitionLanguage_Tree_NameNode_typeOperations);
 
-static inline bool isFirst(Arcadia_Natural8Value byte) {
+static inline Arcadia_BooleanValue isFirst(Arcadia_Natural8Value byte) {
   return '_' == byte
       || ('a' <= byte && byte <= 'z')
       || ('A' <= byte && byte <= 'Z');
 }
 
-static inline bool isRest(Arcadia_Natural8Value byte) {
+static inline Arcadia_BooleanValue isRest(Arcadia_Natural8Value byte) {
   return '_' == byte
     || ('a' <= byte && byte <= 'z')
     || ('A' <= byte && byte <= 'Z')
@@ -97,10 +82,10 @@ Arcadia_DataDefinitionLanguage_Tree_NameNode_constructImpl
     Arcadia_Thread_jump(thread);
   }
   switch (Arcadia_Value_getTag(&argumentValues[0])) {
-    case Arcadia_ValueTag_ImmutableUtf8String: {
-      _self->value = Arcadia_Value_getImmutableUtf8StringValue(&argumentValues[0]);
-      Arcadia_Natural8Value const* start = Arcadia_ImmutableUtf8String_getBytes(thread, _self->value);
-      Arcadia_Natural8Value const* end = start + Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, _self->value);
+    case Arcadia_ValueTag_ObjectReference: {
+      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+      Arcadia_Natural8Value const* start = Arcadia_String_getBytes(thread, _self->value);
+      Arcadia_Natural8Value const* end = start + Arcadia_String_getNumberOfBytes(thread, _self->value);
       Arcadia_Natural8Value const* current = start;
       if (current == end || !isFirst(*current)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -130,7 +115,7 @@ Arcadia_DataDefinitionLanguage_Tree_NameNode_visit
   )
 {
   if (self->value) {
-    Arcadia_ImmutableUtf8String_visit(thread, self->value);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->value);
   }
 }
 
@@ -138,11 +123,11 @@ Arcadia_DataDefinitionLanguage_Tree_NameNode*
 Arcadia_DataDefinitionLanguage_Tree_NameNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* string
+    Arcadia_String* string
   )
 {
   Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeImmutableUtf8StringValue(string),
+    Arcadia_Value_makeObjectReferenceValue(string),
   };
   Arcadia_DataDefinitionLanguage_Tree_NameNode* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_Tree_NameNode_getType(thread), 1, &argumentValues[0]);
   return self;

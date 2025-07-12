@@ -13,39 +13,39 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_DATADEFINITIONLANGUAGE_WRITER_H_INCLUDED)
-#define ARCADIA_DATADEFINITIONLANGUAGE_WRITER_H_INCLUDED
+#if !defined(ARCADIA_DATADEFINITIONLANGUAGE_WRITER_UNPARSER_H_INCLUDED)
+#define ARCADIA_DATADEFINITIONLANGUAGE_WRITER_UNPARSER_H_INCLUDED
 
 #include "Arcadia/DataDefinitionLanguage/Tree/Include.h"
 
 /// @code
-/// class Arcadia.DataDefinitionLanguage.Writer
+/// class Arcadia.DataDefinitionLanguage.Unparser
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Writer", Arcadia_DataDefinitionLanguage_Writer, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Unparser", Arcadia_DataDefinitionLanguage_Unparser, u8"Arcadia.Object");
 
-/// @brief Create a Data Definition Language writer.
+/// @brief Create a Data Definition Language unparser.
 /// @param thread A pointer to the thread.
-/// @return A pointer to this thread.
-Arcadia_DataDefinitionLanguage_Writer*
-Arcadia_DataDefinitionLanguage_Writer_create
+/// @return A pointer to the Data Definition Language unparser.
+Arcadia_DataDefinitionLanguage_Unparser*
+Arcadia_DataDefinitionLanguage_Unparser_create
   (
     Arcadia_Thread* thread
   );
 
 /// @brief Move to next token.
 /// @param thread A pointer to the thread.
-/// @param self A pointer to this Data Definition Language writer.
+/// @param self A pointer to this Data Definition Language unparser.
 /// @param node A pointer to the node to write.
-/// @param stringBuffer A pointer to the string buffer to append the data to.
+/// @param target A pointer to the UTF8 writer the output is written to.
 /// @error Arcadia_Status_SemanticalError two map contains two entries with the same key
 /// @error Arcadia_Status_LexicalError a literal string (boolean, number, string, void) does not represent a valid literal
 void
-Arcadia_DataDefinitionLanguage_Writer_write
+Arcadia_DataDefinitionLanguage_Unparser_run
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Writer* self,
+    Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DataDefinitionLanguage_Tree_Node* node,
-    Arcadia_StringBuffer* stringBuffer
+    Arcadia_Utf8Writer* target
   );
 
-#endif // ARCADIA_DATADEFINITIONLANGUAGE_WRITER_WRITER_H_INCLUDED
+#endif // ARCADIA_DATADEFINITIONLANGUAGE_WRITER_UNPARSER_H_INCLUDED

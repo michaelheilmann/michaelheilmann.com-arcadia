@@ -45,23 +45,8 @@ static const Arcadia_ObjectType_Operations _Arcadia_Mil_VariableDefinitionStatem
 };
 
 static const Arcadia_Type_Operations _Arcadia_Mil_VariableDefinitionStatementAst_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_Mil_VariableDefinitionStatementAst_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Mil.VariableDefinitionStatementAst", Arcadia_Mil_VariableDefinitionStatementAst, u8"Arcadia.Mil.StatementAst", Arcadia_Mil_StatementAst, &_Arcadia_Mil_VariableDefinitionStatementAst_typeOperations);

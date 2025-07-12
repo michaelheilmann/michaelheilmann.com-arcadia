@@ -24,7 +24,7 @@ Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.BooleanNode", A
 
 struct Arcadia_DataDefinitionLanguage_Tree_BooleanNode {
   Arcadia_DataDefinitionLanguage_Tree_Node parent;
-  Arcadia_ImmutableUtf8String* value;
+  Arcadia_String* value;
 };
 
 Arcadia_DataDefinitionLanguage_Tree_BooleanNode*
@@ -40,7 +40,7 @@ Arcadia_DataDefinitionLanguage_Tree_BooleanNode*
 Arcadia_DataDefinitionLanguage_Tree_BooleanNode_createString
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* stringValue
+    Arcadia_String* stringValue
   );
 
 #endif // ARCADIA_DATADEFINITIONLANGUAGE_TREE_BOOLEANNODE_H_INCLUDED

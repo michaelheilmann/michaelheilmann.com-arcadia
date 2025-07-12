@@ -21,7 +21,30 @@
 
 /// @code
 /// class Arcadia.Visuals.Application {
-///   construct()
+///   construct
+///     (
+///     )
+/// 
+///   Arcadia.Visuals.Icon
+///   createIcon
+///     (
+///       Arcadia.Integer32 width,
+///       Arcadia.Integer32 height,
+///       Arcadia.Natural8 red,
+///       Arcadia.Natural8 green,
+///       Arcadia.Natural8 blue,
+///       Arcadia.Natural8 alpha
+///     )
+///   
+///   Arcadia.Visuals.Window
+///   createWindow
+///     (
+///     )
+/// 
+///   Arcadia.List
+///   getDisplayDevices
+///     (
+///     )
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Application", Arcadia_Visuals_Application, u8"Arcadia.Object")
@@ -36,6 +59,7 @@ struct Arcadia_Visuals_Application {
                                       Arcadia_Natural8Value blue,
                                       Arcadia_Natural8Value alpha);
   Arcadia_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Visuals_Application* self);
+  Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Visuals_Application* self);
 };
 
 Arcadia_Visuals_Icon*
@@ -53,6 +77,17 @@ Arcadia_Visuals_Application_createIcon
 
 Arcadia_Visuals_Window*
 Arcadia_Visuals_Application_createWindow
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Application* self
+  );
+
+/// @brief Enumerate all display devices.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this application.
+/// @todo Add Linux implementation.
+Arcadia_List*
+Arcadia_Visuals_Application_getDisplayDevices
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Application* self

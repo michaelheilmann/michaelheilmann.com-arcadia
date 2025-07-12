@@ -19,8 +19,6 @@ set(MyExecutableName ${MyProjectName}.Tools.TemplateEngine)
 
 if (NOT TARGET ${MyExecutableName})
 
-  FetchProduct(${MyProjectName}.Tools.TemplateEngineLibrary "${REPOSITORY_SOURCE_DIR}/Tools.TemplateEngine/Library" "path to the Template Engine library directory")
-
   BeginProduct(${MyExecutableName} executable)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/TemplateEngine/Configure.h @ONLY)

@@ -23,16 +23,14 @@ Arcadia_declareObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.NameNode", Arca
 
 struct Arcadia_DataDefinitionLanguage_Tree_NameNode {
   Arcadia_DataDefinitionLanguage_Tree_Node parent;
-  Arcadia_ImmutableUtf8String* value;
+  Arcadia_String* value;
 };
 
-// A writer which consumes a name node always checks if the string is a valid name string.
-// If a reader produces a name node, its string is valid name string.
 Arcadia_DataDefinitionLanguage_Tree_NameNode*
 Arcadia_DataDefinitionLanguage_Tree_NameNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* string
+    Arcadia_String* string
   );
 
 #endif // ARCADIA_DATADEFINITIONLANGUAGE_TREE_NAMENODE_H_INCLUDED

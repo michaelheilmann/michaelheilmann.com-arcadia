@@ -15,8 +15,6 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-FetchProduct(${MyProjectName}.Machine "${REPOSITORY_SOURCE_DIR}/Machine/Library" "path to the Machine library directory")
-
 set(MyTestFolder Machine)
 set(MyTestName ${MyProjectName}.Machine.Tests.Execute)
 

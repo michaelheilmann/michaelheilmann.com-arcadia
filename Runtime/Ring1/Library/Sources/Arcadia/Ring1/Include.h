@@ -101,6 +101,8 @@
 
 #include "Arcadia/Ring1/Implementation/Void.h"
 
+#include "Arcadia/Ring1/Implementation/WeakReference.h"
+
 #undef ARCADIA_RING1_PRIVATE
 #pragma pop_macro("ARCADIA_RING1_PRIVATE")
 

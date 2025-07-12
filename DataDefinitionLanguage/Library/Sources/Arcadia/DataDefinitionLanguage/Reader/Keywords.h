@@ -40,7 +40,7 @@ Arcadia_DataDefinitionLanguage_Keywords_add
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Keywords* self,
-    Arcadia_ImmutableUtf8String* string,
+    Arcadia_String* string,
     Arcadia_Natural32Value type
   );
 
@@ -54,7 +54,7 @@ Arcadia_DataDefinitionLanguage_Keywords_scan
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Keywords* self,
-    Arcadia_ImmutableUtf8String* string,
+    Arcadia_String* string,
     Arcadia_Natural32Value* tokenType
   );
 

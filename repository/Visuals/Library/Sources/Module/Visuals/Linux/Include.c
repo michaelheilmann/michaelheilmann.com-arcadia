@@ -20,7 +20,7 @@
 #define STB_IMAGE_WRITE_STATIC static
 #define STBIWDEF
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "Module/Visuals/Linux/stb_image_write.h"
+#include "Module/Visuals/Linux/_stb_image_write.h"
 
 typedef struct WriteContext {
   Arcadia_Process* process;

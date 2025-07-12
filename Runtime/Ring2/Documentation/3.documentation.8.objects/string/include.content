@@ -1,17 +1,13 @@
 <section class="cxx entity object">
 <h1 id="Arcadia_String">Arcadia_String</h1>
-<p>
-<code>Arcadia_String</code> represents an Unicode string encoded as UTF-8-NO-BOM.
-This type is allocated on the heap and values of this type are referenced by <code>Arcadia_String</code> pointers.
-A <code>Arcadia_String</code> pointer can be safely cast into a <code>Arcadia_ObjectReferenceValue</code> values.
-An <code>Arcadia_ObjectReferenceValue</code> pointing to a <code>Arcadia_String</code> value can be safely cast into a <code>Arcadia_String</code> pointer.
-</p>
+<p><code>Arcadia_String</code> extends <code>Arcadia_Object</code>.</p>
+<p><code>Arcadia_String</code> represents an immutable sequence of Unicode code points in UTF8 encoding.</p>
 
 <p>Arcadia_String derives fro Arcadia_Object and overrides the following methods:</p>
 <ul>
-  <li>Arcadia_Object_equalTo</li>
-  <li>Arcadia_Object_hash</li>
-  <li>Arcadia_Object_notEqualTo</li>
+  <li>Arcadia_Object_isEqualTo</li>
+  <li>Arcadia_Object_isNotEqualTo</li>
+  <li>Arcadia_Object_getHash</li>
 </ul>
 </section>
 

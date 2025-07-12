@@ -21,8 +21,6 @@ set(MyLibraryName ${MyProjectName}.Mil.Frontend)
 if (NOT TARGET ${MyLibraryName})
   BeginProduct(${MyLibraryName} library)
 
-  FetchProduct(${MyLibraryName}.Ring2 "${REPOSITORY_SOURCE_DIR}/../Runtime/Ring2/Library" "path to the Ring 2 library directory")
-
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h @ONLY)
   list(APPEND ${MyLibraryName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h.i)
   list(APPEND ${MyLibraryName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Mil/Frontend/Configure.h)

@@ -18,7 +18,6 @@
 
 #include "Arcadia/Ring2/Include.h"
 #include "Module/Visuals/ImageWriter.h"
-#include "Module/Visuals/PixelBuffer.h"
 
 Arcadia_declareObjectType(u8"LibPngImageWriter", LibPngImageWriter, u8"ImageWriter");
 

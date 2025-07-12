@@ -33,7 +33,7 @@ main1
     Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
-  for (Arcadia_SizeValue i = 0, n = Arcadia_List_getSize(thread, arguments); i < n; ++i) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
     Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
     Arcadia_Utf8StringReader *r = Arcadia_Utf8StringReader_create(thread, argument);
     Arcadia_String *key = NULL,

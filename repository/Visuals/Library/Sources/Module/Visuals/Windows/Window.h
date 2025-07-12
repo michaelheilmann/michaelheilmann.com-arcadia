@@ -19,13 +19,12 @@
 #include "Module/Visuals/Window.h"
 #include "Module/Visuals/Windows/Application.h"
 #include "Module/Visuals/Windows/Icon.h"
+typedef struct Arcadia_Visuals_Windows_DisplayDevice Arcadia_Visuals_Windows_DisplayDevice;
 
 #define WIN32_LEAN_AND_MEAN
 #define NOCOMM
 #include <Windows.h>
 
-// @todo Rename to Windows_NativeWindow.
-// @todo Move to Windows/NativeWindow.(c|h).
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Window", Arcadia_Visuals_Windows_Window, u8"Arcadia.Visuals.Window");
 
 struct Arcadia_Visuals_Windows_Window {
@@ -46,7 +45,8 @@ Arcadia_Visuals_Windows_Window*
 Arcadia_Visuals_Windows_Window_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Application* application
+    Arcadia_Visuals_Windows_Application* application,
+    Arcadia_Visuals_Windows_DisplayDevice* displayDevice
   );
 
 #endif // ARCADIA_VISUALS_WINDOWS_WINDOW_H_INCLUDED

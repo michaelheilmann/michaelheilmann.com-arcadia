@@ -71,24 +71,12 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
   .identical = &identical,
   .equalTo = &isEqualTo,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
   .hash = &hash,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
   .notEqualTo = &isNotEqualTo,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 void
@@ -367,6 +355,40 @@ Arcadia_Object_visit
 }
 
 void
+Arcadia_Object_addNotifyDestroyCallback
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    void* observer,
+    void (*callback)(void* observer, Arcadia_Object*)
+  )
+{
+  ObjectTag* tag = ((ObjectTag*)self) - 1;
+  Arcadia_Status status = Arms_addNotifyDestroy(tag, observer, self, (void (*)(void*,void*))callback);
+  if (status) {
+    Arcadia_Thread_setStatus(thread, status);
+    Arcadia_Thread_jump(thread);
+  }
+}
+
+void
+Arcadia_Object_removeNotifyDestroyCallback
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self,
+    void* observer,
+    void (*callback)(void* observer, Arcadia_Object*)
+  )
+{
+  ObjectTag* tag = ((ObjectTag*)self) - 1;
+  Arcadia_Status status = Arms_removeNotifyDestroy(tag, observer, self, (void (*)(void*, void*))callback);
+  if (status) {
+    Arcadia_Thread_setStatus(thread, status);
+    Arcadia_Thread_jump(thread);
+  }
+}
+
+void
 Arcadia_Object_lock
   (
     Arcadia_Thread* thread,
@@ -407,8 +429,6 @@ Arcadia_Object_getType
   return objectTag->type;
 }
 
-
-
 Arcadia_BooleanValue
 Arcadia_Object_isEqualTo
   (
@@ -448,7 +468,7 @@ Arcadia_Object_isNotEqualTo
 }
 
 Arcadia_SizeValue
-Arcadia_Object_hash
+Arcadia_Object_getHash
   (
     Arcadia_Thread* thread,
     Arcadia_Object* self
