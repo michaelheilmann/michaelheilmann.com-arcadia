@@ -70,7 +70,7 @@ R_Interpreter_Class_constructImpl
   }
   _self->className = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
   _self->extendedClassName = Arcadia_ArgumentsValidation_getObjectReferenceValueOrNull(thread, &argumentValues[1], _Arcadia_String_getType(thread));
-  _self->classMembers = Arcadia_Map_create(thread);
+  _self->classMembers = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 
   _self->extendedClass = NULL;
 
@@ -214,7 +214,7 @@ completeExtendedClass
   if (self->extendedClassName) {
     self->extendedClass = getClass(process, R_Interpreter_ProcessState_getGlobal(process, processState, self->extendedClassName));
     R_Interpreter_Class_complete(process, self->extendedClass, processState);
-    Arcadia_Map* temporary = Arcadia_Map_create(Arcadia_Process_getThread(process));
+    Arcadia_Map* temporary = (Arcadia_Map*)Arcadia_HashMap_create(Arcadia_Process_getThread(process), Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
     R_Interpreter_Class* current = self;
     do {
       Arcadia_Value k = Arcadia_Value_Initializer(),
@@ -284,7 +284,7 @@ R_Interpreter_Class_complete
   if (self->extendedClassName) {
     self->extendedClass = getClass(process, R_Interpreter_ProcessState_getGlobal(process, processState, self->extendedClassName));
     R_Interpreter_Class_complete(process, self->extendedClass, processState);
-    Arcadia_Map* temporary = Arcadia_Map_create(thread);
+    Arcadia_Map* temporary = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
     R_Interpreter_Class* current = self;
     do {
       Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(current->className);
@@ -303,11 +303,11 @@ R_Interpreter_Class_complete
   completeVariables(process, self, processState);
 
   /* (4) complete the methods and the method dispatch */
-  self->methodDispatch = Arcadia_Map_create(thread);
+  self->methodDispatch = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   if (self->extendedClass) {
-    self->methodDispatch = Arcadia_Map_clone(thread, self->extendedClass->methodDispatch);
+    self->methodDispatch = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeObjectReferenceValue(self->extendedClass->methodDispatch));
   } else {
-    self->methodDispatch = Arcadia_Map_create(thread);
+    self->methodDispatch = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   }
   Arcadia_List* members = Arcadia_Map_getValues(thread, self->classMembers);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)members); i < n; ++i) {

@@ -333,7 +333,7 @@ onInvokeExpression
   if (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
     next(thread, self);
   }
-  Arcadia_List* operands = Arcadia_List_create(thread);
+  Arcadia_List* operands = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   if (!is(thread, self, Arcadia_Mil_TokenType_EndOfInput) && !is(thread, self, Arcadia_Mil_TokenType_RightParenthesis)) {
     Arcadia_Mil_OperandAst* operand = onOperand(thread, self);
     Arcadia_List_insertBackObjectReferenceValue(thread, operands, (Arcadia_ObjectReferenceValue)operand);
@@ -752,7 +752,7 @@ onParameters
     Arcadia_Mil_Parser* self
   )
 {
-  Arcadia_List* parameters = Arcadia_List_create(thread);
+  Arcadia_List* parameters = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   while (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
     next(thread, self);
   }
@@ -820,7 +820,7 @@ onConstructorDefinition
     next(thread, self);
   }
   if (is(thread, self, Arcadia_Mil_TokenType_LeftCurlyBracket)) {
-    constructorBody = Arcadia_List_create(thread);
+    constructorBody = (Arcadia_List*)Arcadia_ArrayList_create(thread);
     next(thread, self);
     while (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
       next(thread, self);
@@ -885,7 +885,7 @@ onMethodDefinition
     next(thread, self);
   }
   if (is(thread, self, Arcadia_Mil_TokenType_LeftCurlyBracket)) {
-    methodBody = Arcadia_List_create(thread);
+    methodBody = (Arcadia_List*)Arcadia_ArrayList_create(thread);
     next(thread, self);
     while (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
       next(thread, self);
@@ -1000,7 +1000,7 @@ onClassDefinition
     while (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
       next(thread, self);
     }
-    classBody = Arcadia_List_create(thread);
+    classBody = (Arcadia_List*)Arcadia_ArrayList_create(thread);
     while (!is(thread, self, Arcadia_Mil_TokenType_EndOfInput) && !is(thread, self, Arcadia_Mil_TokenType_RightCurlyBracket)) {
       Arcadia_Mil_Ast* classMemberDefinitionAst = onClassMemberDefinition(thread, self);
       Arcadia_List_insertBackObjectReferenceValue(thread, classBody, (Arcadia_ObjectReferenceValue)classMemberDefinitionAst);
@@ -1060,7 +1060,7 @@ onProcedureDefinition
     next(thread, self);
   }
   if (is(thread, self, Arcadia_Mil_TokenType_LeftCurlyBracket)) {
-    procedureBody = Arcadia_List_create(thread);
+    procedureBody = (Arcadia_List*)Arcadia_ArrayList_create(thread);
     next(thread, self);
     while (is(thread, self, Arcadia_Mil_TokenType_LineTerminator)) {
       next(thread, self);

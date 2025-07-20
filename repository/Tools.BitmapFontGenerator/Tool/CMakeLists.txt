@@ -15,4 +15,36 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-add_subdirectory(Sources)
+set(MyTool Tools.BitmapFontGenerator)
+
+if (NOT TARGET ${MyTool})
+
+  BeginProduct(${MyTool} executable)
+
+  if (${${MyTool}.OperatingSystem} STREQUAL ${${MyTool}.OperatingSystem.Windows})
+
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BitmapFontGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/BitmapFontGenerator/Configure.h @ONLY)
+    list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BitmapFontGenerator/Configure.h.i)
+    list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/BitmapFontGenerator/Configure.h)
+
+    list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BitmapFontGenerator/Main.c)
+
+    list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Visuals ${MyProjectName}.Machine ${MyProjectName}.Arms)
+
+  else()
+
+    set(${MyTool}.Enabled FALSE)
+
+  endif()
+
+  EndProduct(${MyTool})
+
+  if (${${MyTool}.Enabled})
+
+    set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.png\"")
+
+    set_target_properties(${MyTool} PROPERTIES FOLDER "Tools")
+
+  endif()
+
+endif()

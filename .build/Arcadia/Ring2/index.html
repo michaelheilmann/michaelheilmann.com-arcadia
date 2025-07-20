@@ -1890,50 +1890,8 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
 
 <section class="cxx entity object">
 <h1 id="Arcadia_List">Arcadia_List</h1>
-<p><code>Arcadia_List</code> extends <code>Arcadia_Collection</code>.<7p>
+<p><code>Arcadia_List</code> extends <code>Arcadia_Collection</code>.</p>
 <p><code>Arcadia_List</code> represents a list of <code>Arcadia_Value</code> objects.</p>
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_List_create">Arcadia_List_create</h1>
-
-  <my-signature><code>
-  Arcadia_List*<br>
-  Arcadia_List_create<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Create a list.
-  </my-summary>
-
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>A pointer to the <code>Arcadia_List</code> value.</p>
-  </section>
-
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -2184,47 +2142,6 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_Map_create">Arcadia_Map_create</h1>
-
-  <my-signature><code>
-  Arcadia_Map*<br>
-  Arcadia_Map_create<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Create a map.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div>Arcadia_Thread* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>A pointer to the <code>Arcadia_Map</code> object.</p>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <section class="cxx entity method">
 
   <h1 id="Arcadia_Map_get">Arcadia_Map_get</h1>
@@ -2449,50 +2366,6 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
 <h1 id="Arcadia_Set">Set</h1>
 <p><code>Arcadia_Set</code> extends <code>Arcadia_Collection</code>.</p>
 <p><code>Arcadia_Set</code> represents a set of <code>Arcadia_Value</code> objects.</p>
-<p>
-Care must be taken that objects must not change their equivalence relation after being added to this set.
-</p>
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_Set_create">Arcadia_Set_create</h1>
-
-  <my-signature><code>
-  Arcadia_Set*<br>
-  Arcadia_Set_create<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Create a set.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div>Arcadia_Thread* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>A pointer to the <code>Arcadia_Set</code> value.</p>
-  </section>
-
 </section>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -4367,7 +4240,6 @@ Care must be taken that objects must not change their equivalence relation after
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Collection_isEmpty">Arcadia_Collection_isEmpty</a></li>
 
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List">Arcadia_List</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_create">Arcadia_List_create</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_getAt">Arcadia_List_getAt</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_insertAt">Arcadia_List_insertAt</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_insertBack">Arcadia_List_insertBack</a></li>
@@ -4375,12 +4247,10 @@ Care must be taken that objects must not change their equivalence relation after
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_removeAt">Arcadia_List_removeAt</a></li>
 
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Map">Arcadia_Map</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Map_create">Arcadia_Map_create</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Map_get">Arcadia_Map_get</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Map_set">Arcadia_Map_set</a></li>
 
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Set">Arcadia_Set</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Set_create">Arcadia_Set_create</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Set_contains">Arcadia_Set_contains</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Set_add">Arcadia_Set_add</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Set_remove">Arcadia_Set_remove</a></li>

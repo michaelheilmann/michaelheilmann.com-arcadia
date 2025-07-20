@@ -2,39 +2,24 @@
 
 ## Installing the dependencies
 *michaelheilmann.com* requires
-- *make* version 4.3.0 or better.
-- *gcc* version 11.4.0 or better.
-- *cmake* version 3.20 or better.
-  Under *Ubuntu*: install the package *cmake*.
-- *libpng* version 1.6 or better.
-  Under *Ubuntu*: install the package *libpng-dev*.
-- Optional: *gdb* version 12.1 or better.
+- *make* version 4.3.0 or better
+  - Debian: `sudo apt-get install build-essential`
+- *gcc* version 11.4.0 or better
+  - Debian: `sudo apt-get install gcc`
+- *cmake* version 3.20 or better
+  - Debian: `sudo apt-get install cmake`
+- *libpng* version 1.6 or better
+  - Debian:`sudo apt-get install libpng-dev`
+- Optional: *gdb* version 12.1 or better
+  - Debian: `sudo apt-get install gdb`
 - Recommended: *X11 development headers and libraries*
-- Recommended: *OpenGL/GLX development headers and libraries*
+  - Debian:
+    - `sudo apt-get install libx11-dev`
+    - `sudo apt-get install libxrandr-dev`
+- Recommended: *OpenGL/GLX development headers and libraries* 
+  - Debian: `sudo apt-get install libglx-dev`
 - Recommended: *OpenAL development headers and libraries*
-
-## Installing dependencies under Debian Linux-based distributions
-The following instructions apply to all *Debian Linux*-based distributions.
-
-To install `libpng` enter
-```
-sudo apt-get update && sudo apt-get install libpng-dv
-```
-
-To install `cmake` enter
-```
-sudo apt-get update && sudo apt-get install cmake
-```
-
-To install *OpenGL/GLX development headers and libraries* enter
-```
-sudo apt-get update && sudo apt-get install mesa-common-dev libglx-dev
-```
-
-To install *OpenAL development headers and libraries* enter
-```
-sudo apt-get update && sudo apt-get install libopenal-dev
-```
+  - Debian: `sudo apt-get install mesa-common-dev`
 
 ## Building the program
 The following instructions will perform an out-of-source build. An out-of-source build does not modify the source directory

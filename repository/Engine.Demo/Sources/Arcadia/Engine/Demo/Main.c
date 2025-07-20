@@ -18,8 +18,8 @@
 #include <string.h>
 
 #include "Arcadia/Ring2/Include.h"
-#include "Module/Audials/Include.h"
-#include "Module/Visuals/Include.h"
+#include "Arcadia/Audials/Include.h"
+#include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/DataDefinitionLanguage/Include.h"
 
@@ -332,9 +332,9 @@ updateVerticalSynchronization
   _validateBoolean(thread, node, key, Arcadia_BooleanValue_False);
 }
 
-// "displayMode" :
-// Must be unary and must be one of "windowed", "bordlesss fullscreen window", or "fullscreen".
-// Default is "borderless fullscreen window".
+// "windowMode" :
+// Must be unary and must be one of "windowed" or "borderless".
+// Default is "windowed".
 // 
 // "monitor":
 // Must be unary and must be a non-negative integer.
@@ -356,14 +356,12 @@ updateDisplayMode
 {
   Arcadia_String* key;
 
-  Arcadia_List* values = Arcadia_List_create(thread);
-  Arcadia_List_insertBack(thread, values, 
-                         Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"bordlesss fullscreen window", sizeof(u8"bordlesss fullscreen window") - 1)))));
+  Arcadia_List* values = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_List_insertBack(thread, values,
                           Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1)))));
   Arcadia_List_insertBack(thread, values,
-                          Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"fullscreen", sizeof(u8"fullscreen") - 1)))));
-  key = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"displayMode", sizeof(u8"displayMode") - 1)));
+                          Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"borderless", sizeof(u8"borderless") - 1)))));
+  key = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowMode", sizeof(u8"windowMode") - 1)));
   _validateStringEnumeration(thread, node, key, values, 0);
 
   key = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"monitor", sizeof(u8"monitor") - 1)));
@@ -556,7 +554,7 @@ main1
       print(thread, fileHandle, Arcadia_String_getBytes(thread, a), Arcadia_String_getNumberOfBytes(thread, a));
       print(thread, fileHandle, u8"\n", sizeof(u8"\n") - 1);
 
-      Arcadia_List* displayModes = Arcadia_Visuals_DisplayDevice_getDisplayModes(thread, displayDevice);
+      Arcadia_List* displayModes = Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes(thread, displayDevice);
       for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)displayModes); i < n; ++i) {
         Arcadia_Visuals_DisplayMode* displayMode = (Arcadia_Visuals_DisplayMode*)Arcadia_List_getObjectReferenceValueAt(thread, displayModes, i);
         print(thread,fileHandle, u8"    ", sizeof(u8"    ") - 1);
@@ -575,12 +573,11 @@ main1
         print(thread, fileHandle, u8"\n", sizeof(u8"\n") - 1);
       }
     }
-
-    Arcadia_Integer32Value displayDeviceIndex = 0;
-    Arcadia_Visuals_DisplayDevice* displayDevice = NULL;
-    // Get the monitor index.
     Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration = loadConfiguration(thread);
+    // (1) Get the display device.
+    Arcadia_Visuals_DisplayDevice* displayDevice = NULL;
     {
+      Arcadia_Integer32Value displayDeviceIndex = 0;
       char const* path[] = {
         u8"visuals",
         u8"monitor",
@@ -606,6 +603,43 @@ main1
       displayDevice =
         (Arcadia_Visuals_DisplayDevice*)Arcadia_List_getObjectReferenceValueAt(thread, displayDevices, displayDeviceIndex);
     }
+    // (2) Get the window mode.
+    Arcadia_String* windowMode = NULL;
+    {
+      Arcadia_String* windowModeString = NULL;
+      char const* path[] = {
+        u8"visuals",
+        u8"windowMode",
+      };
+      const char* values[] = {
+        u8"windowed",
+        u8"borderless",
+      };
+      Arcadia_JumpTarget jumpTarget;
+      Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+      if (Arcadia_JumpTarget_save(&jumpTarget)) {
+        windowModeString = Cfg2_getString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
+        Arcadia_BooleanValue found = Arcadia_BooleanValue_False;
+        for (Arcadia_SizeValue i = 0, n = 2; i < n; ++i) {
+          Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowModeString);
+          Arcadia_Value b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, values[i], strlen(values[i])))));
+          if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
+            found = Arcadia_BooleanValue_True;
+            break;
+          }
+        }
+        if (!found) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
+          Arcadia_Thread_jump(thread);
+        }
+        Arcadia_Thread_popJumpTarget(thread);
+      } else {
+        Arcadia_Thread_popJumpTarget(thread);
+        windowModeString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1)));
+        Cfg2_setString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2, windowModeString);
+      }
+      windowMode = windowModeString;
+    }
 
     // (1) Initialize Audials.
     Audials_startup(thread);
@@ -619,9 +653,29 @@ main1
     Arcadia_Object_lock(thread, (Arcadia_Object*)window);
 
     // (4) Ensure the window is opened.
+    //Arcadia_Visuals_DisplayMode* currentDisplayMode = Arcadia_Visuals_DisplayDevice_getCurrentDisplayMode(thread, displayDevice);
     Arcadia_Visuals_Window_open(thread, window);
+  
+    // (5) Set the window size and position.
+    Arcadia_Integer32Value left, top, right, bottom;
+    Arcadia_Visuals_DisplayDevice_getBounds(thread, displayDevice, &left, &top, &right, &bottom);
+    Arcadia_Visuals_Window_setPosition(thread, window, left, top);
+    Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
     
-    Arcadia_Integer32Value width, height;
+    // (6) Set the window mode.
+    Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowMode),
+                  b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1))));
+    if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
+    } else {
+      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_False);
+    }
+    Arcadia_Visuals_Window_setPosition(thread, window, left, top);
+    Arcadia_Visuals_Window_setSize(thread, window, right - left + 1, bottom - top + 1);
+    
+    
+    Arcadia_Integer32Value width;
+    Arcadia_Integer32Value height;
     Arcadia_Visuals_Icon* icon;
 
     // (5) Set the big icon.

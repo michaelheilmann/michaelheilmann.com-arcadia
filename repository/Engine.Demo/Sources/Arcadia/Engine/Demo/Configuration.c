@@ -26,6 +26,14 @@ _isNumber
 { return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DataDefinitionLanguage_Tree_NumberNode_getType(thread)); }
 
 static Arcadia_BooleanValue
+_isString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_Node* node
+  )
+{ return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DataDefinitionLanguage_Tree_StringNode_getType(thread)); }
+
+static Arcadia_BooleanValue
 _isMapEntry
   (
     Arcadia_Thread* thread,
@@ -82,6 +90,27 @@ _createInteger32
   Arcadia_List_insertBackObjectReferenceValue(thread, node->entries, (Arcadia_ObjectReferenceValue)e);
 }
 
+static void
+_createString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_MapNode* node,
+    char const* name,
+    Arcadia_String* value
+  )
+{
+  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, name, strlen(name))));
+  Arcadia_SizeValue i = _findIndex(thread, node, 0, nameString);
+  Arcadia_DataDefinitionLanguage_Tree_MapEntryNode* e = NULL;
+  if (i != Arcadia_SizeValue_Maximum) {
+    Arcadia_List_removeAt(thread, node->entries, i, 1);
+  }
+  Arcadia_DataDefinitionLanguage_Tree_NameNode* k = Arcadia_DataDefinitionLanguage_Tree_NameNode_create(thread, nameString);
+  Arcadia_DataDefinitionLanguage_Tree_Node* v = (Arcadia_DataDefinitionLanguage_Tree_Node*)Arcadia_DataDefinitionLanguage_Tree_StringNode_createString(thread, value);
+  e = Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_create(thread, k, v);
+  Arcadia_List_insertBackObjectReferenceValue(thread, node->entries, (Arcadia_ObjectReferenceValue)e);
+}
+
 /// - if x[name] is a map node, then return x[name]
 /// - if x[name] is not a map node or x[name] does not exit, x[name] = {} and return x[name]
 static Arcadia_DataDefinitionLanguage_Tree_MapNode*
@@ -111,8 +140,6 @@ _getOrCreateMap
   return (Arcadia_DataDefinitionLanguage_Tree_MapNode*)e->value;
 }
 
-
-// node must be a map node
 void
 Cfg2_setInteger32
   (
@@ -138,7 +165,6 @@ Cfg2_setInteger32
   _createInteger32(thread, current, names[numberOfNames - 1], value);
 }
 
-// not exists or conversion failed
 Arcadia_Integer32Value
 Cfg2_getInteger32
   (
@@ -176,6 +202,70 @@ Cfg2_getInteger32
     Arcadia_Thread_jump(thread);
   }
   return Arcadia_String_toInteger32(thread, ((Arcadia_DataDefinitionLanguage_Tree_NumberNode*)(current))->value);
+}
+
+void
+Cfg2_setString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    char const* names[],
+    Arcadia_SizeValue numberOfNames,
+    Arcadia_String* value
+  )
+{
+  if (!_isMap(thread, node)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_DataDefinitionLanguage_Tree_MapNode* current = (Arcadia_DataDefinitionLanguage_Tree_MapNode*)node;
+  for (Arcadia_SizeValue i = 0, n = numberOfNames - 1; i < n; ++i) {
+    current = _getOrCreateMap(thread, current, names[i]);
+  }
+  if (!current) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+    Arcadia_Thread_jump(thread);
+  }
+  _createString(thread, current, names[numberOfNames - 1], value);
+}
+
+Arcadia_String*
+Cfg2_getString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    char const* names[],
+    Arcadia_SizeValue numberOfNames
+  )
+{
+  Arcadia_DataDefinitionLanguage_Tree_Node* current = node;
+  for (Arcadia_SizeValue i = 0, n = numberOfNames; i < n; ++i) {
+    if (!_isMap(thread, current)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, names[i], strlen(names[i]))));
+    Arcadia_SizeValue i = _findIndex(thread, (Arcadia_DataDefinitionLanguage_Tree_MapNode*)current, 0, nameString);
+    if (i == Arcadia_SizeValue_Maximum) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+      Arcadia_Thread_jump(thread);
+    }
+    current = Arcadia_List_getObjectReferenceValueAt(thread, ((Arcadia_DataDefinitionLanguage_Tree_MapNode*)current)->entries, i);
+    if (!_isMapEntry(thread, current)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+      Arcadia_Thread_jump(thread);
+    }
+    current = ((Arcadia_DataDefinitionLanguage_Tree_MapEntryNode*)current)->value;
+  }
+  if (!current) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+    Arcadia_Thread_jump(thread);
+  }
+  if (!_isString(thread, current)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  return ((Arcadia_DataDefinitionLanguage_Tree_NumberNode*)(current))->value;
 }
 
 void

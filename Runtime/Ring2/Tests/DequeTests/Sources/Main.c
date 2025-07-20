@@ -26,9 +26,9 @@ dequeTest1
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Deque* a = Arcadia_Deque_create(thread);
+  Arcadia_Deque* a = (Arcadia_Deque*)Arcadia_ArrayDeque_create(thread);
   Arcadia_Tests_assertTrue(thread, NULL != a);
-  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(0) == Arcadia_Deque_getSize(thread, a));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(0) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
 }
 
 // Create a deque.
@@ -41,7 +41,7 @@ dequeTest2
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Deque* a = Arcadia_Deque_create(thread);
+  Arcadia_Deque* a = (Arcadia_Deque*)Arcadia_ArrayDeque_create(thread);
   Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(1));
   Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(2));
   Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(3));

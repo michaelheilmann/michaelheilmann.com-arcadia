@@ -23,7 +23,7 @@
 #include "Arcadia/Ring2/Implementation/Configure.h"
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
-#include "Arcadia/Ring2/Implementation/List.h"
+#include "Arcadia/Ring2/Implementation/Collections/ArrayList.h"
 #include "Arcadia/Ring2/Implementation/String.h"
 
 /// The Generic Path Format

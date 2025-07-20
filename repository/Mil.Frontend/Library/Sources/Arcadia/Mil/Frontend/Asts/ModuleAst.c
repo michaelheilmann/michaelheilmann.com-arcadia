@@ -69,7 +69,7 @@ Arcadia_Mil_ModuleAst_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   _self->path = NULL;
-  _self->definitions = Arcadia_List_create(thread);
+  _self->definitions = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 

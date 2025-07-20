@@ -25,7 +25,7 @@ main1
     char** argv
   )
 {
-  Arcadia_List* arguments = Arcadia_List_create(thread);
+  Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
     Arcadia_String* argument = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, argv[argi], strlen(argv[argi]))));
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, argument);

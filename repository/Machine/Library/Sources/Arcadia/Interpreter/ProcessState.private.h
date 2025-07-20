@@ -17,7 +17,7 @@
 #define R_INTERPRETER_PROCESSSTATE_PRIVATE_H_INCLUDED
 
 #include "Arcadia/Interpreter/ProcessState.h"
-#include "Arcadia/Ring2/Implementation/Map.h"
+#include "Arcadia/Ring2/Include.h"
 
 struct R_Interpreter_ProcessState {
   // Global classe and global procedures.

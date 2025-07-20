@@ -428,7 +428,7 @@ FileContext_constructImpl
   _self->context = (Context*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Context_getType(thread));
   _self->sourceFilePath = (Arcadia_FilePath*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_FilePath_getType(thread));
   _self->source = NULL;
-  _self->environment = Arcadia_Map_create(thread);
+  _self->environment = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_Value k, v;
 
   Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"siteAddress", sizeof(u8"siteAddress") - 1)));

@@ -75,7 +75,7 @@ Context_constructImpl
   _self->temporaryBuffer = NULL;
   _self->temporary = NULL;
   _self->stack = NULL;
-  _self->files = Arcadia_List_create(thread);
+  _self->files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 

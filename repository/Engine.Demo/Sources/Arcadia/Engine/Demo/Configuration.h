@@ -41,6 +41,29 @@ Cfg2_getInteger32
     Arcadia_SizeValue numberOfNames
   );
 
+// { <name[0]> = { <name[1]> : { <name[2]> : ... { <name[n-1]> : <value>} } } }
+// node must be a map node
+void
+Cfg2_setString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    char const* names[],
+    Arcadia_SizeValue numberOfNames,
+    Arcadia_String* value
+  );
+
+// node must be a map node
+// errors: not exists or conversion failed
+Arcadia_String*
+Cfg2_getString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    char const* names[],
+    Arcadia_SizeValue numberOfNames
+  );
+
 // { <name[0]> = { <name[1]> : { <name[2]> : ... { <name[n-1]> : { } } } } }
 // node must be a map node
 void

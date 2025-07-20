@@ -59,12 +59,12 @@ if (NOT TARGET ${MyModule})
     endif()
   endif()
 
-  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Include.c)
-  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Include.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Include.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Include.h)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Audials/Configure.h @ONLY)
-  list(APPEND ${MyModule}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Module/Audials/Configure.h.i)
-  list(APPEND ${MyModule}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Module/Audials/Configure.h)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Configure.h @ONLY)
+  list(APPEND ${MyModule}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Configure.h.i)
+  list(APPEND ${MyModule}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Configure.h)
 
   list(APPEND ${MyModule}.Libraries ${MyProjectName}.Ring2)
   EndProduct(${MyModule})

@@ -94,7 +94,7 @@ compile
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_Parser* parser = Arcadia_Mil_Parser_create(thread);
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
-  Arcadia_List* moduleAsts = Arcadia_List_create(thread);
+  Arcadia_List* moduleAsts = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)paths); i < n; ++i) {
     Arcadia_FilePath* sourceFilePath = Arcadia_List_getObjectReferenceValueAt(thread, paths, i);
     Arcadia_FilePath* absoluteSourceFilePath = NULL;
@@ -123,8 +123,8 @@ testNativePrintProcedure
   )
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-  Arcadia_Map* symbolTable = Arcadia_Map_create(thread);
-  Arcadia_Map* foreignProcedures = Arcadia_Map_create(thread);
+  Arcadia_Map* symbolTable = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* foreignProcedures = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 #define Define(Name,Function) \
   { \
     Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, Name, sizeof(Name) - 1))); \
@@ -138,7 +138,7 @@ testNativePrintProcedure
   Define(u8"main", _Library_main)
 #undef Define
 
-  Arcadia_List* paths = Arcadia_List_create(thread);
+  Arcadia_List* paths = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/MouseButtonMessage.mil", sizeof(u8"Assets/MouseButtonMessage.mil") - 1));
   Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/KeyboardKeyMessage.mil", sizeof(u8"Assets/KeyboardKeyMessage.mil") - 1));
   Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/print.mil", sizeof(u8"Assets/print.mil") - 1));

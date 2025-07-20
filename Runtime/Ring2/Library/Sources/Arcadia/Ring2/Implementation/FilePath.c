@@ -468,7 +468,7 @@ Arcadia_FilePath_constructImpl
   _self->fileNames = NULL;
   _self->relative = Arcadia_BooleanValue_False;
   _self->root = NULL;
-  _self->fileNames = Arcadia_List_create(thread);
+  _self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -535,7 +535,7 @@ Arcadia_FilePath_parseWindows
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
   self->root = NULL;
-  self->fileNames = Arcadia_List_create(thread);
+  self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
   parseWindowsFilePath(process, self, byteBuffer);
@@ -560,7 +560,7 @@ Arcadia_FilePath_parseUnix
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
   self->root = NULL;
-  self->fileNames = Arcadia_List_create(thread);
+  self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
   parseUnixFilePath(process, self, byteBuffer);
@@ -680,7 +680,7 @@ Arcadia_FilePath_parseGeneric
   self->fileNames = NULL;
   self->relative = Arcadia_BooleanValue_False;
   self->root = NULL;
-  self->fileNames = Arcadia_List_create(thread);
+  self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
   parseGenericFilePath(process, self, byteBuffer);

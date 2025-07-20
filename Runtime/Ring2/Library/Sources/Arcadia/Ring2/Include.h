@@ -30,11 +30,12 @@
 #include "Arcadia/Ring2/Implementation/FilePath.h"
 #include "Arcadia/Ring2/Implementation/FileSystem.h"
 
-#include "Arcadia/Ring2/Implementation/Deque.h"
-#include "Arcadia/Ring2/Implementation/List.h"
-#include "Arcadia/Ring2/Implementation/Map.h"
-#include "Arcadia/Ring2/Implementation/Set.h"
-#include "Arcadia/Ring2/Implementation/Stack.h"
+#include "Arcadia/Ring2/Implementation/Collections/ArrayDeque.h"
+#include "Arcadia/Ring2/Implementation/Collections/ArrayList.h"
+#include "Arcadia/Ring2/Implementation/Collections/HashMap.h"
+#include "Arcadia/Ring2/Implementation/Collections/HashSet.h"
+#include "Arcadia/Ring2/Implementation/Collections/ArrayStack.h"
+#include "Arcadia/Ring2/Implementation/Collections/ImmutableList.h"
 
 #include "Arcadia/Ring2/Implementation/Utf8Reader.h"
 #include "Arcadia/Ring2/Implementation/Utf8ByteBufferReader.h"

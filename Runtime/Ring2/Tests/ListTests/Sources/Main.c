@@ -28,7 +28,7 @@ listTest1
     Arcadia_Thread* thread
   )
 {
-  Arcadia_List* l = Arcadia_List_create(thread);
+  Arcadia_List* l = (Arcadia_List*)Arcadia_ArrayList_create(thread);
 
   for (Arcadia_Integer32Value i = 1, n = 7; i <= n; ++i) {
     Arcadia_List_insertBackInteger32Value(thread, l, i);

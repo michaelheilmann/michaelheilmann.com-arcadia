@@ -10,13 +10,13 @@
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileHandle">Arcadia_FileHandle</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FilePath">Arcadia_FilePath</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
-        @{include("3.documentation.8.objects/collection/include.index")}
-        @{include("3.documentation.8.objects/list/include.index")}
-        @{include("3.documentation.8.objects/map/include.index")}
-        @{include("3.documentation.8.objects/set/include.index")}
-        @{include("3.documentation.8.objects/stack/include.index")}
-        @{include("3.documentation.8.objects/string/include.index")}
-        @{include("3.documentation.8.objects/stringbuffer/include.index")}
+        @{include("3.documentation.8.objects/Collection/include.index")}
+        @{include("3.documentation.8.objects/List/include.index")}
+        @{include("3.documentation.8.objects/Map/include.index")}
+        @{include("3.documentation.8.objects/Set/include.index")}
+        @{include("3.documentation.8.objects/Stack/include.index")}
+        @{include("3.documentation.8.objects/String/include.index")}
+        @{include("3.documentation.8.objects/StringBuffer/include.index")}
       </ul>
     </nav>
   </div>

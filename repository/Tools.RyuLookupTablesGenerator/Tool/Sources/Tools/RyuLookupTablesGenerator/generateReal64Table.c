@@ -254,12 +254,12 @@ doPrintLargeTables
   )
 {
   //
-  Arcadia_List* largeTable = Arcadia_List_create(thread);
+  Arcadia_List* largeTable = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (Arcadia_Natural32Value i = 0; i < POS_TABLE_SIZE; ++i) {
     Arcadia_List_insertBackBigIntegerValue(thread, largeTable, multiplier(thread, i));
   }
   //
-  Arcadia_List* largeInvTable = Arcadia_List_create(thread);
+  Arcadia_List* largeInvTable = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (Arcadia_Natural32Value i = 0; i < NEG_TABLE_SIZE; i++) {
     Arcadia_List_insertBackBigIntegerValue(thread, largeInvTable, invMultiplier(thread, i));
   }
@@ -288,12 +288,12 @@ doPrintSmallTables
 {
   //
   int mulTableSize = 26;
-  Arcadia_List* smallInvTable = Arcadia_List_create(thread);
+  Arcadia_List* smallInvTable = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int i = 0; i < (NEG_TABLE_SIZE + mulTableSize - 1) / mulTableSize + 1; i++) {
     Arcadia_List_insertBackBigIntegerValue(thread, smallInvTable, invMultiplier(thread, mulTableSize * i));
   }
   //
-  Arcadia_List* smallTable = Arcadia_List_create(thread);
+  Arcadia_List* smallTable = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (Arcadia_Natural32Value i = 0; i < (POS_TABLE_SIZE + mulTableSize - 1) / (mulTableSize + 1); ++i) {
     Arcadia_List_insertBackBigIntegerValue(thread, smallTable, multiplier(thread, mulTableSize * i));
   }
@@ -301,7 +301,7 @@ doPrintSmallTables
   Arcadia_BigInteger* mul = Arcadia_BigInteger_create(thread); // pull outside of loop to avoid unnecessary allocations
   Arcadia_BigInteger* result = Arcadia_BigInteger_create(thread); // pull outside of loop to avoid unnecessary allocations
   //
-  Arcadia_List* invErrorTable = Arcadia_List_create(thread);
+  Arcadia_List* invErrorTable = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (Arcadia_Natural32Value i = 0; i < NEG_TABLE_SIZE; i++) {
     Arcadia_Natural32Value base = (i + mulTableSize - 1) / mulTableSize;
     Arcadia_Natural32Value base2 = base * mulTableSize;
@@ -327,7 +327,7 @@ doPrintSmallTables
     Arcadia_List_insertBack(thread, invErrorTable, Arcadia_Value_makeNatural32Value(Arcadia_BigInteger_toNatural32(thread, result)));
   }
   //
-  Arcadia_List* errorTable = Arcadia_List_create(thread);
+  Arcadia_List* errorTable = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (Arcadia_Natural32Value i = 0; i < POS_TABLE_SIZE; ++i) {
     Arcadia_Natural32Value base = i / mulTableSize;
     Arcadia_Natural32Value base2 = base * mulTableSize;

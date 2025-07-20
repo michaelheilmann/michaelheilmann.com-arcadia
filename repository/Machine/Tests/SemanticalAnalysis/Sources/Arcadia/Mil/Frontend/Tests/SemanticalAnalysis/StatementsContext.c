@@ -68,8 +68,8 @@ Arcadia_Mil_CallableContext_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->labels = Arcadia_Map_create(thread);
-  _self->variables = Arcadia_List_create(thread);
+  _self->labels = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  _self->variables = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 

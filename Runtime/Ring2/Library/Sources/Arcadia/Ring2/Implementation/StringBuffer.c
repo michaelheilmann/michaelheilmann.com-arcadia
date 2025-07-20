@@ -490,6 +490,20 @@ Arcadia_StringBuffer_insertCodePointsBack
   Arcadia_Unicode_encodeCodePointsUtf8(thread, codePoints, numberOfCodePoints, self, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&appendBytesInternal);
 }
 
+void
+Arcadia_StringBuffer_insertCodePointsFront
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_Natural32Value const* codePoints,
+    Arcadia_SizeValue numberOfCodePoints
+  )
+{
+  Arcadia_StringBuffer* temporary = Arcadia_StringBuffer_create(thread);
+  Arcadia_Unicode_encodeCodePointsUtf8(thread, codePoints, numberOfCodePoints, temporary, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&appendBytesInternal);
+  prependBytesInternal(thread, self, Arcadia_StringBuffer_getBytes(thread, temporary), Arcadia_StringBuffer_getNumberOfBytes(thread, temporary));
+}
+
 Arcadia_Integer32Value
 Arcadia_StringBuffer_compareTo
   (

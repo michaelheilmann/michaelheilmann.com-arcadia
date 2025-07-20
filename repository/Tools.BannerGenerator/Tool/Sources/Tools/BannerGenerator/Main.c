@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Arcadia/Include.h"
-#include "Module/Visuals/Include.h"
+#include "Arcadia/Visuals/Include.h"
 
 static void
 main1
@@ -30,7 +30,7 @@ main1
   Arcadia_Value_setVoidValue(&target,Arcadia_VoidValue_Void);
   Arcadia_Value_setVoidValue(&width, Arcadia_VoidValue_Void);
   Arcadia_Value_setVoidValue(&height, Arcadia_VoidValue_Void);
-  Arcadia_List* arguments = Arcadia_List_create(thread);
+  Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
     Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
@@ -94,15 +94,23 @@ main1
   if (Arcadia_Value_isVoidValue(&height)) {
     Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"height", sizeof(u8"height") - 1)));
   }
-#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  ImageWriter* imageWriter = (ImageWriter*)NativeWindowsImageWriter_create(thread);
-#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  ImageWriter* imageWriter = (ImageWriter*)LibPngImageWriter_create(thread);
-#else
-  #error("environment not (yet) supported")
-#endif
+  Arcadia_Visuals_ImageManager* imageManager = Arcadia_Visuals_ImageManager_getOrCreate(thread);
+  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"png", sizeof(u8"png") - 1))); 
+  Arcadia_List* writers = Arcadia_Visuals_ImageManager_getWriters(thread, imageManager, extension);
+  if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)writers)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
+    Arcadia_Thread_popJumpTarget(thread);
+  }
+  Arcadia_Imaging_ImageWriter* writer = (Arcadia_Imaging_ImageWriter*)Arcadia_List_getObjectReferenceValueAt(thread, writers, 0);
   Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_create(thread, 0, Arcadia_Value_getInteger32Value(&width), Arcadia_Value_getInteger32Value(&height), Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8);
-  ImageWriter_writePngToPath(thread, imageWriter, pixelBuffer, Arcadia_Value_getObjectReferenceValue(&target));
+  Arcadia_List* pixelBufferList = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_List_insertBackObjectReferenceValue(thread, pixelBufferList, pixelBuffer);
+
+  Arcadia_Imaging_ImageWriterParameters* parameters = Arcadia_Imaging_ImageWriterParameters_createFile(thread, (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&target), extension);
+  Arcadia_Imaging_ImageWriter_write(thread,
+                                    writer,
+                                    pixelBufferList,
+                                    parameters);
 }
 
 int

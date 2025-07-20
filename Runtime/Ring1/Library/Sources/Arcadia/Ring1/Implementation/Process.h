@@ -76,6 +76,12 @@ Arcadia_Process_relinquish
     Arcadia_Process* process
   );
 
+/// @brief Acquire an initial handle to the process object singleton.
+/// @param [out] process A pointer to a <code>Arcadia_Process*</code> variable.
+/// @post
+/// If the call to this function was is successful:
+/// - <code>*process</code> was assigned a pointer to the process object singleton.
+/// - the caller acquired a reference to that object which he must relinquish by a call to Arcadia_Process_relinquish when no longer required.
 /// @return #Arcadia_ProcessStatus_Success on success.
 /// - #Arcadia_ProcessStatus_ArgumentValueInvalid @a process is a null pointer
 /// - #Arcadia_ProcessStatus_OperationInvalid the reference counter would overflow or underflow from this call
@@ -86,170 +92,6 @@ Arcadia_Process_get
   (
     Arcadia_Process** process
   );
-
-#if 0
-/// @brief Fill a memory region with a specified value.
-/// @param process A pointer to the Arcadia_Process object
-/// @param p The starting address of the memory region
-/// @param n The size, in Bytes, of the memory region
-/// @param v The value to assign to the Bytes of the memory region
-/// @remarks @a p can be a null pointer
-/// @error Arcadia_Status_ArgumentValueInvalid p + n overflows
-void
-Arcadia_Process_fillMemory
-  (
-    Arcadia_Process* process,
-    void* p,
-    size_t n,
-    uint8_t v
-  );
-#endif
-
-#if 0
-/// @brief Copy the contents of a memory region to another memory region.
-/// @param process A pointer to the Arcadia_Process object
-/// @param p The starting address of the target memory region
-/// @param q The starting address of the source memory region
-/// @param n The size, in Bytes, of the memory regions
-/// @remarks The memory regions may overlap.
-/// @remarks @a p and/or q can be a null pointers
-/// @error Arcadia_Status_ArgumentValueInvalid p + n overflows
-/// @error Arcadia_Status_ArgumentValueInvalid q + n overflows
-void
-Arcadia_Process_copyMemory
-  (
-    Arcadia_Process* process,
-    void* p,
-    const void* q,
-    size_t n
-  );
-#endif
-
-#if 0
-Arcadia_Integer32Value
-Arcadia_Process_compareMemory
-  (
-    Arcadia_Process* process,
-    const void *p,
-    const void* q,
-    Arcadia_SizeValue n
-  );
-#endif
-
-#if 0
-/// @brief
-/// Allocate unmanaged memory.
-/// @param process
-/// A pointer to the Arcadia_Process object
-/// @param p
-/// A pointer to a <code>void*</code> variable.
-/// @param n
-/// The size, in Bytes, of the memory region to allocate.
-/// @post
-/// On success, <code>*p</code> was assigned a pointer to a memory region of @a n Bytes.
-/// @error #Arcadia_Status_ArgumentValueInvalid
-/// @a p is a null pointer
-/// @error #Arcadia_Status_AllocationFailed
-/// the allocation failed
-void*
-Arcadia_Process_allocateUnmanaged
-  (
-    Arcadia_Process* process,
-    size_t n
-  );
-#endif
-
-#if 0
-/// @brief
-/// Deallocate unmanaged memory.
-/// @param process
-/// A pointer to the Arcadia_Process object
-/// @param p
-/// A pointer to a memory region of @a n Bytes.
-/// @error #Arcadia_Status_ArgumentValueInvalid
-/// @a p is a null pointer
-void
-Arcadia_Process_deallocateUnmanaged
-  (
-    Arcadia_Process* process,
-    void* p
-  );
-#endif
-
-#if 0
-/// @brief
-/// Reallocate unmanaged memory.
-/// @param process
-/// A pointer to the Arcadia_Process object
-/// @param p A pointer to a <code>void*</code> variable.
-/// The variable points to the memory region to reallocate.
-/// @param n
-/// The size to reallocate the memory region to.
-/// @post
-/// On success, <code>*p</code> was assigned a pointer to a new memory region of @a n Bytes. The old memory region was deallocated.
-/// @error #Arcadia_Status_ArgumentValueInvalid
-/// @a p is a null pointer
-/// @error #Arcadia_Status_ArgumentValueInvalid
-/// @a *p is a null pointer
-/// @error #Arcadia_Status_AllocationFailed
-/// the allocation failed
-/// @remarks O
-void
-Arcadia_Process_reallocateUnmanaged
-  (
-    Arcadia_Process* process,
-    void** p,
-    size_t n
-  );
-#endif
-
-#if 0
-/// p pointer to an array with elements a[0], ..., a[n]. Each element is 16 bit wide.
-/// These value of the array are swapped such that a[i] = a[n - 1 - i] holds for all 0 <= i < n.
-void
-Arcadia_Process_reverseMemory16
-  (
-    Arcadia_Thread* thread,
-    void* p,
-    size_t n
-  );
-#endif
-
-#if 0
-/// p pointer to an array with elements a[0], ..., a[n]. Each element is 32 bit wide.
-/// These value of the array are swapped such that a[i] = a[n - 1 - i] holds for all 0 <= i < n.
-void
-Arcadia_Process_reverseMemory32
-  (
-    Arcadia_Thread* thread,
-    void* p,
-    size_t n
-  );
-#endif
-
-#if 0
-/// p pointer to an array with elements a[0], ..., a[n]. Each element is 64 bit wide.
-/// These value of the array are swapped such that a[i] = a[n - 1 - i] holds for all 0 <= i < n.
-void
-Arcadia_Process_reverseMemory64
-  (
-    Arcadia_Thread* thread,
-    void* p,
-    size_t n
-  );
-#endif
-
-#if 0
-/// p pointer to an array with elements a[0], ..., a[n]. Each element is 8 bit wide.
-/// These value of the array are swapped such that a[i] = a[n - 1 - i] holds for all 0 <= i < n.
-void
-Arcadia_Process_reverseMemory8
-  (
-    Arcadia_Thread* thread,
-    void* p,
-    size_t n
-  );
-#endif
 
 /// @param process A pointer to the Arcadia_Process object
 void

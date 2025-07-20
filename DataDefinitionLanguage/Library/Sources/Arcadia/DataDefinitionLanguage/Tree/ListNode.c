@@ -68,7 +68,7 @@ Arcadia_DataDefinitionLanguage_Tree_ListNode_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->elements = Arcadia_List_create(thread);
+  _self->elements = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 

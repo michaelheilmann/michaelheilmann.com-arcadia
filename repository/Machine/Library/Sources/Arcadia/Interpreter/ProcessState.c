@@ -42,7 +42,7 @@ R_Interpreter_ProcessState_startup
   Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     singleton->constants = R_Interpreter_Code_Constants_create(Arcadia_Process_getThread(process));
-    singleton->globals = Arcadia_Map_create(Arcadia_Process_getThread(process));
+    singleton->globals = (Arcadia_Map*)Arcadia_HashMap_create(Arcadia_Process_getThread(process), Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));

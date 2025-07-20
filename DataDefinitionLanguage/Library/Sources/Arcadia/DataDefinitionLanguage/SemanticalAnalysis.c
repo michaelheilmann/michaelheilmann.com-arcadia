@@ -237,7 +237,7 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   //
-  _self->map = Arcadia_Map_create(thread);
+  _self->map = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }

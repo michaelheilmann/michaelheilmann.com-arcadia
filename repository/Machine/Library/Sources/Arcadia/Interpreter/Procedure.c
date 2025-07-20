@@ -67,7 +67,7 @@ R_Interpreter_Procedure_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->parameterNames = Arcadia_List_create(thread);
+  _self->parameterNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   _self->unqualifiedName = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
   if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[1]), _Arcadia_ForeignProcedureValue_getType(thread))) {
     _self->isForeign = Arcadia_BooleanValue_True;

@@ -37,57 +37,7 @@
 #include <setjmp.h>
 typedef struct Arcadia_JumpTarget Arcadia_JumpTarget; // Forward declaration.
 typedef struct Arcadia_Thread Arcadia_Thread; // Forward declaration.
-
-/// the process object provides access to the current thread.
-/// the current thread provides access to the thread's jump target stack and the thread's status variable.
-typedef struct Arcadia_Process Arcadia_Process;
-
-#if 0
-typedef uint32_t Arcadia_ProcessStatus;
-#define Arcadia_ProcessStatus_Success (0)
-#define Arcadia_ProcessStatus_ArgumentValueInvalid (1)
-#define Arcadia_ProcessStatus_AllocationFailed (2)
-#define Arcadia_ProcessStatus_OperationInvalid (3)
-#define Arcadia_ProcessStatus_EnvironmentFailed (4)
-
-/// @brief Get the thread of this process.
-/// @param process A pointer to this Arcadia_Process object.
-/// @return A pointer to the Arcadia_Thread object of this Arcadia_Process object.
-Arcadia_Thread*
-Arcadia_Process_getThread
-  (
-    Arcadia_Process* process
-  );
-
-/// @return #Arcadia_ProcessStatus_Success on success.
-/// - #Arcadia_ProcessStatus_ArgumentValueInvalid @a process is a null pointer
-/// - #Arcadia_ProcessStatus_OperationInvalid the reference counter would overflow or underflow from this call
-Arcadia_ProcessStatus
-Arcadia_Process_acquire
-  (
-    Arcadia_Process* process
-  );
-
-/// @return #Arcadia_ProcessStatus_Success on success.
-/// - #Arcadia_ProcessStatus_ArgumentValueInvalid @a process is a null pointer
-/// - #Arcadia_ProcessStatus_OperationInvalid the reference counter would overflow or underflow from this call
-Arcadia_ProcessStatus
-Arcadia_Process_relinquish
-  (
-    Arcadia_Process* process
-  );
-
-/// @return #Arcadia_ProcessStatus_Success on success.
-/// - #Arcadia_ProcessStatus_ArgumentValueInvalid @a process is a null pointer
-/// - #Arcadia_ProcessStatus_OperationInvalid the reference counter would overflow or underflow from this call
-/// - #Arcadia_ProcessStatus_EnvironmentFailed initialization of Arcadia ARMS failed
-/// - #Arcadia_ProcessStatus_AllocationFailed an allocation failed
-Arcadia_ProcessStatus
-Arcadia_Process_get
-  (
-    Arcadia_Process** process
-  );
-#endif
+typedef struct Arcadia_Process Arcadia_Process; // Forward declaration.
 
 /// @brief Fill a memory region with a specified value.
 /// @param process A pointer to the Arcadia_Process object

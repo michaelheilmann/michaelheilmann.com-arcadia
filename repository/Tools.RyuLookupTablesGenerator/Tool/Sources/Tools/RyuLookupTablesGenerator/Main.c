@@ -21,9 +21,6 @@
 #include "Tools/RyuLookupTablesGenerator/generateReal64Table.h"
 #include "Tools/RyuLookupTablesGenerator/Configure.h"
 
-#if 0
-#endif
-
 void
 main1
   (
@@ -34,7 +31,7 @@ main1
 {
   Arcadia_Value target;
   Arcadia_Value_setVoidValue(&target, Arcadia_VoidValue_Void);
-  Arcadia_List* arguments = Arcadia_List_create(thread);
+  Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
     Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);

@@ -32,7 +32,7 @@ main1
   }
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
   Context* context = Context_create(thread);
-  context->stack = Arcadia_Stack_create(thread);
+  context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
   context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
   context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
