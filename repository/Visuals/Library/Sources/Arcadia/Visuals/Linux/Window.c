@@ -16,7 +16,10 @@
 #include "Arcadia/Visuals/Linux/Window.h"
 
 #include "Arcadia/Visuals/Linux/GlxDeviceInfo.h"
+#include "Arcadia/Visuals/Events/WindowPositionChangedEvent.h"
+#include "Arcadia/Visuals/Events/WindowSizeChangedEvent.h"
 
+#include <X11/Xlib.h>
 #include <X11/keysymdef.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -105,6 +108,21 @@ closeImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_Window* self
+  );
+
+static Arcadia_BooleanValue
+getFullscreenImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self
+  );
+
+static void
+setFullscreenImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_BooleanValue fullscreen
   );
 
 static Arcadia_BooleanValue
@@ -214,7 +232,55 @@ endRenderImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_Window* self
   );
+  
+static void
+getBorderInfo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top,
+    Arcadia_Integer32Value* right,
+    Arcadia_Integer32Value* bottom
+  );
 
+static void
+getPositionImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top
+  );
+
+static void
+setPositionImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value left,
+    Arcadia_Integer32Value top
+  );
+
+static void
+getSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value* width,
+    Arcadia_Integer32Value* height
+  );
+
+static void
+setSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height
+  );
+
+/// @todo Remove this.
 static Arcadia_BooleanValue g_quitRequested = Arcadia_BooleanValue_False;
 
 static bool g_error = false;
@@ -247,7 +313,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Linux.Window", Arcadia_Visuals_Linux_Window, u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Linux.Window", Arcadia_Visuals_Linux_Window,
+                         u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window,
+                         &_typeOperations);
 
 static int
 stringToInteger
@@ -687,6 +755,15 @@ Arcadia_Visuals_Linux_Window_constructImpl
   ((Arcadia_Visuals_Window*)_self)->beginRender = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*))&beginRenderImpl;
   ((Arcadia_Visuals_Window*)_self)->endRender = (void(*)(Arcadia_Thread*,Arcadia_Visuals_Window*))&endRenderImpl;
 
+  ((Arcadia_Visuals_Window*)_self)->getPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getPositionImpl;
+  ((Arcadia_Visuals_Window*)_self)->setPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setPositionImpl;
+
+  ((Arcadia_Visuals_Window*)_self)->getSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getSizeImpl;
+  ((Arcadia_Visuals_Window*)_self)->setSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setSizeImpl;
+
+  ((Arcadia_Visuals_Window*)_self)->getFullscreen = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & getFullscreenImpl;
+  ((Arcadia_Visuals_Window*)_self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_BooleanValue)) & setFullscreenImpl;
+
   Arcadia_Object_setType(thread, _self, _type);
 }
 
@@ -721,10 +798,10 @@ openImpl
     int screenId = DefaultScreen(self->application->display);
 
     Window rootWindow = RootWindowOfScreen(self->screen);
-    int windowX = 0;
-    int windowY = 0;
-    int windowW = 640;
-    int windowH = 480;
+    int windowX = ((Arcadia_Visuals_Window*)self)->bounds.left;
+    int windowY = ((Arcadia_Visuals_Window*)self)->bounds.top;
+    int windowW = ((Arcadia_Visuals_Window*)self)->bounds.width;
+    int windowH = ((Arcadia_Visuals_Window*)self)->bounds.height;
     // Does not seem to have an effect when using GNOME.
     int windowBorderWidth = 0;
     int windowClass = InputOutput;
@@ -862,6 +939,23 @@ closeImpl
 }
 
 static Arcadia_BooleanValue
+getFullscreenImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self
+  )
+{ return Arcadia_BooleanValue_False; }
+
+static void
+setFullscreenImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_BooleanValue fullscreen
+  )
+{}
+
+static Arcadia_BooleanValue
 getQuitRequestedImpl
   (
     Arcadia_Thread* thread,
@@ -889,6 +983,53 @@ updateImpl
   while (XPending(self->application->display)) {
     XNextEvent(self->application->display, &event);
     switch (event.type) {
+      case ConfigureNotify: {
+        Arcadia_JumpTarget jumpTarget;
+        Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+        if (Arcadia_JumpTarget_save(&jumpTarget)) {
+          XConfigureEvent* configureEvent = (XConfigureEvent*)&event;
+          int left = configureEvent->x;
+          int top = configureEvent->y;
+          int width = configureEvent->width + configureEvent->border_width * 2;
+          int height = configureEvent->height + configureEvent->border_width * 2;
+          bool positionChanged = false, sizeChanged = false;
+          if (((Arcadia_Visuals_Window*)self)->bounds.left != left ||
+              ((Arcadia_Visuals_Window*)self)->bounds.top != top) {
+            ((Arcadia_Visuals_Window*)self)->bounds.left = left;
+            ((Arcadia_Visuals_Window*)self)->bounds.top = top;
+            positionChanged = true;
+          }
+          if (((Arcadia_Visuals_Window*)self)->bounds.width != width ||
+              ((Arcadia_Visuals_Window*)self)->bounds.height != height) {
+            ((Arcadia_Visuals_Window*)self)->bounds.width = width;
+            ((Arcadia_Visuals_Window*)self)->bounds.height = height;
+            sizeChanged = true;
+          }
+          if (positionChanged) {
+            Arcadia_Visuals_WindowPositionChangedEvent_create
+              (
+                thread,
+                Arcadia_getTickCount(thread),
+                (Arcadia_Visuals_Window*)self,
+                left,
+                top
+              );
+          }
+          if (sizeChanged) {
+            Arcadia_Visuals_WindowSizeChangedEvent_create
+              (
+                thread,
+                Arcadia_getTickCount(thread),
+                (Arcadia_Visuals_Window*)self,
+                width,
+                height
+              );            
+          }
+          Arcadia_Thread_popJumpTarget(thread);
+        } else {
+          Arcadia_Thread_popJumpTarget(thread);
+        }
+      } break;
       case KeyPress: {
         if (XLookupKeysym(&event.xkey, 0) == XK_Escape) {
           g_quitRequested = Arcadia_BooleanValue_True;
@@ -1053,6 +1194,100 @@ endRenderImpl
   if (self->context == glXGetCurrentContext()) {
     glXSwapBuffers(self->application->display, self->window);
   }
+}
+
+static void
+getBorderInfo
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top,
+    Arcadia_Integer32Value* right,
+    Arcadia_Integer32Value* bottom
+  )
+{
+  Atom type;
+  int format;
+  unsigned long nitems, bytes_after;
+  unsigned char *property;
+  Status status;
+  status = XGetWindowProperty(self->application->display, self->window, self->application->_NET_FRAME_EXTENTS,
+                              0, 16, 0, XA_CARDINAL, &type, &format, &nitems, &bytes_after, &property);
+  if (status != Success) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  if (type == None || nitems != 4) {
+    XFree(property);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  *left = (int)((long *)property)[0];
+  *top = (int)((long *)property)[1];
+  *right = (int)((long *)property)[2];
+  *bottom = (int)((long *)property)[3];
+  XFree(property);
+}
+
+static void
+getPositionImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top
+  )
+{
+  XWindowAttributes attributes;
+  XGetWindowAttributes(self->application->display, self->window, &attributes);
+  *left = attributes.x;
+  *top = attributes.y;
+}
+
+static void
+setPositionImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value left,
+    Arcadia_Integer32Value top
+  )
+{
+  Arcadia_Integer32Value borderLeft, borderTop, borderRight, borderBottom;
+  getBorderInfo(thread, self, &borderLeft, &borderTop, &borderRight, &borderBottom);
+  XMoveWindow(self->application->display, self->window, left + borderLeft, top + borderTop);
+  XSync(self->application->display, False);
+}
+
+static void
+getSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value* width,
+    Arcadia_Integer32Value* height
+  )
+{
+  XWindowAttributes attributes;
+  XGetWindowAttributes(self->application->display, self->window, &attributes); 
+  *width = attributes.width;
+  *height = attributes.height;
+}
+
+static void
+setSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_Window* self,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height
+  )
+{
+  //Arcadia_Integer32Value borderLeft, borderTop, borderRight, borderBottom;
+  //getBorderInfo(thread, self, &borderLeft, &borderTop, &borderRight, &borderBottom);
+  XResizeWindow(self->application->display, self->window, width, height);
+  XSync(self->application->display, False);
 }
 
 Arcadia_Visuals_Linux_Window*

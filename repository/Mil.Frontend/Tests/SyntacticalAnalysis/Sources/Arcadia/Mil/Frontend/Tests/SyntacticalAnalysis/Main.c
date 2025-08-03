@@ -22,7 +22,7 @@ onTest
     Arcadia_FilePath* sourceFilePath
   )
 {
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FilePath* absoluteSourceFilePath = NULL;
   if (Arcadia_FilePath_isRelative(thread, sourceFilePath)) {
     absoluteSourceFilePath = Arcadia_FileSystem_getWorkingDirectory(thread, fileSystem);

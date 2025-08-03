@@ -16,9 +16,8 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Build the documentation.
-set(${MyProjectName}.Arms.DocFiles)
-list(APPEND ${MyProjectName}.Arms.DocFiles "${CMAKE_CURRENT_SOURCE_DIR}/index.html.i")
-
-MyBuildDocs(${MyProjectName} ${MyProjectName}.Arms.BuildDocs "${CMAKE_CURRENT_SOURCE_DIR}" "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Arms" "${${MyProjectName}.Arms.DocFiles}")
-
+InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
+                     "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Arms/index.html"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+add_custom_target(${MyProjectName}.Arms.BuildDocs ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Arms/index.html")
 set_target_properties(${MyProjectName}.Arms.BuildDocs PROPERTIES FOLDER "Arms")

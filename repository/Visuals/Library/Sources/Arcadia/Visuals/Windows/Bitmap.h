@@ -23,13 +23,14 @@
 #include <Windows.h>
 
 /// @code
-/// class Windows.NativeBitmap {
+/// class Arcadia.Visuals.Windows.Bitmap {
 ///   construct(width:Integer32, height: Integer32)
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Windows.NativeBitmap", Windows_NativeBitmap, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Bitmap", Arcadia_Visuals_Windows_Bitmap,
+                          u8"Arcadia.Object");
 
-struct Windows_NativeBitmap {
+struct Arcadia_Visuals_Windows_Bitmap {
   Arcadia_Object _parent;
   HDC hDeviceContext;
   HBITMAP hBitmap;
@@ -41,8 +42,8 @@ struct Windows_NativeBitmap {
   Arcadia_Natural8Value pixelFormat;
 };
 
-Windows_NativeBitmap*
-Windows_NativeBitmap_create
+Arcadia_Visuals_Windows_Bitmap*
+Arcadia_Visuals_Windows_Bitmap_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
@@ -50,20 +51,20 @@ Windows_NativeBitmap_create
   );
 
 void
-Windows_NativeBitmap_fill
+Arcadia_Visuals_Windows_Bitmap_fill
   (
     Arcadia_Thread* thread,
-    Windows_NativeBitmap* self,
+    Arcadia_Visuals_Windows_Bitmap* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
     Arcadia_Natural8Value b
   );
 
-Arcadia_Visuals_PixelBuffer*
-Windows_NativeBitmap_toPixelBuffer
+Arcadia_Imaging_PixelBuffer*
+Arcadia_Visuals_Windows_Bitmap_toPixelBuffer
   (
     Arcadia_Thread* thread,
-    Windows_NativeBitmap* self
+    Arcadia_Visuals_Windows_Bitmap* self
   );
 
 #endif // ARCADIA_VISUALS_WINDOWS_BITMAP_H_INCLUDED

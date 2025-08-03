@@ -31,6 +31,12 @@ struct Arcadia_Visuals_Linux_DisplayDevice {
   Arcadia_Visuals_DisplayDevice _parent;
   // The application.
   Arcadia_Visuals_Linux_Application* application;
+  struct {
+    int left;
+    int top;
+    int right;
+    int bottom;
+  } bounds;
   // An unique ID.
   // This is usually the stringified value of output.
   Arcadia_String* id;

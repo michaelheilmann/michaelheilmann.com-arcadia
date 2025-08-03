@@ -1,62 +1,86 @@
 <h2 id="syntactical-specification">3 Syntactical Specification</h2>
-<p>The syntactical grammar describes the translation of the words into sentences. The goal non-terminal of the syntactical grammar is the sentence <code>sentence</code> symbol.</p>
+<p>The syntactical grammar describes the translation of the words into sentences. The goal non-terminal of the syntactical grammar is the sentence <code>syn:Sentence</code> symbol.</p>
 
-<p>The words <code>whitespace</code> and <code>line_terminator</code> are removed from the sequence of words before the translation to sentences is performed.</p>
+<p>The words <code>lex:Whitespace</code> and <code>lex:LineTerminator</code> are removed from the sequence of words before the translation to sentences is performed.</p>
 
-<p>The goal sentence <code>sentence</code> is defined by</p>
+<p>The goal sentence <code>syn:Sentence</code> is defined by</p>
 
 <div class="box">
 <p><code>
-sentence : value 
+syn:Sentence : syn:Value 
 </code></p>
 </div>
 
-<p>The sentence <code>value</code> is defined by</p>
+<p>The sentence <code>syn:Value</code> is defined by</p>
 
 <div class="box">
 <p><code>
-value : map<br/>
-value : list<br/>
-value : lexical:string<br/>
-value : lexical:number<br/>
-value : lexical:boolean<br/>
-value : lexical:void 
+syn:Value : syn:Map<br/>
+syn:Value : syn:List<br/>
+syn:Value : syn:String<br/>
+syn:Value : syn:Number<br/>
+syn:Value : syn:Boolean<br/>
+syn:Value : sny:Void
 </code></p>
 </div>
 
-<p>The sentence <code<map</code> is defined by</p> 
+<p>The sentence <code>syn:String</code> is defined by</p>
+<div class="box">
+<p><code>
+syn:String : lex:String
+</code></p>
+
+<p>The sentence <code>syn:Number</code> is defined by</p>
+<div class="box">
+<p><code>
+syn:Number : lex:Number
+</code></p>
+
+<p>The sentence <code>syn:Boolean</code> is defined by</p>
+<div class="box">
+<p><code>
+syn:Boolean : lex:Boolean
+</code></p>
+
+<p>The sentence <code>syn:Void</code> is defined by</p>
+<div class="box">
+<p><code>
+syn:Void : lex:Void 
+</code></p>
+
+<p>The sentence <code>syn:Map</code> is defined by</p> 
 
 <div class="box">
 <p><code>
-map : lexical:left_curly_bracket<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map_body<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lexical:right_curly_bracket<br/>
+syn:Map : lex:LeftCurlyBracket<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;syn:MapBody<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lex:RightCurlyBracket<br/>
 <br/>
-map_body : map_body_element map_body_rest<br/>
-map_body : ε<br/>
+syn:MapBody : syn:MapBodyElement syn:MapBodyRest<br/>
+syn:MapBody : ε<br/>
 <br/>
-map_body_rest : lexical:comma map_body_element map_body_rest<br/>
-map_body_rest : lexical:comma<br/>
-map_body_rest : ε<br/>
-map_body_element : lexical:name lexical:colon value
+syn:MapBodyRest : lex:Comma syn:MapBodyElement syn:MapBodyRest <br/>
+syn:MapBodyRest : lex:Comma<br/>
+syn:MapBodyRest : ε<br/>
+syn:MapBodyElement : lex:Name lex:Colon syn:Value
 </code></p>
 </div>
 
-<p>The sentence <code>list</code> is defined by</p>
+<p>The sentence <code>syn:List</code> is defined by</p>
 
 <div class="box">
 <p><code>
-list : lexical:left_square_bracket<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_body<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lexical:right_square_bracket<br/>
+syn:List : lex:LeftSquareBracket<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;syn:ListBody<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lex:RightSquareBracket<br/>
 <br/>
-list_body : list_body_element list_body_rest<br/>
-list_body : ε<br/>
+syn:ListBody : syn:ListBodyElement syn:ListBodyRest<br/>
+syn:ListBody : ε<br/>
 <br/>
-list_body_rest : lexical:comma list_body_element list_body_rest<br/>
-list_body_rest : lexical:comma<br/>
-list_body_rest : ε<br/>
+syn:ListBodyRest : lex:Comma syn:ListBodyElement syn:ListBodyRest<br/>
+syn:ListBodyRest : lex:Comma<br/>
+syn:ListBodyRest : ε<br/>
 <br/>
-list_body_element : value 
+syn:ListBodyElement : syn:Value 
 </code></p>
 </div>

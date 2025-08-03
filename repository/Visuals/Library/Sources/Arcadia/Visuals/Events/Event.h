@@ -19,7 +19,8 @@
 #include "Arcadia/Ring2/Include.h"
 
 // https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_Event
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Event", Arcadia_Visuals_Event, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Event", Arcadia_Visuals_Event,
+                          u8"Arcadia.Object");
 
 struct Arcadia_Visuals_Event {
   Arcadia_Object _parent;

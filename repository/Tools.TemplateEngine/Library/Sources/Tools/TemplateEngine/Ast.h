@@ -13,13 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(TOOLS_TEMPLATEENGINE_AST_H_INCLUDED)
-#define TOOLS_TEMPLATEENGINE_AST_H_INCLUDED
+#if !defined(ARCADIA_TEMPLATEENGINE_AST_H_INCLUDED)
+#define ARCADIA_TEMPLATEENGINE_AST_H_INCLUDED
 
-#include "Arcadia/Include.h"
+#include "Arcadia/Ring2/Include.h"
 #include "Tools/TemplateEngine/Context.h"
 
-Arcadia_declareObjectType(u8"Tools.TemplateEngine.Ast", Ast, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Ast", Ast,
+                          u8"Arcadia.Object");
 
 /// <name>
 #define GETVARIABLE (1)
@@ -47,4 +48,4 @@ Ast_create
     Arcadia_String* argument
   );
 
-#endif // TOOLS_TEMPLATEENGINE_AST_H_INCLUDED
+#endif // ARCADIA_TEMPLATEENGINE_AST_H_INCLUDED

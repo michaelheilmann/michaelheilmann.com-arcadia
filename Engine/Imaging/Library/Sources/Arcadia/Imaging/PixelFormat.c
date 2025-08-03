@@ -21,33 +21,33 @@ static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
 };
 
-Arcadia_defineEnumerationType(u8"Arcadia.Visuals.PixelFormat", Arcadia_Visuals_PixelFormat, &_typeOperations);
+Arcadia_defineEnumerationType(u8"Arcadia.Imaging.PixelFormat", Arcadia_Imaging_PixelFormat, &_typeOperations);
 
 Arcadia_SizeValue
-Arcadia_Visuals_PixelFormat_getNumberOfBytes
+Arcadia_Imaging_PixelFormat_getNumberOfBytes
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelFormat self
+    Arcadia_Imaging_PixelFormat self
   )
 {
   switch (self) {
-    case Arcadia_Visuals_PixelFormat_An8Ln8:
+    case Arcadia_Imaging_PixelFormat_An8Ln8:
       return 2 * 8;
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8:
       return 4 * 8;
-    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:
       return 4 * 8;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8:
       return 3 * 8;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8:
       return 4 * 8;
-    case Arcadia_Visuals_PixelFormat_Ln8:
+    case Arcadia_Imaging_PixelFormat_Ln8:
       return 1 * 8;
-    case Arcadia_Visuals_PixelFormat_Ln8An8:
+    case Arcadia_Imaging_PixelFormat_Ln8An8:
       return 2 * 8;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8:
       return 3 * 8;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8:
       return 4 * 8;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -57,30 +57,30 @@ Arcadia_Visuals_PixelFormat_getNumberOfBytes
 }
 
 Arcadia_SizeValue
-Arcadia_Visuals_PixelFormat_getNumberOfComponents
+Arcadia_Imaging_PixelFormat_getNumberOfComponents
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelFormat self
+    Arcadia_Imaging_PixelFormat self
   )
 {
   switch (self) {
-    case Arcadia_Visuals_PixelFormat_An8Ln8:
+    case Arcadia_Imaging_PixelFormat_An8Ln8:
       return 2;
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8:
       return 4;
-    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:
       return 4;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8:
       return 3;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8:
       return 4;
-    case Arcadia_Visuals_PixelFormat_Ln8:
+    case Arcadia_Imaging_PixelFormat_Ln8:
       return 1;
-    case Arcadia_Visuals_PixelFormat_Ln8An8:
+    case Arcadia_Imaging_PixelFormat_Ln8An8:
       return 2;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8:
       return 3;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8:
       return 4;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);

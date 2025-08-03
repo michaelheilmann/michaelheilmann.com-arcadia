@@ -23,7 +23,7 @@
 #include <png.h>
 
 static void
-PngImageWriter_constructImpl
+Arcadia_Imaging_Linux_PngImageWriter_constructImpl
   ( 
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -32,43 +32,43 @@ PngImageWriter_constructImpl
   );
 
 static void
-PngImageWriter_visit
+Arcadia_Imaging_Linux_PngImageWriter_visit
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self
+    Arcadia_Imaging_Linux_PngImageWriter* self
   );
 
 static Arcadia_ImmutableList*
-PngImageWriter_getSupportedTypesImpl
+Arcadia_Imaging_Linux_PngImageWriter_getSupportedTypesImpl
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self
+    Arcadia_Imaging_Linux_PngImageWriter* self
   );
 
 static void
-PngImageWriter_writeImpl
+Arcadia_Imaging_Linux_PngImageWriter_writeImpl
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self,
+    Arcadia_Imaging_Linux_PngImageWriter* self,
     Arcadia_List* source,
     Arcadia_Imaging_ImageWriterParameters* target
   );
 
 static void
-PngImageWriter_writePngToByteBufferImpl
+Arcadia_Imaging_Linux_PngImageWriter_writePngToByteBufferImpl
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_Linux_PngImageWriter* self,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   );
 
 static void
-PngImageWriter_writePngToPathImpl
+Arcadia_Imaging_Linux_PngImageWriter_writePngToPathImpl
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_Linux_PngImageWriter* self,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   );
 
@@ -168,18 +168,18 @@ on_flush
 {/*Intentionally empty.*/}
 
 static Arcadia_ImmutableList*
-PngImageWriter_getSupportedTypesImpl
+Arcadia_Imaging_Linux_PngImageWriter_getSupportedTypesImpl
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self
+    Arcadia_Imaging_Linux_PngImageWriter* self
   )
 { return self->supportedTypes; }
 
 static void
-PngImageWriter_writeImpl
+Arcadia_Imaging_Linux_PngImageWriter_writeImpl
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self,
+    Arcadia_Imaging_Linux_PngImageWriter* self,
     Arcadia_List* source,
     Arcadia_Imaging_ImageWriterParameters* target
   )
@@ -194,15 +194,15 @@ PngImageWriter_writeImpl
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue sourceObject = Arcadia_List_getObjectReferenceValueAt(thread, source, 0);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Visuals_PixelBuffer_getType(thread))) {
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Visuals_PixelBuffer* sourcePixelBuffer = (Arcadia_Visuals_PixelBuffer*)sourceObject; 
+  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject; 
   if (Arcadia_Imaging_ImageWriterParameters_hasByteBuffer(thread, target)) {
-    PngImageWriter_writePngToByteBufferImpl(thread, self, sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters_getByteBuffer(thread, target));
+    Arcadia_Imaging_Linux_PngImageWriter_writePngToByteBufferImpl(thread, self, sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters_getByteBuffer(thread, target));
   } else if (Arcadia_Imaging_ImageWriterParameters_hasPath(thread, target)) {
-    PngImageWriter_writePngToPathImpl(thread, self, sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters_getPath(thread, target));
+    Arcadia_Imaging_Linux_PngImageWriter_writePngToPathImpl(thread, self, sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters_getPath(thread, target));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
@@ -210,11 +210,11 @@ PngImageWriter_writeImpl
 }
 
 static void
-PngImageWriter_writePngToByteBufferImpl
+Arcadia_Imaging_Linux_PngImageWriter_writePngToByteBufferImpl
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_Linux_PngImageWriter* self,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   )
 {
@@ -222,21 +222,21 @@ PngImageWriter_writePngToByteBufferImpl
   int bitDepth;
   int colorType;
 
-  switch (Arcadia_Visuals_PixelBuffer_getPixelFormat(thread, sourcePixelBuffer)) {
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
-    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
-      Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_createClone(thread, sourcePixelBuffer);
-      Arcadia_Visuals_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8);
+  switch (Arcadia_Imaging_PixelBuffer_getPixelFormat(thread, sourcePixelBuffer)) {
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8:
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
+      Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, sourcePixelBuffer);
+      Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8);
       sourcePixelBuffer = pixelBuffer;
       bitDepth = 8;
       colorType = PNG_COLOR_TYPE_RGBA;
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
-      Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_createClone(thread, sourcePixelBuffer);
-      Arcadia_Visuals_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8);
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
+      Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, sourcePixelBuffer);
+      Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8);
       sourcePixelBuffer = pixelBuffer;
       bitDepth = 8;
       colorType = PNG_COLOR_TYPE_RGB;
@@ -246,10 +246,10 @@ PngImageWriter_writePngToByteBufferImpl
       Arcadia_Thread_jump(thread);
     } break;
   };
-  uint32_t width = Arcadia_Visuals_PixelBuffer_getWidth(thread, sourcePixelBuffer);
-  uint32_t height = Arcadia_Visuals_PixelBuffer_getHeight(thread, sourcePixelBuffer);
-  uint32_t lineStride = Arcadia_Visuals_PixelBuffer_getLineStride(thread, sourcePixelBuffer);
-  //uint32_t pixelBytes = Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, sourcePixelBuffer);
+  uint32_t width = Arcadia_Imaging_PixelBuffer_getWidth(thread, sourcePixelBuffer);
+  uint32_t height = Arcadia_Imaging_PixelBuffer_getHeight(thread, sourcePixelBuffer);
+  uint32_t lineStride = Arcadia_Imaging_PixelBuffer_getLineStride(thread, sourcePixelBuffer);
+  //uint32_t pixelBytes = Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, sourcePixelBuffer);
   uint8_t* pixels = sourcePixelBuffer->bytes;
 
   state = LibPngState_create(thread);
@@ -289,11 +289,11 @@ PngImageWriter_writePngToByteBufferImpl
 }
 
 static void
-PngImageWriter_writePngToPathImpl
+Arcadia_Imaging_Linux_PngImageWriter_writePngToPathImpl
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_Linux_PngImageWriter* self,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_String* targetPath
   )
 {
@@ -301,21 +301,21 @@ PngImageWriter_writePngToPathImpl
   int bitDepth;
   int colorType;
 
-  switch (Arcadia_Visuals_PixelBuffer_getPixelFormat(thread, sourcePixelBuffer)) {
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
-    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
-      Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_createClone(thread, sourcePixelBuffer);
-      Arcadia_Visuals_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8);
+  switch (Arcadia_Imaging_PixelBuffer_getPixelFormat(thread, sourcePixelBuffer)) {
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8:
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
+      Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, sourcePixelBuffer);
+      Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8);
       sourcePixelBuffer = pixelBuffer;
       bitDepth = 8;
       colorType = PNG_COLOR_TYPE_RGBA;
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
-      Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_createClone(thread, sourcePixelBuffer);
-      Arcadia_Visuals_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8);
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
+      Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, sourcePixelBuffer);
+      Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8);
       sourcePixelBuffer = pixelBuffer;
       bitDepth = 8;
       colorType = PNG_COLOR_TYPE_RGB;
@@ -325,10 +325,10 @@ PngImageWriter_writePngToPathImpl
       Arcadia_Thread_jump(thread);
     } break;
   };
-  uint32_t width = Arcadia_Visuals_PixelBuffer_getWidth(thread, sourcePixelBuffer);
-  uint32_t height = Arcadia_Visuals_PixelBuffer_getHeight(thread, sourcePixelBuffer);
-  uint32_t lineStride = Arcadia_Visuals_PixelBuffer_getLineStride(thread, sourcePixelBuffer);
-  //uint32_t pixelBytes = Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, sourcePixelBuffer);
+  uint32_t width = Arcadia_Imaging_PixelBuffer_getWidth(thread, sourcePixelBuffer);
+  uint32_t height = Arcadia_Imaging_PixelBuffer_getHeight(thread, sourcePixelBuffer);
+  uint32_t lineStride = Arcadia_Imaging_PixelBuffer_getLineStride(thread, sourcePixelBuffer);
+  //uint32_t pixelBytes = Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, sourcePixelBuffer);
   uint8_t* pixels = sourcePixelBuffer->bytes;
 
   state = LibPngState_create(thread);
@@ -383,9 +383,9 @@ PngImageWriter_writePngToPathImpl
 }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &PngImageWriter_constructImpl,
+  .construct = &Arcadia_Imaging_Linux_PngImageWriter_constructImpl,
   .destruct = NULL,
-  .visit = &PngImageWriter_visit,
+  .visit = &Arcadia_Imaging_Linux_PngImageWriter_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -393,12 +393,12 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Imaging.Linux.PngImageWriter", PngImageWriter,
+Arcadia_defineObjectType(u8"Arcadia.Imaging.Linux.PngImageWriter", Arcadia_Imaging_Linux_PngImageWriter,
                          u8"Arcadia.Imaging.ImageWriter", Arcadia_Imaging_ImageWriter,
                          &_typeOperations);
 
 static void
-PngImageWriter_constructImpl
+Arcadia_Imaging_Linux_PngImageWriter_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -406,8 +406,8 @@ PngImageWriter_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  PngImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_Type* _type = _PngImageWriter_getType(thread);
+  Arcadia_Imaging_Linux_PngImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_Type* _type = _Arcadia_Imaging_Linux_PngImageWriter_getType(thread);
   {
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -418,16 +418,16 @@ PngImageWriter_constructImpl
   Arcadia_List* supportedTypes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, supportedTypes, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"png", sizeof(u8"png") - 1))));
   _self->supportedTypes = Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(supportedTypes));
-  ((Arcadia_Imaging_ImageWriter*)_self)->getSupportedTypes = (Arcadia_ImmutableList*(*)(Arcadia_Thread*,Arcadia_Imaging_ImageWriter*))&PngImageWriter_getSupportedTypesImpl;
-  ((Arcadia_Imaging_ImageWriter*)_self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & PngImageWriter_writeImpl;
+  ((Arcadia_Imaging_ImageWriter*)_self)->getSupportedTypes = (Arcadia_ImmutableList*(*)(Arcadia_Thread*,Arcadia_Imaging_ImageWriter*))&Arcadia_Imaging_Linux_PngImageWriter_getSupportedTypesImpl;
+  ((Arcadia_Imaging_ImageWriter*)_self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & Arcadia_Imaging_Linux_PngImageWriter_writeImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
-PngImageWriter_visit
+Arcadia_Imaging_Linux_PngImageWriter_visit
   (
     Arcadia_Thread* thread,
-    PngImageWriter* self
+    Arcadia_Imaging_Linux_PngImageWriter* self
   )
 {
   if (self->supportedTypes) {
@@ -435,8 +435,8 @@ PngImageWriter_visit
   }
 }
 
-PngImageWriter*
-PngImageWriter_create
+Arcadia_Imaging_Linux_PngImageWriter*
+Arcadia_Imaging_Linux_PngImageWriter_create
   (
     Arcadia_Thread* thread
   )
@@ -444,6 +444,6 @@ PngImageWriter_create
   Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
   };
-  PngImageWriter* self = Arcadia_allocateObject(thread, _PngImageWriter_getType(thread), 0, &argumentValues[0]);
+  Arcadia_Imaging_Linux_PngImageWriter* self = Arcadia_allocateObject(thread, _Arcadia_Imaging_Linux_PngImageWriter_getType(thread), 0, &argumentValues[0]);
   return self;
 }

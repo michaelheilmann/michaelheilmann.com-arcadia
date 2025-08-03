@@ -25,14 +25,16 @@ if (NOT TARGET ${MyLibraryName})
   list(APPEND ${MyLibraryName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Configure.h.i)
   list(APPEND ${MyLibraryName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/TemplateEngine/Configure.h)
 
-  list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Context.c)
-  list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Context.h)
-  list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/FileContext.c)
-  list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/FileContext.h)
   list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Ast.c)
   list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Ast.h)
+  list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Context.c)
+  list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Context.h)
+  list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Environment.c)
+  list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Environment.h)
+  list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/FileContext.c)
+  list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/FileContext.h)
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.Ring2 ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 
   EndProduct(${MyLibraryName})
 

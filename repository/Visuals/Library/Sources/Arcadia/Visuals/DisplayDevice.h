@@ -16,12 +16,11 @@
 #if !defined(ARCADIA_VISUALS_DISPLAYDEVICE_H_INCLUDED)
 #define ARCADIA_VISUALS_DISPLAYDEVICE_H_INCLUDED
 
-
 #include "Arcadia/Ring2/Include.h"
 typedef struct Arcadia_Visuals_DisplayMode Arcadia_Visuals_DisplayMode;
 
-
-Arcadia_declareObjectType(u8"Arcadia.Visuals.DisplayDevice", Arcadia_Visuals_DisplayDevice, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.DisplayDevice", Arcadia_Visuals_DisplayDevice,
+                          u8"Arcadia.Object");
 
 struct Arcadia_Visuals_DisplayDevice {
   Arcadia_Object _parent;

@@ -36,7 +36,7 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create
 /// @param thread A pointer to the thread.
 /// @param self A pointer to this Data Definition Language semantical analysis.
 /// @param node A pointer to the node.
-/// @error Arcadia_Status_SemanticalError two map contains two entries with the same key
+/// @error Arcadia_Status_SemanticalError a map contains two entries with the same key
 void
 Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run
   (

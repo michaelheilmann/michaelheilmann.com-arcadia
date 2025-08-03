@@ -18,12 +18,13 @@ left-hand side.</p>
 
 <h3 id="lexical-grammars">2.3 Lexical grammars</h3>
 <p>The lexical grammar uses the Unicode code points from the Unicode decoding phase as its terminal symbols.
-
-It defines a set of productions, starting from the goal symbol <my-mv>word</my-mv>, that describe how sequences of code points are translated into a word.
+The non-terminals of the lexical grammar start with the prefix <code>Lexical.</code>.
+It defines a set of productions, starting from the goal symbol <my-mv>Lexical.Word</my-mv>, that describe how sequences of code points are translated into a word.
 </p>
 
 <h3 id="syntactical-grammars">2.4 Syntactical grammars</h3>
 <p>The syntactical grammar for the <em>Data Definition Language</em> uses words of the lexical grammar as its terminal symbols.
+The non-terminals of the syntactical grammar start with the prefix <code>Syntactical.</code>.
 It defines a set of productions, starting from the goal symbol <my-mv>sentence</my-mv>, that describe how sequences of words are translated into a sentence.
 </p>
 
@@ -43,7 +44,7 @@ Example
 <div class="body">
 <p>The following production denotes the non-terminal for a digit as used in the definitions of numerals:</p>
 <p><code>
-digit: /* A single Unicode symbol from the code point range +U0030 to +U0039 */    
+Lexical.Digit: /* A single Unicode symbol from the code point range +U0030 to +U0039 */    
 </code></p>
 </div>
 </div>
@@ -58,10 +59,10 @@ Example
 <p>The following productions denote the non-terminal for a sign as used in the definitions of numerals:</p>
 <p><code>
 /* #2b is also known as "PLUS SIGN" */<br/>
-plus_sign : #2b<br/>
+Lexical.PlusSign : #2b<br/>
 /* #2d is also known as "MINUS SIGN" */<br/>
-minus_sign : #2d sign : plus_sign<br/>
-sign : minus_sign  
+Lexical.MinusSign : #2d sign : plus_sign<br/>
+Lexical.Sign : Lexical.PlusSign | Lexical.MinusSign  
 </code></p>
 </div>
 </div>
@@ -75,7 +76,7 @@ Example
 <div class="body">
 <p>The following production defines a possibly empty sequence of digits as used in the definitions of numerals:</p>
 <p><code>
-zero-or-more-digits : {digit} 
+Lexical.ZeroOrMoreDigits : {Lexical.Digit} 
 </code></p>
 </div>
 </div>
@@ -86,9 +87,9 @@ zero-or-more-digits : {digit}
 <div class="header">Example</div>
 <div class="body">
 <p>The following productions denotes a possible definition of an integer numeral.
-It consists of an optional sign followed by a digit followed by zero-or-more-digits as defined in the preceeding examples):</p>
+It consists of an optional sign followed by a digit followed by zero or more digits (as defined in the previous example):</p>
 <p><code>
-integer : [sign] digit zero-or-more-digits 
+Lexical.Integer : [Lexical.Sign] Lexical.Digit Lexical.ZeroOrMoreDigits
 </code></p>
 </div>
 </div>
@@ -100,18 +101,18 @@ integer : [sign] digit zero-or-more-digits
 <div class="body">
 <p>
 The following productions denotes a possibly empty list of integers (with integer as defined in the preceeding example).
-Note that this list may include a trailing comma.
+Note that this list may include a trailing comma hence the <code>{x}</code> operator cannot be used here.
 </p>
 <p><code>
-integer-list : integer integer-list-rest<br/>
-integer-list : ε<br/>
+Syntactical.IntegerList : integer Syntactical.IntegerListRest<br/>
+Syntactical.IntegerList : ε<br/>
 <br/>
-integer-list-rest : comma integer integer-list-rest<br/>
-integer-list-rest : comma<br/>
-integer-list-rest : ε<br/>
+Syntactical.IntegerListRest : Lexical.Comma Syntactical.Integer Syntactical.IntegerListRest<br/>
+Syntactical.IntegerListRest : Lexical.Comma<br/>
+Syntactical.IntegerListRest : ε<br/>
 <br/>  
 /* #2c is also known as "COMMA" */<br/>
-comma : #2c 
+Lexical.Comma : #2c 
 </code></p>
 </div>
 </div>    

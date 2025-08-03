@@ -16,7 +16,7 @@
 #include "Arcadia/Visuals/Windows/Bitmap.h"
 
 static void
-Windows_NativeBitmap_constructImpl
+Arcadia_Visuals_Windows_Bitmap_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -25,15 +25,15 @@ Windows_NativeBitmap_constructImpl
   );
 
 static void
-Windows_NativeBitmap_destruct
+Arcadia_Visuals_Windows_Bitmap_destruct
   (
     Arcadia_Thread* thread,
-    Windows_NativeBitmap* self
+    Arcadia_Visuals_Windows_Bitmap* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Windows_NativeBitmap_constructImpl,
-  .destruct = &Windows_NativeBitmap_destruct,
+  .construct = &Arcadia_Visuals_Windows_Bitmap_constructImpl,
+  .destruct = &Arcadia_Visuals_Windows_Bitmap_destruct,
   .visit = NULL,
 };
 
@@ -42,10 +42,12 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Windows.NativeBitmap", Windows_NativeBitmap, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Bitmap", Arcadia_Visuals_Windows_Bitmap,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
-Windows_NativeBitmap_constructImpl
+Arcadia_Visuals_Windows_Bitmap_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -53,8 +55,8 @@ Windows_NativeBitmap_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  Windows_NativeBitmap* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Windows_NativeBitmap_getType(thread);
+  Arcadia_Visuals_Windows_Bitmap* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_Bitmap_getType(thread);
   {
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -132,7 +134,7 @@ Windows_NativeBitmap_constructImpl
   _self->lineStride = (int32_t)lineStride;
   _self->linePadding = (uint32_t)linePadding;
   _self->numberOfBitsPerPixel = 24;
-  _self->pixelFormat = Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8;
+  _self->pixelFormat = Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8;
 
   HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
   if (!hBrush) {
@@ -153,10 +155,10 @@ Windows_NativeBitmap_constructImpl
 }
 
 static void
-Windows_NativeBitmap_destruct
+Arcadia_Visuals_Windows_Bitmap_destruct
   (
     Arcadia_Thread* thread,
-    Windows_NativeBitmap* self
+    Arcadia_Visuals_Windows_Bitmap* self
   )
 {
   if (NULL != self->hBitmap) {
@@ -169,8 +171,8 @@ Windows_NativeBitmap_destruct
   }
 }
 
-Windows_NativeBitmap*
-Windows_NativeBitmap_create
+Arcadia_Visuals_Windows_Bitmap*
+Arcadia_Visuals_Windows_Bitmap_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
@@ -181,15 +183,15 @@ Windows_NativeBitmap_create
     Arcadia_Value_makeInteger32Value(width),
     Arcadia_Value_makeInteger32Value(height),
   };
-  Windows_NativeBitmap* self = Arcadia_allocateObject(thread, _Windows_NativeBitmap_getType(thread), 2, &argumentValues[0]);
+  Arcadia_Visuals_Windows_Bitmap* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_Bitmap_getType(thread), 2, &argumentValues[0]);
   return self;
 }
 
 void
-Windows_NativeBitmap_fill
+Arcadia_Visuals_Windows_Bitmap_fill
   (
     Arcadia_Thread* thread,
-    Windows_NativeBitmap* self,
+    Arcadia_Visuals_Windows_Bitmap* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
     Arcadia_Natural8Value b
@@ -207,11 +209,11 @@ Windows_NativeBitmap_fill
   hBrush = NULL;
 }
 
-Arcadia_Visuals_PixelBuffer*
-Windows_NativeBitmap_toPixelBuffer
+Arcadia_Imaging_PixelBuffer*
+Arcadia_Visuals_Windows_Bitmap_toPixelBuffer
   (
     Arcadia_Thread* thread,
-    Windows_NativeBitmap* self
+    Arcadia_Visuals_Windows_Bitmap* self
   )
 {
   DIBSECTION dibSection;
@@ -221,14 +223,14 @@ Windows_NativeBitmap_toPixelBuffer
   }
   uint8_t* sourceBytes = dibSection.dsBm.bmBits;
   // Currently, we assume that NativeWindowsBitmap is BGR format.
-  Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_create(thread, 0, self->width, self->height, Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8);
+  Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, self->width, self->height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
   for (int32_t y = 0; y < self->height; ++y) {
     for (int32_t x = 0; x < self->width; ++x) {
       int32_t sourceOffset = self->lineStride * y + (x * self->numberOfBitsPerPixel) / 8;
       uint8_t* source = sourceBytes + sourceOffset;
-      Arcadia_Visuals_PixelBuffer_setPixelRgba(thread, pixelBuffer, x, y, source[2], source[1], source[0], 255);
+      Arcadia_Imaging_PixelBuffer_setPixelRgba(thread, pixelBuffer, x, y, source[2], source[1], source[0], 255);
     }
   }
-  Arcadia_Visuals_PixelBuffer_reflectHorizontally(thread, pixelBuffer);
+  Arcadia_Imaging_PixelBuffer_reflectHorizontally(thread, pixelBuffer);
   return pixelBuffer;
 }

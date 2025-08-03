@@ -15,19 +15,19 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "Arcadia/Include.h"
 
+#include "Arcadia/Ring2/Include.h"
+#include "Tools/TemplateEngine/Context.h"
+#include "Tools/TemplateEngine/Environment.h"
 #include "Tools/TemplateEngine/FileContext.h"
 
 static void
 main1
   (
-    Arcadia_Thread* thread,
-    int argc,
-    char** argv
+    Arcadia_Thread* thread
   )
 {
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Context* context = Context_create(thread);
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
@@ -47,9 +47,7 @@ main1
 static void
 recursiveInclude1
   (
-    Arcadia_Thread* thread,
-    int argc,
-    char** argv
+    Arcadia_Thread* thread
   )
 {
   Context* context = Context_create(thread);
@@ -79,9 +77,7 @@ recursiveInclude1
 static void
 recursiveInclude2
   (
-    Arcadia_Thread* thread,
-    int argc,
-    char** argv
+    Arcadia_Thread* thread
   )
 {
   Context* context = Context_create(thread);
@@ -115,23 +111,13 @@ main
     char** argv
   )
 {
-  Arcadia_Process* process = NULL;
-  if (Arcadia_Process_get(&process)) {
+  if (!Arcadia_Tests_safeExecute(&main1)) {
     return EXIT_FAILURE;
   }
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    main1(thread, argc, argv);
-    recursiveInclude1(thread, argc, argv);
-    recursiveInclude2(thread, argc, argv);
+  if (!Arcadia_Tests_safeExecute(&recursiveInclude1)) {
+    return EXIT_FAILURE;
   }
-  Arcadia_Thread_popJumpTarget(thread);
-  Arcadia_Status status = Arcadia_Thread_getStatus(thread);
-  Arcadia_Process_relinquish(process);
-  process = NULL;
-  if (status) {
+  if (!Arcadia_Tests_safeExecute(&recursiveInclude2)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

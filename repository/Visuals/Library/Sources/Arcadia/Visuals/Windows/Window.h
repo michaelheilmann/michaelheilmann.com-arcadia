@@ -25,7 +25,8 @@ typedef struct Arcadia_Visuals_Windows_DisplayDevice Arcadia_Visuals_Windows_Dis
 #define NOCOMM
 #include <Windows.h>
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Window", Arcadia_Visuals_Windows_Window, u8"Arcadia.Visuals.Window");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Window", Arcadia_Visuals_Windows_Window,
+                          u8"Arcadia.Visuals.Window");
 
 struct Arcadia_Visuals_Windows_Window {
   Arcadia_Visuals_Window _parent;
@@ -34,8 +35,6 @@ struct Arcadia_Visuals_Windows_Window {
   // #Arcadia_BooleanValue_True if the window is a fullscreen window.
   // #Arcadia_BooleanValue_False otherwise.
   Arcadia_BooleanValue fullscreen;
-  // The rectangle in virtual screen coordinates.
-  RECT rect;
 
   ATOM classAtom;
   HWND windowHandle;

@@ -45,8 +45,8 @@ An out of source build is the recommended way of building *michaelheilmann.com*.
 - `Arcadia.Visuals.OpenGl.Enabled`
 `TRUE` enables OpenGL support in *Arcadia Visuals*, `FALSE` disables it. Default is `FALSE`.
 \
-To enable OpenGL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=TRUE` to the cmake command.
-To disable OpenGL support, add the parameter `-D"Arcadia.Audials.OpenAl.Enabled"=FALSE` to the cmake command.
+To enable OpenGL support, add the parameter `-D"Arcadia.Visuals.OpenGl.Enabled"=TRUE` to the cmake command.
+To disable OpenGL support, add the parameter `-D"Arcadia.Visuals.OpenGl.Enabled"=FALSE` to the cmake command.
                                                                                                            
 - `Arcadia.Audials.OpenAl.Enabled`
 `TRUE` enables OpenAL support in *Arcadia Audials*, `FALSE` disables it. Default is `FALSE`.

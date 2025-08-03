@@ -60,7 +60,14 @@ Arcadia_Thread_getValueStackSize
     Arcadia_Thread* thread
   );
 
-/// @error Arcadia_Status_ArgumentValueInvalid @a self is a null pointer
+/// @error Arcadia_Status_ArgumentValueInvalid @a index is greater than or equal to the stack size
+Arcadia_Value
+Arcadia_Thread_getValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_SizeValue index
+  );
+
 /// @error Arcadia_Status_ArgumentValueInvalid @a value is a null pointer
 /// @error Arcadia_Status_AllocationFailed an allocation failed
 void
@@ -70,7 +77,6 @@ Arcadia_Thread_pushValue
     Arcadia_Value const* value
   );
 
-/// @error Arcadia_Status_ArgumentValueInvalid @a self is a null pointer
 /// @error Arcadia_Status_ArgumentValueInvalid @a coutn is greater than the size of the stack
 void
 Arcadia_Thread_popValues

@@ -180,33 +180,13 @@ macro(CopyProductAssets target folder sourceDirectory targetDirectory)
 
 endmacro()
 
-# sourceRoot Source directory root (absolute).
-# targetRoot Target directory root (absolute).
-# sourceFiles List of documentation files (absolute).
-function(MyBuildDocs projectName targetName sourceRoot targetRoot sourceFiles)
-  set(_targetFiles "")
-
-  foreach (_sourceFile ${sourceFiles})
-
-    # Compute target file from source file.
-    file(RELATIVE_PATH _targetFile ${sourceRoot} ${_sourceFile})
-    set(_targetFile ${targetRoot}/${_targetFile})
-    cmake_path(GET _targetFile PARENT_PATH _path)
-    cmake_path(GET _targetFile STEM LAST_ONLY _fileNameWithoutExtension)
-    set(_targetFile ${_path}/${_fileNameWithoutExtension})
-    message(STATUS " - - ${_sourceFile} -> ${_targetFile}")
-    list(APPEND _targetFiles "${_targetFile}")
-
-    # Add command to build the target file.
-    add_custom_command(OUTPUT ${_targetFile}
-                       COMMAND $<TARGET_FILE:${projectName}.Tools.TemplateEngine> ${_sourceFile} ${_targetFile}
-                       WORKING_DIRECTORY ${sourceRoot}
-                       COMMENT "${_sourceFile} => ${_targetFile}"
-                       DEPENDS ${projectName}.Tools.TemplateEngine ${_sourceFile})
-
-  endforeach()
-
-  # Make target.
-  add_custom_target(${targetName} ALL DEPENDS ${_targetFiles})
-
-endfunction()
+# sourceFile The source file.
+# targetFile The target file.
+# environmentFile The environment file.
+macro(InvokeTemplateEngine sourceFile targetFile environmentFile)
+  add_custom_command(OUTPUT ${targetFile}
+                     COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${sourceFile} ${targetFile} ${environmentFile}
+                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                     COMMENT "${sourceFile} / ${environmentFile} => ${targetFile}"
+                     DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})
+endmacro()

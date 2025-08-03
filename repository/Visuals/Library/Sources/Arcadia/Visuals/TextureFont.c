@@ -97,7 +97,7 @@ Arcadia_Visuals_TextureFont_create
   return self;
 }
 
-Arcadia_Visuals_PixelBuffer*
+Arcadia_Imaging_PixelBuffer*
 Arcadia_Visuals_TextureFont_getPixelBuffer
   (
     Arcadia_Thread* thread,

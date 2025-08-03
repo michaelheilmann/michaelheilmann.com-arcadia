@@ -16,6 +16,9 @@
 #include "Arcadia/Visuals/Windows/Window.h"
 
 #include "Arcadia/Visuals/Configuration.h"
+#include "Arcadia/Visuals/Events/WindowClosedEvent.h"
+#include "Arcadia/Visuals/Events/WindowPositionChangedEvent.h"
+#include "Arcadia/Visuals/Events/WindowSizeChangedEvent.h"
 #include "Arcadia/Visuals/Windows/_WindowText.h"
 #include "Arcadia/Visuals/Windows/Wgl/WglFactory.h"
 #include <limits.h>
@@ -250,7 +253,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Window", Arcadia_Visuals_Windows_Window, u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Window", Arcadia_Visuals_Windows_Window,
+                         u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window,
+                         &_typeOperations);
 
 static LRESULT CALLBACK
 WindowProc
@@ -261,9 +266,33 @@ WindowProc
     LPARAM lParam
   )
 {
+  Arcadia_Process* process = NULL;
+  if (Arcadia_Process_get(&process)) {
+    return DefWindowProc(hWnd, uMsg, wParam, lParam); // There is nothing we can do actually.
+  }
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+  Arcadia_Process_relinquish(process);
+  process = NULL;
   switch (uMsg) {
     case WM_CLOSE: {
       g_quitRequested = Arcadia_BooleanValue_True;
+      Arcadia_Visuals_Windows_Window* window = (Arcadia_Visuals_Windows_Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+      if (!window) {
+        return 0;
+      }
+      Arcadia_JumpTarget jumpTarget;
+      Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+      if (Arcadia_JumpTarget_save(&jumpTarget)) {
+        Arcadia_Visuals_WindowClosedEvent_create
+          (
+            thread,
+            Arcadia_getTickCount(thread),
+            (Arcadia_Visuals_Window*)window
+          );
+        Arcadia_Thread_popJumpTarget(thread);
+      } else {
+        Arcadia_Thread_popJumpTarget(thread);
+      }
       return 0;
     } break;
     case WM_KEYUP: {
@@ -277,12 +306,60 @@ WindowProc
       if (!window) {
         return 0;
       }
+      RECT rect;
+      GetWindowRect(window->windowHandle, &rect);
+      Arcadia_Integer32Value width = rect.right - rect.left;
+      Arcadia_Integer32Value height = rect.bottom - rect.top;
+      if (width != ((Arcadia_Visuals_Window*)window)->bounds.width ||
+          height != ((Arcadia_Visuals_Window*)window)->bounds.height) {
+        ((Arcadia_Visuals_Window*)window)->bounds.width = width;
+        ((Arcadia_Visuals_Window*)window)->bounds.height = height;
+        Arcadia_JumpTarget jumpTarget;
+        Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+        if (Arcadia_JumpTarget_save(&jumpTarget)) {
+          Arcadia_Visuals_WindowSizeChangedEvent_create
+            (
+              thread,
+              Arcadia_getTickCount(thread),
+              (Arcadia_Visuals_Window*)window,
+              width,
+              height
+            );
+          Arcadia_Thread_popJumpTarget(thread);
+        } else {
+          Arcadia_Thread_popJumpTarget(thread);
+        }
+      }
       return 0;
     } break;
     case WM_MOVE: {
       Arcadia_Visuals_Windows_Window* window = (Arcadia_Visuals_Windows_Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
       if (!window) {
-        return 0;
+        return 0; // There is nothing we can do actually.
+      }
+      RECT rect;
+      GetWindowRect(window->windowHandle, &rect);
+      Arcadia_Integer32Value left = rect.left;
+      Arcadia_Integer32Value top = rect.top;
+      if (left != ((Arcadia_Visuals_Window*)window)->bounds.left ||
+          top != ((Arcadia_Visuals_Window*)window)->bounds.top) {
+        ((Arcadia_Visuals_Window*)window)->bounds.left = left;
+        ((Arcadia_Visuals_Window*)window)->bounds.top = top;
+        Arcadia_JumpTarget jumpTarget;
+        Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+        if (Arcadia_JumpTarget_save(&jumpTarget)) {
+          Arcadia_Visuals_WindowPositionChangedEvent_create
+            (
+              thread,
+              Arcadia_getTickCount(thread),
+              (Arcadia_Visuals_Window*)window,
+              left,
+              top
+            );
+          Arcadia_Thread_popJumpTarget(thread);
+        } else {
+          Arcadia_Thread_popJumpTarget(thread);
+        }
       }
       return 0;
     } break;
@@ -435,10 +512,6 @@ openImpl
   }
 
   if (!self->windowHandle) {
-    self->rect.left = 8;
-    self->rect.top = 8;
-    self->rect.right = 640;
-    self->rect.bottom = 320;
     DWORD dwStyle = WS_OVERLAPPEDWINDOW;
     DWORD dwExStyle = 0;
     self->windowHandle =
@@ -464,7 +537,11 @@ openImpl
       Arcadia_Thread_jump(thread);
     }
     SetWindowLongPtr(self->windowHandle, GWLP_USERDATA, (LONG_PTR)self);
-    MoveWindow(self->windowHandle, self->rect.left, self->rect.top, self->rect.right - self->rect.left, self->rect.bottom - self->rect.top, TRUE);
+    MoveWindow(self->windowHandle, ((Arcadia_Visuals_Window*)self)->bounds.left,
+                                   ((Arcadia_Visuals_Window*)self)->bounds.top,
+                                   ((Arcadia_Visuals_Window*)self)->bounds.width,
+                                   ((Arcadia_Visuals_Window*)self)->bounds.height,
+                                   TRUE);
   }
 
   self->deviceContextHandle = GetDC(self->windowHandle);
@@ -557,7 +634,10 @@ setFullscreenImpl
       SetWindowLongPtr(self->windowHandle, GWL_STYLE, dwStyle);
       if (!SetWindowPos(self->windowHandle,
                         HWND_TOPMOST,
-                        self->rect.left, self->rect.top, self->rect.right - self->rect.left, self->rect.bottom - self->rect.top,
+                        ((Arcadia_Visuals_Window*)self)->bounds.left,
+                        ((Arcadia_Visuals_Window*)self)->bounds.top,
+                        ((Arcadia_Visuals_Window*)self)->bounds.width,
+                        ((Arcadia_Visuals_Window*)self)->bounds.height,
                         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED | SWP_DRAWFRAME | SWP_SHOWWINDOW)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
@@ -950,10 +1030,8 @@ getPositionImpl
     Arcadia_Integer32Value* top
   )
 {
-  RECT rect;
-  GetWindowRect(self->windowHandle, &rect);
-  *left = rect.left;
-  *top = rect.top;
+  *left = ((Arcadia_Visuals_Window*)self)->bounds.top;
+  *top = ((Arcadia_Visuals_Window*)self)->bounds.left;
 }
 
 static void
@@ -965,13 +1043,15 @@ setPositionImpl
     Arcadia_Integer32Value top
   )
 {
-  LONG width = self->rect.right - self->rect.left;
-  LONG height = self->rect.bottom - self->rect.top;
-  self->rect.left = left;
-  self->rect.top = top;
-  self->rect.right = left + width;
-  self->rect.bottom = top + height;
-  MoveWindow(self->windowHandle, self->rect.left, self->rect.top, self->rect.right - self->rect.left, self->rect.bottom - self->rect.top, FALSE);
+  ((Arcadia_Visuals_Window*)self)->bounds.left = left;
+  ((Arcadia_Visuals_Window*)self)->bounds.top = top;
+  if (self->windowHandle) {
+    MoveWindow(self->windowHandle, ((Arcadia_Visuals_Window*)self)->bounds.left,
+                                   ((Arcadia_Visuals_Window*)self)->bounds.top,
+                                   ((Arcadia_Visuals_Window*)self)->bounds.width,
+                                   ((Arcadia_Visuals_Window*)self)->bounds.height,
+                                   FALSE);
+  }
 }
 
 static void
@@ -983,10 +1063,8 @@ getSizeImpl
     Arcadia_Integer32Value* height
   )
 {
-  RECT rect;
-  GetWindowRect(self->windowHandle, &rect);
-  *width = rect.right - rect.left;
-  *height = rect.bottom - rect.top;
+  *width = ((Arcadia_Visuals_Window*)self)->bounds.width;
+  *height = ((Arcadia_Visuals_Window*)self)->bounds.height;
 }
 
 static void
@@ -998,9 +1076,15 @@ setSizeImpl
     Arcadia_Integer32Value height
   )
 {
-  self->rect.right = self->rect.left + width;
-  self->rect.bottom = self->rect.top + height;
-  MoveWindow(self->windowHandle, self->rect.left, self->rect.top, self->rect.right - self->rect.left, self->rect.bottom - self->rect.top, FALSE);
+  ((Arcadia_Visuals_Window*)self)->bounds.width = width;
+  ((Arcadia_Visuals_Window*)self)->bounds.height = height;
+  if (self->windowHandle) {
+    MoveWindow(self->windowHandle, ((Arcadia_Visuals_Window*)self)->bounds.left,
+                                    ((Arcadia_Visuals_Window*)self)->bounds.top,
+                                    ((Arcadia_Visuals_Window*)self)->bounds.width,
+                                    ((Arcadia_Visuals_Window*)self)->bounds.height,
+                                    FALSE);
+  }
 }
 
 Arcadia_Visuals_Windows_Window*

@@ -62,6 +62,13 @@ Arcadia_Visuals_Windows_DisplayMode_getFrequencyImpl
     Arcadia_Visuals_Windows_DisplayMode* self
   );
 
+static void
+Arcadia_Visuals_Windows_DisplayMode_applyImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Windows_DisplayMode* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &Arcadia_Visuals_Windows_DisplayMode_constructImpl,
   .destruct = NULL,
@@ -106,6 +113,8 @@ Arcadia_Visuals_Windows_DisplayMode_constructImpl
   ((Arcadia_Visuals_DisplayMode*)_self)->getVerticalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) &Arcadia_Visuals_Windows_DisplayMode_getVerticalResolutionImpl;
   ((Arcadia_Visuals_DisplayMode*)_self)->getColorDepth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) &Arcadia_Visuals_Windows_DisplayMode_getColorDepthImpl;
   ((Arcadia_Visuals_DisplayMode*)_self)->getFrequency = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) &Arcadia_Visuals_Windows_DisplayMode_getFrequencyImpl;
+  ((Arcadia_Visuals_DisplayMode*)_self)->apply = (void(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_applyImpl;
+
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
@@ -153,6 +162,84 @@ Arcadia_Visuals_Windows_DisplayMode_getFrequencyImpl
     Arcadia_Visuals_Windows_DisplayMode* self
   )
 { return self->frequency; }
+
+static void
+Arcadia_Visuals_Windows_DisplayMode_applyImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Windows_DisplayMode* self
+  )
+{
+  Arcadia_StringBuffer* deviceName = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuffer_insertBack(thread, deviceName, Arcadia_Value_makeObjectReferenceValue(self->device->id));
+  Arcadia_Natural32Value zeroTerminator = 0x0;
+  Arcadia_StringBuffer_insertCodePointsBack(thread, deviceName, &zeroTerminator, 1);
+  // Find the corresponding display mode.
+  DWORD iModeNum = 0;
+  while (true) {
+    DEVMODEA devMode = { 0 };
+    if (!EnumDisplaySettingsA(deviceName->elements, iModeNum, &devMode)) {
+      break;
+    }
+    iModeNum++;
+    if (0 == (devMode.dmFields & DM_PELSWIDTH)) {
+      continue;
+    }
+    if (0 == (devMode.dmFields & DM_PELSHEIGHT)) {
+      continue;
+    }
+    if (0 == (devMode.dmFields & DM_BITSPERPEL)) {
+      continue;
+    }
+    if (0 == (devMode.dmFields & DM_DISPLAYFREQUENCY)) {
+      continue;
+    }
+    if (devMode.dmBitsPerPel == self->colorDepth &&
+        devMode.dmPelsWidth == self->horizontalResolution &&
+        devMode.dmPelsHeight == self->verticalResolution &&
+        devMode.dmDisplayFrequency == self->frequency) {
+      // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-changedisplaysettingsexa
+      LONG lResult = ChangeDisplaySettingsExA(deviceName->elements, &devMode, NULL, CDS_FULLSCREEN, NULL);
+      switch (lResult) {
+        case DISP_CHANGE_SUCCESSFUL: {
+
+        } break;
+        case DISP_CHANGE_BADDUALVIEW: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        } break;
+        case DISP_CHANGE_BADFLAGS: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        } break;
+        case DISP_CHANGE_BADMODE: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        } break;
+        case DISP_CHANGE_BADPARAM: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        } break;
+        case DISP_CHANGE_FAILED: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        } break;
+        case DISP_CHANGE_NOTUPDATED: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        } break;
+        case DISP_CHANGE_RESTART: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        } break;
+        default: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        } break;
+      };
+    }
+  }
+}
 
 Arcadia_Visuals_Windows_DisplayMode*
 Arcadia_Visuals_Windows_DisplayMode_create

@@ -16,14 +16,8 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Build the documentation.
-set(DOCUMENT_TARGET_FILE "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Visuals/index.html")
-file(GLOB_RECURSE DOCUMENTATION_DEPENDENCIES ${CMAKE_CURRENT_SOURCE_DIR}/*)
-add_custom_command(OUTPUT ${DOCUMENT_TARGET_FILE}
-                   COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${DOCUMENT_TARGET_FILE}
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   COMMENT "${CMAKE_CURRENT_SOURCE_DIR}/index.i => ${DOCUMENT_TARGET_FILE}"
-                   DEPENDS ${MyProjectName}.Tools.TemplateEngine ${CMAKE_CURRENT_SOURCE_DIR}/index.i ${DOCUMENTATION_DEPENDENCIES})
-
-add_custom_target(${MyProjectName}.Visuals.BuildDocs ALL DEPENDS ${DOCUMENT_TARGET_FILE})
-
+InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
+                     "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Visuals/index.html"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+add_custom_target(${MyProjectName}.Visuals.BuildDocs ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Visuals/index.html")
 set_target_properties(${MyProjectName}.Visuals.BuildDocs PROPERTIES FOLDER "Visuals")

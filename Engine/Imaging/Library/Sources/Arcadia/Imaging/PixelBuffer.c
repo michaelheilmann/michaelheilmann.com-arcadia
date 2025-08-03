@@ -215,12 +215,12 @@ getTranscodeCallbacks
   } Entry;
 
   static const Entry g_entries[] = {
-    { Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8, 4, &DECODE_ABGR, &ENCODE_ABGR },
-    { Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8, 4, &DECODE_ARGB, &ENCODE_ARGB },
-    { Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8,    3, &DECODE_BGR,  &ENCODE_BGR  },
-    { Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8, 4, &DECODE_BGRA, &ENCODE_BGRA },
-    { Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8,    3, &DECODE_RGB,  &ENCODE_RGB  },
-    { Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8, 4, &DECODE_RGBA, &ENCODE_RGBA },
+    { Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8, 4, &DECODE_ABGR, &ENCODE_ABGR },
+    { Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8, 4, &DECODE_ARGB, &ENCODE_ARGB },
+    { Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8,    3, &DECODE_BGR,  &ENCODE_BGR  },
+    { Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8, 4, &DECODE_BGRA, &ENCODE_BGRA },
+    { Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8,    3, &DECODE_RGB,  &ENCODE_RGB  },
+    { Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8, 4, &DECODE_RGBA, &ENCODE_RGBA },
   };
 
   static const size_t g_numberOfEntries = sizeof(g_entries) / sizeof(Entry);
@@ -257,10 +257,10 @@ getTranscodeCallbacks
 /// @endcode
 ///
 /// @code
-/// construct(pixelBuffer:Arcadia.Visuals.PixelBuffer)
+/// construct(pixelBuffer:Arcadia.Imaging.PixelBuffer)
 /// @endcode
 static void
-Arcadia_Visuals_PixelBuffer_constructImpl
+Arcadia_Imaging_PixelBuffer_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -269,15 +269,15 @@ Arcadia_Visuals_PixelBuffer_constructImpl
   );
 
 static void
-Arcadia_Visuals_PixelBuffer_destruct
+Arcadia_Imaging_PixelBuffer_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_PixelBuffer_constructImpl,
-  .destruct = &Arcadia_Visuals_PixelBuffer_destruct,
+  .construct = &Arcadia_Imaging_PixelBuffer_constructImpl,
+  .destruct = &Arcadia_Imaging_PixelBuffer_destruct,
   .visit = NULL,
 };
 
@@ -286,10 +286,10 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.PixelBuffer", Arcadia_Visuals_PixelBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Imaging.PixelBuffer", Arcadia_Imaging_PixelBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
-Arcadia_Visuals_PixelBuffer_constructImpl
+Arcadia_Imaging_PixelBuffer_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -298,31 +298,31 @@ Arcadia_Visuals_PixelBuffer_constructImpl
   )
 {
   if (1 == numberOfArgumentValues) {
-    Arcadia_Visuals_PixelBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
-    Arcadia_TypeValue _type = _Arcadia_Visuals_PixelBuffer_getType(thread);
+    Arcadia_Imaging_PixelBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
+    Arcadia_TypeValue _type = _Arcadia_Imaging_PixelBuffer_getType(thread);
     {
       Arcadia_Value argumentValues[] = {
         Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
       };
       Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
     }
-    if (!Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_Visuals_PixelBuffer_getType(thread))) {
+    if (!Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Visuals_PixelBuffer* other = (Arcadia_Visuals_PixelBuffer*)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
-    _self->numberOfColumns = Arcadia_Visuals_PixelBuffer_getNumberOfColumns(thread, other);
-    _self->numberOfRows = Arcadia_Visuals_PixelBuffer_getNumberOfRows(thread, other);
-    _self->linePadding = Arcadia_Visuals_PixelBuffer_getLinePadding(thread, other);
-    _self->pixelFormat = Arcadia_Visuals_PixelBuffer_getPixelFormat(thread, other);
-    Arcadia_SizeValue bytesPerPixel = Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, other);
+    Arcadia_Imaging_PixelBuffer* other = (Arcadia_Imaging_PixelBuffer*)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
+    _self->numberOfColumns = Arcadia_Imaging_PixelBuffer_getNumberOfColumns(thread, other);
+    _self->numberOfRows = Arcadia_Imaging_PixelBuffer_getNumberOfRows(thread, other);
+    _self->linePadding = Arcadia_Imaging_PixelBuffer_getLinePadding(thread, other);
+    _self->pixelFormat = Arcadia_Imaging_PixelBuffer_getPixelFormat(thread, other);
+    Arcadia_SizeValue bytesPerPixel = Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, other);
     Arcadia_SizeValue bytes = (bytesPerPixel * _self->numberOfColumns + _self->linePadding) * _self->numberOfRows;
     _self->bytes = Arcadia_Memory_allocateUnmanaged(thread, bytes);
     Arcadia_Memory_copy(thread, _self->bytes, other->bytes, bytes);
     Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
   } else if (4 == numberOfArgumentValues) {
-    Arcadia_TypeValue _type = _Arcadia_Visuals_PixelBuffer_getType(thread);
-    Arcadia_Visuals_PixelBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
+    Arcadia_TypeValue _type = _Arcadia_Imaging_PixelBuffer_getType(thread);
+    Arcadia_Imaging_PixelBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
     {
       Arcadia_Value argumentValues[] = {
         Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -352,14 +352,14 @@ Arcadia_Visuals_PixelBuffer_constructImpl
     _self->linePadding = Arcadia_Value_getInteger32Value(&argumentValues[0]);
     Arcadia_SizeValue bytesPerPixel = 0;
     switch (_self->pixelFormat) {
-      case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
-      case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
-      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
-      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
+      case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:
+      case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8:
+      case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8:
+      case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
         bytesPerPixel = 4;
       } break;
-      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
-      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
+      case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8:
+      case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
         bytesPerPixel = 3;
       } break;
       default: {
@@ -369,7 +369,7 @@ Arcadia_Visuals_PixelBuffer_constructImpl
     };
     _self->bytes = Arcadia_Memory_allocateUnmanaged(thread, (_self->numberOfColumns * bytesPerPixel + _self->linePadding) * _self->numberOfRows);
     switch (_self->pixelFormat) {
-      case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
+      case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
         for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
           Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
@@ -379,7 +379,7 @@ Arcadia_Visuals_PixelBuffer_constructImpl
           }
         }
       } break;
-      case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
+      case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
         for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
           Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
@@ -389,7 +389,7 @@ Arcadia_Visuals_PixelBuffer_constructImpl
           }
         }
       } break;
-      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8: {
+      case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
         for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
           Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
@@ -399,13 +399,33 @@ Arcadia_Visuals_PixelBuffer_constructImpl
           }
         }
       } break;
-      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
+      case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8: {
+        Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
+        for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
+          Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
+          for (Arcadia_SizeValue x = 0; x < _self->numberOfColumns; ++x) {
+            PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
+            ENCODE_BGRA(p + x * bytesPerPixel, &pixel);
+          }
+        }
+      } break;
+      case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
         Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
         for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
           Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
           for (Arcadia_SizeValue x = 0; x < _self->numberOfColumns; ++x) {
             PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
             ENCODE_RGB(p + x * bytesPerPixel, &pixel);
+          }
+        }
+      } break;
+      case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
+        Arcadia_SizeValue lineStride = _self->numberOfColumns * bytesPerPixel + _self->linePadding;
+        for (Arcadia_SizeValue y = 0; y < _self->numberOfRows; ++y) {
+          Arcadia_Natural8Value* p = _self->bytes + (y * lineStride);
+          for (Arcadia_SizeValue x = 0; x < _self->numberOfColumns; ++x) {
+            PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
+            ENCODE_RGBA(p + x * bytesPerPixel, &pixel);
           }
         }
       } break;
@@ -422,10 +442,10 @@ Arcadia_Visuals_PixelBuffer_constructImpl
 }
 
 static void
-Arcadia_Visuals_PixelBuffer_destruct
+Arcadia_Imaging_PixelBuffer_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 {
   if (self->bytes) {
@@ -437,20 +457,20 @@ Arcadia_Visuals_PixelBuffer_destruct
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Arcadia_Natural8Value
-Arcadia_Visuals_PixelBuffer_getPixelFormat
+Arcadia_Imaging_PixelBuffer_getPixelFormat
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 {
   return self->pixelFormat;
 }
 
 void
-Arcadia_Visuals_PixelBuffer_setPixelFormat
+Arcadia_Imaging_PixelBuffer_setPixelFormat
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Natural8Value pixelFormat
   )
 {
@@ -492,18 +512,18 @@ Arcadia_Visuals_PixelBuffer_setPixelFormat
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getLinePadding
+Arcadia_Imaging_PixelBuffer_getLinePadding
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 { return self->linePadding; }
 
 void
-Arcadia_Visuals_PixelBuffer_setLinePadding
+Arcadia_Imaging_PixelBuffer_setLinePadding
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value linePadding
   )
 {
@@ -514,15 +534,15 @@ Arcadia_Visuals_PixelBuffer_setLinePadding
     }
     Arcadia_Integer32Value bytesPerPixel = 0;
     switch (self->pixelFormat) {
-      case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
-      case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
-      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
-      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8:
+      case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:
+      case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8:
+      case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8:
+      case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8:
       {
         bytesPerPixel = 4;
       } break;
-      case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
-      case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
+      case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8:
+      case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
         bytesPerPixel = 3;
       } break;
       default: {
@@ -549,10 +569,10 @@ Arcadia_Visuals_PixelBuffer_setLinePadding
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void
-Arcadia_Visuals_PixelBuffer_getPixelRgba
+Arcadia_Imaging_PixelBuffer_getPixelRgba
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value column,
     Arcadia_Integer32Value row,
     Arcadia_Natural8Value* r,
@@ -561,34 +581,34 @@ Arcadia_Visuals_PixelBuffer_getPixelRgba
     Arcadia_Natural8Value* a
   )
 {
-  if (column < 0 || column > Arcadia_Visuals_PixelBuffer_getNumberOfColumns(thread, self)) {
+  if (column < 0 || column > Arcadia_Imaging_PixelBuffer_getNumberOfColumns(thread, self)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (row < 0 || row > Arcadia_Visuals_PixelBuffer_getNumberOfRows(thread, self)) {
+  if (row < 0 || row > Arcadia_Imaging_PixelBuffer_getNumberOfRows(thread, self)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue offset = row * Arcadia_Visuals_PixelBuffer_getLineStride(thread, self) + column * Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, self);
+  Arcadia_SizeValue offset = row * Arcadia_Imaging_PixelBuffer_getLineStride(thread, self) + column * Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, self);
   Arcadia_Natural8Value* bytes = self->bytes + offset;
   PIXEL pixel = { .r = 0, .g = 0, .b = 0, .a = 255 };
   switch (self->pixelFormat) {
-    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8: {
       DECODE_ABGR(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8: {
       DECODE_ARGB(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8: {
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8: {
       DECODE_BGR(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8: {
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8: {
       DECODE_BGRA(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
       DECODE_RGB(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
       DECODE_RGBA(bytes, &pixel);
     } break;
     default: {
@@ -603,10 +623,10 @@ Arcadia_Visuals_PixelBuffer_getPixelRgba
 }
 
 void
-Arcadia_Visuals_PixelBuffer_setPixelRgba
+Arcadia_Imaging_PixelBuffer_setPixelRgba
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value column,
     Arcadia_Integer32Value row,
     Arcadia_Natural8Value r,
@@ -615,34 +635,34 @@ Arcadia_Visuals_PixelBuffer_setPixelRgba
     Arcadia_Natural8Value a
   )
 {
-  if (column < 0 || column >= Arcadia_Visuals_PixelBuffer_getNumberOfColumns(thread, self)) {
+  if (column < 0 || column >= Arcadia_Imaging_PixelBuffer_getNumberOfColumns(thread, self)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (row < 0 || row >= Arcadia_Visuals_PixelBuffer_getNumberOfRows(thread, self)) {
+  if (row < 0 || row >= Arcadia_Imaging_PixelBuffer_getNumberOfRows(thread, self)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue offset = row * Arcadia_Visuals_PixelBuffer_getLineStride(thread, self) + column * Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, self);
+  Arcadia_SizeValue offset = row * Arcadia_Imaging_PixelBuffer_getLineStride(thread, self) + column * Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, self);
   Arcadia_Natural8Value* bytes = self->bytes + offset;
   PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
   switch (self->pixelFormat) {
-    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8: {
       ENCODE_ABGR(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8: {
       ENCODE_ARGB(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8: {
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8: {
       ENCODE_BGR(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8: {
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8: {
       ENCODE_BGRA(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
       ENCODE_RGB(bytes, &pixel);
     } break;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
       ENCODE_RGBA(bytes, &pixel);
     } break;
     default: {
@@ -655,10 +675,10 @@ Arcadia_Visuals_PixelBuffer_setPixelRgba
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void
-Arcadia_Visuals_PixelBuffer_fill
+Arcadia_Imaging_PixelBuffer_fill
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
     Arcadia_Natural8Value b,
@@ -666,7 +686,7 @@ Arcadia_Visuals_PixelBuffer_fill
   )
 {
   switch (self->pixelFormat) {
-    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8: {
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8: {
       Arcadia_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -678,7 +698,7 @@ Arcadia_Visuals_PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8: {
       Arcadia_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -690,7 +710,7 @@ Arcadia_Visuals_PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8: {
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8: {
       Arcadia_SizeValue bytesPerPixel = 3;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -702,7 +722,7 @@ Arcadia_Visuals_PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8: {
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8: {
       Arcadia_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -714,7 +734,7 @@ Arcadia_Visuals_PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
       Arcadia_SizeValue bytesPerPixel = 3;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -726,7 +746,7 @@ Arcadia_Visuals_PixelBuffer_fill
         p += self->linePadding;
       }
     } break;
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
       Arcadia_SizeValue bytesPerPixel = 4;
       PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
       Arcadia_Natural8Value* p = self->bytes;
@@ -748,10 +768,10 @@ Arcadia_Visuals_PixelBuffer_fill
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void
-Arcadia_Visuals_PixelBuffer_swapColumns
+Arcadia_Imaging_PixelBuffer_swapColumns
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value column1,
     Arcadia_Integer32Value column2
   )
@@ -767,10 +787,10 @@ Arcadia_Visuals_PixelBuffer_swapColumns
   if (column1 == column2) {
     return;
   }
-  Arcadia_Integer32Value bytesPerPixel = Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, self);
-  Arcadia_Integer32Value lineStride = Arcadia_Visuals_PixelBuffer_getLineStride(thread, self);
-  Arcadia_Natural8Value* source = self->bytes + column1 * Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, self);
-  Arcadia_Natural8Value* target = self->bytes + column2 * Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, self);
+  Arcadia_Integer32Value bytesPerPixel = Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, self);
+  Arcadia_Integer32Value lineStride = Arcadia_Imaging_PixelBuffer_getLineStride(thread, self);
+  Arcadia_Natural8Value* source = self->bytes + column1 * Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, self);
+  Arcadia_Natural8Value* target = self->bytes + column2 * Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, self);
   for (Arcadia_SizeValue row = 0; row < self->numberOfRows; ++row) {
     Memory_swap(source, target, bytesPerPixel);
     source += lineStride;
@@ -779,10 +799,10 @@ Arcadia_Visuals_PixelBuffer_swapColumns
 }
 
 void
-Arcadia_Visuals_PixelBuffer_swapRows
+Arcadia_Imaging_PixelBuffer_swapRows
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value row1,
     Arcadia_Integer32Value row2
   )
@@ -798,88 +818,88 @@ Arcadia_Visuals_PixelBuffer_swapRows
   if (row1 == row2) {
     return;
   }
-  Arcadia_Integer32Value bytesPerPixel = Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, self);
-  Arcadia_Natural8Value* source = self->bytes + Arcadia_Visuals_PixelBuffer_getLineStride(thread, self) * row1;
-  Arcadia_Natural8Value* target = self->bytes + Arcadia_Visuals_PixelBuffer_getLineStride(thread, self) * row2;
+  Arcadia_Integer32Value bytesPerPixel = Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, self);
+  Arcadia_Natural8Value* source = self->bytes + Arcadia_Imaging_PixelBuffer_getLineStride(thread, self) * row1;
+  Arcadia_Natural8Value* target = self->bytes + Arcadia_Imaging_PixelBuffer_getLineStride(thread, self) * row2;
   Memory_swap(source, target, self->numberOfColumns * bytesPerPixel);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void
-Arcadia_Visuals_PixelBuffer_reflectVertically
+Arcadia_Imaging_PixelBuffer_reflectVertically
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 {
   for (Arcadia_Integer32Value column = 0, w = self->numberOfColumns / 2; column < w; ++column) {
-    Arcadia_Visuals_PixelBuffer_swapColumns(thread, self, column, self->numberOfColumns - 1 - column);
+    Arcadia_Imaging_PixelBuffer_swapColumns(thread, self, column, self->numberOfColumns - 1 - column);
   }
 }
 
 void
-Arcadia_Visuals_PixelBuffer_reflectHorizontally
+Arcadia_Imaging_PixelBuffer_reflectHorizontally
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 {
   for (Arcadia_Integer32Value row = 0, h = self->numberOfRows / 2; row < h; ++row) {
-    Arcadia_Visuals_PixelBuffer_swapRows(thread, self, row, self->numberOfRows - 1 - row);
+    Arcadia_Imaging_PixelBuffer_swapRows(thread, self, row, self->numberOfRows - 1 - row);
   }
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getNumberOfColumns
+Arcadia_Imaging_PixelBuffer_getNumberOfColumns
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 { return self->numberOfColumns; }
 
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getNumberOfRows
+Arcadia_Imaging_PixelBuffer_getNumberOfRows
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 { return self->numberOfRows; }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getLineStride
+Arcadia_Imaging_PixelBuffer_getLineStride
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
-{ return Arcadia_Visuals_PixelBuffer_getNumberOfColumns(thread, self)
-       * Arcadia_Visuals_PixelBuffer_getBytesPerPixel(thread, self)
-       + Arcadia_Visuals_PixelBuffer_getLinePadding(thread, self);
+{ return Arcadia_Imaging_PixelBuffer_getNumberOfColumns(thread, self)
+       * Arcadia_Imaging_PixelBuffer_getBytesPerPixel(thread, self)
+       + Arcadia_Imaging_PixelBuffer_getLinePadding(thread, self);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getBytesPerPixel
+Arcadia_Imaging_PixelBuffer_getBytesPerPixel
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 {
   size_t bytesPerPixel = 0;
   switch (self->pixelFormat) {
-    case Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8:
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8:
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8:
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8: {
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8:
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
       bytesPerPixel = 4;
     } break;
-    case Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8:
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8:
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
       bytesPerPixel = 3;
     } break;
     default: {
@@ -892,8 +912,8 @@ Arcadia_Visuals_PixelBuffer_getBytesPerPixel
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Arcadia_Visuals_PixelBuffer*
-Arcadia_Visuals_PixelBuffer_create
+Arcadia_Imaging_PixelBuffer*
+Arcadia_Imaging_PixelBuffer_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value linePadding,
@@ -908,36 +928,36 @@ Arcadia_Visuals_PixelBuffer_create
     Arcadia_Value_makeInteger32Value(height),
     Arcadia_Value_makeNatural32Value(pixelFormat),
   };
-  Arcadia_Visuals_PixelBuffer* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_PixelBuffer_getType(thread), 4, &argumentValues[0]);
+  Arcadia_Imaging_PixelBuffer* self = Arcadia_allocateObject(thread, _Arcadia_Imaging_PixelBuffer_getType(thread), 4, &argumentValues[0]);
   return self;
 }
 
-Arcadia_Visuals_PixelBuffer*
-Arcadia_Visuals_PixelBuffer_createClone
+Arcadia_Imaging_PixelBuffer*
+Arcadia_Imaging_PixelBuffer_createClone
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* other
+    Arcadia_Imaging_PixelBuffer* other
   )
 {
   Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue(other),
   };
-  Arcadia_Visuals_PixelBuffer* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_PixelBuffer_getType(thread), 1, &argumentValues[0]);
+  Arcadia_Imaging_PixelBuffer* self = Arcadia_allocateObject(thread, _Arcadia_Imaging_PixelBuffer_getType(thread), 1, &argumentValues[0]);
   return self;
 }
 
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getWidth
+Arcadia_Imaging_PixelBuffer_getWidth
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 { return self->numberOfColumns; }
 
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getHeight
+Arcadia_Imaging_PixelBuffer_getHeight
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   )
 { return self->numberOfRows; }

@@ -31,6 +31,7 @@ struct Arcadia_Visuals_Linux_Application {
   Display* display;
   Atom _NET_WM_ICON;
   Atom WM_DELETE_WINDOW;
+  Atom _NET_FRAME_EXTENTS;
 };
 
 Arcadia_Visuals_Linux_Application*

@@ -26,6 +26,20 @@ Arcadia_Thread_getValueStackSize
   )
 { return thread->stack.size; }
 
+Arcadia_Value
+Arcadia_Thread_getValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_SizeValue index
+  )
+{
+  if (index >= thread->stack.size) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return thread->stack.elements[thread->stack.size - 1 - index];
+}
+
 void
 Arcadia_Thread_pushValue
   (

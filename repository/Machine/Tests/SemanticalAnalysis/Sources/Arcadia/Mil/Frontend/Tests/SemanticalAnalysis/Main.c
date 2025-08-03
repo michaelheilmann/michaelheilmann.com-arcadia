@@ -93,7 +93,7 @@ compile
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Mil_Parser* parser = Arcadia_Mil_Parser_create(thread);
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_List* moduleAsts = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)paths); i < n; ++i) {
     Arcadia_FilePath* sourceFilePath = Arcadia_List_getObjectReferenceValueAt(thread, paths, i);

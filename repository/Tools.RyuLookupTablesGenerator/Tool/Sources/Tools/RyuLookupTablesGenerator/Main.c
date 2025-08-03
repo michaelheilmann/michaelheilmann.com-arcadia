@@ -65,7 +65,7 @@ main1
   }
 
   Arcadia_String* pathPrefixString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&target);
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FilePath* pathPrefix = Arcadia_FilePath_parseNative(thread, Arcadia_String_getBytes(thread, pathPrefixString), Arcadia_String_getNumberOfBytes(thread, pathPrefixString));
   Arcadia_StringBuffer* resultString = Arcadia_StringBuffer_create(thread);
   Arcadia_ByteBuffer* resultBytes = Arcadia_ByteBuffer_create(thread);

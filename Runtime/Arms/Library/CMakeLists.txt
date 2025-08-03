@@ -47,6 +47,8 @@ if (NOT TARGET ${MyLibraryName})
   list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Arms/Internal/Common.h)
   list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Arms/Internal/Statistics.c)
   list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Arms/Internal/Statistics.h)
+  list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Arms/Internal/Tag.c)
+  list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Arms/Internal/Tag.h)
 
   EndProduct(${MyLibraryName})
 

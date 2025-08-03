@@ -18,45 +18,45 @@
 
 #include "Arcadia/Ring2/Include.h"
 
-// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat
-Arcadia_declareEnumerationType(u8"Arcadia.Visuals.PixelFormat", Arcadia_Visuals_PixelFormat);
+// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Imaging_PixelFormat
+Arcadia_declareEnumerationType(u8"Arcadia.Imaging.PixelFormat", Arcadia_Imaging_PixelFormat);
 
-enum Arcadia_Visuals_PixelFormat {
+enum Arcadia_Imaging_PixelFormat {
 
-  Arcadia_Visuals_PixelFormat_An8Ln8,
+  Arcadia_Imaging_PixelFormat_An8Ln8,
 
-  Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8,
+  Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8,
 
-  Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8,
+  Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8,
 
-  Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8,
+  Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8,
 
-  Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8,
+  Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8,
 
-  Arcadia_Visuals_PixelFormat_Ln8,
+  Arcadia_Imaging_PixelFormat_Ln8,
 
-  Arcadia_Visuals_PixelFormat_Ln8An8,
+  Arcadia_Imaging_PixelFormat_Ln8An8,
 
-  Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8,
+  Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8,
 
-  Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8,
+  Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8,
 
 };
 
-// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat_getBytesPerPixel
+// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Imaging_PixelFormat_getBytesPerPixel
 Arcadia_SizeValue
-Arcadia_Visuals_PixelFormat_getNumberOfBytes
+Arcadia_Imaging_PixelFormat_getNumberOfBytes
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelFormat self
+    Arcadia_Imaging_PixelFormat self
   );
 
-// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat_getNumberComponents
+// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Imaging_PixelFormat_getNumberComponents
 Arcadia_SizeValue
-Arcadia_Visuals_PixelFormat_getNumberOfComponents
+Arcadia_Imaging_PixelFormat_getNumberOfComponents
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelFormat self
+    Arcadia_Imaging_PixelFormat self
   );
 
 #endif // ARCADIA_IMAGING_PIXELFORMAT_H_INCLUDED

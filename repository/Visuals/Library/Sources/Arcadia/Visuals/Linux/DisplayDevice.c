@@ -64,6 +64,17 @@ Arcadia_Visuals_Linux_DisplayDevice_getNameImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_DisplayDevice* self
   );
+  
+static void
+Arcadia_Visuals_Linux_DisplayDevice_getBoundsImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_DisplayDevice* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top,
+    Arcadia_Integer32Value* right,
+    Arcadia_Integer32Value* bottom
+  );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &Arcadia_Visuals_Linux_DisplayDevice_constructImpl,
@@ -109,6 +120,7 @@ Arcadia_Visuals_Linux_DisplayDevice_constructImpl
   ((Arcadia_Visuals_DisplayDevice*)_self)->getAvailableDisplayModes = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getAvailableDisplayModesImpl;
   ((Arcadia_Visuals_DisplayDevice*)_self)->getId = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getIdImpl;
   ((Arcadia_Visuals_DisplayDevice*)_self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getNameImpl;
+  ((Arcadia_Visuals_DisplayDevice*)_self)->getBounds = (void (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Visuals_Linux_DisplayDevice_getBoundsImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -131,78 +143,87 @@ Arcadia_Visuals_Linux_DisplayDevice_visitImpl
 }
 
 static void
-makeDisplayModes
+makeDisplayMode
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_DisplayDevice* self,
     XRRScreenResources* screenResources,
-    XRROutputInfo* outputInfo,
+    RRCrtc crtc,
+    RRMode modeId,
     Arcadia_List* displayModes
   )
 {
-  for (int i = 0; i < outputInfo->nmode; ++i) {
-    const XRRModeInfo* modeInfo = &(outputInfo->modes[i]);
-    Rotation rotation = 0;
-    XFixed scaleWidth = 0x10000, scaleHeight = 0x10000;
-    int width = 0, height = 0;
-    int refreshRateNumerator, refreshRateDenominator;
-    {
-      XRRCrtcInfo* temporary = XRRGetCrtcInfo(self->application->display, screenResources, outputInfo->crtc);
-      if (temporary) {
-        rotation = temporary->rotation;
-        XRRFreeCrtcInfo(temporary);
-        temporary = NULL;
-      }
+  const XRRModeInfo* modeInfo = NULL;
+  for (int i = 0; i < screenResources->nmode; ++i) {
+    const XRRModeInfo* currentModeInfo = &(screenResources->modes[i]);
+    if (currentModeInfo->id == modeId) {
+      modeInfo = currentModeInfo;
+      break;
     }
-    {
-      XRRCrtcTransformAttributes *temporary;
-      if (XRRGetCrtcTransform(self->application->display, outputInfo->crtc, &temporary) && temporary) {
-        scaleWidth = temporary->currentTransform.matrix[0][0];
-        scaleHeight = temporary->currentTransform.matrix[1][1];
-        XFree(temporary);
-        temporary = NULL;
-      }
+  }
+  if (!modeInfo) {
+    return;
+  }
+  Rotation rotation = 0;
+  XFixed scaleWidth = 0x10000, scaleHeight = 0x10000;
+  int width = 0, height = 0;
+  int refreshRateNumerator, refreshRateDenominator;
+  {
+    XRRCrtcInfo* crtcInfo = XRRGetCrtcInfo(self->application->display, screenResources, crtc);
+    if (crtcInfo) {
+      rotation = crtcInfo->rotation;
+      XRRFreeCrtcInfo(crtcInfo);
+      crtcInfo = NULL;
     }
-    {
-      static const int RR_RotationLeft = (1 << 1);
-      static const int RR_RotationRight = (1 << 3);
-      if (rotation & (RR_RotationLeft | RR_RotationRight)) {
-        width = (modeInfo->height * scaleWidth + 0xffff) >> 16;
-        height = (modeInfo->width * scaleHeight + 0xffff) >> 16;
-      } else {
-        width = (modeInfo->width * scaleWidth + 0xffff) >> 16;
-        height = (modeInfo->height * scaleHeight + 0xffff) >> 16;
-      }
+  }
+  {
+    XRRCrtcTransformAttributes *crtcTransformAttributes = NULL;
+    if (XRRGetCrtcTransform(self->application->display, crtc, &crtcTransformAttributes) && crtcTransformAttributes) {
+      scaleWidth = crtcTransformAttributes->currentTransform.matrix[0][0];
+      scaleHeight = crtcTransformAttributes->currentTransform.matrix[1][1];
+      XFree(crtcTransformAttributes);
+      crtcTransformAttributes = NULL;
     }
-    {
-      int vTotal = modeInfo->vTotal;
-      if (modeInfo->modeFlags & RR_DoubleScan) {
-        // "doublescan" doubles scan lines.
-        vTotal *= 2;
-      }
-      if (modeInfo->modeFlags & RR_Interlace) {
-        // "interlace" halfs scan lines.
-        vTotal /= 2;
-      }
-      if (modeInfo->hTotal && vTotal) {
-        refreshRateNumerator = modeInfo->dotClock;
-        refreshRateDenominator = (modeInfo->hTotal * vTotal);
-      } else {
-        continue;
-      }
-      Arcadia_Visuals_Linux_DisplayMode* displayMode =
-        Arcadia_Visuals_Linux_DisplayMode_create
-          (
-            thread,
-            self,
-            width,
-            height,
-            0,
-            refreshRateNumerator / refreshRateDenominator
-          );
-      displayMode->modeId = modeInfo->id;
-      Arcadia_List_insertBackObjectReferenceValue(thread, displayModes, displayMode);
+  }
+  {
+    static const int RR_RotationLeft = (1 << 1);
+    static const int RR_RotationRight = (1 << 3);
+    if (rotation & (RR_RotationLeft | RR_RotationRight)) {
+      width = (modeInfo->height * scaleWidth + 0xffff) >> 16;
+      height = (modeInfo->width * scaleHeight + 0xffff) >> 16;
+    } else {
+      width = (modeInfo->width * scaleWidth + 0xffff) >> 16;
+      height = (modeInfo->height * scaleHeight + 0xffff) >> 16;
     }
+  }
+  {
+    int vTotal = modeInfo->vTotal;
+    if (modeInfo->modeFlags & RR_DoubleScan) {
+      // "doublescan" doubles scan lines.
+      vTotal *= 2;
+    }
+    if (modeInfo->modeFlags & RR_Interlace) {
+      // "interlace" halfs scan lines.
+      vTotal /= 2;
+    }
+    if (modeInfo->hTotal && vTotal) {
+      refreshRateNumerator = modeInfo->dotClock;
+      refreshRateDenominator = (modeInfo->hTotal * vTotal);
+    } else {
+      return; // Ignore that one.
+    }
+    Arcadia_Visuals_Linux_DisplayMode* displayMode =
+      Arcadia_Visuals_Linux_DisplayMode_create
+        (
+          thread,
+          self,
+          width,
+          height,
+          0,
+          refreshRateNumerator / refreshRateDenominator
+        );
+    displayMode->modeId = modeInfo->id;
+    Arcadia_List_insertBackObjectReferenceValue(thread, displayModes, displayMode);
   }
 }
 
@@ -221,10 +242,16 @@ Arcadia_Visuals_Linux_DisplayDevice_getAvailableDisplayModesImpl
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      makeDisplayModes(thread, self, screenResources, outputInfo, displayModes);     
+      for (int i = 0; i < outputInfo->nmode; ++i) {
+        makeDisplayMode(thread, self, screenResources, outputInfo->crtc, outputInfo->modes[i], displayModes);
+      }
+      XRRFreeOutputInfo(outputInfo);
+      XRRFreeScreenResources(screenResources);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
-      Arcadia_Thread_popJumpTarget(thread);    
+      Arcadia_Thread_popJumpTarget(thread); 
+      XRRFreeOutputInfo(outputInfo);
+      XRRFreeScreenResources(screenResources);
       Arcadia_Thread_jump(thread);
     }
   }
@@ -246,6 +273,23 @@ Arcadia_Visuals_Linux_DisplayDevice_getNameImpl
     Arcadia_Visuals_Linux_DisplayDevice* self
   )
 { return self->name; }
+
+static void
+Arcadia_Visuals_Linux_DisplayDevice_getBoundsImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Linux_DisplayDevice* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top,
+    Arcadia_Integer32Value* right,
+    Arcadia_Integer32Value* bottom
+  )
+{
+  *left = self->bounds.left;
+  *top = self->bounds.top;
+  *right = self->bounds.right;
+  *bottom = self->bounds.bottom;
+}
 
 Arcadia_Visuals_Linux_DisplayDevice*
 Arcadia_Visuals_Linux_DisplayDevice_create

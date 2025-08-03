@@ -152,7 +152,14 @@ Arcadia_Object_getType
     Arcadia_Object* self
   );
 
-
+static inline Arcadia_BooleanValue
+Arcadia_Object_isInstanceOf
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* object,
+    Arcadia_Type* type
+  )
+{ return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, object), type); }
 
 /// "isEqualTo"
 Arcadia_BooleanValue

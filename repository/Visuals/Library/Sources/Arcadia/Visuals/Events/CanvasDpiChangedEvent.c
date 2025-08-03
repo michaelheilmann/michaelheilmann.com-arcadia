@@ -35,7 +35,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.CanvasDpiChangedEvent", Arcadia_Visuals_CanvasDpiChangedEvent, u8"Arcadia.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.CanvasDpiChangedEvent", Arcadia_Visuals_CanvasDpiChangedEvent,
+                         u8"Arcadia.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent,
+                         &_typeOperations);
 
 static void
 Arcadia_Visuals_CanvasDpiChangedEvent_constructImpl

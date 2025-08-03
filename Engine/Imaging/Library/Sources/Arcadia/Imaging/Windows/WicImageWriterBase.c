@@ -54,7 +54,7 @@ startupFactory
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
@@ -92,7 +92,7 @@ shutdownFactory
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
@@ -110,7 +110,7 @@ startup1
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
@@ -151,7 +151,7 @@ shutdown1
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
@@ -170,7 +170,7 @@ startupEncoder
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
@@ -238,7 +238,7 @@ shutdownEncoder
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
@@ -255,14 +255,14 @@ startup3
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
   HRESULT hr;
   //
-  size_t sourceWidth = Arcadia_Visuals_PixelBuffer_getNumberOfColumns(thread, sourcePixelBuffer);
-  size_t sourceHeight = Arcadia_Visuals_PixelBuffer_getNumberOfRows(thread, sourcePixelBuffer);
+  size_t sourceWidth = Arcadia_Imaging_PixelBuffer_getNumberOfColumns(thread, sourcePixelBuffer);
+  size_t sourceHeight = Arcadia_Imaging_PixelBuffer_getNumberOfRows(thread, sourcePixelBuffer);
   hr = IWICBitmapFrameEncode_SetSize(self->piBitmapFrame, (UINT)sourceWidth, (UINT)sourceHeight);
   if (FAILED(hr)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -271,14 +271,29 @@ startup3
   //
   WICPixelFormatGUID formatGUID = GUID_WICPixelFormatUndefined;
   switch (sourcePixelBuffer->pixelFormat) {
-    case Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8: {
-      formatGUID = GUID_WICPixelFormat24bppBGR;
-    } break;
-    case Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8: {
-      Arcadia_Visuals_PixelBuffer* pixelBuffer = Arcadia_Visuals_PixelBuffer_createClone(thread, sourcePixelBuffer);
-      Arcadia_Visuals_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8);
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8: {
+      Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, sourcePixelBuffer);
+      Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8);
       sourcePixelBuffer = pixelBuffer;
       formatGUID = GUID_WICPixelFormat32bppBGRA;
+    } break;
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8: {
+      Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, sourcePixelBuffer);
+      Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8);
+      sourcePixelBuffer = pixelBuffer;
+      formatGUID = GUID_WICPixelFormat32bppBGRA;
+    } break;
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8: {
+      formatGUID = GUID_WICPixelFormat24bppBGR;
+    } break;
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8: {
+      formatGUID = GUID_WICPixelFormat32bppBGRA;
+    } break;
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
+      formatGUID = GUID_WICPixelFormat24bppBGR;
+    } break;
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
+      formatGUID = GUID_WICPixelFormat32bppRGBA;
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -290,7 +305,7 @@ startup3
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  size_t sourceLineStride = Arcadia_Visuals_PixelBuffer_getLineStride(thread, sourcePixelBuffer);
+  size_t sourceLineStride = Arcadia_Imaging_PixelBuffer_getLineStride(thread, sourcePixelBuffer);
   size_t sourceSizeInPixels = sourceLineStride * sourceHeight;
   hr = IWICBitmapFrameEncode_WritePixels(self->piBitmapFrame, (UINT)sourceHeight, (UINT)sourceLineStride, (UINT)sourceSizeInPixels, (void*)sourcePixelBuffer->bytes);
   if (FAILED(hr)) {
@@ -341,14 +356,14 @@ shutdown3
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 { }
 
 typedef struct Module {
-  void (*startup)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Visuals_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters);
-  void (*shutdown)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Visuals_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters);
+  void (*startup)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters);
+  void (*shutdown)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters);
 } Module;
 
 static void
@@ -412,7 +427,7 @@ Arcadia_Imaging_Windows_WicImageWriterBase_doWrite
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {

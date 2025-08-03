@@ -20,7 +20,8 @@
 
 // Information on a display mode available on a display device.
 // See Arcadia.Visuals.DisplayDevice for more information.
-Arcadia_declareObjectType(u8"Arcadia.Visuals.DisplayMode", Arcadia_Visuals_DisplayMode, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.DisplayMode", Arcadia_Visuals_DisplayMode,
+                          u8"Arcadia.Object");
 
 struct Arcadia_Visuals_DisplayMode {
   Arcadia_Object _parent;
@@ -28,6 +29,7 @@ struct Arcadia_Visuals_DisplayMode {
   Arcadia_Integer32Value (*getVerticalResolution)(Arcadia_Thread* thread, Arcadia_Visuals_DisplayMode* self);
   Arcadia_Integer32Value (*getColorDepth)(Arcadia_Thread* thread, Arcadia_Visuals_DisplayMode* self);
   Arcadia_Integer32Value (*getFrequency)(Arcadia_Thread* thread, Arcadia_Visuals_DisplayMode* self);
+  void (*apply)(Arcadia_Thread* thread, Arcadia_Visuals_DisplayMode* self);
 };
 
 Arcadia_Integer32Value
@@ -53,6 +55,13 @@ Arcadia_Visuals_DisplayMode_getColorDepth
 
 Arcadia_Integer32Value
 Arcadia_Visuals_DisplayMode_getFrequency
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_DisplayMode* self
+  );
+
+void
+Arcadia_Visuals_DisplayMode_apply
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_DisplayMode* self

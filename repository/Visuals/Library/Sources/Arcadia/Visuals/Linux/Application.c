@@ -115,7 +115,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Linux.Application", Arcadia_Visuals_Linux_Application, u8"Arcadia.Visuals.Application", Arcadia_Visuals_Application, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Linux.Application", Arcadia_Visuals_Linux_Application,
+                         u8"Arcadia.Visuals.Application", Arcadia_Visuals_Application,
+                         &_typeOperations);
 
 static Arcadia_Visuals_Linux_Icon*
 Arcadia_Visuals_Linux_Application_createIconImpl
@@ -253,6 +255,10 @@ Arcadia_Visuals_Linux_Application_getDisplayDevicesImpl
       if (displayDevice) {
         Arcadia_List_insertBackObjectReferenceValue(thread, displayDevices, (Arcadia_ObjectReferenceValue)displayDevice);
       }
+      displayDevice->bounds.left = crtcInfo->x;
+      displayDevice->bounds.top = crtcInfo->y;
+      displayDevice->bounds.right = crtcInfo->x + crtcInfo->width;
+      displayDevice->bounds.bottom = crtcInfo->y + crtcInfo->height;
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
@@ -333,6 +339,15 @@ Arcadia_Visuals_Linux_Application_constructImpl
   // (3) Create _NET_WM_ICON atom.
   _self->_NET_WM_ICON = XInternAtom(_self->display, "_NET_WM_ICON", False);
   if (_self->_NET_WM_ICON == None) {
+    XCloseDisplay(_self->display);
+    _self->display = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  
+  // (4) Create _NET_FRAME_EXTENTS atom.
+  _self->_NET_FRAME_EXTENTS = XInternAtom(_self->display, "_NET_FRAME_EXTENTS", False);
+  if (_self->_NET_FRAME_EXTENTS == None) {
     XCloseDisplay(_self->display);
     _self->display = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);

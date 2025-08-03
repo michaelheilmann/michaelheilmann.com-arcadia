@@ -49,7 +49,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Tools.TemplateEngine.Ast", Ast, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.TemplateEngine.Ast", Ast,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 Ast_destruct

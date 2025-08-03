@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_FONT_H_INCLUDED)
-#define ARCADIA_VISUALS_FONT_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_WINDOWS_TEXTUREFONT_H_INCLUDED)
+#define ARCADIA_VISUALS_WINDOWS_TEXTUREFONT_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Visuals/Windows/Bitmap.h"
@@ -24,23 +24,24 @@
 #include <Windows.h>
 
 /// @copde
-/// class TextureFontWindows {
+/// class Arcadia.Visuals.Windows.TextureFontWindows {
 ///   /* The default code point is "Latin Capital Letter A" / "U+0041". */
 ///   construct()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"TextureFontWindows", TextureFontWindows, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.TextureFontWindows", Arcadia_Visuals_Windows_TextureFont,
+                          u8"Arcadia.Object");
 
-struct TextureFontWindows {
+struct Arcadia_Visuals_Windows_TextureFont {
   Arcadia_Object _parent;
-  Windows_NativeBitmap* bitmap;
+  Arcadia_Visuals_Windows_Bitmap* bitmap;
   HFONT hFont;
   HDC hDeviceContext;
   Arcadia_Natural32Value codePoint;
 };
 
-TextureFontWindows*
-TextureFontWindows_create
+Arcadia_Visuals_Windows_TextureFont*
+Arcadia_Visuals_Windows_TextureFont_create
   (
     Arcadia_Thread* thread
   );
@@ -49,15 +50,15 @@ void
 TextureFontWindows_setCodePoint
   (
     Arcadia_Thread* thread,
-    TextureFontWindows* self,
+    Arcadia_Visuals_Windows_TextureFont* self,
     Arcadia_Natural32Value codePoint
   );
 
-Arcadia_Visuals_PixelBuffer*
-TextureFontWindows_getPixelBuffer
+Arcadia_Imaging_PixelBuffer*
+Arcadia_Visuals_Windows_TextureFont_getPixelBuffer
   (
     Arcadia_Thread* thread,
-    TextureFontWindows* self
+    Arcadia_Visuals_Windows_TextureFont* self
   );
 
-#endif // ARCADIA_VISUALS_FONT_H_INCLUDED
+#endif // ARCADIA_VISUALS_WINDOWS_TEXTUREFONT_H_INCLUDED

@@ -15,6 +15,7 @@
 
 #include "Tools/TemplateEngine/Context.h"
 
+#include "Tools/TemplateEngine/Environment.h"
 #include "Tools/TemplateEngine/FileContext.h"
 
 static void
@@ -51,7 +52,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Tools.TemplateEngine.Context", Context, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.TemplateEngine.Context", Context,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 void
 Context_constructImpl
@@ -70,6 +73,14 @@ Context_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
+  static const uint8_t sourceBytes[] =
+    u8"{\n"
+    u8"  generatorName : \"Michael Heilmann's Arcadia Template Engine\",\n"
+    u8"  generatorHome : \"https://michaelheilmann.com\",\n"
+    u8"}\n"
+    ;
+  Arcadia_String* sourceString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, sourceBytes, sizeof(sourceBytes) - 1)));
+  _self->environment = Environment_loadString(thread, sourceString);
   _self->targetBuffer = NULL;
   _self->target = NULL;
   _self->temporaryBuffer = NULL;
@@ -94,14 +105,29 @@ Context_visit
     Context* self
   )
 {
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->targetBuffer);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->target);
+  if (self->environment) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->environment);
+  }
+  if (self->targetBuffer) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->targetBuffer);
+  }
+  if (self->target) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->target);
+  }
 
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporaryBuffer);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporary);
-
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->stack);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->files);
+  if (self->temporaryBuffer) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporaryBuffer);
+  }
+  if (self->temporary) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporary);
+  }
+  
+  if (self->stack) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->stack);
+  }
+  if (self->files) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->files);
+  }
 }
 
 Context*
@@ -147,15 +173,15 @@ void
 Context_onRun
   (
     Arcadia_Thread* thread,
-    Context* context
+    Context* self
   )
 {
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
-  while (!Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)context->stack)) {
-    Arcadia_Value elementValue = Arcadia_Stack_peek(thread, context->stack);
-    Arcadia_Stack_pop(thread, context->stack);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  while (!Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)self->stack)) {
+    Arcadia_Value elementValue = Arcadia_Stack_peek(thread, self->stack);
+    Arcadia_Stack_pop(thread, self->stack);
     Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_Value_getObjectReferenceValue(&elementValue);
-    FileContext* fileContext = FileContext_create(thread, context, filePath);
+    FileContext* fileContext = FileContext_create(thread, self, self->environment, filePath);
     Arcadia_ByteBuffer* sourceByteBuffer = NULL;
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -174,8 +200,8 @@ Context_onRun
       Arcadia_Thread_jump(thread);
     }
     fileContext->source = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
-    recursionGuard(thread, context, filePath);
+    recursionGuard(thread, self, filePath);
     FileContext_execute(thread, fileContext);
-    Arcadia_List_removeAt(thread, context->files, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->files) - 1, 1);
+    Arcadia_List_removeAt(thread, self->files, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->files) - 1, 1);
   }
 }

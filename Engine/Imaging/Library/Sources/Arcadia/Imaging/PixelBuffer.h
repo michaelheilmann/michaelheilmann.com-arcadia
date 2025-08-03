@@ -29,9 +29,9 @@
 ///                number of columns * bytesPerPixel + line padding
 /// - cell: A cell is uniquely adressed by its column index and its row index.
 ///         Each cell accomodates one pixel.
-Arcadia_declareObjectType(u8"Arcadia.Visuals.PixelBuffer", Arcadia_Visuals_PixelBuffer, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Imaging.PixelBuffer", Arcadia_Imaging_PixelBuffer, u8"Arcadia.Object");
 
-struct Arcadia_Visuals_PixelBuffer {
+struct Arcadia_Imaging_PixelBuffer {
   Arcadia_Object _parent;
   Arcadia_Natural8Value* bytes;
   Arcadia_Natural8Value pixelFormat;
@@ -46,10 +46,10 @@ struct Arcadia_Visuals_PixelBuffer {
 /// @param self A pointer to this pixel buffer.
 /// @return The pixel format of this pixel buffer.
 Arcadia_Natural8Value
-Arcadia_Visuals_PixelBuffer_getPixelFormat
+Arcadia_Imaging_PixelBuffer_getPixelFormat
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /// @brief Get the pixel format of this pixel buffer.
@@ -61,10 +61,10 @@ Arcadia_Visuals_PixelBuffer_getPixelFormat
 /// When converting from ABGR, ARGB, BGRA, or RGBA to BGR or RGB,
 /// the alpha component is removed.
 void
-Arcadia_Visuals_PixelBuffer_setPixelFormat
+Arcadia_Imaging_PixelBuffer_setPixelFormat
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Natural8Value pixelFormat
   );
 
@@ -74,10 +74,10 @@ Arcadia_Visuals_PixelBuffer_setPixelFormat
 /// @param self A pointer to this pixel buffer.
 /// @return The line padding of this pixel buffer. Always non-negative.
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getLinePadding
+Arcadia_Imaging_PixelBuffer_getLinePadding
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /// @brief Set the line padding of this pixel buffer.
@@ -86,10 +86,10 @@ Arcadia_Visuals_PixelBuffer_getLinePadding
 /// @warning Can result in reallocation.
 /// @warning The contents of the padding Bytes are unspecified.
 void
-Arcadia_Visuals_PixelBuffer_setLinePadding
+Arcadia_Imaging_PixelBuffer_setLinePadding
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value linePadding
   );
 
@@ -116,10 +116,10 @@ Arcadia_Visuals_PixelBuffer_setLinePadding
 /// if the pixel has an alpha component.
 /// Otherwise it is assigned 255.
 void
-Arcadia_Visuals_PixelBuffer_getPixelRgba
+Arcadia_Imaging_PixelBuffer_getPixelRgba
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value column,
     Arcadia_Integer32Value row,
     Arcadia_Natural8Value* r,
@@ -148,10 +148,10 @@ Arcadia_Visuals_PixelBuffer_getPixelRgba
 /// <code>a</code> is assigned to the alpha component of the pixel
 /// if the pixel has an alpha component.
 void
-Arcadia_Visuals_PixelBuffer_setPixelRgba
+Arcadia_Imaging_PixelBuffer_setPixelRgba
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value column,
     Arcadia_Integer32Value row,
     Arcadia_Natural8Value r,
@@ -178,10 +178,10 @@ Arcadia_Visuals_PixelBuffer_setPixelRgba
 /// <code>a</code> is assigned to the alpha component of the pixel
 /// if the pixel has an alpha component.
 void
-Arcadia_Visuals_PixelBuffer_fill
+Arcadia_Imaging_PixelBuffer_fill
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
     Arcadia_Natural8Value b,
@@ -195,10 +195,10 @@ Arcadia_Visuals_PixelBuffer_fill
 /// @param column1 The first column.
 /// @param column2 The second colum.
 void
-Arcadia_Visuals_PixelBuffer_swapColumns
+Arcadia_Imaging_PixelBuffer_swapColumns
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value column1,
     Arcadia_Integer32Value column2
   );
@@ -208,10 +208,10 @@ Arcadia_Visuals_PixelBuffer_swapColumns
 /// @param row1 The first row.
 /// @param row2 The second row.
 void
-Arcadia_Visuals_PixelBuffer_swapRows
+Arcadia_Imaging_PixelBuffer_swapRows
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* self,
     Arcadia_Integer32Value row1,
     Arcadia_Integer32Value row2
   );
@@ -224,10 +224,10 @@ Arcadia_Visuals_PixelBuffer_swapRows
 /// That is, it was reflected by the axis starting at (width / 2, -infinity) to (width / 2, +infinity).
 /// such that the pixel at position (column, row) is now at position (width - 1 - column, row).
 void
-Arcadia_Visuals_PixelBuffer_reflectVertically
+Arcadia_Imaging_PixelBuffer_reflectVertically
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /// @brief Reflect this pixel buffer horizontally.
@@ -236,10 +236,10 @@ Arcadia_Visuals_PixelBuffer_reflectVertically
 /// That is, it was reflected by the axis starting at (-infinity, height / 2) to (+infinity, height / 2).
 /// such that the pixel at position (column, row) is now at position (column, height - 1 - row).
 void
-Arcadia_Visuals_PixelBuffer_reflectHorizontally
+Arcadia_Imaging_PixelBuffer_reflectHorizontally
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -248,20 +248,20 @@ Arcadia_Visuals_PixelBuffer_reflectHorizontally
 /// @param self A pointer to this pixel buffer.
 /// @return The number of columns of this pixel buffer.
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getNumberOfColumns
+Arcadia_Imaging_PixelBuffer_getNumberOfColumns
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /// @brief Get the number of rows of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The number of rows of this pixel buffer.
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getNumberOfRows
+Arcadia_Imaging_PixelBuffer_getNumberOfRows
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -270,10 +270,10 @@ Arcadia_Visuals_PixelBuffer_getNumberOfRows
 /// @param self A pointer to this pixel buffer.
 /// @return The line stride of this pixel buffer.
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getLineStride
+Arcadia_Imaging_PixelBuffer_getLineStride
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -282,18 +282,18 @@ Arcadia_Visuals_PixelBuffer_getLineStride
 /// @param self A pointer to this pixel buffer.
 /// @return The line stride of this pixel buffer.
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getBytesPerPixel
+Arcadia_Imaging_PixelBuffer_getBytesPerPixel
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /// Create a pixel buffer of the specified width, height, and pixel format.
 /// Its default color is opaque black.
-Arcadia_Visuals_PixelBuffer*
-Arcadia_Visuals_PixelBuffer_create
+Arcadia_Imaging_PixelBuffer*
+Arcadia_Imaging_PixelBuffer_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value linePadding,
@@ -302,31 +302,31 @@ Arcadia_Visuals_PixelBuffer_create
     Arcadia_Natural8Value pixelFormat
   );
 
-Arcadia_Visuals_PixelBuffer*
-Arcadia_Visuals_PixelBuffer_createClone
+Arcadia_Imaging_PixelBuffer*
+Arcadia_Imaging_PixelBuffer_createClone
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* other
+    Arcadia_Imaging_PixelBuffer* other
   );
 
 /// @brief Get the width of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The width of this pixel buffer.
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getWidth
+Arcadia_Imaging_PixelBuffer_getWidth
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 /// @brief Get the height of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The height of this pixel buffer.
 Arcadia_Integer32Value
-Arcadia_Visuals_PixelBuffer_getHeight
+Arcadia_Imaging_PixelBuffer_getHeight
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_PixelBuffer* self
+    Arcadia_Imaging_PixelBuffer* self
   );
 
 #endif // ARCADIA_IMAGING_PIXELBUFFER_H_INCLUDED

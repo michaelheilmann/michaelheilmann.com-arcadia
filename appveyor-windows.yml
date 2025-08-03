@@ -129,7 +129,7 @@ deploy:
     description: 'michaelheilmann.com $(APPVEYOR_REPO_BRANCH) branch v$(APPVEYOR_BUILD_VERSION)'
     provider: GitHub
     auth_token:
-        secure: iTg7jon0UCvoGT5y2flVxHlEyPuE8LxoxE7klXTI0v/wqICc0x5LFlgRlkeyPRhqeottkL03dWNUD0svNte9w/jTW+27iDmI8YywkfrnRECQpBT1kTeJVxjuJ0t49CjH # encrypted token from GitHub
+        secure: iTg7jon0UCvoGT5y2flVxMHPG2pSjZu8T3La9iuSdwdyBf2sOqZHu5aQLNLUKSghkVVOURFuvBem2GcnSb4s4jNGDn/HGHzEQV0Mc+Ivf6aI0xpNy38y17xZbslgmxe8 # encrypted token from GitHub
         artifact: $(ARCHIVE_FILENAME) # upload the artifact
     draft: true
     prerelease: false

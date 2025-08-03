@@ -35,7 +35,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.ApplicationMessage", Arcadia_Visuals_ApplicationEvent, u8"Arcadia.Visuals.Event", Arcadia_Visuals_Event, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.ApplicationEvent", Arcadia_Visuals_ApplicationEvent,
+                         u8"Arcadia.Visuals.Event", Arcadia_Visuals_Event,
+                         &_typeOperations);
 
 static void
 Arcadia_Visuals_ApplicationEvent_constructImpl

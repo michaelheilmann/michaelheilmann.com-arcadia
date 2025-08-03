@@ -47,7 +47,8 @@
 ///     )
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Application", Arcadia_Visuals_Application, u8"Arcadia.Object")
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Application", Arcadia_Visuals_Application,
+                          u8"Arcadia.Object")
 
 struct Arcadia_Visuals_Application {
   Arcadia_Object _parent;

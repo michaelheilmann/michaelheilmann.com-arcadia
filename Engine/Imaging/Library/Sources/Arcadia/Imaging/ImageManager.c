@@ -29,10 +29,10 @@
   #error("environment not (yet) supported")
 #endif
 
-static Arcadia_Visuals_ImageManager* g_instance = NULL;
+static Arcadia_Imaging_ImageManager* g_instance = NULL;
 
 static void
-Arcadia_Visuals_ImageManager_constructImpl
+Arcadia_Imaging_ImageManager_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -40,30 +40,30 @@ Arcadia_Visuals_ImageManager_constructImpl
     Arcadia_Value* argumentValues
   );
 
-static Arcadia_Visuals_ImageManager*
-Arcadia_Visuals_ImageManager_create
+static Arcadia_Imaging_ImageManager*
+Arcadia_Imaging_ImageManager_create
   (
     Arcadia_Thread* thread
   );
 
 static void
-Arcadia_Visuals_ImageManager_visit
+Arcadia_Imaging_ImageManager_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ImageManager* self
+    Arcadia_Imaging_ImageManager* self
   );
 
 static void
-Arcadia_Visuals_ImageManager_destroyCallback
+Arcadia_Imaging_ImageManager_destroyCallback
   (
     void* observer,
     void* observed
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_ImageManager_constructImpl,
+  .construct = &Arcadia_Imaging_ImageManager_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Visuals_ImageManager_visit,
+  .visit = &Arcadia_Imaging_ImageManager_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -71,12 +71,12 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.ImageManager", Arcadia_Visuals_ImageManager,
+Arcadia_defineObjectType(u8"Arcadia.Imaging.ImageManager", Arcadia_Imaging_ImageManager,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_ImageManager_constructImpl
+Arcadia_Imaging_ImageManager_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -84,8 +84,8 @@ Arcadia_Visuals_ImageManager_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Visuals_ImageManager* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Visuals_ImageManager_getType(thread);
+  Arcadia_Imaging_ImageManager* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Imaging_ImageManager_getType(thread);
   {
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -105,9 +105,9 @@ Arcadia_Visuals_ImageManager_constructImpl
   writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_TifImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  writer = (Arcadia_Imaging_ImageWriter*)PngImageWriter_create(thread);
+  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Linux_PngImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
-  writer = (Arcadia_Imaging_ImageWriter*)BmpImageWriter_create(thread);
+  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Linux_BmpImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
 #else
   #error("environment not (yet) supported")
@@ -115,8 +115,8 @@ Arcadia_Visuals_ImageManager_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
-static Arcadia_Visuals_ImageManager*
-Arcadia_Visuals_ImageManager_create
+static Arcadia_Imaging_ImageManager*
+Arcadia_Imaging_ImageManager_create
   (
     Arcadia_Thread* thread
   )
@@ -124,15 +124,15 @@ Arcadia_Visuals_ImageManager_create
   Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
   };
-  Arcadia_Visuals_ImageManager* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_ImageManager_getType(thread), 0, &argumentValues[0]);
+  Arcadia_Imaging_ImageManager* self = Arcadia_allocateObject(thread, _Arcadia_Imaging_ImageManager_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
 static void
-Arcadia_Visuals_ImageManager_visit
+Arcadia_Imaging_ImageManager_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ImageManager* self
+    Arcadia_Imaging_ImageManager* self
   )
 {
   if (self->writers) {
@@ -141,7 +141,7 @@ Arcadia_Visuals_ImageManager_visit
 }
 
 static void
-Arcadia_Visuals_ImageManager_destroyCallback
+Arcadia_Imaging_ImageManager_destroyCallback
   (
     void* observer,
     void* observed
@@ -150,15 +150,15 @@ Arcadia_Visuals_ImageManager_destroyCallback
   g_instance = NULL;
 }
 
-Arcadia_Visuals_ImageManager*
-Arcadia_Visuals_ImageManager_getOrCreate
+Arcadia_Imaging_ImageManager*
+Arcadia_Imaging_ImageManager_getOrCreate
   (
     Arcadia_Thread* thread
   )
 {
   if (!g_instance) {
-    Arcadia_Visuals_ImageManager* instance = Arcadia_Visuals_ImageManager_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_Visuals_ImageManager_destroyCallback);
+    Arcadia_Imaging_ImageManager* instance = Arcadia_Imaging_ImageManager_create(thread);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_Imaging_ImageManager_destroyCallback);
     g_instance = instance;
   }
   return g_instance;
@@ -185,10 +185,10 @@ filter
 }
 
 Arcadia_List*
-Arcadia_Visuals_ImageManager_getWriters
+Arcadia_Imaging_ImageManager_getWriters
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_ImageManager* self,
+    Arcadia_Imaging_ImageManager* self,
     Arcadia_String* extension
   )
 {

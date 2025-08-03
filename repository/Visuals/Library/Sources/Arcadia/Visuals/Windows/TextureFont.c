@@ -16,7 +16,7 @@
 #include "Arcadia/Visuals/Windows/TextureFont.h"
 
 static void
-TextureFontWindows_constructImpl
+Arcadia_Visuals_Windows_TextureFont_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -25,15 +25,15 @@ TextureFontWindows_constructImpl
   );
 
 static void
-TextureFontWindows_destruct
+Arcadia_Visuals_Windows_TextureFont_destruct
   (
     Arcadia_Thread* thread,
-    TextureFontWindows* self
+    Arcadia_Visuals_Windows_TextureFont* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &TextureFontWindows_constructImpl,
-  .destruct = &TextureFontWindows_destruct,
+  .construct = &Arcadia_Visuals_Windows_TextureFont_constructImpl,
+  .destruct = &Arcadia_Visuals_Windows_TextureFont_destruct,
   .visit = NULL,
 };
 
@@ -42,10 +42,12 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"TextureFontWindows", TextureFontWindows, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.TextureFont", Arcadia_Visuals_Windows_TextureFont,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
-TextureFontWindows_constructImpl
+Arcadia_Visuals_Windows_TextureFont_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -53,8 +55,8 @@ TextureFontWindows_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  TextureFontWindows* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _TextureFontWindows_getType(thread);
+  Arcadia_Visuals_Windows_TextureFont* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_TextureFont_getType(thread);
   {
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -88,17 +90,17 @@ TextureFontWindows_constructImpl
   DeleteDC(hDeviceContext);
   hDeviceContext = NULL;
   // Create a bitmap of that size. Draw the symbol to the bitmap.
-  _self->bitmap = Windows_NativeBitmap_create(thread, width, height);
+  _self->bitmap = Arcadia_Visuals_Windows_Bitmap_create(thread, width, height);
   DrawTextA(_self->bitmap->hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
 static void
-TextureFontWindows_destruct
+Arcadia_Visuals_Windows_TextureFont_destruct
   (
     Arcadia_Thread* thread,
-    TextureFontWindows* self
+    Arcadia_Visuals_Windows_TextureFont* self
   )
 {
   if (NULL != self->hFont) {
@@ -107,8 +109,8 @@ TextureFontWindows_destruct
   }
 }
 
-TextureFontWindows*
-TextureFontWindows_create
+Arcadia_Visuals_Windows_TextureFont*
+Arcadia_Visuals_Windows_TextureFont_create
   (
     Arcadia_Thread* thread
   )
@@ -116,15 +118,15 @@ TextureFontWindows_create
   Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
   };
-  TextureFontWindows* self = Arcadia_allocateObject(thread, _TextureFontWindows_getType(thread), 0, &argumentValues[0]);
+  Arcadia_Visuals_Windows_TextureFont* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_TextureFont_getType(thread), 0, &argumentValues[0]);
   return self;
 }
 
 void
-TextureFontWindows_setCodePoint
+Arcadia_Visuals_Windows_TextureFont_setCodePoint
   (
     Arcadia_Thread* thread,
-    TextureFontWindows* self,
+    Arcadia_Visuals_Windows_TextureFont* self,
     Arcadia_Natural32Value codePoint
   )
 {
@@ -155,17 +157,17 @@ TextureFontWindows_setCodePoint
     DeleteDC(hDeviceContext);
     hDeviceContext = NULL;
     // Create a bitmap of that size. Draw the symbol to the bitmap.
-    self->bitmap = Windows_NativeBitmap_create(thread, width, height);
+    self->bitmap = Arcadia_Visuals_Windows_Bitmap_create(thread, width, height);
     DrawTextA(self->bitmap->hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   }
 }
 
-Arcadia_Visuals_PixelBuffer*
-TextureFontWindows_getPixelBuffer
+Arcadia_Imaging_PixelBuffer*
+Arcadia_Visuals_Windows_TextureFont_getPixelBuffer
   (
     Arcadia_Thread* thread,
-    TextureFontWindows* self
+    Arcadia_Visuals_Windows_TextureFont* self
   )
 {
-  return Windows_NativeBitmap_toPixelBuffer(thread, self->bitmap);
+  return Arcadia_Visuals_Windows_Bitmap_toPixelBuffer(thread, self->bitmap);
 }

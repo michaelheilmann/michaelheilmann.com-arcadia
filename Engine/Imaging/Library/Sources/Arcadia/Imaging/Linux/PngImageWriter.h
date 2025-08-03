@@ -19,16 +19,16 @@
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Imaging/ImageWriter.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Imaging.Linux.PngImageWriter", PngImageWriter,
+Arcadia_declareObjectType(u8"Arcadia.Imaging.Linux.PngImageWriter", Arcadia_Imaging_Linux_PngImageWriter,
                           u8"Arcadia.Imaging.ImageWriter");
 
-struct PngImageWriter {
+struct Arcadia_Imaging_Linux_PngImageWriter {
   Arcadia_Imaging_ImageWriter _parent;
   Arcadia_ImmutableList* supportedTypes;
 };
 
-PngImageWriter*
-PngImageWriter_create
+Arcadia_Imaging_Linux_PngImageWriter*
+Arcadia_Imaging_Linux_PngImageWriter_create
   (
     Arcadia_Thread* thread
   );

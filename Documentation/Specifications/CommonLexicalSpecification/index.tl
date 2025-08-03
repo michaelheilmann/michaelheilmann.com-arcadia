@@ -24,7 +24,7 @@
     </p>
     
     @{include("Specifications/CommonLexicalSpecification/1. Grammars.i")}
-    @{include("Specifications/CommonLexicalSpecification/3. Full Profile Lexical Specification.i")} 
+    @{include("Specifications/CommonLexicalSpecification/2. Full Profile Lexical Specification.i")} 
     
   </div>
   <div class="right-column">
@@ -52,6 +52,7 @@
         <li><a href="#full-profile-lexical-specification-digit">3.14 decimal digit</a></li>
         <li><a href="#full-profile-lexical-specification-digit">3.15 hexadecimal digit</a></li>
         <li><a href="#full-profile-lexical-specification-alphanumeric">3.16 alphanumeric</a></li>
+        <li><a href="#full-profile-lexical-specification-period">3.17 period</a></li>
       </ul>
     </nav>
   </div>   
@@ -59,8 +60,9 @@
   <footer>
     <div class="left-column"></div>
     <div class="center-column"></div>
-    <div class="right-column"></div>
-    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 09 July 2025.</span>
+    <div class="right-column">
+      <div>Website maintained by Michael Heilmann.</div>
+      <div>Last modified on 3 August 2025.</div>
     </div>
   </footer>
 </body>

@@ -27,31 +27,42 @@
   The following table denotes the value of the constant for the respective <my-mv>Name</my-mv>
   </p>
   <table>
-  <tr><td><code><span>Name</span></code>        </td><td>Value</td></tr>
-  <tr><td><code>AllocationFailed</code>         </td><td>An allocation failed.</td></tr>
-  <tr><td><code>ArgumentTypeInvalid</code>      </td><td>The type of an argument is invalid.</td></tr>
-  <tr><td><code>ArgumentValueInvalid</code>     </td><td>The value of an argument is invalid.</td></tr>
+  <tr><td><code><span>Name</span></code></td>                                                      <td>Value</td></tr>
+  <tr><td><code id="Arcadia_Status_AllocationFailed">AllocationFailed</code></td>                  <td>An allocation failed.</td></tr>
+  
+  <tr><td><code id="Arcadia_Status_ArgumentTypeInvalid">ArgumentTypeInvalid</code></td>            <td>The type of an argument is invalid.</td></tr>
+  <tr><td><code id="Arcadia_Status_ArgumentValueInvalid">ArgumentValueInvalid</code></td>          <td>The value of an argument is invalid.</td></tr>
 
-  <tr><td><code>ConversionFailed</code>         </td><td>A conversion failed.</td></tr>
+  <tr><td><code id="Arcadia_Status_ConversionFailed">ConversionFailed</code></td>                  <td>A conversion failed.</td></tr>
 
-  <tr><td><code>DivisionByZero</code>           </td><td>An divions by zero was detected.</td></tr>
+  <tr><td><code id="Arcadia_Status_DivisionByZero">DivisionByZero</code></td>                      <td>An divions by zero was detected.</td></tr>
 
-  <tr><td><code>EncodingInvalid</code>          </td><td>An encoding is invalid.</td></tr>
-  <tr><td><code>Exists</code>                   </td><td>Something exists (but should not).</td></tr>
-  <tr><td><code>FileSystemOperationFailed</code></td><td>A file system operation failed.</td></tr>
+  <tr><td><code id="Arcadia_Status_EncodingInvalid">EncodingInvalid</code></td>                    <td>An encoding is invalid.</td></tr>
+  <tr><td><code id="Arcadia_Status_EnvironmentFailed">EnvironmentFailed</code></td>                <td>The environment failed.</td></tr>
+  <tr><td><code id="Arcadia_Status_Exists">Exists</code></td>                                      <td>Something exists (but should not).</td></tr>
+
+  <tr><td><code id="Arcadia_Status_Found">Found</code></td>                                        <td>Something was found.</td>
+
+  <tr><td><code id="Arcadia_Status_FileSystemOperationFailed">FileSystemOperationFailed</code></td><td>A file system operation failed.</td></tr>
 
 
-  <tr><td><code>Initialized</code>              </td><td>Something was initialized (but should not have been initialized).</td></tr>
-  <tr><td><code>NotExists</code>                </td><td>Something does not exist.</td></tr>
-  <tr><td><code>NumberOfArgumentsInvalid</code> </td><td>The number of arguments is invalid.</td></tr>
-  <tr><td><code>OperationInvalid</code>         </td><td>An operation is invalid.</td></tr>
-  <tr><td><code>SemanticalError</code>          </td><td></td></tr>
-  <tr><td><code>SyntacticalError</code>         </td><td></td></tr>
+  <tr><td><code id="Arcadia_Status_Initialized">Initialized</code></td>                            <td>Something was initialized (but should not have been initialized).</td></tr>
+  
+  <tr><td><code id="Arcadia_Status_LexicalError">LexicalError</code></td>                          <td>A lexical error.</td></tr>
+  
+  <tr><td><code id="Arcadia_Status_NotExists">NotExists</code></td>                                <td>Something does not exist.</td></tr>
+  <tr><td><code id="Arcadia_Status_NotFound">NotFound</code></td>                                  <td>Something was not found.</td>
+  <tr><td><code id="Arcadia_Status_NumberOfArgumentsInvalid">NumberOfArgumentsInvalid</code></td>  <td>The number of arguments is invalid.</td></tr>
 
-  <tr><td><code>TestFailed</code>               </td><td>A test failed. This is used by the built-in tests that ensure correctness.</td></tr>
-  <tr><td><code>TypeExists</code>               </td><td>A type exists (but should not).</td></tr>
-  <tr><td><code>TypeNotExists</code>            </td><td>A type does not exist (but should).</td></tr>
+  <tr><td><code id="Arcadia_Status_OperationInvalid">OperationInvalid</code></td>                  <td>An operation is invalid.</td></tr>
 
-  <tr><td><code>Uninitialized</code>            </td><td>Something was uninitialized (but should have been initialized).</td></tr>
+  <tr><td><code id="Arcadia_Status_SemanticalError">SemanticalError</code></td>                    <td>A semantical error.</td></tr>
+  <tr><td><code id="Arcadia_Status_SyntacticalError">SyntacticalError</code></td>                  <td>A syntactical error.</td></tr>
+
+  <tr><td><code id="Arcadia_Status_TestFailed">TestFailed</code></td>                              <td>A test failed. This is used by the built-in tests that ensure correctness.</td></tr>
+  <tr><td><code id="Arcadia_Status_TypeExists">TypeExists</code></td>                              <td>A type exists (but should not).</td></tr>
+  <tr><td><code id="Arcadia_Status_TypeNotExists">TypeNotExists</code></td>                        <td>A type does not exist (but should).</td></tr>
+
+  <tr><td><code id="Arcadia_Status_Uninitialized">Uninitialized</code></td>                        <td>Something was uninitialized (but should have been initialized).</td></tr>
 
   </table>

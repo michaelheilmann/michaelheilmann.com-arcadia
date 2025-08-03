@@ -28,6 +28,17 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window, u8
 struct Arcadia_Visuals_Window {
   Arcadia_Object _parent;
 
+  struct {
+    /// The position of the left side of the window.
+    int left;
+    /// The position of the top side of the window.
+    int top;
+    /// The width of the window.
+    int width;
+    /// The height of the window.
+    int height;
+  } bounds;
+
   void (*open)(Arcadia_Thread*, Arcadia_Visuals_Window*);
 
   void (*close)(Arcadia_Thread*, Arcadia_Visuals_Window*);

@@ -360,7 +360,9 @@ updateDisplayMode
   Arcadia_List_insertBack(thread, values,
                           Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1)))));
   Arcadia_List_insertBack(thread, values,
-                          Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"borderless", sizeof(u8"borderless") - 1)))));
+                          Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"borderless fullscreen window", sizeof(u8"borderless fullscreen window") - 1)))));
+  Arcadia_List_insertBack(thread, values,
+                          Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"fullscreen", sizeof(u8"fullscreen") - 1)))));
   key = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowMode", sizeof(u8"windowMode") - 1)));
   _validateStringEnumeration(thread, node, key, values, 0);
 
@@ -413,7 +415,7 @@ loadConfiguration
     Arcadia_Thread* thread
   )
 {
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FilePath* file;
 
   // (1) Ensure the organization's configuration folder exists.
@@ -503,7 +505,31 @@ print
     currentNumberOfAttempts++;
   }
 }
-  
+
+static Arcadia_Integer32Value getHorizontalResolution(Arcadia_Thread* thread, Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration) {
+  char const* path[] = {
+    u8"visuals",
+    u8"horizontalResolution",
+  };
+  return Cfg2_getInteger32(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
+}
+
+static Arcadia_Integer32Value getVerticalResolution(Arcadia_Thread* thread, Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration) {
+  char const* path[] = {
+    u8"visuals",
+    u8"verticalResolution",
+  };
+  return Cfg2_getInteger32(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
+}
+
+static Arcadia_Integer32Value getColorDepth(Arcadia_Thread* thread, Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration) {
+  char const* path[] = {
+    u8"visuals",
+    u8"colorDepth",
+  };
+  return Cfg2_getInteger32(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
+}
+
 void
 main1
   (
@@ -531,7 +557,7 @@ main1
     
     Arcadia_Object_lock(thread, (Arcadia_Object*)application);
 
-    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
     Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
     Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
     Arcadia_List* displayDevices = Arcadia_Visuals_Application_getDisplayDevices(thread,application);
@@ -613,14 +639,15 @@ main1
       };
       const char* values[] = {
         u8"windowed",
-        u8"borderless",
+        u8"borderless fullscreen window",
+        u8"fullscreen",
       };
       Arcadia_JumpTarget jumpTarget;
       Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
       if (Arcadia_JumpTarget_save(&jumpTarget)) {
         windowModeString = Cfg2_getString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
         Arcadia_BooleanValue found = Arcadia_BooleanValue_False;
-        for (Arcadia_SizeValue i = 0, n = 2; i < n; ++i) {
+        for (Arcadia_SizeValue i = 0, n = 3; i < n; ++i) {
           Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowModeString);
           Arcadia_Value b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, values[i], strlen(values[i])))));
           if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
@@ -646,7 +673,7 @@ main1
     audialsInitialized = Arcadia_BooleanValue_True;
 
     // (2) Play sine wave.
-    Audials_playSine(thread);
+    //Audials_playSine(thread);
 
     // (3) Create a window.
     window = Arcadia_Visuals_Application_createWindow(thread, application);
@@ -663,15 +690,36 @@ main1
     Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
     
     // (6) Set the window mode.
-    Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowMode),
-                  b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1))));
+    Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowMode);
+    Arcadia_Value b;
+
+    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1))));
     if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
-      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
-    } else {
       Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_False);
     }
+    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"borderless fullscreen window", sizeof(u8"borderless fullscreen window") - 1))));
+    if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
+    }
+    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"fullscreen", sizeof(u8"fullscreen") - 1))));
+    if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
+      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
+      Arcadia_Integer32Value horizontalResolution = getHorizontalResolution(thread, configuration),
+                             verticalResolution = getVerticalResolution(thread, configuration),
+                             colorDepth = getColorDepth(thread, configuration);
+      Arcadia_List* list = Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes(thread, displayDevice);
+      for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)list); i < n; ++i) {
+        Arcadia_Visuals_DisplayMode* displayMode = (Arcadia_Visuals_DisplayMode*)Arcadia_List_getObjectReferenceValueAt(thread, list, i);
+        if (horizontalResolution == Arcadia_Visuals_DisplayMode_getHorizontalResolution(thread, displayMode) &&
+            verticalResolution == Arcadia_Visuals_DisplayMode_getVerticalResolution(thread, displayMode) &&
+            colorDepth == Arcadia_Visuals_DisplayMode_getColorDepth(thread, displayMode)) {
+          Arcadia_Visuals_DisplayMode_apply(thread, displayMode);
+          break;
+        }
+      }
+    }
     Arcadia_Visuals_Window_setPosition(thread, window, left, top);
-    Arcadia_Visuals_Window_setSize(thread, window, right - left + 1, bottom - top + 1);
+    Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
     
     
     Arcadia_Integer32Value width;

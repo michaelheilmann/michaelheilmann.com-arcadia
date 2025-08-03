@@ -163,9 +163,9 @@ IcoImageWriter_getPngImageWriter
     IcoImageWriter* self
   )
 {
-  Arcadia_Visuals_ImageManager* imageManager = Arcadia_Visuals_ImageManager_getOrCreate(thread);
+  Arcadia_Imaging_ImageManager* imageManager = Arcadia_Imaging_ImageManager_getOrCreate(thread);
   Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"png", sizeof(u8"png") - 1)));
-  Arcadia_List* writers = Arcadia_Visuals_ImageManager_getWriters(thread, imageManager, extension);
+  Arcadia_List* writers = Arcadia_Imaging_ImageManager_getWriters(thread, imageManager, extension);
   if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)writers)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
     Arcadia_Thread_popJumpTarget(thread);
@@ -185,7 +185,7 @@ IcoImageWriter_writeIcoToPathImpl
 {
   Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(thread);
   IcoImageWriter_writeIcoToByteBufferImpl(thread, self, sourcePixelBuffers, targetByteBuffer);
-  Arcadia_FileSystem_setFileContents(thread, Arcadia_FileSystem_create(thread), Arcadia_FilePath_parseUnix(thread, Arcadia_String_getBytes(thread, targetPath), Arcadia_String_getNumberOfBytes(thread, targetPath)), targetByteBuffer);
+  Arcadia_FileSystem_setFileContents(thread, Arcadia_FileSystem_getOrCreate(thread), Arcadia_FilePath_parseUnix(thread, Arcadia_String_getBytes(thread, targetPath), Arcadia_String_getNumberOfBytes(thread, targetPath)), targetByteBuffer);
 }
 
 static void
@@ -227,17 +227,17 @@ IcoImageWriter_writeIcoToByteBufferImpl
   Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(thread);
   Arcadia_Imaging_ImageWriterParameters* pngParameters = Arcadia_Imaging_ImageWriterParameters_createByteBuffer(thread, temporary, pngExtension);
   for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers); i < n; ++i) {
-    Arcadia_Visuals_PixelBuffer* pixelBuffer = (Arcadia_Visuals_PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
+    Arcadia_Imaging_PixelBuffer* pixelBuffer = (Arcadia_Imaging_PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
     Arcadia_ByteBuffer_clear(thread, temporary);
     Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBuffers);
     Arcadia_List_insertBackObjectReferenceValue(thread, pixelBuffers, pixelBuffer);
     Arcadia_Imaging_ImageWriter_write(thread, pngImageWriter, pixelBuffers, pngParameters);
-    if (Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8 != Arcadia_Visuals_PixelBuffer_getPixelFormat(thread, pixelBuffer)) {
+    if (Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8 != Arcadia_Imaging_PixelBuffer_getPixelFormat(thread, pixelBuffer)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
-    size_t width = Arcadia_Visuals_PixelBuffer_getNumberOfColumns(thread, pixelBuffer),
-           height = Arcadia_Visuals_PixelBuffer_getNumberOfRows(thread, pixelBuffer);
+    size_t width = Arcadia_Imaging_PixelBuffer_getNumberOfColumns(thread, pixelBuffer),
+           height = Arcadia_Imaging_PixelBuffer_getNumberOfRows(thread, pixelBuffer);
     if (width > 256) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
@@ -265,7 +265,7 @@ IcoImageWriter_writeIcoToByteBufferImpl
     offset += Arcadia_ByteBuffer_getSize(thread, temporary);
   }
   for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers); i < n; ++i) {
-    Arcadia_Visuals_PixelBuffer* pixelBuffer = (Arcadia_Visuals_PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
+    Arcadia_Imaging_PixelBuffer* pixelBuffer = (Arcadia_Imaging_PixelBuffer*)Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, i);
     Arcadia_ByteBuffer_clear(thread, temporary);
     Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBuffers);
     Arcadia_List_insertBackObjectReferenceValue(thread, pixelBuffers, pixelBuffer);

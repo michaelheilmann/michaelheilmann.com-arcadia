@@ -99,7 +99,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.FileSystem", Arcadia_FileSystem, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.FileSystem", Arcadia_FileSystem,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 Arcadia_FileSystem_constructImpl
@@ -615,4 +617,28 @@ Arcadia_FileSystem_getExecutablePath
 #else
   #error("environment not (yet) supported")
 #endif
+}
+
+static Arcadia_FileSystem* g_instance = NULL;
+
+static void
+Arcadia_FileSystem_destroyCallback
+  (
+    void* observer,
+    void* observed
+  )
+{ g_instance = NULL; }
+
+Arcadia_FileSystem*
+Arcadia_FileSystem_getOrCreate
+  (
+    Arcadia_Thread* thread
+  )
+{
+  if (!g_instance) {
+    Arcadia_FileSystem* instance = Arcadia_FileSystem_create(thread);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_FileSystem_destroyCallback);
+    g_instance = instance;
+  }
+  return g_instance;
 }

@@ -23,7 +23,8 @@ typedef struct Arcadia_Visuals_Linux_DisplayDevice Arcadia_Visuals_Linux_Display
 // https://www.x.org/releases/current/doc/randrproto/randrproto.txt
 #include <X11/extensions/Xrandr.h>
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.DisplayMode", Arcadia_Visuals_Linux_DisplayMode, u8"Arcadia.Visuals.DisplayMode");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.DisplayMode", Arcadia_Visuals_Linux_DisplayMode,
+                          u8"Arcadia.Visuals.DisplayMode");
 
 struct Arcadia_Visuals_Linux_DisplayMode {
   Arcadia_Visuals_DisplayMode _parent;

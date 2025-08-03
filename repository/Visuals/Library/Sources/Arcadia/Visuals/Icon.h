@@ -25,7 +25,8 @@
 ///   construct()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Icon", Arcadia_Visuals_Icon, u8"Arcadia.Object")
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Icon", Arcadia_Visuals_Icon,
+                          u8"Arcadia.Object")
 
 struct Arcadia_Visuals_Icon {
   Arcadia_Object _parent;

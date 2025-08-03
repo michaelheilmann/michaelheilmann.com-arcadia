@@ -129,4 +129,11 @@ Arcadia_FileSystem_getWorkingDirectory
     Arcadia_FileSystem* self
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getOrCreate
+Arcadia_FileSystem*
+Arcadia_FileSystem_getOrCreate
+  (
+    Arcadia_Thread* thread
+  );
+
 #endif // ARCADIA_RING2_IMPLEMENTATION_FILESYSTEM_H_INCLUDED

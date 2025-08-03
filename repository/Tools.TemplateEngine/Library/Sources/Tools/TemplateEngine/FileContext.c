@@ -15,6 +15,10 @@
 
 #include "Tools/TemplateEngine/FileContext.h"
 
+#include "Tools/TemplateEngine/Ast.h"
+#include "Tools/TemplateEngine/Context.h"
+#include "Tools/TemplateEngine/Environment.h"
+
 static Arcadia_BooleanValue
 is
   (
@@ -171,8 +175,6 @@ onString
   Arcadia_Thread_jump(thread);
 }
 
-#include "Tools/TemplateEngine/Ast.h"
-
 static Arcadia_String*
 getLiteral
   (
@@ -195,7 +197,7 @@ evalAst
     case GETVARIABLE: {
       Arcadia_Value k = Arcadia_Value_Initializer();
       Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)ast->name);
-      Arcadia_Value v = Arcadia_Map_get(thread, context->environment, k);
+      Arcadia_Value v = Environment_get(thread, context->environment, k, Arcadia_BooleanValue_True);
       if (Arcadia_Value_isVoidValue(&v)) {
         // Error.
         Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
@@ -381,7 +383,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Tools.TemplateEngine.FileContext", FileContext, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.TemplateEngine.FileContext", FileContext,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 FileContext_destruct
@@ -421,27 +425,16 @@ FileContext_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (2 != numberOfArgumentValues) {
+
+  if (3 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+
   _self->context = (Context*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Context_getType(thread));
-  _self->sourceFilePath = (Arcadia_FilePath*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_FilePath_getType(thread));
+  _self->environment = (Environment*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Environment_getType(thread));
+  _self->sourceFilePath = (Arcadia_FilePath*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[2], _Arcadia_FilePath_getType(thread));
   _self->source = NULL;
-  _self->environment = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
-  Arcadia_Value k, v;
-
-  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
-  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
-  Arcadia_Map_set(thread, _self->environment, k, v, NULL, NULL);
-
-  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"generatorName", sizeof(u8"generatorName") - 1)));
-  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"Michael Heilmann's Arcadia Template Engine", sizeof(u8"Michael Heilmann's Arcadia Template Engine") - 1)));
-  Arcadia_Map_set(thread, _self->environment, k, v, NULL, NULL);
-
-  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"generatorHome", sizeof(u8"generatorHome") - 1)));
-  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
-  Arcadia_Map_set(thread, _self->environment, k, v, NULL, NULL);
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
@@ -451,14 +444,16 @@ FileContext_create
   (
     Arcadia_Thread* thread,
     Context* context,
+    Environment* environment,
     Arcadia_FilePath* sourceFilePath
   )
 {
   Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)context),
+    Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)environment),
     Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)sourceFilePath),
   };
-  FileContext* self = Arcadia_allocateObject(thread, _FileContext_getType(thread), 2, &argumentValues[0]);
+  FileContext* self = Arcadia_allocateObject(thread, _FileContext_getType(thread), 3, &argumentValues[0]);
   return self;
 }
 

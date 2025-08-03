@@ -55,6 +55,11 @@ Arcadia_Visuals_Window_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
 
+  _self->bounds.left = 0;
+  _self->bounds.top = 0;
+  _self->bounds.width = 1;
+  _self->bounds.height = 1;
+
   _self->open = NULL;
   _self->close = NULL;
 

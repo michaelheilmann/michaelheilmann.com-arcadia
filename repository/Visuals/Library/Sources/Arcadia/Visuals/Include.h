@@ -18,7 +18,14 @@
 
 #include "Arcadia/Ring2/Include.h"
 
+#include "Arcadia/Visuals/Events/CanvasActivationStateChangedEvent.h"
+#include "Arcadia/Visuals/Events/CanvasDpiChangedEvent.h"
 #include "Arcadia/Visuals/Events/CanvasEvent.h"
+#include "Arcadia/Visuals/Events/CanvasSizeChangedEvent.h"
+#include "Arcadia/Visuals/Events/WindowClosedEvent.h"
+#include "Arcadia/Visuals/Events/WindowPositionChangedEvent.h"
+#include "Arcadia/Visuals/Events/WindowSizeChangedEvent.h"
+
 #include "Arcadia/Visuals/CullMode.h"
 #include "Arcadia/Visuals/DisplayDevice.h"
 #include "Arcadia/Visuals/DisplayMode.h"

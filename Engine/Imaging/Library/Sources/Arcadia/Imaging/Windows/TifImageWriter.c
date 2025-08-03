@@ -57,7 +57,7 @@ configure
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_TifImageWriter* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
@@ -81,7 +81,7 @@ getFormat
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_TifImageWriter* self,
-    Arcadia_Visuals_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters,
     GUID const** guid
   )
@@ -115,11 +115,11 @@ Arcadia_Imaging_Windows_TifImageWriter_writeToPathImpl
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue sourceObject = Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, 0);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Visuals_PixelBuffer_getType(thread))) {
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Visuals_PixelBuffer* sourcePixelBuffer = (Arcadia_Visuals_PixelBuffer*)sourceObject;
+  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject;
   Arcadia_Imaging_Windows_WicImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WicImageWriterBase*)self, sourcePixelBuffer, parameters);
 }
 
@@ -139,11 +139,11 @@ Arcadia_Imaging_Windows_TifImageWriter_writeToByteBufferImpl
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue sourceObject = Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, 0);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Visuals_PixelBuffer_getType(thread))) {
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Visuals_PixelBuffer* sourcePixelBuffer = (Arcadia_Visuals_PixelBuffer*)sourceObject;
+  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject;
   Arcadia_Imaging_Windows_WicImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WicImageWriterBase*)self, sourcePixelBuffer, parameters);
 }
 
@@ -162,11 +162,11 @@ Arcadia_Imaging_Windows_TifImageWriter_write
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue sourceObject = Arcadia_List_getObjectReferenceValueAt(thread, source, 0);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Visuals_PixelBuffer_getType(thread))) {
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Visuals_PixelBuffer* sourcePixelBuffer = (Arcadia_Visuals_PixelBuffer*)sourceObject;
+  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject;
   Arcadia_Imaging_Windows_WicImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WicImageWriterBase*)self, sourcePixelBuffer, target);
 }
 
@@ -220,8 +220,8 @@ Arcadia_Imaging_Windows_TifImageWriter_constructImpl
   ((Arcadia_Imaging_ImageWriter*)_self)->getSupportedTypes = (Arcadia_ImmutableList * (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*))& Arcadia_Imaging_Windows_TifImageWriter_getSupportedTypes;
   ((Arcadia_Imaging_ImageWriter*)_self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & Arcadia_Imaging_Windows_TifImageWriter_write;
 
-  ((Arcadia_Imaging_Windows_WicImageWriterBase*)_self)->getFormat = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Visuals_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*, GUID const**)) & getFormat;
-  ((Arcadia_Imaging_Windows_WicImageWriterBase*)_self)->configure = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Visuals_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*)) & configure;
+  ((Arcadia_Imaging_Windows_WicImageWriterBase*)_self)->getFormat = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*, GUID const**)) & getFormat;
+  ((Arcadia_Imaging_Windows_WicImageWriterBase*)_self)->configure = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*)) & configure;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }

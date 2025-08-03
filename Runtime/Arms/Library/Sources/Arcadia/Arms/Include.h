@@ -116,6 +116,28 @@ Arms_removeNotifyDestroyAll
 
 #endif // Arcadia_Arms_Configuration_WithNotifyDestroy
 
+#if defined(Arcadia_Arms_Configuration_WithBarriers) && 1 == Arcadia_Arms_Configuration_WithBarriers
+
+// Ensures the invariant no black object may refer to a white object is preserved.
+// If source is black and target is white, then color target gray.
+static void
+Arms_forwardBarrier
+  (
+    void* source,
+    void* target
+  );
+
+// Ensures the invariant no black object may refer to a white object is preserved.
+// If source is black and target is white, then color source gray.
+static void
+Arms_backwardBarrier
+  (
+    void* source,
+    void* target
+  ); 
+
+#endif // Arcadia_Arms_Configuration_WithBarriers
+
 #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
 
 Arcadia_Arms_Status

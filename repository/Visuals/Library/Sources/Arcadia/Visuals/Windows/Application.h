@@ -26,7 +26,8 @@
 ///   construct()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Application", Arcadia_Visuals_Windows_Application, u8"Arcadia.Visuals.Application")
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Application", Arcadia_Visuals_Windows_Application,
+                          u8"Arcadia.Visuals.Application")
 
 struct Arcadia_Visuals_Windows_Application {
   Arcadia_Visuals_Application _parent;

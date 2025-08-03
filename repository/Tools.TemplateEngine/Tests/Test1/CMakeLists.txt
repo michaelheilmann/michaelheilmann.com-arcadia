@@ -29,7 +29,7 @@ list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools.TemplateEngine.Tests.Test1/Main.c)
 
 # Libraries.
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.Machine ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.Arms)
 
 EndProduct(${MyTestName})
 # Copy assets.

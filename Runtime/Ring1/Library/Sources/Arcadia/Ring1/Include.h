@@ -83,6 +83,7 @@
 #include "Arcadia/Ring1/Implementation/Status.h"
 
 #include "Arcadia/Ring1/Implementation/Thread.h"
+#include "Arcadia/Ring1/Implementation/ThreadExtensions.h"
 
 #include "Arcadia/Ring1/Implementation/swap.h"
 

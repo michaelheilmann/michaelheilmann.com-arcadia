@@ -326,12 +326,16 @@ body.my-error-page-1 header a, body.my-content-page-1 header a {
   color: var(--white);
 }
 
-body.my-error-page-1 main, body.my-content-page-1 main {
+body.my-error-page-1 main,
+body.my-content-page-1 main,
+body.my-error-page-1 footer,
+body.my-content-page-1 footer {
   margin-left: 16px;
   margin-right: 16px;
 }
 
-body.my-error-page-1 footer, body.my-content-page-1 footer {
+body.my-error-page-1 footer,
+body.my-content-page-1 footer {
   border-top-style: solid;
   border-top-width: 1px;
   margin-top: 16px;
@@ -370,7 +374,7 @@ body.my-content-page-1 div.right-column {
 
 body.my-error-page-1 div.right-column {
   flex-grow: 0;
-  width: 8vw;
+  width: 24vw;
 }
 
 body.my-error-page-1 main, body.my-content-page-1 main {
@@ -563,60 +567,6 @@ body.my-content-page-1 my-mv::before {
 /* Meta variables used in documentation of C elements. */
 body.my-content-page-1 my-mv::after {
   content: ">";
-}
-
-body {
-  /*Do not use CSS counters.*/
-  /*counter-reset: section-level-1 0 section-level-2 0 section-level-3 0 section-level-4 0;*/
-}
-
-body.my-content-page-1 h1
-{}
-
-body.my-content-page-1 h1::before
-{}
-
-body.my-content-page-1 h2 {
-  /*Do not use CSS counters.*/
-  /*counter-increment: section-level-1;*/
-  /*counter-reset: section-level-2 0;*/
-}
-
-body.my-content-page-1 h2::before {
-  /*Do not use CSS counters.*/
-  /*content: counter(section-level-1) ". ";*/
-}
-
-body.my-content-page-1 h3 {
-  /*Do not use CSS counters.*/
-  /*counter-increment: section-level-2;*/
-  /*counter-reset: section-level-3 0;*/
-}
-
-body.my-content-page-1 h3::before {
-  /*Do not use CSS counters.*/
-  /*content: counter(section-level-1) "." counter(section-level-2) ". ";
-}
-
-body.my-content-page-1 h4 {
-  /*Do not use CSS counters.*/
-  /*counter-increment: section-level-3;*/
-  /*counter-reset: section-level-4 0;*/
-}
-
-body.my-content-page-1 h4::before {
-  /*Do not use CSS counters.*/
-  /*content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) ". ";*/
-}
-
-body.my-content-page-1 h5 {
-  /*Do not use CSS counters.*/
-  /*counter-increment: section-level-4;*/
-}
-
-body.my-content-page-1 h5::before {
-  /*Do not use CSS counters.*/
-  /*content: counter(section-level-1) "." counter(section-level-2) "." counter(section-level-3) "." counter(section-level-4) ". ";*/
 }
 
 /* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */

@@ -31,7 +31,7 @@ main1
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_create(thread);
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
   for (int argi = 1; argi < argc - 1; ++argi) {

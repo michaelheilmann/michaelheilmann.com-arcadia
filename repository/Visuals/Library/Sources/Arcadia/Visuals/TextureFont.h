@@ -30,7 +30,7 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.TextureFont", Arcadia_Visuals_Textu
 
 struct Arcadia_Visuals_TextureFont {
   Arcadia_Object _parent;
-  Arcadia_Visuals_PixelBuffer* (*getPixelBuffer)(Arcadia_Thread* thread, Arcadia_Visuals_TextureFont* self);
+  Arcadia_Imaging_PixelBuffer* (*getPixelBuffer)(Arcadia_Thread* thread, Arcadia_Visuals_TextureFont* self);
 };
 
 Arcadia_Visuals_TextureFont*
@@ -39,7 +39,7 @@ Arcadia_Visuals_TextureFont_create
     Arcadia_Thread* thread
   );
 
-Arcadia_Visuals_PixelBuffer*
+Arcadia_Imaging_PixelBuffer*
 Arcadia_Visuals_TextureFont_getPixelBuffer
   (
     Arcadia_Thread* thread,

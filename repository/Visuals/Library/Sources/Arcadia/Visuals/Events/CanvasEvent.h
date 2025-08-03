@@ -19,7 +19,8 @@
 #include "Arcadia/Visuals/Events/Event.h"
 
 // https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasEvent
-Arcadia_declareObjectType(u8"Arcadia.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.CanvasEvent", Arcadia_Visuals_CanvasEvent,
+                          u8"Arcadia.Visuals.Event");
 
 struct Arcadia_Visuals_CanvasEvent {
   Arcadia_Visuals_Event _parent;

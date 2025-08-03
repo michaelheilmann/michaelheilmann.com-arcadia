@@ -4,7 +4,20 @@
   <link rel='canonical' href='@{siteAddress}/specifications/ddl/index.html'>
   <title>Data Definition Language</title>
   <style>
-  @{include("./Specifications/specification.css.i")} 
+  @{include("./Specifications/specification.css.i")}
+  my-sem, my-syn, my-lex {
+    font-family: my-code-font, monospace;
+  }
+  my-syn::after {
+    content: "<sub>syn/sub>"
+  }
+  my-sem {
+    font-style: italic;
+    font-family: my-default-font;
+  }
+  my-sem::after {
+    content: "<sub>sem</sub>"
+  }
   </style>
 </head>
 <body class="my-content-page-1">
@@ -27,7 +40,7 @@
     The language is insipired by JSON (see <a href="https://www.ecma-international.org/publications-and-standards/standards/ecma-404/">ECMA-404 The JSON interchange syntax, 2nd edition, December 2017</a> for more information).
     A conversion between JSON and DDL is possible without the loss of data.
     </p>
-
+    
     @{include("./Specifications/DataDefinitionLanguage/lexical-specification.i")}
     @{include("./Specifications/DataDefinitionLanguage/syntactical-specification.i")}
     @{include("./Specifications/DataDefinitionLanguage/semantical-specification.i")}
@@ -47,8 +60,9 @@
   <footer>
     <div class="left-column"></div>
     <div class="center-column"></div>
-    <div class="right-column"></div>
-    <span style="font-style: italic">Webite maintained by Michael Heilmann. Last modified on 25 Feburary 2025.</span>
+    <div class="right-column">
+      <div>Website maintained by Michael Heilmann.</div>
+      <div>Last modified on 25 Feburary 2025.</div>
     </div>
   </footer>
 </body>

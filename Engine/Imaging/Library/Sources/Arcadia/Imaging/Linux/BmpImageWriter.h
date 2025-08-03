@@ -19,15 +19,15 @@
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Imaging/ImageWriter.h"
 
-Arcadia_declareObjectType(u8"BmpImageWriter", BmpImageWriter, u8"Arcadia.Imaging.ImageWriter");
+Arcadia_declareObjectType(u8"Arcadia.Imaging.Linux.BmpImageWriter", Arcadia_Imaging_Linux_BmpImageWriter, u8"Arcadia.Imaging.ImageWriter");
 
-struct BmpImageWriter {
+struct Arcadia_Imaging_Linux_BmpImageWriter {
   Arcadia_Imaging_ImageWriter _parent;
   Arcadia_ImmutableList* supportedTypes;
 };
 
-BmpImageWriter*
-BmpImageWriter_create
+Arcadia_Imaging_Linux_BmpImageWriter*
+Arcadia_Imaging_Linux_BmpImageWriter_create
   (
     Arcadia_Thread* thread
   );

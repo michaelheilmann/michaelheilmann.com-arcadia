@@ -84,7 +84,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.DisplayDevice", Arcadia_Visuals_Windows_DisplayDevice, u8"Arcadia.Visuals.DisplayDevice", Arcadia_Visuals_DisplayDevice, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.DisplayDevice", Arcadia_Visuals_Windows_DisplayDevice,
+                         u8"Arcadia.Visuals.DisplayDevice", Arcadia_Visuals_DisplayDevice,
+                         &_typeOperations);
 
 static void
 Arcadia_Visuals_Windows_DisplayDevice_constructImpl

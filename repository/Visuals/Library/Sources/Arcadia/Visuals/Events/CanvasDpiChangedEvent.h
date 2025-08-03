@@ -19,7 +19,8 @@
 #include "Arcadia/Visuals/Events/CanvasEvent.h"
 
 // https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasDpiChangedEvent
-Arcadia_declareObjectType(u8"Arcadia.Visuals.CanvasDpiChangedEvent", Arcadia_Visuals_CanvasDpiChangedEvent, u8"Arcadia.Visuals.CanvasEvent");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.CanvasDpiChangedEvent", Arcadia_Visuals_CanvasDpiChangedEvent,
+                          u8"Arcadia.Visuals.CanvasEvent");
 
 struct Arcadia_Visuals_CanvasDpiChangedEvent {
   Arcadia_Visuals_CanvasEvent _parent;

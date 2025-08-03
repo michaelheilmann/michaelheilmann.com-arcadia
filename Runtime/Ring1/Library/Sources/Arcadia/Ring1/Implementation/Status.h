@@ -46,53 +46,59 @@
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_EncodingInvalid
 #define Arcadia_Status_EncodingInvalid (6)
 
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_EnvironmentFailed
+#define Arcadia_Status_EnvironmentFailed (7)
+
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Exists
-#define Arcadia_Status_Exists (7)
+#define Arcadia_Status_Exists (8)
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_FileSystemOperationFailed
-#define Arcadia_Status_FileSystemOperationFailed (8)
+#define Arcadia_Status_FileSystemOperationFailed (9)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Found
+#define Arcadia_Status_Found (10)
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Initialized
-#define Arcadia_Status_Initialized (9)
+#define Arcadia_Status_Initialized (11)
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_LexicalError
-#define Arcadia_Status_LexicalError (10)
+#define Arcadia_Status_LexicalError (12)
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotExists
-#define Arcadia_Status_NotExists (11)
+#define Arcadia_Status_NotExists (13)
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NumberOfArgumentsInvalid
-#define Arcadia_Status_NumberOfArgumentsInvalid (12)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_OperationInvalid
-#define Arcadia_Status_OperationInvalid (13)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_SemanticalError
-#define Arcadia_Status_SemanticalError (14)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_SyntacticalError
-#define Arcadia_Status_SyntacticalError (15)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TestFailed
-#define Arcadia_Status_TestFailed (16)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TypeExists
-#define Arcadia_Status_TypeExists (17)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TypeNotExists
-#define Arcadia_Status_TypeNotExists (18)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Uninitialized
-#define Arcadia_Status_Uninitialized (19)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_EnvironmentFailed
-#define Arcadia_Status_EnvironmentFailed (20)
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotFound
+#define Arcadia_Status_NotFound (14)
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotInitialized
-#define Arcadia_Status_NotInitialized (21)
+#define Arcadia_Status_NotInitialized (15)
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotImplemented
-#define Arcadia_Status_NotImplemented (22)
+#define Arcadia_Status_NotImplemented (16)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NumberOfArgumentsInvalid
+#define Arcadia_Status_NumberOfArgumentsInvalid (17)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_OperationInvalid
+#define Arcadia_Status_OperationInvalid (18)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_SemanticalError
+#define Arcadia_Status_SemanticalError (19)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_SyntacticalError
+#define Arcadia_Status_SyntacticalError (20)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TestFailed
+#define Arcadia_Status_TestFailed (21)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TypeExists
+#define Arcadia_Status_TypeExists (22)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TypeNotExists
+#define Arcadia_Status_TypeNotExists (23)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Uninitialized
+#define Arcadia_Status_Uninitialized (24)
 
 typedef uint32_t Arcadia_Status;
 
