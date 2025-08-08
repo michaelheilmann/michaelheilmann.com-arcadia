@@ -26,10 +26,7 @@
 #include <stddef.h>
 #endif
 
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/Status.h"
-#include "Arcadia/Ring1/Implementation/Value.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -208,79 +205,5 @@ Arcadia_Process_allocate
     size_t nameLength,
     size_t size
   );
-
-typedef struct ModuleInfo {
-  /// @brief Pointer to the name of the module. The name is a static constant C string.
-  const char* name;
-  /// @brief Visit the module.
-  /// @warning Internal function.
-  Arcadia_Process_VisitCallback* onVisit;
-  /// @brief Startup the module.
-  /// @warning Internal function.
-  void (*onStartUp)(Arcadia_Thread* thread);
-  /// @brief Shutdown the module.
-  /// @warning Internal function.
-  void (*onShutDown)(Arcadia_Thread* thread);
-  /// @brief Must be invoked in the pre mark phase.
-  /// @warning Internal function.
-  Arcadia_Process_PreMarkCallback* onPreMark;
-  /// @brief Must be invoked in the finalize phase.
-  /// @warning Internal function.
-  Arcadia_Process_FinalizeCallback* onFinalize;
-} ModuleInfo;
-
-#define Arcadia_DeclareModule(Name, cName) \
-  const ModuleInfo* \
-  cName##_getModule \
-    ( \
-    );
-
-#define Arcadia_DefineModule(Name, cName) \
-  static void \
-  _##cName##_onStartUp \
-    ( \
-      Arcadia_Thread* thread \
-    ); \
-\
-  static void \
-  _##cName##_onShutDown \
-    ( \
-      Arcadia_Thread* thread \
-    ); \
-\
-  static void \
-  _##cName##_onPreMark \
-    ( \
-      Arcadia_Thread* thread, \
-      bool purgeCache \
-    ); \
-\
-  static void \
-  _##cName##_onFinalize \
-    ( \
-      Arcadia_Thread* thread, \
-      size_t* destroyed \
-    ); \
-\
-  static void \
-  _##cName##_onVisit \
-    ( \
-      Arcadia_Thread* thread \
-    ); \
-\
-  static const ModuleInfo _##cName##_moduleInfo = { \
-    .name = Name, \
-    .onVisit = &_##cName##_onVisit, \
-    .onStartUp = &_##cName##_onStartUp, \
-    .onShutDown = &_##cName##_onShutDown, \
-    .onPreMark = &_##cName##_onPreMark, \
-    .onFinalize = &_##cName##_onFinalize, \
-  }; \
-\
-  const ModuleInfo* \
-  cName##_getModule \
-    ( \
-    ) \
-  { return &_##cName##_moduleInfo; }
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_PROCESS_H_INCLUDED

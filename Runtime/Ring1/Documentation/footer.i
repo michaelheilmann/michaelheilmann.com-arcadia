@@ -53,6 +53,7 @@
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_countSignificandBits*">Arcadia_countSignificandBits*</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_countTrailingZeroes*">Arcadia_countTrailingZeroes*</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_floor*">Arcadia_floor*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_sqrt*">Arcadia_sqrt*</a></li>
 
 
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getNumberOfCores">Arcadia_getNumberOfCores</a></li>
@@ -125,8 +126,8 @@
     <div class="left-column"></div>
     <div class="center-column"></div>
     <div class="right-column">
-      <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 20 April 2025.</div>
+      <div>Website maintained by @{siteAuthor}.</div>
+      <div>Last modified on @{dayOfMonth()} @{monthName()} @{year()}.</div>
     </div>
   </footer>
   </body>

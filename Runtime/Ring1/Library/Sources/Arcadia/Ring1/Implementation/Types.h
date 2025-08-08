@@ -142,7 +142,7 @@ Arcadia_Type_visit
 {/*Intentionally empty.*/}
 
 Arcadia_SizeValue
-Arcadia_Type_hash
+Arcadia_Type_getHash
   (
     Arcadia_Thread* thread,
     Arcadia_TypeValue self

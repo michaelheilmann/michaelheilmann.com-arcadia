@@ -3,8 +3,8 @@
     <div class="center-column">
     </div>
     <div class="right-column">
-      <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 1 January 2025.</div>
+      <div>Website maintained by @{siteAuthor}.</div>
+      <div>Last modified on @{dayOfMonth()} @{monthName()} @{year()}.</div>
     </div>
   </footer>
   </body>

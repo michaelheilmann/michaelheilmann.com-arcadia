@@ -35,7 +35,9 @@ main1
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
   for (int argi = 1; argi < argc - 1; ++argi) {
-    Arcadia_FileHandle_openForReading(thread, fileHandle, Arcadia_FilePath_parseNative(thread, argv[argi], strlen(argv[argi])));
+    Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, argv[argi], strlen(argv[argi]))));
+    Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, filePathString);
+    Arcadia_FileHandle_openForReading(thread, fileHandle, filePath);
     char bytes[5012];
     Arcadia_SizeValue bytesToRead = 5012;
     Arcadia_SizeValue bytesRead = 0;
@@ -45,7 +47,9 @@ main1
     } while (bytesRead > 0);
     Arcadia_FileHandle_close(thread, fileHandle);
   }
-  Arcadia_FileHandle_openForWriting(thread, fileHandle, Arcadia_FilePath_parseNative(thread, argv[argc - 1], strlen(argv[argc - 1])));
+  Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, argv[argc - 1], strlen(argv[argc - 1]))));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, filePathString);
+  Arcadia_FileHandle_openForWriting(thread, fileHandle, filePath);
   Arcadia_SizeValue bytesWritten;
   Arcadia_FileHandle_write(thread, fileHandle, byteBuffer->p, byteBuffer->sz, &bytesWritten);
   Arcadia_FileHandle_close(thread, fileHandle);

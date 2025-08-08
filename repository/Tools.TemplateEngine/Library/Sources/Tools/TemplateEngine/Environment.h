@@ -66,4 +66,13 @@ Environment_get
     Arcadia_BooleanValue recursive
   );
 
+void
+Environment_set
+  (
+    Arcadia_Thread* thread,
+    Environment* self,
+    Arcadia_Value key,
+    Arcadia_Value value
+  );
+
 #endif // ARCADIA_TEMPLATEENGINE_ENVIRONMENT_H_INCLUDED

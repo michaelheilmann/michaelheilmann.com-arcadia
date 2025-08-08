@@ -17,6 +17,7 @@
 #include "Arcadia/Ring1/Implementation/Atoms.private.h"
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring1/Implementation/Module.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/TypeNameParser.h"
 #include "Arcadia/Arms/Include.h"
@@ -125,7 +126,7 @@ getTickCount
   milliseconds += t.tv_sec * 1000;
   return milliseconds;
 #else
-#error("environment not (yet) supported")
+  #error("environment not (yet) supported")
 #endif
 }
 

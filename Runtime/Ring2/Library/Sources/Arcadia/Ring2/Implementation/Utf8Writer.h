@@ -24,7 +24,8 @@
 typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
 typedef struct Arcadia_String Arcadia_String;
 
-Arcadia_declareObjectType(u8"Arcadia.Utf8Writer", Arcadia_Utf8Writer, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Utf8Writer", Arcadia_Utf8Writer,
+                          u8"Arcadia.Object");
 
 struct Arcadia_Utf8Writer {
   Arcadia_Object _parent;

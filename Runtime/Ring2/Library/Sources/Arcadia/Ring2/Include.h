@@ -46,6 +46,9 @@
 #include "Arcadia/Ring2/Implementation/String.h"
 #include "Arcadia/Ring2/Implementation/StringBuffer.h"
 
+#include "Arcadia/Ring2/Implementation/Time/PointInTime.h"
+#include "Arcadia/Ring2/Implementation/Time/TimeSpecification.h"
+
 #undef ARCADIA_RING2_PRIVATE
 #pragma pop_macro("ARCADIA_RING2_PRIVATE")
 

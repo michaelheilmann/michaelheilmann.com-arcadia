@@ -23,11 +23,12 @@
 #include "Arcadia/Ring1/Include.h"
 
 /// @code
-/// class StringBuffer {
+/// class Arcadia.StringBuffer {
 ///   constructor()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer,
+                          u8"Arcadia.Object");
 
 struct Arcadia_StringBuffer {
   Arcadia_Object _parent;
@@ -62,7 +63,7 @@ Arcadia_StringBuffer_insertBack
     Arcadia_Value value
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_insertBack
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_StringBuffer_insertFront
 void
 Arcadia_StringBuffer_insertFront
   (

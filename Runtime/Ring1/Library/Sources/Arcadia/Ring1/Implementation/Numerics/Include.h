@@ -17,15 +17,10 @@
 #define ARCADIA_RING1_IMPLEMENTATION_NUMERICS_INCLUDE_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Numerics/ceil.h"
-
 #include "Arcadia/Ring1/Implementation/Numerics/clamp.h"
-
 #include "Arcadia/Ring1/Implementation/Numerics/cos.h"
-
 #include "Arcadia/Ring1/Implementation/Numerics/countLeadingZeroes.h"
-
 #include "Arcadia/Ring1/Implementation/Numerics/countSignificandBits.h"
-
 #include "Arcadia/Ring1/Implementation/Numerics/countTrailingZeroes.h"
 
 #include "Arcadia/Ring1/Implementation/Numerics/floor.h"
@@ -41,7 +36,6 @@
 #include "Arcadia/Ring1/Implementation/Numerics/nextPowerOfTwoGreaterThanOrEqualTo.h"
 
 #include "Arcadia/Ring1/Implementation/Numerics/quotientRemainder.h"
-
-#include "Arcadia/Ring1/Implementation/Numerics/cos.h"
+#include "Arcadia/Ring1/Implementation/Numerics/sqrt.h"
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_NUMERICS_INCLUDE_H_INCLUDED

@@ -21,52 +21,88 @@
 #endif
 
 #include "Arcadia/Ring1/Implementation/Thread.h"
+
+#include "Arcadia/Ring1/Implementation/Atoms.h"
+#include "Arcadia/Ring1/Implementation/BigInteger/Include.h"
+#include "Arcadia/Ring1/Implementation/Boolean.h"
+#include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
+#include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/Integer16.h"
+#include "Arcadia/Ring1/Implementation/Integer32.h"
+#include "Arcadia/Ring1/Implementation/Integer64.h"
+#include "Arcadia/Ring1/Implementation/Integer8.h"
+#include "Arcadia/Ring1/Implementation/Natural16.h"
+#include "Arcadia/Ring1/Implementation/Natural32.h"
+#include "Arcadia/Ring1/Implementation/Natural64.h"
+#include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Object.h"
+#include "Arcadia/Ring1/Implementation/Real32.h"
+#include "Arcadia/Ring1/Implementation/Real64.h"
+#include "Arcadia/Ring1/Implementation/Size.h"
+#include "Arcadia/Ring1/Implementation/Types.h"
+#include "Arcadia/Ring1/Implementation/Void.h"
+#include "Arcadia/Ring1/Implementation/Value.h"
 
-static inline Arcadia_AtomValue
-Arcadia_Thread_getAtomValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isAtomValue(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getAtomValue(&value);
+#define Define(Type, Suffix) \
+static inline Type \
+Arcadia_ValueStack_get##Suffix \
+  ( \
+    Arcadia_Thread* thread, \
+    Arcadia_SizeValue index \
+  ) \
+{ \
+  Arcadia_Value value = Arcadia_ValueStack_getValue(thread, index); \
+  if (!Arcadia_Value_is##Suffix(&value)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  return Arcadia_Value_get##Suffix(&value); \
+} \
+\
+static inline void \
+Arcadia_ValueStack_push##Suffix \
+  ( \
+    Arcadia_Thread* thread, \
+    Type value \
+  ) \
+{ \
+  Arcadia_Value temporary = Arcadia_Value_make##Suffix(value); \
+  Arcadia_ValueStack_pushValue(thread, &temporary); \
 }
 
-static inline Arcadia_BooleanValue
-Arcadia_Thread_getBooleanValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{ 
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isBooleanValue(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getBooleanValue(&value);
-}
+Define(Arcadia_AtomValue, AtomValue)
+Define(Arcadia_BigIntegerValue, BigIntegerValue)
+Define(Arcadia_BooleanValue, BooleanValue)
+Define(Arcadia_ForeignProcedureValue, ForeignProcedureValue)
+Define(Arcadia_ImmutableByteArrayValue, ImmutableByteArrayValue)
+Define(Arcadia_ImmutableUtf8StringValue, ImmutableUtf8StringValue)
+Define(Arcadia_Integer16Value, Integer16Value)
+Define(Arcadia_Integer32Value, Integer32Value)
+Define(Arcadia_Integer64Value, Integer64Value)
+Define(Arcadia_Integer8Value, Integer8Value)
+Define(Arcadia_Natural16Value, Natural16Value)
+Define(Arcadia_Natural32Value, Natural32Value)
+Define(Arcadia_Natural64Value, Natural64Value)
+Define(Arcadia_Natural8Value, Natural8Value)
+Define(Arcadia_Real32Value, Real32Value)
+Define(Arcadia_Real64Value, Real64Value)
+Define(Arcadia_ObjectReferenceValue, ObjectReferenceValue)
+Define(Arcadia_SizeValue, SizeValue)
+Define(Arcadia_TypeValue, TypeValue)
+Define(Arcadia_VoidValue, VoidValue)
+
+#undef Define
 
 static inline Arcadia_ObjectReferenceValue
-Arcadia_Thread_getObjectReferenceValue
+Arcadia_ValueStack_getObjectReferenceValueChecked
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue index,
     Arcadia_Type* type
   )
 {
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isObjectReferenceValue(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_Value_getObjectReferenceValue(&value);
+  Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_ValueStack_getObjectReferenceValue(thread, index);
   if (type) {
     if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, objectReferenceValue), type)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -74,171 +110,6 @@ Arcadia_Thread_getObjectReferenceValue
     }
   }
   return objectReferenceValue;
-}
-
-static inline Arcadia_ImmutableByteArrayValue
-Arcadia_Thread_getImmutableByteArrayValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isImmutableByteArrayValue(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getImmutableByteArrayValue(&value);
-}
-
-static inline Arcadia_ImmutableUtf8StringValue
-Arcadia_Thread_getImmutableUtf8StringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isImmutableUtf8StringValue(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getImmutableUtf8StringValue(&value);
-}
-
-static inline Arcadia_Integer16Value
-Arcadia_Thread_getInteger16Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isInteger16Value(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getInteger16Value(&value);
-}
-
-static inline Arcadia_Integer16Value
-Arcadia_Thread_getInteger32Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isInteger32Value(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getInteger32Value(&value);
-}
-
-static inline Arcadia_Integer16Value
-Arcadia_Thread_getInteger64Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isInteger64Value(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getInteger64Value(&value);
-}
-
-static inline Arcadia_Integer8Value
-Arcadia_Thread_getInteger8Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isInteger8Value(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getInteger8Value(&value);
-}
-
-static inline Arcadia_Natural16Value
-Arcadia_Thread_getNatural16Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isNatural16Value(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getNatural16Value(&value);
-}
-
-
-static inline Arcadia_Natural32Value
-Arcadia_Thread_getNatural32Value
-(
-  Arcadia_Thread* thread,
-  Arcadia_SizeValue index
-) {
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isNatural32Value(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getNatural32Value(&value);
-}
-
-static inline Arcadia_Natural64Value
-Arcadia_Thread_getNatural64Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isNatural64Value(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getNatural64Value(&value);
-}
-
-static inline Arcadia_Natural8Value
-Arcadia_Thread_getNatural8Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isNatural8Value(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getNatural8Value(&value);
-}
-
-static inline Arcadia_VoidValue
-Arcadia_Thread_getVoidValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_SizeValue index
-  )
-{
-  Arcadia_Value value = Arcadia_Thread_getValue(thread, index);
-  if (!Arcadia_Value_isVoidValue(&value)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_Value_getVoidValue(&value);
 }
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_THREADEXTENSIONS_H_INCLUDED

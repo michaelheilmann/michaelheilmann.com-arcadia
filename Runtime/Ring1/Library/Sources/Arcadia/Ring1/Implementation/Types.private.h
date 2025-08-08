@@ -19,7 +19,7 @@
 #if !defined(ARCADIA_RING1_PRIVATE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
-#include "Arcadia/Ring1/Implementation/Configure.h"
+#include "Arcadia/Ring1/Implementation/Module.h"
 #include "Arcadia/Ring1/Include.h"
 
 typedef struct TypeNode TypeNode;
@@ -33,6 +33,15 @@ struct TypeNode {
   Arcadia_SizeValue valueSize;
   Arcadia_Type_Operations const* typeOperations;
   Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing;
+};
+
+
+typedef struct TypeNodes TypeNodes;
+
+struct TypeNodes {
+  TypeNode** buckets;
+  size_t size;
+  size_t capacity;
 };
 
 Arcadia_DeclareModule("Arcadia.Types", Arcadia_Types);

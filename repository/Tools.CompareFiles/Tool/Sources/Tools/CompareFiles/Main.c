@@ -30,8 +30,8 @@ main1
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_FilePath* firstFile = Arcadia_FilePath_parseNative(thread, argv[1], strlen(argv[1]));
-  Arcadia_FilePath* secondFile = Arcadia_FilePath_parseNative(thread, argv[2], strlen(argv[2]));
+  Arcadia_FilePath* firstFile = Arcadia_FilePath_parseNative(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[1], strlen(argv[1]))));
+  Arcadia_FilePath* secondFile = Arcadia_FilePath_parseNative(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[2], strlen(argv[2]))));
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   if (!Arcadia_FileSystem_regularFileExists(thread, fileSystem, firstFile)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);

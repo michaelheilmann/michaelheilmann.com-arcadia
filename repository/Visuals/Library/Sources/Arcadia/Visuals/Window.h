@@ -20,10 +20,11 @@
 #include "Arcadia/Visuals/Icon.h"
 #include "Arcadia/Imaging/PixelBuffer.h"
 
-// An instance of "NativeWindow" is in "closed" state when it is created.
-// A successful call to "NativeWindow_open" puts the window in "opened" state.
-// The window is put in "closed" state if it is destructed or by a successful call to "NativeWindow_close".
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window, u8"Arcadia.Object");
+// An instance of "Arcadia.Visuals.Window" is in "closed" state when it is created.
+// A successful call to "Arcadia.Visuals.Window.open" puts the window in "opened" state.
+// The window is put in "closed" state if it is destructed or by a successful call to "Arcadia.Visuals.Window.close".
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window,
+                          u8"Arcadia.Object");
 
 struct Arcadia_Visuals_Window {
   Arcadia_Object _parent;

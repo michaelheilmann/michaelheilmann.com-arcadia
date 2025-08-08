@@ -23,7 +23,8 @@
 #include "Arcadia/Ring2/Implementation/Utf8Reader.h"
 typedef struct Arcadia_String Arcadia_String;
 
-Arcadia_declareObjectType(u8"Arcadia.Utf8StringReader", Arcadia_Utf8StringReader, u8"Arcadia.Utf8Reader");
+Arcadia_declareObjectType(u8"Arcadia.Utf8StringReader", Arcadia_Utf8StringReader,
+                          u8"Arcadia.Utf8Reader");
 
 struct Arcadia_Utf8StringReader {
   Arcadia_Utf8Reader parent;

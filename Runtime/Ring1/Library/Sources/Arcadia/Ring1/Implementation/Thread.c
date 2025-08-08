@@ -20,14 +20,14 @@
 #include "Arcadia/Arms/Include.h"
 
 Arcadia_SizeValue
-Arcadia_Thread_getValueStackSize
+Arcadia_ValueStack_getSize
   (
     Arcadia_Thread* thread
   )
 { return thread->stack.size; }
 
 Arcadia_Value
-Arcadia_Thread_getValue
+Arcadia_ValueStack_getValue
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue index
@@ -41,7 +41,7 @@ Arcadia_Thread_getValue
 }
 
 void
-Arcadia_Thread_pushValue
+Arcadia_ValueStack_pushValue
   (
     Arcadia_Thread* thread,
     Arcadia_Value const* value
@@ -53,7 +53,7 @@ Arcadia_Thread_pushValue
 }
 
 void
-Arcadia_Thread_popValues
+Arcadia_ValueStack_popValues
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue count

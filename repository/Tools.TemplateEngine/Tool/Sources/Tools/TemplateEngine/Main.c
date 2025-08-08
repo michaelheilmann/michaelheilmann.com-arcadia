@@ -28,16 +28,51 @@ main1
     char** argv
   )
 {
-  if (argc < 4) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
+  Arcadia_Value sourceValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+                targetValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+                environmentValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+
+  Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  for (int argi = 1; argi < argc; ++argi) {
+    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
+    Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
 
-  Arcadia_FilePath* sourceFilePath = Arcadia_FilePath_parseNative(thread, argv[1], strlen(argv[1]));
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
+    Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
+    Arcadia_Utf8StringReader* r = Arcadia_Utf8StringReader_create(thread, argument);
+    Arcadia_String *key = NULL, *value = NULL;
+    if (!Arcadia_CommandLine_parseArgument(thread, (Arcadia_Utf8Reader*)r, &key, &value)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+    if (Arcadia_String_isEqualTo_pn(thread, key, u8"source", sizeof(u8"source") - 1)) {
+      if (!value) {
+        Arcadia_CommandLine_raiseNoValueError(thread, key);
+      }
+      Arcadia_Value_setObjectReferenceValue(&sourceValue, value);
+    } else if (Arcadia_String_isEqualTo_pn(thread, key, u8"target", sizeof(u8"target") - 1)) {
+      if (!value) {
+        Arcadia_CommandLine_raiseNoValueError(thread, key);
+      }
+      Arcadia_Value_setObjectReferenceValue(&targetValue, value);
+    } else if (Arcadia_String_isEqualTo_pn(thread, key, u8"environment", sizeof(u8"environment") - 1)) {
+      if (!value) {
+        Arcadia_CommandLine_raiseNoValueError(thread, key);
+      }
+      Arcadia_Value_setObjectReferenceValue(&environmentValue, value);
+    } else {
+      Arcadia_CommandLine_raiseUnknownArgumentError(thread, key, value);
+    }
+  }
+
+  Arcadia_FilePath* sourceFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &sourceValue, _Arcadia_String_getType(thread)));
   Arcadia_Value sourceFilePathValue = Arcadia_Value_makeObjectReferenceValue(sourceFilePath);
-  Arcadia_FilePath* targetFilePath = Arcadia_FilePath_parseNative(thread, argv[2], strlen(argv[2]));
+  
+  Arcadia_FilePath* targetFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &targetValue, _Arcadia_String_getType(thread)));
   Arcadia_Value targetFilePathValue = Arcadia_Value_makeObjectReferenceValue(targetFilePath);
-  Arcadia_FilePath* environmentFilePath = Arcadia_FilePath_parseNative(thread, argv[3], strlen(argv[3]));
+  
+  Arcadia_FilePath* environmentFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &environmentValue, _Arcadia_String_getType(thread)));
   Arcadia_Value environmentFilePathValue = Arcadia_Value_makeObjectReferenceValue(environmentFilePath);
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
@@ -49,6 +84,7 @@ main1
   context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
   context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
   context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
+
   Environment* environment = Environment_loadString(thread, environmentString);
   environment->enclosing = context->environment;
   context->environment = environment;

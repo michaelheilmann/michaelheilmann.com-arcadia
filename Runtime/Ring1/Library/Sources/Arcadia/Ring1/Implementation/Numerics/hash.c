@@ -33,6 +33,6 @@ Arcadia_hashTypeValue
     Arcadia_TypeValue x
   )
 {
-  return Arcadia_Type_hash(thread, x);
+  return Arcadia_Type_getHash(thread, x);
 }
 

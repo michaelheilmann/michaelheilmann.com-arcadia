@@ -186,6 +186,83 @@ getLiteral
 }
 
 static void
+evalInvoke
+  (
+    Arcadia_Thread* thread,
+    FileContext* context,
+    Ast* ast
+  )
+{
+  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->name);
+  Arcadia_Value v = Environment_get(thread, context->environment, k, Arcadia_BooleanValue_True);
+  if (Arcadia_Value_isVoidValue(&v)) {
+    // Error.
+    Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+    Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+    Arcadia_StringBuffer_insertBack(thread, sb, k);
+    Arcadia_StringBuffer_append_pn(thread, sb, u8"` not defined\n\0", sizeof(u8"` not defined\n\0") - 1);
+    fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  if (!Arcadia_Value_isForeignProcedureValue(&v)) {
+    // Error.
+    Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+    Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+    Arcadia_StringBuffer_insertBack(thread, sb, k);
+    Arcadia_StringBuffer_append_pn(thread, sb, u8"` is not of procedure string\n\0", sizeof(u8"` is not of procedure string\n\0") - 1);
+    fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_ForeignProcedure* p = Arcadia_Value_getForeignProcedureValue(&v);
+  Arcadia_Value targetValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+  Arcadia_SizeValue numberOfValues = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->arguments);
+  Arcadia_Value* argumentValues = malloc(sizeof(Arcadia_Value) * numberOfValues);
+  if (!argumentValues) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    for (Arcadia_SizeValue i = 0, n = numberOfValues; i < n; ++i) {
+      argumentValues[i] = Arcadia_List_getAt(thread, ast->arguments, i);
+    }
+    (*p)(thread, &targetValue, numberOfValues, argumentValues);
+    Arcadia_Thread_popJumpTarget(thread);
+    free(argumentValues);
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    free(argumentValues);
+    Arcadia_Thread_jump(thread);
+  }
+
+  Arcadia_String* string = NULL;
+  if (Arcadia_Value_isInteger16Value(&targetValue)) {
+    string = Arcadia_String_createFromInteger16(thread, Arcadia_Value_getInteger16Value(&targetValue));
+  } else if (Arcadia_Value_isInteger32Value(&targetValue)) {
+    string = Arcadia_String_createFromInteger32(thread, Arcadia_Value_getInteger32Value(&targetValue));
+  } else if (Arcadia_Value_isInteger64Value(&targetValue)) {
+    string = Arcadia_String_createFromInteger64(thread, Arcadia_Value_getInteger64Value(&targetValue));
+  } else if (Arcadia_Value_isInteger8Value(&targetValue)) {
+    string = Arcadia_String_createFromInteger8(thread, Arcadia_Value_getInteger8Value(&targetValue));
+  } else  if (Arcadia_Value_isObjectReferenceValue(&targetValue)) {
+    Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&targetValue);
+    if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, object), _Arcadia_String_getType(thread))) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+    string = (Arcadia_String*)object;
+  } else {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_ByteBuffer_append_pn(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
+
+}
+
+static void
 evalAst
   (
     Arcadia_Thread* thread,
@@ -194,9 +271,8 @@ evalAst
   )
 {
   switch (ast->type) {
-    case GETVARIABLE: {
-      Arcadia_Value k = Arcadia_Value_Initializer();
-      Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)ast->name);
+    case Arcadia_TemplateEngine_AstKind_GetVariable: {
+      Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->name);
       Arcadia_Value v = Environment_get(thread, context->environment, k, Arcadia_BooleanValue_True);
       if (Arcadia_Value_isVoidValue(&v)) {
         // Error.
@@ -230,17 +306,25 @@ evalAst
       }
       Arcadia_ByteBuffer_append_pn(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(thread, (Arcadia_String*)object));
     } break;
-    case INVOKE: {
+    case Arcadia_TemplateEngine_AstKind_Invoke: {
       if (Arcadia_String_isEqualTo_pn(thread, ast->name, u8"include", sizeof(u8"include") - 1)) {
-        Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, ast->argument), Arcadia_String_getNumberOfBytes(thread, ast->argument));
+        if (1 != Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->arguments)) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+          Arcadia_Thread_jump(thread);
+        }
+        Arcadia_Object* object = Arcadia_List_getObjectReferenceValueAt(thread, ast->arguments, 0);
+        if (!Arcadia_Object_isInstanceOf(thread, object, _Arcadia_String_getType(thread))) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+          Arcadia_Thread_jump(thread);
+        }
+        Arcadia_String* string = (Arcadia_String*)object;
+        Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
         Arcadia_Value value;
         Arcadia_Value_setObjectReferenceValue(&value, filePath);
         Arcadia_Stack_push(thread, context->context->stack, value);
         Context_onRun(thread, context->context);
       } else {
-        // unknown procedure
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-        Arcadia_Thread_jump(thread);
+        evalInvoke(thread, context, ast);
       }
     } break;
     default: {
@@ -257,26 +341,28 @@ onExpression
     FileContext* context
   )
 {
+  Ast* ast = NULL;
   Arcadia_ByteBuffer_clear(thread, context->context->temporaryBuffer);
   onIdentifier(thread, context);
-  Arcadia_Integer32Value type = GETVARIABLE;
   Arcadia_String* name = getLiteral(thread, context);
   Arcadia_String* argument = NULL;
   if (isLeftParenthesis(thread, context)) {
-    type = INVOKE;
+    ast = Ast_create(thread, Arcadia_TemplateEngine_AstKind_Invoke, name);
     Arcadia_Utf8Reader_next(thread, context->source);
     if (is(thread, context, '"')) {
       Arcadia_ByteBuffer_clear(thread, context->context->temporaryBuffer);
       onString(thread, context);
       argument = getLiteral(thread, context);
+      Arcadia_List_insertBackObjectReferenceValue(thread, ast->arguments, (Arcadia_ObjectReferenceValue)argument);
     }
     if (!isRightParenthesis(thread, context)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
     Arcadia_Utf8Reader_next(thread, context->source);
+  } else {
+    ast = Ast_create(thread, Arcadia_TemplateEngine_AstKind_GetVariable, name);
   }
-  Ast* ast = Ast_create(thread, type, name, argument);
   return ast;
 }
 
@@ -294,8 +380,8 @@ onIncludeDirective
   Arcadia_Utf8Reader_next(thread, context->source);
   Arcadia_ByteBuffer_clear(thread, context->context->temporaryBuffer);
   onString(thread, context);
-  Ast* ast = Ast_create(thread, INVOKE, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"include", sizeof(u8"include") - 1)),
-                                        getLiteral(thread, context));
+  Ast* ast = Ast_create(thread, Arcadia_TemplateEngine_AstKind_Invoke, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"include", sizeof(u8"include") - 1)));
+  Arcadia_List_insertBackObjectReferenceValue(thread, ast->arguments, getLiteral(thread, context));
   if (!isRightParenthesis(thread, context)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);

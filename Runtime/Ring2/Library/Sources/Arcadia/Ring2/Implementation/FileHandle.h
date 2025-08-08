@@ -27,7 +27,8 @@ typedef struct Arcadia_FileSystem Arcadia_FileSystem;
 // FILE
 #include <stdio.h>
 
-Arcadia_declareObjectType(u8"Arcadia.FileHandle", Arcadia_FileHandle, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.FileHandle", Arcadia_FileHandle,
+                          u8"Arcadia.Object");
 
 struct Arcadia_FileHandle {
   Arcadia_Object _parent;

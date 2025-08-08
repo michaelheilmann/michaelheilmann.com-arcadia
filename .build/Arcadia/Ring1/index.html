@@ -1126,15 +1126,17 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
 
   <table>
   <tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
-  <tr><td><code>Integer8Value</code>  </td><td><code>Arcadia_Integer8Value</code></td></tr>
+  <tr><td><code>Integer8Value</code>  </td><td><code>Arcadia_Integer8Value</code> </td></tr>
   <tr><td><code>Integer16Value</code> </td><td><code>Arcadia_Integer16Value</code></td></tr>
   <tr><td><code>Integer32Value</code> </td><td><code>Arcadia_Integer32Value</code></td></tr>
   <tr><td><code>Integer64Value</code> </td><td><code>Arcadia_Integer64Value</code></td></tr>
-  <tr><td><code>Natural8Value</code>  </td><td><code>Arcadia_Natural8Value</code></td></tr>
+  <tr><td><code>Natural8Value</code>  </td><td><code>Arcadia_Natural8Value</code> </td></tr>
   <tr><td><code>Natural16Value</code> </td><td><code>Arcadia_Natural16Value</code></td></tr>
   <tr><td><code>Natural32Value</code> </td><td><code>Arcadia_Natural32Value</code></td></tr>
   <tr><td><code>Natural64Value</code> </td><td><code>Arcadia_Natural64Value</code></td></tr>
-  <tr><td><code>SizeValue</code>      </td><td><code>Arcadia_SizeValue</code></td></tr>
+  <tr><td><code>Real32Value</code>    </td><td><code>Arcadia_Real32Value</code>   </td></tr>
+  <tr><td><code>Real64Value</code>    </td><td><code>Arcadia_Real64Value</code>   </td></tr>
+  <tr><td><code>SizeValue</code>      </td><td><code>Arcadia_SizeValue</code>     </td></tr>
   </table>
 
   <section class="cxx parameters">
@@ -1190,7 +1192,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
   </section>
 
   <p>
-  This function returns the cosine <code>x</code>.
+  This function returns the cosine of <code>x</code>.
   If <code>x</code> is ±0 then the result is 1.
   If <code>x</code> is ±∞ or not a number then the result is not a number.
   </p>
@@ -1851,7 +1853,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
   </section>
 
   <p>
-  This function returns the sine <code>x</code>.
+  This function returns the sine of <code>x</code>.
   If <code>x</code> is ±0 then the result is 0.
   If <code>x</code> is ±∞ or not a number then the result is not a number.
   </p>
@@ -1859,6 +1861,48 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>The sine of <code>x</code>.</p>
+  </section>
+
+</section>
+
+<section class="cxx entity procedure">
+
+  <h1 id="Arcadia_sqrt*">Arcadia_sqrt*</h1>
+
+  <my-signature><code>
+  <my-mv>Type</my-mv><br>
+  Arcadia_sqrt<my-mv>Suffix</my-mv><br>
+  &nbsp;(<br>
+  &nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;<my-mv>Type</my-mv> x<br>
+  &nbsp;)
+  </code></my-signature>
+
+  <my-summary>Compute the square root of <code>x</code>.</my-summary>
+
+  <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above functions are defined</p>
+
+  <table>
+  <tr><td><my-mv>Suffix</my-mv></td><td><my-mv>Type</my-mv></td></tr>
+  <tr><td><code>Real32Value</code>    </td><td><code>Arcadia_Real32Value</code></td></tr>
+  <tr><td><code>Real64Value</code>    </td><td><code>Arcadia_Real64Value</code></td></tr>
+  </table>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div><div>Arcadia_Thread* thread</div><div>A pointer to the <code>Arcadia_Thread</code> object.</div></div>
+    <div><div><my-mv>Type</my-mv> x</div><div>The value to compute the square root of.</div></div>
+  </section>
+
+  <p>
+  This function returns the square root of <code>x</code>.
+  If <code>x</code> is less than -0 or not a number, then not a number os returned.
+  If <code>x</code> is +∞ or ±∞0, then <code>x</code> is returned unmodified.
+  </p>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>The square root of <code>x</code>.</p>
   </section>
 
 </section>
@@ -2753,6 +2797,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_countSignificandBits*">Arcadia_countSignificandBits*</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_countTrailingZeroes*">Arcadia_countTrailingZeroes*</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_floor*">Arcadia_floor*</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_sqrt*">Arcadia_sqrt*</a></li>
 
 
         <li><a href="https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_getNumberOfCores">Arcadia_getNumberOfCores</a></li>
@@ -2826,7 +2871,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com/tree/ma
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 20 April 2025.</div>
+      <div>Last modified on 9 August 2025.</div>
     </div>
   </footer>
   </body>

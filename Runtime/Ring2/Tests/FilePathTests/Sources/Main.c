@@ -25,13 +25,15 @@ checkNormalized
     char const* q
   )
 {
-  Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, p, strlen(p));
-  Arcadia_String* filePathString = Arcadia_FilePath_toNative(thread, filePath);
-  if (Arcadia_String_getNumberOfBytes(thread, filePathString) != strlen(q) + 1) {
+  Arcadia_String* filePathStringSource = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, strlen(p))));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, filePathStringSource);
+  Arcadia_String* filePathStringTarget = Arcadia_FilePath_toNative(thread, filePath);
+  
+  if (Arcadia_String_getNumberOfBytes(thread, filePathStringTarget) != strlen(q) + 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }
-  if (memcmp(Arcadia_String_getBytes(thread, filePathString), q, strlen(q))) {
+  if (memcmp(Arcadia_String_getBytes(thread, filePathStringTarget), q, strlen(q))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }

@@ -75,6 +75,22 @@ macro(BeginProduct target type)
 
 endmacro()
 
+# Determine if a string haystack starts with a string needle.
+# Return the result in a variable result.
+# Usage:
+#   string_starts_with(result ${haystack} ${needle})
+#   if (${result})
+#     ...
+#   endif()
+function(string_starts_with result haystack needle)
+  string(FIND "${haystack}" "${needle}" index)
+  if("${index}" EQUAL 0)
+    set(${result} 1 PARENT_SCOPE)
+  else()
+    set(${result} 0 PARENT_SCOPE)
+  endif()
+endfunction()
+
 macro(EndProduct target)
   if (${${target}.Enabled})
     if (${${target}.Type} STREQUAL library)
@@ -90,14 +106,42 @@ macro(EndProduct target)
     endif()
 
     ConfigureWarningsAndErrors(${target})
+    
+    # Combine all file lists into a single list.
+    set (allFiles "")
+    foreach (e ${${target}.HeaderFiles})
+      list(APPEND allFiles ${e})
+    endforeach()
+    foreach (e ${${target}.SourceFiles})
+      list(APPEND allFiles ${e})
+    endforeach()
+    foreach (e ${${target}.ConfigurationTemplateFiles})
+      list(APPEND allFiles ${e})
+    endforeach()
+    foreach (e ${${target}.ConfigurationFiles})
+      list(APPEND allFiles ${e})
+    endforeach()
+    foreach (e ${${target}.AssemblerFiles})
+      list(APPEND allFiles ${e})
+    endforeach()
 
-    target_sources(${target} PRIVATE ${${target}.ConfigurationTemplateFiles} ${${target}.ConfigurationFiles} ${${target}.SourceFiles} ${${target}.HeaderFiles} ${${target}.AssemblerFiles})
+    target_sources(${target} PRIVATE ${allFiles})
 
-    source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.ConfigurationTemplateFiles})
-    source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${${target}.ConfigurationFiles})
-    source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.HeaderFiles})
-    source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.SourceFiles})
-    source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${${target}.AssemblerFiles})
+    # Assign source groups to the files.
+    # For this to work, the files must reside in ${CMAKE_CURRENT_SOURCE_DIR} or in ${CMAKE_CURRENT_BINARY_DIR}.  
+    foreach (file ${allFiles})
+      string_starts_with(result ${file} ${CMAKE_CURRENT_SOURCE_DIR})
+      if (${result})
+        source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${file})    
+      else()
+        string_starts_with(result ${file} ${CMAKE_CURRENT_BINARY_DIR})
+        if(${result})
+          source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${file})
+        else()
+          message(FATAL_ERROR "unknown/unsupported source directory: ${file}")
+        endif() 
+      endif()
+    endforeach()
 
     set_property(TARGET ${target} PROPERTY C_STANDARD 17)
 
@@ -185,7 +229,7 @@ endmacro()
 # environmentFile The environment file.
 macro(InvokeTemplateEngine sourceFile targetFile environmentFile)
   add_custom_command(OUTPUT ${targetFile}
-                     COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> ${sourceFile} ${targetFile} ${environmentFile}
+                     COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}"
                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                      COMMENT "${sourceFile} / ${environmentFile} => ${targetFile}"
                      DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})

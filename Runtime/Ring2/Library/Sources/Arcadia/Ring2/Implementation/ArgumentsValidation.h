@@ -90,6 +90,20 @@ Arcadia_ArgumentsValidation_getInteger32Value
   return Arcadia_Value_getInteger32Value(value);
 }
 
+static inline Arcadia_Integer64Value
+Arcadia_ArgumentsValidation_getInteger64Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* value
+  )
+{
+  if (!Arcadia_Value_isInteger64Value(value)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return Arcadia_Value_getInteger64Value(value);
+}
+
 static inline Arcadia_Natural64Value
 Arcadia_ArgumentsValidation_getNatural16Value
   (

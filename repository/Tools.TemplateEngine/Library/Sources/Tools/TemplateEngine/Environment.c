@@ -167,3 +167,15 @@ Environment_get
   }
   return value;
 }
+
+void
+Environment_set
+  (
+    Arcadia_Thread* thread,
+    Environment* self,
+    Arcadia_Value key,
+    Arcadia_Value value
+  )
+{
+  Arcadia_Map_set(thread, self->variables, key, value, NULL, NULL);
+}

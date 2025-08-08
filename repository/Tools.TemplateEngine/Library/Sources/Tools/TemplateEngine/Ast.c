@@ -71,8 +71,8 @@ Ast_visit
   if (self->name) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->name);
   }
-  if (self->argument) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->argument);
+  if (self->arguments) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->arguments);
   }
 }
 
@@ -93,13 +93,13 @@ Ast_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (3 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   _self->type = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[0]);
   _self->name = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
-  _self->argument = Arcadia_ArgumentsValidation_getObjectReferenceValueOrNull(thread, &argumentValues[2], _Arcadia_String_getType(thread));
+  _self->arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -108,20 +108,15 @@ Ast_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value type,
-    Arcadia_String* name,
-    Arcadia_String* argument
+    Arcadia_String* name
   )
 {
   Arcadia_Value argumentValues[] = { Arcadia_Value_Initializer(),
-                                     Arcadia_Value_Initializer(),
-                                     Arcadia_Value_Initializer() };
+                                     Arcadia_Value_Initializer(), };
   Arcadia_Value_setInteger32Value(&argumentValues[0], type);
   if (name) {
     Arcadia_Value_setObjectReferenceValue(&argumentValues[1], name);
   }
-  if (argument) {
-    Arcadia_Value_setObjectReferenceValue(&argumentValues[2], argument);
-  }
-  Ast* self = Arcadia_allocateObject(thread, _Ast_getType(thread), 3, &argumentValues[0]);
+  Ast* self = Arcadia_allocateObject(thread, _Ast_getType(thread), 2, &argumentValues[0]);
   return self;
 }

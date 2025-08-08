@@ -28,7 +28,7 @@
   </section>
 
   <p>
-  This function returns the cosine <code>x</code>.
+  This function returns the cosine of <code>x</code>.
   If <code>x</code> is ±0 then the result is 1.
   If <code>x</code> is ±∞ or not a number then the result is not a number.
   </p>

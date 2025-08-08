@@ -6,8 +6,8 @@
     <div class="left-column"></div>
     <div class="center-column"></div>
     <div class="right-column">
-      <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 6 October 2024.</div>
+      <div>Website maintained by @{siteAuthor}.</div>
+      <div>Last modified on @{dayOfMonth()} @{monthName()} @{year()}.</div>
     </div>
   </footer>
   </body>

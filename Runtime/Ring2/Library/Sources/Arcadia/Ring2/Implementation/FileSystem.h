@@ -30,7 +30,8 @@ typedef struct Arcadia_FilePath Arcadia_FilePath;
 ///   constructor()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.FileSystem", Arcadia_FileSystem, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.FileSystem", Arcadia_FileSystem,
+                          u8"Arcadia.Object");
 
 struct Arcadia_FileSystem {
   Arcadia_Object _parent;

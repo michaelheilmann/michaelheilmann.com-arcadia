@@ -30,7 +30,9 @@
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 
-#include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Real32.h"
+#include "Arcadia/Ring1/Implementation/Real64.h"
+
 #include "Arcadia/Ring1/Implementation/Thread.h"
 
 #include "Arcadia/Ring1/Implementation/Size.h"
@@ -65,6 +67,9 @@ Define(Arcadia_Natural64, Natural64)
 Define(Arcadia_Natural8, Natural8)
 
 Define(Arcadia_Size, Size)
+
+Define(Arcadia_Real32, Real32)
+Define(Arcadia_Real64, Real64)
 
 #undef Define
 

@@ -42,6 +42,7 @@
 @{include("numeric-functions/Arcadia_safeAdd.i")}
 @{include("numeric-functions/Arcadia_safeMultiply.i")}
 @{include("numeric-functions/Arcadia_sin.i")}
+@{include("numeric-functions/Arcadia_sqrt.i")}
 @{include("numeric-functions/Arcadia_RealValue_getBits.i")}
 
 <h2>Time and date functions</h2>

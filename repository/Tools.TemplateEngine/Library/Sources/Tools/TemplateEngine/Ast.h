@@ -23,20 +23,20 @@ Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Ast", Ast,
                           u8"Arcadia.Object");
 
 /// <name>
-#define GETVARIABLE (1)
+#define Arcadia_TemplateEngine_AstKind_GetVariable (1)
 
-/// <name>'(' <argument> ')'
-#define INVOKE (2)
+/// <name>'(' <arguments> ')'
+#define Arcadia_TemplateEngine_AstKind_Invoke (2)
 
 struct Ast {
   Arcadia_Object _parent;
   int type;
-  /// GETVARIABLE: The name of the variable
-  /// INVOKE: The name of the procedure
+  /// Arcadia_TemplateEngine_AstKind_GetVariable: The name of the variable
+  /// Arcadia_TemplateEngine_AstKind_Invoke: The name of the procedure
   Arcadia_String* name;
-  /// GETVARIABLE: NULL.
-  /// INVOKE: The value of the argument.
-  Arcadia_String* argument;
+  /// Arcadia_TemplateEngine_AstKind_GetVariable: [].
+  /// Arcadia_TemplateEngine_AstKind_Invoke: List of arguments.
+  Arcadia_List* arguments;
 };
 
 Ast*
@@ -44,8 +44,7 @@ Ast_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value type,
-    Arcadia_String* name,
-    Arcadia_String* argument
+    Arcadia_String* name
   );
 
 #endif // ARCADIA_TEMPLATEENGINE_AST_H_INCLUDED

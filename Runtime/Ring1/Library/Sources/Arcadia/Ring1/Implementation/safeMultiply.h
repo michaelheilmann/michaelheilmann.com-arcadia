@@ -20,6 +20,8 @@
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
+#include "Arcadia/Ring1/Implementation/Boolean.h"
+
 #include "Arcadia/Ring1/Implementation/Integer16.h"
 #include "Arcadia/Ring1/Implementation/Integer32.h"
 #include "Arcadia/Ring1/Implementation/Integer64.h"

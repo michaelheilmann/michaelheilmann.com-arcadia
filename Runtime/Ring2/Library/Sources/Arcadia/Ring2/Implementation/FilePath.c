@@ -31,46 +31,56 @@ typedef struct Context {
 static void
 next
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   );
 
 static void
 saveAndNext
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   );
 
 static Arcadia_BooleanValue
 isEnd
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   );
 
 static Arcadia_BooleanValue
 isDriveLetter
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   );
 
 static Arcadia_BooleanValue
 isColon
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   );
 
-static Arcadia_BooleanValue isDirectorySeparator(Arcadia_Process* process, Context* context);
+static Arcadia_BooleanValue
+isDirectorySeparator
+  (
+    Arcadia_Thread* thread,
+    Context* context
+  );
 
-static Arcadia_BooleanValue isSlash(Arcadia_Process* process, Context* context);
+static Arcadia_BooleanValue
+isSlash
+  (
+    Arcadia_Thread* thread,
+    Context* context
+  );
 
 static void
 normalize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* self
   );
 
@@ -78,7 +88,7 @@ normalize
 static void
 parseWindowsFilePath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* target,
     Arcadia_ByteBuffer* source
   );
@@ -86,7 +96,7 @@ parseWindowsFilePath
 static void
 parseUnixFilePath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* target,
     Arcadia_ByteBuffer* source
   );
@@ -94,7 +104,7 @@ parseUnixFilePath
 static void
 parseGenericFilePath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* target,
     Arcadia_ByteBuffer* source
   );
@@ -102,43 +112,42 @@ parseGenericFilePath
 static void
 next
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   )
-{ Arcadia_Utf8Reader_next(Arcadia_Process_getThread(process), context->reader); }
+{ Arcadia_Utf8Reader_next(thread, context->reader); }
 
 static void
 saveAndNext
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, context->reader);
   Arcadia_Utf8Writer_writeCodePoints(thread, context->temporaryWriter, &codePoint, 1);
-  next(process, context);
+  next(thread, context);
 }
 
 static Arcadia_BooleanValue
 isEnd
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   )
-{ return !Arcadia_Utf8Reader_hasCodePoint(Arcadia_Process_getThread(process), context->reader); }
+{ return !Arcadia_Utf8Reader_hasCodePoint(thread, context->reader); }
 
 static Arcadia_BooleanValue
 isDriveLetter
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   )
 {
-  if (!Arcadia_Utf8Reader_hasCodePoint(Arcadia_Process_getThread(process), context->reader)) {
+  if (!Arcadia_Utf8Reader_hasCodePoint(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(Arcadia_Process_getThread(process), context->reader);
+  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, context->reader);
   return ('a' <= codePoint && codePoint <= 'z')
       || ('A' <= codePoint && codePoint <= 'Z');
 }
@@ -146,25 +155,24 @@ isDriveLetter
 static Arcadia_BooleanValue
 isColon
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   )
 {
-  if (!Arcadia_Utf8Reader_hasCodePoint(Arcadia_Process_getThread(process), context->reader)) {
+  if (!Arcadia_Utf8Reader_hasCodePoint(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(Arcadia_Process_getThread(process), context->reader);
+  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, context->reader);
   return ':' == codePoint;
 }
 
 static Arcadia_BooleanValue
 isDirectorySeparator
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (!Arcadia_Utf8Reader_hasCodePoint(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
@@ -175,11 +183,10 @@ isDirectorySeparator
 static Arcadia_BooleanValue
 isSlash
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Context* context
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   if (!Arcadia_Utf8Reader_hasCodePoint(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
@@ -192,11 +199,10 @@ isSlash
 static void
 normalize
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* self
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_SizeValue previous = 0, current = 1;
   while (current < Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames)) {
     Arcadia_Value t;
@@ -226,13 +232,11 @@ normalize
 static void
 parseWindowsFilePath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* target,
     Arcadia_ByteBuffer* source
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-
   Context context;
   context.reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, source);
   context.temporaryBuffer = Arcadia_ByteBuffer_create(thread);
@@ -243,14 +247,14 @@ parseWindowsFilePath
   target->root = NULL;
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)target->fileNames);
 
-  if (isDriveLetter(process, &context)) {
-    saveAndNext(process, &context);
-    if (isColon(process, &context)) {
-      next(process, &context);
-      if (isDirectorySeparator(process, &context)) {
+  if (isDriveLetter(thread, &context)) {
+    saveAndNext(thread, &context);
+    if (isColon(thread, &context)) {
+      next(thread, &context);
+      if (isDirectorySeparator(thread, &context)) {
         // absolute.
         context.target->relative = Arcadia_BooleanValue_False;
-        next(process, &context);
+        next(thread, &context);
         Arcadia_Value temporaryValue;
         Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
         context.target->root = Arcadia_String_create(thread, temporaryValue);
@@ -264,30 +268,30 @@ parseWindowsFilePath
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
     } else {
-      while (!isEnd(process, &context) && !isDirectorySeparator(process, &context)) {
-        saveAndNext(process, &context);
+      while (!isEnd(thread, &context) && !isDirectorySeparator(thread, &context)) {
+        saveAndNext(thread, &context);
       }
       if (Arcadia_ByteBuffer_getNumberOfBytes(thread, context.temporaryBuffer)) {
         Arcadia_Value temporary;
         Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
-        Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(Arcadia_Process_getThread(process), temporary));
+        Arcadia_Value_setObjectReferenceValue(&temporary, Arcadia_String_create(thread, temporary));
         Arcadia_List_insertBack(thread, context.target->fileNames, temporary);
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
       target->relative = Arcadia_BooleanValue_True;
     }
-  } else if (isDirectorySeparator(process, &context)) {
+  } else if (isDirectorySeparator(thread, &context)) {
     // relative to the root of the current drive.
     context.target->relative = Arcadia_BooleanValue_True;
-    next(process, &context);
+    next(thread, &context);
   } else {
     context.target->relative = Arcadia_BooleanValue_True;
   }
   // read the remaining directories
   Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
-  while (!isEnd(process, &context)) {
-    if (isDirectorySeparator(process, &context)) {
-      next(process, &context);
+  while (!isEnd(thread, &context)) {
+    if (isDirectorySeparator(thread, &context)) {
+      next(thread, &context);
       if (Arcadia_ByteBuffer_getNumberOfBytes(thread, context.temporaryBuffer)) {
         Arcadia_Value temporary;
         Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
@@ -296,7 +300,7 @@ parseWindowsFilePath
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
     } else {
-      saveAndNext(process, &context);
+      saveAndNext(thread, &context);
     }
   }
   if (Arcadia_ByteBuffer_getNumberOfBytes(thread, context.temporaryBuffer)) {
@@ -311,13 +315,11 @@ parseWindowsFilePath
 static void
 parseUnixFilePath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* target,
     Arcadia_ByteBuffer* source
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-
   Context context;
   context.reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, source);
   context.temporaryBuffer = Arcadia_ByteBuffer_create(thread);
@@ -328,16 +330,16 @@ parseUnixFilePath
   target->root = NULL;
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)target->fileNames);
 
-  if (isSlash(process, &context)) {
+  if (isSlash(thread, &context)) {
     target->relative = Arcadia_BooleanValue_False;
     target->root = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"/", sizeof(u8"/") - 1));
-    next(process, &context);
+    next(thread, &context);
   }
   // read the remaining directories
   Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
-  while (!isEnd(process, &context)) {
-    if (isDirectorySeparator(process, &context)) {
-      next(process, &context);
+  while (!isEnd(thread, &context)) {
+    if (isDirectorySeparator(thread, &context)) {
+      next(thread, &context);
       if (Arcadia_ByteBuffer_getNumberOfBytes(thread, context.temporaryBuffer)) {
         Arcadia_Value temporary;
         Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
@@ -346,7 +348,7 @@ parseUnixFilePath
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
     } else {
-      saveAndNext(process, &context);
+      saveAndNext(thread, &context);
     }
   }
   if (Arcadia_ByteBuffer_getNumberOfBytes(thread, context.temporaryBuffer)) {
@@ -361,13 +363,11 @@ parseUnixFilePath
 static void
 parseGenericFilePath
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_FilePath* target,
     Arcadia_ByteBuffer* source
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-
   Context context;
   context.reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, source);
   context.temporaryBuffer = Arcadia_ByteBuffer_create(thread);
@@ -378,16 +378,16 @@ parseGenericFilePath
   target->root = NULL;
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)target->fileNames);
 
-  if (isSlash(process, &context)) {
+  if (isSlash(thread, &context)) {
     target->relative = Arcadia_BooleanValue_False;
     target->root = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"/", sizeof(u8"/") - 1));
-    next(process, &context);
+    next(thread, &context);
   }
   // read the remaining directories
   Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
-  while (!isEnd(process, &context)) {
-    if (isDirectorySeparator(process, &context)) {
-      next(process, &context);
+  while (!isEnd(thread, &context)) {
+    if (isDirectorySeparator(thread, &context)) {
+      next(thread, &context);
       if (Arcadia_ByteBuffer_getNumberOfBytes(thread, context.temporaryBuffer)) {
         Arcadia_Value temporary;
         Arcadia_Value_setObjectReferenceValue(&temporary, (Arcadia_ObjectReferenceValue)context.temporaryBuffer);
@@ -396,7 +396,7 @@ parseGenericFilePath
         Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
       }
     } else {
-      saveAndNext(process, &context);
+      saveAndNext(thread, &context);
     }
   }
   if (Arcadia_ByteBuffer_getNumberOfBytes(thread, context.temporaryBuffer)) {
@@ -442,7 +442,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Library.FilePath", Arcadia_FilePath, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Library.FilePath", Arcadia_FilePath,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 Arcadia_FilePath_constructImpl
@@ -524,11 +526,9 @@ Arcadia_FilePath*
 Arcadia_FilePath_parseWindows
   (
     Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
+    Arcadia_String* string
   )
 {
-  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
   Arcadia_Value argumentValues[] = { Arcadia_Value_Initializer() };
   Arcadia_FilePath* self = Arcadia_allocateObject(thread, _type, 0, &argumentValues[0]);
@@ -537,9 +537,9 @@ Arcadia_FilePath_parseWindows
   self->root = NULL;
   self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
-  parseWindowsFilePath(process, self, byteBuffer);
-  normalize(process, self);
+  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
+  parseWindowsFilePath(thread, self, byteBuffer);
+  normalize(thread, self);
   return self;
 }
 
@@ -547,11 +547,9 @@ Arcadia_FilePath*
 Arcadia_FilePath_parseUnix
   (
     Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
+    Arcadia_String* string
   )
 {
-  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
   Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -562,9 +560,9 @@ Arcadia_FilePath_parseUnix
   self->root = NULL;
   self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
-  parseUnixFilePath(process, self, byteBuffer);
-  normalize(process, self);
+  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
+  parseUnixFilePath(thread, self, byteBuffer);
+  normalize(thread, self);
   return self;
 }
 
@@ -572,14 +570,13 @@ Arcadia_FilePath*
 Arcadia_FilePath_parseNative
   (
     Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
+    Arcadia_String* string
   )
  {
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  return Arcadia_FilePath_parseWindows(thread, bytes, numberOfBytes);
+  return Arcadia_FilePath_parseWindows(thread, string);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  return Arcadia_FilePath_parseUnix(thread, bytes, numberOfBytes);
+  return Arcadia_FilePath_parseUnix(thread, string);
 #else
   #error("operating system not (yet) supported")
 #endif
@@ -671,7 +668,6 @@ Arcadia_FilePath_parseGeneric
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
   Arcadia_TypeValue _type = _Arcadia_FilePath_getType(thread);
   Arcadia_Value argumentValues[] = {
     Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -683,8 +679,8 @@ Arcadia_FilePath_parseGeneric
   self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
-  parseGenericFilePath(process, self, byteBuffer);
-  normalize(process, self);
+  parseGenericFilePath(thread, self, byteBuffer);
+  normalize(thread, self);
   return self;
 }
 
@@ -748,7 +744,7 @@ Arcadia_FilePath_getFullPath
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  return Arcadia_FilePath_parseNative(thread, buffer, strlen(buffer));
+  return Arcadia_FilePath_parseNative(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, buffer, strlen(buffer)))));
 #undef BUFFER_LENGTH
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   Arcadia_String* s = Arcadia_FilePath_toNative(thread, self);
@@ -758,7 +754,7 @@ Arcadia_FilePath_getFullPath
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  return Arcadia_FilePath_parseNative(thread, buffer, strlen(buffer));
+  return Arcadia_FilePath_parseNative(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, buffer, strlen(buffer)))));
 #else
   #error("operating system not (yet) supported")
 #endif

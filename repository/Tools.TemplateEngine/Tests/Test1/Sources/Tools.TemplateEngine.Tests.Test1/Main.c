@@ -104,6 +104,30 @@ recursiveInclude2
   }
 }
 
+static void
+time
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  Context* context = Context_create(thread);
+  context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
+  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
+  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
+  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
+
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, u8"time.t", strlen(u8"time.t"));
+  Arcadia_Value filePathValue;
+  Arcadia_Value_setObjectReferenceValue(&filePathValue, filePath);
+  Arcadia_Stack_push(thread, context->stack, filePathValue);
+  Context_onRun(thread, context);
+
+  Arcadia_FileSystem_setFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, u8"time.txt", strlen(u8"time.txt")), context->targetBuffer);
+
+}
+
 int
 main
   (
@@ -118,6 +142,9 @@ main
     return EXIT_FAILURE;
   }
   if (!Arcadia_Tests_safeExecute(&recursiveInclude2)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&time)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

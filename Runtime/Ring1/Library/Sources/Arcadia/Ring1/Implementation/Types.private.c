@@ -17,13 +17,14 @@
 #include "Arcadia/Ring1/Implementation/Types.private.h"
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Names.h"
 #include "Arcadia/Ring1/Implementation/Atoms.private.h" ///< @todo A better solution is required for this.
 #include <assert.h>
 #include <stdio.h>
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#define TypeNodeName "R.Internal.TypeNode"
+#define TypeNodeName "Arcadia.Internal.TypeNode"
 
 typedef struct TypeNode TypeNode;
 
@@ -49,13 +50,8 @@ TypeNode_visitCallback
     TypeNode* typeNode
   );
 
-typedef struct TypeNodes TypeNodes;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-struct TypeNodes {
-  TypeNode* typeNodes;
-};
 
 static uint32_t g_referenceCount = 0;
 static TypeNodes* g_typeNodes = NULL;
@@ -101,18 +97,25 @@ TypeNodes_create
     Arcadia_Process* process
   )
 {
-  TypeNodes* typeNode = NULL;
+  TypeNodes* typeNodes = NULL;
+  typeNodes = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(TypeNodes));
+
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(Arcadia_Process_getThread(process), &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    typeNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(TypeNodes));
+    typeNodes->buckets = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(TypeNode*) * 8);
+    for (size_t i = 0, n = 8; i < n; ++i) {
+      typeNodes->buckets[i] = NULL;
+    }
+    typeNodes->size = 0;
+    typeNodes->capacity = 8;
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
   } else {
     Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-    return NULL;
+    Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), typeNodes);
+    Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
-  typeNode->typeNodes = NULL;
-  return typeNode;
+  return typeNodes;
 }
 
 static void
@@ -122,19 +125,24 @@ TypeNodes_destroy
     TypeNodes* typeNodes
   )
 {
-  while (typeNodes->typeNodes) {
-    // At each iteration, remove the leaves of the type tree.
-    TypeNode** previous = &typeNodes->typeNodes;
-    TypeNode* current = typeNodes->typeNodes;
-    if (!Arcadia_Type_hasChildren(Arcadia_Process_getThread(process), current)) {
-      TypeNode* node = current;
-      *previous = current->next;
-      current = current->next;
-      node->typeDestructing(NULL);
-      Arcadia_Process_unlockObject(process, node);
-    } else {
-      previous = &current->next;
-      current = current->next;
+  while (typeNodes->size) {
+    for (size_t i = 0, n = typeNodes->capacity; i < n; ++i) {
+      // At each iteration, remove the leaves of the type tree.
+      TypeNode** previous = &typeNodes->buckets[i];
+      TypeNode* current = typeNodes->buckets[i];
+      while (current) {
+        if (!Arcadia_Type_hasChildren(Arcadia_Process_getThread(process), current)) {
+          TypeNode* node = current;
+          *previous = current->next;
+          current = current->next;
+          node->typeDestructing(NULL);
+          Arcadia_Process_unlockObject(process, node);
+          typeNodes->size--;
+        } else {
+          previous = &current->next;
+          current = current->next;
+        }
+      }
     }
   }
 }
@@ -191,11 +199,15 @@ Arcadia_Type_hasChildren
   if (!Arcadia_Type_isObjectKind(thread, self)) {
     return Arcadia_BooleanValue_False;
   }
-  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Type_isObjectKind(thread, typeNode)) {
-      if (Arcadia_Type_getParentObjectType(thread, typeNode) == (TypeNode const*)self) {
-        return Arcadia_BooleanValue_True;
+  for (size_t i = 0, n = g_typeNodes->capacity; i < n; ++i) {
+    TypeNode* typeNode = g_typeNodes->buckets[i];
+    while (typeNode) {
+      if (Arcadia_Type_isObjectKind(thread, typeNode)) {
+        if (Arcadia_Type_getParentObjectType(thread, typeNode) == (TypeNode const*)self) {
+          return Arcadia_BooleanValue_True;
+        }
       }
+      typeNode = typeNode->next;
     }
   }
   return Arcadia_BooleanValue_False;
@@ -220,8 +232,10 @@ Arcadia_registerInternalType
   )
 {
   Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Atom_isEqualTo(thread, typeNode->typeName, typeName)) {
+  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t index = hash % g_typeNodes->capacity;
+  for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
@@ -238,8 +252,9 @@ Arcadia_registerInternalType
   //assert(NULL != typeNode->typeOperations);
   //assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
-  typeNode->next = g_typeNodes->typeNodes;
-  g_typeNodes->typeNodes = typeNode;
+  typeNode->next = g_typeNodes->buckets[index];
+  g_typeNodes->buckets[index] = typeNode;
+  g_typeNodes->size++;
 
   Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode);
 
@@ -257,8 +272,10 @@ Arcadia_registerScalarType
   )
 {
   Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Atom_isEqualTo(thread, typeNode->typeName, typeName)) {
+  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t index = hash % g_typeNodes->capacity;
+  for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
@@ -275,8 +292,9 @@ Arcadia_registerScalarType
   assert(NULL != typeNode->typeOperations);
   assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
-  typeNode->next = g_typeNodes->typeNodes;
-  g_typeNodes->typeNodes = typeNode;
+  typeNode->next = g_typeNodes->buckets[index];
+  g_typeNodes->buckets[index] = typeNode;
+  g_typeNodes->size++;
 
   Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode);
 
@@ -296,8 +314,10 @@ Arcadia_registerObjectType
   )
 {
   Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Atom_isEqualTo(thread, typeNode->typeName, typeName)) {
+  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t index = hash % g_typeNodes->capacity;
+  for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
@@ -320,8 +340,9 @@ Arcadia_registerObjectType
   assert(NULL != typeNode->typeOperations->objectTypeOperations);
   assert(NULL != typeNode->typeOperations->objectTypeOperations->construct);
 
-  typeNode->next = g_typeNodes->typeNodes;
-  g_typeNodes->typeNodes = typeNode;
+  typeNode->next = g_typeNodes->buckets[index];
+  g_typeNodes->buckets[index] = typeNode;
+  g_typeNodes->size++;
 
   Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode); /* @todo Can raise due to allocation failure. Can we built-in a guarantee that at least one lock is always available? */
 
@@ -340,8 +361,10 @@ Arcadia_registerEnumerationType
   )
 {
   Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
-    if (Arcadia_Atom_isEqualTo(thread, typeNode->typeName, typeName)) {
+  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t index = hash % g_typeNodes->capacity;
+  for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
+    if (typeNode->typeName == typeName) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
@@ -356,8 +379,9 @@ Arcadia_registerEnumerationType
 
   assert(NULL != typeNode->typeOperations);
 
-  typeNode->next = g_typeNodes->typeNodes;
-  g_typeNodes->typeNodes = typeNode;
+  typeNode->next = g_typeNodes->buckets[index];
+  g_typeNodes->buckets[index] = typeNode;
+  g_typeNodes->size++;
 
   Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode); /* @todo Can raise due to allocation failure. Can we built-in a guarantee that at least one lock is always available? */
 
@@ -400,7 +424,9 @@ Arcadia_getType
   )
 {
   Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  for (TypeNode* typeNode = g_typeNodes->typeNodes; NULL != typeNode; typeNode = typeNode->next) {
+  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t index = hash % g_typeNodes->capacity;
+  for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
     if (typeNode->typeName == typeName) {
       return typeNode;
     }
@@ -434,7 +460,7 @@ Arcadia_Type_getOperations
 }
 
 Arcadia_SizeValue
-Arcadia_Type_hash
+Arcadia_Type_getHash
   (
     Arcadia_Thread* thread,
     Arcadia_TypeValue self
@@ -537,6 +563,37 @@ _Arcadia_Types_onFinalize
 }
 
 static void
+startupDependencies
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
+  Arcadia_Names_getModule(process)->onStartUp(thread);
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_Atoms_getModule(process)->onStartUp(thread);
+    Arcadia_Thread_popJumpTarget(thread);
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Names_getModule(process)->onShutDown(thread);
+    Arcadia_Thread_jump(thread);
+  }
+}
+
+static void
+shutdownDependencies
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
+  Arcadia_Atoms_getModule(process)->onShutDown(thread);
+  Arcadia_Names_getModule(process)->onShutDown(thread);
+}
+
+static void
 _Arcadia_Types_onStartUp
   (
     Arcadia_Thread* thread
@@ -553,10 +610,10 @@ _Arcadia_Types_onStartUp
       Arcadia_Process_registerType(process, TypeNodeName, sizeof(TypeNodeName) - 1, process, &TypeNode_typeRemovedCallback, &TypeNode_visitCallback, &TypeNode_finalizeCallback);
       g_typeNodeRegistered = Arcadia_BooleanValue_True;
     }
-    Arcadia_Atoms_getModule(process)->onStartUp(thread);
+    startupDependencies(thread);
     g_typeNodes = TypeNodes_create(process);
     if (!g_typeNodes) {
-      Arcadia_Atoms_getModule(process)->onShutDown(thread);
+      shutdownDependencies(thread);
       Arcadia_Thread_jump(thread);
     }
     Arcadia_JumpTarget jumpTarget;
@@ -577,7 +634,7 @@ _Arcadia_Types_onStartUp
       if (status) {
         /*Intentionally empty.*/
       }
-      Arcadia_Atoms_getModule(process)->onShutDown(thread);
+      shutdownDependencies(thread);
       Arcadia_Thread_jump(thread);
     }
   }
@@ -612,7 +669,7 @@ _Arcadia_Types_onShutDown
     if (status) {
       /* Intentionally empty.*/
     }
-    Arcadia_Atoms_getModule(process)->onShutDown(thread);
+    shutdownDependencies(thread);
   }
 }
 

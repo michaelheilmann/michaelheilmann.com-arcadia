@@ -185,7 +185,7 @@ IcoImageWriter_writeIcoToPathImpl
 {
   Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(thread);
   IcoImageWriter_writeIcoToByteBufferImpl(thread, self, sourcePixelBuffers, targetByteBuffer);
-  Arcadia_FileSystem_setFileContents(thread, Arcadia_FileSystem_getOrCreate(thread), Arcadia_FilePath_parseUnix(thread, Arcadia_String_getBytes(thread, targetPath), Arcadia_String_getNumberOfBytes(thread, targetPath)), targetByteBuffer);
+  Arcadia_FileSystem_setFileContents(thread, Arcadia_FileSystem_getOrCreate(thread), Arcadia_FilePath_parseUnix(thread, targetPath), targetByteBuffer);
 }
 
 static void

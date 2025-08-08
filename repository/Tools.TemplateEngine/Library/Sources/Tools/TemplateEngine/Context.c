@@ -18,6 +18,8 @@
 #include "Tools/TemplateEngine/Environment.h"
 #include "Tools/TemplateEngine/FileContext.h"
 
+#include "Tools/TemplateEngine/Library.h"
+
 static void
 Context_constructImpl
   (
@@ -81,6 +83,7 @@ Context_constructImpl
     ;
   Arcadia_String* sourceString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, sourceBytes, sizeof(sourceBytes) - 1)));
   _self->environment = Environment_loadString(thread, sourceString);
+  Arcadia_TemplateEngine_registerTimeLibrary(thread, _self->environment);
   _self->targetBuffer = NULL;
   _self->target = NULL;
   _self->temporaryBuffer = NULL;

@@ -21,7 +21,7 @@
 #endif
 
 #include "Arcadia/Ring1/Implementation/Atoms.h"
-#include "Arcadia/Ring1/Implementation/Process.h"
+#include "Arcadia/Ring1/Implementation/Module.h"
 
 Arcadia_DeclareModule("Arcadia.Atoms", Arcadia_Atoms);
 

@@ -327,7 +327,8 @@ Arcadia_FileSystem_getWorkingDirectory
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_FilePath* filePath = Arcadia_FilePath_parseWindows(thread, pBuffer, dwBufferSize - 1);
+    Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, pBuffer, dwBufferSize - 1)));
+    Arcadia_FilePath* filePath = Arcadia_FilePath_parseWindows(thread, filePathString);
     Arcadia_Thread_popJumpTarget(thread);
     Arms_MemoryManager_deallocate(Arms_getSlabMemoryManager(), pBuffer);
     pBuffer = NULL;
@@ -346,7 +347,8 @@ Arcadia_FileSystem_getWorkingDirectory
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_FilePath* filePath = Arcadia_FilePath_parseUnix(thread, cwd, strlen(cwd));
+  Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, cwd, strlen(cwd))));
+  Arcadia_FilePath* filePath = Arcadia_FilePath_parseUnix(thread, filePathString);
   return filePath;
 #else
   #error("environment not (yet) supported")
@@ -446,7 +448,7 @@ Arcadia_FileSystem_getLocal
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    filePath = Arcadia_FilePath_parseWindows(thread, q, iResult - 1);
+    filePath = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, q, iResult - 1))));
     Arcadia_Thread_popJumpTarget(thread);
     free(q);
     q = NULL;
@@ -472,18 +474,43 @@ Arcadia_FileSystem_getRoaming
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }
+  int iResult;
+  iResult = WideCharToMultiByte(CP_UTF8, 0, p, -1, NULL, 0, NULL, NULL);
+  if (!iResult) {
+    CoTaskMemFree(p);
+    p = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  char* q = malloc(sizeof(char) * iResult);
+  if (!q) {
+    CoTaskMemFree(p);
+    p = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  iResult = WideCharToMultiByte(CP_UTF8, 0, p, -1, q, iResult, NULL, NULL);
+  CoTaskMemFree(p);
+  p = NULL;
+  if (!iResult) {
+    free(q);
+    q = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+
   Arcadia_FilePath* filePath = NULL;
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    filePath = Arcadia_FilePath_parseWindows(thread, p, wcslen(p));
+    filePath = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, q, iResult - 1))));
     Arcadia_Thread_popJumpTarget(thread);
-    CoTaskMemFree(p);
-    p = NULL;
+    free(q);
+    q = NULL;
   } else {
     Arcadia_Thread_popJumpTarget(thread);
-    CoTaskMemFree(p);
-    p = NULL;
+    free(q);
+    q = NULL;
     Arcadia_Thread_jump(thread);
   }
   return filePath;
@@ -586,7 +613,7 @@ Arcadia_FileSystem_getExecutablePath
         n = lo;
         Arcadia_Memory_reallocateUnmanaged(thread, &p, n);
       } else {
-        Arcadia_FilePath* path = Arcadia_FilePath_parseWindows(thread, p, n);
+        Arcadia_FilePath* path = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, n))));
         Arcadia_Memory_deallocateUnmanaged(thread, p);
         p = NULL;
         Arcadia_Thread_popJumpTarget(thread);

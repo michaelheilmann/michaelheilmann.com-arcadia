@@ -38,7 +38,8 @@
 /// trailing slashes are ignored
 /// For Windows, `/a` is translated to `a:\` and `/a(/<dir1>)(/<dir2>)*` is translated to `a:\<dir1>(\<dir2>)*`
 /// For Linux, `/a(/<dir>)* is translated to `/a(/<dir>)*`
-Arcadia_declareObjectType(u8"Arcadia.FilePath", Arcadia_FilePath, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.FilePath", Arcadia_FilePath,
+                          u8"Arcadia.Object");
 
 struct Arcadia_FilePath {
   Arcadia_Object _parent;
@@ -74,8 +75,7 @@ Arcadia_FilePath*
 Arcadia_FilePath_parseWindows
   (
     Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
+    Arcadia_String* string
   );
 
 // Parse a Unix file path.
@@ -87,8 +87,7 @@ Arcadia_FilePath*
 Arcadia_FilePath_parseUnix
   (
     Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
+    Arcadia_String* string
   );
 
 // Invoke Arcadia_FilePath_parseUnix or Arcadia_FilePath_parseWindows depending on the operating system.
@@ -96,8 +95,7 @@ Arcadia_FilePath*
 Arcadia_FilePath_parseNative
   (
     Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
+    Arcadia_String* string
   );
 
 Arcadia_String*

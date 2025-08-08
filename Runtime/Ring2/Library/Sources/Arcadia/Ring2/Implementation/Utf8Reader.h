@@ -22,7 +22,8 @@
 
 #include "Arcadia/Ring1/Include.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader,
+                          u8"Arcadia.Object");
 
 struct Arcadia_Utf8Reader {
   Arcadia_Object _parent;
