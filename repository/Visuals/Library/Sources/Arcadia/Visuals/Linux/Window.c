@@ -729,6 +729,7 @@ Arcadia_Visuals_Linux_Window_constructImpl
   _self->colormap = None;
   _self->window = None;
   _self->title = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, g_title, sizeof(g_title) - 1));
+  _self->fullscreen = Arcadia_BooleanValue_False;
 
   ((Arcadia_Visuals_Window*)_self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & openImpl;
   ((Arcadia_Visuals_Window*)_self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & closeImpl;
@@ -944,7 +945,7 @@ getFullscreenImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_Window* self
   )
-{ return Arcadia_BooleanValue_False; }
+{ return self->fullscreen; }
 
 static void
 setFullscreenImpl
@@ -953,7 +954,33 @@ setFullscreenImpl
     Arcadia_Visuals_Linux_Window* self,
     Arcadia_BooleanValue fullscreen
   )
-{}
+{
+  if (self->window) {
+    if (self->fullscreen != fullscreen) {
+
+      struct {
+        unsigned long   flags;
+        unsigned long   functions;
+        unsigned long   decorations;
+        long            inputMode;
+        unsigned long   status;
+      } hints = {
+        .flags = 2, // indicate that we change the decorations
+        .functions = 0, // ignored
+        .decorations = fullscreen ? 0 : 1, // 0 means disables decorations, 1 enables decorations
+        .inputMode = 0, // ignored
+        .status = 0, // ingored
+      };
+      XChangeProperty(self->application->display, self->window, self->application->_MOTIF_WM_HINTS,
+                                                   self->application->_MOTIF_WM_HINTS,
+                                                   32, PropModeReplace, (unsigned char *)&hints,
+                                                   5);
+      self->fullscreen = fullscreen;
+    }
+  } else {
+    self->fullscreen = fullscreen;
+  }  
+}
 
 static Arcadia_BooleanValue
 getQuitRequestedImpl

@@ -101,7 +101,6 @@ multiplier
   return pow5DivPow2;
 }
 
-
 // precondition: i >= 0
 // Compute floor(2^k / 5^q) + 1 where
 // - q = i as described in section 3.4
@@ -179,8 +178,9 @@ printTable
       Arcadia_Thread_jump(thread);
 #endif
     }
+    Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8"Arcadia_Natural64Value_Literal(", sizeof(u8"Arcadia_Natural64Value_Literal(") - 1);
     Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(string));
-    Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8", ", sizeof(u8", ") - 1);
+    Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8"), ", sizeof(u8"), ") - 1);
     string = Arcadia_BigInteger_toDecimalString(thread, pow5High);
     if (pad && Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, string) < 19) { // fill to 19 code points of shorter
       for (Arcadia_SizeValue j = 0, m = 18 - Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, string); j < m; ++j) {
@@ -192,7 +192,9 @@ printTable
       Arcadia_Thread_jump(thread);
 #endif
     }
+    Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8"Arcadia_Natural64Value_Literal(", sizeof(u8"Arcadia_Natural64Value_Literal(") - 1);
     Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(string));
+    Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8"), ", sizeof(u8"), ") - 1);
     Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8" }", sizeof(u8" }") - 1);
     if (i != length - 1) {
       Arcadia_StringBuffer_append_pn(thread, stringBuffer, u8",", sizeof(u8",") - 1);

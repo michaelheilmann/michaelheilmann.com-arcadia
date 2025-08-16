@@ -24,7 +24,8 @@
 #include "Arcadia/Ring2/Implementation/Collections/Collection.h"
 typedef struct Arcadia_List Arcadia_List;
 
-Arcadia_declareObjectType(u8"Arcadia.Map", Arcadia_Map, u8"Arcadia.Collection");
+Arcadia_declareObjectType(u8"Arcadia.Map", Arcadia_Map,
+                          u8"Arcadia.Collection");
 
 struct Arcadia_Map {
   Arcadia_Collection parent;

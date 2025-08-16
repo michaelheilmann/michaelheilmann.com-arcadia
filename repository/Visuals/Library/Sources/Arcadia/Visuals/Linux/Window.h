@@ -41,6 +41,11 @@ struct Arcadia_Visuals_Linux_Window {
   GLXFBConfig *frameBufferConfiguration; // Default value is NULL.
   XVisualInfo *visualInfo; // Default value is NULL.
   GLXContext context; // Default value is NULL.
+  
+  // #Arcadia_BooleanValue_True if the window is a fullscreen window.
+  // #Arcadia_BooleanValue_False otherwise.
+  // Default is #Arcadia_BooleanValue_False.
+  Arcadia_BooleanValue fullscreen;
 
   Arcadia_String* title;
   Arcadia_Visuals_Linux_Icon* smallIcon;

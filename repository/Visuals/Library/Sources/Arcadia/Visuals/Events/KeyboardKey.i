@@ -36,7 +36,7 @@ Define(BrowserStop, 169, "Browser stop")
 
 
 Define(C, 67, "C")
-#if defined(WithAliases)
+#if defined(withAliases)
 Define(Capital, 6, "Capital")											// "Capital" key. Alias of "CapsLock" key.
 #endif
 Define(CapsLock, 6, "Caps lock")										// "CapsLock"" key. Alias of "Capital" key.
@@ -56,12 +56,12 @@ Define(D6, 54, "6")
 Define(D7, 55, "7")
 Define(D8, 56, "8")
 Define(D9, 57, "9")
-Define(DeadCircumflex, 221, "Dead Circumflex")                          // "^" aka "VK_OEM5" in WinAPI.
-Define(DeadGrave, 219, "Dead Grave")                                    // "`" aka "VK_OEM6" in WinAPI.
+Define(DeadCircumflex, 221, "Dead Circumflex")                          // "^" aka "VK_OEM_5" in WinAPI.
+Define(DeadGrave, 219, "Dead Grave")                                    // "`" aka "VK_OEM_6" in WinAPI.
 Define(Decimal, 110, "Decimal")											// Decimal separator on NumPad
 Define(Delete, 46, "Delete")
 Define(Divide, 111, "Divide")
-#if defined(WithAliases)
+#if defined(withAliases)
 Define(Down, 40, "Down")												// "Down" key. Alias of "Down Arrow" key.
 #endif
 Define(DownArrow, 40, "Down Arrow")										// "Down Arrow" key. Alias of "Down" key.
@@ -114,7 +114,7 @@ Define(Insert, 58, "Insert")
 
 
 Define(J, 74, "J")
-Define(Junja, 23, "IME Junja Mode")										// IME Junja Mode key.
+Define(JunjaMode, 23, "IME Junja Mode")										// "IME Junja Mode"" key.
 
 
 Define(K, 75, "K")
@@ -144,7 +144,7 @@ Define(Multiply, 106, "Multiply")
 
 Define(N, 78, "N")
 Define(NonConvert, 29, "IME NonConvert")
-Define(NumberSign, 227, "Number Sign")                                  // "#" aka "VK_OEM2" in WinAPI.
+Define(NumberSign, 227, "Number Sign")                                  // "#" aka "VK_OEM_2" in WinAPI.
 Define(NumLock, 144, "Num Lock")
 Define(NumPad0, 96, "NumPad 0")
 Define(NumPad1, 97, "NumPad 1")
@@ -176,7 +176,7 @@ Define(Q, 81, "Q")
 
 Define(R, 82, "R")
 Define(Return, 13, "Return")
-#if defined(WithAliases)
+#if defined(withAliases)
 Define(Right, 39, "Right")
 #endif
 Define(RightArrow, 39, "RightArrow")

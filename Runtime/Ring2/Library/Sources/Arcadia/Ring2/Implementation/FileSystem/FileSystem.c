@@ -14,12 +14,10 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING2_PRIVATE (1)
-#include "Arcadia/Ring2/Implementation/FileSystem.h"
+#include "Arcadia/Ring2/Implementation/FileSystem/FileSystem.h"
 
+#include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Arms/Include.h"
-#include "Arcadia/Ring2/Implementation/FileHandle.h"
-#include "Arcadia/Ring2/Implementation/FilePath.h"
-#include "Arcadia/Ring2/Implementation/String.h"
 
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   #define WIN32_LEAN_AND_MEAN
@@ -63,7 +61,6 @@ Arcadia_FileSystem_getRoaming
   );
 
 #endif
-
 
 static void
 Arcadia_FileSystem_constructImpl
@@ -300,6 +297,31 @@ Arcadia_FileSystem_createDirectory
 #endif
 }
 
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+  #include "Arcadia/Ring2/Implementation/FileSystem/DirectoryIteratorWindows.h"
+#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
+  #include "Arcadia/Ring2/Implementation/FileSystem/DirectoryIteratorLinux.h"
+#else
+  #error("operating system not (yet) supported")
+#endif
+
+Arcadia_DirectoryIterator*
+Arcadia_FileSystem_createDirectoryIterator
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+{
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+  return (Arcadia_DirectoryIterator*)Arcadia_DirectoryIteratorWindows_create(thread, path);
+#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
+  return (Arcadia_DirectoryIterator*)Arcadia_DirectoryIteratorLinux_create(thread, path);
+#else
+  #error("operating system not (yet) supported")
+#endif
+}
+
 Arcadia_FilePath*
 Arcadia_FileSystem_getWorkingDirectory
   (
@@ -387,7 +409,8 @@ Arcadia_FileSystem_getHomeFolder
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    filePath = Arcadia_FilePath_parseUnix(thread, ppwd->pw_dir, strlen(ppwd->pw_dir));
+    Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, ppwd->pw_dir, strlen(ppwd->pw_dir))));
+    filePath = Arcadia_FilePath_parseUnix(thread, filePathString);
     Arcadia_Thread_popJumpTarget(thread);
     free(p);
     p = NULL;
@@ -640,7 +663,7 @@ Arcadia_FileSystem_getExecutablePath
   }
   // `readlink` returns a string in some encoding.
   // We assume that this encoding is UTF-8 at the moment.
-  return Arcadia_FilePath_parseUnix(thread, p, n);
+  return Arcadia_FilePath_parseUnix(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, n))));
 #else
   #error("environment not (yet) supported")
 #endif

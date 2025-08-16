@@ -28,6 +28,7 @@ configuration:
 environment:
     CLONE_DIRECTORY: C:\Source
     BUILD_DIRECTORY: C:\Build
+    PACKAGE_DIRECTORY: C:\Package
     
 # The clone directory.
 clone_folder: '%CLONE_DIRECTORY%'
@@ -42,6 +43,7 @@ install:
     # Create the build directory.
     - ps: |
         New-Item -Path "${env:BUILD_DIRECTORY}" -ItemType Directory
+        New-Item -Path "${env:PACKAGE_DIRECTORY}" -ItemType Directory
     # Download and install CMake.
     - set CMAKE_URL="https://cmake.org/files/v3.29/cmake-3.29.0-windows-x86_64.zip"
     - appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
@@ -107,10 +109,17 @@ build:
 
 after_build:
     - ps: New-Item ${env:BUILD_DIRECTORY}\.keepme -type file
-    - ps: 7z a ${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\.keepme
+    - ps: 7z a .\..\Package\${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\.keepme
+    - ps: 7z a .\..\Package\${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\Tools\TemplateEngine\Tool\${env:CONFIGURATION}\Arcadia.Tools.TemplateEngine.exe
+    - ps: 7z rn .\..\Package\${env:ARCHIVE_FILENAME} Arcadia.Tools.TemplateEngine.exe TemplateEngine\Binaries\Arcadia.Tools.TemplateEngine.exe
+    - ps: Push-AppveyorArtifact .\..\Package\${env:ARCHIVE_FILENAME} -FileName ${env:ARCHIVE_FILENAME} -DeploymentName ${env:ARCHIVE_FILENAME} 
 
 test_script:
-    - ps: ctest --output-junit test-results-${env:APPVEYOR_JOB_ID}.xml -C ${env:CONFIGURATION}
+    - ps: ctest --output-junit ${env:BUILD_DIRECTORY}/test-results-${env:APPVEYOR_JOB_ID}.xml -C ${env:CONFIGURATION}
+on_finish:
+    - ps: |
+        get-content ${env:BUILD_DIRECTORY}/Testing/Temporary/LastTest.log
+        get-content (Resolve-Path .\test-results-${env:APPVEYOR_JOB_ID}.xml)
     - ps: |
         $webClient = New-Object 'System.Net.WebClient'
         $webClient.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test-results-${env:APPVEYOR_JOB_ID}.xml))
@@ -119,9 +128,9 @@ test_script:
 matrix:
     fast_finish: true
 
-artifacts:
-    - path: $(ARCHIVE_FILENAME)
-      name: $(ARCHIVE_FILENAME)
+#artifacts:
+#    - name: $(ARCHIVE_FILENAME)
+#      path: .\..\Package\$(ARCHIVE_FILENAME)
 
 deploy:
     release: $(RELEASE_NAME)

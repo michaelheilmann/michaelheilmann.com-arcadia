@@ -29,6 +29,7 @@ Arcadia_Visuals_KeyboardKey_toString
   )
 {
   switch (self) {
+  /*#define withAliases*/
   #define Alias(alias, aliased)
   #define Define(name, value, description)\
     case Arcadia_Visuals_KeyboardKey_##name: {\

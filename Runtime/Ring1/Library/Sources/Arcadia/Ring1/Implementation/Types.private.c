@@ -233,6 +233,7 @@ Arcadia_registerInternalType
 {
   Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
   size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  assert(NULL != g_typeNodes);
   size_t index = hash % g_typeNodes->capacity;
   for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
     if (typeNode->typeName == typeName) {

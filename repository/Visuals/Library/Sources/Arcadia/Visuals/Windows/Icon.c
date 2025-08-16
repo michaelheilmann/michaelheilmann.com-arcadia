@@ -42,7 +42,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Icon", Arcadia_Visuals_Windows_Icon, u8"Arcadia.Visuals.Icon", Arcadia_Visuals_Icon, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Icon", Arcadia_Visuals_Windows_Icon,
+                         u8"Arcadia.Visuals.Icon", Arcadia_Visuals_Icon,
+                         &_typeOperations);
 
 static void
 Arcadia_Visuals_Windows_Icon_constructImpl

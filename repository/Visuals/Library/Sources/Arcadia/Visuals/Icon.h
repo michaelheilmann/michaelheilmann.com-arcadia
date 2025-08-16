@@ -18,10 +18,8 @@
 
 #include "Arcadia/Ring2/Include.h"
 
-#include <stdint.h>
-
 /// @code
-/// class Icon {
+/// class Arcadia.Visuals.Icon {
 ///   construct()
 /// }
 /// @endcode

@@ -29,7 +29,8 @@
 ///   construct(width:Integer32, height:Integer32, red:Natural8, green:Natural8, blue:Natural8, alpha:Natural8)
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Icon", Arcadia_Visuals_Windows_Icon, u8"Arcadia.Visuals.Icon")
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Icon", Arcadia_Visuals_Windows_Icon,
+                          u8"Arcadia.Visuals.Icon")
 
 struct Arcadia_Visuals_Windows_Icon {
   Arcadia_Visuals_Icon _parent;

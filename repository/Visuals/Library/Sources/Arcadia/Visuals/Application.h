@@ -18,6 +18,7 @@
 
 #include "Arcadia/Visuals/Icon.h"
 #include "Arcadia/Visuals/Window.h"
+typedef struct Arcadia_Visuals_Event Arcadia_Visuals_Event;
 
 /// @code
 /// class Arcadia.Visuals.Application {
@@ -52,6 +53,9 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Application", Arcadia_Visuals_Appli
 
 struct Arcadia_Visuals_Application {
   Arcadia_Object _parent;
+  /// @brief The event queue.
+  Arcadia_Deque* events;
+
   Arcadia_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Visuals_Application* self,
                                       Arcadia_Integer32Value width,
                                       Arcadia_Integer32Value height,
@@ -89,6 +93,29 @@ Arcadia_Visuals_Application_createWindow
 /// @todo Add Linux implementation.
 Arcadia_List*
 Arcadia_Visuals_Application_getDisplayDevices
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Application* self
+  );
+
+/// @brief Enque an event to this application.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this application.
+/// @param event A pointer to the event.
+void
+Arcadia_Visuals_Application_enqueEvent
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Application* self,
+    Arcadia_Visuals_Event* event
+  );
+
+/// @brief Deque an event from this application.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this application.
+/// @return A pointer to the event (if there is an event), a null pointer otherwise.
+Arcadia_Visuals_Event*
+Arcadia_Visuals_Application_dequeEvent
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Application* self

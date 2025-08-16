@@ -292,6 +292,9 @@ Arms_run
     Arms_RunStatistics* statistics
   )
 {
+  size_t locked = 0;
+  size_t live = 0;
+  size_t dead = 0;
   size_t destroyed = 0;
   // Premark phase:
   // Add all locked objects to the gray list.
@@ -302,6 +305,7 @@ Arms_run
     assert(NULL != currentLock->object);
     if (currentLock->count) {
       Arms_visit(currentLock->object);
+      locked++;
       previousLock = &currentLock->next;
       currentLock = currentLock->next;
     } else {
@@ -338,10 +342,12 @@ Arms_run
       if (deadObject->type->finalize) {
         deadObject->type->finalize(deadObject->type->context, deadObject + 1);
       }
+      dead++;
       destroyed++;
       free(deadObject);
     } else {
       Arms_Tag_setWhite(currentObject);
+      live++;
       previousObject = &currentObject->universeNext;
       currentObject = currentObject->universeNext;
     }

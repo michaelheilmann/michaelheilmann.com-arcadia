@@ -107,7 +107,7 @@ Arcadia_PointInTime_getDayOfWeek
         Arcadia_Thread_jump(thread);
       }
     #else
-      if (localtime_r(&t1, &t2)) {
+      if (!localtime_r(&t1, &t2)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -123,7 +123,7 @@ Arcadia_PointInTime_getDayOfWeek
         Arcadia_Thread_jump(thread);
       }
     #else
-      if (gmtime_r(&t1, &t2)) {
+      if (!gmtime_r(&t1, &t2)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -155,7 +155,7 @@ Arcadia_PointInTime_getDayOfMonth
         Arcadia_Thread_jump(thread);
       }
     #else
-      if (localtime_r(&t1, &t2)) {
+      if (!localtime_r(&t1, &t2)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -171,7 +171,7 @@ Arcadia_PointInTime_getDayOfMonth
         Arcadia_Thread_jump(thread);
       }
     #else
-      if (gmtime_r(&t1, &t2)) {
+      if (!gmtime_r(&t1, &t2)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -203,7 +203,7 @@ Arcadia_PointInTime_getMonth
         Arcadia_Thread_jump(thread);
       }
   #else
-      if (localtime_r(&t1, &t2)) {
+      if (!localtime_r(&t1, &t2)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -219,7 +219,7 @@ Arcadia_PointInTime_getMonth
         Arcadia_Thread_jump(thread);
       }
     #else
-      if (gmtime_r(&t1, &t2)) {
+      if (!gmtime_r(&t1, &t2)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -251,7 +251,7 @@ Arcadia_PointInTime_getYear
         Arcadia_Thread_jump(thread);
       }
     #else
-      if (localtime_r(&t1, &t2)) {
+      if (!localtime_r(&t1, &t2)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -267,7 +267,7 @@ Arcadia_PointInTime_getYear
         Arcadia_Thread_jump(thread);
       }
     #else
-      if (gmtime_r(&t1, &t2)) {
+      if (!gmtime_r(&t1, &t2)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }

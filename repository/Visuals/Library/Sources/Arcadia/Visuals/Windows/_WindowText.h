@@ -20,4 +20,13 @@ Windows_setWindowText
     Arcadia_String* text
   );
 
+static BOOL
+Windows_multiByteToWideChar
+  (
+    const char* p,
+    size_t n,
+    wchar_t** q,
+    size_t* m
+  );
+
 #endif // ARCADIA_VISUALS_WINDOWS__WINDOWTEXT_H_INCLUDED

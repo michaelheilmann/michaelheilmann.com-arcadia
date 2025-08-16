@@ -342,7 +342,7 @@ Arcadia_Imaging_Linux_PngImageWriter_writePngToPathImpl
     for (size_t i = 0; i < height; ++i) {
       state->row_pointers[i] = pixels + lineStride * i;
     }
-    Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, Arcadia_String_getBytes(thread, targetPath), Arcadia_String_getNumberOfBytes(thread, targetPath));
+    Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, targetPath);
     Arcadia_String* filePathString = Arcadia_FilePath_toNative(thread, filePath);
     fp = fopen(Arcadia_String_getBytes(thread, filePathString), "wb");
     if (!fp) {

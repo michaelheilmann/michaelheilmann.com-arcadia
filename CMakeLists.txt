@@ -29,5 +29,7 @@ add_subdirectory(Runtime/Ring1)
 add_subdirectory(Runtime/Ring2)
 add_subdirectory(DataDefinitionLanguage)
 add_subdirectory(Engine/Imaging)
-add_subdirectory(repository)
 add_subdirectory(Documentation)
+add_subdirectory(Tools/TemplateEngine)
+add_subdirectory(repository)
+

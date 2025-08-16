@@ -34,6 +34,7 @@ struct Arcadia_Visuals_Windows_Window {
 
   // #Arcadia_BooleanValue_True if the window is a fullscreen window.
   // #Arcadia_BooleanValue_False otherwise.
+  // Default is #Arcadia_BooleanValue_False.
   Arcadia_BooleanValue fullscreen;
 
   ATOM classAtom;

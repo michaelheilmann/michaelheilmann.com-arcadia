@@ -23,7 +23,8 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/Collections/List.h"
 
-Arcadia_declareObjectType(u8"Arcadia.ImmutableList", Arcadia_ImmutableList, u8"Arcadia.List");
+Arcadia_declareObjectType(u8"Arcadia.ImmutableList", Arcadia_ImmutableList,
+                          u8"Arcadia.List");
 
 struct Arcadia_ImmutableList {
   Arcadia_List parent;

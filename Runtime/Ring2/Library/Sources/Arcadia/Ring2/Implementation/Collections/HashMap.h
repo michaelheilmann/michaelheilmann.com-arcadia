@@ -25,7 +25,8 @@
 
 typedef struct _Arcadia_HashMap_Node _Arcadia_HashMap_Node;
 
-Arcadia_declareObjectType(u8"Arcadia.HashMap", Arcadia_HashMap, u8"Arcadia.Map");
+Arcadia_declareObjectType(u8"Arcadia.HashMap", Arcadia_HashMap,
+                          u8"Arcadia.Map");
 
 struct Arcadia_HashMap {
   Arcadia_Map _parent;

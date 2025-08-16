@@ -18,6 +18,7 @@
 #include "Arcadia/Visuals/Windows/DisplayDevice.h"
 #include "Arcadia/Visuals/Windows/Icon.h"
 #include "Arcadia/Visuals/Windows/Window.h"
+#include "Arcadia/Visuals/Windows/_CharConv.h"
 
 static Arcadia_Visuals_Windows_Application* g_instance = NULL;
 
@@ -39,31 +40,6 @@ Arcadia_Visuals_Windows_Application_createWindowImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Windows_Application* self
-  );
-
-static BOOL
-multiByteToWideChar
-  (
-    const char* p,
-    size_t n,
-    wchar_t** q,
-    size_t* m
-  );
-
-static Arcadia_String*
-Windows_fromChar
-  (
-    Arcadia_Thread* thread,
-    CONST CHAR* p,
-    size_t n
-  );
-
-static Arcadia_String*
-Windows_fromWideChar
-  (
-    Arcadia_Thread* thread,
-    CONST WCHAR* p,
-    size_t n
   );
 
 static Arcadia_String*
@@ -221,86 +197,6 @@ Arcadia_Visuals_Windows_Application_create
   return self;
 }
 
-static BOOL
-multiByteToWideChar
-  (
-    const char* p,
-    size_t n,
-    wchar_t** q,
-    size_t* m
-  )
-{
-  int l = MultiByteToWideChar(CP_ACP, 0, p, n, NULL, 0);
-  if (l <= 0) {
-    return FALSE;
-  }
-  wchar_t* r = malloc(sizeof(wchar_t) * l);
-  if (!r) {
-    return FALSE;
-  }
-  if (MultiByteToWideChar(CP_ACP, 0, p, n, r, l) <= 0) {
-    free(r);
-    r = NULL;
-    return FALSE;
-  }
-  *q = r;
-  *m = l;
-  return TRUE;
-}
-
-static Arcadia_String*
-Windows_fromChar
-  (
-    Arcadia_Thread* thread,
-    CONST CHAR* p,
-    size_t n
-  )
-{
-  return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, n)));
-}
-
-static Arcadia_String*
-Windows_fromWideChar
-  (
-    Arcadia_Thread* thread,
-    CONST WCHAR* p,
-    size_t n
-  )
-{
-  int m = WideCharToMultiByte(CP_UTF8, 0, p, -1, NULL, 0, NULL, NULL);
-  if (!m) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  CHAR* q = malloc(sizeof(char) * m);
-  if (!q) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  if (!WideCharToMultiByte(CP_UTF8, 0, p, -1, q, m, NULL, NULL)) {
-    free(q);
-    q = NULL;
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_String* s;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    s = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, q, m)));
-    Arcadia_Thread_popJumpTarget(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    free(q);
-    q = NULL;
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  free(q);
-  q = NULL;
-  return s;
-}
-
 static Arcadia_String*
 Arcadia_Visuals_Windows_Application_getAdapterName
   (
@@ -317,7 +213,7 @@ Arcadia_Visuals_Windows_Application_getAdapterName
     }
     deviceIndex++;
     if (!strcmp(deviceInfo.DeviceName, p)) {
-      return Windows_fromChar(thread, deviceInfo.DeviceString, strlen(deviceInfo.DeviceString));
+      return Windows_fromMultiByte(thread, deviceInfo.DeviceString, strlen(deviceInfo.DeviceString));
     }
   }
   return NULL;
@@ -359,7 +255,7 @@ Arcadia_Visuals_Windows_Application_getMonitorName
   }
 
   wchar_t* q; size_t m;
-  multiByteToWideChar(p, strlen(p) + 1, &q, &m);
+  Windows_multiByteToWideChar(p, strlen(p) + 1, &q, &m);
 
   Arcadia_String* name = NULL;
   Arcadia_JumpTarget jumpTarget;
@@ -445,7 +341,7 @@ enumDisplayMonitorsCallback
     }
 
     // (1) Get the ID.
-    Arcadia_String* id = Windows_fromChar(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice, strlen(monitorInfoEx.szDevice));
+    Arcadia_String* id = Windows_fromMultiByte(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice, strlen(monitorInfoEx.szDevice));
     // (2) Get the monitor name.
     Arcadia_String* monitorName = Arcadia_Visuals_Windows_Application_getMonitorName(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice);
     // (2) Get the adapter name

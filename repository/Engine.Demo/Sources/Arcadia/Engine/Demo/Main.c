@@ -759,6 +759,12 @@ main1
 
     Arcadia_Thread_popJumpTarget(thread);
 
+    // (10) Clean the message queue.
+    // TODO: I do not like this, but the messages cause the application not to be destroyed.
+    while (Arcadia_Visuals_Application_dequeEvent(thread, application)) {
+      fprintf(stdout, "%s:%d: purging message\n", __FILE__, __LINE__);
+    }
+
     if (window) {
       Arcadia_Object_unlock(thread, (Arcadia_Object*)window);
       window = NULL;

@@ -23,7 +23,8 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/Collections/Stack.h"
 
-Arcadia_declareObjectType(u8"Arcadia.ArrayStack", Arcadia_ArrayStack, u8"Arcadia.Stack");
+Arcadia_declareObjectType(u8"Arcadia.ArrayStack", Arcadia_ArrayStack,
+                          u8"Arcadia.Stack");
 
 struct Arcadia_ArrayStack {
   Arcadia_Stack parent;

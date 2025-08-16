@@ -24,6 +24,7 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 typedef struct Arcadia_FilePath Arcadia_FilePath;
+typedef struct Arcadia_DirectoryIterator Arcadia_DirectoryIterator;
 
 /// @code
 /// class FileSystem {
@@ -123,6 +124,16 @@ Arcadia_FileSystem_getSaveFolder
     Arcadia_FileSystem* self
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_createDirectoryIterator
+Arcadia_DirectoryIterator*
+Arcadia_FileSystem_createDirectoryIterator
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getWorkingDirectory
 Arcadia_FilePath*
 Arcadia_FileSystem_getWorkingDirectory
   (

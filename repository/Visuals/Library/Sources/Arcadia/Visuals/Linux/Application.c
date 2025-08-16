@@ -353,6 +353,15 @@ Arcadia_Visuals_Linux_Application_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
+  
+  // (5) Create _MOTIF_WM_HINTS atom.
+  _self->_MOTIF_WM_HINTS = XInternAtom(_self->display, "_MOTIF_WM_HINTS", False);
+  if (_self->_MOTIF_WM_HINTS == None) {
+    XCloseDisplay(_self->display);
+    _self->display = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
 
   ((Arcadia_Visuals_Application*)_self)->createIcon = (Arcadia_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Visuals_Application*, Arcadia_Integer32Value, Arcadia_Integer32Value, Arcadia_Natural8Value, Arcadia_Natural8Value, Arcadia_Natural8Value, Arcadia_Natural8Value))&Arcadia_Visuals_Linux_Application_createIconImpl;
   ((Arcadia_Visuals_Application*)_self)->createWindow = (Arcadia_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Visuals_Application*))&Arcadia_Visuals_Linux_Application_createWindowImpl;

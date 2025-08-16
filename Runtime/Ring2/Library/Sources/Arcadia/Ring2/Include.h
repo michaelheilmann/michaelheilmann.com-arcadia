@@ -26,9 +26,7 @@
 
 #include "Arcadia/Ring2/Implementation/CommandLine.h"
 
-#include "Arcadia/Ring2/Implementation/FileHandle.h"
-#include "Arcadia/Ring2/Implementation/FilePath.h"
-#include "Arcadia/Ring2/Implementation/FileSystem.h"
+#include "Arcadia/Ring2/Implementation/FileSystem/Include.h"
 
 #include "Arcadia/Ring2/Implementation/Collections/ArrayDeque.h"
 #include "Arcadia/Ring2/Implementation/Collections/ArrayList.h"

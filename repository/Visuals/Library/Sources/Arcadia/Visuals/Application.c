@@ -24,10 +24,17 @@ Arcadia_Visuals_Application_constructImpl
     Arcadia_Value* argumentValues
   );
 
+static void
+Arcadia_Visuals_Application_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Application* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &Arcadia_Visuals_Application_constructImpl,
   .destruct = NULL,
-  .visit = NULL,
+  .visit = &Arcadia_Visuals_Application_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -61,7 +68,20 @@ Arcadia_Visuals_Application_constructImpl
   _self->createIcon = NULL;
   _self->createWindow = NULL;
   _self->getDisplayDevices = NULL;
+  _self->events = (Arcadia_Deque*)Arcadia_ArrayDeque_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+}
+
+static void
+Arcadia_Visuals_Application_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Application* self
+  )
+{
+  if (self->events) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->events);
+  }
 }
 
 Arcadia_Visuals_Icon*
@@ -93,3 +113,30 @@ Arcadia_Visuals_Application_getDisplayDevices
     Arcadia_Visuals_Application* self
   )
 { return self->getDisplayDevices(thread, self); }
+
+void
+Arcadia_Visuals_Application_enqueEvent
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Application* self,
+    Arcadia_Visuals_Event* event
+  )
+{ 
+  Arcadia_Deque_insertBack(thread, self->events, Arcadia_Value_makeObjectReferenceValue(event));
+}
+
+Arcadia_Visuals_Event*
+Arcadia_Visuals_Application_dequeEvent
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Application* self
+  )
+{
+  if (Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)self->events)) {
+    return NULL;
+  }
+  Arcadia_Value eventValue = Arcadia_Deque_getFront(thread, self->events);
+  Arcadia_Deque_removeFront(thread, self->events);
+  Arcadia_Visuals_Event* event = (Arcadia_Visuals_Event*)Arcadia_Value_getObjectReferenceValue(&eventValue);
+  return event;
+}

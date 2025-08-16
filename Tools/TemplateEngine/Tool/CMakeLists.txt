@@ -27,7 +27,7 @@ if (NOT TARGET ${MyExecutableName})
 
   list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Main.c)
 
-  list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary ${MyProjectName}.Machine ${MyProjectName}.Arms)
+  list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary)
 
   EndProduct(${MyExecutableName})
 

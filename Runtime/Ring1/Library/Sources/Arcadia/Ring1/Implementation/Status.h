@@ -100,6 +100,8 @@
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Uninitialized
 #define Arcadia_Status_Uninitialized (24)
 
+#define Arcadia_Status_FileNotFound (25)
+
 typedef uint32_t Arcadia_Status;
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_STATUS_H_INCLUDED

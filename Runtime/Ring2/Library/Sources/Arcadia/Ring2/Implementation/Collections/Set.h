@@ -23,7 +23,8 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/Collections/Collection.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Set", Arcadia_Set, u8"Arcadia.Collection");
+Arcadia_declareObjectType(u8"Arcadia.Set", Arcadia_Set,
+                          u8"Arcadia.Collection");
 
 struct Arcadia_Set {
   Arcadia_Collection parent;

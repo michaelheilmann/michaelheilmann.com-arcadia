@@ -23,7 +23,8 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/Collections/Set.h"
 
-Arcadia_declareObjectType(u8"Arcadia.ImmutableSet", Arcadia_ImmutableSet, u8"Arcadia.Set");
+Arcadia_declareObjectType(u8"Arcadia.ImmutableSet", Arcadia_ImmutableSet,
+                          u8"Arcadia.Set");
 
 struct Arcadia_ImmutableSet {
   Arcadia_Set parent;

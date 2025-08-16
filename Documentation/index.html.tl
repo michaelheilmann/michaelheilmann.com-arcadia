@@ -56,13 +56,10 @@
                 <a href='@{siteAddress}/Arcadia/Ring2'>Arcadia Ring2</a>
               </li>
               <li>
-                <div>Arcadia Machine [coming soon]</div>
-              </li>
-              <li>
                 <a href='@{siteAddress}/Arcadia/Visuals'>Arcadia Visuals</a>
               </li>
               <li>
-                <div>Arcadia Audials [coming soon]</div>
+                <a href='@{siteAddress}/Arcadia/TemplateEngine'>Arcadia Template Engine</a>
               </li>
             </ul>
           </div>

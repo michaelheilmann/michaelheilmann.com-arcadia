@@ -14,12 +14,9 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING2_PRIVATE (1)
-#include "Arcadia/Ring2/Implementation/FileHandle.h"
+#include "Arcadia/Ring2/Implementation/FileSystem/FileHandle.h"
 
-#include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
-#include "Arcadia/Ring2/Implementation/FileSystem.h"
-#include "Arcadia/Ring2/Implementation/FilePath.h"
-#include "Arcadia/Ring2/Implementation/String.h"
+#include "Arcadia/Ring2/Include.h"
 
 #define Flags_OpenRead (1)
 

@@ -14,12 +14,18 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING2_PRIVATE (1)
-#include "Arcadia/Ring2/Implementation/FilePath.h"
+#include "Arcadia/Ring2/Implementation/FileSystem/FilePath.h"
 
-#include "Arcadia/Ring2/Implementation/ByteBuffer.h"
-#include "Arcadia/Ring2/Implementation/Utf8ByteBufferReader.h"
-#include "Arcadia/Ring2/Implementation/Utf8ByteBufferWriter.h"
-#include <string.h>
+#include "Arcadia/Ring2/Include.h"
+
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+  #define WIN32_LEAN_AND_MEAN
+  #include <Windows.h> // for GetFullPathName
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  #include <stdlib.h> // for realpath
+  #include <linux/limits.h> // for PATH_MAX
+  #include <string.h> // for strlen
+#endif
 
 typedef struct Context {
   Arcadia_Utf8Writer* temporaryWriter;
@@ -338,7 +344,7 @@ parseUnixFilePath
   // read the remaining directories
   Arcadia_ByteBuffer_clear(thread, context.temporaryBuffer);
   while (!isEnd(thread, &context)) {
-    if (isDirectorySeparator(thread, &context)) {
+    if (isSlash(thread, &context)) {
       next(thread, &context);
       if (Arcadia_ByteBuffer_getNumberOfBytes(thread, context.temporaryBuffer)) {
         Arcadia_Value temporary;
@@ -442,7 +448,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Library.FilePath", Arcadia_FilePath,
+Arcadia_defineObjectType(u8"Arcadia.FilePath", Arcadia_FilePath,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
@@ -719,14 +725,6 @@ Arcadia_FilePath_toGeneric
   Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
   return Arcadia_String_create(thread, temporaryValue);
 }
-
-#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  #define WIN32_LEAN_AND_MEAN
-  #include <Windows.h> // for GetFullPathName
-#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  #include <stdlib.h> // for realpath
-  #include <linux/limits.h> // for PATH_MAX
-#endif
 
 Arcadia_FilePath*
 Arcadia_FilePath_getFullPath

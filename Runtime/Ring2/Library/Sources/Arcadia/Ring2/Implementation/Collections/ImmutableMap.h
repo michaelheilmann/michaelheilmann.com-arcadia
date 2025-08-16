@@ -23,7 +23,8 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/Collections/Map.h"
 
-Arcadia_declareObjectType(u8"Arcadia.ImmutableMap", Arcadia_ImmutableMap, u8"Arcadia.Map");
+Arcadia_declareObjectType(u8"Arcadia.ImmutableMap", Arcadia_ImmutableMap,
+                          u8"Arcadia.Map");
 
 struct Arcadia_ImmutableMap {
   Arcadia_Map parent;
