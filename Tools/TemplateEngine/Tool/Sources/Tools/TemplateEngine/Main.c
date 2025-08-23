@@ -71,7 +71,7 @@ main1
   
   Arcadia_FilePath* targetFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &targetValue, _Arcadia_String_getType(thread)));
   Arcadia_Value targetFilePathValue = Arcadia_Value_makeObjectReferenceValue(targetFilePath);
-  
+
   Arcadia_FilePath* environmentFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &environmentValue, _Arcadia_String_getType(thread)));
   Arcadia_Value environmentFilePathValue = Arcadia_Value_makeObjectReferenceValue(environmentFilePath);
 

@@ -1,0 +1,151 @@
+// The author of this software is Michael Heilmann (contact@michaelheilmann.com).
+//
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+#if !defined(ARCADIA_RING2_FILESYSTEM_FILESYSTEM_H_INCLUDED)
+#define ARCADIA_RING2_FILESYSTEM_FILESYSTEM_H_INCLUDED
+
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
+
+#include "Arcadia/Ring2/Implementation/Configure.h"
+#include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Implementation/ByteBuffer.h"
+typedef struct Arcadia_FilePath Arcadia_FilePath;
+typedef struct Arcadia_DirectoryIterator Arcadia_DirectoryIterator;
+
+/// @code
+/// class FileSystem {
+///   constructor()
+/// }
+/// @endcode
+Arcadia_declareObjectType(u8"Arcadia.FileSystem", Arcadia_FileSystem,
+                          u8"Arcadia.Object");
+
+struct Arcadia_FileSystem {
+  Arcadia_Object _parent;
+};
+
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_create
+Arcadia_FileSystem*
+Arcadia_FileSystem_create
+  (
+    Arcadia_Thread* thread
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents
+Arcadia_ByteBuffer*
+Arcadia_FileSystem_getFileContents
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents
+void
+Arcadia_FileSystem_setFileContents
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path,
+    Arcadia_ByteBuffer * contents
+  );
+
+void
+Arcadia_FileSystem_createDirectory
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_regularFileExists
+Arcadia_BooleanValue
+Arcadia_FileSystem_regularFileExists
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists
+Arcadia_BooleanValue
+Arcadia_FileSystem_directoryFileExists
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+/// @brief Get the path of the executing executable.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this file system.
+/// @return A pointer to the executable path.
+/// @success The caller acquired a reference to the string.
+Arcadia_FilePath*
+Arcadia_FileSystem_getExecutablePath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+// Get the folder in which configuration files are stored.
+// The following table lists the values for a given operating system
+// - Windows: `C:\Users\<Username>\AppData\Local\<Organization Name>\<Game Name>`
+// - Linux: `<Home>\<Organization Name>\<Game Name>`
+Arcadia_FilePath*
+Arcadia_FileSystem_getConfigurationFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+// Get the folder in which save files are stored.
+// The following table lists the values for a given operating system
+// - Windows: `C:\Users\<Username>\AppData\Roaming\<Organization Name>\<Game Name>`
+// - Linux: `<Home>\<Organization Name>\<Game Name>`
+Arcadia_FilePath*
+Arcadia_FileSystem_getSaveFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_createDirectoryIterator
+Arcadia_DirectoryIterator*
+Arcadia_FileSystem_createDirectoryIterator
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getWorkingDirectory
+Arcadia_FilePath*
+Arcadia_FileSystem_getWorkingDirectory
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getOrCreate
+Arcadia_FileSystem*
+Arcadia_FileSystem_getOrCreate
+  (
+    Arcadia_Thread* thread
+  );
+
+#endif // ARCADIA_RING2_FILESYSTEM_FILESYSTEM_H_INCLUDED

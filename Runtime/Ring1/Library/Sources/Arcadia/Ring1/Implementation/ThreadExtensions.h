@@ -69,6 +69,17 @@ Arcadia_ValueStack_push##Suffix \
 { \
   Arcadia_Value temporary = Arcadia_Value_make##Suffix(value); \
   Arcadia_ValueStack_pushValue(thread, &temporary); \
+} \
+\
+static inline Arcadia_BooleanValue \
+Arcadia_ValueStack_is##Suffix \
+  ( \
+    Arcadia_Thread* thread, \
+    Arcadia_SizeValue index \
+  ) \
+{ \
+  Arcadia_Value value = Arcadia_ValueStack_getValue(thread, index); \
+  return Arcadia_Value_is##Suffix(&value); \
 }
 
 Define(Arcadia_AtomValue, AtomValue)

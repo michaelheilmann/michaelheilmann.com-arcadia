@@ -21,9 +21,6 @@
 #endif
 
 #include <stdint.h>
-#include <stdbool.h>
-#include <inttypes.h>
-#include <setjmp.h>
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Success
 #define Arcadia_Status_Success (0)

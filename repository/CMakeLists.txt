@@ -26,8 +26,8 @@ add_subdirectory(Tools.ConcatenateFiles)
 add_subdirectory(Tools.CompareFiles)
 add_subdirectory(Tools.Compiler)
 
-add_subdirectory(Visuals)
-add_subdirectory(Audials)
+add_subdirectory(Visuals.Implementation)
+add_subdirectory(Audials.Implementation)
 
 add_subdirectory(Tools.IconGenerator)
 add_subdirectory(Tools.BannerGenerator)

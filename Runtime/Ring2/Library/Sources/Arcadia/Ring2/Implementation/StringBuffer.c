@@ -101,7 +101,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.StringBuffer", Arcadia_StringBuffer,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static Arcadia_BooleanValue
 getOffsetFromFront
@@ -290,28 +292,6 @@ Arcadia_StringBuffer_startsWith_pn
     return Arcadia_BooleanValue_False;
   }
   return !Arcadia_Memory_compare(thread, self->elements, bytes, numberOfBytes);
-}
-
-void
-Arcadia_StringBuffer_append_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-{
-  if (!bytes) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  if (!Arcadia_Unicode_isUtf8(thread, bytes, numberOfBytes, NULL)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  ensureFreeCapacityBytes(thread, self, numberOfBytes);
-  Arcadia_Memory_copy(thread, self->elements + self->size, bytes, numberOfBytes);
-  self->size += numberOfBytes;
 }
 
 void

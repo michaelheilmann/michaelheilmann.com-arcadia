@@ -16,7 +16,7 @@
   <main>
     <div class="left-column"></div>
     <div class="center-column">
-    <h1>Common Lexical Specifications</h1>
+    <h1>Common Lexical Specification</h1>
     <p style="font-style: italic">
     This <em>Common Lexical Specification</em> provides definitions of grammar rules being re-used in multiple language specifications on this website.
     This document consists of three sections: Section 1 defines how programs are encoded on a Byte level. Section 2 provides an introduction into grammars.

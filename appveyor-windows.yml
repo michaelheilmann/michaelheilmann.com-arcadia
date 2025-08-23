@@ -101,7 +101,7 @@ before_build:
         Write-Host "CMake Architecture:     ${env:CMAKE_ARCHITECTURE_NAME}"
     # Generate build files.
     - ps: |
-        cd ${env:BUILD_DIRECTORY}; cmake -G ${env:CMAKE_GENERATOR_NAME} -A ${env:CMAKE_ARCHITECTURE_NAME} -D"Arcadia.Audials.OpenAl.Enabled"=TRUE -D"Arcadia.Visuals.OpenGl.Enabled"=TRUE ${env:CLONE_DIRECTORY}\CMakeLists.txt
+        cd ${env:BUILD_DIRECTORY}; cmake -G ${env:CMAKE_GENERATOR_NAME} -A ${env:CMAKE_ARCHITECTURE_NAME} -D"Arcadia.Audials.Implementation.OpenAL.Enabled"=TRUE -D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=TRUE ${env:CLONE_DIRECTORY}\CMakeLists.txt
 
 build:
     parallel: true # enable MSBuild parallel builds

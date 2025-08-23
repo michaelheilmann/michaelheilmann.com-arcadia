@@ -27,8 +27,8 @@
 // A command-line argument is of the form
 // @code
 // <argument> : '--'<name>('='<value>)?
-// <name> : /* one or more symbols not equal to '=' */
-// <value> : /* zero more symbols */
+// <name> : a name as defined in the Common Lexical Specification at https://michaelheilmann.com/specifications/common-lexical-specification
+// <value> : a string as defined in the Common Lexical Specification at https://michaelheilmann.com/specifications/common-lexical-specification
 // @endcode
 // @code{<name>} is returned in @code{*key}.
 // If a @code{<value>} is specified, it is returned in @code{*value}.

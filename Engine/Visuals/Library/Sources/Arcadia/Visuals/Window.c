@@ -1,0 +1,287 @@
+// The author of this software is Michael Heilmann (contact@michaelheilmann.com).
+//
+// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+#define ARCADIA_VISUALS_PRIVATE (1)
+#include "Arcadia/Visuals/Window.h"
+
+static void
+Arcadia_Visuals_Window_constructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* self,
+    Arcadia_SizeValue numberOfArgumentValues,
+    Arcadia_Value* argumentValues
+  );
+
+static void
+Arcadia_Visuals_Window_visit
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  );
+
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  .construct = &Arcadia_Visuals_Window_constructImpl,
+  .destruct = NULL,
+  .visit = &Arcadia_Visuals_Window_visit,
+};
+
+static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
+  .objectTypeOperations = &_objectTypeOperations,
+};
+
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
+
+static void
+Arcadia_Visuals_Window_constructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value* self,
+    Arcadia_SizeValue numberOfArgumentValues,
+    Arcadia_Value* argumentValues
+  )
+{
+  Arcadia_Visuals_Window* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Visuals_Window_getType(thread);
+  {
+    Arcadia_Value argumentValues[] = {
+      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    };
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+  }
+
+  _self->title = Arcadia_String_createFromCxxString(thread, u8"Arcadia Engine Window");
+  _self->fullscreen = Arcadia_BooleanValue_False;
+  _self->bounds.left = 0;
+  _self->bounds.top = 0;
+  _self->bounds.width = 1;
+  _self->bounds.height = 1;
+
+  _self->open = NULL;
+  _self->close = NULL;
+
+  _self->getRequiredBigIconSize = NULL;
+  _self->getRequiredSmallIconSize = NULL;
+
+  _self->getBigIcon = NULL;
+  _self->setBigIcon = NULL;
+
+  _self->getSmallIcon = NULL;
+  _self->setSmallIcon = NULL;
+
+  _self->getTitle = NULL;
+  _self->setTitle  = NULL;
+
+  _self->getCanvasSize = NULL;
+
+  _self->beginRender = NULL;
+  _self->endRender = NULL;
+
+  _self->setPosition = NULL;
+  _self->getPosition = NULL;
+
+  _self->setSize = NULL;
+  _self->getSize = NULL;
+
+  _self->getFullscreen = NULL;
+  _self->setFullscreen = NULL;
+
+  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+}
+
+static void
+Arcadia_Visuals_Window_visit
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{
+  if (self->title) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->title);
+  }
+}
+
+void
+Arcadia_Visuals_Window_open
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{ self->open(thread, self); }
+
+void
+Arcadia_Visuals_Window_close
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{ self->close(thread, self); }
+
+void
+Arcadia_Visuals_Window_getRequiredBigIconSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* width,
+    Arcadia_Integer32Value* height
+  )
+{ self->getRequiredBigIconSize(thread, self, width, height); }
+
+void
+Arcadia_Visuals_Window_getRequiredSmallIconSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* width,
+    Arcadia_Integer32Value* height
+  )
+{ self->getRequiredSmallIconSize(thread, self, width, height); }
+
+Arcadia_Visuals_Icon*
+Arcadia_Visuals_Window_getBigIcon
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{ return self->getBigIcon(thread, self); }
+
+void
+Arcadia_Visuals_Window_setBigIcon
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Visuals_Icon* icon
+  )
+{ self->setBigIcon(thread, self, icon); }
+
+Arcadia_Visuals_Icon*
+Arcadia_Visuals_Window_getSmallIcon
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{ return self->getSmallIcon(thread, self); }
+
+void
+Arcadia_Visuals_Window_setSmallIcon
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Visuals_Icon* icon
+  )
+{ self->setSmallIcon(thread, self, icon); }
+
+Arcadia_String*
+Arcadia_Visuals_Window_getTitle
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{ return self->getTitle(thread, self); }
+
+void
+Arcadia_Visuals_Window_setTitle
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_String* title
+  )
+{ self->setTitle(thread, self, title); }
+
+void
+Arcadia_Visuals_Window_getCanvasSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* width,
+    Arcadia_Integer32Value* height
+  )
+{ self->getCanvasSize(thread, self, width, height); }
+
+void
+Arcadia_Visuals_Window_beginRender
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{ self->beginRender(thread, self); }
+
+void
+Arcadia_Visuals_Window_endRender
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{ self->endRender(thread, self); }
+
+void
+Arcadia_Visuals_Window_setPosition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value left,
+    Arcadia_Integer32Value top
+  )
+{ self->setPosition(thread, self, left, top); }
+
+void
+Arcadia_Visuals_Window_getPosition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* left,
+    Arcadia_Integer32Value* top
+  )
+{ self->getPosition(thread, self, left, top); }
+
+void
+Arcadia_Visuals_Window_setSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height
+  )
+{ self->setSize(thread, self, width, height); }
+
+void
+Arcadia_Visuals_Window_getSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_Integer32Value* width,
+    Arcadia_Integer32Value* height
+  )
+{ self->getSize(thread, self, width, height); }
+
+Arcadia_BooleanValue
+Arcadia_Visuals_Window_getFullscreen
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self
+  )
+{ return self->getFullscreen(thread, self); }
+
+void
+Arcadia_Visuals_Window_setFullscreen
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Window* self,
+    Arcadia_BooleanValue fullscreen
+  )
+{ self->setFullscreen(thread, self, fullscreen); }

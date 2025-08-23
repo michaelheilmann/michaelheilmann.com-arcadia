@@ -231,6 +231,7 @@ macro(InvokeTemplateEngine sourceFile targetFile environmentFile)
   add_custom_command(OUTPUT ${targetFile}
                      COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}"
                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                     VERBATIM
                      COMMENT "${sourceFile} / ${environmentFile} => ${targetFile}"
                      DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})
 endmacro()

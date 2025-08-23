@@ -55,6 +55,90 @@ isEqualOrEnd
   return '=' == Arcadia_Utf8Reader_getCodePoint(thread, reader);
 }
 
+static Arcadia_String*
+parseString 
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Utf8Reader* reader,
+    Arcadia_Utf8Writer* writer,
+    Arcadia_ByteBuffer* writerByteBuffer
+  )
+{
+  Arcadia_Natural32Value codePoint;
+  if (!Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
+    return NULL;
+  }
+  codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
+  if (codePoint != '"') {
+    return NULL;
+  }
+  Arcadia_Utf8Reader_next(thread, reader);
+  Arcadia_BooleanValue lastWasSlash = Arcadia_BooleanValue_False;
+  while (Arcadia_BooleanValue_True) {
+    codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
+    if (lastWasSlash) {
+      switch (codePoint) {
+        case 'r': {
+          lastWasSlash = Arcadia_BooleanValue_False;
+          codePoint = '\r';
+          Arcadia_Utf8Reader_next(thread, reader);
+          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+        } break;
+        case 'n': {
+          lastWasSlash = Arcadia_BooleanValue_False;
+          codePoint = '\n';
+          Arcadia_Utf8Reader_next(thread, reader);
+          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+        } break;
+        case 'v': {
+          lastWasSlash = Arcadia_BooleanValue_False;
+          codePoint = '\v';
+          Arcadia_Utf8Reader_next(thread, reader);
+          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+        } break;
+        case 't': {
+          lastWasSlash = Arcadia_BooleanValue_False;
+          codePoint = '\t';
+          Arcadia_Utf8Reader_next(thread, reader);
+          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+        } break;
+        case '"': {
+          lastWasSlash = Arcadia_BooleanValue_False;
+          codePoint = '"';
+          Arcadia_Utf8Reader_next(thread, reader);
+          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+        } break;
+        case '\\': {
+          lastWasSlash = Arcadia_BooleanValue_False;
+          Arcadia_Utf8Reader_next(thread, reader);
+          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+        } break;
+        default: {
+          return NULL;
+        }
+      };
+    } else {
+      if (codePoint == '"') {
+        Arcadia_Utf8Reader_next(thread, reader);
+        break;
+      } else if (codePoint == '\\') {
+        Arcadia_Utf8Reader_next(thread, reader);
+        lastWasSlash = Arcadia_BooleanValue_True;
+      } else {
+        Arcadia_Utf8Reader_next(thread, reader);
+        Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+      }
+
+    }
+  }
+
+  Arcadia_Value temporaryValue;
+  Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)writerByteBuffer);
+  Arcadia_String* resultString = Arcadia_String_create(thread, temporaryValue);
+
+  return resultString;
+}
+
 Arcadia_BooleanValue
 Arcadia_CommandLine_parseArgument
   (
@@ -83,7 +167,7 @@ Arcadia_CommandLine_parseArgument
     return Arcadia_BooleanValue_False;
   }
   Arcadia_Utf8Reader_next(thread, reader);
-  // <value>
+  // <name>
   if (isEqualOrEnd(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
@@ -96,24 +180,22 @@ Arcadia_CommandLine_parseArgument
   key1 = Arcadia_String_create(thread, temporaryValue);
   Arcadia_ByteBuffer_clear(thread, writerByteBuffer);
   if (isEnd(thread, reader)) {
+    *key = key1;
+    *value = NULL;
     return Arcadia_BooleanValue_True;
   }
-  // ('=' <value>)?
+  // '=' <value>
   if (!isEqual(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
   Arcadia_Utf8Reader_next(thread, reader);
-  if (isEnd(thread, reader)) {
+  value1 = parseString(thread, reader, writer, writerByteBuffer);
+  if (!value1) {
     return Arcadia_BooleanValue_False;
   }
-  do {
-    Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
-    Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
-    Arcadia_Utf8Reader_next(thread, reader);
-  } while (!isEnd(thread, reader));
-  Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)writerByteBuffer);
-  value1 = Arcadia_String_create(thread, temporaryValue);
-  Arcadia_ByteBuffer_clear(thread, writerByteBuffer);
+  if (!isEnd(thread, reader)) {
+    return Arcadia_BooleanValue_False;
+  }
   *key = key1;
   *value = value1;
   return Arcadia_BooleanValue_True;
@@ -128,7 +210,7 @@ Arcadia_CommandLine_raiseRequiredArgumentMissingError
 {
   fwrite(u8"required command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
   fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
-  fwrite(u8"` not specified", 1, sizeof(u8"` not specified") - 1, stdout);
+  fwrite(u8"` not specified\n", 1, sizeof(u8"` not specified\n") - 1, stdout);
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
 }
@@ -143,7 +225,7 @@ Arcadia_CommandLine_raiseUnknownArgumentError
 {
   fwrite(u8"unknown command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
   fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
-  fwrite(u8"`", 1, sizeof(u8"`") - 1, stdout);
+  fwrite(u8"`\n", 1, sizeof(u8"`\n") - 1, stdout);
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
 }
@@ -157,7 +239,7 @@ Arcadia_CommandLine_raiseNoValueError
 {
   fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
   fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
-  fwrite(u8"` is not valid", 1, sizeof(u8"` is not valid") - 1, stdout);
+  fwrite(u8"` is not valid\n", 1, sizeof(u8"` is not valid\n") - 1, stdout);
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
 }

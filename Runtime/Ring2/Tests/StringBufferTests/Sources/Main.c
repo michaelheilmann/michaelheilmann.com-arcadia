@@ -29,44 +29,44 @@ testRemoveCodePointsFront
                       * b = Arcadia_StringBuffer_create(thread);
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"", sizeof(u8"") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"", sizeof(u8"") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"");
   Arcadia_StringBuffer_removeCodePointsFront(thread, a, 0);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"1", sizeof(u8"1") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"1");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"1", sizeof(u8"1") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"1");
   Arcadia_StringBuffer_removeCodePointsFront(thread, a, 0);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"1", sizeof(u8"1") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"1");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"", sizeof(u8"") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"");
   Arcadia_StringBuffer_removeCodePointsFront(thread, a, 1);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"12", sizeof(u8"12") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"12");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"2", sizeof(u8"2") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"2");
   Arcadia_StringBuffer_removeCodePointsFront(thread, a, 1);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"123", sizeof(u8"123") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"123");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"23", sizeof(u8"23") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"23");
   Arcadia_StringBuffer_removeCodePointsFront(thread, a, 1);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"12345", sizeof(u8"12345") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"12345");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"45", sizeof(u8"45") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"45");
   Arcadia_StringBuffer_removeCodePointsFront(thread, a, 3);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 }
@@ -81,44 +81,44 @@ testRemoveCodePointsBack
                       * b = Arcadia_StringBuffer_create(thread);
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"", sizeof(u8"") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"", sizeof(u8"") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"");
   Arcadia_StringBuffer_removeCodePointsBack(thread, a, 0);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"1", sizeof(u8"1") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"1");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"1", sizeof(u8"1") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"1");
   Arcadia_StringBuffer_removeCodePointsBack(thread, a, 0);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"1", sizeof(u8"1") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"1");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"", sizeof(u8"") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"");
   Arcadia_StringBuffer_removeCodePointsBack(thread, a, 1);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"12", sizeof(u8"12") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"12");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"1", sizeof(u8"1") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"1");
   Arcadia_StringBuffer_removeCodePointsBack(thread, a, 1);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"123", sizeof(u8"123") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"123");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"12", sizeof(u8"12") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"12");
   Arcadia_StringBuffer_removeCodePointsBack(thread, a, 1);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 
   Arcadia_StringBuffer_clear(thread, a);
-  Arcadia_StringBuffer_append_pn(thread, a, u8"12345", sizeof(u8"12345") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, a, u8"12345");
   Arcadia_StringBuffer_clear(thread, b);
-  Arcadia_StringBuffer_append_pn(thread, b, u8"12", sizeof(u8"12") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, b, u8"12");
   Arcadia_StringBuffer_removeCodePointsBack(thread, a, 3);
   Arcadia_Tests_assertTrue(thread, 0 == Arcadia_StringBuffer_compareTo(thread, a, Arcadia_Value_makeObjectReferenceValue(b)));
 }

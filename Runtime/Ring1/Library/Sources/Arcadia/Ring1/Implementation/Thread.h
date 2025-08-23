@@ -31,9 +31,6 @@
 #include "Arcadia/Ring1/Implementation/Status.h"
 #include "Arcadia/Ring1/Implementation/Value.h"
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <inttypes.h>
 #include <setjmp.h>
 typedef struct Arcadia_Process Arcadia_Process; // Forward declaration.
 

@@ -183,13 +183,13 @@ Arcadia_Mil_Scanner_constructImpl
   _self->input = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
   _self->token.text = Arcadia_StringBuffer_create(thread);
   //
-  Arcadia_StringBuffer_append_pn(thread, _self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, _self->token.text, u8"<start of input>");
   //
   Arcadia_StringBuffer* temporary = Arcadia_StringBuffer_create(thread);
 #define On(text, type) \
   { \
     Arcadia_StringBuffer_clear(thread, temporary); \
-    Arcadia_StringBuffer_append_pn(thread, temporary, text, sizeof(text) - 1); \
+    Arcadia_StringBuffer_insertBackCxxString(thread, temporary, text); \
     Arcadia_Mil_Keywords_add(thread, _self->keywords, Arcadia_Mil_StringTable_getOrCreateString(thread, _self->stringTable, temporary), Arcadia_Mil_TokenType_##type); \
   }
   //
@@ -381,12 +381,12 @@ onEndOfLine
       next(thread, self);
     }
     onEndToken(thread, self, Arcadia_Mil_TokenType_LineTerminator);
-    Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<line terminator>");
     return;
   } else if ('\n' == self->symbol) {
     next(thread, self);
     onEndToken(thread, self, Arcadia_Mil_TokenType_LineTerminator);
-    Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<line terminator>");
     return;
   }
 }
@@ -404,7 +404,7 @@ Arcadia_Mil_Scanner_step
   }
   if (CodePoint_End == self->symbol) {
     onEndToken(thread, self, Arcadia_Mil_TokenType_EndOfInput);
-    Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<end of input>", sizeof(u8"<end of input>") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<end of input>");
     return;
   }
   // Whitespace :  <Whitespace> | <Tabulator>
@@ -413,7 +413,7 @@ Arcadia_Mil_Scanner_step
       next(thread, self);
     } while (' ' == self->symbol || '\t' == self->symbol);
     onEndToken(thread, self, Arcadia_Mil_TokenType_WhiteSpaces);
-    Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<whitespaces>", sizeof(u8"<whitespaces>") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<whitespaces>");
     return;
   }
   // LineTerminator : <LineFeed>
@@ -425,12 +425,12 @@ Arcadia_Mil_Scanner_step
       next(thread, self);
     }
     onEndToken(thread, self, Arcadia_Mil_TokenType_LineTerminator);
-    Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<line terminator>");
     return;
   } else if ('\n' == self->symbol) {
     next(thread, self);
     onEndToken(thread, self, Arcadia_Mil_TokenType_LineTerminator);
-    Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<line terminator>");
     return;
   }
   if ('=' == self->symbol) {
@@ -605,5 +605,5 @@ Arcadia_Mil_Scanner_setInput
   self->symbol = CodePoint_Start;
   self->token.type = Arcadia_Mil_TokenType_StartOfInput;
   Arcadia_StringBuffer_clear(thread, self->token.text);
-  Arcadia_StringBuffer_append_pn(thread, self->token.text, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<start of input>");
 }

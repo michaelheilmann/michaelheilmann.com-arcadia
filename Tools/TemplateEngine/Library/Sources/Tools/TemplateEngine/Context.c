@@ -90,6 +90,7 @@ Context_constructImpl
   _self->temporary = NULL;
   _self->stack = NULL;
   _self->files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  _self->log = Arcadia_Log_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }
 
@@ -108,6 +109,9 @@ Context_visit
     Context* self
   )
 {
+  if (self->log) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->log);
+  }
   if (self->environment) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->environment);
   }
@@ -161,9 +165,9 @@ recursionGuard
       Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, p);
       Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
       Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue(ps);
-      Arcadia_StringBuffer_append_pn(thread, sb, u8"recursive include of file `", sizeof(u8"recursive include of file `") - 1);
+      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"recursive include of file `");
       Arcadia_StringBuffer_insertBack(thread, sb, v);
-      Arcadia_StringBuffer_append_pn(thread, sb, u8"`\0", sizeof(u8"`\0") - 1);
+      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`");
       fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
@@ -196,9 +200,9 @@ Context_onRun
       Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, filePath);
       Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
       Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ps);
-      Arcadia_StringBuffer_append_pn(thread, sb, u8"failed to read file `", sizeof(u8"failed to read file `") - 1);
+      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"failed to read file `");
       Arcadia_StringBuffer_insertBack(thread, sb, v);
-      Arcadia_StringBuffer_append_pn(thread, sb, u8"`\0", sizeof(u8"`\0") - 1);
+      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`");
       fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
       Arcadia_Thread_jump(thread);
     }

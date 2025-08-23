@@ -20,6 +20,7 @@
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Audials/Include.h"
 #include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Visuals/Implementation/Include.h"
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/DataDefinitionLanguage/Include.h"
 
@@ -492,7 +493,7 @@ static void
 print
   (
     Arcadia_Thread* thread,
-    Arcadia_FileHandle* self,
+    Arcadia_Log* self,
     const Arcadia_Natural8Value* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -500,13 +501,19 @@ print
   Arcadia_SizeValue currentNumberOfAttempts = 0, maximumNumberOfAttempts = 3;
   Arcadia_SizeValue n = 0, m = 0;
   while (n < numberOfBytes && currentNumberOfAttempts < maximumNumberOfAttempts) {
-    Arcadia_FileHandle_write(thread, self, bytes + n, numberOfBytes - n, &m);
+    Arcadia_FileHandle_write(thread, self->fileHandle, bytes + n, numberOfBytes - n, &m);
     n += m;
     currentNumberOfAttempts++;
   }
 }
 
-static Arcadia_Integer32Value getHorizontalResolution(Arcadia_Thread* thread, Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration) {
+static Arcadia_Integer32Value
+getHorizontalResolution
+  (
+    Arcadia_Thread* thread, 
+    Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration
+  )
+{
   char const* path[] = {
     u8"visuals",
     u8"horizontalResolution",
@@ -514,7 +521,13 @@ static Arcadia_Integer32Value getHorizontalResolution(Arcadia_Thread* thread, Ar
   return Cfg2_getInteger32(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
 }
 
-static Arcadia_Integer32Value getVerticalResolution(Arcadia_Thread* thread, Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration) {
+static Arcadia_Integer32Value
+getVerticalResolution
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration
+  )
+{
   char const* path[] = {
     u8"visuals",
     u8"verticalResolution",
@@ -522,13 +535,146 @@ static Arcadia_Integer32Value getVerticalResolution(Arcadia_Thread* thread, Arca
   return Cfg2_getInteger32(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
 }
 
-static Arcadia_Integer32Value getColorDepth(Arcadia_Thread* thread, Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration) {
+static Arcadia_Integer32Value
+getColorDepth
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration
+  )
+{
   char const* path[] = {
     u8"visuals",
     u8"colorDepth",
   };
   return Cfg2_getInteger32(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
 }
+
+#if 0
+/// dump the device bounds of a display device
+static void
+dumpDisplayDeviceBounds
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Log* log,
+    Arcadia_Visuals_DisplayDevice* device
+  )
+{
+  Arcadia_Integer32Value left, top, right, bottom;
+  Arcadia_Visuals_DisplayDevice_getBounds(thread, device, &left, &top, &right, &bottom);
+  
+  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+  
+  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"    bounds:");
+  
+  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n     left: ");
+  Arcadia_StringBuffer_insertBackInteger32(thread, message, left);
+  
+  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n     top: ");
+  Arcadia_StringBuffer_insertBackInteger32(thread, message, top);
+  
+  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n     right: ");
+  Arcadia_StringBuffer_insertBackInteger32(thread, message, right);
+  
+  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n     bottom: ");
+  Arcadia_StringBuffer_insertBackInteger32(thread, message, bottom);
+  
+  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
+  Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
+}
+
+static void
+dumpDisplayModes
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Log* log,
+    Arcadia_Visuals_DisplayDevice* device
+  )
+{
+  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+  Arcadia_String* a;
+  
+  Arcadia_List* modes = Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes(thread, device);
+  
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)modes); i < n; ++i) {
+    Arcadia_Visuals_DisplayMode* mode =
+      (Arcadia_Visuals_DisplayMode*)Arcadia_List_getObjectReferenceValueAt(thread, modes, i);
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"     ");
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"horizontal resolution: ");
+    
+    a = Arcadia_String_createFromInteger32(thread, Arcadia_Visuals_DisplayMode_getHorizontalResolution(thread, mode));
+    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"vertical resolution: ");
+    
+    a = Arcadia_String_createFromInteger32(thread, Arcadia_Visuals_DisplayMode_getVerticalResolution(thread, mode));
+    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8", color depth: ");
+    
+    a = Arcadia_String_createFromInteger32(thread, Arcadia_Visuals_DisplayMode_getColorDepth(thread, mode));
+    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8", frequency: ");
+    
+    a = Arcadia_String_createFromInteger32(thread, Arcadia_Visuals_DisplayMode_getFrequency(thread, mode));
+    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
+  }
+  Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
+}
+
+static void
+dumpDisplayDevices
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+  Arcadia_Log* log = Arcadia_Log_create(thread);
+  
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+  Arcadia_Visuals_Application* application = (Arcadia_Visuals_Application*)Arcadia_Visuals_Windows_Application_getOrCreate(thread);
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  Arcadia_Visuals_Application* application = (Arcadia_Visuals_Application*)Arcadia_Visuals_Linux_Application_getOrCreate(thread);
+#else
+  #error("environment system not (yet) supported")
+#endif
+  Arcadia_List* displayDevices = Arcadia_Visuals_Application_getDisplayDevices(thread, application);
+  
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)displayDevices); i < n; ++i) {   
+    Arcadia_Visuals_DisplayDevice* displayDevice =
+      (Arcadia_Visuals_DisplayDevice*)Arcadia_List_getObjectReferenceValueAt(thread, displayDevices, i);
+    
+    Arcadia_String* a;
+
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"  ");
+    
+    a = Arcadia_String_createFromSize(thread, i);
+    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8") id: ");
+
+    a = Arcadia_Visuals_DisplayDevice_getId(thread, displayDevice);
+    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8", name: ");
+    
+    a = Arcadia_Visuals_DisplayDevice_getName(thread, displayDevice);
+    Arcadia_StringBuffer_insertBackString(thread, message, a);
+    
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
+    
+    Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
+    Arcadia_StringBuffer_clear(thread, message);
+
+    dumpDisplayModes(thread, log, displayDevice);
+    dumpDisplayDeviceBounds(thread, log, displayDevice);
+  }
+}
+#endif
 
 void
 main1
@@ -538,6 +684,7 @@ main1
     char **argv
   )
 {
+  Arcadia_BooleanValue quit = Arcadia_BooleanValue_False;
   Arcadia_Visuals_Application* application = NULL;
   Arcadia_Visuals_Window* window = NULL;
   Arcadia_BooleanValue audialsInitialized = Arcadia_BooleanValue_False;
@@ -562,43 +709,7 @@ main1
     Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
     Arcadia_List* displayDevices = Arcadia_Visuals_Application_getDisplayDevices(thread,application);
 
-    print(thread, fileHandle, u8"display devices:\n", sizeof(u8"display devices:\n"));
-    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)displayDevices); i < n; ++i) {
-      Arcadia_Visuals_DisplayDevice* displayDevice =
-        (Arcadia_Visuals_DisplayDevice*)Arcadia_List_getObjectReferenceValueAt(thread, displayDevices, i);
-      
-      Arcadia_String* a;
-
-      print(thread, fileHandle, u8"  ", sizeof(u8"  ") - 1);
-      a = Arcadia_String_createFromSize(thread, i);
-      print(thread, fileHandle, Arcadia_String_getBytes(thread, a), Arcadia_String_getNumberOfBytes(thread, a));
-      print(thread, fileHandle, u8") id: ", sizeof(u8") id: ") - 1);
-      a = Arcadia_Visuals_DisplayDevice_getId(thread, displayDevice);
-      print(thread, fileHandle, Arcadia_String_getBytes(thread, a), Arcadia_String_getNumberOfBytes(thread, a));
-      print(thread, fileHandle, u8", name: ", sizeof(u8", name: ") - 1);
-      a = Arcadia_Visuals_DisplayDevice_getName(thread, displayDevice);
-      print(thread, fileHandle, Arcadia_String_getBytes(thread, a), Arcadia_String_getNumberOfBytes(thread, a));
-      print(thread, fileHandle, u8"\n", sizeof(u8"\n") - 1);
-
-      Arcadia_List* displayModes = Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes(thread, displayDevice);
-      for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)displayModes); i < n; ++i) {
-        Arcadia_Visuals_DisplayMode* displayMode = (Arcadia_Visuals_DisplayMode*)Arcadia_List_getObjectReferenceValueAt(thread, displayModes, i);
-        print(thread,fileHandle, u8"    ", sizeof(u8"    ") - 1);
-        print(thread, fileHandle, u8"horizontal resolution: ", sizeof(u8"horizontal resolution: ") - 1);
-        a = Arcadia_String_createFromInteger32(thread, Arcadia_Visuals_DisplayMode_getHorizontalResolution(thread, displayMode));
-        print(thread, fileHandle, Arcadia_String_getBytes(thread, a), Arcadia_String_getNumberOfBytes(thread, a));
-        print(thread, fileHandle, u8", vertical resolution: ", sizeof(u8", vertical resolution: ") - 1);
-        a = Arcadia_String_createFromInteger32(thread, Arcadia_Visuals_DisplayMode_getVerticalResolution(thread, displayMode));
-        print(thread, fileHandle, Arcadia_String_getBytes(thread, a), Arcadia_String_getNumberOfBytes(thread, a));
-        print(thread, fileHandle, u8", color depth: ", sizeof(u8", color depth: ") - 1);
-        a = Arcadia_String_createFromInteger32(thread, Arcadia_Visuals_DisplayMode_getColorDepth(thread, displayMode));
-        print(thread, fileHandle, Arcadia_String_getBytes(thread, a), Arcadia_String_getNumberOfBytes(thread, a));
-        print(thread, fileHandle, u8", frequency: ", sizeof(u8", frequency: ") - 1);
-        a = Arcadia_String_createFromInteger32(thread, Arcadia_Visuals_DisplayMode_getFrequency(thread, displayMode));
-        print(thread, fileHandle, Arcadia_String_getBytes(thread, a), Arcadia_String_getNumberOfBytes(thread, a));
-        print(thread, fileHandle, u8"\n", sizeof(u8"\n") - 1);
-      }
-    }
+    Arcadia_Visuals_Diagnostics_dumpDevices(thread);
     Arcadia_DataDefinitionLanguage_Tree_MapNode* configuration = loadConfiguration(thread);
     // (1) Get the display device.
     Arcadia_Visuals_DisplayDevice* displayDevice = NULL;
@@ -680,7 +791,6 @@ main1
     Arcadia_Object_lock(thread, (Arcadia_Object*)window);
 
     // (4) Ensure the window is opened.
-    //Arcadia_Visuals_DisplayMode* currentDisplayMode = Arcadia_Visuals_DisplayDevice_getCurrentDisplayMode(thread, displayDevice);
     Arcadia_Visuals_Window_open(thread, window);
   
     // (5) Set the window size and position.
@@ -688,6 +798,8 @@ main1
     Arcadia_Visuals_DisplayDevice_getBounds(thread, displayDevice, &left, &top, &right, &bottom);
     Arcadia_Visuals_Window_setPosition(thread, window, left, top);
     Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
+    
+    Arcadia_Visuals_Diagnostics_dumpDevices(thread); 
     
     // (6) Set the window mode.
     Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowMode);
@@ -714,6 +826,13 @@ main1
             verticalResolution == Arcadia_Visuals_DisplayMode_getVerticalResolution(thread, displayMode) &&
             colorDepth == Arcadia_Visuals_DisplayMode_getColorDepth(thread, displayMode)) {
           Arcadia_Visuals_DisplayMode_apply(thread, displayMode);
+          
+          Arcadia_Visuals_DisplayDevice_getBounds(thread, displayDevice, &left, &top, &right, &bottom);
+          Arcadia_Visuals_Window_setPosition(thread, window, left, top);
+          Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
+          
+          Arcadia_Visuals_Diagnostics_dumpDevices(thread);
+          
           break;
         }
       }
@@ -742,11 +861,20 @@ main1
     Arcadia_Process_stepArms(process);
 
     // (8) Enter the message loop.
-    while (!Arcadia_Visuals_Window_getQuitRequested(thread, window)) {
+    while (!Arcadia_Visuals_Application_getQuitRequested(thread, application)) {
       Arcadia_Process_stepArms(process);
-      Arcadia_Visuals_Window_update(thread, window);
+      Arcadia_Visuals_Application_update(thread, application);
       Arcadia_Visuals_Window_beginRender(thread, window);
       Arcadia_Visuals_Window_endRender(thread, window);
+
+      Arcadia_Engine_Event* event = Arcadia_Visuals_Application_dequeEvent(thread, application);
+      if (NULL != event && Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_KeyboardKeyEvent_getType(thread))) {
+        Arcadia_Visuals_KeyboardKeyEvent* keyboardKeyEvent = (Arcadia_Visuals_KeyboardKeyEvent*)event;
+        if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKeyAction_Released &&
+            Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKey_Escape) {
+          quit = Arcadia_BooleanValue_True;
+        }
+      }
     }
 
     // (9) Ensure the window is closed.

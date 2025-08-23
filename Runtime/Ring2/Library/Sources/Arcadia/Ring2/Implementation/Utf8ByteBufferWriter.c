@@ -73,7 +73,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Utf8ByteBufferWriter", Arcadia_Utf8ByteBufferWriter, u8"Arcadia.Utf8Writer", Arcadia_Utf8Writer, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Utf8ByteBufferWriter", Arcadia_Utf8ByteBufferWriter,
+                         u8"Arcadia.Utf8Writer", Arcadia_Utf8Writer,
+                         &_typeOperations);
 
 static void
 Arcadia_Utf8ByteBufferWriter_constructImpl
@@ -120,7 +122,7 @@ Arcadia_Utf8ByteBufferWriter_writeBytesImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Utf8ByteBufferWriter* self,
-    const void* bytes,
+    void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
 {

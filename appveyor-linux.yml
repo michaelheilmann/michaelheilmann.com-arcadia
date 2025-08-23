@@ -29,7 +29,7 @@ before_build:
         # Create the build directory.
         New-Item -Path "${env:BUILD_DIRECTORY}" -ItemType Directory
         
-        cd ${env:BUILD_DIRECTORY}; cmake -D"Arcadia.Visuals.OpenGl.Enabled"=TRUE -D"Arcadia.Audials.OpenAl.Enabled"=TRUE ${env:CLONE_DIRECTORY}\CMakeLists.txt
+        cd ${env:BUILD_DIRECTORY}; cmake -D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=TRUE -D"Arcadia.Audials.Implementation.OpenAL.Enabled"=TRUE ${env:CLONE_DIRECTORY}\CMakeLists.txt
         
         ${env:RELEASE_NAME}="michaelheilmann.com-linux-$(${env:APPVEYOR_REPO_BRANCH})-v$(${env:APPVEYOR_BUILD_VERSION}.ToLower())"
         

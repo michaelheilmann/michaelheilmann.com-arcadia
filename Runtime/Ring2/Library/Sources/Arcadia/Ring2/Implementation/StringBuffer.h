@@ -128,21 +128,6 @@ Arcadia_StringBuffer_startsWith_pn
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   );
-
-/// @brief Append Bytes to a string buffer.
-/// @param self A pointer to the string buffer.
-/// @param bytes A pointer to the array of Bytes.
-/// @param numberOfBytes The number of Bytes in the array pointed to by @a bytes.
-/// @error Arcadia_Status_ArgumentValueInvalid @a bytes is a null pointer
-/// @error Arcadia_Status_EncodingInvalid The Bytes are not an UTF-8 Byte sequence.
-void
-Arcadia_StringBuffer_append_pn
-  (
-    Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  );
   
 /// @brief Remove code points from the front of this string buffer.
 /// @param thread A pointer to this thread. 

@@ -15,8 +15,8 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "Arcadia/Include.h"
 #include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Visuals/Implementation/Include.h"
 
 void
 main1

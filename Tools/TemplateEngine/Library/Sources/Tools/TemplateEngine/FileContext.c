@@ -198,9 +198,9 @@ evalInvoke
   if (Arcadia_Value_isVoidValue(&v)) {
     // Error.
     Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
     Arcadia_StringBuffer_insertBack(thread, sb, k);
-    Arcadia_StringBuffer_append_pn(thread, sb, u8"` not defined\n\0", sizeof(u8"` not defined\n\0") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` not defined\n");
     fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
@@ -208,9 +208,9 @@ evalInvoke
   if (!Arcadia_Value_isForeignProcedureValue(&v)) {
     // Error.
     Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-    Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
     Arcadia_StringBuffer_insertBack(thread, sb, k);
-    Arcadia_StringBuffer_append_pn(thread, sb, u8"` is not of procedure string\n\0", sizeof(u8"` is not of procedure string\n\0") - 1);
+    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` is not of procedure string\n");
     fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
@@ -277,18 +277,18 @@ evalAst
       if (Arcadia_Value_isVoidValue(&v)) {
         // Error.
         Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-        Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
         Arcadia_StringBuffer_insertBack(thread, sb, k);
-        Arcadia_StringBuffer_append_pn(thread, sb, u8"` not defined\n\0", sizeof(u8"` not defined\n\0") - 1);
+        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` not defined\n");
         fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
         Arcadia_Thread_jump(thread);
       } else  if (!Arcadia_Value_isObjectReferenceValue(&v)) {
         // Error.
         Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-        Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
         Arcadia_StringBuffer_insertBack(thread, sb, k);
-        Arcadia_StringBuffer_append_pn(thread, sb, u8"` is not of type string\n\0", sizeof(u8"` is not of type string\n\0") - 1);
+        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` is not of type string\n");
         fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
         Arcadia_Thread_jump(thread);
@@ -297,9 +297,9 @@ evalAst
       if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, object), _Arcadia_String_getType(thread))) {
         // Error.
         Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-        Arcadia_StringBuffer_append_pn(thread, sb, u8"variable `", sizeof(u8"variable `") - 1);
+        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
         Arcadia_StringBuffer_insertBack(thread, sb, k);
-        Arcadia_StringBuffer_append_pn(thread, sb, u8"` is not of type string\n\0", sizeof(u8"` is not of type string\n\0") - 1);
+        Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"` is not of type string\n");
         fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
         Arcadia_Thread_jump(thread);

@@ -161,7 +161,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Utf8ByteBufferReader", Arcadia_Utf8ByteBufferReader, u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Utf8ByteBufferReader", Arcadia_Utf8ByteBufferReader,
+                         u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader,
+                         &_typeOperations);
 
 void
 Arcadia_Utf8ByteBufferReader_constructImpl

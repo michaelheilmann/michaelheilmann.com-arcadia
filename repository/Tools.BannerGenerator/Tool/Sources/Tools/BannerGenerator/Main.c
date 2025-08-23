@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Arcadia/Include.h"
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Imaging/Include.h"
 
 static void
 main1

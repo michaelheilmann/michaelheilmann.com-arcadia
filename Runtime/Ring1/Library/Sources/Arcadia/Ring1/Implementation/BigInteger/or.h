@@ -21,18 +21,6 @@
 #endif
 
 #include "Arcadia/Ring1/Implementation/BigInteger/BigInteger.h"
-#if 0
-#include "Arcadia/Ring1/Implementation/Integer16.h"
-#include "Arcadia/Ring1/Implementation/Integer32.h"
-#include "Arcadia/Ring1/Implementation/Integer64.h"
-#include "Arcadia/Ring1/Implementation/Integer8.h"
-#include "Arcadia/Ring1/Implementation/Natural16.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "Arcadia/Ring1/Implementation/Natural64.h"
-#include "Arcadia/Ring1/Implementation/Natural8.h"
-typedef struct Arcadia_BigInteger Arcadia_BigInteger;
-typedef Arcadia_BigInteger* Arcadia_BigIntegerValue;
-#endif
 
 void
 Arcadia_BigInteger_or3

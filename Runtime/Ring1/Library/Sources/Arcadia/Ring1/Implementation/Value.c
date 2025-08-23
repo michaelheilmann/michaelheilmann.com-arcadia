@@ -512,6 +512,9 @@ Arcadia_Value_getHash
       operations->hash(thread, &resultValue, 1, &args[0]);
       return Arcadia_Value_getSizeValue(&resultValue);
     } break;
+    case Arcadia_ValueTag_Type: {
+      return Arcadia_Type_getHash(thread, self->typeValue);
+    } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);

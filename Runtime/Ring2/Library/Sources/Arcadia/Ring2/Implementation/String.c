@@ -95,7 +95,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .notEqualTo = &isNotEqualToImpl,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.String", Arcadia_String, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.String", Arcadia_String,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 #define On(Type, Suffix) \
   static void \

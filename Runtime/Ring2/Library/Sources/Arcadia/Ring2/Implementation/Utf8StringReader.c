@@ -80,7 +80,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcada.Utf8StringReader", Arcadia_Utf8StringReader, u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcada.Utf8StringReader", Arcadia_Utf8StringReader,
+                         u8"Arcadia.Utf8Reader", Arcadia_Utf8Reader,
+                         &_typeOperations);
 
 static void
 Arcadia_Utf8StringReader_constructImpl
@@ -120,7 +122,9 @@ Arcadia_Utf8StringReader_visit
     Arcadia_Utf8StringReader* self
   )
 {
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->source);
+  if (self->source) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->source);
+  }
 }
 
 static void

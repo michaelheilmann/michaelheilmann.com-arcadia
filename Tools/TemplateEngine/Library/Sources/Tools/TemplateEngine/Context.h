@@ -34,6 +34,8 @@ struct Context {
 
   Arcadia_Stack* stack;
   Arcadia_List* files;
+
+  Arcadia_Log* log;
 };
 
 Context*
