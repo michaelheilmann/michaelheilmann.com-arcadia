@@ -77,15 +77,16 @@ Arcadia_FileHandle_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->fileSystem = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_FileSystem_getType(thread));
+  _self->fileSystem = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FileSystem_getType(thread));
   Arcadia_Object_lock(thread, (Arcadia_Object*)_self->fileSystem);
   _self->fd = NULL;
   _self->flags = 0;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 static void
@@ -123,14 +124,14 @@ Arcadia_FileHandle_create
     Arcadia_FileSystem* fileSystem
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  if (fileSystem) {
-    Arcadia_Value_setObjectReferenceValue(&argumentValues[0], fileSystem);
+  if (!fileSystem) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  Arcadia_FileHandle* self = Arcadia_allocateObject(thread, _Arcadia_FileHandle_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)fileSystem);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_FileHandle);
 }
 
 void

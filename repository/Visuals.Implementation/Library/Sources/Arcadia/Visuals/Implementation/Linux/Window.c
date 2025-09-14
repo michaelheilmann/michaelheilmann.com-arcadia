@@ -24,15 +24,6 @@
 
 #include <limits.h>
 
-static const char g_title[] = "Liminality";
-
-static int
-stringToInteger
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String* source
-  );
-
 static Arcadia_BooleanValue
 isConfigurationSupported
   (
@@ -290,21 +281,6 @@ Arcadia_defineObjectType(u8"Arcadia.Visuals.Linux.Window", Arcadia_Visuals_Linux
                          u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window,
                          &_typeOperations);
 
-static int
-stringToInteger
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String* source
-  )
-{
-  Arcadia_Integer64Value target = Arcadia_String_toInteger64(thread, source);
-  if (target < INT_MIN || target > INT_MAX) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  return (int)target;
-}
-
 static Arcadia_BooleanValue
 isConfigurationSupported
   (
@@ -398,11 +374,11 @@ openVisual
     GLX_DRAWABLE_TYPE    , GLX_WINDOW_BIT,
     GLX_RENDER_TYPE      , GLX_RGBA_BIT,
     GLX_X_VISUAL_TYPE    , GLX_TRUE_COLOR,
-    GLX_RED_SIZE         , stringToInteger(thread, desiredConfiguration->colorBuffer.redBits),
-    GLX_GREEN_SIZE       , stringToInteger(thread, desiredConfiguration->colorBuffer.greenBits),
-    GLX_BLUE_SIZE        , stringToInteger(thread, desiredConfiguration->colorBuffer.blueBits),
-    GLX_ALPHA_SIZE       , stringToInteger(thread, desiredConfiguration->colorBuffer.alphaBits),
-    GLX_DEPTH_SIZE       , stringToInteger(thread, desiredConfiguration->depthBuffer.depthBits),
+    GLX_RED_SIZE         , Arcadia_String_toCxxInt(thread, desiredConfiguration->colorBuffer.redBits),
+    GLX_GREEN_SIZE       , Arcadia_String_toCxxInt(thread, desiredConfiguration->colorBuffer.greenBits),
+    GLX_BLUE_SIZE        , Arcadia_String_toCxxInt(thread, desiredConfiguration->colorBuffer.blueBits),
+    GLX_ALPHA_SIZE       , Arcadia_String_toCxxInt(thread, desiredConfiguration->colorBuffer.alphaBits),
+    GLX_DEPTH_SIZE       , Arcadia_String_toCxxInt(thread, desiredConfiguration->depthBuffer.depthBits),
     //GLX_STENCIL_SIZE     , 8,
     GLX_DOUBLEBUFFER     , True,
     //GLX_SAMPLE_BUFFERS , 1,
@@ -414,8 +390,8 @@ openVisual
   GLXFBConfig* frameBufferConfigurations =
     glXChooseFBConfig
       (
-        self->application->display,
-        DefaultScreen(self->application->display),
+        self->system->display,
+        DefaultScreen(self->system->display),
         visualsAttributes,
         &numberOfFrameBufferConfigurations
       );
@@ -437,13 +413,13 @@ openVisual
     XVisualInfo *visualInfo =
       glXGetVisualFromFBConfig
         (
-          self->application->display,
+          self->system->display,
           frameBufferConfigurations[i]
         );
     if (visualInfo) {
       int sampleBuffers, samples;
-      glXGetFBConfigAttrib(self->application->display, frameBufferConfigurations[i], GLX_SAMPLE_BUFFERS, &sampleBuffers );
-      glXGetFBConfigAttrib(self->application->display, frameBufferConfigurations[i], GLX_SAMPLES       , &samples  );
+      glXGetFBConfigAttrib(self->system->display, frameBufferConfigurations[i], GLX_SAMPLE_BUFFERS, &sampleBuffers );
+      glXGetFBConfigAttrib(self->system->display, frameBufferConfigurations[i], GLX_SAMPLES       , &samples  );
 
       if (bestFrameBufferConfiguration < 0 || sampleBuffers && samples > bestNumberOfSamples )
         bestFrameBufferConfiguration = i, bestNumberOfSamples = samples;
@@ -464,7 +440,7 @@ openVisual
       Arcadia_Thread_jump(thread);
     }
     *self->frameBufferConfiguration = frameBufferConfigurations[bestFrameBufferConfiguration];
-    self->visualInfo = glXGetVisualFromFBConfig(self->application->display, *self->frameBufferConfiguration );
+    self->visualInfo = glXGetVisualFromFBConfig(self->system->display, *self->frameBufferConfiguration );
     if (!self->visualInfo) {
       free(self->frameBufferConfiguration);
       self->frameBufferConfiguration = NULL;
@@ -516,7 +492,7 @@ openContext
   };
   // Replace the original error handler with our error handler.
   g_oldErrorHandler = XSetErrorHandler(&errorHandler);
-  self->context = glXCreateContextAttribsARB(self->application->display,
+  self->context = glXCreateContextAttribsARB(self->system->display,
                                              *self->frameBufferConfiguration,
                                              0,
                                              True,
@@ -530,8 +506,8 @@ openContext
     Arcadia_Thread_jump(thread);
   }
   // Verifying that context is a direct context
-  if (!glXIsDirect(self->application->display, self->context)) {
-    glXDestroyContext(self->application->display, self->context);
+  if (!glXIsDirect(self->system->display, self->context)) {
+    glXDestroyContext(self->system->display, self->context);
     self->context = NULL;
 
     // Restore the original error handler.
@@ -541,11 +517,11 @@ openContext
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  glXMakeCurrent(self->application->display, self->window, self->context);
+  glXMakeCurrent(self->system->display, self->window, self->context);
 
-  XSync(self->application->display, False);
+  XSync(self->system->display, False);
   if (g_error) {
-    glXDestroyContext(self->application->display, self->context);
+    glXDestroyContext(self->system->display, self->context);
     self->context = NULL;
 
     // Restore the original error handler.
@@ -572,7 +548,7 @@ applyIcons
     return;
   }
   if (!self->smallIcon && !self->bigIcon) {
-    XDeleteProperty(self->application->display, self->window, self->application->_NET_WM_ICON);
+    XDeleteProperty(self->system->display, self->window, self->system->_NET_WM_ICON);
   } else {
     size_t numberOfElements = 0;
     Arcadia_Visuals_Linux_Icon* icons[] = {
@@ -589,9 +565,9 @@ applyIcons
     }
     void const* p = Arcadia_ByteBuffer_getBytes(thread, byteBuffer);
     int n = Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer);
-    XChangeProperty(self->application->display,
+    XChangeProperty(self->system->display,
                     self->window,
-                    self->application->_NET_WM_ICON,
+                    self->system->_NET_WM_ICON,
                     XA_CARDINAL,
                     32,
                     PropModeReplace,
@@ -599,7 +575,29 @@ applyIcons
                     numberOfElements);
   }
   // @todo Call XSync instead.
-  XFlush(self->application->display);
+  XFlush(self->system->display);
+}
+
+static Arcadia_BooleanValue
+filter
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value context,
+    Arcadia_Value value
+  )
+{
+  Arcadia_Visuals_Window* window = (Arcadia_Visuals_Window*)Arcadia_Value_getObjectReferenceValue(&context);
+  Arcadia_WeakReference* weakReferenceElement = (Arcadia_WeakReference*)Arcadia_Value_getObjectReferenceValue(&value);
+  Arcadia_Value valueElement = Arcadia_WeakReference_getValue(thread, weakReferenceElement);
+  if (Arcadia_Value_isObjectReferenceValue(&valueElement)) {
+    Arcadia_Visuals_Window* windowElement = (Arcadia_Visuals_Window*)Arcadia_Value_getObjectReferenceValue(&valueElement);
+    if (window == windowElement) {
+      return Arcadia_BooleanValue_False;
+    }
+  } else {
+    return Arcadia_BooleanValue_False;
+  }
+  return Arcadia_BooleanValue_True;
 }
 
 static void
@@ -610,17 +608,17 @@ Arcadia_Visuals_Linux_Window_destruct
   )
 {
   if (self->context) {
-    glXDestroyContext(self->application->display, self->context);
+    glXDestroyContext(self->system->display, self->context);
     self->context = NULL;
   }
 
   if (self->window) {
-    XDestroyWindow(self->application->display, self->window);
+    XDestroyWindow(self->system->display, self->window);
     self->window = None;
   }
 
   if (self->colormap) {
-    XFreeColormap(self->application->display, self->colormap);
+    XFreeColormap(self->system->display, self->colormap);
     self->colormap = None;
   }
   if (self->visualInfo) {
@@ -638,18 +636,10 @@ Arcadia_Visuals_Linux_Window_destruct
   #endif
     self->screen = NULL;
   }
-
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->application->windows); i < n; ++i) {
-    Arcadia_Visuals_Linux_Window* window = (Arcadia_Visuals_Linux_Window*)Arcadia_List_getObjectReferenceValueAt(thread, self->application->windows, i);
-    if (window == self) {
-      Arcadia_List_removeAt(thread, self->application->windows, i, 1);
-      break;
-    }
-  }
-
-  if (self->application) {
-    Arcadia_Object_unlock(thread, self->application);
-    self->application = NULL;
+  Arcadia_List_filter(thread, ((Arcadia_Visuals_System*)self->system)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
+  if (self->system) {
+    Arcadia_Object_unlock(thread, self->system);
+    self->system = NULL;
   }
   fprintf(stdout, "%s:%d: GLX window destroyed\n", __FILE__, __LINE__);
 }
@@ -661,8 +651,8 @@ Arcadia_Visuals_Linux_Window_visit
     Arcadia_Visuals_Linux_Window* self
   )
 {
-  if (self->application) {
-    Arcadia_Object_visit(thread, self->application);
+  if (self->system) {
+    Arcadia_Object_visit(thread, self->system);
   }
   if (self->bigIcon) {
     Arcadia_Object_visit(thread, self->bigIcon);
@@ -689,12 +679,12 @@ Arcadia_Visuals_Linux_Window_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-
   if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
+  _self->system = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_Visuals_Linux_System_getType(thread));
+  Arcadia_Object_lock(thread, _self->system);
   _self->smallIcon = NULL;
   _self->bigIcon = NULL;
   _self->screen = NULL;
@@ -702,9 +692,6 @@ Arcadia_Visuals_Linux_Window_constructImpl
   _self->visualInfo = NULL;
   _self->colormap = None;
   _self->window = None;
-
-  _self->application = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_Visuals_Linux_Application_getType(thread));
-  Arcadia_Object_lock(thread, _self->application);
 
   ((Arcadia_Visuals_Window*)_self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & openImpl;
   ((Arcadia_Visuals_Window*)_self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & closeImpl;
@@ -748,7 +735,7 @@ openImpl
   Arcadia_Visuals_Linux_GlxDeviceInfo* deviceInfo = Arcadia_Visuals_Linux_GlxDeviceInfo_create(thread);
 
   if (!self->screen) {
-    self->screen = DefaultScreenOfDisplay(self->application->display);
+    self->screen = DefaultScreenOfDisplay(self->system->display);
     if (!self->screen) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
@@ -766,7 +753,7 @@ openImpl
   }
 
   if (!self->window) {
-    int screenId = DefaultScreen(self->application->display);
+    int screenId = DefaultScreen(self->system->display);
 
     Window rootWindow = RootWindowOfScreen(self->screen);
     int windowX = ((Arcadia_Visuals_Window*)self)->bounds.left;
@@ -776,7 +763,7 @@ openImpl
     // Does not seem to have an effect when using GNOME.
     int windowBorderWidth = 0;
     int windowClass = InputOutput;
-    int windowDepth = DefaultDepth(self->application->display, screenId);
+    int windowDepth = DefaultDepth(self->system->display, screenId);
 
     int attributeValueMask = 0;
     XSetWindowAttributes windowAttributes = {};
@@ -789,21 +776,21 @@ openImpl
 
   #if 1
     // Does not seem to have an effect when using GNOME.
-    windowAttributes.border_pixel = WhitePixel(self->application->display, screenId);
+    windowAttributes.border_pixel = WhitePixel(self->system->display, screenId);
     attributeValueMask |= CWBorderPixel;
   #endif
 
     windowAttributes.event_mask = StructureNotifyMask | KeyPressMask | KeyReleaseMask | ExposureMask;
     attributeValueMask |= CWEventMask;
 
-    self->colormap = XCreateColormap(self->application->display,
+    self->colormap = XCreateColormap(self->system->display,
                                      rootWindow,
                                      self->visualInfo->visual,
                                      AllocNone);
     windowAttributes.colormap = self->colormap;
     attributeValueMask |= CWColormap;
 
-    self->window = XCreateWindow(self->application->display,
+    self->window = XCreateWindow(self->system->display,
                                  rootWindow,
                                  windowX, windowY, windowW, windowH,
                                  windowBorderWidth,
@@ -813,7 +800,7 @@ openImpl
                                  attributeValueMask, &windowAttributes);
     if (!self->window) {
 
-      XDestroyWindow(self->application->display, self->window);
+      XDestroyWindow(self->system->display, self->window);
       self->window = None;
 
       XFree(self->visualInfo);
@@ -833,9 +820,9 @@ openImpl
     }
   }
 
-  XMapWindow(self->application->display, self->window);
+  XMapWindow(self->system->display, self->window);
 
-  XSetWMProtocols(self->application->display, self->window, &self->application->WM_DELETE_WINDOW, 1);
+  XSetWMProtocols(self->system->display, self->window, &self->system->WM_DELETE_WINDOW, 1);
 
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -844,10 +831,10 @@ openImpl
   } else {
     Arcadia_Thread_popJumpTarget(thread);
 
-    XDestroyWindow(self->application->display, self->window);
+    XDestroyWindow(self->system->display, self->window);
     self->window = None;
 
-    XFreeColormap(self->application->display, self->colormap);
+    XFreeColormap(self->system->display, self->colormap);
     self->colormap = None;
 
     XFree(self->visualInfo);
@@ -866,7 +853,7 @@ openImpl
   }
 
   // TODO: Use XSync.
-  XFlush(self->application->display);
+  XFlush(self->system->display);
 }
 
 static void
@@ -877,17 +864,17 @@ closeImpl
   )
 {
   if (self->context) {
-    glXDestroyContext(self->application->display, self->context);
+    glXDestroyContext(self->system->display, self->context);
     self->context = NULL;
   }
 
   if (self->window) {
-    XDestroyWindow(self->application->display, self->window);
+    XDestroyWindow(self->system->display, self->window);
     self->window = None;
   }
 
   if (self->colormap) {
-    XFreeColormap(self->application->display, self->colormap);
+    XFreeColormap(self->system->display, self->colormap);
     self->colormap = None;
   }
 
@@ -941,10 +928,10 @@ setFullscreenImpl
         .inputMode = 0, // ignored
         .status = 0, // ingored
       };
-      XChangeProperty(self->application->display, self->window, self->application->_MOTIF_WM_HINTS,
-                                                  self->application->_MOTIF_WM_HINTS,
-                                                  32, PropModeReplace, (unsigned char *)&hints,
-                                                  5);
+      XChangeProperty(self->system->display, self->window, self->system->_MOTIF_WM_HINTS,
+                                                   self->system->_MOTIF_WM_HINTS,
+                                                   32, PropModeReplace, (unsigned char *)&hints,
+                                                   5);
       ((Arcadia_Visuals_Window*)self)->fullscreen = fullscreen;
     }
   } else {
@@ -1046,9 +1033,10 @@ setTitleImpl
   Arcadia_StringBuffer_insertBack(thread, stringBuffer, value);
 
   if (self->window) {
-    XStoreName(self->application->display, self->window,
+    XStoreName(self->system->display, self->window,
                Arcadia_StringBuffer_getBytes(thread, stringBuffer));
   }
+  ((Arcadia_Visuals_Window*)self)->title = title;
 }
 
 static void
@@ -1065,7 +1053,7 @@ getCanvasSizeImpl
     Arcadia_Thread_jump(thread);
   }
   XWindowAttributes attr;
-  if(!XGetWindowAttributes(self->application->display, self->window, &attr)) {
+  if(!XGetWindowAttributes(self->system->display, self->window, &attr)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -1080,7 +1068,7 @@ beginRenderImpl
     Arcadia_Visuals_Linux_Window* self
   )
 {
-  if (!glXMakeCurrent(self->application->display, self->window, self->context)) {
+  if (!glXMakeCurrent(self->system->display, self->window, self->context)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -1100,7 +1088,7 @@ endRenderImpl
   )
 {
   if (self->context == glXGetCurrentContext()) {
-    glXSwapBuffers(self->application->display, self->window);
+    glXSwapBuffers(self->system->display, self->window);
   }
 }
 
@@ -1120,7 +1108,7 @@ getBorderInfo
   unsigned long nitems, bytes_after;
   unsigned char *property;
   Status status;
-  status = XGetWindowProperty(self->application->display, self->window, self->application->_NET_FRAME_EXTENTS,
+  status = XGetWindowProperty(self->system->display, self->window, self->system->_NET_FRAME_EXTENTS,
                               0, 16, 0, XA_CARDINAL, &type, &format, &nitems, &bytes_after, &property);
   if (status != Success) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -1148,7 +1136,7 @@ getPositionImpl
   )
 {
   XWindowAttributes attributes;
-  XGetWindowAttributes(self->application->display, self->window, &attributes);
+  XGetWindowAttributes(self->system->display, self->window, &attributes);
   *left = attributes.x;
   *top = attributes.y;
 }
@@ -1164,8 +1152,8 @@ setPositionImpl
 {
   Arcadia_Integer32Value borderLeft, borderTop, borderRight, borderBottom;
   getBorderInfo(thread, self, &borderLeft, &borderTop, &borderRight, &borderBottom);
-  XMoveWindow(self->application->display, self->window, left + borderLeft, top + borderTop);
-  XSync(self->application->display, False);
+  XMoveWindow(self->system->display, self->window, left + borderLeft, top + borderTop);
+  XSync(self->system->display, False);
 }
 
 static void
@@ -1178,7 +1166,7 @@ getSizeImpl
   )
 {
   XWindowAttributes attributes;
-  XGetWindowAttributes(self->application->display, self->window, &attributes); 
+  XGetWindowAttributes(self->system->display, self->window, &attributes); 
   *width = attributes.width;
   *height = attributes.height;
 }
@@ -1192,23 +1180,20 @@ setSizeImpl
     Arcadia_Integer32Value height
   )
 {
-  XResizeWindow(self->application->display, self->window, width, height);
-  XSync(self->application->display, False);
+  XResizeWindow(self->system->display, self->window, width, height);
+  XSync(self->system->display, False);
 }
 
 Arcadia_Visuals_Linux_Window*
 Arcadia_Visuals_Linux_Window_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_Application* application
+    Arcadia_Visuals_Linux_System* system
   )
 {
   Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+    system ? Arcadia_Value_makeObjectReferenceValue(system) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
   };
-  if (application) {
-    Arcadia_Value_setObjectReferenceValue(&argumentValues[0], application);
-  }
   Arcadia_Visuals_Linux_Window* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Linux_Window_getType(thread), 1, &argumentValues[0]);
   return self;
 }

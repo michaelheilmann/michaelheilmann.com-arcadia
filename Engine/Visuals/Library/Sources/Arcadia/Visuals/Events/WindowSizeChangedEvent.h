@@ -21,7 +21,7 @@ typedef struct Arcadia_Visuals_Window Arcadia_Visuals_Window;
 
 // https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_WindowSizeChangedEvent
 Arcadia_declareObjectType(u8"Arcadia.Visuals.WindowSizeChangedEvent", Arcadia_Visuals_WindowSizeChangedEvent,
-                          u8"Arcadia.Visuals.WindowSizeChangedEvent");
+                          u8"Arcadia.Engine.Event");
 
 struct Arcadia_Visuals_WindowSizeChangedEvent {
   Arcadia_Engine_Event _parent;

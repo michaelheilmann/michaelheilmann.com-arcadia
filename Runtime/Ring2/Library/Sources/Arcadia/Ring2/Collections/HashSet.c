@@ -256,7 +256,12 @@ Arcadia_HashSet_constructImpl
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->buckets = NULL;
   _self->capacity = 0;
@@ -274,6 +279,7 @@ Arcadia_HashSet_constructImpl
   ((Arcadia_Set*)_self)->get = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value)) &Arcadia_HashSet_getImpl;
   ((Arcadia_Set*)_self)->remove = (void (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value, Arcadia_Value*)) & Arcadia_HashSet_removeImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 static void
@@ -436,9 +442,28 @@ Arcadia_HashSet_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_HashSet* self = Arcadia_allocateObject(thread, _Arcadia_HashSet_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_HashSet);
+}
+
+Arcadia_Value
+Arcadia_HashSet_findFirst
+  (
+    Arcadia_Thread* thread,
+    Arcadia_HashSet* self,
+    Arcadia_Value context,
+    Arcadia_BooleanValue(*predicate)(Arcadia_Thread* thread, Arcadia_Value context, Arcadia_Value element)
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    _Arcadia_HashSet_Node* node = self->buckets[i];
+    while (node) {
+      if ((*predicate)(thread, context, node->value)) {
+        return node->value;
+      }
+      node = node->next;
+    }
+  }
+  return Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
 }

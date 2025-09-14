@@ -64,13 +64,14 @@ Arcadia_DataDefinitionLanguage_Tree_StringNode_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  switch (Arcadia_Value_getTag(&argumentValues[0])) {
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1);
+  switch (Arcadia_Value_getTag(&x)) {
     case Arcadia_ValueTag_ObjectReference: {
-      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &x, _Arcadia_String_getType(thread));
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -78,6 +79,7 @@ Arcadia_DataDefinitionLanguage_Tree_StringNode_constructImpl
     } break;
   };
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 static void
@@ -99,9 +101,12 @@ Arcadia_DataDefinitionLanguage_Tree_StringNode_createString
     Arcadia_String* stringValue
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(stringValue),
-  };
-  Arcadia_DataDefinitionLanguage_Tree_StringNode* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_Tree_StringNode_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (stringValue) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, stringValue);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_DataDefinitionLanguage_Tree_StringNode);
 }

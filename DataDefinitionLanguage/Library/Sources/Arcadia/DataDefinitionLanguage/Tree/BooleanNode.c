@@ -64,19 +64,19 @@ Arcadia_DataDefinitionLanguage_Tree_BooleanNode_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  switch (Arcadia_Value_getTag(&argumentValues[0])) {
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1);
+  switch (Arcadia_Value_getTag(&x)) {
     case Arcadia_ValueTag_Boolean: {
-      _self->value = Arcadia_String_createFromBoolean(thread, Arcadia_Value_getBooleanValue(&argumentValues[0]));
+      _self->value = Arcadia_String_createFromBoolean(thread, Arcadia_Value_getBooleanValue(&x));
     } break;
     case Arcadia_ValueTag_ObjectReference: {
-      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &x, _Arcadia_String_getType(thread));
       static const Arcadia_Natural8Value trueString[] = u8"true";
-      static const Arcadia_Natural8Value falseString[] = u8"false";
-      
+      static const Arcadia_Natural8Value falseString[] = u8"false"; 
       if (sizeof(trueString) - 1 != Arcadia_String_getNumberOfBytes(thread, _self->value) ||
           0 != Arcadia_Memory_compare(thread, trueString, Arcadia_String_getBytes(thread, _self->value), sizeof(trueString) - 1)) {
         if (sizeof(falseString) - 1 != Arcadia_String_getNumberOfBytes(thread, _self->value) &&
@@ -85,7 +85,6 @@ Arcadia_DataDefinitionLanguage_Tree_BooleanNode_constructImpl
           Arcadia_Thread_jump(thread);
         }
       }
-
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -93,6 +92,7 @@ Arcadia_DataDefinitionLanguage_Tree_BooleanNode_constructImpl
     } break;
   };
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 static void
@@ -114,11 +114,10 @@ Arcadia_DataDefinitionLanguage_Tree_BooleanNode_createBoolean
     Arcadia_BooleanValue booleanValue
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeBooleanValue(booleanValue),
-  };
-  Arcadia_DataDefinitionLanguage_Tree_BooleanNode* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_Tree_BooleanNode_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushBooleanValue(thread, booleanValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_DataDefinitionLanguage_Tree_BooleanNode);
 }
 
 Arcadia_DataDefinitionLanguage_Tree_BooleanNode*
@@ -128,9 +127,12 @@ Arcadia_DataDefinitionLanguage_Tree_BooleanNode_createString
     Arcadia_String* stringValue
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(stringValue),
-  };
-  Arcadia_DataDefinitionLanguage_Tree_BooleanNode* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_Tree_BooleanNode_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (stringValue) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, stringValue);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_DataDefinitionLanguage_Tree_BooleanNode);
 }

@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/Mil/Frontend/Include.h"
+#include "Arcadia/MIL/Frontend/Include.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -25,10 +25,18 @@ main1
     char** argv
   )
 {
-  Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_List* filePaths = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
-    Arcadia_String* argument = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, argv[argi], strlen(argv[argi]))));
-    Arcadia_List_insertBackObjectReferenceValue(thread, arguments, argument);
+    Arcadia_JumpTarget jumpTarget;
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, argv[argi], strlen(argv[argi]));
+      Arcadia_List_insertBackObjectReferenceValue(thread, filePaths, filePath);
+      Arcadia_Thread_popJumpTarget(thread);
+    } else {
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_Thread_jump(thread);
+    }
   }
 }
 

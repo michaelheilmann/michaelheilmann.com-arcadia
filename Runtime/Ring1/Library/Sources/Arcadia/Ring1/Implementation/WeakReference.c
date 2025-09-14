@@ -17,6 +17,8 @@
 #include "Arcadia/Ring1/Implementation/WeakReference.h"
 
 #include "Arcadia/Arms/Include.h"
+#include "Arcadia/Ring1/Implementation/Thread.h"
+#include "Arcadia/Ring1/Implementation/ThreadExtensions.h"
 #include "Arcadia/Ring1/Implementation/Object.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/Thread.h"
@@ -141,10 +143,15 @@ Arcadia_WeakReference_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (0 == numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (0 == numberOfArgumentValues1) {
     _self->value = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
-  } else if (1 == numberOfArgumentValues) {
-    _self->value = argumentValues[0];
+  } else if (1 == numberOfArgumentValues1) {
+    _self->value = Arcadia_ValueStack_getValue(thread, 1);
     switch (Arcadia_Value_getTag(&_self->value)) {
       case Arcadia_ValueTag_Atom: {
         Arms_addNotifyDestroy(_self->value.atomValue, _self, NULL, &callback);
@@ -188,6 +195,7 @@ Arcadia_WeakReference_constructImpl
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 Arcadia_WeakReference*
@@ -197,8 +205,10 @@ Arcadia_WeakReference_create
     Arcadia_Value value
   )
 {
-  Arcadia_WeakReference*  self = Arcadia_allocateObject(thread, _Arcadia_WeakReference_getType(thread), 1, &value);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, &value);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_WeakReference);
 }
 
 Arcadia_Value

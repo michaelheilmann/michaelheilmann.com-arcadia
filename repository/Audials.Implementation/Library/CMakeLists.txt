@@ -22,9 +22,11 @@ if (NOT TARGET ${MyModule})
 
   BeginProduct(${MyModule} library)
 
-  set(${MyModule}.Backend.None 0)
-  set(${MyModule}.Backend.OpenAl 1)
-  set(${MyModule}.Backend ${${MyModule}.Backend.None})
+  if (${MyModule}.OpenAL.Enabled)
+    set(${MyModule}.Configuration.OpenAL.Enabled 1)
+  else()
+    set(${MyModule}.Configuration.OpenAL.Enabled 0)
+  endif()
 
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows} AND ${${MyModule}.OpenAL.Enabled})
     # Use OpenAL under Windows if enabled.
@@ -59,14 +61,18 @@ if (NOT TARGET ${MyModule})
     endif()
   endif()
 
-  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Include.c)
-  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Include.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Include.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Include.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/Backend.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/Backend.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/System.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/System.h)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Configure.h @ONLY)
-  list(APPEND ${MyModule}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Configure.h.i)
-  list(APPEND ${MyModule}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Configure.h)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h @ONLY)
+  list(APPEND ${MyModule}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h.i)
+  list(APPEND ${MyModule}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h)
 
-  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Ring2)
+  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Audials ${MyProjectName}.Ring2)
   EndProduct(${MyModule})
   set_target_properties(${MyModule} PROPERTIES FOLDER "Audials")
 

@@ -101,11 +101,11 @@ Arcadia_Utf8StringReader_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->source = (Arcadia_String*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+  _self->source = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   _self->byteIndex = 0;
   _self->codePoint = CodePoint_Start;
   ((Arcadia_Utf8Reader*)_self)->getByteIndex = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Utf8Reader*)) & Arcadia_Utf8StringReader_getByteIndexImpl;
@@ -113,6 +113,7 @@ Arcadia_Utf8StringReader_constructImpl
   ((Arcadia_Utf8Reader*)_self)->hasCodePoint = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Utf8Reader*)) & Arcadia_Utf8StringReader_hasCodePointImpl;
   ((Arcadia_Utf8Reader*)_self)->next = (void (*)(Arcadia_Thread*, Arcadia_Utf8Reader*)) & Arcadia_Utf8StringReader_nextImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 static void
@@ -212,9 +213,8 @@ Arcadia_Utf8StringReader_create
     Arcadia_String* source
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(source),
-  };
-  Arcadia_Utf8StringReader* self = Arcadia_allocateObject(thread, _Arcadia_Utf8StringReader_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)source);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_Utf8StringReader);
 }

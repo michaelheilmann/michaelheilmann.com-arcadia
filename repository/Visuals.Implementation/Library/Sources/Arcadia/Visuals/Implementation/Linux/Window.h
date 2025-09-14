@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_IMPLEMENTATIO_LINUX_WINDOW_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-#include "Arcadia/Visuals/Implementation/Linux/Application.h"
+#include "Arcadia/Visuals/Implementation/Linux/System.h"
 #include "Arcadia/Visuals/Implementation/Linux/GlxDeviceInfo.h"
 #include "Arcadia/Visuals/Implementation/Linux/Icon.h"
 
@@ -33,7 +33,7 @@ struct Arcadia_Visuals_Linux_Window {
   // Each window holds a lock on the application
   // as it uses the atoms and the display of the
   // application.
-  Arcadia_Visuals_Linux_Application* application;
+  Arcadia_Visuals_Linux_System* system;
 
   Screen* screen; // Default value is NULL.
   Window window; // Default value is None.
@@ -41,7 +41,7 @@ struct Arcadia_Visuals_Linux_Window {
   GLXFBConfig *frameBufferConfiguration; // Default value is NULL.
   XVisualInfo *visualInfo; // Default value is NULL.
   GLXContext context; // Default value is NULL.
-  
+
   Arcadia_Visuals_Linux_Icon* smallIcon;
   Arcadia_Visuals_Linux_Icon* bigIcon;
 };
@@ -50,7 +50,7 @@ Arcadia_Visuals_Linux_Window*
 Arcadia_Visuals_Linux_Window_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_Application* application
+    Arcadia_Visuals_Linux_System* system
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATIO_LINUX_WINDOW_H_INCLUDED

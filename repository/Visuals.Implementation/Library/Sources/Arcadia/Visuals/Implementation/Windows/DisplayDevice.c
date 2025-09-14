@@ -105,13 +105,18 @@ Arcadia_Visuals_Windows_DisplayDevice_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (3 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->id = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
-  _self->adapter = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
-  _self->monitor = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[2], _Arcadia_String_getType(thread));
+  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (3 != numberOfArgumentValues1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  _self->id = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_String_getType(thread));
+  _self->adapter = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
+  _self->monitor = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   _self->availableDisplayModes = NULL;
   _self->currentDisplayMode = NULL;
   ((Arcadia_Visuals_DisplayDevice*)_self)->getCurrentDisplayMode = (Arcadia_Visuals_DisplayMode * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl;
@@ -120,6 +125,7 @@ Arcadia_Visuals_Windows_DisplayDevice_constructImpl
   ((Arcadia_Visuals_DisplayDevice*)_self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Windows_DisplayDevice_getNameImpl;
   ((Arcadia_Visuals_DisplayDevice*)_self)->getBounds = (void (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Visuals_Windows_DisplayDevice_getBoundsImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 static void
@@ -298,12 +304,11 @@ Arcadia_Visuals_Windows_DisplayDevice_create
     Arcadia_String* monitor
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(id),
-    Arcadia_Value_makeObjectReferenceValue(adapter),
-    Arcadia_Value_makeObjectReferenceValue(monitor),
-  };
-  Arcadia_Visuals_Windows_DisplayDevice* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_DisplayDevice_getType(thread), 3, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, id);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, adapter);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, monitor);
+  Arcadia_ValueStack_pushNatural8Value(thread, 3);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_DisplayDevice);
 }
 

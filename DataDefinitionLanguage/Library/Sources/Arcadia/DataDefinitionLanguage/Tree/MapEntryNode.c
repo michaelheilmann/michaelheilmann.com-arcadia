@@ -66,13 +66,14 @@ Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
   }
-  if (2 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->key = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_DataDefinitionLanguage_Tree_NameNode_getType(thread));
-  _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_DataDefinitionLanguage_Tree_Node_getType(thread));
+  _self->key = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_DataDefinitionLanguage_Tree_NameNode_getType(thread));
+  _self->value = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_DataDefinitionLanguage_Tree_Node_getType(thread));
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 
 static void
@@ -99,10 +100,17 @@ Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_create
     Arcadia_DataDefinitionLanguage_Tree_Node* value
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(key),
-    Arcadia_Value_makeObjectReferenceValue(value),
-  };
-  Arcadia_DataDefinitionLanguage_Tree_MapEntryNode* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_getType(thread), 2, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (key) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, key);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  if (value) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, value);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(Arcadia_DataDefinitionLanguage_Tree_MapEntryNode);
 }

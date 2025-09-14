@@ -57,7 +57,12 @@ Arcadia_Map_constructImpl
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->get = NULL;
   _self->remove = NULL;
@@ -65,6 +70,7 @@ Arcadia_Map_constructImpl
   _self->getKeys = NULL;
   _self->getValues = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 Arcadia_Value

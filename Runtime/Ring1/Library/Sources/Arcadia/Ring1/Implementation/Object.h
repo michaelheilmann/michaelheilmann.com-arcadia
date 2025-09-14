@@ -78,8 +78,8 @@ struct Arcadia_Object {
 /// b) cast that memory into an object
 /// b) invoke the constructor of type X with the specified number of argument values
 /// c) if any of the constructors fails
-/// @error Core.Status.ArgumentValueInvalid if "type" is "NULL"
-/// @error Core.Status.AllocationFailed if step a) fails
+/// @error Arcadia.Status.ArgumentValueInvalid if "type" is "NULL"
+/// @error Arcadia.Status.AllocationFailed if step a) fails
 void*
 Arcadia_allocateObject
   (
@@ -88,6 +88,19 @@ Arcadia_allocateObject
     Arcadia_SizeValue numberOfArgumentValues,
     Arcadia_Value* argumentValues
   );
+
+/// @transitional
+void*
+ARCADIA_CREATEOBJECT0
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Type* type,
+    Arcadia_SizeValue oldValueStackSize
+  );
+
+/// @transitional
+#define ARCADIA_CREATEOBJECT(type) \
+  return ARCADIA_CREATEOBJECT0(thread, _##type##_getType(thread), oldValueStackSize);
 
 void
 Arcadia_Object_setType

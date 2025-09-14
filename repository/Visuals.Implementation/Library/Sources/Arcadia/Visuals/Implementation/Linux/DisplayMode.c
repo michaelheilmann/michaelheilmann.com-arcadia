@@ -15,8 +15,7 @@
 
 #include "Arcadia/Visuals/Implementation/Linux/DisplayMode.h"
 
-#include "Arcadia/Visuals/Include.h"
-#include "Arcadia/Visuals/Implementation/Linux/Application.h"
+#include "Arcadia/Visuals/Implementation/Linux/System.h"
 #include "Arcadia/Visuals/Implementation/Linux/DisplayDevice.h"
 
 static void
@@ -190,19 +189,19 @@ Arcadia_Visuals_Linux_DisplayMode_applyImpl
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    rootWindow = XDefaultRootWindow(self->device->application->display);
-    defaultScreen = DefaultScreen(self->device->application->display);
-    screenResources = XRRGetScreenResources(self->device->application->display, rootWindow);
+    rootWindow = XDefaultRootWindow(self->device->system->display);
+    defaultScreen = DefaultScreen(self->device->system->display);
+    screenResources = XRRGetScreenResources(self->device->system->display, rootWindow);
     if (!screenResources) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
-    outputInfo = XRRGetOutputInfo(self->device->application->display, screenResources, self->device->output);
+    outputInfo = XRRGetOutputInfo(self->device->system->display, screenResources, self->device->output);
     if (!screenResources) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
-    crtcInfo = XRRGetCrtcInfo(self->device->application->display, screenResources, outputInfo->crtc);
+    crtcInfo = XRRGetCrtcInfo(self->device->system->display, screenResources, outputInfo->crtc);
     if (!crtcInfo) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
@@ -210,30 +209,30 @@ Arcadia_Visuals_Linux_DisplayMode_applyImpl
     
     if (self->modeId != crtcInfo->mode) {
       Status status;
-      XGrabServer(self->device->application->display);
-      status = XRRSetCrtcConfig(self->device->application->display, screenResources, outputInfo->crtc,
+      XGrabServer(self->device->system->display);
+      status = XRRSetCrtcConfig(self->device->system->display, screenResources, outputInfo->crtc,
                                 CurrentTime, 0, 0, None, crtcInfo->rotation, NULL, 0);
       if (status != Success) {
-        XUngrabServer(self->device->application->display);
+        XUngrabServer(self->device->system->display);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
-      int mm_width = self->horizontalResolution * DisplayWidthMM(self->device->application->display, defaultScreen)
-                   / DisplayWidth(self->device->application->display, defaultScreen);
-      int mm_height = self->verticalResolution * DisplayHeightMM(self->device->application->display, defaultScreen)
-                    / DisplayHeight(self->device->application->display, defaultScreen);
+      int mm_width = self->horizontalResolution * DisplayWidthMM(self->device->system->display, defaultScreen)
+                   / DisplayWidth(self->device->system->display, defaultScreen);
+      int mm_height = self->verticalResolution * DisplayHeightMM(self->device->system->display, defaultScreen)
+                    / DisplayHeight(self->device->system->display, defaultScreen);
       
-      XSync(self->device->application->display, False);
+      XSync(self->device->system->display, False);
       
-      XRRSetScreenSize(self->device->application->display, rootWindow,
+      XRRSetScreenSize(self->device->system->display, rootWindow,
                        self->horizontalResolution, self->verticalResolution,
                        mm_width, mm_height);
 
-      XSync(self->device->application->display, False);
+      XSync(self->device->system->display, False);
       
-      status = XRRSetCrtcConfig(self->device->application->display, screenResources, outputInfo->crtc, CurrentTime,
+      status = XRRSetCrtcConfig(self->device->system->display, screenResources, outputInfo->crtc, CurrentTime,
                                 crtcInfo->x, crtcInfo->y, self->modeId, crtcInfo->rotation, &self->device->output, 1);
-      XUngrabServer(self->device->application->display);                                   
+      XUngrabServer(self->device->system->display);                                   
       if (status != Success) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);

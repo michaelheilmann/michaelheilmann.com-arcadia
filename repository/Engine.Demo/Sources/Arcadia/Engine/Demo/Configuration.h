@@ -21,6 +21,29 @@
 // { <name[0]> = { <name[1]> : { <name[2]> : ... { <name[n-1]> : <value>} } } }
 // node must be a map node
 void
+Cfg2_setBoolean
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    char const* names[],
+    Arcadia_SizeValue numberOfNames,
+    Arcadia_Integer32Value value
+  );
+
+// node must be a map node
+// errors: not exists or conversion failed
+Arcadia_BooleanValue
+Cfg2_getBoolean
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    char const* names[],
+    Arcadia_SizeValue numberOfNames
+  );
+
+// { <name[0]> = { <name[1]> : { <name[2]> : ... { <name[n-1]> : <value>} } } }
+// node must be a map node
+void
 Cfg2_setInteger32
   (
     Arcadia_Thread* thread,
@@ -73,6 +96,19 @@ Cfg2_setSection
     Arcadia_DataDefinitionLanguage_Tree_Node* node,
     char const* names[],
     Arcadia_SizeValue numberOfNames
+  );
+  
+void
+Cfg_saveConfiguration
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_Tree_Node* configuration
+  );
+
+Arcadia_DataDefinitionLanguage_Tree_MapNode*
+Cfg_loadConfiguration
+  (
+    Arcadia_Thread* thread
   );
 
 #endif // ARCADIA_ENGINE_DEMO_CONFIGURATIONUTILITIES_H_INCLUDED

@@ -101,16 +101,17 @@ Arcadia_Utf8FileHandleWriter_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->target = (Arcadia_FileHandle*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_FileHandle_getType(thread));
+  _self->target = (Arcadia_FileHandle*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FileHandle_getType(thread));
   _self->temporary = Arcadia_ByteBuffer_create(thread);
   ((Arcadia_Utf8Writer*)_self)->writeBytes = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, void const*, Arcadia_SizeValue)) & Arcadia_Utf8FileHandleWriter_writeBytesImpl;
   ((Arcadia_Utf8Writer*)_self)->writeCodePoints = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & Arcadia_Utf8FileHandleWriter_writeCodePointsImpl;
   ((Arcadia_Utf8Writer*)_self)->writeString = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, Arcadia_String*)) & Arcadia_Utf8FileHandleWriter_writeStringImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 static void
@@ -192,9 +193,8 @@ Arcadia_Utf8FileHandleWriter_create
     Arcadia_FileHandle* target
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(target),
-  };
-  Arcadia_Utf8FileHandleWriter* self = Arcadia_allocateObject(thread, _Arcadia_Utf8FileHandleWriter_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)target);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_Utf8FileHandleWriter);
 }

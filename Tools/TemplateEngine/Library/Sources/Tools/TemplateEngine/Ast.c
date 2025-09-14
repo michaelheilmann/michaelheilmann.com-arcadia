@@ -93,14 +93,15 @@ Ast_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (2 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->type = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[0]);
-  _self->name = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
+  _self->type = Arcadia_ValueStack_getInteger32Value(thread, 2);
+  _self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   _self->arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 3);
 }
 
 Ast*
@@ -111,12 +112,13 @@ Ast_create
     Arcadia_String* name
   )
 {
-  Arcadia_Value argumentValues[] = { Arcadia_Value_Initializer(),
-                                     Arcadia_Value_Initializer(), };
-  Arcadia_Value_setInteger32Value(&argumentValues[0], type);
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushInteger32Value(thread, type);
   if (name) {
-    Arcadia_Value_setObjectReferenceValue(&argumentValues[1], name);
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, name);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
-  Ast* self = Arcadia_allocateObject(thread, _Ast_getType(thread), 2, &argumentValues[0]);
-  return self;
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(Ast);
 }

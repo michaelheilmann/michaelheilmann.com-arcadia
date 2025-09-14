@@ -89,13 +89,14 @@ Arcadia_DirectoryIteratorWindows_constructImpl
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->path = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_FilePath_getType(thread));
+  _self->path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
   _self->handle = INVALID_HANDLE_VALUE;
   Arcadia_StringBuffer* queryStringBuilder = Arcadia_StringBuffer_create(thread);
   Arcadia_StringBuffer_insertBack(thread, queryStringBuilder, Arcadia_Value_makeObjectReferenceValue(Arcadia_FilePath_toNative(thread, _self->path)));
@@ -125,6 +126,7 @@ Arcadia_DirectoryIteratorWindows_constructImpl
   ((Arcadia_DirectoryIterator*)_self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorWindows_hasValue;
   ((Arcadia_DirectoryIterator*)_self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorWindows_nextValue;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 static void
@@ -195,9 +197,8 @@ Arcadia_DirectoryIteratorWindows_create
     Arcadia_FilePath* path
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(path),
-  };
-  Arcadia_DirectoryIteratorWindows* self = Arcadia_allocateObject(thread, _Arcadia_DirectoryIteratorWindows_getType(thread), 1, &argumentValues[0]);
-  return self; 
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)path);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_DirectoryIteratorWindows);
 }

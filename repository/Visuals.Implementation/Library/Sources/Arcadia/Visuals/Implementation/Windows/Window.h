@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_WINDOWS_WINDOW_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-#include "Arcadia/Visuals/Implementation/Windows/Application.h"
+#include "Arcadia/Visuals/Implementation/Windows/System.h"
 #include "Arcadia/Visuals/Implementation/Windows/Icon.h"
 typedef struct Arcadia_Visuals_Windows_DisplayDevice Arcadia_Visuals_Windows_DisplayDevice;
 
@@ -30,10 +30,8 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Window", Arcadia_Visuals_Wi
 
 struct Arcadia_Visuals_Windows_Window {
   Arcadia_Visuals_Window _parent;
-  Arcadia_Visuals_Windows_Application* application;
+  Arcadia_Visuals_Windows_System* system;
 
-
-  ATOM classAtom;
   HWND windowHandle;
   HDC deviceContextHandle;
   HGLRC glResourceContextHandle;
@@ -46,7 +44,7 @@ Arcadia_Visuals_Windows_Window*
 Arcadia_Visuals_Windows_Window_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Application* application,
+    Arcadia_Visuals_Windows_System* system,
     Arcadia_Visuals_Windows_DisplayDevice* displayDevice
   );
 

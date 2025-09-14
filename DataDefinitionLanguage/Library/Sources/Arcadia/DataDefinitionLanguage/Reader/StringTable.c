@@ -66,7 +66,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.StringTable", Arcadia_DataDefinitionLanguage_StringTable, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.StringTable", Arcadia_DataDefinitionLanguage_StringTable,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 Arcadia_DataDefinitionLanguage_StringTable_constructImpl
@@ -85,6 +87,10 @@ Arcadia_DataDefinitionLanguage_StringTable_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
   _self->buckets = NULL;
   _self->size = Arcadia_SizeValue_Literal(0);
   _self->capacity = Arcadia_SizeValue_Literal(0);
@@ -95,6 +101,7 @@ Arcadia_DataDefinitionLanguage_StringTable_constructImpl
   }
   _self->capacity = g_defaultCapacity;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 static void
@@ -200,11 +207,9 @@ Arcadia_DataDefinitionLanguage_StringTable_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_DataDefinitionLanguage_StringTable* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_StringTable_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_DataDefinitionLanguage_StringTable);
 }
 
 Arcadia_String*

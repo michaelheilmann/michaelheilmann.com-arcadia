@@ -51,18 +51,28 @@ Arcadia_Visuals_CanvasSizeChangedEvent_constructImpl
 {
   Arcadia_Visuals_CanvasSizeChangedEvent* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_CanvasSizeChangedEvent_getType(thread);
-  {
-    if (3 != numberOfArgumentValues) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
+  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
+  if (3 != numberOfArgumentValues1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  {
+    Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 2));
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+  }
+
   //
-  _self->horizontalSize = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[1]);
-  _self->verticalSize = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[2]);
+  _self->horizontalSize = Arcadia_ValueStack_getInteger32Value(thread, 1);
+  _self->verticalSize = Arcadia_ValueStack_getInteger32Value(thread, 0);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 Arcadia_Visuals_CanvasSizeChangedEvent*
@@ -74,11 +84,10 @@ Arcadia_Visuals_CanvasSizeChangedEvent_create
     Arcadia_Integer32Value verticalSize
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeNatural64Value(timestamp),
-    Arcadia_Value_makeInteger32Value(horizontalSize),
-    Arcadia_Value_makeInteger32Value(verticalSize),
-  };
-  Arcadia_Visuals_CanvasSizeChangedEvent* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_CanvasSizeChangedEvent_getType(thread), 3, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
+  Arcadia_ValueStack_pushInteger32Value(thread, horizontalSize);
+  Arcadia_ValueStack_pushInteger32Value(thread, verticalSize);
+  Arcadia_ValueStack_pushNatural8Value(thread, 3);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_CanvasSizeChangedEvent);
 }

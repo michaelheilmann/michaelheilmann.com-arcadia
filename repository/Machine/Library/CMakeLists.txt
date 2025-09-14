@@ -56,7 +56,7 @@ if (NOT TARGET ${MyLibraryName})
   list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Include.c)
   list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Include.h)
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Mil.Frontend ${MyProjectName}.Ring2 ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.Ring2 ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
 
   if (${${MyLibraryName}.OperatingSystem} STREQUAL ${${MyLibraryName}.OperatingSystem.Linux})
     list(APPEND ${MyLibraryName}.Libraries m)

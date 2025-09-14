@@ -511,18 +511,23 @@ FileContext_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-
-  if (3 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (3 != numberOfArgumentValues1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  _self->context = (Context*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Context_getType(thread));
-  _self->environment = (Environment*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Environment_getType(thread));
-  _self->sourceFilePath = (Arcadia_FilePath*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[2], _Arcadia_FilePath_getType(thread));
+  _self->context = (Context*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Context_getType(thread));
+  _self->environment = (Environment*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Environment_getType(thread));
+  _self->sourceFilePath = (Arcadia_FilePath*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
   _self->source = NULL;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 FileContext*
@@ -534,13 +539,13 @@ FileContext_create
     Arcadia_FilePath* sourceFilePath
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)context),
-    Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)environment),
-    Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)sourceFilePath),
-  };
-  FileContext* self = Arcadia_allocateObject(thread, _FileContext_getType(thread), 3, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_ObjectReferenceValue)context);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_ObjectReferenceValue)environment);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_ObjectReferenceValue)sourceFilePath);
+  Arcadia_ValueStack_pushNatural8Value(thread, 3);
+  ARCADIA_CREATEOBJECT(FileContext);
+
 }
 
 void

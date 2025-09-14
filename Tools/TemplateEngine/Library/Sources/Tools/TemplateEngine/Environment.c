@@ -81,17 +81,27 @@ Environment_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (1 != numberOfArgumentValues1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_Value_isVoidValue(&argumentValues[0])) {
+  if (1 != numberOfArgumentValues1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
     _self->enclosing = NULL;
   } else {
-    _self->enclosing = (Environment*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Environment_getType(thread));
+    _self->enclosing = (Environment*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Environment_getType(thread));
   }
   _self->variables = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 Environment*
@@ -101,11 +111,14 @@ Environment_create
     Environment* enclosing
   )
 {
-  Arcadia_Value argumentValues[] = {
-    NULL != enclosing ? Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)enclosing) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Environment* self = Arcadia_allocateObject(thread, _Environment_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (enclosing) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_ObjectReferenceValue)enclosing);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Environment);
 }
 
 Environment*

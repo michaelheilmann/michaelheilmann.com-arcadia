@@ -16,9 +16,6 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_CONFIGURE_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_CONFIGURE_H_INCLUDED
 
-#define Arcadia_Visuals_Configuration_Backend_None (@Arcadia.Visuals.Backend.None@)
-#define Arcadia_Visuals_Configuration_Backend_OpenGl (@Arcadia.Visuals.Backend.OpenGl@)
-
-#define Arcadia_Visuals_Configuration_Backend @Arcadia.Visuals.Backend@
+#define Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled (@Arcadia.Visuals.Implementation.Configuration.OpenGL4.Enabled@)
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_CONFIGURE_H_INCLUDED

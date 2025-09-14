@@ -22,15 +22,15 @@
 // https://www.x.org/releases/current/doc/randrproto/randrproto.txt
 #include <X11/extensions/Xrandr.h>
 
-typedef struct Arcadia_Visuals_Linux_Application Arcadia_Visuals_Linux_Application;
+typedef struct Arcadia_Visuals_Linux_System Arcadia_Visuals_Linux_System;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.DisplayDevice", Arcadia_Visuals_Linux_DisplayDevice,
                           u8"Arcadia.Visuals.DisplayDevice");
 
 struct Arcadia_Visuals_Linux_DisplayDevice {
   Arcadia_Visuals_DisplayDevice _parent;
-  // The application.
-  Arcadia_Visuals_Linux_Application* application;
+  // The system.
+  Arcadia_Visuals_Linux_System* system;
   struct {
     int left;
     int top;
@@ -46,7 +46,10 @@ struct Arcadia_Visuals_Linux_DisplayDevice {
   Arcadia_String* name;
   // The X11 ID of the output. RROutput type is an alias of XID type which is an alias of CARD32 type.
   RROutput output;
-  // The X11 ID of the mode. RRMode type is an alias of XID type which is an alias of CARD32 type.
+  // The X11 ID of the default mode.
+  //RRMode defaultMode;
+  // The X11 ID of the current mode.
+  // RRMode type is an alias of XID type which is an alias of CARD32 type.
   RRMode mode;
 };
 
@@ -54,7 +57,7 @@ Arcadia_Visuals_Linux_DisplayDevice*
 Arcadia_Visuals_Linux_DisplayDevice_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_Application* application,
+    Arcadia_Visuals_Linux_System* system,
     Arcadia_String* id,
     Arcadia_String* name
   );

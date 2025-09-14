@@ -18,7 +18,8 @@
 
 #include "Arcadia/Ring1/Implementation/Object.h"
 
-Arcadia_declareObjectType(u8"Arcadia.WeakRefernece", Arcadia_WeakReference, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.WeakReference", Arcadia_WeakReference,
+                          u8"Arcadia.Object");
 
 struct Arcadia_WeakReference {
   Arcadia_Object _parent;

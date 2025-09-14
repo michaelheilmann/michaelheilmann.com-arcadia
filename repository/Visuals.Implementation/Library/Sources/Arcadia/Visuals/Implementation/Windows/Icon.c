@@ -63,47 +63,22 @@ Arcadia_Visuals_Windows_Icon_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-
-  if (6 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (6 != numberOfArgumentValues1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  if (!Arcadia_Value_isInteger32Value(&argumentValues[0])) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Integer32Value width = Arcadia_Value_getInteger32Value(&argumentValues[0]);
-
-  if (!Arcadia_Value_isInteger32Value(&argumentValues[1])) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Integer32Value height = Arcadia_Value_getInteger32Value(&argumentValues[1]);
-
-  if (!Arcadia_Value_isNatural8Value(&argumentValues[2])) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value red = Arcadia_Value_getNatural8Value(&argumentValues[2]);
-
-  if (!Arcadia_Value_isNatural8Value(&argumentValues[3])) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value green = Arcadia_Value_getNatural8Value(&argumentValues[3]);
-
-  if (!Arcadia_Value_isNatural8Value(&argumentValues[4])) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value blue = Arcadia_Value_getNatural8Value(&argumentValues[4]);
-
-  if (!Arcadia_Value_isNatural8Value(&argumentValues[5])) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value alpha = Arcadia_Value_getNatural8Value(&argumentValues[5]);
+  Arcadia_Integer32Value width = Arcadia_ValueStack_getInteger32Value(thread, 6);
+  Arcadia_Integer32Value height = Arcadia_ValueStack_getInteger32Value(thread, 5);
+  Arcadia_Natural8Value red = Arcadia_ValueStack_getNatural8Value(thread, 4);
+  Arcadia_Natural8Value green = Arcadia_ValueStack_getNatural8Value(thread, 3);
+  Arcadia_Natural8Value blue = Arcadia_ValueStack_getNatural8Value(thread, 2);
+  Arcadia_Natural8Value alpha = Arcadia_ValueStack_getNatural8Value(thread, 1);
 
   HDC hMemDC;
   BITMAPV5HEADER bi;
@@ -224,6 +199,7 @@ Arcadia_Visuals_Windows_Icon_constructImpl
 
   _self->hIcon = hIcon;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 static void
@@ -251,14 +227,13 @@ Arcadia_Visuals_Windows_Icon_create
     Arcadia_Natural8Value alpha
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeInteger32Value(width),
-    Arcadia_Value_makeInteger32Value(height),
-    Arcadia_Value_makeNatural8Value(red),
-    Arcadia_Value_makeNatural8Value(green),
-    Arcadia_Value_makeNatural8Value(blue),
-    Arcadia_Value_makeNatural8Value(alpha),
-  };
-  Arcadia_Visuals_Windows_Icon* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_Icon_getType(thread), 6, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushInteger32Value(thread, width);
+  Arcadia_ValueStack_pushInteger32Value(thread, height);
+  Arcadia_ValueStack_pushNatural8Value(thread, red);
+  Arcadia_ValueStack_pushNatural8Value(thread, green);
+  Arcadia_ValueStack_pushNatural8Value(thread, blue);
+  Arcadia_ValueStack_pushNatural8Value(thread, alpha);
+  Arcadia_ValueStack_pushNatural8Value(thread, 6);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_Icon);
 }

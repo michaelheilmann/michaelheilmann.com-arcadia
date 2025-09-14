@@ -142,7 +142,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.HashMap", Arcadia_HashMap, u8"Arcadia.Map", Arcadia_Map, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.HashMap", Arcadia_HashMap,
+                         u8"Arcadia.Map", Arcadia_Map,
+                         &_typeOperations);
 
 static void
 Arcadia_HashMap_ensureFreeCapacity
@@ -267,13 +269,15 @@ Arcadia_HashMap_constructImpl
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_Value_isVoidValue(&argumentValues[0])) {
+  Arcadia_Natural8Value nargs = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (0 == nargs) {
     _self->buckets = NULL;
     _self->capacity = 0;
     _self->size = 0;
@@ -282,8 +286,8 @@ Arcadia_HashMap_constructImpl
     for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
       _self->buckets[i] = NULL;
     }
-  } else if (Arcadia_Value_isObjectReferenceValue(&argumentValues[1])) {
-    Arcadia_HashMap* other = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_HashMap_getType(thread));
+  } else if (1 == nargs) {
+    Arcadia_HashMap* other = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_HashMap_getType(thread));
     _self->buckets = NULL;
     _self->size = 0;
     _self->capacity = other->capacity;
@@ -314,6 +318,7 @@ Arcadia_HashMap_constructImpl
   ((Arcadia_Map*)_self)->getKeys = (Arcadia_List *(*)(Arcadia_Thread*, Arcadia_Map*)) & Arcadia_HashMap_getKeysImpl;
   ((Arcadia_Map*)_self)->getValues = (Arcadia_List *(*)(Arcadia_Thread*, Arcadia_Map*)) &Arcadia_HashMap_getValuesImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, nargs + 1);
 }
 
 static void
@@ -476,8 +481,14 @@ Arcadia_HashMap_create
     Arcadia_Value value
   )
 {
-  Arcadia_HashMap* self = Arcadia_allocateObject(thread, _Arcadia_HashMap_getType(thread), 1, &value);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (Arcadia_Value_isVoidValue(&value)) {
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  } else {
+    Arcadia_ValueStack_pushValue(thread, &value);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  }
+  ARCADIA_CREATEOBJECT(Arcadia_HashMap);
 }
 
 static Arcadia_List*

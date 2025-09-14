@@ -7,12 +7,13 @@
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_Object_getHash">Arcadia_Object_getHash</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_Object_isEqualTo">Arcadia_Object_isEqualTo</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_Object_isNotEqualTo">Arcadia_Object_isNotEqualTo</a></li>
-        <li>Byte Buffer</li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer">Arcadia_ByteBuffer</a></li>
+        
+        @{include("3.documentation.8.objects/ByteBuffer/include.index")}
         <li>File System</li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ExistingFilePolicy">Arcadia_ExistingFilePolicy</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileAccessMode">Arcadia_FileAccessMode</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileHandle">Arcadia_FileHandle</a></li>
+        
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FilePath">Arcadia_FilePath</a></li>
         
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>

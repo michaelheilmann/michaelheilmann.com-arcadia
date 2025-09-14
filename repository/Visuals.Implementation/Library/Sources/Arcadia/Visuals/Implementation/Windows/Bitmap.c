@@ -63,19 +63,18 @@ Arcadia_Visuals_Windows_Bitmap_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-
-  if (2 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Value_isInteger32Value(&argumentValues[0])) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (2 != numberOfArgumentValues1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Value_isInteger32Value(&argumentValues[1])) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
+
+  Arcadia_Integer32Value width = Arcadia_ValueStack_getInteger32Value(thread, 2);
+  Arcadia_Integer32Value height = Arcadia_ValueStack_getInteger32Value(thread, 1);
 
   _self->hBitmap = NULL;
   _self->hDeviceContext = NULL;
@@ -97,8 +96,8 @@ Arcadia_Visuals_Windows_Bitmap_constructImpl
 
   BITMAPINFO bmi;
   bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = Arcadia_Value_getInteger32Value(&argumentValues[0]);
-  bmi.bmiHeader.biHeight = Arcadia_Value_getInteger32Value(&argumentValues[1]);
+  bmi.bmiHeader.biWidth = width;
+  bmi.bmiHeader.biHeight = height;
   bmi.bmiHeader.biPlanes = 1;
   bmi.bmiHeader.biBitCount = 24;
   bmi.bmiHeader.biCompression = BI_RGB;
@@ -152,6 +151,7 @@ Arcadia_Visuals_Windows_Bitmap_constructImpl
   hBrush = NULL;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 static void
@@ -179,12 +179,11 @@ Arcadia_Visuals_Windows_Bitmap_create
     Arcadia_Integer32Value height
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeInteger32Value(width),
-    Arcadia_Value_makeInteger32Value(height),
-  };
-  Arcadia_Visuals_Windows_Bitmap* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Windows_Bitmap_getType(thread), 2, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushInteger32Value(thread, width);
+  Arcadia_ValueStack_pushInteger32Value(thread, height);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_Bitmap);
 }
 
 void

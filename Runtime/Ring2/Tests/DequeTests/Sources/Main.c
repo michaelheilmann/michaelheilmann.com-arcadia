@@ -41,6 +41,70 @@ dequeTest2
     Arcadia_Thread* thread
   )
 {
+  Arcadia_Value v;
+  Arcadia_Deque* a = (Arcadia_Deque*)Arcadia_ArrayDeque_create(thread);
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(1));
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(2));
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(3));
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(4));
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(5));
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(6));
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(7));
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(8));
+  Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(9));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 9 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(8) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 8 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(7) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 7 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(6) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 6 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(5) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 5 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(4) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 4 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(3) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 3 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(2) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 2 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(1) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+
+  v = Arcadia_Deque_getFront(thread, a);
+  Arcadia_Deque_removeFront(thread, a);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Value_isInteger32Value(&v) && 1 == Arcadia_Value_getInteger32Value(&v));
+  Arcadia_Tests_assertTrue(thread, Arcadia_SizeValue_Literal(0) == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)a));
+}
+
+static void
+dequeTest3
+  (
+    Arcadia_Thread* thread
+  )
+{
   Arcadia_Deque* a = (Arcadia_Deque*)Arcadia_ArrayDeque_create(thread);
   Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(1));
   Arcadia_Deque_insertFront(thread, a, Arcadia_Value_makeInteger32Value(2));

@@ -18,9 +18,22 @@ cmake_minimum_required(VERSION 3.20)
 set(MyDemoName ${MyProjectName}.Engine.Demo)
 
 if (NOT TARGET ${MyDemoName})
-  message(STATUS "${MyDemoName}: ${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled = ${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled}")
+  #message(STATUS "${MyDemoName}: ${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled = ${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled}")
+  set(${MyDemoName}.Enabled FALSE)
+  
+  # This demo requires at least one rendering backend.
   if (${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled})
-    BeginProduct(${MyDemoName} executable)
+    set(${MyDemoName}.Enabled TRUE)
+  endif()
+  if (${${MyProjectName}.Visuals.Implementation.Direct3D12.Enabled})
+    set(${MyDemoName}.Enabled TRUE)
+  endif()
+  if (${${MyProjectName}.Visuals.Implementation.Vulkan.Enabled})
+    set(${MyDemoName}.Enabled TRUE)
+  endif()
+  
+  if (${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled})
+	BeginProduct(${MyDemoName} executable)
 
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Engine/Demo/Configure.h @ONLY)
 	list(APPEND ${MyDemoName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configure.h.i)
@@ -28,6 +41,9 @@ if (NOT TARGET ${MyDemoName})
 
 	list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Main.c)
     
+    list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Visuals.c)
+    list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Visuals.h)  
+
     list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.c)
     list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.h)   
 

@@ -134,15 +134,16 @@ Arcadia_ImmutableList_constructImpl
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  _self->size = 0;
-  _self->elements = NULL;
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_List* other = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_List_getType(thread));
+  _self->size = 0;
+  _self->elements = NULL;
+  Arcadia_List* other = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
   _self->size = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)other);
   _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * _self->size);
   for (Arcadia_SizeValue i = 0, n = _self->size; i < n; ++i) {
@@ -157,6 +158,7 @@ Arcadia_ImmutableList_constructImpl
   ((Arcadia_List*)_self)->insertFront = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertFrontImpl;
   ((Arcadia_List*)_self)->removeAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_SizeValue)) & Arcadia_ImmutableList_removeAtImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 static void
@@ -283,6 +285,8 @@ Arcadia_ImmutableList_create
     Arcadia_Value argument
   )
 {
-  Arcadia_ImmutableList* self = Arcadia_allocateObject(thread, _Arcadia_ImmutableList_getType(thread), 1, &argument);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, &argument);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_ImmutableList);
 }

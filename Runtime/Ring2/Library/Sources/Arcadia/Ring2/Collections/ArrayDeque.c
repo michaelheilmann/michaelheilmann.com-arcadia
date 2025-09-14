@@ -254,14 +254,16 @@ Arcadia_ArrayDeque_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  Arcadia_Value* oldElements = self->elements;
-  Arcadia_Value* newElements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * newCapacity);
-  for (Arcadia_SizeValue i = 0, n = self->size; i < n; ++i) {
-    newElements[i] = oldElements[MOD(self->read + i, self->capacity)];
+  if (oldCapacity != newCapacity) {
+    Arcadia_Value* oldElements = self->elements;
+    Arcadia_Value* newElements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * newCapacity);
+    for (Arcadia_SizeValue i = 0, n = self->size; i < n; ++i) {
+      newElements[MOD(self->read + i, newCapacity)] = oldElements[MOD(self->read + i, self->capacity)];
+    }
+    Arcadia_Memory_deallocateUnmanaged(thread, oldElements);
+    self->elements = newElements;
+    self->capacity = newCapacity;
   }
-  Arcadia_Memory_deallocateUnmanaged(thread, oldElements);
-  self->elements = newElements;
-  self->capacity = newCapacity;
 }
 
 static void
@@ -300,10 +302,16 @@ Arcadia_ArrayDeque_constructImpl
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
-  if (numberOfArgumentValues) {
-    Arcadia_Deque* other = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_Deque_getType(thread));
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Natural8Value nargs = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (1 == nargs) {
+    Arcadia_Deque* other = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Deque_getType(thread));
     Arcadia_SizeValue size = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)other);
     _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * size);
     for (Arcadia_SizeValue i = 0; i < size; ++i) {
@@ -312,12 +320,15 @@ Arcadia_ArrayDeque_constructImpl
     _self->read = 0;
     _self->size = size;
     _self->capacity = size;
-  } else {
+  } else if (0 == nargs) {
     _self->elements = NULL;
     _self->read = 0;
     _self->size = 0;
     _self->capacity = g_minimumCapacity;
     _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * _self->capacity);
+  } else {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   ((Arcadia_Collection*)_self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*))&Arcadia_ArrayDeque_clearImpl;
   ((Arcadia_Collection*)_self)->getSize = (Arcadia_SizeValue (*)(Arcadia_Thread*, Arcadia_Collection*))&Arcadia_ArrayDeque_getSizeImpl;
@@ -332,6 +343,7 @@ Arcadia_ArrayDeque_constructImpl
   ((Arcadia_Deque*)_self)->removeBack = (void(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_removeBackImpl;
   ((Arcadia_Deque*)_self)->removeFront = (void(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_removeFrontImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, nargs + 1);
 }
 
 static void
@@ -440,6 +452,7 @@ Arcadia_ArrayDeque_insertAtImpl
   // if "index < size / 2" then "a[read] ... a[read + index - 1]" is shifted down
   // and otherwise "a[read + index],... a[read+size-1]" is shifted up.
   if (index < self->size / 2) {
+    // We shift down:
     // If a' ist the new queue and a is the old queue, then the operation
     // can be described as follows:
     // - a'[read-1] = a[read], ..., a'[read - 1 + index] = a[read + index]
@@ -449,12 +462,13 @@ Arcadia_ArrayDeque_insertAtImpl
     // As read' = read - 1, one can also write
     // - a'[read'] = a[read' + 1], ..., a'[read + index] = a[read' + index + 1]
     // which is the form used here.
-    Arcadia_SizeValue offset = MOD(self->read - 1, capacity);
+    //Arcadia_SizeValue offset = self->read == 0 ? self->capacity - 1 : MOD(self->read - 1, capacity);
     for (Arcadia_SizeValue j = 0; j < index; ++j) {
-      self->elements[MOD(offset + j, capacity)] = self->elements[MOD(offset + j + 1, capacity)];
+      self->elements[MOD(self->read + j, capacity)] = self->elements[MOD(self->read + j + 1, capacity)];
     }
-    self->read = MOD(self->read - 1, capacity);
-  } else {
+    self->read = self->read == 0 ? self->capacity - 1 : MOD(self->read - 1, capacity);
+  }  else {
+    // We shift up:
     // If a' ist the new queue and a is the old queue, then the operation
     // can be described as follows:
     // - a'[read + size] = a[read + size - 1], ..., a'[read + index + 1] = a[read + index]
@@ -577,9 +591,7 @@ Arcadia_ArrayDeque_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_ArrayDeque* self = Arcadia_allocateObject(thread, _Arcadia_ArrayDeque_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_ArrayDeque);
 }

@@ -50,6 +50,12 @@ Arcadia_Engine_Event_constructImpl
 {
   Arcadia_Engine_Event* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Engine_Event_getType(thread);
+  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
+  if (1 != numberOfArgumentValues1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
   {
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -57,12 +63,8 @@ Arcadia_Engine_Event_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   //
-  if (1 != numberOfArgumentValues) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  //
-  _self->timestamp = Arcadia_ArgumentsValidation_getNatural64Value(thread, &argumentValues[0]);
+  _self->timestamp = Arcadia_ValueStack_getNatural64Value(thread, 0);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
 }

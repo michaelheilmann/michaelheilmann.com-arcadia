@@ -59,7 +59,7 @@ Arcadia_ValueStack_popValues
     Arcadia_SizeValue count
   )
 {
-  if (count < thread->stack.size) {
+  if (count > thread->stack.size) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }

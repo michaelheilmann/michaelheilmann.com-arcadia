@@ -4,7 +4,7 @@
 @{include("3.documentation.i")}
 @{include("3.documentation.8.objects.i")}
 @{include("3.documentation.8.objects/object.i")}
-@{include("3.documentation.8.objects/bytebuffer.i")}
+@{include("3.documentation.8.objects/ByteBuffer/include.content")}
 @{include("3.documentation.8.objects/FileSystem/ExistingFilePolicy.i")}
 @{include("3.documentation.8.objects/FileSystem/FileAccessMode.i")}
 @{include("3.documentation.8.objects/FileSystem/FileHandle.i")}
@@ -12,6 +12,7 @@
 @{include("3.documentation.8.objects/FileSystem/FileSystem.i")}
 @{include("3.documentation.8.objects/FileSystem/FileType.i")}
 @{include("3.documentation.8.objects/FileSystem/NonExistingFilePolicy.i")}
+@{include("3.documentation.8.objects/ByteBuffer/include.content")}
 @{include("3.documentation.8.objects/Collection/include.content")}
 @{include("3.documentation.8.objects/List/include.content")}
 @{include("3.documentation.8.objects/Map/include.content")}

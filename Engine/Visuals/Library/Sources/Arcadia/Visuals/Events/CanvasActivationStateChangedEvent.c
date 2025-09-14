@@ -51,17 +51,22 @@ Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
 {
   Arcadia_Visuals_CanvasActivationStateChangedEvent* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_CanvasActivationStateChangedEvent_getType(thread);
+  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
+  if (2 != numberOfArgumentValues1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
   {
-    if (2 != numberOfArgumentValues) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 1));
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   //
   _self->active = Arcadia_ArgumentsValidation_getBooleanValue(thread, &argumentValues[1]);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
 }
 
 Arcadia_Visuals_CanvasActivationStateChangedEvent*
@@ -72,10 +77,9 @@ Arcadia_Visuals_CanvasActivationStateChangedEvent_create
     Arcadia_BooleanValue active
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeNatural64Value(timestamp),
-    Arcadia_Value_makeBooleanValue(active),
-  };
-  Arcadia_Visuals_CanvasActivationStateChangedEvent* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_CanvasActivationStateChangedEvent_getType(thread), 2, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
+  Arcadia_ValueStack_pushBooleanValue(thread, active);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_CanvasActivationStateChangedEvent);
 }

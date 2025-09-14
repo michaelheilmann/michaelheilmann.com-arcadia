@@ -60,17 +60,26 @@ Arcadia_Visuals_WindowClosedEvent_constructImpl
 {
   Arcadia_Visuals_WindowClosedEvent* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_WindowClosedEvent_getType(thread);
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
+  if (2 != numberOfArgumentValues1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
   {
-    if (2 != numberOfArgumentValues) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 1));
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
   }
   //
-  _self->window = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_Visuals_Window_getType(thread));
+  _self->window = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 0, _Arcadia_Visuals_Window_getType(thread));
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
 }
 
 static void
@@ -93,10 +102,13 @@ Arcadia_Visuals_WindowClosedEvent_create
     Arcadia_Visuals_Window* window
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeNatural64Value(timestamp),
-    window ? Arcadia_Value_makeObjectReferenceValue(window) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_Visuals_WindowClosedEvent* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_WindowClosedEvent_getType(thread), 2, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
+  if (window) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, window);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_WindowClosedEvent);
 }

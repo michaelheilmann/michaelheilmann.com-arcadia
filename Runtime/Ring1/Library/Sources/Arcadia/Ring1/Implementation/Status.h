@@ -99,6 +99,8 @@
 
 #define Arcadia_Status_FileNotFound (25)
 
+#define Arcadia_Status_StackCorruption (27+1000)
+
 typedef uint32_t Arcadia_Status;
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_STATUS_H_INCLUDED

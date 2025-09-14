@@ -18,7 +18,7 @@
 
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/Windows/Bitmap.h"
-#include "Arcadia/Imaging/Include.h"
+#include "Arcadia/Imaging/PixelBuffer.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>

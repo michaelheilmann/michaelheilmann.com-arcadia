@@ -19,7 +19,7 @@
 #include "Arcadia/execute.h"
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Include.h"
-#include "Arcadia/Mil/Frontend/Include.h"
+#include "Arcadia/MIL/Frontend/Include.h"
 #include "Arcadia/Interpreter/Procedure.h"
 
 #endif // R_R_H_INCLUDED

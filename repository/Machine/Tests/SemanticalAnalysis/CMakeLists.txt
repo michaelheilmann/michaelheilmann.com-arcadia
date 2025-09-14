@@ -15,23 +15,23 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTestFolder Mil/Frontend)
-set(MyTestName ${MyProjectName}.Mil.Frontend.Tests.SemanticalAnalysis)
+set(MyTestFolder MIL/Frontend)
+set(MyTestName ${MyProjectName}.MIL.Frontend.Tests.SemanticalAnalysis)
 
 if (NOT TARGET ${MyTestName})
   BeginProduct(${MyTestName} test)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/Configure.h @ONLY)
-  list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/Configure.h.i)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/Configure.h)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h @ONLY)
+  list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h.i)
+  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/Main.c)
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/EnterPass.c)
-  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/EnterPass.h)
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/StatementsContext.c)
-  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/StatementsContext.h)
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/Pass.c)
-  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Mil/Frontend/Tests/SemanticalAnalysis/Pass.h)
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Main.c)
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/EnterPass.c)
+  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/EnterPass.h)
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/StatementsContext.c)
+  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/StatementsContext.h)
+  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.c)
+  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.h)
 
   list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
 

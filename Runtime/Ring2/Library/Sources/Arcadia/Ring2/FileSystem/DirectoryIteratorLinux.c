@@ -96,12 +96,17 @@ Arcadia_DirectoryIteratorLinux_constructImpl
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   // Clear errno.
   errno = 0;
   // Open directory.
-  Arcadia_FilePath* path = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_FilePath_getType(thread));
+  Arcadia_String* path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
   Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path);
   _self->dir = opendir(Arcadia_String_getBytes(thread, pathString));
   if (!_self->dir) {
@@ -141,6 +146,7 @@ Arcadia_DirectoryIteratorLinux_constructImpl
   ((Arcadia_DirectoryIterator*)_self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_hasValue;
   ((Arcadia_DirectoryIterator*)_self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_nextValue;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 Arcadia_DirectoryIteratorLinux*
@@ -150,11 +156,10 @@ Arcadia_DirectoryIteratorLinux_create
     Arcadia_FilePath* path
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(path),
-  };
-  Arcadia_DirectoryIteratorLinux* self = Arcadia_allocateObject(thread, _Arcadia_DirectoryIteratorLinux_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)path);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_DirectoryIteratorLinux);
 }
 
 static void

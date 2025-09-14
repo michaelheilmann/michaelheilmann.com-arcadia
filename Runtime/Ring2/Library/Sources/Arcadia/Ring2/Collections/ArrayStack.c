@@ -195,7 +195,12 @@ Arcadia_ArrayStack_constructImpl
     Arcadia_Value argumentValues[] = {
       Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
     };
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->elements = NULL;
   _self->capacity = 0;
@@ -213,6 +218,7 @@ Arcadia_ArrayStack_constructImpl
   ((Arcadia_Stack*)_self)->pop = (void (*)(Arcadia_Thread*, Arcadia_Stack*)) & Arcadia_ArrayStack_popImpl;
   ((Arcadia_Stack*)_self)->push = (void (*)(Arcadia_Thread*, Arcadia_Stack*,Arcadia_Value)) & Arcadia_ArrayStack_pushImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 static void
@@ -332,9 +338,7 @@ Arcadia_ArrayStack_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_ArrayStack* self = Arcadia_allocateObject(thread, _Arcadia_ArrayStack_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_ArrayStack);
 }

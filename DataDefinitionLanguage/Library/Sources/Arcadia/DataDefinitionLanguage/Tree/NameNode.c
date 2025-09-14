@@ -47,13 +47,23 @@ Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.NameNode", Arcad
                          u8"Arcadia.DataDefinitionLanguage.Tree.Node", Arcadia_DataDefinitionLanguage_Tree_Node,
                          &_Arcadia_DataDefinitionLanguage_Tree_NameNode_typeOperations);
 
-static inline Arcadia_BooleanValue isFirst(Arcadia_Natural8Value byte) {
+static inline Arcadia_BooleanValue
+isFirst
+  (
+    Arcadia_Natural8Value byte
+  )
+{
   return '_' == byte
       || ('a' <= byte && byte <= 'z')
       || ('A' <= byte && byte <= 'Z');
 }
 
-static inline Arcadia_BooleanValue isRest(Arcadia_Natural8Value byte) {
+static inline Arcadia_BooleanValue
+isRest
+  (
+    Arcadia_Natural8Value byte
+  )
+{
   return '_' == byte
     || ('a' <= byte && byte <= 'z')
     || ('A' <= byte && byte <= 'Z')
@@ -77,13 +87,14 @@ Arcadia_DataDefinitionLanguage_Tree_NameNode_constructImpl
     };
     Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  switch (Arcadia_Value_getTag(&argumentValues[0])) {
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1);
+  switch (Arcadia_Value_getTag(&x)) {
     case Arcadia_ValueTag_ObjectReference: {
-      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
+      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &x, _Arcadia_String_getType(thread));
       Arcadia_Natural8Value const* start = Arcadia_String_getBytes(thread, _self->value);
       Arcadia_Natural8Value const* end = start + Arcadia_String_getNumberOfBytes(thread, _self->value);
       Arcadia_Natural8Value const* current = start;
@@ -105,6 +116,7 @@ Arcadia_DataDefinitionLanguage_Tree_NameNode_constructImpl
     } break;
   };
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2);
 }
 
 static void
@@ -126,9 +138,12 @@ Arcadia_DataDefinitionLanguage_Tree_NameNode_create
     Arcadia_String* string
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(string),
-  };
-  Arcadia_DataDefinitionLanguage_Tree_NameNode* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_Tree_NameNode_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (string) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, string);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_DataDefinitionLanguage_Tree_NameNode);
 }

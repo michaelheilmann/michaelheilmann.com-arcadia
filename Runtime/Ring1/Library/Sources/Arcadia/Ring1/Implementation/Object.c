@@ -293,6 +293,37 @@ Arcadia_allocateObject
   return (void*)(tag + 1);
 }
 
+void*
+ARCADIA_CREATEOBJECT0
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Type* type,
+    Arcadia_SizeValue oldValueStackSize
+  )
+{
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_Value dummy = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+    void* self = Arcadia_allocateObject(thread, type, 0, &dummy);
+    if (!self || oldValueStackSize != Arcadia_ValueStack_getSize(thread)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_Thread_popJumpTarget(thread);
+    return self;
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    if (oldValueStackSize < Arcadia_ValueStack_getSize(thread)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+      Arcadia_Thread_jump(thread);
+    } else {
+      Arcadia_ValueStack_popValues(thread, Arcadia_ValueStack_getSize(thread) - oldValueStackSize);
+    }
+    Arcadia_Thread_jump(thread);
+  }
+}
+
 static Arcadia_TypeValue g__Arcadia_Object_type = NULL;
 
 static void
