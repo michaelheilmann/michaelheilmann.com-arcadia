@@ -44,7 +44,9 @@ static const Arcadia_Type_Operations _Arcadia_MIL_BooleanLiteralOperandAst_typeO
   .objectTypeOperations = &_Arcadia_MIL_BooleanLiteralOperandAst_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.MIL.BooleanLiteralOperandAst", Arcadia_MIL_BooleanLiteralOperandAst, u8"Arcadia.MIL.OperandAst", Arcadia_MIL_OperandAst, &_Arcadia_MIL_BooleanLiteralOperandAst_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.MIL.BooleanLiteralOperandAst", Arcadia_MIL_BooleanLiteralOperandAst,
+                         u8"Arcadia.MIL.OperandAst", Arcadia_MIL_OperandAst,
+                         &_Arcadia_MIL_BooleanLiteralOperandAst_typeOperations);
 
 static void
 Arcadia_MIL_BooleanLiteralOperandAst_constructImpl
@@ -58,8 +60,8 @@ Arcadia_MIL_BooleanLiteralOperandAst_constructImpl
   Arcadia_MIL_BooleanLiteralOperandAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_MIL_BooleanLiteralOperandAst_getType(thread);
   {
-    Arcadia_Value argumentValues[] = { Arcadia_Value_Initializer() };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);

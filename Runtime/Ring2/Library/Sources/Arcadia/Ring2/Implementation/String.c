@@ -169,10 +169,8 @@ Arcadia_String_constructImpl
   Arcadia_String* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_String_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1);
   if (Arcadia_Value_isBooleanValue(&x)) {

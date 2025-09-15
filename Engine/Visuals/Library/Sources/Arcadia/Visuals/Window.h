@@ -22,6 +22,7 @@
 #include "Arcadia/Engine/Include.h"
 #include "Arcadia/Imaging/Include.h"
 #include "Arcadia/Visuals/Icon.h"
+#include "Arcadia/Visuals/WindowBackend.h"
 
 // An instance of "Arcadia.Visuals.Window" is in "closed" state when it is created.
 // A successful call to "Arcadia.Visuals.Window.open" puts the window in "opened" state.
@@ -31,6 +32,9 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Window", Arcadia_Visuals_Window,
 
 struct Arcadia_Visuals_Window {
   Arcadia_Object _parent;
+
+  // Pointer to the window backend if any, a null pointer otherwise.
+  Arcadia_Visuals_WindowBackend* backend;
 
   // #Arcadia_BooleanValue_True if the window is a fullscreen window.
   // #Arcadia_BooleanValue_False otherwise.
@@ -55,6 +59,11 @@ struct Arcadia_Visuals_Window {
     /// Default is 1.
     Arcadia_Integer32Value height;
   } bounds;
+
+  // The big icon.
+  Arcadia_Visuals_Icon* bigIcon;
+  // The small icon.
+  Arcadia_Visuals_Icon* smallIcon;
 
   void (*open)(Arcadia_Thread*, Arcadia_Visuals_Window*);
 
@@ -329,6 +338,12 @@ Arcadia_Visuals_Window_setFullscreen
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self,
     Arcadia_BooleanValue fullscreen
+  );
+
+Arcadia_Visuals_Window*
+Arcadia_Visuals_Window_create
+  (
+    Arcadia_Thread* thread
   );
 
 #endif // ARCADIA_VISUALS_WINDOW_H_INCLUDED

@@ -37,7 +37,9 @@ static const Arcadia_Type_Operations _Arcadia_MIL_StatementAst_typeOperations = 
   .objectTypeOperations = &_Arcadia_MIL_StatementAst_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.MIL.StatementAst", Arcadia_MIL_StatementAst, u8"Arcadia.MIL.Ast", Arcadia_MIL_Ast, &_Arcadia_MIL_StatementAst_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.MIL.StatementAst", Arcadia_MIL_StatementAst,
+                         u8"Arcadia.MIL.Ast", Arcadia_MIL_Ast,
+                         &_Arcadia_MIL_StatementAst_typeOperations);
 
 static void
 Arcadia_MIL_StatementAst_constructImpl
@@ -51,10 +53,9 @@ Arcadia_MIL_StatementAst_constructImpl
   Arcadia_MIL_StatementAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_MIL_StatementAst_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }

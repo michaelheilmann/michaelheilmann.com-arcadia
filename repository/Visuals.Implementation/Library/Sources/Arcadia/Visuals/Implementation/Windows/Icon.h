@@ -40,12 +40,7 @@ Arcadia_Visuals_Windows_Icon*
 Arcadia_Visuals_Windows_Icon_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height,
-    Arcadia_Natural8Value red,
-    Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue,
-    Arcadia_Natural8Value alpha
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   );
 
 #endif // ARCADIA_VISUALS_WINDOWS_ICON_H_INCLUDED

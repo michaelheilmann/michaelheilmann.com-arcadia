@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/Visuals/Implementation/Linux/GlxDeviceInfo.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/GlxDeviceInfo.h"
 
 #include <string.h>
 
@@ -247,13 +247,16 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_constructImpl
   Arcadia_Visuals_Linux_GlxDeviceInfo* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Linux_GlxDeviceInfo_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->xDisplay = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 Arcadia_Visuals_Linux_GlxDeviceInfo*
@@ -262,11 +265,9 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_Visuals_Linux_GlxDeviceInfo* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Linux_GlxDeviceInfo_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Linux_GlxDeviceInfo);
 }
 
 Arcadia_List*

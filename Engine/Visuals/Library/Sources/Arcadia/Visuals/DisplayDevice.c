@@ -36,7 +36,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.DisplayDevice", Arcadia_Visuals_DisplayDevice, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.DisplayDevice", Arcadia_Visuals_DisplayDevice,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 Arcadia_Visuals_DisplayDevice_constructImpl
@@ -50,12 +52,10 @@ Arcadia_Visuals_DisplayDevice_constructImpl
   Arcadia_Visuals_DisplayDevice* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_DisplayDevice_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
-  if (0 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -64,6 +64,7 @@ Arcadia_Visuals_DisplayDevice_constructImpl
   _self->getId = NULL;
   _self->getName = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 void

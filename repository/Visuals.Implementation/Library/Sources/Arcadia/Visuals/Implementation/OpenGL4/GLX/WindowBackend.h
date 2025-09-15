@@ -13,27 +13,27 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATIO_LINUX_WINDOW_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATIO_LINUX_WINDOW_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_WINDOWBACKEND_H_INCLUDED)
+#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_WINDOWBACKEND_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-#include "Arcadia/Visuals/Implementation/Linux/System.h"
-#include "Arcadia/Visuals/Implementation/Linux/GlxDeviceInfo.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/GlxDeviceInfo.h"
 #include "Arcadia/Visuals/Implementation/Linux/Icon.h"
 
 #include <X11/Xlib.h>
 #include <GL/glx.h>
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.Window", Arcadia_Visuals_Linux_Window,
-                          u8"Arcadia.Visuals.Window");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.WindowBackend", Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend,
+                          u8"Arcadia.Visuals.WindowBackend");
 
-struct Arcadia_Visuals_Linux_Window {
-  Arcadia_Visuals_Window _parent;
+struct Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend {
+  Arcadia_Visuals_WindowBackend _parent;
 
   // Each window holds a lock on the application
   // as it uses the atoms and the display of the
   // application.
-  Arcadia_Visuals_Linux_System* system;
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_System* system;
 
   Screen* screen; // Default value is NULL.
   Window window; // Default value is None.
@@ -46,11 +46,11 @@ struct Arcadia_Visuals_Linux_Window {
   Arcadia_Visuals_Linux_Icon* bigIcon;
 };
 
-Arcadia_Visuals_Linux_Window*
-Arcadia_Visuals_Linux_Window_create
+Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* system
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* system
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATIO_LINUX_WINDOW_H_INCLUDED
+#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_WINDOWBACKEND_H_INCLUDED

@@ -354,11 +354,8 @@ Arcadia_Engine_Demo_startupAudials
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_Value argumentValues[] = {
-        Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-      };
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      backend = (Arcadia_Audials_Backend*)Arcadia_allocateObject(thread, backendType, 0, &argumentValues[0]);
+      backend = (Arcadia_Audials_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
@@ -374,10 +371,8 @@ Arcadia_Engine_Demo_startupAudials
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_Value argumentValues[] = {
-        Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-      };
-      backend = (Arcadia_Audials_Backend*)Arcadia_allocateObject(thread, backendType, 0, &argumentValues[0]);
+      Arcadia_ValueStack_pushNatural8Value(thread, 0);
+      backend = (Arcadia_Audials_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
     }
     Arcadia_Audials_System* temporary = Arcadia_Audials_System_createSystem(thread, backend);
     Arcadia_Object_lock(thread, (Arcadia_Object*)temporary);
@@ -423,11 +418,8 @@ Arcadia_Engine_Demo_startupVisuals
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_Value argumentValues[] = {
-        Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-      };
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      backend = (Arcadia_Visuals_Backend*)Arcadia_allocateObject(thread, backendType, 0, &argumentValues[0]);
+      backend = (Arcadia_Visuals_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
@@ -443,10 +435,8 @@ Arcadia_Engine_Demo_startupVisuals
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_Value argumentValues[] = {
-        Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-      };
-      backend = (Arcadia_Visuals_Backend*)Arcadia_allocateObject(thread, backendType, 0, &argumentValues[0]);
+      Arcadia_ValueStack_pushNatural8Value(thread, 0);
+      backend = (Arcadia_Visuals_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
     }
     Arcadia_Visuals_System* temporary = Arcadia_Visuals_System_createSystem(thread, backend);
     Arcadia_Object_lock(thread, (Arcadia_Object*)temporary);
@@ -610,15 +600,20 @@ Arcadia_Engine_Demo_startupVisuals
   // (7) Set the window icons and the window title.
   {
     Arcadia_Visuals_Icon* icon;
+    Arcadia_Imaging_PixelBuffer* pixelBuffer;
     Arcadia_Integer32Value width, height;
     // Set the big icon.
     Arcadia_Visuals_Window_getRequiredBigIconSize(thread, *pWindow, &width, &height);
-    icon = Arcadia_Visuals_System_createIcon(thread, (Arcadia_Visuals_System*)engine->visualsSystem, width, height, 47, 47, 47, 255);
+    pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
+    Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
+    icon = Arcadia_Visuals_System_createIcon(thread, (Arcadia_Visuals_System*)engine->visualsSystem, pixelBuffer);
     Arcadia_Visuals_Window_setBigIcon(thread, *pWindow, icon);
 
     // Set the small icon.
     Arcadia_Visuals_Window_getRequiredSmallIconSize(thread, *pWindow, &width, &height);
-    icon = Arcadia_Visuals_System_createIcon(thread, (Arcadia_Visuals_System*)engine->visualsSystem, width, height, 47, 47, 47, 255);
+    pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
+    Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
+    icon = Arcadia_Visuals_System_createIcon(thread, (Arcadia_Visuals_System*)engine->visualsSystem, pixelBuffer);
     Arcadia_Visuals_Window_setSmallIcon(thread, *pWindow, icon);
 
     // Set the title.
@@ -744,11 +739,11 @@ main1
       Arcadia_Object_unlock(thread, (Arcadia_Object*)window);
       window = NULL;
     }
-    if (engine->audialsSystem) {
+    if (engine && engine->audialsSystem) {
       Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->audialsSystem);
       engine->audialsSystem = NULL;
     }
-    if (engine->visualsSystem) {
+    if (engine && engine->visualsSystem) {
       Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->visualsSystem);
       engine->visualsSystem = NULL;
     }

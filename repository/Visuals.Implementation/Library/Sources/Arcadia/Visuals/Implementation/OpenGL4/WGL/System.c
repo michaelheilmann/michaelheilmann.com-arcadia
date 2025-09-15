@@ -13,22 +13,31 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/Visuals/Implementation/Windows/System.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/WGL/System.h"
 
 #include "Arcadia/Visuals/Implementation/Configure.h"
 #include "Arcadia/Visuals/Implementation/Windows/DisplayDevice.h"
+#include "Arcadia/Visuals/Implementation/Windows/_GetDisplayDevices.h"
 #include "Arcadia/Visuals/Implementation/Windows/Icon.h"
-#include "Arcadia/Visuals/Implementation/Windows/Window.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/WGL/WindowBackend.h"
 #include "Arcadia/Visuals/Implementation/Windows/_CharConv.h"
+
+#if defined(Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled
+  #include "Arcadia/Visuals/Implementation/Direct3D12/Backend.h"
+#endif
 
 #if defined(Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
   #include "Arcadia/Visuals/Implementation/OpenGL4/Backend.h"
 #endif
 
-static Arcadia_Visuals_Windows_System* g_instance = NULL;
+#if defined(Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled
+  #include "Arcadia/Visuals/Implementation/Vulkan/Backend.h"
+#endif
+
+static Arcadia_Visuals_Implementation_OpenGL4_WGL_System* g_instance = NULL;
 
 static LRESULT CALLBACK
-Arcadia_Visuals_Windows_System_windowCallbackProcedure
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_windowCallbackProcedure
   (
     HWND hWnd,
     UINT uMsg,
@@ -37,7 +46,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
   );
 
 static void
-Arcadia_Visuals_Windows_System_mapKeyboardKey
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_mapKeyboardKey
   (
     Arcadia_Thread* thread,
     WORD source,
@@ -45,51 +54,32 @@ Arcadia_Visuals_Windows_System_mapKeyboardKey
   );
 
 static void
-Arcadia_Visuals_Windows_System_updateImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_updateImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   );
 
 static Arcadia_Visuals_Windows_Icon*
-Arcadia_Visuals_Windows_System_createIconImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_createIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height,
-    Arcadia_Natural8Value red,
-    Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue,
-    Arcadia_Natural8Value alpha
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self,
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   );
 
-static Arcadia_Visuals_Windows_Window*
-Arcadia_Visuals_Windows_System_createWindowImpl
+static Arcadia_Visuals_Window*
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_createWindowImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
-  );
-
-static Arcadia_String*
-Arcadia_Visuals_Windows_System_getAdapterName
-  (
-    Arcadia_Thread* thread,
-    const CHAR* p
-  );
-
-static Arcadia_String*
-Arcadia_Visuals_Windows_System_getMonitorName
-  (
-    Arcadia_Thread* thread,
-    const CHAR* p
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   );
 
 static Arcadia_List*
-Arcadia_Visuals_Windows_System_getDisplayDevicesImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getDisplayDevicesImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   );
 
 static void
@@ -100,7 +90,7 @@ destroyCallback
   );
 
 static void
-Arcadia_Visuals_Windows_System_constructImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -109,23 +99,23 @@ Arcadia_Visuals_Windows_System_constructImpl
   );
 
 static void
-Arcadia_Visuals_Windows_System_destructImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   );
 
 static void
-Arcadia_Visuals_Windows_System_visitImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Windows_System_constructImpl,
-  .destruct = &Arcadia_Visuals_Windows_System_destructImpl,
-  .visit = &Arcadia_Visuals_Windows_System_visitImpl,
+  .construct = &Arcadia_Visuals_Implementation_OpenGL4_WGL_System_constructImpl,
+  .destruct = &Arcadia_Visuals_Implementation_OpenGL4_WGL_System_destructImpl,
+  .visit = &Arcadia_Visuals_Implementation_OpenGL4_WGL_System_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -133,12 +123,12 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Application", Arcadia_Visuals_Windows_System,
-                         u8"Arcadia.Visuals.Application", Arcadia_Visuals_System,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.System", Arcadia_Visuals_Implementation_OpenGL4_WGL_System,
+                         u8"Arcadia.Visuals.System", Arcadia_Visuals_System,
                          &_typeOperations);
 
 static LRESULT CALLBACK
-Arcadia_Visuals_Windows_System_windowCallbackProcedure
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_windowCallbackProcedure
   (
     HWND hWnd,
     UINT uMsg,
@@ -155,7 +145,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
   process = NULL;
   switch (uMsg) {
     case WM_CLOSE: {
-      Arcadia_Visuals_Windows_Window* window = (Arcadia_Visuals_Windows_Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+      Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* window = (Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
       if (!window) {
         return 0;
       }   
@@ -168,7 +158,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
               (
                 thread,
                 Arcadia_getTickCount(thread),
-                (Arcadia_Visuals_Window*)window
+                (Arcadia_Visuals_Window*)((Arcadia_Visuals_WindowBackend*)window)->window
               );
         Arcadia_Engine_enqueEvent(thread, Arcadia_Engine_getOrCreate(thread), event);
         Arcadia_Thread_popJumpTarget(thread);
@@ -178,7 +168,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
       return 0;
     } break;
     case WM_KEYDOWN: {
-      Arcadia_Visuals_Windows_Window* window = (Arcadia_Visuals_Windows_Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+      Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* window = (Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
       if (!window) {
         return 0;
       }
@@ -186,7 +176,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
       Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
       if (Arcadia_JumpTarget_save(&jumpTarget)) {
         Arcadia_Visuals_KeyboardKey keyboardKey;
-        Arcadia_Visuals_Windows_System_mapKeyboardKey(thread, LOWORD(wParam), &keyboardKey);
+        Arcadia_Visuals_Implementation_OpenGL4_WGL_System_mapKeyboardKey(thread, LOWORD(wParam), &keyboardKey);
         Arcadia_Engine_Event* event =
           (Arcadia_Engine_Event*)
             Arcadia_Visuals_KeyboardKeyEvent_create
@@ -204,7 +194,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
       return 0;
     } break;
     case WM_KEYUP: {
-      Arcadia_Visuals_Windows_Window* window = (Arcadia_Visuals_Windows_Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+      Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* window = (Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
       if (!window) {
         return 0;
       }
@@ -212,7 +202,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
       Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
       if (Arcadia_JumpTarget_save(&jumpTarget)) {
         Arcadia_Visuals_KeyboardKey keyboardKey;
-        Arcadia_Visuals_Windows_System_mapKeyboardKey(thread, LOWORD(wParam), &keyboardKey);
+        Arcadia_Visuals_Implementation_OpenGL4_WGL_System_mapKeyboardKey(thread, LOWORD(wParam), &keyboardKey);
         Arcadia_Engine_Event* event =
           (Arcadia_Engine_Event*)
             Arcadia_Visuals_KeyboardKeyEvent_create
@@ -230,7 +220,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
       return 0;
     } break;
     case WM_SIZE: {
-      Arcadia_Visuals_Windows_Window* window = (Arcadia_Visuals_Windows_Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+      Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* window = (Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
       if (!window) {
         return 0;
       }
@@ -238,10 +228,10 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
       GetWindowRect(window->windowHandle, &rect);
       Arcadia_Integer32Value width = rect.right - rect.left;
       Arcadia_Integer32Value height = rect.bottom - rect.top;
-      if (width != ((Arcadia_Visuals_Window*)window)->bounds.width ||
-          height != ((Arcadia_Visuals_Window*)window)->bounds.height) {
-        ((Arcadia_Visuals_Window*)window)->bounds.width = width;
-        ((Arcadia_Visuals_Window*)window)->bounds.height = height;
+      if (width != ((Arcadia_Visuals_WindowBackend*)window)->bounds.width ||
+          height != ((Arcadia_Visuals_WindowBackend*)window)->bounds.height) {
+        ((Arcadia_Visuals_WindowBackend*)window)->bounds.width = width;
+        ((Arcadia_Visuals_WindowBackend*)window)->bounds.height = height;
         Arcadia_JumpTarget jumpTarget;
         Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
         if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -251,7 +241,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
                 (
                   thread,
                   Arcadia_getTickCount(thread),
-                  (Arcadia_Visuals_Window*)window,
+                  (Arcadia_Visuals_Window*)((Arcadia_Visuals_WindowBackend*)window)->window,
                   width,
                   height
                 );
@@ -264,7 +254,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
       return 0;
     } break;
     case WM_MOVE: {
-      Arcadia_Visuals_Windows_Window* window = (Arcadia_Visuals_Windows_Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+      Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* window = (Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
       if (!window) {
         return 0; // There is nothing we can do actually.
       }
@@ -272,10 +262,10 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
       GetWindowRect(window->windowHandle, &rect);
       Arcadia_Integer32Value left = rect.left;
       Arcadia_Integer32Value top = rect.top;
-      if (left != ((Arcadia_Visuals_Window*)window)->bounds.left ||
-          top != ((Arcadia_Visuals_Window*)window)->bounds.top) {
-        ((Arcadia_Visuals_Window*)window)->bounds.left = left;
-        ((Arcadia_Visuals_Window*)window)->bounds.top = top;
+      if (left != ((Arcadia_Visuals_WindowBackend*)window)->bounds.left ||
+          top != ((Arcadia_Visuals_WindowBackend*)window)->bounds.top) {
+        ((Arcadia_Visuals_WindowBackend*)window)->bounds.left = left;
+        ((Arcadia_Visuals_WindowBackend*)window)->bounds.top = top;
         Arcadia_JumpTarget jumpTarget;
         Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
         if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -285,7 +275,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
                 (
                   thread,
                   Arcadia_getTickCount(thread),
-                  (Arcadia_Visuals_Window*)window,
+                  (Arcadia_Visuals_Window*)((Arcadia_Visuals_WindowBackend*)window)->window,
                   left,
                   top
                 );
@@ -304,7 +294,7 @@ Arcadia_Visuals_Windows_System_windowCallbackProcedure
 }
 
 static void
-Arcadia_Visuals_Windows_System_mapKeyboardKey
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_mapKeyboardKey
   (
     Arcadia_Thread* thread,
     WORD source,
@@ -490,10 +480,10 @@ Arcadia_Visuals_Windows_System_mapKeyboardKey
 }
 
 static void
-Arcadia_Visuals_Windows_System_updateImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_updateImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   )
 {
   MSG msg = { 0 };
@@ -515,42 +505,40 @@ Arcadia_Visuals_Windows_System_updateImpl
 }
 
 static Arcadia_Visuals_Windows_Icon*
-Arcadia_Visuals_Windows_System_createIconImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_createIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height,
-    Arcadia_Natural8Value red,
-    Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue,
-    Arcadia_Natural8Value alpha
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self,
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   )
 {
-  Arcadia_Visuals_Windows_Icon* icon = Arcadia_Visuals_Windows_Icon_create(thread, width, height, 47, 47, 47, 255);
+  Arcadia_Visuals_Windows_Icon* icon = Arcadia_Visuals_Windows_Icon_create(thread, pixelBuffer);
   return icon;
 }
 
-static Arcadia_Visuals_Windows_Window*
-Arcadia_Visuals_Windows_System_createWindowImpl
+static Arcadia_Visuals_Window*
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_createWindowImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   )
 {
-  Arcadia_Visuals_Windows_Window* window = Arcadia_Visuals_Windows_Window_create(thread, self, NULL);
+  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_create(thread, self, NULL);
+  Arcadia_Visuals_Window* window = Arcadia_Visuals_Window_create(thread);
   Arcadia_WeakReference* windowWeakReference =
     Arcadia_WeakReference_create
       (
         thread,
-        Arcadia_Value_makeObjectReferenceValue(window)
+        Arcadia_Value_makeObjectReferenceValue(windowBackend)
       );
   Arcadia_List_insertBackObjectReferenceValue(thread, ((Arcadia_Visuals_System*)self)->windows, (Arcadia_Object*)windowWeakReference);
+  window->backend = windowBackend;
+  windowBackend->window = window;
   return window;
 }
 
 static void
-Arcadia_Visuals_Windows_System_constructImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -558,13 +546,11 @@ Arcadia_Visuals_Windows_System_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Visuals_Windows_System* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_System_getType(thread);
+  Arcadia_Visuals_Implementation_OpenGL4_WGL_System* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -575,7 +561,7 @@ Arcadia_Visuals_Windows_System_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->defaultWindowCallbackProcedure = &Arcadia_Visuals_Windows_System_windowCallbackProcedure;
+  _self->defaultWindowCallbackProcedure = &Arcadia_Visuals_Implementation_OpenGL4_WGL_System_windowCallbackProcedure;
   _self->instanceHandle = GetModuleHandle(NULL);
   if (!_self->instanceHandle) {
     _self->defaultWindowCallbackProcedure = NULL;
@@ -613,20 +599,22 @@ Arcadia_Visuals_Windows_System_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  ((Arcadia_Visuals_System*)_self)->createIcon = (Arcadia_Visuals_Icon * (*)(Arcadia_Thread*, Arcadia_Visuals_System*, Arcadia_Integer32Value, Arcadia_Integer32Value, Arcadia_Natural8Value, Arcadia_Natural8Value, Arcadia_Natural8Value, Arcadia_Natural8Value)) & Arcadia_Visuals_Windows_System_createIconImpl;
-  ((Arcadia_Visuals_System*)_self)->createWindow = (Arcadia_Visuals_Window * (*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Windows_System_createWindowImpl;
-  ((Arcadia_Visuals_System*)_self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Windows_System_getDisplayDevicesImpl;
-  ((Arcadia_Visuals_System*)_self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Windows_System_updateImpl;
+  _self->glResourceContextHandle = NULL;
+
+  ((Arcadia_Visuals_System*)_self)->createIcon = (Arcadia_Visuals_Icon * (*)(Arcadia_Thread*, Arcadia_Visuals_System*, Arcadia_Imaging_PixelBuffer*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_System_createIconImpl;
+  ((Arcadia_Visuals_System*)_self)->createWindow = (Arcadia_Visuals_Window * (*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_System_createWindowImpl;
+  ((Arcadia_Visuals_System*)_self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getDisplayDevicesImpl;
+  ((Arcadia_Visuals_System*)_self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_System_updateImpl;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 static void
-Arcadia_Visuals_Windows_System_destructImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   )
 {
   if (self->classAtom) {
@@ -646,205 +634,21 @@ Arcadia_Visuals_Windows_System_destructImpl
 }
 
 static void
-Arcadia_Visuals_Windows_System_visitImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   )
 { }
 
-static Arcadia_String*
-Arcadia_Visuals_Windows_System_getAdapterName
-  (
-    Arcadia_Thread* thread,
-    const CHAR* p
-  )
-{
-  DWORD deviceIndex = 0;
-  while (1) {
-    DISPLAY_DEVICEA deviceInfo = { 0 };
-    deviceInfo.cb = sizeof(deviceInfo);
-    if (!EnumDisplayDevicesA(NULL, deviceIndex, &deviceInfo, 0)) {
-      break;
-    }
-    deviceIndex++;
-    if (!strcmp(deviceInfo.DeviceName, p)) {
-      return Windows_fromMultiByte(thread, deviceInfo.DeviceString, strlen(deviceInfo.DeviceString));
-    }
-  }
-  return NULL;
-}
-
-static Arcadia_String*
-Arcadia_Visuals_Windows_System_getMonitorName
-  (
-    Arcadia_Thread* thread,
-    const CHAR* p
-  )
-{
-  UINT32 pathCount, modeCount;
-  HRESULT hResult = GetDisplayConfigBufferSizes(QDC_ALL_PATHS, &pathCount, &modeCount);
-  if (S_OK != hResult) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  DISPLAYCONFIG_PATH_INFO* paths = malloc(sizeof(DISPLAYCONFIG_PATH_INFO) * pathCount);
-  if (!paths) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  DISPLAYCONFIG_MODE_INFO* modes = malloc(sizeof(DISPLAYCONFIG_MODE_INFO) * modeCount);
-  if (!modes) {
-    free(paths);
-    paths = NULL;
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  hResult = QueryDisplayConfig(QDC_ONLY_ACTIVE_PATHS, &pathCount, paths, &modeCount, modes, NULL);
-  if (S_OK != hResult) {
-    free(modes);
-    modes = NULL;
-    free(paths);
-    paths = NULL;
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-
-  wchar_t* q; size_t m;
-  Windows_multiByteToWideChar(p, strlen(p) + 1, &q, &m);
-
-  Arcadia_String* name = NULL;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    for (UINT32 i = 0; i < pathCount; ++i) {
-
-      DISPLAYCONFIG_SOURCE_DEVICE_NAME sourceDeviceNameInfo = { 0 };
-      sourceDeviceNameInfo.header.adapterId = paths[i].targetInfo.adapterId;
-      sourceDeviceNameInfo.header.id = paths[i].sourceInfo.id;
-      sourceDeviceNameInfo.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME;
-      sourceDeviceNameInfo.header.size = sizeof(sourceDeviceNameInfo);
-      hResult = DisplayConfigGetDeviceInfo(&sourceDeviceNameInfo.header);
-      if (S_OK != hResult) {
-        free(q);
-        q = NULL;
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-        Arcadia_Thread_jump(thread);
-      }
-      if (wcsncmp(sourceDeviceNameInfo.viewGdiDeviceName, q, m)) {
-        continue;
-      }
-      DISPLAYCONFIG_TARGET_DEVICE_NAME targetDeviceName =  { 0 };
-      targetDeviceName.header.adapterId = paths[i].targetInfo.adapterId;
-      targetDeviceName.header.id = paths[i].targetInfo.id;
-      targetDeviceName.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME;
-      targetDeviceName.header.size = sizeof(targetDeviceName);
-      hResult = DisplayConfigGetDeviceInfo(&targetDeviceName.header);
-      if (S_OK != hResult) {
-        free(q);
-        q = NULL;
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-        Arcadia_Thread_jump(thread);
-      }
-      name = Windows_fromWideChar(thread, targetDeviceName.monitorFriendlyDeviceName, wcslen(targetDeviceName.monitorFriendlyDeviceName));
-      break;
-    }
-    Arcadia_Thread_popJumpTarget(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    free(q);
-    q = NULL;
-    free(modes);
-    modes = NULL;
-    free(paths);
-    paths = NULL;
-    Arcadia_Thread_jump(thread);
-  }
-  free(q);
-  q = NULL;
-  free(modes);
-  modes = NULL;
-  free(paths);
-  paths = NULL;
-  return name;
-}
-
-typedef struct EnumDisplayMonitorsContext {
-  Arcadia_Thread* thread;
-  Arcadia_List* displayDevices;
-} EnumDisplayMonitorsContext;
-
-static BOOL CALLBACK
-enumDisplayMonitorsCallback
-  (
-    HMONITOR hMonitor,
-    HDC hDeviceContext,
-    LPRECT lpClipRect,
-    LPARAM dwData
-  )
-{
-  EnumDisplayMonitorsContext* enumDisplayMonitorsContext = (EnumDisplayMonitorsContext*)dwData;
-
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(enumDisplayMonitorsContext->thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-
-    MONITORINFOEX monitorInfoEx = { 0 };
-    monitorInfoEx.cbSize = sizeof(monitorInfoEx);
-    if (!GetMonitorInfoA(hMonitor, (LPMONITORINFO)&monitorInfoEx)) {
-      Arcadia_Thread_setStatus(enumDisplayMonitorsContext->thread, Arcadia_Status_EnvironmentFailed);
-      return FALSE;
-    }
-
-    // (1) Get the ID.
-    Arcadia_String* id = Windows_fromMultiByte(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice, strlen(monitorInfoEx.szDevice));
-    // (2) Get the monitor name.
-    Arcadia_String* monitorName = Arcadia_Visuals_Windows_System_getMonitorName(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice);
-    // (2) Get the adapter name
-    Arcadia_String* adapterName = Arcadia_Visuals_Windows_System_getAdapterName(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice);
-
-    Arcadia_Visuals_Windows_DisplayDevice *displayDevice = Arcadia_Visuals_Windows_DisplayDevice_create(enumDisplayMonitorsContext->thread, id, adapterName, monitorName);
-    displayDevice->left = monitorInfoEx.rcMonitor.left;
-    displayDevice->top = monitorInfoEx.rcMonitor.top;
-    displayDevice->right = monitorInfoEx.rcMonitor.right;
-    displayDevice->bottom = monitorInfoEx.rcMonitor.bottom;
-    displayDevice->hMonitor = hMonitor;
-
-    Arcadia_List_insertBackObjectReferenceValue(enumDisplayMonitorsContext->thread, enumDisplayMonitorsContext->displayDevices,
-                                                (Arcadia_ObjectReferenceValue)displayDevice);
-
-    Arcadia_Thread_popJumpTarget(enumDisplayMonitorsContext->thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(enumDisplayMonitorsContext->thread);
-    return FALSE;
-  }
-  return TRUE;
-}
-
 static Arcadia_List*
-Arcadia_Visuals_Windows_System_getDisplayDevicesImpl
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getDisplayDevicesImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* self
   )
 {
-  Arcadia_List* displayDevices = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-
-  // "EnumDisplayMonitors" vs. "EnumDisplayDevices":
-  // Monitors can be disabled and remapped by the control panel Display applet.
-  // With "EnumDisplayDevices" you get the "raw" view, "EnumDisplayMonitors" gives you the mapped view.
-  // You should only care about the mapped view provided by "EnumDisplayMonitors".
-
-  EnumDisplayMonitorsContext enumDisplayMonitorsContext = {
-    .thread = thread,
-    .displayDevices = displayDevices,
-  };
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-  EnumDisplayMonitors(NULL, NULL, &enumDisplayMonitorsCallback, (LPARAM)&enumDisplayMonitorsContext);
-  if (Arcadia_Thread_getStatus(thread)) {
-    Arcadia_Thread_jump(thread);
-  }
-  return displayDevices;
+  return _getDisplayDevices(thread);
 }
 
 static void
@@ -857,25 +661,25 @@ destroyCallback
   g_instance = NULL;
 }
 
-Arcadia_Visuals_Windows_System*
-Arcadia_Visuals_Windows_System_create
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System*
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_create
   (
     Arcadia_Thread* thread
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_System);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_WGL_System);
 }
 
-Arcadia_Visuals_Windows_System*
-Arcadia_Visuals_Windows_System_getOrCreate
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System*
+Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getOrCreate
   (
     Arcadia_Thread* thread
   )
 {
   if (!g_instance) {
-    Arcadia_Visuals_Windows_System* instance = Arcadia_Visuals_Windows_System_create(thread);
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* instance = Arcadia_Visuals_Implementation_OpenGL4_WGL_System_create(thread);
     Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &destroyCallback);
     g_instance = instance;
   }

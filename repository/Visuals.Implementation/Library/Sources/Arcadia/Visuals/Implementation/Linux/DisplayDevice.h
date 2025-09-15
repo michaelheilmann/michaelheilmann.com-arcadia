@@ -22,7 +22,7 @@
 // https://www.x.org/releases/current/doc/randrproto/randrproto.txt
 #include <X11/extensions/Xrandr.h>
 
-typedef struct Arcadia_Visuals_Linux_System Arcadia_Visuals_Linux_System;
+typedef struct Arcadia_Visuals_Implementation_OpenGL4_GLX_System Arcadia_Visuals_Implementation_OpenGL4_GLX_System;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.DisplayDevice", Arcadia_Visuals_Linux_DisplayDevice,
                           u8"Arcadia.Visuals.DisplayDevice");
@@ -30,7 +30,7 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.DisplayDevice", Arcadia_Visua
 struct Arcadia_Visuals_Linux_DisplayDevice {
   Arcadia_Visuals_DisplayDevice _parent;
   // The system.
-  Arcadia_Visuals_Linux_System* system;
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_System* system;
   struct {
     int left;
     int top;
@@ -57,7 +57,7 @@ Arcadia_Visuals_Linux_DisplayDevice*
 Arcadia_Visuals_Linux_DisplayDevice_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* system,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* system,
     Arcadia_String* id,
     Arcadia_String* name
   );

@@ -44,7 +44,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"R.Interpreter.Constructor", R_Interpreter_Constructor, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"R.Interpreter.Constructor", R_Interpreter_Constructor,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 R_Interpreter_Constructor_constructImpl
@@ -58,26 +60,25 @@ R_Interpreter_Constructor_constructImpl
   R_Interpreter_Constructor* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Constructor_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_ForeignProcedureValue_getType(thread))) {
+  if (Arcadia_ValueStack_isForeignProcedureValue(thread, 1)) {
     _self->isForeign = Arcadia_BooleanValue_True;
-    _self->foreignProcedure = Arcadia_Value_getForeignProcedureValue(&argumentValues[0]);
-  } else if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _R_Interpreter_Code_getType(thread))) {
+    _self->foreignProcedure = Arcadia_ValueStack_getForeignProcedureValue(thread, 1);
+  } else if (Arcadia_ValueStack_getObjectReferenceValue(thread, 1)) {
     _self->isForeign = Arcadia_BooleanValue_False;
-    _self->code = Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
+    _self->code = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _R_Interpreter_Code_getType(thread));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 1 + 1);
 }
 
 static void
@@ -99,11 +100,14 @@ R_Interpreter_Constructor_createForeign
     Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeForeignProcedureValue(foreignProcedure),
-  };
-  R_Interpreter_Constructor* self = Arcadia_allocateObject(thread, _R_Interpreter_Constructor_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (foreignProcedure) {
+    Arcadia_ValueStack_pushForeignProcedureValue(thread, foreignProcedure);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(R_Interpreter_Constructor);
 }
 
 R_Interpreter_Constructor*
@@ -113,11 +117,14 @@ R_Interpreter_Constructor_create
     R_Interpreter_Code* code
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(code),
-  };
-  R_Interpreter_Constructor* self = Arcadia_allocateObject(thread, _R_Interpreter_Constructor_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (code) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, code);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(R_Interpreter_Constructor);
 }
 
 R_Interpreter_Code*

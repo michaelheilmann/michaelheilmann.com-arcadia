@@ -18,8 +18,6 @@
 
 #include "Arcadia/MIL/Frontend/Asts/OperandAst.h"
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 /// @code
 /// class Arcadia.MIL.StringLiteralOperandAst extends Arcadia.MIL.OperandAst
 /// @endcode
@@ -41,7 +39,5 @@ Arcadia_MIL_StringLiteralOperandAst_create
     Arcadia_Thread* thread,
     Arcadia_String* value
   );
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #endif // ARCADIA_MIL_ASTS_STRINGLITERALOPERANDAST_H_INCLUDED

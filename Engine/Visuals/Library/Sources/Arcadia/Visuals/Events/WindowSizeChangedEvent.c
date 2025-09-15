@@ -73,7 +73,7 @@ Arcadia_Visuals_WindowSizeChangedEvent_constructImpl
   {
     Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 3));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   //
   _self->window = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Window_getType(thread));

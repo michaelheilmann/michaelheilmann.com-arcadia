@@ -13,7 +13,22 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(TOOLS_TEMPLATEENGINE_TESTS_TEST1_CONFIGURE_H_INCLUDED)
-#define TOOLS_TEMPLATEENGINE_TESTS_TEST1_CONFIGURE_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_DIRECT3D12_BACKEND_H_INCLUDED)
+#define ARCADIA_VISUALS_IMPLEMENTATION_DIRECT3D12_BACKEND_H_INCLUDED
 
-#endif // TOOLS_TEMPLATEENGINE_TESTS_TEST1_CONFIGURE_H_INCLUDED
+#include "Arcadia/Visuals/Include.h"
+
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Direct3D12.Backend", Arcadia_Visuals_Direct3D12_Backend,
+                          Arcadia_Visuals_Backend);
+
+struct Arcadia_Visuals_Direct3D12_Backend {
+  Arcadia_Visuals_Backend parent;
+};
+
+Arcadia_Visuals_Direct3D12_Backend*
+Arcadia_Visuals_Direct3D12_Backend_create
+  (
+    Arcadia_Thread* thread
+  );
+
+#endif // ARCADIA_VISUALS_IMPLEMENTATION_DIRECT3D12_BACKEND_H_INCLUDED

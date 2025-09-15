@@ -13,10 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+
+#include "Arcadia.Tools.TemplateEngine.Library/Library.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 #include <stdlib.h>
 #include <string.h>
-#include "Tools/TemplateEngine/Library.h"
-#include "Tools/TemplateEngine/Environment.h"
 
 // Return x:Arcadia.Integer8 where x denotes the day of the week [1,7] in UTC time.
 static void

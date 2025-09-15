@@ -60,7 +60,7 @@ Arcadia_Visuals_CanvasDpiChangedEvent_constructImpl
   {
     Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 2));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   //
   _self->horizontalDpi = Arcadia_ValueStack_getInteger32Value(thread, 1);

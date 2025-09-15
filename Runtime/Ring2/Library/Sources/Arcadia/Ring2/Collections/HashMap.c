@@ -266,11 +266,8 @@ Arcadia_HashMap_constructImpl
   Arcadia_TypeValue _type = _Arcadia_HashMap_getType(thread);
   Arcadia_HashMap_ensureInitialized(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);

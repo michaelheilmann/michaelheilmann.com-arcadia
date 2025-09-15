@@ -17,7 +17,7 @@
 #define ARCADIA_TEMPLATEENGINE_AST_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
-#include "Tools/TemplateEngine/Context.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Context.h"
 
 Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Ast", Ast,
                           u8"Arcadia.Object");

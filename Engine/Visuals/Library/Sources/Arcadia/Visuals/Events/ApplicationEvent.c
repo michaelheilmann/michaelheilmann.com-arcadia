@@ -69,7 +69,7 @@ Arcadia_Visuals_ApplicationEvent_constructImpl
   {
     Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 1));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   //
   _self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 0, _Arcadia_Visuals_System_getType(thread));

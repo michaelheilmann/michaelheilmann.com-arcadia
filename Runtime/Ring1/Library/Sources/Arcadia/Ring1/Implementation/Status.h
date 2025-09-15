@@ -55,11 +55,23 @@
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Found
 #define Arcadia_Status_Found (10)
 
+/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because something is full.
+/// This value is guaranteed to be a non-zero value.
+#define Arcadia_Status_Full (10+1000)
+
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Initialized
 #define Arcadia_Status_Initialized (11)
 
+/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because something is empty.
+/// This value is guaranteed to be a non-zero value.
+#define Arcadia_Status_Empty (11+1000)
+
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_LexicalError
 #define Arcadia_Status_LexicalError (12)
+
+/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because something is not empty.
+/// This value is guaranteed to be a non-zero value.
+#define Arcadia_Status_NotEmpty (12+1000)
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotExists
 #define Arcadia_Status_NotExists (13)
@@ -98,6 +110,16 @@
 #define Arcadia_Status_Uninitialized (24)
 
 #define Arcadia_Status_FileNotFound (25)
+
+/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because of a stack overflow.
+/// This value is guaranteed to be a non-zero value.
+/// @remarks A stack underflow situation occurs if the application attempts to add an element to a full stack.
+#define Arcadia_Status_StackOverflow (25+1000)
+
+/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because of a stack underflow.
+/// This value is guaranteed to be a non-zero value.
+/// @remarks A stack underflow situation occurs if the application attempts to remove an element from an empty stack.
+#define Arcadia_Status_StackUnderflow (26+1000)
 
 #define Arcadia_Status_StackCorruption (27+1000)
 

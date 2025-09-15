@@ -18,8 +18,6 @@
 
 #include "Arcadia/MIL/Frontend/Asts/Ast.h"
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 /// @code
 /// class Arcadia.MIL.StatementAst extends Arcadia.MIL.Ast
 /// @endcode

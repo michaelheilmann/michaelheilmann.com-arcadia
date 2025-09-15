@@ -206,10 +206,12 @@ Arcadia_Imaging_Windows_TifImageWriter_constructImpl
   Arcadia_Imaging_Windows_TifImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Imaging_Windows_TifImageWriter_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
 
   _self->supportedTypes = NULL;
@@ -224,6 +226,7 @@ Arcadia_Imaging_Windows_TifImageWriter_constructImpl
   ((Arcadia_Imaging_Windows_WicImageWriterBase*)_self)->configure = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*)) & configure;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 Arcadia_Imaging_Windows_TifImageWriter*
@@ -232,9 +235,7 @@ Arcadia_Imaging_Windows_TifImageWriter_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_Imaging_Windows_TifImageWriter* self = Arcadia_allocateObject(thread, _Arcadia_Imaging_Windows_TifImageWriter_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_Imaging_Windows_TifImageWriter);
 }

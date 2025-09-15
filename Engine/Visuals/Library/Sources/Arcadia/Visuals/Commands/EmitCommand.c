@@ -57,15 +57,18 @@ Arcadia_Visuals_EmitCommand_constructImpl
 {
   Arcadia_Visuals_EmitCommand* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_EmitCommand_getType(thread);
-  {
-    if (2 != numberOfArgumentValues) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
-  _self->message = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
+  {
+    Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 2));
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    Arcadia_superTypeConstructor2(thread, _type, self);
+  }
+  _self->message = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 
 static void

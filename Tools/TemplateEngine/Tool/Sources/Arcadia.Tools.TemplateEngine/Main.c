@@ -16,9 +16,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Arcadia/Ring2/Include.h"
-#include "Tools/TemplateEngine/Context.h"
-#include "Tools/TemplateEngine/Environment.h"
-#include "Tools/TemplateEngine/FileContext.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Context.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
+#include "Arcadia.Tools.TemplateEngine.Library/FileContext.h"
 
 void
 main1

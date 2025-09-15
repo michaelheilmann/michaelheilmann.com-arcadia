@@ -59,10 +59,9 @@ Arcadia_DataDefinitionLanguage_Tree_VoidNode_constructImpl
   Arcadia_DataDefinitionLanguage_Tree_VoidNode* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Tree_VoidNode_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeInteger32Value(Arcadia_DataDefinitionLanguage_Tree_NodeType_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
+    Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DataDefinitionLanguage_Tree_NodeType_Void);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);

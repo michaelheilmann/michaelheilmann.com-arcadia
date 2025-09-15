@@ -64,7 +64,7 @@ Arcadia_Visuals_MouseButtonEvent_constructImpl
   {
     Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 4));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor(thread, _type, self, 1, &argumentValues[0]);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   //
   _self->action = Arcadia_ValueStack_getInteger32Value(thread, 3);

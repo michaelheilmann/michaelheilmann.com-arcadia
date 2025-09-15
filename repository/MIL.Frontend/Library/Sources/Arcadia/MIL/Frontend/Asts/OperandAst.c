@@ -17,8 +17,6 @@
 
 #include "Arcadia/MIL/Frontend/Include.h"
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 static void
 Arcadia_MIL_OperandAst_constructImpl
   (
@@ -39,7 +37,9 @@ static const Arcadia_Type_Operations _Arcadia_MIL_OperandAst_typeOperations = {
   .objectTypeOperations = &_Arcadia_MIL_OperandAst_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.MIL.OperandAst", Arcadia_MIL_OperandAst, u8"Arcadia.MIL.Ast", Arcadia_MIL_Ast, &_Arcadia_MIL_OperandAst_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.MIL.OperandAst", Arcadia_MIL_OperandAst,
+                         u8"Arcadia.MIL.Ast", Arcadia_MIL_Ast,
+                         &_Arcadia_MIL_OperandAst_typeOperations);
 
 static void
 Arcadia_MIL_OperandAst_constructImpl
@@ -53,12 +53,9 @@ Arcadia_MIL_OperandAst_constructImpl
   Arcadia_MIL_OperandAst* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_MIL_OperandAst_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

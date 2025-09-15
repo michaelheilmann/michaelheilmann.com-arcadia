@@ -23,13 +23,13 @@
 
   #include <GL/GL.h>
 
-  #include "Arcadia/Visuals/Implementation/Windows/System.h"
+  #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/System.h"
 
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
 
   #include <GL/gl.h>
 
-  #include "Arcadia/Visuals/Implementation/Linux/System.h"
+  #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
 
 #else
 
@@ -143,9 +143,9 @@ Arcadia_Visuals_OpenGL4_Backend_createSystemImpl
   )
 {
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  return (Arcadia_Visuals_System*)Arcadia_Visuals_Windows_System_getOrCreate(thread);
+  return (Arcadia_Visuals_System*)Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getOrCreate(thread);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  return (Arcadia_Visuals_System*)Arcadia_Visuals_Linux_System_getOrCreate(thread);
+  return (Arcadia_Visuals_System*)Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getOrCreate(thread);
 #else
   #error("environment system not (yet) supported")
 #endif
@@ -163,10 +163,8 @@ Arcadia_Visuals_OpenGL4_Backend_construct
   Arcadia_Visuals_OpenGL4_Backend* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_OpenGL4_Backend_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);

@@ -26,6 +26,7 @@
 #include "Arcadia/Visuals/Backend.h"
 
 #include "Arcadia/Visuals/Configuration.h"
+#include "Arcadia/Visuals/Context.h"
 
 #include "Arcadia/Visuals/Diagnostics.h"
 

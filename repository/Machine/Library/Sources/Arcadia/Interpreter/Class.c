@@ -45,7 +45,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"R.Interpreter.Class", R_Interpreter_Class,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 R_Interpreter_Class_constructImpl
@@ -59,17 +61,22 @@ R_Interpreter_Class_constructImpl
   R_Interpreter_Class* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Class_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
-  if (2 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->className = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_String_getType(thread));
-  _self->extendedClassName = Arcadia_ArgumentsValidation_getObjectReferenceValueOrNull(thread, &argumentValues[1], _Arcadia_String_getType(thread));
+  _self->className = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
+  if (Arcadia_ValueStack_isObjectReferenceValue(thread, 1)) {
+    _self->extendedClassName = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
+  } else if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
+    _self->extendedClassName = NULL;
+  } else {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
   _self->classMembers = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 
   _self->extendedClass = NULL;
@@ -77,6 +84,7 @@ R_Interpreter_Class_constructImpl
   _self->complete = Arcadia_BooleanValue_False;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 
 static void
@@ -86,10 +94,18 @@ R_Interpreter_Class_visit
     R_Interpreter_Class* self
   )
 {
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->className);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->extendedClassName);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->classMembers);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->extendedClass);
+  if (self->className) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->className);
+  }
+  if (self->extendedClass) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->extendedClassName);
+  }
+  if (self->classMembers) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->classMembers);
+  }
+  if (self->extendedClass) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->extendedClass);
+  }
 }
 
 R_Interpreter_Class*
@@ -100,12 +116,19 @@ R_Interpreter_Class_create
     Arcadia_String* extendedClassName
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(className),
-    extendedClassName ? Arcadia_Value_makeObjectReferenceValue(extendedClassName) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  R_Interpreter_Class* self = Arcadia_allocateObject(thread, _R_Interpreter_Class_getType(thread), 2, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (className) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, className);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  if (extendedClassName) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, extendedClassName);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(R_Interpreter_Class);
 }
 
 Arcadia_String*

@@ -67,7 +67,7 @@ deploy:
     provider: GitHub
     auth_token:
         secure: iTg7jon0UCvoGT5y2flVxMHPG2pSjZu8T3La9iuSdwdyBf2sOqZHu5aQLNLUKSghkVVOURFuvBem2GcnSb4s4jNGDn/HGHzEQV0Mc+Ivf6aI0xpNy38y17xZbslgmxe8 # encrypted token from GitHub
-        artifact: $(ARCHIVE_FILENAME) # upload the artifact
+        #artifact: $(ARCHIVE_FILENAME) # upload the artifact
     draft: true
     prerelease: false
     force_update: true

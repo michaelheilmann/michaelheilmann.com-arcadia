@@ -46,7 +46,7 @@ Audials_playSine
   // Set the position of the listener.
   ALfloat position[] = { 0.f, 0.f, 0.f };
   alListenerfv(AL_POSITION, position);
-  alListenerf(AL_GAIN, 0.4f);
+  alListenerf(AL_GAIN, 0.1f);
   if (AL_NO_ERROR != alGetError()) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);

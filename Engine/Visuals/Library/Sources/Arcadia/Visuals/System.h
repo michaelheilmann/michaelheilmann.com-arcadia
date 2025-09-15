@@ -63,13 +63,7 @@ struct Arcadia_Visuals_System {
   /// @brief List of windows.
   Arcadia_List* windows;
 
-  Arcadia_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Visuals_System* self,
-                                      Arcadia_Integer32Value width,
-                                      Arcadia_Integer32Value height,
-                                      Arcadia_Natural8Value red,
-                                      Arcadia_Natural8Value green,
-                                      Arcadia_Natural8Value blue,
-                                      Arcadia_Natural8Value alpha);
+  Arcadia_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Visuals_System* self, Arcadia_Imaging_PixelBuffer* pixelBuffer);
   
   Arcadia_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Visuals_System* self);
   
@@ -83,12 +77,7 @@ Arcadia_Visuals_System_createIcon
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_System* self,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height,
-    Arcadia_Natural8Value red,
-    Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue,
-    Arcadia_Natural8Value alpha
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   );
 
 Arcadia_Visuals_Window*

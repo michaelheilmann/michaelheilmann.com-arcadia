@@ -19,6 +19,15 @@
 #include "Arcadia/Ring1/Include.h"
 #include <stdio.h>
 
+static void*
+Arcadia_allocateObject
+  (
+    Arcadia_Thread* thread,
+    Arcadia_TypeValue type,
+    Arcadia_SizeValue numberOfArgumentValues,
+    Arcadia_Value* argumentValues
+  );
+
 static void
 Arcadia_Object_constructImpl
   (
@@ -89,8 +98,13 @@ Arcadia_Object_constructImpl
   )
 {
   Arcadia_Object* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = Arcadia_getType(thread, u8"Arcadia.Object", sizeof(u8"Arcadia.Object") - 1);
+  Arcadia_TypeValue _type = _Arcadia_Object_getType(thread);
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
   Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 static void
@@ -257,7 +271,7 @@ onVisitObject
   }
 }
 
-void*
+static void*
 Arcadia_allocateObject
   (
     Arcadia_Thread* thread,
@@ -271,7 +285,7 @@ Arcadia_allocateObject
     Arcadia_Thread_jump(thread);
   }
   if (!Arcadia_Type_isObjectKind(thread, type)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
 

@@ -13,21 +13,21 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_LINUX_SYSTEM_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_LINUX_SYSTEM_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_SYSTEM_H_INCLUDED)
+#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_SYSTEM_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
 #include <X11/Xlib.h> // For Atom.
 
 /// @code
-/// class Arcadia.Visuals.Linux.System extends Arcadia.Visuals.System {
+/// class Arcadia.Visuals.OpenGL4.GLX.System extends Arcadia.Visuals.System {
 ///   construct()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.System", Arcadia_Visuals_Linux_System,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.OpenGL4.GLX.System", Arcadia_Visuals_Implementation_OpenGL4_GLX_System,
                           u8"Arcadia.Visuals.System")
 
-struct Arcadia_Visuals_Linux_System {
+struct Arcadia_Visuals_Implementation_OpenGL4_GLX_System {
   Arcadia_Visuals_System _parent;
   
   Display* display;
@@ -46,16 +46,16 @@ struct Arcadia_Visuals_Linux_System {
   } xrandr;
 };
 
-Arcadia_Visuals_Linux_System*
-Arcadia_Visuals_Linux_System_create
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_create
   (
     Arcadia_Thread* thread
   );
 
-Arcadia_Visuals_Linux_System*
-Arcadia_Visuals_Linux_System_getOrCreate
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getOrCreate
   (
     Arcadia_Thread* thread
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_LINUX_SYSTEM_H_INCLUDED
+#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_SYSTEM_H_INCLUDED

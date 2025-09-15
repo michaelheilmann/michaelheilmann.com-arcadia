@@ -286,7 +286,9 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Imaging.PixelBuffer", Arcadia_Imaging_PixelBuffer, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Imaging.PixelBuffer", Arcadia_Imaging_PixelBuffer,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_typeOperations);
 
 static void
 Arcadia_Imaging_PixelBuffer_constructImpl
@@ -297,20 +299,20 @@ Arcadia_Imaging_PixelBuffer_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  if (1 == numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+
+  if (1 == numberOfArgumentValues1) {
     Arcadia_Imaging_PixelBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
     Arcadia_TypeValue _type = _Arcadia_Imaging_PixelBuffer_getType(thread);
     {
-      Arcadia_Value argumentValues[] = {
-        Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-      };
-      Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+      Arcadia_ValueStack_pushNatural8Value(thread, 0);
+      Arcadia_superTypeConstructor2(thread, _type, self);
     }
-    if (!Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &argumentValues[0]), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_Imaging_PixelBuffer* other = (Arcadia_Imaging_PixelBuffer*)Arcadia_Value_getObjectReferenceValue(&argumentValues[0]);
+    Arcadia_Imaging_PixelBuffer* other = (Arcadia_Imaging_PixelBuffer*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Imaging_PixelBuffer_getType(thread));
     _self->numberOfColumns = Arcadia_Imaging_PixelBuffer_getNumberOfColumns(thread, other);
     _self->numberOfRows = Arcadia_Imaging_PixelBuffer_getNumberOfRows(thread, other);
     _self->linePadding = Arcadia_Imaging_PixelBuffer_getLinePadding(thread, other);
@@ -320,36 +322,20 @@ Arcadia_Imaging_PixelBuffer_constructImpl
     _self->bytes = Arcadia_Memory_allocateUnmanaged(thread, bytes);
     Arcadia_Memory_copy(thread, _self->bytes, other->bytes, bytes);
     Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
-  } else if (4 == numberOfArgumentValues) {
+    Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  } else if (4 == numberOfArgumentValues1) {
     Arcadia_TypeValue _type = _Arcadia_Imaging_PixelBuffer_getType(thread);
     Arcadia_Imaging_PixelBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
     {
-      Arcadia_Value argumentValues[] = {
-        Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-      };
-      Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
-    }
-    if (!Arcadia_Value_isInteger32Value(&argumentValues[0])) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    if (!Arcadia_Value_isInteger32Value(&argumentValues[1])) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    if (!Arcadia_Value_isInteger32Value(&argumentValues[2])) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    if (!Arcadia_Value_isNatural32Value(&argumentValues[3])) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-      Arcadia_Thread_jump(thread);
+      Arcadia_ValueStack_pushNatural8Value(thread, 0);
+      Arcadia_superTypeConstructor2(thread, _type, self);
     }
     _self->bytes = NULL;
-    _self->pixelFormat = Arcadia_Value_getNatural32Value(&argumentValues[3]);
-    _self->numberOfColumns = Arcadia_Value_getInteger32Value(&argumentValues[1]);
-    _self->numberOfRows = Arcadia_Value_getInteger32Value(&argumentValues[2]);
-    _self->linePadding = Arcadia_Value_getInteger32Value(&argumentValues[0]);
+    _self->linePadding = Arcadia_ValueStack_getInteger32Value(thread, 4);
+    _self->numberOfColumns = Arcadia_ValueStack_getInteger32Value(thread, 3);
+    _self->numberOfRows = Arcadia_ValueStack_getInteger32Value(thread, 2);
+    _self->pixelFormat = Arcadia_ValueStack_getNatural32Value(thread, 1);
+    
     Arcadia_SizeValue bytesPerPixel = 0;
     switch (_self->pixelFormat) {
       case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:
@@ -435,6 +421,7 @@ Arcadia_Imaging_PixelBuffer_constructImpl
       } break;
     };
     Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+    Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -922,14 +909,13 @@ Arcadia_Imaging_PixelBuffer_create
     Arcadia_Natural8Value pixelFormat
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeInteger32Value(linePadding),
-    Arcadia_Value_makeInteger32Value(width),
-    Arcadia_Value_makeInteger32Value(height),
-    Arcadia_Value_makeNatural32Value(pixelFormat),
-  };
-  Arcadia_Imaging_PixelBuffer* self = Arcadia_allocateObject(thread, _Arcadia_Imaging_PixelBuffer_getType(thread), 4, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushInteger32Value(thread, linePadding);
+  Arcadia_ValueStack_pushInteger32Value(thread, width);
+  Arcadia_ValueStack_pushInteger32Value(thread, height);
+  Arcadia_ValueStack_pushNatural32Value(thread, pixelFormat);
+  Arcadia_ValueStack_pushNatural8Value(thread, 4);
+  ARCADIA_CREATEOBJECT(Arcadia_Imaging_PixelBuffer);
 }
 
 Arcadia_Imaging_PixelBuffer*
@@ -939,11 +925,14 @@ Arcadia_Imaging_PixelBuffer_createClone
     Arcadia_Imaging_PixelBuffer* other
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(other),
-  };
-  Arcadia_Imaging_PixelBuffer* self = Arcadia_allocateObject(thread, _Arcadia_Imaging_PixelBuffer_getType(thread), 1, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (other) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, other);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  ARCADIA_CREATEOBJECT(Arcadia_Imaging_PixelBuffer);
 }
 
 Arcadia_Integer32Value

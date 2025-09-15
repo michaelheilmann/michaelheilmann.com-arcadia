@@ -15,7 +15,7 @@
 
 #include "Arcadia/Visuals/Implementation/Linux/DisplayDevice.h"
 
-#include "Arcadia/Visuals/Implementation/Linux/System.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
 #include "Arcadia/Visuals/Implementation/Linux/DisplayMode.h"
 
 static void
@@ -103,25 +103,27 @@ Arcadia_Visuals_Linux_DisplayDevice_constructImpl
   Arcadia_Visuals_Linux_DisplayDevice* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Linux_DisplayDevice_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
-  if (3 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 3 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->system = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_Visuals_Linux_System_getType(thread));
-  _self->id = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
-  _self->name = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[2], _Arcadia_String_getType(thread));
+  
+  _self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getType(thread));
+  _self->id = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
+  _self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   _self->output = 0;
   _self->mode = 0;
+  
   ((Arcadia_Visuals_DisplayDevice*)_self)->getAvailableDisplayModes = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getAvailableDisplayModesImpl;
   ((Arcadia_Visuals_DisplayDevice*)_self)->getId = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getIdImpl;
   ((Arcadia_Visuals_DisplayDevice*)_self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getNameImpl;
   ((Arcadia_Visuals_DisplayDevice*)_self)->getBounds = (void (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Visuals_Linux_DisplayDevice_getBoundsImpl;
+  
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 3 + 1);
 }
 
 static void
@@ -298,18 +300,29 @@ Arcadia_Visuals_Linux_DisplayDevice*
 Arcadia_Visuals_Linux_DisplayDevice_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* system,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* system,
     Arcadia_String* id,
     Arcadia_String* name
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeObjectReferenceValue(system),
-    Arcadia_Value_makeObjectReferenceValue(id),
-    Arcadia_Value_makeObjectReferenceValue(name),
-  };
-  Arcadia_Visuals_Linux_DisplayDevice* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Linux_DisplayDevice_getType(thread), 3, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (system) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, system);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  if (id) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, id);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  if (name) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, name);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, 3);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Linux_DisplayDevice);
 }
 
 /// @brief Update the device bounds from the backend.

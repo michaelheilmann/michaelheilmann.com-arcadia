@@ -409,10 +409,12 @@ Arcadia_Imaging_Linux_PngImageWriter_constructImpl
   Arcadia_Imaging_Linux_PngImageWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_Type* _type = _Arcadia_Imaging_Linux_PngImageWriter_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   _self->supportedTypes = NULL;
   Arcadia_List* supportedTypes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
@@ -421,6 +423,7 @@ Arcadia_Imaging_Linux_PngImageWriter_constructImpl
   ((Arcadia_Imaging_ImageWriter*)_self)->getSupportedTypes = (Arcadia_ImmutableList*(*)(Arcadia_Thread*,Arcadia_Imaging_ImageWriter*))&Arcadia_Imaging_Linux_PngImageWriter_getSupportedTypesImpl;
   ((Arcadia_Imaging_ImageWriter*)_self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & Arcadia_Imaging_Linux_PngImageWriter_writeImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 static void
@@ -441,9 +444,7 @@ Arcadia_Imaging_Linux_PngImageWriter_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_Imaging_Linux_PngImageWriter* self = Arcadia_allocateObject(thread, _Arcadia_Imaging_Linux_PngImageWriter_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_Imaging_Linux_PngImageWriter);
 }

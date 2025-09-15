@@ -58,27 +58,22 @@ Arcadia_Visuals_Windows_Icon_constructImpl
   Arcadia_Visuals_Windows_Icon* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_Icon_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (6 != numberOfArgumentValues1) {
+  if (1 != numberOfArgumentValues1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_Integer32Value width = Arcadia_ValueStack_getInteger32Value(thread, 6);
-  Arcadia_Integer32Value height = Arcadia_ValueStack_getInteger32Value(thread, 5);
-  Arcadia_Natural8Value red = Arcadia_ValueStack_getNatural8Value(thread, 4);
-  Arcadia_Natural8Value green = Arcadia_ValueStack_getNatural8Value(thread, 3);
-  Arcadia_Natural8Value blue = Arcadia_ValueStack_getNatural8Value(thread, 2);
-  Arcadia_Natural8Value alpha = Arcadia_ValueStack_getNatural8Value(thread, 1);
+  Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Imaging_PixelBuffer_getType(thread));
+  pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, pixelBuffer);
+  Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
 
   HDC hMemDC;
   BITMAPV5HEADER bi;
@@ -89,8 +84,8 @@ Arcadia_Visuals_Windows_Icon_constructImpl
 
   ZeroMemory(&bi, sizeof(BITMAPV5HEADER));
   bi.bV5Size = sizeof(BITMAPV5HEADER);
-  bi.bV5Width = width;
-  bi.bV5Height = height;
+  bi.bV5Width = Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer);
+  bi.bV5Height = Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer);
   bi.bV5Planes = 1;
   bi.bV5BitCount = 32;
   bi.bV5Compression = BI_BITFIELDS;
@@ -137,7 +132,7 @@ Arcadia_Visuals_Windows_Icon_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  PatBlt(hMemDC, 0, 0, width, height, WHITENESS);
+  PatBlt(hMemDC, 0, 0, Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer), Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer), WHITENESS);
   if (HGDI_ERROR == SelectObject(hMemDC, hOldBitmap)) {
     DeleteObject(hBitmap);
     hBitmap = NULL;
@@ -150,7 +145,7 @@ Arcadia_Visuals_Windows_Icon_constructImpl
   hMemDC = NULL;
 
    // Create an empty mask bitmap.
-  HBITMAP hMonoBitmap = CreateBitmap(width, height, 1, 1, NULL);
+  HBITMAP hMonoBitmap = CreateBitmap(Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer), Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer), 1, 1, NULL);
   if (!hMonoBitmap) {
     DeleteObject(hBitmap);
     hBitmap = NULL;
@@ -162,11 +157,13 @@ Arcadia_Visuals_Windows_Icon_constructImpl
   // the complete cursor is semi-transparent.
   DWORD* lpdwPixel;
   lpdwPixel = (DWORD*)lpBits;
-  for (x = 0; x < width; x++) {
-    for (y = 0; y < height; y++) {
+  for (x = 0; x < Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer); x++) {
+    for (y = 0; y < Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer); y++) {
       // Clear the alpha bits
       uint32_t pixel = 0x000000000;
       // Set the alpha bits to 0x9F (semi-transparent) or 0xFF000000 (opaque).
+      Arcadia_Natural8Value red, green, blue, alpha;
+      Arcadia_Imaging_PixelBuffer_getPixelRgba(thread, pixelBuffer, x, y, &red, &green, &blue, &alpha);
       pixel |= alpha << 24;
       pixel |= red << 16;
       pixel |= green << 8;
@@ -219,21 +216,11 @@ Arcadia_Visuals_Windows_Icon*
 Arcadia_Visuals_Windows_Icon_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height,
-    Arcadia_Natural8Value red,
-    Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue,
-    Arcadia_Natural8Value alpha
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushInteger32Value(thread, width);
-  Arcadia_ValueStack_pushInteger32Value(thread, height);
-  Arcadia_ValueStack_pushNatural8Value(thread, red);
-  Arcadia_ValueStack_pushNatural8Value(thread, green);
-  Arcadia_ValueStack_pushNatural8Value(thread, blue);
-  Arcadia_ValueStack_pushNatural8Value(thread, alpha);
-  Arcadia_ValueStack_pushNatural8Value(thread, 6);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, pixelBuffer);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_Icon);
 }

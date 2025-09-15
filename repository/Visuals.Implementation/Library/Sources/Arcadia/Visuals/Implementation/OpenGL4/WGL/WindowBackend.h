@@ -13,11 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_WINDOWS_WINDOW_H_INCLUDED)
-#define ARCADIA_VISUALS_WINDOWS_WINDOW_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED)
+#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-#include "Arcadia/Visuals/Implementation/Windows/System.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/WGL/System.h"
 #include "Arcadia/Visuals/Implementation/Windows/Icon.h"
 typedef struct Arcadia_Visuals_Windows_DisplayDevice Arcadia_Visuals_Windows_DisplayDevice;
 
@@ -25,12 +25,12 @@ typedef struct Arcadia_Visuals_Windows_DisplayDevice Arcadia_Visuals_Windows_Dis
 #define NOCOMM
 #include <Windows.h>
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Window", Arcadia_Visuals_Windows_Window,
-                          u8"Arcadia.Visuals.Window");
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpennGL4.WGL.WindowBackend", Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend,
+                          u8"Arcadia.Visuals.WindowBackend");
 
-struct Arcadia_Visuals_Windows_Window {
-  Arcadia_Visuals_Window _parent;
-  Arcadia_Visuals_Windows_System* system;
+struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend {
+  Arcadia_Visuals_WindowBackend _parent;
+  Arcadia_Visuals_Implementation_OpenGL4_WGL_System* system;
 
   HWND windowHandle;
   HDC deviceContextHandle;
@@ -40,12 +40,12 @@ struct Arcadia_Visuals_Windows_Window {
   Arcadia_Visuals_Windows_Icon* bigIcon;
 };
 
-Arcadia_Visuals_Windows_Window*
-Arcadia_Visuals_Windows_Window_create
+Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend*
+Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_System* system,
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* system,
     Arcadia_Visuals_Windows_DisplayDevice* displayDevice
   );
 
-#endif // ARCADIA_VISUALS_WINDOWS_WINDOW_H_INCLUDED
+#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED

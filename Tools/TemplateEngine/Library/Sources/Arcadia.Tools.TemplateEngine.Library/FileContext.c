@@ -13,11 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Tools/TemplateEngine/FileContext.h"
+#include "Arcadia.Tools.TemplateEngine.Library/FileContext.h"
 
-#include "Tools/TemplateEngine/Ast.h"
-#include "Tools/TemplateEngine/Context.h"
-#include "Tools/TemplateEngine/Environment.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Ast.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Context.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 
 static Arcadia_BooleanValue
 is
@@ -506,10 +506,8 @@ FileContext_constructImpl
   FileContext* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _FileContext_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);

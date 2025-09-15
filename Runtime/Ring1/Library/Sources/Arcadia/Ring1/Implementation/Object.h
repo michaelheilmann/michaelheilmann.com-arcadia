@@ -30,8 +30,11 @@ struct Arcadia_Object {
   int dummy;
 };
 
-#define Arcadia_superTypeConstructor(_thread, _type, ...) \
-  Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(thread, _type))->objectTypeOperations->construct(_thread, __VA_ARGS__)
+#define Arcadia_superTypeConstructor2(_thread, _type, _self) \
+  { \
+    Arcadia_Value dummy = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void); \
+    Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(thread, _type))->objectTypeOperations->construct(_thread, _self, 0, &dummy); \
+  }
 
 /// R(untime) ex(tension) macro.
 /// @param _cilName, _cilParentName UTF8 string literals for the Common Intermediate Language type names of the type and its parent type.
@@ -71,25 +74,22 @@ struct Arcadia_Object {
   }
 
 
-/// @brief Allocate an "Arcadia.Object" or derived type value.
-/// @details
-/// Allocate an "Arcadia.Object" value of the specified "Arcadia.Object" or derived type type X.
-/// a) allocate memory of size "Arcadia_Type_getValueSize(type)" at address "a".
-/// b) cast that memory into an object
-/// b) invoke the constructor of type X with the specified number of argument values
-/// c) if any of the constructors fails
-/// @error Arcadia.Status.ArgumentValueInvalid if "type" is "NULL"
-/// @error Arcadia.Status.AllocationFailed if step a) fails
-void*
-Arcadia_allocateObject
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue type,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
-  );
-
-/// @transitional
+/// @brief
+/// Allocate an "Arcadia.Object" or derived type value.
+/// 
+/// @details 
+/// a) Raise "Arcadia.Status.ArgumentValueInvalid" if "type" is a null pointer.
+///    Raise "Arcadia.Status.ArgumentTypeInvalid" if "type" is not an "Arcadia.Object" or derived type.
+/// 
+/// b) Allocate memory of size "Arcadia_Type_getValueSize(type)" at address "a".
+///    Raise "Arcadia.Status.AllocationFailed" if the allocation fails.
+///    Assign this memory the "Arcadia.Memory" type.
+/// 
+/// c) Cast that memory into an object
+/// 
+/// d) Invoke the constructor of type "type" with the specified number of argument values.
+/// 
+/// e) Assert the stack is not corrupted if a) - c) are successfull. Otherwise raise Arcadia.Status.StackCorruption.
 void*
 ARCADIA_CREATEOBJECT0
   (

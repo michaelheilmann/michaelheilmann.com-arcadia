@@ -59,12 +59,10 @@ Arcadia_Visuals_System_constructImpl
   Arcadia_Visuals_System* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_System_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
-  if (0 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -74,6 +72,7 @@ Arcadia_Visuals_System_constructImpl
   _self->getDisplayDevices = NULL;
   _self->update = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 static void
@@ -93,14 +92,9 @@ Arcadia_Visuals_System_createIcon
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_System* self,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height,
-    Arcadia_Natural8Value red,
-    Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue,
-    Arcadia_Natural8Value alpha
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   )
-{ return self->createIcon(thread, self, width, height, red, green, blue, alpha); }
+{ return self->createIcon(thread, self, pixelBuffer); }
 
 Arcadia_Visuals_Window*
 Arcadia_Visuals_System_createWindow

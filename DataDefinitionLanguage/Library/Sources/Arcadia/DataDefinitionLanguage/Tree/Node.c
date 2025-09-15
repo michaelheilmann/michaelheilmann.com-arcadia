@@ -43,7 +43,9 @@ static const Arcadia_Type_Operations _Arcadia_DataDefinitionLanguage_Tree_Node_t
   .objectTypeOperations = &_Arcadia_DataDefinitionLanguage_Tree_Node_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.Node", Arcadia_DataDefinitionLanguage_Tree_Node, u8"Arcadia.Object", Arcadia_Object, &_Arcadia_DataDefinitionLanguage_Tree_Node_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.DataDefinitionLanguage.Tree.Node", Arcadia_DataDefinitionLanguage_Tree_Node,
+                         u8"Arcadia.Object", Arcadia_Object,
+                         &_Arcadia_DataDefinitionLanguage_Tree_Node_typeOperations);
 
 static void
 Arcadia_DataDefinitionLanguage_Tree_Node_constructImpl
@@ -57,16 +59,14 @@ Arcadia_DataDefinitionLanguage_Tree_Node_constructImpl
   Arcadia_DataDefinitionLanguage_Tree_Node* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Tree_Node_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
-  if (1 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->type = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[0]);
+  _self->type = Arcadia_ValueStack_getInteger32Value(thread, 1);
   switch (_self->type) {
     case Arcadia_DataDefinitionLanguage_Tree_NodeType_Boolean:
     case Arcadia_DataDefinitionLanguage_Tree_NodeType_List:
@@ -83,6 +83,7 @@ Arcadia_DataDefinitionLanguage_Tree_Node_constructImpl
     } break;
   };
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 1 + 1);
 }
 
 static void

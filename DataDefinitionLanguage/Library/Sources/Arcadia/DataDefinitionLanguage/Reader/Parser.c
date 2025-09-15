@@ -110,15 +110,18 @@ Arcadia_DataDefinitionLanguage_Parser_constructImpl
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Parser_getType(thread);
   //
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   //
   _self->scanner = Arcadia_DataDefinitionLanguage_Scanner_create(thread);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 static void
@@ -139,11 +142,9 @@ Arcadia_DataDefinitionLanguage_Parser_create
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_DataDefinitionLanguage_Parser* self = Arcadia_allocateObject(thread, _Arcadia_DataDefinitionLanguage_Parser_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_DataDefinitionLanguage_Parser);
 }
 
 Arcadia_String*

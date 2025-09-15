@@ -24,10 +24,10 @@
 #endif
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  #include "Arcadia/Visuals/Implementation/Windows/System.h"
+  #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/System.h"
   #include "Arcadia/Visuals/Implementation/Windows/TextureFont.h"
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  #include "Arcadia/Visuals/Implementation/Linux/System.h"
+  #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
 #else
   #error("environment not (yet) supported")
 #endif

@@ -59,12 +59,17 @@ Arcadia_Visuals_Window_constructImpl
   Arcadia_Visuals_Window* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Window_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
+  }
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
 
+  _self->backend = NULL;
+  _self->bigIcon = NULL;
+  _self->smallIcon = NULL;
   _self->title = Arcadia_String_createFromCxxString(thread, u8"Arcadia Engine Window");
   _self->fullscreen = Arcadia_BooleanValue_False;
   _self->bounds.left = 0;
@@ -102,6 +107,7 @@ Arcadia_Visuals_Window_constructImpl
   _self->setFullscreen = NULL;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 static void
@@ -114,6 +120,15 @@ Arcadia_Visuals_Window_visit
   if (self->title) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->title);
   }
+  if (self->backend) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backend);
+  }
+  if (self->smallIcon) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->smallIcon);
+  }
+  if (self->bigIcon) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->bigIcon);
+  }
 }
 
 void
@@ -122,7 +137,15 @@ Arcadia_Visuals_Window_open
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self
   )
-{ self->open(thread, self); }
+{
+  if (self->backend) {
+    Arcadia_Visuals_WindowBackend_open(thread, self->backend);
+    Arcadia_Visuals_WindowBackend_setFullscreen(thread, self->backend, self->fullscreen);
+    Arcadia_Visuals_WindowBackend_setPosition(thread, self->backend, self->bounds.left, self->bounds.top);
+    Arcadia_Visuals_WindowBackend_setSize(thread, self->backend, self->bounds.width, self->bounds.width);
+    Arcadia_Visuals_WindowBackend_setTitle(thread, self->backend, self->title);
+  }
+}
 
 void
 Arcadia_Visuals_Window_close
@@ -130,7 +153,11 @@ Arcadia_Visuals_Window_close
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self
   )
-{ self->close(thread, self); }
+{
+  if (self->backend) {
+    Arcadia_Visuals_WindowBackend_close(thread, self->backend);
+  }
+}
 
 void
 Arcadia_Visuals_Window_getRequiredBigIconSize
@@ -140,7 +167,7 @@ Arcadia_Visuals_Window_getRequiredBigIconSize
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ self->getRequiredBigIconSize(thread, self, width, height); }
+{ Arcadia_Visuals_WindowBackend_getRequiredBigIconSize(thread, self->backend, width, height); }
 
 void
 Arcadia_Visuals_Window_getRequiredSmallIconSize
@@ -150,7 +177,7 @@ Arcadia_Visuals_Window_getRequiredSmallIconSize
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ self->getRequiredSmallIconSize(thread, self, width, height); }
+{ Arcadia_Visuals_WindowBackend_getRequiredSmallIconSize(thread, self->backend, width, height); }
 
 Arcadia_Visuals_Icon*
 Arcadia_Visuals_Window_getBigIcon
@@ -158,7 +185,7 @@ Arcadia_Visuals_Window_getBigIcon
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self
   )
-{ return self->getBigIcon(thread, self); }
+{ return Arcadia_Visuals_WindowBackend_getBigIcon(thread, self->backend); }
 
 void
 Arcadia_Visuals_Window_setBigIcon
@@ -167,7 +194,7 @@ Arcadia_Visuals_Window_setBigIcon
     Arcadia_Visuals_Window* self,
     Arcadia_Visuals_Icon* icon
   )
-{ self->setBigIcon(thread, self, icon); }
+{ Arcadia_Visuals_WindowBackend_setBigIcon(thread, self->backend, icon); }
 
 Arcadia_Visuals_Icon*
 Arcadia_Visuals_Window_getSmallIcon
@@ -175,7 +202,7 @@ Arcadia_Visuals_Window_getSmallIcon
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self
   )
-{ return self->getSmallIcon(thread, self); }
+{ return Arcadia_Visuals_WindowBackend_getSmallIcon(thread, self->backend); }
 
 void
 Arcadia_Visuals_Window_setSmallIcon
@@ -184,7 +211,7 @@ Arcadia_Visuals_Window_setSmallIcon
     Arcadia_Visuals_Window* self,
     Arcadia_Visuals_Icon* icon
   )
-{ self->setSmallIcon(thread, self, icon); }
+{ Arcadia_Visuals_WindowBackend_setSmallIcon(thread, self->backend, icon); }
 
 Arcadia_String*
 Arcadia_Visuals_Window_getTitle
@@ -192,7 +219,7 @@ Arcadia_Visuals_Window_getTitle
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self
   )
-{ return self->getTitle(thread, self); }
+{ return self->title; }
 
 void
 Arcadia_Visuals_Window_setTitle
@@ -201,7 +228,12 @@ Arcadia_Visuals_Window_setTitle
     Arcadia_Visuals_Window* self,
     Arcadia_String* title
   )
-{ self->setTitle(thread, self, title); }
+{
+  self->title = title;
+  if (self->backend) {
+    Arcadia_Visuals_WindowBackend_setTitle(thread, self->backend, title);
+  }
+}
 
 void
 Arcadia_Visuals_Window_getCanvasSize
@@ -211,7 +243,7 @@ Arcadia_Visuals_Window_getCanvasSize
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ self->getCanvasSize(thread, self, width, height); }
+{ Arcadia_Visuals_WindowBackend_getCanvasSize(thread, self->backend, width, height); }
 
 void
 Arcadia_Visuals_Window_beginRender
@@ -219,7 +251,7 @@ Arcadia_Visuals_Window_beginRender
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self
   )
-{ self->beginRender(thread, self); }
+{ Arcadia_Visuals_WindowBackend_beginRender(thread, self->backend); }
 
 void
 Arcadia_Visuals_Window_endRender
@@ -227,7 +259,7 @@ Arcadia_Visuals_Window_endRender
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self
   )
-{ self->endRender(thread, self); }
+{ Arcadia_Visuals_WindowBackend_endRender(thread, self->backend); }
 
 void
 Arcadia_Visuals_Window_setPosition
@@ -237,7 +269,13 @@ Arcadia_Visuals_Window_setPosition
     Arcadia_Integer32Value left,
     Arcadia_Integer32Value top
   )
-{ self->setPosition(thread, self, left, top); }
+{
+  self->bounds.left = left;
+  self->bounds.top = top;
+  if (self->backend) {
+    Arcadia_Visuals_WindowBackend_setPosition(thread, self->backend, left, top);
+  }
+}
 
 void
 Arcadia_Visuals_Window_getPosition
@@ -247,7 +285,10 @@ Arcadia_Visuals_Window_getPosition
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top
   )
-{ self->getPosition(thread, self, left, top); }
+{
+  *left = self->bounds.left;
+  *top = self->bounds.top;
+}
 
 void
 Arcadia_Visuals_Window_setSize
@@ -257,7 +298,13 @@ Arcadia_Visuals_Window_setSize
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
   )
-{ self->setSize(thread, self, width, height); }
+{
+  self->bounds.width = width;
+  self->bounds.height = height;
+  if (self->backend) {
+    Arcadia_Visuals_WindowBackend_setSize(thread, self->backend, width, height);
+  }
+}
 
 void
 Arcadia_Visuals_Window_getSize
@@ -267,7 +314,10 @@ Arcadia_Visuals_Window_getSize
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ self->getSize(thread, self, width, height); }
+{
+  *width = self->bounds.width;
+  *height = self->bounds.height;
+}
 
 Arcadia_BooleanValue
 Arcadia_Visuals_Window_getFullscreen
@@ -275,7 +325,9 @@ Arcadia_Visuals_Window_getFullscreen
     Arcadia_Thread* thread,
     Arcadia_Visuals_Window* self
   )
-{ return self->getFullscreen(thread, self); }
+{
+  return self->fullscreen;
+}
 
 void
 Arcadia_Visuals_Window_setFullscreen
@@ -284,4 +336,20 @@ Arcadia_Visuals_Window_setFullscreen
     Arcadia_Visuals_Window* self,
     Arcadia_BooleanValue fullscreen
   )
-{ self->setFullscreen(thread, self, fullscreen); }
+{
+  self->fullscreen = fullscreen;
+  if (self->backend) {
+    Arcadia_Visuals_WindowBackend_setFullscreen(thread, self->backend, fullscreen);
+  }
+}
+
+Arcadia_Visuals_Window*
+Arcadia_Visuals_Window_create
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Window);
+}

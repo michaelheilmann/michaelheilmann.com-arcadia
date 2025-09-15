@@ -17,7 +17,7 @@
 #define ARCADIA_TEMPLATEENGINE_LIBRARYH_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
-#include "Tools/TemplateEngine/Context.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Context.h"
 
 void
 Arcadia_TemplateEngine_registerTimeLibrary

@@ -15,7 +15,7 @@
 
 #include "Arcadia/Visuals/Implementation/Linux/DisplayMode.h"
 
-#include "Arcadia/Visuals/Implementation/Linux/System.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
 #include "Arcadia/Visuals/Implementation/Linux/DisplayDevice.h"
 
 static void
@@ -96,20 +96,19 @@ Arcadia_Visuals_Linux_DisplayMode_constructImpl
   Arcadia_Visuals_Linux_DisplayMode* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Linux_DisplayMode_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
-  if (5 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 5 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->device = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _Arcadia_Visuals_Linux_DisplayDevice_getType(thread));
-  _self->horizontalResolution = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[1]);
-  _self->verticalResolution = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[2]);
-  _self->colorDepth = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[3]);
-  _self->frequency = Arcadia_ArgumentsValidation_getInteger32Value(thread, &argumentValues[4]);
+
+  _self->device = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 5, _Arcadia_Visuals_Linux_DisplayDevice_getType(thread));
+  _self->horizontalResolution = Arcadia_ValueStack_getInteger32Value(thread, 4);
+  _self->verticalResolution = Arcadia_ValueStack_getInteger32Value(thread, 3);
+  _self->colorDepth = Arcadia_ValueStack_getInteger32Value(thread, 2);
+  _self->frequency = Arcadia_ValueStack_getInteger32Value(thread, 1);
 
   ((Arcadia_Visuals_DisplayMode*)_self)->getHorizontalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*,Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Linux_DisplayMode_getHorizontalResolutionImpl;
   ((Arcadia_Visuals_DisplayMode*)_self)->getVerticalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) &Arcadia_Visuals_Linux_DisplayMode_getVerticalResolutionImpl;
@@ -118,6 +117,7 @@ Arcadia_Visuals_Linux_DisplayMode_constructImpl
   ((Arcadia_Visuals_DisplayMode*)_self)->apply = (void(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Linux_DisplayMode_applyImpl;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_ValueStack_popValues(thread, 5 + 1);
 }
 
 static void
@@ -277,13 +277,16 @@ Arcadia_Visuals_Linux_DisplayMode_create
     Arcadia_Integer32Value frequency
   )
 {
-  Arcadia_Value argumentValues[] = {
-    device ? Arcadia_Value_makeObjectReferenceValue(device) : Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    Arcadia_Value_makeInteger32Value(horizontalResolution),
-    Arcadia_Value_makeInteger32Value(verticalResolution),
-    Arcadia_Value_makeInteger32Value(colorDepth),
-    Arcadia_Value_makeInteger32Value(frequency),
-  };
-  Arcadia_Visuals_Linux_DisplayMode* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Linux_DisplayMode_getType(thread), 5, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (device) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, device);
+  } else {
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  }
+  Arcadia_ValueStack_pushInteger32Value(thread, horizontalResolution),
+  Arcadia_ValueStack_pushInteger32Value(thread, verticalResolution),
+  Arcadia_ValueStack_pushInteger32Value(thread, colorDepth),
+  Arcadia_ValueStack_pushInteger32Value(thread, frequency),
+  Arcadia_ValueStack_pushNatural8Value(thread, 5);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Linux_DisplayMode);
 }

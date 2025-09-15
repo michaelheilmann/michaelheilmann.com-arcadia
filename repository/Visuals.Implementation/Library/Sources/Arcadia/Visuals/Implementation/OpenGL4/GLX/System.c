@@ -13,12 +13,12 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/Visuals/Implementation/Linux/System.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
 
 #include "Arcadia/Visuals/Implementation/Linux/DisplayDevice.h"
-#include "Arcadia/Visuals/Implementation/Linux/GlxDeviceInfo.h"
 #include "Arcadia/Visuals/Implementation/Linux/Icon.h"
-#include "Arcadia/Visuals/Implementation/Linux/Window.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/GlxDeviceInfo.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/WindowBackend.h"
 
 #include <string.h>
 
@@ -40,7 +40,7 @@
   #include "Arcadia/Visuals/Vulkan/Backend.h"
 #endif
 
-static Arcadia_Visuals_Linux_System* g_instance = NULL;
+static Arcadia_Visuals_Implementation_OpenGL4_GLX_System* g_instance = NULL;
 
 static int
 errorHandler
@@ -50,98 +50,93 @@ errorHandler
   );
 
 static Arcadia_Visuals_Linux_Icon*
-Arcadia_Visuals_Linux_System_createIconImpl
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height,
-    Arcadia_Natural8Value red,
-    Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue,
-    Arcadia_Natural8Value alpha
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   );
 
-static Arcadia_Visuals_Linux_Window*
-Arcadia_Visuals_Linux_System_createWindowImpl
+static Arcadia_Visuals_Window*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createWindowImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   );
 
 static Arcadia_Visuals_Linux_DisplayDevice*
 getDisplayDevice
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     RROutput outputId,
     RRMode modeId
   );
 
 static Arcadia_List*
-Arcadia_Visuals_Linux_System_getDisplayDevicesImpl
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getDisplayDevicesImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   );
 
 static void
-Arcadia_Visuals_Linux_System_mapKeyboardKey
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_mapKeyboardKey
   (
     Arcadia_Thread* thread,
     XKeyEvent* source,
     Arcadia_Visuals_KeyboardKey* target
   );
 
-static Arcadia_Visuals_Linux_Window*
-Arcadia_Visuals_Linux_System_findWindow
+static Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     Window x11window
   );
 
 static void
-Arcadia_Visuals_Linux_System_onKeyPressEvent
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onKeyPressEvent
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     XKeyEvent* x11event
   );
 
 static void
-Arcadia_Visuals_Linux_System_onKeyReleaseEvent
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onKeyReleaseEvent
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     XKeyEvent* event
   );
 
 static void
-Arcadia_Visuals_Linux_System_onConfigureNotifyEvent
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onConfigureNotifyEvent
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     XConfigureEvent* event
   );
   
 static void
-Arcadia_Visuals_Linux_System_onDeleteWindowEvent
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onDeleteWindowEvent
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     XClientMessageEvent* event
   );
 
 static void
-Arcadia_Visuals_Linux_System_updateImpl
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_updateImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   );
 
 static void
-Arcadia_Visuals_Linux_System_constructImpl
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -150,23 +145,23 @@ Arcadia_Visuals_Linux_System_constructImpl
   );
 
 static void
-Arcadia_Visuals_Linux_System_destruct
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   );
 
 static void
-Arcadia_Visuals_Linux_System_visit
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Linux_System_constructImpl,
-  .destruct = &Arcadia_Visuals_Linux_System_destruct,
-  .visit = &Arcadia_Visuals_Linux_System_visit,
+  .construct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_System_constructImpl,
+  .destruct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_System_destruct,
+  .visit = &Arcadia_Visuals_Implementation_OpenGL4_GLX_System_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -189,42 +184,40 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Linux.Application", Arcadia_Visuals_Linux_System,
-                         u8"Arcadia.Visuals.Application", Arcadia_Visuals_System,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.System", Arcadia_Visuals_Implementation_OpenGL4_GLX_System,
+                         u8"Arcadia.Visuals.System", Arcadia_Visuals_System,
                          &_typeOperations);
 
 static Arcadia_Visuals_Linux_Icon*
-Arcadia_Visuals_Linux_System_createIconImpl
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createIconImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height,
-    Arcadia_Natural8Value red,
-    Arcadia_Natural8Value green,
-    Arcadia_Natural8Value blue,
-    Arcadia_Natural8Value alpha
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   )
 {
-  Arcadia_Visuals_Linux_Icon* icon = Arcadia_Visuals_Linux_Icon_create(thread, width, height, 47, 47, 47, 255);
+  Arcadia_Visuals_Linux_Icon* icon = Arcadia_Visuals_Linux_Icon_create(thread, pixelBuffer);
   return icon;
 }
 
-static Arcadia_Visuals_Linux_Window*
-Arcadia_Visuals_Linux_System_createWindowImpl
+static Arcadia_Visuals_Window*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createWindowImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   )
 {
-  Arcadia_Visuals_Linux_Window* window = Arcadia_Visuals_Linux_Window_create(thread, self);
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create(thread, self);
+  Arcadia_Visuals_Window* window = Arcadia_Visuals_Window_create(thread);
   Arcadia_WeakReference* windowWeakReference =
     Arcadia_WeakReference_create
       (
         thread,
-        Arcadia_Value_makeObjectReferenceValue(window)
+        Arcadia_Value_makeObjectReferenceValue(windowBackend)
       );
   Arcadia_List_insertBackObjectReferenceValue(thread, ((Arcadia_Visuals_System*)self)->windows, (Arcadia_Object*)windowWeakReference);
+  window->backend = windowBackend;
+  windowBackend->window = window;
   return window;
 }
 
@@ -232,7 +225,7 @@ static Arcadia_Visuals_Linux_DisplayDevice*
 getDisplayDevice
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     RROutput outputId,
     RRMode modeId
   )
@@ -297,10 +290,10 @@ getDisplayDevice
 }
 
 static Arcadia_List*
-Arcadia_Visuals_Linux_System_getDisplayDevicesImpl
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getDisplayDevicesImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   )
 {
   Arcadia_List* displayDevices = (Arcadia_List*)Arcadia_ArrayList_create(thread);
@@ -361,7 +354,7 @@ Arcadia_Visuals_Linux_System_getDisplayDevicesImpl
 }
 
 static void
-Arcadia_Visuals_Linux_System_mapKeyboardKey
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_mapKeyboardKey
   (
     Arcadia_Thread* thread,
     XKeyEvent* source,
@@ -508,11 +501,11 @@ Arcadia_Visuals_Linux_System_mapKeyboardKey
   #undef Define
 }
 
-static Arcadia_Visuals_Linux_Window*
-Arcadia_Visuals_Linux_System_findWindow
+static Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     Window x11window
   )
 {
@@ -520,7 +513,7 @@ Arcadia_Visuals_Linux_System_findWindow
     Arcadia_WeakReference* weakReference = (Arcadia_WeakReference*)Arcadia_List_getObjectReferenceValueAt(thread, ((Arcadia_Visuals_System*)self)->windows, i);
     Arcadia_Value value = Arcadia_WeakReference_getValue(thread, weakReference);
     if (Arcadia_Value_isObjectReferenceValue(&value)) {
-      Arcadia_Visuals_Linux_Window* window = (Arcadia_Visuals_Linux_Window*)Arcadia_Value_getObjectReferenceValue(&value);
+      Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* window = (Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend*)Arcadia_Value_getObjectReferenceValue(&value);
       if (window->window == x11window) {
         return window;
       }
@@ -530,22 +523,22 @@ Arcadia_Visuals_Linux_System_findWindow
 }
 
 static void
-Arcadia_Visuals_Linux_System_onKeyPressEvent
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onKeyPressEvent
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     XKeyEvent* x11event
   )
 {  
-  Arcadia_Visuals_Linux_Window* window = Arcadia_Visuals_Linux_System_findWindow(thread, self, x11event->window);
-  if (!window) {
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
+  if (!windowBackend) {
     return;
   }
   Arcadia_Visuals_KeyboardKey keyboardKey; 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Visuals_Linux_System_mapKeyboardKey(thread, x11event, &keyboardKey);
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System_mapKeyboardKey(thread, x11event, &keyboardKey);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -564,14 +557,18 @@ Arcadia_Visuals_Linux_System_onKeyPressEvent
 }
 
 static void
-Arcadia_Visuals_Linux_System_onKeyReleaseEvent
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onKeyReleaseEvent
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     XKeyEvent* x11event
   )
 {
-  Arcadia_Visuals_Linux_Window* window = Arcadia_Visuals_Linux_System_findWindow(thread, self, x11event->window);
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
+  if (!windowBackend) {
+    return;
+  }
+  Arcadia_Visuals_Window* window = windowBackend->window;
   if (!window) {
     return;
   }
@@ -579,7 +576,7 @@ Arcadia_Visuals_Linux_System_onKeyReleaseEvent
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Visuals_Linux_System_mapKeyboardKey(thread, x11event, &keyboardKey);
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System_mapKeyboardKey(thread, x11event, &keyboardKey);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -598,14 +595,18 @@ Arcadia_Visuals_Linux_System_onKeyReleaseEvent
 }
 
 static void
-Arcadia_Visuals_Linux_System_onConfigureNotifyEvent
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onConfigureNotifyEvent
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     XConfigureEvent* x11event
   )
 {
-  Arcadia_Visuals_Linux_Window* window = Arcadia_Visuals_Linux_System_findWindow(thread, self, x11event->window);
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
+  if (!windowBackend) {
+    return;
+  }
+  Arcadia_Visuals_Window* window = windowBackend->window;
   if (!window) {
     return;
   }
@@ -615,16 +616,16 @@ Arcadia_Visuals_Linux_System_onConfigureNotifyEvent
   int height = x11event->height + x11event->border_width * 2;
   bool positionChanged = false,
        sizeChanged = false;
-  if (((Arcadia_Visuals_Window*)window)->bounds.left != left ||
-      ((Arcadia_Visuals_Window*)window)->bounds.top != top) {
-    ((Arcadia_Visuals_Window*)window)->bounds.left = left;
-    ((Arcadia_Visuals_Window*)window)->bounds.top = top;
+  if (((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.left != left ||
+      ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.top != top) {
+    ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.left = left;
+    ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.top = top;
     positionChanged = true;
   }
-  if (((Arcadia_Visuals_Window*)window)->bounds.width != width ||
-      ((Arcadia_Visuals_Window*)window)->bounds.height != height) {
-    ((Arcadia_Visuals_Window*)window)->bounds.width = width;
-    ((Arcadia_Visuals_Window*)window)->bounds.height = height;
+  if (((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.width != width ||
+      ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.height != height) {
+    ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.width = width;
+    ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.height = height;
     sizeChanged = true;
   }
   if (positionChanged) {
@@ -634,7 +635,7 @@ Arcadia_Visuals_Linux_System_onConfigureNotifyEvent
         (
           thread,
           Arcadia_getTickCount(thread),
-          (Arcadia_Visuals_Window*)window,
+          window,
           left,
           top
         );
@@ -647,7 +648,7 @@ Arcadia_Visuals_Linux_System_onConfigureNotifyEvent
         (
           thread,
           Arcadia_getTickCount(thread),
-          (Arcadia_Visuals_Window*)window,
+          window,
           width,
           height
         );
@@ -656,14 +657,18 @@ Arcadia_Visuals_Linux_System_onConfigureNotifyEvent
 }
 
 static void
-Arcadia_Visuals_Linux_System_onDeleteWindowEvent
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onDeleteWindowEvent
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self,
     XClientMessageEvent* x11event
   )
 {
-  Arcadia_Visuals_Linux_Window* window = Arcadia_Visuals_Linux_System_findWindow(thread, self, x11event->window);
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
+  if (!windowBackend) {
+    return;
+  }
+  Arcadia_Visuals_Window* window = windowBackend->window;
   if (!window) {
     return;
   }
@@ -673,16 +678,16 @@ Arcadia_Visuals_Linux_System_onDeleteWindowEvent
       (
         thread,
         Arcadia_getTickCount(thread),
-        (Arcadia_Visuals_Window*)window
+        window
       );
   Arcadia_Engine_enqueEvent(thread, Arcadia_Engine_getOrCreate(thread), event);
 }
 
 static void
-Arcadia_Visuals_Linux_System_updateImpl
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_updateImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   )
 {
   XEvent event;
@@ -693,7 +698,7 @@ Arcadia_Visuals_Linux_System_updateImpl
         Arcadia_JumpTarget jumpTarget;
         Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
         if (Arcadia_JumpTarget_save(&jumpTarget)) {
-          Arcadia_Visuals_Linux_System_onConfigureNotifyEvent(thread, self, &event.xconfigure);
+          Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onConfigureNotifyEvent(thread, self, &event.xconfigure);
           Arcadia_Thread_popJumpTarget(thread);
         } else {
           Arcadia_Thread_popJumpTarget(thread);
@@ -703,7 +708,7 @@ Arcadia_Visuals_Linux_System_updateImpl
         Arcadia_JumpTarget jumpTarget;
         Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
         if (Arcadia_JumpTarget_save(&jumpTarget)) {
-          Arcadia_Visuals_Linux_System_onKeyPressEvent(thread, self, &event.xkey);
+          Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onKeyPressEvent(thread, self, &event.xkey);
           Arcadia_Thread_popJumpTarget(thread);
         } else {
           Arcadia_Thread_popJumpTarget(thread);
@@ -713,7 +718,7 @@ Arcadia_Visuals_Linux_System_updateImpl
         Arcadia_JumpTarget jumpTarget;
         Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
         if (Arcadia_JumpTarget_save(&jumpTarget)) {
-          Arcadia_Visuals_Linux_System_onKeyReleaseEvent(thread, self, &event.xkey);
+          Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onKeyReleaseEvent(thread, self, &event.xkey);
           Arcadia_Thread_popJumpTarget(thread);
         } else {
           Arcadia_Thread_popJumpTarget(thread);
@@ -721,7 +726,7 @@ Arcadia_Visuals_Linux_System_updateImpl
       } break;
       case ClientMessage: {
         if ((Atom)event.xclient.data.l[0] == self->WM_DELETE_WINDOW) {
-          Arcadia_Visuals_Linux_System_onDeleteWindowEvent(thread, self, &event.xclient);
+          Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onDeleteWindowEvent(thread, self, &event.xclient);
         }
       } break;
     };
@@ -729,7 +734,7 @@ Arcadia_Visuals_Linux_System_updateImpl
 }
 
 static void
-Arcadia_Visuals_Linux_System_constructImpl
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Value* self,
@@ -737,15 +742,13 @@ Arcadia_Visuals_Linux_System_constructImpl
     Arcadia_Value* argumentValues
   )
 {
-  Arcadia_Visuals_Linux_System* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Linux_System_getType(thread);
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_System* _self = Arcadia_Value_getObjectReferenceValue(self);
+  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getType(thread);
   {
-    Arcadia_Value argumentValues[] = {
-      Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-    };
-    Arcadia_superTypeConstructor(thread, _type, self, 0, &argumentValues[0]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor2(thread, _type, self);
   }
-  if (0 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -838,18 +841,19 @@ Arcadia_Visuals_Linux_System_constructImpl
     _self->display = NULL;
     Arcadia_Thread_jump(thread);
   }
-  ((Arcadia_Visuals_System*)_self)->createIcon = (Arcadia_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Visuals_System*, Arcadia_Integer32Value, Arcadia_Integer32Value, Arcadia_Natural8Value, Arcadia_Natural8Value, Arcadia_Natural8Value, Arcadia_Natural8Value))&Arcadia_Visuals_Linux_System_createIconImpl;
-  ((Arcadia_Visuals_System*)_self)->createWindow = (Arcadia_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Visuals_System*))&Arcadia_Visuals_Linux_System_createWindowImpl;
-  ((Arcadia_Visuals_System*)_self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Linux_System_getDisplayDevicesImpl;
-  ((Arcadia_Visuals_System*)_self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_System*)) &Arcadia_Visuals_Linux_System_updateImpl;
+  ((Arcadia_Visuals_System*)_self)->createIcon = (Arcadia_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Visuals_System*, Arcadia_Imaging_PixelBuffer*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createIconImpl;
+  ((Arcadia_Visuals_System*)_self)->createWindow = (Arcadia_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Visuals_System*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createWindowImpl;
+  ((Arcadia_Visuals_System*)_self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getDisplayDevicesImpl;
+  ((Arcadia_Visuals_System*)_self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_System*)) &Arcadia_Visuals_Implementation_OpenGL4_GLX_System_updateImpl;
   Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 static void
-Arcadia_Visuals_Linux_System_destruct
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   )
 {
   self->_MOTIF_WM_HINTS = 0;
@@ -863,24 +867,22 @@ Arcadia_Visuals_Linux_System_destruct
 }
 
 static void
-Arcadia_Visuals_Linux_System_visit
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_System* self
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   )
 { }
 
-Arcadia_Visuals_Linux_System*
-Arcadia_Visuals_Linux_System_create
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_create
   (
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Value argumentValues[] = {
-    Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-  };
-  Arcadia_Visuals_Linux_System* self = Arcadia_allocateObject(thread, _Arcadia_Visuals_Linux_System_getType(thread), 0, &argumentValues[0]);
-  return self;
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_GLX_System);
 }
 
 static void
@@ -893,14 +895,14 @@ destroyCallback
   g_instance = NULL;
 }
 
-Arcadia_Visuals_Linux_System*
-Arcadia_Visuals_Linux_System_getOrCreate
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System*
+Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getOrCreate
   (
     Arcadia_Thread* thread
   )
 {
   if (!g_instance) {
-    Arcadia_Visuals_Linux_System* instance = Arcadia_Visuals_Linux_System_create(thread);
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* instance = Arcadia_Visuals_Implementation_OpenGL4_GLX_System_create(thread);
     Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &destroyCallback);
     g_instance = instance;
   }

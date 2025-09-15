@@ -21,13 +21,13 @@ if (NOT TARGET ${MyExecutableName})
 
   BeginProduct(${MyExecutableName} executable)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/TemplateEngine/Configure.h @ONLY)
-  list(APPEND ${MyExecutableName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Configure.h.i)
-  list(APPEND ${MyExecutableName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/TemplateEngine/Configure.h)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h @ONLY)
+  list(APPEND ${MyExecutableName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
+  list(APPEND ${MyExecutableName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h)
 
-  list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/TemplateEngine/Main.c)
+  list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Main.c)
 
-  list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngineLibrary)
+  list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library)
 
   EndProduct(${MyExecutableName})
 
