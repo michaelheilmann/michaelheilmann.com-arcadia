@@ -19,9 +19,10 @@
 #include "Arcadia/MIL/Frontend/TokenType.h"
 
 /// @code
-/// class Arcadia.MILScanner
+/// class Arcadia.MIL.Scanner
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.MIL.Scanner", Arcadia_MIL_Scanner, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.MIL.Scanner", Arcadia_MIL_Scanner,
+                          u8"Arcadia.Object");
 
 /// @brief Create a MIL scanner.
 /// @return A pointer to this MIL scanner.

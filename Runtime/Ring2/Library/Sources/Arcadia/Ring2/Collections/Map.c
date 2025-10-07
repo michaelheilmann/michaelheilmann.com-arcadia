@@ -22,13 +22,11 @@ static void
 Arcadia_Map_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Map* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Map_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Map_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -46,27 +44,24 @@ static void
 Arcadia_Map_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Map* self
   )
 {
-  Arcadia_Map* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Map_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->get = NULL;
-  _self->remove = NULL;
-  _self->set = NULL;
-  _self->getKeys = NULL;
-  _self->getValues = NULL;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->get = NULL;
+  self->remove = NULL;
+  self->set = NULL;
+  self->getKeys = NULL;
+  self->getValues = NULL;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

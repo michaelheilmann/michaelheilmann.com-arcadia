@@ -27,9 +27,7 @@ static void
 Arcadia_Imaging_ImageWriterParameters_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Imaging_ImageWriterParameters* self
   );
 
 static void
@@ -47,7 +45,7 @@ Arcadia_Imaging_ImageWriterParameters_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Imaging_ImageWriterParameters_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_constructImpl,
   .destruct = &Arcadia_Imaging_ImageWriterParameters_destruct,
   .visit = &Arcadia_Imaging_ImageWriterParameters_visit,
 };
@@ -64,16 +62,13 @@ static void
 Arcadia_Imaging_ImageWriterParameters_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Imaging_ImageWriterParameters* self
   )
 {
-  Arcadia_Imaging_ImageWriterParameters* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Imaging_ImageWriterParameters_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -81,15 +76,15 @@ Arcadia_Imaging_ImageWriterParameters_constructImpl
   }
   Arcadia_Object* object = Arcadia_ValueStack_getObjectReferenceValue(thread, 2);
   if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_String_getType(thread))) {
-    _self->object = (Arcadia_ObjectReferenceValue)object;
+    self->object = (Arcadia_ObjectReferenceValue)object;
   } else if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_ByteBuffer_getType(thread))) {
-    _self->object = (Arcadia_ObjectReferenceValue)object;
+    self->object = (Arcadia_ObjectReferenceValue)object;
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->format = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->format = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 

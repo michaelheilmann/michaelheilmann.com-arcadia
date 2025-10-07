@@ -22,9 +22,7 @@ static void
 Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Tree_MapEntryNode* self
   );
 
 static void
@@ -35,7 +33,7 @@ Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_visit
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_objectTypeOperations = {
-  .construct = &Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_visit,
 };
@@ -53,25 +51,22 @@ static void
 Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Tree_MapEntryNode* self
   )
 {
-  Arcadia_DataDefinitionLanguage_Tree_MapEntryNode* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_getType(thread);
   {
     Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DataDefinitionLanguage_Tree_NodeType_MapEntry);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->key = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_DataDefinitionLanguage_Tree_NameNode_getType(thread));
-  _self->value = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_DataDefinitionLanguage_Tree_Node_getType(thread));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->key = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_DataDefinitionLanguage_Tree_NameNode_getType(thread));
+  self->value = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_DataDefinitionLanguage_Tree_Node_getType(thread));
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 

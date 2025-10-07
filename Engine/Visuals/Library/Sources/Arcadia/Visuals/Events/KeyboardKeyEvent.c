@@ -20,13 +20,11 @@ static void
 Arcadia_Visuals_KeyboardKeyEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_KeyboardKeyEvent* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_KeyboardKeyEvent_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Visuals_KeyboardKeyEvent_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -44,12 +42,9 @@ static void
 Arcadia_Visuals_KeyboardKeyEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_KeyboardKeyEvent* self
   )
 {
-  Arcadia_Visuals_KeyboardKeyEvent* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_KeyboardKeyEvent_getType(thread);
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -64,13 +59,13 @@ Arcadia_Visuals_KeyboardKeyEvent_constructImpl
   {
     Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 2));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  _self->action = Arcadia_ValueStack_getInteger32Value(thread, 1);
-  _self->key = Arcadia_ValueStack_getInteger32Value(thread, 0);
+  self->action = Arcadia_ValueStack_getInteger32Value(thread, 1);
+  self->key = Arcadia_ValueStack_getInteger32Value(thread, 0);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
 }
 

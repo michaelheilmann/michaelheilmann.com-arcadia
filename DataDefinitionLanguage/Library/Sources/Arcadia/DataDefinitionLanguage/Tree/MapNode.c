@@ -20,9 +20,7 @@ static void
 Arcadia_DataDefinitionLanguage_Tree_MapNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Tree_MapNode* self
   );
 
 static void
@@ -33,7 +31,7 @@ Arcadia_DataDefinitionLanguage_Tree_MapNode_visit
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_DataDefinitionLanguage_Tree_MapNode_objectTypeOperations = {
-  .construct = &Arcadia_DataDefinitionLanguage_Tree_MapNode_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Tree_MapNode_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_DataDefinitionLanguage_Tree_MapNode_visit,
 };
@@ -51,24 +49,21 @@ static void
 Arcadia_DataDefinitionLanguage_Tree_MapNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Tree_MapNode* self
   )
 {
-  Arcadia_DataDefinitionLanguage_Tree_MapNode* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Tree_MapNode_getType(thread);
   {
     Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DataDefinitionLanguage_Tree_NodeType_Map);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->entries = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->entries = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

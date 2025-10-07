@@ -17,6 +17,7 @@
 #define ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Types.h"
+#include "Arcadia/Arms/Include.h"
 typedef struct Arcadia_Value Arcadia_Value;
 
 typedef struct Arcadia_Object Arcadia_Object;
@@ -30,10 +31,11 @@ struct Arcadia_Object {
   int dummy;
 };
 
-#define Arcadia_superTypeConstructor2(_thread, _type, _self) \
+#define Arcadia_Configuration_withBarriers (Arcadia_Arms_Configuration_WithBarriers)
+
+#define Arcadia_superTypeConstructor(_thread, _type, _self) \
   { \
-    Arcadia_Value dummy = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void); \
-    Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(thread, _type))->objectTypeOperations->construct(_thread, _self, 0, &dummy); \
+    Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(thread, _type))->objectTypeOperations->construct(_thread, (Arcadia_Object*)_self); \
   }
 
 /// R(untime) ex(tension) macro.
@@ -136,6 +138,34 @@ Arcadia_Object_removeNotifyDestroyCallback
     void* observer,
     void (*callback)(void* observer, Arcadia_Object*)
   );
+
+#if Arcadia_Configuration_withBarriers
+
+/// @brief A "forward" barrier.
+/// If both @a source and @a target are not null,
+/// and if @a source is black and if @a target is white,
+/// then @a target becomes gray.
+void
+Arcadia_Object_forwardBarrier
+  (
+    Arcadia_Thread * thread,
+    Arcadia_Object * source,
+    Arcadia_Object * target
+  );
+
+/// @brief A "backward" barrier.
+/// If both @a source and @a target are not null,
+/// and if @a source is black and if @a target is white,
+/// then @a source becomes gray.
+void
+Arcadia_Object_backwardBarrier
+  (
+    Arcadia_Thread * thread,
+    Arcadia_Object* source,
+    Arcadia_Object* target
+  );
+
+#endif
 
 /// @brief Increment the lock count of the object.
 /// @param self A pointer to the object.

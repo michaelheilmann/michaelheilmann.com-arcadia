@@ -39,7 +39,7 @@
 
 #define Define(Type, Suffix) \
   static inline Type##Value \
-  R_clamp##Suffix##Value \
+  Arcadia_clamp##Suffix##Value \
     ( \
       Arcadia_Thread* thread, \
       Type##Value value, \

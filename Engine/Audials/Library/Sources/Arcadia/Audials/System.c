@@ -19,9 +19,7 @@ static void
 Arcadia_Audials_System_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Audials_System* self
   );
 
 static void
@@ -32,7 +30,7 @@ Arcadia_Audials_System_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Audials_System_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Audials_System_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_Audials_System_visitImpl,
 };
@@ -50,23 +48,21 @@ static void
 Arcadia_Audials_System_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Audials_System* self
   )
 {
-  Arcadia_Audials_System* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Audials_System_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->update = NULL;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->update = NULL;
+  self->playSine = NULL;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
@@ -85,3 +81,11 @@ Arcadia_Audials_System_update
     Arcadia_Audials_System* self
   )
 { self->update(thread, self); }
+
+void
+Arcadia_Audials_System_playSine
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_System* self
+  )
+{ self->playSine(thread, self); }

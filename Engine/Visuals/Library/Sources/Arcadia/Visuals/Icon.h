@@ -23,7 +23,7 @@
 
 /// @code
 /// class Arcadia.Visuals.Icon {
-///   construct()
+///   constructor()
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Icon", Arcadia_Visuals_Icon,

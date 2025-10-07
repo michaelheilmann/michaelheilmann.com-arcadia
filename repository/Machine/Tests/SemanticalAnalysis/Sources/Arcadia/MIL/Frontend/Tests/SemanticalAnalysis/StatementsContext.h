@@ -59,7 +59,7 @@ Arcadia_MIL_CallableContext_onDefineLabel
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_LabelStatementAst* ast,
+    Arcadia_MIL_AST_LabelStatementNode* ast,
     Arcadia_Natural32Value instructionIndex
   );
 
@@ -71,7 +71,7 @@ Arcadia_MIL_CallableContext_onParameterVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_Ast* ast
+    Arcadia_MIL_AST_Node* ast
   );
 
 /// @param thread A pointer to this thread.

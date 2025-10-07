@@ -20,13 +20,11 @@ static void
 Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_CanvasActivationStateChangedEvent* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -44,12 +42,9 @@ static void
 Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_CanvasActivationStateChangedEvent* self
   )
 {
-  Arcadia_Visuals_CanvasActivationStateChangedEvent* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_CanvasActivationStateChangedEvent_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
@@ -60,12 +55,12 @@ Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
   {
     Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 1));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  _self->active = Arcadia_ArgumentsValidation_getBooleanValue(thread, &argumentValues[1]);
+  self->active = Arcadia_ValueStack_getBooleanValue(thread, 1);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
 }
 

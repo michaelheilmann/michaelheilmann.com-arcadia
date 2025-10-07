@@ -24,7 +24,7 @@
 
 /// @code
 /// class Arcadia.Visuals.Configuration extends Arcadia.Object {
-///   construct()
+///   constructor()
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Configuration", Arcadia_Visuals_Configuration,

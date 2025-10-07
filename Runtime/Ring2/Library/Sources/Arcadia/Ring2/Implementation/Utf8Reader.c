@@ -17,19 +17,17 @@
 #include "Arcadia/Ring2/Implementation/Utf8Reader.h"
 
 /// @code
-/// construct()
+/// constructor()
 /// @endcode
 static void
 Arcadia_Utf8Reader_constructorImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Utf8Reader* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Utf8Reader_constructorImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Utf8Reader_constructorImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -47,25 +45,22 @@ static void
 Arcadia_Utf8Reader_constructorImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Utf8Reader* self
   )
 {
-  Arcadia_Utf8Reader* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Utf8Reader_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->getCodePoint = NULL;
-  _self->hasCodePoint = NULL;
-  _self->next = NULL;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->getCodePoint = NULL;
+  self->hasCodePoint = NULL;
+  self->next = NULL;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

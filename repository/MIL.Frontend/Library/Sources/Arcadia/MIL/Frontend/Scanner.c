@@ -67,9 +67,7 @@ static void
 Arcadia_MIL_Scanner_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_MIL_Scanner* self
   );
 
 static void
@@ -138,7 +136,7 @@ isDigit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_MIL_Scanner_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_MIL_Scanner_constructImpl,
   .destruct = &Arcadia_MIL_Scanner_destruct,
   .visit = &Arcadia_MIL_Scanner_visit,
 };
@@ -156,17 +154,14 @@ static void
 Arcadia_MIL_Scanner_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_MIL_Scanner* self
   )
 {
-  Arcadia_MIL_Scanner* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_MIL_Scanner_getType(thread);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
@@ -174,28 +169,28 @@ Arcadia_MIL_Scanner_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  _self->token.type = Arcadia_MIL_TokenType_StartOfInput;
-  _self->token.text = NULL;
-  _self->stringTable = NULL;
-  _self->keywords = NULL;
-  _self->input = NULL;
-  _self->symbol = CodePoint_Start;
+  self->token.type = Arcadia_MIL_TokenType_StartOfInput;
+  self->token.text = NULL;
+  self->stringTable = NULL;
+  self->keywords = NULL;
+  self->input = NULL;
+  self->symbol = CodePoint_Start;
   //
-  _self->keywords = Arcadia_MIL_Keywords_create(thread);
+  self->keywords = Arcadia_MIL_Keywords_create(thread);
   //
-  _self->token.type = Arcadia_MIL_TokenType_StartOfInput;
-  _self->stringTable = Arcadia_MIL_StringTable_create(thread);
-  _self->input = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
-  _self->token.text = Arcadia_StringBuffer_create(thread);
+  self->token.type = Arcadia_MIL_TokenType_StartOfInput;
+  self->stringTable = Arcadia_MIL_StringTable_create(thread);
+  self->input = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
+  self->token.text = Arcadia_StringBuffer_create(thread);
   //
-  Arcadia_StringBuffer_insertBackCxxString(thread, _self->token.text, u8"<start of input>");
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<start of input>");
   //
   Arcadia_StringBuffer* temporary = Arcadia_StringBuffer_create(thread);
 #define On(text, type) \
   { \
     Arcadia_StringBuffer_clear(thread, temporary); \
     Arcadia_StringBuffer_insertBackCxxString(thread, temporary, text); \
-    Arcadia_MIL_Keywords_add(thread, _self->keywords, Arcadia_MIL_StringTable_getOrCreateString(thread, _self->stringTable, temporary), Arcadia_MIL_TokenType_##type); \
+    Arcadia_MIL_Keywords_add(thread, self->keywords, Arcadia_MIL_StringTable_getOrCreateString(thread, self->stringTable, temporary), Arcadia_MIL_TokenType_##type); \
   }
   //
   On(u8"class", Class);
@@ -237,13 +232,15 @@ Arcadia_MIL_Scanner_constructImpl
   On(u8"isGreaterThanOrEqualTo", IsGreaterThanOrEqualTo);
   // list operations
   On(u8"concatenate", Concatenate);
+  // set operations
+  On(u8"set", Set);
   // literals
   On(u8"void", VoidLiteral);
   On(u8"true", BooleanLiteral);
   On(u8"false", BooleanLiteral);
 #undef On
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
@@ -517,6 +514,31 @@ Arcadia_MIL_Scanner_step
       }
     }
     onEndToken(thread, self, Arcadia_MIL_TokenType_StringLiteral);
+    return;
+  } else if ('$' == self->symbol) {
+    // <register>
+    saveAndNext(thread, self);
+    // a <register> is one of the following:
+    // a) a '$' followed by a digit between 0 and 9
+    // b) a '$' followed by a digit between 1 and 9 folloed by one or more digits between 0 and 9
+    // c) a '$' followed by a <name>
+    if ('0' == self->symbol) {
+      saveAndNext(thread, self);
+    } else if ('1' <= self->symbol && self->symbol <= '9') {
+      saveAndNext(thread, self);
+      while (isDigit(thread, self)) {
+        saveAndNext(thread, self);
+      }
+    } else if ('_' == self->symbol || isAlphabetic(thread, self)) {
+      saveAndNext(thread, self);
+      while ('_' == self->symbol || isAlphabetic(thread, self) || isDigit(thread, self)) {
+        saveAndNext(thread, self);
+      }
+    } else {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_LexicalError);
+      Arcadia_Thread_jump(thread);
+    }
+    onEndToken(thread, self, Arcadia_MIL_TokenType_Register);
     return;
   } else if ('_' == self->symbol || isAlphabetic(thread, self)) {
     // <name>

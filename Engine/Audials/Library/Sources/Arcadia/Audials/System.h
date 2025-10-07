@@ -19,13 +19,13 @@
 #include "Arcadia/Engine/Include.h"
 
 /// @code
-/// class Arcadia.Audials.System {
+/// class Arcadia.Audials.System extends Arcadia.Engine.System {
 /// 
-///   construct
+///   constructor
 ///     (
 ///     )
 ///   
-///   update
+///   method update
 ///     (
 ///     ) : Void
 /// }
@@ -37,6 +37,7 @@ struct Arcadia_Audials_System {
   Arcadia_Engine_System _parent;
 
   void (*update)(Arcadia_Thread* thread, Arcadia_Audials_System* self);
+  void (*playSine)(Arcadia_Thread* thread, Arcadia_Audials_System* self);
 };
 
 /// @brief Update this system.
@@ -47,6 +48,14 @@ Arcadia_Audials_System_update
   (
     Arcadia_Thread* thread,
     Arcadia_Audials_System* self
+  );
+
+/// @brief Play a sine wave sound.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this system.
+void
+Arcadia_Audials_System_playSine
+  (
   );
 
 #endif // ARCADIA_AUDIALS_SYSTEM_H_INCLUDED

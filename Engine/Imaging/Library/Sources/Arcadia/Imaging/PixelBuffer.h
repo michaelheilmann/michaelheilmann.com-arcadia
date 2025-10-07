@@ -29,14 +29,20 @@
 ///                number of columns * bytesPerPixel + line padding
 /// - cell: A cell is uniquely adressed by its column index and its row index.
 ///         Each cell accomodates one pixel.
-Arcadia_declareObjectType(u8"Arcadia.Imaging.PixelBuffer", Arcadia_Imaging_PixelBuffer, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.Imaging.PixelBuffer", Arcadia_Imaging_PixelBuffer,
+                          u8"Arcadia.Object");
 
 struct Arcadia_Imaging_PixelBuffer {
   Arcadia_Object _parent;
+  /// A pointer to the Bytes of this pixel buffer.
   Arcadia_Natural8Value* bytes;
+  /// The pixel format of this pixel buffer.
   Arcadia_Natural8Value pixelFormat;
-  Arcadia_Integer32Value numberOfRows;
-  Arcadia_Integer32Value numberOfColumns;
+  /// The height, in pixels, of this pixel buffer.
+  Arcadia_Integer32Value height;
+  /// The width, in pixels, of this pixel buffer.
+  Arcadia_Integer32Value width;
+  /// The line padding of this pixel buffer.
   Arcadia_Integer32Value linePadding;
 };
 

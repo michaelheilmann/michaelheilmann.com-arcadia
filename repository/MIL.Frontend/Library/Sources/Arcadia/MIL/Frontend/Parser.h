@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_MIL_FRONTEND_PARSER_H_INCLUDED)
 #define ARCADIA_MIL_FRONTEND_PARSER_H_INCLUDED
 
-#include "Arcadia/MIL/Frontend/Asts/Include.h"
+#include "Arcadia/MIL/AST/Include.h"
 
 /// @code
 /// class Arcadia.MILParser

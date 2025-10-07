@@ -35,9 +35,7 @@ static void
 Arcadia_Imaging_ImageManager_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Imaging_ImageManager* self
   );
 
 static Arcadia_Imaging_ImageManager*
@@ -61,7 +59,7 @@ Arcadia_Imaging_ImageManager_destroyCallback
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Imaging_ImageManager_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_ImageManager_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_Imaging_ImageManager_visit,
 };
@@ -79,43 +77,40 @@ static void
 Arcadia_Imaging_ImageManager_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Imaging_ImageManager* self
   )
 {
-  Arcadia_Imaging_ImageManager* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Imaging_ImageManager_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  _self->writers = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  self->writers = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Imaging_ImageWriter* writer = NULL;
  
   writer = (Arcadia_Imaging_ImageWriter*)IcoImageWriter_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_BmpImageWriter_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
   writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_PngImageWriter_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
   writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_TifImageWriter_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Linux_PngImageWriter_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
   writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Linux_BmpImageWriter_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, _self->writers, writer);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
 #else
   #error("environment not (yet) supported")
 #endif
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

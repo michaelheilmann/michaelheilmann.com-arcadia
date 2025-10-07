@@ -19,42 +19,47 @@
 #include "Arcadia/Audials/Implementation/Configure.h"
 #include "Arcadia/Audials/Implementation/OpenAL/Backend.h"
 
-static Arcadia_Audials_OpenAL_System* g_instance = NULL;
+static Arcadia_Audials_Implementation_OpenAL_System* g_instance = NULL;
 
 static void
-Arcadia_Audials_OpenAL_System_updateImpl
+Arcadia_Audials_Implementation_OpenAL_System_updateImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_OpenAL_System* self
+    Arcadia_Audials_Implementation_OpenAL_System* self
   );
 
 static void
-Arcadia_Audials_OpenAL_System_constructImpl
+Arcadia_Audials_Implementation_OpenAL_System_playSineImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Audials_Implementation_OpenAL_System* self
   );
 
 static void
-Arcadia_Audials_OpenAL_System_destructImpl
+Arcadia_Audials_Implementation_OpenAL_System_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_OpenAL_System* self
+    Arcadia_Audials_Implementation_OpenAL_System* self
   );
 
 static void
-Arcadia_Audials_OpenAL_System_visitImpl
+Arcadia_Audials_Implementation_OpenAL_System_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_OpenAL_System* self
+    Arcadia_Audials_Implementation_OpenAL_System* self
+  );
+
+static void
+Arcadia_Audials_Implementation_OpenAL_System_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_Implementation_OpenAL_System* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Audials_OpenAL_System_constructImpl,
-  .destruct = &Arcadia_Audials_OpenAL_System_destructImpl,
-  .visit = &Arcadia_Audials_OpenAL_System_visitImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_System_constructImpl,
+  .destruct = &Arcadia_Audials_Implementation_OpenAL_System_destructImpl,
+  .visit = &Arcadia_Audials_Implementation_OpenAL_System_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -62,62 +67,205 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Audials.OpenAL.System", Arcadia_Audials_OpenAL_System,
+Arcadia_defineObjectType(u8"Arcadia.Audials.Implementation.OpenAL.System", Arcadia_Audials_Implementation_OpenAL_System,
                          u8"Arcadia.Audials.System", Arcadia_Audials_System,
                          &_typeOperations);
 
 static void
-Arcadia_Audials_OpenAL_System_updateImpl
+Arcadia_Audials_Implementation_OpenAL_System_updateImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_OpenAL_System* self
+    Arcadia_Audials_Implementation_OpenAL_System* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Audials_OpenAL_System_constructImpl
+Arcadia_Audials_Implementation_OpenAL_System_playSineImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Audials_Implementation_OpenAL_System* self
   )
 {
-  Arcadia_Audials_OpenAL_System* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Audials_OpenAL_System_getType(thread);
+  alcMakeContextCurrent(self->alcContext);
+
+  // Set the position of the listener.
+  ALfloat position[] = { 0.f, 0.f, 0.f };
+  alListenerfv(AL_POSITION, position);
+  alListenerf(AL_GAIN, 0.1f);
+  if (AL_NO_ERROR != alGetError()) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  alSourcef(self->alSourceId, AL_GAIN, 1.0f);
+  alSourcei(self->alSourceId, AL_BUFFER, self->alBufferId);
+  alSourcei(self->alSourceId, AL_LOOPING, AL_FALSE);
+  alSourcei(self->alSourceId, AL_SOURCE_RELATIVE, AL_TRUE);
+  alSourcePlay(self->alSourceId);
+  if (AL_NO_ERROR != alGetError()) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+}
+
+static void
+Arcadia_Audials_Implementation_OpenAL_System_constructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_Implementation_OpenAL_System* self
+  )
+{
+  Arcadia_TypeValue _type = _Arcadia_Audials_Implementation_OpenAL_System_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  _self->alcDevice = NULL;
-  _self->alcContext = NULL;
-  _self->alBufferId = 0;
-  _self->alSourceId = 0;
+  self->alcDevice = NULL;
+  self->alcContext = NULL;
+  self->alBufferId = 0;
+  self->alSourceId = 0;
 
-  ((Arcadia_Audials_System*)_self)->update = (void(*)(Arcadia_Thread*, Arcadia_Audials_System*)) & Arcadia_Audials_OpenAL_System_updateImpl;
+  // Select the default audio device on the system.
+  self->alcDevice = alcOpenDevice(NULL);
+  if (!self->alcDevice) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  // Create a context on the device.
+  self->alcContext = alcCreateContext(self->alcDevice, NULL);
+  if (!self->alcContext) {
+    alcCloseDevice(self->alcDevice);
+    self->alcDevice = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  alcMakeContextCurrent(self->alcContext);
+  if (alGetError()) {
+    alcCloseDevice(self->alcDevice);
+    self->alcDevice = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  alGenBuffers(1, &self->alBufferId);
+  if (alGetError()) {
+    alcMakeContextCurrent(NULL);
+    alcDestroyContext(self->alcContext);
+    self->alcContext = NULL;
+    alcCloseDevice(self->alcDevice);
+    self->alcDevice = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  alGenSources(1, &self->alSourceId);
+  if (alGetError()) {
+    alDeleteBuffers(1, &self->alBufferId);
+    self->alBufferId = 0;
+    alcDestroyContext(self->alcContext);
+    self->alcContext = NULL;
+    alcCloseDevice(self->alcDevice);
+    self->alcDevice = NULL;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+    Arcadia_Thread_jump(thread);
+  }
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  {
+    Arcadia_JumpTarget jumpTarget;
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      static const float PI = 3.14159265358979323846;
+      const int channels = 1;
+      const int frequency = 110.0f;
+      const int seconds = 6.f;
+      const int sampleRate = 44100;
+      const int numberOfSamples = channels * sampleRate * seconds;
+
+      Arcadia_ByteBuffer* sourceVoiceBuffer = Arcadia_ByteBuffer_create(thread);
+
+      const float constant = 2.f * PI * (float)frequency / (float)sampleRate;
+      if (channels == 1) {
+        for (size_t i = 0; i < numberOfSamples; ++i) {
+          int16_t sample = 32760 * sin(constant * i);
+          Arcadia_ByteBuffer_append_pn(thread, sourceVoiceBuffer, &sample, 2);
+        }
+      } else if (channels == 2) {
+        for (size_t i = 0; i < numberOfSamples; ++i) {
+          int16_t sample = 32760 * sin(constant * i);
+          Arcadia_ByteBuffer_append_pn(thread, sourceVoiceBuffer, &sample, 2);
+          Arcadia_ByteBuffer_append_pn(thread, sourceVoiceBuffer, &sample, 2);
+        }
+      }
+      if (channels == 1) {
+        alBufferData(self->alBufferId, AL_FORMAT_MONO16, Arcadia_ByteBuffer_getBytes(thread, sourceVoiceBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, sourceVoiceBuffer), sampleRate);
+      } else if (channels == 2) {
+        alBufferData(self->alBufferId, AL_FORMAT_STEREO16, Arcadia_ByteBuffer_getBytes(thread, sourceVoiceBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, sourceVoiceBuffer), sampleRate);
+      }
+      if (alGetError()) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_Thread_popJumpTarget(thread);
+    } else {
+      Arcadia_Thread_popJumpTarget(thread);
+      alDeleteSources(1, &self->alSourceId);
+      self->alSourceId = 0;
+      alDeleteBuffers(1, &self->alBufferId);
+      self->alBufferId = 0;
+      alcDestroyContext(self->alcContext);
+      self->alcContext = NULL;
+      alcCloseDevice(self->alcDevice);
+      self->alcDevice = NULL;
+      Arcadia_Thread_jump(thread);
+    }
+  }
+
+  ((Arcadia_Audials_System*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Audials_System*)) & Arcadia_Audials_Implementation_OpenAL_System_updateImpl;
+  ((Arcadia_Audials_System*)self)->playSine = (void(*)(Arcadia_Thread*, Arcadia_Audials_System*)) & Arcadia_Audials_Implementation_OpenAL_System_playSineImpl;
+
+
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
 static void
-Arcadia_Audials_OpenAL_System_destructImpl
+Arcadia_Audials_Implementation_OpenAL_System_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_OpenAL_System* self
+    Arcadia_Audials_Implementation_OpenAL_System* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->alSourceId) {
+    alSourceStop(self->alSourceId);
+    alDeleteSources(1, &self->alSourceId);
+    self->alSourceId = 0;
+  }
+  if (self->alBufferId) {
+    alDeleteBuffers(1, &self->alBufferId);
+    self->alBufferId = 0;
+  }
+  if (self->alcContext) {
+    if (alcGetCurrentContext() == self->alcContext) {
+      alcMakeContextCurrent(NULL);
+    }
+    if (self->alcContext) {
+      alcDestroyContext(self->alcContext);
+      self->alcContext = NULL;
+    }
+  }
+  if (self->alcDevice) {
+    alcCloseDevice(self->alcDevice);
+    self->alcDevice = NULL;
+  }
+}
 
 static void
-Arcadia_Audials_OpenAL_System_visitImpl
+Arcadia_Audials_Implementation_OpenAL_System_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_OpenAL_System* self
+    Arcadia_Audials_Implementation_OpenAL_System* self
   )
 {/*Intentionally empty.*/}
 
@@ -131,25 +279,25 @@ destroyCallback
   g_instance = NULL;
 }
 
-Arcadia_Audials_OpenAL_System*
-Arcadia_Audials_OpenAL_System_create
+Arcadia_Audials_Implementation_OpenAL_System*
+Arcadia_Audials_Implementation_OpenAL_System_create
   (
     Arcadia_Thread* thread
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Audials_OpenAL_System);
+  ARCADIA_CREATEOBJECT(Arcadia_Audials_Implementation_OpenAL_System);
 }
 
-Arcadia_Audials_OpenAL_System*
-Arcadia_Audials_OpenAL_System_getOrCreate
+Arcadia_Audials_Implementation_OpenAL_System*
+Arcadia_Audials_Implementation_OpenAL_System_getOrCreate
   (
     Arcadia_Thread* thread
   )
 {
   if (!g_instance) {
-    Arcadia_Audials_OpenAL_System* instance = Arcadia_Audials_OpenAL_System_create(thread);
+    Arcadia_Audials_Implementation_OpenAL_System* instance = Arcadia_Audials_Implementation_OpenAL_System_create(thread);
     Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &destroyCallback);
     g_instance = instance;
   }

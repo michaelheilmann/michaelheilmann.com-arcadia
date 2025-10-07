@@ -48,9 +48,7 @@ static void
 Arcadia_HashMap_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_HashMap* self
   );
 
 static void
@@ -132,7 +130,7 @@ Arcadia_HashMap_getKeysImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_HashMap_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_HashMap_constructImpl,
   .destruct = &Arcadia_HashMap_destruct,
   .visit = &Arcadia_HashMap_visit,
 };
@@ -257,17 +255,14 @@ static void
 Arcadia_HashMap_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_HashMap* self
   )
 {
-  Arcadia_HashMap* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_HashMap_getType(thread);
   Arcadia_HashMap_ensureInitialized(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -275,22 +270,22 @@ Arcadia_HashMap_constructImpl
   }
   Arcadia_Natural8Value nargs = Arcadia_ValueStack_getNatural8Value(thread, 0);
   if (0 == nargs) {
-    _self->buckets = NULL;
-    _self->capacity = 0;
-    _self->size = 0;
-    _self->capacity = g_minimumCapacity;
-    _self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(_Arcadia_HashMap_Node*) * _self->capacity);
-    for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
-      _self->buckets[i] = NULL;
+    self->buckets = NULL;
+    self->capacity = 0;
+    self->size = 0;
+    self->capacity = g_minimumCapacity;
+    self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(_Arcadia_HashMap_Node*) * self->capacity);
+    for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+      self->buckets[i] = NULL;
     }
   } else if (1 == nargs) {
     Arcadia_HashMap* other = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_HashMap_getType(thread));
-    _self->buckets = NULL;
-    _self->size = 0;
-    _self->capacity = other->capacity;
-    _self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(_Arcadia_HashMap_Node*) * _self->capacity);
-    for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
-      _self->buckets[i] = NULL;
+    self->buckets = NULL;
+    self->size = 0;
+    self->capacity = other->capacity;
+    self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(_Arcadia_HashMap_Node*) * self->capacity);
+    for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+      self->buckets[i] = NULL;
     }
     for (Arcadia_SizeValue i = 0, n = other->capacity; i < n; ++i) {
       for (_Arcadia_HashMap_Node* otherNode = other->buckets[i]; NULL != otherNode; otherNode = otherNode->next) {
@@ -298,23 +293,23 @@ Arcadia_HashMap_constructImpl
         selfNode->hash = otherNode->hash;
         selfNode->key = otherNode->key;
         selfNode->value = otherNode->value;
-        selfNode->next = _self->buckets[i];
-        _self->buckets[i] = selfNode;
+        selfNode->next = self->buckets[i];
+        self->buckets[i] = selfNode;
       }
     }
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  ((Arcadia_Collection*)_self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_clearImpl;
-  ((Arcadia_Collection*)_self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_getSizeImpl;
-  ((Arcadia_Collection*)_self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_isImmutableImpl;
-  ((Arcadia_Map*)_self)->get = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value)) &Arcadia_HashMap_getImpl;
-  ((Arcadia_Map*)_self)->remove = (void (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value, Arcadia_Value*, Arcadia_Value*))  &Arcadia_HashMap_removeImpl;
-  ((Arcadia_Map*)_self)->set = (void (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value, Arcadia_Value, Arcadia_Value*, Arcadia_Value*)) & Arcadia_HashMap_setImpl;
-  ((Arcadia_Map*)_self)->getKeys = (Arcadia_List *(*)(Arcadia_Thread*, Arcadia_Map*)) & Arcadia_HashMap_getKeysImpl;
-  ((Arcadia_Map*)_self)->getValues = (Arcadia_List *(*)(Arcadia_Thread*, Arcadia_Map*)) &Arcadia_HashMap_getValuesImpl;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  ((Arcadia_Collection*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_clearImpl;
+  ((Arcadia_Collection*)self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_getSizeImpl;
+  ((Arcadia_Collection*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_isImmutableImpl;
+  ((Arcadia_Map*)self)->get = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value)) &Arcadia_HashMap_getImpl;
+  ((Arcadia_Map*)self)->remove = (void (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value, Arcadia_Value*, Arcadia_Value*))  &Arcadia_HashMap_removeImpl;
+  ((Arcadia_Map*)self)->set = (void (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value, Arcadia_Value, Arcadia_Value*, Arcadia_Value*)) & Arcadia_HashMap_setImpl;
+  ((Arcadia_Map*)self)->getKeys = (Arcadia_List *(*)(Arcadia_Thread*, Arcadia_Map*)) & Arcadia_HashMap_getKeysImpl;
+  ((Arcadia_Map*)self)->getValues = (Arcadia_List *(*)(Arcadia_Thread*, Arcadia_Map*)) &Arcadia_HashMap_getValuesImpl;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, nargs + 1);
 }
 

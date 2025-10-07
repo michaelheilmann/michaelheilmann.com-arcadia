@@ -41,9 +41,7 @@ static void
 Arcadia_ArrayList_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_ArrayList* self
   );
 
 static void
@@ -124,7 +122,7 @@ Arcadia_ArrayList_removeAtImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_ArrayList_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_ArrayList_constructImpl,
   .destruct = &Arcadia_ArrayList_destruct,
   .visit = &Arcadia_ArrayList_visit,
 };
@@ -194,39 +192,36 @@ static void
 Arcadia_ArrayList_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_ArrayList* self
   )
 {
-  Arcadia_ArrayList* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_ArrayList_getType(thread);
   Arcadia_ArrayList_ensureInitialized(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->elements = NULL;
-  _self->capacity = 0;
-  _self->size = 0;
-  _self->capacity = g_minimumCapacity;
-  _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * _self->capacity);
-  for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
-    Arcadia_Value_setVoidValue(_self->elements + i, Arcadia_VoidValue_Void);
+  self->elements = NULL;
+  self->capacity = 0;
+  self->size = 0;
+  self->capacity = g_minimumCapacity;
+  self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * self->capacity);
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    Arcadia_Value_setVoidValue(self->elements + i, Arcadia_VoidValue_Void);
   }
-  ((Arcadia_Collection*)_self)->clear = (void (*)(Arcadia_Thread*,Arcadia_Collection*))&Arcadia_ArrayList_clearImpl;
-  ((Arcadia_Collection*)_self)->getSize = (Arcadia_SizeValue (*)(Arcadia_Thread*,Arcadia_Collection*))&Arcadia_ArrayList_getSizeImpl;
-  ((Arcadia_Collection*)_self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ArrayList_isImmutableImpl;
-  ((Arcadia_List*)_self)->getAt = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue))&Arcadia_ArrayList_getAtImpl;
-  ((Arcadia_List*)_self)->insertAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_Value)) & Arcadia_ArrayList_insertAtImpl;
-  ((Arcadia_List*)_self)->insertBack = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value))  &Arcadia_ArrayList_insertBackImpl;
-  ((Arcadia_List*)_self)->insertFront = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value))  &Arcadia_ArrayList_insertFrontImpl;
-  ((Arcadia_List*)_self)->removeAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_SizeValue)) & Arcadia_ArrayList_removeAtImpl;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  ((Arcadia_Collection*)self)->clear = (void (*)(Arcadia_Thread*,Arcadia_Collection*))&Arcadia_ArrayList_clearImpl;
+  ((Arcadia_Collection*)self)->getSize = (Arcadia_SizeValue (*)(Arcadia_Thread*,Arcadia_Collection*))&Arcadia_ArrayList_getSizeImpl;
+  ((Arcadia_Collection*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ArrayList_isImmutableImpl;
+  ((Arcadia_List*)self)->getAt = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue))&Arcadia_ArrayList_getAtImpl;
+  ((Arcadia_List*)self)->insertAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_Value)) & Arcadia_ArrayList_insertAtImpl;
+  ((Arcadia_List*)self)->insertBack = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value))  &Arcadia_ArrayList_insertBackImpl;
+  ((Arcadia_List*)self)->insertFront = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value))  &Arcadia_ArrayList_insertFrontImpl;
+  ((Arcadia_List*)self)->removeAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_SizeValue)) & Arcadia_ArrayList_removeAtImpl;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

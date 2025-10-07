@@ -102,9 +102,7 @@ static void
 Arcadia_ArrayDeque_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_ArrayDeque* self
   );
 
 static void
@@ -212,7 +210,7 @@ Arcadia_ArrayDeque_removeAtImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_ArrayDeque_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_ArrayDeque_constructImpl,
   .destruct = &Arcadia_ArrayDeque_destruct,
   .visit = &Arcadia_ArrayDeque_visit,
 };
@@ -290,17 +288,14 @@ static void
 Arcadia_ArrayDeque_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_ArrayDeque* self
   )
 {
-  Arcadia_ArrayDeque* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_ArrayDeque_getType(thread);
   Arcadia_ArrayDeque_ensureInitialized(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -310,36 +305,36 @@ Arcadia_ArrayDeque_constructImpl
   if (1 == nargs) {
     Arcadia_Deque* other = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Deque_getType(thread));
     Arcadia_SizeValue size = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)other);
-    _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * size);
+    self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * size);
     for (Arcadia_SizeValue i = 0; i < size; ++i) {
-      _self->elements[i] = Arcadia_Deque_getAt(thread, other, i);
+      self->elements[i] = Arcadia_Deque_getAt(thread, other, i);
     }
-    _self->read = 0;
-    _self->size = size;
-    _self->capacity = size;
+    self->read = 0;
+    self->size = size;
+    self->capacity = size;
   } else if (0 == nargs) {
-    _self->elements = NULL;
-    _self->read = 0;
-    _self->size = 0;
-    _self->capacity = g_minimumCapacity;
-    _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * _self->capacity);
+    self->elements = NULL;
+    self->read = 0;
+    self->size = 0;
+    self->capacity = g_minimumCapacity;
+    self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * self->capacity);
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  ((Arcadia_Collection*)_self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*))&Arcadia_ArrayDeque_clearImpl;
-  ((Arcadia_Collection*)_self)->getSize = (Arcadia_SizeValue (*)(Arcadia_Thread*, Arcadia_Collection*))&Arcadia_ArrayDeque_getSizeImpl;
-  ((Arcadia_Collection*)_self)->isImmutable = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_Collection*))&Arcadia_ArrayDeque_isImmutableImpl;
-  ((Arcadia_Deque*)_self)->getAt = (Arcadia_Value(*)(Arcadia_Thread*,Arcadia_Deque*,Arcadia_SizeValue)) & Arcadia_ArrayDeque_getAtImpl;
-  ((Arcadia_Deque*)_self)->getBack = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_getBackImpl;
-  ((Arcadia_Deque*)_self)->getFront = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_getFrontImpl;
-  ((Arcadia_Deque*)_self)->insertAt = (void(*)(Arcadia_Thread*, Arcadia_Deque*, Arcadia_SizeValue, Arcadia_Value)) &Arcadia_ArrayDeque_insertAtImpl;
-  ((Arcadia_Deque*)_self)->insertBack = (void(*)(Arcadia_Thread*, Arcadia_Deque*, Arcadia_Value)) &Arcadia_ArrayDeque_insertBackImpl;
-  ((Arcadia_Deque*)_self)->insertFront = (void(*)(Arcadia_Thread*, Arcadia_Deque*, Arcadia_Value)) &Arcadia_ArrayDeque_insertFrontImpl;
-  ((Arcadia_Deque*)_self)->removeAt = (void(*)(Arcadia_Thread*, Arcadia_Deque*, Arcadia_SizeValue)) &Arcadia_ArrayDeque_removeAtImpl;
-  ((Arcadia_Deque*)_self)->removeBack = (void(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_removeBackImpl;
-  ((Arcadia_Deque*)_self)->removeFront = (void(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_removeFrontImpl;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  ((Arcadia_Collection*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*))&Arcadia_ArrayDeque_clearImpl;
+  ((Arcadia_Collection*)self)->getSize = (Arcadia_SizeValue (*)(Arcadia_Thread*, Arcadia_Collection*))&Arcadia_ArrayDeque_getSizeImpl;
+  ((Arcadia_Collection*)self)->isImmutable = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_Collection*))&Arcadia_ArrayDeque_isImmutableImpl;
+  ((Arcadia_Deque*)self)->getAt = (Arcadia_Value(*)(Arcadia_Thread*,Arcadia_Deque*,Arcadia_SizeValue)) & Arcadia_ArrayDeque_getAtImpl;
+  ((Arcadia_Deque*)self)->getBack = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_getBackImpl;
+  ((Arcadia_Deque*)self)->getFront = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_getFrontImpl;
+  ((Arcadia_Deque*)self)->insertAt = (void(*)(Arcadia_Thread*, Arcadia_Deque*, Arcadia_SizeValue, Arcadia_Value)) &Arcadia_ArrayDeque_insertAtImpl;
+  ((Arcadia_Deque*)self)->insertBack = (void(*)(Arcadia_Thread*, Arcadia_Deque*, Arcadia_Value)) &Arcadia_ArrayDeque_insertBackImpl;
+  ((Arcadia_Deque*)self)->insertFront = (void(*)(Arcadia_Thread*, Arcadia_Deque*, Arcadia_Value)) &Arcadia_ArrayDeque_insertFrontImpl;
+  ((Arcadia_Deque*)self)->removeAt = (void(*)(Arcadia_Thread*, Arcadia_Deque*, Arcadia_SizeValue)) &Arcadia_ArrayDeque_removeAtImpl;
+  ((Arcadia_Deque*)self)->removeBack = (void(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_removeBackImpl;
+  ((Arcadia_Deque*)self)->removeFront = (void(*)(Arcadia_Thread*, Arcadia_Deque*)) &Arcadia_ArrayDeque_removeFrontImpl;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, nargs + 1);
 }
 

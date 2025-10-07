@@ -116,16 +116,6 @@ Arcadia_Visuals_Window_close
     Arcadia_Visuals_Window* self
   );
 
-/// @brief Update this window.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this window.
-void
-Arcadia_Visuals_Window_update
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Window* self
-  );
-
 /// @brief Get the size (width and height), in pixels, of a big window icon.
 /// @param width A pointer to a <code>Arcadia_Integer32Value</code> variable.
 /// @param height A pointer to a <code>Arcadia_Integer32Value</code> variable.

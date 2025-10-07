@@ -19,9 +19,7 @@ static void
 Arcadia_Visuals_Windows_Bitmap_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Windows_Bitmap* self
   );
 
 static void
@@ -32,7 +30,7 @@ Arcadia_Visuals_Windows_Bitmap_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Windows_Bitmap_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Windows_Bitmap_constructImpl,
   .destruct = &Arcadia_Visuals_Windows_Bitmap_destruct,
   .visit = NULL,
 };
@@ -50,16 +48,13 @@ static void
 Arcadia_Visuals_Windows_Bitmap_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Windows_Bitmap* self
   )
 {
-  Arcadia_Visuals_Windows_Bitmap* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_Bitmap_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -74,16 +69,16 @@ Arcadia_Visuals_Windows_Bitmap_constructImpl
   Arcadia_Integer32Value width = Arcadia_ValueStack_getInteger32Value(thread, 2);
   Arcadia_Integer32Value height = Arcadia_ValueStack_getInteger32Value(thread, 1);
 
-  _self->hBitmap = NULL;
-  _self->hDeviceContext = NULL;
+  self->hBitmap = NULL;
+  self->hDeviceContext = NULL;
 
   HDC hScreenDeviceContext = GetDC(NULL);
   if (!hScreenDeviceContext) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  _self->hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
-  if (!_self->hDeviceContext) {
+  self->hDeviceContext = CreateCompatibleDC(hScreenDeviceContext);
+  if (!self->hDeviceContext) {
     ReleaseDC(NULL, hScreenDeviceContext);
     hScreenDeviceContext = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -101,54 +96,54 @@ Arcadia_Visuals_Windows_Bitmap_constructImpl
   bmi.bmiHeader.biCompression = BI_RGB;
   bmi.bmiHeader.biSizeImage = (bmi.bmiHeader.biWidth * bmi.bmiHeader.biHeight) * 3;
 
-  _self->hBitmap = CreateDIBSection(_self->hDeviceContext, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
-  if (!_self->hBitmap) {
-    DeleteDC(_self->hDeviceContext);
-    _self->hDeviceContext = NULL;
+  self->hBitmap = CreateDIBSection(self->hDeviceContext, &bmi, DIB_RGB_COLORS, NULL, NULL, 0);
+  if (!self->hBitmap) {
+    DeleteDC(self->hDeviceContext);
+    self->hDeviceContext = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
   if (bmi.bmiHeader.biBitCount != 24) {
-    DeleteObject(_self->hBitmap);
-    _self->hBitmap = NULL;
-    DeleteDC(_self->hDeviceContext);
-    _self->hDeviceContext = NULL;
+    DeleteObject(self->hBitmap);
+    self->hBitmap = NULL;
+    DeleteDC(self->hDeviceContext);
+    self->hDeviceContext = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  _self->width = Arcadia_Value_getInteger32Value(&argumentValues[0]);
-  _self->height = Arcadia_Value_getInteger32Value(&argumentValues[1]);
+  self->width = width;
+  self->height = height;
   DWORD lineStride = ((((bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) + 31) & ~31) >> 3);
   DWORD linePadding = lineStride - ((bmi.bmiHeader.biWidth * bmi.bmiHeader.biBitCount) >> 3);
   if (lineStride > INT32_MAX) {
-    DeleteObject(_self->hBitmap);
-    _self->hBitmap = NULL;
-    DeleteDC(_self->hDeviceContext);
-    _self->hDeviceContext = NULL;
+    DeleteObject(self->hBitmap);
+    self->hBitmap = NULL;
+    DeleteDC(self->hDeviceContext);
+    self->hDeviceContext = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  _self->lineStride = (int32_t)lineStride;
-  _self->linePadding = (uint32_t)linePadding;
-  _self->numberOfBitsPerPixel = 24;
-  _self->pixelFormat = Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8;
+  self->lineStride = (int32_t)lineStride;
+  self->linePadding = (uint32_t)linePadding;
+  self->numberOfBitsPerPixel = 24;
+  self->pixelFormat = Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8;
 
   HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
   if (!hBrush) {
-    DeleteObject(_self->hBitmap);
-    _self->hBitmap = NULL;
-    DeleteDC(_self->hDeviceContext);
-    _self->hDeviceContext = NULL;
+    DeleteObject(self->hBitmap);
+    self->hBitmap = NULL;
+    DeleteDC(self->hDeviceContext);
+    self->hDeviceContext = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  SelectObject(_self->hDeviceContext, _self->hBitmap);
-  RECT fillRetc = { .left = 0, .top = 0, .right = _self->width, .bottom = _self->height };
-  FillRect(_self->hDeviceContext, &fillRetc, hBrush);
+  SelectObject(self->hDeviceContext, self->hBitmap);
+  RECT fillRetc = { .left = 0, .top = 0, .right = self->width, .bottom = self->height };
+  FillRect(self->hDeviceContext, &fillRetc, hBrush);
   DeleteObject(hBrush);
   hBrush = NULL;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 

@@ -241,3 +241,23 @@ Arcadia_Memory_reverseMemory8
     }
   }
 }
+
+void
+Arcadia_Memory_swap
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    void* q,
+    size_t n
+  )
+{
+  Arcadia_Natural8Value* p0 = (Arcadia_Natural8Value*)p,
+                       * q0 = (Arcadia_Natural8Value*)q;
+  for (size_t i = 0; i < n; ++i) {
+    Arcadia_Natural8Value temporary = *p0;
+    *p0 = *q0;
+    *q0 = temporary;
+    p0++;
+    q0++;
+  }
+}

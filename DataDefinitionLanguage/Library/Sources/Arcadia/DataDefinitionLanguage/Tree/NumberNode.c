@@ -20,9 +20,7 @@ static void
 Arcadia_DataDefinitionLanguage_Tree_NumberNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Tree_NumberNode* self
   );
 
 static void
@@ -33,7 +31,7 @@ Arcadia_DataDefinitionLanguage_Tree_NumberNode_visit
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_DataDefinitionLanguage_Tree_NumberNode_objectTypeOperations = {
-  .construct = &Arcadia_DataDefinitionLanguage_Tree_NumberNode_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Tree_NumberNode_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_DataDefinitionLanguage_Tree_NumberNode_visit,
 };
@@ -55,17 +53,14 @@ static void
 Arcadia_DataDefinitionLanguage_Tree_NumberNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Tree_NumberNode* self
   )
 {
-  Arcadia_DataDefinitionLanguage_Tree_NumberNode* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Tree_NumberNode_getType(thread);
   {
     Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DataDefinitionLanguage_Tree_NodeType_Number);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -74,39 +69,39 @@ Arcadia_DataDefinitionLanguage_Tree_NumberNode_constructImpl
   Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1);
   switch (Arcadia_Value_getTag(&x)) {
     case Arcadia_ValueTag_Integer16: {
-      _self->value = Arcadia_String_createFromInteger16(thread, Arcadia_Value_getInteger16Value(&x));
+      self->value = Arcadia_String_createFromInteger16(thread, Arcadia_Value_getInteger16Value(&x));
     } break;
     case Arcadia_ValueTag_Integer32: {
-      _self->value = Arcadia_String_createFromInteger32(thread, Arcadia_Value_getInteger32Value(&x));
+      self->value = Arcadia_String_createFromInteger32(thread, Arcadia_Value_getInteger32Value(&x));
     } break;
     case Arcadia_ValueTag_Integer64: {
-      _self->value = Arcadia_String_createFromInteger64(thread, Arcadia_Value_getInteger64Value(&x));
+      self->value = Arcadia_String_createFromInteger64(thread, Arcadia_Value_getInteger64Value(&x));
     } break;
     case Arcadia_ValueTag_Integer8: {
-      _self->value = Arcadia_String_createFromInteger8(thread, Arcadia_Value_getInteger8Value(&x));
+      self->value = Arcadia_String_createFromInteger8(thread, Arcadia_Value_getInteger8Value(&x));
     } break;
     case Arcadia_ValueTag_Natural16: {
-      _self->value = Arcadia_String_createFromNatural16(thread, Arcadia_Value_getNatural16Value(&x));
+      self->value = Arcadia_String_createFromNatural16(thread, Arcadia_Value_getNatural16Value(&x));
     } break;
     case Arcadia_ValueTag_Natural32: {
-      _self->value = Arcadia_String_createFromNatural32(thread, Arcadia_Value_getNatural32Value(&x));
+      self->value = Arcadia_String_createFromNatural32(thread, Arcadia_Value_getNatural32Value(&x));
     } break;
     case Arcadia_ValueTag_Natural64: {
-      _self->value = Arcadia_String_createFromNatural64(thread, Arcadia_Value_getNatural64Value(&x));
+      self->value = Arcadia_String_createFromNatural64(thread, Arcadia_Value_getNatural64Value(&x));
     } break;
     case Arcadia_ValueTag_Natural8: {
-      _self->value = Arcadia_String_createFromNatural8(thread, Arcadia_Value_getNatural8Value(&x));
+      self->value = Arcadia_String_createFromNatural8(thread, Arcadia_Value_getNatural8Value(&x));
     } break;
     case Arcadia_ValueTag_Real32: {
-      _self->value = Arcadia_String_createFromReal32(thread, Arcadia_Value_getReal32Value(&x));
+      self->value = Arcadia_String_createFromReal32(thread, Arcadia_Value_getReal32Value(&x));
     } break;
     case Arcadia_ValueTag_Real64: {
-      _self->value = Arcadia_String_createFromReal64(thread, Arcadia_Value_getReal64Value(&x));
+      self->value = Arcadia_String_createFromReal64(thread, Arcadia_Value_getReal64Value(&x));
     } break;
     case Arcadia_ValueTag_ObjectReference: {
-      _self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &x, _Arcadia_String_getType(thread));
-      Arcadia_Natural8Value const* start = Arcadia_String_getBytes(thread, _self->value);
-      Arcadia_Natural8Value const* end = start + Arcadia_String_getNumberOfBytes(thread, _self->value);
+      self->value = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &x, _Arcadia_String_getType(thread));
+      Arcadia_Natural8Value const* start = Arcadia_String_getBytes(thread, self->value);
+      Arcadia_Natural8Value const* end = start + Arcadia_String_getNumberOfBytes(thread, self->value);
       Arcadia_Natural8Value const* current = start; 
       if (current != end && *current == '+' || *current == '-') {
         current++;
@@ -161,7 +156,7 @@ Arcadia_DataDefinitionLanguage_Tree_NumberNode_constructImpl
       Arcadia_Thread_jump(thread);
     } break;
   };
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
 }
 

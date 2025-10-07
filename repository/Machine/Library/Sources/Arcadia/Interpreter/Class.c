@@ -22,9 +22,7 @@ static void
 R_Interpreter_Class_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    R_Interpreter_Class* self
   );
 
 static void
@@ -35,7 +33,7 @@ R_Interpreter_Class_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &R_Interpreter_Class_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & R_Interpreter_Class_constructImpl,
   .destruct = NULL,
   .visit = &R_Interpreter_Class_visit,
 };
@@ -53,37 +51,34 @@ static void
 R_Interpreter_Class_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    R_Interpreter_Class* self
   )
 {
-  R_Interpreter_Class* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Class_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->className = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
+  self->className = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
   if (Arcadia_ValueStack_isObjectReferenceValue(thread, 1)) {
-    _self->extendedClassName = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
+    self->extendedClassName = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   } else if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
-    _self->extendedClassName = NULL;
+    self->extendedClassName = NULL;
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->classMembers = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  self->classMembers = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 
-  _self->extendedClass = NULL;
+  self->extendedClass = NULL;
 
-  _self->complete = Arcadia_BooleanValue_False;
+  self->complete = Arcadia_BooleanValue_False;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 

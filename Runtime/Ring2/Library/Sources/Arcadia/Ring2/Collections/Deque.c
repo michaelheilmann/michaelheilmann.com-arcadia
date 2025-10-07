@@ -22,13 +22,11 @@ static void
 Arcadia_Deque_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Deque* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Deque_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Deque_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -46,31 +44,28 @@ static void
 Arcadia_Deque_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Deque* self
   )
 {
-  Arcadia_Deque* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Deque_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->getAt = NULL;
-  _self->getBack = NULL;
-  _self->getFront = NULL;
-  _self->insertAt = NULL;
-  _self->insertBack = NULL;
-  _self->insertFront = NULL;
-  _self->removeAt = NULL;
-  _self->removeBack = NULL;
-  _self->removeFront = NULL;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->getAt = NULL;
+  self->getBack = NULL;
+  self->getFront = NULL;
+  self->insertAt = NULL;
+  self->insertBack = NULL;
+  self->insertFront = NULL;
+  self->removeAt = NULL;
+  self->removeBack = NULL;
+  self->removeFront = NULL;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

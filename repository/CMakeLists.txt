@@ -16,6 +16,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 add_subdirectory(Machine)
+add_subdirectory(MIL.AST)
 add_subdirectory(MIL.Frontend)
 
 add_subdirectory(Integrations)

@@ -24,11 +24,11 @@ clampTests
   )
 {
 #define Do(Type, Suffix) \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == R_clamp##Suffix##Value(thread, Type##Value_Literal(0), Type##Value_Minimum,    Type##Value_Maximum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == R_clamp##Suffix##Value(thread, Type##Value_Minimum,    Type##Value_Literal(0), Type##Value_Maximum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == R_clamp##Suffix##Value(thread, Type##Value_Maximum,    Type##Value_Minimum,    Type##Value_Literal(0))); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum    == R_clamp##Suffix##Value(thread, Type##Value_Maximum,    Type##Value_Minimum,    Type##Value_Minimum)); \
-  Arcadia_Tests_assertTrue(thread, Type##Value_Maximum    == R_clamp##Suffix##Value(thread, Type##Value_Minimum,    Type##Value_Maximum,    Type##Value_Maximum));
+  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == Arcadia_clamp##Suffix##Value(thread, Type##Value_Literal(0), Type##Value_Minimum,    Type##Value_Maximum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == Arcadia_clamp##Suffix##Value(thread, Type##Value_Minimum,    Type##Value_Literal(0), Type##Value_Maximum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Literal(0) == Arcadia_clamp##Suffix##Value(thread, Type##Value_Maximum,    Type##Value_Minimum,    Type##Value_Literal(0))); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Minimum    == Arcadia_clamp##Suffix##Value(thread, Type##Value_Maximum,    Type##Value_Minimum,    Type##Value_Minimum)); \
+  Arcadia_Tests_assertTrue(thread, Type##Value_Maximum    == Arcadia_clamp##Suffix##Value(thread, Type##Value_Minimum,    Type##Value_Maximum,    Type##Value_Maximum));
 
   Do(Arcadia_Integer16, Integer16)
   Do(Arcadia_Integer32, Integer32)

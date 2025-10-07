@@ -22,6 +22,10 @@
 
 #include <limits.h>
 
+static bool g_error = false;
+
+static int (*g_oldErrorHandler)(Display*, XErrorEvent*) = NULL;
+
 static Arcadia_BooleanValue
 isConfigurationSupported
   (
@@ -36,6 +40,33 @@ errorHandler
     Display *display,
     XErrorEvent *event
   );
+  
+static void pushErrorHandler(Display* display) {
+  // Replace the original error handler with our error handler.
+  g_oldErrorHandler = XSetErrorHandler(&errorHandler);
+}
+
+static void checkError(Display*display) {
+  XSync(display, False);
+}
+
+static void popErrorHandler(Display* display) {
+  // Restore the original error handler.
+  XSetErrorHandler(g_oldErrorHandler);
+  g_oldErrorHandler = NULL;    
+}
+
+#if 0
+static void checkError(Display* display) {
+  g_error = false;
+  // Replace the original error handler with our error handler.
+  g_oldErrorHandler = XSetErrorHandler(&errorHandler);
+  XSync(display, False);
+  // Restore the original error handler.
+  XSetErrorHandler(g_oldErrorHandler);
+  g_oldErrorHandler = NULL;  
+}
+#endif
 
 static void
 openVisual
@@ -78,9 +109,7 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   );
 
 static void
@@ -245,10 +274,6 @@ setSizeImpl
     Arcadia_Integer32Value height
   );
 
-static bool g_error = false;
-
-static int (*g_oldErrorHandler)(Display*, XErrorEvent*) = NULL;
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl,
   .destruct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct,
@@ -337,6 +362,9 @@ errorHandler
     XErrorEvent *event
   )
 {
+  char buf[1024+1];
+  XGetErrorText(display, event->error_code, buf, 1024+1);
+  printf("%s:%d: %s\n", __FILE__, __LINE__, buf);
   g_error = true;
   return 0;
 }
@@ -358,7 +386,7 @@ openVisual
   }
 
   Arcadia_Visuals_Configuration* desiredConfiguration = Arcadia_Visuals_Configuration_create(thread);
-  Arcadia_List* availableConfigurations = Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations(thread, deviceInfo);
+  Arcadia_List* availableConfigurations = Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations(thread, deviceInfo, self->system->display);
 
   if (!isConfigurationSupported(thread, availableConfigurations, desiredConfiguration)) {
     fprintf(stderr, "%s:%d: unsupported configuration\n", __FILE__, __LINE__);
@@ -465,8 +493,6 @@ openContext
     Arcadia_Visuals_Linux_GlxDeviceInfo* deviceInfo
   )
 {
-  g_error = false;
-
   // NOTE: It is not necessary to create or make current to a context before calling glXGetProcAddressARB.
   PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB =
     (PFNGLXCREATECONTEXTATTRIBSARBPROC)
@@ -477,7 +503,7 @@ openContext
 
   // Check for the GLX_ARB_create_context extension string and the function.
   // If either is not present, raise an error.
-  if (!Arcadia_Visuals_Linux_GlxDeviceInfo_isGlxExtensionSupported(thread, deviceInfo, "GLX_ARB_create_context") || !glXCreateContextAttribsARB) {
+  if (!Arcadia_Visuals_Linux_GlxDeviceInfo_isGlxExtensionSupported(thread, deviceInfo, self->system->display, "GLX_ARB_create_context") || !glXCreateContextAttribsARB) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -488,18 +514,12 @@ openContext
     //GLX_CONTEXT_FLAGS_ARB, GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
     None
   };
-  // Replace the original error handler with our error handler.
-  g_oldErrorHandler = XSetErrorHandler(&errorHandler);
   self->context = glXCreateContextAttribsARB(self->system->display,
                                              *self->frameBufferConfiguration,
                                              0,
                                              True,
                                              contextAttributes);
   if (NULL == self->context) {
-    // Restore the original error handler.
-    XSetErrorHandler(g_oldErrorHandler);
-    g_oldErrorHandler = NULL;
-
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -507,10 +527,6 @@ openContext
   if (!glXIsDirect(self->system->display, self->context)) {
     glXDestroyContext(self->system->display, self->context);
     self->context = NULL;
-
-    // Restore the original error handler.
-    XSetErrorHandler(g_oldErrorHandler);
-    g_oldErrorHandler = NULL;
 
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
@@ -522,17 +538,9 @@ openContext
     glXDestroyContext(self->system->display, self->context);
     self->context = NULL;
 
-    // Restore the original error handler.
-    XSetErrorHandler(g_oldErrorHandler);
-    g_oldErrorHandler = NULL;
-
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-
-  // Restore the original error handler.
-  XSetErrorHandler(g_oldErrorHandler);
-  g_oldErrorHandler = NULL;
 }
 
 static void
@@ -664,62 +672,59 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  _self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getType(thread));
-  Arcadia_Object_lock(thread, _self->system);
-  _self->smallIcon = NULL;
-  _self->bigIcon = NULL;
-  _self->screen = NULL;
-  _self->frameBufferConfiguration = NULL;
-  _self->visualInfo = NULL;
-  _self->colormap = None;
-  _self->window = None;
+  self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getType(thread));
+  Arcadia_Object_lock(thread, self->system);
+  self->smallIcon = NULL;
+  self->bigIcon = NULL;
+  self->screen = NULL;
+  self->frameBufferConfiguration = NULL;
+  self->visualInfo = NULL;
+  self->colormap = None;
+  self->window = None;
 
-  ((Arcadia_Visuals_Window*)_self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & openImpl;
-  ((Arcadia_Visuals_Window*)_self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & closeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & openImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & closeImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->getRequiredBigIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredBigIconSizeImpl;
-  ((Arcadia_Visuals_Window*)_self)->getRequiredSmallIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredSmallIconSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getRequiredBigIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredBigIconSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getRequiredSmallIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredSmallIconSizeImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->getBigIcon = (Arcadia_Visuals_Icon*(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & getBigIconImpl;
-  ((Arcadia_Visuals_Window*)_self)->setBigIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Visuals_Icon*)) & setBigIconImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getBigIcon = (Arcadia_Visuals_Icon*(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getBigIconImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setBigIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*)) & setBigIconImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->getSmallIcon = (Arcadia_Visuals_Icon*(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & getSmallIconImpl;
-  ((Arcadia_Visuals_Window*)_self)->setSmallIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Visuals_Icon*)) & setSmallIconImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getSmallIcon = (Arcadia_Visuals_Icon*(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getSmallIconImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setSmallIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*)) & setSmallIconImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->getTitle = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & getTitleImpl;
-  ((Arcadia_Visuals_Window*)_self)->setTitle = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_String*)) & setTitleImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getTitle = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getTitleImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setTitle = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_String*)) & setTitleImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->getCanvasSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getCanvasSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->beginRender = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*))&beginRenderImpl;
-  ((Arcadia_Visuals_Window*)_self)->endRender = (void(*)(Arcadia_Thread*,Arcadia_Visuals_Window*))&endRenderImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->beginRender = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*))&beginRenderImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->endRender = (void(*)(Arcadia_Thread*,Arcadia_Visuals_WindowBackend*))&endRenderImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->getPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getPositionImpl;
-  ((Arcadia_Visuals_Window*)_self)->setPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setPositionImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getPositionImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setPositionImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->getSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getSizeImpl;
-  ((Arcadia_Visuals_Window*)_self)->setSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setSizeImpl;
 
-  ((Arcadia_Visuals_Window*)_self)->getFullscreen = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Visuals_Window*)) & getFullscreenImpl;
-  ((Arcadia_Visuals_Window*)_self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Window*, Arcadia_BooleanValue)) & setFullscreenImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getFullscreen = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getFullscreenImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_BooleanValue)) & setFullscreenImpl;
 
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, self, _type);
   Arcadia_ValueStack_popValues(thread, 1 + 1);
 }
 
@@ -730,12 +735,18 @@ openImpl
     Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
 {
+  // Replace the original error handler with our error handler.
+  g_oldErrorHandler = XSetErrorHandler(&errorHandler);
+  
   Arcadia_Visuals_Linux_GlxDeviceInfo* deviceInfo = Arcadia_Visuals_Linux_GlxDeviceInfo_create(thread);
 
   if (!self->screen) {
     self->screen = DefaultScreenOfDisplay(self->system->display);
     if (!self->screen) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+      // Restore the original error handler.
+      XSetErrorHandler(g_oldErrorHandler);
+      g_oldErrorHandler = NULL;  
       Arcadia_Thread_jump(thread);
     }
   }
@@ -747,6 +758,9 @@ openImpl
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
+    // Restore the original error handler.
+    XSetErrorHandler(g_oldErrorHandler);
+    g_oldErrorHandler = NULL;  
     Arcadia_Thread_jump(thread);
   }
 
@@ -754,10 +768,10 @@ openImpl
     int screenId = DefaultScreen(self->system->display);
 
     Window rootWindow = RootWindowOfScreen(self->screen);
-    int windowX = ((Arcadia_Visuals_Window*)self)->bounds.left;
-    int windowY = ((Arcadia_Visuals_Window*)self)->bounds.top;
-    int windowW = ((Arcadia_Visuals_Window*)self)->bounds.width;
-    int windowH = ((Arcadia_Visuals_Window*)self)->bounds.height;
+    int windowX = ((Arcadia_Visuals_WindowBackend*)self)->bounds.left;
+    int windowY = ((Arcadia_Visuals_WindowBackend*)self)->bounds.top;
+    int windowW = ((Arcadia_Visuals_WindowBackend*)self)->bounds.width;
+    int windowH = ((Arcadia_Visuals_WindowBackend*)self)->bounds.height;
     // Does not seem to have an effect when using GNOME.
     int windowBorderWidth = 0;
     int windowClass = InputOutput;
@@ -812,16 +826,23 @@ openImpl
       XFree(self->screen);
     #endif
       self->screen = NULL;
+      
+      // Restore the original error handler.
+      XSetErrorHandler(g_oldErrorHandler);
+      g_oldErrorHandler = NULL;  
 
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
   }
-
   XMapWindow(self->system->display, self->window);
 
   XSetWMProtocols(self->system->display, self->window, &self->system->WM_DELETE_WINDOW, 1);
-
+  
+  // TODO: Use XSync.
+  XSync(self->system->display, False);
+  //checkError(self->system->display);
+  
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     openContext(thread, self, deviceInfo);
@@ -846,12 +867,20 @@ openImpl
     XFree(self->screen);
   #endif
     self->screen = NULL;
+    
+    // Restore the original error handler.
+    XSetErrorHandler(g_oldErrorHandler);
+    g_oldErrorHandler = NULL;  
 
     Arcadia_Thread_jump(thread);
   }
 
   // TODO: Use XSync.
-  XFlush(self->system->display);
+  XSync(self->system->display, False);
+
+    // Restore the original error handler.
+    XSetErrorHandler(g_oldErrorHandler);
+    g_oldErrorHandler = NULL;  
 }
 
 static void
@@ -911,7 +940,7 @@ setFullscreenImpl
   )
 {
   if (self->window) {
-    if (((Arcadia_Visuals_Window*)self)->fullscreen != fullscreen) {
+    if (((Arcadia_Visuals_WindowBackend*)self)->fullscreen != fullscreen) {
 
       struct {
         unsigned long   flags;
@@ -926,14 +955,19 @@ setFullscreenImpl
         .inputMode = 0, // ignored
         .status = 0, // ingored
       };
+      pushErrorHandler(self->system->display);
+      XSync(self->system->display, False);
+      XSync(self->system->display, False);
       XChangeProperty(self->system->display, self->window, self->system->_MOTIF_WM_HINTS,
                                                    self->system->_MOTIF_WM_HINTS,
                                                    32, PropModeReplace, (unsigned char *)&hints,
                                                    5);
-      ((Arcadia_Visuals_Window*)self)->fullscreen = fullscreen;
+      XSync(self->system->display, False);
+      popErrorHandler(self->system->display);
+      ((Arcadia_Visuals_WindowBackend*)self)->fullscreen = fullscreen;
     }
   } else {
-    ((Arcadia_Visuals_Window*)self)->fullscreen = fullscreen;
+    ((Arcadia_Visuals_WindowBackend*)self)->fullscreen = fullscreen;
   }  
 }
 
@@ -1148,10 +1182,13 @@ setPositionImpl
     Arcadia_Integer32Value top
   )
 {
+  pushErrorHandler(self->system->display);
+  XSync(self->system->display, False);
   Arcadia_Integer32Value borderLeft, borderTop, borderRight, borderBottom;
   getBorderInfo(thread, self, &borderLeft, &borderTop, &borderRight, &borderBottom);
   XMoveWindow(self->system->display, self->window, left + borderLeft, top + borderTop);
   XSync(self->system->display, False);
+  popErrorHandler(self->system->display); 
 }
 
 static void

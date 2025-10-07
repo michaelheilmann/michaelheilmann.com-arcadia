@@ -183,4 +183,13 @@ Arcadia_Memory_reverseMemory8
     size_t n
   );
 
+void
+Arcadia_Memory_swap
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    void* q,
+    size_t n
+  );
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_MEMORY_H_INCLUDED

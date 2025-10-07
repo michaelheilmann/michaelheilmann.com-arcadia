@@ -22,9 +22,7 @@ static void
 Arcadia_Log_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Log* self
   );
 
 static void
@@ -35,7 +33,7 @@ Arcadia_Log_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Log_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Log_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_Log_visit,
 };
@@ -53,25 +51,22 @@ static void
 Arcadia_Log_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Log* self
   )
 {
-  Arcadia_Log* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Log_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  _self->fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, _self->fileHandle);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle_openStandardOutput(thread, self->fileHandle);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

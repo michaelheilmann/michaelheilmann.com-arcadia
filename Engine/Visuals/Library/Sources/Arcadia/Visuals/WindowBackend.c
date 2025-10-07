@@ -20,9 +20,7 @@ static void
 Arcadia_Visuals_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_WindowBackend* self
   );
 
 static void
@@ -33,7 +31,7 @@ Arcadia_Visuals_WindowBackend_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_WindowBackend_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_WindowBackend_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_Visuals_WindowBackend_visit,
 };
@@ -51,57 +49,61 @@ static void
 Arcadia_Visuals_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_WindowBackend* self
   )
 {
-  Arcadia_Visuals_WindowBackend* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_WindowBackend_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  _self->title = Arcadia_String_createFromCxxString(thread, u8"Arcadia Engine Window");
+  self->title = Arcadia_String_createFromCxxString(thread, u8"Arcadia Engine Window");
+  
+  self->bounds.left = 0;
+  self->bounds.top = 0;
+  self->bounds.width = 1;
+  self->bounds.height = 1;
+  
+  self->fullscreen = Arcadia_BooleanValue_False;
 
-  _self->window = NULL;
+  self->window = NULL;
 
-  _self->open = NULL;
-  _self->close = NULL;
-  _self->update = NULL;
+  self->open = NULL;
+  self->close = NULL;
+  self->update = NULL;
 
-  _self->getRequiredBigIconSize = NULL;
-  _self->getRequiredSmallIconSize = NULL;
+  self->getRequiredBigIconSize = NULL;
+  self->getRequiredSmallIconSize = NULL;
 
-  _self->getBigIcon = NULL;
-  _self->setBigIcon = NULL;
+  self->getBigIcon = NULL;
+  self->setBigIcon = NULL;
 
-  _self->getSmallIcon = NULL;
-  _self->setSmallIcon = NULL;
+  self->getSmallIcon = NULL;
+  self->setSmallIcon = NULL;
 
-  _self->getTitle = NULL;
-  _self->setTitle  = NULL;
+  self->getTitle = NULL;
+  self->setTitle  = NULL;
 
-  _self->getCanvasSize = NULL;
+  self->getCanvasSize = NULL;
 
-  _self->beginRender = NULL;
-  _self->endRender = NULL;
+  self->beginRender = NULL;
+  self->endRender = NULL;
 
-  _self->setPosition = NULL;
-  _self->getPosition = NULL;
+  self->setPosition = NULL;
+  self->getPosition = NULL;
 
-  _self->setSize = NULL;
-  _self->getSize = NULL;
+  self->setSize = NULL;
+  self->getSize = NULL;
 
-  _self->getFullscreen = NULL;
-  _self->setFullscreen = NULL;
+  self->getFullscreen = NULL;
+  self->setFullscreen = NULL;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

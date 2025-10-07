@@ -34,9 +34,7 @@ static void
 Arcadia_DataDefinitionLanguage_Keywords_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Keywords* self
   );
 
 static void
@@ -88,7 +86,7 @@ Arcadia_DataDefinitionLanguage_Keywords_visit
 }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_DataDefinitionLanguage_Keywords_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_constructImpl,
   .destruct = &Arcadia_DataDefinitionLanguage_Keywords_destruct,
   .visit = &Arcadia_DataDefinitionLanguage_Keywords_visit,
 };
@@ -106,28 +104,25 @@ static void
 Arcadia_DataDefinitionLanguage_Keywords_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Keywords* self
   )
 {
-  Arcadia_DataDefinitionLanguage_Keywords* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Keywords_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->size = 0;
-  _self->capacity = 8;
-  _self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Keyword*) * _self->capacity);
-  for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
-    _self->buckets[i] = NULL;
+  self->size = 0;
+  self->capacity = 8;
+  self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Keyword*) * self->capacity);
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    self->buckets[i] = NULL;
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

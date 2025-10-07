@@ -133,6 +133,8 @@ if (NOT TARGET ${MyModule})
   
   # Enable OpenGL 4.
   if (${${MyModule}.OpenGL4.Enabled})
+    list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Mesh.c)
+    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Mesh.h)
     list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Backend.c)
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Backend.h)
     list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Context.c)
@@ -188,6 +190,8 @@ if (NOT TARGET ${MyModule})
   endif()
 
   if (${${MyModule}.OpenGL4.Enabled} AND (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows}))
+    list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/WGL/SystemWindow.c)
+    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/WGL/SystemWindow.h)
     list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryContext.c)
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryContext.h)
     list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryWindow.c)
@@ -203,6 +207,6 @@ if (NOT TARGET ${MyModule})
 
   EndProduct(${MyModule})
 
-  set_target_properties(${MyModule} PROPERTIES FOLDER "Visuals")
+  set_target_properties(${MyModule} PROPERTIES FOLDER "Backends")
 
 endif()

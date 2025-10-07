@@ -20,9 +20,7 @@ static void
 Arcadia_Visuals_System_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_System* self
   );
 
 static void
@@ -33,7 +31,7 @@ Arcadia_Visuals_System_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_System_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Visuals_System_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_Visuals_System_visitImpl,
 };
@@ -51,27 +49,24 @@ static void
 Arcadia_Visuals_System_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_System* self
   )
 {
-  Arcadia_Visuals_System* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_System_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->windows = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  _self->createIcon = NULL;
-  _self->createWindow = NULL;
-  _self->getDisplayDevices = NULL;
-  _self->update = NULL;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->windows = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  self->createIcon = NULL;
+  self->createWindow = NULL;
+  self->getDisplayDevices = NULL;
+  self->update = NULL;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

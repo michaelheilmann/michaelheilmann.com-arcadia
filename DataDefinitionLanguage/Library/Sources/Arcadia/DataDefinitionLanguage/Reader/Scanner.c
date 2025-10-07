@@ -65,9 +65,7 @@ static void
 Arcadia_DataDefinitionLanguage_Scanner_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Scanner* self
   );
 
 static void
@@ -143,7 +141,7 @@ isDecimalDigit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_DataDefinitionLanguage_Scanner_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Scanner_constructImpl,
   .destruct = &Arcadia_DataDefinitionLanguage_Scanner_destruct,
   .visit = &Arcadia_DataDefinitionLanguage_Scanner_visit,
 };
@@ -161,17 +159,14 @@ static void
 Arcadia_DataDefinitionLanguage_Scanner_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_Scanner* self
   )
 {
-  Arcadia_DataDefinitionLanguage_Scanner* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Scanner_getType(thread);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
@@ -179,28 +174,28 @@ Arcadia_DataDefinitionLanguage_Scanner_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  _self->token.type = Arcadia_DataDefinitionLanguage_WordType_StartOfInput;
-  _self->token.text = NULL;
-  _self->stringTable = NULL;
-  _self->keywords = NULL;
-  _self->input = NULL;
-  _self->symbol = CodePoint_Start;
+  self->token.type = Arcadia_DataDefinitionLanguage_WordType_StartOfInput;
+  self->token.text = NULL;
+  self->stringTable = NULL;
+  self->keywords = NULL;
+  self->input = NULL;
+  self->symbol = CodePoint_Start;
   //
-  _self->keywords = Arcadia_DataDefinitionLanguage_Keywords_create(thread);
+  self->keywords = Arcadia_DataDefinitionLanguage_Keywords_create(thread);
   //
-  _self->token.type = Arcadia_DataDefinitionLanguage_WordType_StartOfInput;
-  _self->stringTable = Arcadia_DataDefinitionLanguage_StringTable_create(thread);
-  _self->input = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
-  _self->token.text = Arcadia_StringBuffer_create(thread);
+  self->token.type = Arcadia_DataDefinitionLanguage_WordType_StartOfInput;
+  self->stringTable = Arcadia_DataDefinitionLanguage_StringTable_create(thread);
+  self->input = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
+  self->token.text = Arcadia_StringBuffer_create(thread);
   //
-  Arcadia_StringBuffer_insertBackCxxString(thread, _self->token.text, u8"<start of input>");
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<start of input>");
   //
   Arcadia_StringBuffer* temporary = Arcadia_StringBuffer_create(thread);
 #define On(text, type) \
   { \
     Arcadia_StringBuffer_clear(thread, temporary); \
     Arcadia_StringBuffer_insertBackCxxString(thread, temporary, text); \
-    Arcadia_DataDefinitionLanguage_Keywords_add(thread, _self->keywords, Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString(thread, _self->stringTable, temporary), Arcadia_DataDefinitionLanguage_WordType_##type); \
+    Arcadia_DataDefinitionLanguage_Keywords_add(thread, self->keywords, Arcadia_DataDefinitionLanguage_StringTable_getOrCreateString(thread, self->stringTable, temporary), Arcadia_DataDefinitionLanguage_WordType_##type); \
   }
   //
   // literals
@@ -210,7 +205,7 @@ Arcadia_DataDefinitionLanguage_Scanner_constructImpl
   //
 #undef On
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

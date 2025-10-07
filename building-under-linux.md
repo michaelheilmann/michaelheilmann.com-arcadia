@@ -51,5 +51,5 @@ To disable OpenGL support, add the parameter `-D"Arcadia.Visuals.Implementation.
 - `Arcadia.Audials.Implementation.OpenAL.Enabled`
 `TRUE` enables OpenAL support in *Arcadia Audials*, `FALSE` disables it. Default is `FALSE`.
 \
-To enable OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAL.Implementation.Enabled"=TRUE` to the cmake command.
-To disable OpenAL support, add the parameter `-D"Arcadia.Audials.OpenAL.Implementation.Enabled"=FALSE` to the cmake command.
+To enable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=TRUE` to the cmake command.
+To disable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=FALSE` to the cmake command.

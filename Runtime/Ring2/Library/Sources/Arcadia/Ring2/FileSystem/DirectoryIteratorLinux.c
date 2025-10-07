@@ -33,9 +33,7 @@ static void
 Arcadia_DirectoryIteratorLinux_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DirectoryIteratorLinux* self
   );
 
 static void
@@ -85,16 +83,13 @@ static void
 Arcadia_DirectoryIteratorLinux_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DirectoryIteratorLinux* self
   )
 {
-  Arcadia_DirectoryIteratorLinux* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DirectoryIteratorLinux_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -105,8 +100,8 @@ Arcadia_DirectoryIteratorLinux_constructImpl
   // Open directory.
   Arcadia_String* path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
   Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path);
-  _self->dir = opendir(Arcadia_String_getBytes(thread, pathString));
-  if (!_self->dir) {
+  self->dir = opendir(Arcadia_String_getBytes(thread, pathString));
+  if (!self->dir) {
     switch (errno) {
       case ENOENT: {
         errno = 0;
@@ -129,20 +124,20 @@ Arcadia_DirectoryIteratorLinux_constructImpl
     };
   }
   // Read first directory entry.
-  _self->dirent = readdir(_self->dir);
-  if (!_self->dirent) {
-    closedir(_self->dir);
-    _self->dir = NULL;
+  self->dirent = readdir(self->dir);
+  if (!self->dirent) {
+    closedir(self->dir);
+    self->dir = NULL;
     if (errno) {
       errno = 0;
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
   }
-  ((Arcadia_DirectoryIterator*)_self)->getValue = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorLinux_getValue;
-  ((Arcadia_DirectoryIterator*)_self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_hasValue;
-  ((Arcadia_DirectoryIterator*)_self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_nextValue;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  ((Arcadia_DirectoryIterator*)self)->getValue = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorLinux_getValue;
+  ((Arcadia_DirectoryIterator*)self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_hasValue;
+  ((Arcadia_DirectoryIterator*)self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_nextValue;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
 }
 

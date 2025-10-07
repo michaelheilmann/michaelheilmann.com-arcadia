@@ -39,6 +39,38 @@ expectAndNext
 }
 
 static void
+testScanner4
+  (
+    Arcadia_Thread* thread
+  )
+{
+  static const char* input =
+    u8"$0\n"
+    u8"$1\n"
+    u8"$512\n"
+    u8"$_\n"
+    ;
+  Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
+  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_Register, u8"$0", sizeof(u8"$0") - 1);
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_Register, u8"$1", sizeof(u8"$1") - 1);
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_Register, u8"$512", sizeof(u8"$512") - 1);
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_Register, u8"$_", sizeof(u8"$_") - 1);
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+
+  expectAndNext(thread, scanner, Arcadia_MIL_TokenType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
+}
+
+static void
 testScanner3
   (
     Arcadia_Thread* thread
@@ -225,19 +257,6 @@ testScanner1
   expectAndNext(thread, scanner, Arcadia_MIL_TokenType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
 }
 
-void
-main1
-  (
-    Arcadia_Thread* thread,
-    int argc,
-    char** argv
-  )
-{
-  testScanner1(thread);
-  testScanner2(thread);
-  testScanner3(thread);
-}
-
 int
 main
   (
@@ -245,23 +264,16 @@ main
     char** argv
   )
 {
-  Arcadia_Status status;
-  Arcadia_Process* process = NULL;
-  if (Arcadia_Process_get(&process)) {
+  if (!Arcadia_Tests_safeExecute(&testScanner1)) {
     return EXIT_FAILURE;
   }
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    main1(thread, argc, argv);
-    Arcadia_Thread_popJumpTarget(thread);
+  if (!Arcadia_Tests_safeExecute(&testScanner2)) {
+    return EXIT_FAILURE;
   }
-  status = Arcadia_Thread_getStatus(thread);
-  thread = NULL;
-  Arcadia_Process_relinquish(process);
-  process = NULL;
-  if (status) {
+  if (!Arcadia_Tests_safeExecute(&testScanner3)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&testScanner4)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

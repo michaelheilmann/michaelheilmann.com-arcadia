@@ -424,6 +424,26 @@ Arms_unlock
 
 #endif
 
+#if defined(Arcadia_Arms_Configuration_WithBarriers) && 1 == Arcadia_Arms_Configuration_WithBarriers
+
+void
+Arms_forwardBarrier
+  (
+    void* source,
+    void* target
+  )
+{ }
+
+void
+Arms_backwardBarrier
+  (
+    void* source,
+    void* target
+  )
+{ }
+
+#endif // Arcadia_Arms_Configuration_WithBarriers
+
 Arms_MemoryManager*
 Arms_getDefaultMemoryManager
   (

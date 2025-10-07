@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_AUDIALS_OPENAL_SYSTEM_H_INCLUDED)
-#define ARCADIA_AUDIALS_OPENAL_SYSTEM_H_INCLUDED
+#if !defined(ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_SYSTEM_H_INCLUDED)
+#define ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_SYSTEM_H_INCLUDED
 
 #include "Arcadia/Audials/Include.h"
 
@@ -24,14 +24,14 @@
 #include <math.h>
 
 /// @code
-/// class Arcadia.Audials.OpenAL.System extends Arcadia.Audials.System {
-///   construct()
+/// class Arcadia.Audials.Implementation.OpenAL.System extends Arcadia.Audials.System {
+///   constructor()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Audials.OpenAL.System", Arcadia_Audials_OpenAL_System,
+Arcadia_declareObjectType(u8"Arcadia.Audials.Implementation.OpenAL.System", Arcadia_Audials_Implementation_OpenAL_System,
                           u8"Arcadia.Audials.System")
 
-struct Arcadia_Audials_OpenAL_System {
+struct Arcadia_Audials_Implementation_OpenAL_System {
   Arcadia_Audials_System _parent;
   ALCdevice* alcDevice;
   ALCcontext* alcContext;
@@ -40,16 +40,16 @@ struct Arcadia_Audials_OpenAL_System {
 };
 
 // @todo Make private.
-Arcadia_Audials_OpenAL_System*
-Arcadia_Audials_OpenAL_System_create
+Arcadia_Audials_Implementation_OpenAL_System*
+Arcadia_Audials_Implementation_OpenAL_System_create
   (
     Arcadia_Thread* thread
   );
 
-Arcadia_Audials_OpenAL_System*
-Arcadia_Audials_OpenAL_System_getOrCreate
+Arcadia_Audials_Implementation_OpenAL_System*
+Arcadia_Audials_Implementation_OpenAL_System_getOrCreate
   (
     Arcadia_Thread* thread
   );
 
-#endif // ARCADIA_AUDIALS_OPENAL_SYSTEM_H_INCLUDED
+#endif // ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_SYSTEM_H_INCLUDED

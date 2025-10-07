@@ -120,7 +120,7 @@ Arms_removeNotifyDestroyAll
 
 // Ensures the invariant no black object may refer to a white object is preserved.
 // If source is black and target is white, then color target gray.
-static void
+void
 Arms_forwardBarrier
   (
     void* source,
@@ -129,7 +129,7 @@ Arms_forwardBarrier
 
 // Ensures the invariant no black object may refer to a white object is preserved.
 // If source is black and target is white, then color source gray.
-static void
+void
 Arms_backwardBarrier
   (
     void* source,

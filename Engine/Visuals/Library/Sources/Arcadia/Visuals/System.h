@@ -25,7 +25,8 @@ typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
 
 /// @code
 /// class Arcadia.Visuals.System extends Arcadia.Engine.System {
-///   construct
+///   
+///   constructor
 ///     (
 ///     )
 /// 
@@ -52,6 +53,7 @@ typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
 ///     (
 ///     )
 ///     : Arcadia.List
+///
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.System", Arcadia_Visuals_System,

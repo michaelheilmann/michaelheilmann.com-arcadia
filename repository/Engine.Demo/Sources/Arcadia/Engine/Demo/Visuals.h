@@ -21,14 +21,6 @@
 #include "Arcadia/Visuals/Include.h"
 
 void
-Arcadia_Engine_Demo_startupAudials
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine* engine,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration
-  );
-
-void
 Arcadia_Engine_Demo_startupVisuals
   (
     Arcadia_Thread* thread,

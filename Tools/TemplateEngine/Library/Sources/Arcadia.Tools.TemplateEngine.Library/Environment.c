@@ -29,13 +29,11 @@ static void
 Environment_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Environment* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Environment_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Environment_constructImpl,
   .destruct = NULL,
   .visit = &Environment_visit,
 };
@@ -68,16 +66,13 @@ static void
 Environment_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Environment* self
   )
 {
-  Environment* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Environment_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
@@ -93,12 +88,12 @@ Environment_constructImpl
     Arcadia_Thread_jump(thread);
   }
   if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
-    _self->enclosing = NULL;
+    self->enclosing = NULL;
   } else {
-    _self->enclosing = (Environment*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Environment_getType(thread));
+    self->enclosing = (Environment*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Environment_getType(thread));
   }
-  _self->variables = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->variables = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 

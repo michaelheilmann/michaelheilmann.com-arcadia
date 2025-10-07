@@ -24,28 +24,4 @@
 
 #include "Arcadia/Ring2/Include.h"
 
-void
-Audials_startup
-  (
-    Arcadia_Thread* thread
-  );
-
-void
-Audials_shutdown
-  (
-    Arcadia_Thread* thread
-  );
-
-void
-Audials_playSine
-  (
-    Arcadia_Thread* thread
-  );
-
-void
-Audials_stopSine
-  (
-    Arcadia_Thread* thread
-  );
-
 #endif // ARCADIA_AUDIALS_IMPLEMENTATION_INCLUDE_H_INCLUDED

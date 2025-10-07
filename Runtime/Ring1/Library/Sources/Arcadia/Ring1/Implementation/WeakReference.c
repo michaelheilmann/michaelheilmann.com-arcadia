@@ -41,13 +41,11 @@ static void
 Arcadia_WeakReference_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_WeakReference* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_WeakReference_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_WeakReference_constructImpl,
   .destruct = &Arcadia_WeakReference_destruct,
   .visit = &Arcadia_WeakReference_visit,
 };
@@ -130,16 +128,13 @@ static void
 Arcadia_WeakReference_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_WeakReference* self
   )
 {
-  Arcadia_WeakReference* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_WeakReference_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
@@ -147,12 +142,12 @@ Arcadia_WeakReference_constructImpl
   }
   Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
   if (0 == numberOfArgumentValues1) {
-    _self->value = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+    self->value = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
   } else if (1 == numberOfArgumentValues1) {
-    _self->value = Arcadia_ValueStack_getValue(thread, 1);
-    switch (Arcadia_Value_getTag(&_self->value)) {
+    self->value = Arcadia_ValueStack_getValue(thread, 1);
+    switch (Arcadia_Value_getTag(&self->value)) {
       case Arcadia_ValueTag_Atom: {
-        Arms_addNotifyDestroy(_self->value.atomValue, _self, NULL, &callback);
+        Arms_addNotifyDestroy(self->value.atomValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_BigInteger: {
       } break;
@@ -160,10 +155,10 @@ Arcadia_WeakReference_constructImpl
       case Arcadia_ValueTag_ForeignProcedure: {
       } break;
       case Arcadia_ValueTag_ImmutableByteArray: {
-        Arms_addNotifyDestroy(_self->value.immutableByteArrayValue, _self, NULL, &callback);
+        Arms_addNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_ImmutableUtf8String: {
-        Arms_addNotifyDestroy(_self->value.immutableUtf8StringValue, _self, NULL, &callback);
+        Arms_addNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_Integer16:
       case Arcadia_ValueTag_Integer32:
@@ -175,7 +170,7 @@ Arcadia_WeakReference_constructImpl
       case Arcadia_ValueTag_Natural8: {
       } break;
       case Arcadia_ValueTag_ObjectReference: {
-        Arcadia_Object_addNotifyDestroyCallback(thread, _self->value.objectReferenceValue, _self, &callback);
+        Arcadia_Object_addNotifyDestroyCallback(thread, self->value.objectReferenceValue, self, &callback);
       } break;
       case Arcadia_ValueTag_Real32:
       case Arcadia_ValueTag_Real64:
@@ -192,7 +187,7 @@ Arcadia_WeakReference_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 

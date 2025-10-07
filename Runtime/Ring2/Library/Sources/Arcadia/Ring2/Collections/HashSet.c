@@ -47,9 +47,7 @@ static void
 Arcadia_HashSet_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_HashSet* self
   );
 
 static void
@@ -122,7 +120,7 @@ Arcadia_HashSet_removeImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_HashSet_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_HashSet_constructImpl,
   .destruct = &Arcadia_HashSet_destruct,
   .visit = &Arcadia_HashSet_visit,
 };
@@ -246,38 +244,35 @@ static void
 Arcadia_HashSet_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_HashSet* self
   )
 {
-  Arcadia_HashSet* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_HashSet_getType(thread);
   Arcadia_HashSet_ensureInitialized(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->buckets = NULL;
-  _self->capacity = 0;
-  _self->size = 0;
-  _self->capacity = g_minimumCapacity;
-  _self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(_Arcadia_HashSet_Node*) * _self->capacity);
-  for (Arcadia_SizeValue i = 0, n = _self->capacity; i < n; ++i) {
-    _self->buckets[i] = NULL;
+  self->buckets = NULL;
+  self->capacity = 0;
+  self->size = 0;
+  self->capacity = g_minimumCapacity;
+  self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(_Arcadia_HashSet_Node*) * self->capacity);
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    self->buckets[i] = NULL;
   }
-  ((Arcadia_Collection*)_self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_clearImpl;
-  ((Arcadia_Collection*)_self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_getSizeImpl;
-  ((Arcadia_Collection*)_self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_isImmutableImpl;
-  ((Arcadia_Set*)_self)->add = (void (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value, Arcadia_Value*)) &Arcadia_HashSet_addImpl;
-  ((Arcadia_Set*)_self)->contains = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value)) &Arcadia_HashSet_containsImpl;
-  ((Arcadia_Set*)_self)->get = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value)) &Arcadia_HashSet_getImpl;
-  ((Arcadia_Set*)_self)->remove = (void (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value, Arcadia_Value*)) & Arcadia_HashSet_removeImpl;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  ((Arcadia_Collection*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_clearImpl;
+  ((Arcadia_Collection*)self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_getSizeImpl;
+  ((Arcadia_Collection*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_isImmutableImpl;
+  ((Arcadia_Set*)self)->add = (void (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value, Arcadia_Value*)) &Arcadia_HashSet_addImpl;
+  ((Arcadia_Set*)self)->contains = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value)) &Arcadia_HashSet_containsImpl;
+  ((Arcadia_Set*)self)->get = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value)) &Arcadia_HashSet_getImpl;
+  ((Arcadia_Set*)self)->remove = (void (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value, Arcadia_Value*)) & Arcadia_HashSet_removeImpl;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

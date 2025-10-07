@@ -25,9 +25,7 @@ static void
 Arcadia_DirectoryIteratorWindows_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DirectoryIteratorWindows* self
   );
   
 static void
@@ -59,7 +57,7 @@ Arcadia_DirectoryIteratorWindows_nextValue
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_DirectoryIteratorWindows_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DirectoryIteratorWindows_constructImpl,
   .destruct = &Arcadia_DirectoryIteratorWindows_destructImpl,
   .visit = NULL,
 };
@@ -77,26 +75,23 @@ static void
 Arcadia_DirectoryIteratorWindows_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DirectoryIteratorWindows* self
   )
 {
   static uint32_t zeroTerminator = '\0';
-  Arcadia_DirectoryIteratorWindows* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DirectoryIteratorWindows_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
-  _self->handle = INVALID_HANDLE_VALUE;
+  self->path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
+  self->handle = INVALID_HANDLE_VALUE;
   Arcadia_StringBuffer* queryStringBuilder = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBack(thread, queryStringBuilder, Arcadia_Value_makeObjectReferenceValue(Arcadia_FilePath_toNative(thread, _self->path)));
+  Arcadia_StringBuffer_insertBack(thread, queryStringBuilder, Arcadia_Value_makeObjectReferenceValue(Arcadia_FilePath_toNative(thread, self->path)));
   Arcadia_StringBuffer_removeCodePointsBack(thread, queryStringBuilder, 1);
   // (1) Append '/' if the path does not end with '/'.
   if (!Arcadia_StringBuffer_endsWith_pn(thread, queryStringBuilder, u8"\\", sizeof(u8"\\") - 1)) {
@@ -107,8 +102,8 @@ Arcadia_DirectoryIteratorWindows_constructImpl
   Arcadia_StringBuffer_insertCodePointsBack(thread, queryStringBuilder, &zeroTerminator, 1);
   Arcadia_String* queryString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(queryStringBuilder));
   SetLastError(0);
-  _self->handle = FindFirstFileA(Arcadia_String_getBytes(thread, queryString), &_self->data);
-  if (INVALID_HANDLE_VALUE == _self->handle) {
+  self->handle = FindFirstFileA(Arcadia_String_getBytes(thread, queryString), &self->data);
+  if (INVALID_HANDLE_VALUE == self->handle) {
     DWORD dwLastError = GetLastError();
     SetLastError(0);
     if (dwLastError == ERROR_FILE_NOT_FOUND) {
@@ -119,10 +114,10 @@ Arcadia_DirectoryIteratorWindows_constructImpl
       Arcadia_Thread_jump(thread);
     }
   }
-  ((Arcadia_DirectoryIterator*)_self)->getValue = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorWindows_getValue;
-  ((Arcadia_DirectoryIterator*)_self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorWindows_hasValue;
-  ((Arcadia_DirectoryIterator*)_self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorWindows_nextValue;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  ((Arcadia_DirectoryIterator*)self)->getValue = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorWindows_getValue;
+  ((Arcadia_DirectoryIterator*)self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorWindows_hasValue;
+  ((Arcadia_DirectoryIterator*)self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorWindows_nextValue;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
 }
 

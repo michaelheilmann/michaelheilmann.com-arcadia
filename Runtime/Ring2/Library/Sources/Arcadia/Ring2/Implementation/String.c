@@ -23,9 +23,7 @@ static void
 Arcadia_String_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_String* self
   );
 
 static Arcadia_SizeValue
@@ -82,7 +80,7 @@ getByteRange
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_String_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_String_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_String_visit,
 };
@@ -157,49 +155,46 @@ static void
 Arcadia_String_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_String* self
   )
 {
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_String* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_String_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1);
   if (Arcadia_Value_isBooleanValue(&x)) {
-    fromBoolean(thread, &_self->immutableUtf8String, Arcadia_Value_getBooleanValue(&x));
+    fromBoolean(thread, &self->immutableUtf8String, Arcadia_Value_getBooleanValue(&x));
   } else if (Arcadia_Value_isInteger16Value(&x)) {
-    fromInteger16(thread, &_self->immutableUtf8String, Arcadia_Value_getInteger16Value(&x));
+    fromInteger16(thread, &self->immutableUtf8String, Arcadia_Value_getInteger16Value(&x));
   } else if (Arcadia_Value_isInteger32Value(&x)) {
-    fromInteger32(thread, &_self->immutableUtf8String, Arcadia_Value_getInteger32Value(&x));
+    fromInteger32(thread, &self->immutableUtf8String, Arcadia_Value_getInteger32Value(&x));
   } else if (Arcadia_Value_isInteger64Value(&x)) {
-    fromInteger64(thread, &_self->immutableUtf8String, Arcadia_Value_getInteger64Value(&x));
+    fromInteger64(thread, &self->immutableUtf8String, Arcadia_Value_getInteger64Value(&x));
   } else if (Arcadia_Value_isInteger8Value(&x)) {
-    fromInteger8(thread, &_self->immutableUtf8String, Arcadia_Value_getInteger8Value(&x));
+    fromInteger8(thread, &self->immutableUtf8String, Arcadia_Value_getInteger8Value(&x));
   } else if (Arcadia_Value_isNatural16Value(&x)) {
-    fromNatural16(thread, &_self->immutableUtf8String, Arcadia_Value_getNatural16Value(&x));
+    fromNatural16(thread, &self->immutableUtf8String, Arcadia_Value_getNatural16Value(&x));
   } else if (Arcadia_Value_isNatural32Value(&x)) {
-    fromNatural32(thread, &_self->immutableUtf8String, Arcadia_Value_getNatural32Value(&x));
+    fromNatural32(thread, &self->immutableUtf8String, Arcadia_Value_getNatural32Value(&x));
   } else if (Arcadia_Value_isNatural64Value(&x)) {
-    fromNatural64(thread, &_self->immutableUtf8String, Arcadia_Value_getNatural64Value(&x));
+    fromNatural64(thread, &self->immutableUtf8String, Arcadia_Value_getNatural64Value(&x));
   } else if (Arcadia_Value_isNatural8Value(&x)) {
-    fromNatural8(thread, &_self->immutableUtf8String, Arcadia_Value_getNatural8Value(&x));
+    fromNatural8(thread, &self->immutableUtf8String, Arcadia_Value_getNatural8Value(&x));
   } if (Arcadia_Value_isImmutableByteArrayValue(&x)) {
-    fromImmutableByteArray(thread, &_self->immutableUtf8String, Arcadia_Value_getImmutableByteArrayValue(&x));
+    fromImmutableByteArray(thread, &self->immutableUtf8String, Arcadia_Value_getImmutableByteArrayValue(&x));
   } else if (Arcadia_Value_isImmutableUtf8StringValue(&x)) {
-    fromImmutableUtf8String(thread, &_self->immutableUtf8String, Arcadia_Value_getImmutableUtf8StringValue(&x));
+    fromImmutableUtf8String(thread, &self->immutableUtf8String, Arcadia_Value_getImmutableUtf8StringValue(&x));
   } else if (Arcadia_Value_isObjectReferenceValue(&x)) {
     Arcadia_ObjectReferenceValue referenceValue = Arcadia_Value_getObjectReferenceValue(&x);
     if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_ByteBuffer_getType(thread))) {
       Arcadia_ByteBuffer* object = (Arcadia_ByteBuffer*)referenceValue;
-      _self->immutableUtf8String =
+      self->immutableUtf8String =
         Arcadia_ImmutableUtf8String_create
           (
             thread,
@@ -208,21 +203,21 @@ Arcadia_String_constructImpl
           );
     } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_String_getType(thread))) {
       Arcadia_String* object = (Arcadia_String*)referenceValue;
-      _self->immutableUtf8String = object->immutableUtf8String;
+      self->immutableUtf8String = object->immutableUtf8String;
     } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_StringBuffer_getType(thread))) {
       Arcadia_StringBuffer* object = (Arcadia_StringBuffer*)referenceValue;
-      _self->immutableUtf8String = Arcadia_ImmutableUtf8String_create(thread, Arcadia_StringBuffer_getBytes(thread, object), Arcadia_StringBuffer_getNumberOfBytes(thread, object));
+      self->immutableUtf8String = Arcadia_ImmutableUtf8String_create(thread, Arcadia_StringBuffer_getBytes(thread, object), Arcadia_StringBuffer_getNumberOfBytes(thread, object));
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
     }
   } else if (Arcadia_Value_isVoidValue(&x)) {
-    fromVoid(thread, &_self->immutableUtf8String, Arcadia_Value_getVoidValue(&x));
+    fromVoid(thread, &self->immutableUtf8String, Arcadia_Value_getVoidValue(&x));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
 }
 

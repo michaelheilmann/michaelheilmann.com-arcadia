@@ -22,10 +22,10 @@
 #include <Windows.h>
 
 // A temporary window used to create old-style contexts.
-Arcadia_declareObjectType(u8"Arcadia.Visuals.OpenGL.WGL.FactoryWindow", Arcadia_Visuals_OpenGL_WGL_FactoryWindow,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.FactoryWindow", Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow,
                           u8"Arcadia.Object");
 
-struct Arcadia_Visuals_OpenGL_WGL_FactoryWindow {
+struct Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow {
   Arcadia_Object parent;
   HINSTANCE instanceHandle;
   ATOM classAtom;
@@ -33,24 +33,24 @@ struct Arcadia_Visuals_OpenGL_WGL_FactoryWindow {
   HDC deviceContextHandle;
 };
 
-Arcadia_Visuals_OpenGL_WGL_FactoryWindow*
-Arcadia_Visuals_OpenGL_WGL_FactoryWindow_create
+Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow*
+Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_create
   (
     Arcadia_Thread* thread
   );
 
 void
-Arcadia_Visuals_OpenGL_WGL_FactoryWindow_open
+Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_open
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_OpenGL_WGL_FactoryWindow* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
   );
 
 void
-Arcadia_Visuals_OpenGL_WGL_FactoryWindow_close
+Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_close
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_OpenGL_WGL_FactoryWindow* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow* self
   );
 
 #endif // ARCADIA_VISUALS_OPENGL_WGL_FACTORYWINDOW_H_INCLUDED

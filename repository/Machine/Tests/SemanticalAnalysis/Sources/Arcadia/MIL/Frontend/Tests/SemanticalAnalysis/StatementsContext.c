@@ -22,9 +22,7 @@ static void
 Arcadia_MIL_CallableContext_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_MIL_CallableContext* self
   );
 
 static void
@@ -35,7 +33,7 @@ Arcadia_MIL_CallableContext_visit
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_MIL_CallableContext_objectTypeOperations = {
-  .construct = &Arcadia_MIL_CallableContext_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_CallableContext_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_MIL_CallableContext_visit,
 };
@@ -53,24 +51,21 @@ static void
 Arcadia_MIL_CallableContext_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_MIL_CallableContext* self
   )
 {
-  Arcadia_MIL_CallableContext* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_MIL_CallableContext_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->labels = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
-  _self->variables = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->labels = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  self->variables = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 
@@ -118,7 +113,7 @@ Arcadia_MIL_CallableContext_onDefineLabel
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_LabelStatementAst* ast,
+    Arcadia_MIL_AST_LabelStatementNode* ast,
     Arcadia_Natural32Value instructionIndex
   )
 {
@@ -139,7 +134,7 @@ Arcadia_MIL_CallableContext_onParameterVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_Ast* ast
+    Arcadia_MIL_AST_Node* ast
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->variables); i < n; ++i) {

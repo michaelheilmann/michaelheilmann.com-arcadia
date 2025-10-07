@@ -3,6 +3,7 @@
 
 #include "Arcadia/Visuals/Include.h"
 #define WIN32_LEAN_AND_MEAN
+#define NOCOMM
 #include <Windows.h>
 
 Arcadia_List*

@@ -33,13 +33,11 @@ static void
 Ast_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Ast* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Ast_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Ast_constructImpl,
   .destruct = &Ast_destruct,
   .visit = &Ast_visit,
 };
@@ -80,25 +78,22 @@ static void
 Ast_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Ast* self
   )
 {
-  Ast* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Ast_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->type = Arcadia_ValueStack_getInteger32Value(thread, 2);
-  _self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
-  _self->arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->type = Arcadia_ValueStack_getInteger32Value(thread, 2);
+  self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
+  self->arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 3);
 }
 

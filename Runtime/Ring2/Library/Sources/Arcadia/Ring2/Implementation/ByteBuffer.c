@@ -20,9 +20,7 @@ static void
 Arcadia_ByteBuffer_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_ByteBuffer* self
   );
 
 static void
@@ -33,7 +31,7 @@ Arcadia_ByteBuffer_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_ByteBuffer_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_ByteBuffer_constructImpl,
   .destruct = &Arcadia_ByteBuffer_destruct,
   .visit = NULL,
 };
@@ -51,26 +49,23 @@ static void
 Arcadia_ByteBuffer_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_ByteBuffer* self
   )
 {
-  Arcadia_ByteBuffer* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_ByteBuffer_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->p = NULL;
-  _self->sz = 0;
-  _self->cp = 0;
-  _self->p = Arcadia_Memory_allocateUnmanaged(thread, 0);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->p = NULL;
+  self->sz = 0;
+  self->cp = 0;
+  self->p = Arcadia_Memory_allocateUnmanaged(thread, 0);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

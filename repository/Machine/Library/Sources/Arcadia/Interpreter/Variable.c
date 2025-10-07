@@ -21,9 +21,7 @@ static void
 R_Interpreter_Variable_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    R_Interpreter_Variable* self
   );
 
 static void
@@ -34,7 +32,7 @@ R_Interpreter_Variable_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &R_Interpreter_Variable_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & R_Interpreter_Variable_constructImpl,
   .destruct = NULL,
   .visit = &R_Interpreter_Variable_visit,
 };
@@ -52,26 +50,23 @@ static void
 R_Interpreter_Variable_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    R_Interpreter_Variable* self
   )
 {
-  R_Interpreter_Variable* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Variable_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->ready = Arcadia_BooleanValue_False;
-  _self->index = Arcadia_SizeValue_Literal(0);
-  _self->class = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[0], _R_Interpreter_Class_getType(thread));
-  _self->name = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &argumentValues[1], _Arcadia_String_getType(thread));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->ready = Arcadia_BooleanValue_False;
+  self->index = Arcadia_SizeValue_Literal(0);
+  self->class = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _R_Interpreter_Class_getType(thread));
+  self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 

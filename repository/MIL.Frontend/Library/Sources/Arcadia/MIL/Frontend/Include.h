@@ -16,7 +16,7 @@
 #if !defined(ARCAIDA_MIL_FRONTEND_INCLUDE_H_INCLUDED)
 #define ARCAIDA_MIL_FRONTEND_INCLUDE_H_INCLUDED
 
-#include "Arcadia/MIL/Frontend/Asts/Include.h"
+#include "Arcadia/MIL/AST/Include.h"
 #include "Arcadia/MIL/Frontend/Keywords.h"
 #include "Arcadia/MIL/Frontend/Parser.h"
 #include "Arcadia/MIL/Frontend/Scanner.h"

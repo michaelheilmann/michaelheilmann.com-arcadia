@@ -18,15 +18,15 @@
 
 #include "Arcadia/Audials/Include.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Audials.OpenAL.Backend", Arcadia_Audials_OpenAL_Backend,
+Arcadia_declareObjectType(u8"Arcadia.Audials.Implementation.OpenAL.Backend", Arcadia_Audials_Implementation_OpenAL_Backend,
                           Arcadia_Audials_Backend);
 
-struct Arcadia_Audials_OpenAL_Backend {
+struct Arcadia_Audials_Implementation_OpenAL_Backend {
   Arcadia_Audials_Backend parent;
 };
 
-Arcadia_Audials_OpenAL_Backend*
-Arcadia_Audials_OpenAL_Backend_create
+Arcadia_Audials_Implementation_OpenAL_Backend*
+Arcadia_Audials_Implementation_OpenAL_Backend_create
   (
     Arcadia_Thread* thread
   );

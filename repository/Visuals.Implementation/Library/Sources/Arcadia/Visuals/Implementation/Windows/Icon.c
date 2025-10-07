@@ -16,24 +16,22 @@
 #include "Arcadia/Visuals/Implementation/Windows/Icon.h"
 
 static void
-Arcadia_Visuals_Windows_Icon_constructImpl
+Arcadia_Visuals_Implementation_Windows_Icon_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_Windows_Icon* self
   );
 
 static void
-Arcadia_Visuals_Windows_Icon_destruct
+Arcadia_Visuals_Implementation_Windows_Icon_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Icon* self
+    Arcadia_Visuals_Implementation_Windows_Icon* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Windows_Icon_constructImpl,
-  .destruct = &Arcadia_Visuals_Windows_Icon_destruct,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_Windows_Icon_constructImpl,
+  .destruct = &Arcadia_Visuals_Implementation_Windows_Icon_destruct,
   .visit = NULL,
 };
 
@@ -42,24 +40,21 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Icon", Arcadia_Visuals_Windows_Icon,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.Windows.Icon", Arcadia_Visuals_Implementation_Windows_Icon,
                          u8"Arcadia.Visuals.Icon", Arcadia_Visuals_Icon,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_Windows_Icon_constructImpl
+Arcadia_Visuals_Implementation_Windows_Icon_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_Windows_Icon* self
   )
 {
-  Arcadia_Visuals_Windows_Icon* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_Icon_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_Windows_Icon_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -194,16 +189,16 @@ Arcadia_Visuals_Windows_Icon_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  _self->hIcon = hIcon;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->hIcon = hIcon;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 static void
-Arcadia_Visuals_Windows_Icon_destruct
+Arcadia_Visuals_Implementation_Windows_Icon_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Icon* self
+    Arcadia_Visuals_Implementation_Windows_Icon* self
   )
 {
   if (self->hIcon) {
@@ -212,8 +207,8 @@ Arcadia_Visuals_Windows_Icon_destruct
   }
 }
 
-Arcadia_Visuals_Windows_Icon*
-Arcadia_Visuals_Windows_Icon_create
+Arcadia_Visuals_Implementation_Windows_Icon*
+Arcadia_Visuals_Implementation_Windows_Icon_create
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_PixelBuffer* pixelBuffer
@@ -222,5 +217,5 @@ Arcadia_Visuals_Windows_Icon_create
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, pixelBuffer);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_Icon);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_Windows_Icon);
 }

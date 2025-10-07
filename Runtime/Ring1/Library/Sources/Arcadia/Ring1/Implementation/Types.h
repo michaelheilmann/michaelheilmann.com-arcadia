@@ -25,8 +25,9 @@
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 #include "Arcadia/Ring1/Implementation/Value.h"
 typedef struct Arcadia_Value Arcadia_Value;
+typedef struct Arcadia_Object Arcadia_Object;
 
-typedef void (Arcadia_Object_ConstructorCallbackFunction)(Arcadia_Thread* thread, Arcadia_Value* self, Arcadia_SizeValue numberOfArguments, Arcadia_Value* arguments);
+typedef void (Arcadia_Object_ConstructorCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
 typedef void (Arcadia_Object_DestructorCallbackFunction)(Arcadia_Thread* thread, void* self);
 typedef void (Arcadia_Object_VisitCallbackFunction)(Arcadia_Thread* thread, void* self);
 

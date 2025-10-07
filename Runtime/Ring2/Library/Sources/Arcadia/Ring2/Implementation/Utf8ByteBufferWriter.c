@@ -24,9 +24,7 @@ static void
 Arcadia_Utf8ByteBufferWriter_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Utf8ByteBufferWriter* self
   );
 
 static void
@@ -63,7 +61,7 @@ Arcadia_Utf8ByteBufferWriter_writeStringImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Utf8ByteBufferWriter_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Utf8ByteBufferWriter_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_Utf8ByteBufferWriter_visit,
 };
@@ -81,26 +79,23 @@ static void
 Arcadia_Utf8ByteBufferWriter_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Utf8ByteBufferWriter* self
   )
 {
-  Arcadia_Utf8ByteBufferWriter* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Utf8ByteBufferWriter_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->target = (Arcadia_ByteBuffer*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_ByteBuffer_getType(thread));
-  ((Arcadia_Utf8Writer*)_self)->writeBytes = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, void const*, Arcadia_SizeValue)) & Arcadia_Utf8ByteBufferWriter_writeBytesImpl;
-  ((Arcadia_Utf8Writer*)_self)->writeCodePoints = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & Arcadia_Utf8ByteBufferWriter_writeCodePointsImpl;
-  ((Arcadia_Utf8Writer*)_self)->writeString = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, Arcadia_String*))&Arcadia_Utf8ByteBufferWriter_writeStringImpl;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->target = (Arcadia_ByteBuffer*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_ByteBuffer_getType(thread));
+  ((Arcadia_Utf8Writer*)self)->writeBytes = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, void const*, Arcadia_SizeValue)) & Arcadia_Utf8ByteBufferWriter_writeBytesImpl;
+  ((Arcadia_Utf8Writer*)self)->writeCodePoints = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & Arcadia_Utf8ByteBufferWriter_writeCodePointsImpl;
+  ((Arcadia_Utf8Writer*)self)->writeString = (void (*)(Arcadia_Thread*, Arcadia_Utf8Writer*, Arcadia_String*))&Arcadia_Utf8ByteBufferWriter_writeStringImpl;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
 }
 

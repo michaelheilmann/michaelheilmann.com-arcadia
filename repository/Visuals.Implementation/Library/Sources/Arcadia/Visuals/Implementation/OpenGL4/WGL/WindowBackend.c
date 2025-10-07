@@ -17,7 +17,7 @@
 
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/Windows/_WindowText.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryContext.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Context.h"
 #include <limits.h>
 
 static void
@@ -38,9 +38,7 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self
   );
 
 static void
@@ -90,7 +88,7 @@ getRequiredSmallIconSizeImpl
     Arcadia_Integer32Value* height
   );
 
-static Arcadia_Visuals_Windows_Icon*
+static Arcadia_Visuals_Implementation_Windows_Icon*
 getBigIconImpl
   (
     Arcadia_Thread* thread,
@@ -102,10 +100,10 @@ setBigIconImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self,
-    Arcadia_Visuals_Windows_Icon* icon
+    Arcadia_Visuals_Implementation_Windows_Icon* icon
   );
 
-static Arcadia_Visuals_Windows_Icon*
+static Arcadia_Visuals_Implementation_Windows_Icon*
 getSmallIconImpl
   (
     Arcadia_Thread* thread,
@@ -117,7 +115,7 @@ setSmallIconImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self,
-    Arcadia_Visuals_Windows_Icon* icon
+    Arcadia_Visuals_Implementation_Windows_Icon* icon
   );
 
 static Arcadia_String*
@@ -145,11 +143,11 @@ getCanvasSizeImpl
   );
 
 static void
-createContext
+setPixelFormat
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self,
-    Arcadia_Visuals_OpenGL_WGL_FactoryContext* factoryContext
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* system
   );
 
 static void
@@ -203,7 +201,7 @@ setSizeImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_constructImpl,
   .destruct = &Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_destruct,
   .visit = &Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_visit,
 };
@@ -284,16 +282,13 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -304,46 +299,45 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->system = NULL;
-  _self->windowHandle = NULL;
-  _self->deviceContextHandle = NULL;
-  _self->glResourceContextHandle = NULL;
-  _self->bigIcon = NULL;
-  _self->smallIcon = NULL;
+  self->system = NULL;
+  self->windowHandle = NULL;
+  self->deviceContextHandle = NULL;
+  self->bigIcon = NULL;
+  self->smallIcon = NULL;
 
-  _self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getType(thread));
-  Arcadia_Object_lock(thread, (Arcadia_Object*)_self->system);
+  self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getType(thread));
+  Arcadia_Object_lock(thread, (Arcadia_Object*)self->system);
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & openImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & closeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & openImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & closeImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->getRequiredBigIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredBigIconSizeImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->getRequiredSmallIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredSmallIconSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getRequiredBigIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredBigIconSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getRequiredSmallIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredSmallIconSizeImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->getBigIcon = (Arcadia_Visuals_Icon *(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getBigIconImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->setBigIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*)) & setBigIconImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getBigIcon = (Arcadia_Visuals_Icon *(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getBigIconImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setBigIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*)) & setBigIconImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->getSmallIcon = (Arcadia_Visuals_Icon *(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getSmallIconImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->setSmallIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*)) & setSmallIconImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getSmallIcon = (Arcadia_Visuals_Icon *(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getSmallIconImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setSmallIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*)) & setSmallIconImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->getTitle = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getTitleImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->setTitle = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_String*)) & setTitleImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getTitle = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getTitleImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setTitle = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_String*)) & setTitleImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->getCanvasSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getCanvasSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->beginRender = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*))&beginRenderImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->endRender = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*))&endRenderImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->beginRender = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*))&beginRenderImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->endRender = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*))&endRenderImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->getPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getPositionImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->setPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setPositionImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getPositionImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setPositionImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->getSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getSizeImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->setSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getSizeImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setSizeImpl;
 
-  ((Arcadia_Visuals_WindowBackend*)_self)->getFullscreen = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getFullscreenImpl;
-  ((Arcadia_Visuals_WindowBackend*)_self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_BooleanValue)) & setFullscreenImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->getFullscreen = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getFullscreenImpl;
+  ((Arcadia_Visuals_WindowBackend*)self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_BooleanValue)) & setFullscreenImpl;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
@@ -401,11 +395,8 @@ openImpl
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Windows_setWindowText(thread, self->windowHandle, ((Arcadia_Visuals_WindowBackend*)self)->title);
-    Arcadia_Visuals_OpenGL_WGL_FactoryContext* wglFactoryContext = Arcadia_Visuals_OpenGL_WGL_FactoryContext_create(thread);
-    Arcadia_Visuals_OpenGL_WGL_FactoryContext_open(thread, wglFactoryContext);
-    createContext(thread, self, wglFactoryContext);
-    Arcadia_Visuals_OpenGL_WGL_FactoryContext_close(thread, wglFactoryContext);
+    _setWindowText(thread, self->windowHandle, ((Arcadia_Visuals_WindowBackend*)self)->title);
+    setPixelFormat(thread, self, self->system);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -428,13 +419,6 @@ closeImpl
 {
   if (!self->windowHandle) {
     return;
-  }
-  if (self->glResourceContextHandle) {
-    if (self->glResourceContextHandle == wglGetCurrentContext()) {
-      wglMakeCurrent(self->deviceContextHandle, NULL);
-    }
-    wglDeleteContext(self->glResourceContextHandle);
-    self->glResourceContextHandle = NULL;
   }
   if (self->deviceContextHandle) {
     ReleaseDC(self->windowHandle, self->deviceContextHandle);
@@ -515,7 +499,7 @@ getRequiredSmallIconSizeImpl
   *height = GetSystemMetrics(SM_CYSMICON);
 }
 
-static Arcadia_Visuals_Windows_Icon*
+static Arcadia_Visuals_Implementation_Windows_Icon*
 getBigIconImpl
   (
     Arcadia_Thread* thread,
@@ -528,7 +512,7 @@ setBigIconImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self,
-    Arcadia_Visuals_Windows_Icon* icon
+    Arcadia_Visuals_Implementation_Windows_Icon* icon
   )
 {
   self->bigIcon = icon;
@@ -541,7 +525,7 @@ setBigIconImpl
   }
 }
 
-static Arcadia_Visuals_Windows_Icon*
+static Arcadia_Visuals_Implementation_Windows_Icon*
 getSmallIconImpl
   (
     Arcadia_Thread* thread,
@@ -554,7 +538,7 @@ setSmallIconImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self,
-    Arcadia_Visuals_Windows_Icon* icon
+    Arcadia_Visuals_Implementation_Windows_Icon* icon
   )
 {
   self->smallIcon = icon;
@@ -589,7 +573,7 @@ setTitleImpl
   }
   ((Arcadia_Visuals_WindowBackend*)self)->title = title;
   if (self->windowHandle) {
-    Windows_setWindowText(thread, self->windowHandle, title);
+    _setWindowText(thread, self->windowHandle, title);
   }
 }
 
@@ -668,161 +652,22 @@ isConfigurationSupported
 }
 
 static void
-createContext
+setPixelFormat
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self,
-    Arcadia_Visuals_OpenGL_WGL_FactoryContext* wglFactoryContext
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* system
   )
 {
-  // (1) Get supported configuration.
-  Arcadia_List* supportedConfigurations = Arcadia_Visuals_OpenGL_WGL_FactoryContext_getConfigurations(thread, wglFactoryContext);
-  Arcadia_StringBuffer* logMessage = Arcadia_StringBuffer_create(thread);
-  Arcadia_Log* log = Arcadia_Log_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)supportedConfigurations); i < n; ++i) {
-    Arcadia_Visuals_Configuration* supportedConfiguration = Arcadia_List_getObjectReferenceValueAt(thread, supportedConfigurations, i);
-    Arcadia_StringBuffer_clear(thread, logMessage);
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"index: ");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromSize(thread, i));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"red bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.redBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"green bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.greenBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"blue bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.blueBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"alpha bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->colorBuffer.alphaBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"depth bits: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->depthBuffer.depthBits));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"OpenGL major version: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->opengl.version.major));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"OpenGL minor version: ");
-    Arcadia_StringBuffer_insertBack(thread, logMessage, Arcadia_Value_makeObjectReferenceValue(supportedConfiguration->opengl.version.minor));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));   
-  }
-  // (2) Get desired configuration.
-  Arcadia_Visuals_Configuration* desiredConfiguration = Arcadia_Visuals_Configuration_create(thread);
-  // (3) Check if desired configuration is in supported configurations. If yes, continue. If no, fail.
-  if (!isConfigurationSupported(thread, supportedConfigurations, desiredConfiguration)) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": visuals configuration not supported\n");
-
-    Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
-
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  const int pixelFormatAttribs[] = {
-    WGL_ACCELERATION_ARB, // WGL_ACCELERATION_ARB
-    WGL_FULL_ACCELERATION_ARB, // WGL_FULL_ACCELERATION_ARB
-    WGL_DEPTH_BITS_ARB, Arcadia_String_toCxxInt(thread, desiredConfiguration->depthBuffer.depthBits), // WGL_DEPTH_BITS_ARB
-    WGL_DRAW_TO_WINDOW_ARB, 1, // WGL_DRAW_TO_WINDOW_ARB
-    WGL_RED_BITS_ARB, Arcadia_String_toCxxInt(thread, desiredConfiguration->colorBuffer.redBits), // WGL_RED_BITS_ARB
-    WGL_GREEN_BITS_ARB, Arcadia_String_toCxxInt(thread, desiredConfiguration->colorBuffer.greenBits), // WGL_GREEN_BITS_ARB
-    WGL_BLUE_BITS_ARB, Arcadia_String_toCxxInt(thread, desiredConfiguration->colorBuffer.blueBits), // WGL_BLUE_BITS_ARB
-    WGL_ALPHA_BITS_ARB, Arcadia_String_toCxxInt(thread, desiredConfiguration->colorBuffer.alphaBits), // WGL_ALPHA_BITS_ARB
-    WGL_PIXEL_TYPE_ARB,  WGL_TYPE_RGBA_ARB, // WGL_PIXEL_TYPE_ARB // WGL_TYPE_RGBA_ARB
-    WGL_SUPPORT_OPENGL_ARB, 1, // WGL_SUPPORT_OPENGL_ARB
-    WGL_COLOR_BITS_ARB,	32, // WGL_COLOR_BITS_ARB
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-  };
-  int pixelFormatIndex;
-  int numberOfPixelFormats;
-  wglFactoryContext->_wglChoosePixelFormat(self->deviceContextHandle, &pixelFormatAttribs[0], NULL, 1, &pixelFormatIndex, &numberOfPixelFormats);
-  if (!numberOfPixelFormats) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": failed to select pixel format\n");
-
-    Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
-
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
   PIXELFORMATDESCRIPTOR pixelFormatDescriptors;
-  if (!DescribePixelFormat(self->deviceContextHandle, pixelFormatIndex, sizeof(pixelFormatDescriptors), &pixelFormatDescriptors)) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": failed to describe pixel format\n");
-
-    Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
-
+  if (!DescribePixelFormat(self->deviceContextHandle, system->pixelFormatIndex, sizeof(pixelFormatDescriptors), &pixelFormatDescriptors)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  if (!SetPixelFormat(self->deviceContextHandle, pixelFormatIndex, &pixelFormatDescriptors)) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": failed to set pixel format\n");
-
-    Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
-
+  if (!SetPixelFormat(self->deviceContextHandle, system->pixelFormatIndex, &pixelFormatDescriptors)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  int contextAttribs[] = {
-    WGL_CONTEXT_MAJOR_VERSION_ARB, Arcadia_String_toCxxInt(thread, desiredConfiguration->opengl.version.major),
-    WGL_CONTEXT_MINOR_VERSION_ARB, Arcadia_String_toCxxInt(thread, desiredConfiguration->opengl.version.minor),
-    WGL_CONTEXT_FLAGS_ARB, 0,
-    0
-  };
-  self->glResourceContextHandle = wglFactoryContext->_wglCreateContextAttribs(self->deviceContextHandle, NULL, &contextAttribs[0]);
-  if (!self->glResourceContextHandle) {
-    Arcadia_StringBuffer_clear(thread, logMessage);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": failed to create OpenGL/WGL context for OpenGL version ");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.major);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8".");
-    Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.minor);
-    Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-    Arcadia_Log_error(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
-
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-
-  Arcadia_StringBuffer_clear(thread, logMessage);
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, __FILE__);
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8":");
-  Arcadia_StringBuffer_insertBackString(thread, logMessage, Arcadia_String_createFromCxxInt(thread, __LINE__));
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8": created OpenGL/WGL context for OpenGL version \n");
-  Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.major);
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8".");
-  Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.minor);
-  Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
-
-  Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
 }
 
 static void
@@ -832,16 +677,12 @@ beginRenderImpl
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self
   )
 {
-  if (!wglMakeCurrent(self->deviceContextHandle, self->glResourceContextHandle)) {
+  if (!wglMakeCurrent(self->deviceContextHandle, self->system->glResourceContextHandle)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Integer32Value width, height;
-  Arcadia_Visuals_WindowBackend_getCanvasSize(thread, (Arcadia_Visuals_WindowBackend*)self, &width, &height);
-  glViewport(0, 0, width, height);
-  glClearColor(193.0f/255.0f, 216.0f/255.0f, 195.0f/255.0f, 255.0f/255.0f);
-  glClearDepth(1.f);
-  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+  Arcadia_Visuals_Implementation_OpenGL4_Context* context = Arcadia_Visuals_Implementation_OpenGL4_Context_create(thread);
+  Arcadia_Visuals_Implementation_OpenGL4_Context_render(thread, context, ((Arcadia_Visuals_WindowBackend*)self)->window);
 }
 
 static void
@@ -851,7 +692,7 @@ endRenderImpl
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self
   )
 {
-  if (self->glResourceContextHandle == wglGetCurrentContext()) {
+  if (self->system->glResourceContextHandle == wglGetCurrentContext()) {
     if (!SwapBuffers(self->deviceContextHandle)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);

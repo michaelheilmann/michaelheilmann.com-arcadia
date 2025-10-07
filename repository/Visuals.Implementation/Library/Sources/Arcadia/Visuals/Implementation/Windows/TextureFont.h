@@ -26,7 +26,7 @@
 /// @copde
 /// class Arcadia.Visuals.Windows.TextureFontWindows {
 ///   /* The default code point is "Latin Capital Letter A" / "U+0041". */
-///   construct()
+///   constructor()
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.TextureFontWindows", Arcadia_Visuals_Windows_TextureFont,

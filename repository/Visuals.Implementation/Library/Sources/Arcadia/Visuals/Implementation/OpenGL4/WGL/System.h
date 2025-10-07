@@ -17,13 +17,19 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_SYSTEM_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/WGL/SystemWindow.h"
 
 #define WIN32_LEAN_AND_MEAN
+#define NOCOMM
 #include <Windows.h>
 
+/// The system maintains a pixel format and an OpenGL resource context.
+/// The pixel format must be remembered as each time a new window is created the pixel format must be set for that window and all windows must have the same pixel format.
+/// The OpenGL resource context is a singleton and is either attached to a single window or is not attached.
+/// 
 /// @code
 /// class Arcadia.Visuals.Implementation.OpenGL4.WGL.System extends Arcadia.Visuals.System {
-///   construct()
+///   constructor()
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.System", Arcadia_Visuals_Implementation_OpenGL4_WGL_System,
@@ -39,8 +45,13 @@ struct Arcadia_Visuals_Implementation_OpenGL4_WGL_System {
   char* className;
   // The window callback procedure of the window class.
   WNDPROC defaultWindowCallbackProcedure;
-  // The WGL/OpenGL resource context handle.
+
+  // The WGL/OpenGL system-wide window.
+  Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow* systemWindow;
+  // The WGL/OpenGL system-wide resource context handle.
   HGLRC glResourceContextHandle;
+  // The WGL/OpenGL system-wide pixel format index.
+  int pixelFormatIndex;
 };
 
 // @todo Make private.

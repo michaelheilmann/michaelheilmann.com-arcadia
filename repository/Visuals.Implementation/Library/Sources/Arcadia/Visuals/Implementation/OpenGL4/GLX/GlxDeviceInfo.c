@@ -17,6 +17,8 @@
 
 #include <string.h>
 
+static Arcadia_BooleanValue g_error = Arcadia_BooleanValue_False;
+
 // Utility variable.
 static int (*g_oldErrorHandler)(Display*, XErrorEvent*) = NULL;
 
@@ -70,9 +72,7 @@ static void
 Arcadia_Visuals_Linux_GlxDeviceInfo_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Linux_GlxDeviceInfo* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -106,12 +106,32 @@ Arcadia_defineObjectType(u8"Arcadia.Visuals.Linux.GlxDeviceInfo", Arcadia_Visual
                          &_typeOperations);
 
 static int
+ignoreErrorHandler
+  (
+    Display *display,
+    XErrorEvent *event
+  )
+{
+  //char buf[1024+1];
+  //XGetErrorText(display, event->error_code, buf, 1024+1);
+  //printf("%s:%d: %s\n", __FILE__, __LINE__, buf);
+  //g_error = Arcadia_BooleanValue_True;
+  return 0;
+}
+
+static int
 errorHandler
   (
     Display *display,
     XErrorEvent *event
   )
-{ return 0; }
+{
+  char buf[1024+1];
+  XGetErrorText(display, event->error_code, buf, 1024+1);
+  printf("%s:%d: %s\n", __FILE__, __LINE__, buf);
+  g_error = Arcadia_BooleanValue_True;
+  return 0;
+}
 
 static bool
 isExtensionSupported
@@ -220,12 +240,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_destruct
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_GlxDeviceInfo* self
   )
-{
-  if (self->xDisplay) {
-    XCloseDisplay(self->xDisplay);
-    self->xDisplay = NULL;
-  }
-}
+{ }
 
 static void
 Arcadia_Visuals_Linux_GlxDeviceInfo_visit
@@ -239,23 +254,19 @@ static void
 Arcadia_Visuals_Linux_GlxDeviceInfo_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Linux_GlxDeviceInfo* self
   )
 {
-  Arcadia_Visuals_Linux_GlxDeviceInfo* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Linux_GlxDeviceInfo_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->xDisplay = NULL;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
@@ -274,24 +285,16 @@ Arcadia_List*
 Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_GlxDeviceInfo* self
+    Arcadia_Visuals_Linux_GlxDeviceInfo* self,
+    Display* display
   )
 {
   Arcadia_List* configurations = (Arcadia_List*)Arcadia_ArrayList_create(thread);
 
-  if (!self->xDisplay) {
-    self->xDisplay = XOpenDisplay(NULL);
-    if (!self->xDisplay) {
-      fprintf(stderr, "%s:%d: unable to open X display\n", __FILE__, __LINE__);
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-      Arcadia_Thread_jump(thread);
-    }
-  }
-
   int glXMajorVersion, glXMinorVersion;
 
   // FBConfigs were added in GLX version 1.3.
-  if (!glXQueryVersion(self->xDisplay, &glXMajorVersion, &glXMinorVersion)) {
+  if (!glXQueryVersion(display, &glXMajorVersion, &glXMinorVersion)) {
     fprintf(stderr, "%s:%d: unable to determine GLX version\n", __FILE__, __LINE__);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
@@ -302,7 +305,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
     Arcadia_Thread_jump(thread);
   }
   int glXNumberOfConfigurations;
-  GLXFBConfig* glXConfigurations = glXChooseFBConfig(self->xDisplay, DefaultScreen(self->xDisplay),
+  GLXFBConfig* glXConfigurations = glXChooseFBConfig(display, DefaultScreen(display),
                                                      NULL, &glXNumberOfConfigurations);
   if (!glXConfigurations) {
     fprintf(stderr, "%s:%d: unable to obtain GLX frame buffer configuration\n", __FILE__, __LINE__);
@@ -320,7 +323,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           int key, value;
 
           key = GLX_DRAWABLE_TYPE;
-          if (glXGetFBConfigAttrib(self->xDisplay, glXConfiguration, key, &value)) {
+          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &value)) {
             continue;
           }
           if (GLX_WINDOW_BIT != (value & GLX_WINDOW_BIT)) {
@@ -328,7 +331,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           }
 
           key = GLX_RENDER_TYPE;
-          if (glXGetFBConfigAttrib(self->xDisplay, glXConfiguration, key, &value)) {
+          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &value)) {
             continue;
           }
           if (GLX_RGBA_BIT != (value & GLX_RGBA_BIT)) {
@@ -336,7 +339,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           }
 
           key = GLX_X_VISUAL_TYPE;
-          if (glXGetFBConfigAttrib(self->xDisplay, glXConfiguration, key, &value)) {
+          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &value)) {
             continue;
           }
           if (value != GLX_TRUE_COLOR) {
@@ -345,7 +348,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
 
           key = GLX_RED_SIZE;
           int redBits;
-          if (glXGetFBConfigAttrib(self->xDisplay, glXConfiguration, key, &redBits)) {
+          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &redBits)) {
             continue;
           }
           if (redBits < 8) {
@@ -353,7 +356,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           }
           key = GLX_GREEN_SIZE;
           int greenBits;
-          if (glXGetFBConfigAttrib(self->xDisplay, glXConfiguration, key, &greenBits)) {
+          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &greenBits)) {
             continue;
           }
           if (greenBits < 8) {
@@ -361,7 +364,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           }
           key = GLX_BLUE_SIZE;
           int blueBits;
-          if (glXGetFBConfigAttrib(self->xDisplay, glXConfiguration, key, &blueBits)) {
+          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &blueBits)) {
             continue;
           }
           if (blueBits < 8) {
@@ -369,7 +372,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           }
           key = GLX_ALPHA_SIZE;
           int alphaBits;
-          if (glXGetFBConfigAttrib(self->xDisplay, glXConfiguration, key, &alphaBits)) {
+          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &alphaBits)) {
             continue;
           }
           if (alphaBits < 8) {
@@ -378,7 +381,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
 
           key = GLX_DEPTH_SIZE;
           int depthBits;
-          if (glXGetFBConfigAttrib(self->xDisplay, glXConfiguration, key, &depthBits)) {
+          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &depthBits)) {
             continue;
           }
           if (depthBits < 24) {
@@ -386,7 +389,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           }
 
           // Get the default screen's GLX extension list.
-          const char *glXExtensions = glXQueryExtensionsString(self->xDisplay, DefaultScreen(self->xDisplay));
+          const char *glXExtensions = glXQueryExtensionsString(display, DefaultScreen(display));
           // Check for the GLX_ARB_create_context extension string.
           if (!isExtensionSupported(glXExtensions, "GLX_ARB_create_context")) {
             continue;
@@ -408,9 +411,9 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           };
 
           // Replace the original error handler with our error handler.
-          g_oldErrorHandler = XSetErrorHandler(&errorHandler);
+          g_oldErrorHandler = XSetErrorHandler(&ignoreErrorHandler);
 
-          GLXContext glXContext = glXCreateContextAttribsARB(self->xDisplay, glXConfiguration, 0, True,
+          GLXContext glXContext = glXCreateContextAttribsARB(display, glXConfiguration, 0, True,
                                                              contextAttributes);
           if (NULL == glXContext) {
             continue;
@@ -421,7 +424,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
           g_oldErrorHandler = NULL;
 
 
-          glXDestroyContext(self->xDisplay, glXContext);
+          glXDestroyContext(display, glXContext);
           glXContext = NULL;
 
           Arcadia_Visuals_Configuration* configuration = Arcadia_Visuals_Configuration_create(thread);
@@ -442,9 +445,6 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
     XFree(glXConfigurations);
     glXConfigurations = NULL;
 
-    XCloseDisplay(self->xDisplay);
-    self->xDisplay = NULL;
-
     return configurations;
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -452,11 +452,6 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
     if (glXConfigurations) {
       XFree(glXConfigurations);
       glXConfigurations = NULL;
-    }
-
-    if (self->xDisplay) {
-      XCloseDisplay(self->xDisplay);
-      self->xDisplay = NULL;
     }
 
     Arcadia_Thread_jump(thread);
@@ -468,18 +463,19 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_isGlxExtensionSupported
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_GlxDeviceInfo* self,
+    Display* display,
     const char *glXExtension
   )
 {
-  if (!self->xDisplay) {
-    self->xDisplay = XOpenDisplay(NULL);
-    if (!self->xDisplay) {
-      fprintf(stderr, "%s:%d: unable to open X display\n", __FILE__, __LINE__);
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-      Arcadia_Thread_jump(thread);
-    }
-  }
+  g_error = Arcadia_BooleanValue_False;
+  // Replace the original error handler with our error handler.
+  g_oldErrorHandler = XSetErrorHandler(&errorHandler);
+  
   // Get the default screen's GLX extension list.
-  const char *glXExtensions = glXQueryExtensionsString(self->xDisplay, DefaultScreen(self->xDisplay));
-  return isExtensionSupported(glXExtensions, glXExtension);
+  const char *glXExtensions = glXQueryExtensionsString(display, DefaultScreen(display));
+  Arcadia_BooleanValue result = isExtensionSupported(glXExtensions, glXExtension);
+  // Restore the original error handler.
+  XSetErrorHandler(g_oldErrorHandler);
+  g_oldErrorHandler = NULL;
+  return result;
 }

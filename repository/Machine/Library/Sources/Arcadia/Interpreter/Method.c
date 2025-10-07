@@ -21,9 +21,7 @@ static void
 R_Interpreter_Method_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    R_Interpreter_Method* self
   );
 
 static void
@@ -34,7 +32,7 @@ R_Interpreter_Method_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &R_Interpreter_Method_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & R_Interpreter_Method_constructImpl,
   .destruct = NULL,
   .visit = &R_Interpreter_Method_visit,
 };
@@ -52,36 +50,33 @@ static void
 R_Interpreter_Method_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    R_Interpreter_Method* self
   )
 {
-  R_Interpreter_Method* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Method_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->ready = Arcadia_BooleanValue_False;
-  _self->index = Arcadia_SizeValue_Literal(0);
-  _self->parameterNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  _self->unqualifiedName = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
+  self->ready = Arcadia_BooleanValue_False;
+  self->index = Arcadia_SizeValue_Literal(0);
+  self->parameterNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  self->unqualifiedName = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
   if (Arcadia_ValueStack_isForeignProcedureValue(thread, 1)) {
-    _self->isForeign = Arcadia_BooleanValue_True;
-    _self->foreignProcedure = Arcadia_ValueStack_getForeignProcedureValue(thread, 1);
+    self->isForeign = Arcadia_BooleanValue_True;
+    self->foreignProcedure = Arcadia_ValueStack_getForeignProcedureValue(thread, 1);
   } else if (Arcadia_ValueStack_isObjectReferenceValue(thread, 1)) {
-    _self->isForeign = Arcadia_BooleanValue_False;
-    _self->code = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _R_Interpreter_Code_getType(thread));
+    self->isForeign = Arcadia_BooleanValue_False;
+    self->code = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _R_Interpreter_Code_getType(thread));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 

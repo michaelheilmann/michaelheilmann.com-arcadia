@@ -19,9 +19,7 @@ static void
 Arcadia_Visuals_Windows_TextureFont_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Windows_TextureFont* self
   );
 
 static void
@@ -32,7 +30,7 @@ Arcadia_Visuals_Windows_TextureFont_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Windows_TextureFont_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Windows_TextureFont_constructImpl,
   .destruct = &Arcadia_Visuals_Windows_TextureFont_destruct,
   .visit = NULL,
 };
@@ -50,16 +48,13 @@ static void
 Arcadia_Visuals_Windows_TextureFont_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Windows_TextureFont* self
   )
 {
-  Arcadia_Visuals_Windows_TextureFont* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_TextureFont_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -81,10 +76,10 @@ Arcadia_Visuals_Windows_TextureFont_constructImpl
   ReleaseDC(NULL, hScreenDeviceContext);
   hScreenDeviceContext = NULL;
   // Get the size of the symbol.
-  _self->codePoint = 'A';
+  self->codePoint = 'A';
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_Utf8Writer* utf8ByteBufferWriter = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, byteBuffer);
-  Arcadia_Utf8Writer_writeCodePoints(thread, utf8ByteBufferWriter, &_self->codePoint, 1);
+  Arcadia_Utf8Writer_writeCodePoints(thread, utf8ByteBufferWriter, &self->codePoint, 1);
   RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
   DrawTextA(hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
   int32_t width = textRect.right - textRect.left;
@@ -92,10 +87,10 @@ Arcadia_Visuals_Windows_TextureFont_constructImpl
   DeleteDC(hDeviceContext);
   hDeviceContext = NULL;
   // Create a bitmap of that size. Draw the symbol to the bitmap.
-  _self->bitmap = Arcadia_Visuals_Windows_Bitmap_create(thread, width, height);
-  DrawTextA(_self->bitmap->hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
+  self->bitmap = Arcadia_Visuals_Windows_Bitmap_create(thread, width, height);
+  DrawTextA(self->bitmap->hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

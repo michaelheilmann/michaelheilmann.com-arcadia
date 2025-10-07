@@ -82,9 +82,7 @@ static void
 Arcadia_DataDefinitionLanguage_SemanticalAnalysis_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_SemanticalAnalysis* self
   );
 
 static void
@@ -95,7 +93,7 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_DataDefinitionLanguage_SemanticalAnalysis_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_SemanticalAnalysis_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visit,
 };
@@ -222,17 +220,14 @@ static void
 Arcadia_DataDefinitionLanguage_SemanticalAnalysis_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_SemanticalAnalysis* self
   )
 {
-  Arcadia_DataDefinitionLanguage_SemanticalAnalysis* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_SemanticalAnalysis_getType(thread);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
@@ -240,9 +235,9 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  _self->map = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  self->map = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

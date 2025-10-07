@@ -74,6 +74,6 @@ if (NOT TARGET ${MyModule})
 
   list(APPEND ${MyModule}.Libraries ${MyProjectName}.Audials ${MyProjectName}.Ring2)
   EndProduct(${MyModule})
-  set_target_properties(${MyModule} PROPERTIES FOLDER "Audials")
+  set_target_properties(${MyModule} PROPERTIES FOLDER "Backends")
 
 endif()

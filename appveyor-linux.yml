@@ -56,9 +56,9 @@ test_script:
 matrix:
     fast_finish: true
 
-artifacts:
-    - path: $(ARCHIVE_FILENAME)
-      name: $(ARCHIVE_FILENAME)
+#artifacts:
+#   - path: $(ARCHIVE_FILENAME)
+#     name: $(ARCHIVE_FILENAME)
 
 deploy:
     release: $(RELEASE_NAME)
@@ -66,7 +66,7 @@ deploy:
     description: 'michaelheilmann.com $(APPVEYOR_REPO_BRANCH) branch v$(APPVEYOR_BUILD_VERSION)'
     provider: GitHub
     auth_token:
-        secure: iTg7jon0UCvoGT5y2flVxMHPG2pSjZu8T3La9iuSdwdyBf2sOqZHu5aQLNLUKSghkVVOURFuvBem2GcnSb4s4jNGDn/HGHzEQV0Mc+Ivf6aI0xpNy38y17xZbslgmxe8 # encrypted token from GitHub
+        secure: iTg7jon0UCvoGT5y2flVxLlhZs9xza3tjBl3BDcyfaWZgDwqi4eKcdLDKpBlHGmSxFa29t6QJg42AHtX9RO/x39VKrZgT7pbkqndNJZb8tEd2ib+fmEN9OAPiD8GV1d1 # encrypted token from GitHub
         #artifact: $(ARCHIVE_FILENAME) # upload the artifact
     draft: true
     prerelease: false

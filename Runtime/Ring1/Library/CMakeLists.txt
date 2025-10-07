@@ -383,7 +383,16 @@ if (NOT TARGET ${MyLibraryName})
   endif()
 
   if (${${MyLibraryName}.OperatingSystem} STREQUAL ${${MyLibraryName}.OperatingSystem.Linux})
-    list(APPEND ${MyLibraryName}.Libraries m)
+
+    # link "math" library
+	list(APPEND ${MyLibraryName}.Libraries m)
+
+	# link "pthread" library
+	set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+	set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+	find_package(Threads REQUIRED)
+	list(APPEND ${MyLibraryName}.Libraries Threads::Threads)
+
   endif()
 
   EndProduct(${MyLibraryName})

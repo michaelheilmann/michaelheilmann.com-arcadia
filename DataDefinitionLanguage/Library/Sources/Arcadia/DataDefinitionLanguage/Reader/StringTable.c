@@ -21,9 +21,7 @@ static void
 Arcadia_DataDefinitionLanguage_StringTable_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_StringTable* self
   );
 
 static void
@@ -56,7 +54,7 @@ Arcadia_DataDefinitionLanguage_StringTable_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_DataDefinitionLanguage_StringTable_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_StringTable_constructImpl,
   .destruct = &Arcadia_DataDefinitionLanguage_StringTable_destruct,
   .visit = &Arcadia_DataDefinitionLanguage_StringTable_visit,
 };
@@ -74,31 +72,28 @@ static void
 Arcadia_DataDefinitionLanguage_StringTable_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_DataDefinitionLanguage_StringTable* self
   )
 {
-  Arcadia_DataDefinitionLanguage_StringTable* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_StringTable_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->buckets = NULL;
-  _self->size = Arcadia_SizeValue_Literal(0);
-  _self->capacity = Arcadia_SizeValue_Literal(0);
+  self->buckets = NULL;
+  self->size = Arcadia_SizeValue_Literal(0);
+  self->capacity = Arcadia_SizeValue_Literal(0);
   static Arcadia_SizeValue const g_defaultCapacity = 8;
-  _self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node*) * g_defaultCapacity);
+  self->buckets = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_DataDefinitionLanguage_StringTable_Node*) * g_defaultCapacity);
   for (Arcadia_SizeValue i = 0, n = g_defaultCapacity; i < n; ++i) {
-    _self->buckets[i] = NULL;
+    self->buckets[i] = NULL;
   }
-  _self->capacity = g_defaultCapacity;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->capacity = g_defaultCapacity;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

@@ -24,7 +24,7 @@ Arcadia_Visuals_Windows_System_getAdapterName
     }
     deviceIndex++;
     if (!strcmp(deviceInfo.DeviceName, p)) {
-      return Windows_fromMultiByte(thread, deviceInfo.DeviceString, strlen(deviceInfo.DeviceString));
+      return _fromMultiByte(thread, deviceInfo.DeviceString, strlen(deviceInfo.DeviceString));
     }
   }
   return NULL;
@@ -66,7 +66,7 @@ Arcadia_Visuals_Windows_System_getMonitorName
   }
 
   wchar_t* q; size_t m;
-  Windows_multiByteToWideChar(p, strlen(p) + 1, &q, &m);
+  _multiByteToWideChar(p, strlen(p) + 1, &q, &m);
 
   Arcadia_String* name = NULL;
   Arcadia_JumpTarget jumpTarget;
@@ -101,7 +101,7 @@ Arcadia_Visuals_Windows_System_getMonitorName
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
-      name = Windows_fromWideChar(thread, targetDeviceName.monitorFriendlyDeviceName, wcslen(targetDeviceName.monitorFriendlyDeviceName));
+      name = _fromWideChar(thread, targetDeviceName.monitorFriendlyDeviceName, wcslen(targetDeviceName.monitorFriendlyDeviceName));
       break;
     }
     Arcadia_Thread_popJumpTarget(thread);
@@ -147,7 +147,7 @@ enumDisplayMonitorsCallback
     }
 
     // (1) Get the ID.
-    Arcadia_String* id = Windows_fromMultiByte(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice, strlen(monitorInfoEx.szDevice));
+    Arcadia_String* id = _fromMultiByte(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice, strlen(monitorInfoEx.szDevice));
     // (2) Get the monitor name.
     Arcadia_String* monitorName = Arcadia_Visuals_Windows_System_getMonitorName(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice);
     // (2) Get the adapter name

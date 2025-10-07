@@ -26,7 +26,6 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.GlxDeviceInfo", Arcadia_Visua
 
 struct Arcadia_Visuals_Linux_GlxDeviceInfo {
   Arcadia_Object _parent;
-  Display* xDisplay;
 };
 
 Arcadia_Visuals_Linux_GlxDeviceInfo*
@@ -43,7 +42,8 @@ Arcadia_List*
 Arcadia_Visuals_Linux_GlxDeviceInfo_getGlxConfigurations
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Linux_GlxDeviceInfo* self
+    Arcadia_Visuals_Linux_GlxDeviceInfo* self,
+    Display* display
   );
 
 Arcadia_BooleanValue
@@ -51,6 +51,7 @@ Arcadia_Visuals_Linux_GlxDeviceInfo_isGlxExtensionSupported
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_GlxDeviceInfo* self,
+    Display* display,
     const char *glXExtension
   );
 

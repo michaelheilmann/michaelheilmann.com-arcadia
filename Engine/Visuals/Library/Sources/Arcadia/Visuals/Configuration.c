@@ -27,13 +27,11 @@ static void
 Arcadia_Visuals_Configuration_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Configuration* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Configuration_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Visuals_Configuration_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_Visuals_Configuration_visit,
 };
@@ -69,33 +67,30 @@ static void
 Arcadia_Visuals_Configuration_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Configuration* self
   )
 {
-  Arcadia_Visuals_Configuration* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Configuration_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  _self->opengl.version.major = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"4", sizeof(u8"4") - 1));
-  _self->opengl.version.minor = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"3", sizeof(u8"3") - 1));
+  self->opengl.version.major = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"4", sizeof(u8"4") - 1));
+  self->opengl.version.minor = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"3", sizeof(u8"3") - 1));
 
-  _self->depthBuffer.depthBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"24", sizeof(u8"24") - 1));
+  self->depthBuffer.depthBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"24", sizeof(u8"24") - 1));
 
-  _self->colorBuffer.redBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
-  _self->colorBuffer.greenBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
-  _self->colorBuffer.blueBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
-  _self->colorBuffer.alphaBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
+  self->colorBuffer.redBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
+  self->colorBuffer.greenBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
+  self->colorBuffer.blueBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
+  self->colorBuffer.alphaBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
 

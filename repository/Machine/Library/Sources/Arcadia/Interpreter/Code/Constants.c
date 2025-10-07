@@ -21,9 +21,7 @@ static void
 constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    R_Interpreter_Code_Constants* self
   );
 
 static void
@@ -49,7 +47,7 @@ getOrCreate
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & constructImpl,
   .destruct = &destructImpl,
   .visit = &visitImpl,
 };
@@ -67,26 +65,23 @@ static void
 constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    R_Interpreter_Code_Constants* self
   )
 {
-  R_Interpreter_Code_Constants* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _R_Interpreter_Code_Constants_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->p = NULL;
-  _self->sz = 0;
-  _self->cp = 0;
-  _self->p = Arcadia_Memory_allocateUnmanaged(thread, 0);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->p = NULL;
+  self->sz = 0;
+  self->cp = 0;
+  self->p = Arcadia_Memory_allocateUnmanaged(thread, 0);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

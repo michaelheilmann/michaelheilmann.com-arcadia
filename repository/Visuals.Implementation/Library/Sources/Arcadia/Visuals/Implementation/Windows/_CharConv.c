@@ -1,7 +1,7 @@
 #include "Arcadia/Visuals/Implementation/Windows/_CharConv.h"
 
 Arcadia_String*
-Windows_fromMultiByte
+_fromMultiByte
   (
     Arcadia_Thread* thread,
     CONST CHAR* p,
@@ -12,7 +12,7 @@ Windows_fromMultiByte
 }
 
 Arcadia_String*
-Windows_fromWideChar
+_fromWideChar
   (
     Arcadia_Thread* thread,
     CONST WCHAR* p,
@@ -54,7 +54,7 @@ Windows_fromWideChar
 }
 
 BOOL
-Windows_multiByteToWideChar
+_multiByteToWideChar
   (
     const char* p,
     size_t n,

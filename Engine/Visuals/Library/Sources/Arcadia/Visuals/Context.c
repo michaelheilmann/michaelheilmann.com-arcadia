@@ -20,9 +20,7 @@ static void
 Arcadia_Visuals_Context_construct
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Context* self
   );
 
 static void
@@ -40,7 +38,7 @@ Arcadia_Visuals_Context_visit
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_Visuals_Context_objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Context_construct,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Visuals_Context_construct,
   .destruct = &Arcadia_Visuals_Context_destruct,
   .visit = &Arcadia_Visuals_Context_visit,
 };
@@ -73,25 +71,22 @@ static void
 Arcadia_Visuals_Context_construct
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Context* self
   )
 {
-  Arcadia_Visuals_Context* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Context_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->getClearColor = NULL;
-  _self->getClearDepth = NULL;
-  _self->getViewport = NULL;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->getClearColor = NULL;
+  self->getClearDepth = NULL;
+  self->getViewport = NULL;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

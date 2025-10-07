@@ -19,9 +19,7 @@ static void
 Arcadia_Visuals_Linux_Icon_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Linux_Icon* self
   );
 
 static void
@@ -65,19 +63,20 @@ static void
 Arcadia_Visuals_Linux_Icon_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Linux_Icon* self
   )
 {
-  Arcadia_Visuals_Linux_Icon* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Linux_Icon_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
-
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 6 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (1 != numberOfArgumentValues1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -100,15 +99,15 @@ Arcadia_Visuals_Linux_Icon_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->numberOfBytes = numberOfBytes;
-  _self->width = Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer);
-  _self->height = Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer);
-  _self->bytes = Arcadia_Memory_allocateUnmanaged(thread, numberOfBytes);
-  _self->bytes[0] = (Arcadia_Natural32Value)_self->width;
-  _self->bytes[1] = (Arcadia_Natural32Value)_self->height;
-  unsigned long* p = &_self->bytes[2];
-  for (Arcadia_SizeValue y = 0; y < _self->height; ++y) {
-    for (Arcadia_SizeValue x = 0; x < _self->width; ++x) {
+  self->numberOfBytes = numberOfBytes;
+  self->width = Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer);
+  self->height = Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer);
+  self->bytes = Arcadia_Memory_allocateUnmanaged(thread, numberOfBytes);
+  self->bytes[0] = (Arcadia_Natural32Value)self->width;
+  self->bytes[1] = (Arcadia_Natural32Value)self->height;
+  unsigned long* p = &self->bytes[2];
+  for (Arcadia_SizeValue y = 0; y < self->height; ++y) {
+    for (Arcadia_SizeValue x = 0; x < self->width; ++x) {
       Arcadia_Natural8Value red, green, blue, alpha;
       Arcadia_Imaging_PixelBuffer_getPixelRgba(thread, pixelBuffer, x, y, &red, &green, &blue, &alpha);
       *p++ = alpha << 24
@@ -117,8 +116,8 @@ Arcadia_Visuals_Linux_Icon_constructImpl
            | red << 0;
     }
   }
-  Arcadia_Object_setType(thread, _self, _type);
-  Arcadia_ValueStack_popValues(thread, 5 + 1);
+  Arcadia_Object_setType(thread, self, _type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 static void

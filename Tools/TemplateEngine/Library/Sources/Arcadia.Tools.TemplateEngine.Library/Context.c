@@ -24,9 +24,7 @@ static void
 Context_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Context* self
   );
 
 static void
@@ -44,7 +42,7 @@ Context_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Context_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Context_constructImpl,
   .destruct = &Context_destruct,
   .visit = &Context_visit,
 };
@@ -62,16 +60,13 @@ void
 Context_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Context* self
   )
 {
-  Context* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Context_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
@@ -89,16 +84,16 @@ Context_constructImpl
     u8"}\n"
     ;
   Arcadia_String* sourceString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, sourceBytes, sizeof(sourceBytes) - 1)));
-  _self->environment = Environment_loadString(thread, sourceString);
-  Arcadia_TemplateEngine_registerTimeLibrary(thread, _self->environment);
-  _self->targetBuffer = NULL;
-  _self->target = NULL;
-  _self->temporaryBuffer = NULL;
-  _self->temporary = NULL;
-  _self->stack = NULL;
-  _self->files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  _self->log = Arcadia_Log_create(thread);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  self->environment = Environment_loadString(thread, sourceString);
+  Arcadia_TemplateEngine_registerTimeLibrary(thread, self->environment);
+  self->targetBuffer = NULL;
+  self->target = NULL;
+  self->temporaryBuffer = NULL;
+  self->temporary = NULL;
+  self->stack = NULL;
+  self->files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  self->log = Arcadia_Log_create(thread);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 

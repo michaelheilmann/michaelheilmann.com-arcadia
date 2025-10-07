@@ -50,6 +50,8 @@ enum Arcadia_MIL_TokenType {
 
   // A name.
   Arcadia_MIL_TokenType_Name,
+  // A register.
+  Arcadia_MIL_TokenType_Register,
 
   // A boolean literal.
   // "true" or "false".
@@ -133,6 +135,9 @@ enum Arcadia_MIL_TokenType {
 
   // "concatenate" (list operations)
   Arcadia_MIL_TokenType_Concatenate,
+
+  // "set"
+  Arcadia_MIL_TokenType_Set,
 
   /// A single line comment.
   Arcadia_MIL_TokenType_SingleLineComment,

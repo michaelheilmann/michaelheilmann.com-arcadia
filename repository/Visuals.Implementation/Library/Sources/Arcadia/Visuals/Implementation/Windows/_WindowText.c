@@ -11,7 +11,7 @@
 #endif
 
 Arcadia_String*
-Windows_getWindowText
+_getWindowText
   (
     Arcadia_Thread* thread,
     HWND hWnd
@@ -72,7 +72,7 @@ Windows_getWindowText
 }
 
 void
-Windows_setWindowText
+_setWindowText
   (
     Arcadia_Thread* thread,
     HWND hWnd,

@@ -23,18 +23,14 @@ static void*
 Arcadia_allocateObject
   (
     Arcadia_Thread* thread,
-    Arcadia_TypeValue type,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_TypeValue type
   );
 
 static void
 Arcadia_Object_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Object* self
   );
 
 static void
@@ -92,18 +88,15 @@ void
 Arcadia_Object_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Object* self
   )
 {
-  Arcadia_Object* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Object_getType(thread);
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, _self, _type);
+  Arcadia_Object_setType(thread, self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
@@ -275,9 +268,7 @@ static void*
 Arcadia_allocateObject
   (
     Arcadia_Thread* thread,
-    Arcadia_TypeValue type,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_TypeValue type
   )
 {
   if (!type) {
@@ -301,9 +292,7 @@ Arcadia_allocateObject
   if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), memoryType)) {
     fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
   }
-  Arcadia_Value selfValue = Arcadia_Value_Initializer();
-  Arcadia_Value_setObjectReferenceValue(&selfValue, (Arcadia_ObjectReferenceValue)(Arcadia_Object*)(tag + 1));
-  Arcadia_Type_getOperations(type)->objectTypeOperations->construct(thread, &selfValue, numberOfArgumentValues, &argumentValues[0]);
+  Arcadia_Type_getOperations(type)->objectTypeOperations->construct(thread, (Arcadia_ObjectReferenceValue)(Arcadia_Object*)(tag + 1));
   return (void*)(tag + 1);
 }
 
@@ -318,8 +307,7 @@ ARCADIA_CREATEOBJECT0
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Value dummy = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
-    void* self = Arcadia_allocateObject(thread, type, 0, &dummy);
+    void* self = Arcadia_allocateObject(thread, type);
     if (!self || oldValueStackSize != Arcadia_ValueStack_getSize(thread)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
       Arcadia_Thread_jump(thread);
@@ -432,6 +420,40 @@ Arcadia_Object_removeNotifyDestroyCallback
     Arcadia_Thread_jump(thread);
   }
 }
+
+#if Arcadia_Configuration_withBarriers
+
+void
+Arcadia_Object_forwardBarrier
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* source,
+    Arcadia_Object* target
+  )
+{
+  if (source && target) {
+    ObjectTag* sourceTag = ((ObjectTag*)source) - 1;
+    ObjectTag* targetTag = ((ObjectTag*)target) - 1;
+    Arms_forwardBarrier(sourceTag, targetTag);
+  }
+}
+
+void
+Arcadia_Object_backwardBarrier
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* source,
+    Arcadia_Object* target
+  )
+{
+  if (source && target) {
+    ObjectTag* sourceTag = ((ObjectTag*)source) - 1;
+    ObjectTag* targetTag = ((ObjectTag*)target) - 1;
+    Arms_backwardBarrier(sourceTag, targetTag);
+  }
+}
+
+#endif // Arcadia_Configuration_withBarriers
 
 void
 Arcadia_Object_lock

@@ -3,17 +3,18 @@
 
 #include "Arcadia/Visuals/Include.h"
 #define WIN32_LEAN_AND_MEAN
+#define NOCOMM
 #include <Windows.h>
 
 Arcadia_String*
-Windows_getWindowText
+_getWindowText
   (
     Arcadia_Thread* thread,
     HWND hWnd
   );
 
 void
-Windows_setWindowText
+_setWindowText
   (
     Arcadia_Thread* thread,
     HWND hWnd,
@@ -21,7 +22,7 @@ Windows_setWindowText
   );
 
 static BOOL
-Windows_multiByteToWideChar
+_multiByteToWideChar
   (
     const char* p,
     size_t n,

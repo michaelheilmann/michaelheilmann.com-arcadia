@@ -19,13 +19,11 @@ static void
 Arcadia_Engine_Event_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Engine_Event* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_Engine_Event_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Engine_Event_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
@@ -43,12 +41,9 @@ static void
 Arcadia_Engine_Event_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Engine_Event* self
   )
 {
-  Arcadia_Engine_Event* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Engine_Event_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
@@ -58,11 +53,11 @@ Arcadia_Engine_Event_constructImpl
   }
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  _self->timestamp = Arcadia_ValueStack_getNatural64Value(thread, 0);
+  self->timestamp = Arcadia_ValueStack_getNatural64Value(thread, 0);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
 }

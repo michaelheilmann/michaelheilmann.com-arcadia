@@ -28,17 +28,7 @@
 // https://www.x.org/releases/current/doc/randrproto/randrproto.txt
 #include <X11/extensions/Xrandr.h>
 
-#if defined(Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled
-  #include "Arcadia/Visuals/Direct3D12/Backend.h"
-#endif
-
-#if defined(Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
-  #include "Arcadia/Visuals/OpenGL4/Backend.h"
-#endif
-
-#if defined(Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled
-  #include "Arcadia/Visuals/Vulkan/Backend.h"
-#endif
+#include "Arcadia/Visuals/Implementation/OpenGL4/Backend.h"
 
 static Arcadia_Visuals_Implementation_OpenGL4_GLX_System* g_instance = NULL;
 
@@ -139,9 +129,7 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_GLX_System_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   );
 
 static void
@@ -207,7 +195,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createWindowImpl
     Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create(thread, self);
+  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create(thread, self);
   Arcadia_Visuals_Window* window = Arcadia_Visuals_Window_create(thread);
   Arcadia_WeakReference* windowWeakReference =
     Arcadia_WeakReference_create
@@ -564,7 +552,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onKeyReleaseEvent
     XKeyEvent* x11event
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
+  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
   if (!windowBackend) {
     return;
   }
@@ -602,7 +590,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onConfigureNotifyEvent
     XConfigureEvent* x11event
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
+  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
   if (!windowBackend) {
     return;
   }
@@ -664,7 +652,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_System_onDeleteWindowEvent
     XClientMessageEvent* x11event
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* windowBackend = Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
+  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_System_findWindow(thread, self, x11event->window);
   if (!windowBackend) {
     return;
   }
@@ -737,16 +725,13 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_GLX_System_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_GLX_System* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -754,65 +739,65 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_System_constructImpl
   }
 
   // (1) Open the default display.
-  _self->display = XOpenDisplay(NULL);
-  if (!_self->display) {
+  self->display = XOpenDisplay(NULL);
+  if (!self->display) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
 
   // (2) Ensure the XRANDR extension is present. Determine its event base and its error base.
   int dummy;
-  if (!XQueryExtension(_self->display, "RANDR", &dummy, &dummy, &dummy)) {
+  if (!XQueryExtension(self->display, "RANDR", &dummy, &dummy, &dummy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  if (!XRRQueryExtension(_self->display, &_self->xrandr.eventBase, &_self->xrandr.errorBase)) {
+  if (!XRRQueryExtension(self->display, &self->xrandr.eventBase, &self->xrandr.errorBase)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
 
   // (3) Create WM_DELETE_WINDOW atom.
-  _self->WM_DELETE_WINDOW = XInternAtom(_self->display, "WM_DELETE_WINDOW", False);
-  if (_self->WM_DELETE_WINDOW == None) {
-    _self->xrandr.errorBase = 0;
-    _self->xrandr.eventBase = 0;
-    XCloseDisplay(_self->display);
-    _self->display = NULL;
+  self->WM_DELETE_WINDOW = XInternAtom(self->display, "WM_DELETE_WINDOW", False);
+  if (self->WM_DELETE_WINDOW == None) {
+    self->xrandr.errorBase = 0;
+    self->xrandr.eventBase = 0;
+    XCloseDisplay(self->display);
+    self->display = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
 
   // (4) Create _NET_WM_ICON atom.
-  _self->_NET_WM_ICON = XInternAtom(_self->display, "_NET_WM_ICON", False);
-  if (_self->_NET_WM_ICON == None) {
-    _self->WM_DELETE_WINDOW = 0;
-    _self->xrandr.errorBase = 0;
-    _self->xrandr.eventBase = 0;
-    XCloseDisplay(_self->display);
-    _self->display = NULL;
+  self->_NET_WM_ICON = XInternAtom(self->display, "_NET_WM_ICON", False);
+  if (self->_NET_WM_ICON == None) {
+    self->WM_DELETE_WINDOW = 0;
+    self->xrandr.errorBase = 0;
+    self->xrandr.eventBase = 0;
+    XCloseDisplay(self->display);
+    self->display = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
 
   // (5) Create _NET_FRAME_EXTENTS atom.
-  _self->_NET_FRAME_EXTENTS = XInternAtom(_self->display, "_NET_FRAME_EXTENTS", False);
-  if (_self->_NET_FRAME_EXTENTS == None) {
-    _self->_NET_WM_ICON = 0;
-    _self->WM_DELETE_WINDOW = 0;
-    XCloseDisplay(_self->display);
-    _self->display = NULL;
+  self->_NET_FRAME_EXTENTS = XInternAtom(self->display, "_NET_FRAME_EXTENTS", False);
+  if (self->_NET_FRAME_EXTENTS == None) {
+    self->_NET_WM_ICON = 0;
+    self->WM_DELETE_WINDOW = 0;
+    XCloseDisplay(self->display);
+    self->display = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
 
   // (6) Create _MOTIF_WM_HINTS atom.
-  _self->_MOTIF_WM_HINTS = XInternAtom(_self->display, "_MOTIF_WM_HINTS", False);
-  if (_self->_MOTIF_WM_HINTS == None) {
-    _self->_NET_FRAME_EXTENTS = 0;
-    _self->_NET_WM_ICON = 0;
-    _self->WM_DELETE_WINDOW = 0;
-    XCloseDisplay(_self->display);
-    _self->display = NULL;
+  self->_MOTIF_WM_HINTS = XInternAtom(self->display, "_MOTIF_WM_HINTS", False);
+  if (self->_MOTIF_WM_HINTS == None) {
+    self->_NET_FRAME_EXTENTS = 0;
+    self->_NET_WM_ICON = 0;
+    self->WM_DELETE_WINDOW = 0;
+    XCloseDisplay(self->display);
+    self->display = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -822,30 +807,30 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_System_constructImpl
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {  
   #if defined(Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled
-    Arcadia_List_insertBack(thread, ((Arcadia_Visuals_System*)_self)->backends, Arcadia_Value_makeObjectReferenceValue(Arcadia_Visuals_Direct3D12_Backend_create(thread)));
+    Arcadia_List_insertBack(thread, ((Arcadia_Visuals_System*)self)->backends, Arcadia_Value_makeObjectReferenceValue(Arcadia_Visuals_Direct3D12_Backend_create(thread)));
   #endif
   #if defined(Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
-    Arcadia_List_insertBack(thread, ((Arcadia_Visuals_System*)_self)->backends, Arcadia_Value_makeObjectReferenceValue(Arcadia_Visuals_OpenGL4_Backend_create(thread)));
+    Arcadia_List_insertBack(thread, ((Arcadia_Visuals_System*)self)->backends, Arcadia_Value_makeObjectReferenceValue(Arcadia_Visuals_OpenGL4_Backend_create(thread)));
   #endif
   #if defined(Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled) && 1 == Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled
-    Arcadia_List_insertBack(thread, ((Arcadia_Visuals_System*)_self)->backends, Arcadia_Value_makeObjectReferenceValue(Arcadia_Visuals_Vulkan_Backend_create(thread)));
+    Arcadia_List_insertBack(thread, ((Arcadia_Visuals_System*)self)->backends, Arcadia_Value_makeObjectReferenceValue(Arcadia_Visuals_Vulkan_Backend_create(thread)));
   #endif
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
-    _self->_MOTIF_WM_HINTS = 0;
-    _self->_NET_FRAME_EXTENTS = 0;
-    _self->_NET_WM_ICON = 0;
-    _self->WM_DELETE_WINDOW = 0;
-    XCloseDisplay(_self->display);
-    _self->display = NULL;
+    self->_MOTIF_WM_HINTS = 0;
+    self->_NET_FRAME_EXTENTS = 0;
+    self->_NET_WM_ICON = 0;
+    self->WM_DELETE_WINDOW = 0;
+    XCloseDisplay(self->display);
+    self->display = NULL;
     Arcadia_Thread_jump(thread);
   }
-  ((Arcadia_Visuals_System*)_self)->createIcon = (Arcadia_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Visuals_System*, Arcadia_Imaging_PixelBuffer*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createIconImpl;
-  ((Arcadia_Visuals_System*)_self)->createWindow = (Arcadia_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Visuals_System*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createWindowImpl;
-  ((Arcadia_Visuals_System*)_self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getDisplayDevicesImpl;
-  ((Arcadia_Visuals_System*)_self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_System*)) &Arcadia_Visuals_Implementation_OpenGL4_GLX_System_updateImpl;
-  Arcadia_Object_setType(thread, _self, _type);
+  ((Arcadia_Visuals_System*)self)->createIcon = (Arcadia_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Visuals_System*, Arcadia_Imaging_PixelBuffer*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createIconImpl;
+  ((Arcadia_Visuals_System*)self)->createWindow = (Arcadia_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Visuals_System*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_System_createWindowImpl;
+  ((Arcadia_Visuals_System*)self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_System*)) & Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getDisplayDevicesImpl;
+  ((Arcadia_Visuals_System*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_System*)) &Arcadia_Visuals_Implementation_OpenGL4_GLX_System_updateImpl;
+  Arcadia_Object_setType(thread, self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 

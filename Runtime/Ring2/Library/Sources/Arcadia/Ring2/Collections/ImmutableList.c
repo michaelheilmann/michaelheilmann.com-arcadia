@@ -22,9 +22,7 @@ static void
 Arcadia_ImmutableList_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_ImmutableList* self
   );
 
 static void
@@ -105,7 +103,7 @@ Arcadia_ImmutableList_removeAtImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = &Arcadia_ImmutableList_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_ImmutableList_constructImpl,
   .destruct = &Arcadia_ImmutableList_destruct,
   .visit = &Arcadia_ImmutableList_visit,
 };
@@ -123,38 +121,35 @@ static void
 Arcadia_ImmutableList_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_ImmutableList* self
   )
 {
-  Arcadia_ImmutableList* _self = Arcadia_Value_getObjectReferenceValue(self);
   Arcadia_TypeValue _type = _Arcadia_ImmutableList_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  _self->size = 0;
-  _self->elements = NULL;
+  self->size = 0;
+  self->elements = NULL;
   Arcadia_List* other = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
-  _self->size = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)other);
-  _self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * _self->size);
-  for (Arcadia_SizeValue i = 0, n = _self->size; i < n; ++i) {
-    _self->elements[i] = Arcadia_List_getAt(thread, other, i);
+  self->size = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)other);
+  self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * self->size);
+  for (Arcadia_SizeValue i = 0, n = self->size; i < n; ++i) {
+    self->elements[i] = Arcadia_List_getAt(thread, other, i);
   }
-  ((Arcadia_Collection*)_self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_clearImpl;
-  ((Arcadia_Collection*)_self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_getSizeImpl;
-  ((Arcadia_Collection*)_self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_isImmutableImpl;
-  ((Arcadia_List*)_self)->getAt = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue)) & Arcadia_ImmutableList_getAtImpl;
-  ((Arcadia_List*)_self)->insertAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_Value)) & Arcadia_ImmutableList_insertAtImpl;
-  ((Arcadia_List*)_self)->insertBack = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertBackImpl;
-  ((Arcadia_List*)_self)->insertFront = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertFrontImpl;
-  ((Arcadia_List*)_self)->removeAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_SizeValue)) & Arcadia_ImmutableList_removeAtImpl;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  ((Arcadia_Collection*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_clearImpl;
+  ((Arcadia_Collection*)self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_getSizeImpl;
+  ((Arcadia_Collection*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_isImmutableImpl;
+  ((Arcadia_List*)self)->getAt = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue)) & Arcadia_ImmutableList_getAtImpl;
+  ((Arcadia_List*)self)->insertAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_Value)) & Arcadia_ImmutableList_insertAtImpl;
+  ((Arcadia_List*)self)->insertBack = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertBackImpl;
+  ((Arcadia_List*)self)->insertFront = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertFrontImpl;
+  ((Arcadia_List*)self)->removeAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_SizeValue)) & Arcadia_ImmutableList_removeAtImpl;
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
 }
 
