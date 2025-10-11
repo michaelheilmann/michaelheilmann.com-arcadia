@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_MIL_AST_OPERANDS_REGISTEROPERANDNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_OPERANDS_REGISTEROPERANDNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Operands/OperandNode.h"
+#include "Arcadia/MIL/AST/OperandNode.h"
 
 /// @code
 /// class Arcadia.MIL.AST.RegisterOperandNode extends Arcadia.MIL.AST.OperandNode {

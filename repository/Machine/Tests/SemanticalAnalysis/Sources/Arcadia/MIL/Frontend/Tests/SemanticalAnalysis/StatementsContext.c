@@ -113,7 +113,7 @@ Arcadia_MIL_CallableContext_onDefineLabel
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_AST_LabelStatementNode* ast,
+    Arcadia_MIL_AST_LabelDefinitionStatementNode* ast,
     Arcadia_Natural32Value instructionIndex
   )
 {
@@ -155,7 +155,7 @@ Arcadia_MIL_CallableContext_onLocalVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* context,
     Arcadia_String* name,
-    Arcadia_MIL_VariableDefinitionStatementAst* ast
+    Arcadia_MIL_VariableDefinitionStatementNode* ast
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->variables); i < n; ++i) {

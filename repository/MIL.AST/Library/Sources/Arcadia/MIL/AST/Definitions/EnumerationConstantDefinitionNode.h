@@ -16,19 +16,19 @@
 #if !defined(ARCADIA_MIL_AST_ENUMERATIONCONSTANTDEFINITIONNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_ENUMERATIONCONSTANTDEFINITIONNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/DefinitionNode.h"
 
 /// The definition of an enumeration constant.
-Arcadia_declareObjectType(u8"Arcadia.MIL.AST.EnumerationConstantDefinitionNode", EnumerationConstantDefinitionNode,
-                          u8"Arcadia.MIL.AST.Node");
+Arcadia_declareObjectType(u8"Arcadia.MIL.AST.EnumerationConstantDefinitionNode", Arcadia_MIL_AST_EnumerationConstantDefinitionNode,
+                          u8"Arcadia.MIL.AST.DefinitionNode");
 
-struct EnumerationConstantDefinitionNode {
+struct Arcadia_MIL_AST_EnumerationConstantDefinitionNode {
   Arcadia_MIL_AST_Node _parent;
   Arcadia_String* name;
 };
 
-EnumerationConstantDefinitionNode*
-EnumerationConstantDefinitionNode_create
+Arcadia_MIL_AST_EnumerationConstantDefinitionNode*
+Arcadia_MIL_AST_EnumerationConstantDefinitionNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* name

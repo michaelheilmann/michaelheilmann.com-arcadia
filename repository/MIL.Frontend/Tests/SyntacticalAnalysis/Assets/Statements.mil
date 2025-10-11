@@ -1,62 +1,62 @@
 procedure hello {
-  a = "Hello, "
-  b = "World!\n"
-  c = concatenate a, b
-  c = concatenate "Hello ", b
-  c = concatenate a, "World!\n"
+  set a, "Hello, "
+  set b, "World!\n"
+  concatenate c, a, b
+  concatenate c, "Hello ", b
+  concatenate c, a, "World!\n"
 
-  a = 7
-  b = 5
-  c = add a, b
-  c = add 7, b
-  c = add a, 7
+  set a, 7
+  set b, 5
+  add c, a, b
+  add c, 7, b
+  add c, a, 7
 
-  a = 7
-  b = 5
-  c = subtract a, b
-  c = subtract 7, b
-  c = subtract a, 7
+  set a, 7
+  set b, 5
+  subtract c, a, b
+  subtract c, 7, b
+  subtract c, a, 7
 
-  a = 7
-  b = 5
-  c = multiply a, b
-  c = multiply 7, b
-  c = multiply a, 7
+  set a, 7
+  set b, 5
+  multiply c, a, b
+  multiply c, 7, b
+  multiply c, a, 7
 
-  a = 7
-  b = 5
-  c = divide a, b
-  c = divide 7, b
-  c = divide a, 7
+  set a, 7
+  set b, 5
+  divide c, a, b
+  divide c, 7, b
+  divide c, a, 7
 
-  a = 7
-  c = negate a
-  c = negate 7
-  c = negate 5
+  set a, 7
+  negate c, a
+  negate c, 7
+  negate c, 5
 
-  a = true
-  b = false
-  c = and a, b
-  c = and true, b
-  c = and b, false
+  set a, true
+  set b, false
+  and c, a, b
+  and c, true, b
+  and c, b, false
 
-  a = true
-  b = false
-  c = or a, b
-  c = or true, b
-  c = or b, false
+  set a, true
+  set b, false
+  or c, a, b
+  or c, true, b
+  or c, b, false
 
-  a = true
-  c = not a
-  c = not true
-  c = not false
+  set a, true
+  not c, a
+  not c, true
+  not c, false
 
-  c = isEqualTo a, b
-  c = isNotEqualTo a, b
-  c = isLowerThan a, b
-  c = isLowerThanOrEqualTo a, b
-  c = isGreaterThan a, b
-  c = isGreaterThanOrEqualTo a, b
+  isEqualTo c, a, b
+  isNotEqualTo c, a, b
+  isLowerThan c, a, b
+  isLowerThanOrEqualTo c, a, b
+  isGreaterThan c, a, b
+  isGreaterThanOrEqualTo c, a, b
 
   return c
 }

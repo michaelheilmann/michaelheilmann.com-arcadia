@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_MIL_AST_OPERANDS_VARIABLEOPERANDNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_OPERANDS_VARIABLEOPERANDNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Operands/OperandNode.h"
+#include "Arcadia/MIL/AST/OperandNode.h"
 
 /// @code
 /// class Arcadia.MIL.AST.VariableOperandNode extends Arcadia.MIL.AST.OperandNode {
@@ -25,7 +25,7 @@
 /// @endcode
 /// represents
 /// @code
-/// name
+/// lexical.name
 /// @endcode
 /// in the @a operand context.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.VariableOperandNode", Arcadia_MIL_AST_VariableOperandNode,

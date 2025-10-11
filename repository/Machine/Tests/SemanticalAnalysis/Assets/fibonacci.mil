@@ -1,7 +1,7 @@
 procedure fibonacci (variable a) {
-  b = isLowerThan a, 0
-  b1 = isEqualTo a, 0
-  b2 = isEqualTo a, 1
+  isLowerThan b, a, 0
+  isEqualTo b1, a, 0
+  isEqualTo b2, a, 1
 IsLowerThanZero:
   raise
 IsEqualZero:

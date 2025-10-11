@@ -34,20 +34,20 @@ Arcadia_MIL_MethodDefinitionNode_visit
     Arcadia_MIL_MethodDefinitionNode* self
   );
 
-static const Arcadia_ObjectType_Operations _Arcadia_MIL_MethodDefinitionNode_objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_MethodDefinitionNode_constructImpl,
   .destruct = NULL,
   .visit = &Arcadia_MIL_MethodDefinitionNode_visit,
 };
 
-static const Arcadia_Type_Operations _Arcadia_MIL_MethodDefinitionNode_typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
-  .objectTypeOperations = &_Arcadia_MIL_MethodDefinitionNode_objectTypeOperations,
+  .objectTypeOperations = &_objectTypeOperations,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.MIL.AST.MethodDefinitionNode", Arcadia_MIL_MethodDefinitionNode,
-                         u8"Arcadia.MIL.AST.Node", Arcadia_MIL_AST_Node,
-                         &_Arcadia_MIL_MethodDefinitionNode_typeOperations);
+                         u8"Arcadia.MIL.AST.DefinitionNode", Arcadia_MIL_AST_DefinitionNode,
+                         &_typeOperations);
 
 static void
 Arcadia_MIL_MethodDefinitionNode_constructImpl

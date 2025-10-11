@@ -21,35 +21,35 @@
 /// constructor()
 /// @endcode
 static void
-Arcadia_MIL_AST_ExpressionNode_constructImpl
+Arcadia_MIL_AST_InstructionNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_AST_ExpressionNode* self
+    Arcadia_MIL_AST_InstructionNode* self
   );
 
-static const Arcadia_ObjectType_Operations _Arcadia_MIL_AST_ExpressionNode_objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_AST_ExpressionNode_constructImpl,
+static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_AST_InstructionNode_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
 
-static const Arcadia_Type_Operations _Arcadia_MIL_AST_ExpressionNode_typeOperations = {
+static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
-  .objectTypeOperations = &_Arcadia_MIL_AST_ExpressionNode_objectTypeOperations,
+  .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.MIL.AST.ExpressionNode", Arcadia_MIL_AST_ExpressionNode,
-                         u8"Arcadia.MIL.AST.Node", Arcadia_MIL_AST_Node,
-                         &_Arcadia_MIL_AST_ExpressionNode_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.MIL.AST.InstructionNode", Arcadia_MIL_AST_InstructionNode,
+                         u8"Arcadia.MIL.AST.InstructionStatementNode2", Arcadia_MIL_AST_InstructionStatementNode2,
+                         &_typeOperations);
 
 void
-Arcadia_MIL_AST_ExpressionNode_constructImpl
+Arcadia_MIL_AST_InstructionNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_AST_ExpressionNode* self
+    Arcadia_MIL_AST_InstructionNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_AST_ExpressionNode_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_MIL_AST_InstructionNode_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -61,4 +61,3 @@ Arcadia_MIL_AST_ExpressionNode_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
-

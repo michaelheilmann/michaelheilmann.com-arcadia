@@ -16,13 +16,17 @@
 #if !defined(ARCADIA_MIL_AST_DEFINITIONS_METHODDEFINITIONNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_DEFINITIONS_METHODDEFINITIONNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/DefinitionNode.h"
 
-Arcadia_declareObjectType(u8"Arcadia.MIL.MethodDefinitionAst", Arcadia_MIL_MethodDefinitionNode,
-                          u8"Arcadia.MIL.AST.Node");
+/// @code
+/// class Arcadia.MIL.AST.MethodDefinitionNode extends Arcadia.MIL.AST.DefinitionNode
+/// @endcode
+/// See https://michaelheilmann.com/specifications/mil/#method-definition for more information.
+Arcadia_declareObjectType(u8"Arcadia.MIL.AST.MethodDefinitionNode", Arcadia_MIL_MethodDefinitionNode,
+                          u8"Arcadia.MIL.AST.DefinitionNode");
 
 struct Arcadia_MIL_MethodDefinitionNode {
-  Arcadia_MIL_AST_Node _parent;
+  Arcadia_MIL_AST_DefinitionNode _parent;
   Arcadia_String* nativeName;
   Arcadia_String* methodName;
   Arcadia_List* methodParameters;

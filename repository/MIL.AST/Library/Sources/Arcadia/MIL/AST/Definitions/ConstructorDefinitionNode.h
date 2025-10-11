@@ -16,13 +16,17 @@
 #if !defined(ARCADIA_MIL_AST_DEFINITIONS_CONSTRUCTORDEFINITIONNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_DEFINITIONS_CONSTRUCTORDEFINITIONNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/DefinitionNode.h"
 
+/// @code
+/// class Arcadia.MIL.AST.ConstructorDefinitionNode extends Arcadia.MIL.AST.DefinitionNode
+/// @endcode
+/// See https://michaelheilmann.com/specifications/mil/#constructor-definition for more information.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.ConstructorDefinitionNode", Arcadia_MIL_AST_ConstructorDefinitionNode,
-                          u8"Arcadia.MIL.AST.Node");
+                          u8"Arcadia.MIL.AST.DefinitionNode");
 
 struct Arcadia_MIL_AST_ConstructorDefinitionNode {
-  Arcadia_MIL_AST_Node _parent;
+  Arcadia_MIL_AST_DefinitionNode _parent;
   Arcadia_String* nativeName;
   Arcadia_List* constructorParameters;
   Arcadia_List* constructorBody;

@@ -25,6 +25,8 @@
 /// @endcode
 /// represents
 /// @code
+/// definitionStatement
+/// instructionStatement
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.StatementNode", Arcadia_MIL_AST_StatementNode,
                           u8"Arcadia.MIL.AST.Node");

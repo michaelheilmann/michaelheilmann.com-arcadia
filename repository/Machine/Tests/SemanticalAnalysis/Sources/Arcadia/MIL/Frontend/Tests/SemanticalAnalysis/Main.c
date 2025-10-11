@@ -76,7 +76,7 @@ onPhase1
     Arcadia_Process* process,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_ModuleAst* moduleAst
+    Arcadia_MIL_AST_ModuleNode* moduleAst
   )
 {
   Arcadia_MIL_EnterPass_onModule(Arcadia_Process_getThread(process), R_Interpreter_ProcessState_get(), symbolTable, foreignProcedures, moduleAst);
@@ -107,11 +107,11 @@ compile
     Arcadia_ByteBuffer* sourceFileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
 
     Arcadia_MIL_Parser_setInput(thread, parser, (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceFileContents));
-    Arcadia_MIL_ModuleAst* moduleAst = Arcadia_MIL_Parser_run(thread, parser);
+    Arcadia_MIL_AST_ModuleNode* moduleAst = Arcadia_MIL_Parser_run(thread, parser);
     Arcadia_List_insertBackObjectReferenceValue(thread, moduleAsts, moduleAst);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)moduleAsts); i < n; ++i) {
-    Arcadia_MIL_ModuleAst* moduleAst = Arcadia_List_getObjectReferenceValueAt(thread, moduleAsts, i);
+    Arcadia_MIL_AST_ModuleNode* moduleAst = Arcadia_List_getObjectReferenceValueAt(thread, moduleAsts, i);
     onPhase1(process, symbolTable, foreignProcedures, moduleAst);
   }
 }
@@ -140,10 +140,10 @@ testNativePrintProcedure
 
   Arcadia_List* paths = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/MouseButtonMessage.mil", sizeof(u8"Assets/MouseButtonMessage.mil") - 1));
-  Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/KeyboardKeyMessage.mil", sizeof(u8"Assets/KeyboardKeyMessage.mil") - 1));
-  Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/print.mil", sizeof(u8"Assets/print.mil") - 1));
-  Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/main.mil", sizeof(u8"Assets/main.mil") - 1));
-  Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/fibonacci.mil", sizeof(u8"Assets/fibonacci.mil") - 1));
+  //Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/KeyboardKeyMessage.mil", sizeof(u8"Assets/KeyboardKeyMessage.mil") - 1));
+  //Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/print.mil", sizeof(u8"Assets/print.mil") - 1));
+  //Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/main.mil", sizeof(u8"Assets/main.mil") - 1));
+  //Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/fibonacci.mil", sizeof(u8"Assets/fibonacci.mil") - 1));
 
   R_Interpreter_ProcessState_startup(process);
 

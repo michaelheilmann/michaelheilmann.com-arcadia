@@ -13,34 +13,28 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_MIL_AST_EXPRESSIONNODE_H_INCLUDED)
-#define ARCADIA_MIL_AST_EXPRESSIONNODE_H_INCLUDED
+#if !defined(ARCADIA_MIL_AST_INSTRUCTIONNODE_H_INCLUDED)
+#define ARCADIA_MIL_AST_INSTRUCTIONNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/InstructionStatementNode.h"
 
 /// @code
-/// class Arcadia.MIL.AST.ExpressionNode extends Arcadia.MIL.AST.Node
+/// class Arcadia.MIL.AST.InstructionMode extends Arcadia.MIL.AST.InstructionStatementNode
 /// @endcode
 /// represents
-/// @code{Arcadia.MIL.AST.ExpressionNode} and its subtypes represent a instructions.
-/// The following instructions are represented:
 /// @code
-/// 
-/// instruction : arithmeticInstruction 
-///             | logicalInstruction
-/// 
-/// arithmeticInstruction : ('add' | 'subtract' | 'multiply' | 'divide') <result> <first operand> <second operand>
-///                       | 'negate' <result> <operand>
-/// 
-/// logicalInstruction : ('and' | 'or') <result> <first operand> <second operand>
-///                    | 'not' <result> <operand>
-/// 
+/// instruction : binaryInstruction
+///             | unaryInstruction
+///             | invokeInstruction
+///             | jumpInstruction
+///             | raiseInstruction
+///             | returnInstruction
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.MIL.AST.ExpressionNode", Arcadia_MIL_AST_ExpressionNode,
-                          u8"Arcadia.MIL.AST.Node");
+Arcadia_declareObjectType(u8"Arcadia.MIL.AST.InstructionNode", Arcadia_MIL_AST_InstructionNode,
+                          u8"Arcadia.MIL.AST.InstructionStatementNode2");
 
-struct Arcadia_MIL_AST_ExpressionNode {
-  Arcadia_MIL_AST_Node _parent;
+struct Arcadia_MIL_AST_InstructionNode {
+  Arcadia_MIL_AST_InstructionStatementNode2 _parent;
 };
 
-#endif // ARCADIA_MIL_AST_EXPRESSIONNODE_H_INCLUDED
+#endif // ARCADIA_MIL_AST_INSTRUCTIONNODE_H_INCLUDED

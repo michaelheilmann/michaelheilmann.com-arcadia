@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_MIL_AST_OPERANDS_LITERALOPERANDNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_OPERANDS_LITERALOPERANDNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Operands/OperandNode.h"
+#include "Arcadia/MIL/AST/OperandNode.h"
 
 /// @code
 /// class Arcadia.MIL.AST.LiteralOperandNode extends Arcadia.MIL.AST.OperandNode {
@@ -25,7 +25,7 @@
 /// @endcode
 /// represents
 /// @code
-/// literal
+/// lexical.literal
 /// @endcode
 /// in the @a operand context.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.LiteralOperandNode", Arcadia_MIL_AST_LiteralOperandNode,

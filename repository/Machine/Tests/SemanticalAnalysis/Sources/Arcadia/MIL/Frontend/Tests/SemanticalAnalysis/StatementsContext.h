@@ -18,7 +18,7 @@
 
 #include "Arcadia/Include.h"
 #include "Arcadia/MIL/Frontend/Include.h"
-typedef struct Arcadia_MIL_VariableDefinitionStatementAst Arcadia_MIL_VariableDefinitionStatementAst;
+typedef struct Arcadia_MIL_VariableDefinitionStatementNode Arcadia_MIL_VariableDefinitionStatementNode;
 
 /// @brief Context for compiling a sequence of statements.
 Arcadia_declareObjectType("Arcadia.MIL.CallableContext", Arcadia_MIL_CallableContext, "Arcadia.Object");
@@ -59,7 +59,7 @@ Arcadia_MIL_CallableContext_onDefineLabel
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_AST_LabelStatementNode* ast,
+    Arcadia_MIL_AST_LabelDefinitionStatementNode* ast,
     Arcadia_Natural32Value instructionIndex
   );
 
@@ -82,7 +82,7 @@ Arcadia_MIL_CallableContext_onLocalVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_VariableDefinitionStatementAst* ast
+    Arcadia_MIL_VariableDefinitionStatementNode* ast
   );
 
 #endif // ARCADIA_MIL_CALLABLECONTEXT_H_INCLUDED

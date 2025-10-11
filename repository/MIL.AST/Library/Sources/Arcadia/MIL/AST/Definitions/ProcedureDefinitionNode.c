@@ -46,7 +46,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.MIL.AST.AST.ProcedureDefinitionNode", Arcadia_MIL_AST_ProcedureDefinitionNode,
-                         u8"Arcadia.MIL.AST.Node", Arcadia_MIL_AST_Node,
+                         u8"Arcadia.MIL.AST.DefinitionNode", Arcadia_MIL_AST_DefinitionNode,
                          &_typeOperations);
 
 static void

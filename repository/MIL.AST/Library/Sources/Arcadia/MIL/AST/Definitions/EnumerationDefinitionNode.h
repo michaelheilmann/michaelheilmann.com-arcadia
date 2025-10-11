@@ -16,10 +16,10 @@
 #if !defined(ARCADIA_MIL_AST_ENUMERATIONDEFINITIONNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_ENUMERATIONDEFINITIONNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/DefinitionNode.h"
 
 /// @code
-/// class Arcadia.MIL.AST.EnumerationDefinitionNode extends Arcadia.MIL.AST.Node {
+/// class Arcadia.MIL.AST.EnumerationDefinitionNode extends Arcadia.MIL.AST.DefinitionNode {
 ///   construct(enumerationName:Arcadia.String, enumerationBody:Arcadia.List)
 /// }
 /// @endcode
@@ -29,10 +29,10 @@
 /// enumerationBody : '{' enumerationMemberDefinition* '}'
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.EnumerationDefinitionNode", Arcadia_MIL_AST_EnumerationDefinitionNode,
-                          u8"Arcadia.MIL.AST.Node");
+                          u8"Arcadia.MIL.AST.DefinitionNode");
 
 struct Arcadia_MIL_AST_EnumerationDefinitionNode {
-  Arcadia_MIL_AST_Node _parent;
+  Arcadia_MIL_AST_DefinitionNode _parent;
   Arcadia_String* enumerationName;
   Arcadia_List* enumerationBody;
 };

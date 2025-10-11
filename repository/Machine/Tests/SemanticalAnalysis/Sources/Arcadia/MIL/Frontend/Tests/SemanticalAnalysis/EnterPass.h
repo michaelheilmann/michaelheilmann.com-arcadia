@@ -28,7 +28,7 @@ Arcadia_MIL_EnterPass_onModule
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_ModuleAst* moduleAst
+    Arcadia_MIL_AST_ModuleNode* moduleAst
   );
 
 /// The first pass (enter pass) of the compiler.

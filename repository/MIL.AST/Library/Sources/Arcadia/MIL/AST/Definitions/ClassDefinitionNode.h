@@ -16,20 +16,16 @@
 #if !defined(ARCADIA_MIL_AST_DEFINITIONS_CLASSDEFINITIONNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_DEFINITIONS_CLASSDEFINITIONNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/DefinitionNode.h"
 
 /// @code
-/// class Arcadia.MIL.AST.ClassDefinitionNode extends Arcadia.MIL.AST.Node {
+/// class Arcadia.MIL.AST.ClassDefinitionNode extends Arcadia.MIL.AST.DefinitionNode {
 ///   constructor(className:Arcadia.String, extendedClassName:Arcadia.String, classBody:Arcadia.List)
 /// }
 /// @endcode
-/// Represents
-/// @code
-/// classDefinition : 'class' name ('extends' name)? classBody
-/// classBody : '{' classMemberDefinition* '}'
-/// @endcode
+/// See https://mmichaelheilmann.com/specifications/mil/#class-definition for more information.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.ClassDefinitionNode", Arcadia_MIL_AST_ClassDefinitionNode,
-                          u8"Arcadia.MIL.AST.Node");
+                          u8"Arcadia.MIL.AST.DefinitionNode");
 
 struct Arcadia_MIL_AST_ClassDefinitionNode {
   Arcadia_MIL_AST_Node _parent;

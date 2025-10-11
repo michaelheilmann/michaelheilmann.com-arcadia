@@ -70,15 +70,14 @@ add_custom_target(Website.Specifications.DataDefinitionLanguage ALL DEPENDS "${R
 set_target_properties(Website.Specifications.DataDefinitionLanguage PROPERTIES FOLDER "Website")
 
 # Build "specifications/common-lexical-specification/index.html".
-InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/index.tl"
+InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/index.html.tl"
                      "${REPOSITORY_SOURCE_DIR}/../.build/specifications/common-lexical-specification/index.html"
                      "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 add_custom_target(Website.Specifications.CommonLexicalSpecification ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/specifications/common-lexical-specification/index.html")
 set_target_properties(Website.Specifications.CommonLexicalSpecification PROPERTIES FOLDER "Website")
 
-# Build "Specifications/Mil/index.html".
-# @todo Rename "index.i" to "index.html.t".
-InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/Mil/index.i"
+# Build "specifications/mil/index.html".
+InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/MIL/index.html.tl"
                      "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mil/index.html"
                      "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 add_custom_target(Website.Specifications.Mil ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mil/index.html")

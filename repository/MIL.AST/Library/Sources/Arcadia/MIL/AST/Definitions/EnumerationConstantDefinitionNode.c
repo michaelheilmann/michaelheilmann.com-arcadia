@@ -21,23 +21,23 @@
 /// constructor(variableName:Arcadia.String)
 /// @endcode
 static void
-EnumerationConstantDefinitionNode_constructImpl
+Arcadia_MIL_AST_EnumerationConstantDefinitionNode_constructImpl
   (
     Arcadia_Thread* thread,
-    EnumerationConstantDefinitionNode* self
+    Arcadia_MIL_AST_EnumerationConstantDefinitionNode* self
   );
 
 static void
-EnumerationConstantDefinitionNode_visit
+Arcadia_MIL_AST_EnumerationConstantDefinitionNode_visit
   (
     Arcadia_Thread* thread,
-    EnumerationConstantDefinitionNode* self
+    Arcadia_MIL_AST_EnumerationConstantDefinitionNode* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&EnumerationConstantDefinitionNode_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_AST_EnumerationConstantDefinitionNode_constructImpl,
   .destruct = NULL,
-  .visit = &EnumerationConstantDefinitionNode_visit,
+  .visit = &Arcadia_MIL_AST_EnumerationConstantDefinitionNode_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -45,18 +45,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.MIL.AST.FieldDefinitionNode", EnumerationConstantDefinitionNode,
-                         u8"Arcadia.MIL.AST.Node", Arcadia_MIL_AST_Node,
+Arcadia_defineObjectType(u8"Arcadia.MIL.AST.EnumerationDefinitionNode", Arcadia_MIL_AST_EnumerationConstantDefinitionNode,
+                         u8"Arcadia.MIL.AST.DefinitionNode", Arcadia_MIL_AST_DefinitionNode,
                          &_typeOperations);
 
 static void
-EnumerationConstantDefinitionNode_constructImpl
+Arcadia_MIL_AST_EnumerationConstantDefinitionNode_constructImpl
   (
     Arcadia_Thread* thread,
-    EnumerationConstantDefinitionNode* self
+    Arcadia_MIL_AST_EnumerationConstantDefinitionNode* self
   )
 {
-  Arcadia_TypeValue _type = _EnumerationConstantDefinitionNode_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_MIL_AST_EnumerationConstantDefinitionNode_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -71,15 +71,15 @@ EnumerationConstantDefinitionNode_constructImpl
 }
 
 static void
-EnumerationConstantDefinitionNode_visit
+Arcadia_MIL_AST_EnumerationConstantDefinitionNode_visit
   (
     Arcadia_Thread* thread,
-    EnumerationConstantDefinitionNode* self
+    Arcadia_MIL_AST_EnumerationConstantDefinitionNode* self
   )
 { Arcadia_Object_visit(thread, (Arcadia_Object*)self->name); }
 
-EnumerationConstantDefinitionNode*
-EnumerationConstantDefinitionNode_create
+Arcadia_MIL_AST_EnumerationConstantDefinitionNode*
+Arcadia_MIL_AST_EnumerationConstantDefinitionNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* name
@@ -92,5 +92,5 @@ EnumerationConstantDefinitionNode_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(EnumerationConstantDefinitionNode);
+  ARCADIA_CREATEOBJECT(Arcadia_MIL_AST_EnumerationConstantDefinitionNode);
 }

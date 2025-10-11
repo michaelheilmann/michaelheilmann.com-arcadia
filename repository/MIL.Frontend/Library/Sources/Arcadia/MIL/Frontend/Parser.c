@@ -167,7 +167,7 @@ onOperand
     Arcadia_MIL_Parser* self
   );
 
-static Arcadia_MIL_AST_ExpressionNode*
+static Arcadia_MIL_AST_InstructionNode*
 onExpression
   (
     Arcadia_Thread* thread,
@@ -217,7 +217,7 @@ onMethodDefinition
   );
 
 static Arcadia_MIL_AST_FieldDefinitionNode*
-onVariableDefinition
+onFieldDefinition
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
@@ -244,7 +244,7 @@ onProcedureDefinition
     Arcadia_MIL_Parser* self
   );
 
-static Arcadia_MIL_ModuleAst*
+static Arcadia_MIL_AST_ModuleNode*
 onModule
   (
     Arcadia_Thread* thread,
@@ -359,55 +359,63 @@ onInvokeInstruction
   return invokeInstructionNode;
 }
 
-// expression :
-//   unaryExpression
-//   binaryExpression
-//   invokeExpression
+// instruction :
+//   | unaryInstruction
+//   | binaryInstruction
+//   | invokeInstruction
+//   | jumpInstruction
+//   | raiseInstruction
+//   | returnInstruction
+// 
+// raiseInstruction :
+//   'raise'
+// returnInstruction :
+//   'return' <operand>?
+// 
+// invokeInstruction :
+//   'invoke' variableOperand '(' ( <operand> (',' <operand>)* )? ')'
+// 
+// jumpInstruction :
+//   | 'jump' <label>
+//   | 'jumpIfTrue' <operand> <label>
+//   | 'jumpIfFalse' <operand> <label>
 //
-// invokeExpression :
-//  'invoke' variableOperand '(' ( operand (',' operand)* )? ')'
+// binaryInstruction :
+//   | 'add' <target> ',' <first operand> ',' <second operand>
+//   | 'and' <target> ',' <first operand> ',' <second operand>
+//   | 'concatenate' <target> ',' <first operand> ',' <second operand>
+//   | 'divide' <target> ',' <first operand> ',' <second operand>
+//   | 'multiply' <target> ',' <first operand> ',' <second operand>
+//   | 'or' <target> ',' <first operand> ',' <second operand>
+//   | 'subtract' <target> ',' <first operand> ',' <second operand>
+//   | 'isEqualTo' <target> ',' <first operand> ',' <second operand>
+//   | 'isNotEqualTo' <target> ',' <first operand> ',' <second operand>
+//   | 'isLowerThan' <target> ',' <first operand> ',' <second operand>
+//   | 'isLowerThanOrEqualTo' <target> ',' <first operand> ',' <second operand>
+//   | 'isGreaterThan' <target> ',' <first operand> ',' <second operand>
+//   | 'isGreaterThanOrEqualTo' <target> ',' <first operand> ',' <second operand>
 //
-// binaryExpression :
-//   'add' <target> ',' <first operand> ',' <second operand>
-//   'and' <target> ',' <first operand> ',' <second operand>
-//   'concatenate' <target> ',' <first operand> ',' <second operand>
-//   'divide' <target> ',' <first operand> ',' <second operand>
-//   'multiply' <target> ',' <first operand> ',' <second operand>
-//   'or' <target> ',' <first operand> ',' <second operand>
-//   'subtract' <target> ',' <first operand> ',' <second operand>
-//   'isEqualTo' <target> ',' <first operand> ',' <second operand>
-//   'isNotEqualTo' <target> ',' <first operand> ',' <second operand>
-//   'isLowerThan' <target> ',' <first operand> ',' <second operand>
-//   'isLowerThanOrEqualTo' <target> ',' <first operand> ',' <second operand>
-//   'isGreaterThan' <target> ',' <first operand> ',' <second operand>
-//   'isGreaterThanOrEqualTo' <target> ',' <first operand> ',' <second operand>
-//
-// unaryExpression:
-//   'negate' <target> <operand>
-//   'not' <target> <operand>
-//   'set' <target> <operand>
-static Arcadia_MIL_AST_ExpressionNode*
-onExpression
+// unaryInstruction:
+//   | 'negate' <target> <operand>
+//   | 'not' <target> <operand>
+//   | 'set' <target> <operand>
+static Arcadia_MIL_AST_InstructionNode*
+onInstruction
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
   )
 {
   switch (getType(thread, self)) {
-    // constantExpression
-    case Arcadia_MIL_TokenType_BooleanLiteral:
-    case Arcadia_MIL_TokenType_IntegerLiteral:
-    case Arcadia_MIL_TokenType_RealLiteral:
-    case Arcadia_MIL_TokenType_StringLiteral:
-    case Arcadia_MIL_TokenType_VoidLiteral:
-    case Arcadia_MIL_TokenType_Name: {
-      Arcadia_MIL_AST_OperandNode* operand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_LoadExpressionAst_create(thread, operand);
-    } break;
     // binaryExpression
     case Arcadia_MIL_TokenType_Add: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -415,11 +423,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Add, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Add, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_And: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -427,11 +440,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_And, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_And, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_Concatenate: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -439,11 +457,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Concatenate, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Concatenate, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_Divide: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -451,11 +474,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Divide, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Divide, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_Multiply: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -463,11 +491,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Multiply, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Multiply, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_Or: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -475,11 +508,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Or, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Or, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_Subtract: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -487,12 +525,17 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Subtract, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_Subtract, target, firstOperand, secondOperand);
     } break;
     // relational operations
     case Arcadia_MIL_TokenType_IsEqualTo: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -500,11 +543,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsEqualTo, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsEqualTo, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_IsNotEqualTo: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -512,11 +560,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsNotEqualTo, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsNotEqualTo, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_IsLowerThan: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -524,11 +577,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsLowerThan, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsLowerThan, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_IsLowerThanOrEqualTo: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -536,11 +594,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsLowerThanOrEqualTo, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsLowerThanOrEqualTo, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_IsGreaterThan: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -548,11 +611,16 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsGreaterThan, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsGreaterThan, target, firstOperand, secondOperand);
     } break;
     case Arcadia_MIL_TokenType_IsGreaterThanOrEqualTo: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* firstOperand = onOperand(thread, self);
       if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -560,29 +628,104 @@ onExpression
       }
       next(thread, self);
       Arcadia_MIL_AST_OperandNode* secondOperand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_BinaryExpressionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsGreaterThanOrEqualTo, target, firstOperand, secondOperand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_BinaryInstructionNode_create(thread, Arcadia_MIL_AST_BinaryInstructionKind_IsGreaterThanOrEqualTo, target, firstOperand, secondOperand);
     } break;
     // unaryExpression
     case Arcadia_MIL_TokenType_Negate: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* operand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_UnaryInstructionNode_create(thread, Arcadia_MIL_AST_UnaryInstructionKind_Negate, target, operand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_UnaryInstructionNode_create(thread, Arcadia_MIL_AST_UnaryInstructionKind_Negate, target, operand);
     } break;
     case Arcadia_MIL_TokenType_Not: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* operand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_UnaryInstructionNode_create(thread, Arcadia_MIL_AST_UnaryInstructionKind_Not, target, operand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_UnaryInstructionNode_create(thread, Arcadia_MIL_AST_UnaryInstructionKind_Not, target, operand);
     } break;
     case Arcadia_MIL_TokenType_Invoke: {
-      return (Arcadia_MIL_AST_ExpressionNode*)onInvokeInstruction(thread, self);
+      return (Arcadia_MIL_AST_InstructionNode*)onInvokeInstruction(thread, self);
     } break;
     case Arcadia_MIL_TokenType_Set: {
       next(thread, self);
-      Arcadia_MIL_AST_OperandNode* target = (Arcadia_MIL_AST_OperandNode*)Arcadia_MIL_AST_RegisterOperandNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"$0"));
+      Arcadia_MIL_AST_OperandNode* target = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
       Arcadia_MIL_AST_OperandNode* operand = onOperand(thread, self);
-      return (Arcadia_MIL_AST_ExpressionNode*)Arcadia_MIL_AST_UnaryInstructionNode_create(thread, Arcadia_MIL_AST_UnaryInstructionKind_Set, target, operand);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_UnaryInstructionNode_create(thread, Arcadia_MIL_AST_UnaryInstructionKind_Set, target, operand);
+    } break;
+    case Arcadia_MIL_TokenType_Raise: {
+      next(thread, self);
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_RaiseInstructionNode_create(thread);
+    } break;
+    case Arcadia_MIL_TokenType_Return: {
+      next(thread, self);
+      Arcadia_MIL_AST_OperandNode* operand = NULL;
+      if (is(thread, self, Arcadia_MIL_TokenType_BooleanLiteral) || is(thread, self, Arcadia_MIL_TokenType_IntegerLiteral) || is(thread, self, Arcadia_MIL_TokenType_RealLiteral) || is(thread, self, Arcadia_MIL_TokenType_StringLiteral) || is(thread, self, Arcadia_MIL_TokenType_Name)) {
+        operand = onOperand(thread, self);
+      }
+      return (Arcadia_MIL_AST_InstructionNode*)Arcadia_MIL_AST_ReturnInstructionNode_create(thread, operand);
+    } break;
+    case Arcadia_MIL_TokenType_Jump: {
+      next(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Name)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_String* labelName = getText(thread, self);
+      next(thread, self);
+      onEndOfStatement(thread, self);
+      Arcadia_MIL_AST_JumpInstructionNode* jumpNode = Arcadia_MIL_AST_JumpInstructionNode_create(thread, labelName);
+      return (Arcadia_MIL_AST_InstructionNode*)jumpNode;
+    } break;
+    case Arcadia_MIL_TokenType_JumpIfFalse: {
+      next(thread, self);
+      Arcadia_MIL_AST_OperandNode* operand = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Name)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_String* labelName = getText(thread, self);
+      next(thread, self);
+      Arcadia_MIL_AST_JumpInstructionNode* jumpNode = Arcadia_MIL_AST_JumpInstructionNode_create(thread, labelName);
+      operand = NULL;
+      return (Arcadia_MIL_AST_InstructionNode*)jumpNode;
+    } break;
+    case Arcadia_MIL_TokenType_JumpIfTrue: {
+      next(thread, self);
+      Arcadia_MIL_AST_OperandNode* operand = onOperand(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Comma)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      next(thread, self);
+      if (!is(thread, self, Arcadia_MIL_TokenType_Name)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_String* labelName = getText(thread, self);
+      next(thread, self);
+      Arcadia_MIL_AST_JumpInstructionNode* jumpNode = Arcadia_MIL_AST_JumpInstructionNode_create(thread, labelName);
+      operand = NULL;
+      return (Arcadia_MIL_AST_InstructionNode*)jumpNode;
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -610,7 +753,25 @@ onEndOfStatement
   }
 }
 
-static Arcadia_MIL_VariableDefinitionStatementAst*
+// instructionStatement : instruction endOfStatement
+static Arcadia_MIL_AST_InstructionStatementNode2*
+onInstructionStatement
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_Parser* self
+  )
+{
+  Arcadia_MIL_AST_InstructionNode* instruction = onInstruction(thread, self);
+  Arcadia_MIL_AST_InstructionStatementNode2* statement = (Arcadia_MIL_AST_InstructionStatementNode2*)instruction;
+  onEndOfStatement(thread, self);
+  while (is(thread, self, Arcadia_MIL_TokenType_LineTerminator)) {
+    next(thread, self);
+  }
+  return statement;
+}
+
+/// variableDefinitionStatement : 'variable' name endOfStatement
+static Arcadia_MIL_VariableDefinitionStatementNode*
 onVariableDefinitionStatement
   (
     Arcadia_Thread* thread,
@@ -626,25 +787,20 @@ onVariableDefinitionStatement
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_MIL_VariableDefinitionStatementAst* variableDefinitionStatementAst = Arcadia_MIL_VariableDefinitionStatementAst_create(thread, getText(thread, self));
+  Arcadia_MIL_VariableDefinitionStatementNode* statement = Arcadia_MIL_VariableDefinitionStatementNode_create(thread, getText(thread, self));
   next(thread, self);
+  onEndOfStatement(thread, self);
   while (is(thread, self, Arcadia_MIL_TokenType_LineTerminator)) {
     next(thread, self);
   }
-  return variableDefinitionStatementAst;
+  return statement;
 }
 
-/// statement : expressionStatement endOfStatement
-///           | labelStatement endOfStatement?
-///           | returnStatement endOfStatement
+/// statement : instructionStatement
+///           | labelDefinitionStatement endOfStatement?
+///           | variableDefinitionStatement
 ///           | emptyStatement endOfStatement
-///           | jumpStatement endOfStatement
-/// expressionStatement: name '=' expression
-/// labelStatement: name ':'
-/// variableDefinitionStatement : variableDefinition
-/// returnStatement : 'return' operand?
-/// jumpStatement : 'jump'|'jumpIfTrue'|'jumpIfFalse' name
-/// raiseStatement : 'raise'
+/// labelDefinitionStatement : name ':'
 static Arcadia_MIL_AST_StatementNode*
 onStatement
   (
@@ -656,95 +812,33 @@ onStatement
   while (is(thread, self, Arcadia_MIL_TokenType_LineTerminator)) {
     next(thread, self);
   }
-  // raise statement
-  if (is(thread, self, Arcadia_MIL_TokenType_Raise)) {
-    next(thread, self);
-    onEndOfStatement(thread, self);
-    Arcadia_MIL_RaiseStatementAst* statementAst = Arcadia_MIL_RaiseStatementAst_create(thread);
-    return (Arcadia_MIL_AST_StatementNode*)statementAst;
-  }
-  // jump statement
-  if (is(thread, self, Arcadia_MIL_TokenType_Jump)) {
-    if (!is(thread, self, Arcadia_MIL_TokenType_Name)) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_String* labelName = getText(thread, self);
-    next(thread, self);
-    onEndOfStatement(thread, self);
-    Arcadia_MIL_AST_JumpStatementNode* statementAst = Arcadia_MIL_AST_JumpStatementNode_create(thread, labelName);
-    return (Arcadia_MIL_AST_StatementNode*)statementAst;
-  } else if (is(thread, self, Arcadia_MIL_TokenType_JumpIfTrue)) {
-    if (!is(thread, self, Arcadia_MIL_TokenType_Name)) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_String* labelName = getText(thread, self);
-    next(thread, self);
-    onEndOfStatement(thread, self);
-    Arcadia_MIL_AST_JumpStatementNode* statementAst = Arcadia_MIL_AST_JumpStatementNode_create(thread, labelName);
-    return (Arcadia_MIL_AST_StatementNode*)statementAst;
-  } else if (is(thread, self, Arcadia_MIL_TokenType_JumpIfFalse)) {
-    if (!is(thread, self, Arcadia_MIL_TokenType_Name)) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_String* labelName = getText(thread, self);
-    next(thread, self);
-    onEndOfStatement(thread, self);
-    Arcadia_MIL_AST_JumpStatementNode* statementAst = Arcadia_MIL_AST_JumpStatementNode_create(thread, labelName);
-    return (Arcadia_MIL_AST_StatementNode*)statementAst;
-  }
-  // return statement
-  if (is(thread, self, Arcadia_MIL_TokenType_Return)) {
-    next(thread, self);
-    Arcadia_MIL_AST_OperandNode* operandAst = NULL;
-    if (is(thread, self, Arcadia_MIL_TokenType_BooleanLiteral) || is(thread, self, Arcadia_MIL_TokenType_IntegerLiteral) || is(thread, self, Arcadia_MIL_TokenType_RealLiteral) || is(thread, self, Arcadia_MIL_TokenType_StringLiteral) || is(thread, self, Arcadia_MIL_TokenType_Name)) {
-      operandAst = onOperand(thread, self);
-    }
-    onEndOfStatement(thread, self);
-    Arcadia_MIL_ReturnStatementAst* statementAst = Arcadia_MIL_ReturnStatementAst_create(thread, operandAst);
-    return (Arcadia_MIL_AST_StatementNode*)statementAst;
-  }
-  // variable definition statement
+  // variableDefinitionStatement : 'variable' name
   if (is(thread, self, Arcadia_MIL_TokenType_Variable)) {
-    Arcadia_MIL_VariableDefinitionStatementAst* statementAst = onVariableDefinitionStatement(thread, self);
-    onEndOfStatement(thread, self);
+    Arcadia_MIL_VariableDefinitionStatementNode* statementAst = onVariableDefinitionStatement(thread, self);
     return (Arcadia_MIL_AST_StatementNode*)statementAst;
   }
-  if (!is(thread, self, Arcadia_MIL_TokenType_Name)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_MIL_AST_StatementNode* statementAst = NULL;
-  Arcadia_String* nameString = getText(thread, self);
-  next(thread, self);
-  switch (getType(thread, self)) {
-    case Arcadia_MIL_TokenType_EqualsSign: {
-      next(thread, self);
-      Arcadia_MIL_AST_ExpressionNode* expressionAst = onExpression(thread, self);
-      statementAst = (Arcadia_MIL_AST_StatementNode*)Arcadia_MIL_ExpressionStatementAst_create(thread, nameString, expressionAst);
-      onEndOfStatement(thread, self);
-    } break;
-    case Arcadia_MIL_TokenType_Colon: {
-      next(thread, self);
-      statementAst = (Arcadia_MIL_AST_StatementNode*)Arcadia_MIL_AST_LabelStatementNode_create(thread, nameString);
-      // statement terminator injection
-      if (is(thread, self, Arcadia_MIL_TokenType_EndOfInput) || is(thread, self, Arcadia_MIL_TokenType_LineTerminator) || is(thread, self, Arcadia_MIL_TokenType_RightCurlyBracket)) {
-        if (is(thread, self, Arcadia_MIL_TokenType_LineTerminator) || is(thread, self, Arcadia_MIL_TokenType_RightCurlyBracket)) {
-          next(thread, self);
-        }
-      }
-    } break;
-    default: {
+  // labelDefinitionStatement : name ':'
+  if (is(thread, self, Arcadia_MIL_TokenType_Name)) {
+    Arcadia_MIL_AST_StatementNode* statementAst = NULL;
+    Arcadia_String* name = getText(thread, self);
+    next(thread, self);
+    if (!is(thread, self, Arcadia_MIL_TokenType_Colon)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
       Arcadia_Thread_jump(thread);
-    } break;
-  }
-  while (is(thread, self, Arcadia_MIL_TokenType_LineTerminator)) {
+    }
     next(thread, self);
+    statementAst = (Arcadia_MIL_AST_StatementNode*)Arcadia_MIL_AST_LabelDefinitionStatementNode_create(thread, name);
+    onEndOfStatement(thread, self);
+    while (is(thread, self, Arcadia_MIL_TokenType_LineTerminator)) {
+      next(thread, self);
+    }
+    return statementAst;
   }
-  return statementAst;
+  // instruction statement
+  {
+    Arcadia_MIL_AST_InstructionStatementNode2* statementAst = onInstructionStatement(thread, self);
+    return (Arcadia_MIL_AST_StatementNode*)statementAst;
+  }
 }
 
 // variable <name>
@@ -934,7 +1028,7 @@ onMethodDefinition
 
 // variableDefinition : 'variable' variableName
 static Arcadia_MIL_AST_FieldDefinitionNode*
-onVariableDefinition
+onFieldDefinition
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
@@ -974,7 +1068,7 @@ onClassMemberDefinition
       return (Arcadia_MIL_AST_Node*)onMethodDefinition(thread, self);
     } break;
     case Arcadia_MIL_TokenType_Variable: {
-      return (Arcadia_MIL_AST_Node*)onVariableDefinition(thread, self);
+      return (Arcadia_MIL_AST_Node*)onFieldDefinition(thread, self);
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -1107,15 +1201,15 @@ onProcedureDefinition
   return procedureDefinitionAst;
 }
 
-/// module : (classDefinition|proceduredefinition)*
-static Arcadia_MIL_ModuleAst*
+/// module : (classDefinition|enumerationDefinition|proceduredefinition)*
+static Arcadia_MIL_AST_ModuleNode*
 onModule
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
   )
 {
-  Arcadia_MIL_ModuleAst* moduleAst = Arcadia_MIL_ModuleAst_create(thread);
+  Arcadia_MIL_AST_ModuleNode* moduleAst = Arcadia_MIL_AST_ModuleNode_create(thread);
   if (!is(thread, self, Arcadia_MIL_TokenType_StartOfInput)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
@@ -1129,11 +1223,11 @@ onModule
     switch (getType(thread, self)) {
       case Arcadia_MIL_TokenType_Class: {
         definitionAst = (Arcadia_MIL_DefinitionAst*)onClassDefinition(thread, self);
-        Arcadia_MIL_ModuleAst_appendDefinition(thread, moduleAst, definitionAst);
+        Arcadia_MIL_AST_ModuleNode_appendDefinition(thread, moduleAst, definitionAst);
       } break;
       case Arcadia_MIL_TokenType_Procedure: {
         definitionAst = (Arcadia_MIL_DefinitionAst*)onProcedureDefinition(thread, self);
-        Arcadia_MIL_ModuleAst_appendDefinition(thread, moduleAst, definitionAst);
+        Arcadia_MIL_AST_ModuleNode_appendDefinition(thread, moduleAst, definitionAst);
       } break;
       default: {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -1148,14 +1242,14 @@ onModule
   return moduleAst;
 }
 
-Arcadia_MIL_ModuleAst*
+Arcadia_MIL_AST_ModuleNode*
 Arcadia_MIL_Parser_run
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
   )
 {
-  Arcadia_MIL_ModuleAst* moduleAst = onModule(thread, self);
+  Arcadia_MIL_AST_ModuleNode* moduleAst = onModule(thread, self);
   return moduleAst;
 }
 

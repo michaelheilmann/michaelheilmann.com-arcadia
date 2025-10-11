@@ -16,14 +16,14 @@
 #if !defined(ARCADIA_MIL_AST_VARIABLEDEFINITIONNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_VARIABLEDEFINITIONNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/DefinitionNode.h"
 
 /// The definition of a parameter variable, local variable, or member variable.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.FieldDefinitionNode", Arcadia_MIL_AST_FieldDefinitionNode,
-                          u8"Arcadia.MIL.AST.Node");
+                          u8"Arcadia.MIL.AST.DefinitionNode");
 
 struct Arcadia_MIL_AST_FieldDefinitionNode {
-  Arcadia_MIL_AST_Node _parent;
+  Arcadia_MIL_AST_DefinitionNode _parent;
   Arcadia_String* variableName;
 };
 

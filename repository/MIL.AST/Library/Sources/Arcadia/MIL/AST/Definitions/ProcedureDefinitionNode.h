@@ -16,22 +16,17 @@
 #if !defined(ARCADIA_MIL_AST_DEFINITIONS_PROCEDUREDEFINITIONNODE_H_INCLUDED)
 #define ARCADIA_MIL_AST_DEFINITIONS_PROCEDUREDEFINITIONNODE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/DefinitionNode.h"
 
 /// @code
-/// class Arcadia.MIL.ProcedureDefinitionAst extends Arcadia.MIL.AST.Node
+/// class Arcadia.MIL.ProcedureDefinitionAst extends Arcadia.MIL.AST.DefinitionNode
 /// @endcode
-/// Represents
-/// @code
-/// procedureDefinition : 'procedure' 'entry'? ('native' string)? name procedureParameters
-///                     | 'procedure' 'entry'? name procedureParameters procedureBody
-/// procedureBody : '{' statements '}'
-/// @endcode
+/// See https://michaelheilmann.com/specifications/mil/#procedure-definition for more information.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.ProcedureDefinitionNode", Arcadia_MIL_AST_ProcedureDefinitionNode,
-                          u8"Arcadia.MIL.AST.Node");
+                          u8"Arcadia.MIL.AST.DefinitionNode");
 
 struct Arcadia_MIL_AST_ProcedureDefinitionNode {
-  Arcadia_MIL_AST_Node _parent;
+  Arcadia_MIL_AST_DefinitionNode _parent;
   Arcadia_BooleanValue entry;
   Arcadia_String* nativeName;
   Arcadia_String* procedureName;

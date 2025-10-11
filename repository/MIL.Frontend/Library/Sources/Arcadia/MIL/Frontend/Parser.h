@@ -34,7 +34,7 @@ Arcadia_MIL_Parser_create
 /// @brief Translate the token stream into an AST.
 /// @param self A pointer to this MIL parser.
 /// @return A pointer to the MIL AST.
-Arcadia_MIL_ModuleAst*
+Arcadia_MIL_AST_ModuleNode*
 Arcadia_MIL_Parser_run
   (
     Arcadia_Thread* thread,

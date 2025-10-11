@@ -16,8 +16,21 @@
 #if !defined(ARCADIA_MIL_AST_INCLUDE_H_INCLUDED)
 #define ARCADIA_MIL_AST_INCLUDE_H_INCLUDED
 
-#include "Arcadia/MIL/AST/BinaryInstructionKind.h"
-#include "Arcadia/MIL/AST/UnaryInstructionKind.h"
+#include "Arcadia/MIL/AST/DefinitionNode.h"
+#include "Arcadia/MIL/AST/DefinitionStatementNode.h"
+#include "Arcadia/MIL/AST/InstructionNode.h"
+#include "Arcadia/MIL/AST/InstructionStatementNode.h"
+#include "Arcadia/MIL/AST/ModuleNode.h"
+#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/OperandNode.h"
+#include "Arcadia/MIL/AST/StatementNode.h"
+
+#include "Arcadia/MIL/AST/Instructions/BinaryInstructionNode.h"
+#include "Arcadia/MIL/AST/Instructions/InvokeInstructionNode.h"
+#include "Arcadia/MIL/AST/Instructions/JumpInstructionNode.h"
+#include "Arcadia/MIL/AST/Instructions/RaiseInstructionNode.h"
+#include "Arcadia/MIL/AST/Instructions/ReturnInstructionNode.h"
+#include "Arcadia/MIL/AST/Instructions/UnaryInstructionNode.h"
 
 #include "Arcadia/MIL/AST/Literals/BooleanLiteralNode.h"
 #include "Arcadia/MIL/AST/Literals/IntegerLiteralNode.h"
@@ -26,7 +39,6 @@
 #include "Arcadia/MIL/AST/Literals/VoidLiteralNode.h"
 
 #include "Arcadia/MIL/AST/Operands/LiteralOperandNode.h"
-#include "Arcadia/MIL/AST/Operands/OperandNode.h"
 #include "Arcadia/MIL/AST/Operands/RegisterOperandNode.h"
 #include "Arcadia/MIL/AST/Operands/VariableOperandNode.h"
 
@@ -37,5 +49,17 @@
 #include "Arcadia/MIL/AST/Definitions/FieldDefinitionNode.h"
 #include "Arcadia/MIL/AST/Definitions/MethodDefinitionNode.h"
 #include "Arcadia/MIL/AST/Definitions/ProcedureDefinitionNode.h"
+
+#include "Arcadia/MIL/AST/DefinitionStatements/LabelDefinitionStatementNode.h"
+#include "Arcadia/MIL/AST/DefinitionStatements/VariableDefinitionStatementNode.h"
+
+#include "Arcadia/MIL/AST/DefinitionNode.h"
+#include "Arcadia/MIL/AST/DefinitionStatementNode.h"
+#include "Arcadia/MIL/AST/InstructionNode.h"
+#include "Arcadia/MIL/AST/InstructionStatementNode.h"
+#include "Arcadia/MIL/AST/ModuleNode.h"
+#include "Arcadia/MIL/AST/Node.h"
+#include "Arcadia/MIL/AST/OperandNode.h"
+#include "Arcadia/MIL/AST/StatementNode.h"
 
 #endif // ARCADIA_MIL_AST_INCLUDE_H_INCLUDED
