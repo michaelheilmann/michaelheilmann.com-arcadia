@@ -20,60 +20,14 @@
   #error("do not include directly, include `Arcadia/Visuals/Include.h` instead")
 #endif
 
-#include "Arcadia/Visuals/System.h"
+#include "Arcadia/Engine/Include.h"
 
-// Arcadia.Visuals.Backend objects represent visuals backends like "OpenGL 4", "Direct3D 12", or "Vulkan".
-// Arcadia.Engine provides the list of backends and it also allows for activating/deactivating exactly one backend.
-// Switching backends invalidates windows, contexts, and resources.
+// A visuals backend.
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Backend", Arcadia_Visuals_Backend,
                           u8"Arcadia.Engine.Backend");
 
 struct Arcadia_Visuals_Backend {
   Arcadia_Engine_Backend _parent;
-  void (*open)(Arcadia_Thread*, Arcadia_Visuals_Backend*);
-  void (*close)(Arcadia_Thread*, Arcadia_Visuals_Backend*);
-  Arcadia_String *(*getName)(Arcadia_Thread*, Arcadia_Visuals_Backend*);
-  Arcadia_Visuals_System* (*createSystem)(Arcadia_Thread*, Arcadia_Visuals_Backend*);
 };
-
-/// @brief Ensure this backend is opened.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this backend.
-void
-Arcadia_Visuals_Backend_open
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Backend* self
-  );
-
-/// @brief Ensure this backend is closed.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this backend.
-void
-Arcadia_Visuals_Backend_close
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Backend* self
-  );
-
-/// @brief Get the name of this backend.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this window.
-Arcadia_String*
-Arcadia_Visuals_Backend_getName
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Backend* self
-  );
-
-/// @brief Create the system.
-/// @papram self A pointer to this backend.
-/// @return The system.
-Arcadia_Visuals_System*
-Arcadia_Visuals_System_createSystem
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Backend* self
-  );
 
 #endif // ARCADIA_VISUALS_BACKEND_H_INCLUDED

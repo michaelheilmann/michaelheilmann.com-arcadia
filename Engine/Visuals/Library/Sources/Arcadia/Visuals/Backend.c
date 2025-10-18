@@ -54,42 +54,6 @@ Arcadia_Visuals_Backend_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->close = NULL;
-  self->createSystem = NULL;
-  self->getName = NULL;
-  self->open = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
-
-void
-Arcadia_Visuals_Backend_open
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Backend* self
-  )
-{ self->open(thread, self); }
-
-void
-Arcadia_Visuals_Backend_close
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Backend* self
-  )
-{ self->close(thread, self); }
-
-Arcadia_String*
-Arcadia_Visuals_Backend_getName
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Backend* self
-  )
-{ return self->getName(thread, self); }
-
-Arcadia_Visuals_System*
-Arcadia_Visuals_System_createSystem
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Backend* self
-  )
-{ return self->createSystem(thread, self); }

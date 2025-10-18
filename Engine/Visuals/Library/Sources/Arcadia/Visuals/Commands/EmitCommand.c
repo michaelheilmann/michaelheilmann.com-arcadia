@@ -32,7 +32,7 @@ Arcadia_Visuals_EmitCommand_visitImpl
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Visuals_EmitCommand_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Visuals_EmitCommand_visitImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_EmitCommand_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

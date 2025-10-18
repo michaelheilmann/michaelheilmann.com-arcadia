@@ -48,8 +48,8 @@ getOrCreate
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & constructImpl,
-  .destruct = &destructImpl,
-  .visit = &visitImpl,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -134,7 +134,7 @@ getOrCreate
       return i;
     }
   }
-  Arcadia_Arrays_resizeByFreeCapacity(thread, Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Value), self->sz, &self->cp, 1, Arcadia_Arrays_ResizeStrategy_Type4);
+  Arcadia_Arrays_resizeByFreeCapacity(thread, Arcadia_Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Value), self->sz, &self->cp, 1, Arcadia_Arrays_ResizeStrategy_Type4);
   self->p[self->sz++] = *constant;
   return self->sz - 1;
 }

@@ -15,6 +15,9 @@
 
 #include "Arcadia/Audials/System.h"
 
+#include "Arcadia/Engine/SystemEvent.h"
+#include "Arcadia/Audials/BackendContext.h"
+
 static void
 Arcadia_Audials_System_constructImpl
   (
@@ -29,10 +32,25 @@ Arcadia_Audials_System_visitImpl
     Arcadia_Audials_System* self
   );
 
+static Arcadia_Audials_BackendContext*
+Arcadia_Audials_System_getBackendContext
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_System* self
+  );
+
+static void
+Arcadia_Audials_System_setBackendContext
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_System* self,
+    Arcadia_Audials_BackendContext* backendContext
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Audials_System_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Audials_System_visitImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Audials_System_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -60,7 +78,7 @@ Arcadia_Audials_System_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->update = NULL;
+  self->backendContext = NULL;
   self->playSine = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
@@ -74,13 +92,27 @@ Arcadia_Audials_System_visitImpl
   )
 {/*Intentionally empty.*/}
 
-void
-Arcadia_Audials_System_update
+static Arcadia_Audials_BackendContext*
+Arcadia_Audials_System_getBackendContext
   (
     Arcadia_Thread* thread,
     Arcadia_Audials_System* self
   )
-{ self->update(thread, self); }
+{ return self->backendContext; }
+
+static void
+Arcadia_Audials_System_setBackendContext
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_System* self,
+    Arcadia_Audials_BackendContext* backendContext
+  )
+{
+  if (self->backendContext != backendContext) {
+    Arcadia_Engine_SystemEvent_create(thread, Arcadia_TimeStamp_getNow(thread), Arcadia_Engine_ResourceEventKind_PreDetach, (Arcadia_Engine_System*)self);
+    Arcadia_Engine_SystemEvent_create(thread, Arcadia_TimeStamp_getNow(thread), Arcadia_Engine_ResourceEventKind_PostAttach, (Arcadia_Engine_System*)self);
+  }
+}
 
 void
 Arcadia_Audials_System_playSine

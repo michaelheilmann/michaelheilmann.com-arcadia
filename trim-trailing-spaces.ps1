@@ -32,8 +32,8 @@ Get-ChildItem -Path ./repository -Recurse -ErrorAction SilentlyContinue -Force -
     (Get-Content -Path $_.FullName | foreach {$_ -replace '\s+$', ''}) | Set-Content -Path $_.FullName
   }
 
-# *.te and *.mil
-Get-ChildItem -Path ./repository -Recurse -ErrorAction SilentlyContinue -Force -Include *.te, *.mil |
+# *.tl and *.mil
+Get-ChildItem -Path ./repository -Recurse -ErrorAction SilentlyContinue -Force -Include *.tl, *.mil |
   Foreach-Object {
     (Get-Content -Path $_.FullName | foreach {$_ -replace '\s+$', ''}) | Set-Content -Path $_.FullName
   }

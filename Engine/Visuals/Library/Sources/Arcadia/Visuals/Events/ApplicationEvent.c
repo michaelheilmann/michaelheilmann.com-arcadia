@@ -16,7 +16,7 @@
 #define ARCADIA_VISUALS_PRIVATE (1)
 #include "Arcadia/Visuals/Events/ApplicationEvent.h"
 
-#include "Arcadia/Visuals/System.h"
+#include "Arcadia/Visuals/BackendContext.h"
 
 static void
 Arcadia_Visuals_ApplicationEvent_constructImpl
@@ -35,7 +35,7 @@ Arcadia_Visuals_ApplicationEvent_visit
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_ApplicationEvent_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Visuals_ApplicationEvent_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_ApplicationEvent_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -67,7 +67,7 @@ Arcadia_Visuals_ApplicationEvent_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 0, _Arcadia_Visuals_System_getType(thread));
+  self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 0, _Arcadia_Visuals_BackendContext_getType(thread));
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
@@ -80,7 +80,7 @@ Arcadia_Visuals_ApplicationEvent_visit
     Arcadia_Visuals_ApplicationEvent* self
   )
 {
-  if (self->system) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->system);
+  if (self->backendContext) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backendContext);
   }
 }

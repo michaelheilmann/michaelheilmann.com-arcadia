@@ -84,7 +84,7 @@ void
 Arcadia_Arrays_resizeByAdditionalCapacity
   (
     Arcadia_Thread* thread,
-    Arms_MemoryManager* memoryManager,
+    Arcadia_Arms_MemoryManager* memoryManager,
     void** elements,
     Arcadia_SizeValue elementSize,
     Arcadia_SizeValue size,
@@ -109,7 +109,7 @@ void
 Arcadia_Arrays_resizeByFreeCapacity
   (
     Arcadia_Thread* thread,
-    Arms_MemoryManager* memoryManager,
+    Arcadia_Arms_MemoryManager* memoryManager,
     void** elements,
     Arcadia_SizeValue elementSize,
     Arcadia_SizeValue size,

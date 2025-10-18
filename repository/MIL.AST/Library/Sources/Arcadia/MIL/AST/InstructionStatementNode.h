@@ -13,13 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_MIL_AST_INSTRUCTIONSTATEMENTNODE2_H_INCLUDED)
-#define ARCADIA_MIL_AST_INSTRUCTIONSTATEMENTNODE2_H_INCLUDED
+#if !defined(ARCADIA_MIL_AST_INSTRUCTIONSTATEMENTNODE_H_INCLUDED)
+#define ARCADIA_MIL_AST_INSTRUCTIONSTATEMENTNODE_H_INCLUDED
 
 #include "Arcadia/MIL/AST/StatementNode.h"
 
 /// @code
-/// class Arcadia.MIL.AST.DefinitionStatementNode2 extends Arcadia.MIL.AST.StatementNode {
+/// class Arcadia.MIL.AST.DefinitionStatementNode extends Arcadia.MIL.AST.StatementNode {
 ///   ...
 /// }
 /// @endcode
@@ -27,11 +27,11 @@
 /// @code
 /// instructionStatement : instruction
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.MIL.AST.InstructionStatementNode2", Arcadia_MIL_AST_InstructionStatementNode2,
+Arcadia_declareObjectType(u8"Arcadia.MIL.AST.InstructionStatementNode", Arcadia_MIL_AST_InstructionStatementNode,
                           u8"Arcadia.MIL.AST.StatementNode");
 
-struct Arcadia_MIL_AST_InstructionStatementNode2 {
+struct Arcadia_MIL_AST_InstructionStatementNode {
   Arcadia_MIL_AST_StatementNode _parent;
 };
 
-#endif // ARCADIA_MIL_AST_INSTRUCTIONSTATEMENTNODE2_H_INCLUDED
+#endif // ARCADIA_MIL_AST_INSTRUCTIONSTATEMENTNODE_H_INCLUDED

@@ -27,7 +27,14 @@
 
 #define Arcadia_Tests_assertTrue(thread, expression) \
   if (!(expression)) { \
-    Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: test assertion `%s` failed\n", __FILE__, __LINE__, #expression); \
+    Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: test assertion true == `%s` failed\n", __FILE__, __LINE__, #expression); \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed); \
+    Arcadia_Thread_jump(thread); \
+  }
+  
+#define Arcadia_Tests_assertFalse(thread, expression) \
+  if ((expression)) { \
+    Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: test assertion false == `%s` failed\n", __FILE__, __LINE__, #expression); \
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed); \
     Arcadia_Thread_jump(thread); \
   }

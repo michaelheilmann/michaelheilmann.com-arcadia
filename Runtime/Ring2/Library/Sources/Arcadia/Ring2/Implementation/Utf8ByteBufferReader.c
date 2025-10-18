@@ -108,6 +108,14 @@ Arcadia_Utf8ByteBufferReader_nextImpl
       codePoint <<= 6;
       codePoint |= (byte & 0b00111111);
     }
+    if (expectedNumberOfBytes == 1 && codePoint <= 0x7f) {
+    } else if (expectedNumberOfBytes == 2 && 0x80 <= codePoint && codePoint <= 0x7ff) {
+    } else if (expectedNumberOfBytes == 3 && 0x800 <= codePoint && codePoint <= 0xffff) {
+    } else if (expectedNumberOfBytes == 4 && 0x10000 <= codePoint && codePoint > 0x10ffff) {
+    } else {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+      Arcadia_Thread_jump(thread);
+    }
     self->byteIndex += expectedNumberOfBytes;
     self->codePoint = codePoint;
   }
@@ -151,7 +159,7 @@ Arcadia_Utf8ByteBufferReader_getByteIndexImpl
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Utf8ByteBufferReader_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Utf8ByteBufferReader_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Utf8ByteBufferReader_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

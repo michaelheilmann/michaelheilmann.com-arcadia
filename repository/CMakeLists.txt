@@ -27,6 +27,7 @@ add_subdirectory(Tools.ConcatenateFiles)
 add_subdirectory(Tools.CompareFiles)
 add_subdirectory(Tools.Compiler)
 
+add_subdirectory(Math)
 add_subdirectory(Visuals.Implementation)
 add_subdirectory(Audials.Implementation)
 

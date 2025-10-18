@@ -26,7 +26,7 @@ struct NotifyDestroyListNode {
   NotifyDestroyListNode* next;
   void* argument1;
   void* argument2;
-  Arms_NotifyDestroyCallback* callback;
+  Arcadia_Arms_NotifyDestroyCallback* callback;
 };
 
 /* hash map node */
@@ -70,7 +70,7 @@ NodeList_remove
     NotifyDestroyMapNode* node,
     void* argument1,
     void* argument2,
-    Arms_NotifyDestroyCallback* callback
+    Arcadia_Arms_NotifyDestroyCallback* callback
   )
 {
   NotifyDestroyListNode** previous1 = &node->list;
@@ -103,7 +103,7 @@ NodeList_notify
 }
 
 Arcadia_Arms_Status
-Arms_NotifyDestroyModule_startup
+Arcadia_Arms_NotifyDestroyModule_startup
   (
   )
 {
@@ -126,7 +126,7 @@ Arms_NotifyDestroyModule_startup
 }
 
 Arcadia_Arms_Status
-Arms_NotifyDestroyModule_shutdown
+Arcadia_Arms_NotifyDestroyModule_shutdown
   (
   )
 {
@@ -138,7 +138,7 @@ Arms_NotifyDestroyModule_shutdown
 }
 
 void
-Arms_NotifyDestroyModule_notifyDestroy
+Arcadia_Arms_NotifyDestroyModule_notifyDestroy
   (
     void* observed
   )
@@ -163,12 +163,12 @@ Arms_NotifyDestroyModule_notifyDestroy
 }
 
 Arcadia_Arms_Status
-Arms_addNotifyDestroy
+Arcadia_Arms_addNotifyDestroy
   (
     void* observed,
     void* argument1,
     void* argument2,
-    Arms_NotifyDestroyCallback* callback
+    Arcadia_Arms_NotifyDestroyCallback* callback
   )
 {
   size_t hashValue = (size_t)(uintptr_t)observed;
@@ -203,7 +203,7 @@ Arms_addNotifyDestroy
 }
 
 Arcadia_Arms_Status
-Arms_removeNotifyDestroyAll
+Arcadia_Arms_removeNotifyDestroyAll
   (
     void* observed
   )
@@ -229,12 +229,12 @@ Arms_removeNotifyDestroyAll
 }
 
 Arcadia_Arms_Status
-Arms_removeNotifyDestroy
+Arcadia_Arms_removeNotifyDestroy
   (
     void* observed,
     void* argument1,
     void* argument2,
-    Arms_NotifyDestroyCallback* callback
+    Arcadia_Arms_NotifyDestroyCallback* callback
   )
 {
   size_t hashValue = (size_t)(uintptr_t)observed;
@@ -262,4 +262,4 @@ Arms_removeNotifyDestroy
   return Arcadia_Arms_Status_Success;
 }
 
-#endif // Arms_Configuration_WithNotifyDestroy
+#endif // Arcadia_Arms_Configuration_WithNotifyDestroy

@@ -61,8 +61,8 @@ next
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_Parser_constructImpl,
-  .destruct = &Arcadia_MIL_Parser_destruct,
-  .visit = &Arcadia_MIL_Parser_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_MIL_Parser_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Parser_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -366,15 +366,15 @@ onInvokeInstruction
 //   | jumpInstruction
 //   | raiseInstruction
 //   | returnInstruction
-// 
+//
 // raiseInstruction :
 //   'raise'
 // returnInstruction :
 //   'return' <operand>?
-// 
+//
 // invokeInstruction :
 //   'invoke' variableOperand '(' ( <operand> (',' <operand>)* )? ')'
-// 
+//
 // jumpInstruction :
 //   | 'jump' <label>
 //   | 'jumpIfTrue' <operand> <label>
@@ -754,7 +754,7 @@ onEndOfStatement
 }
 
 // instructionStatement : instruction endOfStatement
-static Arcadia_MIL_AST_InstructionStatementNode2*
+static Arcadia_MIL_AST_InstructionStatementNode*
 onInstructionStatement
   (
     Arcadia_Thread* thread,
@@ -762,7 +762,7 @@ onInstructionStatement
   )
 {
   Arcadia_MIL_AST_InstructionNode* instruction = onInstruction(thread, self);
-  Arcadia_MIL_AST_InstructionStatementNode2* statement = (Arcadia_MIL_AST_InstructionStatementNode2*)instruction;
+  Arcadia_MIL_AST_InstructionStatementNode* statement = (Arcadia_MIL_AST_InstructionStatementNode*)instruction;
   onEndOfStatement(thread, self);
   while (is(thread, self, Arcadia_MIL_TokenType_LineTerminator)) {
     next(thread, self);
@@ -836,7 +836,7 @@ onStatement
   }
   // instruction statement
   {
-    Arcadia_MIL_AST_InstructionStatementNode2* statementAst = onInstructionStatement(thread, self);
+    Arcadia_MIL_AST_InstructionStatementNode* statementAst = onInstructionStatement(thread, self);
     return (Arcadia_MIL_AST_StatementNode*)statementAst;
   }
 }

@@ -67,31 +67,31 @@ main
     char **argv
   )
 {
-  if (Arms_startup()) {
+  if (Arcadia_Arms_startup()) {
     return EXIT_FAILURE;
   }
-  if (Arms_addType("Object", strlen("Object"), NULL, NULL, (Arms_VisitCallbackFunction*)&Object_visit, (Arms_FinalizeCallbackFunction*)&Object_finalize)) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
+  if (Arcadia_Arms_addType("Object", strlen("Object"), NULL, NULL, (Arcadia_Arms_VisitCallbackFunction*)&Object_visit, (Arcadia_Arms_FinalizeCallbackFunction*)&Object_finalize)) {
+    Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+    Arcadia_Arms_run(&statistics);
+    Arcadia_Arms_shutdown();
     return EXIT_FAILURE;
   }
   Object* sender = NULL;
-  if (Arms_allocate(&sender, "Object", strlen("Object"), sizeof(Object))) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
+  if (Arcadia_Arms_allocate(&sender, "Object", strlen("Object"), sizeof(Object))) {
+    Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+    Arcadia_Arms_run(&statistics);
+    Arcadia_Arms_shutdown();
     return EXIT_FAILURE;
   }
-  if (Arms_addNotifyDestroy(sender, NULL, NULL, (Arms_NotifyDestroyCallback*)&Object_notifyDestroy)) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
+  if (Arcadia_Arms_addNotifyDestroy(sender, NULL, NULL, (Arcadia_Arms_NotifyDestroyCallback*)&Object_notifyDestroy)) {
+    Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+    Arcadia_Arms_run(&statistics);
+    Arcadia_Arms_shutdown();
     return EXIT_FAILURE;
   }
-  Arms_RunStatistics statistics = { .destroyed = 0 };
-  Arms_run(&statistics);
-  Arms_shutdown();
+  Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+  Arcadia_Arms_run(&statistics);
+  Arcadia_Arms_shutdown();
   if (g_visitCalled || !g_finalizeCalled || !g_notifyDestroyCalled) {
     return EXIT_FAILURE;
   }

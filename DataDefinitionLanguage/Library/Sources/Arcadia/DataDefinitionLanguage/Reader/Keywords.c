@@ -87,8 +87,8 @@ Arcadia_DataDefinitionLanguage_Keywords_visit
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_constructImpl,
-  .destruct = &Arcadia_DataDefinitionLanguage_Keywords_destruct,
-  .visit = &Arcadia_DataDefinitionLanguage_Keywords_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

@@ -61,7 +61,7 @@ Arcadia_Imaging_ImageManager_destroyCallback
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_ImageManager_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Imaging_ImageManager_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Imaging_ImageManager_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

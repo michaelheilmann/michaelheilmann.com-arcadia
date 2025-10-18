@@ -211,8 +211,8 @@ Arcadia_ArrayDeque_removeAtImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_ArrayDeque_constructImpl,
-  .destruct = &Arcadia_ArrayDeque_destruct,
-  .visit = &Arcadia_ArrayDeque_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_ArrayDeque_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ArrayDeque_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

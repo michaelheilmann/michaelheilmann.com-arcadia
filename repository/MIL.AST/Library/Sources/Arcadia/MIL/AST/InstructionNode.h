@@ -31,10 +31,10 @@
 ///             | returnInstruction
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.InstructionNode", Arcadia_MIL_AST_InstructionNode,
-                          u8"Arcadia.MIL.AST.InstructionStatementNode2");
+                          u8"Arcadia.MIL.AST.InstructionStatementNode");
 
 struct Arcadia_MIL_AST_InstructionNode {
-  Arcadia_MIL_AST_InstructionStatementNode2 _parent;
+  Arcadia_MIL_AST_InstructionStatementNode _parent;
 };
 
 #endif // ARCADIA_MIL_AST_INSTRUCTIONNODE_H_INCLUDED

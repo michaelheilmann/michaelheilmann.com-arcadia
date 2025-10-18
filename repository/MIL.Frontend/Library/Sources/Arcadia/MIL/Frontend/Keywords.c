@@ -87,8 +87,8 @@ Arcadia_MIL_Keywords_visit
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_Keywords_constructImpl,
-  .destruct = &Arcadia_MIL_Keywords_destruct,
-  .visit = &Arcadia_MIL_Keywords_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_MIL_Keywords_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Keywords_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

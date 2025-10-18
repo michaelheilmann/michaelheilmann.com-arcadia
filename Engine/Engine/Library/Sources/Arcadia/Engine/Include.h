@@ -17,7 +17,10 @@
 #define ARCADIA_ENGINE_INCLUDE_H_INCLUDED
 
 #include "Arcadia/Engine/Backend.h"
+#include "Arcadia/Engine/BackendContext.h"
 #include "Arcadia/Engine/System.h"
+#include "Arcadia/Engine/SystemEvent.h"
+
 #include "Arcadia/Engine/Engine.h"
 #include "Arcadia/Engine/Event.h"
 

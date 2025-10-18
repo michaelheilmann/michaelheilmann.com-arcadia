@@ -18,12 +18,12 @@
 
 #include "Arcadia/Arms/Internal/MemoryManager.private.h"
 
-typedef struct Arms_DefaultMemoryManager Arms_DefaultMemoryManager;
+typedef struct Arcadia_Arms_DefaultMemoryManager Arcadia_Arms_DefaultMemoryManager;
 
-Arms_MemoryManagerStartupShutdown_Status
-Arms_DefaultMemoryManager_create
+Arcadia_Arms_MemoryManagerStartupShutdown_Status
+Arcadia_Arms_DefaultMemoryManager_create
   (
-    Arms_DefaultMemoryManager** result
+    Arcadia_Arms_DefaultMemoryManager** result
   );
 
 #endif // ARCADIA_ARMS_DEFAULTMEMORYMANAGER_PRIVATE_H_INCLUDED

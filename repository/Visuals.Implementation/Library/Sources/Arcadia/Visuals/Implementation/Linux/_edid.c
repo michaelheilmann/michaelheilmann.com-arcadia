@@ -51,14 +51,14 @@ decode_vendor_and_product_identification
   )
 {
   int is_model_year;
-  
+
   /* Manufacturer Code */
   info->manufacturer_code[0]  = get_bits (edid[0x08], 2, 6);
   info->manufacturer_code[1]  = get_bits (edid[0x08], 0, 1) << 3;
   info->manufacturer_code[1] |= get_bits (edid[0x09], 5, 7);
   info->manufacturer_code[2]  = get_bits (edid[0x09], 0, 4);
   info->manufacturer_code[3]  = '\0';
-  
+
   info->manufacturer_code[0] += 'A' - 1;
   info->manufacturer_code[1] += 'A' - 1;
   info->manufacturer_code[2] += 'A' - 1;
@@ -127,7 +127,7 @@ decode_display_parameters
   if (info->is_digital)
   {
     int bits;
-    
+
     static const int bit_depth[8] =
     {
         -1, 6, 8, 10, 12, 14, 16, -1
@@ -142,14 +142,14 @@ decode_display_parameters
     info->ad.digital.bits_per_primary = bit_depth[bits];
 
     bits = get_bits (edid[0x14], 0, 3);
-    
+
     if (bits <= 5)
       info->ad.digital.interface = interfaces[bits];
     else
 	    info->ad.digital.interface = UNDEFINED;
   } else {
     int bits = get_bits (edid[0x14], 5, 6);
-	
+
     static const double levels[][3] =
     {
 	    { 0.7,   0.3,    1.0 },
@@ -178,7 +178,7 @@ decode_display_parameters
     info->aspect_ratio = -1.0;
   } else if (edid[0x16] == 0) {
     info->width_mm = -1;
-    info->height_mm = -1; 
+    info->height_mm = -1;
     info->aspect_ratio = 100.0 / (edid[0x15] + 99);
   } else if (edid[0x15] == 0) {
     info->width_mm = -1;
@@ -271,7 +271,7 @@ decode_established_timings
     MonitorInfo *info
   )
 {
-  static const Timing established[][8] = 
+  static const Timing established[][8] =
   {
     {
         { 800, 600, 60 },
@@ -327,7 +327,7 @@ decode_standard_timings
   )
 {
   int i;
-  
+
   for (i = 0; i < 8; i++)
   {
     int first = edid[0x26 + 2 * i];
@@ -429,7 +429,7 @@ decode_detailed_timing
     TWO_WAY_RIGHT_ON_EVEN, TWO_WAY_LEFT_ON_EVEN,
     FOUR_WAY_INTERLEAVED, SIDE_BY_SIDE
   };
-    
+
   detailed->pixel_clock = (timing[0x00] | timing[0x01] << 8) * 10000;
   detailed->h_addr = timing[0x02] | ((timing[0x04] & 0xf0) << 4);
   detailed->h_blank = timing[0x03] | ((timing[0x04] & 0x0f) << 8);
@@ -482,9 +482,9 @@ decode_descriptors
 {
   int i;
   int timing_idx;
-  
+
   timing_idx = 0;
-  
+
   for (i = 0; i < 4; ++i) {
     int index = 0x36 + i * 18;
 

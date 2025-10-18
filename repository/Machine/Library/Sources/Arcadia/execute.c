@@ -89,6 +89,7 @@ execute1
         } else {
           calleeValue = *R_Interpreter_ThreadState_getRegisterAt(interpreterThread, calleeIndex);
         }
+        Arcadia_SizeValue oldStackSize = Arcadia_ValueStack_getSize(thread);
         // number of arguments
         Arcadia_Natural32Value count;
         R_Interpreter_Code_decodeCount(thread, currentCallState->procedure->code, &currentCallState->instructionIndex, &count);
@@ -96,24 +97,28 @@ execute1
           Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
           Arcadia_Thread_jump(thread);
         }
-        Arcadia_Value argumentValues[R_Machine_Code_NumberOfArguments_Maximum];
         for (Arcadia_Natural32Value i = 0, n = count; i < n; ++i) {
           R_Machine_Code_IndexKind argumentIndexKind;
           Arcadia_Natural32Value argumentIndex;
           R_Interpreter_Code_decodeIndex(thread, currentCallState->procedure->code, &currentCallState->instructionIndex, &argumentIndexKind, &argumentIndex);
           if (argumentIndexKind == R_Machine_Code_IndexKind_Constant) {
-            argumentValues[i] = *R_Interpreter_Code_Constants_getAt(Arcadia_Process_getThread(process), constants, argumentIndex);
+            Arcadia_ValueStack_pushValue(thread, R_Interpreter_Code_Constants_getAt(Arcadia_Process_getThread(process), constants, argumentIndex));
           } else {
-            argumentValues[i] = *R_Interpreter_ThreadState_getRegisterAt(interpreterThread, argumentIndex);
+            Arcadia_ValueStack_pushValue(thread, R_Interpreter_ThreadState_getRegisterAt(interpreterThread, argumentIndex));
           }
         }
+        Arcadia_ValueStack_pushNatural8Value(thread, count);
         if (Arcadia_Value_isForeignProcedureValue(&calleeValue)) {
           Arcadia_ForeignProcedureValue foreignProcedureValue = Arcadia_Value_getForeignProcedureValue(&calleeValue);
           R_Interpreter_ThreadState_beginForeignProcedureCall(process, interpreterThread, 0, foreignProcedureValue);
           Arcadia_JumpTarget jumpTarget;
           Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
           if (Arcadia_JumpTarget_save(&jumpTarget)) {
-            (*foreignProcedureValue)(thread, targetValue, count, &(argumentValues[0]));
+            (*foreignProcedureValue)(thread);
+            if (oldStackSize > Arcadia_ValueStack_getSize(thread)) {
+              Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+              Arcadia_Thread_jump(thread);
+            }
             Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
             R_Interpreter_ThreadState_endCall(interpreterThread); // Must not fail.
           } else {

@@ -25,118 +25,79 @@
 static void
 add
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 divide
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isGreaterThan
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isGreaterThanOrEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 hash
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 identical
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isLowerThan
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isLowerThanOrEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 multiply
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 negate
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isNotEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 subtract
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -156,409 +117,360 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = &subtract,
 };
 
+#define BINARY_OPERATION() \
+  if (Arcadia_ValueStack_getSize(thread) < 3) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  if (2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 2); \
+  Arcadia_Value y = Arcadia_ValueStack_getValue(thread, 1); \
+  Arcadia_ValueStack_popValues(thread, 3);
+
+#define UNARY_OPERATION() \
+  if (Arcadia_ValueStack_getSize(thread) < 2) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  if (1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1); \
+  Arcadia_ValueStack_popValues(thread, 2);
+
 static void
 add
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) + (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) + Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) + (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) + (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) + (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) + (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) + (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) + (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) + (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) + Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) + (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) + (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) + (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) + (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) + (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) + (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 divide
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) / (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) / Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) / (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) / (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) / (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) / (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) / (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) / (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) / (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) / Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) / (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) / (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) / (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) / (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) / (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) / (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 isEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
-#undef A2
-#undef A1
 }
 
 static void
 isGreaterThan
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) > (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) > Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) > (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) > (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) > (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) > (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) > (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) > (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) > (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) > Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) > (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) > (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) > (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) > (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) > (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) > (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 isGreaterThanOrEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) >= (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) >= Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) >= (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) >= (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) >= (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) >= (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) >= (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) >= (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) >= (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) >= Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) >= (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) >= (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) >= (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) >= (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) >= (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) >= (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 hash
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-  Arcadia_Real64Value x = Arcadia_Value_getReal64Value(A1);
-  if (x == 0.) {
-    x = +0.;
+  UNARY_OPERATION();
+  Arcadia_Real64Value y = Arcadia_Value_getReal64Value(&x);
+  if (y == 0.) {
+    y = +0.;
   }
   typedef struct Union {
     Arcadia_Real64Value real64Value;
     Arcadia_Natural64Value natural64Value;
   } Union;
-  Union v = { .real64Value = x };
-  Arcadia_Value_setSizeValue(target, (Arcadia_SizeValue)v.natural64Value);
-#undef A1
+  Union z = { .real64Value = y };
+  Arcadia_ValueStack_pushSizeValue(thread, (Arcadia_SizeValue)z.natural64Value);
 }
 
 static void
 identical
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) == Arcadia_Value_getReal64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) == Arcadia_Value_getReal64Value(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
-#undef A2
-#undef A1
 }
 
 static void
 isLowerThan
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) < (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) < Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) < (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) < (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) < (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) < (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) < (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) < (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) < (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) < Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) < (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) < (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) < (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) < (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) < (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) < (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 isLowerThanOrEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) <= (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) <= Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) <= (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) <= (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) <= (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) <= (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) <= (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) <= (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) <= (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) <= Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) <= (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) <= (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) <= (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) <= (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) <= (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) <= (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 multiply
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 negate
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-  Arcadia_Value_setReal64Value(target, -Arcadia_Value_getReal64Value(A1));
-#undef A1
+  UNARY_OPERATION();
+  Arcadia_ValueStack_pushReal64Value(thread, -Arcadia_Value_getReal64Value(&x));
 }
 
 static void
 isNotEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) != (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) != Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) != (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) != (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) != (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) != (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) != (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getReal64Value(A1) != (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) != (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) != Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) != (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) != (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) != (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) != (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) != (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getReal64Value(&x) != (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
   }
-#undef A2
-#undef A1
 }
 
 static void
 subtract
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isReal32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getReal32Value(A2));
-  } else if (Arcadia_Value_isReal64Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * Arcadia_Value_getReal64Value(A2));
-  } else if (Arcadia_Value_isInteger8Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(A2));
-  } else if (Arcadia_Value_isInteger16Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(A2));
-  } else if (Arcadia_Value_isInteger32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(A2));
-  } else if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setReal64Value(target, Arcadia_Value_getReal64Value(A1) * (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isReal32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getReal32Value(&y));
+  } else if (Arcadia_Value_isReal64Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * Arcadia_Value_getReal64Value(&y));
+  } else if (Arcadia_Value_isInteger8Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getInteger8Value(&y));
+  } else if (Arcadia_Value_isInteger16Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getInteger16Value(&y));
+  } else if (Arcadia_Value_isInteger32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getInteger32Value(&y));
+  } else if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushReal64Value(thread, Arcadia_Value_getReal64Value(&x) * (Arcadia_Real64Value)Arcadia_Value_getNatural32Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 Arcadia_defineScalarType(Arcadia_Real64, u8"Arcadia.Real64", &_typeOperations);

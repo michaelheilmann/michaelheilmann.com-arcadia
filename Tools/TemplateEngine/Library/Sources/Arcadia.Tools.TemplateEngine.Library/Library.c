@@ -23,135 +23,107 @@
 static void
 getUtcDayOfWeek
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 // Return x:Arcadia.String where x denotes the name of the day of the month [1,31] in UTC time.
 static void
 getUtcDayOfMonth
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 // Return x:Arcadia.String where x denotes the name of the day of the week name in UTC time.
 static void
 getUtcDayOfWeekName
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 // Returns x:Arcadia.Integer8 where x denotes the month of the year [1,12] in UTC time.
 static void
 getUtcMonth
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 // Returns x:Arcadia.String where x denotes the name of the month of the year in UTC time.
 static void
 getUtcMonthName
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 // [..., 1:Arcadia.Integer8} -> [..., x:Arcadia.Integer32] where x denotes the year in UTC time.
 static void
 getUtcYear
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 getUtcDayOfWeek
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-  if (0 != numberOfArguments) {
+  if (0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  Arcadia_ValueStack_popValues(thread, 1);
   Arcadia_PointInTime* pointInTime = Arcadia_PointInTime_create(thread, Arcadia_TimeStamp_getNow(thread));
   Arcadia_Integer8Value v = Arcadia_PointInTime_getDayOfWeek(thread, pointInTime, Arcadia_TimeSpecification_Utc);
-  Arcadia_Value_setInteger8Value(targetValue, v + 1);
+  Arcadia_ValueStack_pushInteger8Value(thread, v + 1);
 }
 
 
 static void
 getUtcDayOfMonth
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-  if (0 != numberOfArguments) {
+  if (0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  Arcadia_ValueStack_popValues(thread, 1);
   Arcadia_PointInTime* pointInTime = Arcadia_PointInTime_create(thread, Arcadia_TimeStamp_getNow(thread));
   Arcadia_Integer8Value v = Arcadia_PointInTime_getDayOfMonth(thread, pointInTime, Arcadia_TimeSpecification_Utc);
-  Arcadia_Value_setInteger8Value(targetValue, v + 1);
+  Arcadia_ValueStack_pushInteger8Value(thread, v + 1);
 }
 
 static void
 getUtcDayOfWeekName
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-  if (0 != numberOfArguments) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Value target, argumentValues;
-  getUtcDayOfWeek(thread, &target, 0, &argumentValues);
-  switch (Arcadia_Value_getInteger8Value(&target)) {
+  getUtcDayOfWeek(thread);
+  Arcadia_Integer8Value day = Arcadia_ValueStack_getInteger8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
+  switch (day) {
     case 1: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Monday", sizeof(u8"Monday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Monday", sizeof(u8"Monday") - 1))));
     } break;
     case 2: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Tuesday", sizeof(u8"Tuesday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Tuesday", sizeof(u8"Tuesday") - 1))));
     } break;
     case 3: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Wednesday", sizeof(u8"Wednesday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Wednesday", sizeof(u8"Wednesday") - 1))));
     } break;
     case 4: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Thursday", sizeof(u8"Thursday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Thursday", sizeof(u8"Thursday") - 1))));
     } break;
     case 5: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Friday", sizeof(u8"Friday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Friday", sizeof(u8"Friday") - 1))));
     } break;
     case 6: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Saturday", sizeof(u8"Saturday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Saturday", sizeof(u8"Saturday") - 1))));
     } break;
     case 7: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Sunday", sizeof(u8"Sunday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Sunday", sizeof(u8"Sunday") - 1))));
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -163,73 +135,65 @@ getUtcDayOfWeekName
 static void
 getUtcMonth
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-  if (0 != numberOfArguments) {
+  if (0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  Arcadia_ValueStack_popValues(thread, 1);
   Arcadia_PointInTime* pointInTime = Arcadia_PointInTime_create(thread, Arcadia_TimeStamp_getNow(thread));
   Arcadia_Integer8Value v = Arcadia_PointInTime_getMonth(thread, pointInTime, Arcadia_TimeSpecification_Utc);
-  Arcadia_Value_setInteger8Value(targetValue, v + 1);
+  Arcadia_ValueStack_pushInteger8Value(thread, v + 1);
 }
 
 
 static void
 getUtcMonthName
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-  if (0 != numberOfArguments) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Value target, argumentValues;
-  getUtcMonth(thread, &target, 0, &argumentValues);
-  switch (Arcadia_Value_getInteger8Value(&target)) {
+  getUtcMonth(thread);
+  Arcadia_Integer8Value month = Arcadia_ValueStack_getInteger8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
+  switch (month) {
     case 1: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"January", sizeof(u8"January") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"January", sizeof(u8"January") - 1))));
     } break;
     case 2: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"February", sizeof(u8"February") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"February", sizeof(u8"February") - 1))));
     } break;
     case 3: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"March", sizeof(u8"March") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"March", sizeof(u8"March") - 1))));
     } break;
     case 4: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"April", sizeof(u8"April") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"April", sizeof(u8"April") - 1))));
     } break;
     case 5: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"May", sizeof(u8"May") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"May", sizeof(u8"May") - 1))));
     } break;
     case 6: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"June", sizeof(u8"June") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"June", sizeof(u8"June") - 1))));
     } break;
     case 7: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"July", sizeof(u8"July") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"July", sizeof(u8"July") - 1))));
     } break;
     case 8: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"August", sizeof(u8"August") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"August", sizeof(u8"August") - 1))));
     } break;
     case 9: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"September", sizeof(u8"September") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"September", sizeof(u8"September") - 1))));
     } break;
     case 10: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"October", sizeof(u8"October") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"October", sizeof(u8"October") - 1))));
     } break;
     case 11: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"November", sizeof(u8"November") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"November", sizeof(u8"November") - 1))));
     } break;
     case 12: {
-      Arcadia_Value_setObjectReferenceValue(targetValue, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"December", sizeof(u8"December") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"December", sizeof(u8"December") - 1))));
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -241,19 +205,17 @@ getUtcMonthName
 static void
 getUtcYear
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-  if (0 != numberOfArguments) {
+  if (0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  Arcadia_ValueStack_popValues(thread, 1);
   Arcadia_PointInTime* pointInTime = Arcadia_PointInTime_create(thread, Arcadia_TimeStamp_getNow(thread));
   Arcadia_Integer32Value v = Arcadia_PointInTime_getYear(thread, pointInTime, Arcadia_TimeSpecification_Utc);
-  Arcadia_Value_setInteger32Value(targetValue, v + 1900);
+  Arcadia_ValueStack_pushInteger32Value(thread, v + 1900);
 }
 
 void

@@ -58,7 +58,7 @@ Arcadia_DirectoryIteratorWindows_nextValue
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DirectoryIteratorWindows_constructImpl,
-  .destruct = &Arcadia_DirectoryIteratorWindows_destructImpl,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_DirectoryIteratorWindows_destructImpl,
   .visit = NULL,
 };
 

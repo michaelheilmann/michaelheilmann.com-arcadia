@@ -139,8 +139,17 @@ R_Instructions_add
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->add(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->add(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -167,8 +176,17 @@ R_Instructions_and
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->and(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->and(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -195,8 +213,17 @@ R_Instructions_concatenate
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->concatenate(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->concatenate(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -223,8 +250,17 @@ R_Instructions_divide
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->divide(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->divide(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -251,8 +287,17 @@ R_Instructions_isEqualTo
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->equalTo(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->equalTo(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -279,8 +324,17 @@ R_Instructions_isGreaterThan
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->greaterThan(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->greaterThan(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -307,8 +361,17 @@ R_Instructions_isGreaterThanOrEqualTo
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->greaterThanOrEqualTo(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->greaterThanOrEqualTo(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -349,8 +412,17 @@ R_Instructions_isLowerThan
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->lowerThan(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->lowerThan(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -377,8 +449,17 @@ R_Instructions_isLowerThanOrEqualTo
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->lowerThanOrEqualTo(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->lowerThanOrEqualTo(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -405,8 +486,17 @@ R_Instructions_multiply
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] ={ *firstOperandValue, *secondOperandValue };
-  operations->multiply(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->multiply(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -435,8 +525,16 @@ R_Instructions_negate
     Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
-  Arcadia_Value args[1] = { *operandValue };
-  operations->negate(thread, targetValue, 1, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, operandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  operations->negate(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -465,8 +563,16 @@ R_Instructions_not
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[1] = { *operandValue };
-  operations->not(thread, targetValue, 1, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, operandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  operations->not(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -493,8 +599,17 @@ R_Instructions_isNotEqualTo
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->notEqualTo(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->notEqualTo(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
 
 void
@@ -517,13 +632,24 @@ R_Instructions_or
 
   Arcadia_TypeValue firstOperandType = Arcadia_Value_getType(thread, firstOperandValue);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
-  if (!operations-> or ) {
+  if (!operations->or) {
     Arcadia_Thread_setStatus(Arcadia_Process_getThread(process), Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(Arcadia_Process_getThread(process));
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->or(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->or(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }
+
+#define BINOP() \
 
 void
 R_Instructions_subtract
@@ -549,6 +675,15 @@ R_Instructions_subtract
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Value args[2] = { *firstOperandValue, *secondOperandValue };
-  operations->subtract(thread, targetValue, 2, &args[0]);
+  Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, firstOperandValue);
+  Arcadia_ValueStack_pushValue(thread, secondOperandValue);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->subtract(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  *targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
 }

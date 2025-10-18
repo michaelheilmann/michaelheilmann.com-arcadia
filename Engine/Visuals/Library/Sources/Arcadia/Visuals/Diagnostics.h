@@ -20,13 +20,13 @@
   #error("do not include directly, include `Arcadia/Visuals/Include.h` instead")
 #endif
 #include "Arcadia/Ring2/Include.h"
-typedef struct Arcadia_Visuals_System Arcadia_Visuals_System;
+typedef struct Arcadia_Visuals_BackendContext Arcadia_Visuals_BackendContext;
 
 void
 Arcadia_Visuals_Diagnostics_dumpDevices
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_System* system
+    Arcadia_Visuals_BackendContext* backendContext
   );
 
 #endif // ARCADIA_VISUALS_DIAGNOSTICS

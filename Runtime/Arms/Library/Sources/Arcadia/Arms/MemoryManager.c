@@ -15,43 +15,43 @@
 
 #include "Arcadia/Arms/Internal/MemoryManager.private.h"
 
-Arms_MemoryManager_Status
-Arms_MemoryManager_allocate
+Arcadia_Arms_MemoryManager_Status
+Arcadia_Arms_MemoryManager_allocate
   (
-    Arms_MemoryManager* memoryManager,
+    Arcadia_Arms_MemoryManager* memoryManager,
     void** p,
     Arcadia_Arms_Size n
   )
 {
   if (!memoryManager) {
-    return Arms_MemoryManager_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid;
   }
   return memoryManager->allocate(memoryManager, p, n);
 }
 
-Arms_MemoryManager_Status
-Arms_MemoryManager_reallocate
+Arcadia_Arms_MemoryManager_Status
+Arcadia_Arms_MemoryManager_reallocate
   (
-    Arms_MemoryManager* memoryManager,
+    Arcadia_Arms_MemoryManager* memoryManager,
     void** p,
     Arcadia_Arms_Size n
   )
 {
   if (!memoryManager) {
-    return Arms_MemoryManager_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid;
   }
   return memoryManager->reallocate(memoryManager, p, n);
 }
 
-Arms_MemoryManager_Status
-Arms_MemoryManager_deallocate
+Arcadia_Arms_MemoryManager_Status
+Arcadia_Arms_MemoryManager_deallocate
   (
-    Arms_MemoryManager* memoryManager,
+    Arcadia_Arms_MemoryManager* memoryManager,
     void* p
   )
 {
   if (!memoryManager) {
-    return Arms_MemoryManager_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid;
   }
   return memoryManager->deallocate(memoryManager, p);
 }

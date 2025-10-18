@@ -284,7 +284,7 @@ Arcadia_Atom_visit
   )
 {
   self->lastVisited = getTickCount(thread);
-  Arms_visit(self);
+  Arcadia_Arms_visit(self);
 }
 
 void const*
@@ -461,7 +461,7 @@ _Arcadia_Atoms_onPreMark
     Arcadia_Atom* current = g_singleton->buckets[i];
     while (current) {
       if (now - current->lastVisited > THRESHOLD && !purgeCache) {
-        Arms_visit(current);
+        Arcadia_Arms_visit(current);
       }
       current = current->next;
     }

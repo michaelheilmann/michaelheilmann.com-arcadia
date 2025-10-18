@@ -34,7 +34,7 @@ Arcadia_MIL_AST_LiteralOperandNode_visit
 static const Arcadia_ObjectType_Operations _Arcadia_MIL_AST_LiteralOperandNode_objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_AST_LiteralOperandNode_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_MIL_AST_LiteralOperandNode_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_AST_LiteralOperandNode_visit,
 };
 
 static const Arcadia_Type_Operations _Arcadia_MIL_AST_LiteralOperandNode_typeOperations = {
@@ -71,7 +71,7 @@ Arcadia_MIL_AST_LiteralOperandNode_constructImpl
     self->literal = (Arcadia_MIL_AST_Node*)argument;
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread); 
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1 + 1);

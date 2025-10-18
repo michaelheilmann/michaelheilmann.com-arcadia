@@ -46,8 +46,8 @@ Arcadia_WeakReference_constructImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_WeakReference_constructImpl,
-  .destruct = &Arcadia_WeakReference_destruct,
-  .visit = &Arcadia_WeakReference_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*) & Arcadia_WeakReference_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_WeakReference_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -78,7 +78,7 @@ Arcadia_WeakReference_destruct
 {
   switch (Arcadia_Value_getTag(&self->value)) {
     case Arcadia_ValueTag_Atom: {
-      Arms_removeNotifyDestroy(self->value.atomValue, self, NULL, &callback);
+      Arcadia_Arms_removeNotifyDestroy(self->value.atomValue, self, NULL, &callback);
     } break;
     case Arcadia_ValueTag_BigInteger: {
     } break;
@@ -86,10 +86,10 @@ Arcadia_WeakReference_destruct
     case Arcadia_ValueTag_ForeignProcedure: {
     } break;
     case Arcadia_ValueTag_ImmutableByteArray: {
-      Arms_removeNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
+      Arcadia_Arms_removeNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
     } break;
     case Arcadia_ValueTag_ImmutableUtf8String: {
-      Arms_removeNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
+      Arcadia_Arms_removeNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
     } break;
     case Arcadia_ValueTag_Integer16:
     case Arcadia_ValueTag_Integer32:
@@ -147,7 +147,7 @@ Arcadia_WeakReference_constructImpl
     self->value = Arcadia_ValueStack_getValue(thread, 1);
     switch (Arcadia_Value_getTag(&self->value)) {
       case Arcadia_ValueTag_Atom: {
-        Arms_addNotifyDestroy(self->value.atomValue, self, NULL, &callback);
+        Arcadia_Arms_addNotifyDestroy(self->value.atomValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_BigInteger: {
       } break;
@@ -155,10 +155,10 @@ Arcadia_WeakReference_constructImpl
       case Arcadia_ValueTag_ForeignProcedure: {
       } break;
       case Arcadia_ValueTag_ImmutableByteArray: {
-        Arms_addNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
+        Arcadia_Arms_addNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_ImmutableUtf8String: {
-        Arms_addNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
+        Arcadia_Arms_addNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_Integer16:
       case Arcadia_ValueTag_Integer32:

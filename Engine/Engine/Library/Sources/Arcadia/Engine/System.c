@@ -22,17 +22,10 @@ Arcadia_Engine_System_constructImpl
     Arcadia_Engine_System* self
   );
 
-static void
-Arcadia_Engine_System_visitImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_System* self
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Engine_System_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Engine_System_visitImpl,
+  .visit = NULL,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -60,18 +53,31 @@ Arcadia_Engine_System_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+
+  self->setBackendContext = NULL;
+  self->getBackendContext = NULL;
   self->update = NULL;
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
 
-static void
-Arcadia_Engine_System_visitImpl
+void
+Arcadia_Engine_System_setBackendContext
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_System* self,
+    Arcadia_Engine_BackendContext* backendContext
+  )
+{ self->setBackendContext(thread, self, backendContext); }
+
+Arcadia_Engine_BackendContext*
+Arcadia_Engine_System_getBackendContext
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_System* self
   )
-{/*Intentionally empty.*/}
+{ return self->getBackendContext(thread, self); }
 
 void
 Arcadia_Engine_System_update

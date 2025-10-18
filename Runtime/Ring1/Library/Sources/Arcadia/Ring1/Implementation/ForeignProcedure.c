@@ -22,28 +22,19 @@
 static void
 isEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 hash
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isNotEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -53,58 +44,67 @@ static const Arcadia_Type_Operations _typeOperations = {
   .notEqualTo = &isNotEqualTo,
 };
 
+#define BINARY_OPERATION() \
+  if (Arcadia_ValueStack_getSize(thread) < 3) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  if (2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 2); \
+  Arcadia_Value y = Arcadia_ValueStack_getValue(thread, 1); \
+  Arcadia_ValueStack_popValues(thread, 3);
+
+#define UNARY_OPERATION() \
+  if (Arcadia_ValueStack_getSize(thread) < 2) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  if (1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1); \
+  Arcadia_ValueStack_popValues(thread, 2);
+
 static void
 isEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isForeignProcedureValue(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getForeignProcedureValue(A1) == Arcadia_Value_getForeignProcedureValue(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isForeignProcedureValue(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getForeignProcedureValue(&x) == Arcadia_Value_getForeignProcedureValue(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
-#undef A2
-#undef A1
 }
 
 static void
 hash
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-  Arcadia_Value_setSizeValue(target, (Arcadia_SizeValue)(uintptr_t)Arcadia_Value_getForeignProcedureValue(A1));
-#undef A1
+  UNARY_OPERATION();
+  Arcadia_ValueStack_pushSizeValue(thread, (Arcadia_SizeValue)(uintptr_t)Arcadia_Value_getForeignProcedureValue(&x));
 }
 
 static void
 isNotEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isForeignProcedureValue(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getForeignProcedureValue(A1) != Arcadia_Value_getForeignProcedureValue(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isForeignProcedureValue(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getForeignProcedureValue(&x) != Arcadia_Value_getForeignProcedureValue(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
   }
-#undef A2
-#undef A1
 }
 
 Arcadia_defineScalarType(Arcadia_ForeignProcedure, u8"Arcadia.ForeignProcedure", &_typeOperations);

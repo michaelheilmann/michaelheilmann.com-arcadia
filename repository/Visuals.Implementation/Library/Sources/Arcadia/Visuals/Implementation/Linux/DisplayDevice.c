@@ -15,7 +15,7 @@
 
 #include "Arcadia/Visuals/Implementation/Linux/DisplayDevice.h"
 
-#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Linux/DisplayMode.h"
 
 static void
@@ -62,7 +62,7 @@ Arcadia_Visuals_Linux_DisplayDevice_getNameImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_DisplayDevice* self
   );
-  
+
 static void
 Arcadia_Visuals_Linux_DisplayDevice_getBoundsImpl
   (
@@ -105,18 +105,18 @@ Arcadia_Visuals_Linux_DisplayDevice_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  
-  self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getType(thread));
+
+  self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getType(thread));
   self->id = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
   self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   self->output = 0;
   self->mode = 0;
-  
+
   ((Arcadia_Visuals_DisplayDevice*)self)->getAvailableDisplayModes = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getAvailableDisplayModesImpl;
   ((Arcadia_Visuals_DisplayDevice*)self)->getId = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getIdImpl;
   ((Arcadia_Visuals_DisplayDevice*)self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Linux_DisplayDevice_getNameImpl;
   ((Arcadia_Visuals_DisplayDevice*)self)->getBounds = (void (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Visuals_Linux_DisplayDevice_getBoundsImpl;
-  
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 3 + 1);
 }
@@ -128,11 +128,11 @@ Arcadia_Visuals_Linux_DisplayDevice_visitImpl
     Arcadia_Visuals_Linux_DisplayDevice* self
   )
 {
-  if (self->system) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->system); 
+  if (self->backendContext) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backendContext);
   }
   if (self->id) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->id);  
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->id);
   }
   if (self->name) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->name);
@@ -150,9 +150,9 @@ makeDisplayMode
     Arcadia_List* displayModes
   )
 {
-  int defaultScreen = DefaultScreen(self->system->display);
-  int defaultColorDepth = DefaultDepth(self->system->display, defaultScreen);
-  
+  int defaultScreen = DefaultScreen(self->backendContext->display);
+  int defaultColorDepth = DefaultDepth(self->backendContext->display, defaultScreen);
+
   const XRRModeInfo* modeInfo = NULL;
   for (int i = 0; i < screenResources->nmode; ++i) {
     const XRRModeInfo* currentModeInfo = &(screenResources->modes[i]);
@@ -169,7 +169,7 @@ makeDisplayMode
   int width = 0, height = 0;
   int refreshRateNumerator, refreshRateDenominator;
   {
-    XRRCrtcInfo* crtcInfo = XRRGetCrtcInfo(self->system->display, screenResources, crtc);
+    XRRCrtcInfo* crtcInfo = XRRGetCrtcInfo(self->backendContext->display, screenResources, crtc);
     if (crtcInfo) {
       rotation = crtcInfo->rotation;
       XRRFreeCrtcInfo(crtcInfo);
@@ -178,7 +178,7 @@ makeDisplayMode
   }
   {
     XRRCrtcTransformAttributes *crtcTransformAttributes = NULL;
-    if (XRRGetCrtcTransform(self->system->display, crtc, &crtcTransformAttributes) && crtcTransformAttributes) {
+    if (XRRGetCrtcTransform(self->backendContext->display, crtc, &crtcTransformAttributes) && crtcTransformAttributes) {
       scaleWidth = crtcTransformAttributes->currentTransform.matrix[0][0];
       scaleHeight = crtcTransformAttributes->currentTransform.matrix[1][1];
       XFree(crtcTransformAttributes);
@@ -235,9 +235,9 @@ Arcadia_Visuals_Linux_DisplayDevice_getAvailableDisplayModesImpl
   )
 {
   Arcadia_List* displayModes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Window rootWindow = XDefaultRootWindow(self->system->display);
-  XRRScreenResources* screenResources = XRRGetScreenResources(self->system->display, rootWindow);
-  XRROutputInfo *outputInfo = XRRGetOutputInfo(self->system->display, screenResources, self->output);
+  Window rootWindow = XDefaultRootWindow(self->backendContext->display);
+  XRRScreenResources* screenResources = XRRGetScreenResources(self->backendContext->display, rootWindow);
+  XRROutputInfo *outputInfo = XRRGetOutputInfo(self->backendContext->display, screenResources, self->output);
   if (outputInfo && outputInfo->connection != RR_Disconnected) {
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -249,7 +249,7 @@ Arcadia_Visuals_Linux_DisplayDevice_getAvailableDisplayModesImpl
       XRRFreeScreenResources(screenResources);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
-      Arcadia_Thread_popJumpTarget(thread); 
+      Arcadia_Thread_popJumpTarget(thread);
       XRRFreeOutputInfo(outputInfo);
       XRRFreeScreenResources(screenResources);
       Arcadia_Thread_jump(thread);
@@ -295,14 +295,14 @@ Arcadia_Visuals_Linux_DisplayDevice*
 Arcadia_Visuals_Linux_DisplayDevice_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* system,
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext,
     Arcadia_String* id,
     Arcadia_String* name
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  if (system) {
-    Arcadia_ValueStack_pushObjectReferenceValue(thread, system);
+  if (backendContext) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext);
   } else {
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
@@ -330,8 +330,8 @@ Arcadia_Visuals_Linux_DisplayDevice_updateBounds
     Arcadia_Visuals_Linux_DisplayDevice* self
   )
 {
-  Window rootWindow = XDefaultRootWindow(self->system->display);
-  XRRScreenResources* screenResources = XRRGetScreenResources(self->system->display, rootWindow);
+  Window rootWindow = XDefaultRootWindow(self->backendContext->display);
+  XRRScreenResources* screenResources = XRRGetScreenResources(self->backendContext->display, rootWindow);
   if (!screenResources) {
     Arcadia_StringBuffer* buffer = Arcadia_StringBuffer_create(thread);
     Arcadia_StringBuffer_insertBackCxxString(thread, buffer, __FILE__);
@@ -344,15 +344,15 @@ Arcadia_Visuals_Linux_DisplayDevice_updateBounds
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  XRROutputInfo *outputInfo = XRRGetOutputInfo(self->system->display, screenResources, self->output);
+  XRROutputInfo *outputInfo = XRRGetOutputInfo(self->backendContext->display, screenResources, self->output);
   if (!outputInfo) {
     XRRFreeScreenResources(screenResources);
     screenResources = NULL;
     fprintf(stderr, u8"%s:%d: %s failed\n", __FILE__, __LINE__, u8"XRRGetOutputInfo");
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread); 
+    Arcadia_Thread_jump(thread);
   }
-  XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(self->system->display, screenResources, outputInfo->crtc);
+  XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo(self->backendContext->display, screenResources, outputInfo->crtc);
   if (!crtcInfo) {
     XRRFreeOutputInfo(outputInfo);
     outputInfo = NULL;
@@ -360,7 +360,7 @@ Arcadia_Visuals_Linux_DisplayDevice_updateBounds
     screenResources = NULL;
     fprintf(stderr, u8"%s:%d: %s failed\n", __FILE__, __LINE__, u8"XRRGetCrtcInfo");
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread); 
+    Arcadia_Thread_jump(thread);
   }
 
   self->bounds.left = crtcInfo->x;

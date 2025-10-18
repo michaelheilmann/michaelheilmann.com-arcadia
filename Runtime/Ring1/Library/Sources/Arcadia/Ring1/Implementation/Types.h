@@ -28,8 +28,8 @@ typedef struct Arcadia_Value Arcadia_Value;
 typedef struct Arcadia_Object Arcadia_Object;
 
 typedef void (Arcadia_Object_ConstructorCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
-typedef void (Arcadia_Object_DestructorCallbackFunction)(Arcadia_Thread* thread, void* self);
-typedef void (Arcadia_Object_VisitCallbackFunction)(Arcadia_Thread* thread, void* self);
+typedef void (Arcadia_Object_DestructorCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
+typedef void (Arcadia_Object_VisitCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
 
 /// Type operations for object types.
 typedef struct Arcadia_ObjectType_Operations {

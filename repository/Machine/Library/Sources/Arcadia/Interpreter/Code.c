@@ -117,7 +117,7 @@ R_Interpreter_Code_destruct
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & R_Interpreter_Code_constructImpl,
-  .destruct = &R_Interpreter_Code_destruct,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&R_Interpreter_Code_destruct,
   .visit = NULL,
 };
 
@@ -187,7 +187,7 @@ R_Interpreter_Code_append
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Arrays_resizeByFreeCapacity(thread, Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, Arcadia_Arrays_ResizeStrategy_Type4);
+  Arcadia_Arrays_resizeByFreeCapacity(thread, Arcadia_Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, Arcadia_Arrays_ResizeStrategy_Type4);
   Arcadia_Memory_copy(thread, self->p + self->sz, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }

@@ -38,8 +38,8 @@ Ast_constructImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Ast_constructImpl,
-  .destruct = &Ast_destruct,
-  .visit = &Ast_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*) & Ast_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Ast_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

@@ -151,7 +151,7 @@ R_Interpreter_ThreadState_beginForeignProcedureCall
     Arcadia_ForeignProcedureValue foreignProcedure
   )
 {
-  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getThread(process), Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
+  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getThread(process), Arcadia_Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
   R_CallState* callState = &(thread->calls.elements[thread->calls.size]);
   if (thread->calls.size) {
     callState->previous = &(thread->calls.elements[thread->calls.size - 1]);
@@ -174,7 +174,7 @@ R_Interpreter_ThreadState_beginProcedureCall
     R_Interpreter_Procedure* procedure
   )
 {
-  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getThread(process), Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
+  Arcadia_Arrays_resizeByFreeCapacity(Arcadia_Process_getThread(process), Arcadia_Arms_getDefaultMemoryManager(), &thread->calls.elements, sizeof(R_CallState), thread->calls.size, &thread->calls.capacity, 1, Arcadia_Arrays_ResizeStrategy_Type1);
   R_CallState* callState = &(thread->calls.elements[thread->calls.size]);
   if (thread->calls.size) {
     callState->previous = &(thread->calls.elements[thread->calls.size - 1]);

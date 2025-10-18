@@ -35,7 +35,7 @@ Arcadia_Log_visit
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Log_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Log_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Log_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

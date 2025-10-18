@@ -47,7 +47,7 @@ Arcadia_printStringBuffer
   );
 
 void
-Arcadia_printNewline  
+Arcadia_printNewline
   (
     Arcadia_Thread* thread
   );

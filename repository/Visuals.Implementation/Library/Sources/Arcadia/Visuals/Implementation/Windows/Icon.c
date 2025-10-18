@@ -31,7 +31,7 @@ Arcadia_Visuals_Implementation_Windows_Icon_destruct
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_Windows_Icon_constructImpl,
-  .destruct = &Arcadia_Visuals_Implementation_Windows_Icon_destruct,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_Windows_Icon_destruct,
   .visit = NULL,
 };
 

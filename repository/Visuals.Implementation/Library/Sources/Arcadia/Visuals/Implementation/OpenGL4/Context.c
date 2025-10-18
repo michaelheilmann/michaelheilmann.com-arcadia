@@ -16,75 +16,12 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_PRIVATE (1)
 #include "Arcadia/Visuals/Implementation/OpenGL4/Context.h"
 
-#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#endif
-
-#include <GL/gl.h>
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_getClearColorImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value* red,
-    Arcadia_Real32Value* green,
-    Arcadia_Real32Value* blue,
-    Arcadia_Real32Value* alpha
-  );
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_getClearDepthImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value* depth
-  );
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_getViewportImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value* left,
-    Arcadia_Real32Value* top,
-    Arcadia_Real32Value* right,
-    Arcadia_Real32Value* bottom
-  );
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_setClearColorImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
-  );
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_setClearDepthImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value depth
-  );
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_setViewportImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value left,
-    Arcadia_Real32Value top,
-    Arcadia_Real32Value right,
-    Arcadia_Real32Value bottom
-  );
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/FragmentProgramResource.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ProgramResource.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/VertexBufferResource.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/VertexProgramResource.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ViewportResource.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_Context_construct
@@ -99,7 +36,7 @@ Arcadia_Visuals_Implementation_OpenGL4_Context_destruct
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_Context* self
   );
-  
+
 static void
 Arcadia_Visuals_Implementation_OpenGL4_Context_visit
   (
@@ -109,8 +46,8 @@ Arcadia_Visuals_Implementation_OpenGL4_Context_visit
 
 static const Arcadia_ObjectType_Operations _Arcadia_Visuals_Implementation_OpenGL4_Context_objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Context_construct,
-  .destruct = &Arcadia_Visuals_Implementation_OpenGL4_Context_destruct,
-  .visit = &Arcadia_Visuals_Implementation_OpenGL4_Context_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Context_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Context_visit,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Visuals_Implementation_OpenGL4_Context_typeOperations = {
@@ -140,89 +77,6 @@ Arcadia_defineObjectType(u8"Arcardia.Visuals.Implementation.OpenGL4.Context", Ar
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_getClearColorImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value* red,
-    Arcadia_Real32Value* green,
-    Arcadia_Real32Value* blue,
-    Arcadia_Real32Value* alpha
-  );
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_getClearDepthImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value* depth
-  );
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_getViewportImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value* left,
-    Arcadia_Real32Value* bottom,
-    Arcadia_Real32Value* right,
-    Arcadia_Real32Value* top
-  );
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_setClearColorImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
-  )
-{
-  self->clearColor.red = red;
-  self->clearColor.green = green;
-  self->clearColor.blue = blue;
-  self->clearColor.alpha = alpha;
-  self->hasRenderTarget = Arcadia_BooleanValue_False;
-  self->renderTargetSize.width = 320;
-  self->renderTargetSize.height = 240;
-  glClearColor(self->clearColor.red, self->clearColor.green, self->clearColor.blue, self->clearColor.alpha);
-}
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_setClearDepthImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value depth
-  )
-{
-  self->clearDepth = depth;
-  glClearDepth(self->clearDepth);
-}
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Context_setViewportImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Context* self,
-    Arcadia_Real32Value left,
-    Arcadia_Real32Value bottom,
-    Arcadia_Real32Value right,
-    Arcadia_Real32Value top
-  )
-{
-  self->viewport.left = left;
-  self->viewport.bottom = bottom;
-  self->viewport.right = right;
-  self->viewport.top = top;
-  glViewport(left, self->viewport.bottom, self->viewport.right - self->viewport.left, self->viewport.top - self->viewport.bottom);
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-static void
 Arcadia_Visuals_Implementation_OpenGL4_Context_construct
   (
     Arcadia_Thread* thread,
@@ -238,22 +92,6 @@ Arcadia_Visuals_Implementation_OpenGL4_Context_construct
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
-  self->clearColor.red = 193;
-  self->clearColor.green = 216;
-  self->clearColor.blue = 195;
-  self->clearColor.alpha = 255;
-
-  self->clearDepth = 1.f;
-
-  self->viewport.left = 0.f;
-  self->viewport.bottom = 0.f;
-  self->viewport.right = 1.f;
-  self->viewport.top = 1.f;
-
-  ((Arcadia_Visuals_Context*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Context*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value))& Arcadia_Visuals_Implementation_OpenGL4_Context_setClearColorImpl;
-  ((Arcadia_Visuals_Context*)self)->setClearDepth = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Context*, Arcadia_Real32Value))& Arcadia_Visuals_Implementation_OpenGL4_Context_setClearDepthImpl;
-  ((Arcadia_Visuals_Context*)self)->setViewport = (void (*)(Arcadia_Thread * thread, Arcadia_Visuals_Context*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value))& Arcadia_Visuals_Implementation_OpenGL4_Context_setViewportImpl;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
@@ -291,22 +129,77 @@ Arcadia_Visuals_Implementation_OpenGL4_Context_render
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_Context* self,
+    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
     Arcadia_Visuals_Window* window
   )
 {
+  Arcadia_Visuals_Implementation_ViewportResource* viewport1 = NULL,
+                                                         * viewport2 = NULL;
+  Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer = NULL;
+  Arcadia_Visuals_Implementation_ProgramResource* program = NULL;
+
   Arcadia_Integer32Value width, height;
   Arcadia_Visuals_Window_getCanvasSize(thread, window, &width, &height);
-  
-  glViewport(0, 0, width, height);
-  glEnable(GL_SCISSOR_TEST);
-  glScissor(0, 0, width, height);
 
-  glClearDepth(self->clearDepth);
-  glClear(GL_DEPTH_BUFFER_BIT);
+  {
+    viewport1 =
+      Arcadia_Visuals_Implementation_BackendContext_createViewportResource
+        (
+          thread,
+          (Arcadia_Visuals_Implementation_BackendContext*)backendContext
+        );
+    Arcadia_Visuals_Implementation_ViewportResource_setClearColor(thread, viewport1, 255.f, 0.f, 0.f, 255.f);
+    Arcadia_Visuals_Implementation_ViewportResource_setRelativeViewportRectangle(thread, viewport1, 0.f, 0.f, 0.5f, 1.f);
+    Arcadia_Visuals_Implementation_ViewportResource_setCanvasSize(thread, viewport1, width, height);
+  }
+  {
+    viewport2 =
+      Arcadia_Visuals_Implementation_BackendContext_createViewportResource
+        (
+          thread,
+          (Arcadia_Visuals_Implementation_BackendContext*)backendContext
+        );
+    Arcadia_Visuals_Implementation_ViewportResource_setClearColor(thread, viewport2, 0.f, 255.f, 0.f, 255.f);
+    Arcadia_Visuals_Implementation_ViewportResource_setRelativeViewportRectangle(thread, viewport2, 0.5f, 0.f, 1.0f, 1.f);
+    Arcadia_Visuals_Implementation_ViewportResource_setCanvasSize(thread, viewport2, width, height);
+  }
+  {
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
+    };
+    vertexBuffer = Arcadia_Visuals_Implementation_BackendContext_createVertexBufferResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
+    Arcadia_Visuals_Implementation_VertexBufferResource_setData(thread, vertexBuffer, (void*)vertices, sizeof(vertices));
+    Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)vertexBuffer);
+  }
+  {
+    Arcadia_Visuals_Implementation_VertexProgramResource* vertexProgram = NULL;
+    Arcadia_Visuals_Implementation_FragmentProgramResource* fragmentProgram = NULL;
 
-  glClearColor((Arcadia_Real32Value)self->clearColor.red / 255.0f,
-               (Arcadia_Real32Value)self->clearColor.green / 255.0f,
-               (Arcadia_Real32Value)self->clearColor.blue / 255.0f,
-               (Arcadia_Real32Value)self->clearColor.alpha / 255.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
+    vertexProgram = Arcadia_Visuals_Implementation_BackendContext_createVertexProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
+    fragmentProgram = Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
+
+    program = Arcadia_Visuals_Implementation_BackendContext_createProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext, vertexProgram, fragmentProgram);
+    Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)program);
+  }
+  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, backendContext);
+
+  Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)viewport1);
+  gl->glUseProgram(((Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*)program)->id);
+  gl->glBindVertexArray(((Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource*)vertexBuffer)->vertexArrayID);
+  gl->glDrawArrays(GL_TRIANGLES, 0, 3);
+
+  Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)viewport2);
+  gl->glUseProgram(((Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*)program)->id);
+  gl->glBindVertexArray(((Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource*)vertexBuffer)->vertexArrayID);
+  gl->glDrawArrays(GL_TRIANGLES, 0, 3);
 }
+
+void
+Arcadia_Visuals_Implementation_OpenGL4_Context_invalidateAll
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_Context* self
+  )
+{ }

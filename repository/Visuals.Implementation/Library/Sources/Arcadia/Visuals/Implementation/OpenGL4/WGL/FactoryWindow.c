@@ -43,7 +43,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_constructImpl,
-  .destruct = &Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow_destruct,
   .visit = NULL,
 };
 

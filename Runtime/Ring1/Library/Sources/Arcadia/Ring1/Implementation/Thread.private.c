@@ -24,7 +24,7 @@ Arcadia_Thread_initializeValueStack
     Arcadia_Thread* thread
   )
 {
-  if (Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), &thread->stack.elements, sizeof(Arcadia_Value) * 8)) {
+  if (Arcadia_Arms_MemoryManager_allocate(Arcadia_Arms_getDefaultMemoryManager(), &thread->stack.elements, sizeof(Arcadia_Value) * 8)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -41,7 +41,7 @@ Arcadia_Thread_uninitializeValueStack
     Arcadia_Thread* thread
   )
 {
-  Arms_MemoryManager_deallocate(Arms_getDefaultMemoryManager(), thread->stack.elements);
+  Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getDefaultMemoryManager(), thread->stack.elements);
   thread->stack.elements = NULL;
 }
 
@@ -90,7 +90,7 @@ Arcadia_Thread_increaseValueStackCapacity
   }
 
   Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-  if (Arms_MemoryManager_reallocate(Arms_getDefaultMemoryManager(), &thread->stack.elements, newCapacity * sizeof(Arcadia_Value))) {
+  if (Arcadia_Arms_MemoryManager_reallocate(Arcadia_Arms_getDefaultMemoryManager(), &thread->stack.elements, newCapacity * sizeof(Arcadia_Value))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }

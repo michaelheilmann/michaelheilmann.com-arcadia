@@ -21,6 +21,7 @@
 typedef struct Arcadia_Value Arcadia_Value;
 
 typedef struct Arcadia_Object Arcadia_Object;
+
 Arcadia_TypeValue
 _Arcadia_Object_getType
   (
@@ -70,7 +71,16 @@ struct Arcadia_Object {
   { \
     if (!g_##_cName##_type) { \
       Arcadia_TypeValue parentType = _##_cParentName##_getType(thread); \
-      g_##_cName##_type = Arcadia_registerObjectType(thread, _cilName, sizeof(_cilName) - 1, sizeof(_cName), parentType, _cTypeOperations, &_##_cName##_typeDestructing); \
+      g_##_cName##_type = Arcadia_registerObjectType \
+        ( \
+          thread, \
+          _cilName, \
+          sizeof(_cilName) - 1, \
+          sizeof(_cName), \
+          parentType, \
+          _cTypeOperations, \
+          &_##_cName##_typeDestructing \
+        ); \
     } \
     return g_##_cName##_type; \
   }

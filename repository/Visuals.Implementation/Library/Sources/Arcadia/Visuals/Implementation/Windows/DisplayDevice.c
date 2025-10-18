@@ -74,7 +74,7 @@ Arcadia_Visuals_Windows_DisplayDevice_getBoundsImpl
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Windows_DisplayDevice_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Visuals_Windows_DisplayDevice_visitImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Windows_DisplayDevice_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

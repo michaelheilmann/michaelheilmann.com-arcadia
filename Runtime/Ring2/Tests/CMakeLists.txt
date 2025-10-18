@@ -16,9 +16,11 @@
 cmake_minimum_required(VERSION 3.20)
 
 add_subdirectory(Utf8Tests)
+add_subdirectory(StringTests)
 add_subdirectory(FilePathTests)
 add_subdirectory(DirectoryIteratorTests)
 add_subdirectory(DequeTests)
 add_subdirectory(ListTests)
 add_subdirectory(MapTests)
+add_subdirectory(SetTests)
 add_subdirectory(StringBufferTests)

@@ -95,7 +95,7 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visit
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_SemanticalAnalysis_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

@@ -19,9 +19,13 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryWindow.h"
 #include "Arcadia/Visuals/Include.h"
 
-#define WIN32_LEAN_AND_MEAN
-#define NOCOMM
-#include <GL/gl.h>
+#if !defined(WIN32_LEAN_AND_MEAN)
+  #define WIN32_LEAN_AND_MEAN
+#endif
+#if !defined(NOCOMM)
+  #define NOCOMM
+#endif
+#include <GL/glcorearb.h>
 #include <GL/wglext.h>
 
 // An old style context. Provides means to enumerate new style context configurations and create new style contexts.

@@ -17,8 +17,7 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_WINDOWBACKEND_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/GlxDeviceInfo.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Linux/Icon.h"
 
 #include <X11/Xlib.h>
@@ -33,14 +32,10 @@ struct Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend {
   // Each window holds a lock on the application
   // as it uses the atoms and the display of the
   // application.
-  Arcadia_Visuals_Implementation_OpenGL4_GLX_System* system;
+  Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext;
 
   Screen* screen; // Default value is NULL.
   Window window; // Default value is None.
-  Colormap colormap; // Default value is None.
-  GLXFBConfig *frameBufferConfiguration; // Default value is NULL.
-  XVisualInfo *visualInfo; // Default value is NULL.
-  GLXContext context; // Default value is NULL.
 
   Arcadia_Visuals_Linux_Icon* smallIcon;
   Arcadia_Visuals_Linux_Icon* bigIcon;
@@ -50,7 +45,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend*
 Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_GLX_System* system
+    Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* backendContext
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_WINDOWBACKEND_H_INCLUDED

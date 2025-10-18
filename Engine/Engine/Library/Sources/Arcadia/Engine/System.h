@@ -16,44 +16,40 @@
 #if !defined(ARCADIA_ENGINE_SYSTEM_H_INCLUDED)
 #define ARCADIA_ENGINE_SYSTEM_H_INCLUDED
 
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Engine/BackendContext.h"
 
-/// @brief
-/// The base of all systems.
-/// 
-/// @details
-/// A system is either an "audials" or a "visuals" system.
-/// The engine maintains pointers to the active system of the respective type.
-/// 
-/// The attempt to create a system of a type with an active of that type is an error.
-/// Systems check that by inspecting the pointers to active systems maintained by the engine.
-/// 
-/// One can first create a system of a type, shut it down, and create a system of another type.
-/// For example, one can create a OpenGL visuals system, shut it down, and create an Vulkan visuals system.
-/// 
-/// @details
-/// @code
-/// class Arcadia.Engine.System {
-/// 
-///   construct
-///     (
-///     )
-///   
-///   method
-///   update
-///     (
-///     )
-///     : Arcadia.Void
-/// }
-/// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Engine.System", Arcadia_Engine_System,
                           u8"Arcadia.Object")
 
 struct Arcadia_Engine_System {
   Arcadia_Object _parent;
-
+  void (*setBackendContext)(Arcadia_Thread* thread, Arcadia_Engine_System*, Arcadia_Engine_BackendContext*);
+  Arcadia_Engine_BackendContext* (*getBackendContext)(Arcadia_Thread* thread, Arcadia_Engine_System*);
   void (*update)(Arcadia_Thread* thread, Arcadia_Engine_System* self);
 };
+
+/// @brief Set the backend context of this system.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this system.
+/// @param A pointer to the backend context or the null pointer.
+void
+Arcadia_Engine_System_setBackendContext
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_System* self,
+    Arcadia_Engine_BackendContext* backendContext
+  );
+
+/// @brief Get the backend context of this system.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this system.
+/// @return A pointer to the backend context or the null pointer.
+Arcadia_Engine_BackendContext*
+Arcadia_Engine_System_getBackendContext
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_System* self
+  );
 
 /// @brief Update this system.
 /// @param thread A pointer to this thread.

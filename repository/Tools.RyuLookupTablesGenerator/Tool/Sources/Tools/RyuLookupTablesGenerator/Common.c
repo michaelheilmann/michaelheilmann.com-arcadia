@@ -25,7 +25,7 @@ Arcadia_printInteger32
     Arcadia_Thread* thread,
     Arcadia_Integer32Value integer32
   )
-{ 
+{
   Arcadia_printImmutableUtf8String(thread, Arcadia_ImmutableUtf8String_createFromInteger32(thread, integer32));
 }
 

@@ -86,13 +86,12 @@ execute2
 static void
 print
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* targetValue,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Thread* thread
   )
 {
   fprintf(stdout, "Hello, World!\n");
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, (Arcadia_SizeValue)numberOfArguments + 1);
 }
 
 static void
@@ -109,7 +108,7 @@ execute3
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
     R_Interpreter_Code* code = R_Interpreter_Code_create(thread);
-    if (0 != R_Interpreter_Code_Constants_getOrCreateForeignProcedure(Arcadia_Process_getThread(process), constants, &print)) {
+    if (0 != R_Interpreter_Code_Constants_getOrCreateForeignProcedure(thread, constants, &print)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);
     }

@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_EVENTS_APPLICATIONEVENT_H_INCLUDED
 
 #include "Arcadia/Engine/Include.h"
-typedef struct Arcadia_Visuals_System Arcadia_Visuals_System;
+typedef struct Arcadia_Visuals_BackendContext Arcadia_Visuals_BackendContext;
 
 // The opaque type of an "application" message.
 Arcadia_declareObjectType(u8"Arcadia.Visuals.ApplicationEvent", Arcadia_Visuals_ApplicationEvent,
@@ -25,7 +25,7 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.ApplicationEvent", Arcadia_Visuals_
 
 struct Arcadia_Visuals_ApplicationEvent {
   Arcadia_Engine_Event _parent;
-  Arcadia_Visuals_System* system;
+  Arcadia_Visuals_BackendContext* backendContext;
 };
 
 #endif // ARCADIA_VISUALS_EVENTS_APPLICATIONEVENT_H_INCLUDED

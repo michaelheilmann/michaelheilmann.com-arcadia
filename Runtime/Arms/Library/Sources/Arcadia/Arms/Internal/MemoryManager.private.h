@@ -19,23 +19,23 @@
 #include "Arcadia/Arms/MemoryManager.h"
 #include "Arcadia/Arms/Configure.h"
 
-typedef enum Arms_MemoryManagerStartupShutdown_Status {
-  Arms_MemoryManagerStartupShutdown_Status_Success = 0,
-  Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid = 1,
-  Arms_MemoryManagerStartupShutdown_Status_AllocationFailed = 2,
-} Arms_MemoryManagerStartupShutdown_Status;
+typedef enum Arcadia_Arms_MemoryManagerStartupShutdown_Status {
+  Arcadia_Arms_MemoryManagerStartupShutdown_Status_Success = 0,
+  Arcadia_Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid = 1,
+  Arcadia_Arms_MemoryManagerStartupShutdown_Status_AllocationFailed = 2,
+} Arcadia_Arms_MemoryManagerStartupShutdown_Status;
 
-struct Arms_MemoryManager {
-  Arms_MemoryManager_Status (*allocate)(Arms_MemoryManager* self, void** p, size_t n);
-  Arms_MemoryManager_Status (*reallocate)(Arms_MemoryManager* self, void** p, size_t n);
-  Arms_MemoryManager_Status (*deallocate)(Arms_MemoryManager* self, void* p);
-  Arms_MemoryManagerStartupShutdown_Status(*destroy)(Arms_MemoryManager* self);
+struct Arcadia_Arms_MemoryManager {
+  Arcadia_Arms_MemoryManager_Status (*allocate)(Arcadia_Arms_MemoryManager* self, void** p, size_t n);
+  Arcadia_Arms_MemoryManager_Status (*reallocate)(Arcadia_Arms_MemoryManager* self, void** p, size_t n);
+  Arcadia_Arms_MemoryManager_Status (*deallocate)(Arcadia_Arms_MemoryManager* self, void* p);
+  Arcadia_Arms_MemoryManager_Status (*destroy)(Arcadia_Arms_MemoryManager* self);
 };
 
-Arms_MemoryManagerStartupShutdown_Status
-Arms_MemoryManager_destroy
+Arcadia_Arms_MemoryManagerStartupShutdown_Status
+Arcadia_Arms_MemoryManager_destroy
   (
-    Arms_MemoryManager* memoryManager
+    Arcadia_Arms_MemoryManager* memoryManager
   );
 
 #endif // ARCADIA_ARMS_MEMORYMANAGER_PRIVATE_H_INCLUDED

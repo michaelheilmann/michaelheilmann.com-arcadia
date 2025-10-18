@@ -112,8 +112,8 @@ Arcadia_ArrayStack_pushImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_ArrayStack_constructImpl,
-  .destruct = &Arcadia_ArrayStack_destruct,
-  .visit = &Arcadia_ArrayStack_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_ArrayStack_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ArrayStack_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

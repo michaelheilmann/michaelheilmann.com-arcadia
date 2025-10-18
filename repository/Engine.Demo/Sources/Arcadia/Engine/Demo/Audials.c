@@ -82,7 +82,7 @@ Arcadia_Engine_Demo_startupAudials
       u8"audials",
       u8"backend",
     };
-    Arcadia_Audials_Backend* backend = NULL;
+    Arcadia_Engine_Backend* backend = NULL;
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -98,7 +98,7 @@ Arcadia_Engine_Demo_startupAudials
         Arcadia_Thread_jump(thread);
       }
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      backend = (Arcadia_Audials_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
+      backend = (Arcadia_Engine_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
@@ -115,11 +115,11 @@ Arcadia_Engine_Demo_startupAudials
         Arcadia_Thread_jump(thread);
       }
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      backend = (Arcadia_Audials_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
+      backend = (Arcadia_Engine_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
     }
-    Arcadia_Audials_System* temporary = Arcadia_Audials_System_createSystem(thread, backend);
+    Arcadia_Audials_BackendContext* temporary = (Arcadia_Audials_BackendContext*)Arcadia_Engine_Backend_createBackendContext(thread, backend);
     Arcadia_Object_lock(thread, (Arcadia_Object*)temporary);
-    engine->audialsSystem = (Arcadia_Engine_System*)temporary;
+    engine->audialsBackendContext = (Arcadia_Engine_BackendContext*)temporary;
   }
   // (3) Set the master volume.
   {

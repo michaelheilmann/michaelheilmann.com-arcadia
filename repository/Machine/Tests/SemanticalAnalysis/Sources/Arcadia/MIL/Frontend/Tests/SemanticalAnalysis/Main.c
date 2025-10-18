@@ -23,75 +23,74 @@
 static void
 _Library_KeyboardKeyMessage_construct
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArgument,
-    Arcadia_Value* argumentValues
+    Arcadia_Thread* thread
   )
-{ }
+{
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, (Arcadia_SizeValue)numberOfArguments + 1);
+}
 
 static void
 _Library_KeyboardKeyMessage_getAction
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArgument,
-    Arcadia_Value* argumentValues
+    Arcadia_Thread* thread
   )
-{ }
+{
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, (Arcadia_SizeValue)numberOfArguments + 1);
+}
 
 static void
 _Library_KeyboardKeyMessage_getKey
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArgument,
-    Arcadia_Value* argumentValues
+    Arcadia_Thread* thread
   )
-{ }
+{
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, (Arcadia_SizeValue)numberOfArguments + 1);
+}
 
 static void
 _Library_print
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArgument,
-    Arcadia_Value* argumentValues
+    Arcadia_Thread* thread
   )
-{/*Intentionally empty.*/}
+{
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, (Arcadia_SizeValue)numberOfArguments + 1);
+}
 
 static void
 _Library_main
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArgument,
-    Arcadia_Value* argumentValues
+    Arcadia_Thread* thread
   )
-{/*Intentionally empty.*/}
+{
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_ValueStack_popValues(thread, (Arcadia_SizeValue)numberOfArguments + 1);
+}
 
 static void
 onPhase1
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     Arcadia_MIL_AST_ModuleNode* moduleAst
   )
 {
-  Arcadia_MIL_EnterPass_onModule(Arcadia_Process_getThread(process), R_Interpreter_ProcessState_get(), symbolTable, foreignProcedures, moduleAst);
+  Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule(thread, R_Interpreter_ProcessState_get(), symbolTable, foreignProcedures, moduleAst);
 }
 
 static void
 compile
   (
-    Arcadia_Process* process,
+    Arcadia_Thread* thread,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     Arcadia_List* paths
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_MIL_Parser* parser = Arcadia_MIL_Parser_create(thread);
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_List* moduleAsts = (Arcadia_List*)Arcadia_ArrayList_create(thread);
@@ -112,17 +111,16 @@ compile
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)moduleAsts); i < n; ++i) {
     Arcadia_MIL_AST_ModuleNode* moduleAst = Arcadia_List_getObjectReferenceValueAt(thread, moduleAsts, i);
-    onPhase1(process, symbolTable, foreignProcedures, moduleAst);
+    onPhase1(thread, symbolTable, foreignProcedures, moduleAst);
   }
 }
 
 static void
 testNativePrintProcedure
   (
-    Arcadia_Process* process
+    Arcadia_Thread* thread
   )
 {
-  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_Map* symbolTable = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_Map* foreignProcedures = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 #define Define(Name,Function) \
@@ -140,24 +138,24 @@ testNativePrintProcedure
 
   Arcadia_List* paths = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/MouseButtonMessage.mil", sizeof(u8"Assets/MouseButtonMessage.mil") - 1));
-  //Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/KeyboardKeyMessage.mil", sizeof(u8"Assets/KeyboardKeyMessage.mil") - 1));
-  //Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/print.mil", sizeof(u8"Assets/print.mil") - 1));
-  //Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/main.mil", sizeof(u8"Assets/main.mil") - 1));
-  //Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/fibonacci.mil", sizeof(u8"Assets/fibonacci.mil") - 1));
+  Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/KeyboardKeyMessage.mil", sizeof(u8"Assets/KeyboardKeyMessage.mil") - 1));
+  Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/print.mil", sizeof(u8"Assets/print.mil") - 1));
+  Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/main.mil", sizeof(u8"Assets/main.mil") - 1));
+  Arcadia_List_insertBackObjectReferenceValue(thread, paths, Arcadia_FilePath_parseGeneric(thread, u8"Assets/fibonacci.mil", sizeof(u8"Assets/fibonacci.mil") - 1));
 
-  R_Interpreter_ProcessState_startup(process);
+  R_Interpreter_ProcessState_startup(Arcadia_Thread_getProcess(thread));
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    compile(process, symbolTable, foreignProcedures, paths);
+    compile(thread, symbolTable, foreignProcedures, paths);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
-    R_Interpreter_ProcessState_shutdown(process);
+    R_Interpreter_ProcessState_shutdown(Arcadia_Thread_getProcess(thread));
     Arcadia_Thread_jump(thread);
   }
-  R_Interpreter_ProcessState_shutdown(process);
+  R_Interpreter_ProcessState_shutdown(Arcadia_Thread_getProcess(thread));
 }
 
 void
@@ -168,7 +166,8 @@ main1
     char** argv
   )
 {
-  testNativePrintProcedure(process);
+  Arcadia_Thread* thread = Arcadia_Process_getThread(process);
+  testNativePrintProcedure(thread);
 }
 
 int

@@ -17,17 +17,17 @@
 #define ARCADIA_AUDIALS_SYSTEM_H_INCLUDED
 
 #include "Arcadia/Engine/Include.h"
+typedef struct Arcadia_Audials_BackendContext Arcadia_Audials_BackendContext;
 
 /// @code
 /// class Arcadia.Audials.System extends Arcadia.Engine.System {
 /// 
+///   field backendContext : Arcadia.Audials.BackendContext
+/// 
 ///   constructor
 ///     (
 ///     )
-///   
-///   method update
-///     (
-///     ) : Void
+///
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Audials.System", Arcadia_Audials_System,
@@ -35,20 +35,9 @@ Arcadia_declareObjectType(u8"Arcadia.Audials.System", Arcadia_Audials_System,
 
 struct Arcadia_Audials_System {
   Arcadia_Engine_System _parent;
-
-  void (*update)(Arcadia_Thread* thread, Arcadia_Audials_System* self);
+  Arcadia_Audials_BackendContext* backendContext;
   void (*playSine)(Arcadia_Thread* thread, Arcadia_Audials_System* self);
 };
-
-/// @brief Update this system.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this system.
-void
-Arcadia_Audials_System_update
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Audials_System* self
-  );
 
 /// @brief Play a sine wave sound.
 /// @param thread A pointer to this thread.
@@ -56,6 +45,8 @@ Arcadia_Audials_System_update
 void
 Arcadia_Audials_System_playSine
   (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_System* self
   );
 
 #endif // ARCADIA_AUDIALS_SYSTEM_H_INCLUDED

@@ -19,17 +19,14 @@
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/Configure.h"
 
-#if Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
-  #include "Arcadia/Visuals/Implementation/OpenGL4/Backend.h"
-#endif
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/System.h"
   #include "Arcadia/Visuals/Implementation/Windows/TextureFont.h"
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
 #else
   #error("environment not (yet) supported")
 #endif
+
+void Arcadia_Visuals_Implementation_registerBackends(Arcadia_Thread* thread, Arcadia_Set* set);
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED

@@ -15,7 +15,7 @@
 
 #include "Arcadia/Visuals/Implementation/Linux/DisplayMode.h"
 
-#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Linux/DisplayDevice.h"
 
 static void
@@ -59,7 +59,7 @@ Arcadia_Visuals_Linux_DisplayMode_getFrequencyImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_DisplayMode* self
   );
-  
+
 static void
 Arcadia_Visuals_Linux_DisplayMode_applyImpl
   (
@@ -174,7 +174,7 @@ Arcadia_Visuals_Linux_DisplayMode_applyImpl
   Arcadia_StringBuffer_insertBackString(thread, log, self->device->name);
   Arcadia_StringBuffer_insertBackCxxString(thread, log, u8" \n");
   fwrite(Arcadia_StringBuffer_getBytes(thread, log), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, log), stdout);
-  
+
   int defaultScreen;
   Window rootWindow;
   XRRScreenResources* screenResources = NULL;;
@@ -184,58 +184,58 @@ Arcadia_Visuals_Linux_DisplayMode_applyImpl
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    rootWindow = XDefaultRootWindow(self->device->system->display);
-    defaultScreen = DefaultScreen(self->device->system->display);
-    screenResources = XRRGetScreenResources(self->device->system->display, rootWindow);
+    rootWindow = XDefaultRootWindow(self->device->backendContext->display);
+    defaultScreen = DefaultScreen(self->device->backendContext->display);
+    screenResources = XRRGetScreenResources(self->device->backendContext->display, rootWindow);
     if (!screenResources) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
-    outputInfo = XRRGetOutputInfo(self->device->system->display, screenResources, self->device->output);
+    outputInfo = XRRGetOutputInfo(self->device->backendContext->display, screenResources, self->device->output);
     if (!screenResources) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
-    crtcInfo = XRRGetCrtcInfo(self->device->system->display, screenResources, outputInfo->crtc);
+    crtcInfo = XRRGetCrtcInfo(self->device->backendContext->display, screenResources, outputInfo->crtc);
     if (!crtcInfo) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
-    
+
     if (self->modeId != crtcInfo->mode) {
       Status status;
-      XGrabServer(self->device->system->display);
-      status = XRRSetCrtcConfig(self->device->system->display, screenResources, outputInfo->crtc,
+      XGrabServer(self->device->backendContext->display);
+      status = XRRSetCrtcConfig(self->device->backendContext->display, screenResources, outputInfo->crtc,
                                 CurrentTime, 0, 0, None, crtcInfo->rotation, NULL, 0);
       if (status != Success) {
-        XUngrabServer(self->device->system->display);
+        XUngrabServer(self->device->backendContext->display);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
-      int mm_width = self->horizontalResolution * DisplayWidthMM(self->device->system->display, defaultScreen)
-                   / DisplayWidth(self->device->system->display, defaultScreen);
-      int mm_height = self->verticalResolution * DisplayHeightMM(self->device->system->display, defaultScreen)
-                    / DisplayHeight(self->device->system->display, defaultScreen);
-      
-      XSync(self->device->system->display, False);
-      
-      XRRSetScreenSize(self->device->system->display, rootWindow,
+      int mm_width = self->horizontalResolution * DisplayWidthMM(self->device->backendContext->display, defaultScreen)
+                   / DisplayWidth(self->device->backendContext->display, defaultScreen);
+      int mm_height = self->verticalResolution * DisplayHeightMM(self->device->backendContext->display, defaultScreen)
+                    / DisplayHeight(self->device->backendContext->display, defaultScreen);
+
+      XSync(self->device->backendContext->display, False);
+
+      XRRSetScreenSize(self->device->backendContext->display, rootWindow,
                        self->horizontalResolution, self->verticalResolution,
                        mm_width, mm_height);
 
-      XSync(self->device->system->display, False);
-      
-      status = XRRSetCrtcConfig(self->device->system->display, screenResources, outputInfo->crtc, CurrentTime,
+      XSync(self->device->backendContext->display, False);
+
+      status = XRRSetCrtcConfig(self->device->backendContext->display, screenResources, outputInfo->crtc, CurrentTime,
                                 crtcInfo->x, crtcInfo->y, self->modeId, crtcInfo->rotation, &self->device->output, 1);
-      XUngrabServer(self->device->system->display);                                   
+      XUngrabServer(self->device->backendContext->display);
       if (status != Success) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
         Arcadia_Thread_jump(thread);
       }
     }
-    
+
     Arcadia_Visuals_Linux_DisplayDevice_updateBounds(thread, self->device);
-    
+
     XRRFreeCrtcInfo(crtcInfo);
     crtcInfo = NULL;
     XRRFreeOutputInfo(outputInfo);

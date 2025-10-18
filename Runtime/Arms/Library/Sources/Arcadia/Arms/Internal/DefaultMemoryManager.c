@@ -17,89 +17,89 @@
 
 #include "Arcadia/Arms/Include.h"
 
-struct Arms_DefaultMemoryManager {
-  Arms_MemoryManager parent;
+struct Arcadia_Arms_DefaultMemoryManager {
+  Arcadia_Arms_MemoryManager parent;
 };
 
-static Arms_MemoryManager_Status
+static Arcadia_Arms_MemoryManager_Status
 allocate
   (
-    Arms_DefaultMemoryManager* self,
+    Arcadia_Arms_DefaultMemoryManager* self,
     void** p,
     Arcadia_Arms_Size n
   )
 {
   if (!p) {
-    return Arms_MemoryManager_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid;
   }
   void* q = malloc(n > 0 ? n : 1);
   if (!q) {
-    return Arms_MemoryManager_Status_AllocationFailed;
+    return Arcadia_Arms_MemoryManager_Status_AllocationFailed;
   }
   *p = q;
-  return Arms_MemoryManager_Status_Success;
+  return Arcadia_Arms_MemoryManager_Status_Success;
 }
 
-static Arms_MemoryManager_Status
+static Arcadia_Arms_MemoryManager_Status
 reallocate
   (
-    Arms_DefaultMemoryManager* self,
+    Arcadia_Arms_DefaultMemoryManager* self,
     void** p,
     Arcadia_Arms_Size n
   )
 {
   if (!p) {
-    return Arcadia_Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid;
   }
   void* q = realloc(*p, n > 0 ? n : 1);
   if (!q) {
-    return Arcadia_Arms_Status_AllocationFailed;
+    return Arcadia_Arms_MemoryManager_Status_AllocationFailed;
   }
   *p = q;
-  return Arcadia_Arms_Status_Success;
+  return Arcadia_Arms_MemoryManager_Status_Success;
 }
 
-static Arms_MemoryManager_Status
+static Arcadia_Arms_MemoryManager_Status
 deallocate
   (
-    Arms_DefaultMemoryManager* self,
+    Arcadia_Arms_DefaultMemoryManager* self,
     void* p
   )
 {
   if (!p) {
-    return Arcadia_Arms_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid;
   }
   free(p);
-  return Arcadia_Arms_Status_Success;
+  return Arcadia_Arms_MemoryManager_Status_Success;
 }
 
-static Arms_MemoryManagerStartupShutdown_Status
+static Arcadia_Arms_MemoryManagerStartupShutdown_Status
 destroy
   (
-    Arms_DefaultMemoryManager* self
+    Arcadia_Arms_DefaultMemoryManager* self
   )
 {
   free(self);
-  return Arms_MemoryManagerStartupShutdown_Status_Success;
+  return Arcadia_Arms_MemoryManagerStartupShutdown_Status_Success;
 }
 
-Arms_MemoryManagerStartupShutdown_Status
-Arms_DefaultMemoryManager_create
+Arcadia_Arms_MemoryManagerStartupShutdown_Status
+Arcadia_Arms_DefaultMemoryManager_create
   (
-    Arms_DefaultMemoryManager** result
+    Arcadia_Arms_DefaultMemoryManager** result
   )
 {
   if (!result) {
-    return Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid;
+    return Arcadia_Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid;
   }
-  Arms_DefaultMemoryManager* self = malloc(sizeof(Arms_DefaultMemoryManager));
+  Arcadia_Arms_DefaultMemoryManager* self = malloc(sizeof(Arcadia_Arms_DefaultMemoryManager));
   if (!self) {
-    return Arms_MemoryManagerStartupShutdown_Status_AllocationFailed;
+    return Arcadia_Arms_MemoryManagerStartupShutdown_Status_AllocationFailed;
   }
-  ((Arms_MemoryManager*)self)->allocate = (Arms_MemoryManager_Status (*)(Arms_MemoryManager*, void**, Arcadia_Arms_Size)) & allocate;
-  ((Arms_MemoryManager*)self)->reallocate = (Arms_MemoryManager_Status(*)(Arms_MemoryManager*, void**, Arcadia_Arms_Size)) &reallocate;
-  ((Arms_MemoryManager*)self)->deallocate = (Arms_MemoryManager_Status(*)(Arms_MemoryManager*, void*)) &deallocate;
-  ((Arms_MemoryManager*)self)->destroy = (Arms_MemoryManagerStartupShutdown_Status(*)(Arms_MemoryManager*)) &destroy;
+  ((Arcadia_Arms_MemoryManager*)self)->allocate = (Arcadia_Arms_MemoryManager_Status (*)(Arcadia_Arms_MemoryManager*, void**, Arcadia_Arms_Size)) & allocate;
+  ((Arcadia_Arms_MemoryManager*)self)->reallocate = (Arcadia_Arms_MemoryManager_Status(*)(Arcadia_Arms_MemoryManager*, void**, Arcadia_Arms_Size)) &reallocate;
+  ((Arcadia_Arms_MemoryManager*)self)->deallocate = (Arcadia_Arms_MemoryManager_Status(*)(Arcadia_Arms_MemoryManager*, void*)) &deallocate;
+  ((Arcadia_Arms_MemoryManager*)self)->destroy = (Arcadia_Arms_MemoryManagerStartupShutdown_Status(*)(Arcadia_Arms_MemoryManager*)) &destroy;
   *result = self;
-  return Arms_MemoryManagerStartupShutdown_Status_Success;
+  return Arcadia_Arms_MemoryManagerStartupShutdown_Status_Success;
 }

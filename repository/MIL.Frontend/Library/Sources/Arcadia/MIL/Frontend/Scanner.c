@@ -137,8 +137,8 @@ isDigit
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_MIL_Scanner_constructImpl,
-  .destruct = &Arcadia_MIL_Scanner_destruct,
-  .visit = &Arcadia_MIL_Scanner_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_MIL_Scanner_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Scanner_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

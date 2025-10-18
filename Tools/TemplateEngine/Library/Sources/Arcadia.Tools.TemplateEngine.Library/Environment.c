@@ -35,7 +35,7 @@ Environment_constructImpl
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Environment_constructImpl,
   .destruct = NULL,
-  .visit = &Environment_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Environment_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

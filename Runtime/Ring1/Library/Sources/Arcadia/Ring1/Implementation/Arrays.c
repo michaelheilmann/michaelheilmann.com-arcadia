@@ -22,7 +22,7 @@ void
 Arcadia_Arrays_resizeByAdditionalCapacity
   (
     Arcadia_Thread* thread,
-    Arms_MemoryManager* memoryManager,
+    Arcadia_Arms_MemoryManager* memoryManager,
     void** elements,
     Arcadia_SizeValue elementSize,
     Arcadia_SizeValue size,
@@ -45,7 +45,7 @@ Arcadia_Arrays_resizeByAdditionalCapacity
         Arcadia_Thread_jump(thread);
       }
       newCapacity = oldCapacity + requiredAdditionalCapacity;
-      if (Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
+      if (Arcadia_Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -63,7 +63,7 @@ Arcadia_Arrays_resizeByAdditionalCapacity
         Arcadia_Thread_jump(thread);
       }
       newCapacity = currentNewCapacity;
-      if (Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
+      if (Arcadia_Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -75,7 +75,7 @@ Arcadia_Arrays_resizeByAdditionalCapacity
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
         Arcadia_Thread_jump(thread);
       }
-      if (Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
+      if (Arcadia_Arms_MemoryManager_reallocate(memoryManager, elements, newCapacity * elementSize)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
         Arcadia_Thread_jump(thread);
       }
@@ -103,7 +103,7 @@ void
 Arcadia_Arrays_resizeByFreeCapacity
   (
     Arcadia_Thread* thread,
-    Arms_MemoryManager* memoryManager,
+    Arcadia_Arms_MemoryManager* memoryManager,
     void** elements,
     Arcadia_SizeValue elementSize,
     Arcadia_SizeValue size,

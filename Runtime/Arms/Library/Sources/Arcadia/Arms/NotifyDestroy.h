@@ -20,17 +20,17 @@
 #include <stdbool.h>
 
 /* private */ Arcadia_Arms_Status
-Arms_NotifyDestroyModule_startup
+Arcadia_Arms_NotifyDestroyModule_startup
   (
   );
 
 /* private */ Arcadia_Arms_Status
-Arms_NotifyDestroyModule_shutdown
+Arcadia_Arms_NotifyDestroyModule_shutdown
   (
   );
 
 /* private */ void
-Arms_NotifyDestroyModule_notifyDestroy
+Arcadia_Arms_NotifyDestroyModule_notifyDestroy
   (
     void* object
   );

@@ -20,8 +20,13 @@
 
 #include <stdint.h>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#if !defined(WIN32_LEAN_AND_MEAN)
+  #define WIN32_LEAN_AND_MEAN
+#endif
+#if !defined(NOCOMM)
+  #define NOCOMM
+#endif
+#include <Windows.h>
 
 /// @code
 /// class Arcadia.Visuals.Windows.Icon {

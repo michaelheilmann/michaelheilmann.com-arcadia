@@ -1,0 +1,34 @@
+#include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"
+
+void
+_Arcadia_Visuals_Implementation_OpenGL4_Functions_initialize
+  (
+    Arcadia_Thread* thread,
+    _Arcadia_Visuals_Implementation_OpenGL4_Functions* functions,
+    _Arcadia_Visuals_Implementation_OpenGL4_Linker* linker
+  )
+{
+#define Define(Type, Name) \
+  functions->Name = NULL;
+  #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.i"
+#undef Define
+
+#define Define(Type, Name) \
+  functions->Name = (Type)(*linker->link)(thread, linker, #Name);
+  #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.i"
+#undef Define
+}
+
+void
+_Arcadia_Visuals_Implementation_OpenGL4_Functions_uninitialize
+  (
+    Arcadia_Thread* thread,
+    _Arcadia_Visuals_Implementation_OpenGL4_Functions* functions
+  )
+{
+#define Define(Type, Name) \
+  functions->Name = NULL;
+  #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.i"
+#undef Define
+
+}

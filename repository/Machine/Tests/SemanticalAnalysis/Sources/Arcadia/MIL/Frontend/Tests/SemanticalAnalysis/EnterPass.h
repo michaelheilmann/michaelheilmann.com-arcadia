@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(R_MIL_ENTER_H_INCLUDED)
-#define R_MIL_ENTER_H_INCLUDED
+#if !defined(ARCADIA_MIL_SEMANTICALANALYSIS_ENTERPASS_H_INCLUDED)
+#define ARCADIA_MIL_SEMANTICALANALYSIS_ENTERPASS_H_INCLUDED
 
 #include "Arcadia/Include.h"
 #include "Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.h"
@@ -22,7 +22,7 @@
 typedef struct Arcadia_MIL_CallableContext Arcadia_MIL_CallableContext;
 
 void
-Arcadia_MIL_EnterPass_onModule
+Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule
   (
     Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess,
@@ -35,16 +35,17 @@ Arcadia_MIL_EnterPass_onModule
 /// Guarantees:
 /// - no class-class, prodecure-procedure, class-procedure name collision
 /// - no label name collision
-Arcadia_declareObjectType(u8"Arcadia.MIL.EnterPass", Arcadia_MIL_EnterPass, u8"Arcadia.MIL.Pass");
+Arcadia_declareObjectType(u8"Arcadia.MIL.SemanticalAnalysis.EnterPass", Arcadia_MIL_SemanticalAnalysis_EnterPass,
+                          u8"Arcadia.MIL.Pass");
 
-struct Arcadia_MIL_EnterPass {
+struct Arcadia_MIL_SemanticalAnalysis_EnterPass {
   Arcadia_MIL_Pass _parent;
 };
 
-Arcadia_MIL_EnterPass*
-Arcadia_MIL_EnterPass_create
+Arcadia_MIL_SemanticalAnalysis_EnterPass*
+Arcadia_MIL_SemanticalAnalysis_EnterPass_create
   (
     Arcadia_Thread* thread
   );
 
-#endif // R_MIL_ENTER_H_INCLUDED
+#endif // ARCADIA_MIL_SEMANTICALANALYSIS_ENTERPASS_H_INCLUDED

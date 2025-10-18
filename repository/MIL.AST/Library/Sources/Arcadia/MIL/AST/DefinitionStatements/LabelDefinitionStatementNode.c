@@ -37,7 +37,7 @@ Arcadia_MIL_AST_LabelDefinitionStatementNode_visit
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_AST_LabelDefinitionStatementNode_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_MIL_AST_LabelDefinitionStatementNode_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_AST_LabelDefinitionStatementNode_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -46,7 +46,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.MIL.AST.LabelDefinitionStatementNode", Arcadia_MIL_AST_LabelDefinitionStatementNode,
-                         u8"Arcadia.MIL.AST.DefinitionStatementNode", Arcadia_MIL_AST_InstructionNode,
+                         u8"Arcadia.MIL.AST.DefinitionStatementNode", Arcadia_MIL_AST_DefinitionStatementNode,
                          &_typeOperations);
 
 static void

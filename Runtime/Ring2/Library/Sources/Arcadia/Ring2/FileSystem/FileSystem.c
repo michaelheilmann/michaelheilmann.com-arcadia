@@ -85,8 +85,8 @@ Arcadia_FileSystem_destruct
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_FileSystem_constructImpl,
-  .destruct = &Arcadia_FileSystem_destruct,
-  .visit = &Arcadia_FileSystem_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_FileSystem_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FileSystem_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -332,12 +332,12 @@ Arcadia_FileSystem_getWorkingDirectory
     Arcadia_Thread_jump(thread);
   }
   char* pBuffer = NULL;
-  if (Arms_MemoryManager_allocate(Arms_getSlabMemoryManager(), &pBuffer, dwBufferSize)) {
+  if (Arcadia_Arms_MemoryManager_allocate(Arcadia_Arms_getSlabMemoryManager(), &pBuffer, dwBufferSize)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }
   if (!GetCurrentDirectory(dwBufferSize, pBuffer)) {
-    Arms_MemoryManager_deallocate(Arms_getSlabMemoryManager(), pBuffer);
+    Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getSlabMemoryManager(), pBuffer);
     pBuffer = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
@@ -348,12 +348,12 @@ Arcadia_FileSystem_getWorkingDirectory
     Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, pBuffer, dwBufferSize - 1)));
     Arcadia_FilePath* filePath = Arcadia_FilePath_parseWindows(thread, filePathString);
     Arcadia_Thread_popJumpTarget(thread);
-    Arms_MemoryManager_deallocate(Arms_getSlabMemoryManager(), pBuffer);
+    Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getSlabMemoryManager(), pBuffer);
     pBuffer = NULL;
     return filePath;
   } else {
     Arcadia_Thread_popJumpTarget(thread);
-    Arms_MemoryManager_deallocate(Arms_getSlabMemoryManager(), pBuffer);
+    Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getSlabMemoryManager(), pBuffer);
     pBuffer = NULL;
     Arcadia_Thread_jump(thread);
   }

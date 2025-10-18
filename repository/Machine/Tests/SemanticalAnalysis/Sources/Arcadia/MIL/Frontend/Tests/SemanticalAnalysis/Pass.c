@@ -34,7 +34,7 @@ Arcadia_MIL_Pass_visit
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_Pass_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_MIL_Pass_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Pass_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

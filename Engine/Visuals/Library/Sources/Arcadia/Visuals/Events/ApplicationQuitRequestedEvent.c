@@ -59,7 +59,7 @@ Arcadia_Visuals_ApplicationQuitRequestedEvent_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 0, _Arcadia_Visuals_System_getType(thread));
+  Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 0, _Arcadia_Visuals_BackendContext_getType(thread));
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
 }
@@ -69,12 +69,12 @@ Arcadia_Visuals_ApplicationQuitRequestedEvent_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural64Value timestamp,
-    Arcadia_Visuals_System* system
+    Arcadia_Visuals_BackendContext* backendContext
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural64Value(thread, timestamp);
-  if (system) { Arcadia_ValueStack_pushObjectReferenceValue(thread, system); } else { Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_VoidValue_Void); }
+  if (backendContext) { Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); } else { Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_VoidValue_Void); }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_ApplicationQuitRequestedEvent);
 }

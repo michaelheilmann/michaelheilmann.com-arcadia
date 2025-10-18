@@ -1,0 +1,135 @@
+// The author of this software is Michael Heilmann (contact@@michaelheilmann.com).
+//
+// Copyright(c) 2024-2025 Michael Heilmann (contact@@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+#if !defined(ARCADIA_MATH_IMPLEMENTATION_VECTOR@{dimensionality}@{scalarSuffixUppercase}_H_INCLUDED)
+#define ARCADIA_MATH_IMPLEMENTATION_VECTOR@{dimensionality}@{scalarSuffixUppercase}_H_INCLUDED
+
+#include "Arcadia/Ring1/Include.h"
+
+Arcadia_declareObjectType(u8"Arcadia.Math.Vector@{dimensionality}@{scalarSuffix}", Arcadia_Math_Vector@{dimensionality}@{scalarSuffix},
+                          u8"Arcadia.Object");
+
+struct Arcadia_Math_Vector@{dimensionality}@{scalarSuffix} {
+  Arcadia_Object _parent;
+  @{scalarType} elements[@{dimensionality}];
+};
+
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}*
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_create
+  (
+    Arcadia_Thread* thread
+  );
+
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}*
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_createWithValues
+  (
+    Arcadia_Thread* thread,
+    @{scalarType} const* values
+  );
+
+/// @@brief Assign the values of another vector to this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@param other A pointer to the other vector.
+/// @@remarks @@a self and @@a other may refer to the same object.
+/// @@post This vector was assigned the values of the other vector.
+void
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_assign
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* other
+  );
+
+/// @@brief Compute the inversion of one vector and assign the result to this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@param other A pointer to the other vector.
+/// @@post This vector was assigned the values of the inversion of the other vector.
+void
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_invert
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* other
+  );
+
+/// @@brief Compute the sum of this vector and another vector and assign the result to this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@param other A pointer to the other vector.
+/// @@remarks @@a self and @@a other may refer to the same object.
+/// @@post This vector was assigned the result.
+void
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_add
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* other
+  );
+
+/// @@brief Compute the difference of this vector and another vector and assign the result to this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@param other A pointer to the other vector.
+/// @@remarks @@a self and @@a other may refer to the same object.
+/// @@post This vector was assigned the result.
+void
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_subtract
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* other
+  );
+
+/// @@brief Linearily interpolate between this vector and another vector and assign the result to this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@param other A pointer to the other vector.
+/// @@param t The interpolation value.
+/// @@remarks @@a self and @@a other may refer to the same object.
+/// @@post This vector was assigned the result.
+void
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_lerp
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* other,
+    @{scalarType} t
+  );
+
+/// @@brief Get the length of this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@return The length of this vector.
+@{scalarType}
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_getLength
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self
+  );
+
+/// @@brief Get the squared length of this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@return The squared length of this vector.
+@{scalarType}
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_getSquaredLength
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self
+  );
+
+#endif // ARCADIA_MATH_IMPLEMENTATION_VECTOR@{dimensionality}@{scalarSuffixUppercase}_H_INCLUDED

@@ -15,9 +15,9 @@
 
 #include "Arcadia/Arms/Internal/MemoryManager.private.h"
 
-Arms_MemoryManagerStartupShutdown_Status
-Arms_MemoryManager_destroy
+Arcadia_Arms_MemoryManagerStartupShutdown_Status
+Arcadia_Arms_MemoryManager_destroy
   (
-    Arms_MemoryManager* memoryManager
+    Arcadia_Arms_MemoryManager* memoryManager
   )
 { return memoryManager->destroy(memoryManager); }

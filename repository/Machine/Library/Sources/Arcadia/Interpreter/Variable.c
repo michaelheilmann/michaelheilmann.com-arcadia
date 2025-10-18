@@ -34,7 +34,7 @@ R_Interpreter_Variable_visit
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & R_Interpreter_Variable_constructImpl,
   .destruct = NULL,
-  .visit = &R_Interpreter_Variable_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&R_Interpreter_Variable_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

@@ -84,7 +84,7 @@ Arcadia_Visuals_Linux_Icon_constructImpl
   Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Imaging_PixelBuffer_getType(thread));
   pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, pixelBuffer);
   Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
-  
+
   Arcadia_Natural32Value dummy, numberOfPixels, numberOfBytes;
   if (!Arcadia_safeMultiplyNatural32Value(thread, (Arcadia_Natural32Value)Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer),
                                                   (Arcadia_Natural32Value)Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer), &dummy, &numberOfPixels)) {
@@ -139,7 +139,7 @@ Arcadia_Visuals_Linux_Icon_create
     Arcadia_Thread* thread,
     Arcadia_Imaging_PixelBuffer* pixelBuffer
   )
-{ 
+{
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, pixelBuffer);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);

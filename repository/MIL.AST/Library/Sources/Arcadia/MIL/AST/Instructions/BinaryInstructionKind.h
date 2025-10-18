@@ -69,7 +69,7 @@ enum Arcadia_MIL_AST_BinaryInstructionKind {
   /// secondOperand : register
   /// @endcode
   Arcadia_MIL_AST_BinaryInstructionKind_Or = 6,
-  
+
   /// @code
   /// subtractInstruction : 'subtract' target, firstOperand, secondOperand
   /// target : register

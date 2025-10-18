@@ -14,3 +14,14 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include "Arcadia/Visuals/Implementation/Include.h"
+
+#if Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
+  #include "Arcadia/Visuals/Implementation/OpenGL4/Backend.h"
+#endif
+
+
+void Arcadia_Visuals_Implementation_registerBackends(Arcadia_Thread* thread, Arcadia_Set* types) {
+#if Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
+  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_OpenGL4_Backend_getType(thread)), NULL);
+#endif
+}

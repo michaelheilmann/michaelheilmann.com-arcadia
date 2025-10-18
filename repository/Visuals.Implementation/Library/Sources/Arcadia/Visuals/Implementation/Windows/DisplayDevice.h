@@ -18,7 +18,12 @@
 
 
 #include "Arcadia/Visuals/Include.h"
-#define WIN32_LEAN_AND_MEAN
+#if !defined(WIN32_LEAN_AND_MEAN)
+  #define WIN32_LEAN_AND_MEAN
+#endif
+#if !defined(NOCOMM)
+  #define NOCOMM
+#endif
 #include <Windows.h>
 typedef struct Arcadia_Visuals_Windows_DisplayMode Arcadia_Visuals_Windows_DisplayMode;
 

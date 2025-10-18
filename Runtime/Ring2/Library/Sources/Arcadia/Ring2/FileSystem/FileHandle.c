@@ -45,8 +45,8 @@ Arcadia_FileHandle_visit
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_FileHandle_constructImpl,
-  .destruct = &Arcadia_FileHandle_destruct,
-  .visit = &Arcadia_FileHandle_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_FileHandle_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FileHandle_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

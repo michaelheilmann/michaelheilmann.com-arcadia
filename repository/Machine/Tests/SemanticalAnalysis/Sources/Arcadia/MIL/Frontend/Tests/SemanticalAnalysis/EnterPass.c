@@ -21,6 +21,7 @@
 #include "Arcadia/Interpreter/Method.h"
 #include "Arcadia/MIL/AST/Include.h"
 #include "Arcadia/MIL/Frontend/Include.h"
+#include <limits.h>
 
 static Arcadia_Natural32Value
 getRegisterOfVariable2
@@ -278,7 +279,7 @@ onExpressionStatement
     R_Interpreter_ProcessState* interpreterProcessState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_InstructionStatementNode2* instructionStatementNode
+    Arcadia_MIL_AST_InstructionStatementNode* instructionStatementNode
   )
 {
   if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MIL_AST_BinaryInstructionNode_getType(thread))) {
@@ -424,6 +425,11 @@ onExpressionStatement
   } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MIL_AST_ReturnInstructionNode_getType(thread))) {
     onReturnInstruction(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_ReturnInstructionNode*)instructionStatementNode);
   } else {
+    Arcadia_Type* type = Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode);
+    Arcadia_AtomValue typeNameAtom = Arcadia_Type_getName(type);
+    Arcadia_logf(Arcadia_LogFlags_Error, u8"AST node of type `%.*s` was not handled\n",
+                                         Arcadia_clampSizeValue(thread, Arcadia_Atom_getNumberOfBytes(thread, typeNameAtom), 0, INT_MAX),
+                                         Arcadia_Atom_getBytes(thread, typeNameAtom));
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -462,8 +468,8 @@ onStatements
     Arcadia_Value elementValue = Arcadia_List_getAt(thread, statements, i);
     Arcadia_ObjectReferenceValue objectElementValue = Arcadia_Value_getObjectReferenceValue(&elementValue);
     Arcadia_MIL_AST_StatementNode* statement = (Arcadia_MIL_AST_StatementNode*)objectElementValue;
-    if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_InstructionStatementNode2_getType(thread))) {
-      onExpressionStatement(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_InstructionStatementNode2*)statement);
+    if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_InstructionStatementNode_getType(thread))) {
+      onExpressionStatement(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_InstructionStatementNode*)statement);
     } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_VariableDefinitionStatementNode_getType(thread))) {
       onVariableDefinitionStatement(process, interpreterProcessState, code, context, (Arcadia_MIL_VariableDefinitionStatementNode*)statement);
     } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_LabelDefinitionStatementNode_getType(thread))) {
@@ -751,7 +757,7 @@ onClassDefinition
 }
 
 void
-Arcadia_MIL_EnterPass_onModule
+Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule
   (
     Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess,
@@ -774,23 +780,23 @@ Arcadia_MIL_EnterPass_onModule
 }
 
 static void
-Arcadia_MIL_EnterPass_constructImpl
+Arcadia_MIL_SemanticalAnalysis_EnterPass_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_EnterPass* self
+    Arcadia_MIL_SemanticalAnalysis_EnterPass* self
   );
 
 static void
-Arcadia_MIL_EnterPass_visit
+Arcadia_MIL_SemanticalAnalysis_EnterPass_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_EnterPass* self
+    Arcadia_MIL_SemanticalAnalysis_EnterPass* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_EnterPass_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_SemanticalAnalysis_EnterPass_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_MIL_EnterPass_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_SemanticalAnalysis_EnterPass_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -798,18 +804,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.MIL.EnterPass", Arcadia_MIL_EnterPass,
+Arcadia_defineObjectType(u8"Arcadia.MIL.SemanticalAnalysis.EnterPass", Arcadia_MIL_SemanticalAnalysis_EnterPass,
                          u8"Arcadia.MIL.Pass", Arcadia_MIL_Pass,
                          &_typeOperations);
 
 static void
-Arcadia_MIL_EnterPass_constructImpl
+Arcadia_MIL_SemanticalAnalysis_EnterPass_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_EnterPass* self
+    Arcadia_MIL_SemanticalAnalysis_EnterPass* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_EnterPass_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_MIL_SemanticalAnalysis_EnterPass_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -823,20 +829,20 @@ Arcadia_MIL_EnterPass_constructImpl
 }
 
 static void
-Arcadia_MIL_EnterPass_visit
+Arcadia_MIL_SemanticalAnalysis_EnterPass_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_EnterPass* self
+    Arcadia_MIL_SemanticalAnalysis_EnterPass* self
   )
 { }
 
-Arcadia_MIL_EnterPass*
-Arcadia_MIL_EnterPass_create
+Arcadia_MIL_SemanticalAnalysis_EnterPass*
+Arcadia_MIL_SemanticalAnalysis_EnterPass_create
   (
     Arcadia_Thread* thread
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_MIL_EnterPass);
+  ARCADIA_CREATEOBJECT(Arcadia_MIL_SemanticalAnalysis_EnterPass);
 }

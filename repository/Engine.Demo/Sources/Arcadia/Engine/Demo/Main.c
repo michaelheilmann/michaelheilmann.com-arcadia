@@ -44,7 +44,7 @@ main1
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    
+
     {
       Arcadia_DataDefinitionLanguage_Tree_Node* temporary = (Arcadia_DataDefinitionLanguage_Tree_Node*)Cfg_loadConfiguration(thread);
       Arcadia_Object_lock(thread,  (Arcadia_Object*)temporary);
@@ -68,15 +68,15 @@ main1
     Arcadia_Engine_Demo_startupAudials(thread, engine, configuration);
 
     // (2) Play sine wave.
-    Arcadia_Audials_System_playSine(thread, (Arcadia_Audials_System*)engine->audialsSystem);
+    Arcadia_Audials_BackendContext_playSine(thread, (Arcadia_Audials_BackendContext*)engine->audialsBackendContext);
 
     Arcadia_Process_stepArms(process);
 
     // (8) Enter the message loop.
     while (!quit) {
       Arcadia_Process_stepArms(process);
-      Arcadia_Audials_System_update(thread, (Arcadia_Audials_System*)engine->audialsSystem);
-      Arcadia_Visuals_System_update(thread, (Arcadia_Visuals_System*)engine->visualsSystem);
+      Arcadia_Audials_BackendContext_update(thread, (Arcadia_Audials_BackendContext*)engine->audialsBackendContext);
+      Arcadia_Visuals_BackendContext_update(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
       Arcadia_Visuals_Window_beginRender(thread, window);
       Arcadia_Visuals_Window_endRender(thread, window);
 
@@ -86,6 +86,9 @@ main1
         if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKeyAction_Released &&
             Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKey_Escape) {
           quit = Arcadia_BooleanValue_True;
+        } else if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKeyAction_Released &&
+                   Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKey_R) {
+          Arcadia_logf(Arcadia_LogFlags_Info, "re-initializing backends\n");
         }
       }
     }
@@ -106,13 +109,13 @@ main1
       Arcadia_Object_unlock(thread, (Arcadia_Object*)window);
       window = NULL;
     }
-    if (engine->audialsSystem) {
-      Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->audialsSystem);
-      engine->audialsSystem = NULL;
+    if (engine->audialsBackendContext) {
+      Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->audialsBackendContext);
+      engine->audialsBackendContext = NULL;
     }
-    if (engine->visualsSystem) {
-      Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->visualsSystem);
-      engine->visualsSystem = NULL;
+    if (engine->visualsBackendContext) {
+      Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->visualsBackendContext);
+      engine->visualsBackendContext = NULL;
     }
     if (engine) {
       Arcadia_Object_unlock(thread, (Arcadia_Object*)engine);
@@ -131,13 +134,13 @@ main1
       Arcadia_Object_unlock(thread, (Arcadia_Object*)window);
       window = NULL;
     }
-    if (engine && engine->audialsSystem) {
-      Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->audialsSystem);
-      engine->audialsSystem = NULL;
+    if (engine && engine->audialsBackendContext) {
+      Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->audialsBackendContext);
+      engine->audialsBackendContext = NULL;
     }
-    if (engine && engine->visualsSystem) {
-      Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->visualsSystem);
-      engine->visualsSystem = NULL;
+    if (engine && engine->visualsBackendContext) {
+      Arcadia_Object_unlock(thread, (Arcadia_Object*)engine->visualsBackendContext);
+      engine->visualsBackendContext = NULL;
     }
     if (engine) {
       Arcadia_Object_unlock(thread, (Arcadia_Object*)engine);

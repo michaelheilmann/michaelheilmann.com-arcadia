@@ -39,7 +39,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.MIL.AST.InstructionNode", Arcadia_MIL_AST_InstructionNode,
-                         u8"Arcadia.MIL.AST.InstructionStatementNode2", Arcadia_MIL_AST_InstructionStatementNode2,
+                         u8"Arcadia.MIL.AST.InstructionStatementNode", Arcadia_MIL_AST_InstructionStatementNode,
                          &_typeOperations);
 
 void

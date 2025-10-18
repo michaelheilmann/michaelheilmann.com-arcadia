@@ -298,9 +298,9 @@ IcoImageWriter_writeImpl
 }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & IcoImageWriter_constructImpl,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&IcoImageWriter_constructImpl,
   .destruct = NULL,
-  .visit = &IcoImageWriter_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&IcoImageWriter_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

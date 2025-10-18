@@ -24,7 +24,7 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct Arcadia_Value Arcadia_Value;
 
-typedef void (Arcadia_ForeignProcedure)(Arcadia_Thread* thread, Arcadia_Value* targetValue, Arcadia_SizeValue numberOfArgumentValues, Arcadia_Value* argumentValues);
+typedef void (Arcadia_ForeignProcedure)(Arcadia_Thread* thread);
 
 typedef Arcadia_ForeignProcedure* Arcadia_ForeignProcedureValue;
 

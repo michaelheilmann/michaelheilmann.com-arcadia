@@ -33,7 +33,7 @@ Arcadia_DataDefinitionLanguage_Tree_Node_visit
 static const Arcadia_ObjectType_Operations _Arcadia_DataDefinitionLanguage_Tree_Node_objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Tree_Node_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_DataDefinitionLanguage_Tree_Node_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DataDefinitionLanguage_Tree_Node_visit,
 };
 
 static const Arcadia_Type_Operations _Arcadia_DataDefinitionLanguage_Tree_Node_typeOperations = {

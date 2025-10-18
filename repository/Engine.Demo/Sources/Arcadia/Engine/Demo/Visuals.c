@@ -147,15 +147,7 @@ Arcadia_Engine_Demo_startupVisuals
 {
   // (1) Register visuals backends.
   {
-#if Arcadia_Visuals_Implementation_Configuration_Direct3D12_Backend_Enabled
-  Arcadia_Set_add(thread, engine->visualBackendTypes, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_Direct3D12_Backend_getType(thread)), NULL);
-#endif
-#if Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled
-  Arcadia_Set_add(thread, engine->visualBackendTypes, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_OpenGL4_Backend_getType(thread)), NULL);
-#endif
-#if Arcadia_Visuals_Implementation_Configuration_Vulkan_Backend_Enabled
-  Arcadia_Set_add(thread, engine->visualBackendTypes, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_Vulkan_Backend_getType(thread)), NULL);
-#endif
+    Arcadia_Visuals_Implementation_registerBackends(thread, engine->visualBackendTypes);
   }
   // (2) Select visuals system.
   {
@@ -163,7 +155,7 @@ Arcadia_Engine_Demo_startupVisuals
       u8"visuals",
       u8"backend",
     };
-    Arcadia_Visuals_Backend* backend = NULL;
+    Arcadia_Engine_Backend* backend = NULL;
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
@@ -179,7 +171,7 @@ Arcadia_Engine_Demo_startupVisuals
         Arcadia_Thread_jump(thread);
       }
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      backend = (Arcadia_Visuals_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
+      backend = (Arcadia_Engine_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
@@ -196,16 +188,16 @@ Arcadia_Engine_Demo_startupVisuals
         Arcadia_Thread_jump(thread);
       }
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      backend = (Arcadia_Visuals_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
+      backend = (Arcadia_Engine_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
     }
-    Arcadia_Visuals_System* temporary = Arcadia_Visuals_System_createSystem(thread, backend);
+    Arcadia_Visuals_BackendContext* temporary = (Arcadia_Visuals_BackendContext*)Arcadia_Engine_Backend_createBackendContext(thread, backend);
     Arcadia_Object_lock(thread, (Arcadia_Object*)temporary);
-    engine->visualsSystem = (Arcadia_Engine_System*)temporary;
+    engine->visualsBackendContext = (Arcadia_Engine_BackendContext*)temporary;
   }
   // (3) Select display device (aka "monitor").
   {
-    Arcadia_List* displayDevices = Arcadia_Visuals_System_getDisplayDevices(thread, (Arcadia_Visuals_System*)engine->visualsSystem);
-    Arcadia_Visuals_Diagnostics_dumpDevices(thread, (Arcadia_Visuals_System*)engine->visualsSystem);
+    Arcadia_List* displayDevices = Arcadia_Visuals_BackendContext_getDisplayDevices(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+    Arcadia_Visuals_Diagnostics_dumpDevices(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
     Arcadia_Integer32Value displayDeviceIndex = 0;
     char const* path[] = {
       u8"visuals",
@@ -270,7 +262,7 @@ Arcadia_Engine_Demo_startupVisuals
   }
   // (5) Create and open a window, set its size and position according to the display device it is located on.
   {
-    Arcadia_Visuals_Window* window = Arcadia_Visuals_System_createWindow(thread, (Arcadia_Visuals_System*)engine->visualsSystem);
+    Arcadia_Visuals_Window* window = Arcadia_Visuals_BackendContext_createWindow(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
     Arcadia_Object_lock(thread, (Arcadia_Object*)window);
     Arcadia_Visuals_Window_open(thread, window);
     Arcadia_Integer32Value left, top, right, bottom;
@@ -366,14 +358,14 @@ Arcadia_Engine_Demo_startupVisuals
     Arcadia_Visuals_Window_getRequiredBigIconSize(thread, *pWindow, &width, &height);
     pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
     Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
-    icon = Arcadia_Visuals_System_createIcon(thread, (Arcadia_Visuals_System*)engine->visualsSystem, pixelBuffer);
+    icon = Arcadia_Visuals_BackendContext_createIcon(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext, pixelBuffer);
     Arcadia_Visuals_Window_setBigIcon(thread, *pWindow, icon);
 
     // Set the small icon.
     Arcadia_Visuals_Window_getRequiredSmallIconSize(thread, *pWindow, &width, &height);
     pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
     Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
-    icon = Arcadia_Visuals_System_createIcon(thread, (Arcadia_Visuals_System*)engine->visualsSystem, pixelBuffer);
+    icon = Arcadia_Visuals_BackendContext_createIcon(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext, pixelBuffer);
     Arcadia_Visuals_Window_setSmallIcon(thread, *pWindow, icon);
 
     // Set the title.

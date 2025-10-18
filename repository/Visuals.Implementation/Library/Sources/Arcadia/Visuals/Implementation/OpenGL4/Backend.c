@@ -21,15 +21,15 @@
   #define WIN32_LEAN_AND_MEAN
   #include <Windows.h>
 
-  #include <GL/GL.h>
+  #include <GL/glcorearb.h>
 
-  #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/System.h"
+  #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/BackendContext.h"
 
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
 
-  #include <GL/gl.h>
+  #include <GL/glcorearb.h>
 
-  #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/System.h"
+  #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/BackendContext.h"
 
 #else
 
@@ -37,22 +37,15 @@
 
 #endif
 
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Backend_openImpl
+static Arcadia_String*
+Arcadia_Visuals_Implementation_OpenGL4_Backend_getNameImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_Backend* self
   );
 
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Backend_closeImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Backend* self
-  );
-  
-static Arcadia_String*
-Arcadia_Visuals_Implementation_OpenGL4_Backend_getNameImpl
+static Arcadia_Visuals_BackendContext*
+Arcadia_Visuals_Implementation_OpenGL4_Backend_createBackendContextImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_Backend* self
@@ -71,7 +64,7 @@ Arcadia_Visuals_Implementation_OpenGL4_Backend_destruct
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_Backend* self
   );
-  
+
 static void
 Arcadia_Visuals_Implementation_OpenGL4_Backend_visit
   (
@@ -81,8 +74,8 @@ Arcadia_Visuals_Implementation_OpenGL4_Backend_visit
 
 static const Arcadia_ObjectType_Operations _Arcadia_Visuals_Implementation_OpenGL4_Backend_objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) &Arcadia_Visuals_Implementation_OpenGL4_Backend_construct,
-  .destruct = &Arcadia_Visuals_Implementation_OpenGL4_Backend_destruct,
-  .visit = &Arcadia_Visuals_Implementation_OpenGL4_Backend_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Backend_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Backend_visit,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Visuals_Implementation_OpenGL4_Backend_typeOperations = {
@@ -109,22 +102,6 @@ Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.Backend", Arc
                          u8"Arcadia.Visuals.Backend", Arcadia_Visuals_Backend,
                          &_Arcadia_Visuals_Implementation_OpenGL4_Backend_typeOperations);
 
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Backend_openImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Backend* self
-  )
-{/*Intentionally empty.*/}
-
-static void
-Arcadia_Visuals_Implementation_OpenGL4_Backend_closeImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_Backend* self
-  )
-{/*Intentionally empty.*/}
-  
 static Arcadia_String*
 Arcadia_Visuals_Implementation_OpenGL4_Backend_getNameImpl
   (
@@ -133,17 +110,17 @@ Arcadia_Visuals_Implementation_OpenGL4_Backend_getNameImpl
   )
 { return Arcadia_String_createFromCxxString(thread, u8"Arcadia Visuals OpenGL 4 Backend"); }
 
-static Arcadia_Visuals_System*
-Arcadia_Visuals_Implementation_OpenGL4_Backend_createSystemImpl
+static Arcadia_Visuals_BackendContext*
+Arcadia_Visuals_Implementation_OpenGL4_Backend_createBackendContextImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_Backend* self
   )
 {
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  return (Arcadia_Visuals_System*)Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getOrCreate(thread);
+  return (Arcadia_Visuals_BackendContext*)Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_getOrCreate(thread);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  return (Arcadia_Visuals_System*)Arcadia_Visuals_Implementation_OpenGL4_GLX_System_getOrCreate(thread);
+  return (Arcadia_Visuals_BackendContext*)Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getOrCreate(thread);
 #else
   #error("environment system not (yet) supported")
 #endif
@@ -167,10 +144,8 @@ Arcadia_Visuals_Implementation_OpenGL4_Backend_construct
   }
   Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
 
-  ((Arcadia_Visuals_Backend*)self)->open = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Backend*))& Arcadia_Visuals_Implementation_OpenGL4_Backend_openImpl;
-  ((Arcadia_Visuals_Backend*)self)->close = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Backend*))& Arcadia_Visuals_Implementation_OpenGL4_Backend_closeImpl;
-  ((Arcadia_Visuals_Backend*)self)->createSystem = (Arcadia_Visuals_System* (*)(Arcadia_Thread*, Arcadia_Visuals_Backend*))& Arcadia_Visuals_Implementation_OpenGL4_Backend_createSystemImpl;
-  ((Arcadia_Visuals_Backend*)self)->getName = (Arcadia_String *(*)(Arcadia_Thread*, Arcadia_Visuals_Backend*))&Arcadia_Visuals_Implementation_OpenGL4_Backend_getNameImpl;
+  ((Arcadia_Engine_Backend*)self)->createBackendContext = (Arcadia_Engine_BackendContext* (*)(Arcadia_Thread*, Arcadia_Engine_Backend*))& Arcadia_Visuals_Implementation_OpenGL4_Backend_createBackendContextImpl;
+  ((Arcadia_Engine_Backend*)self)->getName = (Arcadia_String *(*)(Arcadia_Thread*, Arcadia_Engine_Backend*))&Arcadia_Visuals_Implementation_OpenGL4_Backend_getNameImpl;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
@@ -190,11 +165,7 @@ Arcadia_Visuals_Implementation_OpenGL4_Backend_visit
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_Backend* self
   )
-{
-  if (self->factoryContext) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->factoryContext);
-  }
-}
+{/*Intentionally empty.*/}
 
 Arcadia_Visuals_Implementation_OpenGL4_Backend*
 Arcadia_Visuals_Implementation_OpenGL4_Backend_create

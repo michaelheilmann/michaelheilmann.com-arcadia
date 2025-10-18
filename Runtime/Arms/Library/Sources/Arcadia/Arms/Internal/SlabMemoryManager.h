@@ -18,12 +18,12 @@
 
 #include "Arcadia/Arms/Internal/MemoryManager.private.h"
 
-typedef struct Arms_SlabMemoryManager Arms_SlabMemoryManager;
+typedef struct Arcadia_Arms_SlabMemoryManager Arcadia_Arms_SlabMemoryManager;
 
-Arms_MemoryManagerStartupShutdown_Status
-Arms_SlabMemoryManager_create
+Arcadia_Arms_MemoryManagerStartupShutdown_Status
+Arcadia_Arms_SlabMemoryManager_create
   (
-    Arms_SlabMemoryManager** result
+    Arcadia_Arms_SlabMemoryManager** result
   );
 
 #endif // ARCADIA_ARMS_SLABMEMORYMANAGER_PRIVATE_H_INCLUDED

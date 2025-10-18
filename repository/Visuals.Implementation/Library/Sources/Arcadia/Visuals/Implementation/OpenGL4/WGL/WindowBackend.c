@@ -147,7 +147,7 @@ setPixelFormat
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* system
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext
   );
 
 static void
@@ -202,8 +202,8 @@ setSizeImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_constructImpl,
-  .destruct = &Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_destruct,
-  .visit = &Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -253,10 +253,10 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_destruct
     DeleteObject(self->windowHandle);
     self->windowHandle = NULL;
   }
-  Arcadia_List_filter(thread, ((Arcadia_Visuals_System*)self->system)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
-  if (NULL != self->system) {
-    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->system);
-    self->system = NULL;
+  Arcadia_List_filter(thread, ((Arcadia_Visuals_BackendContext*)self->backendContext)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
+  if (NULL != self->backendContext) {
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+    self->backendContext = NULL;
   }
 }
 
@@ -267,8 +267,8 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_visit
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self
   )
 {
-  if (self->system) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->system);
+  if (self->backendContext) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backendContext);
   }
   if (self->smallIcon) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->smallIcon);
@@ -299,14 +299,14 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->system = NULL;
+  self->backendContext = NULL;
   self->windowHandle = NULL;
   self->deviceContextHandle = NULL;
   self->bigIcon = NULL;
   self->smallIcon = NULL;
 
-  self->system = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_OpenGL4_WGL_System_getType(thread));
-  Arcadia_Object_lock(thread, (Arcadia_Object*)self->system);
+  self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_getType(thread));
+  Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
 
   ((Arcadia_Visuals_WindowBackend*)self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & openImpl;
   ((Arcadia_Visuals_WindowBackend*)self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & closeImpl;
@@ -358,18 +358,18 @@ openImpl
     self->windowHandle =
       CreateWindowEx
         (
-          dwExStyle,                     // extended window style
-          self->system->className,       // window class
-          u8"Arcadia Engine Window",     // window text
-          dwStyle,                       // window style
-          CW_USEDEFAULT,                 // left
-          CW_USEDEFAULT,                 // top
-          CW_USEDEFAULT,                 // width
-          CW_USEDEFAULT,                 // height
-          NULL,                          // parent window
-          NULL,                          // menu
-          self->system->instanceHandle,  // instance handle
-          NULL                           // additional application data
+          dwExStyle,                            // extended window style
+          self->backendContext->className,      // window class
+          u8"Arcadia Engine Window",            // window text
+          dwStyle,                              // window style
+          CW_USEDEFAULT,                        // left
+          CW_USEDEFAULT,                        // top
+          CW_USEDEFAULT,                        // width
+          CW_USEDEFAULT,                        // height
+          NULL,                                 // parent window
+          NULL,                                 // menu
+          self->backendContext->instanceHandle, // instance handle
+          NULL                                  // additional application data
         );
 
     if (!self->windowHandle) {
@@ -396,7 +396,7 @@ openImpl
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     _setWindowText(thread, self->windowHandle, ((Arcadia_Visuals_WindowBackend*)self)->title);
-    setPixelFormat(thread, self, self->system);
+    setPixelFormat(thread, self, self->backendContext);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -656,15 +656,15 @@ setPixelFormat
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* system
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext
   )
 {
   PIXELFORMATDESCRIPTOR pixelFormatDescriptors;
-  if (!DescribePixelFormat(self->deviceContextHandle, system->pixelFormatIndex, sizeof(pixelFormatDescriptors), &pixelFormatDescriptors)) {
+  if (!DescribePixelFormat(self->deviceContextHandle, backendContext->pixelFormatIndex, sizeof(pixelFormatDescriptors), &pixelFormatDescriptors)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  if (!SetPixelFormat(self->deviceContextHandle, system->pixelFormatIndex, &pixelFormatDescriptors)) {
+  if (!SetPixelFormat(self->deviceContextHandle, backendContext->pixelFormatIndex, &pixelFormatDescriptors)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -677,12 +677,11 @@ beginRenderImpl
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self
   )
 {
-  if (!wglMakeCurrent(self->deviceContextHandle, self->system->glResourceContextHandle)) {
+  if (!wglMakeCurrent(self->deviceContextHandle, self->backendContext->glResourceContextHandle)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Visuals_Implementation_OpenGL4_Context* context = Arcadia_Visuals_Implementation_OpenGL4_Context_create(thread);
-  Arcadia_Visuals_Implementation_OpenGL4_Context_render(thread, context, ((Arcadia_Visuals_WindowBackend*)self)->window);
+  Arcadia_Visuals_Implementation_OpenGL4_Context_render(thread, self->backendContext->context, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self->backendContext, ((Arcadia_Visuals_WindowBackend*)self)->window);
 }
 
 static void
@@ -692,7 +691,7 @@ endRenderImpl
     Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend* self
   )
 {
-  if (self->system->glResourceContextHandle == wglGetCurrentContext()) {
+  if (self->backendContext->glResourceContextHandle == wglGetCurrentContext()) {
     if (!SwapBuffers(self->deviceContextHandle)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
@@ -770,12 +769,12 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend*
 Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_System* system,
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext,
     Arcadia_Visuals_Windows_DisplayDevice* displayDevice
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  if (system) { Arcadia_ValueStack_pushObjectReferenceValue(thread, system); } else { Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);  }
+  if (backendContext) { Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); } else { Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);  }
   if (displayDevice) { Arcadia_ValueStack_pushObjectReferenceValue(thread, displayDevice); } else { Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void); }
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend);

@@ -2,8 +2,12 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_SYSTEMWINDOW_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-#define WIN32_LEAN_AND_MEAN
-#define NOCOMM
+#if !defined(WIN32_LEAN_AND_MEAN)
+  #define WIN32_LEAN_AND_MEAN
+#endif
+#if !defined(NOCOMM)
+  #define NOCOMM
+#endif
 #include <Windows.h>
 
 // The "system" window is kept around as long as the system exists.

@@ -13,12 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_CONFIGURE_H_INCLUDED)
-#define ARCADIA_VISUALS_CONFIGURE_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_CONFIGURE_H_INCLUDED)
+#define ARCADIA_ENGINE_CONFIGURE_H_INCLUDED
 
-#define Arcadia_Visuals_Configuration_Backend_None (@Arcadia.Visuals.Backend.None@)
-#define Arcadia_Visuals_Configuration_Backend_OpenGl (@Arcadia.Visuals.Backend.OpenGl@)
-
-#define Arcadia_Visuals_Configuration_Backend @Arcadia.Visuals.Backend@
-
-#endif // ARCADIA_VISUALS_CONFIGURE_H_INCLUDED
+#endif // ARCADIA_ENGINE_CONFIGURE_H_INCLUDED

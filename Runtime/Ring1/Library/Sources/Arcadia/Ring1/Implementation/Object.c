@@ -36,53 +36,66 @@ Arcadia_Object_constructImpl
 static void
 identical
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 hash
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 isNotEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
-static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+static const Arcadia_ObjectType_Operations _Arcadia_Object_objectTypeOperations = {
   .construct = &Arcadia_Object_constructImpl,
   .destruct = NULL,
   .visit = NULL,
 };
 
-static const Arcadia_Type_Operations _typeOperations = {
+static const Arcadia_Type_Operations _Arcadia_Object_typeOperations = {
   Arcadia_Type_Operations_Initializer,
-  .objectTypeOperations = &_objectTypeOperations,
+  .objectTypeOperations = &_Arcadia_Object_objectTypeOperations,
   .identical = &identical,
   .equalTo = &isEqualTo,
   .hash = &hash,
   .notEqualTo = &isNotEqualTo,
 };
+
+#define BINARY_OPERATION() \
+  if (Arcadia_ValueStack_getSize(thread) < 3) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  if (2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 2); \
+  Arcadia_Value y = Arcadia_ValueStack_getValue(thread, 1); \
+  Arcadia_ValueStack_popValues(thread, 3);
+
+#define UNARY_OPERATION() \
+  if (Arcadia_ValueStack_getSize(thread) < 2) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  if (1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1); \
+  Arcadia_ValueStack_popValues(thread, 2);
 
 void
 Arcadia_Object_constructImpl
@@ -103,75 +116,53 @@ Arcadia_Object_constructImpl
 static void
 identical
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (!Arcadia_Value_isObjectReferenceValue(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getObjectReferenceValue(A1) == Arcadia_Value_getObjectReferenceValue(A2));
+  BINARY_OPERATION();
+  if (!Arcadia_Value_isObjectReferenceValue(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getObjectReferenceValue(&x) == Arcadia_Value_getObjectReferenceValue(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
-#undef A2
-#undef A1
 }
 
 static void
 isEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (!Arcadia_Value_isObjectReferenceValue(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getObjectReferenceValue(A1) == Arcadia_Value_getObjectReferenceValue(A2));
+  BINARY_OPERATION();
+  if (!Arcadia_Value_isObjectReferenceValue(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getObjectReferenceValue(&x) == Arcadia_Value_getObjectReferenceValue(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
-#undef A2
-#undef A1
 }
 
 static void
 hash
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-  Arcadia_Value_setSizeValue(target, (Arcadia_SizeValue)(uintptr_t)Arcadia_Value_getObjectReferenceValue(A1));
-#undef A1
+  UNARY_OPERATION();
+  Arcadia_ValueStack_pushSizeValue(thread, (Arcadia_SizeValue)(uintptr_t)Arcadia_Value_getObjectReferenceValue(&x));
 }
 
 static void
 isNotEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (!Arcadia_Value_isObjectReferenceValue(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getObjectReferenceValue(A1) != Arcadia_Value_getObjectReferenceValue(A2));
+  BINARY_OPERATION();
+  if (!Arcadia_Value_isObjectReferenceValue(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getObjectReferenceValue(&x) != Arcadia_Value_getObjectReferenceValue(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
   }
-#undef A2
-#undef A1
 }
 
 #define ObjectTypeName u8"Arcadia.Object"
@@ -185,7 +176,7 @@ struct ObjectTag {
 static bool g_objectRegistered = false;
 
 static void
-onObjectTypeRemoved
+_Arcadia_Object_onObjectTypeRemoved
   (
     Arcadia_Process* process,
     uint8_t const* name,
@@ -193,21 +184,21 @@ onObjectTypeRemoved
   );
 
 static void
-onFinalizeObject
+_Arcadia_Object_onFinalizeObject
   (
     Arcadia_Process* process,
     void* object
   );
 
 static void
-onVisitObject
+_Arcadia_Object_onVisitObject
   (
     Arcadia_Process* process,
     void* object
   );
 
 static void
-onObjectTypeRemoved
+_Arcadia_Object_onObjectTypeRemoved
   (
     Arcadia_Process* process,
     const uint8_t* name,
@@ -218,7 +209,7 @@ onObjectTypeRemoved
 }
 
 static void
-onFinalizeObject
+_Arcadia_Object_onFinalizeObject
   (
     Arcadia_Process* process,
     void* object
@@ -244,7 +235,7 @@ onFinalizeObject
 }
 
 static void
-onVisitObject
+_Arcadia_Object_onVisitObject
   (
     Arcadia_Process* process,
     void* object
@@ -329,7 +320,7 @@ ARCADIA_CREATEOBJECT0
 static Arcadia_TypeValue g__Arcadia_Object_type = NULL;
 
 static void
-typeDestructing
+_Arcadia_Object_typeDestructing
   (
     void* context
   )
@@ -343,11 +334,12 @@ _Arcadia_Object_getType
 {
   if (!g_objectRegistered) {
     Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), ObjectTypeName, sizeof(ObjectTypeName) - 1, Arcadia_Thread_getProcess(thread),
-                                 &onObjectTypeRemoved, &onVisitObject, &onFinalizeObject);
+                                 &_Arcadia_Object_onObjectTypeRemoved, &_Arcadia_Object_onVisitObject, &_Arcadia_Object_onFinalizeObject);
     g_objectRegistered = Arcadia_BooleanValue_True;
   }
   if (!g__Arcadia_Object_type) {
-    g__Arcadia_Object_type = Arcadia_registerObjectType(thread, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(Arcadia_Object), NULL, &_typeOperations, &typeDestructing);
+    g__Arcadia_Object_type = Arcadia_registerObjectType(thread, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(Arcadia_Object), NULL,
+                                                        &_Arcadia_Object_typeOperations, &_Arcadia_Object_typeDestructing);
   }
   return g__Arcadia_Object_type;
 }
@@ -397,7 +389,7 @@ Arcadia_Object_addNotifyDestroyCallback
   )
 {
   ObjectTag* tag = ((ObjectTag*)self) - 1;
-  Arcadia_Status status = Arms_addNotifyDestroy(tag, observer, self, (void (*)(void*,void*))callback);
+  Arcadia_Status status = Arcadia_Arms_addNotifyDestroy(tag, observer, self, (void (*)(void*,void*))callback);
   if (status) {
     Arcadia_Thread_setStatus(thread, status);
     Arcadia_Thread_jump(thread);
@@ -414,7 +406,7 @@ Arcadia_Object_removeNotifyDestroyCallback
   )
 {
   ObjectTag* tag = ((ObjectTag*)self) - 1;
-  Arcadia_Status status = Arms_removeNotifyDestroy(tag, observer, self, (void (*)(void*, void*))callback);
+  Arcadia_Status status = Arcadia_Arms_removeNotifyDestroy(tag, observer, self, (void (*)(void*, void*))callback);
   if (status) {
     Arcadia_Thread_setStatus(thread, status);
     Arcadia_Thread_jump(thread);
@@ -434,7 +426,7 @@ Arcadia_Object_forwardBarrier
   if (source && target) {
     ObjectTag* sourceTag = ((ObjectTag*)source) - 1;
     ObjectTag* targetTag = ((ObjectTag*)target) - 1;
-    Arms_forwardBarrier(sourceTag, targetTag);
+    Arcadia_Arms_forwardBarrier(sourceTag, targetTag);
   }
 }
 
@@ -449,7 +441,7 @@ Arcadia_Object_backwardBarrier
   if (source && target) {
     ObjectTag* sourceTag = ((ObjectTag*)source) - 1;
     ObjectTag* targetTag = ((ObjectTag*)target) - 1;
-    Arms_backwardBarrier(sourceTag, targetTag);
+    Arcadia_Arms_backwardBarrier(sourceTag, targetTag);
   }
 }
 
@@ -506,13 +498,21 @@ Arcadia_Object_isEqualTo
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value resultValue;
-  Arcadia_Value args[2] = {
-    Arcadia_Value_makeObjectReferenceValue(self),
-    *other
-  };
-  operations->equalTo(thread, &resultValue, 2, &args[0]);
-  return Arcadia_Value_getBooleanValue(&resultValue);
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+
+  Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, &temporary);
+  Arcadia_ValueStack_pushValue(thread, other);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->equalTo(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_BooleanValue returnValue = Arcadia_ValueStack_getBooleanValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
+  return returnValue;
+  
 }
 
 Arcadia_BooleanValue
@@ -525,13 +525,20 @@ Arcadia_Object_isNotEqualTo
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value resultValue;
-  Arcadia_Value args[2] = {
-    Arcadia_Value_makeObjectReferenceValue(self),
-    *other
-  };
-  operations->notEqualTo(thread, &resultValue, 2, &args[0]);
-  return Arcadia_Value_getBooleanValue(&resultValue);
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+
+  Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, &temporary);
+  Arcadia_ValueStack_pushValue(thread, other);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->notEqualTo(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_BooleanValue returnValue = Arcadia_ValueStack_getBooleanValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
+  return returnValue;
 }
 
 Arcadia_SizeValue
@@ -543,12 +550,19 @@ Arcadia_Object_getHash
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value resultValue;
-  Arcadia_Value args[1] = {
-    Arcadia_Value_makeObjectReferenceValue(self),
-  };
-  operations->hash(thread, &resultValue, 1, &args[0]);
-  return Arcadia_Value_getSizeValue(&resultValue);
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+
+  Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, &temporary);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  operations->hash(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_SizeValue returnValue = Arcadia_ValueStack_getSizeValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
+  return returnValue;
 }
 
 Arcadia_BooleanValue
@@ -561,11 +575,18 @@ Arcadia_Object_isIdenticalTo
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value resultValue;
-  Arcadia_Value args[2] = {
-    Arcadia_Value_makeObjectReferenceValue(self),
-    *other,
-  };
-  operations->identical(thread, &resultValue, 2, &args[0]);
-  return Arcadia_Value_getBooleanValue(&resultValue);
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+
+  Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, &temporary);
+  Arcadia_ValueStack_pushValue(thread, other);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  operations->identical(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_BooleanValue returnValue = Arcadia_ValueStack_getBooleanValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
+  return returnValue;
 }

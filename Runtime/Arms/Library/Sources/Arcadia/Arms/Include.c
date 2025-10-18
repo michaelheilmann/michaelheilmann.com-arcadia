@@ -56,9 +56,9 @@ struct Arms_Type {
   uint8_t* name;
   size_t nameLength;
   void* context;
-  Arms_TypeRemovedCallbackFunction* typeRemoved;
-  Arms_VisitCallbackFunction* visit;
-  Arms_FinalizeCallbackFunction* finalize;
+  Arcadia_Arms_TypeRemovedCallbackFunction* typeRemoved;
+  Arcadia_Arms_VisitCallbackFunction* visit;
+  Arcadia_Arms_FinalizeCallbackFunction* finalize;
 };
 
 #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
@@ -86,11 +86,11 @@ static Arms_Lock* g_locks = NULL;
 
 #endif
 
-static Arms_DefaultMemoryManager* g_defaultMemoryManager = NULL;
-static Arms_SlabMemoryManager* g_slabMemoryManager = NULL;
+static Arcadia_Arms_DefaultMemoryManager* g_defaultMemoryManager = NULL;
+static Arcadia_Arms_SlabMemoryManager* g_slabMemoryManager = NULL;
 
 Arcadia_Arms_Status
-Arms_startup
+Arcadia_Arms_startup
   (
   )
 {
@@ -99,36 +99,36 @@ Arms_startup
     return Arcadia_Arms_Status_OperationInvalid;
   }
   if (!g_referenceCount) {
-    switch (Arms_DefaultMemoryManager_create(&g_defaultMemoryManager)) {
-      case Arms_MemoryManagerStartupShutdown_Status_AllocationFailed: {
+    switch (Arcadia_Arms_DefaultMemoryManager_create(&g_defaultMemoryManager)) {
+      case Arcadia_Arms_MemoryManagerStartupShutdown_Status_AllocationFailed: {
         return Arcadia_Arms_Status_AllocationFailed;
       } break;
-      case Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid: {
+      case Arcadia_Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid: {
         return Arcadia_Arms_Status_ArgumentValueInvalid;
       } break;
-      case Arms_MemoryManagerStartupShutdown_Status_Success: {
+      case Arcadia_Arms_MemoryManagerStartupShutdown_Status_Success: {
         /* Intentionally empty.*/
       } break;
       default: {
         return Arcadia_Arms_Status_EnvironmentFailed;
       } break;
     };
-    switch (Arms_SlabMemoryManager_create(&g_slabMemoryManager)) {
-      case Arms_MemoryManagerStartupShutdown_Status_AllocationFailed: {
-        Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+    switch (Arcadia_Arms_SlabMemoryManager_create(&g_slabMemoryManager)) {
+      case Arcadia_Arms_MemoryManagerStartupShutdown_Status_AllocationFailed: {
+        Arcadia_Arms_MemoryManager_destroy((Arcadia_Arms_MemoryManager*)g_defaultMemoryManager);
         g_defaultMemoryManager = NULL;
         return Arcadia_Arms_Status_AllocationFailed;
       } break;
-      case Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid: {
-        Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+      case Arcadia_Arms_MemoryManagerStartupShutdown_Status_ArgumentValueInvalid: {
+        Arcadia_Arms_MemoryManager_destroy((Arcadia_Arms_MemoryManager*)g_defaultMemoryManager);
         g_defaultMemoryManager = NULL;
         return Arcadia_Arms_Status_ArgumentValueInvalid;
       } break;
-      case Arms_MemoryManagerStartupShutdown_Status_Success: {
+      case Arcadia_Arms_MemoryManagerStartupShutdown_Status_Success: {
         /* Intentionally empty.*/
       } break;
       default: {
-        Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+        Arcadia_Arms_MemoryManager_destroy((Arcadia_Arms_MemoryManager*)g_defaultMemoryManager);
         g_defaultMemoryManager = NULL;
         return Arcadia_Arms_Status_EnvironmentFailed;
       } break;
@@ -144,10 +144,10 @@ Arms_startup
   #endif
 
   #if defined(Arcadia_Arms_Configuration_WithNotifyDestroy) && 1 == Arcadia_Arms_Configuration_WithNotifyDestroy
-    if (Arms_NotifyDestroyModule_startup()) {
-      Arms_MemoryManager_destroy((Arms_MemoryManager*)g_slabMemoryManager);
+    if (Arcadia_Arms_NotifyDestroyModule_startup()) {
+      Arcadia_Arms_MemoryManager_destroy((Arcadia_Arms_MemoryManager*)g_slabMemoryManager);
       g_slabMemoryManager = NULL;
-      Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+      Arcadia_Arms_MemoryManager_destroy((Arcadia_Arms_MemoryManager*)g_defaultMemoryManager);
       g_defaultMemoryManager = NULL;
       return Arcadia_Arms_Status_EnvironmentFailed;
     }
@@ -159,7 +159,7 @@ Arms_startup
 }
 
 Arcadia_Arms_Status
-Arms_shutdown
+Arcadia_Arms_shutdown
   (
   )
 {
@@ -178,7 +178,7 @@ Arms_shutdown
     }
   #endif
   #if defined(Arcadia_Arms_Configuration_WithNotifyDestroy) && 1 == Arcadia_Arms_Configuration_WithNotifyDestroy
-    Arms_NotifyDestroyModule_shutdown();
+    Arcadia_Arms_NotifyDestroyModule_shutdown();
   #endif
     while (g_types) {
       Arms_Type* type = g_types;
@@ -191,9 +191,9 @@ Arms_shutdown
       free(type);
       type = NULL;
     }
-    Arms_MemoryManager_destroy((Arms_MemoryManager*)g_slabMemoryManager);
+    Arcadia_Arms_MemoryManager_destroy((Arcadia_Arms_MemoryManager*)g_slabMemoryManager);
     g_slabMemoryManager = NULL;
-    Arms_MemoryManager_destroy((Arms_MemoryManager*)g_defaultMemoryManager);
+    Arcadia_Arms_MemoryManager_destroy((Arcadia_Arms_MemoryManager*)g_defaultMemoryManager);
     g_defaultMemoryManager = NULL;
   }
   g_referenceCount = referenceCount;
@@ -201,14 +201,14 @@ Arms_shutdown
 }
 
 Arcadia_Arms_Status
-Arms_addType
+Arcadia_Arms_addType
   (
     Arms_Natural8 const* name,
     Arcadia_Arms_Size nameLength,
     void* context,
-    Arms_TypeRemovedCallbackFunction* typeRemoved,
-    Arms_VisitCallbackFunction* visit,
-    Arms_FinalizeCallbackFunction* finalize
+    Arcadia_Arms_TypeRemovedCallbackFunction* typeRemoved,
+    Arcadia_Arms_VisitCallbackFunction* visit,
+    Arcadia_Arms_FinalizeCallbackFunction* finalize
   )
 {
   if (!name) {
@@ -249,7 +249,7 @@ Arms_addType
 }
 
 Arcadia_Arms_Status
-Arms_allocate
+Arcadia_Arms_allocate
   (
     void** pObject,
     Arms_Natural8 const* name,
@@ -287,15 +287,12 @@ Arms_allocate
 }
 
 Arcadia_Arms_Status
-Arms_run
+Arcadia_Arms_run
   (
-    Arms_RunStatistics* statistics
+    Arcadia_Arms_RunStatistics* statistics
   )
 {
-  size_t locked = 0;
-  size_t live = 0;
-  size_t dead = 0;
-  size_t destroyed = 0;
+  Arcadia_Arms_RunStatistics statistics0 = Arcadia_Arms_RunStatistics_StaticInitializer();
   // Premark phase:
   // Add all locked objects to the gray list.
   // Also remove locks with a lock count of 0.
@@ -304,8 +301,8 @@ Arms_run
   while (currentLock) {
     assert(NULL != currentLock->object);
     if (currentLock->count) {
-      Arms_visit(currentLock->object);
-      locked++;
+      Arcadia_Arms_visit(currentLock->object);
+      statistics0.locked++;
       previousLock = &currentLock->next;
       currentLock = currentLock->next;
     } else {
@@ -337,27 +334,27 @@ Arms_run
       *previousObject = currentObject->universeNext;
       currentObject = currentObject->universeNext;
     #if defined(Arcadia_Arms_Configuration_WithNotifyDestroy) && 1 == Arcadia_Arms_Configuration_WithNotifyDestroy
-      Arms_NotifyDestroyModule_notifyDestroy(deadObject + 1);
+      Arcadia_Arms_NotifyDestroyModule_notifyDestroy(deadObject + 1);
     #endif
       if (deadObject->type->finalize) {
         deadObject->type->finalize(deadObject->type->context, deadObject + 1);
+        statistics0.finalized++;
       }
-      dead++;
-      destroyed++;
+      statistics0.dead++;
       free(deadObject);
     } else {
       Arms_Tag_setWhite(currentObject);
-      live++;
+      statistics0.live++;
       previousObject = &currentObject->universeNext;
       currentObject = currentObject->universeNext;
     }
   }
-  statistics->destroyed = destroyed;
+  *statistics = statistics0;
   return Arcadia_Arms_Status_Success;
 }
 
 void
-Arms_visit
+Arcadia_Arms_visit
   (
     void* object
   )
@@ -377,7 +374,7 @@ Arms_visit
 #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
 
 Arcadia_Arms_Status
-Arms_lock
+Arcadia_Arms_lock
   (
     void* object
   )
@@ -404,7 +401,7 @@ Arms_lock
 }
 
 Arcadia_Arms_Status
-Arms_unlock
+Arcadia_Arms_unlock
   (
     void* object
   )
@@ -427,7 +424,7 @@ Arms_unlock
 #if defined(Arcadia_Arms_Configuration_WithBarriers) && 1 == Arcadia_Arms_Configuration_WithBarriers
 
 void
-Arms_forwardBarrier
+Arcadia_Arms_forwardBarrier
   (
     void* source,
     void* target
@@ -435,7 +432,7 @@ Arms_forwardBarrier
 { }
 
 void
-Arms_backwardBarrier
+Arcadia_Arms_backwardBarrier
   (
     void* source,
     void* target
@@ -444,14 +441,14 @@ Arms_backwardBarrier
 
 #endif // Arcadia_Arms_Configuration_WithBarriers
 
-Arms_MemoryManager*
-Arms_getDefaultMemoryManager
+Arcadia_Arms_MemoryManager*
+Arcadia_Arms_getDefaultMemoryManager
   (
   )
-{ return (Arms_MemoryManager*)g_defaultMemoryManager; }
+{ return (Arcadia_Arms_MemoryManager*)g_defaultMemoryManager; }
 
-Arms_MemoryManager*
-Arms_getSlabMemoryManager
+Arcadia_Arms_MemoryManager*
+Arcadia_Arms_getSlabMemoryManager
   (
   )
-{ return (Arms_MemoryManager*)g_slabMemoryManager; }
+{ return (Arcadia_Arms_MemoryManager*)g_slabMemoryManager; }

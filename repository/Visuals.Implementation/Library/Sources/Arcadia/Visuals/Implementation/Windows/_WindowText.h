@@ -2,8 +2,13 @@
 #define ARCADIA_VISUALS_WINDOWS__WINDOWTEXT_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-#define WIN32_LEAN_AND_MEAN
-#define NOCOMM
+
+#if !defined(WIN32_LEAN_AND_MEAN)
+  #define WIN32_LEAN_AND_MEAN
+#endif
+#if !defined(NOCOMM)
+  #define NOCOMM
+#endif
 #include <Windows.h>
 
 Arcadia_String*

@@ -46,8 +46,8 @@ Arcadia_Imaging_ImageWriterParameters_destruct
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_constructImpl,
-  .destruct = &Arcadia_Imaging_ImageWriterParameters_destruct,
-  .visit = &Arcadia_Imaging_ImageWriterParameters_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

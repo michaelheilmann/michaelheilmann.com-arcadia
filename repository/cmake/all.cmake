@@ -48,6 +48,7 @@ endif()
 # - ${target}.SourceFiles      List of C/C++ source files
 # - ${target}.HeaderFiles      List of C/C++ header files
 # - ${target}.AssetFiles       List of asset files
+# - ${target}.InlayFiles       List of inlay files
 # - ${target}.WorkingDirectory for tests and executables only: the working directory. Defaults to ${CMAKE_CURRENT_BINARY_DIR}.
 # - ${target}.Libaries         List of libraries
 # - ${target}.PrivateLibaries  List of libraries only visible from within ${target}
@@ -56,6 +57,7 @@ endif()
 macro(BeginProduct target type)
   set(${target}.SourceFiles "")
   set(${target}.HeaderFiles "")
+  set(${target}.InlayFiles "")
   set(${target}.ConfigurationTemplateFiles "")
   set(${target}.ConfigurationFiles "")
   set(${target}.AssetFiles "")
@@ -113,6 +115,9 @@ macro(EndProduct target)
       list(APPEND allFiles ${e})
     endforeach()
     foreach (e ${${target}.SourceFiles})
+      list(APPEND allFiles ${e})
+    endforeach()
+    foreach (e ${${target}.InlayFiles})
       list(APPEND allFiles ${e})
     endforeach()
     foreach (e ${${target}.ConfigurationTemplateFiles})

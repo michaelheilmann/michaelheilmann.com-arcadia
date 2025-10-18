@@ -17,14 +17,12 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_BACKEND_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-typedef struct Arcadia_Visuals_OpenGL4_WGL_FactoryContext Arcadia_Visuals_OpenGL4_WGL_FactoryContext;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.Backend", Arcadia_Visuals_Implementation_OpenGL4_Backend,
                           Arcadia_Visuals_Backend);
 
 struct Arcadia_Visuals_Implementation_OpenGL4_Backend {
   Arcadia_Visuals_Backend parent;
-  Arcadia_Visuals_OpenGL4_WGL_FactoryContext* factoryContext;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_Backend*

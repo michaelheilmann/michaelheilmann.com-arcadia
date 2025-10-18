@@ -22,118 +22,79 @@
 static void
 add
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 divide
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 equalTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 greaterThan
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 greaterThanOrEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 hash
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 identical
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 lowerThan
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 lowerThanOrEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 multiply
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 negate
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 notEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static void
 subtract
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -160,336 +121,287 @@ static const Arcadia_Type_Operations _typeOperations = {
   .subtract = &subtract,
 };
 
+#define BINARY_OPERATION() \
+  if (Arcadia_ValueStack_getSize(thread) < 3) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  if (2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 2); \
+  Arcadia_Value y = Arcadia_ValueStack_getValue(thread, 1); \
+  Arcadia_ValueStack_popValues(thread, 3);
+
+#define UNARY_OPERATION() \
+  if (Arcadia_ValueStack_getSize(thread) < 2) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  if (1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1); \
+  Arcadia_ValueStack_popValues(thread, 2);
+
 static void
 add
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setNatural16Value(target, Arcadia_Value_getNatural16Value(A1) + (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setNatural16Value(target, Arcadia_Value_getNatural16Value(A1) + Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setNatural32Value(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) + Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setNatural64Value(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) + Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushNatural16Value(thread, Arcadia_Value_getNatural16Value(&x) + (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushNatural16Value(thread, Arcadia_Value_getNatural16Value(&x) + Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushNatural32Value(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) + Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushNatural64Value(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) + Arcadia_Value_getNatural64Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 divide
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    if (Arcadia_Value_getNatural8Value(A2)) {
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    if (!Arcadia_Value_getNatural8Value(&y)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Value_setNatural16Value(target, Arcadia_Value_getNatural16Value(A1) / (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    if (Arcadia_Value_getNatural16Value(A2)) {
+    Arcadia_ValueStack_pushNatural16Value(thread, Arcadia_Value_getNatural16Value(&x) / (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    if (!Arcadia_Value_getNatural16Value(&y)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Value_setNatural16Value(target, Arcadia_Value_getNatural16Value(A1) / Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    if (Arcadia_Value_getNatural32Value(A2)) {
+    Arcadia_ValueStack_pushNatural16Value(thread, Arcadia_Value_getNatural16Value(&x) / Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    if (!Arcadia_Value_getNatural32Value(&y)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Value_setNatural32Value(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) / Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    if (Arcadia_Value_getNatural64Value(A2)) {
+    Arcadia_ValueStack_pushNatural32Value(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) / Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    if (!Arcadia_Value_getNatural64Value(&y)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_DivisionByZero);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Value_setNatural64Value(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) / Arcadia_Value_getNatural64Value(A2));
+    Arcadia_ValueStack_pushNatural64Value(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) / Arcadia_Value_getNatural64Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 equalTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) == (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) == Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) == Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) == Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) == (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) == Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) == Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) == Arcadia_Value_getNatural64Value(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
-#undef A2
-#undef A1
 }
 
 static void
 greaterThan
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) > (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) > Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) > Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) > Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) > (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) > Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) > Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) > Arcadia_Value_getNatural64Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 greaterThanOrEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) >= (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) >= Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) >= Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) >= Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) >= (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) >= Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) >= Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) >= Arcadia_Value_getNatural64Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 hash
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-  Arcadia_Value_setSizeValue(target, (Arcadia_SizeValue)Arcadia_Value_getNatural16Value(A1));
-#undef A1
+  UNARY_OPERATION();
+  Arcadia_ValueStack_pushSizeValue(thread, (Arcadia_SizeValue)Arcadia_Value_getNatural16Value(&x));
 }
 
 static void
 identical
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) == Arcadia_Value_getNatural16Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) == Arcadia_Value_getNatural16Value(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_False);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
-#undef A2
-#undef A1
 }
 
 static void
 lowerThan
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) < (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) < Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) < Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) < Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) < (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) < Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) < Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) < Arcadia_Value_getNatural64Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 lowerThanOrEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) <= (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) <= Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) <= Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) <= Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) <= (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) <= Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) <= Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) <= Arcadia_Value_getNatural64Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 multiply
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setNatural16Value(target, Arcadia_Value_getNatural16Value(A1) * (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setNatural16Value(target, Arcadia_Value_getNatural16Value(A1) * Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setNatural32Value(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) * Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setNatural64Value(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) * Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushNatural16Value(thread, Arcadia_Value_getNatural16Value(&x) * (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushNatural16Value(thread, Arcadia_Value_getNatural16Value(&x) * Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushNatural32Value(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) * Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushNatural64Value(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) * Arcadia_Value_getNatural64Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 static void
 negate
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-  Arcadia_Value_setNatural32Value(target, -Arcadia_Value_getNatural32Value(A1));
-#undef A1
+  UNARY_OPERATION();
+  Arcadia_ValueStack_pushNatural32Value(thread, -Arcadia_Value_getNatural32Value(&x));
 }
 
 static void
 notEqualTo
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) != (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, Arcadia_Value_getNatural16Value(A1) != Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) != Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setBooleanValue(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) != Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) != (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getNatural16Value(&x) != Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) != Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) != Arcadia_Value_getNatural64Value(&y));
   } else {
-    Arcadia_Value_setBooleanValue(target, Arcadia_BooleanValue_True);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
   }
-#undef A2
-#undef A1
 }
 
 static void
 subtract
   (
-    Arcadia_Thread* thread,
-    Arcadia_Value* target,
-    Arcadia_SizeValue numberOfArguments,
-    Arcadia_Value* arguments
+    Arcadia_Thread* thread
   )
 {
-#define A1 &(arguments[0])
-#define A2 &(arguments[1])
-  if (Arcadia_Value_isNatural8Value(A2)) {
-    Arcadia_Value_setNatural16Value(target, Arcadia_Value_getNatural16Value(A1) - (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(A2));
-  } else if (Arcadia_Value_isNatural16Value(A2)) {
-    Arcadia_Value_setNatural16Value(target, Arcadia_Value_getNatural16Value(A1) - Arcadia_Value_getNatural16Value(A2));
-  } else if (Arcadia_Value_isNatural32Value(A2)) {
-    Arcadia_Value_setNatural32Value(target, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(A1) - Arcadia_Value_getNatural32Value(A2));
-  } else if (Arcadia_Value_isNatural64Value(A2)) {
-    Arcadia_Value_setNatural64Value(target, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(A1) - Arcadia_Value_getNatural64Value(A2));
+  BINARY_OPERATION();
+  if (Arcadia_Value_isNatural8Value(&y)) {
+    Arcadia_ValueStack_pushNatural16Value(thread, Arcadia_Value_getNatural16Value(&x) - (Arcadia_Natural16Value)Arcadia_Value_getNatural8Value(&y));
+  } else if (Arcadia_Value_isNatural16Value(&y)) {
+    Arcadia_ValueStack_pushNatural16Value(thread, Arcadia_Value_getNatural16Value(&x) - Arcadia_Value_getNatural16Value(&y));
+  } else if (Arcadia_Value_isNatural32Value(&y)) {
+    Arcadia_ValueStack_pushNatural32Value(thread, (Arcadia_Natural32Value)Arcadia_Value_getNatural16Value(&x) - Arcadia_Value_getNatural32Value(&y));
+  } else if (Arcadia_Value_isNatural64Value(&y)) {
+    Arcadia_ValueStack_pushNatural64Value(thread, (Arcadia_Natural64Value)Arcadia_Value_getNatural16Value(&x) - Arcadia_Value_getNatural64Value(&y));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-#undef A2
-#undef A1
 }
 
 Arcadia_defineScalarType(Arcadia_Natural16, u8"Arcadia.Natural16", &_typeOperations);

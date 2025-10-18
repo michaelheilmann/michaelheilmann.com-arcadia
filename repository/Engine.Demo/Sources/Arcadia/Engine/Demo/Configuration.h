@@ -97,7 +97,7 @@ Cfg2_setSection
     char const* names[],
     Arcadia_SizeValue numberOfNames
   );
-  
+
 void
 Cfg_saveConfiguration
   (

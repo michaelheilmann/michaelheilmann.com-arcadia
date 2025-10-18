@@ -70,7 +70,7 @@ Arcadia_Utf8FileHandleWriter_writeStringImpl
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Utf8FileHandleWriter_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Utf8FileHandleWriter_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Utf8FileHandleWriter_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

@@ -27,10 +27,10 @@ main
     char **argv
   )
 {
-  if (Arms_startup()) {
+  if (Arcadia_Arms_startup()) {
     return EXIT_FAILURE;
   }
-  if (Arms_shutdown()) {
+  if (Arcadia_Arms_shutdown()) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

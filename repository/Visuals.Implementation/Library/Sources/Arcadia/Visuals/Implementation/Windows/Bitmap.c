@@ -31,7 +31,7 @@ Arcadia_Visuals_Windows_Bitmap_destruct
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Windows_Bitmap_constructImpl,
-  .destruct = &Arcadia_Visuals_Windows_Bitmap_destruct,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Windows_Bitmap_destruct,
   .visit = NULL,
 };
 

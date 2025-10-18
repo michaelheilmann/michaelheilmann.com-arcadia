@@ -217,26 +217,38 @@ evalInvoke
   }
   Arcadia_ForeignProcedure* p = Arcadia_Value_getForeignProcedureValue(&v);
   Arcadia_Value targetValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
-  Arcadia_SizeValue numberOfValues = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->arguments);
-  Arcadia_Value* argumentValues = malloc(sizeof(Arcadia_Value) * numberOfValues);
-  if (!argumentValues) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
-    Arcadia_Thread_jump(thread);
-  }
+  
+#if 0
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    for (Arcadia_SizeValue i = 0, n = numberOfValues; i < n; ++i) {
-      argumentValues[i] = Arcadia_List_getAt(thread, ast->arguments, i);
+#endif
+    Arcadia_SizeValue oldStackSize = Arcadia_ValueStack_getSize(thread);
+    Arcadia_SizeValue numberOfValues = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->arguments);
+    if (numberOfValues > Arcadia_Natural8Value_Maximum - 1) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+      Arcadia_Thread_jump(thread);
     }
-    (*p)(thread, &targetValue, numberOfValues, argumentValues);
+    for (Arcadia_SizeValue i = 0, n = numberOfValues; i < n; ++i) {
+      Arcadia_Value temporary = Arcadia_List_getAt(thread, ast->arguments, i);
+      Arcadia_ValueStack_pushValue(thread, &temporary);
+    }
+    Arcadia_ValueStack_pushNatural8Value(thread, numberOfValues);
+    (*p)(thread);
+    if (oldStackSize > Arcadia_ValueStack_getSize(thread) || (Arcadia_ValueStack_getSize(thread) - oldStackSize) != 1) {
+      Arcadia_ValueStack_popValues(thread, Arcadia_ValueStack_getSize(thread) - oldStackSize);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+      Arcadia_Thread_jump(thread);
+    }
+    targetValue = Arcadia_ValueStack_getValue(thread, 0);
+    Arcadia_ValueStack_popValues(thread, 1);
+#if 0
     Arcadia_Thread_popJumpTarget(thread);
-    free(argumentValues);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
-    free(argumentValues);
     Arcadia_Thread_jump(thread);
   }
+#endif
 
   Arcadia_String* string = NULL;
   if (Arcadia_Value_isInteger16Value(&targetValue)) {
@@ -457,9 +469,9 @@ FileContext_constructImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & FileContext_constructImpl,
-  .destruct = &FileContext_destruct,
-  .visit = &FileContext_visit,
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&FileContext_constructImpl,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&FileContext_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&FileContext_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

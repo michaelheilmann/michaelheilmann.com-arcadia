@@ -47,7 +47,7 @@ Arcadia_Engine_create
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Engine_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_Engine_visitImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -77,10 +77,10 @@ Arcadia_Engine_constructImpl
   }
 
   self->visualBackendTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
-  self->visualsSystem = NULL;
+  self->visualsBackendContext = NULL;
   
   self->audialsBackendTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
-  self->audialsSystem = NULL;
+  self->audialsBackendContext = NULL;
   
   self->events = (Arcadia_Deque*)Arcadia_ArrayDeque_create(thread);
 
@@ -100,14 +100,14 @@ Arcadia_Engine_visitImpl
   if (self->visualBackendTypes) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualBackendTypes);
   }
-  if (self->visualsSystem) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsSystem);  
+  if (self->visualsBackendContext) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsBackendContext);  
   }
   if (self->audialsBackendTypes) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsBackendTypes);
   }
-  if (self->audialsSystem) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsSystem);  
+  if (self->audialsBackendContext) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsBackendContext);  
   }
   if (self->events) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->events);

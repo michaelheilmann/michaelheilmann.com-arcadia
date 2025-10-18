@@ -24,13 +24,12 @@
 #include "Arcadia/Engine/Include.h"
 
 #include "Arcadia/Visuals/Backend.h"
+#include "Arcadia/Visuals/BackendContext.h"
 
 #include "Arcadia/Visuals/Configuration.h"
 #include "Arcadia/Visuals/Context.h"
 
 #include "Arcadia/Visuals/Diagnostics.h"
-
-#include "Arcadia/Visuals/System.h"
 
 #include "Arcadia/Visuals/Events/ApplicationQuitRequestedEvent.h"
 

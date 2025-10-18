@@ -37,7 +37,7 @@ Arcadia_MIL_AST_JumpInstructionNode_visit
 static const Arcadia_ObjectType_Operations _Arcadia_MIL_AST_JumpInstructionNode_objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_AST_JumpInstructionNode_constructImpl,
   .destruct = NULL,
-  .visit = &Arcadia_MIL_AST_JumpInstructionNode_visit,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_AST_JumpInstructionNode_visit,
 };
 
 static const Arcadia_Type_Operations _Arcadia_MIL_AST_JumpInstructionNode_typeOperations = {

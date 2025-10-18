@@ -257,7 +257,7 @@ Arcadia_Imaging_PixelBuffer_destruct
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_PixelBuffer_constructImpl,
-  .destruct = &Arcadia_Imaging_PixelBuffer_destruct,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Imaging_PixelBuffer_destruct,
   .visit = NULL,
 };
 

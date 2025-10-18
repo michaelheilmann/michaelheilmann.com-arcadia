@@ -1,0 +1,105 @@
+// The author of this software is Michael Heilmann (contact@@michaelheilmann.com).
+//
+// Copyright(c) 2024-2025 Michael Heilmann (contact@@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+#if !defined(ARCADIA_MATH_IMPLEMENTATION_COLOR@{numberOfComponents}@{componentSuffixUppercase}_H_INCLUDED)
+#define ARCADIA_MATH_IMPLEMENTATION_COLOR@{numberOfComponents}@{componentSuffixUppercase}_H_INCLUDED
+
+#include "Arcadia/Ring1/Include.h"
+
+Arcadia_declareObjectType(u8"Arcadia.Math.Color@{numberOfComponents}@{componentSuffix}", Arcadia_Math_Color@{numberOfComponents}@{componentSuffix},
+                          u8"Arcadia.Object");
+
+struct Arcadia_Math_Color@{numberOfComponents}@{componentSuffix} {
+  Arcadia_Object _parent;
+  @{componentType} components[@{numberOfComponents}];
+};
+
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}*
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_create
+  (
+    Arcadia_Thread* thread
+  );
+
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}*
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_createWithValues
+  (
+    Arcadia_Thread* thread,
+    @{componentType} const* values
+  );
+
+/// @@brief Assign the values of another color to this color.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this color.
+/// @@param other A pointer to the other color.
+/// @@remarks @@a self and @@a other may refer to the same object.
+/// @@post This vector was assigned the values of the other vector.
+void
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_assign
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* self,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* other
+  );
+
+/// @@brief Linearily interpolate between this color and another color and assign the result to this color.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this color.
+/// @@param other A pointer to the other color.
+/// @@param t The interpolation value.
+/// @@remarks @@a self and @@a other may refer to the same object.
+/// @@post This color was assigned the result.
+void
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_lerp
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* self,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* other,
+    @{componentType} t
+  );
+
+/// @@brief Compute the inversion of one color and assign the result to this color.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this color.
+/// @@param other A pointer to the other color.
+/// @@post This color was assigned the values of the inversion of the other color.
+/// @@remarks
+/// For colors with component values within the range of \f$[l,h]\f$ where \f$l < h\f$ denotes mininum intensity and \f$h\f$ denotes maximum intensity,
+/// the inverse \f$B\f$ of a color \f$A = (a_0, \ldots, a_{n-1})$ is given by \f$B = (h - a_0, \ldots, h - a_{n-1})\f$.
+void
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_invert
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* self,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* other
+  );
+
+/// @@brief Compute the sum of this color and another color and assign the result to this color.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this color.
+/// @@param other A pointer to the other color.
+/// @@remarks @@a self and @@a other may refer to the same object.
+/// @@post This color was assigned the result.
+/// @@remarks
+/// For colors with component values within the range of \f$[l,h]\f$ where \f$l < h\f$ denotes mininum intensity and \f$h\f$ denotes maximum intensity,
+/// the sum \f$C\f$ of a color \f$A = (a_0, \ldots, a_{n-1})$ and a color \f$B = (b_0, \ldots, b_{n-1})\f$ is given by \f$C = (\max(\min(a_0 + b_0, h), l), \ldots, \max(\min(a_{n-1} + b_{n-1}, h), l))\f$.
+void
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_add
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* self,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* other
+  );
+
+#endif // ARCADIA_MATH_IMPLEMENTATION_COLOR@{numberOfComponents}@{componentSuffixUppercase}_H_INCLUDED

@@ -97,7 +97,7 @@ startupArms
   (
   )
 {
-  Arcadia_Arms_Status status = Arms_startup();
+  Arcadia_Arms_Status status = Arcadia_Arms_startup();
   switch (status) {
     case Arcadia_Arms_Status_Success: {
       return Arcadia_Status_Success;
@@ -123,7 +123,7 @@ shutdownArms
   (
   )
 {
-  Arcadia_Arms_Status status = Arms_shutdown();
+  Arcadia_Arms_Status status = Arcadia_Arms_shutdown();
   switch (status) {
     case Arcadia_Arms_Status_Success: {
       return Arcadia_Status_Success;
@@ -216,9 +216,9 @@ Arcadia_Process_relinquish
   if (ReferenceCount_Minimum == --process->referenceCount) {
     shutdownModules(process);
     Arcadia_Thread_uninitialize(&process->thread);
-    Arms_MemoryManager_deallocate(Arms_getDefaultMemoryManager(), g_process);
+    Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getDefaultMemoryManager(), g_process);
     g_process = NULL;
-    if (Arms_shutdown()) {
+    if (Arcadia_Arms_shutdown()) {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
     }
   }
@@ -235,11 +235,11 @@ Arcadia_Process_get
     return Arcadia_ProcessStatus_ArgumentValueInvalid;
   }
   if (!g_process) {
-    if (Arms_startup()) {
+    if (Arcadia_Arms_startup()) {
       return Arcadia_ProcessStatus_EnvironmentFailed;
     }
-    if (Arms_MemoryManager_allocate(Arms_getDefaultMemoryManager(), &g_process, sizeof(Arcadia_Process))) {
-      if (Arms_shutdown()) {
+    if (Arcadia_Arms_MemoryManager_allocate(Arcadia_Arms_getDefaultMemoryManager(), &g_process, sizeof(Arcadia_Process))) {
+      if (Arcadia_Arms_shutdown()) {
         Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
       }
       return Arcadia_ProcessStatus_AllocationFailed;
@@ -258,9 +258,9 @@ Arcadia_Process_get
       Arcadia_Thread_popJumpTarget(&g_process->thread);
       shutdownModules(g_process);
       Arcadia_Thread_uninitialize(&g_process->thread);
-      Arms_MemoryManager_deallocate(Arms_getDefaultMemoryManager(), g_process);
+      Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getDefaultMemoryManager(), g_process);
       g_process = NULL;
-      if (Arms_shutdown()) {
+      if (Arcadia_Arms_shutdown()) {
         Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
       }
       return Arcadia_ProcessStatus_AllocationFailed;
@@ -284,7 +284,7 @@ Arcadia_Process_visitObject
   )
 {
   if (object) {
-    Arms_visit(object);
+    Arcadia_Arms_visit(object);
   }
 }
 
@@ -295,7 +295,7 @@ Arcadia_Process_lockObject
     void* object
   )
 {
-  Arcadia_Arms_Status status = Arms_lock(object);
+  Arcadia_Arms_Status status = Arcadia_Arms_lock(object);
   switch (status) {
     case Arcadia_Arms_Status_Success: {
       return Arcadia_Status_Success;
@@ -323,7 +323,7 @@ Arcadia_Process_unlockObject
     void* object
   )
 {
-  Arcadia_Arms_Status status = Arms_unlock(object);
+  Arcadia_Arms_Status status = Arcadia_Arms_unlock(object);
   switch (status) {
     case Arcadia_Arms_Status_Success: {
       return Arcadia_Status_Success;
@@ -350,8 +350,8 @@ Arcadia_Process_stepArms
     Arcadia_Process* process
   )
 {
-  Arms_RunStatistics statistics = { .destroyed = 0 };
-  Arcadia_Arms_Status status = Arms_run(&statistics);
+  Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+  Arcadia_Arms_Status status = Arcadia_Arms_run(&statistics);
   switch (status) {
     case Arcadia_Arms_Status_Success:
     { return Arcadia_Status_Success; }
@@ -378,14 +378,14 @@ Arcadia_Process_runArms
   )
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-  Arms_RunStatistics statistics = { .destroyed = 0 };
+  Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
   do {
     for (ArmsCallbackNode* node = process->armsCallbackNodes; NULL != node; node = node->next) {
       if (node->onPreMark) {
         node->onPreMark(thread, purgeCaches);
       }
     }
-    Arcadia_Arms_Status status = Arms_run(&statistics);
+    Arcadia_Arms_Status status = Arcadia_Arms_run(&statistics);
     switch (status) {
       case Arcadia_Arms_Status_Success:
       {/*Intentionally empty.*/ }
@@ -404,16 +404,16 @@ Arcadia_Process_runArms
     };
     for (ArmsCallbackNode* node = process->armsCallbackNodes; NULL != node; node = node->next) {
       if (node->onFinalize) {
-        size_t destroyed;
-        node->onFinalize(thread, &destroyed);
-        if (SIZE_MAX - destroyed < statistics.destroyed) {
-          statistics.destroyed = SIZE_MAX;
+        size_t finalized;
+        node->onFinalize(thread, &finalized);
+        if (SIZE_MAX - finalized < statistics.finalized) {
+          statistics.finalized = SIZE_MAX;
         } else {
-          statistics.destroyed += destroyed;
+          statistics.finalized += finalized;
         }
       }
     }
-  } while (statistics.destroyed > 0);
+  } while (statistics.finalized > 0);
   return Arcadia_Status_Success;
 }
 
@@ -540,7 +540,7 @@ Arcadia_Process_registerType
     void (*finalize)(void*, void*)
   )
 {
-  Arcadia_Arms_Status status = Arms_addType(name, nameLength, context, typeRemoved, visit, finalize);
+  Arcadia_Arms_Status status = Arcadia_Arms_addType(name, nameLength, context, typeRemoved, visit, finalize);
   if (status) {
     switch (status) {
       case Arcadia_Arms_Status_AllocationFailed: {
@@ -574,7 +574,7 @@ Arcadia_Process_allocate
   )
 {
   void* q = NULL;
-  Arcadia_Arms_Status status = Arms_allocate(&q, name, nameLength, size);
+  Arcadia_Arms_Status status = Arcadia_Arms_allocate(&q, name, nameLength, size);
   if (status) {
     switch (status) {
       case Arcadia_Arms_Status_AllocationFailed: {

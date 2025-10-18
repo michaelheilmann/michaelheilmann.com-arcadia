@@ -18,6 +18,41 @@
 #include "Arcadia/Ring2/Include.h"
 
 void
+Arcadia_Tests_Utf8_read2
+  (
+    Arcadia_Thread* thread
+  )
+{
+  // Test if the parser detects overlong UTF-8.
+  // https://datatracker.ietf.org/doc/html/rfc3629#page-5
+  Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_ByteBuffer_create(thread);
+  uint8_t sourceBytes[] = {
+    0xC1,
+    0xA1,
+  };
+  size_t numberOfSourceBytes = sizeof(sourceBytes) / sizeof(uint8_t);
+  for (uint8_t i = 0, n = numberOfSourceBytes; i < n; ++i) {
+    Arcadia_ByteBuffer_append_pn(thread, sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
+  }
+  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    while (Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
+      Arcadia_Utf8Reader_getCodePoint(thread, reader);
+      Arcadia_Utf8Reader_next(thread, reader);
+    }
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+    Arcadia_Thread_jump(thread);
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
+  }
+}
+
+
+void
 Arcadia_Tests_Utf8_read1
   (
     Arcadia_Thread* thread

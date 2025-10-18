@@ -27,7 +27,7 @@
 /// @code
 /// name ':'
 /// @endcode
-/// 
+///
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.LabelDefinitionStatementNode", Arcadia_MIL_AST_LabelDefinitionStatementNode,
                           u8"Arcadia.MIL.AST.DefinitionStatementNode");
 

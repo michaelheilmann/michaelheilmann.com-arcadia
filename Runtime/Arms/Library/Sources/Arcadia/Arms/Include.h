@@ -22,40 +22,44 @@
 #include "Arcadia/Arms/StatusType.h"
 #include "Arcadia/Arms/MemoryManager.h"
 
-/// Alias for
-#define Arms_SizeOf(x) sizeof(x)
-#define Arms_AlignOf(x) _Alignof(x)
-#define Arms_OffsetOf(x) offsetof(x)
+/// Alias for sizeof(expression).
+#define Arcadia_Arms_SizeOf(expression) sizeof(expression)
 
-typedef void (Arms_TypeRemovedCallbackFunction)(void* context, Arms_Natural8 const* name, Arcadia_Arms_Size nameLength);
+/// Alias for _Alignof(expression).
+#define Arcadia_Arms_AlignOf(expression) _Alignof(expression)
 
-typedef void (Arms_VisitCallbackFunction)(void* context, void* object);
+/// Alias for offsetof(expression).
+#define Arcadia_Arms_OffsetOf(expression) offsetof(expression)
 
-typedef void (Arms_FinalizeCallbackFunction)(void* context, void* object);
+typedef void (Arcadia_Arms_TypeRemovedCallbackFunction)(void* context, Arms_Natural8 const* name, Arcadia_Arms_Size nameLength);
+
+typedef void (Arcadia_Arms_VisitCallbackFunction)(void* context, void* object);
+
+typedef void (Arcadia_Arms_FinalizeCallbackFunction)(void* context, void* object);
 
 Arcadia_Arms_Status
-Arms_startup
+Arcadia_Arms_startup
   (
   );
 
 Arcadia_Arms_Status
-Arms_shutdown
+Arcadia_Arms_shutdown
   (
   );
 
 Arcadia_Arms_Status
-Arms_addType
+Arcadia_Arms_addType
   (
     Arms_Natural8 const* name,
     Arcadia_Arms_Size nameLength,
     void* context,
-    Arms_TypeRemovedCallbackFunction* typeRemoved,
-    Arms_VisitCallbackFunction* visit,
-    Arms_FinalizeCallbackFunction* finalize
+    Arcadia_Arms_TypeRemovedCallbackFunction* typeRemoved,
+    Arcadia_Arms_VisitCallbackFunction* visit,
+    Arcadia_Arms_FinalizeCallbackFunction* finalize
   );
 
 Arcadia_Arms_Status
-Arms_allocate
+Arcadia_Arms_allocate
   (
     void** pObject,
     Arms_Natural8 const* name,
@@ -63,53 +67,61 @@ Arms_allocate
     Arcadia_Arms_Size size
   );
 
-typedef struct Arms_RunStatistics {
-  /// The number of objects destroyed in this run.
-  Arcadia_Arms_Size destroyed;
-} Arms_RunStatistics;
+typedef struct Arcadia_Arms_RunStatistics {
+  /// The number of locked objects.
+  Arcadia_Arms_Size locked;
+  /// The number of dead objects.
+  Arcadia_Arms_Size dead;
+  /// The number of live objects.
+  Arcadia_Arms_Size live;
+  /// The number of finalized objects.
+  Arcadia_Arms_Size finalized;
+} Arcadia_Arms_RunStatistics;
+
+#define Arcadia_Arms_RunStatistics_StaticInitializer() { .locked = 0, .live = 0, .dead = 0, .finalized = 0 };
 
 Arcadia_Arms_Status
-Arms_run
+Arcadia_Arms_run
   (
-    Arms_RunStatistics* statistics
+    Arcadia_Arms_RunStatistics* statistics
   );
 
 void
-Arms_visit
+Arcadia_Arms_visit
   (
     void* object
   );
 
 #if defined(Arcadia_Arms_Configuration_WithNotifyDestroy) && 1 ==  Arcadia_Arms_Configuration_WithNotifyDestroy
 
-typedef void (Arms_NotifyDestroyCallback)(void* argument1, void *argument2);
+typedef void (Arcadia_Arms_NotifyDestroyCallback)(void* argument1, void *argument2);
 
 Arcadia_Arms_Status
-Arms_removeNotifyDestroyAll
+Arcadia_Arms_removeNotifyDestroyAll
   (
     void* observed
   );
 
 Arcadia_Arms_Status
-Arms_addNotifyDestroy
+Arcadia_Arms_addNotifyDestroy
   (
     void* observed,
     void* argument1,
     void* argument2,
-    Arms_NotifyDestroyCallback* callback
+    Arcadia_Arms_NotifyDestroyCallback* callback
   );
 
 Arcadia_Arms_Status
-Arms_removeNotifyDestroy
+Arcadia_Arms_removeNotifyDestroy
   (
     void* observed,
     void* argument1,
     void* argument2,
-    Arms_NotifyDestroyCallback* callback
+    Arcadia_Arms_NotifyDestroyCallback* callback
   );
 
 Arcadia_Arms_Status
-Arms_removeNotifyDestroyAll
+Arcadia_Arms_removeNotifyDestroyAll
   (
     void* observed
   );
@@ -121,7 +133,7 @@ Arms_removeNotifyDestroyAll
 // Ensures the invariant no black object may refer to a white object is preserved.
 // If source is black and target is white, then color target gray.
 void
-Arms_forwardBarrier
+Arcadia_Arms_forwardBarrier
   (
     void* source,
     void* target
@@ -130,7 +142,7 @@ Arms_forwardBarrier
 // Ensures the invariant no black object may refer to a white object is preserved.
 // If source is black and target is white, then color source gray.
 void
-Arms_backwardBarrier
+Arcadia_Arms_backwardBarrier
   (
     void* source,
     void* target
@@ -141,26 +153,26 @@ Arms_backwardBarrier
 #if defined(Arcadia_Arms_Configuration_WithLocks) && 1 == Arcadia_Arms_Configuration_WithLocks
 
 Arcadia_Arms_Status
-Arms_lock
+Arcadia_Arms_lock
   (
     void* object
   );
 
 Arcadia_Arms_Status
-Arms_unlock
+Arcadia_Arms_unlock
   (
     void* object
   );
 
 #endif // Arcadia_Arms_Configuration_WithLocks
 
-Arms_MemoryManager*
-Arms_getDefaultMemoryManager
+Arcadia_Arms_MemoryManager*
+Arcadia_Arms_getDefaultMemoryManager
   (
   );
 
-Arms_MemoryManager*
-Arms_getSlabMemoryManager
+Arcadia_Arms_MemoryManager*
+Arcadia_Arms_getSlabMemoryManager
   (
   );
 

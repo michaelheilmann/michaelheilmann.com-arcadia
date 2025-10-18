@@ -90,7 +90,7 @@ appendBytesInternal
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_StringBuffer_constructImpl,
-  .destruct = &Arcadia_StringBuffer_destruct,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_StringBuffer_destruct,
   .visit = NULL,
 };
 

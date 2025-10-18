@@ -29,6 +29,9 @@ main
   if (!Arcadia_Tests_safeExecute(&Arcadia_Tests_Utf8_read1)) {
     return EXIT_FAILURE;
   }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Tests_Utf8_read2)) {
+    return EXIT_FAILURE;
+  }
   if (!Arcadia_Tests_safeExecute(&Arcadia_Tests_Utf8_readWrite1)) {
     return EXIT_FAILURE;
   }

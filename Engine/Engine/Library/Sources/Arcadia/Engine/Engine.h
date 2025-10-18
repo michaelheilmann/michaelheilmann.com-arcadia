@@ -18,7 +18,7 @@
 
 #include "Arcadia/Ring2/Include.h"
 typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
-typedef struct Arcadia_Engine_System Arcadia_Engine_System;
+typedef struct Arcadia_Engine_BackendContext Arcadia_Engine_BackendContext;
 
 /// @code
 /// class Arcadia.Engine {
@@ -39,11 +39,11 @@ struct Arcadia_Engine {
   /// Set of Arcadia.Audials.Backend derived type objects.
   Arcadia_Set* audialsBackendTypes;
   
-  /// Pointer to the active visuals system if any, null otherwise.
-  Arcadia_Engine_System* visualsSystem;
+  /// Pointer to the active visuals backend context if any, null otherwise.
+  Arcadia_Engine_BackendContext* visualsBackendContext;
   
-  /// Pointer to the active audials system if any, null otherwise.
-  Arcadia_Engine_System* audialsSystem;
+  /// Pointer to the active audials backend context if any, null otherwise.
+  Arcadia_Engine_BackendContext* audialsBackendContext;
     
   /// @brief The event queue.
   Arcadia_Deque* events;

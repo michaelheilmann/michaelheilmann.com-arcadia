@@ -38,7 +38,7 @@ _getWindowText
   char* buffer = malloc(bufferSize);
   if (!buffer) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
-    Arcadia_Thread_jump(thread);   
+    Arcadia_Thread_jump(thread);
   }
   // Get the text INCLUDING the zero terminator.
   if (bufferSize > LPARAM_MAX) {

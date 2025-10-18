@@ -16,24 +16,17 @@
 #define ARCADIA_AUDIALS_IMPLEMENTATION_PRIVATE (1)
 #include "Arcadia/Audials/Implementation/OpenAL/Backend.h"
 
-#include "Arcadia/Audials/Implementation/OpenAL/System.h"
+#include "Arcadia/Audials/Implementation/OpenAL/BackendContext.h"
 
-static void
-Arcadia_Audials_Implementation_OpenAL_Backend_openImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_Backend* self
-  );
-
-static void
-Arcadia_Audials_Implementation_OpenAL_Backend_closeImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_Backend* self
-  );
-  
 static Arcadia_String*
 Arcadia_Audials_Implementation_OpenAL_Backend_getNameImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_Implementation_OpenAL_Backend* self
+  );
+
+static Arcadia_Audials_BackendContext*
+Arcadia_Audials_Implementation_OpenAL_Backend_createBackendContextImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Audials_Implementation_OpenAL_Backend* self
@@ -52,7 +45,7 @@ Arcadia_Audials_Implementation_OpenAL_Backend_destruct
     Arcadia_Thread* thread,
     Arcadia_Audials_Implementation_OpenAL_Backend* self
   );
-  
+
 static void
 Arcadia_Audials_Implementation_OpenAL_Backend_visit
   (
@@ -62,8 +55,8 @@ Arcadia_Audials_Implementation_OpenAL_Backend_visit
 
 static const Arcadia_ObjectType_Operations _Arcadia_Audials_Implementation_OpenAL_Backend_objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_Backend_construct,
-  .destruct = &Arcadia_Audials_Implementation_OpenAL_Backend_destruct,
-  .visit = &Arcadia_Audials_Implementation_OpenAL_Backend_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_Backend_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_Backend_visit,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Audials_Implementation_OpenAL_Backend_typeOperations = {
@@ -90,22 +83,6 @@ Arcadia_defineObjectType(u8"Arcadia.Audials.Implementation.OpenAL.Backend", Arca
                          u8"Arcadia.Audials.Backend", Arcadia_Audials_Backend,
                          &_Arcadia_Audials_Implementation_OpenAL_Backend_typeOperations);
 
-static void
-Arcadia_Audials_Implementation_OpenAL_Backend_openImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_Backend* self
-  )
-{/*Intentionally empty.*/}
-
-static void
-Arcadia_Audials_Implementation_OpenAL_Backend_closeImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_Backend* self
-  )
-{/*Intentionally empty.*/}
-  
 static Arcadia_String*
 Arcadia_Audials_Implementation_OpenAL_Backend_getNameImpl
   (
@@ -114,14 +91,14 @@ Arcadia_Audials_Implementation_OpenAL_Backend_getNameImpl
   )
 { return Arcadia_String_createFromCxxString(thread, u8"Arcadia Audials OpenAL Backend"); }
 
-static Arcadia_Audials_System*
-Arcadia_Audials_Implementation_OpenAL_Backend_createSystemImpl
+static Arcadia_Audials_BackendContext*
+Arcadia_Audials_Implementation_OpenAL_Backend_createBackendContextImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Audials_Implementation_OpenAL_Backend* self
   )
 {
-  return (Arcadia_Audials_System*)Arcadia_Audials_Implementation_OpenAL_System_getOrCreate(thread);
+  return (Arcadia_Audials_BackendContext*)Arcadia_Audials_Implementation_OpenAL_BackendContext_getOrCreate(thread);
 }
 
 static void
@@ -142,10 +119,8 @@ Arcadia_Audials_Implementation_OpenAL_Backend_construct
   }
   Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
 
-  ((Arcadia_Audials_Backend*)self)->open = (void (*)(Arcadia_Thread*, Arcadia_Audials_Backend*))& Arcadia_Audials_Implementation_OpenAL_Backend_openImpl;
-  ((Arcadia_Audials_Backend*)self)->close = (void (*)(Arcadia_Thread*, Arcadia_Audials_Backend*))&Arcadia_Audials_Implementation_OpenAL_Backend_closeImpl;
-  ((Arcadia_Audials_Backend*)self)->createSystem = (Arcadia_Audials_System* (*)(Arcadia_Thread*, Arcadia_Audials_Backend*))&Arcadia_Audials_Implementation_OpenAL_Backend_createSystemImpl;
-  ((Arcadia_Audials_Backend*)self)->getName = (Arcadia_String *(*)(Arcadia_Thread*, Arcadia_Audials_Backend*)) & Arcadia_Audials_Implementation_OpenAL_Backend_getNameImpl;
+  ((Arcadia_Engine_Backend*)self)->createBackendContext = (Arcadia_Engine_BackendContext* (*)(Arcadia_Thread*, Arcadia_Engine_Backend*))&Arcadia_Audials_Implementation_OpenAL_Backend_createBackendContextImpl;
+  ((Arcadia_Engine_Backend*)self)->getName = (Arcadia_String *(*)(Arcadia_Thread*, Arcadia_Engine_Backend*)) & Arcadia_Audials_Implementation_OpenAL_Backend_getNameImpl;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);

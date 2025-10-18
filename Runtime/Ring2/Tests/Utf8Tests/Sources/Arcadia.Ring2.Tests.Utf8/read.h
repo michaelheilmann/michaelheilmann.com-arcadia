@@ -18,6 +18,12 @@
 
 #include "Arcadia/Ring2/Include.h"
 
+void
+Arcadia_Tests_Utf8_read2
+  (
+    Arcadia_Thread* thread
+  );
+
 /// @brief
 /// Let x := [x1, ..., xn] be a sequence of pairs such that x[i] is a pair (a_i, b_i) with a_i being a valid UTF-8 Byte sequence and b_i being a sequence of
 /// Unicode code points corresponding to a_i.

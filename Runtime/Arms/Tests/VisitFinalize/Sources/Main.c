@@ -58,7 +58,7 @@ Message_visit
   )
 {
   if (object->sender) {
-    Arms_visit(object->sender);
+    Arcadia_Arms_visit(object->sender);
   }
 }
 
@@ -83,51 +83,51 @@ main
     char **argv
   )
 {
-  if (Arms_startup()) {
+  if (Arcadia_Arms_startup()) {
     return EXIT_FAILURE;
   }
-  if (Arms_addType("Sender", strlen("Sender"), NULL, NULL, (Arms_VisitCallbackFunction*)&Sender_visit, (Arms_FinalizeCallbackFunction*)&Sender_finalize)) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
+  if (Arcadia_Arms_addType("Sender", strlen("Sender"), NULL, NULL, (Arcadia_Arms_VisitCallbackFunction*)&Sender_visit, (Arcadia_Arms_FinalizeCallbackFunction*)&Sender_finalize)) {
+    Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+    Arcadia_Arms_run(&statistics);
+    Arcadia_Arms_shutdown();
     return EXIT_FAILURE;
   }
-  if (Arms_addType("Message", strlen("Message"), NULL, NULL, (Arms_VisitCallbackFunction*) & Message_visit, (Arms_FinalizeCallbackFunction*) & Message_finalize)) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
+  if (Arcadia_Arms_addType("Message", strlen("Message"), NULL, NULL, (Arcadia_Arms_VisitCallbackFunction*) & Message_visit, (Arcadia_Arms_FinalizeCallbackFunction*) & Message_finalize)) {
+    Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+    Arcadia_Arms_run(&statistics);
+    Arcadia_Arms_shutdown();
     return EXIT_FAILURE;
   }
   Sender* sender = NULL;
-  if (Arms_allocate(&sender, "Sender", strlen("Sender"), sizeof(Sender))) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
+  if (Arcadia_Arms_allocate(&sender, "Sender", strlen("Sender"), sizeof(Sender))) {
+    Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+    Arcadia_Arms_run(&statistics);
+    Arcadia_Arms_shutdown();
     return EXIT_FAILURE;
   }
   sender->name = NULL;
   Message* message = NULL;
-  if (Arms_allocate(&message, "Message", strlen("Message"), sizeof(Message))) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
+  if (Arcadia_Arms_allocate(&message, "Message", strlen("Message"), sizeof(Message))) {
+    Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+    Arcadia_Arms_run(&statistics);
+    Arcadia_Arms_shutdown();
     return EXIT_FAILURE;
   }
   message->text = NULL;
   message->sender = NULL;
   message->text = strdup("Hello, World!\n");
   if (!message->text) {
-    Arms_RunStatistics statistics = { .destroyed = 0 };
-    Arms_run(&statistics);
-    Arms_shutdown();
+    Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+    Arcadia_Arms_run(&statistics);
+    Arcadia_Arms_shutdown();
     return EXIT_FAILURE;
   }
   message->sender = sender;
-  Arms_lock(message);
-  Arms_RunStatistics statistics = { .destroyed = 0 };
-  Arms_run(&statistics);
-  Arms_unlock(message);
-  Arms_run(&statistics);
-  Arms_shutdown();
+  Arcadia_Arms_lock(message);
+  Arcadia_Arms_RunStatistics statistics = Arcadia_Arms_RunStatistics_StaticInitializer();
+  Arcadia_Arms_run(&statistics);
+  Arcadia_Arms_unlock(message);
+  Arcadia_Arms_run(&statistics);
+  Arcadia_Arms_shutdown();
   return EXIT_SUCCESS;
 }

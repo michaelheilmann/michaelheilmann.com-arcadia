@@ -17,55 +17,15 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_CONTEXT_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Math/Include.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"
+typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Visuals_Implementation_OpenGL4_BackendContext;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.Context", Arcadia_Visuals_Implementation_OpenGL4_Context,
                           Arcadia_Visuals_Context);
 
 struct Arcadia_Visuals_Implementation_OpenGL4_Context {
   Arcadia_Visuals_Context parent;
-
-  // Default is 1.
-  Arcadia_Real32Value clearDepth;
-
-  struct {
-    // Default is 193.
-    Arcadia_Natural8Value red;
-    // Default is 216.
-    Arcadia_Natural8Value green;
-    // Default is 195.
-    Arcadia_Natural8Value blue;
-    // Default is 255.
-    Arcadia_Natural8Value alpha;
-  } clearColor;
-
-  struct {
-
-    // Default is 0.
-    Arcadia_Real32Value left;
-    // Default is 0.
-    Arcadia_Real32Value bottom;
-    // Default is 1.
-    Arcadia_Real32Value right;
-    // Default is 1.
-    Arcadia_Real32Value top;
-
-  } viewport;
-
-  // If this context is attached to a render target.
-  // Default is Arcadia_BooleanValue_False.
-  Arcadia_BooleanValue hasRenderTarget;
-
-  struct {
-
-    // If attached, the width of the render target.
-    // Default is 320.
-    Arcadia_Natural32Value width;
-
-    // If attached, the height of the render target.
-    // Default is 240.
-    Arcadia_Natural32Value height;
-
-  } renderTargetSize;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_Context*
@@ -79,7 +39,17 @@ Arcadia_Visuals_Implementation_OpenGL4_Context_render
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_Context* self,
+    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
     Arcadia_Visuals_Window* window
+  );
+
+// "invalidate" all resources in the context.
+// Effectively, this iterates over all resources and set the OpenGL resource IDs of each object to 0
+void
+Arcadia_Visuals_Implementation_OpenGL4_Context_invalidateAll
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_Context* self
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_CONTEXT_H_INCLUDED

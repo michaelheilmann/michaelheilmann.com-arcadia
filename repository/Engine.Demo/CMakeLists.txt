@@ -20,7 +20,7 @@ set(MyDemoName ${MyProjectName}.Engine.Demo)
 if (NOT TARGET ${MyDemoName})
   #message(STATUS "${MyDemoName}: ${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled = ${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled}")
   set(${MyDemoName}.Enabled FALSE)
-  
+
   # This demo requires at least one rendering backend.
   if (${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled})
     set(${MyDemoName}.Enabled TRUE)
@@ -31,7 +31,7 @@ if (NOT TARGET ${MyDemoName})
   if (${${MyProjectName}.Visuals.Implementation.Vulkan.Enabled})
     set(${MyDemoName}.Enabled TRUE)
   endif()
-  
+
   if (${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled})
 	BeginProduct(${MyDemoName} executable)
 
@@ -40,15 +40,15 @@ if (NOT TARGET ${MyDemoName})
   list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Engine/Demo/Configure.h)
 
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Main.c)
-    
+
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Audials.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Audials.h)  
+  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Audials.h)
 
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Visuals.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Visuals.h)  
+  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Visuals.h)
 
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.h)   
+  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.h)
 
   list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.Audials.Implementation ${MyProjectName}.Visuals.Implementation)
 
