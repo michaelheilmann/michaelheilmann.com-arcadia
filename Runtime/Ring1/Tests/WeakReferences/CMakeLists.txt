@@ -22,7 +22,7 @@ BeginProduct(${MyTestName} test)
 
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.WeakReferences/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1 ${MyProjectName}.ARMS)
 
 EndProduct(${MyTestName})
 

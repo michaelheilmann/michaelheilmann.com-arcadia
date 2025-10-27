@@ -38,6 +38,12 @@ typedef struct Arcadia_ObjectType_Operations {
   Arcadia_Object_VisitCallbackFunction* visit;
 } Arcadia_ObjectType_Operations;
 
+#define Arcadia_ObjectType_Operations_Initializer \
+  .construct = NULL, \
+  .destruct = NULL, \
+  .visit = NULL
+
+
 /// Type operations for all types.
 typedef struct Arcadia_Type_Operations {
   /// Pointer to the object type operations if the type is an object type.

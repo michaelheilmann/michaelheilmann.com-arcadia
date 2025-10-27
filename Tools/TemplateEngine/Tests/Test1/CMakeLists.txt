@@ -29,7 +29,7 @@ list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.Test1/Main.c)
 
 # Libraries.
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.ARMS)
 
 EndProduct(${MyTestName})
 # Copy assets.

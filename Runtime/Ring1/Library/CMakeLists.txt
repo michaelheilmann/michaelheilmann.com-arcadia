@@ -385,7 +385,7 @@ if (NOT TARGET ${MyLibraryName})
   list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Network/SocketType.c)
   list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Network/SocketType.h)
   
-  list(APPEND ${MyLibraryName}.Libraries Arcadia.Arms)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.ARMS)
 
   if (${${MyLibraryName}.Compiler.Masm} STREQUAL ${${MyLibraryName}.Compiler.Masm.Ms})
 	  if (${${MyLibraryName}.InstructionSetArchitecture} STREQUAL ${${MyLibraryName}.InstructionSetArchitecture.X64})

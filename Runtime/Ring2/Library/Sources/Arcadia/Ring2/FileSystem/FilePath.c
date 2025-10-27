@@ -683,7 +683,11 @@ Arcadia_FilePath_toGeneric
   Arcadia_Utf8Writer* temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, temporaryBuffer);
   Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames);
   if (self->root) {
+    Arcadia_Utf8Writer_writeBytes(thread, temporary, u8"/", sizeof(u8"/") - 1);
     Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, self->root), Arcadia_String_getNumberOfBytes(thread, self->root));
+    if (n > 0) {
+      Arcadia_Utf8Writer_writeBytes(thread, temporary, u8"/", sizeof(u8"/") - 1);
+    }
   }
   if (n > 0) {
     Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, 0);

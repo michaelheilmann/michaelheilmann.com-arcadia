@@ -29,7 +29,7 @@ struct Arcadia_Arms_MemoryManager {
   Arcadia_Arms_MemoryManager_Status (*allocate)(Arcadia_Arms_MemoryManager* self, void** p, size_t n);
   Arcadia_Arms_MemoryManager_Status (*reallocate)(Arcadia_Arms_MemoryManager* self, void** p, size_t n);
   Arcadia_Arms_MemoryManager_Status (*deallocate)(Arcadia_Arms_MemoryManager* self, void* p);
-  Arcadia_Arms_MemoryManager_Status (*destroy)(Arcadia_Arms_MemoryManager* self);
+  Arcadia_Arms_MemoryManagerStartupShutdown_Status(*destroy)(Arcadia_Arms_MemoryManager* self);
 };
 
 Arcadia_Arms_MemoryManagerStartupShutdown_Status

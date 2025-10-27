@@ -22,7 +22,7 @@ BeginProduct(${MyDemoName} executable)
 
 list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
-list(APPEND ${MyDemoName}.Libraries ${MyProjectName}.Ring2 ${MyProjectName}.Arms)
+list(APPEND ${MyDemoName}.Libraries ${MyProjectName}.Ring2 ${MyProjectName}.ARMS)
 
 EndProduct(${MyDemoName})
 

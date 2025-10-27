@@ -17,6 +17,7 @@
 #include "Arcadia/Ring2/Collections/HashSet.h"
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Collections/List.h"
 
 static Arcadia_BooleanValue g_initialized = Arcadia_BooleanValue_False;
 
@@ -83,6 +84,14 @@ Arcadia_HashSet_isImmutableImpl
   (
     Arcadia_Thread* thread,
     Arcadia_HashSet* self
+  );
+
+static void
+Arcadia_HashSet_getAllImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_HashSet* self,
+    Arcadia_List* target
   );
 
 static void
@@ -268,6 +277,7 @@ Arcadia_HashSet_constructImpl
   ((Arcadia_Collection*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_clearImpl;
   ((Arcadia_Collection*)self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_getSizeImpl;
   ((Arcadia_Collection*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashSet_isImmutableImpl;
+  ((Arcadia_Set*)self)->getAll = (void(*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_List*)) & Arcadia_HashSet_getAllImpl;
   ((Arcadia_Set*)self)->add = (void (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value, Arcadia_Value*)) &Arcadia_HashSet_addImpl;
   ((Arcadia_Set*)self)->contains = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value)) &Arcadia_HashSet_containsImpl;
   ((Arcadia_Set*)self)->get = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_Set*, Arcadia_Value)) &Arcadia_HashSet_getImpl;
@@ -311,6 +321,21 @@ Arcadia_HashSet_isImmutableImpl
     Arcadia_HashSet* self
   )
 { return Arcadia_BooleanValue_False; }
+
+static void
+Arcadia_HashSet_getAllImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_HashSet* self,
+    Arcadia_List* target
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    for (_Arcadia_HashSet_Node* node = self->buckets[i]; NULL != node; node = node->next) {
+      Arcadia_List_insertBack(thread, target, node->value);
+    }
+  }
+}
 
 static void
 Arcadia_HashSet_addImpl

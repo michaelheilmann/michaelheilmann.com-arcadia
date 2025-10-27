@@ -101,3 +101,12 @@ Arcadia_Set_remove
     Arcadia_Value* oldValue
   )
 { self->remove(thread, self, value, oldValue); }
+
+void
+Arcadia_Set_getAll
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Set* self,
+    Arcadia_List* target
+  )
+{ self->getAll(thread, self, target); }

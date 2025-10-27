@@ -23,7 +23,8 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.VertexBufferResource
 
 struct Arcadia_Visuals_Implementation_VertexBufferResource {
   Arcadia_Visuals_Implementation_Resource _parent;
-  void (*setData)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self, const void* bytes, Arcadia_SizeValue numberOfBytes);
+  void (*setData)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self, Arcadia_SizeValue numberOfVertices, const void* bytes, Arcadia_SizeValue numberOfBytes);
+  Arcadia_SizeValue (*getNumberOVertices)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self);
 };
 
 void
@@ -31,8 +32,16 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setData
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self,
+    Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
+  );
+
+Arcadia_SizeValue
+Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVertices
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_VertexBufferResource* self
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_VERTEXBUFFERRESOURCE_H_INCLUDED

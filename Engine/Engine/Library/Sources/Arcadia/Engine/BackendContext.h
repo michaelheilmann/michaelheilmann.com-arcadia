@@ -16,6 +16,9 @@
 #if !defined(ARCADIA_ENGINE_BACKENDCONTEXT_H_INCLUDED)
 #define ARCADIA_ENGINE_BACKENDCONTEXT_H_INCLUDED
 
+#if !defined(ARCADIA_ENGINE_PRIVATE) || 1 != ARCADIA_ENGINE_PRIVATE
+  #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
+#endif
 #include "Arcadia/Ring2/Include.h"
 
 /// @brief

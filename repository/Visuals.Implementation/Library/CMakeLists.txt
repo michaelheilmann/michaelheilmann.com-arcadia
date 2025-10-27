@@ -237,7 +237,7 @@ if (NOT TARGET ${MyModule})
   endif()
 
   list(APPEND ${MyModule}.Libraries ${MyProjectName}.Visuals ${MyProjectName}.Imaging)
-  list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.Math ${MyProjectName}.Ring2 ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.Arms)
+  list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.Math ${MyProjectName}.Ring2 ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.ARMS)
 
   EndProduct(${MyModule})
 

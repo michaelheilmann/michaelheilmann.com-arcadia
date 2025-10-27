@@ -28,7 +28,7 @@ if (NOT TARGET ${MyTestName})
 
   list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SyntacticalAnalysis/Main.c)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.Arms)
+  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.ARMS)
 
   EndProduct(${MyTestName})
   target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)

@@ -207,6 +207,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
       return;
     }
     // (3) link program
+    while (gl->glGetError()) { }
     gl->glLinkProgram(self->id);
     GLint success = GL_FALSE;
     gl->glGetProgramiv(self->id, GL_LINK_STATUS, &success);

@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTest ${MyProjectName}.Arms.Tests.NotifyDestroyTest)
+set(MyTest ${MyProjectName}.ARMS.Tests.NotifyDestroyTest)
 
 # Create test executable.
 BeginProduct(${MyTest} test)
 
 list(APPEND ${MyTest}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
-list(APPEND ${MyTest}.Libraries ${MyProjectName}.Arms)
+list(APPEND ${MyTest}.Libraries ${MyProjectName}.ARMS)
 
 EndProduct(${MyTest})
 
-set_target_properties(${MyTest} PROPERTIES FOLDER "Arms")
+set_target_properties(${MyTest} PROPERTIES FOLDER "ARMS")

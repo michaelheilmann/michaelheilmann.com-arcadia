@@ -23,7 +23,7 @@ BeginProduct(${MyTestName} test)
 
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
-list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
+list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Machine ${MyProjectName}.ARMS)
 
 EndProduct(${MyTestName})
 set_target_properties(${MyTestName} PROPERTIES FOLDER ${MyTestFolder})

@@ -60,11 +60,19 @@ Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_renderImpl
     Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* self
   );
 
+static Arcadia_SizeValue
+Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_getNumberOfVerticesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* self
+  );
+
 static void
 Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_setDataImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* self,
+    Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
   );
@@ -101,10 +109,11 @@ Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_constructImpl
     Arcadia_Value t;
     t = Arcadia_ValueStack_getValue(thread, 1);
     Arcadia_ValueStack_pushValue(thread, &t);
-    t = Arcadia_ValueStack_getValue(thread, 1);
-    Arcadia_ValueStack_pushValue(thread, &t);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
+
+  self->numberOfVertices = 0;
 
   self->bytes = NULL;
   self->numberOfBytes = 0;
@@ -120,7 +129,8 @@ Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_constructImpl
   ((Arcadia_Visuals_Implementation_Resource*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_unloadImpl;
   ((Arcadia_Visuals_Implementation_Resource*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_unlinkImpl;
   ((Arcadia_Visuals_Implementation_Resource*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_renderImpl;
-  ((Arcadia_Visuals_Implementation_VertexBufferResource*)self)->setData = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_VertexBufferResource*, const void*, Arcadia_SizeValue)) & Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_setDataImpl;
+  ((Arcadia_Visuals_Implementation_VertexBufferResource*)self)->getNumberOVertices = (Arcadia_SizeValue (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_VertexBufferResource*)) & Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_getNumberOfVerticesImpl;
+  ((Arcadia_Visuals_Implementation_VertexBufferResource*)self)->setData = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_VertexBufferResource*, Arcadia_SizeValue, const void*, Arcadia_SizeValue)) & Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_setDataImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -242,11 +252,20 @@ Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_renderImpl
   }
 }
 
+static Arcadia_SizeValue
+Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_getNumberOfVerticesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* self
+  )
+{ return self->numberOfVertices; }
+
 static void
 Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_setDataImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* self,
+    Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
   )
@@ -254,8 +273,8 @@ Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_setDataImpl
   Arcadia_Memory_reallocateUnmanaged(thread, &self->bytes, numberOfBytes);
   Arcadia_Memory_copy(thread, self->bytes, bytes, numberOfBytes);
   self->numberOfBytes = numberOfBytes;
+  self->numberOfVertices = numberOfVertices;
 }
-
 
 Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource*
 Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_create

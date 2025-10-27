@@ -168,4 +168,23 @@ Define(Arcadia_Void, Void, void)
 
 #undef Define
 
+static inline Arcadia_Object*
+Arcadia_List_getObjectReferenceValueCheckedAt
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self,
+    Arcadia_SizeValue index,
+    Arcadia_Type* type
+  )
+{
+  Arcadia_Object* element = Arcadia_List_getObjectReferenceValueAt(thread, self, index);
+  if (type) {
+    if (!Arcadia_Object_isInstanceOf(thread, element, type)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+  }
+  return element;
+}
+
 #endif // ARCADIA_RING2_COLLECTIONS_LIST_H_INCLUDED

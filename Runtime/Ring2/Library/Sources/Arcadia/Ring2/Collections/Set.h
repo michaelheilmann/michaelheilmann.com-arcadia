@@ -22,6 +22,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Collections/Collection.h"
+typedef struct Arcadia_List Arcadia_List;
 
 Arcadia_declareObjectType(u8"Arcadia.Set", Arcadia_Set,
                           u8"Arcadia.Collection");
@@ -33,6 +34,7 @@ struct Arcadia_Set {
   Arcadia_BooleanValue(*contains)(Arcadia_Thread* thread, Arcadia_Set* self, Arcadia_Value value);
   Arcadia_Value(*get)(Arcadia_Thread* thread, Arcadia_Set* self, Arcadia_Value value);
   void (*remove)(Arcadia_Thread* thread, Arcadia_Set* self, Arcadia_Value value, Arcadia_Value* oldValue);
+  void (*getAll)(Arcadia_Thread*, Arcadia_Set*, Arcadia_List*);
 };
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Set_add
@@ -71,6 +73,14 @@ Arcadia_Set_remove
     Arcadia_Set* self,
     Arcadia_Value value,
     Arcadia_Value* oldValue
+  );
+
+void
+Arcadia_Set_getAll
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Set* self,
+    Arcadia_List* target
   );
 
 #endif // ARCADIA_RING2_COLLECTIONS_SET_H_INCLUDED

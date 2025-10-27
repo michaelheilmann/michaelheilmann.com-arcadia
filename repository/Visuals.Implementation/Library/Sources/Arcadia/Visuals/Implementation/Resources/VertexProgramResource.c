@@ -71,8 +71,7 @@ Arcadia_Visuals_Implementation_VertexProgramResource_constructImpl
     Arcadia_Value t;
     t = Arcadia_ValueStack_getValue(thread, 1);
     Arcadia_ValueStack_pushValue(thread, &t);
-    t = Arcadia_ValueStack_getValue(thread, 1);
-    Arcadia_ValueStack_pushValue(thread, &t);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);

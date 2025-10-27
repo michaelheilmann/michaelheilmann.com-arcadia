@@ -71,8 +71,7 @@ Arcadia_Visuals_Implementation_VertexBufferResource_constructImpl
     Arcadia_Value t;
     t = Arcadia_ValueStack_getValue(thread, 1);
     Arcadia_ValueStack_pushValue(thread, &t);
-    t = Arcadia_ValueStack_getValue(thread, 1);
-    Arcadia_ValueStack_pushValue(thread, &t);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
 
@@ -101,8 +100,16 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setData
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self,
+    Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
   )
-{ self->setData(thread, self, bytes, numberOfBytes); }
+{ self->setData(thread, self, numberOfVertices, bytes, numberOfBytes); }
 
+Arcadia_SizeValue
+Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVertices
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_VertexBufferResource* self
+  )
+{ return self->getNumberOVertices(thread, self); }

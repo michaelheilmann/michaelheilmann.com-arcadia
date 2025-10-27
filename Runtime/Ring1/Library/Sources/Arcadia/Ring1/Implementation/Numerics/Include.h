@@ -35,6 +35,7 @@
 #include "Arcadia/Ring1/Implementation/Numerics/nextPowerOfTwoGreaterThan.h"
 #include "Arcadia/Ring1/Implementation/Numerics/nextPowerOfTwoGreaterThanOrEqualTo.h"
 
+#include "Arcadia/Ring1/Implementation/Numerics/sin.h"
 #include "Arcadia/Ring1/Implementation/Numerics/quotientRemainder.h"
 #include "Arcadia/Ring1/Implementation/Numerics/sqrt.h"
 

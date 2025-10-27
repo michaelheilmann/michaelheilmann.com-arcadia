@@ -28,7 +28,7 @@ if (NOT TARGET ${MyTestName})
 
   list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Main.c)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.Arms)
+  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.ARMS)
 
   EndProduct(${MyTestName})
   set_target_properties(${MyTestName} PROPERTIES FOLDER ${MyTestFolder})

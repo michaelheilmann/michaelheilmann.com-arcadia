@@ -170,7 +170,7 @@ Arcadia_Visuals_Implementation_OpenGL4_Context_render
          0.0f,  0.5f, 0.0f
     };
     vertexBuffer = Arcadia_Visuals_Implementation_BackendContext_createVertexBufferResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
-    Arcadia_Visuals_Implementation_VertexBufferResource_setData(thread, vertexBuffer, (void*)vertices, sizeof(vertices));
+    Arcadia_Visuals_Implementation_VertexBufferResource_setData(thread, vertexBuffer, 3, (void*)vertices, sizeof(vertices));
     Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)vertexBuffer);
   }
   {

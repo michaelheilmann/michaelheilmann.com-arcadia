@@ -27,7 +27,7 @@ if (NOT TARGET ${MyTool})
 
   list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/ConcatenateFiles/Main.c)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
+  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.ARMS)
 
   EndProduct(${MyTool})
 

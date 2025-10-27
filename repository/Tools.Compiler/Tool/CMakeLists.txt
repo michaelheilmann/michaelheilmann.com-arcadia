@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTool Tools.Compiler)
+set(MyTool ${MyProjectName}.Tools.Compiler)
 
 if (NOT TARGET ${MyTool})
 
@@ -27,10 +27,10 @@ if (NOT TARGET ${MyTool})
 
   list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Compiler/Main.c)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
+  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.ARMS)
 
   EndProduct(${MyTool})
 
-  set_target_properties(${MyTool} PROPERTIES FOLDER "Tools")
+  set_target_properties(${MyTool} PROPERTIES FOLDER "Tools/Compiler")
 
 endif()

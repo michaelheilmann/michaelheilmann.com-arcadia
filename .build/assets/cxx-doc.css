@@ -92,3 +92,25 @@ section.cxx.remarks > div:nth-child(2)
   border-top-style: solid;
   border-top-color: lightgray;
 }
+
+/* Style the tables. */
+section.cxx table {
+  border-collapse: collapse;
+}
+
+section.cxx table tr td {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+section.cxx table tr td {
+  border-style: solid;
+  border-width: 1.25px;
+  border-color: lightgray;
+}
+
+section.cxx table + p {
+  margin-top: 1rem;
+}

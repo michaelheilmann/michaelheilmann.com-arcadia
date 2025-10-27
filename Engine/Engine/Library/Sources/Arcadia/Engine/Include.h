@@ -16,12 +16,17 @@
 #if !defined(ARCADIA_ENGINE_INCLUDE_H_INCLUDED)
 #define ARCADIA_ENGINE_INCLUDE_H_INCLUDED
 
+#pragma push_macro("ARCADIA_ENGINE_PRIVATE")
+#undef ARCADIA_ENGINE_PRIVATE
+#define ARCADIA_ENGINE_PRIVATE (1)
+
 #include "Arcadia/Engine/Backend.h"
 #include "Arcadia/Engine/BackendContext.h"
-#include "Arcadia/Engine/System.h"
-#include "Arcadia/Engine/SystemEvent.h"
 
 #include "Arcadia/Engine/Engine.h"
 #include "Arcadia/Engine/Event.h"
+
+#undef ARCADIA_ENGINE_PRIVATE
+#pragma pop_macro("ARCADIA_ENGINE_PRIVATE")
 
 #endif // ARCADIA_ENGINE_INCLUDE_H_INCLUDED

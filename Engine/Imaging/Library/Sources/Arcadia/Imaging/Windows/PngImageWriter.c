@@ -102,12 +102,15 @@ Arcadia_Imaging_Windows_PngImageWriter_writeToPathImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ObjectReferenceValue sourceObject = Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, 0);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject;
+  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer =
+    (Arcadia_Imaging_PixelBuffer*)
+    Arcadia_List_getObjectReferenceValueCheckedAt
+      (
+        thread,
+        sourcePixelBuffers,
+        0,
+        _Arcadia_Imaging_PixelBuffer_getType(thread)
+      );
   Arcadia_Imaging_Windows_WicImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WicImageWriterBase*)self, sourcePixelBuffer, parameters);
 }
 
@@ -126,12 +129,15 @@ Arcadia_Imaging_Windows_PngImageWriter_writeToByteBufferImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ObjectReferenceValue sourceObject = Arcadia_List_getObjectReferenceValueAt(thread, sourcePixelBuffers, 0);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject;
+  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer =
+    (Arcadia_Imaging_PixelBuffer*)
+    Arcadia_List_getObjectReferenceValueCheckedAt
+      (
+        thread,
+        sourcePixelBuffers,
+        0,
+        _Arcadia_Imaging_PixelBuffer_getType(thread)
+      );
   Arcadia_Imaging_Windows_WicImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WicImageWriterBase*)self, sourcePixelBuffer, parameters);
 }
 

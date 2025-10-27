@@ -33,6 +33,8 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.VertexBuffer
 struct Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource {
   Arcadia_Visuals_Implementation_VertexBufferResource _parent;
 
+  Arcadia_SizeValue numberOfVertices;
+
   void* bytes;
   Arcadia_SizeValue numberOfBytes;
 

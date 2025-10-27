@@ -26,7 +26,7 @@ list(APPEND ${MyTargetName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sourc
 
 list(APPEND ${MyTargetName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Main.c)
 
-list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.Machine ${MyProjectName}.Arms)
+list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.Machine ${MyProjectName}.ARMS)
 
 EndProduct(${MyTargetName})
 set_target_properties(${MyTargetName} PROPERTIES OUTPUT_NAME "arcadia")

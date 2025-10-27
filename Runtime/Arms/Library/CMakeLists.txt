@@ -16,7 +16,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Create a library.
-set(MyLibraryName ${MyProjectName}.Arms)
+set(MyLibraryName ${MyProjectName}.ARMS)
 if (NOT TARGET ${MyLibraryName})
 
   BeginProduct(${MyLibraryName} library)
@@ -52,6 +52,6 @@ if (NOT TARGET ${MyLibraryName})
 
   EndProduct(${MyLibraryName})
 
-  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Arms")
+  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "ARMS")
 
 endif()

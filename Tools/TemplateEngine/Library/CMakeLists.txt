@@ -36,7 +36,7 @@ if (NOT TARGET ${MyLibraryName})
   list(APPEND ${MyLibraryName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Library.c)
   list(APPEND ${MyLibraryName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Library/Library.h)
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.MIL.AST ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.Ring2 ${MyProjectName}.Ring1 ${MyProjectName}.Arms)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.MIL.AST ${MyProjectName}.DataDefinitionLanguage ${MyProjectName}.Ring2 ${MyProjectName}.Ring1 ${MyProjectName}.ARMS)
 
   EndProduct(${MyLibraryName})
 

@@ -16,6 +16,9 @@
 #if !defined(ARCADIA_ENGINE_BACKEND_H_INCLUDED)
 #define ARCADIA_ENGINE_BACKEND_H_INCLUDED
 
+#if !defined(ARCADIA_ENGINE_PRIVATE) || 1 != ARCADIA_ENGINE_PRIVATE
+  #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
+#endif
 #include "Arcadia/Engine/BackendContext.h"
 
 // Arcadia.Engine.Backend objects represent backends like "OpenGL" or "OpenAL".
