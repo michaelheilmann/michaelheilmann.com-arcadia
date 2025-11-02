@@ -16,7 +16,10 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/FragmentProgramResource.h"
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
+#include "Arcadia/Visuals/VPL/Backends/GLSL/Include.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/Utilities.h"
 #include <assert.h>
+#include <string.h>
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_constructImpl
@@ -97,6 +100,7 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_constructImpl
   }
 
   self->dirty = Arcadia_BooleanValue_True;
+  self->code = NULL;
   self->id = 0;
 
   ((Arcadia_Visuals_Implementation_Resource*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_unloadImpl;
@@ -122,7 +126,11 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->code) {
+    Arcadia_ImmutableByteArray_visit(thread, self->code);
+  }
+}
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_unloadImpl
@@ -159,14 +167,6 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_renderImpl
 {
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
   _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
-  static const char* program =
-    "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "\n"
-    "void main() {\n"
-    " FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\n"
-    ;
   if (0 == self->id) {
     // (1) create shader
     self->id = gl->glCreateShader(GL_FRAGMENT_SHADER);
@@ -175,9 +175,14 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_renderImpl
     }
   }
   if (self->dirty) {
+    Arcadia_Visuals_VPL_Backends_GLSL_Program* programAST = createDefaultProgram(thread);
+    Arcadia_ByteBuffer* codeByteBuffer = Arcadia_ByteBuffer_create(thread);
+    Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultFragmentShader(thread, programAST, codeByteBuffer);
+    self->code = Arcadia_ImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, codeByteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, codeByteBuffer));
     // (1) set shader source
     while (gl->glGetError()) { }
-    gl->glShaderSource(self->id, 1, &program, NULL);
+    const GLchar* temporary = Arcadia_ImmutableByteArray_getBytes(thread, self->code);
+    gl->glShaderSource(self->id, 1, &temporary, NULL);
     if (gl->glGetError()) {
       return;
     }
@@ -191,6 +196,15 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_renderImpl
     GLint success = GL_FALSE;
     gl->glGetShaderiv(self->id, GL_COMPILE_STATUS, &success);
     if (!success) {
+      GLuint infoLogLength;
+      gl->glGetShaderiv(self->id, GL_INFO_LOG_LENGTH, &infoLogLength);
+      GLchar* infoLog = malloc(sizeof(GLchar) + (infoLogLength + 1));
+      if (!infoLog) {
+        return;
+      }
+      gl->glGetShaderInfoLog(self->id, infoLogLength, NULL, infoLog);
+      free(infoLog);
+      infoLog = NULL;
       return;
     } else {
       self->dirty = Arcadia_BooleanValue_False;

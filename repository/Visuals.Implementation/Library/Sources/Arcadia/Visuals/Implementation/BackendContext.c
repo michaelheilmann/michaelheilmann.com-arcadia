@@ -73,7 +73,9 @@ Arcadia_Visuals_Implementation_BackendContext_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
+  self->createConstantBufferResource = NULL;
   self->createFragmentProgramResource = NULL;
+  self->createMeshResource = NULL;
   self->createProgramResource = NULL;
   self->createVertexBufferResource = NULL;
   self->createVertexProgramResource = NULL;
@@ -99,6 +101,14 @@ Arcadia_Visuals_Implementation_BackendContext_visitImpl
   )
 {/*Intentionally empty.*/}
 
+Arcadia_Visuals_Implementation_ConstantBufferResource*
+Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_BackendContext* self
+  )
+{ return self->createConstantBufferResource(thread, self); }
+
 Arcadia_Visuals_Implementation_FragmentProgramResource*
 Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource
   (
@@ -106,6 +116,16 @@ Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource
     Arcadia_Visuals_Implementation_BackendContext* self
   )
 { return self->createFragmentProgramResource(thread, self); }
+
+Arcadia_Visuals_Implementation_MeshResource*
+Arcadia_Visuals_Implementation_BackendContext_createMeshResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_BackendContext* self,
+    Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer,
+    Arcadia_Visuals_Implementation_ProgramResource* program
+  )
+{ return self->createMeshResource(thread, self, vertexBuffer, program); }
 
 Arcadia_Visuals_Implementation_ProgramResource*
 Arcadia_Visuals_Implementation_BackendContext_createProgramResource

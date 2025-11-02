@@ -21,6 +21,8 @@
 #endif
 
 #include "Arcadia/Ring2/Logging/Log.h"
+#include "Arcadia/Ring2/Logging/ConsoleLog.h"
+#include "Arcadia/Ring2/Logging/FileLog.h"
 #include "Arcadia/Ring2/Logging/LogCategory.h"
 
 #endif // ARCADIA_RING2_LOGGING_INCLUDE_H_INCLUDED

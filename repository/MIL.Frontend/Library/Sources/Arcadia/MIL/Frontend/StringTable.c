@@ -25,6 +25,20 @@ Arcadia_MIL_StringTable_constructImpl
   );
 
 static void
+Arcadia_MIL_StringTable_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_StringTable* self
+  );
+
+static void
+Arcadia_MIL_StringTable_destructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_StringTable* self
+  );
+
+static void
 Arcadia_MIL_StringTable_maybeResize_nojump
   (
     Arcadia_Thread* thread,
@@ -39,24 +53,10 @@ Arcadia_MIL_StringTable_hashBytes
     Arcadia_SizeValue numberOfBytes
   );
 
-static void
-Arcadia_MIL_StringTable_visit
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_StringTable* self
-  );
-
-static void
-Arcadia_MIL_StringTable_destruct
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_StringTable* self
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_StringTable_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_MIL_StringTable_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_StringTable_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_MIL_StringTable_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_StringTable_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -95,6 +95,38 @@ Arcadia_MIL_StringTable_constructImpl
   self->capacity = g_defaultCapacity;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
+}
+
+static void
+Arcadia_MIL_StringTable_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_StringTable* self
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    Arcadia_MIL_StringTable_Node* node = self->buckets[i];
+    while (node) {
+      Arcadia_Object_visit(thread, (Arcadia_Object*)node->string);
+      node = node->next;
+    }
+  }
+}
+
+static void
+Arcadia_MIL_StringTable_destructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_StringTable* self
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    while (self->buckets[i]) {
+      Arcadia_MIL_StringTable_Node* node = self->buckets[i];
+      self->buckets[i] = self->buckets[i]->next;
+      Arcadia_Memory_deallocateUnmanaged(thread, node);
+    }
+  }
 }
 
 static void
@@ -160,38 +192,6 @@ Arcadia_MIL_StringTable_hashBytes
     hash = hash * 37 + bytes[i];
   }
   return hash;
-}
-
-static void
-Arcadia_MIL_StringTable_visit
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_StringTable* self
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    Arcadia_MIL_StringTable_Node* node = self->buckets[i];
-    while (node) {
-      Arcadia_Object_visit(thread, (Arcadia_Object*)node->string);
-      node = node->next;
-    }
-  }
-}
-
-static void
-Arcadia_MIL_StringTable_destruct
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_StringTable* self
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    while (self->buckets[i]) {
-      Arcadia_MIL_StringTable_Node* node = self->buckets[i];
-      self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Memory_deallocateUnmanaged(thread, node);
-    }
-  }
 }
 
 Arcadia_MIL_StringTable*

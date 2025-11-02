@@ -29,14 +29,10 @@ Arcadia_declareObjectType(u8"Arcadia.Log", Arcadia_Log,
                           
 struct Arcadia_Log {
   Arcadia_Object _parent;
+  void (*info)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*);
+  void (*error)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*);
   Arcadia_FileHandle* fileHandle;
 };
-
-Arcadia_Log*
-Arcadia_Log_create
-  (
-    Arcadia_Thread* thread
-  );
 
 void
 Arcadia_Log_info

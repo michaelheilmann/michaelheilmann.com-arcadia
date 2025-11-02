@@ -17,7 +17,6 @@
 
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/Windows/_WindowText.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Context.h"
 #include <limits.h>
 
 static void
@@ -681,7 +680,6 @@ beginRenderImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Visuals_Implementation_OpenGL4_Context_render(thread, self->backendContext->context, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self->backendContext, ((Arcadia_Visuals_WindowBackend*)self)->window);
 }
 
 static void

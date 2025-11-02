@@ -38,57 +38,23 @@ Arcadia_MIL_Keywords_constructImpl
   );
 
 static void
-Arcadia_MIL_Keywords_destruct
+Arcadia_MIL_Keywords_destructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Keywords* self
   );
 
 static void
-Arcadia_MIL_Keywords_visit
+Arcadia_MIL_Keywords_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Keywords* self
   );
-
-static void
-Arcadia_MIL_Keywords_destruct
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_Keywords* self
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    while (self->buckets[i]) {
-      Keyword* node = self->buckets[i];
-      self->buckets[i] = self->buckets[i]->next;
-      Arcadia_Memory_deallocateUnmanaged(thread, node);
-    }
-  }
-  Arcadia_Memory_deallocateUnmanaged(thread, self->buckets);
-  self->buckets = NULL;
-}
-
-static void
-Arcadia_MIL_Keywords_visit
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_Keywords* self
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
-    Keyword* node = self->buckets[i];
-    while (node) {
-      Arcadia_Object_visit(thread, (Arcadia_Object*)node->string);
-      node = node->next;
-    }
-  }
-}
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_Keywords_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_MIL_Keywords_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Keywords_visit,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_MIL_Keywords_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Keywords_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -124,6 +90,40 @@ Arcadia_MIL_Keywords_constructImpl
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
+}
+
+static void
+Arcadia_MIL_Keywords_destructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_Keywords* self
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    while (self->buckets[i]) {
+      Keyword* node = self->buckets[i];
+      self->buckets[i] = self->buckets[i]->next;
+      Arcadia_Memory_deallocateUnmanaged(thread, node);
+    }
+  }
+  Arcadia_Memory_deallocateUnmanaged(thread, self->buckets);
+  self->buckets = NULL;
+}
+
+static void
+Arcadia_MIL_Keywords_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_Keywords* self
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = self->capacity; i < n; ++i) {
+    Keyword* node = self->buckets[i];
+    while (node) {
+      Arcadia_Object_visit(thread, (Arcadia_Object*)node->string);
+      node = node->next;
+    }
+  }
 }
 
 Arcadia_MIL_Keywords*

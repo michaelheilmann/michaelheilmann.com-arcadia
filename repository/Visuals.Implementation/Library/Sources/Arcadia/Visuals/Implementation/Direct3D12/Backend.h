@@ -18,15 +18,15 @@
 
 #include "Arcadia/Visuals/Include.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Direct3D12.Backend", Arcadia_Visuals_Direct3D12_Backend,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Direct3D12.Backend", Arcadia_Visuals_Implementation_Direct3D12_Backend,
                           Arcadia_Visuals_Backend);
 
-struct Arcadia_Visuals_Direct3D12_Backend {
+struct Arcadia_Visuals_Implementation_Direct3D12_Backend {
   Arcadia_Visuals_Backend parent;
 };
 
-Arcadia_Visuals_Direct3D12_Backend*
-Arcadia_Visuals_Direct3D12_Backend_create
+Arcadia_Visuals_Implementation_Direct3D12_Backend*
+Arcadia_Visuals_Implementation_Direct3D12_Backend_create
   (
     Arcadia_Thread* thread
   );

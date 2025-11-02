@@ -92,7 +92,9 @@ Context_constructImpl
   self->temporary = NULL;
   self->stack = NULL;
   self->files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  self->log = Arcadia_Log_create(thread);
+  self->consoleLog = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
+  self->logFilePath = NULL;
+  self->dependenciesFilePath = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
@@ -112,8 +114,14 @@ Context_visit
     Context* self
   )
 {
-  if (self->log) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->log);
+  if (self->consoleLog) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->consoleLog);
+  }
+  if (self->logFilePath) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->logFilePath);
+  }
+  if (self->dependenciesFilePath) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->dependenciesFilePath);
   }
   if (self->environment) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->environment);

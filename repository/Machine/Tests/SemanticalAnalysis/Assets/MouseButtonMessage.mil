@@ -1,8 +1,8 @@
 class MouseButtonMessage {
-  variable m_action
-  variable m_button
+  variable m_action : Integer
+  variable m_button : Integer
 
-  constructor(variable action, variable button) {
+  constructor(variable action : Integer, variable button : Integer) {
     set m_action, action
     set m_button, button
   }

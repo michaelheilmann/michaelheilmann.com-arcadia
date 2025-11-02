@@ -21,6 +21,7 @@ add_subdirectory(MIL.Frontend)
 
 add_subdirectory(Integrations)
 
+add_subdirectory(Visuals.VPL.Backends.GLSL)
 add_subdirectory(Engine.Demo)
 
 add_subdirectory(Tools.ConcatenateFiles)

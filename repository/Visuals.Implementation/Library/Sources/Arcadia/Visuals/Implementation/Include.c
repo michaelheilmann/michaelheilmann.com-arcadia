@@ -19,6 +19,11 @@
   #include "Arcadia/Visuals/Implementation/OpenGL4/Backend.h"
 #endif
 
+#include "Arcadia/Visuals/Implementation/SceneNodeFactory.h"
+
+void Arcadia_Visuals_Implementation_registerSceneNodeFactories(Arcadia_Thread* thread, Arcadia_Set* types) {
+  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_SceneNodeFactory_getType(thread)), NULL);
+}
 
 void Arcadia_Visuals_Implementation_registerBackends(Arcadia_Thread* thread, Arcadia_Set* types) {
 #if Arcadia_Visuals_Implementation_Configuration_OpenGL4_Backend_Enabled

@@ -122,3 +122,30 @@ Arcadia_Visuals_Implementation_Resource_render
     Arcadia_Visuals_Implementation_Resource* self
   )
 { self->render(thread, self); }
+
+void
+Arcadia_Visuals_Implementation_Resource_ref
+  (
+    Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self
+  )
+{
+  if (self->referenceCount == Arcadia_Integer32Value_Maximum) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  self->referenceCount++;
+}
+
+void
+Arcadia_Visuals_Implementation_Resource_unref
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_Resource* self
+  )
+{
+  if (self->referenceCount == Arcadia_Integer32Value_Literal(0)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  self->referenceCount--;
+}

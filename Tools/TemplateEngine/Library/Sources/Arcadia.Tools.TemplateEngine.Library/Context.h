@@ -30,12 +30,25 @@ struct Context {
   Arcadia_Utf8Writer* temporary;
   Arcadia_ByteBuffer* temporaryBuffer;
 
+  Arcadia_FilePath* logFilePath;
+  Arcadia_FilePath* dependenciesFilePath;
+
+
   Environment* environment;
 
   Arcadia_Stack* stack;
+  /// The include graph.
+  /// For example, if we start at X and X includes first A and second B.
+  /// Then when processing B this list contains X, B.
   Arcadia_List* files;
 
-  Arcadia_Log* log;
+  /// The set of all files processed so far.
+  /// For example, if we start at X and X includes first A and second B.
+  /// The wehn processing B this list contains X, A, B.
+  Arcadia_List* allFiles;
+
+  /// The console log.
+  Arcadia_Log* consoleLog;
 };
 
 Context*

@@ -24,14 +24,16 @@ Arcadia_declareObjectType(u8"Arcadia.MIL.AST.FieldDefinitionNode", Arcadia_MIL_A
 
 struct Arcadia_MIL_AST_FieldDefinitionNode {
   Arcadia_MIL_AST_DefinitionNode _parent;
-  Arcadia_String* variableName;
+  Arcadia_String* name;
+  Arcadia_String* type;
 };
 
 Arcadia_MIL_AST_FieldDefinitionNode*
 Arcadia_MIL_AST_FieldDefinitionNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_String* name
+    Arcadia_String* name,
+    Arcadia_String* type
   );
 
 #endif // ARCADIA_MIL_AST_VARIABLEDEFINITIONNODE_H_INCLUDED

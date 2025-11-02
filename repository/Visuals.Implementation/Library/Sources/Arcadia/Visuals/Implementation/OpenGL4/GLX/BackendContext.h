@@ -22,8 +22,6 @@
 #include <X11/Xlib.h> // For Atom.
 #include <GL/glx.h> // For XVisualInfo and GLXFBConfig.
 
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_Context Arcadia_Visuals_Implementation_OpenGL4_Context;
-
 /// @code
 /// class Arcadia.Visuals.OpenGL4.GLX.BackendContext extends Arcadia.Visuals.BackendContext {
 ///   construct()
@@ -66,12 +64,6 @@ struct Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext {
 
   /// The OpenGL and GLX functions available to us.
   _Arcadia_Visuals_Implementation_OpenGL4_Functions _functions;
-
-  // The list of resources.
-  Arcadia_List* resources;
-
-  /// TODO: Remove this.
-  Arcadia_Visuals_Implementation_OpenGL4_Context* context2;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext*

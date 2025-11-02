@@ -13,10 +13,29 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/MIL/Frontend/TokenType.h"
+#if !defined(ARCADIA_RING2_LOGGING_FILELOG_H_INCLUDED)
+#define ARCADIA_RING2_LOGGING_FILELOG_H_INCLUDED
 
-static const Arcadia_Type_Operations _typeOperations = {
-  Arcadia_Type_Operations_Initializer,
+#if !defined(ARCADIA_RING2_PRIVATE)
+  #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
+#endif
+
+#include "Arcadia/Ring2/Logging/Log.h"
+typedef struct Arcadia_FileHandle Arcadia_FileHandle;
+typedef struct Arcadia_String Arcadia_String;
+
+Arcadia_declareObjectType(u8"Arcadia.FileLog", Arcadia_FileLog,
+                          u8"Arcadia.Log");
+                          
+struct Arcadia_FileLog {
+  Arcadia_Log _parent;
+  Arcadia_FileHandle* fileHandle;
 };
 
-Arcadia_defineEnumerationType(u8"Arcadia.MIL.TokenType", Arcadia_MIL_TokenType, &_typeOperations);
+Arcadia_FileLog*
+Arcadia_FileLog_create
+  (
+    Arcadia_Thread* thread
+  );
+
+#endif // ARCADIA_RING2_LOGGING_FILELOG_H_INCLUDED

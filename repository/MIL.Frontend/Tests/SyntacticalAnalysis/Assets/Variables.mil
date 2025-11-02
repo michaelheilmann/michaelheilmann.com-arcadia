@@ -1,12 +1,12 @@
 
 class MyClassB extends MyClassA {
 
-  variable myVariable1
+  variable myVariable1 : Integer
 
   constructor
   {}
 
-  constructor(variable myVariable2, variable b)
+  constructor(variable myVariable2 : Integer, variable b : Integer)
   {
     variable myVariable3
   }
@@ -14,7 +14,7 @@ class MyClassB extends MyClassA {
   method MyMethodA
   {}
 
-  method MyMethodB(variable a, variable b)
+  method MyMethodB(variable a : Integer, variable b : Integer)
   {}
 
 }

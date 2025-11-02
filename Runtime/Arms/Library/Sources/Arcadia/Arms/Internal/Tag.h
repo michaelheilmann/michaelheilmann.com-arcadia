@@ -15,14 +15,14 @@ typedef struct Arms_Tag Arms_Tag;
 #if Arcadia_Arms_Configuration_InstructionSetArchitecture_X64 == Arcadia_Arms_Configuration_InstructionSetArchitecture
 
   // We must make sure that this thing is 64 bit aligned.
-  #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Msvc
+  #if Arcadia_Arms_Configuration_CompilerC == Arcadia_Arms_Configuration_CompilerC_Msvc
     #pragma pack(push, 8)
   #endif
 
 #elif Arcadia_Arms_Configuration_InstructionSetArchitecture_X32 == Arcadia_Arms_Configuration_InstructionSetArchitecture
 
   // We must make sure that this thing is 32 bit aligned.
-  #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Msvc
+  #if Arcadia_Arms_Configuration_CompilerC == Arcadia_Arms_Configuration_CompilerC_Msvc
     #pragma pack(push, 4)
   #endif
 
@@ -41,7 +41,7 @@ struct Arms_Tag {
   #endif
 #elif Arcadia_Arms_Configuration_InstructionSetArchitecture_X32 == Arcadia_Arms_Configuration_InstructionSetArchitecture
   // We must make sure that this thing is 32 bit aligned.
-  #if Arms_Configuration_CompilerC == Arms_Configuration_CompilerC_Gcc
+  #if Arcadia_Arms_Configuration_CompilerC == Arcadia_Arms_Configuration_CompilerC_Gcc
     __attribute__((aligned(16)))
   #endif
 #endif

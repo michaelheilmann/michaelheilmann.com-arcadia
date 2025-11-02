@@ -23,8 +23,6 @@
 #include "Arcadia/Math/Implementation/Configure.h"
 #include "Arcadia/Math/Implementation/Color4Real32.h"
 #include "Arcadia/Math/Implementation/Color4Real64.h"
-#include "Arcadia/Math/Implementation/Vector3Real32.h"
-#include "Arcadia/Math/Implementation/Vector3Real64.h"
 #include "Arcadia/Math/Implementation/setOrthographicProjection.h"
 #include "Arcadia/Math/Implementation/setPerspectiveProjection.h"
 #include "Arcadia/Math/Implementation/setRotationX.h"
@@ -32,6 +30,8 @@
 #include "Arcadia/Math/Implementation/setRotationZ.h"
 #include "Arcadia/Math/Implementation/setScaling.h"
 #include "Arcadia/Math/Implementation/setTranslation.h"
+#include "Arcadia/Math/Implementation/Vector3Real32.h"
+#include "Arcadia/Math/Implementation/Vector3Real64.h"
 
 #undef ARCADIA_MATH_PRIVATE
 #pragma pop_macro("ARCADIA_MATH_PRIVATE")

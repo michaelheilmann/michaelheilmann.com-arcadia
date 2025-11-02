@@ -1,1 +1,1 @@
-procedure native "print" Print (variable a)
+procedure native "print" Print (variable a : String)

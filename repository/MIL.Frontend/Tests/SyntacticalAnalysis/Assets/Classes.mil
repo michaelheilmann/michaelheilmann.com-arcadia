@@ -3,13 +3,13 @@ class MyClassB extends MyClassA {
   constructor
   {}
 
-  constructor(variable a, variable b)
+  constructor(variable a : Integer, variable b : Integer)
   {}
 
   method MyMethodA
   {}
 
-  method MyMethodB(variable a, variable b)
+  method MyMethodB(variable a : Integer, variable b : Integer)
   {}
 
 }

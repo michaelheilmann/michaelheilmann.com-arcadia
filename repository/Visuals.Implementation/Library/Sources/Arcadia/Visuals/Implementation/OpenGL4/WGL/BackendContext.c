@@ -27,10 +27,11 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Backend.h"
 
-#include "Arcadia/Visuals/Implementation/OpenGL4/Context.h"
 #include "Arcadia/Visuals/Implementation/Resource.h"
 
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ConstantBufferResource.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/FragmentProgramResource.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/MeshResource.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ProgramResource.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/VertexBufferResource.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ViewportResource.h"
@@ -93,73 +94,6 @@ getFunctionsImpl
     Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self
   )
 { return &self->_functions; }
-
-static Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource*
-createFragmentProgramResourceImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self
-  )
-{
-  Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource* resource = Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
-  Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
-  return resource;
-}
-
-static Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*
-createProgramResourceImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self,
-    Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource* vertexProgramResource,
-    Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource* fragmentProgramResource
-  )
-{
-  Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* resource = Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self, vertexProgramResource, fragmentProgramResource);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
-  Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
-  return resource;
-}
-
-static Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource*
-createVertexBufferResourceImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self
-  )
-{
-  Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* resource = Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
-  Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
-  return resource;
-}
-
-static Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource*
-createVertexProgramResourceImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self
-  )
-{
-  Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource* resource = Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
-  Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
-  return resource;
-}
-
-static Arcadia_Visuals_Implementation_OpenGL4_ViewportResource*
-createViewportResourceImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self
-  )
-{
-  Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* resource = Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
-  Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
-  return resource;
-}
 
 static Arcadia_BooleanValue
 isConfigurationSupported
@@ -226,7 +160,7 @@ createContext
   // (1) Get supported configuration.
   Arcadia_List* supportedConfigurations = Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryContext_getConfigurations(thread, wglFactoryContext);
   Arcadia_StringBuffer* logMessage = Arcadia_StringBuffer_create(thread);
-  Arcadia_Log* log = Arcadia_Log_create(thread);
+  Arcadia_Log* log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)supportedConfigurations); i < n; ++i) {
     Arcadia_Visuals_Configuration* supportedConfiguration = Arcadia_List_getObjectReferenceValueAt(thread, supportedConfigurations, i);
     Arcadia_StringBuffer_clear(thread, logMessage);
@@ -400,7 +334,8 @@ static Arcadia_SizeValue
 updateResources
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self,
+    Arcadia_BooleanValue force
   );
 
 static void
@@ -831,16 +766,17 @@ static Arcadia_SizeValue
 updateResources
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self,
+    Arcadia_BooleanValue force
   )
 {
   Arcadia_SizeValue removed = 0;
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->resources); i < n;) {
-    Arcadia_Visuals_Implementation_Resource* resource = (Arcadia_Visuals_Implementation_Resource*)Arcadia_List_getObjectReferenceValueAt(thread, self->resources, i);
-    if (!resource->referenceCount) {
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources); i < n;) {
+    Arcadia_Visuals_Implementation_Resource* resource = (Arcadia_Visuals_Implementation_Resource*)Arcadia_List_getObjectReferenceValueAt(thread, ((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources, i);
+    if (!resource->referenceCount || force) {
       Arcadia_Visuals_Implementation_Resource_unload(thread, resource);
       Arcadia_Visuals_Implementation_Resource_unlink(thread, resource);
-      Arcadia_List_removeAt(thread, self->resources, i, 1);
+      Arcadia_List_removeAt(thread, ((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources, i, 1);
       n--;
       removed++;
     } else {
@@ -875,7 +811,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_updateImpl
     }
   }
   // (2) Update the resources.
-  updateResources(thread, self);
+  updateResources(thread, self, Arcadia_BooleanValue_False);
 }
 
 static Arcadia_Visuals_Implementation_Windows_Icon*
@@ -1021,18 +957,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  self->resources = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Object_lock(thread, (Arcadia_Object*)self->resources);
-
-  self->context = Arcadia_Visuals_Implementation_OpenGL4_Context_create(thread);
-  Arcadia_Object_lock(thread, (Arcadia_Object*)self->context);
-
   ((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->getFunctions = (_Arcadia_Visuals_Implementation_OpenGL4_Functions * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)) & getFunctionsImpl;
-  ((Arcadia_Visuals_Implementation_BackendContext*)self)->createFragmentProgramResource = (Arcadia_Visuals_Implementation_FragmentProgramResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createFragmentProgramResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContext*)self)->createProgramResource = (Arcadia_Visuals_Implementation_ProgramResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*, Arcadia_Visuals_Implementation_VertexProgramResource*, Arcadia_Visuals_Implementation_FragmentProgramResource*)) & createProgramResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContext*)self)->createVertexBufferResource = (Arcadia_Visuals_Implementation_VertexBufferResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createVertexBufferResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContext*)self)->createVertexProgramResource = (Arcadia_Visuals_Implementation_VertexProgramResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createVertexProgramResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContext*)self)->createViewportResource = (Arcadia_Visuals_Implementation_ViewportResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createViewportResourceImpl;
 
   ((Arcadia_Visuals_BackendContext*)self)->createIcon = (Arcadia_Visuals_Icon * (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*, Arcadia_Imaging_PixelBuffer*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_createIconImpl;
   ((Arcadia_Visuals_BackendContext*)self)->createWindow = (Arcadia_Visuals_Window * (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_createWindowImpl;
@@ -1050,18 +975,9 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_destructImpl
     Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* self
   )
 {
-  // We must invalidate all the objects in the context.
-  Arcadia_Visuals_Implementation_OpenGL4_Context_invalidateAll(thread, self->context);
-  Arcadia_Object_unlock(thread, (Arcadia_Object*)self->context);
-  self->context = NULL;
-
   // (1) Update resources until no resources are left.
-  while (updateResources(thread, self)) {
-
-  }
-  // (2) We unlock the list of resources.
-  Arcadia_Object_unlock(thread, (Arcadia_Object*)self->resources);
-  self->resources = NULL;
+  while (updateResources(thread, self, Arcadia_BooleanValue_True))
+  {/*Intentionally empty.*/}
 
   _Arcadia_Visuals_Implementation_OpenGL4_Functions_uninitialize(thread, &self->_functions);
 
@@ -1104,9 +1020,6 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_visitImpl
 {
   if (self->systemWindow) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->systemWindow);
-  }
-  if (self->context) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->context);
   }
   // "visitation" of "resources" is not necessary as "backend context" holds a GC lock for this object.
 #if 0

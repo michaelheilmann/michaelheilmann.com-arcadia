@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_MIL_FRONTEND_KEYWORDS_H_INCLUDED)
 #define ARCADIA_MIL_FRONTEND_KEYWORDS_H_INCLUDED
 
-#include "Arcadia/MIL/Frontend/TokenType.h"
+#include "Arcadia/MIL/Frontend/TokenKind.h"
 
 /// @code
 /// class Arcadia.MILKeywords

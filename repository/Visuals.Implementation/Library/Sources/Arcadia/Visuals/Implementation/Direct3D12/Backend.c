@@ -23,58 +23,42 @@
 
 #endif
 
-static void
-Arcadia_Visuals_Direct3D12_Backend_openImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
-  );
-
-static void
-Arcadia_Visuals_Direct3D12_Backend_closeImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
-  );
-  
 static Arcadia_String*
-Arcadia_Visuals_Direct3D12_Backend_getNameImpl
+Arcadia_Visuals_Implementation_Direct3D12_Backend_getNameImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   );
 
 static void
-Arcadia_Visuals_Direct3D12_Backend_construct
+Arcadia_Visuals_Implementation_Direct3D12_Backend_construct
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   );
 
 static void
-Arcadia_Visuals_Direct3D12_Backend_destruct
+Arcadia_Visuals_Implementation_Direct3D12_Backend_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
-  );
-  
-static void
-Arcadia_Visuals_Direct3D12_Backend_visit
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   );
 
-static const Arcadia_ObjectType_Operations _Arcadia_Visuals_Direct3D12_Backend_objectTypeOperations = {
-  .construct = &Arcadia_Visuals_Direct3D12_Backend_construct,
-  .destruct = &Arcadia_Visuals_Direct3D12_Backend_destruct,
-  .visit = &Arcadia_Visuals_Direct3D12_Backend_visit,
+static void
+Arcadia_Visuals_Implementation_Direct3D12_Backend_visit
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
+  );
+
+static const Arcadia_ObjectType_Operations _Arcadia_Visuals_Implementation_Direct3D12_Backend_objectTypeOperations = {
+  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_Direct3D12_Backend_construct,
+  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_Direct3D12_Backend_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_Direct3D12_Backend_visit,
 };
 
-static const Arcadia_Type_Operations _Arcadia_Visuals_Direct3D12_Backend_typeOperations = {
-  .objectTypeOperations = &_Arcadia_Visuals_Direct3D12_Backend_objectTypeOperations,
+static const Arcadia_Type_Operations _Arcadia_Visuals_Implementation_Direct3D12_Backend_typeOperations = {
+  .objectTypeOperations = &_Arcadia_Visuals_Implementation_Direct3D12_Backend_objectTypeOperations,
   .add = NULL,
   .and = NULL,
   .concatenate = NULL,
@@ -93,48 +77,45 @@ static const Arcadia_Type_Operations _Arcadia_Visuals_Direct3D12_Backend_typeOpe
   .subtract = NULL,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Direct3D12.Backend", Arcadia_Visuals_Direct3D12_Backend,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.Direct3D12.Backend", Arcadia_Visuals_Implementation_Direct3D12_Backend,
                          u8"Arcadia.Visuals.Backend", Arcadia_Visuals_Backend,
-                         &_Arcadia_Visuals_Direct3D12_Backend_typeOperations);
+                         &_Arcadia_Visuals_Implementation_Direct3D12_Backend_typeOperations);
 
 static void
-Arcadia_Visuals_Direct3D12_Backend_openImpl
+Arcadia_Visuals_Implementation_Direct3D12_Backend_openImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Visuals_Direct3D12_Backend_closeImpl
+Arcadia_Visuals_Implementation_Direct3D12_Backend_closeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   )
 {/*Intentionally empty.*/}
-  
+
 static Arcadia_String*
-Arcadia_Visuals_Direct3D12_Backend_getNameImpl
+Arcadia_Visuals_Implementation_Direct3D12_Backend_getNameImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   )
 { return Arcadia_String_createFromCxxString(thread, u8"Arcadia Visuals Direct3D 12 Backend"); }
 
 static void
-Arcadia_Visuals_Direct3D12_Backend_construct
+Arcadia_Visuals_Implementation_Direct3D12_Backend_construct
   (
     Arcadia_Thread* thread,
-    Arcadia_Value* self,
-    Arcadia_SizeValue numberOfArgumentValues,
-    Arcadia_Value* argumentValues
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   )
 {
-  Arcadia_Visuals_Direct3D12_Backend* _self = Arcadia_Value_getObjectReferenceValue(self);
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Direct3D12_Backend_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_Direct3D12_Backend_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor2(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -142,37 +123,35 @@ Arcadia_Visuals_Direct3D12_Backend_construct
   }
   Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
 
-  ((Arcadia_Visuals_Backend*)_self)->open = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Backend*))&Arcadia_Visuals_Direct3D12_Backend_openImpl;
-  ((Arcadia_Visuals_Backend*)_self)->close = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Backend*))&Arcadia_Visuals_Direct3D12_Backend_closeImpl;
-  ((Arcadia_Visuals_Backend*)_self)->getName = (Arcadia_String *(*)(Arcadia_Thread*, Arcadia_Visuals_Backend*))&Arcadia_Visuals_Direct3D12_Backend_getNameImpl;
+  ((Arcadia_Engine_Backend*)self)->getName = (Arcadia_String *(*)(Arcadia_Thread*, Arcadia_Engine_Backend*))& Arcadia_Visuals_Implementation_Direct3D12_Backend_getNameImpl;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
 
 static void
-Arcadia_Visuals_Direct3D12_Backend_destruct
+Arcadia_Visuals_Implementation_Direct3D12_Backend_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Visuals_Direct3D12_Backend_visit
+Arcadia_Visuals_Implementation_Direct3D12_Backend_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Direct3D12_Backend* self
+    Arcadia_Visuals_Implementation_Direct3D12_Backend* self
   )
 {/*Intentionally empty.*/}
 
-Arcadia_Visuals_Direct3D12_Backend*
-Arcadia_Visuals_Direct3D12_Backend_create
+Arcadia_Visuals_Implementation_Direct3D12_Backend*
+Arcadia_Visuals_Implementation_Direct3D12_Backend_create
   (
     Arcadia_Thread* thread
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Direct3D12_Backend);
+  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_Direct3D12_Backend);
 }

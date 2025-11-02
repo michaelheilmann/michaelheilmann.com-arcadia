@@ -43,7 +43,7 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcada.Log", Arcadia_Log,
+Arcadia_defineObjectType(u8"Arcadia.Log", Arcadia_Log,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
@@ -63,9 +63,8 @@ Arcadia_Log_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  self->fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, self->fileHandle);
+  self->error = NULL;
+  self->info = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
@@ -76,50 +75,7 @@ Arcadia_Log_visit
     Arcadia_Thread* thread,
     Arcadia_Log* self
   )
-{
-  if (self->fileHandle) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->fileHandle);
-  }
-}
-
-Arcadia_Log*
-Arcadia_Log_create
-  (
-    Arcadia_Thread* thread
-  )
-{
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Log);
-}
-
-static void
-writeBytes
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Log* self,
-    const Arcadia_Natural8Value* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-{
-  Arcadia_SizeValue written = 0, toWrite = numberOfBytes;
-  Arcadia_SizeValue numberOfAttempts = 0, maximumNumberOfAttempts = 3;
-  while (toWrite) {
-    Arcadia_SizeValue writtenNow = 0;
-    Arcadia_FileHandle_write(thread, self->fileHandle, bytes + written, toWrite, &writtenNow);
-    if (writtenNow == 0) {
-      if (numberOfAttempts == maximumNumberOfAttempts) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
-        Arcadia_Thread_jump(thread);
-      }
-      numberOfAttempts++;
-    } else {
-      numberOfAttempts = 0;
-      toWrite -= writtenNow;
-      written += writtenNow;
-    }
-  }
-}
+{ }
 
 void
 Arcadia_Log_info
@@ -128,12 +84,7 @@ Arcadia_Log_info
     Arcadia_Log* self,
     Arcadia_String* message
   )
-{
-  const char* p = Arcadia_String_getBytes(thread, message);
-  Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(thread, message);
-  writeBytes(thread, self, u8"\033[38;2;0;255;0m", sizeof(u8"\033[38;2;0;255;0m") - 1);
-  writeBytes(thread, self, p, n);
-}
+{ self->info(thread, self, message); }
 
 void
 Arcadia_Log_error
@@ -142,9 +93,4 @@ Arcadia_Log_error
     Arcadia_Log* self,
     Arcadia_String* message
   )
-{
-  const char* p = Arcadia_String_getBytes(thread, message);
-  Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(thread, message);
-  writeBytes(thread, self, u8"\033[38;2;255;0;0m", sizeof(u8"\033[38;2;255;0;0m") - 1);
-  writeBytes(thread, self, p, n);
-}
+{ self->error(thread, self, message); }

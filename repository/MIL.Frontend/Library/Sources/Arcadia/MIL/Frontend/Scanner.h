@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_MIL_FRONTEND_SCANNER_H_INCLUDED)
 #define ARCADIA_MIL_FRONTEND_SCANNER_H_INCLUDED
 
-#include "Arcadia/MIL/Frontend/TokenType.h"
+#include "Arcadia/MIL/Frontend/TokenKind.h"
 
 /// @code
 /// class Arcadia.MIL.Scanner
@@ -46,7 +46,7 @@ Arcadia_MIL_Scanner_getTokenText
 /// @param self A pointer to this MIL scanner.
 /// @return The type of the token.
 Arcadia_Natural32Value
-Arcadia_MIL_Scanner_getTokenType
+Arcadia_MIL_Scanner_getTokenKind
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Scanner* self

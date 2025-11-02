@@ -26,6 +26,8 @@
 #include "Arcadia/Engine/Engine.h"
 #include "Arcadia/Engine/Event.h"
 
+#include "Arcadia/Engine/SceneNodeFactory.h"
+
 #undef ARCADIA_ENGINE_PRIVATE
 #pragma pop_macro("ARCADIA_ENGINE_PRIVATE")
 

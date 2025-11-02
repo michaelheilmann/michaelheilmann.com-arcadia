@@ -139,6 +139,21 @@ Arcadia_List_removeAt
     Arcadia_List_insertFront(thread, self, value); \
   } \
 \
+\
+  void \
+  Arcadia_List_insert##Suffix##ValueAt \
+    ( \
+      Arcadia_Thread* thread, \
+      Arcadia_List* self, \
+      Arcadia_SizeValue index, \
+      Type##Value Variable##Value \
+    ) \
+  { \
+    Arcadia_Value value; \
+    Arcadia_Value_set##Suffix##Value(&value, Variable##Value); \
+    Arcadia_List_insertAt(thread, self, index, value); \
+  } \
+\
   Arcadia_BooleanValue \
   Arcadia_List_is##Suffix##ValueAt \
     ( \

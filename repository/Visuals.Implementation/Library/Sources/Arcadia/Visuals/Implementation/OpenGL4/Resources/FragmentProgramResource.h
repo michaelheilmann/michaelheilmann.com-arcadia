@@ -33,6 +33,7 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.FragmentProg
 struct Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource {
   Arcadia_Visuals_Implementation_FragmentProgramResource _parent;
   Arcadia_BooleanValue dirty;
+  Arcadia_ImmutableByteArray* code;
   GLuint id;
 };
 

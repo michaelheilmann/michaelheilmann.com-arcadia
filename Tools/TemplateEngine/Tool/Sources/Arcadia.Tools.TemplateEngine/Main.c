@@ -30,7 +30,9 @@ main1
 {
   Arcadia_Value sourceValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
                 targetValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
-                environmentValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+                environmentValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+                dependenciesFileValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
+                logFileValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
 
   Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
@@ -61,24 +63,24 @@ main1
         Arcadia_CommandLine_raiseNoValueError(thread, key);
       }
       Arcadia_Value_setObjectReferenceValue(&environmentValue, value);
+    } else if (Arcadia_String_isEqualTo_pn(thread, key, u8"dependenciesFile", sizeof(u8"dependenciesFile") - 1)) {
+      Arcadia_Value_setObjectReferenceValue(&dependenciesFileValue, value);
+    } else if (Arcadia_String_isEqualTo_pn(thread, key, u8"logFile", sizeof(u8"logFile") - 1)) {
+      Arcadia_Value_setObjectReferenceValue(&logFileValue, value);
     } else {
       Arcadia_CommandLine_raiseUnknownArgumentError(thread, key, value);
     }
   }
 
-  Arcadia_FilePath* sourceFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &sourceValue, _Arcadia_String_getType(thread)));
-  Arcadia_Value sourceFilePathValue = Arcadia_Value_makeObjectReferenceValue(sourceFilePath);
-  
-  Arcadia_FilePath* targetFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &targetValue, _Arcadia_String_getType(thread)));
-  Arcadia_Value targetFilePathValue = Arcadia_Value_makeObjectReferenceValue(targetFilePath);
+  Context* context = Context_create(thread);
 
+  Arcadia_FilePath* sourceFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &sourceValue, _Arcadia_String_getType(thread)));
+  Arcadia_FilePath* targetFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &targetValue, _Arcadia_String_getType(thread)));
   Arcadia_FilePath* environmentFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &environmentValue, _Arcadia_String_getType(thread)));
-  Arcadia_Value environmentFilePathValue = Arcadia_Value_makeObjectReferenceValue(environmentFilePath);
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_String* environmentString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_FileSystem_getFileContents(thread, fileSystem, environmentFilePath)));
 
-  Context* context = Context_create(thread);
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
   context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
@@ -89,9 +91,10 @@ main1
   environment->enclosing = context->environment;
   context->environment = environment;
 
-  Arcadia_Stack_push(thread, context->stack, sourceFilePathValue);
+  Arcadia_Stack_pushObjectReferenceValue(thread, context->stack, (Arcadia_Object*)sourceFilePath);
   Context_onRun(thread, context);
-  Arcadia_FileSystem_setFileContents(thread, fileSystem, (Arcadia_FilePath*)Arcadia_Value_getObjectReferenceValue(&targetFilePathValue), context->targetBuffer);
+
+  Arcadia_FileSystem_setFileContents(thread, fileSystem, targetFilePath, context->targetBuffer);
 }
 
 int

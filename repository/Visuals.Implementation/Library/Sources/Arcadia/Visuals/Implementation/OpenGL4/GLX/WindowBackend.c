@@ -15,7 +15,6 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/WindowBackend.h"
 
-#include "Arcadia/Visuals/Implementation/OpenGL4/Context.h"
 #include "Arcadia/Visuals/Implementation/Linux/ErrorHandler.h"
 #include <X11/Xlib.h>
 #include <X11/keysymdef.h>
@@ -737,13 +736,6 @@ beginRenderImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Visuals_Implementation_OpenGL4_Context_render
-    (
-      thread,
-      self->backendContext->context2,
-      (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self->backendContext,
-      ((Arcadia_Visuals_WindowBackend*)self)->window
-    );
 }
 
 static void

@@ -145,10 +145,10 @@ Arcadia_Engine_Demo_startupVisuals
     Arcadia_Visuals_Window** pWindow
   )
 {
-  // (1) Register visuals backends.
-  {
-    Arcadia_Visuals_Implementation_registerBackends(thread, engine->visualBackendTypes);
-  }
+  // (1.1) Register visuals backends.
+  Arcadia_Visuals_Implementation_registerBackends(thread, engine->visualBackendTypes);
+  // (1.2) Register visuals scene node factory.
+  Arcadia_Visuals_Implementation_registerSceneNodeFactories(thread, engine->visualSceneNodeFactoryTypes);
   // (2) Select visuals system.
   {
     char const* path[] = {
@@ -370,5 +370,32 @@ Arcadia_Engine_Demo_startupVisuals
 
     // Set the title.
     Arcadia_Visuals_Window_setTitle(thread, *pWindow, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Liminality"));
+  }
+  // (8) Create the scene node factory.
+  {
+    Arcadia_Engine_SceneNodeFactory* sceneNodeFactory = NULL;
+    Arcadia_JumpTarget jumpTarget;
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_List* temporary = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+      Arcadia_Set_getAll(thread, engine->visualSceneNodeFactoryTypes, temporary);
+      Arcadia_Value scneNodeFactoryTypeValue = Arcadia_List_getAt(thread, temporary, 0);
+      if (!Arcadia_Value_isTypeValue(&scneNodeFactoryTypeValue)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_Type* scneNodeFactoryType = Arcadia_Value_getTypeValue(&scneNodeFactoryTypeValue);
+      if (!Arcadia_Type_isSubType(thread, scneNodeFactoryType, _Arcadia_Visuals_SceneNodeFactory_getType(thread))) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_ValueStack_pushNatural8Value(thread, 0);
+      sceneNodeFactory = (Arcadia_Engine_SceneNodeFactory*)ARCADIA_CREATEOBJECT0(thread, scneNodeFactoryType, Arcadia_ValueStack_getSize(thread) - 1);
+      Arcadia_Thread_popJumpTarget(thread);
+    } else {
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_Thread_jump(thread);
+    }
+    engine->visualsSceneNodeFactory = sceneNodeFactory;
   }
 }

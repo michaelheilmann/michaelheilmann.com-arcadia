@@ -27,7 +27,7 @@ if (NOT TARGET ${MyTool})
 
   list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Compiler/Main.c)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Machine ${MyProjectName}.ARMS)
+  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.MIL.AST)
 
   EndProduct(${MyTool})
 

@@ -101,7 +101,7 @@ Arcadia_Visuals_Diagnostics_dumpDevices
   )
 {
   Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-  Arcadia_Log* log = Arcadia_Log_create(thread);
+  Arcadia_Log* log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
   Arcadia_List* displayDevices = Arcadia_Visuals_BackendContext_getDisplayDevices(thread, backendContext);
   
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)displayDevices); i < n; ++i) {   

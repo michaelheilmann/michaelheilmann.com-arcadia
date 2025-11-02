@@ -39,27 +39,6 @@ Arcadia_Visuals_Implementation_ProgramResource_visitImpl
     Arcadia_Visuals_Implementation_ProgramResource* self
   );
 
-static void
-Arcadia_Visuals_Implementation_ProgramResource_unloadImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_ProgramResource* self
-  );
-
-static void
-Arcadia_Visuals_Implementation_ProgramResource_unlinkImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_ProgramResource* self
-  );
-
-static void
-Arcadia_Visuals_Implementation_ProgramResource_renderImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_ProgramResource* self
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_ProgramResource_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_ProgramResource_destructImpl,

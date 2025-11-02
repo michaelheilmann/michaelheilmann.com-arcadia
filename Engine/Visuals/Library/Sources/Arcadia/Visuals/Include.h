@@ -27,9 +27,13 @@
 #include "Arcadia/Visuals/BackendContext.h"
 
 #include "Arcadia/Visuals/Configuration.h"
-#include "Arcadia/Visuals/Context.h"
+#include "Arcadia/Visuals/SceneNodeFactory.h"
 
 #include "Arcadia/Visuals/Diagnostics.h"
+
+#include "Arcadia/Visuals/Scene/Node.h"
+#include "Arcadia/Visuals/Scene/MeshNode.h"
+#include "Arcadia/Visuals/Scene/ViewportNode.h"
 
 #include "Arcadia/Visuals/Events/ApplicationQuitRequestedEvent.h"
 

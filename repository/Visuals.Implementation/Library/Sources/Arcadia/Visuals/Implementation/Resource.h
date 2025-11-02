@@ -70,4 +70,18 @@ Arcadia_Visuals_Implementation_Resource_render
     Arcadia_Visuals_Implementation_Resource* self
   );
 
+void
+Arcadia_Visuals_Implementation_Resource_ref
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_Resource* self
+  );
+
+void
+Arcadia_Visuals_Implementation_Resource_unref
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_Resource* self
+  );
+
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_RESOURCE_H_INCLUDED

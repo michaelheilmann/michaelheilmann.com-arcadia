@@ -20,7 +20,7 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/SystemWindow.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_Context Arcadia_Visuals_Implementation_OpenGL4_Context;
+typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_Implementation_SceneNodeFactory;
 
 #if !defined(WIN32_LEAN_AND_MEAN)
   #define WIN32_LEAN_AND_MEAN
@@ -67,13 +67,6 @@ struct Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext {
 
   /// The OpenGL and WGL functions available to us.
   _Arcadia_Visuals_Implementation_OpenGL4_Functions _functions;
-
-  // The list of resources.
-  Arcadia_List* resources;
-
-
-  /// TODO: Remove this.
-  Arcadia_Visuals_Implementation_OpenGL4_Context* context;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext*

@@ -545,10 +545,9 @@ onProcedureDefinition
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->procedureParameters); i < n; ++i) {
-    Arcadia_Value variableNameValue = Arcadia_List_getAt(thread, definitionAst->procedureParameters, i);
-    Arcadia_String* variableNameString = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &variableNameValue, _Arcadia_String_getType(thread));
+    Arcadia_MIL_AST_FieldDefinitionNode* variable = (Arcadia_MIL_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->procedureParameters, i, _Arcadia_MIL_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
-                                                              variableNameString,
+                                                              variable->name,
                                                               (Arcadia_MIL_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {
@@ -595,10 +594,9 @@ onConstructorDefinition
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->constructorParameters); i < n; ++i) {
-    Arcadia_Value variableNameValue = Arcadia_List_getAt(thread, definitionAst->constructorParameters, i);
-    Arcadia_String* variableNameString = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &variableNameValue, _Arcadia_String_getType(thread));
+    Arcadia_MIL_AST_FieldDefinitionNode* variable = (Arcadia_MIL_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->constructorParameters, i, _Arcadia_MIL_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
-                                                              variableNameString,
+                                                              variable->name,
                                                               (Arcadia_MIL_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {
@@ -644,10 +642,9 @@ onMethodDefinition
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->methodParameters); i < n; ++i) {
-    Arcadia_Value variableNameValue = Arcadia_List_getAt(thread, definitionAst->methodParameters, i);
-    Arcadia_String* variableNameString = Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &variableNameValue, _Arcadia_String_getType(thread));
+    Arcadia_MIL_AST_FieldDefinitionNode* variable = (Arcadia_MIL_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->methodParameters, i, _Arcadia_MIL_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
-                                                              variableNameString,
+                                                              variable->name,
                                                               (Arcadia_MIL_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {

@@ -16,6 +16,7 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ProgramResource.h"
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/Utilities.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/FragmentProgramResource.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/VertexProgramResource.h"
 #include <assert.h>

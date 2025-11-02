@@ -27,6 +27,9 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.BackendConte
 struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext {
   Arcadia_Visuals_Implementation_BackendContext _parent;
 
+  // The list of resources.
+  Arcadia_List* resources;
+
   _Arcadia_Visuals_Implementation_OpenGL4_Functions* (*getFunctions)
     (
       Arcadia_Thread* thread,

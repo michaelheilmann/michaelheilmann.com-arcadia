@@ -26,6 +26,58 @@
 #include "Arcadia/Engine/Demo/Audials.h"
 #include "Arcadia/Engine/Demo/Visuals.h"
 
+static void
+render
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine* engine,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height
+  )
+{
+  Arcadia_Visuals_Scene_ViewportNode* viewportNode1 =
+    (Arcadia_Visuals_Scene_ViewportNode*)
+    Arcadia_Visuals_SceneNodeFactory_createViewportNode
+      (
+        thread,
+        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+      );
+  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)viewportNode1, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, viewportNode1, 255.f, 0.f, 0.f, 255.f);
+  Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, viewportNode1, 0.f, 0.f, 0.5f, 1.f);
+  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, viewportNode1, width, height);
+
+  Arcadia_Visuals_Scene_ViewportNode* viewportNode2 =
+    (Arcadia_Visuals_Scene_ViewportNode*)
+    Arcadia_Visuals_SceneNodeFactory_createViewportNode
+      (
+        thread,
+        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+      );
+  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)viewportNode2, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, viewportNode2, 0.f, 255.f, 0.f, 255.f);
+  Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, viewportNode2, 0.5f, 0.f, 1.0f, 1.f);
+  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, viewportNode2, width, height);
+
+  Arcadia_Visuals_Scene_MeshNode* meshNode =
+    (Arcadia_Visuals_Scene_MeshNode*)
+    Arcadia_Visuals_SceneNodeFactory_createMeshNode
+      (
+        thread,
+        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+      );
+  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)meshNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)viewportNode1);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode);
+
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)viewportNode2);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode);
+}
+
 void
 main1
   (
@@ -78,17 +130,27 @@ main1
       Arcadia_Audials_BackendContext_update(thread, (Arcadia_Audials_BackendContext*)engine->audialsBackendContext);
       Arcadia_Visuals_BackendContext_update(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
       Arcadia_Visuals_Window_beginRender(thread, window);
+      {
+        Arcadia_Integer32Value width, height;
+        Arcadia_Visuals_Window_getCanvasSize(thread, window, &width, &height);
+        render(thread, engine, width, height);
+      }
       Arcadia_Visuals_Window_endRender(thread, window);
 
       Arcadia_Engine_Event* event = Arcadia_Engine_dequeEvent(thread, engine);
-      if (NULL != event && Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_KeyboardKeyEvent_getType(thread))) {
-        Arcadia_Visuals_KeyboardKeyEvent* keyboardKeyEvent = (Arcadia_Visuals_KeyboardKeyEvent*)event;
-        if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKeyAction_Released &&
-            Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKey_Escape) {
+      if (NULL != event) {
+        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_WindowClosedEvent_getType(thread))) {
           quit = Arcadia_BooleanValue_True;
-        } else if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKeyAction_Released &&
-                   Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKey_R) {
-          Arcadia_logf(Arcadia_LogFlags_Info, "re-initializing backends\n");
+        }
+        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_KeyboardKeyEvent_getType(thread))) {
+          Arcadia_Visuals_KeyboardKeyEvent* keyboardKeyEvent = (Arcadia_Visuals_KeyboardKeyEvent*)event;
+          if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKeyAction_Released &&
+              Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKey_Escape) {
+            quit = Arcadia_BooleanValue_True;
+          } else if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKeyAction_Released &&
+                     Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, keyboardKeyEvent) == Arcadia_Visuals_KeyboardKey_R) {
+            Arcadia_logf(Arcadia_LogFlags_Info, "re-initializing backends\n");
+          }
         }
       }
     }

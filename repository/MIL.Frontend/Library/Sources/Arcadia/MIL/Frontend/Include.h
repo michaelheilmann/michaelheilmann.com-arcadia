@@ -22,4 +22,7 @@
 #include "Arcadia/MIL/Frontend/Scanner.h"
 #include "Arcadia/MIL/Frontend/StringTable.h"
 
+#include "Arcadia/MIL/Frontend/SymbolKind.h"
+#include "Arcadia/MIL/Frontend/Symbol.h"
+
 #endif // ARCAIDA_MIL_FRONTEND_INCLUDE_H_INCLUDED
