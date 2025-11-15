@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-add_subdirectory(LexicalAnalysis)
-add_subdirectory(SyntacticalAnalysis)
-add_subdirectory(SemanticalAnalysis)
-add_subdirectory(Writer)
+add_subdirectory(DDL/LexicalAnalysis)
+add_subdirectory(DDL/SyntacticalAnalysis)
+add_subdirectory(DDL/SemanticalAnalysis)
+add_subdirectory(DDL/Writer)

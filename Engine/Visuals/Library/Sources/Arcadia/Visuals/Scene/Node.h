@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_SCENE_NODE_H_INCLUDED
 
 #include "Arcadia/Math/Include.h"
-
+typedef struct Arcadia_Visuals_Scene_MeshContext Arcadia_Visuals_Scene_MeshContext;
 typedef struct Arcadia_Visuals_BackendContext Arcadia_Visuals_BackendContext;
 
 // The base of all scene nodes.
@@ -30,7 +30,7 @@ struct Arcadia_Visuals_Scene_Node {
   Arcadia_Object _parent;
 
   void (*setBackendContext)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_BackendContext*);
-  void (*render)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*);
+  void (*render)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_Scene_MeshContext*);
 };
 
 // Change the backend context of this node.
@@ -47,7 +47,8 @@ void
 Arcadia_Visuals_Scene_Node_render
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Scene_Node* self
+    Arcadia_Visuals_Scene_Node* self,
+    Arcadia_Visuals_Scene_MeshContext* meshContext
   );
 
 #endif // ARCADIA_VISUALS_SCENE_NODE_H_INCLUDED

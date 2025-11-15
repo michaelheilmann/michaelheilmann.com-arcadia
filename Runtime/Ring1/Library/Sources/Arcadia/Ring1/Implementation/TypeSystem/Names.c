@@ -167,7 +167,7 @@ Arcadia_Name_visit
   )
 {
   self->lastVisited = getTickCount(thread);
-  Arcadia_Arms_visit(self);
+  Arcadia_ARMS_visit(self);
 }
 
 size_t
@@ -300,7 +300,7 @@ _Arcadia_Names_onPreMark
     Arcadia_Name* current = g_names->buckets[i];
     while (current) {
       if (now - current->lastVisited > Arcadia_Name_Threshold && !purgeCache) {
-        Arcadia_Arms_visit(current);
+        Arcadia_ARMS_visit(current);
       }
       current = current->next;
     }

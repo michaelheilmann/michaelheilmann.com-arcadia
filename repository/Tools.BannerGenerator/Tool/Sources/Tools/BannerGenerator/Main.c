@@ -15,7 +15,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "Arcadia/DataDefinitionLanguage/Include.h"
+#include "Arcadia/DDL/Include.h"
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Imaging/Include.h"
 

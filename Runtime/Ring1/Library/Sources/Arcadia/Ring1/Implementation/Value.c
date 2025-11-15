@@ -584,3 +584,52 @@ Arcadia_Value_getHash
 }
 
 #undef OnHash
+
+#define OnIsInstanceOf(Type) \
+  case Arcadia_ValueTag_##Type: { \
+    Arcadia_TypeValue type1 = _Arcadia_##Type##Value_getType(thread); \
+\
+    return (type1 == type); \
+  } break;
+
+Arcadia_BooleanValue
+Arcadia_Value_isInstanceOf
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* self,
+    Arcadia_Type* type
+  )
+{
+  switch (self->tag) {
+    OnIsInstanceOf(Atom);
+    OnIsInstanceOf(BigInteger);
+    OnIsInstanceOf(Boolean);
+    OnIsInstanceOf(ForeignProcedure);
+    OnIsInstanceOf(ImmutableByteArray);
+    OnIsInstanceOf(ImmutableUtf8String);
+    OnIsInstanceOf(Integer16);
+    OnIsInstanceOf(Integer32);
+    OnIsInstanceOf(Integer64);
+    OnIsInstanceOf(Integer8);
+    OnIsInstanceOf(Natural16);
+    OnIsInstanceOf(Natural32);
+    OnIsInstanceOf(Natural64);
+    OnIsInstanceOf(Natural8);
+    OnIsInstanceOf(Real32);
+    OnIsInstanceOf(Real64);
+    OnIsInstanceOf(Size);
+    OnIsInstanceOf(Void);
+    case Arcadia_ValueTag_ObjectReference: {
+      return Arcadia_Object_isInstanceOf(thread, self->objectReferenceValue, type);
+    } break;
+    case Arcadia_ValueTag_Type: {
+      return _Arcadia_Type_getType(thread) == type;
+    } break;
+    default: {
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
+      exit(EXIT_FAILURE);
+    } break;
+  };
+}
+
+#undef OnIsInstanceOF

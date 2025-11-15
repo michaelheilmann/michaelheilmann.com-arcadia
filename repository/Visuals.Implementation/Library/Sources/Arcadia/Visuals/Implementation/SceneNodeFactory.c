@@ -16,6 +16,8 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_PRIVATE (1)
 #include "Arcadia/Visuals/Implementation/SceneNodeFactory.h"
 
+#include "Arcadia/Visuals/Implementation/Scene/CameraNode.h"
+#include "Arcadia/Visuals/Implementation/Scene/MeshContext.h"
 #include "Arcadia/Visuals/Implementation/Scene/MeshNode.h"
 #include "Arcadia/Visuals/Implementation/Scene/ViewportNode.h"
 
@@ -40,6 +42,22 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_visit
     Arcadia_Visuals_Implementation_SceneNodeFactory* self
   );
 
+static Arcadia_Visuals_Implementation_Scene_MeshContext*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext
+  );
+
+static Arcadia_Visuals_Implementation_Scene_CameraNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createCameraNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext
+  );
+
 static Arcadia_Visuals_Implementation_Scene_MeshNode*
 Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshNodeImpl
   (
@@ -56,16 +74,8 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_createViewportNodeImpl
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   );
 
-static void
-Arcadia_Visuals_Implementation_SceneNodeFactory_renderImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext,
-    Arcadia_Visuals_Window* window
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_SceneNodeFactory_construct,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_SceneNodeFactory_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_SceneNodeFactory_visit,
@@ -113,9 +123,10 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_construct
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  ((Arcadia_Visuals_SceneNodeFactory*)self)->createCameraNode = (Arcadia_Visuals_Scene_CameraNode * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createCameraNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactory*)self)->createMeshContext = (Arcadia_Visuals_Scene_MeshContext * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshContextImpl;
   ((Arcadia_Visuals_SceneNodeFactory*)self)->createMeshNode = (Arcadia_Visuals_Scene_MeshNode* (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshNodeImpl;
   ((Arcadia_Visuals_SceneNodeFactory*)self)->createViewportNode = (Arcadia_Visuals_Scene_ViewportNode* (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createViewportNodeImpl;
-  ((Arcadia_Visuals_SceneNodeFactory*)self)->render = (void (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_Visuals_Window*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_renderImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
@@ -135,6 +146,24 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_visit
     Arcadia_Visuals_Implementation_SceneNodeFactory* self
   )
 {/*Intentionally empty.*/}
+
+static Arcadia_Visuals_Implementation_Scene_MeshContext*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext
+  )
+{ return Arcadia_Visuals_Implementation_Scene_MeshContext_create(thread, backendContext); }
+
+static Arcadia_Visuals_Implementation_Scene_CameraNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createCameraNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext
+  )
+{ return Arcadia_Visuals_Implementation_Scene_CameraNode_create(thread, backendContext); }
 
 static Arcadia_Visuals_Implementation_Scene_MeshNode*
 Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshNodeImpl
@@ -163,59 +192,4 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_create
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_SceneNodeFactory);
-}
-
-static void
-Arcadia_Visuals_Implementation_SceneNodeFactory_renderImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext,
-    Arcadia_Visuals_Window* window
-  )
-{
-  Arcadia_Integer32Value width, height;
-  Arcadia_Visuals_Window_getCanvasSize(thread, window, &width, &height);
-
-  Arcadia_Visuals_Scene_ViewportNode* viewportNode1 =
-    (Arcadia_Visuals_Scene_ViewportNode*)
-    Arcadia_Visuals_SceneNodeFactory_createViewportNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)self,
-        (Arcadia_Visuals_BackendContext*)backendContext
-      );
-  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)viewportNode1, (Arcadia_Visuals_BackendContext*)backendContext);
-  Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, viewportNode1, 255.f, 0.f, 0.f, 255.f);
-  Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, viewportNode1, 0.f, 0.f, 0.5f, 1.f);
-  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, viewportNode1, width, height);
-
-  Arcadia_Visuals_Scene_ViewportNode* viewportNode2 =
-    (Arcadia_Visuals_Scene_ViewportNode*)
-    Arcadia_Visuals_SceneNodeFactory_createViewportNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)self,
-        (Arcadia_Visuals_BackendContext*)backendContext
-      );
-  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)viewportNode2, (Arcadia_Visuals_BackendContext*)backendContext);
-  Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, viewportNode2, 0.f, 255.f, 0.f, 255.f);
-  Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, viewportNode2, 0.5f, 0.f, 1.0f, 1.f);
-  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, viewportNode2, width, height);
-
-  Arcadia_Visuals_Scene_MeshNode* meshNode =
-    (Arcadia_Visuals_Scene_MeshNode*)
-    Arcadia_Visuals_SceneNodeFactory_createMeshNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)self,
-        (Arcadia_Visuals_BackendContext*)backendContext
-      );
-  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)meshNode, (Arcadia_Visuals_BackendContext*)backendContext);
-
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)viewportNode1);
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode);
-
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)viewportNode2);
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode);
 }

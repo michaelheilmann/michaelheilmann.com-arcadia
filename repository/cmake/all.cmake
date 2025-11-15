@@ -129,6 +129,11 @@ macro(EndProduct target)
     foreach (e ${${target}.AssemblerFiles})
       list(APPEND allFiles ${e})
     endforeach()
+    
+    # Support for resource files under windows.
+    if (${${target}.OperatingSystem} STREQUAL ${${target}.OperatingSystem.Windows} AND ${target}.Windows.ResourceFile)
+      list(APPEND allFiles ${${target}.Windows.ResourceFile})
+    endif()
 
     target_sources(${target} PRIVATE ${allFiles})
 

@@ -24,6 +24,8 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.ConstantBufferResour
 struct Arcadia_Visuals_Implementation_ConstantBufferResource {
   Arcadia_Visuals_Implementation_Resource _parent;
   void (*setData)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, const void*, Arcadia_SizeValue);
+  void (*clear)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*);
+  void (*writeMatrix4x4Real32)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, Arcadia_BooleanValue transpose, Arcadia_Math_Matrix4Real32 const* source);
 };
 
 void
@@ -33,6 +35,22 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_setData
     Arcadia_Visuals_Implementation_ConstantBufferResource* self,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
+  );
+
+void
+Arcadia_Visuals_Implementation_ConstantBufferResource_clear
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResource* self
+  );
+
+void
+Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResource* self,
+    Arcadia_BooleanValue transpose,
+    Arcadia_Math_Matrix4Real32 const* source
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_CONSTANTBUFFERRESOURCE_H_INCLUDED

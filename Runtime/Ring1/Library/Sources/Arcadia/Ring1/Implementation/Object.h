@@ -17,7 +17,7 @@
 #define ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Types.h"
-#include "Arcadia/Arms/Include.h"
+#include "Arcadia/ARMS/Include.h"
 typedef struct Arcadia_Value Arcadia_Value;
 
 typedef struct Arcadia_Object Arcadia_Object;
@@ -32,7 +32,7 @@ struct Arcadia_Object {
   int dummy;
 };
 
-#define Arcadia_Configuration_withBarriers (Arcadia_Arms_Configuration_WithBarriers)
+#define Arcadia_Configuration_withBarriers (Arcadia_ARMS_Configuration_WithBarriers)
 
 #define Arcadia_superTypeConstructor(_thread, _type, _self) \
   { \

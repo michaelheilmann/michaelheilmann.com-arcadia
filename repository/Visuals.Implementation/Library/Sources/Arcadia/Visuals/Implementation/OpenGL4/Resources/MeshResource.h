@@ -37,10 +37,8 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.MeshResource
 struct Arcadia_Visuals_Implementation_OpenGL4_MeshResource {
   Arcadia_Visuals_Implementation_MeshResource _parent;
   Arcadia_Natural8Value dirty;
-  Arcadia_Math_Matrix4Real32* worldToViewMatrix;
-  Arcadia_Math_Matrix4Real32* viewToProjectionMatrix;
   Arcadia_Math_Matrix4Real32* localToWorldMatrix;
-  Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* constantBuffer;
+  Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* meshConstantBuffer;
   Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBuffer;
   Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* program;
 };

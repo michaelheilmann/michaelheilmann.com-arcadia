@@ -164,11 +164,12 @@ Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultVertexShader
     Arcadia_ByteBuffer* target
   )
 {
-  Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock* constantBlock = NULL;
+  Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock* viewerBlock = NULL;
+  Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock* meshBlock = NULL;
   Arcadia_Visuals_VPL_Backends_GLSL_VariableScalar* variableScalar = NULL;
   Arcadia_List* fields = NULL;
   Arcadia_String* name = NULL, * type = NULL;
-  // create the fields of block "matrices"
+  // create fields of block "viewer"
   fields = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   name = Arcadia_String_createFromCxxString(thread, u8"projection");
   type = Arcadia_String_createFromCxxString(thread, u8"mat4");
@@ -176,15 +177,25 @@ Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultVertexShader
   name = Arcadia_String_createFromCxxString(thread, u8"view");
   type = Arcadia_String_createFromCxxString(thread, u8"mat4");
   Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Backends_GLSL_Field_create(thread, name, type));
+  viewerBlock =
+    Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock_create
+    (
+      thread,
+      Arcadia_String_createFromCxxString(thread, u8"viewer"),
+      (Arcadia_List*)Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(fields))
+    );
+
+  // create the fields of block "mesh"
+  fields = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   name = Arcadia_String_createFromCxxString(thread, u8"model");
   type = Arcadia_String_createFromCxxString(thread, u8"mat4");
   Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Backends_GLSL_Field_create(thread, name, type));
   // create the constantblock "matrices"
-  constantBlock =
+  meshBlock =
     Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock_create
       (
         thread,
-        Arcadia_String_createFromCxxString(thread, u8"matrices"),
+        Arcadia_String_createFromCxxString(thread, u8"mesh"),
         (Arcadia_List*)Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(fields))
       );
 
@@ -203,12 +214,13 @@ Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultVertexShader
       );
   static const char* suffix =
     "void main() {\n"
-    "  mat4 mvp = _matrices0.projection * _matrices0.view * _matrices0.model;"
+    "  mat4 mvp = _viewer0.projection * _viewer0.view * _mesh0.model;"
     "  gl_Position = mvp * vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1.0);\n"
     "}\n"
     ;
   Arcadia_ByteBuffer_append_pn(thread, target, prefix, strlen(prefix));
-  writeConstantBlock(thread, self, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), constantBlock, target);
+  writeConstantBlock(thread, self, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), viewerBlock, target);
+  writeConstantBlock(thread, self, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), meshBlock, target);
   Arcadia_ByteBuffer_append_pn(thread, target, suffix, strlen(suffix) + 1);
 }
 

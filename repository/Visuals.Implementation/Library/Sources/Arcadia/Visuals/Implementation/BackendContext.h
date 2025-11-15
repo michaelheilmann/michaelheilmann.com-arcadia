@@ -19,6 +19,7 @@
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/Resources/ConstantBufferResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/FragmentProgramResource.h"
+#include "Arcadia/Visuals/Implementation/Resources/MeshContextResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/MeshResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/ProgramResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/VertexBufferResource.h"
@@ -41,6 +42,13 @@ struct Arcadia_Visuals_Implementation_BackendContext {
 
   Arcadia_Visuals_Implementation_FragmentProgramResource*
   (*createFragmentProgramResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_Implementation_BackendContext* self
+    );
+
+  Arcadia_Visuals_Implementation_MeshContextResource*
+  (*createMeshContextResource)
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self
@@ -96,6 +104,13 @@ Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource
 // Create a fragment program resource. The initial reference count of that resource is 0, hence it'd be destroyed at the next update of the backend.
 Arcadia_Visuals_Implementation_FragmentProgramResource*
 Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_BackendContext* self
+  );
+
+Arcadia_Visuals_Implementation_MeshContextResource*
+Arcadia_Visuals_Implementation_BackendContext_createMeshContextResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self

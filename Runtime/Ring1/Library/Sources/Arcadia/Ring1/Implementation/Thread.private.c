@@ -16,7 +16,7 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Thread.private.h"
 
-#include "Arcadia/Arms/Include.h"
+#include "Arcadia/ARMS/Include.h"
 
 void
 Arcadia_Thread_initializeValueStack
@@ -24,7 +24,7 @@ Arcadia_Thread_initializeValueStack
     Arcadia_Thread* thread
   )
 {
-  if (Arcadia_Arms_MemoryManager_allocate(Arcadia_Arms_getDefaultMemoryManager(), &thread->stack.elements, sizeof(Arcadia_Value) * 8)) {
+  if (Arcadia_ARMS_MemoryManager_allocate(Arcadia_ARMS_getDefaultMemoryManager(), &thread->stack.elements, sizeof(Arcadia_Value) * 8)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -41,7 +41,7 @@ Arcadia_Thread_uninitializeValueStack
     Arcadia_Thread* thread
   )
 {
-  Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getDefaultMemoryManager(), thread->stack.elements);
+  Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getDefaultMemoryManager(), thread->stack.elements);
   thread->stack.elements = NULL;
 }
 
@@ -90,7 +90,7 @@ Arcadia_Thread_increaseValueStackCapacity
   }
 
   Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-  if (Arcadia_Arms_MemoryManager_reallocate(Arcadia_Arms_getDefaultMemoryManager(), &thread->stack.elements, newCapacity * sizeof(Arcadia_Value))) {
+  if (Arcadia_ARMS_MemoryManager_reallocate(Arcadia_ARMS_getDefaultMemoryManager(), &thread->stack.elements, newCapacity * sizeof(Arcadia_Value))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }

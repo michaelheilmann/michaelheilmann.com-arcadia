@@ -71,7 +71,9 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
+  self->clear = NULL;
   self->setData = NULL;
+  self->writeMatrix4x4Real32 = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -94,10 +96,28 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_visitImpl
 
 void
 Arcadia_Visuals_Implementation_ConstantBufferResource_setData
-(
-  Arcadia_Thread* thread,
-  Arcadia_Visuals_Implementation_ConstantBufferResource* self,
-  const void* bytes,
-  Arcadia_SizeValue numberOfBytes
-)
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResource* self,
+    const void* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 { self->setData(thread, self, bytes, numberOfBytes); }
+
+void
+Arcadia_Visuals_Implementation_ConstantBufferResource_clear
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResource* self
+  )
+{ self->clear(thread, self); }
+
+void
+Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResource* self,
+    Arcadia_BooleanValue transpose,
+    Arcadia_Math_Matrix4Real32 const* source
+  )
+{ self->writeMatrix4x4Real32(thread, self, transpose, source); }

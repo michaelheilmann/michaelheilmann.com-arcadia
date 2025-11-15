@@ -19,7 +19,6 @@
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/Configure.h"
 
-
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #include "Arcadia/Visuals/Implementation/Windows/TextureFont.h"
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem

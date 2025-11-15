@@ -41,6 +41,13 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_visitImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_loadImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
+  );
+
+static void
 Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_unloadImpl
   (
     Arcadia_Thread* thread,
@@ -58,7 +65,8 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
+    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
   );
 
 static void
@@ -68,6 +76,22 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_setDataImpl
     Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
+  );
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
+  );
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real32Impl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
+    Arcadia_BooleanValue transpose,
+    Arcadia_Math_Matrix4Real32 const* source
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -106,12 +130,15 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   self->dirty = Arcadia_BooleanValue_True;
-  self->bytes = Arcadia_Memory_allocateUnmanaged(thread, 0);
-  self->numberOfBytes = 0;
+  self->byteBuffer = Arcadia_ByteBuffer_create(thread);
   self->bufferID = 0;
+
+  ((Arcadia_Visuals_Implementation_Resource*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_loadImpl;
   ((Arcadia_Visuals_Implementation_Resource*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_unloadImpl;
   ((Arcadia_Visuals_Implementation_Resource*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_Resource*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl;
+  ((Arcadia_Visuals_Implementation_Resource*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_MeshContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl;
+  ((Arcadia_Visuals_Implementation_ConstantBufferResource*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl;
+  ((Arcadia_Visuals_Implementation_ConstantBufferResource*)self)->writeMatrix4x4Real32 = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, Arcadia_BooleanValue, Arcadia_Math_Matrix4Real32 const*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real32Impl;
   ((Arcadia_Visuals_Implementation_ConstantBufferResource*)self)->setData = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, const void*, Arcadia_SizeValue)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_setDataImpl;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
@@ -126,10 +153,6 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_destructImpl
   )
 {
   assert(0 == self->bufferID);
-  if (self->bytes) {
-    Arcadia_Memory_deallocateUnmanaged(thread, self->bytes);
-    self->bytes = NULL;
-  }
 }
 
 static void
@@ -138,7 +161,34 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->byteBuffer) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->byteBuffer);
+  }
+}
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_loadImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
+  )
+{
+  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+
+  if (0 == self->bufferID) {
+    gl->glGenBuffers(1, &self->bufferID);
+  }
+  if (self->dirty) {
+    gl->glBindBuffer(GL_UNIFORM_BUFFER, self->bufferID);
+    gl->glBufferData(GL_UNIFORM_BUFFER, Arcadia_ByteBuffer_getNumberOfBytes(thread, self->byteBuffer), Arcadia_ByteBuffer_getBytes(thread, self->byteBuffer), GL_STATIC_DRAW);
+    if (gl->glGetError()) {
+      return;
+    }
+    self->dirty = Arcadia_BooleanValue_False;
+  }
+}
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_unloadImpl
@@ -170,7 +220,8 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
+    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
   )
 {
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
@@ -181,7 +232,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl
   }
   if (self->dirty) {
     gl->glBindBuffer(GL_UNIFORM_BUFFER, self->bufferID);
-    gl->glBufferData(GL_UNIFORM_BUFFER, self->numberOfBytes, self->bytes, GL_STATIC_DRAW);
+    gl->glBufferData(GL_UNIFORM_BUFFER, Arcadia_ByteBuffer_getNumberOfBytes(thread, self->byteBuffer), Arcadia_ByteBuffer_getBytes(thread, self->byteBuffer), GL_STATIC_DRAW);
     if (gl->glGetError()) {
       return;
     }
@@ -198,9 +249,41 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_setDataImpl
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Memory_reallocateUnmanaged(thread, &self->bytes, numberOfBytes);
-  Arcadia_Memory_copy(thread, self->bytes, bytes, numberOfBytes);
-  self->numberOfBytes = numberOfBytes;
+  Arcadia_ByteBuffer_clear(thread, self->byteBuffer);
+  Arcadia_ByteBuffer_append_pn(thread, self->byteBuffer, bytes, numberOfBytes);
+  self->dirty = Arcadia_BooleanValue_True;
+}
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
+  )
+{ Arcadia_ByteBuffer_clear(thread, self->byteBuffer); self->dirty = Arcadia_BooleanValue_True; }
+
+static inline void
+Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real32Impl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
+    Arcadia_BooleanValue transpose,
+    Arcadia_Math_Matrix4Real32 const* source
+  )
+{
+  if (transpose) {
+    for (size_t i = 0; i < 4; ++i) {
+      for (size_t j = 0; j < 4; ++j) {
+        Arcadia_ByteBuffer_append_pn(thread, self->byteBuffer, &(source->elements[j][i]), sizeof(float));
+      }
+    }
+  } else {
+    for (size_t i = 0; i < 4; ++i) {
+      for (size_t j = 0; j < 4; ++j) {
+        Arcadia_ByteBuffer_append_pn(thread, self->byteBuffer, &(source->elements[i][j]), sizeof(float));
+      }
+    }
+  }
   self->dirty = Arcadia_BooleanValue_True;
 }
 

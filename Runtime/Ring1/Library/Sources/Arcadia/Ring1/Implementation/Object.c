@@ -389,7 +389,7 @@ Arcadia_Object_addNotifyDestroyCallback
   )
 {
   ObjectTag* tag = ((ObjectTag*)self) - 1;
-  Arcadia_Status status = Arcadia_Arms_addNotifyDestroy(tag, observer, self, (void (*)(void*,void*))callback);
+  Arcadia_Status status = Arcadia_ARMS_addNotifyDestroy(tag, observer, self, (void (*)(void*,void*))callback);
   if (status) {
     Arcadia_Thread_setStatus(thread, status);
     Arcadia_Thread_jump(thread);
@@ -406,7 +406,7 @@ Arcadia_Object_removeNotifyDestroyCallback
   )
 {
   ObjectTag* tag = ((ObjectTag*)self) - 1;
-  Arcadia_Status status = Arcadia_Arms_removeNotifyDestroy(tag, observer, self, (void (*)(void*, void*))callback);
+  Arcadia_Status status = Arcadia_ARMS_removeNotifyDestroy(tag, observer, self, (void (*)(void*, void*))callback);
   if (status) {
     Arcadia_Thread_setStatus(thread, status);
     Arcadia_Thread_jump(thread);
@@ -426,7 +426,7 @@ Arcadia_Object_forwardBarrier
   if (source && target) {
     ObjectTag* sourceTag = ((ObjectTag*)source) - 1;
     ObjectTag* targetTag = ((ObjectTag*)target) - 1;
-    Arcadia_Arms_forwardBarrier(sourceTag, targetTag);
+    Arcadia_ARMS_forwardBarrier(sourceTag, targetTag);
   }
 }
 
@@ -441,7 +441,7 @@ Arcadia_Object_backwardBarrier
   if (source && target) {
     ObjectTag* sourceTag = ((ObjectTag*)source) - 1;
     ObjectTag* targetTag = ((ObjectTag*)target) - 1;
-    Arcadia_Arms_backwardBarrier(sourceTag, targetTag);
+    Arcadia_ARMS_backwardBarrier(sourceTag, targetTag);
   }
 }
 

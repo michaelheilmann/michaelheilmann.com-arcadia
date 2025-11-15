@@ -16,7 +16,7 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Memory.h"
 
-#include "Arcadia/Arms/Include.h"
+#include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 #include "Arcadia/Ring1/Implementation/Thread.private.h"
 #include <stdbool.h>
@@ -105,11 +105,11 @@ Arcadia_Memory_allocateUnmanaged
   )
 {
   void* q = NULL;
-  Arcadia_Arms_MemoryManager_Status status = Arcadia_Arms_MemoryManager_allocate(Arcadia_Arms_getDefaultMemoryManager(), &q, n);
+  Arcadia_ARMS_MemoryManager_Status status = Arcadia_ARMS_MemoryManager_allocate(Arcadia_ARMS_getDefaultMemoryManager(), &q, n);
   if (status) {
-    if (status == Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid) {
+    if (status == Arcadia_ARMS_MemoryManager_Status_ArgumentValueInvalid) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    } else if (status == Arcadia_Arms_MemoryManager_Status_AllocationFailed) {
+    } else if (status == Arcadia_ARMS_MemoryManager_Status_AllocationFailed) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use Arcadia_Status_EnvironmentInvalid.*/
@@ -126,9 +126,9 @@ Arcadia_Memory_deallocateUnmanaged
     void* p
   )
 {
-  Arcadia_Arms_MemoryManager_Status status = Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getDefaultMemoryManager(), p);
+  Arcadia_ARMS_MemoryManager_Status status = Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getDefaultMemoryManager(), p);
   if (status) {
-    if (status == Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid) {
+    if (status == Arcadia_ARMS_MemoryManager_Status_ArgumentValueInvalid) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use Arcadia_Status_EnvironmentInvalid.*/
@@ -145,11 +145,11 @@ Arcadia_Memory_reallocateUnmanaged
     size_t n
   )
 {
-  Arcadia_Arms_MemoryManager_Status status = Arcadia_Arms_MemoryManager_reallocate(Arcadia_Arms_getDefaultMemoryManager(), p, n);
+  Arcadia_ARMS_MemoryManager_Status status = Arcadia_ARMS_MemoryManager_reallocate(Arcadia_ARMS_getDefaultMemoryManager(), p, n);
   if (status) {
-    if (status == Arcadia_Arms_MemoryManager_Status_ArgumentValueInvalid) {
+    if (status == Arcadia_ARMS_MemoryManager_Status_ArgumentValueInvalid) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    } else if (status == Arcadia_Arms_MemoryManager_Status_AllocationFailed) {
+    } else if (status == Arcadia_ARMS_MemoryManager_Status_AllocationFailed) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed); /*@todo As ARMs behaves incorrectly, we should use Arcadia_Status_EnvironmentInvalid.*/

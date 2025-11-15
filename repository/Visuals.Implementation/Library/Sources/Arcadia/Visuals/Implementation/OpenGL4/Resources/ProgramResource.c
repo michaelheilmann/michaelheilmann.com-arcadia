@@ -43,6 +43,13 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+  );
+
+static void
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl
   (
     Arcadia_Thread* thread,
@@ -60,7 +67,8 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -110,9 +118,11 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
   ((Arcadia_Visuals_Implementation_Resource*)self->vertexProgram)->referenceCount++;
   ((Arcadia_Visuals_Implementation_Resource*)self->fragmentProgram)->referenceCount++;
 
+  ((Arcadia_Visuals_Implementation_Resource*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl;
   ((Arcadia_Visuals_Implementation_Resource*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl;
   ((Arcadia_Visuals_Implementation_Resource*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_Resource*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl;
+  ((Arcadia_Visuals_Implementation_Resource*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_MeshContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl;
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -136,6 +146,55 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl
     Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {/*Intentionally empty.*/}
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+  )
+{
+  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+  if (0 == self->id) {
+    self->id = gl->glCreateProgram();
+    if (0 == self->id) {
+      return;
+    }
+  }
+  if (self->dirty) {
+    // (1) attach vertex program
+    Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->vertexProgram);
+    if (!self->vertexProgram->id) {
+      return;
+    }
+    while (gl->glGetError()) { }
+    gl->glAttachShader(self->id, self->vertexProgram->id);
+    if (gl->glGetError()) {
+      return;
+    }
+    // (2) attach fragment program
+    Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->fragmentProgram);
+    if (!self->fragmentProgram->id) {
+      return;
+    }
+    while (gl->glGetError()) { }
+    gl->glAttachShader(self->id, self->fragmentProgram->id);
+    if (gl->glGetError()) {
+      return;
+    }
+    // (3) link program
+    while (gl->glGetError()) { }
+    gl->glLinkProgram(self->id);
+    GLint success = GL_FALSE;
+    gl->glGetProgramiv(self->id, GL_LINK_STATUS, &success);
+    if (!success) {
+      return;
+    } else {
+      self->dirty = Arcadia_BooleanValue_False;
+    }
+  }
+}
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_unloadImpl
@@ -175,7 +234,8 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
   )
 {
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
@@ -188,7 +248,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
   }
   if (self->dirty) {
     // (1) attach vertex program
-    Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->vertexProgram);
+    Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->vertexProgram);
     if (!self->vertexProgram->id) {
       return;
     }
@@ -198,7 +258,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_renderImpl
       return;
     }
     // (2) attach fragment program
-    Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->fragmentProgram);
+    Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->fragmentProgram);
     if (!self->fragmentProgram->id) {
       return;
     }

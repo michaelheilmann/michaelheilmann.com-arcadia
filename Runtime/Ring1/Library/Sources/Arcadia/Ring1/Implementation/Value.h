@@ -273,4 +273,12 @@ Arcadia_Value_getHash
     Arcadia_Value* self
   );
 
+Arcadia_BooleanValue
+Arcadia_Value_isInstanceOf
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value const* self,
+    Arcadia_Type* type
+  );
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_VALUE_H_INCLUDED

@@ -18,14 +18,28 @@ cmake_minimum_required(VERSION 3.20)
 set(MyModule ${MyProjectName}.Visuals.Implementation)
 
 if (NOT TARGET ${MyModule})
+  option(${MyModule}.Direct3D12.Enabled "TRUE enables Direct3D 12 support. FALSE disables Direct3D 12 support. Default is FALSE" FALSE)
   option(${MyModule}.OpenGL4.Enabled "TRUE enables OpenGL 4 support. FALSE disables OpenGL 4 support. Default is FALSE" FALSE)
+  option(${MyModule}.Vulkan.Enabled "TRUE enables Vulkan support. FALSE disables Vulkan support. Default is FALSE" FALSE)
 
   BeginProduct(${MyModule} library)
+
+  if (${MyModule}.Direct3D12.Enabled)
+    set(${MyModule}.Configuration.Direct3D12.Enabled 1)
+  else()
+    set(${MyModule}.Configuration.Direct3D12.Enabled 0)
+  endif()
 
   if (${MyModule}.OpenGL4.Enabled)
     set(${MyModule}.Configuration.OpenGL4.Enabled 1)
   else()
     set(${MyModule}.Configuration.OpenGL4.Enabled 0)
+  endif()
+
+  if (${MyModule}.Vulkan.Enabled)
+    set(${MyModule}.Configuration.Vulkan.Enabled 1)
+  else()
+    set(${MyModule}.Configuration.Vulkan.Enabled 0)
   endif()
 
   # X11/OpenGL under Linux.
@@ -131,10 +145,14 @@ if (NOT TARGET ${MyModule})
     set(${MyModule}.Backend ${${MyModule}.Backend.OpenGL})
   endif()
 
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/CameraNode.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/CameraNode.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/MeshNode.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/MeshNode.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/ViewportNode.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/ViewportNode.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/MeshContext.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/MeshContext.h)
 
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/SceneNodeFactory.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/SceneNodeFactory.h)
@@ -154,6 +172,8 @@ if (NOT TARGET ${MyModule})
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/FragmentProgramResource.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/ProgramResource.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/ProgramResource.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/MeshContextResource.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/MeshContextResource.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/MeshResource.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/MeshResource.h)
 
@@ -186,6 +206,17 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h)
   endif()
 
+  # Enable Direct3D 12 under Windows.
+  if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows} AND ${${MyModule}.Direct3D12.Enabled})
+    list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Direct3D12/Backend.c)
+    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Direct3D12/Backend.h)
+  endif()
+
+  # Enable Vulkan under Windows.
+  if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows} AND ${${MyModule}.Vulkan.Enabled})
+    list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Vulkan/Backend.c)
+    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Vulkan/Backend.h)
+  endif()
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Visuals/Implementation/Configure.h @ONLY)
   list(APPEND ${MyModule}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Configure.h.i)

@@ -17,7 +17,7 @@
 #include "Arcadia/Ring1/Implementation/Thread.h"
 
 #include "Arcadia/Ring1/Implementation/Thread.private.h"
-#include "Arcadia/Arms/Include.h"
+#include "Arcadia/ARMS/Include.h"
 
 Arcadia_SizeValue
 Arcadia_ValueStack_getSize

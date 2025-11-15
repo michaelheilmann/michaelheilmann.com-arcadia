@@ -25,33 +25,28 @@ syn:Value : sny:Void
 </div>
 
 <p>The sentence <code>syn:String</code> is defined by</p>
-<div class="box">
-<p><code>
+<div class="box"><p><code>
 syn:String : lex:String
-</code></p>
+</code></p></div>
 
 <p>The sentence <code>syn:Number</code> is defined by</p>
-<div class="box">
-<p><code>
+<div class="box"><p><code>
 syn:Number : lex:Number
-</code></p>
+</code></p></div>
 
 <p>The sentence <code>syn:Boolean</code> is defined by</p>
-<div class="box">
-<p><code>
+<div class="box"><p><code>
 syn:Boolean : lex:Boolean
-</code></p>
+</code></p></div>
 
 <p>The sentence <code>syn:Void</code> is defined by</p>
-<div class="box">
-<p><code>
+<div class="box"><p><code>
 syn:Void : lex:Void 
-</code></p>
+</code></p></div>
 
 <p>The sentence <code>syn:Map</code> is defined by</p> 
 
-<div class="box">
-<p><code>
+<div class="box"><p><code>
 syn:Map : lex:LeftCurlyBracket<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;syn:MapBody<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lex:RightCurlyBracket<br/>
@@ -63,13 +58,11 @@ syn:MapBodyRest : lex:Comma syn:MapBodyElement syn:MapBodyRest <br/>
 syn:MapBodyRest : lex:Comma<br/>
 syn:MapBodyRest : ε<br/>
 syn:MapBodyElement : lex:Name lex:Colon syn:Value
-</code></p>
-</div>
+</code></p></div>
 
 <p>The sentence <code>syn:List</code> is defined by</p>
 
-<div class="box">
-<p><code>
+<div class="box"><p><code>
 syn:List : lex:LeftSquareBracket<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;syn:ListBody<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lex:RightSquareBracket<br/>
@@ -82,5 +75,4 @@ syn:ListBodyRest : lex:Comma<br/>
 syn:ListBodyRest : ε<br/>
 <br/>
 syn:ListBodyElement : syn:Value 
-</code></p>
-</div>
+</code></p></div>

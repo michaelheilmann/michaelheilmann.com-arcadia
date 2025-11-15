@@ -377,7 +377,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table
   // 1
   a = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger8(thread, a, 1);
-  if (Arcadia_Arms_addNotifyDestroy(a, NULL, &ONE, &onNotifyDestroy)) {
+  if (Arcadia_ARMS_addNotifyDestroy(a, NULL, &ONE, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -387,7 +387,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table
   // 2
   a = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger8(thread, a, 2);
-  if (Arcadia_Arms_addNotifyDestroy(a, NULL, &TWO, &onNotifyDestroy)) {
+  if (Arcadia_ARMS_addNotifyDestroy(a, NULL, &TWO, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -405,7 +405,7 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table
 #if _DEBUG
   //Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, a));
 #endif
-  if (Arcadia_Arms_addNotifyDestroy(a, NULL, &MASK64, &onNotifyDestroy)) {
+  if (Arcadia_ARMS_addNotifyDestroy(a, NULL, &MASK64, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }

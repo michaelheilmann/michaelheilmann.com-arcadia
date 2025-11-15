@@ -31,6 +31,8 @@
 
 #include "Arcadia/Visuals/Diagnostics.h"
 
+#include "Arcadia/Visuals/Scene/MeshContext.h"
+#include "Arcadia/Visuals/Scene/CameraNode.h"
 #include "Arcadia/Visuals/Scene/Node.h"
 #include "Arcadia/Visuals/Scene/MeshNode.h"
 #include "Arcadia/Visuals/Scene/ViewportNode.h"

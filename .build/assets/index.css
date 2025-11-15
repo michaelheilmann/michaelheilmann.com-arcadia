@@ -583,3 +583,8 @@ body.my-content-page-1 my-mv::after {
 /*h6 ~ my-signature, h6 ~ my-summary,*/h6 ~ my-parameters, h6 ~ my-errors, h6 ~ my-return-value {
   font-size: var(--h6-font-size);
 }
+
+/* Ensure a table followed by a paragraph are properly separated. */
+table + p {
+  margin-top: 1rem;
+}

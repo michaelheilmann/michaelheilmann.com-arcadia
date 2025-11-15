@@ -16,7 +16,7 @@
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 
 #include "Arcadia.Tools.TemplateEngine.Library/Ast.h"
-#include "Arcadia/DataDefinitionLanguage/Include.h"
+#include "Arcadia/DDL/Include.h"
 
 static void
 Environment_visit
@@ -121,32 +121,32 @@ Environment_loadString
     Arcadia_String* source
   )
 {
-  Arcadia_DataDefinitionLanguage_Tree_Node* node = NULL;
-  Arcadia_DataDefinitionLanguage_Parser* syntacticalAnalysis = Arcadia_DataDefinitionLanguage_Parser_create(thread);
-  Arcadia_DataDefinitionLanguage_Parser_setInput(thread, syntacticalAnalysis, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, source));
+  Arcadia_DDL_Node* node = NULL;
+  Arcadia_DDL_Parser* syntacticalAnalysis = Arcadia_DDL_Parser_create(thread);
+  Arcadia_DDL_Parser_setInput(thread, syntacticalAnalysis, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, source));
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis* semanticalAnalysis = Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create(thread);
-  node = Arcadia_DataDefinitionLanguage_Parser_run(thread, syntacticalAnalysis);
+  node = Arcadia_DDL_Parser_run(thread, syntacticalAnalysis);
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run(thread, semanticalAnalysis, node);
   Environment* variables = Environment_create(thread, NULL);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DataDefinitionLanguage_Tree_MapNode_getType(thread))) {
+  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_DataDefinitionLanguage_Tree_MapNode* mapNode = (Arcadia_DataDefinitionLanguage_Tree_MapNode*)node;
+  Arcadia_DDL_MapNode* mapNode = (Arcadia_DDL_MapNode*)node;
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
     node = Arcadia_List_getObjectReferenceValueAt(thread, mapNode->entries, i);
-    if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DataDefinitionLanguage_Tree_MapEntryNode_getType(thread))) {
+    if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapEntryNode_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_DataDefinitionLanguage_Tree_MapEntryNode* mapEntryNode = (Arcadia_DataDefinitionLanguage_Tree_MapEntryNode*)node;
+    Arcadia_DDL_MapEntryNode* mapEntryNode = (Arcadia_DDL_MapEntryNode*)node;
     Arcadia_String* keyString = mapEntryNode->key->value;
     node = mapEntryNode->value;
-    if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DataDefinitionLanguage_Tree_StringNode_getType(thread))) {
+    if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_StringNode_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_String* valueString = ((Arcadia_DataDefinitionLanguage_Tree_StringNode*)mapEntryNode->value)->value;
+    Arcadia_String* valueString = ((Arcadia_DDL_StringNode*)mapEntryNode->value)->value;
     Arcadia_Map_set(thread, variables->variables, Arcadia_Value_makeObjectReferenceValue(keyString), Arcadia_Value_makeObjectReferenceValue(valueString), NULL, NULL);
   }
   return variables;

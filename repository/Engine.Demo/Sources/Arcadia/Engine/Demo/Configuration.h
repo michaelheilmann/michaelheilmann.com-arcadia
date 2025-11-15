@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_ENGINE_DEMO_CONFIGURATIONUTILITIES_H_INCLUDED)
 #define ARCADIA_ENGINE_DEMO_CONFIGURATIONUTILITIES_H_INCLUDED
 
-#include "Arcadia/DataDefinitionLanguage/Include.h"
+#include "Arcadia/DDL/Include.h"
 
 // { <name[0]> = { <name[1]> : { <name[2]> : ... { <name[n-1]> : <value>} } } }
 // node must be a map node
@@ -24,7 +24,7 @@ void
 Cfg2_setBoolean
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    Arcadia_DDL_Node* node,
     char const* names[],
     Arcadia_SizeValue numberOfNames,
     Arcadia_Integer32Value value
@@ -36,7 +36,7 @@ Arcadia_BooleanValue
 Cfg2_getBoolean
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    Arcadia_DDL_Node* node,
     char const* names[],
     Arcadia_SizeValue numberOfNames
   );
@@ -47,7 +47,7 @@ void
 Cfg2_setInteger32
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    Arcadia_DDL_Node* node,
     char const* names[],
     Arcadia_SizeValue numberOfNames,
     Arcadia_Integer32Value value
@@ -59,7 +59,7 @@ Arcadia_Integer32Value
 Cfg2_getInteger32
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    Arcadia_DDL_Node* node,
     char const* names[],
     Arcadia_SizeValue numberOfNames
   );
@@ -70,7 +70,7 @@ void
 Cfg2_setString
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    Arcadia_DDL_Node* node,
     char const* names[],
     Arcadia_SizeValue numberOfNames,
     Arcadia_String* value
@@ -82,7 +82,7 @@ Arcadia_String*
 Cfg2_getString
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    Arcadia_DDL_Node* node,
     char const* names[],
     Arcadia_SizeValue numberOfNames
   );
@@ -93,7 +93,7 @@ void
 Cfg2_setSection
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* node,
+    Arcadia_DDL_Node* node,
     char const* names[],
     Arcadia_SizeValue numberOfNames
   );
@@ -102,10 +102,10 @@ void
 Cfg_saveConfiguration
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration
+    Arcadia_DDL_Node* configuration
   );
 
-Arcadia_DataDefinitionLanguage_Tree_MapNode*
+Arcadia_DDL_MapNode*
 Cfg_loadConfiguration
   (
     Arcadia_Thread* thread

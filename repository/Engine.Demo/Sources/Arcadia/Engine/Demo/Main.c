@@ -21,7 +21,7 @@
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Audials/Include.h"
 #include "Arcadia/Visuals/Include.h"
-#include "Arcadia/DataDefinitionLanguage/Include.h"
+#include "Arcadia/DDL/Include.h"
 
 #include "Arcadia/Engine/Demo/Audials.h"
 #include "Arcadia/Engine/Demo/Visuals.h"
@@ -35,6 +35,16 @@ render
     Arcadia_Integer32Value height
   )
 {
+  Arcadia_Visuals_Scene_MeshContext* meshContext =
+    Arcadia_Visuals_SceneNodeFactory_createMeshContext
+      (
+        thread,
+        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+      );
+  Arcadia_Visuals_Scene_MeshContext_setBackendContext(thread, (Arcadia_Visuals_Scene_MeshContext*)meshContext, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Visuals_Scene_MeshContext_render(thread, (Arcadia_Visuals_Scene_MeshContext*)meshContext); // TODO: Remove this.
+
   Arcadia_Visuals_Scene_ViewportNode* viewportNode1 =
     (Arcadia_Visuals_Scene_ViewportNode*)
     Arcadia_Visuals_SceneNodeFactory_createViewportNode
@@ -43,10 +53,6 @@ render
         (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
         (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
       );
-  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)viewportNode1, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
-  Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, viewportNode1, 255.f, 0.f, 0.f, 255.f);
-  Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, viewportNode1, 0.f, 0.f, 0.5f, 1.f);
-  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, viewportNode1, width, height);
 
   Arcadia_Visuals_Scene_ViewportNode* viewportNode2 =
     (Arcadia_Visuals_Scene_ViewportNode*)
@@ -56,10 +62,25 @@ render
         (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
         (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
       );
+
+  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)viewportNode1, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, viewportNode1, 255.f, 0.f, 0.f, 255.f);
+  Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, viewportNode1, 0.f, 0.f, 0.5f, 1.f);
+  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, viewportNode1, width, height);
+
   Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)viewportNode2, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
   Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, viewportNode2, 0.f, 255.f, 0.f, 255.f);
   Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, viewportNode2, 0.5f, 0.f, 1.0f, 1.f);
   Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, viewportNode2, width, height);
+
+  Arcadia_Visuals_Scene_CameraNode* cameraNode =
+    (Arcadia_Visuals_Scene_CameraNode*)
+    Arcadia_Visuals_SceneNodeFactory_createCameraNode
+      (
+        thread,
+        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+      );
 
   Arcadia_Visuals_Scene_MeshNode* meshNode =
     (Arcadia_Visuals_Scene_MeshNode*)
@@ -71,11 +92,15 @@ render
       );
   Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)meshNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
 
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)viewportNode1);
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode);
+  Arcadia_Visuals_Scene_CameraNode_setViewport(thread, cameraNode, viewportNode1);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)viewportNode1, meshContext);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)cameraNode, meshContext);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode, meshContext);
 
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)viewportNode2);
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode);
+  Arcadia_Visuals_Scene_CameraNode_setViewport(thread, cameraNode, viewportNode2);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)viewportNode2, meshContext);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)cameraNode, meshContext);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode, meshContext);
 }
 
 void
@@ -89,7 +114,7 @@ main1
   Arcadia_BooleanValue quit = Arcadia_BooleanValue_False;
   Arcadia_Engine* engine = NULL;
   Arcadia_Visuals_Window* window = NULL;
-  Arcadia_DataDefinitionLanguage_Tree_Node* configuration = NULL;
+  Arcadia_DDL_Node* configuration = NULL;
 
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
 
@@ -98,7 +123,7 @@ main1
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
 
     {
-      Arcadia_DataDefinitionLanguage_Tree_Node* temporary = (Arcadia_DataDefinitionLanguage_Tree_Node*)Cfg_loadConfiguration(thread);
+      Arcadia_DDL_Node* temporary = (Arcadia_DDL_Node*)Cfg_loadConfiguration(thread);
       Arcadia_Object_lock(thread,  (Arcadia_Object*)temporary);
       configuration = temporary;
     }

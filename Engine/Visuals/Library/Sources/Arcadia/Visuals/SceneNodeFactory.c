@@ -83,6 +83,8 @@ Arcadia_Visuals_SceneNodeFactory_construct
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  self->createCameraNode = NULL;
+  self->createMeshContext = NULL;
   self->createMeshNode = NULL;
   self->createViewportNode = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
@@ -105,6 +107,24 @@ Arcadia_Visuals_SceneNodeFactory_visit
   )
 {/*Intentionally empty.*/}
 
+Arcadia_Visuals_Scene_CameraNode*
+Arcadia_Visuals_SceneNodeFactory_createCameraNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext
+  )
+{ return self->createCameraNode(thread, self, backendContext); }
+
+Arcadia_Visuals_Scene_MeshContext*
+Arcadia_Visuals_SceneNodeFactory_createMeshContext
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext
+  )
+{ return self->createMeshContext(thread, self, backendContext); }
+
 Arcadia_Visuals_Scene_MeshNode*
 Arcadia_Visuals_SceneNodeFactory_createMeshNode
   (
@@ -122,13 +142,3 @@ Arcadia_Visuals_SceneNodeFactory_createViewportNode
     Arcadia_Visuals_BackendContext* backendContext
   )
 { return self->createViewportNode(thread, self, backendContext); }
-
-void
-Arcadia_Visuals_SceneNodeFactory_render
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_SceneNodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext,
-    Arcadia_Visuals_Window* window
-  )
-{ self->render(thread, self, backendContext, window); }

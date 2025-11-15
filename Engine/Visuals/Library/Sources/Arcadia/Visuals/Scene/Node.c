@@ -112,6 +112,7 @@ void
 Arcadia_Visuals_Scene_Node_render
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Scene_Node* self
+    Arcadia_Visuals_Scene_Node* self,
+    Arcadia_Visuals_Scene_MeshContext* meshContext
   )
-{ self->render(thread, self); }
+{ self->render(thread, self, meshContext); }

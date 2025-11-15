@@ -16,6 +16,7 @@
 #include "Arcadia/Visuals/Implementation/Scene/ViewportNode.h"
 
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
+#include "Arcadia/Visuals/Implementation/Scene/MeshContext.h"
 #include <assert.h>
 
 static void
@@ -43,7 +44,8 @@ static void
 Arcadia_Visuals_Implementation_Scene_ViewportNode_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_Scene_ViewportNode* self
+    Arcadia_Visuals_Implementation_Scene_ViewportNode* self,
+    Arcadia_Visuals_Scene_MeshContext* meshContext
   );
 
 static void
@@ -144,7 +146,7 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_constructImpl
   ((Arcadia_Visuals_Scene_ViewportNode*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_ViewportNode*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_setClearColorImpl;
   ((Arcadia_Visuals_Scene_ViewportNode*)self)->setRelativeViewportRectangle = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_ViewportNode*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_setRelativeViewportRectangleImpl;
 
-  ((Arcadia_Visuals_Scene_Node*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_renderImpl;
+  ((Arcadia_Visuals_Scene_Node*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_Scene_MeshContext*)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_renderImpl;
   ((Arcadia_Visuals_Scene_Node*)self)->setBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_setBackendContextImpl;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
@@ -178,7 +180,8 @@ static void
 Arcadia_Visuals_Implementation_Scene_ViewportNode_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_Scene_ViewportNode* self
+    Arcadia_Visuals_Implementation_Scene_ViewportNode* self,
+    Arcadia_Visuals_Scene_MeshContext* meshContext
   )
 {
   if (self->backendContext) {
@@ -204,7 +207,8 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_renderImpl
                                                                             self->canvasSize.width,
                                                                             self->canvasSize.height);
     }
-    Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource);
+    Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource,
+                                                           ((Arcadia_Visuals_Implementation_Scene_MeshContext*)meshContext)->meshContextResource);
   }
 }
 
@@ -284,4 +288,3 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_create
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_Scene_ViewportNode);
 }
-

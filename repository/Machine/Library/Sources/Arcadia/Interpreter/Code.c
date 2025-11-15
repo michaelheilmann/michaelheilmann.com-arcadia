@@ -187,7 +187,7 @@ R_Interpreter_Code_append
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Arrays_resizeByFreeCapacity(thread, Arcadia_Arms_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, Arcadia_Arrays_ResizeStrategy_Type4);
+  Arcadia_Arrays_resizeByFreeCapacity(thread, Arcadia_ARMS_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Natural8Value), self->sz, &self->cp, numberOfBytes, Arcadia_Arrays_ResizeStrategy_Type4);
   Arcadia_Memory_copy(thread, self->p + self->sz, bytes, numberOfBytes);
   self->sz += numberOfBytes;
 }

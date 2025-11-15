@@ -33,8 +33,7 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ConstantBuff
 struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource {
   Arcadia_Visuals_Implementation_ConstantBufferResource _parent;
   Arcadia_BooleanValue dirty;
-  void* bytes;
-  Arcadia_SizeValue numberOfBytes;
+  Arcadia_ByteBuffer* byteBuffer;
   GLuint bufferID;
 };
 

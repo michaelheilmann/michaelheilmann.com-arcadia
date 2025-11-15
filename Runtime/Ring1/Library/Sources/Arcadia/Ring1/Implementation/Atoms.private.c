@@ -20,7 +20,7 @@
 #include "Arcadia/Ring1/Implementation/Module.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/TypeNameParser.h"
-#include "Arcadia/Arms/Include.h"
+#include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 #include <string.h> /*TODO: Add and use Arcadia_Process functionality.*/
 
@@ -284,7 +284,7 @@ Arcadia_Atom_visit
   )
 {
   self->lastVisited = getTickCount(thread);
-  Arcadia_Arms_visit(self);
+  Arcadia_ARMS_visit(self);
 }
 
 void const*
@@ -461,7 +461,7 @@ _Arcadia_Atoms_onPreMark
     Arcadia_Atom* current = g_singleton->buckets[i];
     while (current) {
       if (now - current->lastVisited > THRESHOLD && !purgeCache) {
-        Arcadia_Arms_visit(current);
+        Arcadia_ARMS_visit(current);
       }
       current = current->next;
     }

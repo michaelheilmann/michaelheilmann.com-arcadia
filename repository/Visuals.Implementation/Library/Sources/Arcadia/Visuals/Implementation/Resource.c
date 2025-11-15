@@ -100,6 +100,14 @@ Arcadia_Visuals_Implementation_Resource_visitImpl
 {/*Intentionally empty.*/}
 
 void
+Arcadia_Visuals_Implementation_Resource_load
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_Resource* self
+  )
+{ self->load(thread, self); }
+
+void
 Arcadia_Visuals_Implementation_Resource_unload
   (
     Arcadia_Thread* thread,
@@ -119,9 +127,10 @@ void
 Arcadia_Visuals_Implementation_Resource_render
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_Resource* self
+    Arcadia_Visuals_Implementation_Resource* self,
+    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
   )
-{ self->render(thread, self); }
+{ self->render(thread, self, meshContextResource); }
 
 void
 Arcadia_Visuals_Implementation_Resource_ref

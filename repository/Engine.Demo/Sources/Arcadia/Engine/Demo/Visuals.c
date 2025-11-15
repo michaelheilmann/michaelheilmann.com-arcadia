@@ -24,7 +24,7 @@ static void
 setDisplayMode
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration,
+    Arcadia_DDL_Node* configuration,
     Arcadia_Integer32Value horizontalResolution,
     Arcadia_Integer32Value verticalResolution,
     Arcadia_Integer32Value colorDepth
@@ -57,7 +57,7 @@ static void
 getDisplayMode
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration,
+    Arcadia_DDL_Node* configuration,
     Arcadia_Integer32Value* horizontalResolution,
     Arcadia_Integer32Value* verticalResolution,
     Arcadia_Integer32Value* colorDepth
@@ -94,7 +94,7 @@ static void
 setVerticalSynchronization
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration,
+    Arcadia_DDL_Node* configuration,
     Arcadia_BooleanValue value
   )
 {
@@ -109,7 +109,7 @@ static Arcadia_BooleanValue
 getVerticalSynchronization
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration
+    Arcadia_DDL_Node* configuration
   )
 {
   char const* path[] = {
@@ -139,7 +139,7 @@ Arcadia_Engine_Demo_startupVisuals
   (
     Arcadia_Thread* thread,
     Arcadia_Engine* engine,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration,
+    Arcadia_DDL_Node* configuration,
     Arcadia_Visuals_DisplayDevice** pDisplayDevice,
     Arcadia_String** pWindowMode,
     Arcadia_Visuals_Window** pWindow
@@ -159,7 +159,7 @@ Arcadia_Engine_Demo_startupVisuals
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_String* backendTypeName = Cfg2_getString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
+      Arcadia_String* backendTypeName = Cfg2_getString(thread, (Arcadia_DDL_Node*)configuration, path, 2);
       Arcadia_Value backendTypeValue = Arcadia_HashSet_findFirst(thread, (Arcadia_HashSet*)engine->visualBackendTypes, Arcadia_Value_makeObjectReferenceValue(backendTypeName), &findTypeByName);
       if (!Arcadia_Value_isTypeValue(&backendTypeValue)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
@@ -176,7 +176,7 @@ Arcadia_Engine_Demo_startupVisuals
     } else {
       Arcadia_Thread_popJumpTarget(thread);
       Arcadia_String* backendTypeName = Arcadia_String_createFromCxxString(thread, u8"Arcadia.Visuals.Implementation.OpenGL4.Backend");
-      Cfg2_setString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2, backendTypeName);
+      Cfg2_setString(thread, (Arcadia_DDL_Node*)configuration, path, 2, backendTypeName);
       Arcadia_Value backendTypeValue = Arcadia_HashSet_findFirst(thread, (Arcadia_HashSet*)engine->visualBackendTypes, Arcadia_Value_makeObjectReferenceValue(backendTypeName), &findTypeByName);
       if (!Arcadia_Value_isTypeValue(&backendTypeValue)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
@@ -206,7 +206,7 @@ Arcadia_Engine_Demo_startupVisuals
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      displayDeviceIndex = Cfg2_getInteger32(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
+      displayDeviceIndex = Cfg2_getInteger32(thread, (Arcadia_DDL_Node*)configuration, path, 2);
       if (displayDeviceIndex < 0 || displayDeviceIndex >= Arcadia_Collection_getSize(thread, (Arcadia_Collection*)displayDevices)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
         Arcadia_Thread_jump(thread);
@@ -214,7 +214,7 @@ Arcadia_Engine_Demo_startupVisuals
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
-      Cfg2_setInteger32(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2, displayDeviceIndex);
+      Cfg2_setInteger32(thread, (Arcadia_DDL_Node*)configuration, path, 2, displayDeviceIndex);
     }
     // If we don't have at least one display device, bail out.
     if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)displayDevices)) {
@@ -238,7 +238,7 @@ Arcadia_Engine_Demo_startupVisuals
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      windowMode = Cfg2_getString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
+      windowMode = Cfg2_getString(thread, (Arcadia_DDL_Node*)configuration, path, 2);
       Arcadia_BooleanValue found = Arcadia_BooleanValue_False;
       for (Arcadia_SizeValue i = 0, n = 3; i < n; ++i) {
         Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowMode);
@@ -256,7 +256,7 @@ Arcadia_Engine_Demo_startupVisuals
     } else {
       Arcadia_Thread_popJumpTarget(thread);
       windowMode = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1)));
-      Cfg2_setString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2, windowMode);
+      Cfg2_setString(thread, (Arcadia_DDL_Node*)configuration, path, 2, windowMode);
     }
     *pWindowMode = windowMode;
   }

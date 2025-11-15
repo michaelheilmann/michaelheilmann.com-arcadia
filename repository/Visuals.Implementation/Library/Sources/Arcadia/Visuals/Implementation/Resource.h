@@ -18,7 +18,7 @@
 
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Math/Include.h"
-
+typedef struct Arcadia_Visuals_Implementation_MeshContextResource Arcadia_Visuals_Implementation_MeshContextResource;
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
 
 // A "resource" is owned by a "backend context". That is, the "backend context" holds a STRONG reference to its "resources".
@@ -33,10 +33,18 @@ struct Arcadia_Visuals_Implementation_Resource {
   // Unmanaged reference to the "backend context" or the null reference.
   Arcadia_Visuals_Implementation_BackendContext* context;
 
+  void (*load)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self);
   void (*unload)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self);
   void (*unlink)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self);
-  void (*render)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self);
+  void (*render)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self, Arcadia_Visuals_Implementation_MeshContextResource*);
 };
+
+void
+Arcadia_Visuals_Implementation_Resource_load
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_Resource* self
+  );
 
 // Unload the "backend resource" of this resource.
 // "Unloading" is a reversible action.
@@ -67,7 +75,8 @@ void
 Arcadia_Visuals_Implementation_Resource_render
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_Resource* self
+    Arcadia_Visuals_Implementation_Resource* self,
+    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
   );
 
 void

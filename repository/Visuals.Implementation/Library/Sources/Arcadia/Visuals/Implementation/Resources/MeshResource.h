@@ -18,14 +18,13 @@
 
 #include "Arcadia/Visuals/Implementation/Resource.h"
 #include "Arcadia/Math/Include.h"
+
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.MeshResource", Arcadia_Visuals_Implementation_MeshResource,
                           u8"Arcadia.Visuals.Implementation.Resource")
 
 struct Arcadia_Visuals_Implementation_MeshResource {
   Arcadia_Visuals_Implementation_Resource _parent;
   void (*setLocalToWorldMatrix)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Matrix4Real32*);
-  void (*setViewToProjectionMatrix)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Matrix4Real32*);
-  void (*setWorldToViewMatrix)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Matrix4Real32*);
 };
 
 void
@@ -34,22 +33,6 @@ Arcadia_Visuals_Implemention_MeshResource_setLocalToWorldMatrix
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_MeshResource* self,
     Arcadia_Math_Matrix4Real32* localToWorldMatrix
-  );
-
-void
-Arcadia_Visuals_Implemention_MeshResource_setViewToProjectionMatrix
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_MeshResource* self,
-    Arcadia_Math_Matrix4Real32* viewToProjectionMatrix
-  );
-
-void
-Arcadia_Visuals_Implemention_MeshResource_setWorldToViewMatrix
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_MeshResource* self,
-    Arcadia_Math_Matrix4Real32* worldToViewMatrix
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_MESHRESOURCE_H_INCLUDED

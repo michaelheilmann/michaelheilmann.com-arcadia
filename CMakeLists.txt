@@ -24,7 +24,7 @@ if (NOT MyProjectIsDefined)
   include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
 endif()
 
-add_subdirectory(Runtime/Arms)
+add_subdirectory(Runtime/ARMS)
 add_subdirectory(Runtime/Ring1)
 add_subdirectory(Runtime/Ring2)
 add_subdirectory(DataDefinitionLanguage)

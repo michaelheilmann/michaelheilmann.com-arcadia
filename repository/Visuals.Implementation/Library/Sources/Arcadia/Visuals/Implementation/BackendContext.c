@@ -117,6 +117,14 @@ Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource
   )
 { return self->createFragmentProgramResource(thread, self); }
 
+Arcadia_Visuals_Implementation_MeshContextResource*
+Arcadia_Visuals_Implementation_BackendContext_createMeshContextResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_BackendContext* self
+  )
+{ return self->createMeshContextResource(thread, self); }
+
 Arcadia_Visuals_Implementation_MeshResource*
 Arcadia_Visuals_Implementation_BackendContext_createMeshResource
   (

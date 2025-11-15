@@ -17,7 +17,7 @@
 #include "Arcadia/Ring2/FileSystem/FileSystem.h"
 
 #include "Arcadia/Ring2/Include.h"
-#include "Arcadia/Arms/Include.h"
+#include "Arcadia/ARMS/Include.h"
 
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   #define WIN32_LEAN_AND_MEAN
@@ -332,12 +332,12 @@ Arcadia_FileSystem_getWorkingDirectory
     Arcadia_Thread_jump(thread);
   }
   char* pBuffer = NULL;
-  if (Arcadia_Arms_MemoryManager_allocate(Arcadia_Arms_getSlabMemoryManager(), &pBuffer, dwBufferSize)) {
+  if (Arcadia_ARMS_MemoryManager_allocate(Arcadia_ARMS_getSlabMemoryManager(), &pBuffer, dwBufferSize)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }
   if (!GetCurrentDirectory(dwBufferSize, pBuffer)) {
-    Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getSlabMemoryManager(), pBuffer);
+    Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getSlabMemoryManager(), pBuffer);
     pBuffer = NULL;
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
@@ -348,12 +348,12 @@ Arcadia_FileSystem_getWorkingDirectory
     Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, pBuffer, dwBufferSize - 1)));
     Arcadia_FilePath* filePath = Arcadia_FilePath_parseWindows(thread, filePathString);
     Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getSlabMemoryManager(), pBuffer);
+    Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getSlabMemoryManager(), pBuffer);
     pBuffer = NULL;
     return filePath;
   } else {
     Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Arms_MemoryManager_deallocate(Arcadia_Arms_getSlabMemoryManager(), pBuffer);
+    Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getSlabMemoryManager(), pBuffer);
     pBuffer = NULL;
     Arcadia_Thread_jump(thread);
   }

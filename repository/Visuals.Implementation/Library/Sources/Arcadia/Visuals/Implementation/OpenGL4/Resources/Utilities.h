@@ -17,37 +17,11 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_UTILITIES_H_INCLUDED
 
 #include "Arcadia/Visuals/VPL/Backends/GLSL/Include.h"
-#include "Arcadia/Math/Include.h"
 
 Arcadia_Visuals_VPL_Backends_GLSL_Program*
 createDefaultProgram
   (
     Arcadia_Thread* thread
   );
-
-static inline void
-writeMatrix4x4Real32ToBuffer
-  (
-    Arcadia_Thread* thread,
-    Arcadia_BooleanValue transpose,
-    Arcadia_Math_Matrix4Real32 const* source,
-    Arcadia_ByteBuffer* target
-  )
-{
-  if (transpose) {
-    for (size_t i = 0; i < 4; ++i) {
-      for (size_t j = 0; j < 4; ++j) {
-        Arcadia_ByteBuffer_append_pn(thread, target, &(source->elements[j][i]), sizeof(float));
-      }
-    }
-  } else {
-    for (size_t i = 0; i < 4; ++i) {
-      for (size_t j = 0; j < 4; ++j) {
-        Arcadia_ByteBuffer_append_pn(thread, target, &(source->elements[i][j]), sizeof(float));
-      }
-    }
-  }
-}
-
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_UTILITIES_H_INCLUDED

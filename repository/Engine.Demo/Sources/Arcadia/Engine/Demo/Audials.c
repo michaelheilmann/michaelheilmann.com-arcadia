@@ -22,7 +22,7 @@ static void
 setMasterVolume
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration,
+    Arcadia_DDL_Node* configuration,
     Arcadia_Integer32Value value
   )
 {
@@ -37,7 +37,7 @@ static Arcadia_Integer32Value
 getMasterVolume
   (
     Arcadia_Thread* thread,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration
+    Arcadia_DDL_Node* configuration
   )
 {
   char const* path[] = {
@@ -67,7 +67,7 @@ Arcadia_Engine_Demo_startupAudials
   (
     Arcadia_Thread* thread,
     Arcadia_Engine* engine,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration
+    Arcadia_DDL_Node* configuration
   )
 {
   // (1) Register audials backends.
@@ -86,7 +86,7 @@ Arcadia_Engine_Demo_startupAudials
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_String* backendTypeName = Cfg2_getString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2);
+      Arcadia_String* backendTypeName = Cfg2_getString(thread, (Arcadia_DDL_Node*)configuration, path, 2);
       Arcadia_Value backendTypeValue = Arcadia_HashSet_findFirst(thread, (Arcadia_HashSet*)engine->audialsBackendTypes, Arcadia_Value_makeObjectReferenceValue(backendTypeName), &findTypeByName);
       if (!Arcadia_Value_isTypeValue(&backendTypeValue)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
@@ -103,7 +103,7 @@ Arcadia_Engine_Demo_startupAudials
     } else {
       Arcadia_Thread_popJumpTarget(thread);
       Arcadia_String* backendTypeName = Arcadia_String_createFromCxxString(thread, u8"Arcadia.Audials.Implementation.OpenAL.Backend");
-      Cfg2_setString(thread, (Arcadia_DataDefinitionLanguage_Tree_Node*)configuration, path, 2, backendTypeName);
+      Cfg2_setString(thread, (Arcadia_DDL_Node*)configuration, path, 2, backendTypeName);
       Arcadia_Value backendTypeValue = Arcadia_HashSet_findFirst(thread, (Arcadia_HashSet*)engine->audialsBackendTypes, Arcadia_Value_makeObjectReferenceValue(backendTypeName), &findTypeByName);
       if (!Arcadia_Value_isTypeValue(&backendTypeValue)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);

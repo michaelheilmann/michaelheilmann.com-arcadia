@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_ENGINE_DEMO_AUDIALS_H_INCLUDED)
 #define ARCADIA_ENGINE_DEMO_AUDIALS_H_INCLUDED
 
-#include "Arcadia/DataDefinitionLanguage/Include.h"
+#include "Arcadia/DDL/Include.h"
 #include "Arcadia/Audials/Include.h"
 #include "Arcadia/Visuals/Include.h"
 
@@ -25,7 +25,7 @@ Arcadia_Engine_Demo_startupAudials
   (
     Arcadia_Thread* thread,
     Arcadia_Engine* engine,
-    Arcadia_DataDefinitionLanguage_Tree_Node* configuration
+    Arcadia_DDL_Node* configuration
   );
 
 #endif // ARCADIA_ENGINE_DEMO_AUDIALS_H_INCLUDED

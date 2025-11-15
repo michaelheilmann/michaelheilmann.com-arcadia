@@ -16,7 +16,7 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/WeakReference.h"
 
-#include "Arcadia/Arms/Include.h"
+#include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/Thread.h"
 #include "Arcadia/Ring1/Implementation/ThreadExtensions.h"
 #include "Arcadia/Ring1/Implementation/Object.h"
@@ -78,7 +78,7 @@ Arcadia_WeakReference_destruct
 {
   switch (Arcadia_Value_getTag(&self->value)) {
     case Arcadia_ValueTag_Atom: {
-      Arcadia_Arms_removeNotifyDestroy(self->value.atomValue, self, NULL, &callback);
+      Arcadia_ARMS_removeNotifyDestroy(self->value.atomValue, self, NULL, &callback);
     } break;
     case Arcadia_ValueTag_BigInteger: {
     } break;
@@ -86,10 +86,10 @@ Arcadia_WeakReference_destruct
     case Arcadia_ValueTag_ForeignProcedure: {
     } break;
     case Arcadia_ValueTag_ImmutableByteArray: {
-      Arcadia_Arms_removeNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
+      Arcadia_ARMS_removeNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
     } break;
     case Arcadia_ValueTag_ImmutableUtf8String: {
-      Arcadia_Arms_removeNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
+      Arcadia_ARMS_removeNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
     } break;
     case Arcadia_ValueTag_Integer16:
     case Arcadia_ValueTag_Integer32:
@@ -147,7 +147,7 @@ Arcadia_WeakReference_constructImpl
     self->value = Arcadia_ValueStack_getValue(thread, 1);
     switch (Arcadia_Value_getTag(&self->value)) {
       case Arcadia_ValueTag_Atom: {
-        Arcadia_Arms_addNotifyDestroy(self->value.atomValue, self, NULL, &callback);
+        Arcadia_ARMS_addNotifyDestroy(self->value.atomValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_BigInteger: {
       } break;
@@ -155,10 +155,10 @@ Arcadia_WeakReference_constructImpl
       case Arcadia_ValueTag_ForeignProcedure: {
       } break;
       case Arcadia_ValueTag_ImmutableByteArray: {
-        Arcadia_Arms_addNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
+        Arcadia_ARMS_addNotifyDestroy(self->value.immutableByteArrayValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_ImmutableUtf8String: {
-        Arcadia_Arms_addNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
+        Arcadia_ARMS_addNotifyDestroy(self->value.immutableUtf8StringValue, self, NULL, &callback);
       } break;
       case Arcadia_ValueTag_Integer16:
       case Arcadia_ValueTag_Integer32:

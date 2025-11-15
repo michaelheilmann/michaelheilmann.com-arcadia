@@ -71,6 +71,13 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setCanvasSizeImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_loadImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self
+  );
+
+static void
 Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_unloadImpl
   (
     Arcadia_Thread* thread,
@@ -88,7 +95,8 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self
+    Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self,
+    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -145,9 +153,11 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_constructImpl
   ((Arcadia_Visuals_Implementation_ViewportResource*)self)->setCanvasSize = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setCanvasSizeImpl;
   ((Arcadia_Visuals_Implementation_ViewportResource*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl;
   ((Arcadia_Visuals_Implementation_ViewportResource*)self)->setRelativeViewportRectangle = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setRelativeViewportRectangleImpl;
+  ((Arcadia_Visuals_Implementation_Resource*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_loadImpl;
   ((Arcadia_Visuals_Implementation_Resource*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_unloadImpl;
   ((Arcadia_Visuals_Implementation_Resource*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_Resource*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl;
+  ((Arcadia_Visuals_Implementation_Resource*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_MeshContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl;
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -216,6 +226,14 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setCanvasSizeImpl
 }
 
 static void
+Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_loadImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self
+  )
+{ }
+
+static void
 Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_unloadImpl
   (
     Arcadia_Thread* thread,
@@ -237,7 +255,8 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self
+    Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self,
+    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
   )
 {
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;

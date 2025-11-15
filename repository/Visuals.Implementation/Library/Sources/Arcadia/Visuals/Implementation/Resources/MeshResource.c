@@ -37,6 +37,7 @@ Arcadia_Visuals_Implementation_MeshResource_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_MeshResource_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_MeshResource_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_MeshResource_visitImpl,
@@ -72,8 +73,6 @@ Arcadia_Visuals_Implementation_MeshResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   self->setLocalToWorldMatrix = NULL;
-  self->setViewToProjectionMatrix = NULL;
-  self->setWorldToViewMatrix = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -102,21 +101,3 @@ Arcadia_Visuals_Implemention_MeshResource_setLocalToWorldMatrix
     Arcadia_Math_Matrix4Real32* localToWorld
   )
 { self->setLocalToWorldMatrix(thread, self, localToWorld); }
-
-void
-Arcadia_Visuals_Implemention_MeshResource_setWorldToViewMatrix
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_MeshResource* self,
-    Arcadia_Math_Matrix4Real32* worldToViewMatrix
-  )
-{ self->setWorldToViewMatrix(thread, self, worldToViewMatrix); }
-
-void
-Arcadia_Visuals_Implemention_MeshResource_setViewToProjectionMatrix
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_MeshResource* self,
-    Arcadia_Math_Matrix4Real32* viewToProjectionMatrix
-  )
-{ self->setViewToProjectionMatrix(thread, self, viewToProjectionMatrix); }

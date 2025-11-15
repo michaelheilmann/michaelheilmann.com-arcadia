@@ -21,6 +21,8 @@
 #endif
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Math/Include.h"
+#include "Arcadia/Visuals/Scene/CameraNode.h"
+#include "Arcadia/Visuals/Scene/MeshContext.h"
 #include "Arcadia/Visuals/Scene/MeshNode.h"
 #include "Arcadia/Visuals/Scene/ViewportNode.h"
 #include "Arcadia/Visuals/Window.h"
@@ -33,6 +35,22 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.SceneNodeFactory", Arcadia_Visuals_
 
 struct Arcadia_Visuals_SceneNodeFactory {
   Arcadia_Engine_SceneNodeFactory parent;
+
+  Arcadia_Visuals_Scene_CameraNode*
+  (*createCameraNode)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_SceneNodeFactory* self,
+      Arcadia_Visuals_BackendContext* backendContext
+    );
+
+  Arcadia_Visuals_Scene_MeshContext*
+  (*createMeshContext)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_SceneNodeFactory* self,
+      Arcadia_Visuals_BackendContext* backendContext
+      );
 
   Arcadia_Visuals_Scene_MeshNode*
   (*createMeshNode)
@@ -50,15 +68,23 @@ struct Arcadia_Visuals_SceneNodeFactory {
       Arcadia_Visuals_BackendContext* backendContext
     );
 
-  void
-  (*render)
-    (
-      Arcadia_Thread* thread,
-      Arcadia_Visuals_SceneNodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext,
-      Arcadia_Visuals_Window* window
-    );
 };
+
+Arcadia_Visuals_Scene_CameraNode*
+Arcadia_Visuals_SceneNodeFactory_createCameraNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext
+  );
+
+Arcadia_Visuals_Scene_MeshContext*
+Arcadia_Visuals_SceneNodeFactory_createMeshContext
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext
+  );
 
 Arcadia_Visuals_Scene_MeshNode*
 Arcadia_Visuals_SceneNodeFactory_createMeshNode
@@ -74,15 +100,6 @@ Arcadia_Visuals_SceneNodeFactory_createViewportNode
     Arcadia_Thread* thread,
     Arcadia_Visuals_SceneNodeFactory* self,
     Arcadia_Visuals_BackendContext* backendContext
-  );
-
-void
-Arcadia_Visuals_SceneNodeFactory_render
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_SceneNodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext,
-    Arcadia_Visuals_Window* window
   );
 
 #endif // ARCADIA_VISUALS_SCENENODEFACTORY_H_INCLUDED

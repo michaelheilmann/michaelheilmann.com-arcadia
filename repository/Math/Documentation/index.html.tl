@@ -4,4 +4,6 @@
 
 @{include("2.further-references.i")}
 
+@{include("3.documentation.i")}
+
 @{include("footer.i")}
