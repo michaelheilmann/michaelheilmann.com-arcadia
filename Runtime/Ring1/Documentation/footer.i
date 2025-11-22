@@ -1,4 +1,3 @@
-  </div>
   <div class="right-column">
     <nav>
       <ul style="list-style: none">

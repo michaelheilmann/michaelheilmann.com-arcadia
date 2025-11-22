@@ -5,7 +5,8 @@
   <p>
   This is the documentation for Michael Heilmann's Arcadia Automatic Resource Management System (Arcadia ARMS),
   henceforth Arcadia ARMS. Arcadia ARMS is a precise stop the world garbage collector to be used for programs
-  written in C. Arcadia ARMS is available at <a href="@{siteAddress}/repository/Arms">michaelheilmann.com/repository/Arms</a>.
+  written in C. Arcadia ARMS is available at <a href="@{siteAddress}/Arcadia/ARMS">michaelheilmann.com/Arcadia/ARMS</a>.
+  </p>
 
   @{include("1.files.i")}
   @{include("2.how_arms_works.i")}

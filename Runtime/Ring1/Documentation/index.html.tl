@@ -1,5 +1,13 @@
 @{include("header.i")}
 
+<div class="center-column">
+<h1>Michael Heilmann's Arcadia Ring 1</h1>
+<p>
+This is the documentation for Michael  Heilmann's Arcadia Ring 1.
+Arcadia Ring 1 facilitates the creation of C programs - in particular interpreters - that are portable, maintainable, as well as safe.
+Arcadia Ring 1 is available at <a href="@{siteAddress}/Arcadia/Ring1">michaelheilmann.com/Arcadia/Ring1</a>.
+</p>
+
 @{include("1.files.i")}
 
 @{include("2.further-references.i")}
@@ -90,4 +98,5 @@
 @{include("annotations/Arcadia_ThreadLocal.i")}
 @{include("annotations/Arcadia_Unlikely.i")}
 
+</div>
 @{include("footer.i")}

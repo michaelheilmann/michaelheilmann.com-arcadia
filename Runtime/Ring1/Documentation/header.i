@@ -16,8 +16,4 @@
   </header>
 <main>
   <div class="left-column"></div>
-  <div class="center-column">
-  <h1>Michael Heilmann's Arcadia Ring 1</h1>
-  <p>
-  This is the documentation for Michael  Heilmann's Arcadia Ring 1.
-  Arcadia Ring 1 facilitates the creation of C programs - in particular interpreters - that are portable, maintainable, as well as safe.
+

@@ -47,7 +47,7 @@
           <div class="body">
             <ul>
               <li>
-                <a href='@{siteAddress}/Arcadia/Arms'>Arcadia ARMS</a>
+                <a href='@{siteAddress}/Arcadia/ARMS'>Arcadia ARMS</a>
               </li>
               <li>
                 <a href='@{siteAddress}/Arcadia/Ring1'>Arcadia Ring1</a>

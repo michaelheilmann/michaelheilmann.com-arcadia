@@ -17,7 +17,7 @@
 
 #include "Arcadia/MIL/Frontend/Include.h"
 #include "Arcadia/MIL/Frontend/Keywords.h"
-#include "Arcadia/MIL/Frontend/StringTable.h"
+#include "Arcadia/Languages/Include.h"
 
 // This scanner maintains a tuple (i,n,s):
 // i is the zero-based index of the Byte at which the current UTF8 symbol starts in the input stream.
@@ -39,7 +39,7 @@
 //
 // The scanner writes the lexeme to a string buffer.
 // This allows for efficient creation of strings (see Arcadia_String_create).
-// Furthermore, it avoids to create a string twice by using a string table (see Arcadia_MIL_StringTable).
+// Furthermore, it avoids to create a string twice by using a string table (see Arcadia_Languages_StringTable).
 
 #define CodePoint_Start (Arcadia_Unicode_CodePoint_Last + 1)
 #define CodePoint_End (Arcadia_Unicode_CodePoint_Last + 2)
@@ -52,7 +52,7 @@ struct Arcadia_MIL_Scanner {
   // The input stream.
   Arcadia_Utf8Reader* input;
   // The string table.
-  Arcadia_MIL_StringTable* stringTable;
+  Arcadia_Languages_StringTable* stringTable;
   // The keywords.
   Arcadia_MIL_Keywords* keywords;
   struct {
@@ -179,7 +179,7 @@ Arcadia_MIL_Scanner_constructImpl
   self->keywords = Arcadia_MIL_Keywords_create(thread);
   //
   self->token.kind = Arcadia_MIL_TokenKind_StartOfInput;
-  self->stringTable = Arcadia_MIL_StringTable_create(thread);
+  self->stringTable = Arcadia_Languages_StringTable_create(thread);
   self->input = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
   self->token.text = Arcadia_StringBuffer_create(thread);
   //
@@ -190,7 +190,7 @@ Arcadia_MIL_Scanner_constructImpl
   { \
     Arcadia_StringBuffer_clear(thread, temporary); \
     Arcadia_StringBuffer_insertBackCxxString(thread, temporary, text); \
-    Arcadia_MIL_Keywords_add(thread, self->keywords, Arcadia_MIL_StringTable_getOrCreateString(thread, self->stringTable, temporary), Arcadia_MIL_TokenKind_##type); \
+    Arcadia_MIL_Keywords_add(thread, self->keywords, Arcadia_Languages_StringTable_getOrCreateString(thread, self->stringTable, temporary), Arcadia_MIL_TokenKind_##type); \
   }
   //
   On(u8"class", Class);
@@ -359,7 +359,7 @@ Arcadia_MIL_Scanner_getTokenText
     Arcadia_Thread* thread,
     Arcadia_MIL_Scanner* self
   )
-{ return Arcadia_MIL_StringTable_getOrCreateString(thread, self->stringTable, self->token.text); }
+{ return Arcadia_Languages_StringTable_getOrCreateString(thread, self->stringTable, self->token.text); }
 
 Arcadia_Natural32Value
 Arcadia_MIL_Scanner_getTokenKind

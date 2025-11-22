@@ -13,16 +13,16 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCAIDA_MIL_FRONTEND_INCLUDE_H_INCLUDED)
-#define ARCAIDA_MIL_FRONTEND_INCLUDE_H_INCLUDED
+#if !defined(ARCADIA_MIL_FRONTEND_INCLUDE_H_INCLUDED)
+#define ARCADIA_MIL_FRONTEND_INCLUDE_H_INCLUDED
 
 #include "Arcadia/MIL/AST/Include.h"
 #include "Arcadia/MIL/Frontend/Keywords.h"
 #include "Arcadia/MIL/Frontend/Parser.h"
 #include "Arcadia/MIL/Frontend/Scanner.h"
-#include "Arcadia/MIL/Frontend/StringTable.h"
+#include "Arcadia/Languages/Include.h"
 
 #include "Arcadia/MIL/Frontend/SymbolKind.h"
 #include "Arcadia/MIL/Frontend/Symbol.h"
 
-#endif // ARCAIDA_MIL_FRONTEND_INCLUDE_H_INCLUDED
+#endif // ARCADIA_MIL_FRONTEND_INCLUDE_H_INCLUDED
