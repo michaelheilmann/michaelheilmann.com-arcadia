@@ -100,7 +100,7 @@ Arcadia_Visuals_Scene_MeshNode_destructImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_MeshNode* self
   )
-{ 
+{
   if (self->vertexPositions) {
     Arcadia_Memory_deallocateUnmanaged(thread, self->vertexPositions);
     self->vertexPositions = NULL;

@@ -26,7 +26,7 @@ test
     Arcadia_Thread* thread
   )
 {
-  Arcadia_WeakReference* weakReference = 
+  Arcadia_WeakReference* weakReference =
     Arcadia_WeakReference_create
       (
         thread,

@@ -26,12 +26,12 @@ static void
 whitespace
   (
     Arcadia_Thread* thread,
-    Arcadia_Utf8Writer* target,
+    Arcadia_UTF8Writer* target,
     Arcadia_SizeValue count
   )
 {
   for (Arcadia_SizeValue i = 0; i < count; ++i) {
-    Arcadia_Utf8Writer_writeBytes(thread, target, u8" ", sizeof(u8" ") - 1);
+    Arcadia_UTF8Writer_writeBytes(thread, target, u8" ", sizeof(u8" ") - 1);
   }
 }
 
@@ -42,7 +42,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeBooleanValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_BooleanNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   );
 
 static void
@@ -52,7 +52,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeListValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_ListNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   );
 
 static void
@@ -62,7 +62,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeMapValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_MapNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   );
 
 static void
@@ -72,7 +72,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeNumberValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_NumberNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   );
 
 static void
@@ -82,7 +82,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeStringValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_StringNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   );
 
 static void
@@ -92,7 +92,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_Node* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   );
 
 static void
@@ -102,7 +102,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeVoidValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_VoidNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   );
 
 static void
@@ -141,10 +141,10 @@ Arcadia_DataDefinitionLanguage_Unparser_writeBooleanValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_BooleanNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   )
 {
-  Arcadia_Utf8Writer_writeString(thread, target, node->value);
+  Arcadia_UTF8Writer_writeString(thread, target, node->value);
 }
 
 static void
@@ -154,20 +154,20 @@ Arcadia_DataDefinitionLanguage_Unparser_writeListValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_ListNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   )
 {
-  Arcadia_Utf8Writer_writeBytes(thread, target, u8"[\n", sizeof(u8"[\n") - 1);
+  Arcadia_UTF8Writer_writeBytes(thread, target, u8"[\n", sizeof(u8"[\n") - 1);
   indent += 2;
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->elements); i < n; ++i) {
     Arcadia_DDL_Node* elementNode = (Arcadia_DDL_Node*)Arcadia_List_getObjectReferenceValueAt(thread, node->elements, i);
     whitespace(thread, target, indent);
     Arcadia_DataDefinitionLanguage_Unparser_writeValue(thread, self, elementNode, indent, target);
-    Arcadia_Utf8Writer_writeBytes(thread, target, u8",\n", sizeof(u8",\n") - 1);
+    Arcadia_UTF8Writer_writeBytes(thread, target, u8",\n", sizeof(u8",\n") - 1);
   }
   indent -= 2;
   whitespace(thread, target, indent);
-  Arcadia_Utf8Writer_writeBytes(thread, target, u8"]", sizeof(u8"]") - 1);
+  Arcadia_UTF8Writer_writeBytes(thread, target, u8"]", sizeof(u8"]") - 1);
 }
 
 static void
@@ -177,25 +177,25 @@ Arcadia_DataDefinitionLanguage_Unparser_writeMapValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_MapNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   )
 {
-  Arcadia_Utf8Writer_writeBytes(thread, target, u8"{\n", sizeof(u8"{\n") - 1);
-  indent += 2; 
+  Arcadia_UTF8Writer_writeBytes(thread, target, u8"{\n", sizeof(u8"{\n") - 1);
+  indent += 2;
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->entries); i < n; ++i) {
     Arcadia_DDL_MapEntryNode* entryNode =
       (Arcadia_DDL_MapEntryNode*)Arcadia_List_getObjectReferenceValueAt(thread, node->entries, i);
     Arcadia_DDL_NameNode* keyNode = entryNode->key;
     whitespace(thread, target, indent);
-    Arcadia_Utf8Writer_writeString(thread, target, keyNode->value);
-    Arcadia_Utf8Writer_writeBytes(thread, target, u8" : ", sizeof(u8" : ") - 1);
+    Arcadia_UTF8Writer_writeString(thread, target, keyNode->value);
+    Arcadia_UTF8Writer_writeBytes(thread, target, u8" : ", sizeof(u8" : ") - 1);
     Arcadia_DDL_Node* valueNode = entryNode->value;
     Arcadia_DataDefinitionLanguage_Unparser_writeValue(thread, self, valueNode, indent, target);
-    Arcadia_Utf8Writer_writeBytes(thread, target, u8",\n", sizeof(u8",\n") - 1);
+    Arcadia_UTF8Writer_writeBytes(thread, target, u8",\n", sizeof(u8",\n") - 1);
   }
   indent -= 2;
   whitespace(thread, target, indent);
-  Arcadia_Utf8Writer_writeBytes(thread, target, u8"}", sizeof(u8"}") - 1);
+  Arcadia_UTF8Writer_writeBytes(thread, target, u8"}", sizeof(u8"}") - 1);
 }
 
 static void
@@ -205,10 +205,10 @@ Arcadia_DataDefinitionLanguage_Unparser_writeNumberValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_NumberNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   )
 {
-  Arcadia_Utf8Writer_writeString(thread, target, node->value);
+  Arcadia_UTF8Writer_writeString(thread, target, node->value);
 }
 
 static void
@@ -218,18 +218,18 @@ Arcadia_DataDefinitionLanguage_Unparser_writeStringValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_StringNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   )
-{ 
+{
   Arcadia_String* string = node->value;
-  Arcadia_Utf8Writer_writeBytes(thread, target, u8"\"", sizeof(u8"\"") - 1);
-  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, string);
-  while (Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
-    Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
+  Arcadia_UTF8Writer_writeBytes(thread, target, u8"\"", sizeof(u8"\"") - 1);
+  Arcadia_UTF8Reader* reader = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, string);
+  while (Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
+    Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
     // Escape all control characters [0,1f].
     if (codePoint <= 0x1f) {
       static const Arcadia_Natural32Value codePoints[] = { '\\', 'u', '0', '0' };
-      Arcadia_Utf8Writer_writeCodePoints(thread, target, codePoints, 4);
+      Arcadia_UTF8Writer_writeCodePoints(thread, target, codePoints, 4);
       Arcadia_Natural32Value x = codePoint % 16;
       codePoint /= 16;
       Arcadia_Natural32Value y = codePoint % 16;
@@ -242,7 +242,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeStringValue
         '4',
         '5',
         '6',
-        '7',  
+        '7',
         '8',
         '9',
         'A',
@@ -252,26 +252,26 @@ Arcadia_DataDefinitionLanguage_Unparser_writeStringValue
         'E',
         'F'
       };
-      Arcadia_Utf8Writer_writeCodePoints(thread, target, &hexDigit[y], 1);
-      Arcadia_Utf8Writer_writeCodePoints(thread, target, &hexDigit[x], 1);
+      Arcadia_UTF8Writer_writeCodePoints(thread, target, &hexDigit[y], 1);
+      Arcadia_UTF8Writer_writeCodePoints(thread, target, &hexDigit[x], 1);
     } else {
       switch (codePoint) {
         case '"': {
           static const uint32_t codePoints[] = { '\\', '"' };
-          Arcadia_Utf8Writer_writeCodePoints(thread, target, codePoints, 2);
+          Arcadia_UTF8Writer_writeCodePoints(thread, target, codePoints, 2);
         } break;
         case '\\': {
           static const uint32_t codePoints[] = { '\\', '\\' };
-          Arcadia_Utf8Writer_writeCodePoints(thread, target, codePoints, 2);
+          Arcadia_UTF8Writer_writeCodePoints(thread, target, codePoints, 2);
         } break;
         default: {
-          Arcadia_Utf8Writer_writeCodePoints(thread, target, &codePoint, 1);
+          Arcadia_UTF8Writer_writeCodePoints(thread, target, &codePoint, 1);
         } break;
       };
     }
-    Arcadia_Utf8Reader_next(thread, reader);
+    Arcadia_UTF8Reader_next(thread, reader);
   }
-  Arcadia_Utf8Writer_writeBytes(thread, target, u8"\"", sizeof(u8"\"") - 1);
+  Arcadia_UTF8Writer_writeBytes(thread, target, u8"\"", sizeof(u8"\"") - 1);
 }
 
 static void
@@ -281,7 +281,7 @@ Arcadia_DataDefinitionLanguage_Unparser_writeValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_Node* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   )
 {
   switch (node->type) {
@@ -317,10 +317,10 @@ Arcadia_DataDefinitionLanguage_Unparser_writeVoidValue
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_VoidNode* node,
     Arcadia_SizeValue indent,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   )
 {
-  Arcadia_Utf8Writer_writeString(thread, target, node->value);
+  Arcadia_UTF8Writer_writeString(thread, target, node->value);
 }
 
 static void
@@ -371,9 +371,9 @@ Arcadia_DataDefinitionLanguage_Unparser_run
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_Node* node,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   )
 {
   Arcadia_DataDefinitionLanguage_Unparser_writeValue(thread, self, node, Arcadia_SizeValue_Literal(0), target);
-  Arcadia_Utf8Writer_writeBytes(thread, target, u8"\n", sizeof(u8"\n") - 1);
+  Arcadia_UTF8Writer_writeBytes(thread, target, u8"\n", sizeof(u8"\n") - 1);
 }

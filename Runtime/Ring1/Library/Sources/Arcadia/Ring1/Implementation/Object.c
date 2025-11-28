@@ -511,8 +511,8 @@ Arcadia_Object_isEqualTo
   }
   Arcadia_BooleanValue returnValue = Arcadia_ValueStack_getBooleanValue(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1);
+
   return returnValue;
-  
 }
 
 Arcadia_BooleanValue
@@ -538,6 +538,7 @@ Arcadia_Object_isNotEqualTo
   }
   Arcadia_BooleanValue returnValue = Arcadia_ValueStack_getBooleanValue(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1);
+
   return returnValue;
 }
 
@@ -562,6 +563,7 @@ Arcadia_Object_getHash
   }
   Arcadia_SizeValue returnValue = Arcadia_ValueStack_getSizeValue(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1);
+
   return returnValue;
 }
 
@@ -586,7 +588,35 @@ Arcadia_Object_isIdenticalTo
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
+
   Arcadia_BooleanValue returnValue = Arcadia_ValueStack_getBooleanValue(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1);
+
   return returnValue;
+}
+
+Arcadia_ImmutableUtf8String*
+Arcadia_Object_toString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self
+  )
+{
+  Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
+  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+
+  Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushValue(thread, &temporary);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  operations->toString(thread);
+  if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+
+  Arcadia_ImmutableUtf8String* string = Arcadia_ValueStack_getImmutableUtf8StringValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
+
+  return string;
 }

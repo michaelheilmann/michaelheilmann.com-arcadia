@@ -160,7 +160,7 @@ Arcadia_FileSystem_getFileContents
   do {
     Arcadia_FileHandle_read(thread, fileHandle, p, 5012, &n);
     if (n > 0) {
-      Arcadia_ByteBuffer_append_pn(thread, byteBuffer, p, n);
+      Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, p, n);
     }
   } while (n > 0);
   Arcadia_FileHandle_close(thread, fileHandle);

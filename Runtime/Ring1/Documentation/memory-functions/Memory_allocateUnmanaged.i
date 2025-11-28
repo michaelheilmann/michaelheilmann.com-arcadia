@@ -29,7 +29,7 @@
     A pointer to the first Byte of the memory region.
     </p>
   </section>
-  
+
   <section class="cxx errors">
 
     <h1>Errors</h1>

@@ -20,11 +20,11 @@
 
 /// @code
 /// class Arcadia.Audials.BackendContext extends Arcadia.Engine.BackendContext {
-/// 
+///
 ///   constructor
 ///     (
 ///     )
-///   
+///
 ///   method update
 ///     (
 ///     ) : Void

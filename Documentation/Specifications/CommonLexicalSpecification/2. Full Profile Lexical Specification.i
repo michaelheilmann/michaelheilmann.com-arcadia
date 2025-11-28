@@ -70,7 +70,7 @@ A <code>Lexical.Comment</code> is either a <code>single_line_comment</code> or a
 <div class="body">
 <p><code>
 Lexical.Comment : Lexical.SingleLineComment
-Lexical.Comment : Lexical.MultiLineComment 
+Lexical.Comment : Lexical.MultiLineComment
 </code></p>
 </div>
 </div>
@@ -86,7 +86,7 @@ It extends to the end of the line.
 /* #2f is also known as SOLIDUS */
 Lexical.SingleLineComment :
 #2f #2f
-/* any sequence of characters except for line_terminator */  
+/* any sequence of characters except for line_terminator */
 </code></p>
 </div>
 </div>
@@ -106,7 +106,7 @@ A <code>Lexical.MultiLineComment</code> is opened by a solidus and an asterisk a
 Lexical.MultiLineComment :<br>
 #2f #2a<br>
 /* any sequence of characters except except for #2a #2f */<br>
-#2a #2f  
+#2a #2f
 </code></p>
 </div>
 </div>
@@ -119,7 +119,7 @@ Lexical.MultiLineComment :<br>
   <li><code>#2f #2f</code> has no special meaning either comment.</li>
   <li><code>#2f #2a</code> and <code>#2a #2f</code> have no special meaning in single-line comments.</li>
   <li>Multi-line comments do not nest.</li>
-</ul> 
+</ul>
 
 <h2 id="full-profile-lexical-specification-parentheses">3.5 parentheses</h2>
 <p>The words <code>Lexical.LeftParenthesis</code> and <code>Lexical.RightParenthesis</code>, respectively, are defined by</p>
@@ -130,7 +130,7 @@ Lexical.MultiLineComment :<br>
 /* #28 is also known as "LEFT PARENTHESIS" */<br>
 Lexical.LeftParenthesis : #28<br>
 /* #29 is also known as "RIGHT PARENTHESIS" */<br>
-Lexical.RightParenthesis : #29 
+Lexical.RightParenthesis : #29
 </code></p>
 </div>
 </div>
@@ -144,7 +144,7 @@ Lexical.RightParenthesis : #29
 /* #7b is also known as "LEFT CURLY BRACKET" */<br>
 Lexical.LeftCurlyBracket : #7b<br>
 /* #7d is also known as "RIGHT CURLY BRACKET" */<br>
-Lexical.RightCurlyBracket : #7d 
+Lexical.RightCurlyBracket : #7d
 </code></p>
 </div>
 </div>
@@ -155,7 +155,7 @@ Lexical.RightCurlyBracket : #7d
 <div class="box">
 <p><code>
 /* #3a is also known as "COLON" */<br>
-Lexical.Colon : #3a 
+Lexical.Colon : #3a
 </code></p>
 </div>
 
@@ -167,7 +167,7 @@ Lexical.Colon : #3a
 /* #5b is also known as "LEFT SQUARE BRACKET" */<br>
 Lexical.LeftSquareBracket : #5b<br>
 /* #5d is also known as "RIGHT SQUARE BRACKET" */<br>
-Lexical.RightSquareBracket : #5d 
+Lexical.RightSquareBracket : #5d
 </code></p>
 </div>
 
@@ -177,7 +177,7 @@ Lexical.RightSquareBracket : #5d
 <div class="box">
 <p><code>
 /* #2c is also known as "COMMA" */<br>
-Lexical.Comma : #2c 
+Lexical.Comma : #2c
 </code></p>
 </div>
 
@@ -200,7 +200,7 @@ Lexical.NameSuffixCharacter : /* The unicode characters from #41 to #5a and from
 Lexical.NameSuffixCharacter : /* The unicode characters from #30 to #39. */<br>
 <br>
 /* #5f is also known as "LOW LINE" */<br>
-Lexical.NameSuffixCharacter : #5f<br> 
+Lexical.NameSuffixCharacter : #5f<br>
 </code></p>
 </div>
 </div>
@@ -224,7 +224,7 @@ Lexical.Sign : #2d<br>
 /* #65 is also known as "LATIN SMALL LETTER E" */<br>
 Lexical.ExponentPrefix : #65<br>
 /* #45 is also known as "LATIN CAPITAL LETTER E" */<br>
-Lexical.ExponentPrefix : #45<br>  
+Lexical.ExponentPrefix : #45<br>
 </code></p>
 </div>
 
@@ -256,7 +256,7 @@ Lexical.EscapeSequence : #5c 'u' Lexical.HexadecimalDigit Lexical.HexadecimalDig
 /* #5c is also known as "REVERSE SOLIDUS" */<br>
 Lexical.EscapeSequence : #5c #5c<br>
 /* #64 is also known as "LATIN SMALL LETTER B" */<br>
-Lexical.EscapeSequence : #5c #64<br> 
+Lexical.EscapeSequence : #5c #64<br>
 /* #66 is also known as "LATIN SMALL LETTER F" */<br>
 Lexical.EscapeSequence : #5c #66<br>
 /* #6e is also known as "LATIN SMALL LETTER N" */<br>
@@ -291,7 +291,7 @@ It takes priority over the <code>Lexical.Name</code>.</p>
 <div class="body">
 <p><code>
 Lexical.Void : #76 #6f # #69 #64
-</code></p> 
+</code></p>
 </div>
 </div>
 

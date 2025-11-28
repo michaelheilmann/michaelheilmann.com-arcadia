@@ -14,7 +14,7 @@
     <h1>Parameters</h1>
     <div><div>expression</div><div>An expression.</div></div>
   </section>
-  
+
   <section class="cxx remarks">
   <p>
   For example, given typical programs, it is likely that <code>malloc</code> for a small size of memory is very likely  to succeed.

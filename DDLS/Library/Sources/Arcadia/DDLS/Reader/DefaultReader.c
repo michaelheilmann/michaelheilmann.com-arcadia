@@ -151,7 +151,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_DefaultReader_objectTyp
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_DefaultReader_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_DefaultReader_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_DefaultReader_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -228,7 +228,7 @@ Arcadia_DDLS_DefaultReader_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_Utf8Reader* input 
+    Arcadia_Utf8Reader* input
   )
 {
   Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_create(thread);

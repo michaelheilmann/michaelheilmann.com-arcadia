@@ -23,7 +23,7 @@
 Arcadia_declareEnumerationType(u8"Arcadia.Network.AddressFamily", Arcadia_Network_AddressFamily);
 
 enum Arcadia_Network_AddressFamily {
-  
+
   /// The IPv6 network address family.
   Arcadia_Network_AddressFamily_Ipv4,
 

@@ -40,7 +40,7 @@
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindingMode">Arcadia_Visuals_WindingMode</a></li>
 
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindowClosed">[MIL] Arcadia.Visuals.WindowClosed</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindowClosed_construct">[MIL] Arcadia.Visuals.WindowClosed.construct</a></li>         
+        <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindowClosed_construct">[MIL] Arcadia.Visuals.WindowClosed.construct</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindowPositionChanged">[MIL] Arcadia.Visuals.WindowPositionChanged</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindowPositionChanged_construct">[MIL] Arcadia.Visuals.WindowPositionChanged.construct</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindowSizeChanged">[MIL] Arcadia.Visuals.WindowSizeChanged</a></li>

@@ -26,7 +26,7 @@ typedef struct Arcadia_String Arcadia_String;
 
 Arcadia_declareObjectType(u8"Arcadia.ConsoleLog", Arcadia_ConsoleLog,
                           u8"Arcadia.Log");
-                          
+
 struct Arcadia_ConsoleLog {
   Arcadia_Log _parent;
   Arcadia_BooleanValue colorEnabled;

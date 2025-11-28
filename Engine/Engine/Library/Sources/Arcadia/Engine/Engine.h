@@ -41,17 +41,17 @@ struct Arcadia_Engine {
   Arcadia_Set* visualBackendTypes;
   /// Set of Arcadia.Visuals.SceneNodeFactory derived type objects.
   Arcadia_Set* visualSceneNodeFactoryTypes;
-  
+
   /// Set of Arcadia.Audials.Backend derived type objects.
   Arcadia_Set* audialsBackendTypes;
   /// Set of Arcadia.Audials.SceneNodeFactory derived type objects.
   Arcadia_Set* audialsSceneNodeFactoryTypes;
-  
+
   /// Pointer to the active visuals backend context if any, null otherwise.
   Arcadia_Engine_BackendContext* visualsBackendContext;
   /// The visuals scene node factory.
   Arcadia_Engine_SceneNodeFactory* visualsSceneNodeFactory;
-  
+
   /// Pointer to the active audials backend context if any, null otherwise.
   Arcadia_Engine_BackendContext* audialsBackendContext;
   /// The audials scene node factory.

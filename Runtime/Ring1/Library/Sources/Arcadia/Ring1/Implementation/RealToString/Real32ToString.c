@@ -165,7 +165,7 @@ toString32
   (
     Arcadia_Thread* thread,
     Arcadia_Real32Value value,
-    Buffer* buffer  
+    Buffer* buffer
   )
 {
   Arcadia_Natural32Value bits = Arcadia_Real32Value_getBits(thread, value);

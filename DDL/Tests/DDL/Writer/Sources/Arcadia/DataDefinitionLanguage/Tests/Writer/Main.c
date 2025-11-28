@@ -27,10 +27,10 @@ doRead
     const char* p,
     size_t n
   )
-{ 
+{
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, p, n);
-  Arcadia_Utf8Reader* utf8Reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, byteBuffer);
+  Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, p, n);
+  Arcadia_UTF8Reader* utf8Reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, byteBuffer);
   Arcadia_DDL_Parser_setInput(thread, parser, utf8Reader);
   Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, parser);
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run(thread, semanticalAnalysis, node);
@@ -48,7 +48,7 @@ doWrite
   )
 {
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_Utf8Writer* utf8Writer = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, byteBuffer);
+  Arcadia_UTF8Writer* utf8Writer = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer);
   Arcadia_DataDefinitionLanguage_Unparser_run(thread, unparser, node, utf8Writer);
   Arcadia_Tests_assertTrue(thread, Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer) == n);
   Arcadia_Tests_assertTrue(thread, !Arcadia_Memory_compare(thread, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), p, n));

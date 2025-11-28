@@ -18,7 +18,7 @@
 
 #include "Arcadia/DDL/Include.h"
 
-#include "Arcadia/DDL/Implementation/Include.h"
+#include "Arcadia/DDL/Nodes/Include.h"
 
 /// @brief Get the text of the word.
 /// @param thread A pointer to this thread.
@@ -228,7 +228,7 @@ Arcadia_DDL_Parser_onMapEntry
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self
-  ) 
+  )
 {
   Arcadia_DDL_NameNode* keyNode = Arcadia_DDL_Parser_onName(thread, self);
   if (Arcadia_DDL_WordType_Colon != Arcadia_DDL_Parser_getWordType(thread, self)) {
@@ -252,7 +252,7 @@ Arcadia_DDL_Parser_onMapValue
   Arcadia_DDL_MapNode* mapNode = Arcadia_DDL_MapNode_create(thread);
   Arcadia_DDL_Parser_next(thread, self);
   // As long as we do nor hit a right curly bracket or the end of the input, stay in loop.
-  while (Arcadia_DDL_WordType_RightCurlyBracket != Arcadia_DDL_Parser_getWordType(thread, self) && 
+  while (Arcadia_DDL_WordType_RightCurlyBracket != Arcadia_DDL_Parser_getWordType(thread, self) &&
          Arcadia_DDL_WordType_EndOfInput != Arcadia_DDL_Parser_getWordType(thread, self)) {
     Arcadia_DDL_MapEntryNode* mapEntryNode =
       Arcadia_DDL_Parser_onMapEntry(thread, self);
@@ -283,7 +283,7 @@ Arcadia_DDL_Parser_onName
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_DDL_NameNode* nameNode = 
+  Arcadia_DDL_NameNode* nameNode =
       Arcadia_DDL_NameNode_create(thread, Arcadia_DDL_Parser_getWordText(thread, self));
   Arcadia_DDL_Parser_next(thread, self);
   return nameNode;
@@ -379,7 +379,7 @@ Arcadia_DDL_Parser_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self,
-    Arcadia_Utf8Reader* input
+    Arcadia_UTF8Reader* input
   )
 {
   Arcadia_DDL_Scanner_setInput(thread, self->scanner, input);

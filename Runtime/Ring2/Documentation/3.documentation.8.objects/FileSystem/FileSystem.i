@@ -37,14 +37,14 @@
       <div>An allocation failed.</div>
     </div>
   </section>
-  
+
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
     A pointer to a <code>Arcadia_FileSystem</code> object.
     </p>
   </section>
-  
+
   <section class="cxx remarks">
     <h1>Remarks</h1>
     <p>
@@ -90,7 +90,7 @@
       <div>An allocation failed.</div>
     </div>
   </section>
-  
+
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>

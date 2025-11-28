@@ -81,12 +81,12 @@ Arcadia_Engine_constructImpl
   self->visualSceneNodeFactoryTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
   self->visualsBackendContext = NULL;
   self->visualsSceneNodeFactory = NULL;
-  
+
   self->audialsBackendTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
   self->audialsSceneNodeFactoryTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
   self->audialsBackendContext = NULL;
   self->audialsSceneNodeFactory = NULL;
-  
+
   self->events = (Arcadia_Deque*)Arcadia_ArrayDeque_create(thread);
 
   self->update = NULL;
@@ -109,7 +109,7 @@ Arcadia_Engine_visitImpl
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualSceneNodeFactoryTypes);
   }
   if (self->visualsBackendContext) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsBackendContext);  
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsBackendContext);
   }
   if (self->visualsSceneNodeFactory) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsSceneNodeFactory);
@@ -122,7 +122,7 @@ Arcadia_Engine_visitImpl
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsSceneNodeFactoryTypes);
   }
   if (self->audialsBackendContext) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsBackendContext);  
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsBackendContext);
   }
   if (self->audialsSceneNodeFactory) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsSceneNodeFactory);
@@ -161,7 +161,7 @@ Arcadia_Engine_enqueEvent
     Arcadia_Engine* self,
     Arcadia_Engine_Event* event
   )
-{ 
+{
   Arcadia_Deque_insertBack(thread, self->events, Arcadia_Value_makeObjectReferenceValue(event));
 }
 

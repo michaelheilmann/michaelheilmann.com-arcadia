@@ -20,13 +20,13 @@
 
 /// @code
 /// class Arcadia.MIL.Symbol {
-/// 
+///
 ///   field kind:Arcadia.MIL.SymbolKind
-/// 
+///
 ///   field name:Arcadia.String
-/// 
+///
 ///   constructor(kind:Arcadia.MIL.SymbolKind, name:Arcadia.String)
-/// 
+///
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.MIL.Symbol", Arcadia_MIL_Symbol,

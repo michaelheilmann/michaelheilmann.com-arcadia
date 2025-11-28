@@ -405,7 +405,7 @@ Cfg_saveConfiguration
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_DataDefinitionLanguage_Unparser* unparser = Arcadia_DataDefinitionLanguage_Unparser_create(thread);
   Arcadia_DataDefinitionLanguage_Unparser_run(thread, unparser, (Arcadia_DDL_Node*)configuration,
-                                              (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, byteBuffer));
+                                              (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer));
   Arcadia_FileSystem_setFileContents(thread, fileSystem, file, byteBuffer);
 }
 
@@ -435,7 +435,7 @@ Cfg_loadConfiguration
     Arcadia_DataDefinitionLanguage_Unparser* unparser = Arcadia_DataDefinitionLanguage_Unparser_create(thread);
     Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
     Arcadia_DataDefinitionLanguage_Unparser_run(thread, unparser, (Arcadia_DDL_Node*)Arcadia_DDL_MapNode_create(thread),
-                                                (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, byteBuffer));
+                                                (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer));
     Arcadia_FileSystem_setFileContents(thread, fileSystem, file, byteBuffer);
   }
 
@@ -450,7 +450,7 @@ Cfg_loadConfiguration
     Arcadia_ByteBuffer* byteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, file);
     Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread);
     Arcadia_DDL_Parser_setInput(thread, parser,
-                                (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, byteBuffer));
+                                (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, byteBuffer));
     Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, parser);
     if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
@@ -466,7 +466,7 @@ Cfg_loadConfiguration
     Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
     rootNode = Arcadia_DDL_MapNode_create(thread);
     Arcadia_DataDefinitionLanguage_Unparser_run(thread, unparser, (Arcadia_DDL_Node*)rootNode,
-                                                (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, byteBuffer));
+                                                (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer));
     Arcadia_FileSystem_setFileContents(thread, fileSystem, file, byteBuffer);
   }
   return rootNode;

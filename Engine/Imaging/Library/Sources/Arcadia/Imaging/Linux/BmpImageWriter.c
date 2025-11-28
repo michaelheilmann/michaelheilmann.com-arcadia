@@ -52,14 +52,14 @@ writeCallback
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_ByteBuffer_append_pn(thread, context->byteBuffer, data, size);
+    Arcadia_ByteBuffer_insertBackBytes(thread, context->byteBuffer, data, size);
   }
   Arcadia_Thread_popJumpTarget(thread);
 }
 
 static void
 Arcadia_Imaging_Linux_BmpImageWriter_constructImpl
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Linux_BmpImageWriter* self
   );
@@ -95,7 +95,7 @@ Arcadia_Imaging_Linux_BmpImageWriter_writeBmpToByteBufferImpl
     Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_ByteBuffer* targetByteBuffer
   );
-  
+
 static void
 Arcadia_Imaging_Linux_BmpImageWriter_writeBmpToPathImpl
   (
@@ -136,7 +136,7 @@ Arcadia_Imaging_Linux_BmpImageWriter_writeImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject; 
+  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject;
   if (Arcadia_Imaging_ImageWriterParameters_hasByteBuffer(thread, target)) {
     Arcadia_Imaging_Linux_BmpImageWriter_writeBmpToByteBufferImpl(thread, self, sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters_getByteBuffer(thread, target));
   } else if (Arcadia_Imaging_ImageWriterParameters_hasPath(thread, target)) {
@@ -186,7 +186,7 @@ Arcadia_Imaging_Linux_BmpImageWriter_writeBmpToByteBufferImpl
       Arcadia_Imaging_PixelBuffer_setLinePadding(thread, sourcePixelBuffer, 0);
       components = 3;
     } break;
-    
+
     case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8: {
       sourcePixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, sourcePixelBuffer);
       Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, sourcePixelBuffer, Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8);
@@ -226,7 +226,7 @@ Arcadia_Imaging_Linux_BmpImageWriter_writeBmpToPathImpl
     Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
     Arcadia_String *targetPath
   )
-{ 
+{
   Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_Imaging_Linux_BmpImageWriter_writeBmpToByteBufferImpl(thread, self, sourcePixelBuffer, targetByteBuffer);
   Arcadia_FileSystem_setFileContents(thread, Arcadia_FileSystem_create(thread),

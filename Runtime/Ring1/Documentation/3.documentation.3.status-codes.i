@@ -29,7 +29,7 @@
   <table>
   <tr><td><code><span>Name</span></code></td>                                                      <td>Value</td></tr>
   <tr><td><code id="Arcadia_Status_AllocationFailed">AllocationFailed</code></td>                  <td>An allocation failed.</td></tr>
-  
+
   <tr><td><code id="Arcadia_Status_ArgumentTypeInvalid">ArgumentTypeInvalid</code></td>            <td>The type of an argument is invalid.</td></tr>
   <tr><td><code id="Arcadia_Status_ArgumentValueInvalid">ArgumentValueInvalid</code></td>          <td>The value of an argument is invalid.</td></tr>
 
@@ -47,9 +47,9 @@
 
 
   <tr><td><code id="Arcadia_Status_Initialized">Initialized</code></td>                            <td>Something was initialized (but should not have been initialized).</td></tr>
-  
+
   <tr><td><code id="Arcadia_Status_LexicalError">LexicalError</code></td>                          <td>A lexical error.</td></tr>
-  
+
   <tr><td><code id="Arcadia_Status_NotExists">NotExists</code></td>                                <td>Something does not exist.</td></tr>
   <tr><td><code id="Arcadia_Status_NotFound">NotFound</code></td>                                  <td>Something was not found.</td>
   <tr><td><code id="Arcadia_Status_NumberOfArgumentsInvalid">NumberOfArgumentsInvalid</code></td>  <td>The number of arguments is invalid.</td></tr>

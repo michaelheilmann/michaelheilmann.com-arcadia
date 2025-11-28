@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_DDLS_IMPLEMENTATION_DIAGNOSTICS_H_INCLUDED)
 #define ARCADIA_DDLS_IMPLEMENTATION_DIAGNOSTICS_H_INCLUDED
 
-#include "Arcadia/DDLS/Schema.h"
+#include "Arcadia/DDLS/Nodes/Include.h"
 #include "Arcadia/DDL/Include.h"
 #include "Arcadia/Languages/Include.h"
 
@@ -30,6 +30,8 @@ struct Arcadia_DDLS_Diagnostics {
   Arcadia_String* LIST;
   Arcadia_String* MAP;
   Arcadia_String* NUMBER;
+  Arcadia_String* SCHEMA;
+  Arcadia_String* SCHEMAREFERENCE;
   Arcadia_String* STRING;
   Arcadia_String* VOID;
   Arcadia_StringBuffer* stringBuffer;
@@ -48,7 +50,7 @@ Arcadia_DDLS_Diagnostics_unexpectedTypeError
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_Diagnostics* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_DDLS_Node* ddlsNode,
     Arcadia_DDL_Node* node
   );
 
@@ -75,5 +77,14 @@ Arcadia_DDLS_Diagnostics_mapEntryNotExistsError
     Arcadia_DDLS_Diagnostics* self,
     Arcadia_String* name
   );
+
+void
+Arcadia_DDLS_Diagnostics_unresolvedSchemaReferenceError
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_Diagnostics* self,
+    Arcadia_String* name
+  );
+
 
 #endif // ARCADIA_DDLS_IMPLEMENTATION_DIAGNOSTICS_H_INCLUDED

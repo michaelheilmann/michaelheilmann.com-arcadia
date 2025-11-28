@@ -68,7 +68,7 @@ directoryIteratorTest2
     Arcadia_String* filePathString = Arcadia_FilePath_toGeneric(thread, filePath);
     Arcadia_Tests_assertTrue(thread, NULL != filePathString);
     Arcadia_DirectoryIterator_nextValue(thread, directoryIterator);
-    count++;    
+    count++;
   }
   Arcadia_Tests_assertTrue(thread, 4 == count);
 }

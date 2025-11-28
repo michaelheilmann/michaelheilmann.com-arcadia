@@ -15,6 +15,8 @@
 
 #include "Arcadia/DDLS/Implementation/ValidationContext.h"
 
+#include "Arcadia/DDLS/Extensions.h"
+
 static void
 Arcadia_DDLS_ValidationContext_constructImpl
   (
@@ -34,7 +36,7 @@ Arcadia_DDLS_ValidationContext_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_String* name,
     Arcadia_DDL_Node* node
   );
 
@@ -42,7 +44,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_ValidationContext_objec
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_ValidationContext_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_ValidationContext_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_ValidationContext_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -74,6 +76,7 @@ Arcadia_DDLS_ValidationContext_constructImpl
   self->temporary1 = Arcadia_StringBuffer_create(thread);
   self->stringTable = Arcadia_Languages_StringTable_create(thread);
   self->diagnostics = Arcadia_DDLS_Diagnostics_create(thread, self->stringTable);
+  self->schemata = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   //
   self->run = &Arcadia_DDLS_ValidationContext_runImpl;
   //
@@ -97,72 +100,17 @@ Arcadia_DDLS_ValidationContext_visitImpl
   if (self->stringTable) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->stringTable);
   }
-}
-
-#include "Arcadia/DDLS/Extensions.h"
-
-#if 0
-static Arcadia_String*
-expectedToString
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type
-  )
-{
-  if (Arcadia_DDLS_isBoolean(thread, type)) {
-    return self->diagnostics->BOOLEAN;
-  } else if (Arcadia_DDLS_isList(thread, type)) {
-    return self->diagnostics->LIST;
-  } else if (Arcadia_DDLS_isMap(thread, type)) {
-    return self->diagnostics->MAP;
-  } else if (Arcadia_DDLS_isNumber(thread, type)) {
-    return self->diagnostics->NUMBER;
-  } else if (Arcadia_DDLS_isString(thread, type)) {
-    return self->diagnostics->STRING;
-  } else if (Arcadia_DDLS_isVoid(thread, type)) {
-    return self->diagnostics->VOID;
-  } else {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
+  if (self->schemata) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->schemata);
   }
 }
-#endif
-
-#if 0
-static Arcadia_String*
-receivedToString
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDL_Node* node
-  )
-{
-  if (Arcadia_DDL_Node_isBoolean(thread, node)) {
-    return self->diagnostics->BOOLEAN;
-  } else if (Arcadia_DDL_Node_isList(thread, node)) {
-    return self->diagnostics->LIST;
-  } else if (Arcadia_DDL_Node_isMap(thread, node)) {
-    return self->diagnostics->MAP;
-  } else if (Arcadia_DDL_Node_isNumber(thread, node)) {
-    return self->diagnostics->NUMBER;
-  } else if (Arcadia_DDL_Node_isString(thread, node)) {
-    return self->diagnostics->STRING;
-  } else if (Arcadia_DDL_Node_isVoid(thread, node)) {
-    return self->diagnostics->VOID;
-  } else {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-}
-#endif
 
 static void
 onValidateList
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_DDLS_Node* ddlsNode,
     Arcadia_DDL_Node* node
   );
 
@@ -171,7 +119,7 @@ onValidateMap
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_DDLS_Node* ddlsNode,
     Arcadia_DDL_Node* node
   );
 
@@ -180,7 +128,7 @@ onValidate
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_DDLS_Node* ddlsNode,
     Arcadia_DDL_Node* node
   );
 
@@ -189,16 +137,16 @@ onValidateList
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_DDLS_Node* ddlsNode,
     Arcadia_DDL_Node* node
   )
 {
-  Arcadia_DDLS_ListType* listType = (Arcadia_DDLS_ListType*)type;
-  Arcadia_DDLS_Type* elementType = listType->element;
+  Arcadia_DDLS_ListNode* ddlsListNode = (Arcadia_DDLS_ListNode*)ddlsNode;
+  Arcadia_DDLS_Node* ddlsListElementNode = ddlsListNode->element;
   Arcadia_DDL_ListNode* listNode = (Arcadia_DDL_ListNode*)node;
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)listNode->elements); i < n; ++i) {
     Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, listNode->elements, i, _Arcadia_DDL_Node_getType(thread));
-    onValidate(thread, self, elementType, node);
+    onValidate(thread, self, ddlsListElementNode, node);
   }
 }
 
@@ -207,7 +155,7 @@ onValidateMap
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_DDLS_Node* ddlsNode,
     Arcadia_DDL_Node* node
   )
 {
@@ -215,7 +163,7 @@ onValidateMap
   ///       validation tasks (a new object type) are pushed.
   Arcadia_Map* symbols = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_DDL_MapNode* mapNode = (Arcadia_DDL_MapNode*)node;
-  Arcadia_DDLS_MapType* mapType = (Arcadia_DDLS_MapType*)type;
+  Arcadia_DDLS_MapNode* ddlsMapNode = (Arcadia_DDLS_MapNode*)ddlsNode;
   // (1) Ensure all map entry names are unique.
   // (2) Ensure all map entry names are permitted by the type.
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
@@ -229,17 +177,16 @@ onValidateMap
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Value temporary = Arcadia_Map_get(thread, mapType->entries, newKey);
+    Arcadia_Value temporary = Arcadia_Map_get(thread, ddlsMapNode->entries, newKey);
     if (!Arcadia_Value_isObjectReferenceValue(&temporary)) {
       Arcadia_DDLS_Diagnostics_mapEntryExistsError(thread, self->diagnostics, (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&newKey));
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
-
     }
-    onValidate(thread, self, (Arcadia_DDLS_Type*)Arcadia_Value_getObjectReferenceValueChecked(thread, temporary, _Arcadia_DDLS_Type_getType(thread)), node->value);
+    onValidate(thread, self, (Arcadia_DDLS_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, temporary, _Arcadia_DDLS_Node_getType(thread)), node->value);
   }
   // (3) Ensure no entry required by the type are missing.
-  Arcadia_List* requiredEntries = Arcadia_Map_getKeys(thread, mapType->entries);
+  Arcadia_List* requiredEntries = Arcadia_Map_getKeys(thread, ddlsMapNode->entries);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)requiredEntries); i < n; ++i) {
     Arcadia_Value key = Arcadia_List_getAt(thread, requiredEntries, i);
     Arcadia_Value oldKey;
@@ -257,25 +204,36 @@ onValidate
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_DDLS_Node* ddlsNode,
     Arcadia_DDL_Node* node
   )
 {
-  if (Arcadia_DDLS_isBoolean(thread, type) && Arcadia_DDL_Node_isBoolean(thread, node)) {
+  while (Arcadia_DDLS_isSchemaReference(thread, ddlsNode)) {
+    Arcadia_Value v = Arcadia_Map_get(thread, self->schemata, Arcadia_Value_makeObjectReferenceValue(((Arcadia_DDLS_SchemaReferenceNode*)ddlsNode)->name));
+    if (Arcadia_Value_isVoidValue(&v)) {
+      Arcadia_DDLS_Diagnostics_unresolvedSchemaReferenceError(thread, self->diagnostics, ((Arcadia_DDLS_SchemaReferenceNode*)ddlsNode)->name);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_DDLS_SchemaNode* schemaNode = (Arcadia_DDLS_SchemaNode*)Arcadia_Value_getObjectReferenceValue(&v);
+    ddlsNode = schemaNode->definition;
+
+  }
+  if (Arcadia_DDLS_isBoolean(thread, ddlsNode) && Arcadia_DDL_Node_isBoolean(thread, node)) {
     return;
-  } else if (Arcadia_DDLS_isList(thread, type) && Arcadia_DDL_Node_isList(thread, node)) {
-    onValidateList(thread, self, type, node);
-  } else if (Arcadia_DDLS_isMap(thread, type) && Arcadia_DDL_Node_isMap(thread, node)) {
-    onValidateMap(thread, self, type, node);
-  } else if (Arcadia_DDLS_isNumber(thread, type) && Arcadia_DDL_Node_isNumber(thread, node)) {
+  } else if (Arcadia_DDLS_isList(thread, ddlsNode) && Arcadia_DDL_Node_isList(thread, node)) {
+    onValidateList(thread, self, ddlsNode, node);
+  } else if (Arcadia_DDLS_isMap(thread, ddlsNode) && Arcadia_DDL_Node_isMap(thread, node)) {
+    onValidateMap(thread, self, ddlsNode, node);
+  } else if (Arcadia_DDLS_isNumber(thread, ddlsNode) && Arcadia_DDL_Node_isNumber(thread, node)) {
     return;
-  } else if (Arcadia_DDLS_isString(thread, type) && Arcadia_DDL_Node_isString(thread, node)) {
+  } else if (Arcadia_DDLS_isString(thread, ddlsNode) && Arcadia_DDL_Node_isString(thread, node)) {
     return;
-  } else if (Arcadia_DDLS_isVoid(thread, type) && Arcadia_DDL_Node_isVoid(thread, node)) {
+  } else if (Arcadia_DDLS_isVoid(thread, ddlsNode) && Arcadia_DDL_Node_isVoid(thread, node)) {
     return;
   } else {
-    Arcadia_DDLS_Diagnostics_unexpectedTypeError(thread, self->diagnostics, type, node);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_LexicalError);
+    Arcadia_DDLS_Diagnostics_unexpectedTypeError(thread, self->diagnostics, ddlsNode, node);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
 }
@@ -285,11 +243,18 @@ Arcadia_DDLS_ValidationContext_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_String* name,
     Arcadia_DDL_Node* node
   )
 {
-  onValidate(thread, self, type, node);
+  Arcadia_Value v = Arcadia_Map_get(thread, self->schemata, Arcadia_Value_makeObjectReferenceValue(name));
+  if (Arcadia_Value_isVoidValue(&v)) {
+    Arcadia_DDLS_Diagnostics_unresolvedSchemaReferenceError(thread, self->diagnostics, name);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_DDLS_SchemaNode* ddlsNode = (Arcadia_DDLS_SchemaNode*)Arcadia_Value_getObjectReferenceValue(&v);
+  onValidate(thread, self, ((Arcadia_DDLS_SchemaNode*)ddlsNode)->definition, node);
 }
 
 Arcadia_DDLS_ValidationContext*
@@ -304,13 +269,64 @@ Arcadia_DDLS_ValidationContext_create
 }
 
 void
+Arcadia_DDLS_ValidationContext_addSchema
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_ValidationContext* self,
+    Arcadia_DDLS_SchemaNode* schemaNode
+  )
+{
+  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(schemaNode->name);
+  Arcadia_Value v = Arcadia_Map_get(thread, self->schemata, k);
+  if (!Arcadia_Value_isVoidValue(&v)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  v = Arcadia_Value_makeObjectReferenceValue(schemaNode);
+  Arcadia_Map_set(thread, self->schemata, k, v, NULL, NULL);
+}
+
+Arcadia_DDLS_SchemaNode*
+Arcadia_DDLS_ValidationContext_getSchema
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_ValidationContext* self,
+    Arcadia_String* name
+  )
+{
+  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(name);
+  Arcadia_Value v = Arcadia_Map_get(thread, self->schemata, k);
+  if (Arcadia_Value_isVoidValue(&v)) {
+    return NULL;
+  }
+  return (Arcadia_DDLS_SchemaNode*)Arcadia_Value_getObjectReferenceValue(&v);
+}
+
+Arcadia_DDLS_SchemaNode*
+Arcadia_DDLS_ValidationContext_removeSchema
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_ValidationContext* self,
+    Arcadia_String* name
+  )
+{
+  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(name);
+  Arcadia_Value v;
+  Arcadia_Map_remove(thread, self->schemata, k, NULL, &v);
+  if (Arcadia_Value_isVoidValue(&v)) {
+    return NULL;
+  }
+  return (Arcadia_DDLS_SchemaNode*)Arcadia_Value_getObjectReferenceValue(&v);
+}
+
+void
 Arcadia_DDLS_ValidationContext_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_ValidationContext* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_String* name,
     Arcadia_DDL_Node* node
   )
 {
-  self->run(thread, self, type, node);
+  self->run(thread, self, name, node);
 }

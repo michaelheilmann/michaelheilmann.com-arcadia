@@ -189,13 +189,13 @@ Arcadia_Audials_Implementation_OpenAL_BackendContext_constructImpl
       if (channels == 1) {
         for (size_t i = 0; i < numberOfSamples; ++i) {
           int16_t sample = 32760 * sin(constant * i);
-          Arcadia_ByteBuffer_append_pn(thread, sourceVoiceBuffer, &sample, 2);
+          Arcadia_ByteBuffer_insertBackBytes(thread, sourceVoiceBuffer, &sample, 2);
         }
       } else if (channels == 2) {
         for (size_t i = 0; i < numberOfSamples; ++i) {
           int16_t sample = 32760 * sin(constant * i);
-          Arcadia_ByteBuffer_append_pn(thread, sourceVoiceBuffer, &sample, 2);
-          Arcadia_ByteBuffer_append_pn(thread, sourceVoiceBuffer, &sample, 2);
+          Arcadia_ByteBuffer_insertBackBytes(thread, sourceVoiceBuffer, &sample, 2);
+          Arcadia_ByteBuffer_insertBackBytes(thread, sourceVoiceBuffer, &sample, 2);
         }
       }
       if (channels == 1) {

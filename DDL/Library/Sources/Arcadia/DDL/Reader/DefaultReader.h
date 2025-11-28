@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_DDL_READER_DEFAULTREADER_H_INCLUDED)
 #define ARCADIA_DDL_READER_DEFAULTREADER_H_INCLUDED
 
-#include "Arcadia/DDL/Implementation/Include.h"
+#include "Arcadia/DDL/Nodes/Include.h"
 #include "Arcadia/DDL/Reader/Parser.h"
 
 /// @code
@@ -24,7 +24,7 @@
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.DDL.DefaultReader", Arcadia_DDL_DefaultReader,
                           u8"Arcadia.Object");
-                          
+
 struct Arcadia_DDL_DefaultReader {
   Arcadia_Object parent;
   Arcadia_DDL_Parser* parser;
@@ -48,7 +48,7 @@ Arcadia_DDL_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_DefaultReader* self,
-    Arcadia_Utf8Reader* input
+    Arcadia_UTF8Reader* input
   );
 
 #endif // ARCADIA_DDL_READER_DEFAULTREADER_H_INCLUDED

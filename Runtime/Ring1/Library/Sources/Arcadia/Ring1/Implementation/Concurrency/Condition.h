@@ -54,13 +54,13 @@ Arcadia_Concurrency_Condition_wait
   (
     Arcadia_Concurrency_Condition* condition
   );
-  
+
 Arcadia_Concurrency_Condition_Result
 Arcadia_Concurrency_Condition_signalOne
   (
     Arcadia_Concurrency_Condition* condition
   );
-  
+
 Arcadia_Concurrency_Condition_Result
 Arcadia_Concurrency_Condition_signalAll
   (

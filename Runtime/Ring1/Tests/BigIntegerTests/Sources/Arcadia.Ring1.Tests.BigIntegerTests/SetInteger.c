@@ -54,13 +54,13 @@ Arcadia_Ring1_Tests_BigInteger_setIntegerOperations
 
   regressionTest1(thread, Arcadia_Integer8Value_Minimum);
   regressionTest1(thread, Arcadia_Integer8Value_Maximum);
-  
+
   regressionTest1(thread, Arcadia_Integer16Value_Minimum);
   regressionTest1(thread, Arcadia_Integer16Value_Maximum);
 
   regressionTest1(thread, Arcadia_Integer32Value_Minimum);
   regressionTest1(thread, Arcadia_Integer32Value_Maximum);
-  
+
   regressionTest1(thread, Arcadia_Integer64Value_Minimum);
   regressionTest1(thread, Arcadia_Integer64Value_Maximum);
 }

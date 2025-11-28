@@ -38,10 +38,10 @@ main1
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
     Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
-    Arcadia_Utf8StringReader* r = Arcadia_Utf8StringReader_create(thread, argument);
+    Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argument);
     Arcadia_String* key = NULL,
                   * value = NULL;
-    if (!Arcadia_CommandLine_parseArgument(thread, (Arcadia_Utf8Reader*)r, &key, &value)) {
+    if (!Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r, &key, &value)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
@@ -72,7 +72,7 @@ main1
   Arcadia_FilePath* path;
 
   Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table(thread, Arcadia_BooleanValue_True, resultString);
-  Arcadia_ByteBuffer_append_pn(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
+  Arcadia_ByteBuffer_insertBackBytes(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
   path = Arcadia_FilePath_clone(thread, pathPrefix);
   Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, u8"BigTablesReal64.i", sizeof("BigTablesReal64.i") - 1));
   Arcadia_FileSystem_setFileContents(thread, fileSystem, path, resultBytes);
@@ -80,7 +80,7 @@ main1
   Arcadia_ByteBuffer_clear(thread, resultBytes);
 
   Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table(thread, Arcadia_BooleanValue_False, resultString);
-  Arcadia_ByteBuffer_append_pn(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
+  Arcadia_ByteBuffer_insertBackBytes(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
   path = Arcadia_FilePath_clone(thread, pathPrefix);
   Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, u8"SmallTablesReal64.i", sizeof("SmallTablesReal64.i") - 1));
   Arcadia_FileSystem_setFileContents(thread, fileSystem, path, resultBytes);
@@ -88,7 +88,7 @@ main1
   Arcadia_ByteBuffer_clear(thread, resultBytes);
 
   Arcadia_Tools_RyuLookupTableGenerator_generateReal32Table(thread, resultString);
-  Arcadia_ByteBuffer_append_pn(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
+  Arcadia_ByteBuffer_insertBackBytes(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
   path = Arcadia_FilePath_clone(thread, pathPrefix);
   Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, u8"TablesReal32.i", sizeof("TablesReal32.i") - 1));
   Arcadia_FileSystem_setFileContents(thread, fileSystem, path, resultBytes);

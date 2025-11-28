@@ -118,9 +118,9 @@ startup1
   //
   if (Arcadia_Imaging_ImageWriterParameters_hasPath(thread, parameters)) {
     Arcadia_ByteBuffer* b = Arcadia_ByteBuffer_create(thread);
-    Arcadia_ByteBuffer_append_pn(thread, b, Arcadia_String_getBytes(thread, Arcadia_Imaging_ImageWriterParameters_getPath(thread, parameters)),
-                                            Arcadia_String_getNumberOfBytes(thread, Arcadia_Imaging_ImageWriterParameters_getPath(thread, parameters)));
-    Arcadia_ByteBuffer_append_pn(thread, b, u8"", 1);
+    Arcadia_ByteBuffer_insertBackBytes(thread, b, Arcadia_String_getBytes(thread, Arcadia_Imaging_ImageWriterParameters_getPath(thread, parameters)),
+                                                  Arcadia_String_getNumberOfBytes(thread, Arcadia_Imaging_ImageWriterParameters_getPath(thread, parameters)));
+    Arcadia_ByteBuffer_insertBackBytes(thread, b, u8"", 1);
     wchar_t* targetPathW = Arcadia_Windows_multiByteToWideCharZeroTerminated(b->p);
     if (!targetPathW) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -340,7 +340,7 @@ startup3
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_ByteBuffer_append_pn(thread, Arcadia_Imaging_ImageWriterParameters_getByteBuffer(thread, parameters), p, n);
+      Arcadia_ByteBuffer_insertBackBytes(thread, Arcadia_Imaging_ImageWriterParameters_getByteBuffer(thread, parameters), p, n);
       GlobalUnlock(self->hMemory);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
@@ -412,10 +412,10 @@ Arcadia_Imaging_Windows_WicImageWriterBase_constructImpl
   self->piEncoder = NULL;
   self->piBitmapFrame = NULL;
   self->pPropertyBag = NULL;
-  
+
   self->configure = NULL;
   self->getFormat = NULL;
-  
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
@@ -455,5 +455,5 @@ Arcadia_Imaging_Windows_WicImageWriterBase_doWrite
 
   while (currentModule > 0) {
     modules[--currentModule].shutdown(thread, self, sourcePixelBuffer, parameters);
-  }  
+  }
 }

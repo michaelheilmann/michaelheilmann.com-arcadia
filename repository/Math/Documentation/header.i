@@ -1,4 +1,4 @@
-@{include("./../../../../Documentation/Commons/header-common.i")}
+@{include("./../../../Documentation/Commons/header-common.i")}
 <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=1'>
 <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=1'>
 <link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=1'>

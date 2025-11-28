@@ -201,7 +201,7 @@ Arcadia_ImmutableList_getAtImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return *(self->elements + index); 
+  return *(self->elements + index);
 }
 
 static Arcadia_SizeValue

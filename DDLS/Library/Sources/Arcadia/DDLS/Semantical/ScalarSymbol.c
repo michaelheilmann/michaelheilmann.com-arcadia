@@ -33,7 +33,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_ScalarSymbol_objectType
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_ScalarSymbol_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_ScalarSymbol_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_ScalarSymbol_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -54,7 +54,7 @@ Arcadia_DDLS_ScalarSymbol_constructImpl
   Arcadia_TypeValue _type = _Arcadia_DDLS_ScalarSymbol_getType(thread);
   //
   {
-    Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDLS_SymbolKind_ScalarType);
+    Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDLS_SymbolKind_Scalar);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }

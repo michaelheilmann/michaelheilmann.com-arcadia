@@ -69,13 +69,13 @@ Arcadia_Visuals_Scene_MeshContext_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  
+
   self->viewToProjectionMatrix = Arcadia_Math_Matrix4Real32_create(thread);
   Arcadia_Math_Matrix4Real32_setIdentity(thread, self->viewToProjectionMatrix);
 
   self->worldToViewMatrix = Arcadia_Math_Matrix4Real32_create(thread);
   Arcadia_Math_Matrix4Real32_setIdentity(thread, self->worldToViewMatrix);
-  
+
   self->viewportClearColor.red = 193;
   self->viewportClearColor.green = 216;
   self->viewportClearColor.blue = 195;
@@ -112,7 +112,7 @@ Arcadia_Visuals_Scene_MeshContext_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_MeshContext* self
   )
-{ 
+{
   if (self->viewToProjectionMatrix) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->viewToProjectionMatrix);
   }

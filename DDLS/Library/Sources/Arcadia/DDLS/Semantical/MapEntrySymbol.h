@@ -19,12 +19,12 @@
 #include "Arcadia/DDLS/Semantical/Symbol.h"
 
 Arcadia_declareObjectType(u8"Arcadia.DDLS.MapEntrySymbol", Arcadia_DDLS_MapEntrySymbol,
-                          u8"Arcadia.DDLS.Symbol");                          
-                          
+                          u8"Arcadia.DDLS.Symbol");
+
 struct Arcadia_DDLS_MapEntrySymbol {
   Arcadia_DDLS_Symbol parent;
   Arcadia_String* entryName;
-  Arcadia_DDLS_Symbol* entryType;
+  Arcadia_DDLS_Symbol* entrySymbol;
 };
 
 Arcadia_DDLS_MapEntrySymbol*

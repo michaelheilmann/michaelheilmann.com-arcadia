@@ -51,7 +51,7 @@ testScanner4
     u8"$_\n"
     ;
   Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
-  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
 
   expectAndNext(thread, scanner, Arcadia_MIL_TokenKind_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
 
@@ -131,7 +131,7 @@ testScanner3
     u8"\n"
     ;
   Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
-  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
 
   //
   expectAndNext(thread, scanner, Arcadia_MIL_TokenKind_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
@@ -217,7 +217,7 @@ testScanner2
     u8"\n"
     ;
   Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
-  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
 
   expectAndNext(thread, scanner, Arcadia_MIL_TokenKind_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_TokenKind_Name, u8"Name", sizeof(u8"Name") - 1);
@@ -251,7 +251,7 @@ testScanner1
     u8""
     ;
   Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
-  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+  Arcadia_MIL_Scanner_setInput(thread, scanner, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
 
   expectAndNext(thread, scanner, Arcadia_MIL_TokenKind_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_TokenKind_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);

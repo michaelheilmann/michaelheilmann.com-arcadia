@@ -43,7 +43,7 @@ Arcadia_BigInteger_shiftRightInteger64
     Arcadia_BigInteger* self,
     Arcadia_Integer64Value other
   )
-{ 
+{
   if (other < Arcadia_Integer64Value_Literal(0)) {
     if (other == Arcadia_Integer64Value_Minimum) {
       Arcadia_BigInteger_shiftLeftNatural64(thread, self, ((Arcadia_Natural64Value)(-(other + 1))) + 1);

@@ -20,7 +20,7 @@
 
 static void
 IcoImageWriter_constructImpl
-  ( 
+  (
     Arcadia_Thread* thread,
     IcoImageWriter* self
   );
@@ -110,7 +110,7 @@ IcoImageWriter_writeToPathImpl
     Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
   )
-{ 
+{
   Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(extension);
   Arcadia_Value b[] = {
     Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"ico", sizeof(u8"ico") - 1)))),
@@ -218,8 +218,8 @@ IcoImageWriter_writeIcoToByteBufferImpl
     .numberOfImages = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers)
   };
   Arcadia_List* pixelBuffers = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, targetByteBuffer, &iconDir, sizeof(ICONDIR));
-  
+  Arcadia_ByteBuffer_insertBackBytes(thread, targetByteBuffer, &iconDir, sizeof(ICONDIR));
+
   Arcadia_Imaging_ImageWriter* pngImageWriter =  IcoImageWriter_getPngImageWriter(thread, self);
   Arcadia_String* pngExtension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"png", sizeof(u8"png") - 1)));
   Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(thread);
@@ -259,7 +259,7 @@ IcoImageWriter_writeIcoToByteBufferImpl
                                   .numberOfBitsPerPixel = 32,
                                   .imageSize = Arcadia_ByteBuffer_getSize(thread, temporary),
                                   .offset = sizeof(ICONDIR) + Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers) * sizeof(ICONDIRENTRY) + offset };
-    Arcadia_ByteBuffer_append_pn(thread, targetByteBuffer, &iconDirEntry, sizeof(ICONDIRENTRY));
+    Arcadia_ByteBuffer_insertBackBytes(thread, targetByteBuffer, &iconDirEntry, sizeof(ICONDIRENTRY));
     offset += Arcadia_ByteBuffer_getSize(thread, temporary);
   }
   for (Arcadia_SizeValue i = 0, offset = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)sourcePixelBuffers); i < n; ++i) {
@@ -268,7 +268,7 @@ IcoImageWriter_writeIcoToByteBufferImpl
     Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBuffers);
     Arcadia_List_insertBackObjectReferenceValue(thread, pixelBuffers, pixelBuffer);
     Arcadia_Imaging_ImageWriter_write(thread, pngImageWriter, pixelBuffers, pngParameters);
-    Arcadia_ByteBuffer_append_pn(thread, targetByteBuffer, temporary->p, temporary->sz);
+    Arcadia_ByteBuffer_insertBackBytes(thread, targetByteBuffer, temporary->p, temporary->sz);
     offset += Arcadia_ByteBuffer_getSize(thread, temporary);
   }
 }

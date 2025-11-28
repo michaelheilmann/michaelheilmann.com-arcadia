@@ -24,7 +24,7 @@
 
 static void
 Arcadia_Imaging_Linux_PngImageWriter_constructImpl
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Linux_PngImageWriter* self
   );
@@ -150,7 +150,7 @@ on_write
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_ByteBuffer_append_pn(thread, ws->byteBuffer, data, length);
+    Arcadia_ByteBuffer_insertBackBytes(thread, ws->byteBuffer, data, length);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
@@ -196,7 +196,7 @@ Arcadia_Imaging_Linux_PngImageWriter_writeImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject; 
+  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject;
   if (Arcadia_Imaging_ImageWriterParameters_hasByteBuffer(thread, target)) {
     Arcadia_Imaging_Linux_PngImageWriter_writePngToByteBufferImpl(thread, self, sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters_getByteBuffer(thread, target));
   } else if (Arcadia_Imaging_ImageWriterParameters_hasPath(thread, target)) {

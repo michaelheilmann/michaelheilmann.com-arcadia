@@ -17,7 +17,7 @@
 #include "Arcadia/Ring2/FileSystem/DirectoryIteratorLinux.h"
 
 #include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
-#include "Arcadia/Ring2/Implementation/StringBuffer.h"
+#include "Arcadia/Ring2/Strings/StringBuffer.h"
 #include "Arcadia/Ring2/FileSystem/FilePath.h"
 
 #include <string.h>

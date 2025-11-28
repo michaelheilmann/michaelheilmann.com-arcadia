@@ -17,7 +17,9 @@
 #include "Arcadia/Ring2/Implementation/CommandLine.h"
 
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
-#include "Arcadia/Ring2/Implementation/Utf8ByteBufferWriter.h"
+#include "Arcadia/Ring2/Strings/Include.h"
+#include "Arcadia/Ring2/FileSystem/FileSystem.h"
+#include "Arcadia/Ring2/FileSystem/FileHandle.h"
 
 #include <stdio.h>
 
@@ -25,93 +27,93 @@ static Arcadia_BooleanValue
 isEnd
   (
     Arcadia_Thread* thread,
-    Arcadia_Utf8Reader* reader
+    Arcadia_UTF8Reader* reader
   )
-{ return !Arcadia_Utf8Reader_hasCodePoint(thread, reader); }
+{ return !Arcadia_UTF8Reader_hasCodePoint(thread, reader); }
 
 static Arcadia_BooleanValue
 isEqual
   (
     Arcadia_Thread* thread,
-    Arcadia_Utf8Reader* reader
+    Arcadia_UTF8Reader* reader
   )
 {
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
-  return '=' == Arcadia_Utf8Reader_getCodePoint(thread, reader);
+  return '=' == Arcadia_UTF8Reader_getCodePoint(thread, reader);
 }
 
 static Arcadia_BooleanValue
 isEqualOrEnd
   (
     Arcadia_Thread* thread,
-    Arcadia_Utf8Reader* reader
+    Arcadia_UTF8Reader* reader
   )
 {
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
     return Arcadia_BooleanValue_True;
   }
-  return '=' == Arcadia_Utf8Reader_getCodePoint(thread, reader);
+  return '=' == Arcadia_UTF8Reader_getCodePoint(thread, reader);
 }
 
 static Arcadia_String*
-parseString 
+parseString
   (
     Arcadia_Thread* thread,
-    Arcadia_Utf8Reader* reader,
-    Arcadia_Utf8Writer* writer,
+    Arcadia_UTF8Reader* reader,
+    Arcadia_UTF8Writer* writer,
     Arcadia_ByteBuffer* writerByteBuffer
   )
 {
   Arcadia_Natural32Value codePoint;
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
     return NULL;
   }
-  codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
+  codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
   if (codePoint != '"') {
     return NULL;
   }
-  Arcadia_Utf8Reader_next(thread, reader);
+  Arcadia_UTF8Reader_next(thread, reader);
   Arcadia_BooleanValue lastWasSlash = Arcadia_BooleanValue_False;
   while (Arcadia_BooleanValue_True) {
-    codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
+    codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
     if (lastWasSlash) {
       switch (codePoint) {
         case 'r': {
           lastWasSlash = Arcadia_BooleanValue_False;
           codePoint = '\r';
-          Arcadia_Utf8Reader_next(thread, reader);
-          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+          Arcadia_UTF8Reader_next(thread, reader);
+          Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
         } break;
         case 'n': {
           lastWasSlash = Arcadia_BooleanValue_False;
           codePoint = '\n';
-          Arcadia_Utf8Reader_next(thread, reader);
-          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+          Arcadia_UTF8Reader_next(thread, reader);
+          Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
         } break;
         case 'v': {
           lastWasSlash = Arcadia_BooleanValue_False;
           codePoint = '\v';
-          Arcadia_Utf8Reader_next(thread, reader);
-          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+          Arcadia_UTF8Reader_next(thread, reader);
+          Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
         } break;
         case 't': {
           lastWasSlash = Arcadia_BooleanValue_False;
           codePoint = '\t';
-          Arcadia_Utf8Reader_next(thread, reader);
-          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+          Arcadia_UTF8Reader_next(thread, reader);
+          Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
         } break;
         case '"': {
           lastWasSlash = Arcadia_BooleanValue_False;
           codePoint = '"';
-          Arcadia_Utf8Reader_next(thread, reader);
-          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+          Arcadia_UTF8Reader_next(thread, reader);
+          Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
         } break;
         case '\\': {
           lastWasSlash = Arcadia_BooleanValue_False;
-          Arcadia_Utf8Reader_next(thread, reader);
-          Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+          Arcadia_UTF8Reader_next(thread, reader);
+          Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
         } break;
         default: {
           return NULL;
@@ -119,14 +121,14 @@ parseString
       };
     } else {
       if (codePoint == '"') {
-        Arcadia_Utf8Reader_next(thread, reader);
+        Arcadia_UTF8Reader_next(thread, reader);
         break;
       } else if (codePoint == '\\') {
-        Arcadia_Utf8Reader_next(thread, reader);
+        Arcadia_UTF8Reader_next(thread, reader);
         lastWasSlash = Arcadia_BooleanValue_True;
       } else {
-        Arcadia_Utf8Reader_next(thread, reader);
-        Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+        Arcadia_UTF8Reader_next(thread, reader);
+        Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
       }
 
     }
@@ -143,7 +145,7 @@ Arcadia_BooleanValue
 Arcadia_CommandLine_parseArgument
   (
     Arcadia_Thread* thread,
-    Arcadia_Utf8Reader* reader,
+    Arcadia_UTF8Reader* reader,
     Arcadia_String** key,
     Arcadia_String** value
   )
@@ -151,30 +153,30 @@ Arcadia_CommandLine_parseArgument
   Arcadia_String* value1 = NULL, *key1 = NULL;
   Arcadia_Value temporaryValue;
   Arcadia_ByteBuffer* writerByteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_Utf8Writer* writer = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, writerByteBuffer);
+  Arcadia_UTF8Writer* writer = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, writerByteBuffer);
   // '--'
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
-  if ('-' != Arcadia_Utf8Reader_getCodePoint(thread, reader)) {
+  if ('-' != Arcadia_UTF8Reader_getCodePoint(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Utf8Reader_next(thread, reader);
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
+  Arcadia_UTF8Reader_next(thread, reader);
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
-  if ('-' != Arcadia_Utf8Reader_getCodePoint(thread, reader)) {
+  if ('-' != Arcadia_UTF8Reader_getCodePoint(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Utf8Reader_next(thread, reader);
+  Arcadia_UTF8Reader_next(thread, reader);
   // <name>
   if (isEqualOrEnd(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
   do {
-    Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
-    Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
-    Arcadia_Utf8Reader_next(thread, reader);
+    Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
+    Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+    Arcadia_UTF8Reader_next(thread, reader);
   } while (!isEqualOrEnd(thread, reader));
   Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)writerByteBuffer);
   key1 = Arcadia_String_create(thread, temporaryValue);
@@ -188,7 +190,7 @@ Arcadia_CommandLine_parseArgument
   if (!isEqual(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Utf8Reader_next(thread, reader);
+  Arcadia_UTF8Reader_next(thread, reader);
   value1 = parseString(thread, reader, writer, writerByteBuffer);
   if (!value1) {
     return Arcadia_BooleanValue_False;
@@ -201,6 +203,17 @@ Arcadia_CommandLine_parseArgument
   return Arcadia_BooleanValue_True;
 }
 
+static void Arcadia_FileHandle_writeStringBuffer(Arcadia_Thread* thread, Arcadia_FileHandle* self, Arcadia_StringBuffer* stringBuffer) {
+  Arcadia_SizeValue m = Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer);
+  Arcadia_SizeValue n = 0;
+  Arcadia_Natural8Value const* p = Arcadia_StringBuffer_getBytes(thread, stringBuffer);
+  while (n < m) {
+    Arcadia_SizeValue k = 0;
+    Arcadia_FileHandle_write(thread, self, p + n, m - n, &k);
+    n += k;
+  }
+}
+
 void
 Arcadia_CommandLine_raiseRequiredArgumentMissingError
   (
@@ -208,9 +221,16 @@ Arcadia_CommandLine_raiseRequiredArgumentMissingError
     Arcadia_String* key
   )
 {
-  fwrite(u8"required command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
-  fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
-  fwrite(u8"` not specified\n", 1, sizeof(u8"` not specified\n") - 1, stdout);
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"required command-line argument `");
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, key);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` not specified\n");
+
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
+  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
 }
@@ -223,9 +243,16 @@ Arcadia_CommandLine_raiseUnknownArgumentError
     Arcadia_String* value
   )
 {
-  fwrite(u8"unknown command-line argument `", 1, sizeof(u8"unkown command-line argument `") - 1, stdout);
-  fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
-  fwrite(u8"`\n", 1, sizeof(u8"`\n") - 1, stdout);
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"unknown command-line argument `");
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, key);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"`\n");
+
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
+  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
 }
@@ -237,9 +264,17 @@ Arcadia_CommandLine_raiseNoValueError
     Arcadia_String* key
   )
 {
-  fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
-  fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
-  fwrite(u8"` is not valid\n", 1, sizeof(u8"` is not valid\n") - 1, stdout);
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"no value specifiekd for command-line argument `");
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, key);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"`\n");
+
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
+  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
 }
@@ -252,9 +287,39 @@ Arcadia_CommandLine_raiseValueInvalidError
     Arcadia_String* value
   )
 {
-  fwrite(u8"value specified for command-line argument `", 1, sizeof(u8"value specified for command-line argument `") - 1, stdout);
-  fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
-  fwrite(u8"` is not valid", 1, sizeof(u8"` is not valid") - 1, stdout);
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"value specified for command-line argument `");
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, key);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` is not valid\n");
+
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
+  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+  Arcadia_Thread_jump(thread);
+}
+
+void
+Arcadia_CommandLine_raiseAlreadySpecifiedError
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* key
+  )
+{
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"command-line argument `");
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, key);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` was already specified\n");
+
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
+  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
+
   Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
   Arcadia_Thread_jump(thread);
 }

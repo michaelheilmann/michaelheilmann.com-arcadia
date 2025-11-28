@@ -64,7 +64,7 @@ Arcadia_BigInteger_fromTwosComplement
       self->sign = 1;
     }
   } else {
-    Arcadia_SizeValue n = numberOfLimps;  
+    Arcadia_SizeValue n = numberOfLimps;
     Arcadia_BigInteger_Limp* p = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_BigInteger_Limp) * n);
     Arcadia_Memory_copy(thread, p, limps, sizeof(Arcadia_BigInteger_Limp) * n);
     // The value is positive or negative.

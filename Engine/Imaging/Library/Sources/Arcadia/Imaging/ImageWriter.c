@@ -71,7 +71,7 @@ Arcadia_Imaging_ImageWriter_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  
+
   self->getSupportedTypes = NULL;
   self->write = NULL;
 

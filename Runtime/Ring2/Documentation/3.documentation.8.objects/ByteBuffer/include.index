@@ -1,2 +1,10 @@
 <li>Byte Buffer</li>
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer">Arcadia_ByteBuffer</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer_create">Arcadia_ByteBuffer_create</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer_getBytes">Arcadia_ByteBuffer_getBytes</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer_getNumberOfBytes">Arcadia_ByteBuffer_getNumberOfBytes</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer_getSize">Arcadia_ByteBuffer_getNumberOfBytes</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer_insertBackBytes">Arcadia_ByteBuffer_insertBackBytes</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer_insertBytes">Arcadia_ByteBuffer_insertBytes</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ByteBuffer_insertFrontBytes">Arcadia_ByteBuffer_insertFrontBytes</a></li>

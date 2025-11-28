@@ -50,7 +50,7 @@ struct Arcadia_MIL_Scanner {
   // The current symbol "s".
   Arcadia_Natural32Value symbol;
   // The input stream.
-  Arcadia_Utf8Reader* input;
+  Arcadia_UTF8Reader* input;
   // The string table.
   Arcadia_Languages_StringTable* stringTable;
   // The keywords.
@@ -180,7 +180,7 @@ Arcadia_MIL_Scanner_constructImpl
   //
   self->token.kind = Arcadia_MIL_TokenKind_StartOfInput;
   self->stringTable = Arcadia_Languages_StringTable_create(thread);
-  self->input = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
+  self->input = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
   self->token.text = Arcadia_StringBuffer_create(thread);
   //
   Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<start of input>");
@@ -291,9 +291,9 @@ next
     Arcadia_MIL_Scanner* self
   )
 {
-  if (Arcadia_Utf8Reader_hasCodePoint(thread, self->input)) {
-    self->symbol = Arcadia_Utf8Reader_getCodePoint(thread, self->input);
-    Arcadia_Utf8Reader_next(thread, self->input);
+  if (Arcadia_UTF8Reader_hasCodePoint(thread, self->input)) {
+    self->symbol = Arcadia_UTF8Reader_getCodePoint(thread, self->input);
+    Arcadia_UTF8Reader_next(thread, self->input);
   } else {
     self->symbol = CodePoint_End;
   }
@@ -624,7 +624,7 @@ Arcadia_MIL_Scanner_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Scanner* self,
-    Arcadia_Utf8Reader* input
+    Arcadia_UTF8Reader* input
   )
 {
   self->input = input;

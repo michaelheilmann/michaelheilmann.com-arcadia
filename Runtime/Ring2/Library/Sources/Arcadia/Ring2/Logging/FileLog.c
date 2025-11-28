@@ -31,7 +31,7 @@ Arcadia_FileLog_visit
     Arcadia_Thread* thread,
     Arcadia_FileLog* self
   );
-  
+
 static void
 Arcadia_FileLog_infoImpl
   (
@@ -109,7 +109,7 @@ Arcadia_FileLog_visit
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->fileHandle);
   }
 }
- 
+
 static void
 Arcadia_FileLog_infoImpl
   (

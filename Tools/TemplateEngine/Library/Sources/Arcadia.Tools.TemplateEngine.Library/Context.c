@@ -139,7 +139,7 @@ Context_visit
   if (self->temporary) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporary);
   }
-  
+
   if (self->stack) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->stack);
   }
@@ -176,7 +176,7 @@ recursionGuard
       Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue(ps);
       Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"recursive include of file `");
       Arcadia_StringBuffer_insertBack(thread, sb, v);
-      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`");
+      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`\n");
       fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
@@ -211,11 +211,13 @@ Context_onRun
       Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ps);
       Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"failed to read file `");
       Arcadia_StringBuffer_insertBack(thread, sb, v);
-      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`");
-      fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`\n");
+
+      Arcadia_Log_error(thread, self->consoleLog, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sb)));
+
       Arcadia_Thread_jump(thread);
     }
-    fileContext->source = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
+    fileContext->source = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceByteBuffer);
     recursionGuard(thread, self, filePath);
     FileContext_execute(thread, fileContext);
     Arcadia_List_removeAt(thread, self->files, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->files) - 1, 1);

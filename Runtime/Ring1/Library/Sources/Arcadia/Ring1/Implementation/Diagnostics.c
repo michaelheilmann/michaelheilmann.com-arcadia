@@ -26,6 +26,12 @@ Arcadia_logfv
     va_list arguments
   )
 {
+  if (Arcadia_LogFlags_Debug == (flags & Arcadia_LogFlags_Debug)) {
+    va_list argumentsCopy;
+    va_copy(argumentsCopy, arguments);
+    vfprintf(stdout, format, argumentsCopy);
+    va_end(argumentsCopy);
+  }
   if (Arcadia_LogFlags_Error == (flags & Arcadia_LogFlags_Error)) {
     va_list argumentsCopy;
     va_copy(argumentsCopy, arguments);

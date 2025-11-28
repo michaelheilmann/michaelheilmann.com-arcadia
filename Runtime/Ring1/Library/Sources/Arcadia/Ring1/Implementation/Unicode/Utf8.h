@@ -23,13 +23,13 @@
 
 #define Arcadia_Configuration_Unicode_Utf8_ClassifyFirstByteOptimization (1)
 
-/// @brief 
+/// @brief
 /// The first Byte of an code point encoded in UTF-8 encoding denotes the number of subsequent Bytes.
 /// If the value of the given Byte is valid for  code point encoded in UTF-8 encoding, this function returns 1, 2, 3, or 4.
 /// Otherwise it returns Arcadia_SizeValue_Maximum.
 /// @param value
 /// The Byte.
-/// @return 
+/// @return
 /// 1, 2, 3, or 4 or Arcadia_SizeValue_Maximum.
 static inline Arcadia_SizeValue
 Arcadia_Unicode_Utf8_classifyFirstByte

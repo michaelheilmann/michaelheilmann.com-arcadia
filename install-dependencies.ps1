@@ -30,7 +30,7 @@ $packages =
     "my-openal",
     "my-opengl"
   );
-  
+
 New-Item -ItemType Directory -Force -Path $target
 
 foreach ($configuration in @('debug', 'release', 'minsizerel', 'relwithdebinfo')) {
@@ -39,7 +39,7 @@ foreach ($configuration in @('debug', 'release', 'minsizerel', 'relwithdebinfo')
       $url="$urlPrefix/$package-$configuration-$architecture.zip"
       Write-Host "downloading $url to $target/$package-$configuration-$architecture.zip"
       Invoke-WebRequest -UseBasicParsing $url -OutFile $target/$package-$configuration-$architecture.zip -ErrorAction Stop
-      Expand-Archive -LiteralPath $target/$package-$configuration-$architecture.zip -DestinationPath $target/$package-$configuration-$architecture 
+      Expand-Archive -LiteralPath $target/$package-$configuration-$architecture.zip -DestinationPath $target/$package-$configuration-$architecture
     }
   }
 }

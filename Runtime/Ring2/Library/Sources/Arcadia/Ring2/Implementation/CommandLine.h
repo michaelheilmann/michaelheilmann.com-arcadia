@@ -21,8 +21,7 @@
 #endif
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Implementation/Utf8Reader.h"
-#include "Arcadia/Ring2/Implementation/String.h"
+#include "Arcadia/Ring2/Strings/Include.h"
 
 // A command-line argument is of the form
 // @code
@@ -37,7 +36,7 @@ Arcadia_BooleanValue
 Arcadia_CommandLine_parseArgument
   (
     Arcadia_Thread* thread,
-    Arcadia_Utf8Reader* reader,
+    Arcadia_UTF8Reader* reader,
     Arcadia_String** key,
     Arcadia_String** value
   );
@@ -70,6 +69,13 @@ Arcadia_CommandLine_raiseValueInvalidError
     Arcadia_Thread* thread,
     Arcadia_String* key,
     Arcadia_String* value
+  );
+
+void
+Arcadia_CommandLine_raiseAlreadySpecifiedError
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* key
   );
 
 #endif // ARCADIA_RING2_IMPLEMENTATION_COMMANDLINE_H_INCLUDED

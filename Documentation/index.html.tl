@@ -26,6 +26,16 @@
     display: inline;
     font-size: small;
   }
+
+  footer > div > div {
+    line-height: 1rem;
+  }
+
+  footer > div > div > a {
+    text-decoration: none;
+    font-size: small;
+  }
+
   </style>
 </head>
 <body class="my-index-page-1">
@@ -77,6 +87,9 @@
               <li>
                 <a href='@{siteAddress}/specifications/data-definition-language'>Data Definition Language</a>
               </li>
+              <li>
+                <div>Data Definition Language Schema (coming soon)</div>
+              </li>
             </ul>
           </div>
         </div>
@@ -102,9 +115,15 @@
     <div></div>
   </main>
   <footer>
-    <div></div>
-    <div></div>
-    <div><a style='font-size: small; text-decoration: none;' href='mailto:contact@@michaelheilmann.com'>contact@@michaelheilmann.com</a></div>
+    <div class="left-column">
+    </div>
+    <div class="center-column">
+     </div>
+    <div class="right-column" style="display: flex; flex-direction: column">
+      <div><a href='mailto:contact@@michaelheilmann.com'>contact@@michaelheilmann.com</a></div>
+      <div><a href="@{siteAddress}/imprint">Imprint</a></div>
+      <div><a href="@{siteAddress}/data-protection-statement">Data Protection Statement</a></div>
+    </div>
   </footer>
 </body>
 </html>

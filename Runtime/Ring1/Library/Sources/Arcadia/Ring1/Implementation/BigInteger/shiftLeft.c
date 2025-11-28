@@ -148,7 +148,7 @@ Arcadia_BigInteger_shiftLeftNatural64
                                        &self->limps,
                                        sizeof(Arcadia_BigInteger_Limp) * (limpsToAllocate));
 
-    // 
+    //
     Arcadia_SizeValue lowBitsShift = (Arcadia_BigInteger_BitsPerLimp - bitShift);
     Arcadia_SizeValue highBits = 0;
     Arcadia_SizeValue block = self->limps[sourceIndex];

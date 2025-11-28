@@ -23,7 +23,6 @@
 #include "Arcadia/Ring1/Implementation/Thread.private.h"
 #include "Arcadia/Ring1/Implementation/Types.private.h"
 #include <stdbool.h>
-#include <string.h>
 
 typedef const ModuleInfo* (GetModuleInfo)();
 static GetModuleInfo* g_modules[] = {
@@ -169,6 +168,13 @@ static inline ReferenceCount ReferenceCount_decrement(ReferenceCount* referenceC
   return --(*referenceCount);
 }
 
+/// @brief Get a reference counter.
+/// @param referenceCounter A pointer to the reference counter.
+/// @return the reference count value
+static inline ReferenceCount ReferenceCount_get(ReferenceCount* referenceCount) {
+  return (*referenceCount);
+}
+
 struct Arcadia_Process {
   ReferenceCount referenceCount;
   Arcadia_Thread thread;
@@ -193,7 +199,7 @@ Arcadia_Process_acquire
   if (!process) {
     return Arcadia_ProcessStatus_ArgumentValueInvalid;
   }
-  if (ReferenceCount_Minimum == process->referenceCount || ReferenceCount_Maximum == process->referenceCount) {
+  if (ReferenceCount_Minimum == ReferenceCount_get(&process->referenceCount) || ReferenceCount_Maximum == process->referenceCount) {
     return Arcadia_ProcessStatus_OperationInvalid;
   }
   process->referenceCount++;
@@ -209,17 +215,26 @@ Arcadia_Process_relinquish
   if (!process) {
     return Arcadia_ProcessStatus_ArgumentValueInvalid;
   }
-  if (ReferenceCount_Minimum == process->referenceCount || !g_process) {
+  if (ReferenceCount_Minimum == ReferenceCount_get(&process->referenceCount) || !g_process) {
     /* This is, actually, undefined behavior. */
     return Arcadia_ProcessStatus_OperationInvalid;
   }
-  if (ReferenceCount_Minimum == --process->referenceCount) {
+  if (ReferenceCount_Minimum == ReferenceCount_decrement(&process->referenceCount)) {
+    if (Arcadia_ValueStack_getSize(&process->thread)) {
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: value stack is not empty\n", __FILE__, __LINE__);
+      process->thread.stack.size = 0;
+    }
+    if (!Arcadia_Value_isVoidValue(&process->thread.raised)) {
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: exception is not empty\n", __FILE__, __LINE__);
+      process->thread.raised = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+    }
+    Arcadia_Process_runArms(process, true);
     shutdownModules(process);
     Arcadia_Thread_uninitialize(&process->thread);
     Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getDefaultMemoryManager(), g_process);
     g_process = NULL;
     if (Arcadia_ARMS_shutdown()) {
-      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arcadia_ARMS_shutdown");
     }
   }
   return Arcadia_ProcessStatus_Success;
@@ -261,7 +276,7 @@ Arcadia_Process_get
       Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getDefaultMemoryManager(), g_process);
       g_process = NULL;
       if (Arcadia_ARMS_shutdown()) {
-        Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
+        Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arcadia_ARMS_shutdown");
       }
       return Arcadia_ProcessStatus_AllocationFailed;
     }

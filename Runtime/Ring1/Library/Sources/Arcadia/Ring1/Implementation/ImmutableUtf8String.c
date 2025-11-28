@@ -77,7 +77,7 @@ Arcadia_ImmutableUtf8String_createFromBoolean
     Arcadia_Thread* thread,
     Arcadia_BooleanValue booleanValue
   )
-{ 
+{
   Context context;
   Arcadia_BooleanValue_toUtf8String(thread, booleanValue, &context, &Callback);
   return context.string;

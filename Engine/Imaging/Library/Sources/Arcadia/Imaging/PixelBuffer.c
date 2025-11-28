@@ -311,7 +311,7 @@ Arcadia_Imaging_PixelBuffer_constructImpl
     self->width = Arcadia_ValueStack_getInteger32Value(thread, 3);
     self->height = Arcadia_ValueStack_getInteger32Value(thread, 2);
     self->pixelFormat = Arcadia_ValueStack_getNatural32Value(thread, 1);
-    
+
     Arcadia_SizeValue bytesPerPixel = 0;
     switch (self->pixelFormat) {
       case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8:

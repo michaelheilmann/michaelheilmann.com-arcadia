@@ -32,7 +32,7 @@ expectAndNext
     Arcadia_Thread_jump(thread);
   }
   Arcadia_String* wordText = Arcadia_DDL_Scanner_getWordText(thread, scanner);
-  if (Arcadia_String_getNumberOfBytes(thread, wordText) != wordTextNumberOfBytes || 
+  if (Arcadia_String_getNumberOfBytes(thread, wordText) != wordTextNumberOfBytes ||
       Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, wordText), wordTextBytes, wordTextNumberOfBytes)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
@@ -50,7 +50,7 @@ testScanner1
     u8""
     ;
   Arcadia_DDL_Scanner* scanner = Arcadia_DDL_Scanner_create(thread);
-  Arcadia_DDL_Scanner_setInput(thread, scanner, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+  Arcadia_DDL_Scanner_setInput(thread, scanner, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
 
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
@@ -80,7 +80,7 @@ testScanner2
     u8"6.2831"
     ;
   Arcadia_DDL_Scanner* scanner = Arcadia_DDL_Scanner_create(thread);
-  Arcadia_DDL_Scanner_setInput(thread, scanner, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+  Arcadia_DDL_Scanner_setInput(thread, scanner, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_Comma, u8",", sizeof(u8",") - 1);
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_Colon, u8":", sizeof(u8":") - 1);

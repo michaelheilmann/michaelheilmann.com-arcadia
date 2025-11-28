@@ -26,7 +26,7 @@ typedef struct Arcadia_FilePath Arcadia_FilePath;
 
 Arcadia_declareObjectType(u8"Arcadia.DirectoryIterator", Arcadia_DirectoryIterator,
                           u8"Arcadia.Object");
-                          
+
 struct Arcadia_DirectoryIterator {
   Arcadia_Object _parent;
   Arcadia_BooleanValue (*hasValue)(Arcadia_Thread* thread, Arcadia_DirectoryIterator* self);

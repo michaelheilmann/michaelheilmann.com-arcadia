@@ -23,25 +23,25 @@
 
 /// @brief
 /// The base of all backend context.
-/// 
+///
 /// @details
 /// A backend context is either an "audials" backend context (Arcadia.Audials.BackendContext) or a "visuals" backend context (Arcadia.Visuals.BackendContext).
 /// The engine maintains pointers to the active backend context of the respective type.
-/// 
+///
 /// The attempt to create a backend context of a type with an active of that type is an error.
 /// Systems check that by inspecting the pointers to active backend context maintained by the engine.
-/// 
+///
 /// One can first create a system of a type, shut it down, and create a system of another type.
 /// For example, one can create a OpenGL backend context, shut it down, and create an Vulkan visuals system.
-/// 
+///
 /// @details
 /// @code
 /// class Arcadia.Engine.BackendContext {
-/// 
+///
 ///   construct
 ///     (
 ///     )
-///   
+///
 ///   method
 ///   update
 ///     (

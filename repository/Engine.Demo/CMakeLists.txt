@@ -33,7 +33,7 @@ if (NOT TARGET ${MyDemoName})
   endif()
 
   if (${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled})
-	
+
   BeginProduct(${MyDemoName} executable)
 
   set(${MyDemoName}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Arcadia.Engine.Demo.rc)
@@ -56,6 +56,6 @@ if (NOT TARGET ${MyDemoName})
   list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.DDL ${MyProjectName}.Audials.Implementation ${MyProjectName}.Visuals.Implementation)
 
   EndProduct(${MyDemoName})
-  
+
   endif()
 endif()

@@ -244,64 +244,80 @@ static inline Arcadia_BooleanValue
 Arcadia_DDLS_isBoolean
   (
     Arcadia_Thread* thread,
-    Arcadia_DDLS_Type* type
+    Arcadia_DDLS_Node* ddlsNode
   )
 {
-  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)type, _Arcadia_DDLS_ScalarType_getType(thread)))
+  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_ScalarNode_getType(thread)))
   { return Arcadia_BooleanValue_False; }
-  return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarType*)type)->name, u8"Boolean", sizeof(u8"Boolean") - 1);
+  return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarNode*)ddlsNode)->name, u8"Boolean", sizeof(u8"Boolean") - 1);
 }
 
 static inline Arcadia_BooleanValue
 Arcadia_DDLS_isNumber
   (
     Arcadia_Thread* thread,
-    Arcadia_DDLS_Type* type
+    Arcadia_DDLS_Node* ddlsNode
   )
 {
-  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)type, _Arcadia_DDLS_ScalarType_getType(thread)))     {
+  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_ScalarNode_getType(thread)))     {
   return Arcadia_BooleanValue_False; }
-  return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarType*)type)->name, u8"Number", sizeof(u8"Number") - 1);
+  return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarNode*)ddlsNode)->name, u8"Number", sizeof(u8"Number") - 1);
 }
+
+static inline Arcadia_BooleanValue
+Arcadia_DDLS_isSchema
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_Node* ddlsNode
+  )
+{ return Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_SchemaNode_getType(thread)); }
+
+static inline Arcadia_BooleanValue
+Arcadia_DDLS_isSchemaReference
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_Node* ddlsNode
+  )
+{ return Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_SchemaReferenceNode_getType(thread)); }
 
 static inline Arcadia_BooleanValue
 Arcadia_DDLS_isString
   (
     Arcadia_Thread* thread,
-    Arcadia_DDLS_Type* type
+    Arcadia_DDLS_Node* ddlsNode
   )
 {
-  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)type, _Arcadia_DDLS_ScalarType_getType(thread)))
+  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_ScalarNode_getType(thread)))
   { return Arcadia_BooleanValue_False; }
-  return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarType*)type)->name, u8"String", sizeof(u8"String") - 1);
+  return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarNode*)ddlsNode)->name, u8"String", sizeof(u8"String") - 1);
 }
 
 static inline Arcadia_BooleanValue
 Arcadia_DDLS_isVoid
   (
     Arcadia_Thread* thread,
-    Arcadia_DDLS_Type* type
+    Arcadia_DDLS_Node* ddlsNode
   )
 {
-  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)type, _Arcadia_DDLS_ScalarType_getType(thread)))
+  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_ScalarNode_getType(thread)))
   { return Arcadia_BooleanValue_False; }
-  return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarType*)type)->name, u8"Boolean", sizeof(u8"Boolean") - 1);
+  return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarNode*)ddlsNode)->name, u8"Boolean", sizeof(u8"Boolean") - 1);
 }
 
 static inline Arcadia_BooleanValue
 Arcadia_DDLS_isList
   (
     Arcadia_Thread* thread,
-    Arcadia_DDLS_Type* type
+    Arcadia_DDLS_Node* ddlsNode
   )
-{ return Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)type, _Arcadia_DDLS_ListType_getType(thread)); }
+{ return Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_ListNode_getType(thread)); }
 
 static inline Arcadia_BooleanValue
 Arcadia_DDLS_isMap
   (
     Arcadia_Thread* thread,
-    Arcadia_DDLS_Type* type
+    Arcadia_DDLS_Node* ddlsNode
   )
-{ return Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)type, _Arcadia_DDLS_MapType_getType(thread)); }
+{ return Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_MapNode_getType(thread)); }
 
 #endif // ARCADIA_EXTENSIONS_H_INCLUDED

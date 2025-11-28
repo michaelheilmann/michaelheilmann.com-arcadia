@@ -35,7 +35,7 @@ test1
   Arcadia_Object* object = Arcadia_List_getObjectReferenceValueAt(thread, writers, 0);
   Arcadia_Tests_assertTrue(thread, Arcadia_Object_isInstanceOf(thread, object, _Arcadia_Imaging_ImageWriter_getType(thread)));
   Arcadia_Imaging_ImageWriter* writer = (Arcadia_Imaging_ImageWriter*)object;
-  
+
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)pixelBufferList);
   pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, 256, 256, Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8);
   Arcadia_List_insertBackObjectReferenceValue(thread, pixelBufferList, pixelBuffer);

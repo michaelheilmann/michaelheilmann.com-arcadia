@@ -563,7 +563,7 @@ Arcadia_Value_getHash
 
       Arcadia_ValueStack_pushValue(thread, self);
       Arcadia_ValueStack_pushNatural8Value(thread, 1);
-        
+
       operations->hash(thread);
       if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);

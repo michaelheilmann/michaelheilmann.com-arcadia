@@ -14,26 +14,45 @@
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 # This script removes trailing whitespaces from the following file types
+# - *.txt
 # - *.c
 # - *.h
 # - *.i
-# - *.te
+# - *.tl
 # - *.mil
-
-# CMakeLists.txt
-Get-ChildItem -Path ./repository -Recurse -ErrorAction SilentlyContinue -Force -Filter CMakeLists.txt |
-  Foreach-Object {
-    (Get-Content -Path $_.FullName | foreach {$_ -replace '\s+$', ''}) | Set-Content -Path $_.FullName
-  }
+function removeWhitespaceAtEndOfLines {
+  $forbiddenFolders=@(".git",".vs");
+  $allowedExtensions=@(".txt", ".c", ".h", ".i",  ".tl", ".mil");
+  $includeByName=@("CMakeLists.txt")
   
-# *.c, *.h, and *.i
-Get-ChildItem -Path ./repository -Recurse -ErrorAction SilentlyContinue -Force -Include *.c, *.h, *.i. |
-  Foreach-Object {
-    (Get-Content -Path $_.FullName | foreach {$_ -replace '\s+$', ''}) | Set-Content -Path $_.FullName
+  $xl = new-object system.collections.stack;
+  $x = Get-Item -Path '.';
+  $xl.Push($x);
+  
+  #Write-Host "worklist size: " $xl.Count;
+  
+  while ($xl.Count -ne 0) {
+    $x = $xl.Pop();
+    if ($x.PSIsContainer) {
+      # if the item is '.git' or '.vs', skip.
+      if ($x.Name -In $forbiddenFolders) {
+        #Write-Host "skipping " $x.FullName; 
+        continue;
+      }
+      Get-ChildItem -Path $x.FullName | Foreach-Object {
+        #Write-Host "adding " $_.FullName;
+        $xl.Push($_);
+      }
+    } else {
+      if ($x.Extension -NotIn $allowedExtensions) {
+        #Write-Host "skipping " $x.FullName; 
+        continue;
+      }
+      # if the item is a file, process it.
+      Write-Host "processing " $x.FullName;
+      (Get-Content -Path $x.FullName | foreach {$_ -replace '\s+$', ''}) | Set-Content -Path $x.FullName
+    }
   }
+}
 
-# *.tl and *.mil
-Get-ChildItem -Path ./repository -Recurse -ErrorAction SilentlyContinue -Force -Include *.tl, *.mil |
-  Foreach-Object {
-    (Get-Content -Path $_.FullName | foreach {$_ -replace '\s+$', ''}) | Set-Content -Path $_.FullName
-  }
+removeWhitespaceAtEndOfLines  

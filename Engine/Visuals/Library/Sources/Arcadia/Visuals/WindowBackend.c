@@ -63,12 +63,12 @@ Arcadia_Visuals_WindowBackend_constructImpl
   }
 
   self->title = Arcadia_String_createFromCxxString(thread, u8"Arcadia Engine Window");
-  
+
   self->bounds.left = 0;
   self->bounds.top = 0;
   self->bounds.width = 1;
   self->bounds.height = 1;
-  
+
   self->fullscreen = Arcadia_BooleanValue_False;
 
   self->window = NULL;

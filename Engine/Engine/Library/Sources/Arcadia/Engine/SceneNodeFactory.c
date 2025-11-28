@@ -29,7 +29,7 @@ Arcadia_Engine_SceneNodeFactory_destruct
     Arcadia_Thread* thread,
     Arcadia_Engine_SceneNodeFactory* self
   );
-  
+
 static void
 Arcadia_Engine_SceneNodeFactory_visit
   (

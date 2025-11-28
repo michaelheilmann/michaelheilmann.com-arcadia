@@ -40,7 +40,7 @@
 /// @remarks
 /// An orthographic projection transformation matrix has the following form
 /// @code
-/// f/aspect 0                           0                               0 
+/// f/aspect 0                           0                               0
 /// 0        f                           0                               0
 /// 0        0 (near + far) / (near - far)   2 * near * far / (near - far)
 /// 0        0                          -1                               0

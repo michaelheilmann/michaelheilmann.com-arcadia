@@ -47,7 +47,7 @@ Arcadia_Ring1_Tests_BigInteger_andOperations
   Define(0, 1, 0);
   Define(1, 1, 1);
 
-  Define(2, 3, 2); // 2 ~ 10, 3 ~~ 11 => 2 & 3 ~ 2 
+  Define(2, 3, 2); // 2 ~ 10, 3 ~~ 11 => 2 & 3 ~ 2
   Define(3, 2, 2);
 
 #undef Define

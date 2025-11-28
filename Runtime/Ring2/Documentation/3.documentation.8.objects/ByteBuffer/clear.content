@@ -1,0 +1,30 @@
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteBuffer_clear">Arcadia_ByteBuffer_clear</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_ByteBuffer_clear<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Set the number of elements of this Byte buffer to zero.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+  </section>
+
+</section>

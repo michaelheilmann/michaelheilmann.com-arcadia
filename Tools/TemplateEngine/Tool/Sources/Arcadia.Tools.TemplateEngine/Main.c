@@ -42,9 +42,9 @@ main1
 
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
     Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
-    Arcadia_Utf8StringReader* r = Arcadia_Utf8StringReader_create(thread, argument);
+    Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argument);
     Arcadia_String *key = NULL, *value = NULL;
-    if (!Arcadia_CommandLine_parseArgument(thread, (Arcadia_Utf8Reader*)r, &key, &value)) {
+    if (!Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r, &key, &value)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
@@ -83,9 +83,9 @@ main1
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
   context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
 
   Environment* environment = Environment_loadString(thread, environmentString);
   environment->enclosing = context->environment;

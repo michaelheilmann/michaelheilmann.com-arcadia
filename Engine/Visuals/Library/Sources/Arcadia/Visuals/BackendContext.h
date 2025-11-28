@@ -25,11 +25,11 @@ typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
 
 /// @code
 /// class Arcadia.Visuals.BackendContext extends Arcadia.Engine.BackendContext {
-///   
+///
 ///   constructor
 ///     (
 ///     )
-/// 
+///
 ///   method
 ///   createIcon
 ///     (
@@ -41,13 +41,13 @@ typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
 ///       alpha : Arcadia.Natural8
 ///     )
 ///     : Arcadia.Visuals.Icon
-///   
+///
 ///   method
 ///   createWindow
 ///     (
 ///     )
 ///     : Arcadia.Visuals.Window
-/// 
+///
 ///   method
 ///   getDisplayDevices
 ///     (
@@ -66,9 +66,9 @@ struct Arcadia_Visuals_BackendContext {
   Arcadia_List* windows;
 
   Arcadia_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self, Arcadia_Imaging_PixelBuffer* pixelBuffer);
-  
+
   Arcadia_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
-  
+
   Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
 
   void (*update)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);

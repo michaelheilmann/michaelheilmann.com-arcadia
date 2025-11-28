@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTestName ${MyProjectName}.Ring2.Tests.Utf8)
+set(MyTestName ${MyProjectName}.Ring2.Tests.UTF8)
 
 # Create test executable.
 BeginProduct(${MyTestName} test)

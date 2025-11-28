@@ -33,7 +33,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_Scope_objectTypeOperati
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_Scope_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_Scope_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_Scope_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -65,7 +65,7 @@ Arcadia_DDLS_Scope_constructImpl
   Arcadia_Value v = Arcadia_ValueStack_getValue(thread, 1);
   if (Arcadia_Value_isInstanceOf(thread, &v, _Arcadia_DDLS_Scope_getType(thread))) {
     self->enclosing = (Arcadia_DDLS_Scope*)Arcadia_Value_getObjectReferenceValue(&v);
-  } else if (Arcadia_Value_isInstanceOf(thread, &v, _Arcadia_VoidValue_getType(thread))) { 
+  } else if (Arcadia_Value_isInstanceOf(thread, &v, _Arcadia_VoidValue_getType(thread))) {
     self->enclosing = NULL;
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);

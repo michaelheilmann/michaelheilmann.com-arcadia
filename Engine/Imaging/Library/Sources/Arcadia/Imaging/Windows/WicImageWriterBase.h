@@ -39,11 +39,11 @@ struct Arcadia_Imaging_Windows_WicImageWriterBase {
 
   IWICBitmapFrameEncode* piBitmapFrame;
   IPropertyBag2* pPropertyBag;
-  
+
   void (*getFormat)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase* self, Arcadia_Imaging_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters, GUID const** guid);
   void (*configure)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase* self, Arcadia_Imaging_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters);
 };
-  
+
 void
 Arcadia_Imaging_Windows_WicImageWriterBase_doWrite
   (

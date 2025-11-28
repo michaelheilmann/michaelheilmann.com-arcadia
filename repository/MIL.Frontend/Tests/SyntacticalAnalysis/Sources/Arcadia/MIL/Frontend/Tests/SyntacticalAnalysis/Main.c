@@ -32,7 +32,7 @@ onTest
   }
   Arcadia_ByteBuffer* sourceFileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
   Arcadia_MIL_Parser* parser = Arcadia_MIL_Parser_create(thread);
-  Arcadia_MIL_Parser_setInput(thread, parser, (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceFileContents));
+  Arcadia_MIL_Parser_setInput(thread, parser, (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceFileContents));
   Arcadia_MIL_Parser_run(thread, parser);
 }
 

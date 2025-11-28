@@ -88,19 +88,19 @@ struct Arcadia_Object {
 
 /// @brief
 /// Allocate an "Arcadia.Object" or derived type value.
-/// 
-/// @details 
+///
+/// @details
 /// a) Raise "Arcadia.Status.ArgumentValueInvalid" if "type" is a null pointer.
 ///    Raise "Arcadia.Status.ArgumentTypeInvalid" if "type" is not an "Arcadia.Object" or derived type.
-/// 
+///
 /// b) Allocate memory of size "Arcadia_Type_getValueSize(type)" at address "a".
 ///    Raise "Arcadia.Status.AllocationFailed" if the allocation fails.
 ///    Assign this memory the "Arcadia.Memory" type.
-/// 
+///
 /// c) Cast that memory into an object
-/// 
+///
 /// d) Invoke the constructor of type "type" with the specified number of argument values.
-/// 
+///
 /// e) Assert the stack is not corrupted if a) - c) are successfull. Otherwise raise Arcadia.Status.StackCorruption.
 void*
 ARCADIA_CREATEOBJECT0
@@ -247,6 +247,14 @@ Arcadia_Object_isIdenticalTo
     Arcadia_Thread* thread,
     Arcadia_Object* self,
     Arcadia_Value const* other
+  );
+
+/// "toString"
+Arcadia_ImmutableUtf8String*
+Arcadia_Object_toString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Object* self
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED

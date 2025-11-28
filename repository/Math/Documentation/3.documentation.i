@@ -18,12 +18,12 @@
     <tr><td><code>Real32Value</code></td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code></td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   <p>
   The above types are defined for <my-mv>NumberOfRows</my-mv> = <my-mv>n</my-mv> and <my-mv>NumberOfColumns</my-mv> = <my-mv>n</my-mv> where <my-mv>n</my-mv>
   is three or four.
   </p>
-  
+
   <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above types are defined</p>
 
   <table>
@@ -50,7 +50,7 @@
   <p>
   The above types are defined for <my-mv>NumberOfElements</my-mv> = <my-mv>n</my-mv> where <my-mv>n</my-mv> is three or four.
   </p>
-  
+
 
   <p>The following table lists the combinations of <my-mv>Type</my-mv> and <my-mv>Suffix</my-mv> for which the above types are defined</p>
 

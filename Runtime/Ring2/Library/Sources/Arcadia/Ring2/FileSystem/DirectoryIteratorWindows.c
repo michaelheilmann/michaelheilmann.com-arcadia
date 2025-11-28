@@ -17,8 +17,8 @@
 #include "Arcadia/Ring2/FileSystem/DirectoryIteratorWindows.h"
 
 #include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
-#include "Arcadia/Ring2/Implementation/StringBuffer.h"
-#include "Arcadia/Ring2/Implementation/StringExtensions.h"
+#include "Arcadia/Ring2/Strings/StringBuffer.h"
+#include "Arcadia/Ring2/Strings/StringExtensions.h"
 #include "Arcadia/Ring2/FileSystem/FilePath.h"
 
 static void
@@ -27,7 +27,7 @@ Arcadia_DirectoryIteratorWindows_constructImpl
     Arcadia_Thread* thread,
     Arcadia_DirectoryIteratorWindows* self
   );
-  
+
 static void
 Arcadia_DirectoryIteratorWindows_destructImpl
   (
@@ -164,7 +164,7 @@ Arcadia_DirectoryIteratorWindows_nextValue
     Arcadia_Thread* thread,
     Arcadia_DirectoryIteratorWindows* self
   )
-{ 
+{
   if (self->handle != INVALID_HANDLE_VALUE) {
     SetLastError(0);
     BOOL result = FindNextFileA(self->handle, &self->data);

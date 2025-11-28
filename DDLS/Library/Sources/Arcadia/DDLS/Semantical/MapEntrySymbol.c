@@ -33,7 +33,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_MapEntrySymbol_objectTy
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_MapEntrySymbol_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_MapEntrySymbol_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_MapEntrySymbol_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -54,7 +54,7 @@ Arcadia_DDLS_MapEntrySymbol_constructImpl
   Arcadia_TypeValue _type = _Arcadia_DDLS_MapEntrySymbol_getType(thread);
   //
   {
-    Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDLS_SymbolKind_MapEntryType);
+    Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDLS_SymbolKind_MapEntry);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
@@ -64,7 +64,7 @@ Arcadia_DDLS_MapEntrySymbol_constructImpl
   }
   //
   self->entryName = NULL;
-  self->entryType = NULL;
+  self->entrySymbol = NULL;
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
@@ -80,8 +80,8 @@ Arcadia_DDLS_MapEntrySymbol_visitImpl
   if (self->entryName) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->entryName);
   }
-  if (self->entryType) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->entryType);
+  if (self->entrySymbol) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->entrySymbol);
   }
 }
 

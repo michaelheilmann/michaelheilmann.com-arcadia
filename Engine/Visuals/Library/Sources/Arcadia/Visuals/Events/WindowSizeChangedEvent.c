@@ -106,7 +106,7 @@ Arcadia_Visuals_WindowSizeChangedEvent_create
   if  (window) {
     Arcadia_ValueStack_pushObjectReferenceValue(thread, window);
   } else {
-    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void); 
+    Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushInteger32Value(thread, horizontalSize);
   Arcadia_ValueStack_pushInteger32Value(thread, verticalSize);

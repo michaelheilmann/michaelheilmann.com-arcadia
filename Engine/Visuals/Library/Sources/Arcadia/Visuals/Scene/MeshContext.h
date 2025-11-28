@@ -28,10 +28,10 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Scene.MeshContext", Arcadia_Visuals
 
 struct Arcadia_Visuals_Scene_MeshContext {
   Arcadia_Object parent;
-  
+
   void (*setBackendContext)(Arcadia_Thread*, Arcadia_Visuals_Scene_MeshContext*, Arcadia_Visuals_BackendContext*);
   void (*render)(Arcadia_Thread*, Arcadia_Visuals_Scene_MeshContext*);
-  
+
   struct {
     // Default is 193.
     float red;
@@ -42,22 +42,22 @@ struct Arcadia_Visuals_Scene_MeshContext {
     // Default is 255.
     float alpha;
   } viewportClearColor;
-  
+
   /// The default value is 1.
   float viewportClearDepth;
-  
+
   /// The relative viewport rectangle.
   /// The default value is 0, 0, 1, 1.
   struct {
     Arcadia_Real32Value left, bottom, right, top;
   } relativeViewportRectangle;
-  
+
   /// The size of the canvas.
   /// The default value is 320 x 240.
   struct {
     Arcadia_Real32Value width, height;
   } canvasSize;
-  
+
   /// The view matrix.
   /// The default value is the identity matrix.
   Arcadia_Math_Matrix4Real32* viewToProjectionMatrix;

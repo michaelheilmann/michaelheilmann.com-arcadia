@@ -123,7 +123,7 @@ Arcadia_Visuals_Implementation_MeshContextResource_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  
+
   self->viewerConstantBuffer = NULL;
 
   self->dirty = Arcadia_Visuals_Implementation_MeshContextResource_ViewToProjectionMatrixDirty

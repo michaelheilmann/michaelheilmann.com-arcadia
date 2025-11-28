@@ -24,7 +24,7 @@ Arcadia_declareObjectType(u8"Arcadia.Imaging.ImageWriter", Arcadia_Imaging_Image
 
 struct Arcadia_Imaging_ImageWriter {
   Arcadia_Object _parent;
-  
+
   Arcadia_ImmutableList* (*getSupportedTypes)(Arcadia_Thread* thread, Arcadia_Imaging_ImageWriter* self);
   void (*write)(Arcadia_Thread* thread, Arcadia_Imaging_ImageWriter* self, Arcadia_List* source, Arcadia_Imaging_ImageWriterParameters* target);
 };

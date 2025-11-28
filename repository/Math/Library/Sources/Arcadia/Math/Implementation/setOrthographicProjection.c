@@ -34,7 +34,7 @@ Arcadia_Math_Matrix4x4Real32_setOrthographicProjection
   Arcadia_Real32Value u = -(right + left) / (right - left);
   Arcadia_Real32Value v = -(top + bottom) / (top - bottom);
   Arcadia_Real32Value w = -(far + near) / (far - near);
-  
+
   self->elements[0][0] = a;
   self->elements[1][0] = 0.f;
   self->elements[2][0] = 0.f;
@@ -75,7 +75,7 @@ Arcadia_Math_Matrix4x4Real64_setOrthographicProjection
   Arcadia_Real64Value u = -(right + left) / (right - left);
   Arcadia_Real64Value v = -(top + bottom) / (top - bottom);
   Arcadia_Real64Value w = -(far + near) / (far - near);
-  
+
   self->elements[0][0] = a;
   self->elements[1][0] = 0.;
   self->elements[2][0] = 0.;

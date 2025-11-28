@@ -62,12 +62,19 @@ InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.html.tl"
 add_custom_target(Website.RoadmapArchivePage ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/roadmap-archive.html")
 set_target_properties(Website.RoadmapArchivePage PROPERTIES FOLDER "Website")
 
-# Build "specifications/data-definition-language/index.html".
-InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/DataDefinitionLanguage/index.tl"
-                     "${REPOSITORY_SOURCE_DIR}/../.build/specifications/data-definition-language/index.html"
+# Build "imprint.html".
+InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/imprint.html.tl"
+                     "${REPOSITORY_SOURCE_DIR}/../.build/imprint.html"
                      "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-add_custom_target(Website.Specifications.DataDefinitionLanguage ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/specifications/data-definition-language/index.html")
-set_target_properties(Website.Specifications.DataDefinitionLanguage PROPERTIES FOLDER "Website")
+add_custom_target(Website.ImprintPage ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/imprint.html")
+set_target_properties(Website.ImprintPage PROPERTIES FOLDER "Website")
+
+# Build "data-protection-statement.html".
+InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/data-protection-statement.html.tl"
+                     "${REPOSITORY_SOURCE_DIR}/../.build/data-protection-statement.html"
+                     "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+add_custom_target(Website.DataPritectionStatementPage ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/data-protection-statement.html")
+set_target_properties(Website.DataPritectionStatementPage PROPERTIES FOLDER "Website")
 
 # Build "specifications/common-lexical-specification/index.html".
 InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/index.html.tl"
@@ -82,3 +89,5 @@ InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/MIL/index.html.
                      "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 add_custom_target(Website.Specifications.Mil ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mil/index.html")
 set_target_properties(Website.Specifications.Mil PROPERTIES FOLDER "Website")
+
+add_subdirectory(Specifications/DDL)

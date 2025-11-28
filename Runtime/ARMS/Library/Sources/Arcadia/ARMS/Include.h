@@ -146,7 +146,7 @@ Arcadia_ARMS_backwardBarrier
   (
     void* source,
     void* target
-  ); 
+  );
 
 #endif // Arcadia_ARMS_Configuration_WithBarriers
 

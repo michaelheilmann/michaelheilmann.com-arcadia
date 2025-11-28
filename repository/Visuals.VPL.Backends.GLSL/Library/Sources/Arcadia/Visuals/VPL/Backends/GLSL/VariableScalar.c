@@ -76,7 +76,7 @@ Arcadia_Visuals_VPL_Backends_GLSL_VariableScalar_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_VariableScalar* self
   )
-{ 
+{
   if (self->name) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->name);
   }

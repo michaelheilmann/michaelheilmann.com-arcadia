@@ -20,7 +20,7 @@
   #error("do not include directly, include `Arcadia/DDL/Include.h` instead")
 #endif
 
-#include "Arcadia/DDL/Implementation/Include.h"
+#include "Arcadia/DDL/Nodes/Include.h"
 
 /// @code
 /// class Arcadia.DataDefinitionLanguage.Unparser
@@ -50,7 +50,7 @@ Arcadia_DataDefinitionLanguage_Unparser_run
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Unparser* self,
     Arcadia_DDL_Node* node,
-    Arcadia_Utf8Writer* target
+    Arcadia_UTF8Writer* target
   );
 
 #endif // ARCADIA_DDL_WRITER_UNPARSER_H_INCLUDED

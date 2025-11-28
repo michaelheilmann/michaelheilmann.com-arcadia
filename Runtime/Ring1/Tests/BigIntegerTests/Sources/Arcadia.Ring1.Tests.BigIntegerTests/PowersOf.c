@@ -20,7 +20,7 @@ testRegression20250619
   (
     Arcadia_Thread* thread
   )
-{ 
+{
   {
     Arcadia_BigInteger* x = Arcadia_BigInteger_create(thread);
     Arcadia_BigInteger_setPowerOfFiveNatural32(thread, x, 0);

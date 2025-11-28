@@ -24,7 +24,7 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 #include "Arcadia/Ring2/Collections/ArrayList.h"
-#include "Arcadia/Ring2/Implementation/String.h"
+#include "Arcadia/Ring2/Strings/String.h"
 
 /// The Generic Path Format
 /// directories are separated by a foward slash

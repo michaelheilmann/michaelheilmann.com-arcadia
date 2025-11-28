@@ -20,8 +20,8 @@
 /// @brief
 /// - create a Byte buffer holding the sequence (source)
 /// - create an empty Byte buffer (target)
-/// - read its unicode code points using Utf8ByteBufferReader from source
-/// - write each unicode code point into target using Utf8ByteBufferWriter
+/// - read its unicode code points using UTF8ByteBufferReader from source
+/// - write each unicode code point into target using UTF8ByteBufferWriter
 /// - compare the contents of both Byte buffers
 /// - success if thes contents are equal
 /// - failure otherwise
@@ -34,14 +34,14 @@ onReadWriteTestFixture
   )
 {
   Arcadia_ByteBuffer* sourceByteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, sourceByteBuffer, p, n);
+  Arcadia_ByteBuffer_insertBackBytes(thread, sourceByteBuffer, p, n);
   Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
-  Arcadia_Utf8Writer* writer = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, targetByteBuffer);
-  while (Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
-    Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
-    Arcadia_Utf8Writer_writeCodePoints(thread, writer, &codePoint, 1);
-    Arcadia_Utf8Reader_next(thread, reader);
+  Arcadia_UTF8Reader* reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceByteBuffer);
+  Arcadia_UTF8Writer* writer = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, targetByteBuffer);
+  while (Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
+    Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
+    Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+    Arcadia_UTF8Reader_next(thread, reader);
   }
   if (!Arcadia_ByteBuffer_isEqualTo(thread, sourceByteBuffer, targetByteBuffer)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);

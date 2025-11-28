@@ -28,9 +28,9 @@
 #endif
 
 typedef struct Context {
-  Arcadia_Utf8Writer* temporaryWriter;
+  Arcadia_UTF8Writer* temporaryWriter;
   Arcadia_ByteBuffer* temporaryBuffer;
-  Arcadia_Utf8Reader* reader;
+  Arcadia_UTF8Reader* reader;
   Arcadia_FilePath* target;
 } Context;
 
@@ -121,7 +121,7 @@ next
     Arcadia_Thread* thread,
     Context* context
   )
-{ Arcadia_Utf8Reader_next(thread, context->reader); }
+{ Arcadia_UTF8Reader_next(thread, context->reader); }
 
 static void
 saveAndNext
@@ -130,8 +130,8 @@ saveAndNext
     Context* context
   )
 {
-  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, context->reader);
-  Arcadia_Utf8Writer_writeCodePoints(thread, context->temporaryWriter, &codePoint, 1);
+  Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
+  Arcadia_UTF8Writer_writeCodePoints(thread, context->temporaryWriter, &codePoint, 1);
   next(thread, context);
 }
 
@@ -141,7 +141,7 @@ isEnd
     Arcadia_Thread* thread,
     Context* context
   )
-{ return !Arcadia_Utf8Reader_hasCodePoint(thread, context->reader); }
+{ return !Arcadia_UTF8Reader_hasCodePoint(thread, context->reader); }
 
 static Arcadia_BooleanValue
 isDriveLetter
@@ -150,10 +150,10 @@ isDriveLetter
     Context* context
   )
 {
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, context->reader)) {
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, context->reader);
+  Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
   return ('a' <= codePoint && codePoint <= 'z')
       || ('A' <= codePoint && codePoint <= 'Z');
 }
@@ -165,10 +165,10 @@ isColon
     Context* context
   )
 {
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, context->reader)) {
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, context->reader);
+  Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
   return ':' == codePoint;
 }
 
@@ -179,10 +179,10 @@ isDirectorySeparator
     Context* context
   )
 {
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, context->reader)) {
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, context->reader);
+  Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
   return ('\\' == codePoint || '/' == codePoint);
 }
 
@@ -193,10 +193,10 @@ isSlash
     Context* context
   )
 {
-  if (!Arcadia_Utf8Reader_hasCodePoint(thread, context->reader)) {
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_Natural32Value codePoint = Arcadia_Utf8Reader_getCodePoint(thread, context->reader);
+  Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
   return '/' == codePoint;
 }
 
@@ -217,9 +217,9 @@ normalize
     t = Arcadia_List_getAt(thread, self->fileNames, current);
     Arcadia_String* currentString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&t);
     if (!Arcadia_String_isEqualTo_pn(thread, previousString, "..", sizeof("..") - 1) &&
-        !Arcadia_String_isEqualTo_pn(thread, previousString, u8".", sizeof(u8".")) &&
+        !Arcadia_String_isEqualTo_pn(thread, previousString, u8".", sizeof(u8".") - 1) &&
          Arcadia_String_isEqualTo_pn(thread, currentString, u8"..", sizeof(u8"..") - 1)) {
-   // Remove previous and current.
+      // Remove previous and current.
       Arcadia_List_removeAt(thread, self->fileNames, previous, 2);
     } else if (Arcadia_String_isEqualTo_pn(thread, currentString, u8".", sizeof(u8".") - 1)) {
       // Remove current.
@@ -244,9 +244,9 @@ parseWindowsFilePath
   )
 {
   Context context;
-  context.reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, source);
+  context.reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, source);
   context.temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context.temporaryWriter = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context.temporaryBuffer);
+  context.temporaryWriter = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context.temporaryBuffer);
   context.target = target;
 
   target->relative = Arcadia_BooleanValue_False;
@@ -327,9 +327,9 @@ parseUnixFilePath
   )
 {
   Context context;
-  context.reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, source);
+  context.reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, source);
   context.temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context.temporaryWriter = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context.temporaryBuffer);
+  context.temporaryWriter = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context.temporaryBuffer);
   context.target = target;
 
   target->relative = Arcadia_BooleanValue_True;
@@ -375,9 +375,9 @@ parseGenericFilePath
   )
 {
   Context context;
-  context.reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, source);
+  context.reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, source);
   context.temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context.temporaryWriter = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context.temporaryBuffer);
+  context.temporaryWriter = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context.temporaryBuffer);
   context.target = target;
 
   target->relative = Arcadia_BooleanValue_True;
@@ -508,7 +508,7 @@ Arcadia_FilePath*
 Arcadia_FilePath_clone
   (
     Arcadia_Thread* thread,
-    Arcadia_FilePath* self  
+    Arcadia_FilePath* self
   )
 {
   Arcadia_FilePath* clone = Arcadia_FilePath_create(thread);
@@ -533,7 +533,7 @@ Arcadia_FilePath_parseWindows
   self->root = NULL;
   self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
+  Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
   parseWindowsFilePath(thread, self, byteBuffer);
   normalize(thread, self);
   return self;
@@ -552,7 +552,7 @@ Arcadia_FilePath_parseUnix
   self->root = NULL;
   self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
+  Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
   parseUnixFilePath(thread, self, byteBuffer);
   normalize(thread, self);
   return self;
@@ -583,17 +583,17 @@ Arcadia_FilePath_toNative
 {
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   Arcadia_ByteBuffer* temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_Utf8Writer* temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, temporaryBuffer);
+  Arcadia_UTF8Writer* temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, temporaryBuffer);
   Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames);
 
   if (self->root) {
-    Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, self->root), Arcadia_String_getNumberOfBytes(thread, self->root));
+    Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, self->root), Arcadia_String_getNumberOfBytes(thread, self->root));
     Arcadia_Natural32Value x;
     x = ':';
-    Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+    Arcadia_UTF8Writer_writeCodePoints(thread, temporary, &x, 1);
     if (!self->relative) {
       x = '\\';
-      Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+      Arcadia_UTF8Writer_writeCodePoints(thread, temporary, &x, 1);
     } else {
       /* Intentionally empty. */
     }
@@ -601,49 +601,49 @@ Arcadia_FilePath_toNative
   if (n > 0) {
     Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, 0);
     Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-    Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
+    Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
     i++;
 
     for (; i < n; ++i) {
       Arcadia_Natural32Value x;
       x = '\\';
-      Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+      Arcadia_UTF8Writer_writeCodePoints(thread, temporary, &x, 1);
 
       Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, i);
       Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-      Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
+      Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
     }
   }
   Arcadia_Natural32Value x = '\0';
-  Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+  Arcadia_UTF8Writer_writeCodePoints(thread, temporary, &x, 1);
   Arcadia_Value temporaryValue;
   Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
   return Arcadia_String_create(thread, temporaryValue);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   Arcadia_ByteBuffer* temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_Utf8Writer* temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, temporaryBuffer);
+  Arcadia_UTF8Writer* temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, temporaryBuffer);
   Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames);
   if (self->root) {
-    Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, self->root), Arcadia_String_getNumberOfBytes(thread, self->root));
+    Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, self->root), Arcadia_String_getNumberOfBytes(thread, self->root));
   }
   if (n > 0) {
     Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, 0);
     Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-    Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
+    Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
     i++;
 
     for (; i < n; ++i) {
       Arcadia_Natural32Value x;
       x = '/';
-      Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+      Arcadia_UTF8Writer_writeCodePoints(thread, temporary, &x, 1);
 
       Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, i);
       Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-      Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
+      Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
     }
   }
   Arcadia_Natural32Value x = '\0';
-  Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+  Arcadia_UTF8Writer_writeCodePoints(thread, temporary, &x, 1);
   Arcadia_Value temporaryValue;
   Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
   return Arcadia_String_create(thread, temporaryValue);
@@ -666,7 +666,7 @@ Arcadia_FilePath_parseGeneric
   self->root = NULL;
   self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, numberOfBytes);
+  Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, bytes, numberOfBytes);
   parseGenericFilePath(thread, self, byteBuffer);
   normalize(thread, self);
   return self;
@@ -680,33 +680,31 @@ Arcadia_FilePath_toGeneric
   )
 {
   Arcadia_ByteBuffer* temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_Utf8Writer* temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, temporaryBuffer);
+  Arcadia_UTF8Writer* temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, temporaryBuffer);
   Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames);
   if (self->root) {
-    Arcadia_Utf8Writer_writeBytes(thread, temporary, u8"/", sizeof(u8"/") - 1);
-    Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, self->root), Arcadia_String_getNumberOfBytes(thread, self->root));
+    Arcadia_UTF8Writer_writeBytes(thread, temporary, u8"/", sizeof(u8"/") - 1);
+    Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, self->root), Arcadia_String_getNumberOfBytes(thread, self->root));
     if (n > 0) {
-      Arcadia_Utf8Writer_writeBytes(thread, temporary, u8"/", sizeof(u8"/") - 1);
+      Arcadia_UTF8Writer_writeBytes(thread, temporary, u8"/", sizeof(u8"/") - 1);
     }
   }
   if (n > 0) {
     Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, 0);
     Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-    Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
+    Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
     i++;
 
     for (; i < n; ++i) {
       Arcadia_Natural32Value x;
       x = '/';
-      Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
+      Arcadia_UTF8Writer_writeCodePoints(thread, temporary, &x, 1);
 
       Arcadia_Value e = Arcadia_List_getAt(thread, self->fileNames, i);
       Arcadia_String* fileName = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&e);
-      Arcadia_Utf8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
+      Arcadia_UTF8Writer_writeBytes(thread, temporary, Arcadia_String_getBytes(thread, fileName), Arcadia_String_getNumberOfBytes(thread, fileName));
     }
   }
-  Arcadia_Natural32Value x = '\0';
-  Arcadia_Utf8Writer_writeCodePoints(thread, temporary, &x, 1);
   Arcadia_Value temporaryValue;
   Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)temporaryBuffer);
   return Arcadia_String_create(thread, temporaryValue);

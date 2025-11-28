@@ -33,7 +33,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_MapSymbol_objectTypeOpe
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_MapSymbol_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_MapSymbol_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_MapSymbol_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -54,7 +54,7 @@ Arcadia_DDLS_MapSymbol_constructImpl
   Arcadia_TypeValue _type = _Arcadia_DDLS_MapSymbol_getType(thread);
   //
   {
-    Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDLS_SymbolKind_MapType);
+    Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDLS_SymbolKind_Map);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }

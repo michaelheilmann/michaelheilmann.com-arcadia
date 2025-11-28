@@ -35,7 +35,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_Symbol_objectTypeOperat
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_Symbol_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_Symbol_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_Symbol_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -65,7 +65,6 @@ Arcadia_DDLS_Symbol_constructImpl
   }
   //
   self->kind = Arcadia_ValueStack_getInteger32Value(thread, 1);
-  self->scope = Arcadia_DDLS_Scope_create(thread, NULL);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1 + 1);
@@ -77,8 +76,4 @@ Arcadia_DDLS_Symbol_visitImpl
     Arcadia_Thread* thread,
     Arcadia_DDLS_Symbol* self
   )
-{
-  if (self->scope) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
-  }
-}
+{/*Intentionally empty.*/}

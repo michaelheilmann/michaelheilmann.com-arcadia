@@ -1,0 +1,61 @@
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_ByteBuffer_insertBytes">Arcadia_ByteBuffer_insertBytes</h1>
+
+  <my-signature><code>
+  void<br>
+  Arcadia_ByteBuffer_insertBytes<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;void const* p,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue n<br>
+  &nbsp;&nbsp;)
+  </code></my-signature>
+
+  <my-summary>
+  Insert Bytes into this Byte buffer.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_ByteBuffer* self</div>
+      <div>A pointer to this Byte buffer.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue index</div>
+      <div>The index at which to insert the Bytes. Must be within the bounds of <code>[0,n)</code> where <code>n</code> is the size of this Byte buffer.</div>
+    </div>
+    <div>
+      <div>void const* p</div>
+      <div>A pointer to an array of <code>n</code> Bytes.</div>
+    </div>
+    <div>
+      <div>Arcadia_SizeValue n</div>
+      <div>The number of Bytes in the array pointed to by <code>p</code>.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>bytes</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
+
+</section>

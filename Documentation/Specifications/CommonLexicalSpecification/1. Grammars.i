@@ -44,7 +44,7 @@ Example
 <div class="body">
 <p>The following production denotes the non-terminal for a digit as used in the definitions of numerals:</p>
 <p><code>
-Lexical.Digit: /* A single Unicode symbol from the code point range +U0030 to +U0039 */    
+Lexical.Digit: /* A single Unicode symbol from the code point range +U0030 to +U0039 */
 </code></p>
 </div>
 </div>
@@ -62,12 +62,12 @@ Example
 Lexical.PlusSign : #2b<br/>
 /* #2d is also known as "MINUS SIGN" */<br/>
 Lexical.MinusSign : #2d sign : plus_sign<br/>
-Lexical.Sign : Lexical.PlusSign | Lexical.MinusSign  
+Lexical.Sign : Lexical.PlusSign | Lexical.MinusSign
 </code></p>
 </div>
 </div>
 
-<p>The syntax <code>{x}</code> on the right-hand side of a production denotes zero or more occurrences of <code>x</code>.</p> 
+<p>The syntax <code>{x}</code> on the right-hand side of a production denotes zero or more occurrences of <code>x</code>.</p>
 
 <div class="box">
 <div class="header">
@@ -76,7 +76,7 @@ Example
 <div class="body">
 <p>The following production defines a possibly empty sequence of digits as used in the definitions of numerals:</p>
 <p><code>
-Lexical.ZeroOrMoreDigits : {Lexical.Digit} 
+Lexical.ZeroOrMoreDigits : {Lexical.Digit}
 </code></p>
 </div>
 </div>
@@ -110,9 +110,9 @@ Syntactical.IntegerList : ε<br/>
 Syntactical.IntegerListRest : Lexical.Comma Syntactical.Integer Syntactical.IntegerListRest<br/>
 Syntactical.IntegerListRest : Lexical.Comma<br/>
 Syntactical.IntegerListRest : ε<br/>
-<br/>  
+<br/>
 /* #2c is also known as "COMMA" */<br/>
-Lexical.Comma : #2c 
+Lexical.Comma : #2c
 </code></p>
 </div>
-</div>    
+</div>

@@ -26,7 +26,7 @@ typedef struct Arcadia_String Arcadia_String;
 
 Arcadia_declareObjectType(u8"Arcadia.Log", Arcadia_Log,
                           u8"Arcadia.Object");
-                          
+
 struct Arcadia_Log {
   Arcadia_Object _parent;
   void (*info)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*);

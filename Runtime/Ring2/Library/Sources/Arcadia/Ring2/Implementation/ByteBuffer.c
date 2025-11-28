@@ -125,7 +125,7 @@ Arcadia_ByteBuffer_startsWith_pn
 }
 
 void
-Arcadia_ByteBuffer_append_pn
+Arcadia_ByteBuffer_insertBackBytes
   (
     Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
@@ -137,11 +137,11 @@ Arcadia_ByteBuffer_append_pn
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ByteBuffer_insert_pn(thread, self, self->sz, bytes, numberOfBytes);
+  Arcadia_ByteBuffer_insertBytes(thread, self, self->sz, bytes, numberOfBytes);
 }
 
 void
-Arcadia_ByteBuffer_prepend_pn
+Arcadia_ByteBuffer_insertFrontBytes
   (
     Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
@@ -153,11 +153,11 @@ Arcadia_ByteBuffer_prepend_pn
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ByteBuffer_insert_pn(thread, self, Arcadia_SizeValue_Literal(0), bytes, numberOfBytes);
+  Arcadia_ByteBuffer_insertBytes(thread, self, Arcadia_SizeValue_Literal(0), bytes, numberOfBytes);
 }
 
 void
-Arcadia_ByteBuffer_insert_pn
+Arcadia_ByteBuffer_insertBytes
   (
     Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,

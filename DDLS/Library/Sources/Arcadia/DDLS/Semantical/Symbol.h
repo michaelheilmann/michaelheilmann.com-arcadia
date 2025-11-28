@@ -19,14 +19,24 @@
 #include "Arcadia/Ring2/Include.h"
 typedef struct Arcadia_DDLS_Scope Arcadia_DDLS_Scope;
 
-/* A map type symbol. */
-#define Arcadia_DDLS_SymbolKind_MapType (1)
+/// A schema symbol.
+#define Arcadia_DDLS_SymbolKind_Schema (0)
 
-/* A map entry type symbol. */
-#define Arcadia_DDLS_SymbolKind_MapEntryType (2)
+/// A schema reference symbol.
+#define Arcadia_DDLS_SymbolKind_SchemaReference (1)
 
-/* A scalar type symbol. */
-#define Arcadia_DDLS_SymbolKind_ScalarType (3)
+/// A map symbol.
+#define Arcadia_DDLS_SymbolKind_Map (2)
+
+/// A map entry symbol.
+#define Arcadia_DDLS_SymbolKind_MapEntry (3)
+
+/// A scalar symbol.
+#define Arcadia_DDLS_SymbolKind_Scalar (4)
+
+/// A list symbol.
+/// @todo Add implementation.
+#define Arcadia_DDLS_SymbolLind_List (5)
 
 Arcadia_declareObjectType(u8"Arcadia.DDLS.Symbol", Arcadia_DDLS_Symbol,
                           u8"Arcadia.Object");
@@ -34,7 +44,6 @@ Arcadia_declareObjectType(u8"Arcadia.DDLS.Symbol", Arcadia_DDLS_Symbol,
 struct Arcadia_DDLS_Symbol {
   Arcadia_Object parent;
   Arcadia_Natural8Value kind;
-  Arcadia_DDLS_Scope* scope;
 };
 
 #endif // ARCADIA_DDLS_SEMANTICAL_SYMBOL_H_INCLUDED

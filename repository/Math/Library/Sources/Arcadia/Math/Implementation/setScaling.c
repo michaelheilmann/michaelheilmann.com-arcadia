@@ -43,7 +43,7 @@ Arcadia_Math_MatrixReal32Value_setScaling
   self->elements[0][3] = 0.f;
   self->elements[1][3] = 0.f;
   self->elements[2][3] = 0.f;
-  self->elements[3][3] = 1.f; 
+  self->elements[3][3] = 1.f;
 }
 
 void
@@ -74,5 +74,5 @@ Arcadia_Math_MatrixReal64Value_setScaling
   self->elements[0][3] = 0.;
   self->elements[1][3] = 0.;
   self->elements[2][3] = 0.;
-  self->elements[3][3] = 1.; 
+  self->elements[3][3] = 1.;
 }

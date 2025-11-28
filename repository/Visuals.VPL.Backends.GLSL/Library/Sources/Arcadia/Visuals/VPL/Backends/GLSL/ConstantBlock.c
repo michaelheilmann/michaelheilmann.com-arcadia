@@ -74,7 +74,7 @@ Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock* self
   )
-{ 
+{
   if (self->name) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->name);
   }

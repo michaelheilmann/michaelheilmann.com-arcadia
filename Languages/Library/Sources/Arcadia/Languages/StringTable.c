@@ -226,7 +226,7 @@ Arcadia_Languages_StringTable_getOrCreateString
   Arcadia_SizeValue index = hash % self->capacity;
   for (Arcadia_Languages_StringTable_Node* node = self->buckets[index]; NULL != node; node = node->next) {
     Arcadia_Value nodeValue = Arcadia_Value_makeObjectReferenceValue(node->string);
-    if (node->hash == hash && 
+    if (node->hash == hash &&
         Arcadia_String_getNumberOfBytes(thread, node->string) == numberOfBytes) {
       if (!Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, node->string), bytes, numberOfBytes)) {
         return node->string;

@@ -31,7 +31,7 @@
 
 Arcadia_declareObjectType(u8"Arcadia.DirectoryIteratorLinux", Arcadia_DirectoryIteratorLinux,
                           u8"Arcadia.DirectoryIterator");
-                          
+
 struct Arcadia_DirectoryIteratorLinux {
   Arcadia_DirectoryIterator _parent;
   DIR *dir;

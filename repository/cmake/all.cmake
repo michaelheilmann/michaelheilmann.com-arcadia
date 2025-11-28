@@ -209,6 +209,28 @@ macro(FetchProduct target directory help)
   endif()
 endmacro()
 
+# @param target the target to which targetFile becomes a dependency to
+# @param sourceFile the source file.
+# @param targetFile the target file. to which the target file is a dependency
+macro(MyCopyFile target sourceFile targetFile)
+  string(RANDOM LENGTH 64 result)
+  string(UUID uuid NAMESPACE "15340915-a7be-4950-9d26-b789c0eaf106" NAME ${result} TYPE SHA1)
+
+  message(STATUS "[1] sourceFile = ${sourceFile}, targetFile = ${targetFile}")
+  get_filename_component(targetFileDirectory ${targetFile} DIRECTORY)
+  message(STATUS "[2] targetFileDirectory = ${targetFileDirectory}")
+  add_custom_command(OUTPUT ${targetFile}
+                     COMMAND ${CMAKE_COMMAND} -E make_directory ${targetFileDirectory}
+                     COMMAND ${CMAKE_COMMAND} -E copy ${sourceFile} ${targetFile}
+                     COMMAND ${CMAKE_COMMAND} -E touch ${targetFile}
+                     DEPENDS ${sourceFile}
+                     VERBATIM
+                     COMMENT "copy file `${sourceFile}` to `${targetFile}`")
+  add_custom_target(${uuid} DEPENDS ${targetFile})
+  # Add the target file as a dependency. 
+  add_dependencies(${target} ${uuid})
+endmacro()
+
 macro(CopyProductAssets target folder sourceDirectory targetDirectory)
  #message(STATUS "=> target directory ${targetDirectory}")
  file(GLOB_RECURSE sourceFiles RELATIVE ${sourceDirectory} "${sourceDirectory}/*")
@@ -232,6 +254,22 @@ macro(CopyProductAssets target folder sourceDirectory targetDirectory)
  add_custom_target(${target} ALL DEPENDS ${targetFiles})
  set_target_properties(${target} PROPERTIES FOLDER ${folder})
 
+endmacro()
+
+macro(BeginTemplateEngine target folder sourceFile targetFile environmentFile)
+  add_custom_command(OUTPUT ${targetFile}
+                     COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}"
+                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                     VERBATIM
+                     COMMENT "${sourceFile} / ${environmentFile} => ${targetFile}"
+                     DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})
+  add_custom_target(${target} ALL DEPENDS ${targetFile})
+endmacro()
+
+macro(EndTemplateEngine target)
+  if (${target}.folder)
+    set_target_properties(${target} PROPERTIES FOLDER ${${target}.folder})
+  endif()
 endmacro()
 
 # sourceFile The source file.

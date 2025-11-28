@@ -44,7 +44,7 @@ parse
   )
 {
   Arcadia_String* input = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, n)));
-  Arcadia_Utf8Reader* inputReader = (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, input);
+  Arcadia_UTF8Reader* inputReader = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, input);
   Arcadia_DDL_Parser_setInput(thread, parser, inputReader);
   return Arcadia_DDL_Parser_run(thread, parser);
 }
@@ -54,7 +54,7 @@ test1
   (
     Arcadia_Thread* thread
   )
-{ 
+{
   Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread);
   Arcadia_DDL_Node* node = NULL;
 

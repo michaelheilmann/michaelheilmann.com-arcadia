@@ -25,7 +25,7 @@ Arcadia_isDivisibleByPowerOfFiveNatural16
   )
 {
   #define Arcadia_Configuration_isPowerOfFiveNatural16_Implementation (0)
-  
+
 #if Arcadia_Configuration_isPowerOfFiveNatural16_Implementation == 0
   if (v == 0) {
     // v = 0 can never be any power of 5.
@@ -76,9 +76,9 @@ Arcadia_isDivisibleByPowerOfFiveNatural16
     } break;
   };
 #else
-  #error("unknown/unsupported implementation")  
+  #error("unknown/unsupported implementation")
 #endif
-  
+
   #undef Arcadia_Configuration_isPowerOfFiveNatural16_Implementation
 }
 
@@ -91,7 +91,7 @@ Arcadia_isDivisibleByPowerOfFiveNatural32
   )
 {
   #define Arcadia_Configuration_isPowerOfFiveNatural32_Implementation (0)
-  
+
 #if Arcadia_Configuration_isPowerOfFiveNatural32_Implementation == 0
   if (v == 0) {
     // v = 0 can never be any power of 5.
@@ -165,7 +165,7 @@ Arcadia_isDivisibleByPowerOfFiveNatural8
   )
 {
 #define Arcadia_Configuration_isPowerOfFiveNatural8_Implementation (0)
-  
+
 #if Arcadia_Configuration_isPowerOfFiveNatural8_Implementation == 0
   if (v == 0) {
     // v = 0 can never be any power of 5.

@@ -253,7 +253,7 @@ Arcadia_Visuals_Window_getCanvasSize
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ 
+{
   if (!self->backend) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotImplemented);
     Arcadia_Thread_jump(thread);

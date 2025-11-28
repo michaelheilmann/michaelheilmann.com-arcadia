@@ -24,10 +24,10 @@ Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Context", Context,
 
 struct Context {
   Arcadia_Object _parent;
-  Arcadia_Utf8Writer* target;
+  Arcadia_UTF8Writer* target;
   Arcadia_ByteBuffer* targetBuffer;
 
-  Arcadia_Utf8Writer* temporary;
+  Arcadia_UTF8Writer* temporary;
   Arcadia_ByteBuffer* temporaryBuffer;
 
   Arcadia_FilePath* logFilePath;

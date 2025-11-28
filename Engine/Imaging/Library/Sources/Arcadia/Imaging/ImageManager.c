@@ -92,7 +92,7 @@ Arcadia_Imaging_ImageManager_constructImpl
 
   self->writers = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Imaging_ImageWriter* writer = NULL;
- 
+
   writer = (Arcadia_Imaging_ImageWriter*)IcoImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem

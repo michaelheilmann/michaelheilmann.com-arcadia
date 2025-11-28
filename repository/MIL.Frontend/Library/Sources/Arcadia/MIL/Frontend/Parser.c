@@ -1279,7 +1279,7 @@ Arcadia_MIL_Parser_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self,
-    Arcadia_Utf8Reader* input
+    Arcadia_UTF8Reader* input
   )
 {
   Arcadia_MIL_Scanner_setInput(thread, self->scanner, input);

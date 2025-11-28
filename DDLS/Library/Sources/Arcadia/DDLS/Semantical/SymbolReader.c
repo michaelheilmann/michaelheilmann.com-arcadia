@@ -21,13 +21,8 @@
 #include "Arcadia/DDLS/Semantical/MapSymbol.h"
 #include "Arcadia/DDLS/Semantical/MapEntrySymbol.h"
 #include "Arcadia/DDLS/Semantical/ScalarSymbol.h"
-
-static Arcadia_String*
-generateUniqueName
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDLS_SymbolReader* self
-  );
+#include "Arcadia/DDLS/Semantical/SchemaReferenceSymbol.h"
+#include "Arcadia/DDLS/Semantical/SchemaSymbol.h"
 
 static Arcadia_String*
 readString
@@ -85,8 +80,24 @@ readMapSymbol
     Arcadia_DDL_MapNode* source
   );
 
+static Arcadia_DDLS_SchemaReferenceSymbol*
+readSchemaReferenceSymbol
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  );
+
 static Arcadia_DDLS_Symbol*
-readSymbol
+readSymbol0
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  );
+
+static Arcadia_DDLS_Symbol*
+readSchemaSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_SymbolReader* self,
@@ -111,7 +122,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_SymbolReader_objectType
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_SymbolReader_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_SymbolReader_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_SymbolReader_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -184,9 +195,12 @@ Arcadia_DDLS_SymbolReader_constructImpl
   Define(MAP, u8"Map");
   Define(MAPENTRY, u8"MapEntry");
   Define(NUMBER, u8"Number");
+  Define(SCHEMA, u8"Schema");
+  Define(SCHEMAREFERENCE, u8"SchemaReference");
   Define(STRING, u8"String");
   Define(VOID, u8"Void");
 
+  Define(DEFINITION, u8"definition");
   Define(NAME, u8"name");
   Define(TYPE, u8"type");
   Define(ELEMENT, u8"element");
@@ -220,9 +234,12 @@ Arcadia_DDLS_SymbolReader_visitImpl
   Define(MAP, u8"Map");
   Define(MAPENTRY, u8"MapEntry");
   Define(NUMBER, u8"Number");
+  Define(SCHEMA, u8"Schema");
+  Define(SCHEMAREFERENCE, u8"SchemaReference");
   Define(STRING, u8"String");
   Define(VOID, u8"Void");
 
+  Define(DEFINITION, "definition");
   Define(NAME, u8"name");
   Define(TYPE, u8"type");
   Define(ELEMENT, u8"element");
@@ -264,7 +281,7 @@ Arcadia_DDLS_SymbolReader_run
   }
   self->scope = Arcadia_DDLS_Scope_create(thread, NULL);
   openScope(thread, self, (Arcadia_DDL_MapNode*)source);
-  Arcadia_DDLS_Symbol* target = readSymbol(thread, self, (Arcadia_DDL_MapNode*)source);
+  Arcadia_DDLS_Symbol* target = readSchemaSymbol(thread, self, (Arcadia_DDL_MapNode*)source);
   closeScope(thread, self, (Arcadia_DDL_MapNode*)source);
   return target;
 }
@@ -307,7 +324,7 @@ closeScope
     Arcadia_DDLS_SymbolReader* self,
     Arcadia_DDL_MapNode* source
   )
-{ 
+{
   self->scope = self->scope->enclosing;
 }
 
@@ -374,8 +391,8 @@ readMapEntrySymbol
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_DDL_MapNode* typeSource = (Arcadia_DDL_MapNode*)Arcadia_Value_getObjectReferenceValue(&v);
-  Arcadia_DDLS_Symbol* type = readSymbol(thread, self, typeSource);
+  Arcadia_DDL_MapNode* symbolSource = (Arcadia_DDL_MapNode*)Arcadia_Value_getObjectReferenceValue(&v);
+  Arcadia_DDLS_Symbol* symbol = readSymbol0(thread, self, symbolSource);
   Arcadia_Map_remove(thread, self->scope->symbols, self->TYPE, NULL, NULL);
 
   if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->scope->symbols) > 0) {
@@ -386,7 +403,7 @@ readMapEntrySymbol
 
   Arcadia_DDLS_MapEntrySymbol* mapEntrySymbol = Arcadia_DDLS_MapEntrySymbol_create(thread);
   mapEntrySymbol->entryName = name;
-  mapEntrySymbol->entryType = type;
+  mapEntrySymbol->entrySymbol = symbol;
 
   return mapEntrySymbol;
 }
@@ -418,8 +435,8 @@ readMapSymbol
   Arcadia_DDL_ListNode* xe = (Arcadia_DDL_ListNode*)Arcadia_Value_getObjectReferenceValue(&v);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)xe->elements); i < n; ++i) {
     Arcadia_DDL_MapNode* e = (Arcadia_DDL_MapNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, xe->elements, i, _Arcadia_DDL_MapNode_getType(thread));
-    Arcadia_DDLS_Symbol* s = readSymbol(thread, self, e);
-    if (s->kind != Arcadia_DDLS_SymbolKind_MapEntryType) {
+    Arcadia_DDLS_Symbol* s = readSymbol0(thread, self, e);
+    if (s->kind != Arcadia_DDLS_SymbolKind_MapEntry) {
       Arcadia_logf(Arcadia_LogFlags_Error, u8"expected specification of kind `MapEntry`\n");
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
@@ -443,8 +460,32 @@ readMapSymbol
   return mapSymbol;
 }
 
-Arcadia_DDLS_Symbol*
-readSymbol
+static Arcadia_DDLS_SchemaReferenceSymbol*
+readSchemaReferenceSymbol
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  )
+{
+  Arcadia_DDLS_SchemaReferenceSymbol* schemaReferenceSymbol = Arcadia_DDLS_SchemaReferenceSymbol_create(thread);
+  // (1) Remove `kind` element.
+  Arcadia_Map_remove(thread, self->scope->symbols, self->KIND, NULL, NULL);
+  // (2) Read and remove `name` element.
+  Arcadia_String* name = readString(thread, self, self->NAME);
+  Arcadia_Map_remove(thread, self->scope->symbols, self->NAME, NULL, NULL);
+  // (3) Assert no unsupported elements exist.
+  if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->scope->symbols) > 0) {
+    Arcadia_logf(Arcadia_LogFlags_Error, u8"unsupported entries\n");
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  schemaReferenceSymbol->name = name;
+  return schemaReferenceSymbol;
+}
+
+static Arcadia_DDLS_Symbol*
+readSymbol0
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_SymbolReader* self,
@@ -464,10 +505,12 @@ readSymbol
       target = (Arcadia_DDLS_Symbol*)readMapSymbol(thread, self, source);
     } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->MAPENTRY)) {
       target = (Arcadia_DDLS_Symbol*)readMapEntrySymbol(thread, self, source);
-    } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->STRING)) {
-      target = (Arcadia_DDLS_Symbol*)readStringSymbol(thread, self, source);
     } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->NUMBER)) {
       target = (Arcadia_DDLS_Symbol*)readNumberSymbol(thread, self, source);
+    } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->SCHEMAREFERENCE)) {
+      target = (Arcadia_DDLS_Symbol*)readSchemaReferenceSymbol(thread, self, source);
+    } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->STRING)) {
+      target = (Arcadia_DDLS_Symbol*)readStringSymbol(thread, self, source);
     } else {
       closeScope(thread, self, source);
       Arcadia_logf(Arcadia_LogFlags_Error, u8"unknown type\n");
@@ -484,14 +527,64 @@ readSymbol
   return target;
 }
 
-Arcadia_DDLS_Symbol*
-Arcadia_DDLS_SemanticalPass
+static Arcadia_DDLS_Symbol*
+readSchemaSymbol
   (
     Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
     Arcadia_DDL_MapNode* source
   )
 {
-  Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_create(thread);
-  Arcadia_DDLS_SymbolReader* self = Arcadia_DDLS_SymbolReader_create(thread, stringTable);
-  return readSymbol(thread, self, source);
+  // 1: Open a scope.
+  openScope(thread, self, source);
+  // 2: Read the specification.
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    // 2.1: Get `kind`. Assert `kind` is `Schema`.
+    Arcadia_Value kind = Arcadia_Value_makeObjectReferenceValue(readString(thread, self, self->KIND));
+    if (!Arcadia_Value_isEqualTo(thread, &kind, &self->SCHEMA)) {
+      Arcadia_logf(Arcadia_LogFlags_Error, u8"expected `Schema`\n");
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_Map_remove(thread, self->scope->symbols, self->KIND, NULL, NULL);
+    // 2.2: Get `name` entry.
+    Arcadia_Value name = Arcadia_Value_makeObjectReferenceValue(readString(thread, self, self->NAME));
+    if (!Arcadia_Value_isInstanceOf(thread, &name, _Arcadia_String_getType(thread))) {
+      Arcadia_logf(Arcadia_LogFlags_Error, u8"`name` not specified\n");
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_Map_remove(thread, self->scope->symbols, self->NAME, NULL, NULL);
+    Arcadia_DDLS_SchemaSymbol* schemaSymbol = Arcadia_DDLS_SchemaSymbol_create(thread, (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&name));
+    // 2.3: Read `definition` element.
+    Arcadia_Value definition = Arcadia_Map_get(thread, self->scope->symbols, self->DEFINITION);
+    Arcadia_Type* ty = Arcadia_Value_getType(thread, &definition);
+    Arcadia_Atom* tyn = Arcadia_Type_getName(ty);
+    tyn = NULL;
+    if (!Arcadia_Value_isInstanceOf(thread, &definition, _Arcadia_DDL_MapNode_getType(thread))) {
+      Arcadia_logf(Arcadia_LogFlags_Error, u8"`definition` not specified\n");
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_Map_remove(thread, self->scope->symbols, self->DEFINITION, NULL, NULL);
+
+    if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->scope->symbols) > 0) {
+      Arcadia_logf(Arcadia_LogFlags_Error, u8"unsupported entries\n");
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
+    }
+
+    schemaSymbol->definition = readSymbol0(thread, self, (Arcadia_DDL_MapNode*)Arcadia_Value_getObjectReferenceValue(&definition));
+
+    closeScope(thread, self, source);
+    Arcadia_Thread_popJumpTarget(thread);
+    return (Arcadia_DDLS_Symbol*)schemaSymbol;
+  } else {
+    closeScope(thread, self, source);
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_jump(thread);
+  }
 }
+

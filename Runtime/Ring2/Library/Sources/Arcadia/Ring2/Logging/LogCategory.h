@@ -19,7 +19,7 @@
 #include "Arcadia/Ring1/Include.h"
 
 Arcadia_declareEnumerationType("Arcadia.LogCategory", Arcadia_LogCategory);
-  
+
 enum Arcadia_LogCategory {
   /// The "information" log level.
   Arcadia_LogCategory_Information = 1 << 2,

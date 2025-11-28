@@ -18,7 +18,7 @@
 
 #include "Arcadia/DDL/Include.h"
 
-#include "Arcadia/DDL/Implementation/Include.h"
+#include "Arcadia/DDL/Nodes/Include.h"
 
 static void
 Arcadia_DDL_DefaultReader_constructImpl
@@ -101,7 +101,7 @@ Arcadia_DDL_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_DefaultReader* self,
-    Arcadia_Utf8Reader* input
+    Arcadia_UTF8Reader* input
   )
 {
   Arcadia_DDL_Parser_setInput(thread, self->parser, input);

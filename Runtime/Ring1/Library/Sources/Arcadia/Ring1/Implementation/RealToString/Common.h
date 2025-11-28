@@ -95,7 +95,7 @@ mulShift64
   (
     Arcadia_Thread* thread,
     const uint64_t m,
-    const uint64_t* const mul,  
+    const uint64_t* const mul,
     const int32_t j
   )
 {

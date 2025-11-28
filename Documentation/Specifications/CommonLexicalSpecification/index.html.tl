@@ -1,10 +1,10 @@
-  @{include("./../../Documentation/Commons/header-common.i")}
+  @{include("./Commons/header-common.i")}
   <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=4'>
   <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=4'>
   <link rel='canonical' href='@{siteAddress}/specifications/common-lexical-specification/index.html'>
   <title>Common Lexical Specification</title>
   <style>
-  @{include("./Specifications/specification.css.i")} 
+  @{include("./Specifications/specification.css.i")}
   </style>
 </head>
 <body class="my-content-page-1">
@@ -22,10 +22,10 @@
     This document consists of three sections: Section 1 defines how programs are encoded on a Byte level. Section 2 provides an introduction into grammars.
     Section 3 provides the full profile lexical grammar. Section 4 provides information on profiles.
     </p>
-    
+
     @{include("Specifications/CommonLexicalSpecification/1. Grammars.i")}
-    @{include("Specifications/CommonLexicalSpecification/2. Full Profile Lexical Specification.i")} 
-    
+    @{include("Specifications/CommonLexicalSpecification/2. Full Profile Lexical Specification.i")}
+
   </div>
   <div class="right-column">
     <nav>
@@ -55,7 +55,7 @@
         <li><a href="#full-profile-lexical-specification-period">3.17 period</a></li>
       </ul>
     </nav>
-  </div>   
+  </div>
   </main>
   <footer>
     <div class="left-column"></div>

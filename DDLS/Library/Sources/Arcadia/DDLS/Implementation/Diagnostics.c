@@ -36,7 +36,7 @@ expectedToString
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_Diagnostics* self,
-    Arcadia_DDLS_Type* type
+    Arcadia_DDLS_Node* ddlsNode
   );
 
 static Arcadia_String*
@@ -51,7 +51,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_Diagnostics_objectTypeO
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_Diagnostics_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_Diagnostics_visitImpl,
-};                                                                                  
+};
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_Diagnostics_typeOperations = {
   Arcadia_Type_Operations_Initializer,
@@ -87,16 +87,18 @@ Arcadia_DDLS_Diagnostics_constructImpl
   Arcadia_StringBuffer_clear(thread, self->stringBuffer); \
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, Value); \
   self->Name = Arcadia_Languages_StringTable_getOrCreateString(thread, self->stringTable, self->stringBuffer);
-  
+
   Define(BOOLEAN, u8"Boolean");
   Define(LIST, u8"List");
   Define(MAP, u8"Map");
   Define(NUMBER, u8"Number");
+  Define(SCHEMA, u8"Schema");
+  Define(SCHEMAREFERENCE, u8"SchemaReference");
   Define(STRING, u8"String");
   Define(VOID, u8"Void");
-  
+
 #undef Define
-  
+
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1 + 1);
@@ -112,21 +114,23 @@ Arcadia_DDLS_Diagnostics_visitImpl
   if (self->stringBuffer) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->stringBuffer);
   }
-  
+
 #define Define(Name, Value) \
   if (self->Name) {\
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->Name); \
   }
-  
+
   Define(BOOLEAN, u8"Boolean");
   Define(LIST, u8"List");
   Define(MAP, u8"Map");
   Define(NUMBER, u8"Number");
+  Define(SCHEMA, u8"Schema");
+  Define(SCHEMAREFERENCE, u8"SchemaReference");
   Define(STRING, u8"String");
   Define(VOID, u8"Void");
 
 #undef Define
-  
+
   if (self->stringTable) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->stringTable);
   }
@@ -137,20 +141,24 @@ expectedToString
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_Diagnostics* self,
-    Arcadia_DDLS_Type* type
+    Arcadia_DDLS_Node* ddlsNode
   )
 {
-  if (Arcadia_DDLS_isBoolean(thread, type)) {
+  if (Arcadia_DDLS_isBoolean(thread, ddlsNode)) {
     return self->BOOLEAN;
-  } else if (Arcadia_DDLS_isList(thread, type)) {
+  } else if (Arcadia_DDLS_isList(thread, ddlsNode)) {
     return self->LIST;
-  } else if (Arcadia_DDLS_isMap(thread, type)) {
+  } else if (Arcadia_DDLS_isMap(thread, ddlsNode)) {
     return self->MAP;
-  } else if (Arcadia_DDLS_isNumber(thread, type)) {
+  } else if (Arcadia_DDLS_isNumber(thread, ddlsNode)) {
     return self->NUMBER;
-  } else if (Arcadia_DDLS_isString(thread, type)) {
+  } else if (Arcadia_DDLS_isSchema(thread, ddlsNode)) {
+    return self->SCHEMA;
+  } else if (Arcadia_DDLS_isSchemaReference(thread, ddlsNode)) {
+    return self->SCHEMAREFERENCE;
+  } else if (Arcadia_DDLS_isString(thread, ddlsNode)) {
     return self->STRING;
-  } else if (Arcadia_DDLS_isVoid(thread, type)) {
+  } else if (Arcadia_DDLS_isVoid(thread, ddlsNode)) {
     return self->VOID;
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -202,13 +210,13 @@ Arcadia_DDLS_Diagnostics_unexpectedTypeError
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_Diagnostics* self,
-    Arcadia_DDLS_Type* type,
+    Arcadia_DDLS_Node* ddlsNode,
     Arcadia_DDL_Node* node
   )
 {
   Arcadia_StringBuffer_clear(thread, self->stringBuffer);
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"expected `");
-  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, expectedToString(thread, self, type));
+  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, expectedToString(thread, self, ddlsNode));
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"`, received `");
   Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, receivedToString(thread, self, node));
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"`\n");
@@ -274,6 +282,27 @@ Arcadia_DDLS_Diagnostics_mapEntryNotExistsError
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"a map entry of name `");
   Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, name);
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` not exists but is not required by the type");
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
+  Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
+  Arcadia_FileHandle* fd = Arcadia_FileHandle_create(thread, fs);
+  Arcadia_FileHandle_openStandardOutput(thread, fd);
+  Arcadia_SizeValue bytesWritten;
+  Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
+                                       Arcadia_StringBuffer_getNumberOfBytes(thread, self->stringBuffer), &bytesWritten);
+}
+
+void
+Arcadia_DDLS_Diagnostics_unresolvedSchemaReferenceError
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_Diagnostics* self,
+    Arcadia_String* name
+  )
+{
+  Arcadia_StringBuffer_clear(thread, self->stringBuffer);
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"unresolved schema reference `");
+  Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, name);
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"`");
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fd = Arcadia_FileHandle_create(thread, fs);

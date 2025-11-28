@@ -19,13 +19,13 @@
 #include "Arcadia/DDLS/Semantical/Symbol.h"
 
 Arcadia_declareObjectType(u8"Arcadia.DDLS.ScalarSymbol", Arcadia_DDLS_ScalarSymbol,
-                          u8"Arcadia.DDLS.Symbol");                          
-                          
+                          u8"Arcadia.DDLS.Symbol");
+
 struct Arcadia_DDLS_ScalarSymbol {
   Arcadia_DDLS_Symbol parent;
   Arcadia_String* name;
 };
-                     
+
 Arcadia_DDLS_ScalarSymbol*
 Arcadia_DDLS_ScalarSymbol_create
   (

@@ -21,7 +21,7 @@
 
 #include "Arcadia/Ring1/Implementation/RealToString/BigTablesReal64.i"
 
-static inline uint32_t 
+static inline uint32_t
 decimalLength17
   (
     const uint64_t v

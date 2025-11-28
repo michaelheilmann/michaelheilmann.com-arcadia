@@ -30,7 +30,7 @@
 /// x 0 0 0
 /// 0 y 0 0
 /// 0 0 z 0
-/// 0 0 0 1 
+/// 0 0 0 1
 /// @endcode
 void
 Arcadia_Math_MatrixReal32Value_setScaling
@@ -53,7 +53,7 @@ Arcadia_Math_MatrixReal32Value_setScaling
 /// x 0 0 0
 /// 0 y 0 0
 /// 0 0 z 0
-/// 0 0 0 1 
+/// 0 0 0 1
 /// @endcode
 void
 Arcadia_Math_MatrixReal64Value_setScaling

@@ -9,7 +9,7 @@ branches:
   only:
     - main
     - develop
-    
+
 environment:
   CLONE_DIRECTORY: "~/Source"
   BUILD_DIRECTORY: "~/Build"
@@ -28,14 +28,14 @@ before_build:
     - ps: |
         # Create the build directory.
         New-Item -Path "${env:BUILD_DIRECTORY}" -ItemType Directory
-        
+
         cd ${env:BUILD_DIRECTORY}; cmake -D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=TRUE -D"Arcadia.Audials.Implementation.OpenAL.Enabled"=TRUE ${env:CLONE_DIRECTORY}\CMakeLists.txt
-        
+
         ${env:RELEASE_NAME}="michaelheilmann.com-linux-$(${env:APPVEYOR_REPO_BRANCH})-v$(${env:APPVEYOR_BUILD_VERSION}.ToLower())"
-        
+
         ${env:ARCHIVE_FILENAME}="michaelheilmann.com-${env:APPVEYOR_REPO_BRANCH}";
         ${env:ARCHIVE_FILENAME}="${env:ARCHIVE_FILENAME}-linux"
-                
+
         ${env:ARCHIVE_FILENAME}="${env:ARCHIVE_FILENAME}-v$(${env:APPVEYOR_BUILD_VERSION}.ToLower())";
         ${env:ARCHIVE_FILENAME}="${env:ARCHIVE_FILENAME}.tar.gz";
 
@@ -45,13 +45,13 @@ build_script:
 after_build:
     - ps: New-Item ${env:BUILD_DIRECTORY}/.keepme -type file
     - ps: tar -czvf ${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}/.keepme
-       
+
 test_script:
-    - ps: ctest --output-junit test-results-${env:APPVEYOR_JOB_ID}.xml 
+    - ps: ctest --output-junit test-results-${env:APPVEYOR_JOB_ID}.xml
     - ps: |
         $webClient = New-Object 'System.Net.WebClient'
         $webClient.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test-results-${env:APPVEYOR_JOB_ID}.xml))
-                                          
+
 # If one matrix entry fails, all entries fails (https://www.appveyor.com/docs/build-configuration#failing-strategy).
 matrix:
     fast_finish: true
@@ -66,7 +66,7 @@ deploy:
     description: 'michaelheilmann.com $(APPVEYOR_REPO_BRANCH) branch v$(APPVEYOR_BUILD_VERSION)'
     provider: GitHub
     auth_token:
-        secure: iTg7jon0UCvoGT5y2flVxMkwIjqK45TQdgX+6FFUZew/loUpeRw8MR5RhgoRT2u30KSSpbUYJjdzUgdIhrfIbzusBU+WHBlRNWwBzqOkv/3VkTYivj/xfctXZ7xtBxW3 # encrypted token from GitHub
+        secure: iTg7jon0UCvoGT5y2flVxNA9E1PUZel7gE6Bh3jx6lE/FxU5LUKh+KCKD9tPoUoqhiyzM+BuJHvf7QqP8Os5LayR3FkXEdINXJuEkH6jz/IHHhojo4pEAo3wWikarFOS # encrypted token from GitHub
         #artifact: $(ARCHIVE_FILENAME) # upload the artifact
     draft: true
     prerelease: false

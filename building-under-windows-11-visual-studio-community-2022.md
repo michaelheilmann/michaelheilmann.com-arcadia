@@ -38,7 +38,7 @@ An out of source build is the recommended way of building *michaelheilmann.com*.
 
 #### Adding support for non-default instruction set architecture
 By default, the cmake command to generate the build files will create those files for the default instruction set architecture based on the machine your are building on
-which is either x64 or x86 for Windows. You can explicitly select one of these two instruction set architectures by adding parameters to the cmake command: 
+which is either x64 or x86 for Windows. You can explicitly select one of these two instruction set architectures by adding parameters to the cmake command:
 - To generate the build files for the target architecture x86, add the parameter `-A Win32` to the cmake command.
 - To generate the build files for the target architecture x64, add the parameter `-A x64` to the cmake command.
 
@@ -54,7 +54,7 @@ To enable OpenGL 4 support, add the parameter `-D"Arcadia.Visuals.Implementation
 To disable OpenGL 4 support, add the parameter `-D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=FALSE` to the cmake command.
 \
 *Important*: Ensure that the dependencies are installed by executing the script [/install-dependencies.ps1](/install-dependencies.ps1).
-                                                                                                             
+
 - `Arcadia.Audials.Implementation.OpenAL.Enabled`
 `TRUE` enables OpenAL support in *Arcadia Audials*, `FALSE` disables it. Default is `FALSE`.
 \

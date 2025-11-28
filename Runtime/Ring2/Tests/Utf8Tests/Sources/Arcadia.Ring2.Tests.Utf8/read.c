@@ -32,15 +32,15 @@ Arcadia_Tests_Utf8_read2
   };
   size_t numberOfSourceBytes = sizeof(sourceBytes) / sizeof(uint8_t);
   for (uint8_t i = 0, n = numberOfSourceBytes; i < n; ++i) {
-    Arcadia_ByteBuffer_append_pn(thread, sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
+    Arcadia_ByteBuffer_insertBackBytes(thread, sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
   }
-  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
+  Arcadia_UTF8Reader* reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceByteBuffer);
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    while (Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
-      Arcadia_Utf8Reader_getCodePoint(thread, reader);
-      Arcadia_Utf8Reader_next(thread, reader);
+    while (Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
+      Arcadia_UTF8Reader_getCodePoint(thread, reader);
+      Arcadia_UTF8Reader_next(thread, reader);
     }
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
@@ -70,7 +70,7 @@ Arcadia_Tests_Utf8_read1
   };
   size_t numberOfSourceBytes = sizeof(sourceBytes) / sizeof(uint8_t);
   for (uint8_t i = 0, n = numberOfSourceBytes; i < n; ++i) {
-    Arcadia_ByteBuffer_append_pn(thread, sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
+    Arcadia_ByteBuffer_insertBackBytes(thread, sourceByteBuffer, &sourceBytes[i], sizeof(uint8_t));
   }
 
   uint32_t expectedCodePoints[] = {
@@ -83,11 +83,11 @@ Arcadia_Tests_Utf8_read1
   };
   size_t numberOfExpectedCodePoints = sizeof(expectedCodePoints) / sizeof(uint32_t);
 
-  Arcadia_Utf8Reader* reader = (Arcadia_Utf8Reader*)Arcadia_Utf8ByteBufferReader_create(thread, sourceByteBuffer);
+  Arcadia_UTF8Reader* reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceByteBuffer);
   Arcadia_SizeValue numberOfReceivedCodePoints = 0;
 
-  while (Arcadia_Utf8Reader_hasCodePoint(thread, reader)) {
-    Arcadia_Natural32Value receivedCodePoint = Arcadia_Utf8Reader_getCodePoint(thread, reader);
+  while (Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
+    Arcadia_Natural32Value receivedCodePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
     if (numberOfReceivedCodePoints >= numberOfExpectedCodePoints) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);
@@ -96,7 +96,7 @@ Arcadia_Tests_Utf8_read1
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Utf8Reader_next(thread, reader);
+    Arcadia_UTF8Reader_next(thread, reader);
     numberOfReceivedCodePoints++;
   }
   if (numberOfReceivedCodePoints != numberOfExpectedCodePoints) {

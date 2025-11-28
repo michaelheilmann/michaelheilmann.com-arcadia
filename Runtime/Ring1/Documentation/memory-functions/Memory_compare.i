@@ -22,7 +22,7 @@
     <div><div>const void* q</div><div>A pointer to the first Byte of the second memory region.</div></div>
     <div><div>Arcadia_SizeValue n</div><div>The number of Bytes to compare.</div></div>
   </section>
-  
+
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
@@ -31,7 +31,7 @@
     Zero if both memory regions are equal.
     </p>
   </section>
-  
+
   <section class="cxx remarks">
     <h1>Remarks</h1>
     <p>

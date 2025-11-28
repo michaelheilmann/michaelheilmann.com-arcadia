@@ -260,7 +260,7 @@ static Arcadia_BooleanValue
 Arcadia_ArrayStack_isImmutableImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_ArrayStack* self  
+    Arcadia_ArrayStack* self
   )
 { return Arcadia_BooleanValue_False; }
 

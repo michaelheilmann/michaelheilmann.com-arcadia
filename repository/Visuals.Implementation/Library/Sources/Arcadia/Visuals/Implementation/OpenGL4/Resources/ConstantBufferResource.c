@@ -250,7 +250,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_setDataImpl
   )
 {
   Arcadia_ByteBuffer_clear(thread, self->byteBuffer);
-  Arcadia_ByteBuffer_append_pn(thread, self->byteBuffer, bytes, numberOfBytes);
+  Arcadia_ByteBuffer_insertBackBytes(thread, self->byteBuffer, bytes, numberOfBytes);
   self->dirty = Arcadia_BooleanValue_True;
 }
 
@@ -274,13 +274,13 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real
   if (transpose) {
     for (size_t i = 0; i < 4; ++i) {
       for (size_t j = 0; j < 4; ++j) {
-        Arcadia_ByteBuffer_append_pn(thread, self->byteBuffer, &(source->elements[j][i]), sizeof(float));
+        Arcadia_ByteBuffer_insertBackBytes(thread, self->byteBuffer, &(source->elements[j][i]), sizeof(float));
       }
     }
   } else {
     for (size_t i = 0; i < 4; ++i) {
       for (size_t j = 0; j < 4; ++j) {
-        Arcadia_ByteBuffer_append_pn(thread, self->byteBuffer, &(source->elements[i][j]), sizeof(float));
+        Arcadia_ByteBuffer_insertBackBytes(thread, self->byteBuffer, &(source->elements[i][j]), sizeof(float));
       }
     }
   }

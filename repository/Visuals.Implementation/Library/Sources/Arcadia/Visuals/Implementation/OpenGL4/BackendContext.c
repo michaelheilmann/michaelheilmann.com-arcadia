@@ -124,7 +124,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_BackendContext,
                          u8"Arcadia.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
                          &_typeOperations);
-                    
+
 static Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*
 createConstantBufferResourceImpl
   (
@@ -158,7 +158,7 @@ createMeshContextResourceImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
   )
-{ 
+{
   Arcadia_Visuals_Implementation_MeshContextResource* resource = Arcadia_Visuals_Implementation_MeshContextResource_create(thread, (Arcadia_Visuals_Implementation_BackendContext*)self);
   assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);

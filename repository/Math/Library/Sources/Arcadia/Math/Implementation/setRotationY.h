@@ -26,7 +26,7 @@
 /// @remarks
 /// A rotation transformation matrix for a counter-clockwise rotation around the x-axis by a number of degrees a has the following form:
 /// @code
-///  c  0  s  0 
+///  c  0  s  0
 ///  0  1  0  0
 /// -s  0  c  0
 ///  0  0  0  1

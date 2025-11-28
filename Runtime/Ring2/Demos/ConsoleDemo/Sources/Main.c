@@ -28,10 +28,10 @@ main1
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-  Arcadia_Utf8Writer* writer = (Arcadia_Utf8Writer*)Arcadia_Utf8FileHandleWriter_create(thread, fileHandle);
+  Arcadia_UTF8Writer* writer = (Arcadia_UTF8Writer*)Arcadia_UTF8FileHandleWriter_create(thread, fileHandle);
 
 #define Emit(String) \
-  Arcadia_Utf8Writer_writeString \
+  Arcadia_UTF8Writer_writeString \
     ( \
       thread, \
       writer, \

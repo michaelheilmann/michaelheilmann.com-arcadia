@@ -29,7 +29,7 @@ environment:
     CLONE_DIRECTORY: C:\Source
     BUILD_DIRECTORY: C:\Build
     PACKAGE_DIRECTORY: C:\Package
-    
+
 # The clone directory.
 clone_folder: '%CLONE_DIRECTORY%'
 
@@ -54,9 +54,9 @@ install:
     # Install dependencies.
     - ps: |
         Write-Host "APPVEYOR_BUILD_FOLDER:   ${env:APPVEYOR_BUILD_FOLDER}"
-        ${env:INSTALL_DEPENDENCIES_SCRIPT}="${env:APPVEYOR_BUILD_FOLDER}/install-dependencies.ps1" 
+        ${env:INSTALL_DEPENDENCIES_SCRIPT}="${env:APPVEYOR_BUILD_FOLDER}/install-dependencies.ps1"
         if (Test-Path -Path ${env:INSTALL_DEPENDENCIES_SCRIPT}) {
-            Write-Host "${env:INSTALL_DEPENDENCIES_SCRIPT} found"          
+            Write-Host "${env:INSTALL_DEPENDENCIES_SCRIPT} found"
         } else {
             Write-Host "${env:INSTALL_DEPENDENCIES_SCRIPT} NOT found"
         }
@@ -112,7 +112,7 @@ after_build:
     - ps: 7z a .\..\Package\${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\.keepme
     - ps: 7z a .\..\Package\${env:ARCHIVE_FILENAME} ${env:BUILD_DIRECTORY}\Tools\TemplateEngine\Tool\${env:CONFIGURATION}\Arcadia.Tools.TemplateEngine.exe
     - ps: 7z rn .\..\Package\${env:ARCHIVE_FILENAME} Arcadia.Tools.TemplateEngine.exe TemplateEngine\Binaries\Arcadia.Tools.TemplateEngine.exe
-    - ps: Push-AppveyorArtifact .\..\Package\${env:ARCHIVE_FILENAME} -FileName ${env:ARCHIVE_FILENAME} -DeploymentName ${env:ARCHIVE_FILENAME} 
+    - ps: Push-AppveyorArtifact .\..\Package\${env:ARCHIVE_FILENAME} -FileName ${env:ARCHIVE_FILENAME} -DeploymentName ${env:ARCHIVE_FILENAME}
 
 test_script:
     - ps: ctest --output-junit ${env:BUILD_DIRECTORY}/test-results-${env:APPVEYOR_JOB_ID}.xml -C ${env:CONFIGURATION}
@@ -138,7 +138,7 @@ deploy:
     description: 'michaelheilmann.com $(APPVEYOR_REPO_BRANCH) branch v$(APPVEYOR_BUILD_VERSION)'
     provider: GitHub
     auth_token:
-        secure: iTg7jon0UCvoGT5y2flVxMkwIjqK45TQdgX+6FFUZew/loUpeRw8MR5RhgoRT2u30KSSpbUYJjdzUgdIhrfIbzusBU+WHBlRNWwBzqOkv/3VkTYivj/xfctXZ7xtBxW3 # encrypted token from GitHub
+        secure: iTg7jon0UCvoGT5y2flVxNA9E1PUZel7gE6Bh3jx6lE/FxU5LUKh+KCKD9tPoUoqhiyzM+BuJHvf7QqP8Os5LayR3FkXEdINXJuEkH6jz/IHHhojo4pEAo3wWikarFOS # encrypted token from GitHub
         artifact: $(ARCHIVE_FILENAME) # upload the artifact
     draft: true
     prerelease: false

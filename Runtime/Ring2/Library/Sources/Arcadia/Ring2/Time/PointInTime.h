@@ -101,7 +101,7 @@ Arcadia_PointInTime_getMonth
 // @return The year since the start of the epoch.
 Arcadia_Integer32Value
 Arcadia_PointInTime_getYear
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_PointInTime* self,
     Arcadia_TimeSpecification timeSpecification

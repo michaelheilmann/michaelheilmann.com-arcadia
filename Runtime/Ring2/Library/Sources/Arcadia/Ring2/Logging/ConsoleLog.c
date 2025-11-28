@@ -31,7 +31,7 @@ Arcadia_ConsoleLog_visit
     Arcadia_Thread* thread,
     Arcadia_ConsoleLog* self
   );
-  
+
 static void
 Arcadia_ConsoleLog_infoImpl
   (
@@ -109,7 +109,7 @@ Arcadia_ConsoleLog_visit
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->fileHandle);
   }
 }
- 
+
 static void
 Arcadia_ConsoleLog_infoImpl
   (

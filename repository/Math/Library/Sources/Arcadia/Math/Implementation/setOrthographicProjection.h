@@ -37,7 +37,7 @@
 /// @remarks
 /// An orthographic projection transformation matrix has the following form
 /// @code
-/// a 0 0 u 
+/// a 0 0 u
 /// 0 b 0 v
 /// 0 0 c w
 /// 0 0 0 1

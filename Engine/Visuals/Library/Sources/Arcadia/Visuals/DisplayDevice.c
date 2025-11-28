@@ -92,7 +92,7 @@ Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes
     Arcadia_Thread* thread,
     Arcadia_Visuals_DisplayDevice* self
   )
-{ 
+{
   return self->getAvailableDisplayModes(thread, self);
 }
 

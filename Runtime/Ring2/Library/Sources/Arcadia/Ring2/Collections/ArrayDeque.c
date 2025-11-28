@@ -67,7 +67,7 @@ MIN
 static inline Arcadia_SizeValue
 MOD
   (
-    Arcadia_SizeValue index,  
+    Arcadia_SizeValue index,
     Arcadia_SizeValue capacity
   )
 { return index % capacity; }

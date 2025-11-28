@@ -77,7 +77,7 @@ Arcadia_MIL_AST_FieldDefinitionNode_visit
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_FieldDefinitionNode* self
   )
-{ 
+{
   if (self->name) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->name);
   }

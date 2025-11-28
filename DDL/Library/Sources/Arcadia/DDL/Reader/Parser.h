@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_DDL_READER_PARSER_H_INCLUDED)
 #define ARCADIA_DDL_READER_PARSER_H_INCLUDED
 
-#include "Arcadia/DDL/Implementation/Include.h"
+#include "Arcadia/DDL/Nodes/Include.h"
 #include "Arcadia/Languages/Include.h"
 
 /// @code
@@ -52,7 +52,7 @@ Arcadia_DDL_Parser_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self,
-    Arcadia_Utf8Reader* input
+    Arcadia_UTF8Reader* input
   );
 
 Arcadia_Languages_StringTable*

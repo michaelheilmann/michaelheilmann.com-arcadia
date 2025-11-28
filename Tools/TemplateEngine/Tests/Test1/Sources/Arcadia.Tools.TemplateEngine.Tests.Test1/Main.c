@@ -31,9 +31,9 @@ main1
   Context* context = Context_create(thread);
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
   context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
 
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, u8"HelloWorld.t", strlen(u8"HelloWorld.t"));
   Arcadia_Value filePathValue;
@@ -53,9 +53,9 @@ recursiveInclude1
   Context* context = Context_create(thread);
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
   context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
 
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude1.t", strlen(u8"recursiveInclude1.t"));
   Arcadia_Value filePathValue;
@@ -83,9 +83,9 @@ recursiveInclude2
   Context* context = Context_create(thread);
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
   context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
 
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude2.t", strlen(u8"recursiveInclude2.t"));
   Arcadia_Value filePathValue;
@@ -114,9 +114,9 @@ time
   Context* context = Context_create(thread);
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
   context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->targetBuffer);
+  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
   context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, context->temporaryBuffer);
+  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
 
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, u8"time.t", strlen(u8"time.t"));
   Arcadia_Value filePathValue;

@@ -113,7 +113,7 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Windows/PngImageWriter.h)
     list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Windows/TifImageWriter.c)
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Windows/TifImageWriter.h)
-    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Windows/MultiByteToWideCharZeroTerminated.h)      
+    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Windows/MultiByteToWideCharZeroTerminated.h)
   endif()
 
   list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.Ring2 ${MyProjectName}.DDL ${MyProjectName}.ARMS)

@@ -49,7 +49,7 @@ Arcadia_Integer64Value_toUtf8String
 {
   // TODO: Properly determine the maximal length.
   static Arcadia_Natural8Value bytes[512];
-  
+
   Arcadia_Integer64Value valueTemporary;
   Arcadia_SizeValue numberOfDigits = 0;
   Arcadia_SizeValue numberOfBytes = 0;

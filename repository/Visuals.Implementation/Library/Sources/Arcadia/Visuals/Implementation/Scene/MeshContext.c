@@ -115,7 +115,7 @@ Arcadia_Visuals_Implementation_Scene_MeshContext_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Scene_MeshContext* self
   )
-{ 
+{
   if (self->meshContextResource) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->meshContextResource);
   }

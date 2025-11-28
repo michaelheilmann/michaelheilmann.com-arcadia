@@ -34,7 +34,7 @@
     A pointer to the first Byte of the new memory region.
     </p>
   </section>
-  
+
   <section class="cxx errors">
 
     <h1>Errors</h1>
@@ -45,7 +45,7 @@
     </div>
 
   </ section>
-  
+
   <section class="cxx remarks">
     <h1>Remarks</h1>
     <p>

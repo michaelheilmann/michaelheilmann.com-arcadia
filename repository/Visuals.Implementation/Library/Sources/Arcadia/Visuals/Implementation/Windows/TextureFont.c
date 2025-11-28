@@ -78,8 +78,8 @@ Arcadia_Visuals_Windows_TextureFont_constructImpl
   // Get the size of the symbol.
   self->codePoint = 'A';
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_Utf8Writer* utf8ByteBufferWriter = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, byteBuffer);
-  Arcadia_Utf8Writer_writeCodePoints(thread, utf8ByteBufferWriter, &self->codePoint, 1);
+  Arcadia_UTF8Writer* utf8ByteBufferWriter = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer);
+  Arcadia_UTF8Writer_writeCodePoints(thread, utf8ByteBufferWriter, &self->codePoint, 1);
   RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
   DrawTextA(hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
   int32_t width = textRect.right - textRect.left;
@@ -144,8 +144,8 @@ Arcadia_Visuals_Windows_TextureFont_setCodePoint
     // Get the size of the symbol.
     self->codePoint = codePoint;
     Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-    Arcadia_Utf8Writer* utf8ByteBufferWriter = (Arcadia_Utf8Writer*)Arcadia_Utf8ByteBufferWriter_create(thread, byteBuffer);
-    Arcadia_Utf8Writer_writeCodePoints(thread, utf8ByteBufferWriter, &self->codePoint, 1);
+    Arcadia_UTF8Writer* utf8ByteBufferWriter = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer);
+    Arcadia_UTF8Writer_writeCodePoints(thread, utf8ByteBufferWriter, &self->codePoint, 1);
     RECT textRect = { .left = 0, .top = 0, .right = 0, .bottom = 0 };
     DrawTextA(hDeviceContext, Arcadia_ByteBuffer_getBytes(thread, byteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, byteBuffer), &textRect, DT_LEFT | DT_NOCLIP | DT_NOPREFIX | DT_CALCRECT);
     int32_t width = textRect.right - textRect.left;

@@ -21,11 +21,11 @@
 
 // (1) Assert two different Arcadia.String object Arcadia.Value objects a and b are considered as equal
 //     - that is, Arcadia.Value.isEqualTo(&a,&b) returns Arcadia.Boolean.True - if
-//     the values of their Bytes are equal. Also assert that 
+//     the values of their Bytes are equal. Also assert that
 //     Arcadia.Value.isNotEqualTo(&a,&b) returns Arcadia.Boolean.False in that case.
 // (2) Assert two different Arcadia.String object Arcadia.Vallue objects a and b are considered as NOT equal
 //     - that is, Arcadia.Object.isEqualTo(a,b) returns Arcadia.Boolean.False - if
-//     the values of their Bytes are NOT equal. Also assert that 
+//     the values of their Bytes are NOT equal. Also assert that
 //     Arcadia.Value.isNotEqualTo(&a, &b) returns Arcadia.Boolean.True in that case.
 static void
 testEqualsTo

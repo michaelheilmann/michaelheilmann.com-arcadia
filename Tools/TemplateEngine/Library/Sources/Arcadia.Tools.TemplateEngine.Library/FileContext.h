@@ -30,7 +30,7 @@ struct FileContext {
   /// The path to the source file.
   Arcadia_FilePath* sourceFilePath;
   /// UTF8 reader for the source file.
-  Arcadia_Utf8Reader* source;
+  Arcadia_UTF8Reader* source;
   /// The environment.
   Environment* environment;
 

@@ -6,15 +6,15 @@
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_Object_getHash">Arcadia_Object_getHash</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_Object_isEqualTo">Arcadia_Object_isEqualTo</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_Object_isNotEqualTo">Arcadia_Object_isNotEqualTo</a></li>
-        
+
         @{include("3.documentation.8.objects/ByteBuffer/include.index")}
         <li>File System</li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_ExistingFilePolicy">Arcadia_ExistingFilePolicy</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileAccessMode">Arcadia_FileAccessMode</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileHandle">Arcadia_FileHandle</a></li>
-        
+
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FilePath">Arcadia_FilePath</a></li>
-        
+
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</a></li>
@@ -24,7 +24,7 @@
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_getConfigurationFolder">Arcadia_FileSystem_getConfigurationFolder</a></li>
-        
+
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileType">Arcadia_FileType</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_NonExistingFilePolicy">Arcadia_NonExistingFilePolicy</a></li>
         <li>Collections</li>

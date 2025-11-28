@@ -34,6 +34,10 @@ struct Arcadia_Thread {
   // When the thread is constructed, this is NULL.
   // The constructing process assigns itself to this variable after the thread is constructed.
   Arcadia_Process* process;
+  // The currently raised value.
+  // "void" if there is no raised object.
+  // Any other value.
+  Arcadia_Value raised;
 };
 
 /*@undefined thread does not point to an uninitialized Arcadia_Thread object*/

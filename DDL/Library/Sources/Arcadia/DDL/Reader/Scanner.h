@@ -75,7 +75,7 @@ Arcadia_DDL_Scanner_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Scanner* self,
-    Arcadia_Utf8Reader* input
+    Arcadia_UTF8Reader* input
   );
 
 Arcadia_Languages_StringTable*

@@ -16,7 +16,7 @@
   - Debian:
     - `sudo apt-get install libx11-dev`
     - `sudo apt-get install libxrandr-dev`
-- Recommended: *OpenGL/GLX development headers and libraries* 
+- Recommended: *OpenGL/GLX development headers and libraries*
   - Debian: `sudo apt-get install libglx-dev`
 - Recommended: *OpenAL development headers and libraries*
   - Debian: `sudo apt-get install mesa-common-dev`
@@ -47,7 +47,7 @@ An out of source build is the recommended way of building *michaelheilmann.com*.
 \
 To enable OpenGL support, add the parameter `-D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=TRUE` to the cmake command.
 To disable OpenGL support, add the parameter `-D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=FALSE` to the cmake command.
-                                                                                                           
+
 - `Arcadia.Audials.Implementation.OpenAL.Enabled`
 `TRUE` enables OpenAL support in *Arcadia Audials*, `FALSE` disables it. Default is `FALSE`.
 \

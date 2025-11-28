@@ -19,9 +19,11 @@
 #pragma push_macro("ARCADIA_DDLS_PRIVATE")
 #define ARCADIA_DDLS_PRIVATE (1)
 
-#include "Arcadia/DDLS/Reader/DefaultReader.h"
+#include "Arcadia/DDLS/Syntactical/DefaultReader.h"
 #include "Arcadia/DDLS/Semantical/SymbolReader.h"
-#include "Arcadia/DDLS/Schema.h"
+
+#include "Arcadia/DDLS/Nodes/Include.h"
+
 #include "Arcadia/DDLS/Implementation/ValidationContext.h"
 
 #undef ARCADIA_DDLS_PRIVATE

@@ -59,9 +59,9 @@ Arcadia_ByteBuffer_startsWith_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_append_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_insertBackBytes
 void
-Arcadia_ByteBuffer_append_pn
+Arcadia_ByteBuffer_insertBackBytes
   (
     Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
@@ -69,9 +69,9 @@ Arcadia_ByteBuffer_append_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_prepend_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_insertFrontBytes
 void
-Arcadia_ByteBuffer_prepend_pn
+Arcadia_ByteBuffer_insertFrontBytes
   (
     Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,
@@ -79,9 +79,9 @@ Arcadia_ByteBuffer_prepend_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_insert_pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_ByteBuffer_insertBytes
 void
-Arcadia_ByteBuffer_insert_pn
+Arcadia_ByteBuffer_insertBytes
   (
     Arcadia_Thread* thread,
     Arcadia_ByteBuffer* self,

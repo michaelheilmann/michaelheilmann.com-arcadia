@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 
+#define Arcadia_LogFlags_Debug (0)
 #define Arcadia_LogFlags_Info (1)
 #define Arcadia_LogFlags_Trace (2)
 #define Arcadia_LogFlags_Error (4)

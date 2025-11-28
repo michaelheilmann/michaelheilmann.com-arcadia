@@ -19,7 +19,7 @@
 #include "Arcadia/Ring2/Include.h"
 typedef struct Arcadia_DDLS_Symbol Arcadia_DDLS_Symbol;
 
-                     
+
 /* Map from names to symbols. An error symbol e replace conflicting symbols e1 and e2. */
 Arcadia_declareObjectType(u8"Arcadia.DDLS.Scope", Arcadia_DDLS_Scope,
                           u8"Arcadia.Object");

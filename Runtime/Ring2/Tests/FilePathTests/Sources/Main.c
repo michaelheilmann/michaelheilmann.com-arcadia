@@ -28,7 +28,7 @@ checkNormalized
   Arcadia_String* filePathStringSource = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, strlen(p))));
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, filePathStringSource);
   Arcadia_String* filePathStringTarget = Arcadia_FilePath_toNative(thread, filePath);
-  
+
   if (Arcadia_String_getNumberOfBytes(thread, filePathStringTarget) != strlen(q) + 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
@@ -50,6 +50,20 @@ normalizationTests
   checkNormalized(thread, u8"./", ".");
 }
 
+static void
+regressionTest1
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_String* u = Arcadia_String_createFromCxxString(thread, u8"./../../x/y");
+  Arcadia_FilePath* v = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, u), Arcadia_String_getNumberOfBytes(thread, u));
+  Arcadia_String* w = Arcadia_FilePath_toGeneric(thread, v);
+
+  Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(w);
+  Arcadia_Tests_assertTrue(thread, Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)u, &t));
+}
+
 int
 main
   (
@@ -58,6 +72,9 @@ main
   )
 {
   if (!Arcadia_Tests_safeExecute(&normalizationTests)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&regressionTest1)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

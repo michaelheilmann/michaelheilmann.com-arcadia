@@ -30,7 +30,7 @@ Arcadia_Math_Matrix4x4Real32_setPerspectiveProjection
 {
   fieldOfView = Arcadia_degreesToRadiansReal32Value(thread, fieldOfView);
   Arcadia_Real32Value f = 1 / tanf(fieldOfView / 2.f);
-  
+
   self->elements[0][0] = f / aspectRatio;
   self->elements[1][0] = 0.f;
   self->elements[2][0] = 0.f;
@@ -65,7 +65,7 @@ Arcadia_Math_Matrix4x4Real64_setPerspectiveProjection
 {
   fieldOfView = Arcadia_degreesToRadiansReal64Value(thread, fieldOfView);
   Arcadia_Real64Value f = 1 / tan(fieldOfView / 2.);
-  
+
   self->elements[0][0] = f / aspectRatio;
   self->elements[1][0] = 0.;
   self->elements[2][0] = 0.;

@@ -15,10 +15,10 @@ div.box {
   padding-top: 8px;
   padding-left: 8px;
   padding-right: 8px;
-  
+
   margin-top: 1rem;
   margin-bottom: 1rem;
-  
+
   background-color: rgb(215, 210, 203);
 }
 

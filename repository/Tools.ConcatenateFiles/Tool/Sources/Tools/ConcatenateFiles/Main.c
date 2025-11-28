@@ -43,7 +43,7 @@ main1
     Arcadia_SizeValue bytesRead = 0;
     do {
       Arcadia_FileHandle_read(thread, fileHandle, bytes, bytesToRead, &bytesRead);
-      Arcadia_ByteBuffer_append_pn(thread, byteBuffer, bytes, bytesRead);
+      Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, bytes, bytesRead);
     } while (bytesRead > 0);
     Arcadia_FileHandle_close(thread, fileHandle);
   }

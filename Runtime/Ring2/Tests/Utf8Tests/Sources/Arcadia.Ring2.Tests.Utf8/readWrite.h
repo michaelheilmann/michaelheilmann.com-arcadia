@@ -23,8 +23,8 @@
 /// This test then performs for each x[i] the followin test:
 /// - create a Byte buffer holding x[i]
 /// - create an empty Byte buffer (target)
-/// - read its unicode code points using Utf8ByteBufferReader from source
-/// - write each unicode code point into target using Utf8ByteBufferWriter
+/// - read its unicode code points using UTF8ByteBufferReader from source
+/// - write each unicode code point into target using UTF8ByteBufferWriter
 /// - compare the contents of both Byte buffers
 /// - success if their contents are equal
 /// - failure otherwise

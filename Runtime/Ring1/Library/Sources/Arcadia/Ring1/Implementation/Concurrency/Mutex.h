@@ -54,7 +54,7 @@ Arcadia_Concurrency_Mutex_lock
   (
     Arcadia_Concurrency_Mutex* mutex
   );
-  
+
 Arcadia_Concurrency_Mutex_Result
 Arcadia_Concurrency_Mutex_unlock
   (

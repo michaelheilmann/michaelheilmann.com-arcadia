@@ -51,7 +51,7 @@ Arcadia_MIL_Scope_Entry_create
 /// class Arcadia.MIL.Scope {
 ///
 ///   constructor()
-/// 
+///
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.MIL.Scope", Arcadia_MIL_Scope,

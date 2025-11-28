@@ -272,7 +272,7 @@ applyIcons
       Arcadia_Visuals_Linux_Icon* icon = icons[i];
       if (icon) {
         numberOfElements += icon->width * icon->height + 2;
-        Arcadia_ByteBuffer_append_pn(thread, byteBuffer, icon->bytes, icon->numberOfBytes);
+        Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, icon->bytes, icon->numberOfBytes);
       }
     }
     void const* p = Arcadia_ByteBuffer_getBytes(thread, byteBuffer);
