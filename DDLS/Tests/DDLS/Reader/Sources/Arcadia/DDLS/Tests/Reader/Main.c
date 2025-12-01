@@ -447,15 +447,12 @@ main
     char** argv
   )
 {
-#if 0
   if (!Arcadia_Tests_safeExecute(&testAccept1)) {
     return EXIT_FAILURE;
   }
-#endif
   if (!Arcadia_Tests_safeExecute(&testAccept2)) {
     return EXIT_FAILURE;
   }
-#if 0
   if (!Arcadia_Tests_safeExecute(&testReject1)) {
     return EXIT_FAILURE;
   }
@@ -471,6 +468,5 @@ main
   if (!Arcadia_Tests_safeExecute(&testReject5)) {
     return EXIT_FAILURE;
   }
-#endif
   return EXIT_SUCCESS;
 }

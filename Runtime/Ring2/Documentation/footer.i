@@ -15,15 +15,7 @@
 
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FilePath">Arcadia_FilePath</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSysten_getOrCreate">Arcadia_FileSystem_getOrCreate</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_regularFileExists">Arcadia_FileSystem_regularFileExists</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_getConfigurationFolder">Arcadia_FileSystem_getConfigurationFolder</a></li>
+        @{include("3.documentation.8.objects/FileSystem/FileSystem.index.i")}
 
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileType">Arcadia_FileType</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_NonExistingFilePolicy">Arcadia_NonExistingFilePolicy</a></li>

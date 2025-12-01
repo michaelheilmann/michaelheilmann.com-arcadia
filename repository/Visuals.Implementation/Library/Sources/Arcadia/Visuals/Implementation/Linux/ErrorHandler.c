@@ -1,6 +1,7 @@
 #include "Arcadia/Visuals/Implementation/Linux/ErrorHandler.h"
 
 #include <X11/Xlib.h>
+#include <stdio.h> // @todo Remove references to `stdio.h`.
 
 static int (*g_oldErrorHandler)(Display*, XErrorEvent*) = NULL;
 

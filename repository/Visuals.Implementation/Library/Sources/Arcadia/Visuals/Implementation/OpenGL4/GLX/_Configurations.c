@@ -5,6 +5,7 @@
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/_Extensions.h"
 #include "Arcadia/Visuals/Implementation/Linux/ErrorHandler.h"
+#include <stdio.h> // @todo Remove references to `stdio.h`.
 
 static Arcadia_String*
 integerToString

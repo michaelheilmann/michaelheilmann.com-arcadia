@@ -15,8 +15,6 @@
 
 #include "Arcadia/Engine/Demo/Configuration.h"
 #include <stdlib.h>
-#include <stdio.h> // @todo Remove references to `stdio.h`.
-#include <string.h>
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring2/Include.h"
@@ -140,7 +138,7 @@ main1
     Arcadia_Engine_Demo_startupVisuals(thread, engine, configuration, &displayDevice, &windowMode, &window);
 
     Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-    Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+    Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
     Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
 
     // (1) Initialize Audials.
@@ -191,7 +189,7 @@ main1
 
     // (10) Clean the message queue. FIXME: The messages prevent the engine from being gc'ed.
     while (Arcadia_Engine_dequeEvent(thread, engine)) {
-      fprintf(stdout, "%s:%d: purging message\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Info, "%s:%d: purging message\n", __FILE__, __LINE__);
     }
 
     if (window) {

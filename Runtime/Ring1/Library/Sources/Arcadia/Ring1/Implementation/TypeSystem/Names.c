@@ -17,9 +17,6 @@
 #include "Arcadia/Ring1/Implementation/TypeSystem/Names.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include <memory.h>
-#include <assert.h>
-#include <stdio.h>
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   #define WIN32_LEAN_AND_MEAN
@@ -27,6 +24,7 @@
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   #include <time.h>
   #include <math.h> // round
+  #include <string.h> // memcpy
 #else
   #error("operating system not (yet) supported")
 #endif

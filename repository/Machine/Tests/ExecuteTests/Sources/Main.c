@@ -14,7 +14,6 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include <stdlib.h>
-#include <stdio.h> // @todo Remove references to `stdio.h`.
 
 #include "Arcadia/Include.h"
 
@@ -90,9 +89,7 @@ print
     Arcadia_Thread* thread
   )
 {
-  fprintf(stdout, "Hello, World!\n");
-  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  Arcadia_ValueStack_popValues(thread, (Arcadia_SizeValue)numberOfArguments + 1);
+  Arcadia_print(thread);
 }
 
 static void
@@ -109,20 +106,32 @@ execute3
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
     R_Interpreter_Code* code = R_Interpreter_Code_create(thread);
+    
+    // (1) the foreign procedure
     if (0 != R_Interpreter_Code_Constants_getOrCreateForeignProcedure(thread, constants, &print)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);
     }
+    
+    // (2) the file handle argument
+    Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, Arcadia_FileSystem_getOrCreate(thread));
+    Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
+    Arcadia_Value* value = R_Interpreter_ThreadState_getRegisterAt(R_Interpreter_ProcessState_getCurrentThread(interpreterProcess), 0);
+    Arcadia_Value_setObjectReferenceValue(value, (Arcadia_Object*)fileHandle);
+
+    // (3) the string argument
     if (1 != R_Interpreter_Code_Constants_getOrCreateString(Arcadia_Process_getThread(process), constants, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"Hello, World!\n", sizeof(u8"Hello, World!\n"))))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);
     }
+
     uint8_t opcode = R_Machine_Code_Opcode_Invoke;
     R_Interpreter_Code_append(thread, code, &opcode, 1);
     R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Register, 0); // target
     R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Constant, 0); // calleee
-    R_Interpreter_Code_appendCountNatural8(thread, code, 1); // number of arguments
-    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Constant, 1); // argument #1
+    R_Interpreter_Code_appendCountNatural8(thread, code, 2); // number of arguments
+    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Register, 0); // argument #1 file handle
+    R_Interpreter_Code_appendIndexNatural8(thread, code, R_Machine_Code_IndexKind_Constant, 1); // argument #2 string
     R_executeProcedure(process, interpreterProcess, R_Interpreter_Procedure_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"main", sizeof(u8"main") - 1)), code));
     R_Interpreter_ProcessState_shutdown(process);
     interpreterProcess = NULL;

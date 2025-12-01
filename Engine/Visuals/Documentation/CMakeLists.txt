@@ -16,8 +16,10 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Build the documentation.
-InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
-                     "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Visuals/index.html"
-                     "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-add_custom_target(${MyProjectName}.Visuals.BuildDocs ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Visuals/index.html")
-set_target_properties(${MyProjectName}.Visuals.BuildDocs PROPERTIES FOLDER "Engine")
+BeginTemplateEngine(${MyProjectName}.Visuals.BuildDocs "Engine")
+
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
+                   "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Visuals/index.html"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+
+EndTemplateEngine()

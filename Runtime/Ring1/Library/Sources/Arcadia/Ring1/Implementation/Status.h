@@ -25,9 +25,6 @@
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Success
 #define Arcadia_Status_Success (0)
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_AllocationFailed
-#define Arcadia_Status_AllocationFailed (1)
-
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_ArgumentTypeInvalid
 #define Arcadia_Status_ArgumentTypeInvalid (2)
 
@@ -111,17 +108,29 @@
 
 #define Arcadia_Status_FileNotFound (25)
 
-/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because of a stack overflow.
+
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_AllocationFailed
+#define Arcadia_Status_AllocationFailed (24+1000)
+
+/// @brief Symbolic constant for an Arcadia_Status value indicating a failure because of a stack overflow.
 /// This value is guaranteed to be a non-zero value.
-/// @remarks A stack underflow situation occurs if the application attempts to add an element to a full stack.
+/// @remarks A stack overflow situation occurs if the application attempts to add an element to a full stack.
 #define Arcadia_Status_StackOverflow (25+1000)
 
-/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because of a stack underflow.
+/// @brief Symbolic constant for an Arcadia_Status value indicating a failure because of a stack underflow.
 /// This value is guaranteed to be a non-zero value.
 /// @remarks A stack underflow situation occurs if the application attempts to remove an element from an empty stack.
 #define Arcadia_Status_StackUnderflow (26+1000)
 
+/// @brief Symbolic constant for an Arcadia_Status value indicating a failure because of a stack corruption.
+/// This valus is guaranteed to be a non-zero value.
+/// @remarks A stack corruption 
 #define Arcadia_Status_StackCorruption (27+1000)
+
+/// @brief Symbolic constant for an Arcadia_Status value indicating a failure because a value was raised.
+/// This value is guaranteed to be a non-zero value.
+#define Arcadia_Status_ValueRaised (28+1000)
 
 typedef uint32_t Arcadia_Status;
 

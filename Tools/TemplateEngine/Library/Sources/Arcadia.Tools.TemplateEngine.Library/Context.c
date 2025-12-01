@@ -20,6 +20,8 @@
 
 #include "Arcadia.Tools.TemplateEngine.Library/Library.h"
 
+#include <stdio.h> // @todo Remove references to `stdio.h`.
+
 static void
 Context_constructImpl
   (

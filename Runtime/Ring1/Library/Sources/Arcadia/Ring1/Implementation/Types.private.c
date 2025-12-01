@@ -19,8 +19,8 @@
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring1/Implementation/TypeSystem/Names.h"
 #include "Arcadia/Ring1/Implementation/Atoms.private.h" ///< @todo A better solution is required for this.
+#include <limits.h>
 #include <assert.h>
-#include <stdio.h>
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -75,7 +75,7 @@ TypeNode_finalizeCallback
 {
   if (typeNode->parentObjectType) {
     if (Arcadia_Process_unlockObject(process, typeNode->parentObjectType)) {
-      fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
     }
   }
   typeNode->typeName = NULL;
@@ -331,7 +331,7 @@ Arcadia_registerObjectType
   typeNode->parentObjectType = parentObjectType;
   if (typeNode->parentObjectType) {
     if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode->parentObjectType)) { /* @todo: Can raise due to allocation failure or lock count overflow. */
-      fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
     }
   }
   typeNode->valueSize = valueSize;
@@ -432,10 +432,7 @@ Arcadia_getType
       return typeNode;
     }
   }
-  fwrite("type `", 1, sizeof("type `") - 1, stderr);
-  fwrite(name, 1, nameLength, stderr);
-  fwrite("` not found", 1, sizeof("` not found") - 1, stderr);
-  fwrite("\n", 1, sizeof("\n") - 1, stderr);
+  Arcadia_logf(Arcadia_LogFlags_Error, "type `%.*s` not found\n", nameLength > INT_MAX ? INT_MAX : nameLength, name);
   Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeNotExists);
   Arcadia_Thread_jump(thread);
 }

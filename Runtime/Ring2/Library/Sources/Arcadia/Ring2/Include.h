@@ -30,40 +30,80 @@
 
 #include "Arcadia/Ring2/Logging/Include.h"
 
+#include "Arcadia/Ring2/Print/print.h"
+
 #include "Arcadia/Ring2/Time/Include.h"
 
 #if defined(_DEBUG)
 
-/* Dump the type of a value to the trace channel. */
+/* Diagnostics for a value stack. */
 static inline void
-Debug_dumpValueType
+Arcadia_Diagnostics_logValueStack
   (
     Arcadia_Thread* thread,
+    Arcadia_LogFlags logFlags
+  )
+{
+  Arcadia_SizeValue size = Arcadia_ValueStack_getSize(thread);
+  for (Arcadia_SizeValue index = 0; index < size; ++index) {
+    Arcadia_Value value = Arcadia_ValueStack_getValue(thread, index);
+    Arcadia_TypeValue type = Arcadia_Value_getType(thread, &value);
+    Arcadia_AtomValue typeName = Arcadia_Type_getName(type);
+    Arcadia_logf(Arcadia_LogFlags_Debug,
+                 "%zu) %.*s\n",
+                 index,
+                 Arcadia_Atom_getNumberOfBytes(thread, typeName) > INT_MAX ? INT_MAX : Arcadia_Atom_getNumberOfBytes(thread, typeName),
+                 Arcadia_Atom_getBytes(thread, typeName));
+  }
+}
+
+/* Diagnostics for a value stack element. */
+static inline void
+Arcadia_Diagnostics_logValueStackElement
+  (
+    Arcadia_Thread* thread,
+    Arcadia_LogFlags logFlags,
+    Arcadia_SizeValue index
+  )
+{
+  Arcadia_Value value = Arcadia_ValueStack_getValue(thread, index);
+  Arcadia_TypeValue type = Arcadia_Value_getType(thread, &value);
+  Arcadia_AtomValue typeName = Arcadia_Type_getName(type);
+  Arcadia_logf(logFlags,
+               "%zu) %.*s\n",
+               index,
+               Arcadia_Atom_getNumberOfBytes(thread, typeName) > INT_MAX ? INT_MAX : Arcadia_Atom_getNumberOfBytes(thread, typeName),
+               Arcadia_Atom_getBytes(thread, typeName));
+}
+
+/* Diagnostics for a value. */
+static inline void
+Arcadia_Diagnostics_logValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_LogFlags logFlags,
     Arcadia_Value value
   )
 {
   Arcadia_Type* type = Arcadia_Value_getType(thread, &value);
   Arcadia_Atom* atom = Arcadia_Type_getName(type);
-  Arcadia_logf(Arcadia_LogFlags_Debug, u8"%.*s\n", (int)Arcadia_clampSizeValue(thread, Arcadia_Atom_getNumberOfBytes(thread, atom), 0, INT_MAX),
-                                                   Arcadia_Atom_getBytes(thread, atom));
+  Arcadia_logf(logFlags, u8"%.*s\n", Arcadia_Atom_getNumberOfBytes(thread, atom) > INT_MAX ? INT_MAX : Arcadia_Atom_getNumberOfBytes(thread, atom),
+                                     Arcadia_Atom_getBytes(thread, atom));
 }
 
-#endif
-
-#if defined(_DEBUG)
-
-/* Dump the type of a value to the trace channel. */
+/* Diagnostics for an object value. */
 static inline void
-Debug_dumpObjectType
+Arcadia_Diagnostics_logObjectType
   (
     Arcadia_Thread* thread,
+    Arcadia_LogFlags logFlags,
     Arcadia_Object* object
   )
 {
   Arcadia_Type* type = Arcadia_Object_getType(thread, object);
   Arcadia_Atom* atom = Arcadia_Type_getName(type);
-  Arcadia_logf(Arcadia_LogFlags_Debug, u8"%.*s\n", (int)Arcadia_clampSizeValue(thread, Arcadia_Atom_getNumberOfBytes(thread, atom), 0, INT_MAX),
-                                                   Arcadia_Atom_getBytes(thread, atom));
+  Arcadia_logf(logFlags, u8"%.*s\n", Arcadia_Atom_getNumberOfBytes(thread, atom) > INT_MAX ? INT_MAX : Arcadia_Atom_getNumberOfBytes(thread, atom),
+                                     Arcadia_Atom_getBytes(thread, atom));
 }
 
 #endif

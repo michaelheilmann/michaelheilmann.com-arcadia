@@ -15,8 +15,6 @@
 
 #include "Arcadia.Ring1.Tests.BigIntegerTests/QuotientRemainder.h"
 
-#include <stdio.h>
-
 typedef struct Context {
   Arcadia_BigInteger* divisor;
   Arcadia_BigInteger* dividend;
@@ -37,7 +35,7 @@ Arcadia_Test_BigInteger_quotientRemainderTestFixtureNatural64
     Arcadia_Natural64Value divisor
   )
 {
-  fprintf(stdout, "dividend = %"PRIu64", divisor = %"PRIu64", quotient = %"PRIu64", remainder = %"PRIu64"\n", dividend, divisor, quotient, remainder);
+  Arcadia_logf(Arcadia_LogFlags_Trace, "dividend = %"PRIu64", divisor = %"PRIu64", quotient = %"PRIu64", remainder = %"PRIu64"\n", dividend, divisor, quotient, remainder);
 
   Arcadia_BigInteger_setNatural64(thread, context->dividend, dividend);
   Arcadia_BigInteger_setNatural64(thread, context->divisor, divisor);

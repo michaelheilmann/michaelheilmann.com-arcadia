@@ -221,7 +221,7 @@ Arcadia_DDLS_Diagnostics_unexpectedTypeError
   Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, receivedToString(thread, self, node));
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"`\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fd = Arcadia_FileHandle_create(thread, fs);
+  Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
   Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
@@ -242,7 +242,7 @@ Arcadia_DDLS_Diagnostics_mapEntryAlreadyDefined
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` was already specified");
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fd = Arcadia_FileHandle_create(thread, fs);
+  Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
   Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
@@ -263,7 +263,7 @@ Arcadia_DDLS_Diagnostics_mapEntryExistsError
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` exists but is not permitted by the type");
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fd = Arcadia_FileHandle_create(thread, fs);
+  Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
   Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
@@ -284,7 +284,7 @@ Arcadia_DDLS_Diagnostics_mapEntryNotExistsError
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` not exists but is not required by the type");
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fd = Arcadia_FileHandle_create(thread, fs);
+  Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
   Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),
@@ -305,7 +305,7 @@ Arcadia_DDLS_Diagnostics_unresolvedSchemaReferenceError
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"`");
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fd = Arcadia_FileHandle_create(thread, fs);
+  Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);
   Arcadia_FileHandle_openStandardOutput(thread, fd);
   Arcadia_SizeValue bytesWritten;
   Arcadia_FileHandle_write(thread, fd, Arcadia_StringBuffer_getBytes(thread, self->stringBuffer),

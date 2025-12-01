@@ -41,6 +41,23 @@ Arcadia_Memory_fill
 }
 
 void
+Arcadia_Memory_fillZero
+  (
+    Arcadia_Thread* thread,
+    void* p,
+    size_t n
+  )
+{
+  Arcadia_StaticAssert(UINTPTR_MAX == SIZE_MAX, "environment not (yet) supported");
+
+  if (UINTPTR_MAX - n < ((uintptr_t)p)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  memset(p, UINT8_C(0), n);
+}
+
+void
 Arcadia_Memory_copy
   (
     Arcadia_Thread* thread,
@@ -81,20 +98,19 @@ Arcadia_Memory_copy
   }
 }
 
-Arcadia_Integer8Value
+int8_t
 Arcadia_Memory_compare
   (
     Arcadia_Thread* thread,
     const void* p,
     const void* q,
-    Arcadia_SizeValue n
+    size_t n
   )
 {
-  if (!p || !q) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return memcmp(p, q, n);
+  int t = memcmp(p, q, n);
+  if (t < 0) return INT8_C(- 1);
+  else if (t > 0) return INT8_C(+1);
+  else return INT8_C(0);
 }
 
 void*
@@ -260,4 +276,44 @@ Arcadia_Memory_swap
     p0++;
     q0++;
   }
+}
+
+bool
+Arcadia_Memory_startsWith
+  (
+    Arcadia_Thread* thread,
+    void const* p,
+    size_t n,
+    void const* q,
+    size_t m
+  )
+{
+  if (0 == m) {
+    return true;
+  }
+  // If haystack is shorter than needle, then the former cannot start with the latter.
+  if (n < m) {
+    return false;
+  }
+  return !memcmp(p, q, m);
+}
+
+bool
+Arcadia_Memory_endsWith
+  (
+    Arcadia_Thread* thread,
+    void const* p,
+    size_t n,
+    void const* q,
+    size_t m
+  )
+{
+  if (0 == m) {
+    return true;
+  }
+  // If haystack is shorter than needle, then the former cannot end with the latter.
+  if (n < m) {
+    return false;
+  }
+  return !memcmp(((uint8_t const*)p) + n - m, q, m);
 }

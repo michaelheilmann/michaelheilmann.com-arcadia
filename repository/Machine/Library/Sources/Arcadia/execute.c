@@ -97,7 +97,7 @@ execute1
           Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
           Arcadia_Thread_jump(thread);
         }
-        for (Arcadia_Natural32Value i = 0, n = count; i < n; ++i) {
+        for (Arcadia_Natural32Value i = 0; i < count; ++i) {
           R_Machine_Code_IndexKind argumentIndexKind;
           Arcadia_Natural32Value argumentIndex;
           R_Interpreter_Code_decodeIndex(thread, currentCallState->procedure->code, &currentCallState->instructionIndex, &argumentIndexKind, &argumentIndex);
@@ -107,6 +107,10 @@ execute1
             Arcadia_ValueStack_pushValue(thread, R_Interpreter_ThreadState_getRegisterAt(interpreterThread, argumentIndex));
           }
         }
+        // Reverse the arguments.
+        //Arcadia_Diagnostics_logValueStack(thread, Arcadia_LogFlags_Trace);
+        Arcadia_ValueStack_reverse(thread, 0, count);
+        //Arcadia_Diagnostics_logValueStack(thread, Arcadia_LogFlags_Trace);
         Arcadia_ValueStack_pushNatural8Value(thread, count);
         if (Arcadia_Value_isForeignProcedureValue(&calleeValue)) {
           Arcadia_ForeignProcedureValue foreignProcedureValue = Arcadia_Value_getForeignProcedureValue(&calleeValue);

@@ -224,9 +224,9 @@ Arcadia_Process_relinquish
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: value stack is not empty\n", __FILE__, __LINE__);
       process->thread.stack.size = 0;
     }
-    if (!Arcadia_Value_isVoidValue(&process->thread.raised)) {
+    if (!Arcadia_Value_isVoidValue(&process->thread.raisedValue)) {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: exception is not empty\n", __FILE__, __LINE__);
-      process->thread.raised = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+      process->thread.raisedValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
     }
     Arcadia_Process_runArms(process, true);
     shutdownModules(process);

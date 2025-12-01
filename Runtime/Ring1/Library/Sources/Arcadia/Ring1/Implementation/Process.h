@@ -131,6 +131,9 @@ typedef void (Arcadia_Process_PreMarkCallback)(Arcadia_Thread* thread, bool purg
 typedef void (Arcadia_Process_VisitCallback)(Arcadia_Thread* thread);
 typedef void (Arcadia_Process_FinalizeCallback)(Arcadia_Thread* thread, size_t* destroyed);
 
+/// @brief Add a premark callback to the list of premark callbacks.
+/// @param process A pointer to the process.
+/// @param callback A pointer to the premark callback.
 void
 Arcadia_Process_addArmsPreMarkCallback
   (
@@ -138,6 +141,10 @@ Arcadia_Process_addArmsPreMarkCallback
     Arcadia_Process_PreMarkCallback* callback
   );
 
+/// @brief Remove a premark callback from the list of premark callbacks.
+/// @param process A pointer to the process.
+/// @param callback A pointer to the premark callback.
+/// @remark One occurrence of the callback in the list of premark callbacks was removed.
 void
 Arcadia_Process_removeArmsPreMarkCallback
   (
@@ -145,6 +152,9 @@ Arcadia_Process_removeArmsPreMarkCallback
     Arcadia_Process_PreMarkCallback* callback
   );
 
+/// @brief Add a visit callback to the list of visit callbacks.
+/// @param process A pointer to the process.
+/// @param callback A pointer to the visit callback.
 void
 Arcadia_Process_addArmsVisitCallback
   (
@@ -152,6 +162,10 @@ Arcadia_Process_addArmsVisitCallback
     Arcadia_Process_VisitCallback* callback
   );
 
+/// @brief Remove a visit callback from the list of visit callbacks.
+/// @param process A pointer to the process.
+/// @param callback A pointer to the visit callback.
+/// @remark One occurrence of the callback in the list of visit callbacks was removed.
 void
 Arcadia_Process_removeArmsVisitCallback
   (
@@ -159,6 +173,9 @@ Arcadia_Process_removeArmsVisitCallback
     Arcadia_Process_VisitCallback* callback
   );
 
+/// @brief Add a finalize callback to the list of finalize callbacks.
+/// @param process A pointer to the process.
+/// @param callback A pointer to the finalize callback.
 void
 Arcadia_Process_addArmsFinalizeCallback
   (
@@ -166,6 +183,10 @@ Arcadia_Process_addArmsFinalizeCallback
     Arcadia_Process_FinalizeCallback* callback
   );
 
+/// @brief Remove a finalize callback from the list of finalize callbacks.
+/// @param process A pointer to the process.
+/// @param callback A pointer to the finalize callback.
+/// @remark One occurrence of the callback in the list of finalize callbacks was removed.
 void
 Arcadia_Process_removeArmsFinalizeCallback
   (

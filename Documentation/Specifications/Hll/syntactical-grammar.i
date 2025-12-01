@@ -91,8 +91,8 @@
   <my-rhs>
   methodDeclaration
   </my-rhs><br/>
-                
-             
+
+
 <my-lhs>typeList</my-lhs>
   <my-rhs>
   type (<b>comma</b> type)*
@@ -100,8 +100,8 @@
 <my-lhs>type</my-lhs>
   <my-rhs>
   qualifiedName
-  </my-rhs>       
-                                                                            
+  </my-rhs>
+
 </code></p>
 
 <h3>Class-, enumeration-, and interface-level syntax</h3>
@@ -112,14 +112,14 @@
 
 <my-lhs>methodDeclaration:</my-lhs><my-rhs><b>method</b> methodModifiers name parameterList type callableBody</my-rhs><br/>
 
-<my-lhs>parameterList:</my-lhs><my-rhs><b>leftParenthesis</b>(parameter (<b>comma</b> parameter)*)?<b>rightParenthesis</b></my-rhs><br/> 
+<my-lhs>parameterList:</my-lhs><my-rhs><b>leftParenthesis</b>(parameter (<b>comma</b> parameter)*)?<b>rightParenthesis</b></my-rhs><br/>
 <my-lhs>parameter:</my-lhs><my-rhs>name type</my-rhs>
-<my-lhs>callableBody:</my-lhs><my-rhs><b>is</b> statementList <b>end</b></my-rhs>                                                                           
+<my-lhs>callableBody:</my-lhs><my-rhs><b>is</b> statementList <b>end</b></my-rhs>
 </code></p>
 
 <h3>Statement-level syntax</h3>
 
 <p><code style="font-family:monospace">
 <my-lhs>statementList:</my-lhs><my-rhs>statement*</my-rhs><br/>
-<my-lhs>statement:</my-lhs><my-rhs>expressions</my-rhs><br/>                                                                       
+<my-lhs>statement:</my-lhs><my-rhs>expressions</my-rhs><br/>
 </code></p>

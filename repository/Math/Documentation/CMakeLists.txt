@@ -16,8 +16,10 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Build the documentation.
-InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
-                     "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Math/index.html"
-                     "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-add_custom_target(${MyProjectName}.Math.BuildDocs ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Math/index.html")
-set_target_properties(${MyProjectName}.Math.BuildDocs PROPERTIES FOLDER "Math")
+BeginTemplateEngine(${MyProjectName}.Math.BuildDocs "Math")
+
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
+                   "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Math/index.html"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+
+EndTemplateEngine()

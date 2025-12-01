@@ -16,8 +16,10 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Build the documentation.
-InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
-                     "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/TemplateEngine/index.html"
-                     "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-add_custom_target(${MyProjectName}.Tools.TemplateEngine.BuildDocs ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/TemplateEngine/index.html")
-set_target_properties(${MyProjectName}.Tools.TemplateEngine.BuildDocs PROPERTIES FOLDER "Tools/TemplateEngine")
+BeginTemplateEngine(${MyProjectName}.Tools.TemplateEngine.BuildDocs "Tools/TemplateEngine")
+
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
+                   "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/TemplateEngine/index.html"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+
+EndTemplateEngine()

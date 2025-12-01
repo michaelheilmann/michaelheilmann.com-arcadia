@@ -21,7 +21,8 @@ static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
 };
 
-Arcadia_defineEnumerationType(u8"Arcadia.Imaging.PixelFormat", Arcadia_Imaging_PixelFormat, &_typeOperations);
+Arcadia_defineEnumerationType(u8"Arcadia.Imaging.PixelFormat", Arcadia_Imaging_PixelFormat,
+                              &_typeOperations);
 
 Arcadia_SizeValue
 Arcadia_Imaging_PixelFormat_getNumberOfBytes

@@ -57,6 +57,57 @@ isEqualOrEnd
   return '=' == Arcadia_UTF8Reader_getCodePoint(thread, reader);
 }
 
+static Arcadia_BooleanValue
+isDigit
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8Reader* reader
+  )
+{ 
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
+    return Arcadia_BooleanValue_False;
+  }
+  Arcadia_Natural32Value codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
+  return '0' <= codePoint && codePoint <= '9';
+}
+
+static Arcadia_String*
+parseInteger
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8Reader* reader,
+    Arcadia_UTF8Writer* writer,
+    Arcadia_ByteBuffer* writerByteBuffer
+  )
+{
+  Arcadia_Natural32Value codePoint;
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
+    return NULL;
+  }
+  // ('+'|'-')?
+  codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
+  if (codePoint == '+' || codePoint == '-') {
+    Arcadia_UTF8Reader_next(thread, reader);
+    Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+  }
+  // digit+
+  if (!isDigit(thread, reader)) {
+    return NULL;
+  }
+  codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
+  do {
+    codePoint = Arcadia_UTF8Reader_getCodePoint(thread, reader);
+    Arcadia_UTF8Reader_next(thread, reader);
+    Arcadia_UTF8Writer_writeCodePoints(thread, writer, &codePoint, 1);
+  } while (isDigit(thread, reader));
+
+  Arcadia_Value temporaryValue;
+  Arcadia_Value_setObjectReferenceValue(&temporaryValue, (Arcadia_ObjectReferenceValue)writerByteBuffer);
+  Arcadia_String* resultString = Arcadia_String_create(thread, temporaryValue);
+
+  return resultString;
+}
+
 static Arcadia_String*
 parseString
   (
@@ -191,7 +242,14 @@ Arcadia_CommandLine_parseArgument
     return Arcadia_BooleanValue_False;
   }
   Arcadia_UTF8Reader_next(thread, reader);
-  value1 = parseString(thread, reader, writer, writerByteBuffer);
+  if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
+    return Arcadia_BooleanValue_False;
+  }
+  if ('"' == Arcadia_UTF8Reader_getCodePoint(thread, reader)) {
+    value1 = parseString(thread, reader, writer, writerByteBuffer);
+  } else {
+    value1 = parseInteger(thread, reader, writer, writerByteBuffer);
+  }
   if (!value1) {
     return Arcadia_BooleanValue_False;
   }
@@ -227,7 +285,7 @@ Arcadia_CommandLine_raiseRequiredArgumentMissingError
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` not specified\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
   Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
 
@@ -249,7 +307,7 @@ Arcadia_CommandLine_raiseUnknownArgumentError
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"`\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
   Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
 
@@ -271,7 +329,7 @@ Arcadia_CommandLine_raiseNoValueError
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"`\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
   Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
 
@@ -294,7 +352,7 @@ Arcadia_CommandLine_raiseValueInvalidError
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` is not valid\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
   Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
 
@@ -316,7 +374,7 @@ Arcadia_CommandLine_raiseAlreadySpecifiedError
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"` was already specified\n");
 
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
   Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, stringBuffer);
 

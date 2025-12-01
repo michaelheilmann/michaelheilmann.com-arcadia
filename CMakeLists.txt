@@ -21,7 +21,7 @@ if (NOT MyProjectIsDefined)
   endif()
   project(${MyProjectName})
   set(REPOSITORY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/repository)
-  include(${REPOSITORY_SOURCE_DIR}/cmake/all.cmake)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/all.cmake)
 endif()
 
 add_subdirectory(Runtime/ARMS)

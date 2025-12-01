@@ -25,6 +25,8 @@ include(${CMAKE_CURRENT_LIST_DIR}/detect_compiler.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_byte_order.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_instruction_set_architecture.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/detect_operating_system.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/tool-file-copy.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/tools-template-engine.cmake)
 
 enable_testing()
 
@@ -44,16 +46,19 @@ if (CMAKE_ASM_MASM_COMPILER)
 endif()
 
 # Begin a product (library, executable, or test).
-# The following variables are defined
-# - ${target}.SourceFiles      List of C/C++ source files
-# - ${target}.HeaderFiles      List of C/C++ header files
-# - ${target}.AssetFiles       List of asset files
-# - ${target}.InlayFiles       List of inlay files
-# - ${target}.WorkingDirectory for tests and executables only: the working directory. Defaults to ${CMAKE_CURRENT_BINARY_DIR}.
-# - ${target}.Libaries         List of libraries
-# - ${target}.PrivateLibaries  List of libraries only visible from within ${target}
-# - ${target}.Enabled          TRUE if the product should be built. FALSE otherwise. Defaults to TRUE.
-#   The files are all copied (without their folder) to the binary output directories.
+#
+# - if ${type} is `library`, `executable`, or `test`:
+#   The following variables are defined
+#   - ${target}.SourceFiles      List of C/C++ source files. Initially defined but empty
+#   - ${target}.HeaderFiles      List of C/C++ header files. Initially defined but empty
+#   - ${target}.AssetFiles       List of asset files. Initially defined but empty
+#   - ${target}.InlayFiles       List of inlay files. Initially defined but empty
+#   - ${target}.WorkingDirectory for tests and executables only: the working directory. Defaults to ${CMAKE_CURRENT_BINARY_DIR}.
+#   - ${target}.Libaries         List of libraries. Initially defined but empty
+#   - ${target}.PrivateLibaries  List of libraries only visible from within ${target}. Initially defined but empty
+#   - ${target}.Enabled          TRUE if the product should be built. FALSE otherwise. Defaults to TRUE.
+#
+# - if ${type} is `template`   
 macro(BeginProduct target type)
   set(${target}.SourceFiles "")
   set(${target}.HeaderFiles "")
@@ -71,6 +76,8 @@ macro(BeginProduct target type)
   DetectByteOrder(${target})
   DetectOperatingSystem(${target})
   DetectInstructionSetArchitecture(${target})
+  
+  BeginFileCopy(${target})
 
   # Store the product type.
   set(${target}.Type ${type})
@@ -195,17 +202,19 @@ macro(EndProduct target)
                                 PROPERTIES
                                 COMPILE_FLAGS "/safeseh")
   endif()
+  
+  EndFileCopy()
 
 endmacro()
 
 macro(FetchProduct target directory help)
   if (NOT TARGET ${target})
-      set(__${target}.SourceDir "${directory}" CACHE STRING ${help})
-      get_filename_component(__${target}.SourceDir "${__${target}.SourceDir}"
-                              REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-      #message(STATUS "fetching ${__${target}.SourceDir}")
-      FetchContent_Declare(__${target} SOURCE_DIR ${__${target}.SourceDir})
-      FetchContent_MakeAvailable(__${target})
+    set(__${target}.SourceDir "${directory}" CACHE STRING ${help})
+    get_filename_component(__${target}.SourceDir "${__${target}.SourceDir}"
+                           REALPATH BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+    #message(STATUS "fetching ${__${target}.SourceDir}")
+    FetchContent_Declare(__${target} SOURCE_DIR ${__${target}.SourceDir})
+    FetchContent_MakeAvailable(__${target})
   endif()
 endmacro()
 
@@ -213,22 +222,8 @@ endmacro()
 # @param sourceFile the source file.
 # @param targetFile the target file. to which the target file is a dependency
 macro(MyCopyFile target sourceFile targetFile)
-  string(RANDOM LENGTH 64 result)
-  string(UUID uuid NAMESPACE "15340915-a7be-4950-9d26-b789c0eaf106" NAME ${result} TYPE SHA1)
-
-  message(STATUS "[1] sourceFile = ${sourceFile}, targetFile = ${targetFile}")
-  get_filename_component(targetFileDirectory ${targetFile} DIRECTORY)
-  message(STATUS "[2] targetFileDirectory = ${targetFileDirectory}")
-  add_custom_command(OUTPUT ${targetFile}
-                     COMMAND ${CMAKE_COMMAND} -E make_directory ${targetFileDirectory}
-                     COMMAND ${CMAKE_COMMAND} -E copy ${sourceFile} ${targetFile}
-                     COMMAND ${CMAKE_COMMAND} -E touch ${targetFile}
-                     DEPENDS ${sourceFile}
-                     VERBATIM
-                     COMMENT "copy file `${sourceFile}` to `${targetFile}`")
-  add_custom_target(${uuid} DEPENDS ${targetFile})
-  # Add the target file as a dependency. 
-  add_dependencies(${target} ${uuid})
+  list(APPEND ${target}.copyFiles.sources ${sourceFile})
+  list(APPEND ${target}.copyFiles.targets ${targetFile})
 endmacro()
 
 macro(CopyProductAssets target folder sourceDirectory targetDirectory)
@@ -256,30 +251,22 @@ macro(CopyProductAssets target folder sourceDirectory targetDirectory)
 
 endmacro()
 
-macro(BeginTemplateEngine target folder sourceFile targetFile environmentFile)
-  add_custom_command(OUTPUT ${targetFile}
-                     COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}"
-                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                     VERBATIM
-                     COMMENT "${sourceFile} / ${environmentFile} => ${targetFile}"
-                     DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})
-  add_custom_target(${target} ALL DEPENDS ${targetFile})
+# Can be used between `BeginProduct` and `EndProduct`.
+macro(OnConfigurationFile target file)
+  list(APPEND ${target}.ConfigurationFiles ${file})
 endmacro()
 
-macro(EndTemplateEngine target)
-  if (${target}.folder)
-    set_target_properties(${target} PROPERTIES FOLDER ${${target}.folder})
-  endif()
+# Can be used between `BeginProduct` and `EndProduct`.
+macro(OnConfigurationTemplateFile target file)
+  list(APPEND ${target}.ConfigurationTemplateFiles ${file})
 endmacro()
 
-# sourceFile The source file.
-# targetFile The target file.
-# environmentFile The environment file.
-macro(InvokeTemplateEngine sourceFile targetFile environmentFile)
-  add_custom_command(OUTPUT ${targetFile}
-                     COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}"
-                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                     VERBATIM
-                     COMMENT "${sourceFile} / ${environmentFile} => ${targetFile}"
-                     DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})
+# Can be used between `BeginProduct` and `EndProduct`.
+macro(OnSourceFile target file)
+  list(APPEND ${target}.SourceFiles ${file})
+endmacro()
+
+# Can be used between `BeginProduct` and `EndProduct`.
+macro(OnHeaderFile target file)
+  list(APPEND ${target}.SourceFiles ${file})
 endmacro()

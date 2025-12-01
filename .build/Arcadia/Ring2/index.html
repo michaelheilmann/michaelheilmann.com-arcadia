@@ -1691,103 +1691,215 @@ The enumeration elements can be combined.
 <p><code>Arcadia_FileSystem</code> provides access to the file system.</p>
 </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_FileSystem_create">Arcadia_FileSystem_create</h1>
+  <h1 id="Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</h1>
 
-  <my-signature><code>
-  Arcadia_FileSystem*<br>
-  Arcadia_FileSystem_create<br>
+  <my-summary><code>
+  Arcadia_DirectoryIterator*br>
+  Arcadia_FileSystem_createDirectoryIterator<br>
   &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
   &nbsp;&nbsp;)
-  </code></my-signature>
+  </code></my-summary>
 
   <my-summary>
-  Create a file system.
+  Create a directory iterator.
   </my-summary>
 
-  <section clas="cxx parameters">
+  <section class="cxx parameters">
     <h1>Parameters</h1>
     <div>
       <div><a href="#">Arcadia_Thread</a>* thread</div>
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
     <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FilePath</a>* self</div>
+      <div>A pointer to the path of the directory to search in.</div>
     </div>
   </section>
 
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
-    A pointer to a <code>Arcadia_FileSystem</code> object.
+    A pointer to the directory iterator.
     </p>
-  </section>
-
-  <section class="cxx remarks">
-    <h1>Remarks</h1>
-    <p>
-    Do not call this function.
-    Call <code>Arcadia_FileSystem_getOrCreate</code> instead.
-    </p>
-  </section>
-
-
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_FileSystem_getOrCreate">Arcadia_FileSystem_getOrCreate</h1>
-
-  <my-signature><code>
-  Arcadia_FileSystem*<br>
-  Arcadia_FileSystem_getOrCreate<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get or create the file system singleton.
-  </my-summary>
-
-  <section clas="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
   </section>
 
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
-      <div>Arcadia_Status_AllocationFailed</div>
-      <div>An allocation failed.</div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_createFileHandle">Arcadia_FileSystem_createFileHandle</h1>
+
+  <my-summary><code>
+  Arcadia_FileHandle*<br>
+  Arcadia_FileSystem_createFileHandle<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Create a file handle.
+  The file handle is in closed state.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
     </div>
   </section>
 
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
-    A pointer to a <code>Arcadia_FileSystem</code> object.
+    A pointer to the file handle.
     </p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
   </section>
 
 </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</h1>
+
+  <my-summary><code>
+  Arcadia_BooleanValue<br>
+  Arcadia_FileSystem_directoryFileExists<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Get if a file exists and is a directory file.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The file path of the file.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    <code>Arcadia_BooleanValue_True</code> if the file exists and is a directory file.
+    <code>Arcadia_BooleanValue_False</code> otherwise.
+    </p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_getConfigurationFolder">Arcadia_FileSystem_getConfigurationFolder</h1>
+
+  <my-summary><code>
+  Arcadia_FilePath*<br>
+  Arcadia_FileSystem_getConfigurationFolder<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Get the path to the "configuration" folder.
+  Get the folder in which configuration files are stored.
+  The following table lists the values for a given operating system
+  <ul>
+    <li>Windows: <code>C:\Users\&lt;Username&gt;\AppData\Local\&lt;Organization Name&gt;\&lt;Game Name&gt;</code></li>
+    <li>Linux: <code>&lt;Home&gt;\&lt;Organization Name&gt;\&lt;Game Name&gt;</code></li>
+  </ul>
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    A pointer to the the path of the "configuration" folder.
+    </p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
 
 <section class="cxx entity method">
 
@@ -1848,25 +1960,68 @@ The enumeration elements can be combined.
 
 </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</h1>
+  <h1 id="Arcadia_FileSystem_getOrCreate">Arcadia_FileSystem_getOrCreate</h1>
 
   <my-signature><code>
-  void<br>
-  Arcadia_FileSystem_setFileContents<br>
+  Arcadia_FileSystem*<br>
+  Arcadia_FileSystem_getOrCreate<br>
   &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* contents<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
   <my-summary>
-  Get if a sequence of Bytes is a prefix of this string's sequence of Bytes.
+  Get or create the file system singleton.
+  </my-summary>
+
+  <section clas="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_AllocationFailed</div>
+      <div>An allocation failed.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    A pointer to a <code>Arcadia_FileSystem</code> object.
+    </p>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</h1>
+
+  <my-summary><code>
+  Arcadia_FilePath*<br>
+  Arcadia_FileSystem_getSaveFolder<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Get the path to the "save" folder.
+  Get the folder in which save files are stored.
+  The following table lists the values for a given operating system
+  <ul>
+    <li>Windows: <code>C:\Users\&lt;Username&gt;\AppData\Roaming\&lt;Organization Name&gt;\&lt;Game Name&gt;</code></li>
+    <li>Linux: <code>&lt;Home&gt;\&lt;Organization Name&gt;\&lt;Game Name&gt;</code></li>
+  </ul>
   </my-summary>
 
   <section class="cxx parameters">
@@ -1879,39 +2034,70 @@ The enumeration elements can be combined.
       <div><a href="#">Arcadia_FileSystem</a>* self</div>
       <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
     </div>
-    <div>
-      <div>Arcadia_FilePath* path</div>
-      <div>The file path of the file.</div>
-    </div>
-    <div>
-      <div>Arcadia_ByteBuffer* contents</div>
-      <div>A poiner to the Byte buffer with the file contents.</div>
-    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    A pointer to the the path of the "save" folder.
+    </p>
   </section>
 
   <section class="cxx errors">
     <h1>Errors</h1>
     <div>
       <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>sekf</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>path</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>contents</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_FileSystemOperationFailed</div>
-      <div>Opening the file failed.</div>
+      <div><code>self</code> is a null pointer.</div>
     </div>
   </section>
 
 </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_getWorkingDirectory">Arcadia_FileSystem_getWorkingDirectory</h1>
+
+  <my-summary><code>
+  Arcadia_FilePath*<br>
+  Arcadia_FileSystem_getWorkingDirectory<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Get the working directory of this process.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+  </section>
+
+  <section class="cxx return-value">
+    <h1>Return value</h1>
+    <p>
+    A pointer to the file path.
+    </p>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+  </section>
+
+</section>
 
 <section class="cxx entity method">
 
@@ -1920,7 +2106,7 @@ The enumeration elements can be combined.
   <my-signature><code>
   Arcadia_BooleanValue<br>
   Arcadia_FileSystem_regularFileExists<br>
-  &nbsp;&nbsp;(
+  &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
@@ -1965,24 +2151,25 @@ The enumeration elements can be combined.
       <div>Arcadia_Status_ArgumentValueInvalid</td><td><code>path</code> is a null pointer.</td></tr>
   </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+</section>
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</h1>
+  <h1 id="Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</h1>
 
-  <my-summary><code>
-  Arcadia_BooleanValue<br>
-  Arcadia_FileSystem_directoryFileExists<br>
+  <my-signature><code>
+  void<br>
+  Arcadia_FileSystem_setFileContents<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_ByteBuffer* contents<br>
   &nbsp;&nbsp;)
-  </code></my-summary>
+  </code></my-signature>
 
   <my-summary>
-  Get if a file exists and is a directory file.
+  Set the contents of a file.
   </my-summary>
 
   <section class="cxx parameters">
@@ -1999,14 +2186,10 @@ The enumeration elements can be combined.
       <div>Arcadia_FilePath* path</div>
       <div>The file path of the file.</div>
     </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    <code>Arcadia_BooleanValue_True</code> if the file exists and is a directory file.
-    <code>Arcadia_BooleanValue_False</code> otherwise.
-    </p>
+    <div>
+      <div>Arcadia_ByteBuffer* contents</div>
+      <div>A poiner to the Byte buffer with the file contents.</div>
+    </div>
   </section>
 
   <section class="cxx errors">
@@ -2019,333 +2202,18 @@ The enumeration elements can be combined.
       <div>Arcadia_Status_ArgumentValueInvalid</div>
       <div><code>path</code> is a null pointer.</div>
     </div>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_FileSystem_getWorkingDirectory">Arcadia_FileSystem_getWorkingDirectory</h1>
-
-  <my-summary><code>
-  Arcadia_FilePath*br>
-  Arcadia_FileSystem_getWorkingDirectory<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
-  &nbsp;&nbsp;)
-  </code></my-summary>
-
-  <my-summary>
-  Get the working directory of this process.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div><a href="#">Arcadia_FileSystem</a>* self</div>
-      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    A pointer to the file path.
-    </p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
     <div>
       <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
+      <div><code>contents</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_FileSystemOperationFailed</div>
+      <div>Opening the file failed.</div>
     </div>
   </section>
 
 </section>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</h1>
-
-  <my-summary><code>
-  Arcadia_DirectoryIterator*br>
-  Arcadia_FileSystem_createDirectoryIterator<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
-  &nbsp;&nbsp;)
-  </code></my-summary>
-
-  <my-summary>
-  Create a directory iterator.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div><a href="#">Arcadia_FileSystem</a>* self</div>
-      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
-    </div>
-    <div>
-      <div><a href="#">Arcadia_FilePath</a>* self</div>
-      <div>A pointer to the path of the directory to search in.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    A pointer to the directory iterator.
-    </p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>path</code> is a null pointer.</div>
-    </div>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</h1>
-
-  <my-summary><code>
-  Arcadia_DirectoryIterator*br>
-  Arcadia_FileSystem_createDirectoryIterator<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
-  &nbsp;&nbsp;)
-  </code></my-summary>
-
-  <my-summary>
-  Create a directory iterator.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div><a href="#">Arcadia_FileSystem</a>* self</div>
-      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
-    </div>
-    <div>
-      <div><a href="#">Arcadia_FilePath</a>* self</div>
-      <div>A pointer to the path of the directory to search in.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    A pointer to the directory iterator.
-    </p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>path</code> is a null pointer.</div>
-    </div>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</h1>
-
-  <my-summary><code>
-  Arcadia_FilePath*br>
-  Arcadia_FileSystem_getSaveFolder<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
-  &nbsp;&nbsp;)
-  </code></my-summary>
-
-  <my-summary>
-  Get the path to the "save" folder.
-  Get the folder in which save files are stored.
-  The following table lists the values for a given operating system
-  <ul>
-    <li>Windows: <code>C:\Users\&lt;Username&gt;\AppData\Roaming\&lt;Organization Name&gt;\&lt;Game Name&gt;</li>
-    <li>Linux: <code>&lt;Home&gt;\&lt;Organization Name&gt;\&lt;Game Name&gt;</li>
-  </ul>
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div><a href="#">Arcadia_FileSystem</a>* self</div>
-      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    A pointer to the the path of the "save" folder.
-    </p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</h1>
-
-  <my-summary><code>
-  Arcadia_FilePath*br>
-  Arcadia_FileSystem_getSaveFolder<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
-  &nbsp;&nbsp;)
-  </code></my-summary>
-
-  <my-summary>
-  Get the path to the "save" folder.
-  Get the folder in which save files are stored.
-  The following table lists the values for a given operating system
-  <ul>
-    <li>Windows: <code>C:\Users\&lt;Username&gt;\AppData\Roaming\&lt;Organization Name&gt;\&lt;Game Name&gt;</li>
-    <li>Linux: <code>&lt;Home&gt;\&lt;Organization Name&gt;\&lt;Game Name&gt;</li>
-  </ul>
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div><a href="#">Arcadia_FileSystem</a>* self</div>
-      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    A pointer to the the path of the "save" folder.
-    </p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_FileSystem_getConfigurationFolder">Arcadia_FileSystem_getConfigurationFolder</h1>
-
-  <my-summary><code>
-  Arcadia_FilePath*br>
-  Arcadia_FileSystem_getConfigurationFolder<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
-  &nbsp;&nbsp;)
-  </code></my-summary>
-
-  <my-summary>
-  Get the path to the "configuration" folder.
-  Get the folder in which configuration files are stored.
-  The following table lists the values for a given operating system
-  <ul>
-    <li>Windows: <code>C:\Users\&lt;Username&gt;\AppData\Local\&lt;Organization Name&gt;\&lt;Game Name&gt;</li>
-    <li>Linux: <code>&lt;Home&gt;\&lt;Organization Name&gt;\&lt;Game Name&gt;</li>
-  </ul>
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div><a href="#">Arcadia_FileSystem</a>* self</div>
-      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>
-    A pointer to the the path of the "configuration" folder.
-    </p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-  </section>
-
-</section>
 
 <section class="cxx entity enumeration">
 <h1 id="Arcadia_FileType">Arcadia_FileType</h1>
@@ -5618,15 +5486,17 @@ The enumeration elements cannot be combined.
 
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FilePath">Arcadia_FilePath</a></li>
 
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSysten_getOrCreate">Arcadia_FileSystem_getOrCreate</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_regularFileExists">Arcadia_FileSystem_regularFileExists</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getConfigurationFolder">Arcadia_FileSystem_getConfigurationFolder</a></li>
+        
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createFileHandle">Arcadia_FileSystem_createFileHandle</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSysten_getOrCreate">Arcadia_FileSystem_getOrCreate</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_regularFileExists">Arcadia_FileSystem_regularFileExists</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getConfigurationFolder">Arcadia_FileSystem_getConfigurationFolder</a></li>
 
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileType">Arcadia_FileType</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_NonExistingFilePolicy">Arcadia_NonExistingFilePolicy</a></li>
@@ -5705,7 +5575,7 @@ The enumeration elements cannot be combined.
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 1 December 2025.</div>
+      <div>Last modified on 2 December 2025.</div>
     </div>
   </footer>
   </body>

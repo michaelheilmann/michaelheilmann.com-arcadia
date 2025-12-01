@@ -14,10 +14,6 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include <stdlib.h>
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "Arcadia/Ring1/Include.h"
 
 static void

@@ -90,7 +90,7 @@ Arcadia_FileLog_constructImpl
     Arcadia_Thread_jump(thread);
   }
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  self->fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  self->fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, self->fileHandle);
   ((Arcadia_Log*)self)->error = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*))&Arcadia_FileLog_errorImpl;
   ((Arcadia_Log*)self)->info = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*))&Arcadia_FileLog_infoImpl;

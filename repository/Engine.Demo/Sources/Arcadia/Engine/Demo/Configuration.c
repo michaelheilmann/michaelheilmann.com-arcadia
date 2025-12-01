@@ -391,12 +391,12 @@ Cfg_saveConfiguration
 
   // (1) Ensure the organization's configuration folder exists.
   Arcadia_FilePath* file = Arcadia_FileSystem_getConfigurationFolder(thread, fileSystem);
-  Arcadia_FileSystem_createDirectory(thread, fileSystem, file);
+  Arcadia_FileSystem_createDirectoryFile(thread, fileSystem, file);
 
   // (2) Ensure the product's configuration folder exists.
   file = Arcadia_FilePath_clone(thread, file);
   Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, u8"Demo", sizeof(u8"Demo") - 1));
-  Arcadia_FileSystem_createDirectory(thread, fileSystem, file);
+  Arcadia_FileSystem_createDirectoryFile(thread, fileSystem, file);
 
   // (3) Create/update configuration file.
   file = Arcadia_FilePath_clone(thread, file);
@@ -420,12 +420,12 @@ Cfg_loadConfiguration
 
   // (1) Ensure the organization's configuration folder exists.
   file = Arcadia_FileSystem_getConfigurationFolder(thread, fileSystem);
-  Arcadia_FileSystem_createDirectory(thread, fileSystem, file);
+  Arcadia_FileSystem_createDirectoryFile(thread, fileSystem, file);
 
   // (2) Ensure the product's configuration folder exists.
   file = Arcadia_FilePath_clone(thread, file);
   Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, u8"Demo", sizeof(u8"Demo") - 1));
-  Arcadia_FileSystem_createDirectory(thread, fileSystem, file);
+  Arcadia_FileSystem_createDirectoryFile(thread, fileSystem, file);
 
   // (3) Ensure the product's configuration file exists.
   file = Arcadia_FilePath_clone(thread, file);

@@ -33,7 +33,7 @@ main1
   }
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileHandle_create(thread, fileSystem);
+  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   for (int argi = 1; argi < argc - 1; ++argi) {
     Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, argv[argi], strlen(argv[argi]))));
     Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, filePathString);

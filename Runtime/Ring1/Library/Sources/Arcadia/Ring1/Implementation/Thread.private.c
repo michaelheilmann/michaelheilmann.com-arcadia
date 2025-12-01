@@ -54,7 +54,7 @@ Arcadia_Thread_initialize
   thread->process = NULL;
   thread->status = Arcadia_Status_Success;
   thread->jumpTarget = NULL;
-  thread->raised = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+  thread->raisedValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
   Arcadia_Thread_initializeValueStack(thread);
 }
 
@@ -64,7 +64,7 @@ Arcadia_Thread_uninitialize
     Arcadia_Thread* thread
   )
 {
-  thread->raised = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+  thread->raisedValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
   Arcadia_Thread_uninitializeValueStack(thread);
   thread->jumpTarget = NULL;
   thread->status = Arcadia_Status_Success;

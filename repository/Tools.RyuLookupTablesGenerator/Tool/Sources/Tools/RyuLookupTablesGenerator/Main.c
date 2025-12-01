@@ -13,6 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+#include <stdio.h> // @todo Remove references to `stdio.h`.
 #include <stdlib.h>
 #include <string.h>
 #include "Arcadia/Ring1/Include.h"

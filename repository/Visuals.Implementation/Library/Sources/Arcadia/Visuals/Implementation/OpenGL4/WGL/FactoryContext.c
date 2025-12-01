@@ -15,6 +15,8 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryContext.h"
 
+#include <stdio.h> // @todo Remove references to `stdio.h`.
+
 // Pass the names (from left to right) to wglGetProcAddress.
 // Stop if wglGetProcAddress finds a function of a name and return the function.
 // If wglGetProcess does not find a function for any of the names return null.

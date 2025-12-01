@@ -13,36 +13,26 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_RING2_IMPLEMENTATION_FILESYSTEM_DIRECTORYITERATORLINUX_H_INCLUDED)
-#define ARCADIA_RING2_IMPLEMENTATION_FILESYSTEM_DIRECTORYITERATORLINUX_H_INCLUDED
+#if !defined(ARCADIA_RING2_FILESYSTEM_WINDOWS_GETROAMINGFOLDER_H_INCLUDED)
+#define ARCADIA_RING2_FILESYSTEM_WINDOWS_GETROAMINGFOLDER_H_INCLUDED
 
 #if !defined(ARCADIA_RING2_PRIVATE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 
-#include "Arcadia/Ring2/FileSystem/DirectoryIterator.h"
+#include "Arcadia/Ring2/Include.h"
+typedef struct Arcadia_DefaultFileSystem Arcadia_DefaultFileSystem;
 
-#if (Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Macos)
-	#include <sys/types.h>
-	#include <sys/dir.h>
-#else
-	#include <dirent.h>
-#endif
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
 
-Arcadia_declareObjectType(u8"Arcadia.DirectoryIteratorLinux", Arcadia_DirectoryIteratorLinux,
-                          u8"Arcadia.DirectoryIterator");
-
-struct Arcadia_DirectoryIteratorLinux {
-  Arcadia_DirectoryIterator _parent;
-  DIR *dir;
-  struct dirent *dirent;
-};
-
-Arcadia_DirectoryIteratorLinux*
-Arcadia_DirectoryIteratorLinux_create
+Arcadia_FilePath*
+Arcadia_DefaultFileSystem_getRoamingFolderHelper
   (
     Arcadia_Thread* thread,
-    Arcadia_FilePath* path
+    Arcadia_DefaultFileSystem* self
   );
 
-#endif // ARCADIA_RING2_IMPLEMENTATION_FILESYSTEM_DIRECTORYITERATORLINUX_H_INCLUDED
+#endif
+
+
+#endif // ARCADIA_RING2_FILESYSTEM_WINDOWS_GETROAMINGFOLDER_H_INCLUDED

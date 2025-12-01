@@ -22,7 +22,8 @@
 
 #include "Arcadia/Ring2/Implementation/Configure.h"
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Implementation/ByteBuffer.h"
+typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
+typedef struct Arcadia_FileHandle Arcadia_FileHandle;
 typedef struct Arcadia_FilePath Arcadia_FilePath;
 typedef struct Arcadia_DirectoryIterator Arcadia_DirectoryIterator;
 
@@ -36,51 +37,146 @@ Arcadia_declareObjectType(u8"Arcadia.FileSystem", Arcadia_FileSystem,
 
 struct Arcadia_FileSystem {
   Arcadia_Object _parent;
+  
+  void
+  (*createDirectoryFile)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  Arcadia_DirectoryIterator*
+  (*createDirectoryIterator)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  Arcadia_FileHandle*
+  (*createFileHandle)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self
+    );
+   
+  void
+  (*createRegularFile)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  Arcadia_BooleanValue
+  (*directoryFileExists)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  Arcadia_FilePath*
+  (*getConfigurationFolder)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self
+    );
+
+  Arcadia_FilePath*
+  (*getExecutablePath)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self
+    );
+
+  Arcadia_ByteBuffer*
+  (*getFileContents)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  Arcadia_FilePath*
+  (*getSaveFolder)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self
+    );
+
+  Arcadia_FilePath*
+  (*getWorkingDirectory)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self
+    );
+
+  Arcadia_BooleanValue
+  (*regularFileExists)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  void
+  (*setFileContents)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path,
+      Arcadia_ByteBuffer * contents
+    );
 };
 
-// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_create
-Arcadia_FileSystem*
-Arcadia_FileSystem_create
-  (
-    Arcadia_Thread* thread
-  );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents
-Arcadia_ByteBuffer*
-Arcadia_FileSystem_getFileContents
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
-  );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryFile
+/// @brief Create a directory file.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this file system.
+/// @param path A pointer to the path.
+/// @error Arcadia_Status_NotFound
+/// one or more intermediate directories do not exist; this function will only create the final directory in the path. 
 void
-Arcadia_FileSystem_setFileContents
+Arcadia_FileSystem_createDirectoryFile
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
-    Arcadia_FilePath* path,
-    Arcadia_ByteBuffer * contents
+    Arcadia_FilePath* path
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_createDirectoryIterator
+Arcadia_DirectoryIterator*
+Arcadia_FileSystem_createDirectoryIterator
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+Arcadia_FileHandle*
+Arcadia_FileSystem_createFileHandle
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createRegularFile
+/// @brief Create a regular file.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this file system.
+/// @param path A pointer to the path.
+/// @error Arcadia_Status_NotFound
+/// one or more intermediate directories do not exist; this function will only create the final directory in the path. 
 void
-Arcadia_FileSystem_createDirectory
+Arcadia_FileSystem_createRegularFile
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   );
-
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_regularFileExists
-Arcadia_BooleanValue
-Arcadia_FileSystem_regularFileExists
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
-  );
-
+  
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_directoryFileExists
@@ -88,6 +184,14 @@ Arcadia_FileSystem_directoryFileExists
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
+  );
+  
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getConfigurationFolder
+Arcadia_FilePath*
+Arcadia_FileSystem_getConfigurationFolder
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
   );
 
 /// @brief Get the path of the executing executable.
@@ -102,35 +206,21 @@ Arcadia_FileSystem_getExecutablePath
     Arcadia_FileSystem* self
   );
 
-// Get the folder in which configuration files are stored.
-// The following table lists the values for a given operating system
-// - Windows: `C:\Users\<Username>\AppData\Local\<Organization Name>\<Game Name>`
-// - Linux: `<Home>\<Organization Name>\<Game Name>`
-Arcadia_FilePath*
-Arcadia_FileSystem_getConfigurationFolder
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents
+Arcadia_ByteBuffer*
+Arcadia_FileSystem_getFileContents
   (
     Arcadia_Thread* thread,
-    Arcadia_FileSystem* self
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
   );
 
-// Get the folder in which save files are stored.
-// The following table lists the values for a given operating system
-// - Windows: `C:\Users\<Username>\AppData\Roaming\<Organization Name>\<Game Name>`
-// - Linux: `<Home>\<Organization Name>\<Game Name>`
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getSaveFolder
 Arcadia_FilePath*
 Arcadia_FileSystem_getSaveFolder
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self
-  );
-
-// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_createDirectoryIterator
-Arcadia_DirectoryIterator*
-Arcadia_FileSystem_createDirectoryIterator
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
   );
 
 // https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getWorkingDirectory
@@ -139,6 +229,25 @@ Arcadia_FileSystem_getWorkingDirectory
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_regularFileExists
+Arcadia_BooleanValue
+Arcadia_FileSystem_regularFileExists
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents
+void
+Arcadia_FileSystem_setFileContents
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path,
+    Arcadia_ByteBuffer * contents
   );
 
 // https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getOrCreate

@@ -14,7 +14,7 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING2_PRIVATE (1)
-#include "Arcadia/Ring2/FileSystem/DirectoryIteratorWindows.h"
+#include "Arcadia/Ring2/FileSystem/Windows/DirectoryIteratorWindows.h"
 
 #include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
 #include "Arcadia/Ring2/Strings/StringBuffer.h"

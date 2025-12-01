@@ -229,7 +229,7 @@ Arcadia_Imaging_Linux_BmpImageWriter_writeBmpToPathImpl
 {
   Arcadia_ByteBuffer* targetByteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_Imaging_Linux_BmpImageWriter_writeBmpToByteBufferImpl(thread, self, sourcePixelBuffer, targetByteBuffer);
-  Arcadia_FileSystem_setFileContents(thread, Arcadia_FileSystem_create(thread),
+  Arcadia_FileSystem_setFileContents(thread, Arcadia_FileSystem_getOrCreate(thread),
                                      Arcadia_FilePath_parseUnix(thread, targetPath), targetByteBuffer);
 }
 

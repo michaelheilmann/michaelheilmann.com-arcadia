@@ -17,7 +17,6 @@
 #include "Arcadia/Ring1/Implementation/Object.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include <stdio.h>
 
 static void*
 Arcadia_allocateObject
@@ -218,7 +217,7 @@ _Arcadia_Object_onFinalizeObject
   ObjectTag* objectTag = (ObjectTag*)object;
   Arcadia_TypeValue type = (Arcadia_TypeValue)objectTag->type;
   if (Arcadia_Process_unlockObject(process, type)) {
-    fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
+    Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
   }
   if (type == _Arcadia_Memory_getType(Arcadia_Process_getThread(process))) {
     return;
@@ -281,7 +280,7 @@ Arcadia_allocateObject
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + Arcadia_Type_getValueSize(thread, type));
   tag->type = memoryType;
   if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), memoryType)) {
-    fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
+    Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
   }
   Arcadia_Type_getOperations(type)->objectTypeOperations->construct(thread, (Arcadia_ObjectReferenceValue)(Arcadia_Object*)(tag + 1));
   return (void*)(tag + 1);
@@ -356,12 +355,12 @@ Arcadia_Object_setType
   ObjectTag* objectTag = ((ObjectTag*)self) - 1;
   if (type) {
     if (Arcadia_Process_lockObject(process, type)) {
-      fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
     }
   }
   if (objectTag->type) {
     if (Arcadia_Process_unlockObject(process, objectTag->type)) {
-      fprintf(stderr, "%s:%d: <error>\n", __FILE__, __LINE__);
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
     }
   }
   objectTag->type = type;

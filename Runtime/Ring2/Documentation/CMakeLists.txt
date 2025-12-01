@@ -16,8 +16,10 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Build the documentation.
-InvokeTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
-                     "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Ring2/index.html"
-                     "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-add_custom_target(${MyProjectName}.Ring2.BuildDocs ALL DEPENDS "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Ring2/index.html")
-set_target_properties(${MyProjectName}.Ring2.BuildDocs PROPERTIES FOLDER "Ring2")
+BeginTemplateEngine(${MyProjectName}.Ring2.BuildDocs "Ring2")
+
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
+                   "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Ring2/index.html"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+
+EndTemplateEngine()

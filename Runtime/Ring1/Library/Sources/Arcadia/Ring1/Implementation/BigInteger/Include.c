@@ -342,8 +342,6 @@ _Arcadia_BigIntegerValue_getType
   return g_type;
 }
 
-#include <stdio.h>
-
 void
 Arcadia_BigInteger_toStdoutDebug
   (
@@ -352,7 +350,7 @@ Arcadia_BigInteger_toStdoutDebug
   )
 {
   if (Arcadia_BigInteger_isZero(thread, self)) {
-    fprintf(stdout, "%s\n", "0");
+    Arcadia_logf(Arcadia_LogFlags_Trace, "0");
   } else {
     Arcadia_BigInteger* ten = Arcadia_BigInteger_create(thread);
     Arcadia_BigInteger_setInteger16(thread, ten, 10);
@@ -360,7 +358,7 @@ Arcadia_BigInteger_toStdoutDebug
     Arcadia_BigInteger_copy(thread, quotient, self);
     Arcadia_BigInteger* remainder = Arcadia_BigInteger_create(thread);
     if (Arcadia_BigInteger_isNegative(thread, self)) {
-      fprintf(stdout, "-");
+      Arcadia_logf(Arcadia_LogFlags_Trace, "-");
     }
     Arcadia_SizeValue i = 0, n = 1024;
     char* p = Arcadia_Memory_allocateUnmanaged(thread, 1024);
@@ -388,7 +386,7 @@ Arcadia_BigInteger_toStdoutDebug
         p[i - j - 1] = t;
       }
       p[i] = '\0';
-      fprintf(stdout, "%s\n", p);
+      Arcadia_logf(Arcadia_LogFlags_Trace, "%s\n", p);
     }
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Memory_deallocateUnmanaged(thread, p);

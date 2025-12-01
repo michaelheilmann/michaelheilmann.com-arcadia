@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_RING2_FILESYSTEM_DIRECTORYITERATORWINDOWS_H_INCLUDED)
-#define ARCADIA_RING2_FILESYSTEM_DIRECTORYITERATORWINDOWS_H_INCLUDED
+#if !defined(ARCADIA_RING2_FILESYSTEM_WINDOWS_DIRECTORYITERATORWINDOWS_H_INCLUDED)
+#define ARCADIA_RING2_FILESYSTEM_WINDOWS_DIRECTORYITERATORWINDOWS_H_INCLUDED
 
 #if !defined(ARCADIA_RING2_PRIVATE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
@@ -25,7 +25,7 @@
 #include <Windows.h>
 
 Arcadia_declareObjectType(u8"Arcadia.DirectoryIteratorWindows", Arcadia_DirectoryIteratorWindows,
-                          u8"Arcadia.Object");
+                          u8"Arcadia.DirectoryITerator");
 
 struct Arcadia_DirectoryIteratorWindows {
   Arcadia_DirectoryIterator _parent;
@@ -41,4 +41,4 @@ Arcadia_DirectoryIteratorWindows_create
     Arcadia_FilePath* path
   );
 
-#endif // ARCADIA_RING2_FILESYSTEM_DIRECTORYITERATORWINDOWS_H_INCLUDED
+#endif // ARCADIA_RING2_FILESYSTEM_WINDOWS_DIRECTORYITERATORWINDOWS_H_INCLUDED

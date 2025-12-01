@@ -36,6 +36,8 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ViewportResource.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/VertexProgramResource.h"
 
+#include <stdio.h> // @todo Remove references to `stdio.h`.
+
 #include <assert.h>
 #include <string.h>
 

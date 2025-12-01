@@ -15,6 +15,8 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/Factorywindow.h"
 
+#include <stdio.h> // @todo Remove references to `stdio.h`.
+
 #define WindowClassName "Arcadia.Visuals.OpenGL4.WGL.FactoryWindow"
 #define WindowTitle "Arcadia OpenGL 4 WGL Factory Window"
 

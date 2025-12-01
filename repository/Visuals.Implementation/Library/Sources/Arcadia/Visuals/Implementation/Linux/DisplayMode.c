@@ -17,6 +17,7 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Linux/DisplayDevice.h"
+#include <stdio.h> // @todo Remove references to `stdio.h`.
 
 static void
 Arcadia_Visuals_Linux_DisplayMode_constructImpl

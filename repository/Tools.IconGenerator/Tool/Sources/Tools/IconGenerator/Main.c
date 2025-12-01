@@ -14,10 +14,12 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include <stdlib.h>
+#include <stdio.h> // @todo Remove references to `stdio.h`.
 #include <string.h>
 #include "Arcadia/Include.h"
 #include "Arcadia/Imaging/Include.h"
 
+// @todo Remove references to `stdio.h`.
 static void
 main1
   (

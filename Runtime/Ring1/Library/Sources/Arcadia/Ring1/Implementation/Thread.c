@@ -37,7 +37,8 @@ Arcadia_ValueStack_getValue
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return thread->stack.elements[thread->stack.size - 1 - index];
+  Arcadia_SizeValue arrayIndex = thread->stack.size - 1 - index;
+  return thread->stack.elements[arrayIndex];
 }
 
 void
@@ -64,6 +65,29 @@ Arcadia_ValueStack_popValues
     Arcadia_Thread_jump(thread);
   }
   thread->stack.size -= count;
+}
+
+void
+Arcadia_ValueStack_reverse
+  (
+    Arcadia_Thread* thread,
+    Arcadia_SizeValue start,
+    Arcadia_SizeValue count
+  )
+{
+  if (Arcadia_SizeValue_Maximum - start < count || start + count > thread->stack.size) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  for (Arcadia_SizeValue i = 0; i < count / 2; ++i) {
+    Arcadia_SizeValue a = start + i;
+    Arcadia_SizeValue b = start + count - 1 - i;
+    a = thread->stack.size - 1 - a;
+    b = thread->stack.size - 1 - b;
+    Arcadia_Value t = thread->stack.elements[a];
+    thread->stack.elements[a] = thread->stack.elements[b];
+    thread->stack.elements[b] = t;
+  }
 }
 
 void

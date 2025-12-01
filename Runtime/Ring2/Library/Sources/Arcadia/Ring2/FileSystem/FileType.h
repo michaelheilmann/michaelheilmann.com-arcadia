@@ -27,8 +27,10 @@
 Arcadia_declareEnumerationType("Arcadia.FileType", Arcadia_FileType);
 
 enum Arcadia_FileType {
+  
+  Arcadia_FileType_Unknown = 0,
 
-  Arcadia_FileType_Directory = 1,
+  Arcadia_FileType_Directory,
 
   Arcadia_FileType_Regular,
 
