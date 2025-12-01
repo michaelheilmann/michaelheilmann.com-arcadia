@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTool Tools.CompareFiles)
+set(MyTool ${MyProjectName}.Tools.CompareFiles)
 
 if (NOT TARGET ${MyTool})
 

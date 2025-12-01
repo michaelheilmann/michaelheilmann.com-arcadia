@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTool Tools.ConcatenateFiles)
+set(MyTool ${MyProjectName}.Tools.ConcatenateFiles)
 
 if (NOT TARGET ${MyTool})
 

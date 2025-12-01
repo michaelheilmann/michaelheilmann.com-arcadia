@@ -14,6 +14,7 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include <stdlib.h>
+#include <stdio.h> // @todo Remove references to `stdio.h`.
 
 #include "Arcadia/Include.h"
 

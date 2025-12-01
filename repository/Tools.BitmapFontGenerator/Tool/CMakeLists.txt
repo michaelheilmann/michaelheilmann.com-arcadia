@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTool Tools.BitmapFontGenerator)
+set(MyTool ${MyProjectName}.Tools.BitmapFontGenerator)
 
 if (NOT TARGET ${MyTool})
 

@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTool Tools.BannerGenerator)
+set(MyTool ${MyProjectName}.Tools.BannerGenerator)
 
 if (NOT TARGET ${MyTool})
 

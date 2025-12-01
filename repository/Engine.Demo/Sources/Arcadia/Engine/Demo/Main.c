@@ -15,6 +15,7 @@
 
 #include "Arcadia/Engine/Demo/Configuration.h"
 #include <stdlib.h>
+#include <stdio.h> // @todo Remove references to `stdio.h`.
 #include <string.h>
 
 #include "Arcadia/Ring1/Include.h"
@@ -26,6 +27,7 @@
 #include "Arcadia/Engine/Demo/Audials.h"
 #include "Arcadia/Engine/Demo/Visuals.h"
 
+// @todo Remove references to `stdio.h`.
 static void
 render
   (

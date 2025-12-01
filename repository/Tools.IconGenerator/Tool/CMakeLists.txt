@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-set(MyTool Tools.IconGenerator)
+set(MyTool ${MyProjectName}.Tools.IconGenerator)
 
 if (NOT TARGET ${MyTool})
 
