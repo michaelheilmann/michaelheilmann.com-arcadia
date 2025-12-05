@@ -30,7 +30,7 @@ struct Arcadia_DDLS_DefaultReader {
   Arcadia_Value VOID;
 
   Arcadia_DDL_Parser* parser;
-  Arcadia_DDLS_Node* (*run)(Arcadia_Thread* thread, Arcadia_DDLS_DefaultReader*, Arcadia_UTF8Reader*);
+  Arcadia_DDLS_Node* (*run)(Arcadia_Thread* thread, Arcadia_DDLS_DefaultReader*, Arcadia_String*);
 };
 
 Arcadia_DDLS_DefaultReader*
@@ -44,7 +44,7 @@ Arcadia_DDLS_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   );
 
 #endif // ARCADIA_DDLS_READER_DEFAULTREADER_H_INCLUDED

@@ -24,7 +24,7 @@ readDDLS
   )
 {
   Arcadia_DDLS_DefaultReader* reader = Arcadia_DDLS_DefaultReader_create(thread);
-  Arcadia_DDLS_Node* ddlsNode = Arcadia_DDLS_DefaultReader_run(thread, reader, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_createFromCxxString(thread, source)));
+  Arcadia_DDLS_Node* ddlsNode = Arcadia_DDLS_DefaultReader_run(thread, reader, Arcadia_String_createFromCxxString(thread, source));
   return (Arcadia_DDLS_SchemaNode*)ddlsNode;
 }
 
@@ -36,8 +36,8 @@ readDDL
   )
 {
   Arcadia_DDL_DefaultReader* reader = (Arcadia_DDL_DefaultReader*)Arcadia_DDL_DefaultReader_create(thread);
-  Arcadia_DDL_Node* target = Arcadia_DDL_DefaultReader_run(thread, reader, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_createFromCxxString(thread, source)));
-  return target;
+  Arcadia_DDL_Node* ddlNode = Arcadia_DDL_DefaultReader_run(thread, reader, Arcadia_String_createFromCxxString(thread, source));
+  return ddlNode;
 }
 
 static const char* DDLS_TYPE =
@@ -226,12 +226,10 @@ testRejectGreenNotDefined
     Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"Color"), node);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
     }
@@ -263,12 +261,10 @@ testRejectBlueNotDefined
     Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"Color"), node);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
     }
@@ -302,12 +298,10 @@ testRejectTypeDefinedTwice
     Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"Color"), node);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
     }
@@ -341,12 +335,10 @@ testRejectRedDefinedTwice
     Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"Color"), node);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
     }
@@ -380,12 +372,10 @@ testRejectGreenDefinedTwice
     Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"Color"), node);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
     }
@@ -419,12 +409,10 @@ testRejectBlueDefinedTwice
     Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"Color"), node);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
     }

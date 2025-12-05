@@ -31,6 +31,7 @@ struct Arcadia_UTF8ByteBufferReader {
   Arcadia_UTF8Reader parent;
   Arcadia_ByteBuffer* source;
   Arcadia_SizeValue byteIndex;
+  Arcadia_Natural32Value byteLength;
   Arcadia_Natural32Value codePoint;
 };
 

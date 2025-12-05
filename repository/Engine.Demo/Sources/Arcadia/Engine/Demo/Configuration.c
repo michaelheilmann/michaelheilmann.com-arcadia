@@ -449,8 +449,7 @@ Cfg_loadConfiguration
     Arcadia_DataDefinitionLanguage_SemanticalAnalysis* semanticalAnalysis = Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create(thread);
     Arcadia_ByteBuffer* byteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, file);
     Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread);
-    Arcadia_DDL_Parser_setInput(thread, parser,
-                                (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, byteBuffer));
+    Arcadia_DDL_Parser_setInput(thread, parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(byteBuffer)));
     Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, parser);
     if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);

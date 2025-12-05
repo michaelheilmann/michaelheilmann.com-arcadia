@@ -27,17 +27,17 @@ expectAndNext
     Arcadia_SizeValue wordTextNumberOfBytes
   )
 {
-  if (tokenType != Arcadia_DDL_Scanner_getWordType(thread, scanner)) {
+  if (tokenType != Arcadia_Languages_Scanner_getWordType(thread, (Arcadia_Languages_Scanner*)scanner)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_String* wordText = Arcadia_DDL_Scanner_getWordText(thread, scanner);
+  Arcadia_String* wordText = Arcadia_Languages_Scanner_getWordText(thread, (Arcadia_Languages_Scanner*)scanner);
   if (Arcadia_String_getNumberOfBytes(thread, wordText) != wordTextNumberOfBytes ||
       Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, wordText), wordTextBytes, wordTextNumberOfBytes)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_DDL_Scanner_step(thread, scanner);
+  Arcadia_Languages_Scanner_step(thread, (Arcadia_Languages_Scanner*)scanner);
 }
 
 static void
@@ -50,7 +50,7 @@ testScanner1
     u8""
     ;
   Arcadia_DDL_Scanner* scanner = Arcadia_DDL_Scanner_create(thread);
-  Arcadia_DDL_Scanner_setInput(thread, scanner, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input))));
 
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
@@ -80,7 +80,7 @@ testScanner2
     u8"6.2831"
     ;
   Arcadia_DDL_Scanner* scanner = Arcadia_DDL_Scanner_create(thread);
-  Arcadia_DDL_Scanner_setInput(thread, scanner, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input)))));
+  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input))));
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_Comma, u8",", sizeof(u8",") - 1);
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_Colon, u8":", sizeof(u8":") - 1);

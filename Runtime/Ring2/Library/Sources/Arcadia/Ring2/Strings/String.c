@@ -16,6 +16,7 @@
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Strings/String.h"
 
+#include <assert.h>
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
 #include "Arcadia/Ring2/Strings/StringBuffer.h"
 
@@ -268,6 +269,8 @@ isEqualToImpl
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
     return;
   }
+  assert(NULL != b0);
+  assert(Arcadia_Object_isInstanceOf(thread, b0, _Arcadia_Object_getType(thread)));
   if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, b0), _Arcadia_String_getType(thread))) {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
     return;

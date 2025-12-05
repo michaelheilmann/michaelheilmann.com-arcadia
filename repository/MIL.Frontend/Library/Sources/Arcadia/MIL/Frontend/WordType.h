@@ -13,137 +13,137 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_MIL_FRONTEND_TOKENKIND_H_INCLUDED)
-#define ARCADIA_MIL_FRONTEND_TOKENKIND_H_INCLUDED
+#if !defined(ARCADIA_MIL_FRONTEND_WORDTYPE_H_INCLUDED)
+#define ARCADIA_MIL_FRONTEND_WORDTYPE_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
 
-Arcadia_declareEnumerationType("Arcadia.MIL.TokenKind", Arcadia_MIL_TokenKind);
+Arcadia_declareEnumerationType("Arcadia.MIL.WordType", Arcadia_MIL_WordType);
 
-enum Arcadia_MIL_TokenKind {
+enum Arcadia_MIL_WordType {
 
   // Start of input.
-  Arcadia_MIL_TokenKind_StartOfInput,
+  Arcadia_MIL_WordType_StartOfInput,
   // End of input.
-  Arcadia_MIL_TokenKind_EndOfInput,
+  Arcadia_MIL_WordType_EndOfInput,
 
   // LF, CR or CR LF
-  Arcadia_MIL_TokenKind_LineTerminator,
+  Arcadia_MIL_WordType_LineTerminator,
   // Any non-empty sequence of the symbols tabulator and whitespace.
-  Arcadia_MIL_TokenKind_WhiteSpaces,
+  Arcadia_MIL_WordType_WhiteSpaces,
 
   // The `Equals Sign` / `=`  / U+003D.
-  Arcadia_MIL_TokenKind_EqualsSign,
+  Arcadia_MIL_WordType_EqualsSign,
   // The `Colon` / `:` / U+003A.
-  Arcadia_MIL_TokenKind_Colon,
+  Arcadia_MIL_WordType_Colon,
   // The `Comma` / `,` / U+002C.
-  Arcadia_MIL_TokenKind_Comma,
+  Arcadia_MIL_WordType_Comma,
   // The `Left Curly Bracket` / `{` / U+007B.
-  Arcadia_MIL_TokenKind_LeftCurlyBracket,
+  Arcadia_MIL_WordType_LeftCurlyBracket,
   // The `Right Curly Bracket`/ `}` / U+007D.
-  Arcadia_MIL_TokenKind_RightCurlyBracket,
+  Arcadia_MIL_WordType_RightCurlyBracket,
   // The `Left Parenthesis` / `(` / U+0028.
-  Arcadia_MIL_TokenKind_LeftParenthesis,
+  Arcadia_MIL_WordType_LeftParenthesis,
   // The `Right Parenthesis`/ `)` / U+0029.
-  Arcadia_MIL_TokenKind_RightParenthesis,
+  Arcadia_MIL_WordType_RightParenthesis,
 
 
   // A name.
-  Arcadia_MIL_TokenKind_Name,
+  Arcadia_MIL_WordType_Name,
   // A register.
-  Arcadia_MIL_TokenKind_Register,
+  Arcadia_MIL_WordType_Register,
 
   // A boolean literal.
   // "true" or "false".
-  Arcadia_MIL_TokenKind_BooleanLiteral,
+  Arcadia_MIL_WordType_BooleanLiteral,
   // A real number literal.
-  Arcadia_MIL_TokenKind_RealLiteral,
+  Arcadia_MIL_WordType_RealLiteral,
   // An integer literal.
-  Arcadia_MIL_TokenKind_IntegerLiteral,
+  Arcadia_MIL_WordType_IntegerLiteral,
   // A string literal.
-  Arcadia_MIL_TokenKind_StringLiteral,
+  Arcadia_MIL_WordType_StringLiteral,
   // A void literal.
   // "void".
-  Arcadia_MIL_TokenKind_VoidLiteral,
+  Arcadia_MIL_WordType_VoidLiteral,
 
   // "class"
-  Arcadia_MIL_TokenKind_Class,
+  Arcadia_MIL_WordType_Class,
   // "constructor"
-  Arcadia_MIL_TokenKind_Constructor,
+  Arcadia_MIL_WordType_Constructor,
   // "extends"
-  Arcadia_MIL_TokenKind_Extends,
+  Arcadia_MIL_WordType_Extends,
   // "implements"
-  Arcadia_MIL_TokenKind_Implements,
+  Arcadia_MIL_WordType_Implements,
   // "procedure"
-  Arcadia_MIL_TokenKind_Procedure,
+  Arcadia_MIL_WordType_Procedure,
   // "method"
-  Arcadia_MIL_TokenKind_Method,
+  Arcadia_MIL_WordType_Method,
 
   // "invoke"
-  Arcadia_MIL_TokenKind_Invoke,
+  Arcadia_MIL_WordType_Invoke,
 
   // "native"
-  Arcadia_MIL_TokenKind_Native,
+  Arcadia_MIL_WordType_Native,
   // "entry"
-  Arcadia_MIL_TokenKind_Entry,
+  Arcadia_MIL_WordType_Entry,
   // "return"
-  Arcadia_MIL_TokenKind_Return,
+  Arcadia_MIL_WordType_Return,
   // "variable"
-  Arcadia_MIL_TokenKind_Variable,
+  Arcadia_MIL_WordType_Variable,
 
   // "jump"
-  Arcadia_MIL_TokenKind_Jump,
+  Arcadia_MIL_WordType_Jump,
   // "jumpIfTrue"
-  Arcadia_MIL_TokenKind_JumpIfTrue,
+  Arcadia_MIL_WordType_JumpIfTrue,
   // "jumpIfFalse"
-  Arcadia_MIL_TokenKind_JumpIfFalse,
+  Arcadia_MIL_WordType_JumpIfFalse,
 
   // "raise"
-  Arcadia_MIL_TokenKind_Raise,
+  Arcadia_MIL_WordType_Raise,
 
   // "add" (arithmetic operations)
-  Arcadia_MIL_TokenKind_Add,
+  Arcadia_MIL_WordType_Add,
   // "subtract" (arithmetic operations)
-  Arcadia_MIL_TokenKind_Subtract,
+  Arcadia_MIL_WordType_Subtract,
   // "multiply" (arithmetic operations)
-  Arcadia_MIL_TokenKind_Multiply,
+  Arcadia_MIL_WordType_Multiply,
   // "divide" (arithmetic operations)
-  Arcadia_MIL_TokenKind_Divide,
+  Arcadia_MIL_WordType_Divide,
 
   // "isEqualTo" (relational operation)
-  Arcadia_MIL_TokenKind_IsEqualTo,
+  Arcadia_MIL_WordType_IsEqualTo,
   // "isNotEqualTo" (relational operation),
-  Arcadia_MIL_TokenKind_IsNotEqualTo,
+  Arcadia_MIL_WordType_IsNotEqualTo,
   // "isLowerThan" (relational operation)
-  Arcadia_MIL_TokenKind_IsLowerThan,
+  Arcadia_MIL_WordType_IsLowerThan,
   // "isLowerThanOrEqualTo" (relational operation)
-  Arcadia_MIL_TokenKind_IsLowerThanOrEqualTo,
+  Arcadia_MIL_WordType_IsLowerThanOrEqualTo,
   // "isGreaterThan" (relational operation)
-  Arcadia_MIL_TokenKind_IsGreaterThan,
+  Arcadia_MIL_WordType_IsGreaterThan,
   // "isGreaterThanOrEqualTo" (relational operation)
-  Arcadia_MIL_TokenKind_IsGreaterThanOrEqualTo,
+  Arcadia_MIL_WordType_IsGreaterThanOrEqualTo,
 
   // "negate" (arithmetic operations/logical operations)
-  Arcadia_MIL_TokenKind_Negate,
+  Arcadia_MIL_WordType_Negate,
 
   // "not" (boolean operations)
-  Arcadia_MIL_TokenKind_Not,
+  Arcadia_MIL_WordType_Not,
   // "and" (boolean operations)
-  Arcadia_MIL_TokenKind_And,
+  Arcadia_MIL_WordType_And,
   // "or" (boolean operations)
-  Arcadia_MIL_TokenKind_Or,
+  Arcadia_MIL_WordType_Or,
 
   // "concatenate" (list operations)
-  Arcadia_MIL_TokenKind_Concatenate,
+  Arcadia_MIL_WordType_Concatenate,
 
   // "set"
-  Arcadia_MIL_TokenKind_Set,
+  Arcadia_MIL_WordType_Set,
 
   /// A single line comment.
-  Arcadia_MIL_TokenKind_SingleLineComment,
+  Arcadia_MIL_WordType_SingleLineComment,
   /// A multi line comment.
-  Arcadia_MIL_TokenKind_MultiLineComment,
+  Arcadia_MIL_WordType_MultiLineComment,
 
 };
 
-#endif // ARCADIA_MIL_FRONTEND_TOKENKIND_H_INCLUDED
+#endif // ARCADIA_MIL_FRONTEND_WORDTYPE_H_INCLUDED

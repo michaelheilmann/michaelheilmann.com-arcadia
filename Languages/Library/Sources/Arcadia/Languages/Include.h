@@ -19,6 +19,7 @@
 #pragma push_macro("ARCADIA_LANGUAGES_PRIVATE")
 #define ARCADIA_LANGUAGES_PRIVATE (1)
 
+#include "Arcadia/Languages/Scanner.h"
 #include "Arcadia/Languages/StringTable.h"
 
 #undef ARCADIA_LANGUAGES_PRIVATE

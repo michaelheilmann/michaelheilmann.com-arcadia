@@ -63,25 +63,20 @@ testAccept1
     ;
   Arcadia_DDLS_DefaultReader* ddlsReader =
     Arcadia_DDLS_DefaultReader_create
-    (
-      thread
-    );
+      (
+        thread
+      );
   Arcadia_DDLS_Node* ddlsNode =
     Arcadia_DDLS_DefaultReader_run
-    (
-      thread,
-      ddlsReader,
-      (Arcadia_UTF8Reader*)
-      Arcadia_UTF8StringReader_create
       (
         thread,
+        ddlsReader,
         Arcadia_String_createFromCxxString
-        (
-          thread,
-          DDLS
-        )
-      )
-    );
+          (
+            thread,
+            DDLS
+          )
+      );
   ddlsNode = NULL;
 }
 
@@ -145,15 +140,10 @@ testAccept2
       (
         thread,
         ddlsReader,
-        (Arcadia_UTF8Reader*)
-        Arcadia_UTF8StringReader_create
+        Arcadia_String_createFromCxxString
           (
             thread,
-            Arcadia_String_createFromCxxString
-              (
-                thread,
-                DDLS
-              )
+            DDLS
           )
       );
   ddlsNode = NULL;
@@ -189,16 +179,11 @@ testReject1
       (
         thread,
         ddlsReader,
-        (Arcadia_UTF8Reader*)
-        Arcadia_UTF8StringReader_create
-        (
-          thread,
           Arcadia_String_createFromCxxString
             (
               thread,
               DDLS
             )
-        )
       );
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
@@ -241,15 +226,10 @@ testReject2
       (
         thread,
         ddlsReader,
-        (Arcadia_UTF8Reader*)
-        Arcadia_UTF8StringReader_create
+        Arcadia_String_createFromCxxString
           (
             thread,
-            Arcadia_String_createFromCxxString
-              (
-                thread,
-                DDLS
-              )
+            DDLS
           )
       );
     Arcadia_Thread_popJumpTarget(thread);
@@ -294,15 +274,10 @@ testReject3
       (
         thread,
         ddlsReader,
-        (Arcadia_UTF8Reader*)
-        Arcadia_UTF8StringReader_create
+        Arcadia_String_createFromCxxString
           (
             thread,
-            Arcadia_String_createFromCxxString
-              (
-                thread,
-                DDLS
-              )
+            DDLS
           )
       );
     Arcadia_Thread_popJumpTarget(thread);
@@ -349,15 +324,10 @@ testReject4
       (
         thread,
         ddlsReader,
-        (Arcadia_UTF8Reader*)
-        Arcadia_UTF8StringReader_create
+        Arcadia_String_createFromCxxString
           (
             thread,
-            Arcadia_String_createFromCxxString
-              (
-                thread,
-                DDLS
-              )
+            DDLS
           )
       );
     Arcadia_Thread_popJumpTarget(thread);
@@ -417,15 +387,10 @@ testReject5
       (
         thread,
         ddlsReader,
-        (Arcadia_UTF8Reader*)
-        Arcadia_UTF8StringReader_create
+        Arcadia_String_createFromCxxString
           (
             thread,
-            Arcadia_String_createFromCxxString
-              (
-                thread,
-                DDLS
-              )
+            DDLS
           )
       );
     Arcadia_Thread_popJumpTarget(thread);

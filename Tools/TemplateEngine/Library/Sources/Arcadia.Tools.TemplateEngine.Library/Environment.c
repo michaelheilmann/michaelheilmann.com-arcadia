@@ -123,7 +123,7 @@ Environment_loadString
 {
   Arcadia_DDL_Node* node = NULL;
   Arcadia_DDL_Parser* syntacticalAnalysis = Arcadia_DDL_Parser_create(thread);
-  Arcadia_DDL_Parser_setInput(thread, syntacticalAnalysis, (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, source));
+  Arcadia_DDL_Parser_setInput(thread, syntacticalAnalysis, source);
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis* semanticalAnalysis = Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create(thread);
   node = Arcadia_DDL_Parser_run(thread, syntacticalAnalysis);
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run(thread, semanticalAnalysis, node);

@@ -30,6 +30,7 @@ struct Arcadia_UTF8StringReader {
   Arcadia_UTF8Reader parent;
   Arcadia_String* source;
   Arcadia_SizeValue byteIndex;
+  Arcadia_Natural32Value byteLength;
   Arcadia_Natural32Value codePoint;
 };
 

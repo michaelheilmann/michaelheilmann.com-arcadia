@@ -2,6 +2,7 @@
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</a></li>
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_createFileHandle">Arcadia_FileSystem_createFileHandle</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_deleteRegularFile">Arcadia_FileSystem_deleteRegularFile</a></li>
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</a></li>
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSysten_getOrCreate">Arcadia_FileSystem_getOrCreate</a></li>
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</a></li>

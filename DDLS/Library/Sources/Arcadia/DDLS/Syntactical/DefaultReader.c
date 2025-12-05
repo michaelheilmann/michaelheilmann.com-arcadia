@@ -85,7 +85,7 @@ Arcadia_DDLS_DefaultReader_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_DDLS_DefaultReader_objectTypeOperations = {
@@ -151,7 +151,7 @@ readNode
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
-    }
+    } break;
   };
 }
 
@@ -278,7 +278,7 @@ Arcadia_DDLS_DefaultReader_runImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   )
 {
   Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_create(thread);
@@ -309,6 +309,6 @@ Arcadia_DDLS_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   )
 { return self->run(thread, self, input); }

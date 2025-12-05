@@ -13,10 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/MIL/Frontend/TokenKind.h"
+#include "Arcadia/MIL/Frontend/WordType.h"
 
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
 };
 
-Arcadia_defineEnumerationType(u8"Arcadia.MIL.TokenKind", Arcadia_MIL_TokenKind, &_typeOperations);
+Arcadia_defineEnumerationType(u8"Arcadia.MIL.WordType", Arcadia_MIL_WordType,
+                              &_typeOperations);

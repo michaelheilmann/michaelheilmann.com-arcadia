@@ -60,6 +60,7 @@ Arcadia_UTF8Reader_constructorImpl
   self->getCodePoint = NULL;
   self->hasCodePoint = NULL;
   self->next = NULL;
+  self->getLength = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
@@ -94,12 +95,12 @@ Arcadia_UTF8Reader_hasCodePoint
   return self->hasCodePoint(thread, self);
 }
 
-Arcadia_SizeValue
-Arcadia_UTF8Reader_getByteIndex
+Arcadia_Natural32Value
+Arcadia_UTF8Reader_getLength
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8Reader* self
   )
 {
-  return self->getByteIndex(thread, self);
+  return self->getLength(thread, self);
 }

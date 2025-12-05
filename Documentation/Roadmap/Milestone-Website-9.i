@@ -1,9 +1,6 @@
-<h2>Milestone "Website" 9: Add <em>news page</em></h2>
-<p>Percentage done: 0&percnt;, Due date: Week 2 April 2025</p>
+<h2>Milestone "Website" 9: Add <em>Data Definition Language Schema</em> specification</h2>
+<p>Percentage done: 50&percnt;, Due date: Week 2 January 2026</p>
 <p>
-A <em>news page</em> is reachable from the <em>landing page</em>.
-</p>
-
-<p>
-The <em>news page</em> displays news on the site and the projects.
+The <em>content page</em> for the <em>Data Definition Language Schema</em> specification is reachable from the <em>landing page</em>.
+The <em>content page</em> contains the <em>Data Definition Language Schema</em> specification.
 </p>

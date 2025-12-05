@@ -1,15 +1,31 @@
 @{include("./Commons/header-common.i")}
+  
   <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=1'>
   <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=1'>
   <link rel='canonical' href='@{siteAddress}/'>
+  
   <title>Michael Heilmann's Arcadia</title>
+  
   <style>
+  
+  main > div {
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
   div.topic {
     margin-left: 8px;
   }
   div.topic:first-child {
     margin-left: 0px;
   }
+    
+  div.topic > div.body > p {
+    font-size: small;
+  }
+  
   div.topic > div.body > ul {
     list-style: none;
   }
@@ -48,71 +64,79 @@
     <div></div>
   </header>
   <main>
-    <div>
-      <div style='display: flex; flex-direction: row'>
-        <div class="topic">
-          <div class="header">
-            <span>Software</span>
-          </div>
-          <div class="body">
-            <ul>
-              <li>
-                <a href='@{siteAddress}/Arcadia/ARMS'>Arcadia ARMS</a>
-              </li>
-              <li>
-                <a href='@{siteAddress}/Arcadia/Ring1'>Arcadia Ring1</a>
-              </li>
-              <li>
-                <a href='@{siteAddress}/Arcadia/Ring2'>Arcadia Ring2</a>
-              </li>
-              <li>
-                <a href='@{siteAddress}/Arcadia/Visuals'>Arcadia Visuals</a>
-              </li>
-              <li>
-                <a href='@{siteAddress}/Arcadia/TemplateEngine'>Arcadia Template Engine</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="topic">
-          <div class="header">
-            <span>Specifications</span>
-          </div>
-          <div class="body">
-            <ul>
-              <li>
-                <a href='@{siteAddress}/specifications/common-lexical-specification'>Common Lexical Specification</a>
-              </li>
-              <li>
-                <a href='@{siteAddress}/specifications/data-definition-language'>Data Definition Language</a>
-              </li>
-              <li>
-                <div>Data Definition Language Schema (coming soon)</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="topic">
-          <div class="header">
-            <span>Organizational</span>
-          </div>
-          <div class="body">
-            <ul>
-              <li>
-                <a href='@{siteAddress}/roadmap'>Roadmap</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
+  <div>
+    <div class="topic">
+      <div class="header">
+        <span>Software</span>
+      </div>
+      <div class="body">
+        <ul>
+          <li>
+            <a href='@{siteAddress}/Arcadia/ARMS'>Arcadia ARMS</a>
+          </li>
+          <li>
+            <a href='@{siteAddress}/Arcadia/Ring1'>Arcadia Ring1</a>
+          </li>
+          <li>
+            <a href='@{siteAddress}/Arcadia/Ring2'>Arcadia Ring2</a>
+          </li>
+          <li>
+            <a href='@{siteAddress}/Arcadia/Visuals'>Arcadia Visuals</a>
+          </li>
+          <li>
+            <a href='@{siteAddress}/Arcadia/TemplateEngine'>Arcadia Template Engine</a>
+          </li>
+        </ul>
       </div>
     </div>
 
-    <div></div>
+    <div class="topic">
+      <div class="header">
+        <span>Specifications</span>
+      </div>
+      <div class="body">
+        <ul>
+          <li>
+            <a href='@{siteAddress}/specifications/common-lexical-specification'>Common Lexical Specification</a>
+          </li>
+          <li>
+            <a href='@{siteAddress}/specifications/data-definition-language'>Data Definition Language</a>
+          </li>
+          <li>
+            <div>Data Definition Language Schema (coming soon)</div>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-    <div></div>
+    <div class="topic">
+      <div class="header">
+        <span>Organizational</span>
+      </div>
+      <div class="body">
+        <ul>
+          <li>
+            <a href='@{siteAddress}/roadmap'>Roadmap</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="topic">
+      <div class="header">
+        <span>Assorted Notes</span>
+      </div>
+      <div class="body">
+        <p>This section collects a growing recollection of various notes on web-application security concepts and techniques which were taken during an MPV of a MUD-client written in Angular.</p>
+        <p>The concepts and techniques explained are valid for most web-applications.</p>
+        </p>
+        <ul>
+          <li><a href='@{siteAddress}/assorted-notes/best-practices-for-access-tokens-angular-edition.html'>Best practices for access tokens - Angular edition</a></li>
+          <li><a href='@{siteAddress}/assorted-notes/why-use-refresh-tokens-angular-edition.html'>Why use refresh tokens - Angular edition</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
   </main>
   <footer>
     <div class="left-column">

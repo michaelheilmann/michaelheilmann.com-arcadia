@@ -49,7 +49,7 @@ Arcadia_MIL_Parser_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   );
 
 #endif // ARCADIA_MIL_FRONTEND_PARSER_H_INCLUDED

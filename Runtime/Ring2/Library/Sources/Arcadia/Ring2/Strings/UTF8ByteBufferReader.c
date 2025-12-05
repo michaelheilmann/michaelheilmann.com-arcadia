@@ -117,6 +117,7 @@ Arcadia_UTF8ByteBufferReader_nextImpl
       Arcadia_Thread_jump(thread);
     }
     self->byteIndex += expectedNumberOfBytes;
+    self->byteLength = expectedNumberOfBytes;
     self->codePoint = codePoint;
   }
 }
@@ -148,13 +149,13 @@ Arcadia_UTF8ByteBufferReader_hasCodePointImpl
   return CodePoint_End != self->codePoint;
 }
 
-static Arcadia_SizeValue
-Arcadia_UTF8ByteBufferReader_getByteIndexImpl
+static Arcadia_Natural32Value
+Arcadia_UTF8ByteBufferReader_getLengthImpl
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8ByteBufferReader* self
   )
-{ return self->byteIndex; }
+{ return self->byteLength; }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_UTF8ByteBufferReader_constructImpl,
@@ -190,7 +191,7 @@ Arcadia_UTF8ByteBufferReader_constructImpl
   self->source = (Arcadia_ByteBuffer*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_ByteBuffer_getType(thread));
   self->byteIndex = 0;
   self->codePoint = CodePoint_Start;
-  ((Arcadia_UTF8Reader*)self)->getByteIndex = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8ByteBufferReader_getByteIndexImpl;
+  ((Arcadia_UTF8Reader*)self)->getLength = (Arcadia_Natural32Value(*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8ByteBufferReader_getLengthImpl;
   ((Arcadia_UTF8Reader*)self)->getCodePoint = (Arcadia_Natural32Value (*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8ByteBufferReader_getCodePointImpl;
   ((Arcadia_UTF8Reader*)self)->hasCodePoint = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) &Arcadia_UTF8ByteBufferReader_hasCodePointImpl;
   ((Arcadia_UTF8Reader*)self)->next = (void (*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) &Arcadia_UTF8ByteBufferReader_nextImpl;

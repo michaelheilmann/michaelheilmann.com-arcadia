@@ -46,13 +46,13 @@ Arcadia_DDL_Parser_run
 /// @brief Set the input.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this Data Definition Language parser.
-/// @param input A pointer to the UTF8 reader.
+/// @param input A pointer to the input string.
 void
 Arcadia_DDL_Parser_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   );
 
 Arcadia_Languages_StringTable*

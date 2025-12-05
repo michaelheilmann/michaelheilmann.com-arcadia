@@ -4,7 +4,7 @@
 *michaelheilmann.com* requires
 - *Microsoft Visual Studio Community 2022* version 17.9.2 or better.
   *Microsoft Visual Studio Community 2022* is available at [https://visualstudio.microsoft.com/vs/community/](https://visualstudio.microsoft.com/vs/community/).
-- *Kitware CMake* version 3.29.6 or better.
+- *Kitware CMake* version 4.1.3 or better.
   *Kitware CMake* is available at [https://cmake.org/](https://cmake.org/).
 - *PowerShell*
 

@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 4.1.3)
 
 set(MyTestName ${MyProjectName}.Ring1.Tests.StringToIntegerTests)
 

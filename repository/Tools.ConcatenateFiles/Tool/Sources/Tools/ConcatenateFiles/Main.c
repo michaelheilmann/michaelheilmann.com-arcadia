@@ -55,6 +55,8 @@ main1
   Arcadia_FileHandle_close(thread, fileHandle);
 }
 
+// Return 0 on success.
+// Return 2 on failure.
 int
 main
   (
@@ -76,7 +78,9 @@ main
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {
-    return EXIT_FAILURE;
+    // Return 2 on failure.
+    return 2;
   }
-  return EXIT_SUCCESS;
+  // Return 0 on success.
+  return 0;
 }

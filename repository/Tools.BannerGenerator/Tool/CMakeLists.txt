@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 4.1.3)
 
 set(MyTool ${MyProjectName}.Tools.BannerGenerator)
 
@@ -31,7 +31,7 @@ if (NOT TARGET ${MyTool})
 
   EndProduct(${MyTool})
 
-  set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"helloworld.png\" --width=320 --height=240")
+  set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"\"helloworld.png\"\" --width=320 --height=240")
 
   set_target_properties(${MyTool} PROPERTIES FOLDER "Tools")
 

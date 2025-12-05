@@ -1795,6 +1795,58 @@ The enumeration elements can be combined.
 
 <section class="cxx entity method">
 
+  <h1 id="Arcadia_FileSystem_deleteFile">Arcadia_FileSystem_deleteRegularFile</h1>
+
+  <my-summary><code>
+  void<br>
+  Arcadia_FileSystem_deleteRegularFile<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Delete a regular file.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The path to the file.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_FileSystemOperationFailed</div>
+      <div>The file is not found, the file is not a regular file, or deletion failed.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
   <h1 id="Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</h1>
 
   <my-summary><code>
@@ -5490,6 +5542,7 @@ The enumeration elements cannot be combined.
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createFileHandle">Arcadia_FileSystem_createFileHandle</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteRegularFile">Arcadia_FileSystem_deleteRegularFile</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSysten_getOrCreate">Arcadia_FileSystem_getOrCreate</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</a></li>
@@ -5575,7 +5628,7 @@ The enumeration elements cannot be combined.
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 2 December 2025.</div>
+      <div>Last modified on 5 December 2025.</div>
     </div>
   </footer>
   </body>

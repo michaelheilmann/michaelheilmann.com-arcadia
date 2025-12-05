@@ -105,7 +105,7 @@ compile
     }
     Arcadia_ByteBuffer* sourceFileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
 
-    Arcadia_MIL_Parser_setInput(thread, parser, (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceFileContents));
+    Arcadia_MIL_Parser_setInput(thread, parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sourceFileContents)));
     Arcadia_MIL_AST_ModuleNode* moduleAst = Arcadia_MIL_Parser_run(thread, parser);
     Arcadia_List_insertBackObjectReferenceValue(thread, moduleAsts, moduleAst);
   }

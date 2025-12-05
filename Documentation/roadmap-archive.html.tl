@@ -16,7 +16,7 @@
     <h1>Roadmap Archive</h1>
     @{include("./Roadmap/Archive/Milestone-Arbitrary_Precision_Arithmetic-2.i")}
     @{include("./Roadmap/Archive/Milestone-Arbitrary_Precision_Arithmetic-1.i")}
-    @{include("./Roadmap/Archive/Milestone-Mil-1.i")}
+    @{include("./Roadmap/Archive/Milestone-MIL-1.i")}
     @{include("./Roadmap/Archive/Milestone-Banner_Generator-2.i")}
     @{include("./Roadmap/Archive/Milestone-Banner_Generator-1.i")}
     @{include("./Roadmap/Archive/Milestone-Icon_Generator-2.i")}
@@ -32,6 +32,9 @@
     @{include("./Roadmap/Archive/Milestone-Website-3.i")}
     @{include("./Roadmap/Archive/Milestone-Website-2.i")}
     @{include("./Roadmap/Archive/Milestone-Website-1.i")}
+    @{include("./Roadmap/Archive/Milestone-Arcadia.Ring2-4.i")}
+    @{include("./Roadmap/Archive/Milestone-Arcadia.Ring2-3.i")}
+    @{include("./Roadmap/Archive/Milestone-Arcadia.Ring2-2.i")}
     @{include("./Roadmap/Archive/Milestone-Arcadia.Ring2-1.i")}
   </div>
   <div class="right-column"></div>

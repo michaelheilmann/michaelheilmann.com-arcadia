@@ -101,7 +101,7 @@ Arcadia_DDL_DefaultReader_run
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_DefaultReader* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   )
 {
   Arcadia_DDL_Parser_setInput(thread, self->parser, input);

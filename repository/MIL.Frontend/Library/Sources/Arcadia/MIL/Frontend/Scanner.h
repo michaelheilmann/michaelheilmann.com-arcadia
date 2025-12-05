@@ -16,60 +16,23 @@
 #if !defined(ARCADIA_MIL_FRONTEND_SCANNER_H_INCLUDED)
 #define ARCADIA_MIL_FRONTEND_SCANNER_H_INCLUDED
 
-#include "Arcadia/MIL/Frontend/TokenKind.h"
+#include "Arcadia/MIL/Frontend/WordType.h"
+#include "Arcadia/Languages/Include.h"
 
+/// @brief A scanner for MIL.
 /// @code
 /// class Arcadia.MIL.Scanner
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.MIL.Scanner", Arcadia_MIL_Scanner,
-                          u8"Arcadia.Object");
+                          u8"Arcadia.Languages.Scanner");
 
 /// @brief Create a MIL scanner.
+/// @param thread A pointer to this thread.
 /// @return A pointer to this MIL scanner.
 Arcadia_MIL_Scanner*
 Arcadia_MIL_Scanner_create
   (
     Arcadia_Thread* thread
-  );
-
-/// @brief Get the text of the token.
-/// @param self A pointer to this MIL scanner.
-/// @return The text of the token.
-Arcadia_String*
-Arcadia_MIL_Scanner_getTokenText
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_Scanner* self
-  );
-
-/// @brief Get the type of the token.
-/// @param self A pointer to this MIL scanner.
-/// @return The type of the token.
-Arcadia_Natural32Value
-Arcadia_MIL_Scanner_getTokenKind
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_Scanner* self
-  );
-
-/// @brief Move to next token.
-/// @param self A pointer to this MIL scanner.
-void
-Arcadia_MIL_Scanner_step
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_Scanner* self
-  );
-
-/// @brief Set the input.
-/// @param self A pointer to this MIL scanner.
-/// @param input A pointer to the UTF8 reader.
-void
-Arcadia_MIL_Scanner_setInput
-  (
-    Arcadia_Thread* thread,
-    Arcadia_MIL_Scanner* self,
-    Arcadia_UTF8Reader* input
   );
 
 #endif // ARCADIA_MIL_FRONTEND_SCANNER_H_INCLUDED

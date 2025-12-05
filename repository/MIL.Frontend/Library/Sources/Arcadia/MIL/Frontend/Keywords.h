@@ -16,12 +16,13 @@
 #if !defined(ARCADIA_MIL_FRONTEND_KEYWORDS_H_INCLUDED)
 #define ARCADIA_MIL_FRONTEND_KEYWORDS_H_INCLUDED
 
-#include "Arcadia/MIL/Frontend/TokenKind.h"
+#include "Arcadia/MIL/Frontend/WordType.h"
 
 /// @code
 /// class Arcadia.MILKeywords
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.MIL.Keywords", Arcadia_MIL_Keywords, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.MIL.Keywords", Arcadia_MIL_Keywords,
+                          u8"Arcadia.Object");
 
 /// @brief Create a MIL keywords object.
 /// @return A pointer to this CIL keywords object.

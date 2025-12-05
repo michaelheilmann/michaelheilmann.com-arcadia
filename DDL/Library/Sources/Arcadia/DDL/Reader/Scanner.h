@@ -19,70 +19,20 @@
 #include "Arcadia/DDL/Reader/WordType.h"
 #include "Arcadia/Languages/Include.h"
 
+/// @brief A scanner for DDL.
 /// @code
 /// class Arcadia.DDL.Scanner
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.DDL.Scanner", Arcadia_DDL_Scanner,
-                          u8"Arcadia.Object");
+                          u8"Arcadia.Languages.Scanner");
 
-/// @brief Create a Data Definition Language scanner.
+/// @brief Create a DDL scanner.
 /// @param thread A pointer to this thread.
-/// @return A pointer to the Data Definition Language scanner.
+/// @return A pointer to the DDL scanner.
 Arcadia_DDL_Scanner*
 Arcadia_DDL_Scanner_create
   (
     Arcadia_Thread* thread
-  );
-
-/// @brief Get the text of the word.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this Data Definition Language scanner.
-/// @return The text of the word.
-Arcadia_String*
-Arcadia_DDL_Scanner_getWordText
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_Scanner* self
-  );
-
-/// @brief Get the type of the word.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this Data Definition Language scanner.
-/// @return The type of the word.
-Arcadia_Natural32Value
-Arcadia_DDL_Scanner_getWordType
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_Scanner* self
-  );
-
-/// @brief Move to next token.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this Data Definition Language scanner.
-void
-Arcadia_DDL_Scanner_step
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_Scanner* self
-  );
-
-/// @brief Set the input.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this Data Definition Language scanner.
-/// @param input A pointer to the UTF8 reader.
-void
-Arcadia_DDL_Scanner_setInput
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_Scanner* self,
-    Arcadia_UTF8Reader* input
-  );
-
-Arcadia_Languages_StringTable*
-Arcadia_DDL_Scanner_getStringTable
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_Scanner* self
   );
 
 #endif // ARCADIA_DDL_READER_SCANNER_H_INCLUDED

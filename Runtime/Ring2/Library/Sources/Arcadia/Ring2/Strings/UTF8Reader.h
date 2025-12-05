@@ -22,6 +22,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 
+/// @brief An UTF8 reader for possible infinite streams of UTF8 Bytes.
 Arcadia_declareObjectType(u8"Arcadia.UTF8Reader", Arcadia_UTF8Reader,
                           u8"Arcadia.Object");
 
@@ -30,7 +31,7 @@ struct Arcadia_UTF8Reader {
   void (*next)(Arcadia_Thread*, Arcadia_UTF8Reader* self);
   Arcadia_Natural32Value (*getCodePoint)(Arcadia_Thread* thread, Arcadia_UTF8Reader* self);
   Arcadia_BooleanValue (*hasCodePoint)(Arcadia_Thread* thread, Arcadia_UTF8Reader* self);
-  Arcadia_SizeValue (*getByteIndex)(Arcadia_Thread* thread, Arcadia_UTF8Reader* self);
+  Arcadia_Natural32Value(*getLength)(Arcadia_Thread* thread, Arcadia_UTF8Reader* self);
 };
 
 void
@@ -54,9 +55,9 @@ Arcadia_UTF8Reader_hasCodePoint
     Arcadia_UTF8Reader* self
   );
 
-/// @return The index of the current Byte.
-Arcadia_SizeValue
-Arcadia_UTF8Reader_getByteIndex
+/// @return The length, in Bytes, of the code point in UTF8.
+Arcadia_Natural32Value
+Arcadia_UTF8Reader_getLength
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8Reader* self

@@ -6,8 +6,8 @@
   - Debian: `sudo apt-get install build-essential`
 - *gcc* version 11.4.0 or better
   - Debian: `sudo apt-get install gcc`
-- *cmake* version 3.20 or better
-  - Debian: `sudo apt-get install cmake`
+- *cmake* version 4.1.3 or better
+  - Debian: `sudo apt-get install cmake` or compile and install from source code.
 - *libpng* version 1.6 or better
   - Debian:`sudo apt-get install libpng-dev`
 - Optional: *gdb* version 12.1 or better

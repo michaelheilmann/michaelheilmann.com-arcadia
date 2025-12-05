@@ -171,7 +171,7 @@ Arcadia_DDL_Parser_getWordText
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self
   )
-{ return Arcadia_DDL_Scanner_getWordText(thread, self->scanner); }
+{ return Arcadia_Languages_Scanner_getWordText(thread, (Arcadia_Languages_Scanner*)self->scanner); }
 
 static Arcadia_Natural32Value
 Arcadia_DDL_Parser_getWordType
@@ -179,7 +179,7 @@ Arcadia_DDL_Parser_getWordType
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self
   )
-{ return Arcadia_DDL_Scanner_getWordType(thread, self->scanner); }
+{ return Arcadia_Languages_Scanner_getWordType(thread, (Arcadia_Languages_Scanner*)self->scanner); }
 
 static void
 Arcadia_DDL_Parser_next
@@ -189,7 +189,7 @@ Arcadia_DDL_Parser_next
   )
 {
   do {
-    Arcadia_DDL_Scanner_step(thread, self->scanner);
+    Arcadia_Languages_Scanner_step(thread, (Arcadia_Languages_Scanner*)self->scanner);
   } while (Arcadia_DDL_WordType_WhiteSpace == Arcadia_DDL_Parser_getWordType(thread, self) ||
            Arcadia_DDL_WordType_LineTerminator == Arcadia_DDL_Parser_getWordType(thread, self));
 }
@@ -379,10 +379,10 @@ Arcadia_DDL_Parser_setInput
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   )
 {
-  Arcadia_DDL_Scanner_setInput(thread, self->scanner, input);
+  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)self->scanner, input);
 }
 
 Arcadia_Languages_StringTable*
@@ -391,4 +391,4 @@ Arcadia_DDL_Parser_getStringTable
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self
   )
-{ return Arcadia_DDL_Scanner_getStringTable(thread, self->scanner); }
+{ return Arcadia_Languages_Scanner_getStringTable(thread, (Arcadia_Languages_Scanner*)self->scanner); }

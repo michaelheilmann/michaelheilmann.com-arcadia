@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 4.1.3)
 
 project("liminal")
 add_executable(liminal main.c game.c game.h sg.c sg.h os-windows.c os-windows.h os-windows-icon.c os-windows-icon.h os-windows-bitmap.c os-windows-bitmap.h os-commons.c os-commons.h)

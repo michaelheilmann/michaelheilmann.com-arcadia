@@ -14,16 +14,15 @@
     <div class="left-column"></div>
     <div class="center-column">
     <h1>Roadmap</h1>
-    @{include("./Roadmap/Milestone-Arcadia.Ring2-6.i")}
-    @{include("./Roadmap/Milestone-Arcadia.Ring2-5.i")}
-    @{include("./Roadmap/Milestone-Arcadia.Ring2-4.i")}
-    @{include("./Roadmap/Milestone-Arcadia.Ring2-3.i")}
-    @{include("./Roadmap/Milestone-Arcadia.Ring2-2.i")}
-    @{include("./Roadmap/Milestone-Mil-2.i")}
-    @{include("./Roadmap/Milestone-Cicd-1.i")}
     @{include("./Roadmap/Milestone-Website-9.i")}
     @{include("./Roadmap/Milestone-Website-8.i")}
     @{include("./Roadmap/Milestone-Website-7.i")}
+    @{include("./Roadmap/Milestone-MIL-2.i")}
+    @{include("./Roadmap/Milestone-CICD-1.i")}
+    @{include("./Roadmap/Milestone-Arcadia.Ring2-7.i")}
+    @{include("./Roadmap/Milestone-Arcadia.Ring2-6.i")}
+    @{include("./Roadmap/Milestone-Arcadia.Ring2-5.i")}
+    @{include("./Roadmap/Milestone-Arcadia.Ring1-4.i")}
     <h2>Archive of completed milestones</h2>
     <p>You can review completed milestones in the <a href="https://michaelheilmann.com/roadmap-archive">roadmap archive</a>.</p>
   </div>

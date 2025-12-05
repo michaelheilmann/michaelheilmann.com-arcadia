@@ -45,9 +45,11 @@
 #define CodePoint_Error (Arcadia_Unicode_CodePoint_Last + 3)
 
 struct Arcadia_DDL_Scanner {
-  Arcadia_Object _parent;
+  Arcadia_Languages_Scanner _parent;
   // The current symbol "s".
   Arcadia_Natural32Value symbol;
+  // The input string.
+  Arcadia_String* inputString;
   // The input stream.
   Arcadia_UTF8Reader* input;
   // The string table.
@@ -55,11 +57,15 @@ struct Arcadia_DDL_Scanner {
   // The keywords.
   Arcadia_DataDefinitionLanguage_Keywords* keywords;
   struct {
-    /// The text of the token.
+    /// The text of the word.
     Arcadia_StringBuffer* text;
-    /// The type of the token.
+    /// The type of the word.
     Arcadia_Natural32Value type;
-  } token;
+    /// The start of the word as an offset in Bytes from the beginning of the input.
+    Arcadia_Natural32Value start;
+    /// The length of the word in Bytes.
+    Arcadia_Natural32Value length;
+  } word;
 };
 
 static void
@@ -141,7 +147,65 @@ isDecimalDigit
     Arcadia_DDL_Scanner* self
   );
 
+static Arcadia_String*
+Arcadia_DDL_Scanner_getInputImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  );
+
+static Arcadia_String*
+Arcadia_DDL_Scanner_getWordTextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  );
+
+static Arcadia_Natural32Value
+Arcadia_DDL_Scanner_getWordTypeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  );
+
+static Arcadia_Natural32Value
+Arcadia_DDL_Scanner_getWordStartImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  );
+
+static Arcadia_Natural32Value
+Arcadia_DDL_Scanner_getWordLengthImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  );
+
+static void
+Arcadia_DDL_Scanner_stepImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  );
+
+static void
+Arcadia_DDL_Scanner_setInputImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self,
+    Arcadia_String* input
+  );
+
+static Arcadia_Languages_StringTable*
+Arcadia_DDL_Scanner_getStringTableImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDL_Scanner_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_DDL_Scanner_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDL_Scanner_visit,
@@ -153,7 +217,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DDL.Scanner", Arcadia_DDL_Scanner,
-                         u8"Arcadia.Object", Arcadia_Object,
+                         u8"Arcadia.Languages.Scanner", Arcadia_Languages_Scanner,
                          &_typeOperations);
 
 static void
@@ -175,21 +239,26 @@ Arcadia_DDL_Scanner_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  self->token.type = Arcadia_DDL_WordType_StartOfInput;
-  self->token.text = NULL;
+  self->word.type = Arcadia_DDL_WordType_StartOfInput;
+  self->word.start = 0;
+  self->word.length = 0;
+  self->word.text = NULL;
   self->stringTable = NULL;
   self->keywords = NULL;
+  self->inputString = NULL;
   self->input = NULL;
   self->symbol = CodePoint_Start;
   //
   self->keywords = Arcadia_DataDefinitionLanguage_Keywords_create(thread);
-  //
-  self->token.type = Arcadia_DDL_WordType_StartOfInput;
+  self->inputString = Arcadia_String_createFromCxxString(thread, u8"");
+  self->input = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, self->inputString);
   self->stringTable = Arcadia_Languages_StringTable_create(thread);
-  self->input = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", sizeof(u8"") - 1)));
-  self->token.text = Arcadia_StringBuffer_create(thread);
   //
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<start of input>");
+  self->word.type = Arcadia_DDL_WordType_StartOfInput;
+  self->word.text = Arcadia_StringBuffer_create(thread);
+  self->word.start = 0;
+  self->word.length = sizeof(u8"<start of input>") - 1;
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->word.text, u8"<start of input>");
   //
   Arcadia_StringBuffer* temporary = Arcadia_StringBuffer_create(thread);
 #define On(text, type) \
@@ -205,6 +274,15 @@ Arcadia_DDL_Scanner_constructImpl
   On(u8"false", BooleanLiteral);
   //
 #undef On
+  //
+  ((Arcadia_Languages_Scanner*)self)->getInput = (Arcadia_String*  (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) & Arcadia_DDL_Scanner_getInputImpl;
+  ((Arcadia_Languages_Scanner*)self)->getStringTable = (Arcadia_Languages_StringTable * (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) &Arcadia_DDL_Scanner_getStringTableImpl;
+  ((Arcadia_Languages_Scanner*)self)->getWordLength = (Arcadia_Natural32Value (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) &Arcadia_DDL_Scanner_getWordLengthImpl;
+  ((Arcadia_Languages_Scanner*)self)->getWordStart = (Arcadia_Natural32Value (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) &Arcadia_DDL_Scanner_getWordStartImpl;
+  ((Arcadia_Languages_Scanner*)self)->getWordText = (Arcadia_String* (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) &Arcadia_DDL_Scanner_getWordTextImpl;
+  ((Arcadia_Languages_Scanner*)self)->getWordType = (Arcadia_Natural32Value (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) &Arcadia_DDL_Scanner_getWordTypeImpl;
+  ((Arcadia_Languages_Scanner*)self)->setInput = (void (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*, Arcadia_String*)) &Arcadia_DDL_Scanner_setInputImpl;
+  ((Arcadia_Languages_Scanner*)self)->step = (void (*)(Arcadia_Thread*, Arcadia_Languages_Scanner*)) &Arcadia_DDL_Scanner_stepImpl;
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
@@ -225,10 +303,21 @@ Arcadia_DDL_Scanner_visit
     Arcadia_DDL_Scanner* self
   )
 {
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->input);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->token.text);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->stringTable);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->keywords);
+  if (self->inputString) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->inputString);
+  }
+  if (self->input) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->input);
+  }
+  if (self->word.text) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->word.text);
+  }
+  if (self->stringTable) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->stringTable);
+  }
+  if (self->keywords) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->keywords);
+  }
 }
 
 static void
@@ -239,7 +328,7 @@ write
     Arcadia_Natural32Value codePoint
   )
 {
-  Arcadia_StringBuffer_insertCodePointsBack(thread, self->token.text, &codePoint, Arcadia_SizeValue_Literal(1));
+  Arcadia_StringBuffer_insertCodePointsBack(thread, self->word.text, &codePoint, Arcadia_SizeValue_Literal(1));
 }
 
 static void
@@ -259,6 +348,7 @@ next
 {
   if (Arcadia_UTF8Reader_hasCodePoint(thread, self->input)) {
     self->symbol = Arcadia_UTF8Reader_getCodePoint(thread, self->input);
+    self->word.length += Arcadia_UTF8Reader_getLength(thread, self->input);
     Arcadia_UTF8Reader_next(thread, self->input);
   } else {
     self->symbol = CodePoint_End;
@@ -284,7 +374,7 @@ onEndWord
     Arcadia_DDL_WordType type
   )
 {
-  self->token.type = type;
+  self->word.type = type;
 }
 
 static Arcadia_BooleanValue
@@ -331,21 +421,45 @@ Arcadia_DDL_Scanner_create
   ARCADIA_CREATEOBJECT(Arcadia_DDL_Scanner);
 }
 
-Arcadia_String*
-Arcadia_DDL_Scanner_getWordText
+static Arcadia_String*
+Arcadia_DDL_Scanner_getInputImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Scanner* self
   )
-{ return Arcadia_Languages_StringTable_getOrCreateString(thread, self->stringTable, self->token.text); }
+{ return self->inputString; }
 
-Arcadia_Natural32Value
-Arcadia_DDL_Scanner_getWordType
+static Arcadia_String*
+Arcadia_DDL_Scanner_getWordTextImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Scanner* self
   )
-{ return self->token.type; }
+{ return Arcadia_Languages_StringTable_getOrCreateString(thread, self->stringTable, self->word.text); }
+
+static Arcadia_Natural32Value
+Arcadia_DDL_Scanner_getWordTypeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  )
+{ return self->word.type; }
+
+static Arcadia_Natural32Value
+Arcadia_DDL_Scanner_getWordStartImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  )
+{ return self->word.start; }
+
+static Arcadia_Natural32Value
+Arcadia_DDL_Scanner_getWordLengthImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* self
+  )
+{ return self->word.length; }
 
 static void
 onEndOfLine
@@ -360,12 +474,12 @@ onEndOfLine
       next(thread, self);
     }
     onEndWord(thread, self, Arcadia_DDL_WordType_LineTerminator);
-    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<line terminator>");
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->word.text, u8"<line terminator>");
     return;
   } else if ('\n' == self->symbol) {
     next(thread, self);
     onEndWord(thread, self, Arcadia_DDL_WordType_LineTerminator);
-    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<line terminator>");
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->word.text, u8"<line terminator>");
     return;
   }
 }
@@ -424,11 +538,21 @@ onNumberLiteral
   onEndWord(thread, self, type);
 }
 
-static Arcadia_Natural32Value decimalDigitValue(Arcadia_Natural32Value digit) {
+static Arcadia_Natural32Value
+decimalDigitValue
+  (
+    Arcadia_Natural32Value digit
+  )
+{
   return digit - '0';
 }
 
-static Arcadia_Natural32Value hexadecimalDigitValue(Arcadia_Natural32Value digit) {
+static Arcadia_Natural32Value
+hexadecimalDigitValue
+  (
+    Arcadia_Natural32Value digit
+  )
+{
   if ('a' <= digit && digit <= 'f') return digit - 'a' + 10;
   if ('A' <= digit && digit <= 'F') return digit - 'A' + 10;
   else return digit - '0';
@@ -528,20 +652,24 @@ onStringLiteral
   onEndWord(thread, self, Arcadia_DDL_WordType_StringLiteral);
 }
 
-void
-Arcadia_DDL_Scanner_step
+static void
+Arcadia_DDL_Scanner_stepImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Scanner* self
   )
 {
-  Arcadia_StringBuffer_clear(thread, self->token.text);
+  // Prepare for next token.
+  Arcadia_StringBuffer_clear(thread, self->word.text);
+  self->word.start = self->word.start + self->word.length;
+  self->word.length = 0;
+
   if (CodePoint_Start == self->symbol) {
     next(thread, self);
   }
   if (CodePoint_End == self->symbol) {
     onEndWord(thread, self, Arcadia_DDL_WordType_EndOfInput);
-    Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<end of input>");
+    Arcadia_StringBuffer_insertBackCxxString(thread, self->word.text, u8"<end of input>");
     return;
   }
   // Whitespace :  <Whitespace> | <Tabulator>
@@ -607,7 +735,7 @@ Arcadia_DDL_Scanner_step
       saveAndNext(thread, self);
     }
     onEndWord(thread, self, Arcadia_DDL_WordType_Name);
-    Arcadia_DataDefinitionLanguage_Keywords_scan(thread, self->keywords, Arcadia_DDL_Scanner_getWordText(thread, self), &self->token.type);
+    Arcadia_DataDefinitionLanguage_Keywords_scan(thread, self->keywords, Arcadia_Languages_Scanner_getWordText(thread, (Arcadia_Languages_Scanner*)self), &self->word.type);
     return;
   } else if (isDecimalDigit(thread, self) || '+' == self->symbol || '-' == self->symbol) {
     // <number>
@@ -656,23 +784,26 @@ Arcadia_DDL_Scanner_step
   }
 }
 
-void
-Arcadia_DDL_Scanner_setInput
+static void
+Arcadia_DDL_Scanner_setInputImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Scanner* self,
-    Arcadia_UTF8Reader* input
+    Arcadia_String* input
   )
 {
-  self->input = input;
+  self->inputString = input;
+  self->input = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, self->inputString);
   self->symbol = CodePoint_Start;
-  self->token.type = Arcadia_DDL_WordType_StartOfInput;
-  Arcadia_StringBuffer_clear(thread, self->token.text);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->token.text, u8"<start of input>");
+  self->word.type = Arcadia_DDL_WordType_StartOfInput;
+  self->word.start = 0;
+  self->word.length = 0;
+  Arcadia_StringBuffer_clear(thread, self->word.text);
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->word.text, u8"<start of input>");
 }
 
-Arcadia_Languages_StringTable*
-Arcadia_DDL_Scanner_getStringTable
+static Arcadia_Languages_StringTable*
+Arcadia_DDL_Scanner_getStringTableImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Scanner* self
