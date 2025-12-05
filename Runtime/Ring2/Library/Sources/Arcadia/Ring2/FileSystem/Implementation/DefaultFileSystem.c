@@ -19,19 +19,24 @@
 #include "Arcadia/Ring2/FileSystem/Implementation/DefaultFileHandle.h"
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/ARMS/Include.h"
+
+#include "Arcadia/Ring2/FileSystem/Implementation/deleteDirectoryFile.h"
+#include "Arcadia/Ring2/FileSystem/Implementation/deleteRegularFile.h"
 #include "Arcadia/Ring2/FileSystem/Implementation/getFileType.h"
 
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
 
-#include "Arcadia/Ring2/FileSystem/Windows/getLocalFolder.h"
-#include "Arcadia/Ring2/FileSystem/Windows/getRoamingFolder.h"
+  #include "Arcadia/Ring2/FileSystem/Windows/DirectoryIteratorWindows.h"
+  #include "Arcadia/Ring2/FileSystem/Windows/getLocalFolder.h"
+  #include "Arcadia/Ring2/FileSystem/Windows/getRoamingFolder.h"
 
 #endif
 
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux || \
     Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Cygwin
 
-#include "Arcadia/Ring2/FileSystem/Linux/getHomeFolder.h"
+  #include "Arcadia/Ring2/FileSystem/Linux/DirectoryIteratorLinux.h"
+  #include "Arcadia/Ring2/FileSystem/Linux/getHomeFolder.h"
 
 #endif
 
@@ -47,8 +52,11 @@
   #include <sys/stat.h> // stat 
   #include <sys/types.h>
   #include <errno.h> // errno
-  #include <unistd.h> // getcwd, STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO
+  #include <unistd.h> // sysconf, getcwd, STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO
+  
   #include <linux/limits.h> // PATH_MAX
+  #include <limits.h> // PATH_MAX
+  
   #include <pwd.h> // struct passwd
   #include <fcntl.h>
 
@@ -110,6 +118,30 @@ Arcadia_DefaultFileSystem_createRegularFileImpl
     Arcadia_FilePath* path
   );
 
+static void
+Arcadia_DefaultFileSystem_deleteDirectoryFileImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+static void
+Arcadia_DefaultFileSystem_deleteFileImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+static void
+Arcadia_DefaultFileSystem_deleteRegularFileImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  );
+
 static Arcadia_BooleanValue
 Arcadia_DefaultFileSystem_directoryFileExistsImpl
   (
@@ -134,6 +166,14 @@ Arcadia_DefaultFileSystem_getExecutablePathImpl
 
 static Arcadia_ByteBuffer*
 Arcadia_DefaultFileSystem_getFileContentsImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+static Arcadia_FileType
+Arcadia_DefaultFileSystem_getFileTypeImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self,
@@ -210,40 +250,53 @@ Arcadia_DefaultFileSystem_constructImpl
   }
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+
   self->stdin = INVALID_HANDLE_VALUE;
   self->stdout = INVALID_HANDLE_VALUE;
   self->stderr = INVALID_HANDLE_VALUE;
   self->stdin = GetStdHandle(STD_INPUT_HANDLE);
   if (self->stdin == INVALID_HANDLE_VALUE) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
   self->stdout = GetStdHandle(STD_OUTPUT_HANDLE);
   if (self->stdout == INVALID_HANDLE_VALUE) {
     self->stdin = INVALID_HANDLE_VALUE;
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
   self->stderr = GetStdHandle(STD_ERROR_HANDLE);
   if (self->stderr == INVALID_HANDLE_VALUE) {
     self->stdout = INVALID_HANDLE_VALUE;
     self->stdin = INVALID_HANDLE_VALUE;
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
+
 #endif
+
   ((Arcadia_FileSystem*)self)->createDirectoryFile = (void (*)(Arcadia_Thread*,Arcadia_FileSystem*,Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_createDirectoryFileImpl;
   ((Arcadia_FileSystem*)self)->createFileHandle = (Arcadia_FileHandle *(*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_createFileHandleImpl;
   ((Arcadia_FileSystem*)self)->createDirectoryIterator = (Arcadia_DirectoryIterator* (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_createDirectoryIteratorImpl;
   ((Arcadia_FileSystem*)self)->createRegularFile = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_createRegularFileImpl;
+
+  ((Arcadia_FileSystem*)self)->deleteDirectoryFile = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_deleteDirectoryFileImpl;
+  ((Arcadia_FileSystem*)self)->deleteFile = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_deleteFileImpl;
+  ((Arcadia_FileSystem*)self)->deleteRegularFile = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_deleteRegularFileImpl;
+
   ((Arcadia_FileSystem*)self)->directoryFileExists = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_directoryFileExistsImpl;
+  
   ((Arcadia_FileSystem*)self)->getConfigurationFolder = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getConfigurationFolderImpl;
   ((Arcadia_FileSystem*)self)->getExecutablePath = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getExecutablePathImpl;
   ((Arcadia_FileSystem*)self)->getFileContents = (Arcadia_ByteBuffer * (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getFileContentsImpl;
+  ((Arcadia_FileSystem*)self)->getFileType = (Arcadia_FileType (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getFileTypeImpl;
   ((Arcadia_FileSystem*)self)->getSaveFolder = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getSaveFolderImpl;
   ((Arcadia_FileSystem*)self)->getWorkingDirectory = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getWorkingDirectoryImpl;
+  
   ((Arcadia_FileSystem*)self)->regularFileExists = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_regularFileExistsImpl;
+  
   ((Arcadia_FileSystem*)self)->setFileContents = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*, Arcadia_ByteBuffer*)) & Arcadia_DefaultFileSystem_setFileContentsImpl;
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
@@ -270,82 +323,115 @@ Arcadia_DefaultFileSystem_destruct
 #endif
 }
 
-static Arcadia_ByteBuffer*
-Arcadia_DefaultFileSystem_getFileContentsImpl
+static void
+Arcadia_DefaultFileSystem_createDirectoryFileImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self,
     Arcadia_FilePath* path
   )
 {
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, (Arcadia_FileSystem*)self);
-  Arcadia_FileHandle_openForReading(thread, fileHandle, path);
-  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  char p[5012]; size_t n;
-  do {
-    Arcadia_FileHandle_read(thread, fileHandle, p, 5012, &n);
-    if (n > 0) {
-      Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, p, n);
+  Arcadia_String* nativePath = Arcadia_FilePath_toNative(thread, path);
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+  if (FALSE == CreateDirectory(Arcadia_String_getBytes(thread, nativePath), NULL)) {
+    if (ERROR_ALREADY_EXISTS != GetLastError()) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+      Arcadia_Thread_jump(thread);
     }
-  } while (n > 0);
-  Arcadia_FileHandle_close(thread, fileHandle);
-  fileHandle = NULL;
-  return byteBuffer;
+  }
+#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
+  if (-1 == mkdir(Arcadia_String_getBytes(thread, nativePath), 0777)) {
+    if (errno == EEXIST) {
+      errno = 0;
+      struct stat sb;
+      if (-1 == stat(Arcadia_String_getBytes(thread, nativePath), &sb)) {
+        errno = 0;
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+        Arcadia_Thread_jump(thread);
+      }
+      if (!S_ISDIR(sb.st_mode)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+        Arcadia_Thread_jump(thread);
+      }
+    } else {
+      errno = 0;
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+      Arcadia_Thread_jump(thread);
+    }
+  }
+#else
+  #error("operating system not (yet) supported")
+#endif
+}
+
+static Arcadia_DirectoryIterator*
+Arcadia_DefaultFileSystem_createDirectoryIteratorImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  )
+{
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+  return (Arcadia_DirectoryIterator*)Arcadia_DirectoryIteratorWindows_create(thread, path);
+#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
+  return (Arcadia_DirectoryIterator*)Arcadia_DirectoryIteratorLinux_create(thread, path);
+#else
+  #error("operating system not (yet) supported")
+#endif
+}
+
+static Arcadia_FileHandle*
+Arcadia_DefaultFileSystem_createFileHandleImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self
+  )
+{
+  return (Arcadia_FileHandle*)Arcadia_DefaultFileHandle_create(thread, (Arcadia_FileSystem*)self);
 }
 
 static void
-Arcadia_DefaultFileSystem_setFileContentsImpl
+Arcadia_DefaultFileSystem_createRegularFileImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self,
-    Arcadia_FilePath* path,
-    Arcadia_ByteBuffer * contents
+    Arcadia_FilePath* path
   )
-{
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, (Arcadia_FileSystem*)self);
-  Arcadia_FileHandle_openForWriting(thread, fileHandle, path);
-  Arcadia_SizeValue bytesToWrite = contents->sz,
-                    bytesWritten = 0;
-  while (bytesToWrite > 0) {
-    Arcadia_SizeValue bytesWrittenNow;
-    Arcadia_FileHandle_write(thread, fileHandle, contents->p + bytesWritten, bytesToWrite, &bytesWrittenNow);
-    bytesWritten += bytesWrittenNow;
-    bytesToWrite -= bytesWrittenNow;
-  }
-  Arcadia_FileHandle_close(thread, fileHandle);
-  fileHandle = NULL;
-}
+{/*Intentionally empty.*/}
 
-static Arcadia_BooleanValue
-Arcadia_DefaultFileSystem_regularFileExistsImpl
+static void
+Arcadia_DefaultFileSystem_deleteDirectoryFileImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ Arcadia_DefaultFileSystem_deleteDirectoryFileHelper(thread, self, path); }
+
+static void
+Arcadia_DefaultFileSystem_deleteFileImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self,
     Arcadia_FilePath* path
   )
 {
-  Arcadia_String* nativePathString = Arcadia_FilePath_toNative(thread, path);
-#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(thread, nativePathString));
-  return (dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
-         !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
-#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  struct stat stat;
-  if(-1 == lstat(Arcadia_String_getBytes(thread, nativePathString), &stat)) {
-    switch (errno) {
-      case EOVERFLOW:
-      case ENOMEM: {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-        Arcadia_Thread_jump(thread);
-      } break;
-    };
-    return Arcadia_BooleanValue_False;
+  if (Arcadia_FileType_Directory == Arcadia_FileSystem_getFileType(thread, (Arcadia_FileSystem*)self, path)) {
+    Arcadia_FileSystem_deleteDirectoryFile(thread, (Arcadia_FileSystem*)self, path);
+  } else {
+    Arcadia_FileSystem_deleteRegularFile(thread, (Arcadia_FileSystem*)self, path);
   }
-  return S_IFREG == (stat.st_mode & S_IFMT) || S_IFLNK == (stat.st_mode & S_IFMT);
-#else
-  #error("environment not (yet) supported")
-#endif
 }
+
+static void
+Arcadia_DefaultFileSystem_deleteRegularFileImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ Arcadia_DefaultFileSystem_deleteRegularFileHelper(thread, self, path); }
 
 static Arcadia_BooleanValue
 Arcadia_DefaultFileSystem_directoryFileExistsImpl
@@ -377,88 +463,23 @@ Arcadia_DefaultFileSystem_directoryFileExistsImpl
 #endif
 }
 
-static void
-Arcadia_DefaultFileSystem_createDirectoryFileImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DefaultFileSystem* self,
-    Arcadia_FilePath* path
-  )
-{
-  Arcadia_String* nativePath = Arcadia_FilePath_toNative(thread, path);
-#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  if (FALSE == CreateDirectory(Arcadia_String_getBytes(thread, nativePath), NULL)) {
-    if (ERROR_ALREADY_EXISTS != GetLastError()) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
-      Arcadia_Thread_jump(thread);
-    }
-  }
-#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
-  if (-1 == mkdir(Arcadia_String_getBytes(thread, nativePath), 0777)) {
-    if (errno == EEXIST) {
-      errno = 0;
-      struct stat sb;
-      if (-1 == stat(Arcadia_String_getBytes(thread, nativePath), &sb)) {
-        errno = 0;
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
-        Arcadia_Thread_jump(thread);
-      }
-      if (!S_ISDIR(sb.st_mode)) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
-        Arcadia_Thread_jump(thread);
-      }
-    } else {
-      errno = 0;
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
-      Arcadia_Thread_jump(thread);
-    }
-  }
-#else
-  #error("operating system not (yet) supported")
-#endif
-}
-
-static Arcadia_FileHandle*
-Arcadia_DefaultFileSystem_createFileHandleImpl
+static Arcadia_FilePath*
+Arcadia_DefaultFileSystem_getConfigurationFolderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self
   )
 {
-  return (Arcadia_FileHandle*)Arcadia_DefaultFileHandle_create(thread, (Arcadia_FileSystem*)self);
-}
-
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  #include "Arcadia/Ring2/FileSystem/Windows/DirectoryIteratorWindows.h"
-#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
-  #include "Arcadia/Ring2/FileSystem/Linux/DirectoryIteratorLinux.h"
+  Arcadia_FilePath* filePath = Arcadia_DefaultFileSystem_getLocalFolderHelper(thread, self);
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia", sizeof(u8"Michael Heilmann's Arcadia") - 1));
+  return filePath;
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  Arcadia_FilePath* filePath = Arcadia_DefaultFileSystem_getHomeFolderHelper(thread, self);
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia/Configurations", sizeof(u8"Michael Heilmann's Arcadia/Configurations") - 1));
+  return filePath;
 #else
-  #error("operating system not (yet) supported")
-#endif
-
-static void
-Arcadia_DefaultFileSystem_createRegularFileImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DefaultFileSystem* self,
-    Arcadia_FilePath* path
-  )
-{/*Intentionally empty.*/}
-
-static Arcadia_DirectoryIterator*
-Arcadia_DefaultFileSystem_createDirectoryIteratorImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DefaultFileSystem* self,
-    Arcadia_FilePath* path
-  )
-{
-#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  return (Arcadia_DirectoryIterator*)Arcadia_DirectoryIteratorWindows_create(thread, path);
-#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
-  return (Arcadia_DirectoryIterator*)Arcadia_DirectoryIteratorLinux_create(thread, path);
-#else
-  #error("operating system not (yet) supported")
+  #error("environment not (yet) supported")
 #endif
 }
 
@@ -537,25 +558,37 @@ Arcadia_DefaultFileSystem_getExecutablePathImpl
 #endif
 }
 
-static Arcadia_FilePath*
-Arcadia_DefaultFileSystem_getConfigurationFolderImpl
+static Arcadia_ByteBuffer*
+Arcadia_DefaultFileSystem_getFileContentsImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_DefaultFileSystem* self
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
   )
 {
-#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  Arcadia_FilePath* filePath = Arcadia_DefaultFileSystem_getLocalFolderHelper(thread, self);
-  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia", sizeof(u8"Michael Heilmann's Arcadia") - 1));
-  return filePath;
-#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  Arcadia_FilePath* filePath = Arcadia_DefaultFileSystem_getHomeFolderHelper(thread, self);
-  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia/Configurations", sizeof(u8"Michael Heilmann's Arcadia/Configurations") - 1));
-  return filePath;
-#else
-  #error("environment not (yet) supported")
-#endif
+  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, (Arcadia_FileSystem*)self);
+  Arcadia_FileHandle_openForReading(thread, fileHandle, path);
+  Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
+  char p[5012]; size_t n;
+  do {
+    Arcadia_FileHandle_read(thread, fileHandle, p, 5012, &n);
+    if (n > 0) {
+      Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, p, n);
+    }
+  } while (n > 0);
+  Arcadia_FileHandle_close(thread, fileHandle);
+  fileHandle = NULL;
+  return byteBuffer;
 }
+
+static Arcadia_FileType
+Arcadia_DefaultFileSystem_getFileTypeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ return Arcadia_DefaultFileSystem_getFileTypeHelper(thread, self, path); }
 
 static Arcadia_FilePath*
 Arcadia_DefaultFileSystem_getSaveFolderImpl
@@ -632,18 +665,59 @@ Arcadia_DefaultFileSystem_getWorkingDirectoryImpl
 #endif
 }
 
-#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  // SYSTEM_INFO, GetSystemInfo, MAX_PATH
-  #define WIN32_LEAN_AND_MEAN
-  #include <windows.h>
+static Arcadia_BooleanValue
+Arcadia_DefaultFileSystem_regularFileExistsImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  )
+{
+  Arcadia_String* nativePathString = Arcadia_FilePath_toNative(thread, path);
+#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
+  DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(thread, nativePathString));
+  return (dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
+         !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  // PATH_MAX
-  #include <limits.h>
-  // sysconf
-  #include <unistd.h>
+  struct stat stat;
+  if(-1 == lstat(Arcadia_String_getBytes(thread, nativePathString), &stat)) {
+    switch (errno) {
+      case EOVERFLOW:
+      case ENOMEM: {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+        Arcadia_Thread_jump(thread);
+      } break;
+    };
+    return Arcadia_BooleanValue_False;
+  }
+  return S_IFREG == (stat.st_mode & S_IFMT) || S_IFLNK == (stat.st_mode & S_IFMT);
 #else
   #error("environment not (yet) supported")
 #endif
+}
+
+static void
+Arcadia_DefaultFileSystem_setFileContentsImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path,
+    Arcadia_ByteBuffer * contents
+  )
+{
+  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, (Arcadia_FileSystem*)self);
+  Arcadia_FileHandle_openForWriting(thread, fileHandle, path);
+  Arcadia_SizeValue bytesToWrite = contents->sz,
+                    bytesWritten = 0;
+  while (bytesToWrite > 0) {
+    Arcadia_SizeValue bytesWrittenNow;
+    Arcadia_FileHandle_write(thread, fileHandle, contents->p + bytesWritten, bytesToWrite, &bytesWrittenNow);
+    bytesWritten += bytesWrittenNow;
+    bytesToWrite -= bytesWrittenNow;
+  }
+  Arcadia_FileHandle_close(thread, fileHandle);
+  fileHandle = NULL;
+}
 
 static Arcadia_DefaultFileSystem*
 Arcadia_DefaultFileSystem_create

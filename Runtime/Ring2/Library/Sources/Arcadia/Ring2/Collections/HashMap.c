@@ -130,6 +130,7 @@ Arcadia_HashMap_getKeysImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_HashMap_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_HashMap_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_HashMap_visit,

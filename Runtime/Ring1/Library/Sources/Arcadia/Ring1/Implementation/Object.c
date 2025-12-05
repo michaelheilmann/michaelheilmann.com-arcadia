@@ -16,6 +16,7 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Object.h"
 
+#include <assert.h>
 #include "Arcadia/Ring1/Include.h"
 
 static void*
@@ -483,7 +484,11 @@ Arcadia_Object_getType
     Arcadia_Object* self
   )
 {
+  assert(NULL != thread);
+  assert(NULL != self);
+
   ObjectTag* objectTag = ((ObjectTag*)self) - 1;
+  assert(NULL != objectTag->type);
   return objectTag->type;
 }
 
@@ -495,6 +500,9 @@ Arcadia_Object_isEqualTo
     Arcadia_Value const* other
   )
 {
+  assert(NULL != self);
+  assert(NULL != other);
+
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
   Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
@@ -503,6 +511,7 @@ Arcadia_Object_isEqualTo
   Arcadia_ValueStack_pushValue(thread, &temporary);
   Arcadia_ValueStack_pushValue(thread, other);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  assert(NULL != operations && NULL != operations->equalTo);
   operations->equalTo(thread);
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
@@ -522,6 +531,9 @@ Arcadia_Object_isNotEqualTo
     Arcadia_Value const* other
   )
 {
+  assert(NULL != self);
+  assert(NULL != other);
+
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
   Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);

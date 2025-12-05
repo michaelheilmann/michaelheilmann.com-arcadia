@@ -20,7 +20,7 @@
 #define ARCADIA_DDLS_PRIVATE (1)
 
 #include "Arcadia/DDLS/Syntactical/DefaultReader.h"
-#include "Arcadia/DDLS/Semantical/SymbolReader.h"
+#include "Arcadia/DDLS/Symbols/SymbolReader.h"
 
 #include "Arcadia/DDLS/Nodes/Include.h"
 

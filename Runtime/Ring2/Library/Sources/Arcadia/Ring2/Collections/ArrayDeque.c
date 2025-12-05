@@ -210,6 +210,7 @@ Arcadia_ArrayDeque_removeAtImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_ArrayDeque_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_ArrayDeque_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ArrayDeque_visit,

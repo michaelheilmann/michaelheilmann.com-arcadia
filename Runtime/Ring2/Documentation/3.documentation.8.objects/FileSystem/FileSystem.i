@@ -6,6 +6,8 @@
 
 @{include("3.documentation.8.objects/FileSystem/FileSystem/createDirectoryIterator.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/createFileHandle.i")}
+@{include("3.documentation.8.objects/FileSystem/FileSystem/deleteDirectoryFile.i")}
+@{include("3.documentation.8.objects/FileSystem/FileSystem/deleteFile.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/deleteRegularFile.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/directoryFileExists.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/getConfigurationFolder.i")}

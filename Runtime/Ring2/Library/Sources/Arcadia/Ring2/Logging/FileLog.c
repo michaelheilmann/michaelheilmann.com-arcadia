@@ -120,7 +120,6 @@ Arcadia_FileLog_infoImpl
 {
   const char* p = Arcadia_String_getBytes(thread, message);
   Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(thread, message);
-  //writeBytes(thread, self, u8"\033[38;2;0;255;0m", sizeof(u8"\033[38;2;0;255;0m") - 1);
   writeBytes(thread, self, p, n);
 }
 
@@ -134,7 +133,6 @@ Arcadia_FileLog_errorImpl
 {
   const char* p = Arcadia_String_getBytes(thread, message);
   Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(thread, message);
-  //writeBytes(thread, self, u8"\033[38;2;255;0;0m", sizeof(u8"\033[38;2;255;0;0m") - 1);
   writeBytes(thread, self, p, n);
 }
 
@@ -154,7 +152,7 @@ writeBytes
     Arcadia_FileHandle_write(thread, self->fileHandle, bytes + written, toWrite, &writtenNow);
     if (writtenNow == 0) {
       if (numberOfAttempts == maximumNumberOfAttempts) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
         Arcadia_Thread_jump(thread);
       }
       numberOfAttempts++;

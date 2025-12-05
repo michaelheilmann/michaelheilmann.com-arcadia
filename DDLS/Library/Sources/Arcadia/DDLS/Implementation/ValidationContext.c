@@ -219,6 +219,9 @@ onValidate
     ddlsNode = schemaNode->definition;
 
   }
+  if (Arcadia_DDLS_isAny(thread, ddlsNode)) {
+    return;
+  }
   if (Arcadia_DDLS_isBoolean(thread, ddlsNode) && Arcadia_DDL_Node_isBoolean(thread, node)) {
     return;
   } else if (Arcadia_DDLS_isList(thread, ddlsNode) && Arcadia_DDL_Node_isList(thread, node)) {

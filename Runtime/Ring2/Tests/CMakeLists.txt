@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 4.1.3)
 
-add_subdirectory(Utf8Tests)
+add_subdirectory(UTF8Tests)
 add_subdirectory(StringTests)
 add_subdirectory(FilePathTests)
 add_subdirectory(DirectoryIteratorTests)

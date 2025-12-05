@@ -16,15 +16,33 @@
 #include "Arcadia/DDLS/Syntactical/DefaultReader.h"
 
 #include "Arcadia/DDLS/Extensions.h"
-#include "Arcadia/DDLS/Semantical/SymbolReader.h"
+#include "Arcadia/DDLS/Symbols/SymbolReader.h"
 
 #include "Arcadia/DDLS/Nodes/Include.h"
 
-#include "Arcadia/DDLS/Semantical/MapSymbol.h"
-#include "Arcadia/DDLS/Semantical/MapEntrySymbol.h"
-#include "Arcadia/DDLS/Semantical/ScalarSymbol.h"
-#include "Arcadia/DDLS/Semantical/SchemaReferenceSymbol.h"
-#include "Arcadia/DDLS/Semantical/SchemaSymbol.h"
+#include "Arcadia/DDLS/Symbols/AnySymbol.h"
+#include "Arcadia/DDLS/Symbols/ListSymbol.h"
+#include "Arcadia/DDLS/Symbols/MapSymbol.h"
+#include "Arcadia/DDLS/Symbols/MapEntrySymbol.h"
+#include "Arcadia/DDLS/Symbols/ScalarSymbol.h"
+#include "Arcadia/DDLS/Symbols/SchemaReferenceSymbol.h"
+#include "Arcadia/DDLS/Symbols/SchemaSymbol.h"
+
+static Arcadia_DDLS_AnyNode*
+readAnyNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_DefaultReader* self,
+    Arcadia_DDLS_AnySymbol* source
+  );
+
+static Arcadia_DDLS_ListNode*
+readListNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_DefaultReader* self,
+    Arcadia_DDLS_ListSymbol* source
+  );
 
 static Arcadia_DDLS_MapNode*
 readMapNode
@@ -103,6 +121,31 @@ Arcadia_defineObjectType(u8"Arcadia.DDLS.DefaultReader", Arcadia_DDLS_DefaultRea
                          u8"Arcadia.Object", Arcadia_Object,
                          &_Arcadia_DDLS_DefaultReader_typeOperations);
 
+static Arcadia_DDLS_AnyNode*
+readAnyNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_DefaultReader* self,
+    Arcadia_DDLS_AnySymbol* source
+  )
+{
+  Arcadia_DDLS_AnyNode* target = Arcadia_DDLS_AnyNode_create(thread);
+  return target;
+}
+
+static Arcadia_DDLS_ListNode*
+readListNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_DefaultReader* self,
+    Arcadia_DDLS_ListSymbol* source
+  )
+{
+  Arcadia_DDLS_Node* listElementNode = readNode(thread, self, source->entry);
+  Arcadia_DDLS_ListNode* listNode = Arcadia_DDLS_ListNode_create(thread, listElementNode);
+  return listNode;
+}
+
 static Arcadia_DDLS_MapNode*
 readMapNode
   (
@@ -139,7 +182,13 @@ readNode
   )
 {
   switch (source->kind) {
-    case Arcadia_DDLS_SymbolKind_Map: {
+   case Arcadia_DDLS_SymbolKind_Any: {
+     return (Arcadia_DDLS_Node*)readAnyNode(thread, self, (Arcadia_DDLS_AnySymbol*)source);
+   } break;
+   case Arcadia_DDLS_SymbolKind_List: {
+     return (Arcadia_DDLS_Node*)readListNode(thread, self, (Arcadia_DDLS_ListSymbol*)source);
+   } break;
+   case Arcadia_DDLS_SymbolKind_Map: {
       return (Arcadia_DDLS_Node*)readMapNode(thread, self, (Arcadia_DDLS_MapSymbol*)source);
     } break;
     case Arcadia_DDLS_SymbolKind_Scalar: {

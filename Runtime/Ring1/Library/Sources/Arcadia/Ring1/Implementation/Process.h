@@ -135,7 +135,7 @@ typedef void (Arcadia_Process_FinalizeCallback)(Arcadia_Thread* thread, size_t* 
 /// @param process A pointer to the process.
 /// @param callback A pointer to the premark callback.
 void
-Arcadia_Process_addArmsPreMarkCallback
+Arcadia_Process_addPreMarkCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_PreMarkCallback* callback
@@ -146,7 +146,7 @@ Arcadia_Process_addArmsPreMarkCallback
 /// @param callback A pointer to the premark callback.
 /// @remark One occurrence of the callback in the list of premark callbacks was removed.
 void
-Arcadia_Process_removeArmsPreMarkCallback
+Arcadia_Process_removePreMarkCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_PreMarkCallback* callback
@@ -156,7 +156,7 @@ Arcadia_Process_removeArmsPreMarkCallback
 /// @param process A pointer to the process.
 /// @param callback A pointer to the visit callback.
 void
-Arcadia_Process_addArmsVisitCallback
+Arcadia_Process_addVisitCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_VisitCallback* callback
@@ -167,7 +167,7 @@ Arcadia_Process_addArmsVisitCallback
 /// @param callback A pointer to the visit callback.
 /// @remark One occurrence of the callback in the list of visit callbacks was removed.
 void
-Arcadia_Process_removeArmsVisitCallback
+Arcadia_Process_removeVisitCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_VisitCallback* callback
@@ -177,7 +177,7 @@ Arcadia_Process_removeArmsVisitCallback
 /// @param process A pointer to the process.
 /// @param callback A pointer to the finalize callback.
 void
-Arcadia_Process_addArmsFinalizeCallback
+Arcadia_Process_addFinalizeCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_FinalizeCallback* callback
@@ -188,7 +188,7 @@ Arcadia_Process_addArmsFinalizeCallback
 /// @param callback A pointer to the finalize callback.
 /// @remark One occurrence of the callback in the list of finalize callbacks was removed.
 void
-Arcadia_Process_removeArmsFinalizeCallback
+Arcadia_Process_removeFinalizeCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_FinalizeCallback* callback

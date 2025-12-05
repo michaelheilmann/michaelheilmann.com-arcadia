@@ -142,11 +142,12 @@
     <div class="left-column">
     </div>
     <div class="center-column">
-     </div>
-    <div class="right-column" style="display: flex; flex-direction: column">
-      <div><a href='mailto:contact@@michaelheilmann.com'>contact@@michaelheilmann.com</a></div>
       <div><a href="@{siteAddress}/imprint">Imprint</a></div>
       <div><a href="@{siteAddress}/data-protection-statement">Data Protection Statement</a></div>
+    </div>
+    <div class="right-column" style="display: flex; flex-direction: column">
+      <div><a href='https://discord.gg/XtPA6pwAsp'>Discord</a></div>
+      <div><a href='mailto:contact@@michaelheilmann.com'>contact@@michaelheilmann.com</a></div>
     </div>
   </footer>
 </body>

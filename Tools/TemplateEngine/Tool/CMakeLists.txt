@@ -20,6 +20,8 @@ set(MyExecutableName ${MyProjectName}.Tools.TemplateEngine)
 if (NOT TARGET ${MyExecutableName})
 
   BeginProduct(${MyExecutableName} executable)
+  
+  set(${MyExecutableName}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h @ONLY)
   list(APPEND ${MyExecutableName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
@@ -31,6 +33,7 @@ if (NOT TARGET ${MyExecutableName})
 
   EndProduct(${MyExecutableName})
 
-  set_target_properties(${MyExecutableName} PROPERTIES FOLDER "Tools/TemplateEngine")
+  install(TARGETS ${MyExecutableName} RUNTIME DESTINATION bin/$<CONFIG>) # Wrap into *Product API.
+  set_target_properties(${MyExecutableName} PROPERTIES FOLDER "Tools/TemplateEngine") # Wrap into *Product API.
 
 endif()

@@ -129,6 +129,7 @@ Arcadia_HashSet_removeImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_HashSet_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_HashSet_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_HashSet_visit,

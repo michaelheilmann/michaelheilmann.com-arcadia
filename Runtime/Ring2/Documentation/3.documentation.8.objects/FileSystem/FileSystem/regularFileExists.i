@@ -47,7 +47,9 @@
       <div><code>self</code> is a null pointer.</div>
     </div>
     <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</td><td><code>path</code> is a null pointer.</td></tr>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
   </section>
 
 </section>

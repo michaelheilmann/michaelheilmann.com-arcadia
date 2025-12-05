@@ -46,6 +46,9 @@ main1
   return Arcadia_ByteBuffer_isEqualTo(thread, firstByteBuffer, secondByteBuffer);
 }
 
+// Returns 2 on failure.
+// Returns 0 if there are no differences.
+// Returns 1 if there are differences.
 int
 main
   (
@@ -69,7 +72,7 @@ main
   Arcadia_Process_relinquish(process);
   process = NULL;
   if (status) {
-    return EXIT_FAILURE;
+    return 2;
   }
-  return areEqual ? EXIT_SUCCESS : EXIT_FAILURE;
+  return areEqual ? 0 : 1;
 }

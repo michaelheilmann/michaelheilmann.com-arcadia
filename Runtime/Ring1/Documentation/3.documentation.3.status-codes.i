@@ -28,6 +28,7 @@
   </p>
   <table>
   <tr><td><code><span>Name</span></code></td>                                                      <td>Value</td></tr>
+  <tr><td><code id="Arcadia_Status_AccessDenied">AccessDenied</code></td>                          <td>An access was denied.</td></tr>
   <tr><td><code id="Arcadia_Status_AllocationFailed">AllocationFailed</code></td>                  <td>An allocation failed.</td></tr>
 
   <tr><td><code id="Arcadia_Status_ArgumentTypeInvalid">ArgumentTypeInvalid</code></td>            <td>The type of an argument is invalid.</td></tr>
@@ -43,9 +44,6 @@
 
   <tr><td><code id="Arcadia_Status_Found">Found</code></td>                                        <td>Something was found.</td>
 
-  <tr><td><code id="Arcadia_Status_FileSystemOperationFailed">FileSystemOperationFailed</code></td><td>A file system operation failed.</td></tr>
-
-
   <tr><td><code id="Arcadia_Status_Initialized">Initialized</code></td>                            <td>Something was initialized (but should not have been initialized).</td></tr>
 
   <tr><td><code id="Arcadia_Status_LexicalError">LexicalError</code></td>                          <td>A lexical error.</td></tr>
@@ -54,6 +52,7 @@
   <tr><td><code id="Arcadia_Status_NotFound">NotFound</code></td>                                  <td>Something was not found.</td>
   <tr><td><code id="Arcadia_Status_NumberOfArgumentsInvalid">NumberOfArgumentsInvalid</code></td>  <td>The number of arguments is invalid.</td></tr>
 
+  <tr><td><code id="Arcadia_Status_OperationFailed">OperationFailed</code></td>                    <td>An operation failed.</td></tr>
   <tr><td><code id="Arcadia_Status_OperationInvalid">OperationInvalid</code></td>                  <td>An operation is invalid.</td></tr>
 
   <tr><td><code id="Arcadia_Status_SemanticalError">SemanticalError</code></td>                    <td>A semantical error.</td></tr>

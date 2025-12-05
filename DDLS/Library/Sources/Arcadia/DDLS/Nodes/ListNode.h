@@ -24,7 +24,7 @@
 /// List node.
 /// Consists of a single element type.
 Arcadia_declareObjectType(u8"Arcadia.DDLS.ListNode", Arcadia_DDLS_ListNode,
-                          u8"Arcadia.DDLS.Type");
+                          u8"Arcadia.DDLS.Node");
 
 struct Arcadia_DDLS_ListNode {
   Arcadia_DDLS_Node parent;

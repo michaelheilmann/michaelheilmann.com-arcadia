@@ -427,7 +427,7 @@ Arcadia_DefaultFileHandle_openImpl
 
   self->fd = CreateFile(Arcadia_String_getBytes(thread, nativePath), dwDesiredAccess, dwShareMode, NULL, dwCreationDisposition, FILE_ATTRIBUTE_NORMAL, NULL);
   if (INVALID_HANDLE_VALUE == self->fd) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
 
@@ -484,7 +484,7 @@ Arcadia_DefaultFileHandle_openImpl
     self->fd = open(Arcadia_String_getBytes(thread, nativePath), flags);
   }
   if (0 == self->fd) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
 
@@ -633,7 +633,7 @@ Arcadia_DefaultFileHandle_readImpl
 
   DWORD bytesReadNow;
   if (!ReadFile(self->fd, bytes, bytesToRead, &bytesReadNow, NULL)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
   *bytesRead = bytesReadNow;
@@ -643,7 +643,7 @@ Arcadia_DefaultFileHandle_readImpl
   
   ssize_t bytesReadNow = read(self->fd, bytes, bytesToRead > SSIZE_MAX ? SSIZE_MAX : bytesToRead);
   if (bytesReadNow == -1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
   *bytesRead = bytesReadNow;
@@ -678,7 +678,7 @@ Arcadia_DefaultFileHandle_writeImpl
 
   DWORD bytesWrittenNow;
   if (!WriteFile(self->fd, bytes, bytesToWrite, &bytesWrittenNow, NULL)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
   *bytesWritten = bytesWrittenNow;
@@ -689,7 +689,7 @@ Arcadia_DefaultFileHandle_writeImpl
   ssize_t bytesWrittenNow;
   bytesWrittenNow = write(self->fd, bytes, bytesToWrite > SSIZE_MAX ? SSIZE_MAX : bytesToWrite);
   if (-1 == bytesWrittenNow) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
   }
   *bytesWritten = bytesWrittenNow;

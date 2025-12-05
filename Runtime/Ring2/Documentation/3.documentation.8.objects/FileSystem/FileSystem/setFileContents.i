@@ -52,7 +52,7 @@
       <div><code>contents</code> is a null pointer.</div>
     </div>
     <div>
-      <div>Arcadia_Status_FileSystemOperationFailed</div>
+      <div>Arcadia_Status_OperationFailed</div>
       <div>Opening the file failed.</div>
     </div>
   </section>

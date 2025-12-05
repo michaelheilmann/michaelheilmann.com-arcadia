@@ -158,7 +158,7 @@ writeBytes
     Arcadia_FileHandle_write(thread, self->fileHandle, bytes + written, toWrite, &writtenNow);
     if (writtenNow == 0) {
       if (numberOfAttempts == maximumNumberOfAttempts) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_FileSystemOperationFailed);
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
         Arcadia_Thread_jump(thread);
       }
       numberOfAttempts++;

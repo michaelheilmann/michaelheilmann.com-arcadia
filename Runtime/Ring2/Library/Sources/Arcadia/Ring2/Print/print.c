@@ -40,7 +40,7 @@ static inline Arcadia_String* getString(Arcadia_Thread* thread, Arcadia_SizeValu
 
 /// @error Arcadia.Status.AllocationFailed
 /// @error Arcadia.Status.ArgumentTypeInvalid
-/// @error Arcadia.Status.FileSystemOperationFailed
+/// @error Arcadia.Status.OperationFailed
 static inline void
 printString
   (
@@ -61,7 +61,7 @@ printString
 /// @error Arcadia.Status.StackCorruption calling convention was violated
 /// @error Arcadia.Status.AllocationFailed
 /// @error Arcadia.Status.ArgumentTypeInvalid
-/// @error Arcadia.Status.FileSystemOperationFailed
+/// @error Arcadia.Status.OperationFailed
 void
 Arcadia_print
   (

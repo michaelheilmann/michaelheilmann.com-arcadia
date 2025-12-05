@@ -1795,7 +1795,135 @@ The enumeration elements can be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_FileSystem_deleteFile">Arcadia_FileSystem_deleteRegularFile</h1>
+  <h1 id="Arcadia_FileSystem_deleteDirectoryFile">Arcadia_FileSystem_deleteDirectoryFile</h1>
+
+  <my-summary><code>
+  void<br>
+  Arcadia_FileSystem_deleteDirectoryFile<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Delete a regular file.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The path to the file.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_NotEmpty</div>
+      <div>The directory was not found.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_AccessDenied</div>
+      <div>Access to the file was denied.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_NotFound</div>
+      <div>The file was not found.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_OperationFailed</div>
+      <div>The file is not found, the file is not a regular file, or deletion failed.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_deleteFile">Arcadia_FileSystem_deleteFile</h1>
+
+  <my-summary><code>
+  void<br>
+  Arcadia_FileSystem_deleteFile<br>
+  &nbsp;&nbsp;(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FilePath* path<br>
+  &nbsp;&nbsp;)
+  </code></my-summary>
+
+  <my-summary>
+  Delete a regular file.
+  </my-summary>
+
+  <section class="cxx parameters">
+    <h1>Parameters</h1>
+    <div>
+      <div><a href="#">Arcadia_Thread</a>* thread</div>
+      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
+    </div>
+    <div>
+      <div><a href="#">Arcadia_FileSystem</a>* self</div>
+      <div>A pointer to this <code>Arcadia_FileSystem</code> object.</div>
+    </div>
+    <div>
+      <div>Arcadia_FilePath* path</div>
+      <div>The path to the file.</div>
+    </div>
+  </section>
+
+  <section class="cxx errors">
+    <h1>Errors</h1>
+    <div>
+      <div>Arcadia_Status_AccessDenied</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>self</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_AccessDenied</div>
+      <div>Access to the file was denied.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_NotFound</div>
+      <div>The file was not found.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_OperationFailed</div>
+      <div>Deletion failed.</div>
+    </div>
+  </section>
+
+</section>
+
+<section class="cxx entity method">
+
+  <h1 id="Arcadia_FileSystem_deleteRegularFile">Arcadia_FileSystem_deleteRegularFile</h1>
 
   <my-summary><code>
   void<br>
@@ -1838,8 +1966,16 @@ The enumeration elements can be combined.
       <div><code>path</code> is a null pointer.</div>
     </div>
     <div>
-      <div>Arcadia_Status_FileSystemOperationFailed</div>
-      <div>The file is not found, the file is not a regular file, or deletion failed.</div>
+      <div>Arcadia_Status_AccessDenied</div>
+      <div>Access to the file was denied.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_NotFound</div>
+      <div>The file was not found.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_OperationFailed</div>
+      <div>The file is not a regular file, or deletion failed.</div>
     </div>
   </section>
 
@@ -2005,7 +2141,7 @@ The enumeration elements can be combined.
       <div><code>path</code> is a null pointer.</div>
     </div>
     <div>
-      <div><a href="#">Arcadia_Status_FileSystemOperationFailed</a></div>
+      <div><a href="#">Arcadia_Status_OperationFailed</a></div>
       <div>Opening the file failed.</div>
     </div>
   </section>
@@ -2200,7 +2336,9 @@ The enumeration elements can be combined.
       <div><code>self</code> is a null pointer.</div>
     </div>
     <div>
-      <div>Arcadia_Status_ArgumentValueInvalid</td><td><code>path</code> is a null pointer.</td></tr>
+      <div>Arcadia_Status_ArgumentValueInvalid</div>
+      <div><code>path</code> is a null pointer.</div>
+    </div>
   </section>
 
 </section>
@@ -2259,7 +2397,7 @@ The enumeration elements can be combined.
       <div><code>contents</code> is a null pointer.</div>
     </div>
     <div>
-      <div>Arcadia_Status_FileSystemOperationFailed</div>
+      <div>Arcadia_Status_OperationFailed</div>
       <div>Opening the file failed.</div>
     </div>
   </section>
@@ -5628,7 +5766,7 @@ The enumeration elements cannot be combined.
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 5 December 2025.</div>
+      <div>Last modified on 7 December 2025.</div>
     </div>
   </footer>
   </body>

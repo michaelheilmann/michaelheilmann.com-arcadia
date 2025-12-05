@@ -42,17 +42,17 @@
 
 #endif
 
-typedef struct Arms_Type Arms_Type;
+typedef struct ARMS_Type ARMS_Type;
 
 
 #if defined(Arcadia_ARMS_Configuration_WithLocks) && 1 == Arcadia_ARMS_Configuration_WithLocks
 
-typedef struct Arms_Lock Arms_Lock;
+typedef struct ARMS_Lock ARMS_Lock;
 
 #endif
 
-struct Arms_Type {
-  Arms_Type* next;
+struct ARMS_Type {
+  ARMS_Type* next;
   uint8_t* name;
   size_t nameLength;
   void* context;
@@ -63,8 +63,8 @@ struct Arms_Type {
 
 #if defined(Arcadia_ARMS_Configuration_WithLocks) && 1 == Arcadia_ARMS_Configuration_WithLocks
 
-struct Arms_Lock {
-  Arms_Lock* next;
+struct ARMS_Lock {
+  ARMS_Lock* next;
   int count;
   void* object;
 };
@@ -76,13 +76,13 @@ typedef Arcadia_ARMS_Size Arcadia_ARMS_ReferenceCount;
 #define Arcadia_ARMS_ReferenceCount_Maximum (Arcadia_ARMS_Size_Maximum)
 static Arcadia_ARMS_ReferenceCount g_referenceCount = 0;
 
-static Arms_Type* g_types = NULL;
-static Arcadia_ARMS_Tag* g_universe = NULL;
+static ARMS_Type* g_types = NULL;
+static Arcadia_ARMS_Tag* g_allObjects = NULL;
 static Arcadia_ARMS_Tag* g_grayObjects = NULL;
 
 #if defined(Arcadia_ARMS_Configuration_WithLocks) && 1 == Arcadia_ARMS_Configuration_WithLocks
 
-static Arms_Lock* g_locks = NULL;
+static ARMS_Lock* g_locks = NULL;
 
 #endif
 
@@ -136,7 +136,7 @@ Arcadia_ARMS_startup
 
     g_types = NULL;
 
-    g_universe = NULL;
+    g_allObjects = NULL;
     g_grayObjects = NULL;
 
   #if defined(Arcadia_ARMS_Configuration_WithLocks) && 1 == Arcadia_ARMS_Configuration_WithLocks
@@ -169,7 +169,7 @@ Arcadia_ARMS_shutdown
   }
   int32_t referenceCount = g_referenceCount - 1;
   if (!referenceCount) {
-    if (g_grayObjects || g_universe) {
+    if (g_grayObjects || g_allObjects) {
       Cxx_fatalError();
     }
   #if defined(Arcadia_ARMS_Configuration_WithLocks) && 1 == Arcadia_ARMS_Configuration_WithLocks
@@ -181,7 +181,7 @@ Arcadia_ARMS_shutdown
     Arcadia_ARMS_NotifyDestroyModule_shutdown();
   #endif
     while (g_types) {
-      Arms_Type* type = g_types;
+      ARMS_Type* type = g_types;
       g_types = type->next;
       if (type->typeRemoved) {
         type->typeRemoved(type->context, type->name, type->nameLength);
@@ -215,7 +215,7 @@ Arcadia_ARMS_addType
     return Arcadia_ARMS_Status_ArgumentValueInvalid;
   }
 
-  for (Arms_Type* type = g_types; NULL != type; type = type->next) {
+  for (ARMS_Type* type = g_types; NULL != type; type = type->next) {
     if (type->nameLength == nameLength){
       if (!memcmp(type->name, name, nameLength)) {
         return Arcadia_ARMS_Status_TypeExists;
@@ -223,7 +223,7 @@ Arcadia_ARMS_addType
     }
   }
 
-  Arms_Type* type = malloc(sizeof(Arms_Type));
+  ARMS_Type* type = malloc(sizeof(ARMS_Type));
   if (!type) {
     return Arcadia_ARMS_Status_AllocationFailed;
   }
@@ -260,7 +260,7 @@ Arcadia_ARMS_allocate
   if (!pObject || !name) {
     return Arcadia_ARMS_Status_ArgumentValueInvalid;
   }
-  Arms_Type* type;
+  ARMS_Type* type;
   for (type = g_types; NULL != type; type = type->next) {
     if (type->nameLength == nameLength){
       if (!memcmp(type->name, name, nameLength)) {
@@ -280,8 +280,8 @@ Arcadia_ARMS_allocate
   }
   object->flags = Arcadia_ARMS_TagFlags_White;
   object->type = type;
-  object->universeNext = g_universe;
-  g_universe = object;
+  object->allNext = g_allObjects;
+  g_allObjects = object;
   *pObject = object + 1;
   return Arcadia_ARMS_Status_Success;
 }
@@ -296,8 +296,8 @@ Arcadia_ARMS_run
   // Premark phase:
   // Add all locked objects to the gray list.
   // Also remove locks with a lock count of 0.
-  Arms_Lock** previousLock = &g_locks;
-  Arms_Lock* currentLock = g_locks;
+  ARMS_Lock** previousLock = &g_locks;
+  ARMS_Lock* currentLock = g_locks;
   while (currentLock) {
     assert(NULL != currentLock->object);
     if (currentLock->count) {
@@ -306,7 +306,7 @@ Arcadia_ARMS_run
       previousLock = &currentLock->next;
       currentLock = currentLock->next;
     } else {
-      Arms_Lock* lock = currentLock;
+      ARMS_Lock* lock = currentLock;
       *previousLock = currentLock->next;
       currentLock = currentLock->next;
       free(lock);
@@ -326,13 +326,13 @@ Arcadia_ARMS_run
   // Iterate over all objects in the universe.
   // If an object is black: color it white.
   // If an object is white: Remove, finalize, and deallocate the object.
-  Arcadia_ARMS_Tag** previousObject = &g_universe;
-  Arcadia_ARMS_Tag* currentObject = g_universe;
+  Arcadia_ARMS_Tag** previousObject = &g_allObjects;
+  Arcadia_ARMS_Tag* currentObject = g_allObjects;
   while (currentObject) {
     if (Arcadia_ARMS_Tag_isWhite(currentObject)) {
       Arcadia_ARMS_Tag* deadObject = currentObject;
-      *previousObject = currentObject->universeNext;
-      currentObject = currentObject->universeNext;
+      *previousObject = currentObject->allNext;
+      currentObject = currentObject->allNext;
     #if defined(Arcadia_ARMS_Configuration_WithNotifyDestroy) && 1 == Arcadia_ARMS_Configuration_WithNotifyDestroy
       Arcadia_ARMS_NotifyDestroyModule_notifyDestroy(deadObject + 1);
     #endif
@@ -345,8 +345,8 @@ Arcadia_ARMS_run
     } else {
       Arcadia_ARMS_Tag_setWhite(currentObject);
       statistics0.live++;
-      previousObject = &currentObject->universeNext;
-      currentObject = currentObject->universeNext;
+      previousObject = &currentObject->allNext;
+      currentObject = currentObject->allNext;
     }
   }
   *statistics = statistics0;
@@ -379,7 +379,7 @@ Arcadia_ARMS_lock
     void* object
   )
 {
-  for (Arms_Lock* lock = g_locks; NULL != lock; lock = lock->next) {
+  for (ARMS_Lock* lock = g_locks; NULL != lock; lock = lock->next) {
     if (lock->object == object) {
       if (lock->count == INT_MAX) {
          return Arcadia_ARMS_Status_OperationInvalid;
@@ -389,7 +389,7 @@ Arcadia_ARMS_lock
       }
     }
   }
-  Arms_Lock *lock = malloc(sizeof(Arms_Lock));
+  ARMS_Lock *lock = malloc(sizeof(ARMS_Lock));
   if (!lock) {
     return Arcadia_ARMS_Status_AllocationFailed;
   }
@@ -406,7 +406,7 @@ Arcadia_ARMS_unlock
     void* object
   )
 {
-  for (Arms_Lock* lock = g_locks; NULL != lock; lock = lock->next) {
+  for (ARMS_Lock* lock = g_locks; NULL != lock; lock = lock->next) {
     if (lock->object == object) {
       if (lock->count == 0) {
          return Arcadia_ARMS_Status_OperationInvalid;
@@ -429,7 +429,18 @@ Arcadia_ARMS_forwardBarrier
     void* source,
     void* target
   )
-{ }
+{
+  assert(NULL != source && NULL != target);
+  Arcadia_ARMS_Tag* sourceTag = ((Arcadia_ARMS_Tag*)source) - 1;
+  Arcadia_ARMS_Tag* targetTag = ((Arcadia_ARMS_Tag*)target) - 1;
+  if (Arcadia_ARMS_Tag_isBlack(sourceTag) && Arcadia_ARMS_Tag_isWhite(targetTag)) {
+    Arcadia_ARMS_Tag_setGray(targetTag); // the GC is not running; we color the object gray.
+                                         // if the incremental GC steps, then we have three kinds of objects, black, gray, and white in the primary GC list.
+                                         // we iterate once over this list and ice out gray objects.
+    targetTag->grayNext = g_grayObjects;
+    g_grayObjects = targetTag;
+  }
+}
 
 void
 Arcadia_ARMS_backwardBarrier
@@ -437,7 +448,16 @@ Arcadia_ARMS_backwardBarrier
     void* source,
     void* target
   )
-{ }
+{
+  assert(NULL != source && NULL != target);
+  Arcadia_ARMS_Tag* sourceTag = ((Arcadia_ARMS_Tag*)source) - 1;
+  Arcadia_ARMS_Tag* targetTag = ((Arcadia_ARMS_Tag*)target) - 1;
+  if (Arcadia_ARMS_Tag_isBlack(sourceTag) && Arcadia_ARMS_Tag_isWhite(targetTag)) {
+    Arcadia_ARMS_Tag_setGray(sourceTag);
+    sourceTag->grayNext = g_grayObjects;
+    g_grayObjects = sourceTag;
+  }
+}
 
 #endif // Arcadia_ARMS_Configuration_WithBarriers
 

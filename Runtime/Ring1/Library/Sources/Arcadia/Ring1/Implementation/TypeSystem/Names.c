@@ -342,15 +342,15 @@ _Arcadia_Names_onStartUp
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Process_addArmsPreMarkCallback(process, &_Arcadia_Names_onPreMark);
-      Arcadia_Process_addArmsVisitCallback(process, &_Arcadia_Names_onVisit);
-      Arcadia_Process_addArmsFinalizeCallback(process, &_Arcadia_Names_onFinalize);
+      Arcadia_Process_addPreMarkCallback(process, &_Arcadia_Names_onPreMark);
+      Arcadia_Process_addVisitCallback(process, &_Arcadia_Names_onVisit);
+      Arcadia_Process_addFinalizeCallback(process, &_Arcadia_Names_onFinalize);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-      Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Names_onFinalize);
-      Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Names_onVisit);
-      Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Names_onPreMark);
+      Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Names_onFinalize);
+      Arcadia_Process_removeVisitCallback(process, &_Arcadia_Names_onVisit);
+      Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Names_onPreMark);
       Arcadia_Names_destroy(process, g_names);
       g_names = NULL;
       Arcadia_Status status = Arcadia_Process_runArms(process, true);
@@ -384,9 +384,9 @@ _Arcadia_Names_onShutDown
     }
     Arcadia_Names_destroy(process, g_names);
     g_names = NULL;
-    Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Names_onFinalize);
-    Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Names_onVisit);
-    Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Names_onPreMark);
+    Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Names_onFinalize);
+    Arcadia_Process_removeVisitCallback(process, &_Arcadia_Names_onVisit);
+    Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Names_onPreMark);
     status = Arcadia_Process_runArms(process, true);
     if (status) {
       /* Intentionally empty.*/

@@ -41,6 +41,7 @@ Arcadia_FileSystem_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_FileSystem_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_FileSystem_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FileSystem_visit,
@@ -75,6 +76,9 @@ Arcadia_FileSystem_constructImpl
   self->createDirectoryIterator = NULL;
   self->createFileHandle = NULL;
   self->createRegularFile = NULL;
+  self->deleteDirectoryFile = NULL;
+  self->deleteFile = NULL;
+  self->deleteRegularFile = NULL;
   self->directoryFileExists = NULL;
   self->getConfigurationFolder = NULL;
   self->getExecutablePath = NULL;
@@ -102,43 +106,6 @@ Arcadia_FileSystem_destruct
     Arcadia_FileSystem* self
   )
 {/*Intentionally empty.*/}
-
-Arcadia_ByteBuffer*
-Arcadia_FileSystem_getFileContents
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
-  )
-{ return self->getFileContents(thread, self, path); }
-
-void
-Arcadia_FileSystem_setFileContents
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path,
-    Arcadia_ByteBuffer * contents
-  )
-{ self->setFileContents(thread, self, path, contents); }
-
-Arcadia_BooleanValue
-Arcadia_FileSystem_regularFileExists
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
-  )
-{ return self->regularFileExists(thread, self, path); }
-
-Arcadia_BooleanValue
-Arcadia_FileSystem_directoryFileExists
-  (
-    Arcadia_Thread* thread,
-    Arcadia_FileSystem* self,
-    Arcadia_FilePath* path
-  )
-{ return self->directoryFileExists(thread, self, path); }
 
 void
 Arcadia_FileSystem_createDirectoryFile
@@ -175,6 +142,42 @@ Arcadia_FileSystem_createFileHandle
   )
 { return self->createFileHandle(thread, self); }
 
+void
+Arcadia_FileSystem_deleteDirectoryFile
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ self->deleteDirectoryFile(thread, self, path); }
+
+void
+Arcadia_FileSystem_deleteFile
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ self->deleteFile(thread, self, path); }
+
+void
+Arcadia_FileSystem_deleteRegularFile
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ self->deleteRegularFile(thread, self, path); }
+
+Arcadia_BooleanValue
+Arcadia_FileSystem_directoryFileExists
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ return self->directoryFileExists(thread, self, path); }
+
 Arcadia_FilePath*
 Arcadia_FileSystem_getWorkingDirectory
   (
@@ -192,6 +195,32 @@ Arcadia_FileSystem_getConfigurationFolder
 { return self->getConfigurationFolder(thread, self); }
 
 Arcadia_FilePath*
+Arcadia_FileSystem_getExecutablePath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self
+  )
+{ return self->getExecutablePath(thread, self); }
+
+Arcadia_ByteBuffer*
+Arcadia_FileSystem_getFileContents
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ return self->getFileContents(thread, self, path); }
+
+Arcadia_FileType
+Arcadia_FileSystem_getFileType
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+{ return self->getFileType(thread, self, path); }
+
+Arcadia_FilePath*
 Arcadia_FileSystem_getSaveFolder
   (
     Arcadia_Thread* thread,
@@ -199,13 +228,25 @@ Arcadia_FileSystem_getSaveFolder
   )
 { return self->getSaveFolder(thread, self); }
 
-Arcadia_FilePath*
-Arcadia_FileSystem_getExecutablePath
+
+Arcadia_BooleanValue
+Arcadia_FileSystem_regularFileExists
   (
     Arcadia_Thread* thread,
-    Arcadia_FileSystem* self
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
   )
-{ return self->getExecutablePath(thread, self); }
+{ return self->regularFileExists(thread, self, path); }
+
+void
+Arcadia_FileSystem_setFileContents
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path,
+    Arcadia_ByteBuffer* contents
+  )
+{ self->setFileContents(thread, self, path, contents); }
 
 Arcadia_FileSystem*
 Arcadia_FileSystem_getOrCreate

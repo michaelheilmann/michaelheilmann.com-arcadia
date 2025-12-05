@@ -433,7 +433,7 @@ Arcadia_Process_runArms
 }
 
 void
-Arcadia_Process_addArmsPreMarkCallback
+Arcadia_Process_addPreMarkCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_PreMarkCallback* callback
@@ -448,7 +448,7 @@ Arcadia_Process_addArmsPreMarkCallback
 }
 
 void
-Arcadia_Process_removeArmsPreMarkCallback
+Arcadia_Process_removePreMarkCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_PreMarkCallback* callback
@@ -470,7 +470,7 @@ Arcadia_Process_removeArmsPreMarkCallback
 }
 
 void
-Arcadia_Process_addArmsVisitCallback
+Arcadia_Process_addVisitCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_VisitCallback* callback
@@ -485,7 +485,7 @@ Arcadia_Process_addArmsVisitCallback
 }
 
 void
-Arcadia_Process_removeArmsVisitCallback
+Arcadia_Process_removeVisitCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_VisitCallback* callback
@@ -507,7 +507,7 @@ Arcadia_Process_removeArmsVisitCallback
 }
 
 void
-Arcadia_Process_addArmsFinalizeCallback
+Arcadia_Process_addFinalizeCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_FinalizeCallback* callback
@@ -522,7 +522,7 @@ Arcadia_Process_addArmsFinalizeCallback
 }
 
 void
-Arcadia_Process_removeArmsFinalizeCallback
+Arcadia_Process_removeFinalizeCallback
   (
     Arcadia_Process* process,
     Arcadia_Process_FinalizeCallback* callback

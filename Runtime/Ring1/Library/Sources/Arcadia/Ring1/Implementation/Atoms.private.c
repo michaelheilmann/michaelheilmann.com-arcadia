@@ -387,15 +387,15 @@ _Arcadia_Atoms_onStartUp
 
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Process_addArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
-      Arcadia_Process_addArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
-      Arcadia_Process_addArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+      Arcadia_Process_addPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+      Arcadia_Process_addVisitCallback(process, &_Arcadia_Atoms_onVisit);
+      Arcadia_Process_addFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
       Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
     } else {
       Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-      Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-      Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
-      Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+      Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+      Arcadia_Process_removeVisitCallback(process, &_Arcadia_Atoms_onVisit);
+      Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
       Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), g_singleton->buckets);
       g_singleton->buckets = NULL;
       Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), g_singleton);
@@ -410,9 +410,9 @@ _Arcadia_Atoms_onStartUp
         Arcadia_Thread_popJumpTarget(thread);
       } else {
         Arcadia_Thread_popJumpTarget(thread);
-        Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-        Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
-        Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+        Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+        Arcadia_Process_removeVisitCallback(process, &_Arcadia_Atoms_onVisit);
+        Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
         Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), g_singleton->buckets);
         g_singleton->buckets = NULL;
         Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), g_singleton);
@@ -439,9 +439,9 @@ _Arcadia_Atoms_onShutDown
   }
   g_referenceCount--;
   if (0 == g_referenceCount) {
-    Arcadia_Process_removeArmsFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-    Arcadia_Process_removeArmsVisitCallback(process, &_Arcadia_Atoms_onVisit);
-    Arcadia_Process_removeArmsPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+    Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+    Arcadia_Process_removeVisitCallback(process, &_Arcadia_Atoms_onVisit);
+    Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
     Arcadia_Memory_deallocateUnmanaged(thread, g_singleton->buckets);
     g_singleton->buckets = NULL;
     Arcadia_Memory_deallocateUnmanaged(thread, g_singleton);

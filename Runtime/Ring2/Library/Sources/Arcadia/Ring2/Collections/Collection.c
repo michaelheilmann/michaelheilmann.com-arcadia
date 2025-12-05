@@ -33,9 +33,8 @@ Arcadia_Collection_isEmptyImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Collection_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

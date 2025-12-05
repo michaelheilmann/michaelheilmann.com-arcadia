@@ -24,7 +24,7 @@
 /// A scalar node.
 /// A name of a built-in scalar type.
 Arcadia_declareObjectType(u8"Arcadia.DDLS.ScalarNode", Arcadia_DDLS_ScalarNode,
-                          u8"Arcadia.DDLS.Type");
+                          u8"Arcadia.DDLS.Node");
 
 struct Arcadia_DDLS_ScalarNode {
   Arcadia_DDLS_Node parent;

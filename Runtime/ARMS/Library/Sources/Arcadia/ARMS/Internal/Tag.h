@@ -4,7 +4,7 @@
 #include "Arcadia/ARMS/Internal/Common.h"
 #include <stdbool.h> // bool, true, false
 #include <inttypes.h> // uint8_t
-typedef struct Arms_Type Arms_Type; // Forward declaration.
+typedef struct ARMS_Type ARMS_Type; // Forward declaration.
 
 #define Arcadia_ARMS_TagFlags_White (1)
 #define Arcadia_ARMS_TagFlags_Black (2)
@@ -30,8 +30,8 @@ typedef struct Arcadia_ARMS_Tag Arcadia_ARMS_Tag;
 
 struct Arcadia_ARMS_Tag {
   uint8_t flags;
-  Arms_Type* type;
-  Arcadia_ARMS_Tag* universeNext;
+  ARMS_Type* type;
+  Arcadia_ARMS_Tag* allNext;
   Arcadia_ARMS_Tag* grayNext;
 }
 #if Arcadia_ARMS_Configuration_InstructionSetArchitecture_X64 == Arcadia_ARMS_Configuration_InstructionSetArchitecture

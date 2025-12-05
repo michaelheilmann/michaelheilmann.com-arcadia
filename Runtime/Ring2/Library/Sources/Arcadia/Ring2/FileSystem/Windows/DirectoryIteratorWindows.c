@@ -57,9 +57,9 @@ Arcadia_DirectoryIteratorWindows_nextValue
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DirectoryIteratorWindows_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_DirectoryIteratorWindows_destructImpl,
-  .visit = NULL,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -107,7 +107,7 @@ Arcadia_DirectoryIteratorWindows_constructImpl
     DWORD dwLastError = GetLastError();
     SetLastError(0);
     if (dwLastError == ERROR_FILE_NOT_FOUND) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_FileNotFound);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
       Arcadia_Thread_jump(thread);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);

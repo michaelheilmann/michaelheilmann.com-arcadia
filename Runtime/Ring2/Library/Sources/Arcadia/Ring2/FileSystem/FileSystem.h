@@ -20,12 +20,10 @@
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 
-#include "Arcadia/Ring2/Implementation/Configure.h"
-#include "Arcadia/Ring1/Include.h"
-typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
-typedef struct Arcadia_FileHandle Arcadia_FileHandle;
-typedef struct Arcadia_FilePath Arcadia_FilePath;
-typedef struct Arcadia_DirectoryIterator Arcadia_DirectoryIterator;
+#include "Arcadia/Ring2/FileSystem/DirectoryIterator.h"
+#include "Arcadia/Ring2/FileSystem/FileHandle.h"
+#include "Arcadia/Ring2/FileSystem/FilePath.h"
+#include "Arcadia/Ring2/FileSystem/FileType.h"
 
 /// @code
 /// class FileSystem {
@@ -69,6 +67,30 @@ struct Arcadia_FileSystem {
       Arcadia_FilePath* path
     );
 
+  void
+  (*deleteDirectoryFile)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  void
+  (*deleteFile)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  void
+  (*deleteRegularFile)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
   Arcadia_BooleanValue
   (*directoryFileExists)
     (
@@ -93,6 +115,14 @@ struct Arcadia_FileSystem {
 
   Arcadia_ByteBuffer*
   (*getFileContents)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
+  Arcadia_FileType
+  (*getFileType)
     (
       Arcadia_Thread* thread,
       Arcadia_FileSystem* self,
@@ -176,6 +206,57 @@ Arcadia_FileSystem_createRegularFile
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   );
+
+/// @brief Delete a directory file.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this file system.
+/// @param path A pointer to the path.
+/// @error Arcadia_Status_AccessDenied access to the file was denied
+/// @error Arcadia_Status_OperationFailed deletion failed
+/// @error Arcadia_Status_NotFound the file was not found
+/// @error Arcadia_Status_ArgumentValueInvalid @a path is a null pointer
+/// @error Arcadia_Status_InternalError an internal error occurred
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteDirectoryFile
+void
+Arcadia_FileSystem_deleteDirectoryFile
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+/// @error Arcadia_Status_AccessDenied access to the file was denied
+/// @error Arcadia_Status_OperationFailed deletion failed
+/// @error Arcadia_Status_NotFound the file was not found
+/// @error Arcadia_Status_NotEmpty the file is a directory and not empty
+/// @error Arcadia_Status_ArgumentValueInvalid @a path is a null pointer
+/// @error Arcadia_Status_InternalError an internal error occurred
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteFile
+void
+Arcadia_FileSystem_deleteFile
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+/// @brief Delete a regular file.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this file system.
+/// @param path A pointer to the path.
+/// @error Arcadia_Status_AccessDenied access to the file was denied
+/// @error Arcadia_Status_OperationFailed deletion failed
+/// @error Arcadia_Status_NotFound the file was not found
+/// @error Arcadia_Status_ArgumentValueInvalid @a path is a null pointer
+/// @error Arcadia_Status_InternalError an internal error occurred
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteRegularFile
+void
+Arcadia_FileSystem_deleteRegularFile
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
   
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists
 Arcadia_BooleanValue
@@ -209,6 +290,15 @@ Arcadia_FileSystem_getExecutablePath
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents
 Arcadia_ByteBuffer*
 Arcadia_FileSystem_getFileContents
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileType
+Arcadia_FileType
+Arcadia_FileSystem_getFileType
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self,

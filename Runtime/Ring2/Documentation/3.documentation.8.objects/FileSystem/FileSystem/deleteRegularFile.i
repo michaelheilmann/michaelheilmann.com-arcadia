@@ -1,6 +1,6 @@
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_FileSystem_deleteFile">Arcadia_FileSystem_deleteRegularFile</h1>
+  <h1 id="Arcadia_FileSystem_deleteRegularFile">Arcadia_FileSystem_deleteRegularFile</h1>
 
   <my-summary><code>
   void<br>
@@ -43,8 +43,16 @@
       <div><code>path</code> is a null pointer.</div>
     </div>
     <div>
-      <div>Arcadia_Status_FileSystemOperationFailed</div>
-      <div>The file is not found, the file is not a regular file, or deletion failed.</div>
+      <div>Arcadia_Status_AccessDenied</div>
+      <div>Access to the file was denied.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_NotFound</div>
+      <div>The file was not found.</div>
+    </div>
+    <div>
+      <div>Arcadia_Status_OperationFailed</div>
+      <div>The file is not a regular file, or deletion failed.</div>
     </div>
   </section>
 

@@ -22,115 +22,115 @@
 
 #include <stdint.h>
 
+
+
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Success
 #define Arcadia_Status_Success (0)
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_ArgumentTypeInvalid
-#define Arcadia_Status_ArgumentTypeInvalid (2)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_ArgumentValueInvalid
-#define Arcadia_Status_ArgumentValueInvalid (3)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_ConversionFailed
-#define Arcadia_Status_ConversionFailed (4)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_DivisionByZero
-#define Arcadia_Status_DivisionByZero (5)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_EncodingInvalid
-#define Arcadia_Status_EncodingInvalid (6)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_EnvironmentFailed
-#define Arcadia_Status_EnvironmentFailed (7)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Exists
-#define Arcadia_Status_Exists (8)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_FileSystemOperationFailed
-#define Arcadia_Status_FileSystemOperationFailed (9)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Found
-#define Arcadia_Status_Found (10)
-
-/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because something is full.
-/// This value is guaranteed to be a non-zero value.
-#define Arcadia_Status_Full (10+1000)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Initialized
-#define Arcadia_Status_Initialized (11)
-
-/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because something is empty.
-/// This value is guaranteed to be a non-zero value.
-#define Arcadia_Status_Empty (11+1000)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_LexicalError
-#define Arcadia_Status_LexicalError (12)
-
-/// @brief Symbolic constant for a Arcadia_Status value indicating a failure because something is not empty.
-/// This value is guaranteed to be a non-zero value.
-#define Arcadia_Status_NotEmpty (12+1000)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotExists
-#define Arcadia_Status_NotExists (13)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotFound
-#define Arcadia_Status_NotFound (14)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotInitialized
-#define Arcadia_Status_NotInitialized (15)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotImplemented
-#define Arcadia_Status_NotImplemented (16)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NumberOfArgumentsInvalid
-#define Arcadia_Status_NumberOfArgumentsInvalid (17)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_OperationInvalid
-#define Arcadia_Status_OperationInvalid (18)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_SemanticalError
-#define Arcadia_Status_SemanticalError (19)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_SyntacticalError
-#define Arcadia_Status_SyntacticalError (20)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TestFailed
-#define Arcadia_Status_TestFailed (21)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TypeExists
-#define Arcadia_Status_TypeExists (22)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TypeNotExists
-#define Arcadia_Status_TypeNotExists (23)
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Uninitialized
-#define Arcadia_Status_Uninitialized (24)
-
-#define Arcadia_Status_FileNotFound (25)
 
 
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_AccessDenied
+#define Arcadia_Status_AccessDenied (1)
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_AllocationFailed
-#define Arcadia_Status_AllocationFailed (24+1000)
+#define Arcadia_Status_AllocationFailed (2)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_ArgumentTypeInvalid
+#define Arcadia_Status_ArgumentTypeInvalid (3)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_ArgumentValueInvalid
+#define Arcadia_Status_ArgumentValueInvalid (4)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_ConversionFailed
+#define Arcadia_Status_ConversionFailed (5)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_DivisionByZero
+#define Arcadia_Status_DivisionByZero (6)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Empty
+#define Arcadia_Status_Empty (7)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_EncodingInvalid
+#define Arcadia_Status_EncodingInvalid (8)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_EnvironmentFailed
+#define Arcadia_Status_EnvironmentFailed (9)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Exists
+#define Arcadia_Status_Exists (10)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_OperationFailed
+#define Arcadia_Status_OperationFailed (11)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Found
+#define Arcadia_Status_Found (12)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Full
+#define Arcadia_Status_Full (32)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Initialized
+#define Arcadia_Status_Initialized (14)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_LexicalError
+#define Arcadia_Status_LexicalError (15)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotEmpty
+#define Arcadia_Status_NotEmpty (16)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotExists
+#define Arcadia_Status_NotExists (17)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotFound
+#define Arcadia_Status_NotFound (18)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotImplemented
+#define Arcadia_Status_NotImplemented (19)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NotInitialized
+#define Arcadia_Status_NotInitialized (20)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_NumberOfArgumentsInvalid
+#define Arcadia_Status_NumberOfArgumentsInvalid (21)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_OperationInvalid
+#define Arcadia_Status_OperationInvalid (22)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_SemanticalError
+#define Arcadia_Status_SemanticalError (23)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_SyntacticalError
+#define Arcadia_Status_SyntacticalError (24)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TestFailed
+#define Arcadia_Status_TestFailed (25)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TypeExists
+#define Arcadia_Status_TypeExists (26)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_TypeNotExists
+#define Arcadia_Status_TypeNotExists (27)
+
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Status_Uninitialized
+#define Arcadia_Status_Uninitialized (28)
 
 /// @brief Symbolic constant for an Arcadia_Status value indicating a failure because of a stack overflow.
 /// This value is guaranteed to be a non-zero value.
 /// @remarks A stack overflow situation occurs if the application attempts to add an element to a full stack.
-#define Arcadia_Status_StackOverflow (25+1000)
+#define Arcadia_Status_StackOverflow (29+1000)
 
 /// @brief Symbolic constant for an Arcadia_Status value indicating a failure because of a stack underflow.
 /// This value is guaranteed to be a non-zero value.
 /// @remarks A stack underflow situation occurs if the application attempts to remove an element from an empty stack.
-#define Arcadia_Status_StackUnderflow (26+1000)
+#define Arcadia_Status_StackUnderflow (30+1000)
 
 /// @brief Symbolic constant for an Arcadia_Status value indicating a failure because of a stack corruption.
 /// This valus is guaranteed to be a non-zero value.
 /// @remarks A stack corruption 
-#define Arcadia_Status_StackCorruption (27+1000)
+#define Arcadia_Status_StackCorruption (31+1000)
 
 /// @brief Symbolic constant for an Arcadia_Status value indicating a failure because a value was raised.
 /// This value is guaranteed to be a non-zero value.
-#define Arcadia_Status_ValueRaised (28+1000)
+#define Arcadia_Status_ValueRaised (32+1000)
 
 typedef uint32_t Arcadia_Status;
 

@@ -50,7 +50,7 @@
       <div><code>path</code> is a null pointer.</div>
     </div>
     <div>
-      <div><a href="#">Arcadia_Status_FileSystemOperationFailed</a></div>
+      <div><a href="#">Arcadia_Status_OperationFailed</a></div>
       <div>Opening the file failed.</div>
     </div>
   </section>
