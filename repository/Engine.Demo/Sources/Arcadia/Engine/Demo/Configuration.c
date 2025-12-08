@@ -390,7 +390,7 @@ Cfg_saveConfiguration
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
 
   // (1) Ensure the organization's configuration folder exists.
-  Arcadia_FilePath* file = Arcadia_FileSystem_getConfigurationFolder(thread, fileSystem);
+  Arcadia_FilePath* file = Arcadia_FileSystem_getConfigurationDirectory(thread, fileSystem);
   Arcadia_FileSystem_createDirectoryFile(thread, fileSystem, file);
 
   // (2) Ensure the product's configuration folder exists.
@@ -419,7 +419,7 @@ Cfg_loadConfiguration
   Arcadia_FilePath* file;
 
   // (1) Ensure the organization's configuration folder exists.
-  file = Arcadia_FileSystem_getConfigurationFolder(thread, fileSystem);
+  file = Arcadia_FileSystem_getConfigurationDirectory(thread, fileSystem);
   Arcadia_FileSystem_createDirectoryFile(thread, fileSystem, file);
 
   // (2) Ensure the product's configuration folder exists.

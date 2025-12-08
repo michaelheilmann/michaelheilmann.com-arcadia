@@ -11,13 +11,15 @@
   main > div {
     width:100%;
     display: flex;
+    column-gap: 2rem;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
   }
   
   div.topic {
-    margin-left: 8px;
+    width: 20%;
   }
+  
   div.topic:first-child {
     margin-left: 0px;
   }
@@ -26,9 +28,15 @@
     font-size: small;
   }
   
+  div.topic > div.body > p {
+    margin-left: 2rem;
+    line-height: 1rem;
+  }
+  
   div.topic > div.body > ul {
     list-style: none;
   }
+    
   div.topic > div.body > ul > li {
     margin-left: 2rem;
     display: block;
@@ -116,6 +124,9 @@
       <div class="body">
         <ul>
           <li>
+            <a href='@{siteAddress}/news'>News</a>
+          </li>
+          <li>
             <a href='@{siteAddress}/roadmap'>Roadmap</a>
           </li>
         </ul>
@@ -127,9 +138,8 @@
         <span>Assorted Notes</span>
       </div>
       <div class="body">
-        <p>This section collects a growing recollection of various notes on web-application security concepts and techniques which were taken during an MPV of a MUD-client written in Angular.</p>
-        <p>The concepts and techniques explained are valid for most web-applications.</p>
-        </p>
+        <p>This section collects a growing recollection of various notes on web-application security concepts and techniques which were taken during an MPV of a MUD-client written in Angular.
+           The concepts and techniques explained are valid for most web-applications.</p>
         <ul>
           <li><a href='@{siteAddress}/assorted-notes/best-practices-for-access-tokens-angular-edition.html'>Best practices for access tokens - Angular edition</a></li>
           <li><a href='@{siteAddress}/assorted-notes/why-use-refresh-tokens-angular-edition.html'>Why use refresh tokens - Angular edition</a></li>

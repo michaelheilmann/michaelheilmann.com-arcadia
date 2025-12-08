@@ -18,7 +18,7 @@ cmake_minimum_required(VERSION 4.1.3)
 # Build the documentation.
 BeginTemplateEngine(${MyProjectName}.Ring2.BuildDocs "Ring2")
 
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/Ring2/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 

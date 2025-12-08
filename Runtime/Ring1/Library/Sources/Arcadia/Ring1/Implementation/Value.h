@@ -281,4 +281,25 @@ Arcadia_Value_isInstanceOf
     Arcadia_Type* type
   );
 
+/**
+ * @extension
+ * @brief
+ * Get if a is an object value of the specified type.
+ * @param thread
+ * A pointer to this thread.
+ * @param self
+ * The value.
+ * @param type
+ * A pointer to a type.
+ * @return
+ * A pointer to the object value.
+ */
+Arcadia_ObjectReferenceValue
+Arcadia_Value_getObjectReferenceValueChecked
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value self,
+    Arcadia_Type* type
+  );
+
 #endif // ARCADIA_RING1_IMPLEMENTATION_VALUE_H_INCLUDED

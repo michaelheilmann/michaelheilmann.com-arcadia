@@ -18,62 +18,62 @@ cmake_minimum_required(VERSION 4.1.3)
 BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
 
   # Build "index.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "error.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/error.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/error.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/error.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "news.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/news.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/news.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/news.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "index.css".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.css.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.css.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/assets/index.css"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "reset.css".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/reset.css.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/reset.css.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/assets/reset.css"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "cxx-docs.css".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/cxx-doc.css.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/cxx-doc.css.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/assets/cxx-doc.css"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "roadmap.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/roadmap.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/roadmap.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/roadmap.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "roadmap-archive.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/roadmap-archive.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "imprint.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/imprint.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/imprint.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/imprint.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "data-protection-statement.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/data-protection-statement.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/data-protection-statement.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/data-protection-statement.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "specifications/common-lexical-specification/index.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/index.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/specifications/common-lexical-specification/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "Specifications/MIL/index.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/MIL/index.html.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/MIL/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mil/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 

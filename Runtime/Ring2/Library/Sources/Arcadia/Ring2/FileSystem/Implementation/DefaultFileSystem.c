@@ -151,14 +151,14 @@ Arcadia_DefaultFileSystem_directoryFileExistsImpl
   );
 
 static Arcadia_FilePath*
-Arcadia_DefaultFileSystem_getConfigurationFolderImpl
+Arcadia_DefaultFileSystem_getConfigurationDirectoryImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self
   );
 
 static Arcadia_FilePath*
-Arcadia_DefaultFileSystem_getExecutablePathImpl
+Arcadia_DefaultFileSystem_getExecutableImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self
@@ -174,6 +174,14 @@ Arcadia_DefaultFileSystem_getFileContentsImpl
 
 static Arcadia_FileType
 Arcadia_DefaultFileSystem_getFileTypeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+static Arcadia_Natural64Value
+Arcadia_DefaultFileSystem_getLastWriteTimeImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self,
@@ -218,6 +226,7 @@ Arcadia_DefaultFileSystem_create
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DefaultFileSystem_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_DefaultFileSystem_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DefaultFileSystem_visit,
@@ -286,11 +295,12 @@ Arcadia_DefaultFileSystem_constructImpl
 
   ((Arcadia_FileSystem*)self)->directoryFileExists = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_directoryFileExistsImpl;
   
-  ((Arcadia_FileSystem*)self)->getConfigurationFolder = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getConfigurationFolderImpl;
-  ((Arcadia_FileSystem*)self)->getExecutablePath = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getExecutablePathImpl;
+  ((Arcadia_FileSystem*)self)->getConfigurationDirectory = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getConfigurationDirectoryImpl;
+  ((Arcadia_FileSystem*)self)->getExecutable = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getExecutableImpl;
   ((Arcadia_FileSystem*)self)->getFileContents = (Arcadia_ByteBuffer * (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getFileContentsImpl;
   ((Arcadia_FileSystem*)self)->getFileType = (Arcadia_FileType (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getFileTypeImpl;
-  ((Arcadia_FileSystem*)self)->getSaveFolder = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getSaveFolderImpl;
+  ((Arcadia_FileSystem*)self)->getLastWriteTime = (Arcadia_Natural64Value(*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getLastWriteTimeImpl;
+  ((Arcadia_FileSystem*)self)->getSaveDirectory = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getSaveFolderImpl;
   ((Arcadia_FileSystem*)self)->getWorkingDirectory = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getWorkingDirectoryImpl;
   
   ((Arcadia_FileSystem*)self)->regularFileExists = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_regularFileExistsImpl;
@@ -464,7 +474,7 @@ Arcadia_DefaultFileSystem_directoryFileExistsImpl
 }
 
 static Arcadia_FilePath*
-Arcadia_DefaultFileSystem_getConfigurationFolderImpl
+Arcadia_DefaultFileSystem_getConfigurationDirectoryImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self
@@ -484,7 +494,7 @@ Arcadia_DefaultFileSystem_getConfigurationFolderImpl
 }
 
 static Arcadia_FilePath*
-Arcadia_DefaultFileSystem_getExecutablePathImpl
+Arcadia_DefaultFileSystem_getExecutableImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self
@@ -589,6 +599,49 @@ Arcadia_DefaultFileSystem_getFileTypeImpl
     Arcadia_FilePath* path
   )
 { return Arcadia_DefaultFileSystem_getFileTypeHelper(thread, self, path); }
+
+static Arcadia_Natural64Value
+Arcadia_DefaultFileSystem_getLastWriteTimeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DefaultFileSystem* self,
+    Arcadia_FilePath* path
+  )
+{
+  Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path);
+#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
+  HANDLE hFile = CreateFile(Arcadia_String_getBytes(thread, pathString), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_EXISTING, 0, NULL);
+  if (INVALID_HANDLE_VALUE == hFile) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  FILETIME ftCreate, ftAccess, ftWrite;
+  if (!GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite)) {
+    CloseHandle(hFile);
+    hFile = INVALID_HANDLE_VALUE;
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  CloseHandle(hFile);
+  hFile = INVALID_HANDLE_VALUE;
+  SYSTEMTIME sTime;
+  if (!FileTimeToSystemTime(&ftWrite, &sTime)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  return ((Arcadia_Natural64Value)ftWrite.dwHighDateTime) << 32
+       | ((Arcadia_Natural64Value)ftWrite.dwLowDateTime);
+#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
+  struct stat sb;
+  if (-1 == lstat(Arcadia_String_getBytes(thread, pathString), &sb)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  return (Arcadia_Natural64Value)sb.st_mtime;
+#else
+  #error("environment not (yet) supported")
+#endif
+}
 
 static Arcadia_FilePath*
 Arcadia_DefaultFileSystem_getSaveFolderImpl

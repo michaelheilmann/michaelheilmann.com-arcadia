@@ -18,34 +18,41 @@
 
 #include "Arcadia/Ring2/Include.h"
 typedef struct Environment Environment;
+typedef struct DependenciesContext DependenciesContext;
 
 Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Context", Context,
                           u8"Arcadia.Object");
 
 struct Context {
   Arcadia_Object _parent;
+
   Arcadia_UTF8Writer* target;
   Arcadia_ByteBuffer* targetBuffer;
 
   Arcadia_UTF8Writer* temporary;
   Arcadia_ByteBuffer* temporaryBuffer;
 
-  Arcadia_FilePath* logFilePath;
+  /// The source file path.
+  Arcadia_FilePath* sourceFilePath;
+  /// The target file path.
+  Arcadia_FilePath* targetFilePath;
+  /// The environment file path.
+  Arcadia_FilePath* environmentFilePath;
+
   Arcadia_FilePath* dependenciesFilePath;
+  Arcadia_FilePath* logFilePath;
 
 
   Environment* environment;
 
   Arcadia_Stack* stack;
+
   /// The include graph.
   /// For example, if we start at X and X includes first A and second B.
   /// Then when processing B this list contains X, B.
   Arcadia_List* files;
 
-  /// The set of all files processed so far.
-  /// For example, if we start at X and X includes first A and second B.
-  /// The wehn processing B this list contains X, A, B.
-  Arcadia_List* allFiles;
+  DependenciesContext* dependenciesContext;
 
   /// The console log.
   Arcadia_Log* consoleLog;
@@ -55,6 +62,14 @@ Context*
 Context_create
   (
     Arcadia_Thread* thread
+  );
+
+void
+Context_onRunInner
+  (
+    Arcadia_Thread* thread,
+    Context* self,
+    Arcadia_FilePath* includingFile
   );
 
 void

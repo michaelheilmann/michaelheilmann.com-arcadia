@@ -1793,6 +1793,7 @@ The enumeration elements can be combined.
 
 </section>
 
+
 <section class="cxx entity method">
 
   <h1 id="Arcadia_FileSystem_deleteDirectoryFile">Arcadia_FileSystem_deleteDirectoryFile</h1>
@@ -2037,13 +2038,14 @@ The enumeration elements can be combined.
 
 </section>
 
+
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_FileSystem_getConfigurationFolder">Arcadia_FileSystem_getConfigurationFolder</h1>
+  <h1 id="Arcadia_FileSystem_getConfigurationDirectory">Arcadia_FileSystem_getConfigurationDirectory</h1>
 
   <my-summary><code>
   Arcadia_FilePath*<br>
-  Arcadia_FileSystem_getConfigurationFolder<br>
+  Arcadia_FileSystem_getConfigurationDirectory<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
@@ -2051,8 +2053,8 @@ The enumeration elements can be combined.
   </code></my-summary>
 
   <my-summary>
-  Get the path to the "configuration" folder.
-  Get the folder in which configuration files are stored.
+  Get the path to the "configuration" directory.
+  Get the directory in which configuration files are stored.
   The following table lists the values for a given operating system
   <ul>
     <li>Windows: <code>C:\Users\&lt;Username&gt;\AppData\Local\&lt;Organization Name&gt;\&lt;Game Name&gt;</code></li>
@@ -2075,7 +2077,7 @@ The enumeration elements can be combined.
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
-    A pointer to the the path of the "configuration" folder.
+    A pointer to the the path of the "configuration" directory.
     </p>
   </section>
 
@@ -2191,11 +2193,11 @@ The enumeration elements can be combined.
 
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</h1>
+  <h1 id="Arcadia_FileSystem_getSaveDirectory">Arcadia_FileSystem_getSaveDirectory</h1>
 
   <my-summary><code>
   Arcadia_FilePath*<br>
-  Arcadia_FileSystem_getSaveFolder<br>
+  Arcadia_FileSystem_getSaveDirectory<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
@@ -2203,8 +2205,8 @@ The enumeration elements can be combined.
   </code></my-summary>
 
   <my-summary>
-  Get the path to the "save" folder.
-  Get the folder in which save files are stored.
+  Get the path to the "save" directory.
+  Get the directory in which save files are stored.
   The following table lists the values for a given operating system
   <ul>
     <li>Windows: <code>C:\Users\&lt;Username&gt;\AppData\Roaming\&lt;Organization Name&gt;\&lt;Game Name&gt;</code></li>
@@ -2227,7 +2229,7 @@ The enumeration elements can be combined.
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
-    A pointer to the the path of the "save" folder.
+    A pointer to the the path of the "save" directory.
     </p>
   </section>
 
@@ -2273,7 +2275,7 @@ The enumeration elements can be combined.
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
-    A pointer to the file path.
+    A pointer to the path of the working directory.
     </p>
   </section>
 
@@ -2286,6 +2288,7 @@ The enumeration elements can be combined.
   </section>
 
 </section>
+
 
 <section class="cxx entity method">
 
@@ -2342,6 +2345,7 @@ The enumeration elements can be combined.
   </section>
 
 </section>
+
 
 <section class="cxx entity method">
 
@@ -2403,6 +2407,8 @@ The enumeration elements can be combined.
   </section>
 
 </section>
+
+
 
 
 <section class="cxx entity enumeration">
@@ -5678,16 +5684,26 @@ The enumeration elements cannot be combined.
 
         
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem">Arcadia_FileSystem</a></li>
+
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator">Arcadia_FileSystem_createDirectoryIterator</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createFileHandle">Arcadia_FileSystem_createFileHandle</a></li>
+
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteDirectoryFile">Arcadia_FileSystem_deleteDirectoryFile</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteRegularFile">Arcadia_FileSystem_deleteRegularFile</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteFile">Arcadia_FileSystem_deleteFile</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists">Arcadia_FileSystem_directoryFileExists</a></li>
+
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSysten_getOrCreate">Arcadia_FileSystem_getOrCreate</a></li>
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getFileContents">Arcadia_FileSystem_getFileContents</a></li>
+
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_regularFileExists">Arcadia_FileSystem_regularFileExists</a></li>
+
 <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_setFileContents">Arcadia_FileSystem_setFileContents</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</a></li>
-<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getConfigurationFolder">Arcadia_FileSystem_getConfigurationFolder</a></li>
+
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getConfigurationDirectory">Arcadia_FileSystem_getConfigurationDirectory</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getSaveDirectory">Arcadia_FileSystem_getSaveDirectory</a></li>
+<li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getWorkingDirectory">Arcadia_FileSystem_getWorkingDirectory</a></li>
+
 
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileType">Arcadia_FileType</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_NonExistingFilePolicy">Arcadia_NonExistingFilePolicy</a></li>
@@ -5766,7 +5782,7 @@ The enumeration elements cannot be combined.
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 7 December 2025.</div>
+      <div>Last modified on 8 December 2025.</div>
     </div>
   </footer>
   </body>

@@ -379,7 +379,7 @@ Arcadia_DefaultFileHandle_openImpl
   if (Arcadia_FileAccessMode_Write == (fileAccessMode & Arcadia_FileAccessMode_Write)) {
     dwDesiredAccess |= GENERIC_WRITE;
   }
-  DWORD dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
+  DWORD dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
   DWORD dwCreationDisposition = 0;
   typedef struct Policy {
     Arcadia_ExistingFilePolicy existingFilePolicy;

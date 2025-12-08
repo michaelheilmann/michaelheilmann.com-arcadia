@@ -80,10 +80,10 @@ Arcadia_FileSystem_constructImpl
   self->deleteFile = NULL;
   self->deleteRegularFile = NULL;
   self->directoryFileExists = NULL;
-  self->getConfigurationFolder = NULL;
-  self->getExecutablePath = NULL;
+  self->getConfigurationDirectory = NULL;
+  self->getExecutable = NULL;
   self->getFileContents = NULL;
-  self->getSaveFolder = NULL;
+  self->getSaveDirectory = NULL;
   self->getWorkingDirectory = NULL;
   self->regularFileExists = NULL;
   self->setFileContents = NULL;
@@ -187,20 +187,20 @@ Arcadia_FileSystem_getWorkingDirectory
 { return self->getWorkingDirectory(thread, self); }
 
 Arcadia_FilePath*
-Arcadia_FileSystem_getConfigurationFolder
+Arcadia_FileSystem_getConfigurationDirectory
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self
   )
-{ return self->getConfigurationFolder(thread, self); }
+{ return self->getConfigurationDirectory(thread, self); }
 
 Arcadia_FilePath*
-Arcadia_FileSystem_getExecutablePath
+Arcadia_FileSystem_getExecutable
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self
   )
-{ return self->getExecutablePath(thread, self); }
+{ return self->getExecutable(thread, self); }
 
 Arcadia_ByteBuffer*
 Arcadia_FileSystem_getFileContents
@@ -220,13 +220,22 @@ Arcadia_FileSystem_getFileType
   )
 { return self->getFileType(thread, self, path); }
 
+Arcadia_Natural64Value
+Arcadia_FileSystem_getLastWriteTime
+(
+  Arcadia_Thread* thread,
+  Arcadia_FileSystem* self,
+  Arcadia_FilePath* path
+)
+{ return self->getLastWriteTime(thread, self, path); }
+
 Arcadia_FilePath*
-Arcadia_FileSystem_getSaveFolder
+Arcadia_FileSystem_getSaveDirectory
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self
   )
-{ return self->getSaveFolder(thread, self); }
+{ return self->getSaveDirectory(thread, self); }
 
 
 Arcadia_BooleanValue

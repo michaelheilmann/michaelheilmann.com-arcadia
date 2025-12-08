@@ -55,14 +55,13 @@ macro(EndTemplateEngine)
   if(NOT ${ARGC} EQUAL 0)
     message(FATAL_ERROR "EndTemplatEngine: invalid number of arguments")
   endif()
-
+  
   list(GET g_templateEngineTargets -1 target)
   
   list(LENGTH ${target}.templateEngine.sources l)
   math(EXPR l "${l} - 1")
   
-  
-  add_custom_target(${target})
+  add_custom_target(${target} ALL)
   
   if (l GREATER -1)
     foreach (i RANGE ${l})
@@ -74,9 +73,10 @@ macro(EndTemplateEngine)
       
       # Add custom command and custom target.
       add_custom_command(OUTPUT ${targetFile}
-                         COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}"
+                         COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}" --dependencies="${sourceFile}.dependencies"
                          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                          VERBATIM
+                         DEPFILE "${sourceFile}.dependencies"
                          COMMENT "${sourceFile} / ${environmentFile} => ${targetFile}"
                          DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})
       set_source_files_properties(${targetFile} PROPERTIES GENERATED 1)

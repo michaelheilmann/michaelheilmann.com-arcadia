@@ -633,3 +633,24 @@ Arcadia_Value_isInstanceOf
 }
 
 #undef OnIsInstanceOF
+
+/*@extension*/
+Arcadia_ObjectReferenceValue
+Arcadia_Value_getObjectReferenceValueChecked
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value self,
+    Arcadia_Type* type
+  )
+{
+  if (!Arcadia_Value_isObjectReferenceValue(&self)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Object* o = Arcadia_Value_getObjectReferenceValue(&self);
+  if (!Arcadia_Object_isInstanceOf(thread, o, type)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return o;
+}

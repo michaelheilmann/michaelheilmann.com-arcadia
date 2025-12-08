@@ -27,10 +27,12 @@ struct FileContext {
   Arcadia_Object _parent;
   /// The underlaying context.
   Context* context;
-  /// The path to the source file.
-  Arcadia_FilePath* sourceFilePath;
-  /// UTF8 reader for the source file.
-  Arcadia_UTF8Reader* source;
+  /// The path to the including file.
+  Arcadia_FilePath* includingFilePath;
+  /// The path to the included file.
+  Arcadia_FilePath* includedFilePath;
+  /// UTF8 reader for the included file.
+  Arcadia_UTF8Reader* reader;
   /// The environment.
   Environment* environment;
 
@@ -42,7 +44,8 @@ FileContext_create
     Arcadia_Thread* thread,
     Context* context,
     Environment* environment,
-    Arcadia_FilePath* sourceFilePath
+    Arcadia_FilePath* includingFilePath,
+    Arcadia_FilePath* includedFilePath
   );
 
 void

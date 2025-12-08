@@ -18,7 +18,7 @@ cmake_minimum_required(VERSION 4.1.3)
 # Build "specifications/data-definition-language/index.html".
 BeginTemplateEngine(Website.Specifications.DDL "DDL")
 
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.tl"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/specifications/data-definition-language/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/../../website.env")
 

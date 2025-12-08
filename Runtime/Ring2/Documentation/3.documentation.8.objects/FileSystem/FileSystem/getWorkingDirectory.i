@@ -30,7 +30,7 @@
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
-    A pointer to the file path.
+    A pointer to the path of the working directory.
     </p>
   </section>
 

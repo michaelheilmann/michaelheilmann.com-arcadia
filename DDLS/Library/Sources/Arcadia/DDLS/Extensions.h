@@ -21,38 +21,6 @@
 
 /**
  * @brief
- * Get if a is an object value of the specified type.
- * @param thread
- * A pointer to this thread.
- * @param self
- * The value.
- * @param type
- * A pointer to a type.
- * @return
- * A pointer to the object value.
- */
-static inline Arcadia_Object*
-Arcadia_Value_getObjectReferenceValueChecked
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Value self,
-    Arcadia_Type* type
-  )
-{
-  if (!Arcadia_Value_isObjectReferenceValue(&self)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&self);
-  if (type && !Arcadia_Object_isInstanceOf(thread, object, type)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return object;
-}
-
-/**
- * @brief
  * Get if a node is a boolean node.
  * @param thread
  * A pointer to this thread.

@@ -718,29 +718,18 @@ Arcadia_FilePath_getFullPath
     Arcadia_FilePath* self
   )
 {
-#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-#define BUFFER_LENGTH (4096)
-  Arcadia_String* s = Arcadia_FilePath_toNative(thread, self);
-  char buffer[BUFFER_LENGTH];
-  DWORD result = GetFullPathName(Arcadia_String_getBytes(thread, s), BUFFER_LENGTH, buffer, NULL);
-  if (!result) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
+  Arcadia_FilePath* path = Arcadia_FilePath_clone(thread, self);
+  // (1) if the path is relative, make it absolute using the working directory.
+  if (Arcadia_FilePath_isRelative(thread, path)) {
+    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+    Arcadia_FilePath* newPath = Arcadia_FileSystem_getWorkingDirectory(thread, fileSystem);
+    Arcadia_FilePath_append(thread, newPath, path);
+    path = newPath; 
   }
-  return Arcadia_FilePath_parseNative(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, buffer, strlen(buffer)))));
-#undef BUFFER_LENGTH
-#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  Arcadia_String* s = Arcadia_FilePath_toNative(thread, self);
-  char buffer[PATH_MAX];
-  char* result = realpath(Arcadia_String_getBytes(thread, s), buffer);
-  if (!result) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  return Arcadia_FilePath_parseNative(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, buffer, strlen(buffer)))));
-#else
-  #error("operating system not (yet) supported")
-#endif
+  // (2) normalize the path
+  normalize(thread, path);
+  // (3) return the normalized path
+  return path;
 }
 
 Arcadia_BooleanValue

@@ -6,14 +6,20 @@
 
 @{include("3.documentation.8.objects/FileSystem/FileSystem/createDirectoryIterator.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/createFileHandle.i")}
+
 @{include("3.documentation.8.objects/FileSystem/FileSystem/deleteDirectoryFile.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/deleteFile.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/deleteRegularFile.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/directoryFileExists.i")}
-@{include("3.documentation.8.objects/FileSystem/FileSystem/getConfigurationFolder.i")}
+
+@{include("3.documentation.8.objects/FileSystem/FileSystem/getConfigurationDirectory.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/getFileContents.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/getOrCreate.i")}
-@{include("3.documentation.8.objects/FileSystem/FileSystem/getSaveFolder.i")}
+@{include("3.documentation.8.objects/FileSystem/FileSystem/getSaveDirectory.i")}
 @{include("3.documentation.8.objects/FileSystem/FileSystem/getWorkingDirectory.i")}
+
 @{include("3.documentation.8.objects/FileSystem/FileSystem/regularFileExists.i")}
+
 @{include("3.documentation.8.objects/FileSystem/FileSystem/setFileContents.i")}
+
+

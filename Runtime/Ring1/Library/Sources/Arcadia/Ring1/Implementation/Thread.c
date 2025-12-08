@@ -18,6 +18,7 @@
 
 #include "Arcadia/Ring1/Implementation/Thread.private.h"
 #include "Arcadia/ARMS/Include.h"
+#include <assert.h>
 
 Arcadia_SizeValue
 Arcadia_ValueStack_getSize
@@ -97,6 +98,7 @@ Arcadia_Thread_pushJumpTarget
     Arcadia_JumpTarget* jumpTarget
   )
 {
+  assert(NULL != thread && NULL != jumpTarget);
   jumpTarget->previous = thread->jumpTarget;
   thread->jumpTarget = jumpTarget;
 }
@@ -107,6 +109,7 @@ Arcadia_Thread_popJumpTarget
     Arcadia_Thread* thread
   )
 {
+  assert(NULL != thread && NULL != thread->jumpTarget);
   thread->jumpTarget = thread->jumpTarget->previous;
 }
 
@@ -116,6 +119,7 @@ Arcadia_Thread_jump
     Arcadia_Thread* thread
   )
 {
+  assert(NULL != thread && NULL != thread->jumpTarget);
   longjmp(thread->jumpTarget->environment, -1);
 }
 

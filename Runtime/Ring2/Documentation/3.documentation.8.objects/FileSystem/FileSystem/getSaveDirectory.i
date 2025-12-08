@@ -1,10 +1,10 @@
 <section class="cxx entity method">
 
-  <h1 id="Arcadia_FileSystem_getSaveFolder">Arcadia_FileSystem_getSaveFolder</h1>
+  <h1 id="Arcadia_FileSystem_getSaveDirectory">Arcadia_FileSystem_getSaveDirectory</h1>
 
   <my-summary><code>
   Arcadia_FilePath*<br>
-  Arcadia_FileSystem_getSaveFolder<br>
+  Arcadia_FileSystem_getSaveDirectory<br>
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_FileSystem* self<br>
@@ -12,8 +12,8 @@
   </code></my-summary>
 
   <my-summary>
-  Get the path to the "save" folder.
-  Get the folder in which save files are stored.
+  Get the path to the "save" directory.
+  Get the directory in which save files are stored.
   The following table lists the values for a given operating system
   <ul>
     <li>Windows: <code>C:\Users\&lt;Username&gt;\AppData\Roaming\&lt;Organization Name&gt;\&lt;Game Name&gt;</code></li>
@@ -36,7 +36,7 @@
   <section class="cxx return-value">
     <h1>Return value</h1>
     <p>
-    A pointer to the the path of the "save" folder.
+    A pointer to the the path of the "save" directory.
     </p>
   </section>
 

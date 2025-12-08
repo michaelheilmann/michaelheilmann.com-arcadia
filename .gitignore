@@ -1,2 +1,5 @@
 # Visuals C++
 *.aps
+
+# Michael Heilmann's Arcadia Template Engine dependency files.
+*.te.dependencies

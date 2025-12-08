@@ -17,10 +17,15 @@
 
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 #include "Arcadia.Tools.TemplateEngine.Library/FileContext.h"
+#include "Arcadia.Tools.TemplateEngine.Library/DependenciesContext.h"
 
 #include "Arcadia.Tools.TemplateEngine.Library/Library.h"
 
+#include "Arcadia/DDL/Include.h"
+
+
 #include <stdio.h> // @todo Remove references to `stdio.h`.
+
 
 static void
 Context_constructImpl
@@ -44,6 +49,7 @@ Context_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Context_constructImpl,
   .destruct = (Arcadia_Object_DestructorCallbackFunction*) & Context_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Context_visit,
@@ -88,15 +94,22 @@ Context_constructImpl
   Arcadia_String* sourceString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, sourceBytes, sizeof(sourceBytes) - 1)));
   self->environment = Environment_loadString(thread, sourceString);
   Arcadia_TemplateEngine_registerTimeLibrary(thread, self->environment);
+
+  self->sourceFilePath = NULL;
+  self->targetFilePath = NULL;
+  self->dependenciesFilePath = NULL;
+  self->environmentFilePath = NULL;
+  self->logFilePath = NULL;
+
   self->targetBuffer = NULL;
   self->target = NULL;
   self->temporaryBuffer = NULL;
   self->temporary = NULL;
   self->stack = NULL;
   self->files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  self->dependenciesContext = DependenciesContext_create(thread);
   self->consoleLog = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
-  self->logFilePath = NULL;
-  self->dependenciesFilePath = NULL;
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
@@ -116,15 +129,27 @@ Context_visit
     Context* self
   )
 {
-  if (self->consoleLog) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->consoleLog);
+  if (self->sourceFilePath) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->sourceFilePath);
   }
-  if (self->logFilePath) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->logFilePath);
+  if (self->targetFilePath) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->targetFilePath);
+  }
+  if (self->environmentFilePath) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->environmentFilePath);
   }
   if (self->dependenciesFilePath) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->dependenciesFilePath);
   }
+  if (self->logFilePath) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->logFilePath);
+  }
+
+
+  if (self->consoleLog) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->consoleLog);
+  }
+
   if (self->environment) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->environment);
   }
@@ -148,6 +173,10 @@ Context_visit
   if (self->files) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->files);
   }
+
+  if (self->dependenciesContext) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->dependenciesContext);
+  }
 }
 
 Context*
@@ -162,16 +191,16 @@ Context_create
 }
 
 static void
-recursionGuard
+onRecursionGuard
   (
     Arcadia_Thread* thread,
-    Context* context,
+    Context* self,
     Arcadia_FilePath* path
   )
 {
   path = Arcadia_FilePath_getFullPath(thread, path);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->files); i < n; ++i) {
-    Arcadia_FilePath* p = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueAt(thread, context->files, i);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->files); i < n; ++i) {
+    Arcadia_FilePath* p = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueAt(thread, self->files, i);
     if (Arcadia_FilePath_isEqualTo(thread, p, path)) {
       Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, p);
       Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
@@ -179,12 +208,37 @@ recursionGuard
       Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"recursive include of file `");
       Arcadia_StringBuffer_insertBack(thread, sb, v);
       Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`\n");
-      fwrite(Arcadia_StringBuffer_getBytes(thread, sb), 1, Arcadia_StringBuffer_getNumberOfBytes(thread, sb), stderr);
+
+      Arcadia_Log_error(thread, self->consoleLog, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sb)));
+
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
   }
-  Arcadia_List_insertBackObjectReferenceValue(thread, context->files, path);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->files, path);
+}
+
+void
+Context_onRunInner
+  (
+    Arcadia_Thread* thread,
+    Context* self,
+    Arcadia_FilePath* dependingFile
+  )
+{
+  while (!Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)self->stack)) {
+    Arcadia_Value elementValue = Arcadia_Stack_peek(thread, self->stack);
+    Arcadia_Stack_pop(thread, self->stack);
+    Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_Value_getObjectReferenceValue(&elementValue);
+
+    onRecursionGuard(thread, self, filePath);
+    DependencyContext_onFile(thread, self->dependenciesContext, dependingFile);
+    DependencyContext_onDependency(thread, self->dependenciesContext, dependingFile, filePath);
+
+    FileContext* fileContext = FileContext_create(thread, self, self->environment, dependingFile, filePath);
+    FileContext_execute(thread, fileContext);
+    Arcadia_List_removeAt(thread, self->files, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->files) - 1, 1);
+  }
 }
 
 void
@@ -194,34 +248,8 @@ Context_onRun
     Context* self
   )
 {
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  while (!Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)self->stack)) {
-    Arcadia_Value elementValue = Arcadia_Stack_peek(thread, self->stack);
-    Arcadia_Stack_pop(thread, self->stack);
-    Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_Value_getObjectReferenceValue(&elementValue);
-    FileContext* fileContext = FileContext_create(thread, self, self->environment, filePath);
-    Arcadia_ByteBuffer* sourceByteBuffer = NULL;
-    Arcadia_JumpTarget jumpTarget;
-    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-    if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      sourceByteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, fileContext->sourceFilePath);
-      Arcadia_Thread_popJumpTarget(thread);
-    } else {
-      Arcadia_Thread_popJumpTarget(thread);
-      Arcadia_String* ps = Arcadia_FilePath_toGeneric(thread, filePath);
-      Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
-      Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ps);
-      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"failed to read file `");
-      Arcadia_StringBuffer_insertBack(thread, sb, v);
-      Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`\n");
-
-      Arcadia_Log_error(thread, self->consoleLog, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sb)));
-
-      Arcadia_Thread_jump(thread);
-    }
-    fileContext->source = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceByteBuffer);
-    recursionGuard(thread, self, filePath);
-    FileContext_execute(thread, fileContext);
-    Arcadia_List_removeAt(thread, self->files, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->files) - 1, 1);
-  }
+  self->dependenciesContext->dependenciesFilePath = self->dependenciesFilePath;
+  Arcadia_Stack_pushObjectReferenceValue(thread, self->stack, (Arcadia_Object*)self->sourceFilePath);
+  Context_onRunInner(thread, self, self->targetFilePath);
+  DependenciesContext_write(thread, self->dependenciesContext);
 }

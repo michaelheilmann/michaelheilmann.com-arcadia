@@ -100,14 +100,14 @@ struct Arcadia_FileSystem {
     );
 
   Arcadia_FilePath*
-  (*getConfigurationFolder)
+  (*getConfigurationDirectory)
     (
       Arcadia_Thread* thread,
       Arcadia_FileSystem* self
     );
 
   Arcadia_FilePath*
-  (*getExecutablePath)
+  (*getExecutable)
     (
       Arcadia_Thread* thread,
       Arcadia_FileSystem* self
@@ -129,8 +129,16 @@ struct Arcadia_FileSystem {
       Arcadia_FilePath* path
     );
 
+  Arcadia_Natural64Value
+  (*getLastWriteTime)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_FileSystem* self,
+      Arcadia_FilePath* path
+    );
+
   Arcadia_FilePath*
-  (*getSaveFolder)
+  (*getSaveDirectory)
     (
       Arcadia_Thread* thread,
       Arcadia_FileSystem* self
@@ -207,15 +215,6 @@ Arcadia_FileSystem_createRegularFile
     Arcadia_FilePath* path
   );
 
-/// @brief Delete a directory file.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this file system.
-/// @param path A pointer to the path.
-/// @error Arcadia_Status_AccessDenied access to the file was denied
-/// @error Arcadia_Status_OperationFailed deletion failed
-/// @error Arcadia_Status_NotFound the file was not found
-/// @error Arcadia_Status_ArgumentValueInvalid @a path is a null pointer
-/// @error Arcadia_Status_InternalError an internal error occurred
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteDirectoryFile
 void
 Arcadia_FileSystem_deleteDirectoryFile
@@ -225,12 +224,6 @@ Arcadia_FileSystem_deleteDirectoryFile
     Arcadia_FilePath* path
   );
 
-/// @error Arcadia_Status_AccessDenied access to the file was denied
-/// @error Arcadia_Status_OperationFailed deletion failed
-/// @error Arcadia_Status_NotFound the file was not found
-/// @error Arcadia_Status_NotEmpty the file is a directory and not empty
-/// @error Arcadia_Status_ArgumentValueInvalid @a path is a null pointer
-/// @error Arcadia_Status_InternalError an internal error occurred
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteFile
 void
 Arcadia_FileSystem_deleteFile
@@ -240,15 +233,6 @@ Arcadia_FileSystem_deleteFile
     Arcadia_FilePath* path
   );
 
-/// @brief Delete a regular file.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this file system.
-/// @param path A pointer to the path.
-/// @error Arcadia_Status_AccessDenied access to the file was denied
-/// @error Arcadia_Status_OperationFailed deletion failed
-/// @error Arcadia_Status_NotFound the file was not found
-/// @error Arcadia_Status_ArgumentValueInvalid @a path is a null pointer
-/// @error Arcadia_Status_InternalError an internal error occurred
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_deleteRegularFile
 void
 Arcadia_FileSystem_deleteRegularFile
@@ -267,9 +251,9 @@ Arcadia_FileSystem_directoryFileExists
     Arcadia_FilePath* path
   );
   
-// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getConfigurationFolder
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getConfigurationDirectory
 Arcadia_FilePath*
-Arcadia_FileSystem_getConfigurationFolder
+Arcadia_FileSystem_getConfigurationDirectory
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self
@@ -281,7 +265,7 @@ Arcadia_FileSystem_getConfigurationFolder
 /// @return A pointer to the executable path.
 /// @success The caller acquired a reference to the string.
 Arcadia_FilePath*
-Arcadia_FileSystem_getExecutablePath
+Arcadia_FileSystem_getExecutable
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self
@@ -305,9 +289,18 @@ Arcadia_FileSystem_getFileType
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getSaveFolder
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_getLastWriteTime
+Arcadia_Natural64Value
+Arcadia_FileSystem_getLastWriteTime
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  );
+
+// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getSaveDirectory
 Arcadia_FilePath*
-Arcadia_FileSystem_getSaveFolder
+Arcadia_FileSystem_getSaveDirectory
   (
     Arcadia_Thread* thread,
     Arcadia_FileSystem* self
