@@ -521,10 +521,10 @@ FileContext_constructImpl
 
   self->context = (Context*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 4, _Context_getType(thread));
   self->environment = (Environment*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Environment_getType(thread));
-  
+
   self->includingFilePath = (Arcadia_FilePath*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_FilePath_getType(thread));;
   self->includedFilePath = (Arcadia_FilePath*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
-  
+
   self->reader = NULL;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);

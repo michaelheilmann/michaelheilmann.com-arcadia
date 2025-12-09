@@ -29,7 +29,7 @@ Arcadia_declareObjectType(u8"Arcadia.FileHandle", Arcadia_FileHandle,
 
 struct Arcadia_FileHandle {
   Arcadia_Object _parent;
-  
+
   Arcadia_BooleanValue
   (*isClosed)
     (
@@ -180,7 +180,7 @@ Arcadia_FileHandle_openForWriting
     Arcadia_FileHandle* self,
     Arcadia_FilePath* path
   );
-  
+
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_openStandardError
 void
 Arcadia_FileHandle_openStandardError

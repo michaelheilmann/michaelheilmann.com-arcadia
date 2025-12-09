@@ -31,9 +31,9 @@ struct Arcadia_Languages_Scanner {
   Arcadia_Object _parent;
 
   Arcadia_String* (*getWordText)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
-  
+
   Arcadia_Natural32Value (*getWordType)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
-  
+
   Arcadia_Natural32Value (*getWordStart)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
   Arcadia_Natural32Value (*getWordLength)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
@@ -52,7 +52,7 @@ struct Arcadia_Languages_Scanner {
 /// @return The text of the word.
 Arcadia_String*
 Arcadia_Languages_Scanner_getWordText
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_Languages_Scanner* self
   );

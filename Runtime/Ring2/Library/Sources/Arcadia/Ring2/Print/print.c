@@ -11,7 +11,7 @@ static inline Arcadia_FileHandle* getFileHandle(Arcadia_Thread* thread, Arcadia_
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object* objectValue = Arcadia_Value_getObjectReferenceValue(&value);  
+  Arcadia_Object* objectValue = Arcadia_Value_getObjectReferenceValue(&value);
   if (!Arcadia_Object_isInstanceOf(thread, objectValue, _Arcadia_FileHandle_getType(thread))) {
     //Arcadia_Diagnostics_logValueStackElement(thread, Arcadia_LogFlags_Debug, index);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -29,7 +29,7 @@ static inline Arcadia_String* getString(Arcadia_Thread* thread, Arcadia_SizeValu
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object* objectValue = Arcadia_Value_getObjectReferenceValue(&value);  
+  Arcadia_Object* objectValue = Arcadia_Value_getObjectReferenceValue(&value);
   if (!Arcadia_Object_isInstanceOf(thread, objectValue, _Arcadia_String_getType(thread))) {
     //Arcadia_Diagnostics_logValueStackElement(thread, Arcadia_LogFlags_Debug, index);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -75,7 +75,7 @@ Arcadia_print
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
   }
   Arcadia_SizeValue numberOfArguments;
-  
+
   Arcadia_JumpTarget jumpTarget;
   // (2) read & validate number of arguments.
   // Arcadia_Status_StackCorruption is raised if the number of arguments cannot be read.

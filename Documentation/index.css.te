@@ -284,7 +284,7 @@ html.my-theme-1 {
 html.my-theme-1 code {
   font-family: 'my-code-font';
   color: var(--black);
-  background-color: var(--white);
+  /*background-color: var(--white);*/
   font-weight: thin;
   font-size: 0.9rem;
 }

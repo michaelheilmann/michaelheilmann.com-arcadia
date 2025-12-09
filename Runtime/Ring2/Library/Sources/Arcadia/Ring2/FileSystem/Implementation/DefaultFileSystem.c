@@ -41,7 +41,7 @@
 #endif
 
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  
+
   #define WIN32_LEAN_AND_MEAN
   #include <Windows.h> // GetFileAttributes
 
@@ -49,14 +49,14 @@
       Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Cygwin
 
   #include <string.h> // strlen
-  #include <sys/stat.h> // stat 
+  #include <sys/stat.h> // stat
   #include <sys/types.h>
   #include <errno.h> // errno
   #include <unistd.h> // sysconf, getcwd, STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO
-  
+
   #include <linux/limits.h> // PATH_MAX
   #include <limits.h> // PATH_MAX
-  
+
   #include <pwd.h> // struct passwd
   #include <fcntl.h>
 
@@ -187,14 +187,14 @@ Arcadia_DefaultFileSystem_getLastWriteTimeImpl
     Arcadia_DefaultFileSystem* self,
     Arcadia_FilePath* path
   );
-                  
+
 static Arcadia_FilePath*
 Arcadia_DefaultFileSystem_getSaveFolderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DefaultFileSystem* self
   );
-  
+
 static Arcadia_FilePath*
 Arcadia_DefaultFileSystem_getWorkingDirectoryImpl
   (
@@ -294,7 +294,7 @@ Arcadia_DefaultFileSystem_constructImpl
   ((Arcadia_FileSystem*)self)->deleteRegularFile = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_deleteRegularFileImpl;
 
   ((Arcadia_FileSystem*)self)->directoryFileExists = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_directoryFileExistsImpl;
-  
+
   ((Arcadia_FileSystem*)self)->getConfigurationDirectory = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getConfigurationDirectoryImpl;
   ((Arcadia_FileSystem*)self)->getExecutable = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getExecutableImpl;
   ((Arcadia_FileSystem*)self)->getFileContents = (Arcadia_ByteBuffer * (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getFileContentsImpl;
@@ -302,9 +302,9 @@ Arcadia_DefaultFileSystem_constructImpl
   ((Arcadia_FileSystem*)self)->getLastWriteTime = (Arcadia_Natural64Value(*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_getLastWriteTimeImpl;
   ((Arcadia_FileSystem*)self)->getSaveDirectory = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getSaveFolderImpl;
   ((Arcadia_FileSystem*)self)->getWorkingDirectory = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_FileSystem*)) & Arcadia_DefaultFileSystem_getWorkingDirectoryImpl;
-  
+
   ((Arcadia_FileSystem*)self)->regularFileExists = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*)) & Arcadia_DefaultFileSystem_regularFileExistsImpl;
-  
+
   ((Arcadia_FileSystem*)self)->setFileContents = (void (*)(Arcadia_Thread*, Arcadia_FileSystem*, Arcadia_FilePath*, Arcadia_ByteBuffer*)) & Arcadia_DefaultFileSystem_setFileContentsImpl;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);

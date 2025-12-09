@@ -63,7 +63,7 @@ isDigit
     Arcadia_Thread* thread,
     Arcadia_UTF8Reader* reader
   )
-{ 
+{
   if (!Arcadia_UTF8Reader_hasCodePoint(thread, reader)) {
     return Arcadia_BooleanValue_False;
   }

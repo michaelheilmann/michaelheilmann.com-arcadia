@@ -39,9 +39,6 @@ An out of source build is the recommended way of building *michaelheilmann.com*.
 
 #### Further Options
 
-- `Arcadia.Arms.Statistics.Enabled`
-`TRUE` enables statistics for *Arcadia ARMS*, `FALSE` disables them. Default is `FALSE`.
-
 - `Arcadia.Visuals.Implementation.OpenGL4.Enabled`
 `TRUE` enables OpenGL 4 support in *Arcadia Visuals*, `FALSE` disables it. Default is `FALSE`.
 \
@@ -53,3 +50,10 @@ To disable OpenGL support, add the parameter `-D"Arcadia.Visuals.Implementation.
 \
 To enable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=TRUE` to the cmake command.
 To disable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=FALSE` to the cmake command.
+
+#### Example command line
+The typical command line for x64 build files is hence:
+```
+cd ~/build
+cmake ~/sources -D"Arcadia.Visuals.Implementation.OpenGL4"=TRUE -D"Arcadia.Audials.Implementation.OpenAL"=TRUE
+```

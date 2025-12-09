@@ -16,6 +16,22 @@
   <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=3'>
   <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=3'>
   <link rel='canonical' href='https://michaelheilmann.com/specifications/data-definition-language/index.html'>
+  
+  <script>
+  MathJax = {
+    startup: {
+      ready() {
+        MathJax.startup.defaultReady();
+        const {Token} = MathJax._.input.tex.Token;
+        const {MapHandler} = MathJax._.input.tex.MapHandler;
+        const delimiter = MapHandler.getMap('delimiter');
+        delimiter.add('\\llbracket', new Token('\\llbracket', '\u27E6'));
+        delimiter.add('\\rrbracket', new Token('\\rrbracket', '\u27E7'));
+      }
+    }
+  }
+  </script>
+  
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
   <title>Data Definition Language Schema (draft, v0.1)</title>
   <style>
@@ -32,6 +48,10 @@ my-rhs {
 
 /* A box used to surround out of text contents e.g., theorems, lemmas, examples, etc. */
 div.box {
+  --base-color: rgb(219, 212, 205);
+  --background-color: color-mix(in srgb, var(--base-color) 20%, white 100%);
+  --border-color: color-mix(in srgb, var(--base-color) 100%, white 20%);
+
   padding-bottom: 8px;
   padding-top: 8px;
   padding-left: 8px;
@@ -40,7 +60,33 @@ div.box {
   margin-top: 1rem;
   margin-bottom: 1rem;
 
-  background-color: rgb(215, 210, 203);
+  border-width: 1.75px;
+  border-style: solid;
+  border-radius: 4px;
+
+  border-color: var(--border-color);
+  background-color: var(--background-color);
+}
+
+div.box.todo {
+  --todo-base-color: rgb(234, 136, 145);
+  --todo-background-color: color-mix(in srgb, var(--todo-base-color) 20%, white 100%);
+  --todo-border-color: color-mix(in srgb, var(--todo-base-color) 100%, white 20%);
+
+  padding-bottom: 8px;
+  padding-top: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  border-width: 1.75px;
+  border-style: solid;
+  border-radius: 4px;
+
+  border-color: var(--todo-border-color);
+  background-color: var(--todo-background-color);
 }
 
 div.box > div.header
@@ -50,7 +96,7 @@ div.box > div.body
 {/*Intentionally empty.*/}
 
 div.box code {
-  background-color: rgb(215, 210, 203);
+  /*background-color: rgb(215, 210, 203);*/
 }
 
   my-sem, my-syn, my-lex {
@@ -91,172 +137,372 @@ DDLS is a declarative language for defining the structure and constraints for da
 These tools can be standalone or integrated into libraries and executables.
 </p>
 
-<h2 id="ddl-node">2 DDL Node</h2>
-<p>A <em>DDL</em> node is a description of data.</p>
+<h2 id="notations">Notations</h2>
 
-<h2 id="ddls-file">3 DDLS File</h2>
-<p>A <em>DDLS file</em> is <em>DDL file</em>.
-The DDLS file consists of a single definition of a DDLS Schema type.</p>
+<p>This specification uses the semantical form of the DDL as defined
+   <a href="https://michaelheilmann.com/specifications/data-definition-language/#semantical-specification">here</a>.</p>
 
-<h2 id="types">4 Types</h2>
-<p>
-DDLS types are defined by DDL map values with specific structures and constraints.
-</p>
+<p>Given a DDL value \(x\), we denote the type of that value by \(\textit{type}(x)\).</p>
 
 <p>
 The following DDLS types exist:
 
-The <em>Any</em> type,
+The \(\textit{Any}_{\textit{DDLS}}\) type,
 the scalar types
-<em>Boolean</em>,
-<em>Number</em>,
-<em>String</em>, and
-<em>Void</em>,
+\(\textit{Boolean}_{\textit{DDLS}}\),
+\(\textit{Number}_{\textit{DDLS}}\),
+\(\textit{String}_{\textit{DDLS}}\), and
+\(\textit{Void}_{\textit{DDLS}}\),
 the aggregate types
-<em>List</em>, and
-<em>Map</em>,
-the schema type
-<em>Schema</em>,
+\(\textit{List}_{\textit{DDLS}}\), and
+\(\textit{Map}_{\textit{DDLS}}\),
 as well as the schema reference type
-<em>Schema Reference</em>.
+\(\textit{SchemaReference}_{\textit{DDLS}}\).
 </p>
 
-<h3 id="any-type">4.1 Any Type</h3>
+The \(\textit{Value}_{\textit{DDLS}}\) type is defined as the union of the above types
+\[\begin{aligned}
+\textit{Value}_{\textit{DDLS}} =&\;\textit{Any}_{\textit{DDLS}}\\
+                            \cup&\;\textit{Boolean}_{\textit{DDLS}}\\
+                            \cup&\;\textit{List}_{\textit{DDLS}}\\
+                            \cup&\;\textit{Map}_{\textit{DDLS}}\\
+                            \cup&\;\textit{Number}_{\textit{DDLS}}\\
 
-<h3 id="scalar-type">4.2 Scalar Type</h3>
-<p>An <em>Scalar</em> type is represented by a DDL map which consists exactly of the following entries:</p>
+                            \cup&\;\textit{SchemaReference}_{\textit{DDLS}}\\
+                            \cup&\;\textit{Void}_{\textit{DDLS}}\\
+\end{aligned}\]
 
-<table>
-  <tr><td><code>kind</code></td>
-  <td>A DDL string representing the kind of the scalar type. The value must be one of "Boolean", "Number", "String", or "Void".
-  If the value is "Boolean" then this DDL map represents a <em>Boolean</em> type.
-  If the value is "Number" then this DDL map represents <em>Number></em> type.
-  If the value is "String" then this DDL map represents <em>String></em> type.
-  If the value is "Void" then this DDL map represents <em>Void></em> type.
-  </td></tr>
-</table>
-
-<h3 id="list-type">4.3 List Type</h3>
-<p>A <em>List</em> type is represented by a DDL map which consists exactly of the following entries:</p>
-
-<table>
-  <tr><td><code>kind</code></td>
-  <td>A DDL string representing the kind of the type. The value must be one of "List".</td></tr>
-                                                                                        
-  <tr><td><code>entries</code></td>
-  <td>The type of the list entries.</td></tr>
-</table>
-
-<h3 id="map-type">4.4 Map Type</h3>
 <p>
-A <em>Map</em> type is represented by a DDL map which consists exactly of the following entries:
+Furthermore, there exist a schema type \(\textit{Schema}_{\textit{DDLS}}\) and a map entry type \(\textit{MapEntry}_{\textit{DDLS}}\).
 </p>
+                            
 
-<table>
-  <tr><td><code>kind</code></td>
-  <td>A DDL string representing the kind of the type. The value must be "Map".</td></tr>
-  
-  <tr><td><code>entries</code></td>
-  <td>
-  A DDL map. The names of the map entries are unique.
-  The values are types.
-  </td>
-  </tr>
-  
-</table>
+<p>Given a DDLS value \(x\), we denote the type of that value by \(\textit{type}(x)\).</p>
 
-<h3 id="schema-type">4.5 Schema Type</h3>
-<p>
-A <em>Schema</em> type is represented by a DDL map which consist exactly of the following entries:
+<h2 id="semantics">3 Semantics</h2>
 
-<table>
-  <tr><td><code>kind</code></td>
-  <td>A DDL string representing the kind of the type. The value must be "Schema".</td></tr>
+<p>DDLS programs are a restriction on DDL programs; that is, every DDLS program is a DDL program but not vice versa.
+   The DDLS semantics are defined by a translation function \(\sigma\) of DDL values to DDLS values.</p>
 
-  <tr><td><code>name</code></td>
-  <td>A DDL string representing the name of the schema.</td></tr>  
-  
-</table>
-
-<h3 id="schema-reference-type">4.6 Schema Reference Type</h3>
-<p>
-A <em>SchemaReference</em> type is represented by a DDL map which consists exactly of the following entries:
-</p>
-
-<table>
-  <tr><td><code>kind</code></td>
-  <td>A DDL string representing the kind of the type. The value must be "SchemaReference".</td></tr>
-
-  <tr><td><code>name</code></td>
-  <td>A DDL string representing the name of the referenced schema.</td></tr>  
-  
-</table>
-
-<h2 id="validation">6 Validation</h2>
-<p>A <em>validation context</em> consists of one or more schema nodes \(S = \{ s_1,\ldots,s_n \}\) and a starting schema in \(s \in S\).
-If \(s \not\in S\) then an <em>SchemaNotFound</em> is raised.
-If there exist two schemas \(s_i, s_j \in S\) such that \(i \neq j\) but \(s_i.\textit{name} = s_j.\textit{name}\) then a <em>SchemaAlreadySpecified</em> error is raised.</p>
-
-<p>
-Given a validation context \(S := \{ s_1, \ldots, s_n \}\) and a starting schema \(s \in S\) and a DDL node \(x\), the validation of \(x\) against \((S,s)\) is a function
-</p>
 \[
-\text{validate} : \textit{Context} \times \textit{Schema} \times \textit{Node}_{\textit{DDL}} \rightarrow \textit{Result}
+\sigma : \textit{Name} \cup \textit{Value}
+         \rightarrow \textit{Error} \cup \textit{Value}_{\textit{DDLS}}
+\]
+
+<h3 id="any-type">3.1 Any type</h3>
+<p>The values of type \(\textit{Any}_{\textit{DDLS}}\) are represented by \(\textit{Map}\) values.
+   The map contains a single map entry of name \(\texttt{kind}\) with the value \(\texttt{Any}\) of type \(\textit{String}\).
+
+<p>The translation function is hence given by</p>
+\[
+\sigma([\left((\texttt{kind},\texttt{Any}\right)]) = \textit{any}_{\textit{DDLS}}
+\]
+<p>where \(\textit{any}_{\textit{DDLS}}\) is the single value of type \(\textit{Any}_{\textit{DDLS}}\).</p>
+
+<h3 id="boolean-type">3.2 Boolean types</h3>
+<p>The values of type \(\textit{Boolean}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) values.
+   The map contains a single map entry of name \(\texttt{kind}\) with the value \(\texttt{Boolean}\) of type \(\textit{String}\).
+
+<p>The translation function is hence given by</p>
+\[
+\sigma([\left((\texttt{kind},\texttt{Boolean}\right)]) = \textit{boolean}_{\textit{DDLS}}
+\]
+<p>where \(\textit{boolean}_{\textit{DDLS}}\) is the single value of type \(\textit{Boolean}_{\textit{DDLS}}\).</p>
+
+<h3 id="list-type">3.3 List type</h3>
+<p>Values of type \(\textit{List}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) values.
+   The map contains two entries.</p>
+
+<ul>
+  <li>\(\left(\texttt{kind}, \texttt{List}\right)\) where \(\texttt{List}\) is of type \(\textit{String}\).</li>
+  <li>\(\left(\texttt{elements}, x\right)\) where \(x\) is a value of type \(\textit{Value}_{\textit{DDLS}}\) value.</li>
+</ul>
+
+<p>The translation function is hence given by</p>
+\[
+\sigma
+\left(
+  [\left(\texttt{kind},\texttt{List}\right),
+   \left(\texttt{elements}, x\right)]
+\right)
+=
+\left(\sigma\left(x\right)\right)
+\]
+
+<h3 id="map-type">3.4 Map type</h3>
+<p>A value of type \(\textit{Map}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) value.
+   The map contains two entries.</p>
+
+<ul>
+  <li>\(\left(\texttt{kind}, \texttt{Map}\right)\) where \(\texttt{Map}\) is of type \(\textit{String}\).</li>
+  <li>\(\left(\texttt{entries}, w\right)\) where \(w\) is \(\textit{List}\) value with elements of type \(\textit{MapEntry}_{\textit{DDLS}}\).</li>
+</ul>
+
+<p>The translation function is hence given by</p>
+\[
+\sigma
+\left(
+  [\left(\texttt{kind},\texttt{Map}\right),
+   \left(\texttt{entries}, w\right)]
+\right)
+=
+\begin{cases}
+\left(\sigma\left(w\right)\right) &\text{if }\sigma(w) \not\in \textit{Error} \text{,}\\
+\sigma(w)                         &\text{otherwise.}
+\end{cases}
+\]
+with
+\[
+\left(\sigma(w)\right)=
+\begin{cases}
+\left([\sigma(x)] \circ \sigma(v)\right) & \text{if } w = [x] \circ v \text{ and } \sigma(x) \not\in \textit{Error}\text{,}\\
+\sigma(x)                                & \text{if } w = [x] \circ v \text{ and } \sigma(x)     \in \textit{Error}\text{,}\\
+\left([]                         \right) & \text{if } w = []\text{,}\\     
+\end{cases}
 \]
 
 
-<p>\(\textit{validate}\) is defined as:</p>
+<p>A value of type \(\textit{MapEntry}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) value.
+   The map contains three entries.</p>
+
 <ul>
+  <li>\(\left(\texttt{kind}, \texttt{MapEntry}\right)\) where \(\texttt{MapEntry}\) is of type \(\textit{String}\).</li>
+  <li>\(\left(\texttt{name}, a\right)\) where \(a\) is a value of type \(\textit{String}\).</li>
+  <li>\(\left(\texttt{type}, b\right)\) where \(b\) is a value of type \(\textit{Value}_{\textit{DDLS}}\).</li>
+</ul>
+
+<p>The translation function for a \(\textit{MapEntry}_{\textit{DDLS}}\) is hence given by</p>
+\[
+\sigma
+\left(
+  [\left(\texttt{kind},\texttt{MapEntry}\right),
+   \left(\texttt{name}, a\right)
+   \left(\texttt{type}, b\right)]
+\right)
+=
+\begin{cases}
+\left(a, \sigma\left(b\right)\right) &\text{if }\sigma(b) \not\in \textit{Error} \text{,}\\
+\sigma(b)                            &\text{if }\sigma(b) \in \textit{Error} \text{,}\\
+\textit{Error}                       &\text{otherwise.}
+\end{cases}
+\]
+<h3 id="number-type">3.5 Number types</h3>
+<p>The values of type \(\textit{Number}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) values.
+   The map contains a single map entry of name \(\texttt{kind}\) with the value \(\texttt{Number}\) of type \(\textit{String}\).
+
+<p>The translation function is hence given by</p>
+\[
+\sigma([\left((\texttt{kind},\texttt{Number}\right)]) = \textit{number}_{\textit{DDLS}}
+\]
+<p>where \(\textit{number}_{\textit{DDLS}}\) is the single value of type \(\textit{Number}_{\textit{DDLS}}\).</p>
+
+<h3 id="schema-type">3.6 Schema type</h3>
+<p>A value of type \(\textit{Schema}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) value.
+   The map contains three entries.</p>
+
+<ul>
+  <li>\(\left(\texttt{kind}, \texttt{Schema}\right)\) where \(\texttt{Schema}\) is of type \(\textit{String}\).</li>
+  <li>\(\left(\texttt{name}, v\right)\) where \(v\) is of type \(\textit{String}\).</li>
+  <li>\(\left(\texttt{definition}, w\right)\) where \(w\) is a value of type \(\textit{Value}_{\textit{DDLS}}\).</li>
+</ul>
+
+<p>The translation function is hence given by</p>
+\[
+\sigma
+\left(
+  [\left(\texttt{kind},\texttt{Schema}\right),
+   \left(\texttt{name}, v\right),
+   \left(\texttt{definition}, w\right)]
+\right)
+=
+\left(v,\sigma\left(w\right)\right)
+\]
+
+<p>Given a schema value \( w = (x,y) \) with name \(x\) and definition \(y\) we write
+   \(w.\textit{name}\) to denote \(x) and \(w.\textit{definition}\) to denote \(y\).</p>
+<h3 id="ddls-schema-reference-type">3.7 Schema Reference type</h3>
+
+
+<p>A value of type \(\textit{SchemaReference}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) value.
+   The map contains two entries.</p>
+
+<ul>
+  <li>\(\left(\texttt{kind}, \texttt{SchemaReference}\right)\) where \(\texttt{Schema}\) is of type \(\textit{String}\).</li>
+  <li>\(\left(\texttt{name}, v\right)\) where \(v\) is of type \(\textit{String}\).</li>
+</ul>
+
+<p>The translation function is hence given by</p>
+\[
+\sigma
+\left(
+  [\left(\texttt{kind},\texttt{Schema}\right),
+   \left(\texttt{name}, v\right)]
+\right)
+=
+\left(v,\sigma\left(w\right)\right)
+\]
+
+<h3 id="string-type">3.8 String type</h3>
+<p>The values of type \(\textit{String}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) values.
+   The map contains a single map entry of name \(\texttt{kind}\) with the value \(\texttt{String}\) of type \(\textit{String}\).
+
+<p>The translation function is hence given by</p>
+\[
+\sigma([\left((\texttt{kind},\texttt{String}\right)]) = \textit{string}_{\textit{DDLS}}
+\]
+<p>where \(\textit{string}_{\textit{DDLS}}\) is the single value of type \(\textit{String}_{\textit{DDLS}}\).</p>
+
+<h3 id="void-type">3.9 Void type</h3>
+<p>The values of type \(\textit{Void}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) values.
+   The map contains a single map entry of name \(\texttt{kind}\) with the value \(\texttt{Void}\) of type \(\textit{String}\).</p>
+
+<p>The translation function is hence given by</p>
+\[
+\sigma([\left((\texttt{kind},\texttt{Void}\right)]) = \textit{void}_{\textit{DDLS}}
+\]
+<p>where \(\textit{void}_{\textit{DDLS}}\) is the single value of type \(\textit{Void}_{\textit{DDLS}}\).</p>
+
+
+<h2 id="validation">4 Validation</h2>
+<p>
+A <em>validation context</em> \(\langle \textit{schemas}, \textit{startSchemaName} \rangle\)
+consists of a list \(\textit{schemas}\) if \(\textit{Schema}_{\textit{DDLS}}\) values    and
+name \(\textit{startSchemaName}\) of type \(\textit{String}\).
+</p>
+
+<p>
+The validation function maps from a validation context and a DDL node to a result:
+</p>
+\[
+\text{validate} : \textit{Context} \times \textit{Node}_{\textit{DDL}} \rightarrow \textit{Result}
+\]
+<p>with</p>
+\[
+\textit{Result} = \textit{Errors} \cup \{ \textit{Success} \}
+\]
+
+<h3>4.1 validate</h3>
+<p>\(\textit{validate}(\langle \textit{schemas}, \textit{startSchemaName} \rangle, x)\) is defined as follows:</p>
+<ul>
+  <li>Return a \(\textit{SchemaNotFound}\) error if there is no \(s \in \textit{schemas}, s.\textit{name} = \textit{startSchemaName}\).</li>
+  <li>Return a \(\textit{SchemaAlreadySpecified}\) error if there two schemas \(s_i, s_j \in \textit{schemas}\) such that \(i \neq j\) but \(s_i.\textit{name} = s_j.\textit{name}\).</li>
+  <li>Otherwise let \(s \in \textit{schemas}\) with \(s.\textit{name} = \textit{startSchemaName}\).</li>
+
   <li>
-  Let \(v = \emptyset\).
-  While \(s\) is a DDL schema reference type:
+    If \(s\) is a \(\textit{SchemaReference}_{\textit{DDLS}}\) type:
     <ul>
-      <li>Find \(s' \in S\) such that \(s'.\text{name} = s.\text{name}\). Raise a <em>SchemaNotFound</em> error if no such \(s'\) was found.</li>
-      <li>Raise an error if \(s' \in v\).</li>
-      <li>Let \(s = s'\) and \(v = v \cup \{ s' \}.</li>
+      <li>Let \(v = \emptyset\).</li>
+      <li>While \(s\) is a \(\textit{SchemaReference}_{\textit{DDLS}}\) type:
+        <ul>
+          <li>Find \(s' \in \textit{schemas}\) such that \(s'.\textit{name} = s.\textit{name}\). Return a \(\textit{SchemaNotFound}\) error if no such \(s'\) was found.</li>
+          <li>Return a <em>CyclicSchema</em> error if \(s' \in v\).</li>
+          <li>Let \(s = s'\) and \(v = v \cup \{ s' \}\).</li>
+        </ul>
+      </li>
+      <li>Invoke \(\text{validate}\left(\langle \textit{schemas}, s'.\textit{name} \rangle, x\right)\).</li>
     </ul>
-  Invoke \(\text{validate}\left(S, s', x\right)\).
   </li>
+  
   <li>If \(x\) is a DDL boolean value:
       <ul>
-        <li>If \(s\) is no DDLS boolean scalar type: a <em>ValidationError</em> is raised.</li>
+        <li>If \(s\) is not a value of type \(\textit{Boolean}_{\textit{DDLS}}\): return \(\textit{ValidationError}\).</li>
+        <li>Otherwise return \(\textit{Success}\).</li>
       </ul>
   </li>
   <li>If \(x\) is a DDL list value:
       <ul>
-        <li>If \(s\) is no DDLS list type: a <em>ValidationError</em> is raised.</li>
-        <li>Otherwise: enter \(\text{listValidation}(S, x, y)\).</li>
+        <li>If \(s\) is not a value of type \(\textit{List}_{\textit{DDLS}}\): return \(\textit{ValidationError}\).</li>
+        <li>Otherwise: \(\text{listValidation}(\langle \textit{schemas}, \textit{startSchemaName} \rangle, x)\).</li>
       </ul>
   </li>
   <li>If \(x\) is a DDL map value:
       <ul>
-        <li>If \(s\) is no DDLS map type: a <em>ValidationError</em> is raised.</li>
-        <li>Otherwise: enter \(\text{mapValidation}(S, x, y)\).</li>
+        <li>If \(s\) is not a value of type \(\textit{Map}_{\textit{DDLS}}\): return \(\textit{ValidationError}\).</li>
+        <li>Otherwise: \(\text{mapValidation}(\langle \textit{schemas}, \textit{startSchemaName} \rangle, x)\).</li>
       </ul>
   </li>
   <li>If \(x\) is a DDL number value:
       <ul>
-        <li>If \(s\) is no DDLS number scalar type: a <em>ValidationError</em> is raised.</li>
+        <li>If \(s\) is not a value of type \(\textit{Number}_{\textit{DDLS}}\): return \(\textit{ValidationError}\).</li>
+        <li>Otherwise return <em>Success</em>.</li>
       </ul>
   </li>
   <li>If \(x\) is a DDL string value:
       <ul>
-        <li>If \(s\) is no DDLS string scalar type: a <em>ValidationError</em> is raised.</li>
+        <li>If \(s\) is not a value of type \(\textit{String}_{\textit{DDLS}}\): return \(\textit{ValidationError}\)-</li>
+        <li>Otherwise return <em>Success</em>.</li>
       </ul>
   </li>
   <li>If \(x\) is a DDL void value:
       <ul>
-        <li>If \(s\) is no DDLS void scalar type: a <em>ValidationError</em> is raised.</li>
+        <li>If \(s\) is not a value of type \(\textit{Void}_{\textit{DDLS}}\): return \(\textit{ValidationError}\).</li>
+        <li>Otherwise return <em>Success</em>.</li>
       </ul>
 </ul>
 
-<p>\(\textit{validateList} : \textit{Context} \times \textit{Schema} \times \textit{ListNode}_{\textit{DDL}} \rightarrow \textit{Result}\) is the validation of a list.</p> 
+<h3>4.2 validateList</h3>
+<p>\(\textit{validateList} : \textit{Context} \times \textit{ListNode}_{\textit{DDL}} \rightarrow \textit{Result}\) validates a DDL list node.</p>
+<p>\(\textit{validateList}(\langle \textit{schemas}, \textit{startSchemaName}\rangle, x)\) is defined as follows:</p>
 
-<p>\(\textit{validateMap} : \textit{Context} \times \textit{Schema} \times \textit{MapNode}_{\textit{DDL}} \rightarrow \textit{Result}\) is the validation of a map.</p> 
-
+<ul>
+  <li>Return a \(\textit{SchemaNotFound}\) error if there is no \(s \in \textit{schemas}, s.\textit{name} = \textit{startSchemaName}\).</li>
+  <li>Return a \(\textit{SchemaAlreadySpecified}\) error if there two schemas \(s_i, s_j \in \textit{schemas}\) such that \(i \neq j\) but \(s_i.\textit{name} = s_j.\textit{name}\).</li>
+  <li>Otherwise let \(s \in \textit{schemas}\) with \(s.\textit{name} = \textit{startSchemaName}\).</li>
+   <li>If \(s\) is no DDLS list type: return \(\textit{ValidationError}\).</li>
+</ul>
 
 <p>
-This process always terminates.
+\(x.\textit{elements}\) has a list of DDL nodes.
+\(s.\textit{element}\) is a DDLS node.
+</p>
+<p>
+\(\textit{validate}(\langle \textit{schemas}, s.\textit{element}.\textit{name} \rangle, x')\) is invoked for each \(x' \in x.\textit{elements}\).
+If there is an invocation \(r := \textit{validate}\left(\langle \textit{schemas}, s.\textit{element}.\textit{name} \rangle, x'\right)\) where \(r \neq \textit{Success}\), then return \(r\);
+otherwise return \(\textit{Success}\).
+</p>
+
+<h3>4.3 validateMap</h3>
+<p>\(\textit{validateMap} : \textit{Context} \times \textit{MapNode}_{\textit{DDL}} \rightarrow \textit{Result}\) validates a DDL map node.</p>
+<p>\(\textit{validateMap}(\langle \textit{schemas}, \textit{startSchemaName}\rangle, x\) is defined as follows:</p>
+
+<ul>
+  <li>Return a \(\textit{SchemaNotFound}\) error if there is no \(s \in \textit{schemas}, s.\textit{name} = \textit{startSchemaName}\).</li>
+  <li>Return a \(\textit{SchemaAlreadySpecified}\) error if there two schemas \(s_i, s_j \in \textit{schemas}\) such that \(i \neq j\) but \(s_i.\textit{name} = s_j.\textit{name}\).</li>
+  <li>Otherwise let \(s \in \textit{schemas}\) with \(s.\textit{name} = \textit{startSchemaName}\).</li>
+  <li>If \(s\) is no DDLS map type: return \(\textit{ValidationError}\).</li>
+</ul>
+
+<p>
+\(x.\textit{entries}\) is a list of DDL map entry nodes; a map entry node \(x' \in x.\textit{entries}\) consists of a name \(x'.\textit{name}\) and a \(x'.\textit{value}\) which is a DDL node.
+\(s.\textit{entries}\) is a list of DDLS map entry nodes; a map entry node \(s' \in s.\textit{entries}\) consists of a name \(s'.\textit{name}\) and a \(s'.\textit{value}\) which is a DDLS node.
+</p>
+
+<p>
+Return a <em>ValidationError</em> if there exist \(x', x'' \in x.\textit{entries}\) such that \(x' \neq x''\) and \(x'.\textit{name} = x''.\textit{name}\).
+That is, the DDL map must not have two map entries with the same name. 
+</p>
+
+<p>
+Return a <em>ValidationError</em> if there exists \(s' \in s.\textit{entries}\) such that no \(x' \in x.\textit{entries}\) with \(s'.\textit{name} = x'.\textit{name}\).
+That is, if a map entry with a certain name was specified in \(s\) then it must be present in \(x\).
+</p>
+
+<p>
+Return a <em>ValidationError</em> if there exists \(x' \in x.\textit{entries}\) such that no \(s' \in s.\textit{entries}\) with \(x'.\textit{name} = s'.\textit{name}\).
+That is, if a map entry with a certain name is present in \(x\) then it must be specified in \(s\).
+
+</p>
+
+<p>
+For each \(x' \in x.\textit{entries}\) and for each \(s' \in s.\textit{entries}\)
+\(\textit{validate}\left(\langle \textit{schemas}, s'.\textit{value}.\textit{name} \rangle, x'.\textit{value}\right)\) is invoked if \(s'.\textit{name} = x'.\textit{name}\).
+If there is an invocation \(r := \textit{validate}\left(\langle \textit{schemas}, s'.\textit{value}.\textit{name} \rangle, x'.\textit{value}\right)\) where \(r \neq \textit{Success}\), then return \(r\);
+otherwise return \(\textit{Success}\).
+</p>
+
+<h3>4.4 Acceptance and Rejection</h3>
+<p>
+\(\textit{validate}(S, s, x)\) always terminates.
 If no error is raised, then \(x\) was accepted by \(S\) with \(s\).
 Otherwise \(x\) was rejected by \(S\) with \(s\).
 </p>
@@ -266,11 +512,9 @@ Otherwise \(x\) was rejected by \(S\) with \(s\).
    <nav>
       <ul style="list-style: none">
         <li><a href="#introduction">1 Introduction</a></li>
-        <li><a href="#ddl-node">2 DDL Node</a></li>
-        <li><a href="#ddl-schema-node">3 DDL Schema Node</a></li>
-        <li><a href="#validation-context">4 Validation Context</a></li>
-        <li><a href="#types">5 Types</a></li>
-        <li><a href="#validation">6 Types</a></li>
+        <li><a href="#notation">2 Notation</a></li>
+        <li><a href="#semantics">3 Semantics</a></li>
+        <li><a href="#validation">4 Validation</a></li>
       </ul>
     </nav>
   </div>
@@ -280,7 +524,7 @@ Otherwise \(x\) was rejected by \(S\) with \(s\).
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 8 December 2025.</div>
+      <div>Last modified on 9 December 2025.</div>
     </div>
   </footer>
 </body>

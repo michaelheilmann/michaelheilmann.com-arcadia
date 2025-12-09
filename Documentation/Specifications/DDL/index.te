@@ -2,6 +2,23 @@
   <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=3'>
   <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=3'>
   <link rel='canonical' href='@{siteAddress}/specifications/data-definition-language/index.html'>
+  
+  <script>
+  MathJax = {
+    startup: {
+      ready() {
+        MathJax.startup.defaultReady();
+        const {Token} = MathJax._.input.tex.Token;
+        const {MapHandler} = MathJax._.input.tex.MapHandler;
+        const delimiter = MapHandler.getMap('delimiter');
+        delimiter.add('\\llbracket', new Token('\\llbracket', '\u27E6'));
+        delimiter.add('\\rrbracket', new Token('\\rrbracket', '\u27E7'));
+      }
+    }
+  }
+  </script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@4/tex-mml-chtml.js"></script>
   <title>Data Definition Language</title>
   <style>
   @{include("./../specification.css.i")}
@@ -15,10 +32,11 @@
     font-style: italic;
     font-family: my-default-font;
   }
-  my-sem::after {
-    content: "<sub>sem</sub>"
+  my-sem::before {
+    content: "sem:"
   }
   </style>
+
 </head>
 <body class="my-content-page-1">
   <header>

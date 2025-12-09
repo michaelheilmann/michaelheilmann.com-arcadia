@@ -18,7 +18,7 @@
 
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux || \
     Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Cygwin
-    
+
   #include <string.h> // strlen
   #include <sys/stat.h> // stat
   #include <errno.h> // errno

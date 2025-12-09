@@ -52,12 +52,12 @@ Arcadia_DefaultFileSystem_deleteDirectoryFileHelper
     switch (errno) {
       case ENOTEMPTY: {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotEmpty);
-        Arcadia_Thread_jump(thread);        
+        Arcadia_Thread_jump(thread);
       } break;
       case EACCES:
       case EBUSY:
       case EPERM:
-      case EROFS: 
+      case EROFS:
       case EISDIR:
       case ELOOP:
       case ENAMETOOLONG:

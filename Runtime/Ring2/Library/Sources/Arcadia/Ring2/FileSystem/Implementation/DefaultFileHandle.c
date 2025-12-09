@@ -640,7 +640,7 @@ Arcadia_DefaultFileHandle_readImpl
 
 #elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux || \
       Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Cygwin
-  
+
   ssize_t bytesReadNow = read(self->fd, bytes, bytesToRead > SSIZE_MAX ? SSIZE_MAX : bytesToRead);
   if (bytesReadNow == -1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);

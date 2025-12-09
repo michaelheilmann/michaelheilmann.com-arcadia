@@ -20,7 +20,7 @@ set(MyExecutableName ${MyProjectName}.Tools.TemplateEngine)
 if (NOT TARGET ${MyExecutableName})
 
   BeginProduct(${MyExecutableName} executable)
-  
+
   set(${MyExecutableName}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h @ONLY)

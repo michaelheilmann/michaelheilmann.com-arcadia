@@ -106,13 +106,13 @@ execute3
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     R_Interpreter_Code_Constants* constants = R_Interpreter_ProcessState_getConstants(interpreterProcess);
     R_Interpreter_Code* code = R_Interpreter_Code_create(thread);
-    
+
     // (1) the foreign procedure
     if (0 != R_Interpreter_Code_Constants_getOrCreateForeignProcedure(thread, constants, &print)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);
     }
-    
+
     // (2) the file handle argument
     Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, Arcadia_FileSystem_getOrCreate(thread));
     Arcadia_FileHandle_openStandardOutput(thread, fileHandle);

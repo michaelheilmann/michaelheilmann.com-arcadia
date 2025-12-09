@@ -44,9 +44,6 @@ which is either x64 or x86 for Windows. You can explicitly select one of these t
 
 #### Further Options
 
-- `Arcadia.Arms.Statistics.Enabled`
-`TRUE` enables statistics for *Arcadia ARMS*, `FALSE` disables them. Default is `FALSE`.
-
 - `Arcadia.Visuals.Implementation.OpenGL4.Enabled`
 `TRUE` enables OpenGL 4 support in *Arcadia Visuals*, `FALSE` disables it. Default is `FALSE`.
 \
@@ -62,3 +59,10 @@ To enable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.O
 To disable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=FALSE` to the cmake command.
 \
 *Important*: Ensure that the dependencies are installed by executing the script [/install-dependencies.ps1](/install-dependencies.ps1).
+
+#### Example command line
+The typical command line for x64 build files is hence:
+```
+cd C:/build/x64
+cmake C:/sources -A x64 -D"Arcadia.Visuals.Implementation.OpenGL4"=TRUE -D"Arcadia.Audials.Implementation.OpenAL"=TRUE
+```

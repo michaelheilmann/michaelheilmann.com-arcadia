@@ -27,25 +27,25 @@ typedef struct Arcadia_Thread Arcadia_Thread; // Forward declaration.
 
 /// @brief
 /// Assign the Bytes of a memory block the specified Byte value.
-/// 
+///
 /// @param thread
 /// A pointer to this thread.
-/// 
+///
 /// @param p
 /// A pointer to the memory block.
-/// 
+///
 /// @param n
 /// The number of Bytes of the memory block pointed to by @a p.
-/// 
+///
 /// @param v
 /// The value to assign to the Bytes of the Bytes of the memory block.
-/// 
+///
 /// @remarks
 /// @a p can be a null pointer
-///  
+///
 /// @remarks
 /// Only the specified errors under the specified conditions are raised by calls to this function.
-/// 
+///
 /// @error Arcadia_Status_ArgumentValueInvalid
 /// p + n overflows
 void
@@ -59,22 +59,22 @@ Arcadia_Memory_fill
 
 /// @brief
 /// Assign the Bytes of a memory block the Byte value @a 0.
-/// 
+///
 /// @param thread
 /// A pointer to this thread.
-/// 
+///
 /// @param p
 /// A pointer to the memory block.
-/// 
+///
 /// @param n
 /// The number of Bytes of the memory block pointed to by @a p.
 ///
 /// @remarks
 /// @a p can be a null pointer
-///  
+///
 /// @remarks
 /// Only the specified errors under the specified conditions are raised by calls to this function.
-/// 
+///
 /// @error Arcadia_Status_ArgumentValueInvalid
 /// p + n overflows
 void
@@ -87,25 +87,25 @@ Arcadia_Memory_fillZero
 
 /// @brief
 /// Copy the contents of a memory region to another memory region.
-/// 
+///
 /// @param process
 /// A pointer to the Arcadia_Process object
-/// 
+///
 /// @param p
 /// The starting address of the target memory region
-/// 
+///
 /// @param q
 /// The starting address of the source memory region
-/// 
+///
 /// @param n
 /// The size, in Bytes, of the memory regions
-/// 
+///
 /// @remarks
 /// The memory regions may overlap.
-/// 
+///
 /// @error Arcadia_Status_ArgumentValueInvalid
 /// p + n overflows
-/// 
+///
 /// @error Arcadia_Status_ArgumentValueInvalid
 /// q + n overflows
 ///
@@ -146,13 +146,13 @@ Arcadia_Memory_allocateUnmanaged
 
 /// @brief
 /// Deallocate unmanaged memory.
-/// 
+///
 /// @param thread
 /// A pointer to the Arcadia_Thread object
-/// 
+///
 /// @param p
 /// A pointer to a memory region of @a n Bytes.
-/// 
+///
 /// @error #Arcadia_Status_ArgumentValueInvalid
 /// @a p is a null pointer
 void
@@ -164,24 +164,24 @@ Arcadia_Memory_deallocateUnmanaged
 
 /// @brief
 /// Reallocate unmanaged memory.
-/// 
+///
 /// @param thread
 /// A pointer to this Arcadia_Thread object
 /// @param p A pointer to a <code>void*</code> variable.
 /// The variable points to the memory region to reallocate.
-/// 
+///
 /// @param n
 /// The size to reallocate the memory region to.
-/// 
+///
 /// @post
 /// On success, <code>*p</code> was assigned a pointer to a new memory region of @a n Bytes. The old memory region was deallocated.
-/// 
+///
 /// @error #Arcadia_Status_ArgumentValueInvalid
 /// @a p is a null pointer
-/// 
+///
 /// @error #Arcadia_Status_ArgumentValueInvalid
 /// @a *p is a null pointer
-/// 
+///
 /// @error #Arcadia_Status_AllocationFailed
 /// the allocation failed
 void
@@ -234,19 +234,19 @@ Arcadia_Memory_reverseMemory8
 
 /// @brief
 /// Swap the values of teo memory regions.
-/// 
+///
 /// @param p
 /// A pointer to the first memory region.
-/// 
+///
 /// @param q
 /// A pointer to the second memory region.
 ///
 /// @param n
 /// The number of Bytes of the memory regions pointed to by @a p and @a q, respectively.
-/// 
+///
 /// @remarks
 /// @a p and/or q can be a null pointers
-///  
+///
 /// @remarks
 /// Only the specified errors under the specified conditions are raised by calls to this function.
 void
@@ -260,21 +260,21 @@ Arcadia_Memory_swap
 
 /// @brief
 /// Compare the values of two memory regions.
-/// 
+///
 /// @param p
 /// A pointer to the first memory region.
-/// 
+///
 /// @param q
 /// A pointer to the second memory region.
-/// 
+///
 /// @param n
 /// The number of Bytes of the memory regions pointed to by @a p and @a q, respectively.
-/// 
+///
 /// @return
 /// @a -1 if the first memory region is smaller than the second memory region.
 /// @a +1 if the first memory region is greater than the second memory region.
 /// @a  0 if the memory regions are equal.
-/// 
+///
 /// @remarks
 /// Comparison is performed by comparing the Bytes @a i-th Byte in the first memory region with the i-th Byte of the second memory region.
 /// If all Bytes are equal, the memory regions are equal.
@@ -282,10 +282,10 @@ Arcadia_Memory_swap
 /// The pair at the least index @a j is considered.
 /// The first memory region is smaller than the second memory region if the Byte of that pair in the first memory region is smaller than the Byte in the second memory region.
 /// The first memory region is greater than the second memory region if the Byte of that pair in the first memory region is greater than the Byte in the second memory region.
-/// 
+///
 /// @remarks
 /// @a p and/or q can be a null pointers
-///  
+///
 /// @remarks
 /// Only the specified errors under the specified conditions are raised by calls to this function.
 int8_t
@@ -299,23 +299,23 @@ Arcadia_Memory_compare
 
 /// @brief
 /// Get if the sequence of values of an array are the prefix of the sequence values of another array.
-/// 
+///
 /// @param p
 /// A pointer to an array of @a n Bytes.
-/// 
+///
 /// @param n
 /// The number of Bytes in the array pointed to by @a p.
-/// 
+///
 /// @param q
 /// A pointer to an array of @a m Bytes.
-/// 
+///
 /// @param m
 /// The number of Bytes in the array pointed to by @a q.
-/// 
+///
 /// @return
 /// @a true if the sequence of values of the array pointed to by @a q are the prefix of the sequence of values of the array pointed to by @a p.
 /// @a false otherwise.
-/// 
+///
 /// @remarks
 /// @a p and/or q can be a null pointers
 ///
@@ -333,26 +333,26 @@ Arcadia_Memory_startsWith
 
 /// @brief
 /// Get if the sequence of values of an array are the suffix of the sequence values of another array.
-/// 
+///
 /// @param p
 /// A pointer to an array of @a n Bytes.
-/// 
+///
 /// @param n
 /// The number of Bytes in the array pointed to by @a p.
-/// 
+///
 /// @param q
 /// A pointer to an array of @a m Bytes.
-/// 
+///
 /// @param m
 /// The number of Bytes in the array pointed to by @a q.
-/// 
+///
 /// @return
 /// @a true if the sequence of values of the array pointed to by @a q are the suffix of the sequence of values of the array pointed to by @a p.
 /// @a false otherwise.
-/// 
+///
 /// @remarks
 /// @a p and/or q can be a null pointers
-/// 
+///
 /// @remarks
 /// Only the specified errors under the specified conditions are raised by calls to this function.
 bool

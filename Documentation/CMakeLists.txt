@@ -80,3 +80,4 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
 EndTemplateEngine()
 
 add_subdirectory(Specifications/DDL)
+add_subdirectory(Specifications/DDLS)

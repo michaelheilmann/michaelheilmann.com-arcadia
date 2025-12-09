@@ -125,7 +125,7 @@
 
 /// @brief Symbolic constant for an Arcadia_Status value indicating a failure because of a stack corruption.
 /// This valus is guaranteed to be a non-zero value.
-/// @remarks A stack corruption 
+/// @remarks A stack corruption
 #define Arcadia_Status_StackCorruption (31+1000)
 
 /// @brief Symbolic constant for an Arcadia_Status value indicating a failure because a value was raised.

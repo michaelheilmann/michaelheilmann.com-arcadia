@@ -35,7 +35,7 @@ Arcadia_declareObjectType(u8"Arcadia.FileSystem", Arcadia_FileSystem,
 
 struct Arcadia_FileSystem {
   Arcadia_Object _parent;
-  
+
   void
   (*createDirectoryFile)
     (
@@ -58,7 +58,7 @@ struct Arcadia_FileSystem {
       Arcadia_Thread* thread,
       Arcadia_FileSystem* self
     );
-   
+
   void
   (*createRegularFile)
     (
@@ -175,7 +175,7 @@ struct Arcadia_FileSystem {
 /// @param self A pointer to this file system.
 /// @param path A pointer to the path.
 /// @error Arcadia_Status_NotFound
-/// one or more intermediate directories do not exist; this function will only create the final directory in the path. 
+/// one or more intermediate directories do not exist; this function will only create the final directory in the path.
 void
 Arcadia_FileSystem_createDirectoryFile
   (
@@ -206,7 +206,7 @@ Arcadia_FileSystem_createFileHandle
 /// @param self A pointer to this file system.
 /// @param path A pointer to the path.
 /// @error Arcadia_Status_NotFound
-/// one or more intermediate directories do not exist; this function will only create the final directory in the path. 
+/// one or more intermediate directories do not exist; this function will only create the final directory in the path.
 void
 Arcadia_FileSystem_createRegularFile
   (
@@ -241,7 +241,7 @@ Arcadia_FileSystem_deleteRegularFile
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   );
-  
+
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_directoryFileExists
 Arcadia_BooleanValue
 Arcadia_FileSystem_directoryFileExists
@@ -250,7 +250,7 @@ Arcadia_FileSystem_directoryFileExists
     Arcadia_FileSystem* self,
     Arcadia_FilePath* path
   );
-  
+
 // https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_getConfigurationDirectory
 Arcadia_FilePath*
 Arcadia_FileSystem_getConfigurationDirectory

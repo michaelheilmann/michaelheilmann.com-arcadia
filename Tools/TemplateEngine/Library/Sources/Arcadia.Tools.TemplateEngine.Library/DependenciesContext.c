@@ -156,7 +156,7 @@ DependenciesContext_write
   Arcadia_List* tosList = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   // (1) Create a buffer to write to.
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_UTF8Writer* writer = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer); 
+  Arcadia_UTF8Writer* writer = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, byteBuffer);
   // (2) Iterate over the keys.
   Arcadia_List* froms = Arcadia_Map_getKeys(thread, self->dependencies);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)froms); i < n; ++i) {

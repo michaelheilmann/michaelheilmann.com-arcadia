@@ -724,7 +724,7 @@ Arcadia_FilePath_getFullPath
     Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
     Arcadia_FilePath* newPath = Arcadia_FileSystem_getWorkingDirectory(thread, fileSystem);
     Arcadia_FilePath_append(thread, newPath, path);
-    path = newPath; 
+    path = newPath;
   }
   // (2) normalize the path
   normalize(thread, path);

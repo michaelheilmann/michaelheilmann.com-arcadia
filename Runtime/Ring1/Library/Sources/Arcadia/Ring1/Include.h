@@ -17,7 +17,6 @@
 #define ARCADIA_RING1_INCLUDE_H_INCLUDED
 
 #pragma push_macro("ARCADIA_RING1_PRIVATE")
-#undef ARCADIA_RING1_PRIVATE
 #define ARCADIA_RING1_PRIVATE (1)
 
 #include "Arcadia/Ring1/Implementation/Arrays.h"

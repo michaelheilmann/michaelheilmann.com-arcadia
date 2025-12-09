@@ -50,7 +50,7 @@ Arcadia_DefaultFileSystem_deleteRegularFileHelper
       case EACCES:
       case EBUSY:
       case EPERM:
-      case EROFS: 
+      case EROFS:
       case EISDIR:
       case ELOOP:
       case ENAMETOOLONG:
