@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,10 @@ typedef struct Arcadia_DDL_MapEntryNode Arcadia_DDL_MapEntryNode;
 // The map node is a list of map entry nodes.
 Arcadia_declareObjectType(u8"Arcadia.DDL.MapNode", Arcadia_DDL_MapNode,
                           u8"Arcadia.DDL.Node");
+
+struct Arcadia_DDL_MapNodeDispatch {
+  Arcadia_DDL_NodeDispatch _parent;
+};
 
 struct Arcadia_DDL_MapNode {
   Arcadia_DDL_Node parent;

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,11 +26,11 @@ Arcadia_declareEnumerationType(u8"Arcadia.Visuals.VertexElementSemantics", Arcad
 
 enum Arcadia_Visuals_VertexElementSemantics {
 
-  Arcadia_Visuals_VertexElementSemantics_PositionXyz = 1,
+  Arcadia_Visuals_VertexElementSemantics_PositionXYZ = 1,
 
-  Arcadia_Visuals_VertexElementSemantics_AmbientRgba = 2,
+  Arcadia_Visuals_VertexElementSemantics_AmbientRGBA = 2,
 
-  Arcadia_Visuals_VertexElementSemantics_AmbientUv = 3,
+  Arcadia_Visuals_VertexElementSemantics_AmbientUV = 3,
 
 };
 

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,8 +15,9 @@
 
 #include "Arcadia/DDLS/Include.h"
 #include "Arcadia/DDL/Include.h"
+#include "Arcadia/DDLS/Tests/Validation/Default.h"
 
-static Arcadia_DDLS_Type*
+static Arcadia_DDLS_SchemaNode*
 readDDLS
   (
     Arcadia_Thread* thread,
@@ -24,8 +25,8 @@ readDDLS
   )
 {
   Arcadia_DDLS_DefaultReader* reader = Arcadia_DDLS_DefaultReader_create(thread);
-  Arcadia_DDLS_Type* target = Arcadia_DDLS_DefaultReader_run(thread, reader, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_createFromCxxString(thread, source)));
-  return target;
+  Arcadia_DDLS_Node* ddlsNode = Arcadia_DDLS_DefaultReader_run(thread, reader, Arcadia_String_createFromCxxString(thread, source));
+  return (Arcadia_DDLS_SchemaNode*)ddlsNode;
 }
 
 static Arcadia_DDL_Node*
@@ -36,350 +37,99 @@ readDDL
   )
 {
   Arcadia_DDL_DefaultReader* reader = (Arcadia_DDL_DefaultReader*)Arcadia_DDL_DefaultReader_create(thread);
-  Arcadia_DDL_Node* target = Arcadia_DDL_DefaultReader_run(thread, reader, (Arcadia_Utf8Reader*)Arcadia_Utf8StringReader_create(thread, Arcadia_String_createFromCxxString(thread, source)));
+  Arcadia_DDL_Node* target = Arcadia_DDL_DefaultReader_run(thread, reader, Arcadia_String_createFromCxxString(thread, source));
   return target;
 }
 
-static const char* DDLS =
-  "{\n"
-  "  kind : \"Map\",\n"
-  "  entries : [\n"
-  "    {\n"
-  "      kind : \"MapEntry\",\n"
-  "      name : \"type\",\n"
-  "      type : {\n"
-  "        kind : \"String\",\n"
-  "      },\n"
-  "    },\n"
-  "    {\n"
-  "      kind : \"MapEntry\",\n"
-  "      name : \"red\",\n"
-  "      type : {\n"
-  "        kind : \"Number\",\n"
-  "      },\n"
-  "    },\n"
-  "    {\n"
-  "      kind : \"MapEntry\",\n"
-  "      name : \"green\",\n"
-  "      type : {\n"
-  "        kind : \"Number\",\n"
-  "      },\n"
-  "    },\n"
-  "    {\n"
-  "      kind : \"MapEntry\",\n"
-  "      name : \"blue\",\n"
-  "      type : {\n"
-  "        kind : \"Number\",\n"
-  "      },\n"
-  "    },\n"
-  "  ],\n"
-  "},\n"
-  ;
-
+// input are strings, the single choice is string => accept
 static void
-test1
+Arcadia_DDLS_Tests_Validation_choiceAccept1
   (
     Arcadia_Thread* thread
   )
 {
-  const char* DDL =
+  static const char* DDLS =
     "{\n"
-    "  type : \"Color\",\n"
-    "  red : 255,\n"
-    "  green : 0,\n"
-    "  blue : 0,\n"
+    "  kind : \"Schema\",\n"
+    "  name : \"MySchema\",\n"
+    "  definition : \n"
+    "  {\n"
+    "  kind : \"Choice\",\n"
+    "  choices : [\n"
+    "      {\n"
+    "        kind : \"String\",\n"
+    "      },\n"
+    "    ],\n"
+    "  },\n"
     "},\n"
     ;
-  Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-  Arcadia_DDL_Node* node = readDDL(thread, DDL);
-  Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-  Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-}
 
-// "$.type" not defined
-static void
-testRejectTypeNotDefined
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDL =
-    "{\n"
-    "  red : 255,\n"
-    "  green : 0,\n"
-    "  blue : 0,\n"
-    "},\n"
-    ;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-    Arcadia_DDL_Node* node = readDDL(thread, DDL);
+  const char* DDL[] =
+    {
+      "\"w\"",
+    };
+  for (Arcadia_SizeValue i = 0; i < sizeof(DDL) / sizeof(const char*); ++i) {
+    Arcadia_DDLS_SchemaNode* ddlsNode = readDDLS(thread, DDLS);
+    Arcadia_DDL_Node* node = readDDL(thread, DDL[i]);
     Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-    Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
+    Arcadia_DDLS_ValidationContext_addSchema(thread, validationContext, ddlsNode);
+    Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"MySchema"), node);
   }
 }
 
-// "$.red" not defined
+// input is true, false, void, some numbers, the single choice is string => reject
 static void
-testRejectRedNotDefined
+Arcadia_DDLS_Tests_Validation_choiceReject1
   (
     Arcadia_Thread* thread
   )
 {
-  const char* DDL =
+  static const char* DDLS =
     "{\n"
-    "  type : \"Color\",\n"
-    "  green : 0,\n"
-    "  blue : 0,\n"
+    "  kind : \"Schema\",\n"
+    "  name : \"MySchema\",\n"
+    "  definition : \n"
+    "  {\n"
+    "  kind : \"Choice\",\n"
+    "  choices : [\n"
+    "      {\n"
+    "        kind : \"String\",\n"
+    "      },\n"
+    "    ],\n"
+    "  },\n"
     "},\n"
     ;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-    Arcadia_DDL_Node* node = readDDL(thread, DDL);
-    Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-    Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
 
-// "$.green" not defined
-static void
-testRejectGreenNotDefined
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDL =
-    "{\n"
-    "  type : \"Color\",\n"
-    "  red : 255,\n"
-    "  blue : 0,\n"
-    "},\n"
-    ;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-    Arcadia_DDL_Node* node = readDDL(thread, DDL);
-    Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-    Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
+  const char* DDL[] =
+    {
+    "true",
+    "false",
+    "void",
+    "1",
+    "-1",
+    "0.1",
+    "-0.1",
+    };
+  for (Arcadia_SizeValue i = 0; i < sizeof(DDL) / sizeof(const char*); ++i) {
+    Arcadia_JumpTarget jumpTarget;
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_DDLS_SchemaNode* ddlsNode = readDDLS(thread, DDLS);
+      Arcadia_DDL_Node* node = readDDL(thread, DDL[i]);
+      Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
+      Arcadia_DDLS_ValidationContext_addSchema(thread, validationContext, ddlsNode);
+      Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"MySchema"), node);
+      Arcadia_Thread_popJumpTarget(thread);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
       Arcadia_Thread_jump(thread);
     } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.blue" not defined
-static void
-testRejectBlueNotDefined
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDL =
-    "{\n"
-    "  type : \"Color\",\n"
-    "  red : 255,\n"
-    "  green : 0,\n"
-    "},\n"
-    ;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-    Arcadia_DDL_Node* node = readDDL(thread, DDL);
-    Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-    Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.type" is defined twice
-static void
-testRejectTypeDefinedTwice
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDL =
-    "{\n"
-    "  type : \"Color\",\n"
-    "  red : 255,\n"
-    "  blue : 0,\n"
-    "  green : 0,\n"
-    "  type : \"Color\",\n"
-    "},\n"
-    ;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-    Arcadia_DDL_Node* node = readDDL(thread, DDL);
-    Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-    Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.red" is defined twice
-static void
-testRejectRedDefinedTwice
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDL =
-    "{\n"
-    "  type : \"Color\",\n"
-    "  red : 255,\n"
-    "  blue : 0,\n"
-    "  green : 0,\n"
-    "  red : 255,\n"
-    "},\n"
-    ;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-    Arcadia_DDL_Node* node = readDDL(thread, DDL);
-    Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-    Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.green" is defined twice
-static void
-testRejectGreenDefinedTwice
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDL =
-    "{\n"
-    "  type : \"Color\",\n"
-    "  red : 255,\n"
-    "  blue : 0,\n"
-    "  green : 0,\n"
-    "  green : 0,\n"
-    "},\n"
-    ;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-    Arcadia_DDL_Node* node = readDDL(thread, DDL);
-    Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-    Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.blue" is defined twice
-static void
-testRejectBlueDefinedTwice
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDL =
-    "{\n"
-    "  type : \"Color\",\n"
-    "  red : 255,\n"
-    "  blue : 0,\n"
-    "  green : 0,\n"
-    "  blue : 0,\n"
-    "},\n"
-    ;
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_Type* type = readDDLS(thread, DDLS);
-    Arcadia_DDL_Node* node = readDDL(thread, DDL);
-    Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-    Arcadia_DDLS_ValidationContext_run(thread, validationContext, type, node);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    Arcadia_Thread_jump(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-      Arcadia_Thread_jump(thread);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
+      Arcadia_Thread_popJumpTarget(thread);
+      if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
+        Arcadia_Thread_jump(thread);
+      } else {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
+      }
     }
   }
 }
@@ -391,33 +141,40 @@ main
     char** argv
   )
 {
-  if (!Arcadia_Tests_safeExecute(&test1)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_test1)) {
     return EXIT_FAILURE;
   }
 
-  if (!Arcadia_Tests_safeExecute(&testRejectTypeNotDefined)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_testRejectTypeNotDefined)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testRejectRedNotDefined)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_testRejectRedNotDefined)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testRejectGreenNotDefined)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_testRejectGreenNotDefined)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testRejectBlueNotDefined)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_testRejectBlueNotDefined)) {
     return EXIT_FAILURE;
   }
 
-  if (!Arcadia_Tests_safeExecute(&testRejectTypeDefinedTwice)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_testRejectTypeDefinedTwice)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testRejectRedDefinedTwice)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_testRejectRedDefinedTwice)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testRejectGreenDefinedTwice)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_testRejectGreenDefinedTwice)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testRejectBlueDefinedTwice)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_testRejectBlueDefinedTwice)) {
+    return EXIT_FAILURE;
+  }
+
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_choiceAccept1)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Validation_choiceReject1)) {
     return EXIT_FAILURE;
   }
 

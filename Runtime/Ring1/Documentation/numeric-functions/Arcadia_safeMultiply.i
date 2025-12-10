@@ -1,6 +1,6 @@
 <section class="cxx entity procedure">
 
-  <h1 id="Arcadia_safeMultiply*">Arcadia_safeMultiply*</h1>
+  <h1 id="Arcadia_safeMultiply%2a">Arcadia_safeMultiply*</h1>
 
   <my-signature><code>
   void<br>

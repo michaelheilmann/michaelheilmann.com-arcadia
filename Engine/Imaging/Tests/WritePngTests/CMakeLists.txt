@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 4.1.3)
 
-set(MyTestName ${MyProjectName}.Imaging.Tests.WritePngTests)
+set(MyTestName ${MyProjectName}.Imaging.Tests.WritePNGTests)
 
 # Create test executable.
 BeginProduct(${MyTestName} test)

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -263,7 +263,6 @@ Arcadia_Engine_Demo_startupVisuals
   // (5) Create and open a window, set its size and position according to the display device it is located on.
   {
     Arcadia_Visuals_Window* window = Arcadia_Visuals_BackendContext_createWindow(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
-    Arcadia_Object_lock(thread, (Arcadia_Object*)window);
     Arcadia_Visuals_Window_open(thread, window);
     Arcadia_Integer32Value left, top, right, bottom;
     Arcadia_Visuals_DisplayDevice_getBounds(thread, *pDisplayDevice, &left, &top, &right, &bottom);

@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -15,14 +15,14 @@
 
 cmake_minimum_required(VERSION 4.1.3)
 
-set(MyTestName ${MyProjectName}.Imaging.Tests.WriteBmpTests)
+set(MyTestName ${MyProjectName}.Imaging.Tests.WriteBMPTests)
 
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
 list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Imaging.Tests.WriteBmpTests/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Imaging ${MyProjectName}.Ring2)
+list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Imaging)
 
 EndProduct(${MyTestName})
 

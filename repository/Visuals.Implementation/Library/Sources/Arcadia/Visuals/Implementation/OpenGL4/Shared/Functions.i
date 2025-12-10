@@ -41,3 +41,16 @@ Define(PFNGLDISABLEPROC, glDisable)
 
 Define(PFNGLVIEWPORTPROC, glViewport)
 Define(PFNGLSCISSORPROC, glScissor)
+
+Define(PFNGLGENTEXTURESPROC, glGenTextures)
+Define(PFNGLDELETETEXTURESPROC, glDeleteTextures)
+
+Define(PFNGLBINDTEXTUREPROC, glBindTexture)
+Define(PFNGLTEXIMAGE2DPROC, glTexImage2D)
+Define(PFNGLTEXPARAMETERIPROC, glTexParameteri)
+
+Define(PFNGLGENFRAMEBUFFERSPROC, glGenFramebuffers)
+Define(PFNGLDELETEFRAMEBUFFERSPROC, glDeleteFramebuffers)
+
+Define(PFNGLFRAMEBUFFERTEXTURE2DPROC, glFramebufferTexture2D)
+Define(PFNGLBINDFRAMEBUFFERPROC, glBindFramebuffer)

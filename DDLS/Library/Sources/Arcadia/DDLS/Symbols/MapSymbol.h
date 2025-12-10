@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,6 +20,10 @@
 
 Arcadia_declareObjectType(u8"Arcadia.DDLS.MapSymbol", Arcadia_DDLS_MapSymbol,
                           u8"Arcadia.DDLS.Symbol");
+
+struct Arcadia_DDLS_MapSymbolDispatch {
+  Arcadia_DDLS_SymbolDispatch parent;
+};
 
 struct Arcadia_DDLS_MapSymbol {
   Arcadia_DDLS_Symbol parent;

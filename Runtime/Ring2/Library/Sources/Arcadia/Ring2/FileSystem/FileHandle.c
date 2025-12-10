@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -30,6 +30,13 @@ Arcadia_FileHandle_constructImpl
   );
 
 static void
+Arcadia_FileHandle_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandleDispatch* self
+  );
+
+static void
 Arcadia_FileHandle_destruct
   (
     Arcadia_Thread* thread,
@@ -45,8 +52,8 @@ Arcadia_FileHandle_visit
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_FileHandle_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_FileHandle_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_FileHandle_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_FileHandle_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FileHandle_visit,
 };
 
@@ -76,22 +83,17 @@ Arcadia_FileHandle_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  self->close = NULL;
-  self->isClosed = NULL;
-  self->isOpened = NULL;
-  self->isOpenedForReading = NULL;
-  self->isOpenedForWriting = NULL;
-  self->openForReading = NULL;
-  self->openForWriting = NULL;
-  self->openStandardError = NULL;
-  self->openStandardInput = NULL;
-  self->openStandardOutput = NULL;
-  self->read = NULL;
-  self->write = NULL;
-  //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_FileHandle_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileHandleDispatch* self
+  )
+{ }
 
 static void
 Arcadia_FileHandle_destruct
@@ -115,7 +117,7 @@ Arcadia_FileHandle_close
     Arcadia_Thread* thread,
     Arcadia_FileHandle* self
   )
-{ self->close(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_FileHandle, close, self); }
 
 Arcadia_BooleanValue
 Arcadia_FileHandle_isClosed
@@ -123,7 +125,7 @@ Arcadia_FileHandle_isClosed
     Arcadia_Thread* thread,
     Arcadia_FileHandle const* self
   )
-{ return self->isClosed(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_FileHandle, isClosed, self); }
 
 Arcadia_BooleanValue
 Arcadia_FileHandle_isOpened
@@ -131,7 +133,7 @@ Arcadia_FileHandle_isOpened
     Arcadia_Thread* thread,
     Arcadia_FileHandle const* self
   )
-{ return self->isOpened(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_FileHandle, isOpened, self); }
 
 Arcadia_BooleanValue
 Arcadia_FileHandle_isOpenedForReading
@@ -139,7 +141,7 @@ Arcadia_FileHandle_isOpenedForReading
     Arcadia_Thread* thread,
     Arcadia_FileHandle const* self
   )
-{ return self->isOpenedForReading(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_FileHandle, isOpenedForReading, self); }
 
 Arcadia_BooleanValue
 Arcadia_FileHandle_isOpenedForWriting
@@ -147,7 +149,7 @@ Arcadia_FileHandle_isOpenedForWriting
     Arcadia_Thread* thread,
     Arcadia_FileHandle const* self
   )
-{ return self->isOpenedForWriting(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_FileHandle, isOpenedForWriting, self); }
 
 void
 Arcadia_FileHandle_openForReading
@@ -156,7 +158,7 @@ Arcadia_FileHandle_openForReading
     Arcadia_FileHandle* self,
     Arcadia_FilePath* path
   )
-{ self->openForReading(thread, self, path); }
+{ Arcadia_VirtualCall(Arcadia_FileHandle, openForReading, self, path); }
 
 void
 Arcadia_FileHandle_openForWriting
@@ -165,7 +167,7 @@ Arcadia_FileHandle_openForWriting
     Arcadia_FileHandle* self,
     Arcadia_FilePath* path
   )
-{ self->openForWriting(thread, self, path); }
+{ Arcadia_VirtualCall(Arcadia_FileHandle, openForWriting, self, path); }
 
 void
 Arcadia_FileHandle_read
@@ -176,7 +178,7 @@ Arcadia_FileHandle_read
     Arcadia_SizeValue bytesToRead,
     Arcadia_SizeValue* bytesRead
   )
-{ self->read(thread, self, bytes, bytesToRead, bytesRead); }
+{ Arcadia_VirtualCall(Arcadia_FileHandle, read, self, bytes, bytesToRead, bytesRead); }
 
 void
 Arcadia_FileHandle_write
@@ -187,7 +189,7 @@ Arcadia_FileHandle_write
     Arcadia_SizeValue bytesToWrite,
     Arcadia_SizeValue* bytesWritten
   )
-{ self->write(thread, self, bytes, bytesToWrite, bytesWritten); }
+{ Arcadia_VirtualCall(Arcadia_FileHandle, write, self, bytes, bytesToWrite, bytesWritten); }
 
 void
 Arcadia_FileHandle_openStandardError
@@ -195,7 +197,7 @@ Arcadia_FileHandle_openStandardError
     Arcadia_Thread* thread,
     Arcadia_FileHandle* self
   )
-{ self->openStandardError(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_FileHandle, openStandardError, self); }
 
 void
 Arcadia_FileHandle_openStandardInput
@@ -203,7 +205,7 @@ Arcadia_FileHandle_openStandardInput
     Arcadia_Thread* thread,
     Arcadia_FileHandle* self
   )
-{ self->openStandardInput(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_FileHandle, openStandardInput, self); }
 
 void
 Arcadia_FileHandle_openStandardOutput
@@ -211,4 +213,4 @@ Arcadia_FileHandle_openStandardOutput
     Arcadia_Thread* thread,
     Arcadia_FileHandle* self
   )
-{ self->openStandardOutput(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_FileHandle, openStandardOutput, self); }

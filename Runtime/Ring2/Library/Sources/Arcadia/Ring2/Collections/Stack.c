@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,8 +16,6 @@
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Collections/Stack.h"
 
-#include "Arcadia/Ring2/Include.h"
-
 static void
 Arcadia_Stack_constructImpl
   (
@@ -25,10 +23,16 @@ Arcadia_Stack_constructImpl
     Arcadia_Stack* self
   );
 
+static void
+Arcadia_Stack_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StackDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Stack_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Stack_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -56,13 +60,17 @@ Arcadia_Stack_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->peek = NULL;
-  self->peekAt = NULL;
-  self->pop = NULL;
-  self->push = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
+
+static void
+Arcadia_Stack_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StackDispatch* self
+  )
+{ }
 
 void
 Arcadia_Stack_push
@@ -71,7 +79,7 @@ Arcadia_Stack_push
     Arcadia_Stack* self,
     Arcadia_Value value
   )
-{ self->push(thread, self, value); }
+{ Arcadia_VirtualCall(Arcadia_Stack, push, self, value); }
 
 void
 Arcadia_Stack_pop
@@ -79,7 +87,7 @@ Arcadia_Stack_pop
     Arcadia_Thread* thread,
     Arcadia_Stack* self
   )
-{ self->pop(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_Stack, pop, self); }
 
 Arcadia_Value
 Arcadia_Stack_peek
@@ -87,7 +95,7 @@ Arcadia_Stack_peek
     Arcadia_Thread* thread,
     Arcadia_Stack* self
   )
-{ return self->peek(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Stack, peek, self); }
 
 Arcadia_Value
 Arcadia_Stack_peekAt
@@ -96,7 +104,7 @@ Arcadia_Stack_peekAt
     Arcadia_Stack* self,
     Arcadia_SizeValue index
   )
-{ return self->peekAt(thread, self, index); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Stack, peekAt, self, index); }
 
 #define Define(Type, Suffix, Variable) \
   void \

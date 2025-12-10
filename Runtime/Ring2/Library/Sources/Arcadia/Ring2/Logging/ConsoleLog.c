@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,6 +23,13 @@ Arcadia_ConsoleLog_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_ConsoleLog* self
+  );
+
+static void
+Arcadia_ConsoleLog_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ConsoleLogDispatch* self
   );
 
 static void
@@ -58,8 +65,8 @@ writeBytes
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_ConsoleLog_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_ConsoleLog_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ConsoleLog_visit,
 };
 
@@ -79,7 +86,7 @@ Arcadia_ConsoleLog_constructImpl
     Arcadia_ConsoleLog* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Log_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_ConsoleLog_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -92,10 +99,19 @@ Arcadia_ConsoleLog_constructImpl
   self->colorEnabled = Arcadia_BooleanValue_True;
   self->fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, self->fileHandle);
-  ((Arcadia_Log*)self)->error = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*))&Arcadia_ConsoleLog_errorImpl;
-  ((Arcadia_Log*)self)->info = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*))&Arcadia_ConsoleLog_infoImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
+}
+
+static void
+Arcadia_ConsoleLog_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ConsoleLogDispatch* self
+  )
+{
+  ((Arcadia_LogDispatch*)self)->error = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_ConsoleLog_errorImpl;
+  ((Arcadia_LogDispatch*)self)->info = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_ConsoleLog_infoImpl;
 }
 
 static void

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,6 +24,7 @@
 #include "Arcadia/Ring2/FileSystem/ExistingFilePolicy.h"
 #include "Arcadia/Ring2/FileSystem/FileAccessMode.h"
 #include "Arcadia/Ring2/FileSystem/FileHandle.h"
+#include "Arcadia/Ring2/FileSystem/FileHandleExtensions.h"
 #include "Arcadia/Ring2/FileSystem/FilePath.h"
 #include "Arcadia/Ring2/FileSystem/FileSystem.h"
 #include "Arcadia/Ring2/FileSystem/FileType.h"

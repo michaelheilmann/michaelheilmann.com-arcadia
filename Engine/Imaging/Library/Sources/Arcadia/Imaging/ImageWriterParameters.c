@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -14,6 +14,10 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include "Arcadia/Imaging/ImageWriterParameters.h"
+
+struct Arcadia_Imaging_ImageWriterParametersDispatch {
+  Arcadia_ObjectDispatch parent;
+};
 
 struct Arcadia_Imaging_ImageWriterParameters {
   Arcadia_Object _parent;
@@ -31,6 +35,13 @@ Arcadia_Imaging_ImageWriterParameters_constructImpl
   );
 
 static void
+Arcadia_Imaging_ImageWriterParameters_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_ImageWriterParametersDispatch* self
+  );
+
+static void
 Arcadia_Imaging_ImageWriterParameters_visit
   (
     Arcadia_Thread* thread,
@@ -45,8 +56,9 @@ Arcadia_Imaging_ImageWriterParameters_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_destruct,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Imaging_ImageWriterParameters_visit,
 };
 
@@ -87,6 +99,14 @@ Arcadia_Imaging_ImageWriterParameters_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
+
+static void
+Arcadia_Imaging_ImageWriterParameters_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_ImageWriterParametersDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Imaging_ImageWriterParameters_visit

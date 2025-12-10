@@ -18,14 +18,17 @@
 
 
 
-// Define to 1 to enable locks.
+// Define to 1 to enable the "locks" module.
 #define Arcadia_ARMS_Configuration_WithLocks (1)
 
-// Define to 1 to enable barriers.
+// Define to 1 to enable the "barriers" module.
 #define Arcadia_ARMS_Configuration_WithBarriers (1)
 
-// Define to 1 to enable destroy notifications.
+// Define to 1 to enable the "notify destroy" module.
 #define Arcadia_ARMS_Configuration_WithNotifyDestroy (1)
+
+// Define to 1 to enable the "names" module.
+#define Arcadia_ARMS_Configuration_WithNames (1)
 
 
 

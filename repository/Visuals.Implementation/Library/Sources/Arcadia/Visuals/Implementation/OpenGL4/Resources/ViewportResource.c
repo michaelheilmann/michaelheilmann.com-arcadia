@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,6 +26,13 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_constructImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ViewportResourceDispatch* self
+  );
+
+static void
 Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_destructImpl
   (
     Arcadia_Thread* thread,
@@ -48,6 +55,14 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl
     Arcadia_Real32Value green,
     Arcadia_Real32Value blue,
     Arcadia_Real32Value alpha
+  );
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearDepthImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self,
+    Arcadia_Real32Value depth
   );
 
 static void
@@ -96,12 +111,13 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self,
-    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
+    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextNode
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_destructImpl,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_visitImpl,
 };
 
@@ -150,16 +166,26 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_constructImpl
   self->canvasSize.width = 320.f;
   self->canvasSize.height = 240.f;
 
-  ((Arcadia_Visuals_Implementation_ViewportResource*)self)->setCanvasSize = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setCanvasSizeImpl;
-  ((Arcadia_Visuals_Implementation_ViewportResource*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl;
-  ((Arcadia_Visuals_Implementation_ViewportResource*)self)->setRelativeViewportRectangle = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setRelativeViewportRectangleImpl;
-  ((Arcadia_Visuals_Implementation_Resource*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_loadImpl;
-  ((Arcadia_Visuals_Implementation_Resource*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_unloadImpl;
-  ((Arcadia_Visuals_Implementation_Resource*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_Resource*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_MeshContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl;
-
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+}
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ViewportResourceDispatch* self
+  )
+{
+  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_loadImpl;
+  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_unloadImpl;
+  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_unlinkImpl;
+  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_RenderingContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl;
+
+  ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setCanvasSize = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setCanvasSizeImpl;
+  ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl;
+  ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setClearDepth = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearDepthImpl;
+  ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setRelativeViewportRectangle = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setRelativeViewportRectangleImpl;
 }
 
 static void
@@ -193,6 +219,17 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl
   self->clearColor.green = green;
   self->clearColor.blue = blue;
   self->clearColor.alpha = alpha;
+}
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearDepthImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self,
+    Arcadia_Real32Value depth
+  )
+{
+  self->clearDepth = depth;
 }
 
 static void
@@ -256,7 +293,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self,
-    Arcadia_Visuals_Implementation_MeshContextResource* meshContextResource
+    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextNode
   )
 {
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;

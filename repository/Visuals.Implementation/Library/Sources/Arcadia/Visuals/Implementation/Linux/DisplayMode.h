@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,10 @@ typedef struct Arcadia_Visuals_Linux_DisplayDevice Arcadia_Visuals_Linux_Display
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.DisplayMode", Arcadia_Visuals_Linux_DisplayMode,
                           u8"Arcadia.Visuals.DisplayMode");
+
+struct Arcadia_Visuals_Linux_DisplayModeDispatch {
+  Arcadia_Visuals_DisplayModeDispatch _parent;
+};
 
 struct Arcadia_Visuals_Linux_DisplayMode {
   Arcadia_Visuals_DisplayMode _parent;

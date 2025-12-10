@@ -1,6 +1,6 @@
 <section class="cxx entity procedure">
 
-  <h1 id="Arcadia_Real*Value_getBits">Arcadia_Real*Value_getBits</h1>
+  <h1 id="Arcadia_Real%2aValue_getBits">Arcadia_Real*Value_getBits</h1>
 
   <my-signature><code>
   Arcadia_Natural<my-mv>Bits</my-mv><br>

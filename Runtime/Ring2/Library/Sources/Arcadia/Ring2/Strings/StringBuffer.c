@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -54,6 +54,13 @@ Arcadia_StringBuffer_constructImpl
   );
 
 static void
+Arcadia_StringBuffer_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBufferDispatch* self
+  );
+
+static void
 Arcadia_StringBuffer_destruct
   (
     Arcadia_Thread* thread,
@@ -89,9 +96,9 @@ appendBytesInternal
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_StringBuffer_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_StringBuffer_destruct,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_StringBuffer_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_StringBuffer_destruct,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -183,6 +190,14 @@ Arcadia_StringBuffer_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
+
+static void
+Arcadia_StringBuffer_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBufferDispatch* self
+  )
+{ }
 
 static void
 Arcadia_StringBuffer_destruct
@@ -455,6 +470,15 @@ Arcadia_StringBuffer_insertFront
 }
 
 void
+Arcadia_StringBuffer_insertCodePointBack
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_Natural32Value codePoint
+  )
+{ Arcadia_StringBuffer_insertCodePointsBack(thread, self, &codePoint, 1); }
+
+void
 Arcadia_StringBuffer_insertCodePointsBack
   (
     Arcadia_Thread* thread,
@@ -465,6 +489,15 @@ Arcadia_StringBuffer_insertCodePointsBack
 {
   Arcadia_Unicode_encodeCodePointsUtf8(thread, codePoints, numberOfCodePoints, self, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&appendBytesInternal);
 }
+
+void
+Arcadia_StringBuffer_insertCodePointFront
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_Natural32Value codePoint
+  )
+{ Arcadia_StringBuffer_insertCodePointsFront(thread, self, &codePoint, 1); }
 
 void
 Arcadia_StringBuffer_insertCodePointsFront

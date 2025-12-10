@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -18,7 +18,7 @@ cmake_minimum_required(VERSION 4.1.3)
 # Build "specifications/data-definition-language/index.html".
 BeginTemplateEngine(Website.Specifications.DDL "DDL")
 
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.te"
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/specifications/data-definition-language/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/../../website.env")
 

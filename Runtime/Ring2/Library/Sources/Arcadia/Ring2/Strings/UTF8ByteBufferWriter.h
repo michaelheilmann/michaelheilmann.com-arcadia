@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,10 @@ typedef struct Arcadia_ByteBuffer Arcadia_ByteBuffer;
 
 Arcadia_declareObjectType(u8"Arcadia.UTF8ByteBufferWriter", Arcadia_UTF8ByteBufferWriter,
                           u8"Arcadia.UTF8Writer");
+
+struct Arcadia_UTF8ByteBufferWriterDispatch {
+  Arcadia_UTF8WriterDispatch _parent;
+};
 
 struct Arcadia_UTF8ByteBufferWriter {
   Arcadia_UTF8Writer parent;

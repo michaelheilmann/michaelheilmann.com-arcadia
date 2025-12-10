@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,21 +15,28 @@
 
 #include "Arcadia/Visuals/Implementation/Scene/MeshNode.h"
 
+#include "Arcadia/Visuals/Implementation/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Resource.h"
 #include "Arcadia/Visuals/Implementation/Resources/FragmentProgramResource.h"
-#include "Arcadia/Visuals/Implementation/Resources/MeshContextResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/ProgramResource.h"
+#include "Arcadia/Visuals/Implementation/Resources/RenderingContextResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/VertexBufferResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/VertexProgramResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/ViewportResource.h"
-#include "Arcadia/Visuals/Implementation/BackendContext.h"
-#include "Arcadia/Visuals/Implementation/Scene/MeshContext.h"
+#include "Arcadia/Visuals/Implementation/Scene/RenderingContextNode.h"
 
 static void
 Arcadia_Visuals_Implementation_Scene_MeshNode_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Scene_MeshNode* self
+  );
+
+static void
+Arcadia_Visuals_Implementation_Scene_MeshNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_Scene_MeshNodeDispatch* self
   );
 
 static void
@@ -51,7 +58,7 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Scene_MeshNode* self,
-    Arcadia_Visuals_Scene_MeshContext* meshContext
+    Arcadia_Visuals_Implementation_Scene_RenderingContextNode* renderingContextNode
   );
 
 static void
@@ -63,8 +70,9 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_setBackendContextImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_Scene_MeshNode_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_Scene_MeshNode_destructImpl,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_Scene_MeshNode_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_Scene_MeshNode_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_Scene_MeshNode_visitImpl,
 };
 
@@ -98,12 +106,22 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_constructImpl
     self->backendContext = NULL;
   } else {
     self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_BackendContext_getType(thread));
+    Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
   }
   self->meshResource = NULL;
-  ((Arcadia_Visuals_Scene_Node*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_Scene_MeshContext*)) & Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl;
-  ((Arcadia_Visuals_Scene_Node*)self)->setBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_BackendContext*)) &Arcadia_Visuals_Implementation_Scene_MeshNode_setBackendContextImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+}
+
+static void
+Arcadia_Visuals_Implementation_Scene_MeshNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_Scene_MeshNodeDispatch* self
+  )
+{
+  ((Arcadia_Visuals_Scene_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_Scene_RenderingContextNode*)) & Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl;
+  ((Arcadia_Visuals_Scene_NodeDispatch*)self)->setBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_Scene_MeshNode_setBackendContextImpl;
 }
 
 static void
@@ -112,7 +130,16 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_destructImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Scene_MeshNode* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->backendContext) {
+    if (self->meshResource) {
+      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource);
+      self->meshResource = NULL;
+    }
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+    self->backendContext = NULL;
+  }
+}
 
 static void
 Arcadia_Visuals_Implementation_Scene_MeshNode_visitImpl
@@ -120,23 +147,17 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Scene_MeshNode* self
   )
-{
-  if (self->backendContext) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backendContext);
-  }
-  if (self->meshResource) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->meshResource);
-  }
-}
+{/* The backend context and resources are locked. No need to visit them. */}
 
 static void
 Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Scene_MeshNode* self,
-    Arcadia_Visuals_Scene_MeshContext* meshContext
+    Arcadia_Visuals_Implementation_Scene_RenderingContextNode* renderingContextNode
   )
 {
+  Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)self, (Arcadia_Visuals_BackendContext*)renderingContextNode->backendContext);
   if (self->backendContext) {
     if (!self->meshResource) {
       Arcadia_Visuals_Implementation_BackendContext* backendContext = self->backendContext;
@@ -167,7 +188,7 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl
             vertexBufferResource,
             programResource
           );
-      ((Arcadia_Visuals_Implementation_Resource*)self->meshResource)->referenceCount++;
+      Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource);
 
       // (4) Set the matrices of the mesh resource.
       Arcadia_Math_Matrix4Real32* localToWorldMatrix = Arcadia_Math_Matrix4Real32_create(thread);
@@ -175,10 +196,10 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl
       Arcadia_Visuals_Implemention_MeshResource_setLocalToWorldMatrix(thread, self->meshResource, localToWorldMatrix);
     }
     // (5) Set the mesh context.
-    Arcadia_Visuals_Scene_MeshContext_render(thread, meshContext);
+    Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)renderingContextNode, (Arcadia_Visuals_Scene_RenderingContextNode*)renderingContextNode);
     // (6) Render the mesh resource.
     Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource,
-                                                           ((Arcadia_Visuals_Implementation_Scene_MeshContext*)meshContext)->meshContextResource);
+                                                           ((Arcadia_Visuals_Implementation_Scene_RenderingContextNode*)renderingContextNode)->renderingContextResource);
   }
 }
 
@@ -190,9 +211,19 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_setBackendContextImpl
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   )
 {
+  if (backendContext == self->backendContext) {
+    // Only change something if the backend context changes.
+    return;
+  }
+  if (backendContext) {
+    Arcadia_Object_lock(thread, (Arcadia_Object*)backendContext);
+  }
+  if (self->backendContext) {
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+  }
   if (self->backendContext) {
     if (self->meshResource) {
-      ((Arcadia_Visuals_Implementation_Resource*)self->meshResource)->referenceCount--;
+      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource);
       self->meshResource = NULL;
     }
   }

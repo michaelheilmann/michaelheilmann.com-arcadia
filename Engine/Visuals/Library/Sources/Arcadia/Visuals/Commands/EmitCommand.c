@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,6 +23,13 @@ Arcadia_Visuals_EmitCommand_constructImpl
   );
 
 static void
+Arcadia_Visuals_EmitCommand_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_EmitCommandDispatch* self
+  );
+
+static void
 Arcadia_Visuals_EmitCommand_visitImpl
   (
     Arcadia_Thread* thread,
@@ -30,8 +37,8 @@ Arcadia_Visuals_EmitCommand_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Visuals_EmitCommand_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Visuals_EmitCommand_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_EmitCommand_visitImpl,
 };
 
@@ -65,6 +72,14 @@ Arcadia_Visuals_EmitCommand_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
+
+static void
+Arcadia_Visuals_EmitCommand_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_EmitCommandDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Visuals_EmitCommand_visitImpl

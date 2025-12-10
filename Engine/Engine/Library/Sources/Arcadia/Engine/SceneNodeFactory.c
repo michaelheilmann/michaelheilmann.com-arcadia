@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,6 +24,13 @@ Arcadia_Engine_SceneNodeFactory_construct
   );
 
 static void
+Arcadia_Engine_SceneNodeFactory_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_SceneNodeFactoryDispatch* self
+  );
+
+static void
 Arcadia_Engine_SceneNodeFactory_destruct
   (
     Arcadia_Thread* thread,
@@ -38,29 +45,15 @@ Arcadia_Engine_SceneNodeFactory_visit
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_SceneNodeFactory_objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Engine_SceneNodeFactory_construct,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Engine_SceneNodeFactory_destruct,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Engine_SceneNodeFactory_construct,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_SceneNodeFactory_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_SceneNodeFactory_visit,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Engine_SceneNodeFactory_typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_Engine_SceneNodeFactory_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcardia.Engine.SceneNodeFactory", Arcadia_Engine_SceneNodeFactory,
@@ -86,6 +79,14 @@ Arcadia_Engine_SceneNodeFactory_construct
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_Engine_SceneNodeFactory_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_SceneNodeFactoryDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Engine_SceneNodeFactory_destruct

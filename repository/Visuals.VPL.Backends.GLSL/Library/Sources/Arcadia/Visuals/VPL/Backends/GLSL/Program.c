@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,15 +21,45 @@
 #include <string.h>
 
 static void
+emitCxxString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteBuffer* target,
+    const char* p
+  )
+{
+  Arcadia_ByteBuffer_insertBackBytes(thread, target, p, strlen(p));
+}
+
+static void
+emitString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ByteBuffer* target,
+    Arcadia_String* p
+  )
+{
+  Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, p),
+                                                     Arcadia_String_getNumberOfBytes(thread, p));
+}
+
+static void
 Arcadia_Visuals_VPL_Backends_GLSL_Program_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Program* self
   );
 
+static void
+Arcadia_Visuals_VPL_Backends_GLSL_Program_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_VPL_Backends_GLSL_ProgramDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_VPL_Backends_GLSL_Program_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_VPL_Backends_GLSL_Program_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -62,6 +92,14 @@ Arcadia_Visuals_VPL_Backends_GLSL_Program_constructImpl
   Arcadia_ValueStack_popValues(thread, 1);
 }
 
+static void
+Arcadia_Visuals_VPL_Backends_GLSL_Program_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_VPL_Backends_GLSL_ProgramDispatch* self
+  )
+{ }
+
 Arcadia_Visuals_VPL_Backends_GLSL_Program*
 Arcadia_Visuals_VPL_Backends_GLSL_Program_create
   (
@@ -78,21 +116,23 @@ writeVariableScalar
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Program* self,
-    Arcadia_Map* symbols,
     Arcadia_Visuals_VPL_Backends_GLSL_VariableScalar* variableScalar,
     Arcadia_ByteBuffer* target
   )
 {
+  emitCxxString(thread, target, "layout(location = ");
+  emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
+  emitCxxString(thread, target, u8") ");
   if (variableScalar->isInput) {
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, u8"in", strlen(u8"in"));
+    emitCxxString(thread, target, u8"in");
   } else {
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, u8"out", strlen(u8"out"));
+    emitCxxString(thread, target, u8"out");
   }
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, u8" ", strlen(u8" "));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, variableScalar->type), Arcadia_String_getNumberOfBytes(thread, variableScalar->type));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, u8" ", strlen(u8" "));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, variableScalar->name), Arcadia_String_getNumberOfBytes(thread, variableScalar->name));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, u8";\n", strlen(u8";\n"));
+  emitCxxString(thread, target, u8" ");
+  emitString(thread, target, variableScalar->type);
+  emitCxxString(thread, target, u8" ");
+  emitString(thread, target, variableScalar->name);
+  emitCxxString(thread, target, u8";\n");
 }
 
 static void
@@ -137,23 +177,23 @@ writeConstantBlock
   Arcadia_Map_set(thread, symbols, Arcadia_Value_makeObjectReferenceValue(name), id, NULL, NULL);
 
   Arcadia_List* fields = Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock_getFields(thread, constantBlock);
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, u8"layout(std140) uniform ", strlen(u8"layout(std140) uniform "));
+  emitCxxString(thread, target, u8"layout(std140) uniform ");
   Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, name), Arcadia_String_getNumberOfBytes(thread, name));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, u8" {\n", strlen(u8" {\n"));
+  emitCxxString(thread, target, u8" {\n");
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)fields); i < n; ++i) {
     Arcadia_Visuals_VPL_Backends_GLSL_Field* field = Arcadia_List_getObjectReferenceValueAt(thread, fields, i);
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, u8"  ", strlen(u8"  "));
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, field->type), Arcadia_String_getNumberOfBytes(thread, field->type));
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, u8" ", strlen(u8" "));
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, field->name), Arcadia_String_getNumberOfBytes(thread, field->name));
-    Arcadia_ByteBuffer_insertBackBytes(thread, target, u8";\n", strlen(u8";\n"));
+    emitCxxString(thread, target, u8"  ");
+    emitString(thread, target, field->type);
+    emitCxxString(thread, target, u8" ");
+    emitString(thread, target, field->name);
+    emitCxxString(thread, target, u8";\n");
   }
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, u8"}", strlen(u8"}"));
+  emitCxxString(thread, target, u8"}");
   Arcadia_String* temporary = Arcadia_String_createFromSize(thread, Arcadia_Value_getSizeValue(&id));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, u8"_", strlen(u8"_"));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, constantBlock->name), Arcadia_String_getNumberOfBytes(thread, constantBlock->name));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, temporary), Arcadia_String_getNumberOfBytes(thread, temporary));
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, u8";\n", strlen(u8";\n"));
+  emitCxxString(thread, target, u8"_");
+  emitString(thread, target, constantBlock->name);
+  emitString(thread, target, temporary);
+  emitCxxString(thread, target, u8";\n");
 }
 
 void
@@ -190,7 +230,7 @@ Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultVertexShader
   name = Arcadia_String_createFromCxxString(thread, u8"model");
   type = Arcadia_String_createFromCxxString(thread, u8"mat4");
   Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Backends_GLSL_Field_create(thread, name, type));
-  // create the constantblock "matrices"
+  // create the constant block "mesh"
   meshBlock =
     Arcadia_Visuals_VPL_Backends_GLSL_ConstantBlock_create
       (
@@ -201,27 +241,52 @@ Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultVertexShader
 
   static const char* prefix =
     "#version 330 core\n"
-    "layout(location = 0) in vec3 vertexPosition;\n"
+    "out vec4 vertexColor;\n";
     ;
+  emitCxxString(thread, target, prefix);
+
+  // the xyz position of the vertex
   variableScalar =
     Arcadia_Visuals_VPL_Backends_GLSL_VariableScalar_create
       (
         thread,
         0,
         Arcadia_BooleanValue_True,
-        Arcadia_String_createFromCxxString(thread, u8"vertexPosition"),
+        Arcadia_String_createFromCxxString(thread, u8"vs_input_vertexPosition"),
         Arcadia_String_createFromCxxString(thread, u8"vec3")
       );
+  writeVariableScalar(thread, self, variableScalar, target);
+
+  // the rgba ambient color of the vertex
+  variableScalar =
+    Arcadia_Visuals_VPL_Backends_GLSL_VariableScalar_create
+      (
+        thread,
+        1,
+        Arcadia_BooleanValue_True,
+        Arcadia_String_createFromCxxString(thread, u8"vs_input_vertexColor"),
+        Arcadia_String_createFromCxxString(thread, u8"vec4")
+      );
+  writeVariableScalar(thread, self, variableScalar, target);
+
+  // the viewer constant block
+  writeConstantBlock(thread, self, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), viewerBlock, target);
+  // the mesh constant block
+  writeConstantBlock(thread, self, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), meshBlock, target);
+
+  // the main function
   static const char* suffix =
     "void main() {\n"
     "  mat4 mvp = _viewer0.projection * _viewer0.view * _mesh0.model;"
-    "  gl_Position = mvp * vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1.0);\n"
+    "  gl_Position = mvp * vec4(vs_input_vertexPosition.x, vs_input_vertexPosition.y, vs_input_vertexPosition.z, 1.0);\n"
+    "  vertexColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}\n"
     ;
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, prefix, strlen(prefix));
-  writeConstantBlock(thread, self, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), viewerBlock, target);
-  writeConstantBlock(thread, self, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), meshBlock, target);
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, suffix, strlen(suffix) + 1);
+  emitCxxString(thread, target, suffix);
+
+  // the zero terminator
+  static const char zeroTerminator = '\0';
+  Arcadia_ByteBuffer_insertBackBytes(thread, target, &zeroTerminator, 1);
 }
 
 void
@@ -234,11 +299,14 @@ Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultFragmentShader
 {
   static const char* program =
     "#version 330 core\n"
+    "in vec4 vertexColor;\n"
     "out vec4 fragmentColor;\n"
     "\n"
     "void main() {\n"
-    " fragmentColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    " fragmentColor = vertexColor;\n"
     "}\n"
     ;
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, program, strlen(program) + 1);
+  static const char zeroTerminator = '\0';
+  emitCxxString(thread, target, program);
+  Arcadia_ByteBuffer_insertBackBytes(thread, target, &zeroTerminator, 1);
 }

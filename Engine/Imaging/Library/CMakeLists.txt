@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -37,11 +37,11 @@ if (NOT TARGET ${MyModule})
 
     # zlib.
     if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.zlib.Libraries ${MyDependenciesDirectory}/my-zlib-$<LOWER_CASE:$<CONFIG>>-x64/lib/zlib.lib)
-      set(${MyModule}.zlib.HeaderFilesDirectory ${MyDependenciesDirectory}/my-zlib-$<LOWER_CASE:$<CONFIG>>-x64/include)
+      set(${MyModule}.zlib.Libraries ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/zlib/lib/$<IF:$<STREQUAL:$<LOWER_CASE:$<CONFIG>>,debug>,zsd.lib,zs.lib>)
+      set(${MyModule}.zlib.HeaderFilesDirectory ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/zlib/include)
     elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.zlib.Libraries ${MyDependenciesDirectory}/my-zlib-$<LOWER_CASE:$<CONFIG>>-x86/lib/zlib.lib)
-      set(${MyModule}.zlib.HeaderFilesDirectory ${MyDependenciesDirectory}/my-zlib-$<LOWER_CASE:$<CONFIG>>-x86/include)
+      set(${MyModule}.zlib.Libraries ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/zlib/lib/$<IF:$<STREQUAL:$<LOWER_CASE:$<CONFIG>>,debug>,zsd.lib,zs.lib>)
+      set(${MyModule}.zlib.HeaderFilesDirectory ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/zlib/include)
     else()
       message(FATAL_ERROR " - unsupported instruction set architecture")
     endif()
@@ -50,11 +50,11 @@ if (NOT TARGET ${MyModule})
 
     # libpng.
     if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.LibPng.Libraries ${MyDependenciesDirectory}/my-libpng-$<LOWER_CASE:$<CONFIG>>-x64/lib/libpng.lib)
-      set(${MyModule}.LibPng.HeaderFilesDirectory ${MyDependenciesDirectory}/my-libpng-$<LOWER_CASE:$<CONFIG>>-x64/include)
+      set(${MyModule}.LibPng.Libraries ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/libpng/lib/$<IF:$<STREQUAL:$<LOWER_CASE:$<CONFIG>>,debug>,libpng18_staticd.lib,libpng18_static.lib>)
+      set(${MyModule}.LibPng.HeaderFilesDirectory ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/libpng/include)
     elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.LibPng.Libraries ${MyDependenciesDirectory}/my-libpng-$<LOWER_CASE:$<CONFIG>>-x86/lib/libpng.lib)
-      set(${MyModule}.LibPng.HeaderFilesDirectory ${MyDependenciesDirectory}/my-libpng-$<LOWER_CASE:$<CONFIG>>-x86/include)
+      set(${MyModule}.LibPng.Libraries ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/libpng/lib/$<IF:$<STREQUAL:$<LOWER_CASE:$<CONFIG>>,debug>,libpng18_staticd.lib,libpng18_static.lib>)
+      set(${MyModule}.LibPng.HeaderFilesDirectory ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/libpng/include)
     else()
       message(FATAL_ERROR " - unsupported instruction set architecture")
     endif()
@@ -63,11 +63,11 @@ if (NOT TARGET ${MyModule})
 
     # freetype.
     if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.FreeType.Libraries ${MyDependenciesDirectory}/my-freetype-$<LOWER_CASE:$<CONFIG>>-x64/lib/freetype.lib)
-      set(${MyModule}.FreeType.HeaderFilesDirectory ${MyDependenciesDirectory}/my-freetype-$<LOWER_CASE:$<CONFIG>>-x64/include)
+      set(${MyModule}.FreeType.Libraries ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/freetype/lib/$<IF:$<STREQUAL:$<LOWER_CASE:$<CONFIG>>,debug>,freetyped.lib,freetype.lib>)
+      set(${MyModule}.FreeType.HeaderFilesDirectory ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/freetype/include)
     elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.FreeType.Libraries ${MyDependenciesDirectory}/my-freetype-$<LOWER_CASE:$<CONFIG>>-x86/lib/freetype.lib)
-      set(${MyModule}.FreeType.HeaderFilesDirectory ${MyDependenciesDirectory}/my-freetype-$<LOWER_CASE:$<CONFIG>>-x86/include)
+      set(${MyModule}.FreeType.Libraries ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/freetype/lib/$<IF:$<STREQUAL:$<LOWER_CASE:$<CONFIG>>,debug>,freetyped.lib,freetype.lib>)
+      set(${MyModule}.FreeType.HeaderFilesDirectory ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/freetype/include)
     else()
       message(FATAL_ERROR " - unsupported instruction set architecture")
     endif()
@@ -92,6 +92,13 @@ if (NOT TARGET ${MyModule})
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/PixelBuffer.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/PixelFormat.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/PixelFormat.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Operation.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Operation.h)
+
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Operations/CheckerboardFill.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Operations/CheckerboardFill.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Operations/Fill.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Operations/Fill.h)
 
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/IcoImageWriter.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/IcoImageWriter.h)
@@ -116,7 +123,7 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Imaging/Windows/MultiByteToWideCharZeroTerminated.h)
   endif()
 
-  list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.Ring2 ${MyProjectName}.DDL ${MyProjectName}.ARMS)
+  list(APPEND ${MyModule}.Libraries ${MyProjectName}.ADL)
 
   EndProduct(${MyModule})
 

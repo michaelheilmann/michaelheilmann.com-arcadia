@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,10 +26,16 @@ Arcadia_UTF8Reader_constructorImpl
     Arcadia_UTF8Reader* self
   );
 
+static void
+Arcadia_UTF8Reader_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8ReaderDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_UTF8Reader_constructorImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_UTF8Reader_constructorImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -57,13 +63,17 @@ Arcadia_UTF8Reader_constructorImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->getCodePoint = NULL;
-  self->hasCodePoint = NULL;
-  self->next = NULL;
-  self->getLength = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_UTF8Reader_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8ReaderDispatch* self
+  )
+{ }
 
 void
 Arcadia_UTF8Reader_next
@@ -71,9 +81,7 @@ Arcadia_UTF8Reader_next
     Arcadia_Thread* thread,
     Arcadia_UTF8Reader* self
   )
-{
-  self->next(thread, self);
-}
+{ Arcadia_VirtualCall(Arcadia_UTF8Reader, next, self); }
 
 Arcadia_Natural32Value
 Arcadia_UTF8Reader_getCodePoint
@@ -81,9 +89,7 @@ Arcadia_UTF8Reader_getCodePoint
     Arcadia_Thread* thread,
     Arcadia_UTF8Reader* self
   )
-{
-  return self->getCodePoint(thread, self);
-}
+{ Arcadia_VirtualCallWithReturn(Arcadia_UTF8Reader, getCodePoint, self); }
 
 Arcadia_BooleanValue
 Arcadia_UTF8Reader_hasCodePoint
@@ -91,9 +97,7 @@ Arcadia_UTF8Reader_hasCodePoint
     Arcadia_Thread* thread,
     Arcadia_UTF8Reader* self
   )
-{
-  return self->hasCodePoint(thread, self);
-}
+{ Arcadia_VirtualCallWithReturn(Arcadia_UTF8Reader, hasCodePoint, self); }
 
 Arcadia_Natural32Value
 Arcadia_UTF8Reader_getLength
@@ -101,6 +105,4 @@ Arcadia_UTF8Reader_getLength
     Arcadia_Thread* thread,
     Arcadia_UTF8Reader* self
   )
-{
-  return self->getLength(thread, self);
-}
+{ Arcadia_VirtualCallWithReturn(Arcadia_UTF8Reader, getLength, self); }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,12 +20,26 @@
 #include "Arcadia/Math/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.MeshResource", Arcadia_Visuals_Implementation_MeshResource,
-                          u8"Arcadia.Visuals.Implementation.Resource")
+                          u8"Arcadia.Visuals.Implementation.Resource");
+
+struct Arcadia_Visuals_Implementation_MeshResourceDispatch {
+  Arcadia_Visuals_Implementation_ResourceDispatch _parent;
+
+  void (*setMeshAmbientColor)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Color4Real32*);
+  void (*setLocalToWorldMatrix)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Matrix4Real32*);
+};
 
 struct Arcadia_Visuals_Implementation_MeshResource {
   Arcadia_Visuals_Implementation_Resource _parent;
-  void (*setLocalToWorldMatrix)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Matrix4Real32*);
 };
+
+void
+Arcadia_Visuals_Implementation_MeshResource_setMeshAmbientColor
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_MeshResource* self,
+    Arcadia_Math_Color4Real32* meshAmbientColor
+  );
 
 void
 Arcadia_Visuals_Implemention_MeshResource_setLocalToWorldMatrix

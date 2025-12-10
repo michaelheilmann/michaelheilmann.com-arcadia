@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,14 +15,16 @@
 
 #include "Arcadia/ARMS/Include.h"
 
-#include "Arcadia/ARMS/Internal/MemoryManager.private.h"
+#include "Arcadia/ARMS/Internal/Common.h"
 #include "Arcadia/ARMS/Internal/DefaultMemoryManager.h"
+#include "Arcadia/ARMS/Internal/MemoryManager.private.h"
+#include "Arcadia/ARMS/Internal/ReferenceCounter.h"
 #include "Arcadia/ARMS/Internal/SlabMemoryManager.h"
 #include "Arcadia/ARMS/Internal/Statistics.h"
-#include "Arcadia/ARMS/NotifyDestroy.h"
-#include "Arcadia/ARMS/Internal/Tag.h"
 
-#include "Arcadia/ARMS/Internal/Common.h"
+#include "Arcadia/ARMS/Internal/NotifyDestroy.h" // The "notify destroy" module.
+
+#include "Arcadia/ARMS/Internal/Tag.h"
 
 // malloc, free, realloc
 #include <malloc.h>
@@ -71,10 +73,7 @@ struct ARMS_Lock {
 
 #endif
 
-typedef Arcadia_ARMS_Size Arcadia_ARMS_ReferenceCount;
-#define Arcadia_ARMS_ReferenceCount_Minimum (Arcadia_ARMS_Size_Minimum)
-#define Arcadia_ARMS_ReferenceCount_Maximum (Arcadia_ARMS_Size_Maximum)
-static Arcadia_ARMS_ReferenceCount g_referenceCount = 0;
+static Arcadia_ARMS_ReferenceCounter g_referenceCount = 0;
 
 static ARMS_Type* g_types = NULL;
 static Arcadia_ARMS_Tag* g_allObjects = NULL;
@@ -94,7 +93,7 @@ Arcadia_ARMS_startup
   (
   )
 {
-  if (g_referenceCount == Arcadia_ARMS_ReferenceCount_Maximum) {
+  if (g_referenceCount == Arcadia_ARMS_ReferenceCounter_Maximum) {
     // Cannot increment further.
     return Arcadia_ARMS_Status_OperationInvalid;
   }
@@ -163,7 +162,7 @@ Arcadia_ARMS_shutdown
   (
   )
 {
-  if (Arcadia_ARMS_ReferenceCount_Minimum == g_referenceCount) {
+  if (Arcadia_ARMS_ReferenceCounter_Minimum == g_referenceCount) {
     // Cannot decrement further.
     return Arcadia_ARMS_Status_OperationInvalid;
   }
@@ -203,7 +202,7 @@ Arcadia_ARMS_shutdown
 Arcadia_ARMS_Status
 Arcadia_ARMS_addType
   (
-    Arms_Natural8 const* name,
+    Arcadia_ARMS_Natural8 const* name,
     Arcadia_ARMS_Size nameLength,
     void* context,
     Arcadia_ARMS_TypeRemovedCallbackFunction* typeRemoved,
@@ -252,7 +251,7 @@ Arcadia_ARMS_Status
 Arcadia_ARMS_allocate
   (
     void** pObject,
-    Arms_Natural8 const* name,
+    Arcadia_ARMS_Natural8 const* name,
     Arcadia_ARMS_Size nameLength,
     Arcadia_ARMS_Size size
   )

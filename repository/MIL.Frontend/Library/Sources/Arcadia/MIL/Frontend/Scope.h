@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,8 +22,11 @@ typedef struct Arcadia_MIL_Symbol Arcadia_MIL_Symbol;
 Arcadia_declareObjectType(u8"Arcadia.MIL.Scope.Entry", Arcadia_MIL_Scope_Entry,
                           u8"Arcadia.Object");
 
-struct Arcadia_MIL_Scope_Entry {
+struct Arcadia_MIL_Scope_EntryDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
+struct Arcadia_MIL_Scope_Entry {
   Arcadia_Object _parent;
 
   // The entry in the enclosing scope shadowed by this entry.
@@ -56,6 +59,10 @@ Arcadia_MIL_Scope_Entry_create
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.MIL.Scope", Arcadia_MIL_Scope,
                           u8"Arcadia.Object");
+
+struct Arcadia_MIL_ScopeDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
 struct Arcadia_MIL_Scope {
   Arcadia_Object _parent;

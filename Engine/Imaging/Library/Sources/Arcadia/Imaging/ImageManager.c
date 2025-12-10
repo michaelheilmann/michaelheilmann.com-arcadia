@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -38,6 +38,13 @@ Arcadia_Imaging_ImageManager_constructImpl
     Arcadia_Imaging_ImageManager* self
   );
 
+static void
+Arcadia_Imaging_ImageManager_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_ImageManagerDispatch* self
+  );
+
 static Arcadia_Imaging_ImageManager*
 Arcadia_Imaging_ImageManager_create
   (
@@ -59,8 +66,8 @@ Arcadia_Imaging_ImageManager_destroyCallback
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_ImageManager_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Imaging_ImageManager_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Imaging_ImageManager_visit,
 };
 
@@ -113,6 +120,14 @@ Arcadia_Imaging_ImageManager_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_Imaging_ImageManager_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_ImageManagerDispatch* self
+  )
+{ }
 
 static Arcadia_Imaging_ImageManager*
 Arcadia_Imaging_ImageManager_create

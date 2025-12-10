@@ -23,33 +23,6 @@
   div.topic:first-child {
     margin-left: 0px;
   }
-    
-  div.topic > div.body > p {
-    font-size: small;
-  }
-  
-  div.topic > div.body > p {
-    margin-left: 2rem;
-    line-height: 1rem;
-  }
-  
-  div.topic > div.body > ul {
-    list-style: none;
-  }
-    
-  div.topic > div.body > ul > li {
-    margin-left: 2rem;
-    display: block;
-    line-height: 1rem;
-  }
-  div.topic > div.body > ul > li > a {
-    text-decoration: none;
-    font-size: small;
-  }
-  div.topic > div.body > ul > li > div {
-    display: inline;
-    font-size: small;
-  }
 
   footer > div > div {
     line-height: 1rem;
@@ -58,6 +31,16 @@
   footer > div > div > a {
     text-decoration: none;
     font-size: small;
+  }
+  
+  div.entries {
+    display:flex; flex-direction:column;
+  }
+  
+  div.entries > a {
+    text-decoration: none;
+    font-size: small;
+    margin-left: 2rem;
   }
 
   </style>
@@ -78,23 +61,13 @@
         <span>Software</span>
       </div>
       <div class="body">
-        <ul>
-          <li>
-            <a href='@{siteAddress}/Arcadia/ARMS'>Arcadia ARMS</a>
-          </li>
-          <li>
-            <a href='@{siteAddress}/Arcadia/Ring1'>Arcadia Ring1</a>
-          </li>
-          <li>
-            <a href='@{siteAddress}/Arcadia/Ring2'>Arcadia Ring2</a>
-          </li>
-          <li>
-            <a href='@{siteAddress}/Arcadia/Visuals'>Arcadia Visuals</a>
-          </li>
-          <li>
-            <a href='@{siteAddress}/Arcadia/TemplateEngine'>Arcadia Template Engine</a>
-          </li>
-        </ul>
+        <div class="entries">
+          <a href='@{siteAddress}/Arcadia/ARMS'>Arcadia ARMS</a>
+          <a href='@{siteAddress}/Arcadia/Ring1'>Arcadia Ring1</a>
+          <a href='@{siteAddress}/Arcadia/Ring2'>Arcadia Ring2</a>
+          <a href='@{siteAddress}/Arcadia/Visuals'>Arcadia Visuals</a>
+          <a href='@{siteAddress}/Arcadia/TemplateEngine'>Arcadia Template Engine</a>
+        </div>
       </div>
     </div>
 
@@ -103,17 +76,12 @@
         <span>Specifications</span>
       </div>
       <div class="body">
-        <ul>
-          <li>
-            <a href='@{siteAddress}/specifications/common-lexical-specification'>Common Lexical Specification</a>
-          </li>
-          <li>
-            <a href='@{siteAddress}/specifications/data-definition-language'>Data Definition Language</a>
-          </li>
-          <li>
-            <a href='@{siteAddress}/specifications/data-definitions-language-schema'>Data Definition Language Schema (draft)</a>
-          </li>
-        </ul>
+        <div class="entries">
+          <a href='@{siteAddress}/specifications/mathematical-definitions-notations-and-proofs'>Mathematical Definitions, Notations, and Proofs</a>
+          <a href='@{siteAddress}/specifications/common-lexical-translations'>Common Lexical Translations</a>
+          <a href='@{siteAddress}/specifications/data-definition-language'>Data Definition Language</a>
+          <a href='@{siteAddress}/specifications/data-definitions-language-schema'>Data Definition Language Schema (draft)</a>
+        </div>
       </div>
     </div>
 
@@ -122,14 +90,10 @@
         <span>Organizational</span>
       </div>
       <div class="body">
-        <ul>
-          <li>
-            <a href='@{siteAddress}/news'>News</a>
-          </li>
-          <li>
-            <a href='@{siteAddress}/roadmap'>Roadmap</a>
-          </li>
-        </ul>
+        <div class="entries">
+          <a href='@{siteAddress}/news'>News</a>
+          <a href='@{siteAddress}/roadmap'>Roadmap</a>
+        </div>
       </div>
     </div>
     
@@ -138,12 +102,23 @@
         <span>Assorted Notes</span>
       </div>
       <div class="body">
-        <p>This section collects a growing recollection of various notes on web-application security concepts and techniques which were taken during an MPV of a MUD-client written in Angular.
-           The concepts and techniques explained are valid for most web-applications.</p>
-        <ul>
-          <li><a href='@{siteAddress}/assorted-notes/best-practices-for-access-tokens-angular-edition.html'>Best practices for access tokens - Angular edition</a></li>
-          <li><a href='@{siteAddress}/assorted-notes/why-use-refresh-tokens-angular-edition.html'>Why use refresh tokens - Angular edition</a></li>
-        </ul>
+        <div class="entries">
+          <div>
+              <p style="font-size: small">This section collects a growing recollection of various notes on web-application security concepts and techniques which were taken during an MPV of a MUD-client written in Angular.
+                 The concepts and techniques explained are valid for most web-applications.</p>
+              <div class="entries">
+                <a href='@{siteAddress}/assorted-notes/best-practices-for-access-tokens-angular-edition.html'>Best practices for access tokens - Angular edition</a></li>
+                <a href='@{siteAddress}/assorted-notes/why-use-refresh-tokens-angular-edition.html'>Why use refresh tokens - Angular edition</a></li>
+              </div>
+         </div>
+         <div>
+            <p style="font-size: small">This section collects a growing recollection of various notes on information security and enterprise architecture.</p>
+            <div class="entries">
+              <a href='@{siteAddress}/assorted-notes/togaf-for-software-engineers-buy-in-edition'>TOGAF for software engineers - Buy-in edition</a>
+              <a href='@{siteAddress}/assorted-notes/information-security-data-security-and-data-privacy-commonalities-similarities-and-differences'>
+              Information Security, Data Security, and Data Privacy - Commonalities, similarities, and differences</a>
+            </div>
+         </div>
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,8 +16,6 @@
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Collections/Deque.h"
 
-#include "Arcadia/Ring2/Include.h"
-
 static void
 Arcadia_Deque_constructImpl
   (
@@ -25,9 +23,16 @@ Arcadia_Deque_constructImpl
     Arcadia_Deque* self
   );
 
+static void
+Arcadia_Deque_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DequeDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Deque_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Deque_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -55,18 +60,17 @@ Arcadia_Deque_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->getAt = NULL;
-  self->getBack = NULL;
-  self->getFront = NULL;
-  self->insertAt = NULL;
-  self->insertBack = NULL;
-  self->insertFront = NULL;
-  self->removeAt = NULL;
-  self->removeBack = NULL;
-  self->removeFront = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
+
+static void
+Arcadia_Deque_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DequeDispatch* self
+  )
+{ }
 
 void
 Arcadia_Deque_insertFront
@@ -75,7 +79,7 @@ Arcadia_Deque_insertFront
     Arcadia_Deque* self,
     Arcadia_Value value
   )
-{ self->insertFront(thread, self, value); }
+{ Arcadia_VirtualCall(Arcadia_Deque, insertFront, self, value); }
 
 void
 Arcadia_Deque_insertBack
@@ -84,7 +88,7 @@ Arcadia_Deque_insertBack
     Arcadia_Deque* self,
     Arcadia_Value value
   )
-{ self->insertBack(thread, self, value); }
+{ Arcadia_VirtualCall(Arcadia_Deque, insertBack, self, value); }
 
 void
 Arcadia_Deque_insertAt
@@ -94,7 +98,7 @@ Arcadia_Deque_insertAt
     Arcadia_SizeValue index,
     Arcadia_Value value
   )
-{ self->insertAt(thread, self, index, value); }
+{ Arcadia_VirtualCall(Arcadia_Deque, insertAt, self, index, value); }
 
 Arcadia_Value
 Arcadia_Deque_getFront
@@ -102,7 +106,7 @@ Arcadia_Deque_getFront
     Arcadia_Thread* thread,
     Arcadia_Deque* self
   )
-{ return self->getFront(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Deque, getFront, self); }
 
 Arcadia_Value
 Arcadia_Deque_getBack
@@ -110,7 +114,7 @@ Arcadia_Deque_getBack
     Arcadia_Thread* thread,
     Arcadia_Deque* self
   )
-{ return self->getBack(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Deque, getBack, self); }
 
 Arcadia_Value
 Arcadia_Deque_getAt
@@ -119,7 +123,7 @@ Arcadia_Deque_getAt
     Arcadia_Deque* self,
     Arcadia_SizeValue index
   )
-{ return self->getAt(thread, self, index); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Deque, getAt, self, index); }
 
 void
 Arcadia_Deque_removeFront
@@ -127,7 +131,7 @@ Arcadia_Deque_removeFront
     Arcadia_Thread* thread,
     Arcadia_Deque* self
   )
-{ self->removeFront(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_Deque, removeFront, self); }
 
 void
 Arcadia_Deque_removeBack
@@ -135,7 +139,7 @@ Arcadia_Deque_removeBack
     Arcadia_Thread* thread,
     Arcadia_Deque* self
   )
-{ self->removeBack(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_Deque, removeBack, self); }
 
 void
 Arcadia_Deque_removeAt
@@ -144,4 +148,4 @@ Arcadia_Deque_removeAt
     Arcadia_Deque* self,
     Arcadia_SizeValue index
   )
-{ self->removeAt(thread, self, index); }
+{ Arcadia_VirtualCall(Arcadia_Deque, removeAt, self, index); }

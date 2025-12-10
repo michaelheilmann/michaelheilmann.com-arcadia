@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,13 +22,13 @@
 #include <stdint.h>
 
 // An unsigned binary integer of a width of 8 Bits.
-typedef uint8_t Arms_Natural8;
+typedef uint8_t Arcadia_ARMS_Natural8;
 
 /// The minimum value of Arms_Natural8.
 /// Guaranteed to be @a 0.
-#define Arms_Natural8_Minimum (UINT8_C(0))
+#define Arcadia_ARMS_Natural8_Minimum (UINT8_C(0))
 
 /// The maximum value of Arms_Natural8.
-#define Arms_Natural8_Maximum (UINT8_MAX)
+#define Arcadia_ARMS_Natural8_Maximum (UINT8_MAX)
 
 #endif // ARCADIA_ARMS_NATURAL8TYPE_H_INCLUDED

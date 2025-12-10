@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -15,30 +15,14 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/BackendContext.h"
 
-#include "Arcadia/Visuals/Implementation/Configure.h"
-#include "Arcadia/Visuals/Implementation/Windows/DisplayDevice.h"
 #include "Arcadia/Visuals/Implementation/Windows/_GetDisplayDevices.h"
 #include "Arcadia/Visuals/Implementation/Windows/Icon.h"
-#include "Arcadia/Visuals/Implementation/Windows/_CharConv.h"
-
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/WindowBackend.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryWindow.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryContext.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Backend.h"
-
 #include "Arcadia/Visuals/Implementation/Resource.h"
 
-#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ConstantBufferResource.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/FragmentProgramResource.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/MeshResource.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ProgramResource.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/VertexBufferResource.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/ViewportResource.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/VertexProgramResource.h"
-
 #include <assert.h>
-
 
 static Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* g_instance = NULL;
 
@@ -382,6 +366,13 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_constructImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContextDispatch* self
+  );
+
+static void
 Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_destructImpl
   (
     Arcadia_Thread* thread,
@@ -396,8 +387,9 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_destructImpl,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_visitImpl,
 };
 
@@ -771,19 +763,24 @@ updateResources
   )
 {
   Arcadia_SizeValue removed = 0;
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources); i < n;) {
-    Arcadia_Visuals_Implementation_Resource* resource = (Arcadia_Visuals_Implementation_Resource*)Arcadia_List_getObjectReferenceValueAt(thread, ((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources, i);
-    if (!resource->referenceCount || force) {
-      Arcadia_Visuals_Implementation_Resource_unload(thread, resource);
-      Arcadia_Visuals_Implementation_Resource_unlink(thread, resource);
-      Arcadia_List_removeAt(thread, ((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources, i, 1);
-      n--;
-      removed++;
-    } else {
-      i++;
+  Arcadia_SizeValue removedNow = 0;
+  do {
+    removedNow = 0;
+    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources); i < n;) {
+      Arcadia_Visuals_Implementation_Resource* resource = (Arcadia_Visuals_Implementation_Resource*)Arcadia_List_getObjectReferenceValueAt(thread, ((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources, i);
+      if (!resource->referenceCount || force) {
+        Arcadia_Visuals_Implementation_Resource_unload(thread, resource);
+        Arcadia_Visuals_Implementation_Resource_unlink(thread, resource);
+        Arcadia_List_removeAt(thread, ((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->resources, i, 1);
+        n--;
+        removedNow++;
+      } else {
+        i++;
+      }
     }
-  }
-  return removed++;
+    removed += removedNow;
+  } while (removedNow);
+  return removed;
 }
 
 static void
@@ -956,16 +953,22 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_constructImpl
     }
     Arcadia_Thread_jump(thread);
   }
-
-  ((Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self)->getFunctions = (_Arcadia_Visuals_Implementation_OpenGL4_Functions * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)) & getFunctionsImpl;
-
-  ((Arcadia_Visuals_BackendContext*)self)->createIcon = (Arcadia_Visuals_Icon * (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*, Arcadia_Imaging_PixelBuffer*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_createIconImpl;
-  ((Arcadia_Visuals_BackendContext*)self)->createWindow = (Arcadia_Visuals_Window * (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_createWindowImpl;
-  ((Arcadia_Visuals_BackendContext*)self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_getDisplayDevicesImpl;
-  ((Arcadia_Visuals_BackendContext*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_updateImpl;
-
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+}
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContextDispatch* self
+  )
+{
+  ((Arcadia_Visuals_Implementation_OpenGL4_BackendContextDispatch*)self)->getFunctions = (_Arcadia_Visuals_Implementation_OpenGL4_Functions * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)) & getFunctionsImpl;
+  ((Arcadia_Visuals_BackendContextDispatch*)self)->createIcon = (Arcadia_Visuals_Icon * (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*, Arcadia_Imaging_PixelBuffer*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_createIconImpl;
+  ((Arcadia_Visuals_BackendContextDispatch*)self)->createWindow = (Arcadia_Visuals_Window * (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_createWindowImpl;
+  ((Arcadia_Visuals_BackendContextDispatch*)self)->getDisplayDevices = (Arcadia_List * (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_getDisplayDevicesImpl;
+  ((Arcadia_Visuals_BackendContextDispatch*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_updateImpl;
 }
 
 static void

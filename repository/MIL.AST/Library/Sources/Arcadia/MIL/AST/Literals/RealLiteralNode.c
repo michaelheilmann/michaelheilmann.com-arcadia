@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,13 @@ Arcadia_MIL_AST_RealLiteralNode_constructImpl
   );
 
 static void
+Arcadia_MIL_AST_RealLiteralNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_AST_RealLiteralNodeDispatch* self
+  );
+
+static void
 Arcadia_MIL_AST_RealLiteralNode_visit
   (
     Arcadia_Thread* thread,
@@ -32,8 +39,8 @@ Arcadia_MIL_AST_RealLiteralNode_visit
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_MIL_AST_RealLiteralNode_objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_MIL_AST_RealLiteralNode_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_AST_RealLiteralNode_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_AST_RealLiteralNode_visit,
 };
 
@@ -66,6 +73,14 @@ Arcadia_MIL_AST_RealLiteralNode_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1 + 1);
 }
+
+static void
+Arcadia_MIL_AST_RealLiteralNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_AST_RealLiteralNodeDispatch* self
+  )
+{ }
 
 static void
 Arcadia_MIL_AST_RealLiteralNode_visit

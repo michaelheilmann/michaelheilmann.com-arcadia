@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -70,12 +70,10 @@ Arcadia_Engine_Demo_startupAudials
     Arcadia_DDL_Node* configuration
   )
 {
-  // (1) Register audials backends.
-  {
-  #if Arcadia_Audials_Implementation_Configuration_OpenAL_Backend_Enabled
-    Arcadia_Set_add(thread, engine->audialsBackendTypes, Arcadia_Value_makeTypeValue(_Arcadia_Audials_Implementation_OpenAL_Backend_getType(thread)), NULL);
-  #endif
-  }
+  // (1.1) Register audials backends.
+  Arcadia_Audials_Implementation_registerBackends(thread, engine->audialsBackendTypes);
+  // (1.2) Register audials scene node factory.
+  Arcadia_Audials_Implementation_registerSceneNodeFactories(thread, engine->audialsSceneNodeFactoryTypes);
   // (2) Select audials system.
   {
     char const* path[] = {
@@ -137,5 +135,32 @@ Arcadia_Engine_Demo_startupAudials
       Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
       setMasterVolume(thread, configuration, 10);
     }
+  }
+  // (4) Create the scene node factory.
+  {
+    Arcadia_Engine_SceneNodeFactory* sceneNodeFactory = NULL;
+    Arcadia_JumpTarget jumpTarget;
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_List* temporary = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+      Arcadia_Set_getAll(thread, engine->audialsSceneNodeFactoryTypes, temporary);
+      Arcadia_Value scneNodeFactoryTypeValue = Arcadia_List_getAt(thread, temporary, 0);
+      if (!Arcadia_Value_isTypeValue(&scneNodeFactoryTypeValue)) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_Type* scneNodeFactoryType = Arcadia_Value_getTypeValue(&scneNodeFactoryTypeValue);
+      if (!Arcadia_Type_isSubType(thread, scneNodeFactoryType, _Arcadia_Audials_SceneNodeFactory_getType(thread))) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_ValueStack_pushNatural8Value(thread, 0);
+      sceneNodeFactory = (Arcadia_Engine_SceneNodeFactory*)ARCADIA_CREATEOBJECT0(thread, scneNodeFactoryType, Arcadia_ValueStack_getSize(thread) - 1);
+      Arcadia_Thread_popJumpTarget(thread);
+    } else {
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_Thread_jump(thread);
+    }
+    engine->audialsSceneNodeFactory = sceneNodeFactory;
   }
 }

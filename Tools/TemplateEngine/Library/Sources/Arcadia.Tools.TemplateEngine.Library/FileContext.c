@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -450,9 +450,17 @@ FileContext_constructImpl
     FileContext* self
   );
 
+static void
+FileContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    FileContextDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&FileContext_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&FileContext_destruct,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&FileContext_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&FileContext_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&FileContext_visit,
 };
 
@@ -530,6 +538,14 @@ FileContext_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
+
+static void
+FileContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    FileContextDispatch* self
+  )
+{ }
 
 FileContext*
 FileContext_create

@@ -14,6 +14,8 @@
   }
 }
 
+@{include("./fonts-1.i")}
+
 :root {
   --h1-margin: 0.67em 0;
   --h1-font-size: 2.5rem !important;
@@ -32,266 +34,34 @@
 
   --h6-margin: 1.67em 0;
   --h6-font-size: 1rem !important;
+  
+  --font-family-default: 'my-sans';
+  --font-family-code: 'my-code';
+  --font-family-sans: 'my-sans';
 }
 
 a {
   color: var(--blue);
 }
 
-/*
-landing page font (if font style "normal" is used)
-https://developer.mozilla.org/en-US/docs/Web/CSS/@@font-face/font-weight
-*/
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Thin.ttf');
-  font-weight: 100;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-ExtraLight.ttf');
-  font-weight: 200;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Light.ttf');
-  font-weight: 300;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Regular.ttf');
-  font-weight: 400;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Medium.ttf');
-  font-weight: 500;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-SemiBold.ttf');
-  font-weight: 600;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-Bold.ttf');
-  font-weight: 700;
-  font-style: normal;
-}
-
-/*
-landing page font (if font style "italic" is used)
-https://developer.mozilla.org/en-US/docs/Web/CSS/@@font-face/font-weight
-*/
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-ThinItalicItalic.ttf');
-  font-weight: 100;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-ExtraLightItalic.ttf');
-  font-weight: 200;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-LightItalic.ttf');
-  font-weight: 300;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-RegularItalic.ttf');
-  font-weight: 400;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-MediumItalic.ttf');
-  font-weight: 500;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-SemiBoldItalic.ttf');
-  font-weight: 600;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-landing-page-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans/static/NotoSans-BoldItalic.ttf');
-  font-weight: 700;
-  font-style: italic;
-}
-
-/*
-default font (if font style "normal" is used)
-https://developer.mozilla.org/en-US/docs/Web/CSS/@@font-face/font-weight
-*/
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Thin.ttf');
-  font-weight: 100;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-ExtraLight.ttf');
-  font-weight: 200;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Light.ttf');
-  font-weight: 300;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Regular.ttf');
-  font-weight: 400;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Medium.ttf');
-  font-weight: 500;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-SemiBold.ttf');
-  font-weight: 600;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-Bold.ttf');
-  font-weight: 700;
-  font-style: normal;
-}
-
-/*
-default font (if font style "italic" is used)
-https://developer.mozilla.org/en-US/docs/Web/CSS/@@font-face/font-weight
-*/
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-ThinItalicItalic.ttf');
-  font-weight: 100;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-ExtraLightItalic.ttf');
-  font-weight: 200;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-LightItalic.ttf');
-  font-weight: 300;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  /* Unsure why there is no "RegularItalic". */
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-MediumItalic.ttf');
-  font-weight: 400;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-MediumItalic.ttf');
-  font-weight: 500;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-SemiBoldItalic.ttf');
-  font-weight: 600;
-  font-style: italic;
-}
-@@font-face {
-  font-family: 'my-default-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Serif/static/NotoSerif-BoldItalic.ttf');
-  font-weight: 700;
-  font-style: italic;
-}
-
-/*
-default code font
-*/
-@@font-face {
-  font-family: 'my-code-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-ThinItalic.ttf');
-  font-weight: 100;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-code-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-ExtraLight.ttf');
-  font-weight: 200;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-code-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-Light.ttf');
-  font-weight: 300;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-code-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-Regular.ttf');
-  font-weight: 400;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-code-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-Medium.ttf');
-  font-weight: 500;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-code-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-SemiBold.ttf');
-  font-weight: 600;
-  font-style: normal;
-}
-@@font-face {
-  font-family: 'my-code-font';
-  src: url('https://michaelheilmann.com/assets/noto-new/Noto_Sans_Mono/static/NotoSansMono-Bold.ttf');
-  font-weight: 700;
-  font-style: normal;
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 html.my-theme-1 {
-  font-family: 'my-default-font';
+  font-family: var(--font-family-default);
   color: var(--black);
   background-color: var(--white);
 }
 
 html.my-theme-1 code {
-  font-family: 'my-code-font';
+  font-family: var(--font-family-code);
   color: var(--black);
-  /*background-color: var(--white);*/
-  font-weight: thin;
+  font-weight: 600;
   font-size: 0.9rem;
 }
 
 /* Style for the index and the error page. */
 body.my-index-page-1, body.my-error-page {
-  font-family: 'my-landing-page-font';
+  font-family: var(--font-family-sans);
   font-size: 2rem;
   display: flex;
   flex-direction: column;
@@ -346,7 +116,13 @@ body.my-error-page-1 ul li, body.my-content-page-1 ul li {
   margin-left: 1rem;
 }
 
-body.my-error-page-1 p, body.my-content-page-1 p, body.my-error-page-1 ul, body.my-content-page-1 ul {
+body.my-error-page-1 ul li, body.my-content-page-1 ol li {
+  margin-left: 1rem;
+}
+
+body.my-error-page-1 p, body.my-content-page-1 p,
+body.my-error-page-1 ul, body.my-content-page-1 ul,
+body.my-error-page-1 ol, body.my-content-page-1 ol {
   &:not(:last-child)  {
     margin-bottom: 1rem;
   }
@@ -397,6 +173,7 @@ body.my-content-page-1 div.right-column nav {
 
 body.my-content-page-1 div.right-column nav a {
   text-wrap-mode: wrap;
+  text-decoration: none;
 }
 
 body.my-content-page-1 h3 {

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -27,6 +27,13 @@ Arcadia_Visuals_Scene_Node_constructImpl
   );
 
 static void
+Arcadia_Visuals_Scene_Node_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_NodeDispatch* self  
+  );
+
+static void
 Arcadia_Visuals_Scene_Node_destructImpl
   (
     Arcadia_Thread* thread,
@@ -41,8 +48,9 @@ Arcadia_Visuals_Scene_Node_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Scene_Node_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Scene_Node_destructImpl,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Scene_Node_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Scene_Node_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Scene_Node_visitImpl,
 };
 
@@ -76,12 +84,17 @@ Arcadia_Visuals_Scene_Node_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
-  self->setBackendContext = NULL;
-  self->render = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
+
+static void
+Arcadia_Visuals_Scene_Node_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_NodeDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Visuals_Scene_Node_destructImpl
@@ -106,13 +119,13 @@ Arcadia_Visuals_Scene_Node_setBackendContext
     Arcadia_Visuals_Scene_Node* self,
     Arcadia_Visuals_BackendContext* backendContext
   )
-{ self->setBackendContext(thread, self, backendContext); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Scene_Node, setBackendContext, self, backendContext); }
 
 void
 Arcadia_Visuals_Scene_Node_render
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_Node* self,
-    Arcadia_Visuals_Scene_MeshContext* meshContext
+    Arcadia_Visuals_Scene_RenderingContextNode* renderingContextNode
   )
-{ self->render(thread, self, meshContext); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Scene_Node, render, self, renderingContextNode); }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,13 @@ Arcadia_Collection_constructImpl
     Arcadia_Collection* self
   );
 
+static void
+Arcadia_Collection_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_CollectionDispatch* self
+  );
+
 static Arcadia_BooleanValue
 Arcadia_Collection_isEmptyImpl
   (
@@ -34,7 +41,7 @@ Arcadia_Collection_isEmptyImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Collection_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Collection_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -62,12 +69,18 @@ Arcadia_Collection_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->clear = NULL;
-  self->getSize = NULL;
-  self->isEmpty = &Arcadia_Collection_isEmptyImpl;
-  self->isImmutable = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
+}
+
+static void
+Arcadia_Collection_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_CollectionDispatch* self
+  )
+{
+  self->isEmpty = &Arcadia_Collection_isEmptyImpl;
 }
 
 static Arcadia_BooleanValue
@@ -84,7 +97,7 @@ Arcadia_Collection_clear
     Arcadia_Thread* thread,
     Arcadia_Collection* self
   )
-{ self->clear(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_Collection, clear, self); }
 
 Arcadia_SizeValue
 Arcadia_Collection_getSize
@@ -92,7 +105,7 @@ Arcadia_Collection_getSize
     Arcadia_Thread* thread,
     Arcadia_Collection* self
   )
-{ return self->getSize(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Collection, getSize, self); }
 
 Arcadia_BooleanValue
 Arcadia_Collection_isEmpty
@@ -100,7 +113,7 @@ Arcadia_Collection_isEmpty
     Arcadia_Thread* thread,
     Arcadia_Collection* self
   )
-{ return self->isEmpty(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Collection, isEmpty, self); }
 
 Arcadia_BooleanValue
 Arcadia_Collection_isImmutable
@@ -108,4 +121,4 @@ Arcadia_Collection_isImmutable
     Arcadia_Thread* thread,
     Arcadia_Collection* self
   )
-{ return self->isImmutable(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Collection, isImmutable, self); }

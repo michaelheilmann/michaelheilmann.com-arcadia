@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,10 +21,11 @@
 #include "Arcadia/Ring1/Implementation/Atoms.private.h" ///< @todo A better solution is required for this.
 #include <limits.h>
 #include <assert.h>
+#include <string.h>
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#define TypeNodeName "Arcadia.Internal.TypeNode"
+#define TypeNodeName u8"Arcadia.Internal.TypeNode"
 
 typedef struct TypeNode TypeNode;
 
@@ -77,6 +78,10 @@ TypeNode_finalizeCallback
     if (Arcadia_Process_unlockObject(process, typeNode->parentObjectType)) {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
     }
+  }
+  if (typeNode->dispatch) {
+    free(typeNode->dispatch);
+    typeNode->dispatch = NULL;
   }
   typeNode->typeName = NULL;
 }
@@ -250,6 +255,10 @@ Arcadia_registerInternalType
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
 
+  typeNode->dispatch = NULL;
+  typeNode->dispatchSize = 0;
+  typeNode->initializeDispatch = NULL;
+
   //assert(NULL != typeNode->typeOperations);
   //assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
@@ -290,6 +299,10 @@ Arcadia_registerScalarType
   typeNode->valueSize = 0;
   typeNode->typeDestructing = typeDestructing;
 
+  typeNode->dispatch = NULL;
+  typeNode->dispatchSize = 0;
+  typeNode->initializeDispatch = NULL;
+
   assert(NULL != typeNode->typeOperations);
   assert(NULL == typeNode->typeOperations->objectTypeOperations);
 
@@ -310,6 +323,8 @@ Arcadia_registerObjectType
     size_t nameLength,
     size_t valueSize,
     Arcadia_TypeValue parentObjectType,
+    size_t dispatchSize,
+    void (*initializeDispatch)(Arcadia_Thread*, Arcadia_Dispatch*),
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
@@ -323,19 +338,52 @@ Arcadia_registerObjectType
       Arcadia_Thread_jump(thread);
     }
   }
+
   TypeNode* typeNode = NULL;
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
+
   typeNode->kind = Arcadia_TypeKind_Object;
   typeNode->typeName = typeName;
   typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = parentObjectType;
-  if (typeNode->parentObjectType) {
-    if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode->parentObjectType)) { /* @todo: Can raise due to allocation failure or lock count overflow. */
-      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
-    }
-  }
+
   typeNode->valueSize = valueSize;
   typeNode->typeDestructing = typeDestructing;
+
+  typeNode->dispatch = NULL;
+  typeNode->dispatchSize = dispatchSize;
+  typeNode->initializeDispatch = NULL;
+
+  // Validate relation with parent object type if any.
+  if (typeNode->parentObjectType) {
+    if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), typeNode->parentObjectType)) {
+      // Can fail due to allocation failure or lock count overflow.
+      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+      Arcadia_Thread_jump(thread);
+    }
+    if (dispatchSize < typeNode->parentObjectType->dispatchSize) {
+      // Can fail due to invalid inputs.
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+      Arcadia_Thread_jump(thread);
+    }
+  }
+
+  // Initialize dispatch.
+  typeNode->dispatch = malloc(dispatchSize);
+  if (!typeNode->dispatch) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  memset(typeNode->dispatch, 0, dispatchSize);
+  if (typeNode->parentObjectType) {
+    if (typeNode->parentObjectType->dispatch) {
+      memcpy(typeNode->dispatch, typeNode->parentObjectType->dispatch, typeNode->parentObjectType->dispatchSize);
+    }
+  }
+  if (initializeDispatch) {
+    (*initializeDispatch)(thread, typeNode->dispatch);
+  }
 
   assert(NULL != typeNode->typeOperations);
   assert(NULL != typeNode->typeOperations->objectTypeOperations);
@@ -377,6 +425,10 @@ Arcadia_registerEnumerationType
   typeNode->typeOperations = typeOperations;
   typeNode->valueSize = valueSize;
   typeNode->typeDestructing = typeDestructing;
+
+  typeNode->dispatch = NULL;
+  typeNode->dispatchSize = 0;
+  typeNode->initializeDispatch = NULL;
 
   assert(NULL != typeNode->typeOperations);
 
@@ -446,6 +498,18 @@ Arcadia_Type_getName
   assert(NULL != type);
   TypeNode* typeNode = (TypeNode*)type;
   return typeNode->typeName;
+}
+
+Arcadia_Dispatch*
+Arcadia_Type_getDispatch
+  (
+    Arcadia_TypeValue type
+  )
+{
+  assert(NULL != type);
+  TypeNode* typeNode = (TypeNode*)type;
+  assert(NULL != typeNode->dispatch);
+  return typeNode->dispatch;
 }
 
 Arcadia_Type_Operations const*

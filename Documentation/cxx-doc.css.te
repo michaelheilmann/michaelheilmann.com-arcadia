@@ -63,7 +63,7 @@ section.cxx-entity > h2::before {
 }
 
 /* display of remarks, parameter lists, error lists, and enumeration element lists. */
-section.cxx.enumeration-elements > div
+section.cxx.enumeration-elements > div,
 section.cxx.errors > div,
 section.cxx.parameters > div,
 section.cxx.remarks > div
@@ -71,7 +71,7 @@ section.cxx.remarks > div
   border-bottom-width: 2px;
   border-bottom-style: solid;
   border-bottom-color: lightgray;
-
+  
   & div:nth-child(1) {
     margin-top: 1rem;
     margin-bottom: 1rem;

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -34,6 +34,13 @@ Arcadia_DirectoryIteratorLinux_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DirectoryIteratorLinux* self
+  );
+
+static void
+Arcadia_DirectoryIteratorLinux_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DirectoryIteratorLinuxDispatch* self
   );
 
 static void
@@ -134,11 +141,20 @@ Arcadia_DirectoryIteratorLinux_constructImpl
       Arcadia_Thread_jump(thread);
     }
   }
-  ((Arcadia_DirectoryIterator*)self)->getValue = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorLinux_getValue;
-  ((Arcadia_DirectoryIterator*)self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_hasValue;
-  ((Arcadia_DirectoryIterator*)self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_nextValue;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
+}
+
+static void
+Arcadia_DirectoryIteratorLinux_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DirectoryIteratorLinuxDispatch* self
+  )
+{
+  ((Arcadia_DirectoryIteratorDispatch*)self)->getValue = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorLinux_getValue;
+  ((Arcadia_DirectoryIteratorDispatch*)self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_hasValue;
+  ((Arcadia_DirectoryIteratorDispatch*)self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_nextValue;  
 }
 
 Arcadia_DirectoryIteratorLinux*

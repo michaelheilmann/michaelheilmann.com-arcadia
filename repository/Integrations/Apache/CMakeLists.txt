@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -26,7 +26,7 @@ list(APPEND ${MyTargetName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sourc
 
 list(APPEND ${MyTargetName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Integrations/Apache/Main.c)
 
-list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.Machine ${MyProjectName}.ARMS)
+list(APPEND ${MyTargetName}.Libraries ${MyProjectName}.Machine)
 
 EndProduct(${MyTargetName})
 set_target_properties(${MyTargetName} PROPERTIES OUTPUT_NAME "arcadia")

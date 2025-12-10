@@ -1,24 +1,27 @@
-<h3 id="schema-type">3.6 Schema type</h3>
-<p>A value of type \(\textit{Schema}_{\textit{DDLS}}\) are represented by a \(\textit{Map}\) value.
+<h3 id="schema-type">3.8 Schema type</h3>
+<p>A value of type \(\ddls{\textit{Schema}}\) are represented by a \(\textit{Map}\) value.
    The map contains three entries.</p>
 
-<ul>
-  <li>\(\left(\texttt{kind}, \texttt{Schema}\right)\) where \(\texttt{Schema}\) is of type \(\textit{String}\).</li>
-  <li>\(\left(\texttt{name}, v\right)\) where \(v\) is of type \(\textit{String}\).</li>
-  <li>\(\left(\texttt{definition}, w\right)\) where \(w\) is a value of type \(\textit{Value}_{\textit{DDLS}}\).</li>
-</ul>
-
 <p>The translation function is hence given by</p>
-\[
-\sigma
-\left(
-  [\left(\texttt{kind},\texttt{Schema}\right),
-   \left(\texttt{name}, v\right),
-   \left(\texttt{definition}, w\right)]
-\right)
-=
-\left(v,\sigma\left(w\right)\right)
-\]
-
-<p>Given a schema value \( w = (x,y) \) with name \(x\) and definition \(y\) we write
-   \(w.\textit{name}\) to denote \(x) and \(w.\textit{definition}\) to denote \(y\).</p>
+<table class="syntax-directed-translation">
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      &\left[ \left(\texttt{kind},\texttt{Schema}\right), \left(\texttt{name}, a@@2 \right), \left(\texttt{definition}, b@@3 \right)  \right]@@1\\
+      &\wedge\;\texttt{kind} \in \ddl{\textit{Name}}\\
+      &\wedge\;\texttt{Schema} \in \ddl{\textit{String}}\\
+      &\wedge\;a \in \ddl{\textit{String}}\\
+      &\wedge\;b \in \ddl{\textit{Map}}\\
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} =
+      \begin{cases}
+      \ValidationError & \text{if } 2.\text{value} \in \ddls{\textit{Error}} \vee 3.\text{value} \in\ddls{\textit{Error}} \vee 3.\text{value} \not\in\ddls{\textit{Value}}\text{,}\\
+      \left(\text{SchemaTag}, 2.\text{value}, 3.\text{value}\right) & \text{otherwise.}
+      \end{cases}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+</table>

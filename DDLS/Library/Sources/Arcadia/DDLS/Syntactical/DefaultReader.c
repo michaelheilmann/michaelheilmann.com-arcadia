@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,6 +21,7 @@
 #include "Arcadia/DDLS/Nodes/Include.h"
 
 #include "Arcadia/DDLS/Symbols/AnySymbol.h"
+#include "Arcadia/DDLS/Symbols/ChoiceSymbol.h"
 #include "Arcadia/DDLS/Symbols/ListSymbol.h"
 #include "Arcadia/DDLS/Symbols/MapSymbol.h"
 #include "Arcadia/DDLS/Symbols/MapEntrySymbol.h"
@@ -34,6 +35,14 @@ readAnyNode
     Arcadia_Thread* thread,
     Arcadia_DDLS_DefaultReader* self,
     Arcadia_DDLS_AnySymbol* source
+  );
+
+static Arcadia_DDLS_ChoiceNode*
+readChoiceNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_DefaultReader* self,
+    Arcadia_DDLS_ChoiceSymbol* source
   );
 
 static Arcadia_DDLS_ListNode*
@@ -92,6 +101,13 @@ Arcadia_DDLS_DefaultReader_constructImpl
   );
 
 static void
+Arcadia_DDLS_DefaultReader_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_DefaultReaderDispatch* self
+  );
+
+static void
 Arcadia_DDLS_DefaultReader_visitImpl
   (
     Arcadia_Thread* thread,
@@ -108,7 +124,7 @@ Arcadia_DDLS_DefaultReader_runImpl
 
 static const Arcadia_ObjectType_Operations _Arcadia_DDLS_DefaultReader_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_DefaultReader_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DDLS_DefaultReader_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_DefaultReader_visitImpl,
 };
 
@@ -130,6 +146,27 @@ readAnyNode
   )
 {
   Arcadia_DDLS_AnyNode* target = Arcadia_DDLS_AnyNode_create(thread);
+  return target;
+}
+
+static Arcadia_DDLS_ChoiceNode*
+readChoiceNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_DefaultReader* self,
+    Arcadia_DDLS_ChoiceSymbol* source
+  )
+{
+  Arcadia_DDLS_ChoiceNode* target = Arcadia_DDLS_ChoiceNode_create(thread);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)source->choices); i < n; ++i) {
+    Arcadia_DDLS_Symbol* symbolElement = (Arcadia_DDLS_Symbol*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, source->choices, i, _Arcadia_DDLS_Symbol_getType(thread));
+    if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)symbolElement, _Arcadia_DDLS_SchemaSymbol_getType(thread))) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_DDLS_Node* symbolNode = readNode(thread, self, symbolElement);
+    Arcadia_List_insertBackObjectReferenceValue(thread, target->choices, (Arcadia_Object*)symbolNode);
+  }
   return target;
 }
 
@@ -184,6 +221,9 @@ readNode
   switch (source->kind) {
    case Arcadia_DDLS_SymbolKind_Any: {
      return (Arcadia_DDLS_Node*)readAnyNode(thread, self, (Arcadia_DDLS_AnySymbol*)source);
+   } break;
+   case Arcadia_DDLS_SymbolKind_Choice: {
+     return (Arcadia_DDLS_Node*)readChoiceNode(thread, self, (Arcadia_DDLS_ChoiceSymbol*)source);
    } break;
    case Arcadia_DDLS_SymbolKind_List: {
      return (Arcadia_DDLS_Node*)readListNode(thread, self, (Arcadia_DDLS_ListSymbol*)source);
@@ -281,8 +321,6 @@ Arcadia_DDLS_DefaultReader_constructImpl
   //
   self->parser = Arcadia_DDL_Parser_create(thread);
   //
-  self->run = &Arcadia_DDLS_DefaultReader_runImpl;
-  //
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
   Arcadia_Languages_StringTable* stringTable = Arcadia_DDL_Parser_getStringTable(thread, self->parser);
 #define Define(Variable, Text) \
@@ -299,6 +337,16 @@ Arcadia_DDLS_DefaultReader_constructImpl
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
+}
+
+static void
+Arcadia_DDLS_DefaultReader_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_DefaultReaderDispatch* self
+  )
+{
+  self->run = &Arcadia_DDLS_DefaultReader_runImpl;
 }
 
 static void
@@ -330,7 +378,7 @@ Arcadia_DDLS_DefaultReader_runImpl
     Arcadia_String* input
   )
 {
-  Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_create(thread);
+  Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
   Arcadia_DDL_Parser_setInput(thread, self->parser, input);
   Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, self->parser);
   Arcadia_DDLS_SymbolReader* symbolReader = Arcadia_DDLS_SymbolReader_create(thread, stringTable);
@@ -360,4 +408,4 @@ Arcadia_DDLS_DefaultReader_run
     Arcadia_DDLS_DefaultReader* self,
     Arcadia_String* input
   )
-{ return self->run(thread, self, input); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_DDLS_DefaultReader, run, self, input); }

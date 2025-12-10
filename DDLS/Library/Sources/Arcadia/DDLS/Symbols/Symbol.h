@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -40,8 +40,15 @@ typedef struct Arcadia_DDLS_Scope Arcadia_DDLS_Scope;
 /// An "any" symbol.
 #define Arcadia_DDLS_SymbolKind_Any (6)
 
+/// A "choice" symbol.
+#define Arcadia_DDLS_SymbolKind_Choice (7)
+
 Arcadia_declareObjectType(u8"Arcadia.DDLS.Symbol", Arcadia_DDLS_Symbol,
                           u8"Arcadia.Object");
+
+struct Arcadia_DDLS_SymbolDispatch {
+  Arcadia_ObjectDispatch parent;
+};
 
 struct Arcadia_DDLS_Symbol {
   Arcadia_Object parent;

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -52,10 +52,14 @@
 Arcadia_declareObjectType(u8"Arcadia.Engine.BackendContext", Arcadia_Engine_BackendContext,
                           u8"Arcadia.Object")
 
-struct Arcadia_Engine_BackendContext {
-  Arcadia_Object _parent;
+struct Arcadia_Engine_BackendContextDispatch {
+  Arcadia_ObjectDispatch _parent;
 
   void (*update)(Arcadia_Thread* thread, Arcadia_Engine_BackendContext* self);
+};
+
+struct Arcadia_Engine_BackendContext {
+  Arcadia_Object _parent;
 };
 
 /// @brief Update this backend context.

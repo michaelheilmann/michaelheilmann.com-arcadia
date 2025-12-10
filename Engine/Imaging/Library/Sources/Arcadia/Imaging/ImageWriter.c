@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,7 +21,7 @@ Arcadia_Imaging_ImageWriter_getSupportedTypes
     Arcadia_Thread* thread,
     Arcadia_Imaging_ImageWriter* self
   )
-{ return self->getSupportedTypes(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Imaging_ImageWriter, getSupportedTypes, self); }
 
 void
 Arcadia_Imaging_ImageWriter_write
@@ -31,7 +31,7 @@ Arcadia_Imaging_ImageWriter_write
     Arcadia_List* source,
     Arcadia_Imaging_ImageWriterParameters* target
   )
-{ self->write(thread, self, source, target); }
+{ Arcadia_VirtualCall(Arcadia_Imaging_ImageWriter, write, self, source, target); }
 
 static void
 Arcadia_Imaging_ImageWriter_constructImpl
@@ -40,10 +40,16 @@ Arcadia_Imaging_ImageWriter_constructImpl
     Arcadia_Imaging_ImageWriter* self
   );
 
+static void
+Arcadia_Imaging_ImageWriter_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_ImageWriterDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_ImageWriter_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Imaging_ImageWriter_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -71,10 +77,14 @@ Arcadia_Imaging_ImageWriter_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
-  self->getSupportedTypes = NULL;
-  self->write = NULL;
-
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_Imaging_ImageWriter_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_ImageWriterDispatch* self
+  )
+{ }

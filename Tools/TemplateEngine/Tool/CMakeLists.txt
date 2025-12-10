@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -15,25 +15,25 @@
 
 cmake_minimum_required(VERSION 4.1.3)
 
-set(MyExecutableName ${MyProjectName}.Tools.TemplateEngine)
+set(MyTool ${MyProjectName}.Tools.TemplateEngine)
 
-if (NOT TARGET ${MyExecutableName})
+if (NOT TARGET ${MyTool})
 
-  BeginProduct(${MyExecutableName} executable)
+  BeginProduct(${MyTool} executable)
 
-  set(${MyExecutableName}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
+  set(${MyTool}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h @ONLY)
-  list(APPEND ${MyExecutableName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
-  list(APPEND ${MyExecutableName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h)
+  list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
+  list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h)
 
-  list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Main.c)
+  list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Main.c)
 
-  list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library)
+  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library)
 
-  EndProduct(${MyExecutableName})
+  EndProduct(${MyTool})
 
-  install(TARGETS ${MyExecutableName} RUNTIME DESTINATION bin/$<CONFIG>) # Wrap into *Product API.
-  set_target_properties(${MyExecutableName} PROPERTIES FOLDER "Tools/TemplateEngine") # Wrap into *Product API.
+  install(TARGETS ${MyTool} RUNTIME DESTINATION bin/$<CONFIG>) # Wrap into *Product API.
+  set_target_properties(${MyTool} PROPERTIES FOLDER "Tools/TemplateEngine") # Wrap into *Product API.
 
 endif()

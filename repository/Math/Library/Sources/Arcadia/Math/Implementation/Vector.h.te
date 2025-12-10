@@ -21,6 +21,10 @@
 Arcadia_declareObjectType(u8"Arcadia.Math.Vector@{dimensionality}@{scalarSuffix}", Arcadia_Math_Vector@{dimensionality}@{scalarSuffix},
                           u8"Arcadia.Object");
 
+struct Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}Dispatch {
+  Arcadia_ObjectDispatch _parent;
+};
+
 struct Arcadia_Math_Vector@{dimensionality}@{scalarSuffix} {
   Arcadia_Object _parent;
   @{scalarType} elements[@{dimensionality}];

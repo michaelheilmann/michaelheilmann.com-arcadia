@@ -15,8 +15,6 @@
 
   <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=3'>
   <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=3'>
-  <link rel='canonical' href='https://michaelheilmann.com/specifications/data-definition-language/index.html'>
-  
   <script>
   MathJax = {
     startup: {
@@ -31,9 +29,7 @@
     }
   }
   </script>
-  
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
-  <title>Data Definition Language</title>
   <style>
   /* the left-hand side of a grammar rule */
 my-lhs {
@@ -99,24 +95,84 @@ div.box code {
   /*background-color: rgb(215, 210, 203);*/
 }
 
-  my-sem, my-syn, my-lex {
-    font-family: my-code-font, monospace;
-  }
-  my-syn::after {
-    content: "<sub>syn/sub>"
-  }
-  my-sem {
-    font-style: italic;
-    font-family: my-default-font;
-  }
-  my-sem::before {
-    content: "sem:"
-  }
-  </style>
+my-formula-box.align-left > mjx-container {
+  text-align: left!important;
+}
+my-formula-box.align-right > mjx-container {
+  text-align: right!important;
+}
 
+table.syntax-directed-translation {
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+table.syntax-directed-translation, tr, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+table.syntax-directed-translation td {
+  padding: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+table.syntax-directed-translation td:nth-child(2)  {
+  width: 50%;
+  text-align: right;
+}
+
+div.abstract {
+  font-style: italic;
+}
+
+my-formula-box.align-left > mjx-container {
+  text-align: left!important;
+}
+
+my-sem, my-syn, my-lex {
+  font-family: my-code-font, monospace;
+}
+my-syn::after {
+  content: "<sub>syn/sub>"
+}
+my-sem {
+  font-style: italic;
+  font-family: my-default-font;
+}
+my-sem::after {
+  content: "<sub>sem</sub>"
+}
+
+my-sem, my-syn, my-lex {
+  font-family: my-code-font, monospace;
+}
+my-syn::after {
+  content: "<sub>syn/sub>"
+}
+my-sem {
+  font-style: italic;
+  font-family: my-default-font;
+}
+my-sem::before {
+  content: "sem:"
+}
+
+  </style>
+  
+  <link rel='canonical' href='https://michaelheilmann.com/specifications/data-definition-language/index.html'>
+  <title>Data Definition Language</title>
 </head>
 <body class="my-content-page-1">
   <header>
+  <div style="display:none">
+\[
+\newcommand{\ListType}{{\text{List}}}
+\newcommand{\ListEmpty}{{\left[\right]}}
+\newcommand{\ListLength}[1]{{\ell\left(#1\right)}}
+\newcommand{\ListAt}[2]{{{#1}_{#2}}}
+\]
+</div>
+
   <div>
   <a href="https://michaelheilmann.com/">Home</a>
   </div>
@@ -124,134 +180,160 @@ div.box code {
   <main>
     <div class="left-column"></div>
     <div class="center-column">
+    
     <h1>Data Definition Language</h1>
+    
     <h2 id="introduction">1 Introduction</h2>
     <p>This document is the specification of the <em>Data Definition Language</em>.
-    Programs of this language are sets of UTF8 files of this language and describe structured data for the purpose of for exchanging that data between entities (humans and machines alike).
-    The language provides scalar types (boolean type, number type, string type, and void type)  as well as aggregate types (map values and list values).
-    </p>
+    Programs of this language are sequences of Unicode code points and describe structured data for the purpose of for exchanging that data between entities (humans and machines alike).
+    The programs describes data in terms of typed value and this specificiation describes two aspects; language provides scalar types (boolean type, number type, string type,   and void
+    type) as well as aggregate types (map values and list values). This specification describes the translation from Unicode code points to typed values.</p>
+        
+    <h2 id="translation">2 Translation</h2>
+    <p>A program of the DDL language is translated into values. This translation happens in three phases: The <em>lexical translation</em> translates Unicode     code
+    points to words. The <em>syntactical translation</em> filters the resulting sequence of words and then translates these words into a sentence. The  <em>semantical
+    translation</em> translates sentences into values t.</p>
 
-    <p>
-    The language is insipired by JSON (see <a href="https://www.ecma-international.org/publications-and-standards/standards/ecma-404/">ECMA-404 The JSON interchange syntax, 2nd edition, December 2017</a> for more information).
-    A conversion between JSON and DDL is possible without the loss of data.
-    </p>
+    <h2 id="lexical-translation">3 Lexical Translation</h2>
+<p>The lexical translation translates a sequence of Unicode code points provided as input a sequence of words.</p>
+<p>The lexical translation of the <em>Data Definition Language</em> is based on the <em>Common Lexical Translations</em>
+(see <a href="https://michaelheilmann.com/specifications/common-lexical-translations">https://michaelheilmann.com/specifications/common-lexical-translations</a>
+for more information).</p>
 
-    <h2 id="lexical-specification">2 Lexical Specification</h2>
-<p>The lexical specification of the <em>Data Definition Language</em> is based on the <em>Common Lexical Specification</em>
-(see <a href="https://michaelheilmann.com/specifications/common-lexical-specification">https://michaelheilmann.com/specifications/common-lexical-specification</a> for more information).
-The Data Definition Language lexical specification profile is obtained by adjusting the definition of the
-<code>Lexical.Word</code> of the <Full lexical specification profile:</p>
+<p>The lexical grammar consists of</p>
+<ul>
+  <li>a set of non-terminals \(\textit{DDL.Lexical.NonTerminals}\) and the set of terminals \(\textit{DDL.Lexical.Terminals}\) which are disjoint</li>
+  <li>a set of production rules \(\textit{DDL.Lexical.ProductionRules}\), which are layed down in this section, and</li>
+  <li>a starting symbol \(\text{DDL.Lexical.Words}\) which is element of \(\textit{DDL.Lexical.NonTerminals}\).</li>
+</ul>
 
-<div class="box">
-<div class="body">
-<p><code>
-Lexical.Word : Lexical.Boolean<br/>
-Lexical.Word : Lexical.Number<br/>
-Lexical.Word : Lexical.String<br/>
-Lexical.Word : Lexical.Void<br/>
-Lexical.Word : Lexical.Name<br/>
-Lexical.Word : Lexical.LeftCurlyBracket<br/>
-Lexical.Word : Lexical.RightCurlyBracket<br/>
-Lexical.Word : Lexical.LeftSquareBracket<br/>
-Lexical.Word : Lexical.RightSquareBracket<br/>
-Lexical.Word : Lexical.Comma<br/>
-/*whitespace, newline, and comment are not considered the syntactical grammar*/
-Lexical.Word : Lexical.Whitespace<br/>
-Lexical.Word : Lexical.Newline<br/>
-Lexical.Word : Lexical.Comment<br/>
-</code></p>
-</div>
-</div>
-
-    <h2 id="syntactical-specification">3 Syntactical Specification</h2>
-<p>The syntactical grammar describes the translation of the words into sentences. The goal non-terminal of the syntactical grammar is the sentence <code>syn:Sentence</code> symbol.</p>
-
-<p>The words <code>lex:Whitespace</code> and <code>lex:LineTerminator</code> are removed from the sequence of words before the translation to sentences is performed.</p>
-
-<p>The goal sentence <code>syn:Sentence</code> is defined by</p>
+<p>The two rules, defined in terms of the <em>Common Lexical translations</em>, are defined as follows:</p>
 
 <div class="box">
-<p><code>
-syn:Sentence : syn:Value
-</code></p>
+<my-formula-box class="align-left">\[\begin{array}{ll}
+\text{DDL.Lexical.Words} &: \text{DDL.Lexical.Word}^*\\
+\text{DDL.Lexical.Word} &:\;\text{Lexical.Boolean}\\
+                        &|\;\text{Lexical.Number}\\
+                        &|\;\text{Lexical.String}\\
+                        &|\;\text{Lexical.Void}\\
+                        &|\;\text{Lexical.Name}\\
+                        &|\;\text{Lexical.LeftCurlyBracket}\\
+                        &|\;\text{Lexical.RightCurlyBracket}\\
+                        &|\;\text{Lexical.LeftSquareBracket}\\
+                        &|\;\text{Lexical.RightSquareBracket}\\
+                        &|\;\text{Lexical.Comma}\\
+                        &|\;\text{Lexical.Whitespace}\\
+                        &|\;\text{Lexical.Newline}\\
+                        &|\;\text{Lexical.Comment}\\
+\end{array}\]</my-formula-box>
 </div>
 
-<p>The sentence <code>syn:Value</code> is defined by</p>
+<p>The lexical translation translates a sequence of Unicode code points into words.
+   This resulting sequence of words is then consumed by the syntactical translation.</p>
+
+    <h2 id="syntactical-translation">4 Syntactical Translation</h2>
+<p>The syntactical translation translates a sequence of words provided by the lexical translation into a sentence.</p>
+
+<p>The syntactical grammar consists of</p>
+
+<ul>
+  <li>a set of non-terminals \(\textit{DDL.Syntactical.NonTerminals}\) and the set of terminals \(\textit{DDL.Syntactical.Terminals}\) which are disjoint</li>
+  <li>a set of production rules \(\textit{DDL.Syntactical.ProductionRules}\), which are layed down in this section, and</li>
+  <li>a starting symbol \(\textit{DDL.Syntactical.Sentence}\)> which is element of \(\textit{DDL.Syntactical.NonTerminals}\).</li>
+</ul>
+
+<p><b>Important:</b>The following words are removed from the sequence of words before its translation
+into a sentence:</p>
+<ul>
+  <li>\(\text{DDL.Lexical.Whitespace}\),</li>
+  <li>\(\text{DDL.Lexical.Newline}\), and</li>
+  <li>\(\text{DDL.Lexical.Comment}\)</li>
+</ul>
 
 <div class="box">
-<p><code>
-syn:Value : syn:Map<br/>
-syn:Value : syn:List<br/>
-syn:Value : syn:String<br/>
-syn:Value : syn:Number<br/>
-syn:Value : syn:Boolean<br/>
-syn:Value : sny:Void
-</code></p>
+<my-formula-box class="align-left">\[\begin{aligned}
+&\text{DDL.Syntactical.Sentence} : \text{DDL.Syntactical.Value}
+\end{aligned}\]</my-formula-box>
 </div>
 
-<p>The sentence <code>syn:String</code> is defined by</p>
-<div class="box"><p><code>
-syn:String : lex:String
-</code></p></div>
+<h3>4.1 DDL.Syntactical.Value</h3>
+<p>The sentence \(\text{DDL.Syntactical.Value}\) is defined by</p>
 
-<p>The sentence <code>syn:Number</code> is defined by</p>
-<div class="box"><p><code>
-syn:Number : lex:Number
-</code></p></div>
+<div class="box">
+<my-formula-box class="align-left">\[\begin{aligned}
+&\text{DDL.Syntactical.Value} : \text{DDL.Syntactical.Map}\\
+&\text{DDL.Syntactical.Value} : \text{DDL.Syntactical.List}\\
+&\text{DDL.Syntactical.Value} : \text{DDL.Syntactical.String}\\
+&\text{DDL.Syntactical.Value} : \text{DDL.Syntactical.Number}\\
+&\text{DDL.Syntactical.Value} : \text{DDL.Syntactical.Boolean}\\
+&\text{DDL.Syntactical.Value} : \text{DDL.Syntactical.Void}
+\end{aligned}\]</my-formula-box>
+</div>
 
-<p>The sentence <code>syn:Boolean</code> is defined by</p>
-<div class="box"><p><code>
-syn:Boolean : lex:Boolean
-</code></p></div>
+<h3>4.2 DDL.Syntactical.String</h3>
+<p>The sentence \(\text{DDL.Syntactical.String}\) is defined by</p>
+<my-formula-box class="align-left">\[\begin{aligned}
+&\text{DDL.Syntactical.String} : \text{Lexical.String}
+\end{aligned}\]</my-formula-box>
 
-<p>The sentence <code>syn:Void</code> is defined by</p>
-<div class="box"><p><code>
-syn:Void : lex:Void
-</code></p></div>
+<h3>4.2 DDL.Syntactical.Number</h3>
+<p>The sentence \(\text{DDL.Syntactical.Number}\) is</p>
+<my-formula-box class="align-left">\[\begin{aligned}
+&\text{DDL.Syntactical.Number} : \text{Lexical.Number}
+\end{aligned}\]</my-formula-box>
 
-<p>The sentence <code>syn:Map</code> is defined by</p>
+<h3>4.3 DDL.Syntactical.Boolean</h3>
+<p>The sentence \(\text{DDL.Syntactical.Boolean}\) is</p>
+<my-formula-box class="align-left">\[\begin{aligned}
+&\text{DDL.Syntactical.Boolean} : \text{Lexical.Boolean}
+\end{aligned}\]</my-formula-box>
 
-<div class="box"><p><code>
-syn:Map : lex:LeftCurlyBracket<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;syn:MapBody<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lex:RightCurlyBracket<br/>
-<br/>
-syn:MapBody : syn:MapBodyElement syn:MapBodyRest<br/>
-syn:MapBody : ε<br/>
-<br/>
-syn:MapBodyRest : lex:Comma syn:MapBodyElement syn:MapBodyRest <br/>
-syn:MapBodyRest : lex:Comma<br/>
-syn:MapBodyRest : ε<br/>
-syn:MapBodyElement : lex:Name lex:Colon syn:Value
-</code></p></div>
+<h3>4.4 DDL.Syntactical.Void</h3>
+<p>The sentence \(\text{DDL.Syntactical.Void}\) is</p>
+<my-formula-box class="align-left">\[\begin{aligned}
+&\text{DDL.Syntactical.Void} : \text{Lexical.Void}
+\end{aligned}\]</my-formula-box>
 
-<p>The sentence <code>syn:List</code> is defined by</p>
+<h3>4.5 DDL.Syntactical.Map</h3>
+<p>The sentence \(\text{DDL.Syntactical.Map}\) is</p>
 
-<div class="box"><p><code>
-syn:List : lex:LeftSquareBracket<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;syn:ListBody<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lex:RightSquareBracket<br/>
-<br/>
-syn:ListBody : syn:ListBodyElement syn:ListBodyRest<br/>
-syn:ListBody : ε<br/>
-<br/>
-syn:ListBodyRest : lex:Comma syn:ListBodyElement syn:ListBodyRest<br/>
-syn:ListBodyRest : lex:Comma<br/>
-syn:ListBodyRest : ε<br/>
-<br/>
-syn:ListBodyElement : syn:Value
-</code></p></div>
+<my-formula-box class="align-left">\[\begin{aligned}
+&\text{DDL.Syntactical.Map} :\text{Lexical.LeftCurlyBracket}\;\text{DDL.Syntactical.MapBody}\;\text{Lexical.RightCurlyBracket}\\
+\\
+&\text{DDL.Syntactical.MapBody} : \text{DDL.Syntactical.MapBodyElement}\;\text{DDL.Syntactical.MapBodyRest}\\
+&\text{DDL.Syntactical.MapBody} : \epsilon\\
+\\
+&\text{DDL.Syntactical.MapBodyRest} : \text{Lexical.Comma}\;\text{DDL.Syntactical.MapBodyElement}\;\text{DDL.Syntactical.MapBodyRest}\\
+&\text{DDL.Syntactical.MapBodyRest} : \text{Lexical.Comma}\\
+&\text{DDL.Syntactical.MapBodyRest} : \epsilon\\
+&\text{DDL.Syntactical.MapBodyElement} : \text{Lexical.Name}\;\text{Lexical.Colon}\;\text{DDL.Syntactical.Value}
+\end{aligned}\]</my-formula-box>
 
-    <h2 id="semantical-specification">4 Semantical Specification</h2>
-<p>
-The <em>Data Definition Language</em> language describes structured data in terms of <em>typed values</em>.
-That is, each <em>sentence</em> of the <em>syntactical specification</em> translates to <em>values</em> each of which has <em>type</em>.
+<h3>4.6 DDL.Syntactical.List</h3>
+<p>The sentence \(\text{DDL.Syntactical.List}\) is</p>
 
-The <em>Data Definition Language</em> knows six basic types
-\(\textit{List}\) and \(\textit{Map}\), which are the so called aggregate types, and
-\(\textit{Boolean}\), \(\textit{Number}\), \(\textit{String}\), and \(\textit{Void}\),
-which are the so called scalar types.
-The type \(\textit{Value}\) is defined as the union
+<my-formula-box class="align-left">\[\begin{aligned}
+&\text{DDL.Syntactical.List} : \text{Lexical.LeftSquareBracket}\; \text{DDL.Syntactical.ListBody}\; \text{Lexical.RightSquareBracket}\\
+\\
+&\text{DDL.Syntactical.ListBody} : \text{DDL.Syntactical.ListBodyElement}\; \text{DDL.Syntactical.ListBodyRest}\\
+&\text{DDL.Syntactical.ListBody} : \epsilon\\
+\\
+&\text{DDL.Syntactical.ListBodyRest} : \text{Lexical.Comma}\; \text{DDL.Syntactical.ListBodyElement}\; \text{DDL.Syntactical.ListBodyRest}\\
+&\text{DDL.Syntactical.ListBodyRest} : \text{Lexical.Comma}\\
+&\text{DDL.Syntactical.ListBodyRest} : \epsilon\\
+\\
+&\text{DDL.Syntactical.ListBodyElement} : \text{DDL.Syntactical.Value}
+\end{aligned}\]</my-formula-box>
+
+<p>The syntatical translation translates a sequence of words into one sentence.
+   This resulting sntence is then consumed by the semantical translation.</p>
+
+    <h2 id="semantical-translation">5 Semantical Translation</h2>
+<p>The semantical translation a sentence provided by the syntactical translation into a typed value. The <em>Data Definition Language</em> knows six basic types
+   \(\textit{List}\) and \(\textit{Map}\), which are the so called aggregate types, and \(\textit{Boolean}\), \(\textit{Number}\), \(\textit{String}\),      and
+   \(\textit{Void}\), which are the so called scalar types.</p>
+
+<p>The type \(\textit{Value}\) is defined as the union of all the types above.
 \[\begin{aligned}
 \textit{Value} =&\;\textit{List}\\
             \cup&\;\textit{Map}\\
@@ -260,57 +342,214 @@ The type \(\textit{Value}\) is defined as the union
             \cup&\;\textit{String}\\
             \cup&\;\textit{Void}
 \end{aligned}\]
-There exists type \(\textit{Name}\) representing .
 </p>
 
-<p>To define the semantics of the language, a translation function
-\[
-\sigma : \left(\textit{Terminals} \cup \textit{NonTerminals}\right)* \rightarrow \textit{Name} \cup \textit{Value}
-\] 
-is defined which translates from the set of strings generated by the grammar to types.
-</p>
-
-<h3>4.1 Boolean type</h3>
 <p>
-The type \(\textit{Boolean}\) type has two values \(\textit{true}\) and \(\textit{false}\) which are expressed in the language by the words
-\(\texttt{lex:true}\) and \(\texttt{lex:false}\), respectively (as defined in the syntactical grammar).</p>
+The translation of a sentence into values is described by syntax-directed translations
+(see Aho, Seti, Ullman: Compilers, Principles, Techniques, and Tools; 1st; pp. 305 for more information).
+</p>
 
-\[\begin{aligned}
-\sigma\left(\texttt{syn:Boolean}\right) &= \sigma\left(\texttt{lex:Boolean}\right)\\
-\sigma\left(\texttt{lex:false}\right)   &= \textit{false}\\
-\sigma\left(\texttt{lex:true}\right)    &= \textit{true}
-\end{aligned}\]
+<p>At the end of a translation, the input syntactic form \(x\) has a variable \(x.\text{value}\) which is either
+a value of type \textit{Value}. Furthermore, for each syntactic form, we define two attributes: \(\text{value}\)
+is the computed value of the syntactic form. \(\textit{codePoints}\) is the sequence of code points associated
+with the syntactic form.</p>
 
-<h3>4.2 List type</h3>
+<h3>4.1 Scalar Types</h3>
+<p>This section defines \(\sigma\) for the translation of scalar types.
+
+<h4>4.1.1 Boolean Type</h4>
+<p>The type \(\textit{Boolean}\) type has two values \(\textit{true}\) and \(\textit{false}\) which are expressed in the language by the
+   words \(\texttt{DDL.Lexical.true}\) and \(\texttt{DDL.Lexical.false}\), respectively (as defined in the syntactical grammar).</p>
+
+<p>The semantical translation is defined as follows:</p>
+<table class="syntax-directed-translation">
+  <tr>
+    <td>\(\text{DDL.Syntactical.Boolean}@1 : \text{Lexical.Boolean}@2\)</td>
+    <td>\(\{ 1.\text{value} := 2.\text{value} \}\)</td>
+  </tr>
+  <tr>
+    <td>\(\text{Lexical.Boolean}@1 : \text{Lexical.True}\)</td>
+    <td>\(\{ 1.\text{value} := \textit{true} \}\)</td>
+  </tr>
+  <tr>
+    <td>\(\text{Lexical.Boolean}@1 : \text{Lexical.False}\)</td>
+    <td>\(\{ 1.\text{value} := \textit{false} \}\)</td>
+  </tr>
+</table>
+
+<h4>4.1.2 Number Type</h4>
+<p>
+The type \(\textit{Number}\) represent sequences of Unicode code points that adhere to the constraints defined by \(\textit{DDL.Syntactical.Number}\).
+These Unicode code point sequences represent arbitrary precision integer and arbitrary precision floating point numbers.</p>
+
+<p>The semantical translation is defined as follows:</p>
+
+<table class="syntax-directed-translation">
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+    \text{DDL.Syntactical.Number}@1 : \text{Lexical.Number}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+    \{ 1.\text{value} := 2.\textit{codePoints} \}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+</table>
+
+<p><b>Important:</b> Implementations may want to use typical data types like \(\texttt{int}\) or \(\texttt{float}\). The <em>Data Definition Language</em> does not        impose
+restrictions on the value ranges represented by these number literals. Consequently, the numeric value represented by value of type \(\textit{Number}\) might not be reprentable
+by typical data types like \(\texttt{int}\) or \(\texttt{float}\).</p>
+
+<h4>4.1.3 String Type</h4>
+<p>
+The \(\textit{String}\) type represents sequences of Unicode code points that have the properties defined by \(\text{DDL.Syntactical.String}\).</p>
+
+<p>The semantical translation is defined as follows:</p>
+<table class="syntax-directed-translation">
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+    \text{DDL.Syntactical.String}@1 : \text{Lexical.String}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+    \{ 1.\text{value} := 2.\textit{codePoints} \}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+</table>
+
+<h4>4.1.4 Void Type</h4>
+<p>
+The type <my-sem>sem:Void</my-sem> type has a single values \(\textit{void\} which is expressed in the language by the word \(\textit{void\} (as defined in the syntactical grammar).
+</p>
+
+<p>The semantical translation is defined as follows:</p>
+<table class="syntax-directed-translation">
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+    \text{DDL.Syntactical.Void}@1 : \text{Lexical.Void}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+    \{ 1.\text{value} = \textit{void} \}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+</table>
+
+<h3>4.2 List Type</h3>
 <p>
 The type \(\textit{List}\) represents list of elements. Each element is a DDL node of type \(\textit{Value}\).
-A DDL node of type \(\textit{List}\) is expressed in the language by the sentence \(\texttt{syn:List}\) (as defined in the syntactical grammar).
+A DDL node of type \(\textit{List}\) is expressed in the language by the sentence \(\text{DDL.Syntactical.List}\) (as defined in the syntactical grammar).
 </p>
 
-<p>The semantical representation is defined as
-\[\begin{aligned}
- &\sigma\left(\texttt{syn:List}\right)\\
-=&\sigma\left(\texttt{lex:LeftSquareBracket}\; \texttt{syn:ListBody}\; \texttt{lex:RightSquareBracket} \right)\\
-=&[ \sigma\left(\texttt{syn:ListBody} \right) ]\\
-=&[ \sigma\left(\texttt{syn:ListBodyElement}\; \texttt{syn:ListBodyRest} \right) ]\\
-=&[ \sigma\left(\texttt{syn:ListBodyElement} \right) ] \circ \sigma\left(\texttt{syn:ListBodyRest} \right)
-\end{aligned}\]
-with
-\[
-\sigma\left(\texttt{syn:ListBodyElement} \right) = \sigma\left(\texttt{syn:Value} \right)
-\]
-and
-\[\begin{aligned}
- &\sigma\left(\texttt{syn:ListBodyRest}\right)\\
-=&\sigma\left(\texttt{lex:Comma}\;\texttt{syn:ListBodyElement}\;\texttt{syn:ListBodyRest}\right)\\
-=&[\sigma\left(\texttt{syn:ListBodyElement}\right)] \circ \sigma\left(\texttt{syn:ListBodyRest}\right)
-\end{aligned}\]
-and
-\[\begin{aligned}
-\sigma\left(\texttt{syn:ListBodyRest} \right) &= \sigma\left(\texttt{lex:Comma} \right) = []\\
-\sigma\left(\texttt{syn:ListBodyRest} \right) &= \sigma\left(\epsilon \right) = []
-\end{aligned}\]
-</p>
+<p>The semantical translation is defined as follows:</p>
+<table class="syntax-directed-translation">
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.List}@1 : &\text{Lexical.LeftSquareBracket}\\
+                                       &\text{DDL.Syntactical.ListBody}@2\\
+                                       &\text{Lexical.RightSquareBracket}
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      1.\text{value} = 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.ListBody}@1 : &\text{DDL.Syntactical.ListBodyElement}@2\\
+                                           &\text{DDL.Syntactical.ListBodyRest}@3
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} := \left[ 2.\text{value} \right] \circ 3.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.ListBody}@1 : \epsilon
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} := []
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.ListBodyElement}@1 : \text{DDL.Syntactical.Value}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} := 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.ListBodyRest}@1 :& \text{Lexical.Comma}\\
+                                              & \text{DDL.Syntactical.ListBodyElement}@2\\
+                                              & \text{DDL.Syntactical.ListBodyRest}@3
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = \left[ 2.\text{value} \right] \circ 3.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.ListBodyRest}@1 : \text{Lexical.Comma}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = []
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.ListBodyRest}@1 : \epsilon
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = []
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+</table>
 
 <p><b>Example</b></p>
 <div class="box">
@@ -320,91 +559,116 @@ and
 </code></p>
 </div>
 
-<h3>4.3 Map type</h3>
+<h3>4.3 Map Type</h3>
 <p>
 The type \(\textit{Map}\) represents a list of entries. Each entry is a pair. The first element of a pair is a value of type \(\textit{Name}\), the second element is a value of type \(\textit{Value}\).
-A value of type \(\textit{Map}\) is expressed in the language by the sentence \(\texttt{syn:Map}\) (as defined in the syntactical grammar).
+A value of type \(\textit{Map}\) is expressed in the language by the sentence \(\text{DDL.Syntactical.Map}\) (as defined in the syntactical grammar).
 </p>
 
-<p>The semantical representation is defined as
-\[\begin{aligned}
- &\sigma\left(\texttt{syn:Map}\right)\\
-=&\sigma\left(\texttt{lex:LeftCurlyBracket}\; \texttt{syn:MapBody}\; \texttt{lex:RightCurlyBracket} \right)\\
-=&[ \sigma\left(\texttt{syn:MapBody} \right) ]\\
-=&[ \sigma\left(\texttt{syn:MapBodyElement}\; \texttt{syn:MapBodyRest} \right) ]\\
-=&[ \sigma\left(\texttt{syn:MapBodyElement} \right) ] \circ \sigma\left(\texttt{syn:MapBodyRest} \right)
-\end{aligned}
-\]
-with
-\[
-\sigma\left(\texttt{syn:MapBodyElement}\right) = \sigma\left(\texttt{syn:Value} \right)
-\]
-and
-\[\begin{aligned}
- &\sigma\left(\texttt{syn:MapBodyRest}\right)\\
-=&\sigma\left(\texttt{lex:Comma}\;\texttt{syn:MapBodyElement}\;\texttt{syn:MapBodyRest}\right)\\
-=&[\sigma\left(\texttt{syn:MapBodyElement}\right)] \circ \sigma\left(\texttt{syn:MapBodyRest}\right)
-\end{aligned}\]
-and
-\[\begin{aligned}
-\sigma\left(\texttt{syn:MapBodyRest}\right) &= \sigma\left(\texttt{lex:Comma}\right) = []\\
-\sigma\left(\texttt{syn:MapBodyRest}\right) &= \sigma\left(\epsilon\right) = []
-\end{aligned}\]
+<p>The semantical translation is defined as follows:</p>
+<table class="syntax-directed-translation">
 
-and lastly
-\[\begin{aligned}
- &\sigma\left(\texttt{syn:MapBodyElement} \right)\\
-=&\sigma\left(\texttt{lex:Name};\texttt{lex:Colon};\texttt{syn:Value} \right)\\
-=&\left(\sigma\left( \texttt{lex:Name} \right), \sigma\left(\texttt{syn:Value}\right)\right)\\
-\end{aligned}\]
-</p>
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.Map}@1 : &\text{Lexical.LeftCurlyBracket}\\
+                                      &\text{DDL.Syntactical.MapBody}@2\\
+                                      &\text{Lexical.RightCurlyBracket}
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
 
-<p><b>Example</b></p>
-<div class="box">
-<p><code>
-// A map of<br>
-// text to 'Hello, World!'<br>
-// action to 'Print', and<br>
-// fontSize to 12.<br>
-{ text : 'Hello World!', action : 'Print', fontSize: 12 }
-</code></p>
-</div>
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.MapBody}@1 : &\text{DDL.Syntactical.MapBodyElement}@2\\
+                                          &\text{DDL.Syntactical.MapBodyRest}@3
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} := \left[ 2.\text{value} \right] \circ 3.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
 
-<h3>4.4 Number type</h3>
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.MapBody}@1 : \epsilon
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} := []
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.MapBodyRest}@1 : &\text{Lexical.Comma}\\
+                                              &\text{DDL.Syntactical.MapBodyElement}@2\\
+                                              &\text{DDL.Syntactical.MapBodyRest}@3
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = \left[ 2.\text{value} \right] \circ 3.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.MapBodyRest}@1 : \text{Lexical.Comma}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = []
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.MapBodyRest}@1 : \epsilon
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = []
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.MapBodyElement}@1 = \text{Lexical.Name}@2;\text{Lexical.Colon};\text{DDL.Syntactical.Value}@3
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} := \left(2.\text{codePoints}, 3.\text{value}\right)
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+
+</table>
+
+<h3>4.4 Value Type</h3>
 <p>
-The type \(\textit{Number}\) type represents both two's complement integer numbers as well as IEEE754 floating-point numbers (without not-a-number values of infinity values).
-The values of type number are expressed in the language by the word \(\texttt{Number}\) (as defined in the syntactical grammar).
-
-Note that the <code>Data Definition Language</code> does not impose restrictions on the size of the literals or the values.
-Implementations, however, may impose restrictions.
-</p>
-
-<p>The semantical representation is defined as
-\[\begin{aligned}
- &\sigma\left(\texttt{syn:Number}\right)\\
-=&\sigma\left(\texttt{lex:Number}\right)
-\end{aligned}\]
-</p>
-
-<h3>4.5 String type</h3>
-<p>
-The \(\textit{String}\) type represents UTF-8 strings. \(\textit{String}\) values are expressed in the language by the word \(\texttt{syn:String}\)> (as defined in the syntactical grammar).
-At the end of the syntactical translation of a <my-syn>syn:String</my-syn> word, its escape sequences are replaced by the Unicode symbols they are representing. Furthermore, the opening and closing quotes are removed.
-
-Note that the <em>Data Definition Language</em> does not impose restrictions on the size of the literals or the values.
-Implementations, however, may impose restrictions.
-</p>
-
-<p>The semantical representation is defined as</p>
-\[\begin{aligned}
- &\sigma\left(\texttt{syn:String}\right)\\
-=&\sigma\left(\texttt{lex:String}\right)
-\end{aligned}
-\]
-
-<h3>4.6 Value type</h3>
-<p>
-The type \(\textit{Value}\) type is the union type of the types 
+The type \(\textit{Value}\) type is the union type of the types
 \(\textit{Boolean}\),
 \(\textit{List}\),
 \(\textit{Map}\),
@@ -413,48 +677,98 @@ The type \(\textit{Value}\) type is the union type of the types
 \(\textit{Void}\).
 </p>
 
-<p>The semantical representation is defined as
-\[\begin{aligned}
-&\sigma\left(\texttt{syn:Value}\right)=\sigma\left(\texttt{syn:Boolean} \right)\\
-&\sigma\left(\texttt{syn:Value}\right)=\sigma\left(\texttt{syn:List} \right)\\
-&\sigma\left(\texttt{syn:Value}\right)=\sigma\left(\texttt{syn:Map} \right)\\
-&\sigma\left(\texttt{syn:Value}\right)=\sigma\left(\texttt{syn:String} \right)\\
-&\sigma\left(\texttt{syn:Value}\right)=\sigma\left(\texttt{syn:Number} \right)\\
-&\sigma\left(\texttt{syn:Value}\right)=\sigma\left(\texttt{syn:Void} \right)\\
-\end{aligned}
-\]
-</p>
+<p>The semantical translation is defined as follows:</p>
+<table class="syntax-directed-translation">
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.Value}@1 : \text{DDL.Syntactical.Boolean}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.Value}@1 : \text{DDL.Syntactical.List}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.Value}@1 : \text{DDL.Syntactical.Map}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.Value}@1 : \text{DDL.Syntactical.Number}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.Value}@1 : \text{DDL.Syntactical.String}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+    <td>
+    <my-formula-box class="align-left">\[\begin{array}{ll}
+      \text{DDL.Syntactical.Value}@1 : \text{DDL.Syntactical.Void}@2
+    \end{array}\]</my-formula-box>
+    </td>
+    <td>
+    <my-formula-box class="align-right">\[\begin{array}{ll}
+      1.\text{value} = 2.\text{value}
+    \end{array}\]</my-formula-box>
+    </td>
+  </tr>
+</table>
 
-<h3>4.7 Void Type</h3>
-<p>
-The type <my-sem>sem:Void</my-sem> type has a single values <my-sem>void</my-sem> which is expressed in the language by the word <my-sym>sym: Void</my-sym> (as defined in the syntactical grammar).
-</p>
-
-<p>The semantical representation is defined as
-\[\begin{aligned}
- &\sigma\left(\texttt{syn:Void}\right)\\
-=&\sigma\left(\texttt{lex:Void}\right)
-\end{aligned}
-\]
-</p>
-
-<h3>4.8 Name type</h3>
-<p>The values of type \(\textit{Name}\) represent names as expressed in the language by the sentence \(\texttt{lex:Name}\)
-(as defined in the syntactical grammar).</p> 
-
-<p>The semantical representation is defined as
-\[\begin{aligned}
-\sigma\left(\texttt{lex:Name}\right)
-\end{aligned}\]</p>
 
   </div>
   <div class="right-column">
    <nav>
       <ul style="list-style: none">
         <li><a href="#introduction">1 Introduction</a></li>
-        <li><a href="#lexical-specification">2 Lexical Specification</a></li>
-        <li><a href="#syntactical-specification">3 Syntactical Specification</a></li>
-        <li><a href="#semantical-specification">4 Semantical Specification</a></li>
+        <li><a href="#translation">2 Translation</a></li>
+        <li><a href="#lexical-translation">2 Lexical Translation</a></li>
+        <li><a href="#syntactical-translation">3 Syntactical Translation</a></li>
+        <li><a href="#semantical-translation">4 Semantical Translation</a>
+          <ul>
+            <li><a href="#semantical-translation-scalar-types">4.1 Scalar Types</a></li>
+            <li><a href="#semantical-translation-list-type">4.2 List Type</a></li>
+            <li><a href="#semantical-translation-map-type">4.3 Map Type</a></li>
+            <li><a href="#semantical-translation-value-type">4.4 Value Type</a></li>
+          </ul>
+          </li>
       </ul>
     </nav>
   </div>
@@ -464,7 +778,7 @@ The type <my-sem>sem:Void</my-sem> type has a single values <my-sem>void</my-sem
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 9 December 2025.</div>
+      <div>Last modified on 3 January 2026.</div>
     </div>
   </footer>
 </body>

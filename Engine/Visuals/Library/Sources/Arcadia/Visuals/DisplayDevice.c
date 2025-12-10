@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,10 +23,16 @@ Arcadia_Visuals_DisplayDevice_constructImpl
     Arcadia_Visuals_DisplayDevice* self
   );
 
+static void
+Arcadia_Visuals_DisplayDevice_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_DisplayDeviceDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Visuals_DisplayDevice_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Visuals_DisplayDevice_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -54,13 +60,17 @@ Arcadia_Visuals_DisplayDevice_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->getCurrentDisplayMode = NULL;
-  self->getAvailableDisplayModes = NULL;
-  self->getId = NULL;
-  self->getName = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_Visuals_DisplayDevice_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_DisplayDeviceDispatch* self
+  )
+{ }
 
 void
 Arcadia_Visuals_DisplayDevice_getBounds
@@ -72,9 +82,7 @@ Arcadia_Visuals_DisplayDevice_getBounds
     Arcadia_Integer32Value* right,
     Arcadia_Integer32Value* bottom
   )
-{
-  self->getBounds(thread, self, left, top, right, bottom);
-}
+{ Arcadia_VirtualCall(Arcadia_Visuals_DisplayDevice, getBounds, self, left, top, right, bottom); }
 
 Arcadia_Visuals_DisplayMode*
 Arcadia_Visuals_DisplayDevice_getCurrentDisplayMode
@@ -82,9 +90,7 @@ Arcadia_Visuals_DisplayDevice_getCurrentDisplayMode
     Arcadia_Thread* thread,
     Arcadia_Visuals_DisplayDevice* self
   )
-{
-  return self->getCurrentDisplayMode(thread, self);
-}
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_DisplayDevice, getCurrentDisplayMode, self); }
 
 Arcadia_List*
 Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes
@@ -92,9 +98,7 @@ Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes
     Arcadia_Thread* thread,
     Arcadia_Visuals_DisplayDevice* self
   )
-{
-  return self->getAvailableDisplayModes(thread, self);
-}
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_DisplayDevice, getAvailableDisplayModes, self); }
 
 Arcadia_String*
 Arcadia_Visuals_DisplayDevice_getName
@@ -102,7 +106,7 @@ Arcadia_Visuals_DisplayDevice_getName
     Arcadia_Thread* thread,
     Arcadia_Visuals_DisplayDevice* self
   )
-{ return self->getName(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_DisplayDevice, getName, self); }
 
 Arcadia_String*
 Arcadia_Visuals_DisplayDevice_getId
@@ -110,4 +114,4 @@ Arcadia_Visuals_DisplayDevice_getId
     Arcadia_Thread* thread,
     Arcadia_Visuals_DisplayDevice* self
   )
-{ return self->getId(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_DisplayDevice, getId, self); }

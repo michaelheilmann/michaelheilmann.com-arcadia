@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,6 +24,13 @@ Arcadia_DDL_ListNode_constructImpl
   );
 
 static void
+Arcadia_DDL_ListNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_ListNodeDispatch* self
+  );
+
+static void
 Arcadia_DDL_ListNode_visitImpl
   (
     Arcadia_Thread* thread,
@@ -32,7 +39,7 @@ Arcadia_DDL_ListNode_visitImpl
 
 static const Arcadia_ObjectType_Operations _Arcadia_DDL_ListNode_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDL_ListNode_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DDL_ListNode_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDL_ListNode_visitImpl,
 };
 
@@ -66,6 +73,14 @@ Arcadia_DDL_ListNode_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
+
+static void
+Arcadia_DDL_ListNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_ListNodeDispatch* self
+  )
+{ }
 
 static void
 Arcadia_DDL_ListNode_visitImpl

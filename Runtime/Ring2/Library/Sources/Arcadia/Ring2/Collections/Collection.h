@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,12 +25,17 @@
 Arcadia_declareObjectType(u8"Arcadia.Collection", Arcadia_Collection,
                           u8"Arcadia.Object");
 
+struct Arcadia_CollectionDispatch {
+  Arcadia_ObjectDispatch _parent;
+
+  void (*clear)(Arcadia_Thread*, Arcadia_Collection*);
+  Arcadia_SizeValue(*getSize)(Arcadia_Thread*, Arcadia_Collection*);
+  Arcadia_BooleanValue(*isEmpty)(Arcadia_Thread*, Arcadia_Collection*);
+  Arcadia_BooleanValue(*isImmutable)(Arcadia_Thread*, Arcadia_Collection*);
+};
+
 struct Arcadia_Collection {
   Arcadia_Object _parent;
-  void (*clear)(Arcadia_Thread*, Arcadia_Collection*);
-  Arcadia_SizeValue (*getSize)(Arcadia_Thread*, Arcadia_Collection*);
-  Arcadia_BooleanValue (*isEmpty)(Arcadia_Thread*, Arcadia_Collection*);
-  Arcadia_BooleanValue (*isImmutable)(Arcadia_Thread*, Arcadia_Collection*);
 };
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Collection_clear

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,6 +20,10 @@
 #include "Arcadia/Imaging/ImageWriter.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Imaging.Linux.BmpImageWriter", Arcadia_Imaging_Linux_BmpImageWriter, u8"Arcadia.Imaging.ImageWriter");
+
+struct Arcadia_Imaging_Linux_BmpImageWriterDispatch {
+  Arcadia_Imaging_ImageWriterDispatch _parent;
+};
 
 struct Arcadia_Imaging_Linux_BmpImageWriter {
   Arcadia_Imaging_ImageWriter _parent;

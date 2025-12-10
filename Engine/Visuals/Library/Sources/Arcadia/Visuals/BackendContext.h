@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -57,21 +57,22 @@ typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.BackendContext", Arcadia_Visuals_BackendContext,
-                          u8"Arcadia.Engine.BackendContext")
+                          u8"Arcadia.Engine.BackendContext");
+
+struct Arcadia_Visuals_BackendContextDispatch {
+  Arcadia_Engine_BackendContextDispatch _parent;
+
+  Arcadia_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self, Arcadia_Imaging_PixelBuffer* pixelBuffer);
+  Arcadia_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
+  Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
+  void (*update)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
+};
 
 struct Arcadia_Visuals_BackendContext {
   Arcadia_Engine_BackendContext _parent;
 
   /// @brief List of windows.
   Arcadia_List* windows;
-
-  Arcadia_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self, Arcadia_Imaging_PixelBuffer* pixelBuffer);
-
-  Arcadia_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
-
-  Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
-
-  void (*update)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
 };
 
 Arcadia_Visuals_Icon*

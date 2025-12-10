@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -71,6 +71,10 @@
 
 #include "Arcadia/Ring1/Implementation/Real32.h"
 #include "Arcadia/Ring1/Implementation/Real64.h"
+#include "Arcadia/Ring1/Implementation/Real32_getBits.h"
+#include "Arcadia/Ring1/Implementation/Real64_getBits.h"
+#include "Arcadia/Ring1/Implementation/Real32_isFinite.h"
+#include "Arcadia/Ring1/Implementation/Real64_isFinite.h"
 
 #include "Arcadia/Ring1/Implementation/safeAdd.h"
 #include "Arcadia/Ring1/Implementation/safeMultiply.h"

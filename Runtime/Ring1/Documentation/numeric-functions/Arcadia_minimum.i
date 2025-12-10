@@ -1,5 +1,6 @@
 <section class="cxx entity procedure">
-  <h1 id="Arcadia_minimum*">Arcadia_minimum*</h1>
+
+  <h1 id="Arcadia_minimum%2a">Arcadia_minimum*</h1>
 
   <my-signature><code>
   <my-mv>Type</my-mv><br>

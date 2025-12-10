@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,6 +23,13 @@ IcoImageWriter_constructImpl
   (
     Arcadia_Thread* thread,
     IcoImageWriter* self
+  );
+
+static void
+IcoImageWriter_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    IcoImageWriterDispatch* self
   );
 
 static void
@@ -298,8 +305,8 @@ IcoImageWriter_writeImpl
 }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&IcoImageWriter_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&IcoImageWriter_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&IcoImageWriter_visit,
 };
 
@@ -333,10 +340,19 @@ IcoImageWriter_constructImpl
   Arcadia_List* supportedTypes = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, supportedTypes, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"ico", sizeof(u8"ico") - 1))));
   self->supportedTypes = Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(supportedTypes));
-  ((Arcadia_Imaging_ImageWriter*)self)->getSupportedTypes = (Arcadia_ImmutableList*(*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*))&IcoImageWriter_getSupportedTypesImpl;
-  ((Arcadia_Imaging_ImageWriter*)self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & IcoImageWriter_writeImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
+}
+
+static void
+IcoImageWriter_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    IcoImageWriterDispatch* self
+  )
+{
+  ((Arcadia_Imaging_ImageWriterDispatch*)self)->getSupportedTypes = (Arcadia_ImmutableList * (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*)) & IcoImageWriter_getSupportedTypesImpl;
+  ((Arcadia_Imaging_ImageWriterDispatch*)self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & IcoImageWriter_writeImpl;
 }
 
 static void

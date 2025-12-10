@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -31,6 +31,10 @@ typedef struct Arcadia_Visuals_Windows_DisplayDevice Arcadia_Visuals_Windows_Dis
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpennGL4.WGL.WindowBackend", Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend,
                           u8"Arcadia.Visuals.WindowBackend");
+
+struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackendDispatch {
+  Arcadia_Visuals_WindowBackendDispatch _parent;
+};
 
 struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend {
   Arcadia_Visuals_WindowBackend _parent;

@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -34,11 +34,11 @@ if (NOT TARGET ${MyModule})
     set(MyDependenciesDirectory "C:/arcadia-dependencies")
     list(APPEND ${MyModule}.PrivateLibraries ${OPENGL_LIBRARIES})
     if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.OpenAl.Libraries ${MyDependenciesDirectory}/my-openal-$<LOWER_CASE:$<CONFIG>>-x64/lib/OpenAL32.lib winmm.lib Avrt.lib)
-      set(${MyModule}.OpenAl.HeaderFilesDirectory ${MyDependenciesDirectory}/my-openal-$<LOWER_CASE:$<CONFIG>>-x64/include)
+      set(${MyModule}.OpenAl.Libraries ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/openal-soft/lib/OpenAL32.lib winmm.lib Avrt.lib)
+      set(${MyModule}.OpenAl.HeaderFilesDirectory ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/openal-soft/include)
     elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.OpenAl.Libraries ${MyDependenciesDirectory}/my-openal-$<LOWER_CASE:$<CONFIG>>-x86/lib/OpenAL32.lib winmm.lib Avrt.lib)
-      set(${MyModule}.OpenAl.HeaderFilesDirectory ${MyDependenciesDirectory}/my-openal-$<LOWER_CASE:$<CONFIG>>-x86/include)
+      set(${MyModule}.OpenAl.Libraries ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/openal-soft/lib/OpenAL32.lib winmm.lib Avrt.lib)
+      set(${MyModule}.OpenAl.HeaderFilesDirectory ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/openal-soft/include)
     else()
       message(FATAL_ERROR " - unsupported instruction set architecture")
     endif()
@@ -63,10 +63,31 @@ if (NOT TARGET ${MyModule})
 
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Include.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Include.h)
+
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Synthesis/sine.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Synthesis/sine.h)
+
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Resource.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Resource.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/SceneNodeFactory.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/SceneNodeFactory.h)
+
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Resources/SoundSourceResource.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Resources/SoundSourceResource.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/BackendContext.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/BackendContext.h)
+
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/Backend.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/Backend.h)
+
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/Resources/SoundSourceResource.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/Resources/SoundSourceResource.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/BackendContext.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/BackendContext.h)
+
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Scene/SoundSourceNode.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Scene/SoundSourceNode.h)
+
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h @ONLY)
   list(APPEND ${MyModule}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h.i)

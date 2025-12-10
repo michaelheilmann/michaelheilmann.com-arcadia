@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -22,7 +22,7 @@ BeginProduct(${MyDemoName} executable)
 
 list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
-list(APPEND ${MyDemoName}.Libraries ${MyProjectName}.Ring2 ${MyProjectName}.ARMS)
+list(APPEND ${MyDemoName}.Libraries ${MyProjectName}.Ring2)
 
 EndProduct(${MyDemoName})
 

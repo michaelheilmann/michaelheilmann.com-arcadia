@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -28,7 +28,11 @@ typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Vis
 #endif
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ViewportResource", Arcadia_Visuals_Implementation_OpenGL4_ViewportResource,
-                          u8"Arcadia.Visuals.Implementation.ViewportResource")
+                          u8"Arcadia.Visuals.Implementation.ViewportResource");
+
+struct Arcadia_Visuals_Implementation_OpenGL4_ViewportResourceDispatch {
+  Arcadia_Visuals_Implementation_ViewportResourceDispatch _parent;
+};
 
 struct Arcadia_Visuals_Implementation_OpenGL4_ViewportResource {
   Arcadia_Visuals_Implementation_ViewportResource _parent;

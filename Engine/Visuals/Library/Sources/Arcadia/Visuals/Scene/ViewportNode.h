@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,15 +16,19 @@
 #if !defined(ARCADIA_VISUALS_SCENE_VIEWPORTNODE_H_INCLUDED)
 #define ARCADIA_VISUALS_SCENE_VIEWPORTNODE_H_INCLUDED
 
+#if !defined(ARCADIA_VISUALS_PRIVATE) || 1 != ARCADIA_VISUALS_PRIVATE
+  #error("do not include directly, include `Arcadia/Visuals/Include.h` instead")
+#endif
 #include "Arcadia/Visuals/Scene/Node.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Scene.ViewportNode", Arcadia_Visuals_Scene_ViewportNode,
-                          u8"Arcadia.Visuals.Scene.Node")
+                          u8"Arcadia.Visuals.Scene.Node");
 
-struct Arcadia_Visuals_Scene_ViewportNode {
-  Arcadia_Visuals_Scene_Node _parent;
+struct Arcadia_Visuals_Scene_ViewportNodeDispatch {
+  Arcadia_Visuals_Scene_NodeDispatch parent;
 
-  void (*setClearColor)
+  void
+  (*setClearColor)
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Scene_ViewportNode* self,
@@ -32,6 +36,14 @@ struct Arcadia_Visuals_Scene_ViewportNode {
       Arcadia_Real32Value green,
       Arcadia_Real32Value blue,
       Arcadia_Real32Value alpha
+    );
+
+  void
+  (*setClearDepth)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_Scene_ViewportNode* self,
+      Arcadia_Real32Value depth
     );
 
   void
@@ -53,7 +65,10 @@ struct Arcadia_Visuals_Scene_ViewportNode {
       Arcadia_Real32Value width,
       Arcadia_Real32Value height
     );
+};
 
+struct Arcadia_Visuals_Scene_ViewportNode {
+  Arcadia_Visuals_Scene_Node _parent;
 };
 
 /// Set the clear color.
@@ -67,6 +82,16 @@ Arcadia_Visuals_Scene_ViewportNode_setClearColor
     Arcadia_Real32Value green,
     Arcadia_Real32Value blue,
     Arcadia_Real32Value alpha
+  );
+
+/// Set the clear depth.
+/// Default value is depth = 1.
+void
+Arcadia_Visuals_Scene_ViewportNode_setClearDepth
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_ViewportNode* self,
+    Arcadia_Real32Value depth
   );
 
 /// Set the viewport relative rectangle.

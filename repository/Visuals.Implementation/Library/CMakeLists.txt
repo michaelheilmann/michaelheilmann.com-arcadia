@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -83,59 +83,14 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.PrivateLibraries Shcore.lib)
   endif()
 
-  # Always use zlib, libpng and freetype under Windows.
-  if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows})
-    set(MyDependenciesDirectory "C:/arcadia-dependencies")
-
-    # zlib.
-    if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.zlib.Libraries ${MyDependenciesDirectory}/my-zlib-$<LOWER_CASE:$<CONFIG>>-x64/lib/zlib.lib)
-      set(${MyModule}.zlib.HeaderFilesDirectory ${MyDependenciesDirectory}/my-zlib-$<LOWER_CASE:$<CONFIG>>-x64/include)
-    elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.zlib.Libraries ${MyDependenciesDirectory}/my-zlib-$<LOWER_CASE:$<CONFIG>>-x86/lib/zlib.lib)
-      set(${MyModule}.zlib.HeaderFilesDirectory ${MyDependenciesDirectory}/my-zlib-$<LOWER_CASE:$<CONFIG>>-x86/include)
-    else()
-      message(FATAL_ERROR " - unsupported instruction set architecture")
-    endif()
-    list(APPEND ${MyModule}.PrivateLibraries ${${MyModule}.zlib.Libraries})
-    list(APPEND ${MyModule}.IncludeDirectories ${${MyModule}.zlib.HeaderFilesDirectory})
-
-    # libpng.
-    if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.LibPng.Libraries ${MyDependenciesDirectory}/my-libpng-$<LOWER_CASE:$<CONFIG>>-x64/lib/libpng.lib)
-      set(${MyModule}.LibPng.HeaderFilesDirectory ${MyDependenciesDirectory}/my-libpng-$<LOWER_CASE:$<CONFIG>>-x64/include)
-    elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.LibPng.Libraries ${MyDependenciesDirectory}/my-libpng-$<LOWER_CASE:$<CONFIG>>-x86/lib/libpng.lib)
-      set(${MyModule}.LibPng.HeaderFilesDirectory ${MyDependenciesDirectory}/my-libpng-$<LOWER_CASE:$<CONFIG>>-x86/include)
-    else()
-      message(FATAL_ERROR " - unsupported instruction set architecture")
-    endif()
-    list(APPEND ${MyModule}.PrivateLibraries ${${MyModule}.LibPng.Libraries})
-    list(APPEND ${MyModule}.IncludeDirectories ${${MyModule}.LibPng.HeaderFilesDirectory})
-
-    # freetype.
-    if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.FreeType.Libraries ${MyDependenciesDirectory}/my-freetype-$<LOWER_CASE:$<CONFIG>>-x64/lib/freetype.lib)
-      set(${MyModule}.FreeType.HeaderFilesDirectory ${MyDependenciesDirectory}/my-freetype-$<LOWER_CASE:$<CONFIG>>-x64/include)
-    elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.FreeType.Libraries ${MyDependenciesDirectory}/my-freetype-$<LOWER_CASE:$<CONFIG>>-x86/lib/freetype.lib)
-      set(${MyModule}.FreeType.HeaderFilesDirectory ${MyDependenciesDirectory}/my-freetype-$<LOWER_CASE:$<CONFIG>>-x86/include)
-    else()
-      message(FATAL_ERROR " - unsupported instruction set architecture")
-    endif()
-    list(APPEND ${MyModule}.PrivateLibraries ${${MyModule}.FreeType.Libraries})
-    list(APPEND ${MyModule}.IncludeDirectories ${${MyModule}.FreeType.HeaderFilesDirectory})
-
-  endif()
-
   # Enable WGL/OpenGL 4 under Windows.
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows} AND ${${MyModule}.OpenGL4.Enabled})
     set(MyDependenciesDirectory "C:/arcadia-dependencies")
     find_package(OpenGL REQUIRED)
     if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.OpenGL.HeaderFilesDirectory ${MyDependenciesDirectory}/my-opengl-$<LOWER_CASE:$<CONFIG>>-x64/include)
+      set(${MyModule}.OpenGL.HeaderFilesDirectory ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/opengl/includes)
     elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.OpenGL.HeaderFilesDirectory ${MyDependenciesDirectory}/my-opengl-$<LOWER_CASE:$<CONFIG>>-x86/include)
+      set(${MyModule}.OpenGL.HeaderFilesDirectory ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/opengl/includes)
     else()
       message(FATAL_ERROR " - unsupported instruction set architecture")
     endif()
@@ -147,12 +102,17 @@ if (NOT TARGET ${MyModule})
 
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/CameraNode.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/CameraNode.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/FrameBufferNode.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/FrameBufferNode.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/MeshNode.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/MeshNode.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/ViewportNode.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/ViewportNode.h)
-  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/MeshContext.c)
-  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/MeshContext.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/RenderingContextNode.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Scene/RenderingContextNode.h)
+
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Texture.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Texture.h)
 
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/SceneNodeFactory.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/SceneNodeFactory.h)
@@ -172,10 +132,14 @@ if (NOT TARGET ${MyModule})
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/FragmentProgramResource.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/ProgramResource.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/ProgramResource.h)
-  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/MeshContextResource.c)
-  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/MeshContextResource.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/RenderingContextResource.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/RenderingContextResource.h)
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/MeshResource.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/MeshResource.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/FrameBufferResource.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/FrameBufferResource.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/TextureResource.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/Resources/TextureResource.h)
 
   # Enable OpenGL 4.
   if (${${MyModule}.OpenGL4.Enabled})
@@ -193,6 +157,12 @@ if (NOT TARGET ${MyModule})
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/ProgramResource.h)
     list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/MeshResource.c)
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/MeshResource.h)
+    list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/FrameBufferResource.c)
+    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/FrameBufferResource.h)
+    list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/RenderingContextResource.c)
+    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/RenderingContextResource.h)
+    list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/TextureResource.c)
+    list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/TextureResource.h)
 
     list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/Utilities.c)
     list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/Utilities.h)
@@ -284,7 +254,7 @@ if (NOT TARGET ${MyModule})
   endif()
 
   list(APPEND ${MyModule}.Libraries ${MyProjectName}.Visuals ${MyProjectName}.Imaging)
-  list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.Visuals.VPL.Backends.GLSL ${MyProjectName}.Math ${MyProjectName}.Ring2 ${MyProjectName}.DDL ${MyProjectName}.ARMS)
+  list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.Visuals.VPL.Backends.GLSL ${MyProjectName}.Math ${MyProjectName}.Ring2 ${MyProjectName}.DDL)
 
   EndProduct(${MyModule})
 

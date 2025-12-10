@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,6 +20,10 @@
 #include "Arcadia/Interpreter/Code.h"
 
 Arcadia_declareObjectType(u8"R.Interpreter.Procedure", R_Interpreter_Procedure, u8"Arcadia.Object");
+
+struct R_Interpreter_ProcedureDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
 struct R_Interpreter_Procedure {
   Arcadia_Object _parent;

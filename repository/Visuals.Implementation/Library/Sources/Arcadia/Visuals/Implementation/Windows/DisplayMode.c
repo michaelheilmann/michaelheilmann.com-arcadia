@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,6 +23,13 @@ Arcadia_Visuals_Windows_DisplayMode_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Windows_DisplayMode* self
+  );
+
+static void
+Arcadia_Visuals_Windows_DisplayMode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Windows_DisplayModeDispatch* self
   );
 
 static void
@@ -68,8 +75,8 @@ Arcadia_Visuals_Windows_DisplayMode_applyImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Windows_DisplayMode_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Windows_DisplayMode_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Windows_DisplayMode_visitImpl,
 };
 
@@ -108,15 +115,22 @@ Arcadia_Visuals_Windows_DisplayMode_constructImpl
   self->verticalResolution = Arcadia_ValueStack_getInteger32Value(thread, 3);
   self->colorDepth = Arcadia_ValueStack_getInteger32Value(thread, 2);
   self->frequency = Arcadia_ValueStack_getInteger32Value(thread, 1);
-
-  ((Arcadia_Visuals_DisplayMode*)self)->getHorizontalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*,Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl;
-  ((Arcadia_Visuals_DisplayMode*)self)->getVerticalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) &Arcadia_Visuals_Windows_DisplayMode_getVerticalResolutionImpl;
-  ((Arcadia_Visuals_DisplayMode*)self)->getColorDepth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) &Arcadia_Visuals_Windows_DisplayMode_getColorDepthImpl;
-  ((Arcadia_Visuals_DisplayMode*)self)->getFrequency = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) &Arcadia_Visuals_Windows_DisplayMode_getFrequencyImpl;
-  ((Arcadia_Visuals_DisplayMode*)self)->apply = (void(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_applyImpl;
-
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+}
+
+static void
+Arcadia_Visuals_Windows_DisplayMode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Windows_DisplayModeDispatch* self
+  )
+{
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getHorizontalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getVerticalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getVerticalResolutionImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getColorDepth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getColorDepthImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getFrequency = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getFrequencyImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->apply = (void(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_applyImpl;
 }
 
 static void

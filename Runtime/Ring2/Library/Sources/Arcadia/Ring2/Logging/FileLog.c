@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,6 +23,13 @@ Arcadia_FileLog_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_FileLog* self
+  );
+
+static void
+Arcadia_FileLog_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileLogDispatch* self
   );
 
 static void
@@ -59,8 +66,7 @@ writeBytes
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_FileLog_constructImpl,
-
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_FileLog_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FileLog_visit,
 };
 
@@ -80,7 +86,7 @@ Arcadia_FileLog_constructImpl
     Arcadia_FileLog* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Log_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_FileLog_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -92,10 +98,19 @@ Arcadia_FileLog_constructImpl
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   self->fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, self->fileHandle);
-  ((Arcadia_Log*)self)->error = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*))&Arcadia_FileLog_errorImpl;
-  ((Arcadia_Log*)self)->info = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*))&Arcadia_FileLog_infoImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
+}
+
+static void
+Arcadia_FileLog_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileLogDispatch* self
+  )
+{
+  ((Arcadia_LogDispatch*)self)->error = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_FileLog_errorImpl;
+  ((Arcadia_LogDispatch*)self)->info = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_FileLog_infoImpl;
 }
 
 static void

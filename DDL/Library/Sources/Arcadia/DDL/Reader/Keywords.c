@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,6 +24,10 @@ struct Keyword {
   Arcadia_Natural32Value type;
 };
 
+struct Arcadia_DataDefinitionLanguage_KeywordsDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
+
 struct Arcadia_DataDefinitionLanguage_Keywords {
   Arcadia_Object _parent;
   Keyword** buckets;
@@ -36,6 +40,13 @@ Arcadia_DataDefinitionLanguage_Keywords_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_Keywords* self
+  );
+
+static void
+Arcadia_DataDefinitionLanguage_Keywords_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_KeywordsDispatch* self
   );
 
 static void
@@ -87,8 +98,9 @@ Arcadia_DataDefinitionLanguage_Keywords_visit
 }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_destruct,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DataDefinitionLanguage_Keywords_visit,
 };
 
@@ -126,6 +138,14 @@ Arcadia_DataDefinitionLanguage_Keywords_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_DataDefinitionLanguage_Keywords_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DataDefinitionLanguage_KeywordsDispatch* self
+  )
+{ }
 
 Arcadia_DataDefinitionLanguage_Keywords*
 Arcadia_DataDefinitionLanguage_Keywords_create

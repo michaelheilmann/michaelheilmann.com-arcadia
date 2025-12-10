@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,6 +16,8 @@
 #define ARCADIA_LANGUAGES_PRIVATE (1)
 #include "Arcadia/Languages/StringTable.h"
 
+#include <string.h>
+
 struct Arcadia_Languages_StringTable_Node {
   Arcadia_Languages_StringTable_Node* next;
   // We need to compare the hash of the Bytes in a string buffer with the hash of the Bytes in a string.
@@ -29,6 +31,13 @@ Arcadia_Languages_StringTable_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_StringTable* self
+  );
+
+static void
+Arcadia_Languages_StringTable_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_StringTableDispatch* self
   );
 
 static void
@@ -60,9 +69,16 @@ Arcadia_Languages_StringTable_destruct
     Arcadia_Languages_StringTable* self
   );
 
+static Arcadia_Languages_StringTable*
+Arcadia_Languages_StringTable_create
+  (
+    Arcadia_Thread* thread
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Languages_StringTable_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Languages_StringTable_destruct,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Languages_StringTable_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Languages_StringTable_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Languages_StringTable_visit,
 };
 
@@ -103,6 +119,14 @@ Arcadia_Languages_StringTable_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_Languages_StringTable_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_StringTableDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Languages_StringTable_maybeResize_nojump
@@ -201,7 +225,7 @@ Arcadia_Languages_StringTable_destruct
   }
 }
 
-Arcadia_Languages_StringTable*
+static Arcadia_Languages_StringTable*
 Arcadia_Languages_StringTable_create
   (
     Arcadia_Thread* thread
@@ -219,21 +243,29 @@ Arcadia_Languages_StringTable_getOrCreateString
     Arcadia_Languages_StringTable* self,
     Arcadia_StringBuffer* stringBuffer
   )
+{ return Arcadia_Languages_StringTable_getOrCreateStringFromBytes(thread, self, Arcadia_StringBuffer_getBytes(thread, stringBuffer), Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer)); }
+
+Arcadia_String*
+Arcadia_Languages_StringTable_getOrCreateStringFromBytes
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_StringTable* self,
+    Arcadia_Natural8Value const* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
 {
-  const Arcadia_Natural8Value* bytes = Arcadia_StringBuffer_getBytes(thread, stringBuffer);
-  Arcadia_SizeValue numberOfBytes = Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer);
   Arcadia_SizeValue hash = Arcadia_Languages_StringTable_hashBytes(thread, bytes, numberOfBytes);
   Arcadia_SizeValue index = hash % self->capacity;
   for (Arcadia_Languages_StringTable_Node* node = self->buckets[index]; NULL != node; node = node->next) {
     Arcadia_Value nodeValue = Arcadia_Value_makeObjectReferenceValue(node->string);
     if (node->hash == hash &&
-        Arcadia_String_getNumberOfBytes(thread, node->string) == numberOfBytes) {
+      Arcadia_String_getNumberOfBytes(thread, node->string) == numberOfBytes) {
       if (!Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, node->string), bytes, numberOfBytes)) {
         return node->string;
       }
     }
   }
-  Arcadia_String* string = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, Arcadia_StringBuffer_getBytes(thread, stringBuffer), Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer))));
+  Arcadia_String* string = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, bytes, numberOfBytes)));
   Arcadia_Languages_StringTable_Node* node = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Languages_StringTable_Node));
   node->string = string;
   node->hash = hash;
@@ -244,4 +276,37 @@ Arcadia_Languages_StringTable_getOrCreateString
   Arcadia_Languages_StringTable_maybeResize_nojump(thread, self);
 
   return string;
+}
+
+Arcadia_String*
+Arcadia_Languages_StringTable_getOrCreateStringFromCxxString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_StringTable* self,
+    const char* string
+  )
+{ return Arcadia_Languages_StringTable_getOrCreateStringFromBytes(thread, self, string, strlen(string)); }
+
+static Arcadia_Languages_StringTable* g_instance = NULL;
+
+static void
+Arcadia_Languages_StringTable_destroyCallback
+  (
+    void* observer,
+    void* observed
+  )
+{ g_instance = NULL; }
+
+Arcadia_Languages_StringTable*
+Arcadia_Languages_StringTable_getOrCreate
+  (
+    Arcadia_Thread* thread
+  )
+{
+  if (!g_instance) {
+    Arcadia_Languages_StringTable* instance = Arcadia_Languages_StringTable_create(thread);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_Languages_StringTable_destroyCallback);
+    g_instance = instance;
+  }
+  return g_instance;
 }

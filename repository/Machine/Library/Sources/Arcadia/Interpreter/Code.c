@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -109,6 +109,13 @@ R_Interpreter_Code_constructImpl
   );
 
 static void
+R_Interpreter_Code_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    R_Interpreter_CodeDispatch* self
+  );
+
+static void
 R_Interpreter_Code_destruct
   (
     Arcadia_Thread* thread,
@@ -116,9 +123,9 @@ R_Interpreter_Code_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & R_Interpreter_Code_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&R_Interpreter_Code_destruct,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & R_Interpreter_Code_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&R_Interpreter_Code_destruct,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -153,6 +160,14 @@ R_Interpreter_Code_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+R_Interpreter_Code_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    R_Interpreter_CodeDispatch* self
+  )
+{ }
 
 static void
 R_Interpreter_Code_destruct

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -32,9 +32,16 @@ Arcadia_ADL_Definitions_constructImpl
     Arcadia_ADL_Definitions* self
   );
 
+static void
+Arcadia_ADL_Definitions_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ADL_DefinitionsDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_ADL_Definitions_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_ADL_Definitions_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_ADL_Definitions_visitImpl,
 };
 
@@ -79,6 +86,14 @@ Arcadia_ADL_Definitions_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_ADL_Definitions_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ADL_DefinitionsDispatch* self
+  )
+{ }
 
 Arcadia_ADL_Definitions*
 Arcadia_ADL_Definitions_create

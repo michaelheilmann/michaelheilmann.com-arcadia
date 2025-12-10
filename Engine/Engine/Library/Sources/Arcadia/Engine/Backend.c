@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,10 +23,16 @@ Arcadia_Engine_Backend_constructImpl
     Arcadia_Engine_Backend* self
   );
 
+static void
+Arcadia_Engine_Backend_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_BackendDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Engine_Backend_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Backend_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -54,11 +60,17 @@ Arcadia_Engine_Backend_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->createBackendContext = NULL;
-  self->getName = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_Engine_Backend_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_BackendDispatch* self
+  )
+{ }
 
 Arcadia_String*
 Arcadia_Engine_Backend_getName
@@ -66,7 +78,7 @@ Arcadia_Engine_Backend_getName
     Arcadia_Thread* thread,
     Arcadia_Engine_Backend* self
   )
-{ return self->getName(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Backend, getName, self); }
 
 Arcadia_Engine_BackendContext*
 Arcadia_Engine_Backend_createBackendContext
@@ -74,4 +86,4 @@ Arcadia_Engine_Backend_createBackendContext
     Arcadia_Thread* thread,
     Arcadia_Engine_Backend* self
   )
-{ return self->createBackendContext(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Backend, createBackendContext, self); }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,6 +26,13 @@ Arcadia_Log_constructImpl
   );
 
 static void
+Arcadia_Log_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_LogDispatch* self
+  );
+
+static void
 Arcadia_Log_visit
   (
     Arcadia_Thread* thread,
@@ -33,8 +40,8 @@ Arcadia_Log_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Log_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Log_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Log_visit,
 };
 
@@ -63,11 +70,17 @@ Arcadia_Log_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->error = NULL;
-  self->info = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
+
+static void
+Arcadia_Log_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_LogDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Log_visit
@@ -84,7 +97,7 @@ Arcadia_Log_info
     Arcadia_Log* self,
     Arcadia_String* message
   )
-{ self->info(thread, self, message); }
+{ Arcadia_VirtualCall(Arcadia_Log, info, self, message); }
 
 void
 Arcadia_Log_error
@@ -93,4 +106,4 @@ Arcadia_Log_error
     Arcadia_Log* self,
     Arcadia_String* message
   )
-{ self->error(thread, self, message); }
+{ Arcadia_VirtualCall(Arcadia_Log, error, self, message); }

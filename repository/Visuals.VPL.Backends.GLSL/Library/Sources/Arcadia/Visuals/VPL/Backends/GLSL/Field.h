@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,6 +20,10 @@
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.VPL.Backends.GLSL.Field", Arcadia_Visuals_VPL_Backends_GLSL_Field,
                           u8"Arcadia.Object");
+
+struct Arcadia_Visuals_VPL_Backends_GLSL_FieldDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
 struct Arcadia_Visuals_VPL_Backends_GLSL_Field {
   Arcadia_Object _parent;

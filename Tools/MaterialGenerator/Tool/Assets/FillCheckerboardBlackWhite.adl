@@ -1,0 +1,8 @@
+{
+  type : "PixelBufferOperations.CheckerboardFillOperation",
+  name : "MyFillCheckerboardBlackWhite",
+  checkerWidth : 32,
+  checkerHeight : 32,
+  firstCheckerColor : "Colors.White",
+  secondCheckerColor : "Colors.Black",
+}

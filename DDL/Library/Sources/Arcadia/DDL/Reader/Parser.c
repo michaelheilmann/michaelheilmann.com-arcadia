@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -84,6 +84,10 @@ Arcadia_DDL_Parser_onValue
     Arcadia_DDL_Parser* self
   );
 
+struct Arcadia_DDL_ParserDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
+
 struct Arcadia_DDL_Parser {
   Arcadia_Object _parent;
   Arcadia_DDL_Scanner* scanner;
@@ -97,6 +101,13 @@ Arcadia_DDL_Parser_constructImpl
   );
 
 static void
+Arcadia_DDL_Parser_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_ParserDispatch* self
+  );
+
+static void
 Arcadia_DDL_Parser_visit
   (
     Arcadia_Thread* thread,
@@ -104,8 +115,8 @@ Arcadia_DDL_Parser_visit
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDL_Parser_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DDL_Parser_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDL_Parser_visit,
 };
 
@@ -141,6 +152,14 @@ Arcadia_DDL_Parser_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_DDL_Parser_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_ParserDispatch* self
+  )
+{ }
 
 static void
 Arcadia_DDL_Parser_visit
@@ -190,7 +209,9 @@ Arcadia_DDL_Parser_next
 {
   do {
     Arcadia_Languages_Scanner_step(thread, (Arcadia_Languages_Scanner*)self->scanner);
-  } while (Arcadia_DDL_WordType_WhiteSpace == Arcadia_DDL_Parser_getWordType(thread, self) ||
+  } while (Arcadia_DDL_WordType_MultiLineComment == Arcadia_DDL_Parser_getWordType(thread, self) ||
+           Arcadia_DDL_WordType_SingleLineComment == Arcadia_DDL_Parser_getWordType(thread, self) ||
+           Arcadia_DDL_WordType_WhiteSpace == Arcadia_DDL_Parser_getWordType(thread, self) ||
            Arcadia_DDL_WordType_LineTerminator == Arcadia_DDL_Parser_getWordType(thread, self));
 }
 
@@ -216,6 +237,9 @@ Arcadia_DDL_Parser_onListValue
     }
   }
   if (Arcadia_DDL_WordType_RightSquareBracket != Arcadia_DDL_Parser_getWordType(thread, self)) {
+    Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected right square bracket\n");
+    Arcadia_Languages_Diagnostics_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
@@ -265,6 +289,9 @@ Arcadia_DDL_Parser_onMapValue
     }
   }
   if (Arcadia_DDL_WordType_RightCurlyBracket != Arcadia_DDL_Parser_getWordType(thread, self)) {
+    Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected right curly bracket\n");
+    Arcadia_Languages_Diagnostics_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
@@ -280,6 +307,9 @@ Arcadia_DDL_Parser_onName
   )
 {
   if (Arcadia_DDL_WordType_Name != Arcadia_DDL_Parser_getWordType(thread, self)) {
+    Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected name\n");
+    Arcadia_Languages_Diagnostics_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
@@ -345,6 +375,9 @@ Arcadia_DDL_Parser_onValue
       return node;
     } break;
     default: {
+      Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+      Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected scalar or aggregate\n");
+      Arcadia_Languages_Diagnostics_emit(thread, message);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
       Arcadia_Thread_jump(thread);
     } break;
@@ -368,6 +401,9 @@ Arcadia_DDL_Parser_run
     Arcadia_DDL_Parser_next(thread, self);
   }
   if (Arcadia_DDL_WordType_EndOfInput != Arcadia_DDL_Parser_getWordType(thread, self)) {
+    Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
+    Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected end of input\n");
+    Arcadia_Languages_Diagnostics_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }

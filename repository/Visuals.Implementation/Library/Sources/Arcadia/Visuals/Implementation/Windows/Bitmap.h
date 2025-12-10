@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -29,6 +29,10 @@
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Bitmap", Arcadia_Visuals_Windows_Bitmap,
                           u8"Arcadia.Object");
+
+struct Arcadia_Visuals_Windows_BitmapDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
 struct Arcadia_Visuals_Windows_Bitmap {
   Arcadia_Object _parent;

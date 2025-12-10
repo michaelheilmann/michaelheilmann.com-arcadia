@@ -36,7 +36,7 @@
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_TextureAddressMode">Arcadia_Visuals_TextureAddressMode</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_TextureFilter">Arcadia_Visuals_TextureFilter</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_VertexElementSemantics">Arcadia_Visuals_VertexElementSemantics</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_VertexElementSyntax">Arcadia_Visuals_VertexElementSyntax</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_VertexElementSyntactics">Arcadia_Visuals_VertexElementSyntactics</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindingMode">Arcadia_Visuals_WindingMode</a></li>
 
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_WindowClosed">[MIL] Arcadia.Visuals.WindowClosed</a></li>

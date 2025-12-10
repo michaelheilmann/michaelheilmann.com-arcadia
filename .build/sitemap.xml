@@ -4,55 +4,55 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://michaelheilmann.com/</loc>
-        <lastmod>2025-02-14</lastmod>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://michaelheilmann.com/Arcadia/Ring1/</loc>
-        <lastmod>2025-02-14</lastmod>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://michaelheilmann.com/Arcadia/Ring2/</loc>
-        <lastmod>2025-02-14</lastmod>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://michaelheilmann.com/Arcadia/Arms/</loc>
-        <lastmod>2025-02-14</lastmod>
+        <loc>https://michaelheilmann.com/Arcadia/ARMS/</loc>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://michaelheilmann.com/Arcadia/Visuals/</loc>
-        <lastmod>2025-02-14</lastmod>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://michaelheilmann.com/roadmap</loc>
-        <lastmod>2025-02-14</lastmod>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://michaelheilmann.com/specifications/common-lexical-specification</loc>
-        <lastmod>2025-02-14</lastmod>
+        <loc>https://michaelheilmann.com/specifications/common-lexical-translations</loc>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://michaelheilmann.com/specifications/data-definition-language</loc>
-        <lastmod>2025-02-14</lastmod>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://michaelheilmann.com/roadmap-archive</loc>
-        <lastmod>2025-02-14</lastmod>
+        <lastmod>2025-12-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
     </url>

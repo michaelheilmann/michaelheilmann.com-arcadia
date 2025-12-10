@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,6 +26,10 @@ typedef struct Arcadia_String Arcadia_String;
 
 Arcadia_declareObjectType(u8"Arcadia.ConsoleLog", Arcadia_ConsoleLog,
                           u8"Arcadia.Log");
+
+struct Arcadia_ConsoleLogDispatch {
+  Arcadia_LogDispatch _parent;
+};
 
 struct Arcadia_ConsoleLog {
   Arcadia_Log _parent;

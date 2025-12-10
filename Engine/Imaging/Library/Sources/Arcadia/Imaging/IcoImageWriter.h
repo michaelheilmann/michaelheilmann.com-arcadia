@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -31,6 +31,10 @@
 // - The width and height of any image in an "ico" files may not exceed 256.
 // - all source pixel buffers must be of format PixelBuffer_An8Rn8Gn8Bn8.
 Arcadia_declareObjectType(u8"Arcadia.Imaging.IcoImageWriter", IcoImageWriter, u8"Arcadia.Imaging.ImageWriter");
+
+struct IcoImageWriterDispatch {
+  Arcadia_Imaging_ImageWriterDispatch parent;
+};
 
 struct IcoImageWriter {
   Arcadia_Imaging_ImageWriter _parent;

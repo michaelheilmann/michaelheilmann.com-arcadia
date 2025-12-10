@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,6 +23,13 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_constructImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_ConstantBufferResource_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch* self
+  );
+
+static void
 Arcadia_Visuals_Implementation_ConstantBufferResource_destructImpl
   (
     Arcadia_Thread* thread,
@@ -37,8 +44,9 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_ConstantBufferResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_ConstantBufferResource_destructImpl,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_ConstantBufferResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_ConstantBufferResource_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_ConstantBufferResource_visitImpl,
 };
 
@@ -71,12 +79,17 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  self->clear = NULL;
-  self->setData = NULL;
-  self->writeMatrix4x4Real32 = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
+
+static void
+Arcadia_Visuals_Implementation_ConstantBufferResource_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Visuals_Implementation_ConstantBufferResource_destructImpl
@@ -102,7 +115,7 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_setData
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
   )
-{ self->setData(thread, self, bytes, numberOfBytes); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ConstantBufferResource, setData, self, bytes, numberOfBytes); }
 
 void
 Arcadia_Visuals_Implementation_ConstantBufferResource_clear
@@ -110,7 +123,7 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_clear
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_ConstantBufferResource* self
   )
-{ self->clear(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ConstantBufferResource, clear, self); }
 
 void
 Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32
@@ -120,4 +133,4 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32
     Arcadia_BooleanValue transpose,
     Arcadia_Math_Matrix4Real32 const* source
   )
-{ self->writeMatrix4x4Real32(thread, self, transpose, source); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ConstantBufferResource, writeMatrix4x4Real32, self, transpose, source); }

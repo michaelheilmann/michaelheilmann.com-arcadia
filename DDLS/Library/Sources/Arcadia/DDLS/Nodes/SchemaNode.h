@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,6 +24,10 @@
 /// A schema node.
 Arcadia_declareObjectType(u8"Arcadia.DDLS.SchemaNode", Arcadia_DDLS_SchemaNode,
                           u8"Arcadia.DDLS.Node");
+
+struct Arcadia_DDLS_SchemaNodeDispatch {
+  Arcadia_DDLS_NodeDispatch parent;
+};
 
 struct Arcadia_DDLS_SchemaNode {
   Arcadia_DDLS_Node _parent;

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -17,9 +17,7 @@
 #include <string.h>
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Context.h"
-#include "Arcadia.Tools.TemplateEngine.Library/DependenciesContext.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
-#include "Arcadia.Tools.TemplateEngine.Library/FileContext.h"
 
 void
 main1
@@ -40,7 +38,6 @@ main1
     Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
-
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
     Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
     Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argument);
@@ -86,10 +83,25 @@ main1
   Arcadia_FilePath* environmentFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &environmentFileValue, _Arcadia_String_getType(thread)));
   Arcadia_FilePath* dependenciesFilePath = Arcadia_FilePath_parseNative(thread, Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &dependenciesFileValue, _Arcadia_String_getType(thread)));
 
-
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_String* environmentString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_FileSystem_getFileContents(thread, fileSystem, environmentFilePath)));
-
+  Arcadia_String* environmentString = NULL;
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    environmentString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_FileSystem_getFileContents(thread, fileSystem, environmentFilePath)));
+    Arcadia_Thread_popJumpTarget(thread);
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    // @todo Introduce and utilize diagnostics objects.
+    Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
+    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"unable to open environment file `");
+    Arcadia_StringBuffer_insertBackCxxString(thread, sb, Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, environmentFilePath)));
+    Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"`\n");
+    Arcadia_Natural32Value cp[] = { '\0' };
+    Arcadia_StringBuffer_insertCodePointsBack(thread, sb, cp, 1);
+    Arcadia_logf(Arcadia_LogFlags_Info, Arcadia_StringBuffer_getBytes(thread, sb));
+    Arcadia_Thread_jump(thread);
+  }
   context->targetFilePath = targetFilePath;
   context->sourceFilePath = sourceFilePath;
   context->environmentFilePath = environmentFilePath;

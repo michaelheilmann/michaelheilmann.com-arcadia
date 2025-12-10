@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -13,10 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+#include "Arcadia/DDLS/Tests/Reader/Schema1.h"
 #include "Arcadia/DDLS/Include.h"
 
 static void
-testAccept1
+testAcceptChoice1
   (
     Arcadia_Thread* thread
   )
@@ -24,39 +25,15 @@ testAccept1
   const char* DDLS =
     "{\n"
     "  kind : \"Schema\",\n"
-    "  name : \"Color\",\n"
+    "  name : \"AnyScalar\",\n"
     "  definition : \n"
     "  {\n"
-    "    kind : \"Map\",\n"
-    "    entries : [\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"type\",\n"
-    "        type : {\n"
-    "          kind : \"String\",\n"
-    "        },\n"
-    "      },\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"red\",\n"
-    "        type : {\n"
-    "          kind : \"Number\",\n"
-    "        },\n"
-    "      },\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"green\",\n"
-    "        type : {\n"
-    "          kind : \"Number\",\n"
-    "        },\n"
-    "      },\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"blue\",\n"
-    "        type : {\n"
-    "          kind : \"Number\",\n"
-    "        },\n"
-    "      },\n"
+    "    kind : \"Choice\",\n"
+    "    choices : [\n"
+    "      { kind : \"Boolean\" },\n"
+    "      { kind : \"String\" },\n"
+    "      { kind : \"Number\" },\n"
+    "      { kind : \"Void\" },\n"
     "    ],\n"
     "  },\n"
     "},\n"
@@ -78,331 +55,6 @@ testAccept1
           )
       );
   ddlsNode = NULL;
-}
-
-static void
-testAccept2
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDLS =
-    "{\n"
-    "  kind : \"Schema\",\n"
-    "  name : \"Color\",\n"
-    "  definition : \n"
-    "  {\n"
-    "    kind : \"Map\",\n"
-    "    entries : [\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"type\",\n"
-    "        type : {\n"
-    "          kind : \"SchemaReference\",\n"
-    "          name : \"Type\",\n"
-    "        },\n"
-    "      },\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"red\",\n"
-    "        type : {\n"
-    "          kind : \"SchemaReference\",\n"
-    "          name : \"ColorComponent\",\n"
-    "        },"
-    "      },\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"green\",\n"
-    "        type : {\n"
-    "          kind : \"SchemaReference\",\n"
-    "          name : \"ColorComponent\",\n"
-    "        },\n"
-    "      },\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"blue\",\n"
-    "        type : {\n"
-    "          kind : \"SchemaReference\",\n"
-    "          name : \"ColorComponent\",\n"
-    "        },\n"
-    "      },\n"
-    "    ],\n"
-    "  },\n"
-    "},\n"
-    ;
-  Arcadia_DDLS_DefaultReader* ddlsReader =
-    Arcadia_DDLS_DefaultReader_create
-      (
-        thread
-      );
-  Arcadia_DDLS_Node* ddlsNode =
-    Arcadia_DDLS_DefaultReader_run
-      (
-        thread,
-        ddlsReader,
-        Arcadia_String_createFromCxxString
-          (
-            thread,
-            DDLS
-          )
-      );
-  ddlsNode = NULL;
-}
-
-// "$.kind" is missing
-static void
-testReject1
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDLS =
-    "{\n"
-    "  kind : \"Schema\",\n"
-    "  name : \"MySchema\",\n"
-    "  definition : \n"
-    "  {\n"
-    "    entries : [\n"
-    "    ],\n"
-    "  },\n"
-    "},\n"
-    ;
-  Arcadia_DDLS_DefaultReader* ddlsReader =
-    Arcadia_DDLS_DefaultReader_create
-      (
-        thread
-      );
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_DefaultReader_run
-      (
-        thread,
-        ddlsReader,
-          Arcadia_String_createFromCxxString
-            (
-              thread,
-              DDLS
-            )
-      );
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.entries" is missing
-static void
-testReject2
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDLS =
-    "{\n"
-    "  kind : \"Schema\",\n"
-    "  name : \"MySchema\",\n"
-    "  definition : \n"
-    "  {\n"
-    "    kind : \"Map\",\n"
-    "  },\n"
-    "},\n"
-    ;
-  Arcadia_DDLS_DefaultReader* ddlsReader =
-    Arcadia_DDLS_DefaultReader_create
-      (
-        thread
-      );
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_DefaultReader_run
-      (
-        thread,
-        ddlsReader,
-        Arcadia_String_createFromCxxString
-          (
-            thread,
-            DDLS
-          )
-      );
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.entries" is not a list
-static void
-testReject3
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDLS =
-    "{\n"
-    "  kind : \"Schema\",\n"
-    "  name : \"MySchema\",\n"
-    "  definition : \n"
-    "  {\n"
-    "    type : \"Map\",\n"
-    "    entries : \"x\",\n"
-    "  },\n"
-    "},\n"
-    ;
-  Arcadia_DDLS_DefaultReader* ddlsReader =
-    Arcadia_DDLS_DefaultReader_create
-    (
-      thread
-    );
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_DefaultReader_run
-      (
-        thread,
-        ddlsReader,
-        Arcadia_String_createFromCxxString
-          (
-            thread,
-            DDLS
-          )
-      );
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.kind" specified twice
-static void
-testReject4
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDLS =
-    "{\n"
-    "  kind : \"Schema\",\n"
-    "  name : \"MySchema\",\n"
-    "  definition : \n"
-    "  {\n"
-    "    kind : \"Map\",\n"
-    "    kind : \"Map\",\n"
-    "    entries : {\n"
-    "    },\n"
-    "  },\n"
-    "},\n"
-    ;
-  Arcadia_DDLS_DefaultReader* ddlsReader =
-    Arcadia_DDLS_DefaultReader_create
-      (
-        thread
-      );
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_DefaultReader_run
-      (
-        thread,
-        ddlsReader,
-        Arcadia_String_createFromCxxString
-          (
-            thread,
-            DDLS
-          )
-      );
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
-}
-
-// "$.entries[0].name" and "$.entries[1].name" are equal
-static void
-testReject5
-  (
-    Arcadia_Thread* thread
-  )
-{
-  const char* DDLS =
-    "{\n"
-    "  kind : \"Schema\",\n"
-    "  name : \"MySchema\",\n"
-    "  definition : \n"
-    "  {\n"
-    "    kind : \"Map\",\n"
-    "    entries : [\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"green\",\n"
-    "        type : {\n"
-    "          kind : \"Number\",\n"
-    "        },\n"
-    "      },\n"
-    "      {\n"
-    "        kind : \"MapEntry\",\n"
-    "        name : \"green\",\n"
-    "        type : {\n"
-    "          kind : \"Number\",\n"
-    "        },\n"
-    "      },\n"
-    "    ],\n"
-    "  },\n"
-    "},\n"
-    ;
-  Arcadia_DDLS_DefaultReader* ddlsReader =
-    Arcadia_DDLS_DefaultReader_create
-    (
-      thread
-    );
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_DDLS_DefaultReader_run
-      (
-        thread,
-        ddlsReader,
-        Arcadia_String_createFromCxxString
-          (
-            thread,
-            DDLS
-          )
-      );
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) != Arcadia_Status_SemanticalError) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-    }
-  }
 }
 
 int
@@ -412,26 +64,31 @@ main
     char** argv
   )
 {
-  if (!Arcadia_Tests_safeExecute(&testAccept1)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Reader_testAccept1)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testAccept2)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Reader_testAccept2)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testReject1)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Reader_testReject1)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testReject2)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Reader_testReject2)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testReject3)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Reader_testReject3)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testReject4)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Reader_testReject4)) {
     return EXIT_FAILURE;
   }
-  if (!Arcadia_Tests_safeExecute(&testReject5)) {
+  if (!Arcadia_Tests_safeExecute(&Arcadia_DDLS_Tests_Reader_testReject5)) {
     return EXIT_FAILURE;
   }
+  //
+  if (!Arcadia_Tests_safeExecute(&testAcceptChoice1)) {
+    return EXIT_FAILURE;
+  }
+  //
   return EXIT_SUCCESS;
 }

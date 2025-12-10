@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,10 +16,15 @@
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Collections/ImmutableList.h"
 
-#include "Arcadia/Ring2/Include.h"
-
 static void
 Arcadia_ImmutableList_constructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableList* self
+  );
+
+static void
+Arcadia_ImmutableList_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
     Arcadia_ImmutableList* self
@@ -104,8 +109,8 @@ Arcadia_ImmutableList_removeAtImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_ImmutableList_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*) & Arcadia_ImmutableList_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_ImmutableList_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Arcadia_ImmutableList_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_ImmutableList_visit,
 };
 
@@ -142,16 +147,25 @@ Arcadia_ImmutableList_constructImpl
   for (Arcadia_SizeValue i = 0, n = self->size; i < n; ++i) {
     self->elements[i] = Arcadia_List_getAt(thread, other, i);
   }
-  ((Arcadia_Collection*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_clearImpl;
-  ((Arcadia_Collection*)self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_getSizeImpl;
-  ((Arcadia_Collection*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_isImmutableImpl;
-  ((Arcadia_List*)self)->getAt = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue)) & Arcadia_ImmutableList_getAtImpl;
-  ((Arcadia_List*)self)->insertAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_Value)) & Arcadia_ImmutableList_insertAtImpl;
-  ((Arcadia_List*)self)->insertBack = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertBackImpl;
-  ((Arcadia_List*)self)->insertFront = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertFrontImpl;
-  ((Arcadia_List*)self)->removeAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_SizeValue)) & Arcadia_ImmutableList_removeAtImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
+}
+
+static void
+Arcadia_ImmutableList_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableList* self
+  )
+{
+  ((Arcadia_CollectionDispatch*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_clearImpl;
+  ((Arcadia_CollectionDispatch*)self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_getSizeImpl;
+  ((Arcadia_CollectionDispatch*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_ImmutableList_isImmutableImpl;
+  ((Arcadia_ListDispatch*)self)->getAt = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue)) & Arcadia_ImmutableList_getAtImpl;
+  ((Arcadia_ListDispatch*)self)->insertAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_Value)) & Arcadia_ImmutableList_insertAtImpl;
+  ((Arcadia_ListDispatch*)self)->insertBack = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertBackImpl;
+  ((Arcadia_ListDispatch*)self)->insertFront = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value)) & Arcadia_ImmutableList_insertFrontImpl;
+  ((Arcadia_ListDispatch*)self)->removeAt = (void (*)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_SizeValue)) & Arcadia_ImmutableList_removeAtImpl;
 }
 
 static void

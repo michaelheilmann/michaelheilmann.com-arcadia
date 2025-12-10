@@ -1,6 +1,6 @@
 <section class="cxx entity procedure">
 
-  <h1 id="Arcadia_quotientRemainder*">Arcadia_quotientRemainder*</h1>
+  <h1 id="Arcadia_quotientRemainder%2a">Arcadia_quotientRemainder*</h1>
 
   <my-signature><code>
   void<br>

@@ -1,6 +1,6 @@
 <section class="cxx entity procedure">
 
-  <h1 id="Arcadia_countSignificandBits*">Arcadia_countSignificandBits*</h1>
+  <h1 id="Arcadia_countSignificandBits%2a">Arcadia_countSignificandBits*</h1>
 
   <my-signature><code>
   Arcadia_SizeValue<br>

@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -28,7 +28,7 @@ if (NOT TARGET ${MyTestName})
 
   list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Main.c)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.ARMS)
+  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend)
 
   EndProduct(${MyTestName})
   set_target_properties(${MyTestName} PROPERTIES FOLDER ${MyTestFolder})

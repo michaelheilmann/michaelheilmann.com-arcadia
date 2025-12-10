@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,6 +20,7 @@
 #include "Arcadia/Ring2/Strings/Include.h"
 #include "Arcadia/Ring2/FileSystem/FileSystem.h"
 #include "Arcadia/Ring2/FileSystem/FileHandle.h"
+#include "Arcadia/Ring2/FileSystem/FileHandleExtensions.h"
 
 #include <stdio.h>
 
@@ -259,17 +260,6 @@ Arcadia_CommandLine_parseArgument
   *key = key1;
   *value = value1;
   return Arcadia_BooleanValue_True;
-}
-
-static void Arcadia_FileHandle_writeStringBuffer(Arcadia_Thread* thread, Arcadia_FileHandle* self, Arcadia_StringBuffer* stringBuffer) {
-  Arcadia_SizeValue m = Arcadia_StringBuffer_getNumberOfBytes(thread, stringBuffer);
-  Arcadia_SizeValue n = 0;
-  Arcadia_Natural8Value const* p = Arcadia_StringBuffer_getBytes(thread, stringBuffer);
-  while (n < m) {
-    Arcadia_SizeValue k = 0;
-    Arcadia_FileHandle_write(thread, self, p + n, m - n, &k);
-    n += k;
-  }
 }
 
 void

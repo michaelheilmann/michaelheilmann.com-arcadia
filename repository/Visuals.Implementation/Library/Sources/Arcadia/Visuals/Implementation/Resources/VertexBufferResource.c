@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,6 +26,13 @@ Arcadia_Visuals_Implementation_VertexBufferResource_constructImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_VertexBufferResource_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_VertexBufferResourceDispatch* self
+  );
+
+static void
 Arcadia_Visuals_Implementation_VertexBufferResource_destructImpl
   (
     Arcadia_Thread* thread,
@@ -40,8 +47,9 @@ Arcadia_Visuals_Implementation_VertexBufferResource_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_VertexBufferResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_VertexBufferResource_destructImpl,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_VertexBufferResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_VertexBufferResource_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_VertexBufferResource_visitImpl,
 };
 
@@ -80,6 +88,14 @@ Arcadia_Visuals_Implementation_VertexBufferResource_constructImpl
 }
 
 static void
+Arcadia_Visuals_Implementation_VertexBufferResource_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_VertexBufferResourceDispatch* self
+  )
+{ }
+
+static void
 Arcadia_Visuals_Implementation_VertexBufferResource_destructImpl
   (
     Arcadia_Thread* thread,
@@ -104,7 +120,7 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setData
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
   )
-{ self->setData(thread, self, numberOfVertices, bytes, numberOfBytes); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_VertexBufferResource, setData, self, numberOfVertices, bytes, numberOfBytes); }
 
 Arcadia_SizeValue
 Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVertices
@@ -112,4 +128,4 @@ Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVertices
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self
   )
-{ return self->getNumberOVertices(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_VertexBufferResource, getNumberOVertices, self); }

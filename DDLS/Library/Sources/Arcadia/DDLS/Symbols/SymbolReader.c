@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,6 +21,7 @@
 #include "Arcadia/DDLS/Extensions.h"
 
 #include "Arcadia/DDLS/Symbols/AnySymbol.h"
+#include "Arcadia/DDLS/Symbols/ChoiceSymbol.h"
 #include "Arcadia/DDLS/Symbols/ListSymbol.h"
 #include "Arcadia/DDLS/Symbols/MapSymbol.h"
 #include "Arcadia/DDLS/Symbols/MapEntrySymbol.h"
@@ -54,6 +55,22 @@ closeScope
 
 static Arcadia_DDLS_AnySymbol*
 readAnySymbol
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  );
+
+static Arcadia_DDLS_ScalarSymbol*
+readBooleanSymbol
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  );
+
+static Arcadia_DDLS_ChoiceSymbol*
+readChoiceSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_DDLS_SymbolReader* self,
@@ -108,6 +125,14 @@ readStringSymbol
     Arcadia_DDL_MapNode* source
   );
 
+static Arcadia_DDLS_ScalarSymbol*
+readVoidSymbol
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  );
+
 static Arcadia_DDLS_Symbol*
 readSymbol0
   (
@@ -132,6 +157,13 @@ Arcadia_DDLS_SymbolReader_constructImpl
   );
 
 static void
+Arcadia_DDLS_SymbolReader_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReaderDispatch* self
+  );
+
+static void
 Arcadia_DDLS_SymbolReader_visitImpl
   (
     Arcadia_Thread* thread,
@@ -140,7 +172,7 @@ Arcadia_DDLS_SymbolReader_visitImpl
 
 static const Arcadia_ObjectType_Operations _Arcadia_DDLS_SymbolReader_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_SymbolReader_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DDLS_SymbolReader_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_SymbolReader_visitImpl,
 };
 
@@ -259,6 +291,8 @@ Arcadia_DDLS_SymbolReader_constructImpl
 
   Define(ANY, u8"Any");
   Define(BOOLEAN, u8"Boolean");
+  Define(CHOICE, u8"Choice");
+  Define(CHOICES, u8"choices");
   Define(LIST, u8"List");
   Define(MAP, u8"Map");
   Define(MAPENTRY, u8"MapEntry");
@@ -283,6 +317,14 @@ Arcadia_DDLS_SymbolReader_constructImpl
 }
 
 static void
+Arcadia_DDLS_SymbolReader_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReaderDispatch* self
+  )
+{ }
+
+static void
 Arcadia_DDLS_SymbolReader_visitImpl
   (
     Arcadia_Thread* thread,
@@ -300,6 +342,8 @@ Arcadia_DDLS_SymbolReader_visitImpl
 
   Define(ANY, u8"Any");
   Define(BOOLEAN, u8"Boolean");
+  Define(CHOICE, u8"Choice");
+  Define(CHOICES, u8"choices");
   Define(LIST, u8"List");
   Define(MAP, u8"Map");
   Define(MAPENTRY, u8"MapEntry");
@@ -374,6 +418,60 @@ readAnySymbol
   }
   Arcadia_DDLS_AnySymbol* anySymbol = Arcadia_DDLS_AnySymbol_create(thread);
   return anySymbol;
+}
+
+static Arcadia_DDLS_ScalarSymbol*
+readBooleanSymbol
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  )
+{
+  // (1) Remove the `kind` element.
+  Arcadia_Map_remove(thread, self->scope->symbols, self->KIND, NULL, NULL);
+  if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->scope->symbols) > 0) {
+    Arcadia_logf(Arcadia_LogFlags_Error, u8"unsupported entries\n");
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_DDLS_ScalarSymbol* scalarSymbol = Arcadia_DDLS_ScalarSymbol_create(thread);
+  scalarSymbol->name = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&self->BOOLEAN);
+  return scalarSymbol;
+}
+
+static Arcadia_DDLS_ChoiceSymbol*
+readChoiceSymbol
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  )
+{
+  Arcadia_DDLS_ChoiceSymbol* choiceSymbol = Arcadia_DDLS_ChoiceSymbol_create(thread);
+  // (1) Remove the `kind` element.
+  Arcadia_Map_remove(thread, self->scope->symbols, self->KIND, NULL, NULL);
+  // (2) Read `choices` element.
+  Arcadia_Value v = Arcadia_Map_get(thread, self->scope->symbols, self->CHOICES);
+  if (!Arcadia_Value_isInstanceOf(thread, &v, _Arcadia_DDL_ListNode_getType(thread))) {
+    Arcadia_logf(Arcadia_LogFlags_Error, u8"`choices` not specified\n");
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Map_remove(thread, self->scope->symbols, self->CHOICES, NULL, NULL);
+  if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->scope->symbols) > 0) {
+    Arcadia_logf(Arcadia_LogFlags_Error, u8"unsupported entries\n");
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
+  }
+
+  Arcadia_DDL_ListNode* listNode = (Arcadia_DDL_ListNode*)Arcadia_Value_getObjectReferenceValue(&v);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)listNode->elements); i < n; ++i) {
+    Arcadia_DDL_MapNode* listElementNode = (Arcadia_DDL_MapNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)listNode->elements, i, _Arcadia_DDL_MapNode_getType(thread));
+    Arcadia_List_insertBackObjectReferenceValue(thread, choiceSymbol->choices, (Arcadia_Object*)readSymbol0(thread, self, listElementNode));
+  }
+
+  return choiceSymbol;
 }
 
 static Arcadia_DDLS_ListSymbol*
@@ -562,6 +660,27 @@ readSchemaReferenceSymbol
   return schemaReferenceSymbol;
 }
 
+
+static Arcadia_DDLS_ScalarSymbol*
+readVoidSymbol
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_SymbolReader* self,
+    Arcadia_DDL_MapNode* source
+  )
+{
+  // (1) Remove the `kind` element.
+  Arcadia_Map_remove(thread, self->scope->symbols, self->KIND, NULL, NULL);
+  if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->scope->symbols) > 0) {
+    Arcadia_logf(Arcadia_LogFlags_Error, u8"unsupported entries\n");
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_DDLS_ScalarSymbol* scalarSymbol = Arcadia_DDLS_ScalarSymbol_create(thread);
+  scalarSymbol->name = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&self->VOID);
+  return scalarSymbol;
+}
+
 static Arcadia_DDLS_Symbol*
 readSymbol0
   (
@@ -581,6 +700,10 @@ readSymbol0
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     if (Arcadia_Value_isEqualTo(thread, &kind, &self->ANY)) {
       target = (Arcadia_DDLS_Symbol*)readAnySymbol(thread, self, source);
+    } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->BOOLEAN)) {
+      target = (Arcadia_DDLS_Symbol*)readBooleanSymbol(thread, self, source);
+    } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->CHOICE)) {
+      target = (Arcadia_DDLS_Symbol*)readChoiceSymbol(thread, self, source);
     } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->LIST)) {
       target = (Arcadia_DDLS_Symbol*)readListSymbol(thread, self, source);
     } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->MAP)) {
@@ -593,6 +716,8 @@ readSymbol0
       target = (Arcadia_DDLS_Symbol*)readSchemaReferenceSymbol(thread, self, source);
     } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->STRING)) {
       target = (Arcadia_DDLS_Symbol*)readStringSymbol(thread, self, source);
+    } else if (Arcadia_Value_isEqualTo(thread, &kind, &self->VOID)) {
+      target = (Arcadia_DDLS_Symbol*)readVoidSymbol(thread, self, source);
     } else {
       closeScope(thread, self, source);
       Arcadia_logf(Arcadia_LogFlags_Error, u8"unknown type\n");

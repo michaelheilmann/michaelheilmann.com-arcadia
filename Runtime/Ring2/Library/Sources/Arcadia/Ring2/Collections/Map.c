@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,8 +16,6 @@
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Collections/Map.h"
 
-#include "Arcadia/Ring2/Include.h"
-
 static void
 Arcadia_Map_constructImpl
   (
@@ -25,10 +23,16 @@ Arcadia_Map_constructImpl
     Arcadia_Map* self
   );
 
+static void
+Arcadia_Map_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MapDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Map_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Map_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -56,14 +60,17 @@ Arcadia_Map_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->get = NULL;
-  self->remove = NULL;
-  self->set = NULL;
-  self->getKeys = NULL;
-  self->getValues = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
+
+static void
+Arcadia_Map_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MapDispatch* self
+  )
+{ }
 
 Arcadia_Value
 Arcadia_Map_get
@@ -72,7 +79,7 @@ Arcadia_Map_get
     Arcadia_Map* self,
     Arcadia_Value key
   )
-{ return self->get(thread, self, key); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Map, get, self, key); }
 
 void
 Arcadia_Map_remove
@@ -83,7 +90,7 @@ Arcadia_Map_remove
     Arcadia_Value* oldKey,
     Arcadia_Value* oldValue
   )
-{ self->remove(thread, self, key, oldKey, oldValue); }
+{ Arcadia_VirtualCall(Arcadia_Map, remove, self, key, oldKey, oldValue); }
 
 void
 Arcadia_Map_set
@@ -95,7 +102,7 @@ Arcadia_Map_set
     Arcadia_Value* oldKey,
     Arcadia_Value* oldValue
   )
-{ self->set(thread,self, key, value, oldKey, oldValue); }
+{ Arcadia_VirtualCall(Arcadia_Map, set, self, key, value, oldKey, oldValue); }
 
 Arcadia_List*
 Arcadia_Map_getKeys
@@ -103,7 +110,7 @@ Arcadia_Map_getKeys
     Arcadia_Thread* thread,
     Arcadia_Map* self
   )
-{ return self->getKeys(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Map, getKeys, self); }
 
 Arcadia_List*
 Arcadia_Map_getValues
@@ -111,4 +118,4 @@ Arcadia_Map_getValues
     Arcadia_Thread* thread,
     Arcadia_Map* self
   )
-{ return self->getValues(thread, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Map, getValues, self); }

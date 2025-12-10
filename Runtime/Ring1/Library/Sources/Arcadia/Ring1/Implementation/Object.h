@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,6 +22,10 @@ typedef struct Arcadia_Value Arcadia_Value;
 
 typedef struct Arcadia_Object Arcadia_Object;
 
+typedef struct Arcadia_ObjectDispatch {
+  Arcadia_Dispatch parent;
+} Arcadia_ObjectDispatch;
+
 Arcadia_TypeValue
 _Arcadia_Object_getType
   (
@@ -42,6 +46,7 @@ struct Arcadia_Object {
 /// R(untime) ex(tension) macro.
 /// @param _cilName, _cilParentName UTF8 string literals for the Common Intermediate Language type names of the type and its parent type.
 #define Arcadia_declareObjectType(_cilName, _cName, _cilParentName) \
+  typedef struct _cName##Dispatch _cName##Dispatch; \
   typedef struct _cName _cName; \
   Arcadia_TypeValue \
   _##_cName##_getType \
@@ -78,6 +83,8 @@ struct Arcadia_Object {
           sizeof(_cilName) - 1, \
           sizeof(_cName), \
           parentType, \
+          sizeof(_cName##Dispatch), \
+          (void(*)(Arcadia_Thread*,Arcadia_Dispatch*))&_cName##_initializeDispatchImpl, \
           _cTypeOperations, \
           &_##_cName##_typeDestructing \
         ); \
@@ -256,5 +263,15 @@ Arcadia_Object_toString
     Arcadia_Thread* thread,
     Arcadia_Object* self
   );
+
+/// Utility macro to define the body of a virtual call with return value.
+#define Arcadia_VirtualCallWithReturn(Type, Function, ...) \
+  Type##Dispatch* d = (Type##Dispatch*)Arcadia_Type_getDispatch(Arcadia_Object_getType(thread, (Arcadia_Object*)self)); \
+  return d->Function(thread, __VA_ARGS__);
+
+/// Utility macro to define the body of a virtual call without return value.
+#define Arcadia_VirtualCall(Type, Function, ...) \
+  Type##Dispatch* d = (Type##Dispatch*)Arcadia_Type_getDispatch(Arcadia_Object_getType(thread, (Arcadia_Object*)self)); \
+  d->Function(thread, __VA_ARGS__);
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -171,10 +171,16 @@ Arcadia_Imaging_Windows_PngImageWriter_constructImpl
     Arcadia_Imaging_Windows_PngImageWriter* self
   );
 
+static void
+Arcadia_Imaging_Windows_PngImageWriter_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_Windows_PngImageWriterDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_Imaging_Windows_PngImageWriter_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Imaging_Windows_PngImageWriter_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -208,14 +214,21 @@ Arcadia_Imaging_Windows_PngImageWriter_constructImpl
   Arcadia_List_insertBackObjectReferenceValue(thread, supportedTypes, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"png", sizeof(u8"png") - 1))));
   self->supportedTypes = Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(supportedTypes));
 
-  ((Arcadia_Imaging_ImageWriter*)self)->getSupportedTypes = (Arcadia_ImmutableList * (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*))&Arcadia_Imaging_Windows_PngImageWriter_getSupportedTypes;
-  ((Arcadia_Imaging_ImageWriter*)self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*))&Arcadia_Imaging_Windows_PngImageWriter_write;
-
-  ((Arcadia_Imaging_Windows_WicImageWriterBase*)self)->getFormat = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*, GUID const**))&getFormat;
-  ((Arcadia_Imaging_Windows_WicImageWriterBase*)self)->configure = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*))&configure;
-
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
+}
+
+static void
+Arcadia_Imaging_Windows_PngImageWriter_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_Windows_PngImageWriterDispatch* self
+  )
+{
+  ((Arcadia_Imaging_ImageWriterDispatch*)self)->getSupportedTypes = (Arcadia_ImmutableList * (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*)) & Arcadia_Imaging_Windows_PngImageWriter_getSupportedTypes;
+  ((Arcadia_Imaging_ImageWriterDispatch*)self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & Arcadia_Imaging_Windows_PngImageWriter_write;
+  ((Arcadia_Imaging_Windows_WicImageWriterBaseDispatch*)self)->getFormat = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*, GUID const**)) & getFormat;
+  ((Arcadia_Imaging_Windows_WicImageWriterBaseDispatch*)self)->configure = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*)) & configure;
 }
 
 Arcadia_Imaging_Windows_PngImageWriter*

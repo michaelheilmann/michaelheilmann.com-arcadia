@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,13 @@ Arcadia_UTF8FileHandleWriter_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8FileHandleWriter* self
+  );
+
+static void
+Arcadia_UTF8FileHandleWriter_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8FileHandleWriterDispatch* self
   );
 
 static void
@@ -76,8 +83,8 @@ Arcadia_UTF8FileHandleWriter_writeStringImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_UTF8FileHandleWriter_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_UTF8FileHandleWriter_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_UTF8FileHandleWriter_visit,
 };
 
@@ -108,13 +115,22 @@ Arcadia_UTF8FileHandleWriter_constructImpl
   }
   self->target = (Arcadia_FileHandle*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FileHandle_getType(thread));
   self->temporary = Arcadia_ByteBuffer_create(thread);
-  ((Arcadia_UTF8Writer*)self)->writeBytes = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, void const*, Arcadia_SizeValue)) & Arcadia_UTF8FileHandleWriter_writeBytesImpl;
-  ((Arcadia_UTF8Writer*)self)->writeCodePoints = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & Arcadia_UTF8FileHandleWriter_writeCodePointsImpl;
-  ((Arcadia_UTF8Writer*)self)->writeImmutableUTF8String = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_ImmutableUtf8String*)) & Arcadia_UTF8FileHandleWriter_writeImmutableUtf8StringImpl;
-  ((Arcadia_UTF8Writer*)self)->writeString = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_String*)) & Arcadia_UTF8FileHandleWriter_writeStringImpl;
-  ((Arcadia_UTF8Writer*)self)->flush = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*)) & Arcadia_UTF8FileHandleWriter_flushImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
+}
+
+static void
+Arcadia_UTF8FileHandleWriter_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8FileHandleWriterDispatch* self
+  )
+{
+  ((Arcadia_UTF8WriterDispatch*)self)->writeBytes = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, void const*, Arcadia_SizeValue)) & Arcadia_UTF8FileHandleWriter_writeBytesImpl;
+  ((Arcadia_UTF8WriterDispatch*)self)->writeCodePoints = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & Arcadia_UTF8FileHandleWriter_writeCodePointsImpl;
+  ((Arcadia_UTF8WriterDispatch*)self)->writeImmutableUTF8String = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_ImmutableUtf8String*)) & Arcadia_UTF8FileHandleWriter_writeImmutableUtf8StringImpl;
+  ((Arcadia_UTF8WriterDispatch*)self)->writeString = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_String*)) & Arcadia_UTF8FileHandleWriter_writeStringImpl;
+  ((Arcadia_UTF8WriterDispatch*)self)->flush = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*)) & Arcadia_UTF8FileHandleWriter_flushImpl;
 }
 
 static void

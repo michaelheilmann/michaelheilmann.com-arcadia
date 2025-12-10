@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,10 +19,10 @@
 #include "Arcadia/Visuals/Implementation/Resource.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.ViewportResource", Arcadia_Visuals_Implementation_ViewportResource,
-                          u8"Arcadia.Visuals.Implementation.Resource")
+                          u8"Arcadia.Visuals.Implementation.Resource");
 
-struct Arcadia_Visuals_Implementation_ViewportResource {
-  Arcadia_Visuals_Implementation_Resource _parent;
+struct Arcadia_Visuals_Implementation_ViewportResourceDispatch {
+  Arcadia_Visuals_Implementation_ResourceDispatch _parent;
 
   void (*setClearColor)
     (
@@ -32,6 +32,13 @@ struct Arcadia_Visuals_Implementation_ViewportResource {
       Arcadia_Real32Value green,
       Arcadia_Real32Value blue,
       Arcadia_Real32Value alpha
+    );
+
+  void (*setClearDepth)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_Implementation_ViewportResource* self,
+      Arcadia_Real32Value depth
     );
 
   void
@@ -53,7 +60,10 @@ struct Arcadia_Visuals_Implementation_ViewportResource {
       Arcadia_Real32Value width,
       Arcadia_Real32Value height
     );
+};
 
+struct Arcadia_Visuals_Implementation_ViewportResource {
+  Arcadia_Visuals_Implementation_Resource _parent;
 };
 
 /// Set the clear color.
@@ -67,6 +77,16 @@ Arcadia_Visuals_Implementation_ViewportResource_setClearColor
     Arcadia_Real32Value green,
     Arcadia_Real32Value blue,
     Arcadia_Real32Value alpha
+  );
+
+/// Set the clear depth.
+/// Default values are
+void
+Arcadia_Visuals_Implementation_ViewportResource_setClearDepth
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ViewportResource* self,
+    Arcadia_Real32Value depth
   );
 
 /// Set the viewport relative rectangle.

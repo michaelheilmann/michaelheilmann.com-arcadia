@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -13,10 +13,25 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+#define ARCADIA_VISUALS_PRIVATE (1)
 #include "Arcadia/Visuals/Scene/MeshNode.h"
 
 static void
 Arcadia_Visuals_Scene_MeshNode_constructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_MeshNode* self
+  );
+
+static void
+Arcadia_Visuals_Scene_MeshNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_MeshNodeDispatch* self
+  );
+
+static void
+Arcadia_Visuals_Scene_MeshNode_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_MeshNode* self
@@ -30,9 +45,9 @@ Arcadia_Visuals_Scene_MeshNode_destructImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Scene_MeshNode_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Scene_MeshNode_destructImpl,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Scene_MeshNode_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Scene_MeshNode_destructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -61,6 +76,33 @@ Arcadia_Visuals_Scene_MeshNode_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
+  self->vertexDescriptor = Arcadia_Visuals_VertexDescriptor_create(thread);
+  Arcadia_List_insertBackObjectReferenceValue
+    (
+      thread,
+      self->vertexDescriptor->vertexElementDescriptors,
+      (Arcadia_ObjectReferenceValue)
+      Arcadia_Visuals_VertexElementDescriptor_create
+        (
+          thread,
+          sizeof(Arcadia_Real32Value) * 0,
+          Arcadia_Visuals_VertexElementSemantics_PositionXYZ,
+          Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32
+        )
+    );
+  Arcadia_List_insertBackObjectReferenceValue
+    (
+      thread,
+      self->vertexDescriptor->vertexElementDescriptors,
+      (Arcadia_ObjectReferenceValue)
+      Arcadia_Visuals_VertexElementDescriptor_create
+      (
+        thread,
+        sizeof(Arcadia_Real32Value) * 3,
+        Arcadia_Visuals_VertexElementSemantics_AmbientRGBA,
+        Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32
+      )
+    );
   self->baseColor.red = 1;
   self->baseColor.green = 1;
   self->baseColor.blue = 1;
@@ -95,6 +137,26 @@ Arcadia_Visuals_Scene_MeshNode_constructImpl
 }
 
 static void
+Arcadia_Visuals_Scene_MeshNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_MeshNodeDispatch* self
+  )
+{ }
+
+static void
+Arcadia_Visuals_Scene_MeshNode_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_MeshNode* self
+  )
+{
+  if (self->vertexDescriptor) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->vertexDescriptor);
+  }
+}
+
+static void
 Arcadia_Visuals_Scene_MeshNode_destructImpl
   (
     Arcadia_Thread* thread,
@@ -109,4 +171,47 @@ Arcadia_Visuals_Scene_MeshNode_destructImpl
     Arcadia_Memory_deallocateUnmanaged(thread, self->vertexColors);
     self->vertexColors = NULL;
   }
+}
+
+void
+Arcadia_Visuals_Scene_MeshNode_getNumberOfVertices
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_MeshNode* self,
+    Arcadia_SizeValue* numberOfVertices
+  )
+{ *numberOfVertices = self->numberOfVertices; }
+
+void
+Arcadia_Visuals_Scene_MeshNode_setBaseColor
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_MeshNode* self,
+    Arcadia_Real32Value red,
+    Arcadia_Real32Value green,
+    Arcadia_Real32Value blue,
+    Arcadia_Real32Value alpha
+  )
+{
+  self->baseColor.red = red;
+  self->baseColor.green = green;
+  self->baseColor.blue = blue;
+  self->baseColor.alpha = alpha;
+}
+
+void
+Arcadia_Visuals_Scene_MeshNode_getBaseColor
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_MeshNode* self,
+    Arcadia_Real32Value* red,
+    Arcadia_Real32Value* green,
+    Arcadia_Real32Value* blue,
+    Arcadia_Real32Value* alpha
+  )
+{
+  *red = self->baseColor.red;
+  *green = self->baseColor.green;
+  *blue = self->baseColor.blue;
+  *alpha = self->baseColor.alpha;
 }

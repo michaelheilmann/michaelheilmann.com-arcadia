@@ -33,7 +33,7 @@
 
 <section class="cxx entity define">
 
-  <h1 id="Arcadia_Real*Value_NumberOfBytes">Arcadia_Real*Value_NumberOfBytes</h1>
+  <h1 id="Arcadia_Real%2aValue_NumberOfBytes">Arcadia_Real*Value_NumberOfBytes</h1>
 
   <my-signature><code>
   #define Arcadia_Real<my-mv>Suffix</my-mv>Value_NumberOfBytes <my-mv>implementation detail</my-mv>

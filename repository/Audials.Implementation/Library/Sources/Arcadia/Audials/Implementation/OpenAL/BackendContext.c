@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -18,8 +18,26 @@
 
 #include "Arcadia/Audials/Implementation/Configure.h"
 #include "Arcadia/Audials/Implementation/OpenAL/Backend.h"
+#include "Arcadia/Audials/Implementation/OpenAL/Resources/SoundSourceResource.h"
+#include "Arcadia/Audials/Implementation/Synthesis/sine.h"
+#include <assert.h>
 
 static Arcadia_Audials_Implementation_OpenAL_BackendContext* g_instance = NULL;
+
+// @brief Update resources.
+// @remmarks
+// If a resource has a reference count of 0
+// - unload the resource
+// - unlink the resource
+// - remove the resource from the list
+// @return The number of removed resources
+static Arcadia_SizeValue
+Arcadia_Audials_Implementation_OpenAL_BackendContext_updateResourcesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_Implementation_OpenAL_BackendContext* self,
+    Arcadia_BooleanValue force
+  );
 
 static void
 Arcadia_Audials_Implementation_OpenAL_BackendContext_updateImpl
@@ -28,8 +46,8 @@ Arcadia_Audials_Implementation_OpenAL_BackendContext_updateImpl
     Arcadia_Audials_Implementation_OpenAL_BackendContext* self
   );
 
-static void
-Arcadia_Audials_Implementation_OpenAL_BackendContext_playSineImpl
+static Arcadia_Audials_Implementation_OpenAL_SoundSourceResource*
+Arcadia_Audials_Implementation_OpenAL_BackendContext_createSoundSourceResouceImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Audials_Implementation_OpenAL_BackendContext* self
@@ -40,6 +58,13 @@ Arcadia_Audials_Implementation_OpenAL_BackendContext_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Audials_Implementation_OpenAL_BackendContext* self
+  );
+
+static void
+Arcadia_Audials_Implementation_OpenAL_BackendContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_Implementation_OpenAL_BackendContextDispatch* self
   );
 
 static void
@@ -57,8 +82,9 @@ Arcadia_Audials_Implementation_OpenAL_BackendContext_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_BackendContext_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_BackendContext_destructImpl,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_BackendContext_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_BackendContext_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_BackendContext_visitImpl,
 };
 
@@ -68,8 +94,37 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Audials.Implementation.OpenAL.BackendContext", Arcadia_Audials_Implementation_OpenAL_BackendContext,
-                         u8"Arcadia.Audials.BackendContext", Arcadia_Audials_BackendContext,
+                         u8"Arcadia.Audials.Implementation.BackendContext", Arcadia_Audials_Implementation_BackendContext,
                          &_typeOperations);
+
+static Arcadia_SizeValue
+Arcadia_Audials_Implementation_OpenAL_BackendContext_updateResourcesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_Implementation_OpenAL_BackendContext* self,
+    Arcadia_BooleanValue force
+  )
+{
+  Arcadia_SizeValue removed = 0;
+  Arcadia_SizeValue removedNow = 0;
+  do {
+    removedNow = 0;
+    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Audials_Implementation_OpenAL_BackendContext*)self)->resources); i < n;) {
+      Arcadia_Audials_Implementation_Resource* resource = (Arcadia_Audials_Implementation_Resource*)Arcadia_List_getObjectReferenceValueAt(thread, ((Arcadia_Audials_Implementation_OpenAL_BackendContext*)self)->resources, i);
+      if (!resource->referenceCount || force) {
+        Arcadia_Audials_Implementation_Resource_unload(thread, resource);
+        Arcadia_Audials_Implementation_Resource_unlink(thread, resource);
+        Arcadia_List_removeAt(thread, ((Arcadia_Audials_Implementation_OpenAL_BackendContext*)self)->resources, i, 1);
+        n--;
+        removedNow++;
+      } else {
+        i++;
+      }
+    }
+    removed += removedNow;
+  } while (removedNow);
+  return removed;
+}
 
 static void
 Arcadia_Audials_Implementation_OpenAL_BackendContext_updateImpl
@@ -77,34 +132,22 @@ Arcadia_Audials_Implementation_OpenAL_BackendContext_updateImpl
     Arcadia_Thread* thread,
     Arcadia_Audials_Implementation_OpenAL_BackendContext* self
   )
-{/*Intentionally empty.*/}
+{
+  // (1) Update the resources.
+  Arcadia_Audials_Implementation_OpenAL_BackendContext_updateResourcesImpl(thread, self, Arcadia_BooleanValue_False);
+}
 
-static void
-Arcadia_Audials_Implementation_OpenAL_BackendContext_playSineImpl
+static Arcadia_Audials_Implementation_OpenAL_SoundSourceResource*
+Arcadia_Audials_Implementation_OpenAL_BackendContext_createSoundSourceResouceImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Audials_Implementation_OpenAL_BackendContext* self
   )
 {
-  alcMakeContextCurrent(self->alcContext);
-
-  // Set the position of the listener.
-  ALfloat position[] = { 0.f, 0.f, 0.f };
-  alListenerfv(AL_POSITION, position);
-  alListenerf(AL_GAIN, 0.1f);
-  if (AL_NO_ERROR != alGetError()) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  alSourcef(self->alSourceId, AL_GAIN, 1.0f);
-  alSourcei(self->alSourceId, AL_BUFFER, self->alBufferId);
-  alSourcei(self->alSourceId, AL_LOOPING, AL_FALSE);
-  alSourcei(self->alSourceId, AL_SOURCE_RELATIVE, AL_TRUE);
-  alSourcePlay(self->alSourceId);
-  if (AL_NO_ERROR != alGetError()) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
+  Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* resource = Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_create(thread, (Arcadia_Audials_Implementation_OpenAL_BackendContext*)self);
+  assert(((Arcadia_Audials_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
+  return resource;
 }
 
 static void
@@ -124,10 +167,12 @@ Arcadia_Audials_Implementation_OpenAL_BackendContext_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
+  // Create and lock the list of resources.
+  self->resources = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_Object_lock(thread, (Arcadia_Object*)self->resources);
+
   self->alcDevice = NULL;
   self->alcContext = NULL;
-  self->alBufferId = 0;
-  self->alSourceId = 0;
 
   // Select the default audio device on the system.
   self->alcDevice = alcOpenDevice(NULL);
@@ -150,84 +195,20 @@ Arcadia_Audials_Implementation_OpenAL_BackendContext_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  alGenBuffers(1, &self->alBufferId);
-  if (alGetError()) {
-    alcMakeContextCurrent(NULL);
-    alcDestroyContext(self->alcContext);
-    self->alcContext = NULL;
-    alcCloseDevice(self->alcDevice);
-    self->alcDevice = NULL;
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-  alGenSources(1, &self->alSourceId);
-  if (alGetError()) {
-    alDeleteBuffers(1, &self->alBufferId);
-    self->alBufferId = 0;
-    alcDestroyContext(self->alcContext);
-    self->alcContext = NULL;
-    alcCloseDevice(self->alcDevice);
-    self->alcDevice = NULL;
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-    Arcadia_Thread_jump(thread);
-  }
-
-  {
-    Arcadia_JumpTarget jumpTarget;
-    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-    if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      static const float PI = 3.14159265358979323846;
-      const int channels = 1;
-      const int frequency = 110.0f;
-      const int seconds = 6.f;
-      const int sampleRate = 44100;
-      const int numberOfSamples = channels * sampleRate * seconds;
-
-      Arcadia_ByteBuffer* sourceVoiceBuffer = Arcadia_ByteBuffer_create(thread);
-
-      const float constant = 2.f * PI * (float)frequency / (float)sampleRate;
-      if (channels == 1) {
-        for (size_t i = 0; i < numberOfSamples; ++i) {
-          int16_t sample = 32760 * sin(constant * i);
-          Arcadia_ByteBuffer_insertBackBytes(thread, sourceVoiceBuffer, &sample, 2);
-        }
-      } else if (channels == 2) {
-        for (size_t i = 0; i < numberOfSamples; ++i) {
-          int16_t sample = 32760 * sin(constant * i);
-          Arcadia_ByteBuffer_insertBackBytes(thread, sourceVoiceBuffer, &sample, 2);
-          Arcadia_ByteBuffer_insertBackBytes(thread, sourceVoiceBuffer, &sample, 2);
-        }
-      }
-      if (channels == 1) {
-        alBufferData(self->alBufferId, AL_FORMAT_MONO16, Arcadia_ByteBuffer_getBytes(thread, sourceVoiceBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, sourceVoiceBuffer), sampleRate);
-      } else if (channels == 2) {
-        alBufferData(self->alBufferId, AL_FORMAT_STEREO16, Arcadia_ByteBuffer_getBytes(thread, sourceVoiceBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, sourceVoiceBuffer), sampleRate);
-      }
-      if (alGetError()) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_Thread_popJumpTarget(thread);
-    } else {
-      Arcadia_Thread_popJumpTarget(thread);
-      alDeleteSources(1, &self->alSourceId);
-      self->alSourceId = 0;
-      alDeleteBuffers(1, &self->alBufferId);
-      self->alBufferId = 0;
-      alcDestroyContext(self->alcContext);
-      self->alcContext = NULL;
-      alcCloseDevice(self->alcDevice);
-      self->alcDevice = NULL;
-      Arcadia_Thread_jump(thread);
-    }
-  }
-
-  ((Arcadia_Audials_BackendContext*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Audials_BackendContext*)) & Arcadia_Audials_Implementation_OpenAL_BackendContext_updateImpl;
-  ((Arcadia_Audials_BackendContext*)self)->playSine = (void(*)(Arcadia_Thread*, Arcadia_Audials_BackendContext*)) & Arcadia_Audials_Implementation_OpenAL_BackendContext_playSineImpl;
-
-
+  //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
+}
+
+void
+Arcadia_Audials_Implementation_OpenAL_BackendContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_Implementation_OpenAL_BackendContextDispatch* self
+  )
+{
+  ((Arcadia_Audials_Implementation_BackendContextDispatch*)self)->createSoundSourceResource = (Arcadia_Audials_Implementation_SoundSourceResource * (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_BackendContext*)) & Arcadia_Audials_Implementation_OpenAL_BackendContext_createSoundSourceResouceImpl;
+  ((Arcadia_Audials_BackendContextDispatch*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Audials_BackendContext*)) & Arcadia_Audials_Implementation_OpenAL_BackendContext_updateImpl;
 }
 
 static void
@@ -237,15 +218,15 @@ Arcadia_Audials_Implementation_OpenAL_BackendContext_destructImpl
     Arcadia_Audials_Implementation_OpenAL_BackendContext* self
   )
 {
-  if (self->alSourceId) {
-    alSourceStop(self->alSourceId);
-    alDeleteSources(1, &self->alSourceId);
-    self->alSourceId = 0;
+  // (1) Update resources until no resources are left.
+  while (Arcadia_Audials_Implementation_OpenAL_BackendContext_updateResourcesImpl(thread, self, Arcadia_BooleanValue_True)) {
+    /*Intentionally empty.*/
   }
-  if (self->alBufferId) {
-    alDeleteBuffers(1, &self->alBufferId);
-    self->alBufferId = 0;
-  }
+
+  // Unlock the list of resources.
+  Arcadia_Object_unlock(thread, (Arcadia_Object*)self->resources);
+  self->resources = NULL;
+
   if (self->alcContext) {
     if (alcGetCurrentContext() == self->alcContext) {
       alcMakeContextCurrent(NULL);

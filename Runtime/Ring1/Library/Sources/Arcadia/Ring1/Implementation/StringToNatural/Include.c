@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -88,7 +88,7 @@ Arcadia_toNatural64
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_safeAddNatural64Value(thread, v, (p[numberLiteral.significand.integral.start + numberLiteral.significand.integral.leadingZeroes.length + i] - '0'), &high, &v);
+      Arcadia_safeAddFullNatural64Value(thread, v, (p[numberLiteral.significand.integral.start + numberLiteral.significand.integral.leadingZeroes.length + i] - '0'), &high, &v);
       if (high) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
         Arcadia_Thread_jump(thread);

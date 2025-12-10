@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -31,35 +31,8 @@ typedef struct Arcadia_Visuals_Window Arcadia_Visuals_Window;
 Arcadia_declareObjectType(u8"Arcadia.Visuals.WindowBackend", Arcadia_Visuals_WindowBackend,
                           u8"Arcadia.Object");
 
-struct Arcadia_Visuals_WindowBackend {
-  Arcadia_Object _parent;
-
-  // Pointer to the window backend if any, a null pointer otherwise.
-  Arcadia_Visuals_Window* window;
-
-  // #Arcadia_BooleanValue_True if the window is a fullscreen window.
-  // #Arcadia_BooleanValue_False otherwise.
-  // Default is #Arcadia_BooleanValue_False.
-  Arcadia_BooleanValue fullscreen;
-
-  // The title of the window.
-  // Default is "Arcadia Engine Window".
-  Arcadia_String* title;
-
-  struct {
-    /// The position of the left side of the window.
-    /// Default is 0.
-    Arcadia_Integer32Value left;
-    /// The position of the top side of the window.
-    /// Default is 0.
-    Arcadia_Integer32Value top;
-    /// The width of the window.
-    /// Default is 1.
-    Arcadia_Integer32Value width;
-    /// The height of the window.
-    /// Default is 1.
-    Arcadia_Integer32Value height;
-  } bounds;
+struct Arcadia_Visuals_WindowBackendDispatch {
+  Arcadia_ObjectDispatch _parent;
 
   void (*open)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
   void (*close)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
@@ -91,7 +64,37 @@ struct Arcadia_Visuals_WindowBackend {
 
   Arcadia_BooleanValue(*getFullscreen)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
   void (*setFullscreen)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_BooleanValue);
+};
 
+struct Arcadia_Visuals_WindowBackend {
+  Arcadia_Object _parent;
+
+  // Pointer to the window backend if any, a null pointer otherwise.
+  Arcadia_Visuals_Window* window;
+
+  // #Arcadia_BooleanValue_True if the window is a fullscreen window.
+  // #Arcadia_BooleanValue_False otherwise.
+  // Default is #Arcadia_BooleanValue_False.
+  Arcadia_BooleanValue fullscreen;
+
+  // The title of the window.
+  // Default is "Arcadia Engine Window".
+  Arcadia_String* title;
+
+  struct {
+    /// The position of the left side of the window.
+    /// Default is 0.
+    Arcadia_Integer32Value left;
+    /// The position of the top side of the window.
+    /// Default is 0.
+    Arcadia_Integer32Value top;
+    /// The width of the window.
+    /// Default is 1.
+    Arcadia_Integer32Value width;
+    /// The height of the window.
+    /// Default is 1.
+    Arcadia_Integer32Value height;
+  } bounds;
 };
 
 /// @brief Ensure this window is opened.

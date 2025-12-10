@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,7 +22,11 @@ typedef struct Arcadia_Visuals_Implementation_VertexProgramResource Arcadia_Visu
 typedef struct Arcadia_Visuals_Implementation_FragmentProgramResource Arcadia_Visuals_Implementation_FragmentProgramResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.ProgramResource", Arcadia_Visuals_Implementation_ProgramResource,
-                          u8"Arcadia.Visuals.Implementation.Resource")
+                          u8"Arcadia.Visuals.Implementation.Resource");
+
+struct Arcadia_Visuals_Implementation_ProgramResourceDispatch {
+  Arcadia_Visuals_Implementation_ResourceDispatch _parent;
+};
 
 struct Arcadia_Visuals_Implementation_ProgramResource {
   Arcadia_Visuals_Implementation_Resource _parent;

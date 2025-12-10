@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -16,7 +16,7 @@
 #define ARCADIA_RING2_PRIVATE (1)
 #include "Arcadia/Ring2/Collections/List.h"
 
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/Ring2/Collections/ArrayList.h"
 
 static void
 Arcadia_List_constructImpl
@@ -25,9 +25,16 @@ Arcadia_List_constructImpl
     Arcadia_List* self
   );
 
+static void
+Arcadia_List_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ListDispatch* self
+  ); 
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_List_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_List_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -55,14 +62,17 @@ Arcadia_List_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->getAt = NULL;
-  self->insertAt = NULL;
-  self->insertBack = NULL;
-  self->insertFront = NULL;
-  self->removeAt = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 1);
 }
+
+static void
+Arcadia_List_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ListDispatch* self
+  )
+{ }
 
 Arcadia_Value
 Arcadia_List_getAt
@@ -71,7 +81,7 @@ Arcadia_List_getAt
     Arcadia_List* self,
     Arcadia_SizeValue index
   )
-{ return self->getAt(thread, self, index); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_List, getAt, self, index); }
 
 void
 Arcadia_List_insertBack
@@ -80,7 +90,7 @@ Arcadia_List_insertBack
     Arcadia_List* self,
     Arcadia_Value value
   )
-{ self->insertBack(thread, self, value); }
+{ Arcadia_VirtualCall(Arcadia_List, insertBack, self, value); }
 
 void
 Arcadia_List_insertFront
@@ -89,7 +99,7 @@ Arcadia_List_insertFront
     Arcadia_List* self,
     Arcadia_Value value
   )
-{ self->insertFront(thread, self, value); }
+{ Arcadia_VirtualCall(Arcadia_List, insertFront, self, value); }
 
 void
 Arcadia_List_insertAt
@@ -99,7 +109,7 @@ Arcadia_List_insertAt
     Arcadia_SizeValue index,
     Arcadia_Value value
   )
-{ self->insertAt(thread, self, index, value); }
+{ Arcadia_VirtualCall(Arcadia_List, insertAt, self, index, value); }
 
 void
 Arcadia_List_removeAt
@@ -109,7 +119,7 @@ Arcadia_List_removeAt
     Arcadia_SizeValue index,
     Arcadia_SizeValue count
   )
-{ self->removeAt(thread, self, index, count); }
+{ Arcadia_VirtualCall(Arcadia_List, removeAt, self, index, count); }
 
 #define Define(Type, Suffix, Variable) \
   void \

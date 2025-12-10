@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -28,6 +28,13 @@
 Arcadia_declareObjectType(u8"Arcadia.Imaging.Windows.WicImageWriterBase", Arcadia_Imaging_Windows_WicImageWriterBase,
                           u8"Arcadia.Imaging.ImageWriter");
 
+struct Arcadia_Imaging_Windows_WicImageWriterBaseDispatch {
+  Arcadia_Imaging_ImageWriterDispatch _parent;
+
+  void (*getFormat)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase* self, Arcadia_Imaging_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters, GUID const** guid);
+  void (*configure)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase* self, Arcadia_Imaging_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters);
+};
+
 struct Arcadia_Imaging_Windows_WicImageWriterBase {
   Arcadia_Imaging_ImageWriter _parent;
 
@@ -39,13 +46,29 @@ struct Arcadia_Imaging_Windows_WicImageWriterBase {
 
   IWICBitmapFrameEncode* piBitmapFrame;
   IPropertyBag2* pPropertyBag;
-
-  void (*getFormat)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase* self, Arcadia_Imaging_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters, GUID const** guid);
-  void (*configure)(Arcadia_Thread* thread, Arcadia_Imaging_Windows_WicImageWriterBase* self, Arcadia_Imaging_PixelBuffer* sourcePixelBuffer, Arcadia_Imaging_ImageWriterParameters* parameters);
 };
 
 void
 Arcadia_Imaging_Windows_WicImageWriterBase_doWrite
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_Windows_WicImageWriterBase* self,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_ImageWriterParameters* parameters
+  );
+
+void
+Arcadia_Imaging_Windows_WicImageWriterBase_getFormat
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_Windows_WicImageWriterBase* self,
+    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_ImageWriterParameters* parameters,
+    GUID const** guid
+  );
+
+void
+Arcadia_Imaging_Windows_WicImageWriterBase_configure
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_Windows_WicImageWriterBase* self,

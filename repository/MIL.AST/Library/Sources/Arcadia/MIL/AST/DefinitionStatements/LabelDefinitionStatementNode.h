@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -30,6 +30,10 @@
 ///
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.LabelDefinitionStatementNode", Arcadia_MIL_AST_LabelDefinitionStatementNode,
                           u8"Arcadia.MIL.AST.DefinitionStatementNode");
+
+struct Arcadia_MIL_AST_LabelDefinitionStatementNodeDispatch {
+  Arcadia_MIL_AST_DefinitionStatementNodeDispatch parent;
+};
 
 struct Arcadia_MIL_AST_LabelDefinitionStatementNode {
   Arcadia_MIL_AST_DefinitionStatementNode parent;

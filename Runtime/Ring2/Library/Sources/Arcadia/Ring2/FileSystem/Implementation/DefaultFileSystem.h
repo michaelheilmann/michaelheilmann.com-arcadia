@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -36,6 +36,11 @@
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.DefaultFileSystem", Arcadia_DefaultFileSystem,
                           u8"Arcadia.FileSystem");
+
+
+struct Arcadia_DefaultFileSystemDispatch {
+  Arcadia_FileSystemDispatch _parent;
+};
 
 struct Arcadia_DefaultFileSystem {
   Arcadia_FileSystem _parent;

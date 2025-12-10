@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,6 +22,7 @@
 
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Engine/Include.h"
+#include "Arcadia/Imaging/Include.h"
 
 #include "Arcadia/Visuals/Backend.h"
 #include "Arcadia/Visuals/BackendContext.h"
@@ -31,10 +32,11 @@
 
 #include "Arcadia/Visuals/Diagnostics.h"
 
-#include "Arcadia/Visuals/Scene/MeshContext.h"
 #include "Arcadia/Visuals/Scene/CameraNode.h"
+#include "Arcadia/Visuals/Scene/FrameBufferNode.h"
 #include "Arcadia/Visuals/Scene/Node.h"
 #include "Arcadia/Visuals/Scene/MeshNode.h"
+#include "Arcadia/Visuals/Scene/RenderingContextNode.h"
 #include "Arcadia/Visuals/Scene/ViewportNode.h"
 
 #include "Arcadia/Visuals/Events/ApplicationQuitRequestedEvent.h"
@@ -54,12 +56,16 @@
 #include "Arcadia/Visuals/CullMode.h"
 #include "Arcadia/Visuals/DisplayDevice.h"
 #include "Arcadia/Visuals/DisplayMode.h"
-#include "Arcadia/Imaging/Include.h"
+#include "Arcadia/Visuals/Texture.h"
 #include "Arcadia/Visuals/TextureAddressMode.h"
 #include "Arcadia/Visuals/TextureFilter.h"
+#include "Arcadia/Visuals/VertexDescriptor.h"
+#include "Arcadia/Visuals/VertexElementDescriptor.h"
 #include "Arcadia/Visuals/VertexElementSemantics.h"
-#include "Arcadia/Visuals/VertexElementSyntax.h"
+#include "Arcadia/Visuals/VertexElementSyntactics.h"
 #include "Arcadia/Visuals/WindingMode.h"
+
+#include "Arcadia/Visuals/Scene/RenderScene.h"
 
 #undef ARCADIA_VISUALS_PRIVATE
 #pragma pop_macro("ARCADIA_VISUALS_PRIVATE")

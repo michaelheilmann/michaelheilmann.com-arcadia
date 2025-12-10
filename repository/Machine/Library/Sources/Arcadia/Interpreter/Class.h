@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -53,6 +53,10 @@ typedef struct R_Interpreter_Variable R_Interpreter_Variable;
 /// PARAMETER VARIABLES
 /// The parameter variables x1, x2, ..., xn of a procedure or method or constructor are stored in the registers 0, ..., n - 1.
 Arcadia_declareObjectType(u8"R.Interpreter.Class", R_Interpreter_Class, u8"Arcadia.Object");
+
+struct R_Interpreter_ClassDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
 struct R_Interpreter_Class {
   Arcadia_Object _parent;

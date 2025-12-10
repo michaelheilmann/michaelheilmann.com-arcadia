@@ -25,10 +25,16 @@ Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_constructImpl
     Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}* self
   );
 
+static void
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}Dispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -88,6 +94,14 @@ Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}Dispatch* self
+  )
+{ }
 
 void
 Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_assign

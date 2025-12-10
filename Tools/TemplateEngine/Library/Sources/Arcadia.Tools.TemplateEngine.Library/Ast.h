@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -27,6 +27,10 @@ Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Ast", Ast,
 
 /// <name>'(' <arguments> ')'
 #define Arcadia_TemplateEngine_AstKind_Invoke (2)
+
+struct AstDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
 struct Ast {
   Arcadia_Object _parent;

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,6 +20,7 @@
 #define ARCADIA_DDLS_NODES_PRIVATE (1)
 
 #include "Arcadia/DDLS/Nodes/AnyNode.h"
+#include "Arcadia/DDLS/Nodes/ChoiceNode.h"
 #include "Arcadia/DDLS/Nodes/Node.h"
 #include "Arcadia/DDLS/Nodes/ListNode.h"
 #include "Arcadia/DDLS/Nodes/MapNode.h"

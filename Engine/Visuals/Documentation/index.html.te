@@ -23,6 +23,6 @@
 @{include("TextureAddressMode.i")}
 @{include("TextureFilter.i")}
 @{include("VertexElementSemantics.i")}
-@{include("VertexElementSyntax.i")}
+@{include("VertexElementSyntactics.i")}
 @{include("WindingMode.i")}
 @{include("footer.i")}

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,6 +22,10 @@ typedef struct Arcadia_Visuals_Window Arcadia_Visuals_Window;
 // https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasActivationStateChangedEvent
 Arcadia_declareObjectType(u8"Arcadia.Visuals.CanvasActivationStateChangedEvent", Arcadia_Visuals_CanvasActivationStateChangedEvent,
                           u8"Arcadia.Visuals.CanvasEvent");
+
+struct Arcadia_Visuals_CanvasActivationStateChangedEventDispatch {
+  Arcadia_Visuals_CanvasEventDispatch parent;
+};
 
 struct Arcadia_Visuals_CanvasActivationStateChangedEvent {
   Arcadia_Visuals_CanvasEvent _parent;

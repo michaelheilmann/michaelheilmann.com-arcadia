@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,10 +23,16 @@ Arcadia_UTF8Writer_constructImpl
     Arcadia_UTF8Writer* self
   );
 
+static void
+Arcadia_UTF8Writer_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8WriterDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_UTF8Writer_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_UTF8Writer_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -54,14 +60,18 @@ Arcadia_UTF8Writer_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->writeBytes = NULL;
-  self->writeCodePoints = NULL;
-  self->writeImmutableUTF8String = NULL;
-  self->writeString = NULL;
-  self->flush = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+
+static void
+Arcadia_UTF8Writer_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8WriterDispatch* self
+  )
+{ }
 
 void
 Arcadia_UTF8Writer_writeBytes
@@ -71,9 +81,7 @@ Arcadia_UTF8Writer_writeBytes
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
   )
-{
-  self->writeBytes(thread, self, bytes, numberOfBytes);
-}
+{ Arcadia_VirtualCall(Arcadia_UTF8Writer, writeBytes, self, bytes, numberOfBytes); }
 
 void
 Arcadia_UTF8Writer_writeCodePoints
@@ -83,9 +91,7 @@ Arcadia_UTF8Writer_writeCodePoints
     Arcadia_Natural32Value const* codePoints,
     Arcadia_SizeValue numberOfCodePoints
   )
-{
-  self->writeCodePoints(thread, self, codePoints, numberOfCodePoints);
-}
+{ Arcadia_VirtualCall(Arcadia_UTF8Writer, writeCodePoints, self, codePoints, numberOfCodePoints); }
 
 void
 Arcadia_UTF8Writer_writeImmutableUtf8String
@@ -94,9 +100,7 @@ Arcadia_UTF8Writer_writeImmutableUtf8String
     Arcadia_UTF8Writer* self,
     Arcadia_ImmutableUtf8String* immutableUTF8String
   )
-{
-  self->writeImmutableUTF8String(thread, self, immutableUTF8String);
-}
+{ Arcadia_VirtualCall(Arcadia_UTF8Writer, writeImmutableUTF8String, self, immutableUTF8String); }
 
 void
 Arcadia_UTF8Writer_writeString
@@ -105,9 +109,7 @@ Arcadia_UTF8Writer_writeString
     Arcadia_UTF8Writer* self,
     Arcadia_String* string
   )
-{
-  self->writeString(thread, self, string);
-}
+{ Arcadia_VirtualCall(Arcadia_UTF8Writer, writeString, self, string); }
 
 void
 Arcadia_UTF8Writer_flush
@@ -115,4 +117,4 @@ Arcadia_UTF8Writer_flush
     Arcadia_Thread* thread,
     Arcadia_UTF8Writer* self
   )
-{ self->flush(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_UTF8Writer, flush, self); }

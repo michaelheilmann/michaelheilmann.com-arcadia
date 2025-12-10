@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -58,9 +58,8 @@ isNotEqualTo
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_Object_objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = &Arcadia_Object_constructImpl,
-  .destruct = NULL,
-  .visit = NULL,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Object_typeOperations = {
@@ -320,6 +319,14 @@ ARCADIA_CREATEOBJECT0
 static Arcadia_TypeValue g__Arcadia_Object_type = NULL;
 
 static void
+_Arcadia_Object_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ObjectDispatch* self
+  )
+{ }
+
+static void
 _Arcadia_Object_typeDestructing
   (
     void* context
@@ -338,7 +345,11 @@ _Arcadia_Object_getType
     g_objectRegistered = Arcadia_BooleanValue_True;
   }
   if (!g__Arcadia_Object_type) {
-    g__Arcadia_Object_type = Arcadia_registerObjectType(thread, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(Arcadia_Object), NULL,
+    g__Arcadia_Object_type = Arcadia_registerObjectType(thread,
+                                                        ObjectTypeName, sizeof(ObjectTypeName) - 1,
+                                                        sizeof(Arcadia_Object), NULL,
+                                                        sizeof(Arcadia_ObjectDispatch),
+                                                        (void(*)(Arcadia_Thread*,Arcadia_Dispatch*)) & _Arcadia_Object_initializeDispatchImpl,
                                                         &_Arcadia_Object_typeOperations, &_Arcadia_Object_typeDestructing);
   }
   return g__Arcadia_Object_type;

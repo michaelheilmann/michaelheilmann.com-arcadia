@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,7 +19,7 @@
 #include "Arcadia/Ring1/Implementation/Thread.h"
 
 void
-Arcadia_safeAddNatural16Value
+Arcadia_safeAddFullNatural16Value
   (
     Arcadia_Thread* thread,
     Arcadia_Natural16Value augend,
@@ -44,7 +44,7 @@ Arcadia_safeAddNatural16Value
 }
 
 void
-Arcadia_safeAddNatural32Value
+Arcadia_safeAddFullNatural32Value
   (
     Arcadia_Thread* thread,
     Arcadia_Natural32Value augend,
@@ -69,7 +69,7 @@ Arcadia_safeAddNatural32Value
 }
 
 void
-Arcadia_safeAddNatural64Value
+Arcadia_safeAddFullNatural64Value
   (
     Arcadia_Thread* thread,
     Arcadia_Natural64Value augend,
@@ -102,7 +102,7 @@ Arcadia_safeAddNatural64Value
 }
 
 void
-Arcadia_safeAddNatural8Value
+Arcadia_safeAddFullNatural8Value
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value augend,
@@ -127,7 +127,7 @@ Arcadia_safeAddNatural8Value
 }
 
 void
-Arcadia_safeAddSizeValue
+Arcadia_safeAddFullSizeValue
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue augend,
@@ -142,20 +142,20 @@ Arcadia_safeAddSizeValue
 #if Arcadia_Configuration_CompilerC_Msvc == Arcadia_Configuration_CompilerC
   #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural64Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural64Value_NumberOfBits, "environment not (yet) supported");
-    Arcadia_safeAddNatural64Value(thread, augend, addend, (Arcadia_Natural64Value*)sumHigh, (Arcadia_Natural64Value*)sumLow);
+    Arcadia_safeAddFullNatural64Value(thread, augend, addend, (Arcadia_Natural64Value*)sumHigh, (Arcadia_Natural64Value*)sumLow);
   #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural32Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural32Value_NumberOfBits, "environment not (yet) supported");
-    Arcadia_safeAddNatural32Value(thread, augend, addend, (Arcadia_Natural32Value*)sumHigh, (Arcadia_Natural32Value*)sumLow);
+    Arcadia_safeAddFullNatural32Value(thread, augend, addend, (Arcadia_Natural32Value*)sumHigh, (Arcadia_Natural32Value*)sumLow);
   #else
     #error ("environemnt not (yet) supported");
   #endif
 #elif Arcadia_Configuration_CompilerC_Gcc == Arcadia_Configuration_CompilerC
   #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural64Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural64Value_NumberOfBits, "environment not (yet) supported");
-    Arcadia_safeAddNatural64Value(thread, augend, addend, (Arcadia_Natural64Value*)sumHigh, (Arcadia_Natural64Value*)sumLow);
+    Arcadia_safeAddFullNatural64Value(thread, augend, addend, (Arcadia_Natural64Value*)sumHigh, (Arcadia_Natural64Value*)sumLow);
   #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
     Arcadia_StaticAssert(Arcadia_SizeValue_Maximum == Arcadia_Natural32Value_Maximum && Arcadia_SizeValue_NumberOfBits == Arcadia_Natural32Value_NumberOfBits, "environment not (yet) supported");
-    Arcadia_safeAddNatural32Value(thread, augend, addend, (Arcadia_Natural32Value*)sumHigh, (Arcadia_Natural32Value*)sumLow);
+    Arcadia_safeAddFullNatural32Value(thread, augend, addend, (Arcadia_Natural32Value*)sumHigh, (Arcadia_Natural32Value*)sumLow);
   #else
     #error("environemnt not (yet) supported");
   #endif

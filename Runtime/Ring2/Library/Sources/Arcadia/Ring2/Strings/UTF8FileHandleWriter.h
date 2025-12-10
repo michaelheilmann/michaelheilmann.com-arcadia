@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -27,6 +27,10 @@
 
 Arcadia_declareObjectType(u8"Arcadia.UTF8FileHandleReader", Arcadia_UTF8FileHandleWriter,
                           u8"Arcadia.UTF8Writer");
+
+struct Arcadia_UTF8FileHandleWriterDispatch {
+  Arcadia_UTF8WriterDispatch parent;
+};
 
 struct Arcadia_UTF8FileHandleWriter {
   Arcadia_UTF8Writer parent;

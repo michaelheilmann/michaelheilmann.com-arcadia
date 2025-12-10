@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -19,6 +19,7 @@
 #pragma push_macro("ARCADIA_LANGUAGES_PRIVATE")
 #define ARCADIA_LANGUAGES_PRIVATE (1)
 
+#include "Arcadia/Languages/Diagnostics.h"
 #include "Arcadia/Languages/Scanner.h"
 #include "Arcadia/Languages/StringTable.h"
 

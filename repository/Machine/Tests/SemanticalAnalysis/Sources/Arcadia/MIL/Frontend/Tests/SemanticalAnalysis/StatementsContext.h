@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,6 +22,10 @@ typedef struct Arcadia_MIL_VariableDefinitionStatementNode Arcadia_MIL_VariableD
 
 /// @brief Context for compiling a sequence of statements.
 Arcadia_declareObjectType("Arcadia.MIL.CallableContext", Arcadia_MIL_CallableContext, "Arcadia.Object");
+
+struct Arcadia_MIL_CallableContextDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
 struct Arcadia_MIL_CallableContext {
   Arcadia_Object _parent;

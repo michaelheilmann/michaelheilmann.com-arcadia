@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -27,8 +27,8 @@ typedef struct Arcadia_FileSystem Arcadia_FileSystem;
 Arcadia_declareObjectType(u8"Arcadia.FileHandle", Arcadia_FileHandle,
                           u8"Arcadia.Object");
 
-struct Arcadia_FileHandle {
-  Arcadia_Object _parent;
+struct Arcadia_FileHandleDispatch {
+  Arcadia_ObjectDispatch _parent;
 
   Arcadia_BooleanValue
   (*isClosed)
@@ -121,6 +121,11 @@ struct Arcadia_FileHandle {
       Arcadia_Thread* thread,
       Arcadia_FileHandle* self
     );
+
+};
+
+struct Arcadia_FileHandle {
+  Arcadia_Object _parent;
 };
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileHandle_close

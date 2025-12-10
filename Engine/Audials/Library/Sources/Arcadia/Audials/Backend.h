@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,6 +21,10 @@
 // An audials backend.
 Arcadia_declareObjectType(u8"Arcadia.Audials.Backend", Arcadia_Audials_Backend,
                           u8"Arcadia.Engine.Backend");
+
+struct Arcadia_Audials_BackendDispatch {
+  Arcadia_Engine_BackendDispatch parent;
+};
 
 struct Arcadia_Audials_Backend {
   Arcadia_Engine_Backend _parent;

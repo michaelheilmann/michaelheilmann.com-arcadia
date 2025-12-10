@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,6 +22,10 @@ typedef struct Arcadia_Visuals_BackendContext Arcadia_Visuals_BackendContext;
 // The opaque type of an "application" message.
 Arcadia_declareObjectType(u8"Arcadia.Visuals.ApplicationEvent", Arcadia_Visuals_ApplicationEvent,
                           u8"Arcadia.Engine.Event");
+
+struct Arcadia_Visuals_ApplicationEventDispatch {
+  Arcadia_Engine_EventDispatch parent;
+};
 
 struct Arcadia_Visuals_ApplicationEvent {
   Arcadia_Engine_Event _parent;

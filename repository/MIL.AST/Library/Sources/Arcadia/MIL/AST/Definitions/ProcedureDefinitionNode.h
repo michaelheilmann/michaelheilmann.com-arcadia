@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -24,6 +24,10 @@
 /// See https://michaelheilmann.com/specifications/mil/#procedure-definition for more information.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.ProcedureDefinitionNode", Arcadia_MIL_AST_ProcedureDefinitionNode,
                           u8"Arcadia.MIL.AST.DefinitionNode");
+
+struct Arcadia_MIL_AST_ProcedureDefinitionNodeDispatch {
+  Arcadia_MIL_AST_DefinitionNodeDispatch _parent;
+};
 
 struct Arcadia_MIL_AST_ProcedureDefinitionNode {
   Arcadia_MIL_AST_DefinitionNode _parent;

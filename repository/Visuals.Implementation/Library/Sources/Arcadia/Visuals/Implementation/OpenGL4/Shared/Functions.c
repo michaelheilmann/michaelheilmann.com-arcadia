@@ -14,8 +14,14 @@ _Arcadia_Visuals_Implementation_OpenGL4_Functions_initialize
 #undef Define
 
 #define Define(Type, Name) \
-  functions->Name = (Type)(*linker->link)(thread, linker, #Name);
+  functions->Name = (Type)(*linker->link)(thread, linker, #Name); \
+  if (!functions->Name) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed); \
+    Arcadia_Thread_jump(thread); \
+  }
+
   #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.i"
+
 #undef Define
 }
 

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,6 +26,13 @@ Arcadia_Visuals_Implementation_ViewportResource_constructImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_ViewportResource_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ViewportResourceDispatch* self
+  );
+
+static void
 Arcadia_Visuals_Implementation_ViewportResource_destructImpl
   (
     Arcadia_Thread* thread,
@@ -40,8 +47,9 @@ Arcadia_Visuals_Implementation_ViewportResource_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Implementation_ViewportResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Implementation_ViewportResource_destructImpl,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_ViewportResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_ViewportResource_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_ViewportResource_visitImpl,
 };
 
@@ -74,12 +82,17 @@ Arcadia_Visuals_Implementation_ViewportResource_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  self->setCanvasSize = NULL;
-  self->setClearColor = NULL;
-  self->setRelativeViewportRectangle = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
+
+static void
+Arcadia_Visuals_Implementation_ViewportResource_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ViewportResourceDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Visuals_Implementation_ViewportResource_destructImpl
@@ -107,7 +120,16 @@ Arcadia_Visuals_Implementation_ViewportResource_setClearColor
     Arcadia_Real32Value blue,
     Arcadia_Real32Value alpha
   )
-{ self->setClearColor(thread, self, red, green, blue, alpha); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ViewportResource, setClearColor, self, red, green, blue, alpha); }
+
+void
+Arcadia_Visuals_Implementation_ViewportResource_setClearDepth
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ViewportResource* self,
+    Arcadia_Real32Value depth
+  )
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ViewportResource, setClearDepth, self, depth); }
 
 void
 Arcadia_Visuals_Implementation_ViewportResource_setRelativeViewportRectangle
@@ -119,7 +141,7 @@ Arcadia_Visuals_Implementation_ViewportResource_setRelativeViewportRectangle
     Arcadia_Real32Value right,
     Arcadia_Real32Value top
   )
-{ self->setRelativeViewportRectangle(thread, self, left, bottom, right, top); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ViewportResource, setRelativeViewportRectangle, self, left, bottom, right, top); }
 
 void
 Arcadia_Visuals_Implementation_ViewportResource_setCanvasSize
@@ -129,4 +151,4 @@ Arcadia_Visuals_Implementation_ViewportResource_setCanvasSize
     Arcadia_Real32Value width,
     Arcadia_Real32Value height
   )
-{ self->setCanvasSize(thread, self, width, height); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ViewportResource, setCanvasSize, self, width, height); }

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,10 @@
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.EmitCommand", Arcadia_Visuals_EmitCommand,
                           u8"Arcadia.Visuals.Command");
+
+struct Arcadia_Visuals_EmitCommandDispatch {
+  Arcadia_Visuals_CommandDispatch _parent;
+};
 
 struct Arcadia_Visuals_EmitCommand {
   Arcadia_Visuals_Command _parent;

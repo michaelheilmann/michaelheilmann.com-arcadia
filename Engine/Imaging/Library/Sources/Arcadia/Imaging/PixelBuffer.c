@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -249,6 +249,13 @@ Arcadia_Imaging_PixelBuffer_constructImpl
   );
 
 static void
+Arcadia_Imaging_PixelBuffer_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBufferDispatch* self
+  );
+
+static void
 Arcadia_Imaging_PixelBuffer_destruct
   (
     Arcadia_Thread* thread,
@@ -256,9 +263,9 @@ Arcadia_Imaging_PixelBuffer_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Imaging_PixelBuffer_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Imaging_PixelBuffer_destruct,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Imaging_PixelBuffer_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Imaging_PixelBuffer_destruct,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -403,6 +410,14 @@ Arcadia_Imaging_PixelBuffer_constructImpl
     Arcadia_Thread_jump(thread);
   }
 }
+
+static void
+Arcadia_Imaging_PixelBuffer_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBufferDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Imaging_PixelBuffer_destruct
@@ -636,6 +651,134 @@ Arcadia_Imaging_PixelBuffer_setPixelRgba
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void
+Arcadia_Imaging_PixelBuffer_fillRectangle
+(
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBuffer* self,
+    Arcadia_Integer32Value left,
+    Arcadia_Integer32Value top,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height,
+    Arcadia_Natural8Value r,
+    Arcadia_Natural8Value g,
+    Arcadia_Natural8Value b,
+    Arcadia_Natural8Value a
+  )
+{
+  if (width < 0 || height < 0) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Integer32Value right, bottom;
+  if (!Arcadia_safeAddInteger32Value(left, width, &right) || !Arcadia_safeAddInteger32Value(top, height, &bottom)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  // We have the rectangle (left, top, right, bottom); let's clip it.
+  if (left < 0) left = 0;
+  if (top < 0) top = 0;
+  if (right > self->width) right = self->width;
+  if (bottom > self->height) bottom = self->height;
+
+  switch (self->pixelFormat) {
+    case Arcadia_Imaging_PixelFormat_An8Bn8Gn8Rn8: {
+      Arcadia_SizeValue bytesPerPixel = 4;
+      Arcadia_SizeValue stride = (self->width * bytesPerPixel) + self->linePadding;
+      PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
+      Arcadia_Natural8Value* p = self->bytes;
+      p = p + top * stride; // "p" points to (top, 0)
+      for (Arcadia_SizeValue y = top; y < bottom; ++y) {
+        Arcadia_Natural8Value* q = p + left * bytesPerPixel; // "q" points to(y, left)
+        for (Arcadia_SizeValue x = left; x < right; ++x) {
+          ENCODE_ABGR(q, &pixel);
+          q += bytesPerPixel;
+        }
+        p += stride;
+      }
+    } break;
+    case Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8: {
+      Arcadia_SizeValue bytesPerPixel = 4;
+      Arcadia_SizeValue stride = (self->width * bytesPerPixel) + self->linePadding;
+      PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
+      Arcadia_Natural8Value* p = self->bytes;
+      p = p + top * stride; // "p" points to (top, 0)
+      for (Arcadia_SizeValue y = top; y < bottom; ++y) {
+        Arcadia_Natural8Value* q = p + left * bytesPerPixel; // "q" points to(y, left)
+        for (Arcadia_SizeValue x = left; x < right; ++x) {
+          ENCODE_ARGB(q, &pixel);
+          q += bytesPerPixel;
+        }
+        p += stride;
+      }
+    } break;
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8: {
+      Arcadia_SizeValue bytesPerPixel = 3;
+      Arcadia_SizeValue stride = (self->width * bytesPerPixel) + self->linePadding;
+      PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
+      Arcadia_Natural8Value* p = self->bytes;
+      p = p + top * stride; // "p" points to (top, 0)
+      for (Arcadia_SizeValue y = top; y < bottom; ++y) {
+        Arcadia_Natural8Value* column = p + left * bytesPerPixel; // "q" points to(y, left)
+        for (Arcadia_SizeValue x = left; x < right; ++x) {
+          ENCODE_BGR(column, &pixel);
+          column += bytesPerPixel;
+        }
+        p += stride;
+      }
+    } break;
+    case Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8An8: {
+      Arcadia_SizeValue bytesPerPixel = 4;
+      Arcadia_SizeValue stride = (self->width * bytesPerPixel) + self->linePadding;
+      PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
+      Arcadia_Natural8Value* p = self->bytes;
+      p = p + top * stride; // "p" points to (top, 0)
+      for (Arcadia_SizeValue y = top; y < bottom; ++y) {
+        Arcadia_Natural8Value* q = p + left * bytesPerPixel; // "q" points to (y, left)
+        for (Arcadia_SizeValue x = left; x < right; ++x) {
+          ENCODE_BGRA(q, &pixel);
+          q += bytesPerPixel;
+        }
+        p += stride;
+      }
+    } break;
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8: {
+      Arcadia_SizeValue bytesPerPixel = 3;
+      Arcadia_SizeValue stride = (self->width * bytesPerPixel) + self->linePadding;
+      PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
+      Arcadia_Natural8Value* p = self->bytes;
+      p = p + top * stride; // "p" points to (top, 0)
+      for (Arcadia_SizeValue y = top; y < bottom; ++y) {
+        Arcadia_Natural8Value *q = p + left * bytesPerPixel; // "q" points to (y, left)
+        for (Arcadia_SizeValue x = left; x < right; ++x) {
+          ENCODE_RGB(q, &pixel);
+          q += bytesPerPixel;
+        }
+        p += stride;
+      }
+    } break;
+    case Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8: {
+      Arcadia_SizeValue bytesPerPixel = 4;
+      Arcadia_SizeValue stride = (self->width * bytesPerPixel) + self->linePadding;
+      PIXEL pixel = { .r = r, .g = g, .b = b, .a = a };
+      Arcadia_Natural8Value* p = self->bytes;
+      p = p + top * stride; // "p" points to (top, 0)
+      for (Arcadia_SizeValue y = top; y < bottom; ++y) {
+        Arcadia_Natural8Value* q = p + left * bytesPerPixel; // "q" points to (y, left)
+        for (Arcadia_SizeValue x = left; x < right; ++x) {
+          ENCODE_RGBA(q, &pixel);
+          q += bytesPerPixel;
+        }
+        p += stride;
+      }
+    } break;
+    default: {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
+    } break;
+  };
+}
 
 void
 Arcadia_Imaging_PixelBuffer_fill

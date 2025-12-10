@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -67,11 +67,6 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
                    "${REPOSITORY_SOURCE_DIR}/../.build/data-protection-statement.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
-  # Build "specifications/common-lexical-specification/index.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/CommonLexicalSpecification/index.html.te"
-                   "${REPOSITORY_SOURCE_DIR}/../.build/specifications/common-lexical-specification/index.html"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-
   # Build "Specifications/MIL/index.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/MIL/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mil/index.html"
@@ -79,5 +74,8 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
 
 EndTemplateEngine()
 
+add_subdirectory("Specifications/Common Lexical Translations")
+add_subdirectory("Specifications/MDNP")
 add_subdirectory(Specifications/DDL)
 add_subdirectory(Specifications/DDLS)
+add_subdirectory(AssortedNotes)

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -28,6 +28,10 @@
 // A temporary window used to create old-style contexts.
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.WGL.FactoryWindow", Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow,
                           u8"Arcadia.Object");
+
+struct Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindowDispatch {
+  Arcadia_ObjectDispatch parent;
+};
 
 struct Arcadia_Visuals_Implementation_OpenGL4_WGL_FactoryWindow {
   Arcadia_Object parent;

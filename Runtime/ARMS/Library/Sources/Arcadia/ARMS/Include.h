@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -31,7 +31,7 @@
 /// Alias for offsetof(expression).
 #define Arcadia_ARMS_OffsetOf(expression) offsetof(expression)
 
-typedef void (Arcadia_ARMS_TypeRemovedCallbackFunction)(void* context, Arms_Natural8 const* name, Arcadia_ARMS_Size nameLength);
+typedef void (Arcadia_ARMS_TypeRemovedCallbackFunction)(void* context, Arcadia_ARMS_Natural8 const* name, Arcadia_ARMS_Size nameLength);
 
 typedef void (Arcadia_ARMS_VisitCallbackFunction)(void* context, void* object);
 
@@ -50,7 +50,7 @@ Arcadia_ARMS_shutdown
 Arcadia_ARMS_Status
 Arcadia_ARMS_addType
   (
-    Arms_Natural8 const* name,
+    Arcadia_ARMS_Natural8 const* name,
     Arcadia_ARMS_Size nameLength,
     void* context,
     Arcadia_ARMS_TypeRemovedCallbackFunction* typeRemoved,
@@ -62,7 +62,7 @@ Arcadia_ARMS_Status
 Arcadia_ARMS_allocate
   (
     void** pObject,
-    Arms_Natural8 const* name,
+    Arcadia_ARMS_Natural8 const* name,
     Arcadia_ARMS_Size nameLength,
     Arcadia_ARMS_Size size
   );
@@ -94,37 +94,7 @@ Arcadia_ARMS_visit
 
 #if defined(Arcadia_ARMS_Configuration_WithNotifyDestroy) && 1 ==  Arcadia_ARMS_Configuration_WithNotifyDestroy
 
-typedef void (Arcadia_ARMS_NotifyDestroyCallback)(void* argument1, void *argument2);
-
-Arcadia_ARMS_Status
-Arcadia_ARMS_removeNotifyDestroyAll
-  (
-    void* observed
-  );
-
-Arcadia_ARMS_Status
-Arcadia_ARMS_addNotifyDestroy
-  (
-    void* observed,
-    void* argument1,
-    void* argument2,
-    Arcadia_ARMS_NotifyDestroyCallback* callback
-  );
-
-Arcadia_ARMS_Status
-Arcadia_ARMS_removeNotifyDestroy
-  (
-    void* observed,
-    void* argument1,
-    void* argument2,
-    Arcadia_ARMS_NotifyDestroyCallback* callback
-  );
-
-Arcadia_ARMS_Status
-Arcadia_ARMS_removeNotifyDestroyAll
-  (
-    void* observed
-  );
+#include "Arcadia/ARMS/NotifyDestroy.h"
 
 #endif // Arcadia_ARMS_Configuration_WithNotifyDestroy
 

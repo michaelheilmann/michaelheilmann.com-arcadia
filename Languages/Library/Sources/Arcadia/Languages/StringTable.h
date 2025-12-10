@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -28,6 +28,10 @@ typedef struct Arcadia_Languages_StringTable_Node Arcadia_Languages_StringTable_
 Arcadia_declareObjectType(u8"Arcadia.Languages.StringTable", Arcadia_Languages_StringTable,
                           u8"Arcadia.Object");
 
+struct Arcadia_Languages_StringTableDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
+
 struct Arcadia_Languages_StringTable {
   Arcadia_Object _parent;
   Arcadia_Languages_StringTable_Node** buckets;
@@ -36,7 +40,7 @@ struct Arcadia_Languages_StringTable {
 };
 
 Arcadia_Languages_StringTable*
-Arcadia_Languages_StringTable_create
+Arcadia_Languages_StringTable_getOrCreate
   (
     Arcadia_Thread* thread
   );
@@ -47,6 +51,23 @@ Arcadia_Languages_StringTable_getOrCreateString
     Arcadia_Thread* thread,
     Arcadia_Languages_StringTable* self,
     Arcadia_StringBuffer* stringBuffer
+  );
+
+Arcadia_String*
+Arcadia_Languages_StringTable_getOrCreateStringFromBytes
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_StringTable* self,
+    Arcadia_Natural8Value const *bytes,
+    Arcadia_SizeValue numberOfBytes
+  );
+
+Arcadia_String*
+Arcadia_Languages_StringTable_getOrCreateStringFromCxxString
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_StringTable* self,
+    const char *string
   );
 
 #endif // ARCADIA_LANGUAGES_STRINGTABLE_H_INCLUDED

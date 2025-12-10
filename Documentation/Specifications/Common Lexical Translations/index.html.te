@@ -1,0 +1,77 @@
+  @{include("./../../Commons/header-common.i")}
+  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=4'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=4'>
+  <script>
+  MathJax = {
+    startup: {
+      ready() {
+        MathJax.startup.defaultReady();
+        const {Token} = MathJax._.input.tex.Token;
+        const {MapHandler} = MathJax._.input.tex.MapHandler;
+        const delimiter = MapHandler.getMap('delimiter');
+        delimiter.add('\\llbracket', new Token('\\llbracket', '\u27E6'));
+        delimiter.add('\\rrbracket', new Token('\\rrbracket', '\u27E7'));
+      }
+    }
+  }
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@4/tex-mml-chtml.js"></script>
+  <style>
+  @{include("./../specification.css.i")}
+  </style>
+
+  <link rel='canonical' href='@{siteAddress}/specifications/common-lexical-translations/index.html'>  
+  <title>Common Lexical Translations</title>
+</head>
+<body class="my-content-page-1">
+  <header>
+  @{include("./../mathjax-definitions.i")}
+  <div>
+  <a href="@{siteAddress}/">Home</a>
+  </div>
+  </header>
+  <main>
+    <div class="left-column"></div>
+    <div class="center-column">
+    <h1>Common Lexical Translations</h1>
+    <div class="abstract">@{include("./0. Abstract.i")}</div>
+
+    @{include("./1. Introduction.i")}
+    @{include("./2. Standard Profile.i")}
+
+  </div>
+  <div class="right-column">
+    <nav>
+      <ul style="list-style: none">
+        <li><a href="#introduction">1. Introduction</a></li>
+        <li><a href="#standard-profile">2 Standard Profile</a></li>
+        <li><a href="#standard-profile-word">2.1 word</a></li>
+        <li><a href="#standard-profile-whitespace">2.2 whitespace</a></li>
+        <li><a href="#standard-profile-line-terminator">2.3 line terminator</a></li>
+        <li><a href="#standard-profile-comment">2.4 comment</a></li>
+        <li><a href="#standard-profile-parentheses">2.5 parentheses</a></li>
+        <li><a href="#standard-profile-curly-brackets">2.6 curly brackets</a></li>
+        <li><a href="#standard-profile-colon">2.7 colon</a></li>
+        <li><a href="#standard-profile-comma">2.9 comma</a></li>
+        <li><a href="#standard-profile-number-literal">2.10 number literal</a></li>
+        <li><a href="#standard-profile-string-literal">2.11 string literal</a></li>
+        <li><a href="#standard-profile-boolean-literal">2.12 boolean literal</a></li>
+        <li><a href="#standard-profile-void-literal">2.13 void literal</a></li>
+        <li><a href="#standard-profile-digit">2.14 decimal digit</a></li>
+        <li><a href="#standard-profile-digit">2.15 hexadecimal digit</a></li>
+        <li><a href="#standard-profile-alphanumeric">2.16 alphanumeric</a></li>
+        <li><a href="#standard-profile-period">2.17 period</a></li>
+      </ul>
+    </nav>
+  </div>
+  </main>
+  <footer>
+    <div class="left-column"></div>
+    <div class="center-column"></div>
+    <div class="right-column">
+      <div>Website maintained by @{siteAuthor}.</div>
+      <div>Last modified on @{dayOfMonth()} @{monthName()} @{year()}.</div>
+    </div>
+  </footer>
+</body>
+</html>

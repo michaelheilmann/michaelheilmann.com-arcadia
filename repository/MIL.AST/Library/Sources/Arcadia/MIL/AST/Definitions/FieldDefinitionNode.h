@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,6 +21,10 @@
 /// The definition of a parameter variable, local variable, or member variable.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.FieldDefinitionNode", Arcadia_MIL_AST_FieldDefinitionNode,
                           u8"Arcadia.MIL.AST.DefinitionNode");
+
+struct Arcadia_MIL_AST_FieldDefinitionNodeDispatch {
+  Arcadia_MIL_AST_DefinitionNodeDispatch _parent;
+};
 
 struct Arcadia_MIL_AST_FieldDefinitionNode {
   Arcadia_MIL_AST_DefinitionNode _parent;

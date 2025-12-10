@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,13 +26,13 @@ Arcadia_declareEnumerationType(u8"Arcadia.Visuals.TextureAddressMode", Arcadia_V
 
 enum Arcadia_Visuals_TextureAddressMode {
 
-  Arcadia_Visuals_TextureAddressMode_ClampToEdge,
-
   Arcadia_Visuals_TextureAddressMode_ClampToBorder,
 
-  Arcadia_Visuals_TextureAddressMode_Repeat,
+  Arcadia_Visuals_TextureAddressMode_ClampToEdge,
 
   Arcadia_Visuals_TextureAddressMode_MirroredRepeat,
+
+  Arcadia_Visuals_TextureAddressMode_Repeat,
 
 };
 

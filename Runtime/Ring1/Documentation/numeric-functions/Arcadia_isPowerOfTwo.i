@@ -1,6 +1,6 @@
 <section class="cxx entity procedure">
 
-  <h1 id="Arcadia_isPowerOfTwo*">Arcadia_isPowerOfTwo*</h1>
+  <h1 id="Arcadia_isPowerOfTwo%2a">Arcadia_isPowerOfTwo*</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>

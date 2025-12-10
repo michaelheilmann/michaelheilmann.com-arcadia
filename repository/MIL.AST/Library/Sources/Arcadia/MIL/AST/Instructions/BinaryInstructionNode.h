@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,6 +26,10 @@ typedef struct Arcadia_MIL_AST_OperandNode Arcadia_MIL_AST_OperandNode;
 /// Represents instructions with two operands and a result.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.BinaryInstructionNode", Arcadia_MIL_AST_BinaryInstructionNode,
                           u8"Arcadia.MIL.AST.InstructionNode");
+
+struct Arcadia_MIL_AST_BinaryInstructionNodeDispatch {
+  Arcadia_MIL_AST_InstructionNodeDispatch parent;
+};
 
 struct Arcadia_MIL_AST_BinaryInstructionNode {
   Arcadia_MIL_AST_InstructionNode parent;

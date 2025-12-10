@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -32,11 +32,18 @@ typedef struct Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource Arcad
 typedef struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResource Arcadia_Visuals_Implementation_OpenGL4_ProgramResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.MeshResource", Arcadia_Visuals_Implementation_OpenGL4_MeshResource,
-                          u8"Arcadia.Visuals.Implementation.MeshResource")
+                          u8"Arcadia.Visuals.Implementation.MeshResource");
+
+struct Arcadia_Visuals_Implementation_OpenGL4_MeshResourceDispatch {
+  Arcadia_Visuals_Implementation_MeshResourceDispatch _parent;
+};
 
 struct Arcadia_Visuals_Implementation_OpenGL4_MeshResource {
   Arcadia_Visuals_Implementation_MeshResource _parent;
   Arcadia_Natural8Value dirty;
+  // The mesh-wide ambient color of the mesh.
+  Arcadia_Math_Color4Real32* meshAmbientColor;
+  // The local to world matrix of the mesh.
   Arcadia_Math_Matrix4Real32* localToWorldMatrix;
   Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* meshConstantBuffer;
   Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBuffer;

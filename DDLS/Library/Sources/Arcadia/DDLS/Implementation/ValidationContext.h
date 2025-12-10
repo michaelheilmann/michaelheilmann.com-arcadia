@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,11 @@
 Arcadia_declareObjectType(u8"Arcadia.DDLS.ValidationContext", Arcadia_DDLS_ValidationContext,
                           u8"Arcadia.Object");
 
+struct Arcadia_DDLS_ValidationContextDispatch {
+  Arcadia_ObjectDispatch parent;
+  void (*run)(Arcadia_Thread* thread, Arcadia_DDLS_ValidationContext*, Arcadia_String* name, Arcadia_DDL_Node*);
+};
+
 struct Arcadia_DDLS_ValidationContext {
   Arcadia_Object parent;
   /// @brief The schemata used by this validation context.
@@ -32,7 +37,6 @@ struct Arcadia_DDLS_ValidationContext {
   Arcadia_DDLS_Diagnostics* diagnostics;
   Arcadia_StringBuffer* temporary1;
   Arcadia_Languages_StringTable* stringTable;
-  void (*run)(Arcadia_Thread* thread, Arcadia_DDLS_ValidationContext*, Arcadia_String* name, Arcadia_DDL_Node*);
 };
 
 Arcadia_DDLS_ValidationContext*

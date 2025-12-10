@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,6 +23,7 @@
 #include "Arcadia/Ring1/Implementation/Real64.h"
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_Real%2AValue_getBits
 Arcadia_Natural64Value
 Arcadia_Real64Value_getBits
   (

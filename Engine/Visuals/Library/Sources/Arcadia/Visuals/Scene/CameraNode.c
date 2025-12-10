@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -13,6 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+#define ARCADIA_VISUALS_PRIVATE (1)
 #include "Arcadia/Visuals/Scene/CameraNode.h"
 
 static void
@@ -23,6 +24,13 @@ Arcadia_Visuals_Scene_CameraNode_constructImpl
   );
 
 static void
+Arcadia_Visuals_Scene_CameraNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_CameraNodeDispatch* self
+  );
+
+static void
 Arcadia_Visuals_Scene_CameraNode_destructImpl
   (
     Arcadia_Thread* thread,
@@ -30,9 +38,9 @@ Arcadia_Visuals_Scene_CameraNode_destructImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Visuals_Scene_CameraNode_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_Visuals_Scene_CameraNode_destructImpl,
-  .visit = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Scene_CameraNode_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Scene_CameraNode_destructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -62,11 +70,17 @@ Arcadia_Visuals_Scene_CameraNode_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   self->viewport = NULL;
-  self->setViewToProjectionMatrix = NULL;
-  self->setWorldToViewMatrix = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
+
+static void
+Arcadia_Visuals_Scene_CameraNode_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Scene_CameraNodeDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Visuals_Scene_CameraNode_destructImpl
@@ -92,7 +106,7 @@ Arcadia_Visuals_Scene_CameraNode_setViewToProjectionMatrix
     Arcadia_Visuals_Scene_CameraNode* self,
     Arcadia_Math_Matrix4Real32* viewToProjectionMatrix
   )
-{ self->setViewToProjectionMatrix(thread, self, viewToProjectionMatrix); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Scene_CameraNode, setViewToProjectionMatrix, self, viewToProjectionMatrix); }
 
 void
 Arcadia_Visuals_Scene_CameraNode_setWorldToViewMatrix
@@ -101,4 +115,4 @@ Arcadia_Visuals_Scene_CameraNode_setWorldToViewMatrix
     Arcadia_Visuals_Scene_CameraNode* self,
     Arcadia_Math_Matrix4Real32* worldToViewMatrix
   )
-{ self->setWorldToViewMatrix(thread, self, worldToViewMatrix); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Scene_CameraNode, setWorldToViewMatrix, self, worldToViewMatrix); }

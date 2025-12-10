@@ -8,10 +8,10 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#define Arcadia_LogFlags_Debug (0)
-#define Arcadia_LogFlags_Info (1)
-#define Arcadia_LogFlags_Trace (2)
-#define Arcadia_LogFlags_Error (4)
+#define Arcadia_LogFlags_Debug (1)
+#define Arcadia_LogFlags_Info (2)
+#define Arcadia_LogFlags_Trace (4)
+#define Arcadia_LogFlags_Error (8)
 
 typedef uint8_t Arcadia_LogFlags;
 

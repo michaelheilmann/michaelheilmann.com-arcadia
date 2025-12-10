@@ -7,26 +7,29 @@
 
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_ForeignProcedureValue">Arcadia_ForeignProcedureValue</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer*Value">Arcadia_Integer*Value</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer*Value_NumberOfBits">Arcadia_Integer*Value_NumberOfBits</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer*Value_NumberOfBytes">Arcadia_Integer*Value_NumberOfBytes</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer*Value_Maximum">Arcadia_Integer*Value_Maximum</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer*Value_Minimum">Arcadia_Integer*Value_Minimum</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer*Value_Literal">Arcadia_Integer*Value_Literal</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer%2aValue">Arcadia_Integer*Value</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer%2aValue_NumberOfBits">Arcadia_Integer*Value_NumberOfBits</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer%2aValue_NumberOfBytes">Arcadia_Integer*Value_NumberOfBytes</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer%2aValue_Maximum">Arcadia_Integer*Value_Maximum</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer%2aValue_Minimum">Arcadia_Integer*Value_Minimum</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Integer%2aValue_Literal">Arcadia_Integer*Value_Literal</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural*Value">Arcadia_Natural*Value</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural*Value_NumberOfBits">Arcadia_Natural*Value_NumberOfBits</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural*Value_NumberOfBytes">Arcadia_Natural*Value_NumberOfBytes</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural*Value_Maximum">Arcadia_Natural*Value_Maximum</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural*Value_Minimum">Arcadia_Natural*Value_Minimum</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural*Value_Literal">Arcadia_Natural*Value_Literal</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural%2aValue">Arcadia_Natural*Value</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural%2aValue_NumberOfBits">Arcadia_Natural*Value_NumberOfBits</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural%2aValue_NumberOfBytes">Arcadia_Natural*Value_NumberOfBytes</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural%2aValue_Maximum">Arcadia_Natural*Value_Maximum</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural%2aValue_Minimum">Arcadia_Natural*Value_Minimum</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Natural%2aValue_Literal">Arcadia_Natural*Value_Literal</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real*Value">Arcadia_Real*Value</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real*Value_NumberOfBits">Arcadia_Real*Value_NumberOfBits</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real*Value_NumberOfBytes">Arcadia_Real*Value_NumberOfBytes</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real*Value_Maximum">Arcadia_Real*Value_Maximum</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real*Value_Minimum">Arcadia_Real*Value_Minimum</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real*Value_getBits">Arcadia_Real*Value_getBits</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_ObjectReferenceValue">Arcadia_ObjectReferenceValue</a></li>
+
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real%2aValue">Arcadia_Real*Value</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real%2aValue_NumberOfBits">Arcadia_Real*Value_NumberOfBits</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real%2aValue_NumberOfBytes">Arcadia_Real*Value_NumberOfBytes</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real%2aValue_Maximum">Arcadia_Real*Value_Maximum</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real%2aValue_Minimum">Arcadia_Real*Value_Minimum</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real%2aValue_getBits">Arcadia_Real*Value_getBits</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Real%2aValue_isFinite">Arcadia_Real*Value_isFinite</a></li>
 
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_SizeValue">Arcadia_SizeValue</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_SizeValue_NumberOfBits">Arcadia_SizeValue_NumberOfBits</a></li>
@@ -45,33 +48,29 @@
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Value_isEqualTo">Arcadia_Value_isEqualTo</a></li>
 
         <li>Numeric functions</li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_ceil*">Arcadia_ceil*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_clamp*">Arcadia_clamp*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_cos*">Arcadia_cos*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_countLeadingZeroes*">Arcadia_countLeadingZeroes*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_countSignificandBits*">Arcadia_countSignificandBits*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_countTrailingZeroes*">Arcadia_countTrailingZeroes*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_floor*">Arcadia_floor*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_sqrt*">Arcadia_sqrt*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_ceil%2a">Arcadia_ceil*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_clamp%2a">Arcadia_clamp*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_cos%2a">Arcadia_cos*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_countLeadingZeroes%2a">Arcadia_countLeadingZeroes*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_countSignificandBits%2a">Arcadia_countSignificandBits*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_countTrailingZeroes%2a">Arcadia_countTrailingZeroes*</a></li>
 
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_floor%2a">Arcadia_floor*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_sqrt%2a">Arcadia_sqrt*</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getNumberOfCores">Arcadia_getNumberOfCores</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getPageSize">Arcadia_getPageSize</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getTickCount">Arcadia_getTickCount</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_hash%2a">Arcadia_hash*</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_hash*">Arcadia_hash*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_maximum%2a">Arcadia_maximum*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_minimum%2a">Arcadia_minimum*</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_maximum*">Arcadia_maximum*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_minimum*">Arcadia_minimum*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_nextPowerOfTwoGreaterThan%2a">Arcadia_nextPowerOfTwoGreaterThan*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_nextPowerOfTwoGreaterThanOrEqualTo%2a">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_nextPowerOfTwoGreaterThan*">Arcadia_nextPowerOfTwoGreaterThan*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*">Arcadia_nextPowerOfTwoGreaterThanOrEqualTo*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_ObjectReferenceValue">Arcadia_ObjectReferenceValue</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_quotientRemainder*">Arcadia_quotientRemainder*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_quotientRemainder%2a">Arcadia_quotientRemainder*</a></li>
 
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_safeAdd*">Arcadia_safeAdd*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_safeAddFull%2a">Arcadia_safeAddFull*</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_safeMultiply*">Arcadia_safeMultiply*</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_sin*">Arcadia_sin*</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_sin%2a">Arcadia_sin*</a></li>
 
         <li>Unicode functions</li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_EncodeCodePointCallbackContext">Arcadia_Unicode_EncodeCodePointCallbackContext</a></li>
@@ -90,6 +89,8 @@
         <li>Miscellaneous functions</li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getNumberOfCores">Arcadia_getNumberOfCores</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getPageSize">Arcadia_getPageSize</a></li>
+
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_getTickCount">Arcadia_getTickCount</a></li>
 
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Configuration_CompilerC">Arcadia_Configuration_CompilerC</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Configuration_CompilerC_Gcc">Arcadia_Configuration_CompilerC_Gcc</a></li>

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -25,6 +25,13 @@ Arcadia_DDLS_ValidationContext_constructImpl
   );
 
 static void
+Arcadia_DDLS_ValidationContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_ValidationContextDispatch* self
+  );
+
+static void
 Arcadia_DDLS_ValidationContext_visitImpl
   (
     Arcadia_Thread* thread,
@@ -42,7 +49,7 @@ Arcadia_DDLS_ValidationContext_runImpl
 
 static const Arcadia_ObjectType_Operations _Arcadia_DDLS_ValidationContext_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DDLS_ValidationContext_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DDLS_ValidationContext_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_ValidationContext_visitImpl,
 };
 
@@ -74,14 +81,22 @@ Arcadia_DDLS_ValidationContext_constructImpl
   }
   //
   self->temporary1 = Arcadia_StringBuffer_create(thread);
-  self->stringTable = Arcadia_Languages_StringTable_create(thread);
+  self->stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
   self->diagnostics = Arcadia_DDLS_Diagnostics_create(thread, self->stringTable);
   self->schemata = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   //
-  self->run = &Arcadia_DDLS_ValidationContext_runImpl;
-  //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
+}
+
+static void
+Arcadia_DDLS_ValidationContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_ValidationContextDispatch* self
+  )
+{
+  self->run = &Arcadia_DDLS_ValidationContext_runImpl;
 }
 
 static void
@@ -222,8 +237,38 @@ onValidate
   if (Arcadia_DDLS_isAny(thread, ddlsNode)) {
     return;
   }
+  if (Arcadia_DDLS_isChoice(thread, ddlsNode)) {
+    Arcadia_SizeValue n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_DDLS_ChoiceNode*)ddlsNode)->choices);
+    if (n == 0) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_Thread_jump(thread);
+    }
+    for (Arcadia_SizeValue i = 0; i < n; ++i) {
+      Arcadia_DDLS_Node* ddlsChildNode =
+      (Arcadia_DDLS_Node*)
+      Arcadia_List_getObjectReferenceValueCheckedAt
+        (
+          thread,
+          ((Arcadia_DDLS_ChoiceNode*)ddlsNode)->choices,
+          i,
+          _Arcadia_DDLS_Node_getType(thread)
+        );
+      Arcadia_JumpTarget jumpTarget;
+      Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+      if (Arcadia_JumpTarget_save(&jumpTarget)) {
+        onValidate(thread, self, (Arcadia_DDLS_Node*)ddlsChildNode, node); // TODO: Do not use recursion.
+        Arcadia_Thread_popJumpTarget(thread);
+        break;
+      } else {
+        Arcadia_Thread_popJumpTarget(thread);
+        Arcadia_Thread_jump(thread);
+      }
+    }
+    return; // Accept.
+  }
   if (Arcadia_DDLS_isBoolean(thread, ddlsNode) && Arcadia_DDL_Node_isBoolean(thread, node)) {
-    return;
+    return; // Accept.
   } else if (Arcadia_DDLS_isList(thread, ddlsNode) && Arcadia_DDL_Node_isList(thread, node)) {
     onValidateList(thread, self, ddlsNode, node);
   } else if (Arcadia_DDLS_isMap(thread, ddlsNode) && Arcadia_DDL_Node_isMap(thread, node)) {
@@ -330,6 +375,4 @@ Arcadia_DDLS_ValidationContext_run
     Arcadia_String* name,
     Arcadia_DDL_Node* node
   )
-{
-  self->run(thread, self, name, node);
-}
+{ Arcadia_VirtualCall(Arcadia_DDLS_ValidationContext, run, self, name, node); }

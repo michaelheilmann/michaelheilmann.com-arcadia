@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -20,6 +20,10 @@
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.SceneNodeFactory", Arcadia_Visuals_Implementation_SceneNodeFactory,
                           Arcadia_Visuals_SceneNodeFactory);
+
+struct Arcadia_Visuals_Implementation_SceneNodeFactoryDispatch {
+  Arcadia_Visuals_SceneNodeFactoryDispatch parent;
+};
 
 struct Arcadia_Visuals_Implementation_SceneNodeFactory {
   Arcadia_Visuals_SceneNodeFactory parent;

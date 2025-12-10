@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -30,6 +30,10 @@
 /// in the @a operand context.
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.VariableOperandNode", Arcadia_MIL_AST_VariableOperandNode,
                           u8"Arcadia.MIL.AST.OperandNode");
+
+struct Arcadia_MIL_AST_VariableOperandNodeDispatch {
+  Arcadia_MIL_AST_OperandNodeDispatch parent;
+};
 
 struct Arcadia_MIL_AST_VariableOperandNode {
   Arcadia_MIL_AST_OperandNode parent;

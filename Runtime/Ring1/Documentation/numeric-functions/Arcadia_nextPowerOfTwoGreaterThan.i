@@ -1,6 +1,6 @@
 <section class="cxx entity procedure">
 
-  <h1 id="Arcadia_nextPowerOfTwoGreaterThan*">Arcadia_nextPowerOfTwoGreaterThan*</h1>
+  <h1 id="Arcadia_nextPowerOfTwoGreaterThan%2a">Arcadia_nextPowerOfTwoGreaterThan*</h1>
 
   <my-signature><code>
   <my-mv>Type</my-mv><br>

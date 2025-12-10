@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -22,6 +22,9 @@
 
 #include "Arcadia/Audials/Backend.h"
 #include "Arcadia/Audials/BackendContext.h"
+#include "Arcadia/Audials/Scene/Node.h"
+#include "Arcadia/Audials/Scene/SoundSourceNode.h"
+#include "Arcadia/Audials/SceneNodeFactory.h"
 
 #undef ARCADIA_AUDIALS_PRIVATE
 #pragma pop_macro("ARCADIA_AUDIALS_PRIVATE")

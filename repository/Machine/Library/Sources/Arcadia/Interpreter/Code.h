@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,6 +21,10 @@
 /// @brief Code executed by the interpreter.
 /// @remarks Code executed by the interpreter is a sequence of Natural8 values.
 Arcadia_declareObjectType(u8"R.Interpreter.Code", R_Interpreter_Code, u8"Arcadia.Object");
+
+struct R_Interpreter_CodeDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
 
 struct R_Interpreter_Code {
   Arcadia_Object _parent;

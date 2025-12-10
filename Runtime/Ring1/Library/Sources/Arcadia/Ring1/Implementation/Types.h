@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -27,14 +27,23 @@
 typedef struct Arcadia_Value Arcadia_Value;
 typedef struct Arcadia_Object Arcadia_Object;
 
-typedef void (Arcadia_Object_ConstructorCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
-typedef void (Arcadia_Object_DestructorCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
+typedef void (Arcadia_Object_ConstructCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
+typedef void (Arcadia_Object_DestructCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
 typedef void (Arcadia_Object_VisitCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
+
+/// The base of all dispatches.
+typedef struct Arcadia_Dispatch {
+  Arcadia_Type* type;
+} Arcadia_Dispatch;
+
+/// The type of an initializer function for a dispatch.
+typedef void (Arcadia_Dispatch_InitializerCallback)(Arcadia_Thread* thread, Arcadia_Dispatch* dispatch);
+
 
 /// Type operations for object types.
 typedef struct Arcadia_ObjectType_Operations {
-  Arcadia_Object_ConstructorCallbackFunction* construct;
-  Arcadia_Object_DestructorCallbackFunction* destruct;
+  Arcadia_Object_ConstructCallbackFunction* construct;
+  Arcadia_Object_DestructCallbackFunction* destruct;
   Arcadia_Object_VisitCallbackFunction* visit;
 } Arcadia_ObjectType_Operations;
 
@@ -300,6 +309,8 @@ Arcadia_registerObjectType
     size_t nameLength,
     size_t valueSize,
     Arcadia_TypeValue parentObjectType,
+    size_t dispatchSize,
+    void (*initializeDispatch)(Arcadia_Thread*, Arcadia_Dispatch*),
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   );
@@ -327,6 +338,12 @@ Arcadia_getType
 
 Arcadia_AtomValue
 Arcadia_Type_getName
+  (
+    Arcadia_TypeValue type
+  );
+
+Arcadia_Dispatch*
+Arcadia_Type_getDispatch
   (
     Arcadia_TypeValue type
   );

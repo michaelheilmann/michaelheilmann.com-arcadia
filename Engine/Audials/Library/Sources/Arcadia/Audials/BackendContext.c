@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -23,6 +23,13 @@ Arcadia_Audials_BackendContext_constructImpl
   );
 
 static void
+Arcadia_Audials_BackendContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_BackendContextDispatch* self
+  );
+
+static void
 Arcadia_Audials_BackendContext_visitImpl
   (
     Arcadia_Thread* thread,
@@ -30,8 +37,8 @@ Arcadia_Audials_BackendContext_visitImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_Audials_BackendContext_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Audials_BackendContext_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Audials_BackendContext_visitImpl,
 };
 
@@ -60,11 +67,17 @@ Arcadia_Audials_BackendContext_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->update = NULL;
-  self->playSine = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
+
+static void
+Arcadia_Audials_BackendContext_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Audials_BackendContextDispatch* self
+  )
+{ }
 
 static void
 Arcadia_Audials_BackendContext_visitImpl
@@ -80,12 +93,4 @@ Arcadia_Audials_BackendContext_update
     Arcadia_Thread* thread,
     Arcadia_Audials_BackendContext* self
   )
-{ self->update(thread, self); }
-
-void
-Arcadia_Audials_BackendContext_playSine
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContext* self
-  )
-{ self->playSine(thread, self); }
+{ Arcadia_VirtualCall(Arcadia_Audials_BackendContext, update, self); }

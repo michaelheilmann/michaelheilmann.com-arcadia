@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -49,6 +49,13 @@ Arcadia_HashMap_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_HashMap* self
+  );
+
+static void
+Arcadia_HashMap_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_HashMapDispatch* self
   );
 
 static void
@@ -131,8 +138,8 @@ Arcadia_HashMap_getKeysImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_HashMap_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_HashMap_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_HashMap_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_HashMap_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_HashMap_visit,
 };
 
@@ -302,16 +309,25 @@ Arcadia_HashMap_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  ((Arcadia_Collection*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_clearImpl;
-  ((Arcadia_Collection*)self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_getSizeImpl;
-  ((Arcadia_Collection*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_isImmutableImpl;
-  ((Arcadia_Map*)self)->get = (Arcadia_Value (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value)) &Arcadia_HashMap_getImpl;
-  ((Arcadia_Map*)self)->remove = (void (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value, Arcadia_Value*, Arcadia_Value*))  &Arcadia_HashMap_removeImpl;
-  ((Arcadia_Map*)self)->set = (void (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value, Arcadia_Value, Arcadia_Value*, Arcadia_Value*)) & Arcadia_HashMap_setImpl;
-  ((Arcadia_Map*)self)->getKeys = (Arcadia_List *(*)(Arcadia_Thread*, Arcadia_Map*)) & Arcadia_HashMap_getKeysImpl;
-  ((Arcadia_Map*)self)->getValues = (Arcadia_List *(*)(Arcadia_Thread*, Arcadia_Map*)) &Arcadia_HashMap_getValuesImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, nargs + 1);
+}
+
+static void
+Arcadia_HashMap_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_HashMapDispatch* self
+  )
+{
+  ((Arcadia_CollectionDispatch*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_clearImpl;
+  ((Arcadia_CollectionDispatch*)self)->getSize = (Arcadia_SizeValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_getSizeImpl;
+  ((Arcadia_CollectionDispatch*)self)->isImmutable = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Collection*)) & Arcadia_HashMap_isImmutableImpl;
+  ((Arcadia_MapDispatch*)self)->get = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value)) & Arcadia_HashMap_getImpl;
+  ((Arcadia_MapDispatch*)self)->remove = (void (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value, Arcadia_Value*, Arcadia_Value*)) & Arcadia_HashMap_removeImpl;
+  ((Arcadia_MapDispatch*)self)->set = (void (*)(Arcadia_Thread*, Arcadia_Map*, Arcadia_Value, Arcadia_Value, Arcadia_Value*, Arcadia_Value*)) & Arcadia_HashMap_setImpl;
+  ((Arcadia_MapDispatch*)self)->getKeys = (Arcadia_List * (*)(Arcadia_Thread*, Arcadia_Map*)) & Arcadia_HashMap_getKeysImpl;
+  ((Arcadia_MapDispatch*)self)->getValues = (Arcadia_List * (*)(Arcadia_Thread*, Arcadia_Map*)) & Arcadia_HashMap_getValuesImpl;
 }
 
 static void

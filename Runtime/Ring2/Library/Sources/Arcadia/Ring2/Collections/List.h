@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,14 +26,18 @@
 Arcadia_declareObjectType(u8"Arcadia.List", Arcadia_List,
                           u8"Arcadia.Collection");
 
-struct Arcadia_List {
-  Arcadia_Collection parent;
+struct Arcadia_ListDispatch {
+  Arcadia_CollectionDispatch _parent;
 
-  Arcadia_Value (*getAt)(Arcadia_Thread* thread, Arcadia_List*, Arcadia_SizeValue index);
+  Arcadia_Value(*getAt)(Arcadia_Thread* thread, Arcadia_List*, Arcadia_SizeValue index);
   void (*insertAt)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue index, Arcadia_Value);
   void (*insertBack)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value);
   void (*insertFront)(Arcadia_Thread*, Arcadia_List*, Arcadia_Value);
   void (*removeAt)(Arcadia_Thread*, Arcadia_List*, Arcadia_SizeValue, Arcadia_SizeValue);
+};
+
+struct Arcadia_List {
+  Arcadia_Collection parent;
 };
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_List_insertFront

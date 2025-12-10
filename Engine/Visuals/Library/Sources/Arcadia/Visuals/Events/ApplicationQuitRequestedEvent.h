@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -21,6 +21,10 @@
 // The opaque type of an "application" message.
 Arcadia_declareObjectType(u8"Arcadia.Visuals.ApplicationQuitRequestedEvent", Arcadia_Visuals_ApplicationQuitRequestedEvent,
                           u8"Arcadia.Visuals.ApplicationEvent");
+
+struct Arcadia_Visuals_ApplicationQuitRequestedEventDispatch {
+  Arcadia_Visuals_ApplicationEventDispatch parent;
+};
 
 struct Arcadia_Visuals_ApplicationQuitRequestedEvent {
   Arcadia_Visuals_ApplicationEvent _parent;

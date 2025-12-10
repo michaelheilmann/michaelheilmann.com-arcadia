@@ -1,10 +1,10 @@
 <section class="cxx entity procedure">
 
-  <h1 id="Arcadia_safeAdd*">Arcadia_safeAdd*</h1>
+  <h1 id="Arcadia_safeAddFull%2a">Arcadia_safeAddFull*</h1>
 
   <my-signature><code>
   void<br>
-  Arcadia_safeAdd<my-mv>Suffix</my-mv><br>
+  Arcadia_safeAddFull<my-mv>Suffix</my-mv><br>
   &nbsp;(<br>
   &nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;<my-mv>Type</my-mv> augend,<br>

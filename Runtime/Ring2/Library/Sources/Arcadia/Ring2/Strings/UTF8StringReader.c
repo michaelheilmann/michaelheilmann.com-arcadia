@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -30,6 +30,13 @@ Arcadia_UTF8StringReader_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8StringReader* self
+  );
+
+static void
+Arcadia_UTF8StringReader_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8StringReaderDispatch* self
   );
 
 static void
@@ -68,8 +75,8 @@ Arcadia_UTF8StringReader_getLengthImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_UTF8StringReader_constructImpl,
-  .destruct = NULL,
+  Arcadia_ObjectType_Operations_Initializer,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_UTF8StringReader_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_UTF8StringReader_visit,
 };
 
@@ -101,12 +108,21 @@ Arcadia_UTF8StringReader_constructImpl
   self->source = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   self->byteIndex = 0;
   self->codePoint = CodePoint_Start;
-  ((Arcadia_UTF8Reader*)self)->getLength = (Arcadia_Natural32Value(*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8StringReader_getLengthImpl;
-  ((Arcadia_UTF8Reader*)self)->getCodePoint = (Arcadia_Natural32Value(*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8StringReader_getCodePointImpl;
-  ((Arcadia_UTF8Reader*)self)->hasCodePoint = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8StringReader_hasCodePointImpl;
-  ((Arcadia_UTF8Reader*)self)->next = (void (*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8StringReader_nextImpl;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
+}
+
+static void
+Arcadia_UTF8StringReader_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_UTF8StringReaderDispatch* self
+  )
+{
+  ((Arcadia_UTF8ReaderDispatch*)self)->getLength = (Arcadia_Natural32Value(*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8StringReader_getLengthImpl;
+  ((Arcadia_UTF8ReaderDispatch*)self)->getCodePoint = (Arcadia_Natural32Value(*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8StringReader_getCodePointImpl;
+  ((Arcadia_UTF8ReaderDispatch*)self)->hasCodePoint = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8StringReader_hasCodePointImpl;
+  ((Arcadia_UTF8ReaderDispatch*)self)->next = (void (*)(Arcadia_Thread*, Arcadia_UTF8Reader*)) & Arcadia_UTF8StringReader_nextImpl;
 }
 
 static void

@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -27,6 +27,10 @@
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.MIL.AST.BooleanLiteralNode", Arcadia_MIL_AST_BooleanLiteralNode,
                           u8"Arcadia.MIL.AST.Node");
+
+struct Arcadia_MIL_AST_BooleanLiteralNodeDispatch {
+  Arcadia_MIL_AST_NodeDispatch parent;
+};
 
 struct Arcadia_MIL_AST_BooleanLiteralNode {
   Arcadia_MIL_AST_Node parent;

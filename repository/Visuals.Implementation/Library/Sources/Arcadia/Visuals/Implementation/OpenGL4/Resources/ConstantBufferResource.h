@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -28,7 +28,11 @@ typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Vis
 #endif
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ConstantBufferResource", Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource,
-                          u8"Arcadia.Visuals.Implementation.ConstantBufferResource")
+                          u8"Arcadia.Visuals.Implementation.ConstantBufferResource");
+
+struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResourceDispatch {
+  Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch _parent;
+};
 
 struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource {
   Arcadia_Visuals_Implementation_ConstantBufferResource _parent;

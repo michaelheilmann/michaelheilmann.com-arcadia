@@ -1,0 +1,9 @@
+{
+  type : "PixelBuffer",
+  name : "Example1",
+  width: 256,
+  height: 256,
+  operations : [
+    "MyFillCheckerboardBlackWhite",
+  ],
+}

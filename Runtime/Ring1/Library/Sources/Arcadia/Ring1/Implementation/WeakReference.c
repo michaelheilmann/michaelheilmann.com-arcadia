@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -44,9 +44,16 @@ Arcadia_WeakReference_constructImpl
     Arcadia_WeakReference* self
   );
 
+static void
+Arcadia_WeakReference_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_WeakReferenceDispatch* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*) & Arcadia_WeakReference_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*) & Arcadia_WeakReference_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_WeakReference_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Arcadia_WeakReference_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_WeakReference_visit,
 };
 
@@ -190,6 +197,14 @@ Arcadia_WeakReference_constructImpl
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
 }
+
+static void
+Arcadia_WeakReference_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_WeakReferenceDispatch* self
+  )
+{ }
 
 Arcadia_WeakReference*
 Arcadia_WeakReference_create

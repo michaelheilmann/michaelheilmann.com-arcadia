@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -229,6 +229,14 @@ Arcadia_DDLS_isBoolean
   { return Arcadia_BooleanValue_False; }
   return Arcadia_String_isEqualTo_pn(thread, ((Arcadia_DDLS_ScalarNode*)ddlsNode)->name, u8"Boolean", sizeof(u8"Boolean") - 1);
 }
+
+static inline Arcadia_BooleanValue
+Arcadia_DDLS_isChoice
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDLS_Node* ddlsNode
+  )
+{ return Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)ddlsNode, _Arcadia_DDLS_ChoiceNode_getType(thread)); }
 
 static inline Arcadia_BooleanValue
 Arcadia_DDLS_isNumber

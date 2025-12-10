@@ -1,0 +1,61 @@
+  @{include("./../../Commons/header-common.i")}
+  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=4'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=4'>
+  <script>
+  MathJax = {
+    loader: {load: ['[tex]/newcommand']},
+    tex: {packages: {'[+]': ['newcommand']}},
+    startup: {
+      ready() {
+        MathJax.startup.defaultReady();
+        const {Token} = MathJax._.input.tex.Token;
+        const {MapHandler} = MathJax._.input.tex.MapHandler;
+        const delimiter = MapHandler.getMap('delimiter');
+        delimiter.add('\\llbracket', new Token('\\llbracket', '\u27E6'));
+        delimiter.add('\\rrbracket', new Token('\\rrbracket', '\u27E7'));
+      }
+    }
+  }
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@4/tex-mml-chtml.js"></script>
+  <style>
+  @{include("./../specification.css.i")}
+  </style>
+
+  <link rel='canonical' href='@{siteAddress}/specifications/context-free-grammars/index.html'>
+  <title>Mathematical Definitions and Notations</title>
+</head>
+<body class="my-content-page-1">
+  <header>
+  @{include("./../mathjax-definitions.i")}
+  <div>
+  <a href="@{siteAddress}/">Home</a>
+  </div>
+  </header>
+  <main>
+    <div class="left-column"></div>
+    <div class="center-column">
+    <h1>Mathematical Definitions and Notations</h1>
+    <p>
+    In the realm of <em>Michael Heilmann's Arcadia</em>,
+    understanding the mathematical definitions and notations is crucial for grasping the underlying concepts.
+    This document covers fundamental definitions and notations used in mathematical contexts relevant to <em>Michael Heilmann's Arcadia</em>.
+    </p>
+    @{include("./1. lists.i")}
+    @{include("./2. context-free-grammars.i")}
+  </div>
+  <div class="right-column">
+    <nav>
+    </nav>
+  </div>
+  </main>
+  <footer>
+    <div class="left-column"></div>
+    <div class="center-column"></div>
+    <div class="right-column">
+      <div>Website maintained by @{siteAuthor}.</div>
+      <div>Last modified on @{dayOfMonth()} @{monthName()} @{year()}.</div>
+    </div>
+  </footer>
+</body>
+</html>

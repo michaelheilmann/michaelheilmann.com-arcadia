@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -105,7 +105,7 @@ Arcadia_BigInteger_shiftLeftNatural64
 
   Arcadia_SizeValue limpsToAllocate = self->numberOfLimps;
   Arcadia_SizeValue temporary;
-  Arcadia_safeAddSizeValue(thread, limpsToAllocate, limpShift, &temporary, &limpsToAllocate);
+  Arcadia_safeAddFullSizeValue(thread, limpsToAllocate, limpShift, &temporary, &limpsToAllocate);
   if (temporary) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
@@ -135,7 +135,7 @@ Arcadia_BigInteger_shiftLeftNatural64
   } else {
     // If the shift is not limp-aligned.
     targetIndex++;
-    Arcadia_safeAddSizeValue(thread, limpsToAllocate, 1, &temporary, &limpsToAllocate);
+    Arcadia_safeAddFullSizeValue(thread, limpsToAllocate, 1, &temporary, &limpsToAllocate);
     if (temporary) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);

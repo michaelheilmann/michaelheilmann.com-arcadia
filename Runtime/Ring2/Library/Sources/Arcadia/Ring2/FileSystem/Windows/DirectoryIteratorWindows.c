@@ -1,6 +1,6 @@
 // The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 //
-// Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose without fee is hereby granted, provided that this entire notice
@@ -26,6 +26,13 @@ Arcadia_DirectoryIteratorWindows_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DirectoryIteratorWindows* self
+  );
+
+static void
+Arcadia_DirectoryIteratorWindows_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DirectoryIteratorWindowsDispatch* self
   );
 
 static void
@@ -58,8 +65,8 @@ Arcadia_DirectoryIteratorWindows_nextValue
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructorCallbackFunction*)&Arcadia_DirectoryIteratorWindows_constructImpl,
-  .destruct = (Arcadia_Object_DestructorCallbackFunction*)&Arcadia_DirectoryIteratorWindows_destructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DirectoryIteratorWindows_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_DirectoryIteratorWindows_destructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -114,11 +121,20 @@ Arcadia_DirectoryIteratorWindows_constructImpl
       Arcadia_Thread_jump(thread);
     }
   }
-  ((Arcadia_DirectoryIterator*)self)->getValue = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorWindows_getValue;
-  ((Arcadia_DirectoryIterator*)self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorWindows_hasValue;
-  ((Arcadia_DirectoryIterator*)self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorWindows_nextValue;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2);
+}
+
+static void
+Arcadia_DirectoryIteratorWindows_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DirectoryIteratorWindowsDispatch* self
+  )
+{
+  ((Arcadia_DirectoryIteratorDispatch*)self)->getValue = (Arcadia_FilePath * (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorWindows_getValue;
+  ((Arcadia_DirectoryIteratorDispatch*)self)->hasValue = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorWindows_hasValue;
+  ((Arcadia_DirectoryIteratorDispatch*)self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorWindows_nextValue;
 }
 
 static void
