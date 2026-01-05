@@ -12,9 +12,7 @@
 
   <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
   <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
-
-  <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=3'>
-  <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=3'>
+  
   <script>
   MathJax = {
     startup: {
@@ -29,7 +27,15 @@
     }
   }
   </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+  
+  <!-- @todo Do not use external CDNs. Do use self-hosting. -->
+  <script defer id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+
+  <!-- Cascading Style Sheets. -->
+  <link rel='stylesheet' href='https://michaelheilmann.com/assets/reset.css?v=4'>
+  <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=4'>
+
+
   <style>
   /* the left-hand side of a grammar rule */
 my-lhs {
@@ -778,7 +784,7 @@ The type \(\textit{Value}\) type is the union type of the types
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 3 January 2026.</div>
+      <div>Last modified on 14 January 2026.</div>
     </div>
   </footer>
 </body>

@@ -46,6 +46,24 @@ Arcadia_Visuals_Implementation_VertexBufferResource_visitImpl
     Arcadia_Visuals_Implementation_VertexBufferResource* self
   );
 
+static Arcadia_SizeValue
+Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVerticesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_VertexBufferResource* self
+  );
+
+static void
+Arcadia_Visuals_Implementation_VertexBufferResource_setDataImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_VertexBufferResource* self,
+    Arcadia_Visuals_VertexDescriptor* vertexDescriptor,
+    Arcadia_SizeValue numberOfVertices,
+    const void* bytes,
+    Arcadia_SizeValue numberOfBytes
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_VertexBufferResource_constructImpl,
@@ -82,7 +100,17 @@ Arcadia_Visuals_Implementation_VertexBufferResource_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-
+  //
+  Arcadia_Visuals_VertexDescriptorBuilder* vertexDescriptorBuilder = Arcadia_Visuals_VertexDescriptorBuilder_create(thread);
+  self->vertexDescriptor = Arcadia_Visuals_VertexDescriptorBuilder_build(thread, vertexDescriptorBuilder);
+  //
+  self->numberOfVertices = 0;
+  self->numberOfBytes = 0;
+  self->bytes = Arcadia_Memory_allocateUnmanaged(thread, 0);
+  //
+  self->dirty = Arcadia_Visuals_Implementation_VertexBufferResource_VertexDataDirty
+              | Arcadia_Visuals_Implementation_VertexBufferResource_VertexDescriptorDirty;
+  //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -93,7 +121,10 @@ Arcadia_Visuals_Implementation_VertexBufferResource_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResourceDispatch* self
   )
-{ }
+{
+  self->setData = Arcadia_Visuals_Implementation_VertexBufferResource_setDataImpl;
+  self->getNumberOVertices = Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVerticesImpl;
+}
 
 static void
 Arcadia_Visuals_Implementation_VertexBufferResource_destructImpl
@@ -101,7 +132,12 @@ Arcadia_Visuals_Implementation_VertexBufferResource_destructImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->bytes) {
+    Arcadia_Memory_deallocateUnmanaged(thread, self->bytes);
+    self->bytes = NULL;
+  }
+}
 
 static void
 Arcadia_Visuals_Implementation_VertexBufferResource_visitImpl
@@ -109,18 +145,51 @@ Arcadia_Visuals_Implementation_VertexBufferResource_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->vertexDescriptor) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->vertexDescriptor);
+  }
+}
+
+static Arcadia_SizeValue
+Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVerticesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_VertexBufferResource* self
+  )
+{ return self->numberOfVertices; }
+
+static void
+Arcadia_Visuals_Implementation_VertexBufferResource_setDataImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_VertexBufferResource* self,
+    Arcadia_Visuals_VertexDescriptor* vertexDescriptor,
+    Arcadia_SizeValue numberOfVertices,
+    const void* bytes,
+    Arcadia_SizeValue numberOfBytes
+  )
+{
+  Arcadia_Memory_reallocateUnmanaged(thread, &self->bytes, numberOfBytes);
+  Arcadia_Memory_copy(thread, self->bytes, bytes, numberOfBytes);
+  self->vertexDescriptor = vertexDescriptor;
+  self->numberOfBytes = numberOfBytes;
+  self->numberOfVertices = numberOfVertices;
+  self->dirty = Arcadia_Visuals_Implementation_VertexBufferResource_VertexDataDirty
+              | Arcadia_Visuals_Implementation_VertexBufferResource_VertexDescriptorDirty;
+}
 
 void
 Arcadia_Visuals_Implementation_VertexBufferResource_setData
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self,
+    Arcadia_Visuals_VertexDescriptor* vertexDescriptor,
     Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_VertexBufferResource, setData, self, numberOfVertices, bytes, numberOfBytes); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_VertexBufferResource, setData, self, vertexDescriptor, numberOfVertices, bytes, numberOfBytes); }
 
 Arcadia_SizeValue
 Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVertices

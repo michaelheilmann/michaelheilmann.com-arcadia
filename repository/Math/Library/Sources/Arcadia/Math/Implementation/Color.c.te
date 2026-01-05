@@ -58,7 +58,27 @@ Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_create
 }
 
 Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}*
-Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_createWithValues
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_create4
+  (
+    Arcadia_Thread* thread,
+    @{componentType} r,
+    @{componentType} g,
+    @{componentType} b,
+    @{componentType} a
+  )
+{
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_push@{componentSuffix}Value(thread, r);
+  Arcadia_ValueStack_push@{componentSuffix}Value(thread, g);
+  Arcadia_ValueStack_push@{componentSuffix}Value(thread, b);
+  Arcadia_ValueStack_push@{componentSuffix}Value(thread, a);
+  Arcadia_ValueStack_pushNatural8Value(thread, @{numberOfComponents});
+  ARCADIA_CREATEOBJECT(Arcadia_Math_Color@{numberOfComponents}@{componentSuffix});
+}
+
+
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}*
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_create4v
   (
     Arcadia_Thread* thread,
     @{componentType} const* values
@@ -84,15 +104,25 @@ Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-  for (Arcadia_SizeValue i = 0; i < @{numberOfComponents}; ++i) {
-    self->components[i] = @{minimumComponentValue};
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (4 == numberOfArguments) {
+    for (Arcadia_SizeValue i = 0; i < @{numberOfComponents}; ++i) {
+      self->components[i] = Arcadia_ValueStack_getReal32Value(thread, 4 - i);
+    }  
+  } else if (0 == numberOfArguments) {
+    for (Arcadia_SizeValue i = 0; i < @{numberOfComponents}; ++i) {
+      self->components[i] = @{minimumComponentValue};
+    }
+  } else {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread); 
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArguments + 1);
 }
 
 static void

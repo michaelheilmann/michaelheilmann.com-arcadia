@@ -29,7 +29,7 @@ Arcadia_declareObjectType(u8"Arcadia.Audials.Implementation.BackendContext", Arc
 
 struct Arcadia_Audials_Implementation_BackendContextDispatch {
   Arcadia_Audials_BackendContextDispatch _parent;
-  
+
   Arcadia_Audials_Implementation_SoundSourceResource*
   (*createSoundSourceResource)
     (

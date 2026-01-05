@@ -92,6 +92,18 @@ Arcadia_ValueStack_reverse
 }
 
 void
+Arcadia_Thread_raise
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value raisedValue
+  )
+{
+  thread->raisedValue = raisedValue;
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_ValueRaised);
+  Arcadia_Thread_jump(thread);
+}
+
+void
 Arcadia_Thread_pushJumpTarget
   (
     Arcadia_Thread* thread,

@@ -19,9 +19,9 @@
 #include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
-#include "Arcadia/Ring1/Implementation/Atoms.private.h"
+#include "Arcadia/Ring1/Implementation/Atoms.module.h"
 #include "Arcadia/Ring1/Implementation/Thread.private.h"
-#include "Arcadia/Ring1/Implementation/Types.private.h"
+#include "Arcadia/Ring1/Implementation/Types.module.h"
 #include <stdbool.h>
 
 typedef const ModuleInfo* (GetModuleInfo)();

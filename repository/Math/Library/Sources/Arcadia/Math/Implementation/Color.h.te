@@ -35,9 +35,19 @@ Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_create
   (
     Arcadia_Thread* thread
   );
+  
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}*
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_create4
+  (
+    Arcadia_Thread* thread,
+    @{componentType} r,
+    @{componentType} g,
+    @{componentType} b,
+    @{componentType} a
+  );
 
 Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}*
-Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_createWithValues
+Arcadia_Math_Color@{numberOfComponents}@{componentSuffix}_create4v
   (
     Arcadia_Thread* thread,
     @{componentType} const* values

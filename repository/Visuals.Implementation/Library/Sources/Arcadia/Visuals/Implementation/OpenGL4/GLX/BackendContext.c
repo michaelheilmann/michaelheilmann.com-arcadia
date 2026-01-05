@@ -197,7 +197,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_constructImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* self
   );
-  
+
 static void
 Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_initializeDispatchImpl
   (

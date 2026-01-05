@@ -1,12 +1,10 @@
-@{include("./../../../Documentation/Commons/header-common.i")}
-<link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=1'>
-<link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=1'>
-<link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=1'>
-<link rel='canonical' href='@{siteAddress}/repository/Arcadia/Ring1/'>
-<title>Michael Heilmann's Arcadia Ring 1</title>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@3.2.2/es5/tex-mml-chtml.min.js"></script>
-<style>
-</style>
+  @{include("./../../../Documentation/Commons/header-common.i")}
+
+  <link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=1'>
+  <link rel='canonical' href='@{siteAddress}/Arcadia/Ring1/'>
+  <title>Michael Heilmann's Arcadia Ring 1</title>
+  <style>
+  </style>
 </head>
 <body class="my-content-page-1">
   <header>
@@ -16,4 +14,3 @@
   </header>
 <main>
   <div class="left-column"></div>
-

@@ -30,7 +30,7 @@ static void
 Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResourceDispatch* self 
+    Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResourceDispatch* self
   );
 
 static void

@@ -94,7 +94,7 @@ Arcadia_DDL_VoidNode_constructImpl
 
 static void
 Arcadia_DDL_VoidNode_initializeDispatchImpl
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_DDL_VoidNodeDispatch* self
   )

@@ -54,3 +54,10 @@ Define(PFNGLDELETEFRAMEBUFFERSPROC, glDeleteFramebuffers)
 
 Define(PFNGLFRAMEBUFFERTEXTURE2DPROC, glFramebufferTexture2D)
 Define(PFNGLBINDFRAMEBUFFERPROC, glBindFramebuffer)
+
+Define(PFNGLGETINTEGERVPROC, glGetIntegerv)
+
+Define(PFNGLGETBOOLEANVPROC, glGetBooleanv)
+
+Define(PFNGLGETFLOATVPROC, glGetFloatv)
+Define(PFNGLGETDOUBLEVPROC, glGetDoublev)

@@ -78,12 +78,6 @@ Arcadia_Name_getBytes
     Arcadia_Name* self
   );
 
-struct Arcadia_Names {
-  Arcadia_Name** buckets;
-  size_t size;
-  size_t capacity;
-};
-
 Arcadia_DeclareModule("Arcadia.Names", Arcadia_Names);
 
 Arcadia_Name*

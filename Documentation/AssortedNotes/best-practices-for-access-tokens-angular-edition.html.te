@@ -1,6 +1,4 @@
   @{include("./../Commons/header-common.i")}
-  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=3'>
-  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=3'>
   <link rel='canonical' href='@{siteAddress}/assorted-notes/best-practices-for-access-tokens-angular-edition'>
   <title>Best Practices for access tokens - Angular edition</title>
 </head>

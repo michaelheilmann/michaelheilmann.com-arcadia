@@ -20,7 +20,7 @@ set(MyTest ${MyProjectName}.ARMS.Tests.NotifyDestroyTest)
 # Create test executable.
 BeginProduct(${MyTest} test)
 
-list(APPEND ${MyTest}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
+OnSourceFile(${MyTest} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
 
 list(APPEND ${MyTest}.Libraries ${MyProjectName}.ARMS)
 

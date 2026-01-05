@@ -24,6 +24,26 @@ typedef struct Arcadia_Object Arcadia_Object;
 
 typedef struct Arcadia_ObjectDispatch {
   Arcadia_Dispatch parent;
+
+  Arcadia_ForeignProcedure* add;
+  Arcadia_ForeignProcedure* and;
+  Arcadia_ForeignProcedure* concatenate;
+  Arcadia_ForeignProcedure* divide;
+  Arcadia_ForeignProcedure* identical;
+  Arcadia_ForeignProcedure* equalTo;
+  Arcadia_ForeignProcedure* greaterThan;
+  Arcadia_ForeignProcedure* greaterThanOrEqualTo;
+  Arcadia_ForeignProcedure* hash;
+  Arcadia_ForeignProcedure* lowerThan;
+  Arcadia_ForeignProcedure* lowerThanOrEqualTo;
+  Arcadia_ForeignProcedure* multiply;
+  Arcadia_ForeignProcedure* negate;
+  Arcadia_ForeignProcedure* not;
+  Arcadia_ForeignProcedure* notEqualTo;
+  Arcadia_ForeignProcedure* or;
+  Arcadia_ForeignProcedure* subtract;
+  Arcadia_ForeignProcedure* toString;
+
 } Arcadia_ObjectDispatch;
 
 Arcadia_TypeValue

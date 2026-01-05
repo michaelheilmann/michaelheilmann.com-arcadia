@@ -50,8 +50,6 @@ static const Arcadia_ObjectType_Operations _Arcadia_Visuals_VertexElementDescrip
 static const Arcadia_Type_Operations _Arcadia_Visuals_VertexElementDescriptor_typeOperations = {
   Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_Arcadia_Visuals_VertexElementDescriptor_objectTypeOperations,
-  .equalTo = &Arcadia_Visuals_VertexElementDescriptor_isEqualTo,
-  .notEqualTo = &Arcadia_Visuals_VertexElementDescriptor_isNotEqualTo
 };
 
 Arcadia_defineObjectType(u8"Arcardia.Visuals.VertexElementDescriptor", Arcadia_Visuals_VertexElementDescriptor,
@@ -89,7 +87,10 @@ Arcadia_Visuals_VertexElementDescriptor_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_VertexElementDescriptorDispatch* self
   )
-{ }
+{
+  ((Arcadia_ObjectDispatch*)self)->equalTo = &Arcadia_Visuals_VertexElementDescriptor_isEqualTo;
+  ((Arcadia_ObjectDispatch*)self)->notEqualTo = &Arcadia_Visuals_VertexElementDescriptor_isNotEqualTo;
+}
 
 static void
 Arcadia_Visuals_VertexElementDescriptor_isEqualTo

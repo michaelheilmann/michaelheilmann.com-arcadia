@@ -40,11 +40,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_MeshResourceDispatch {
 
 struct Arcadia_Visuals_Implementation_OpenGL4_MeshResource {
   Arcadia_Visuals_Implementation_MeshResource _parent;
-  Arcadia_Natural8Value dirty;
-  // The mesh-wide ambient color of the mesh.
-  Arcadia_Math_Color4Real32* meshAmbientColor;
-  // The local to world matrix of the mesh.
-  Arcadia_Math_Matrix4Real32* localToWorldMatrix;
+
   Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* meshConstantBuffer;
   Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBuffer;
   Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* program;

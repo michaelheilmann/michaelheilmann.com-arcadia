@@ -1,10 +1,7 @@
 @{include("./../../../Documentation/Commons/header-common.i")}
-<link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=1'>
-<link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=1'>
 <link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=1'>
-<link rel='canonical' href='@{siteAddress}/repository/Arcadia/Ring1/'>
+<link rel='canonical' href='@{siteAddress}/repository/Arcadia/Math/'>
 <title>Michael Heilmann's Arcadia Math</title>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
 </style>
 </head>

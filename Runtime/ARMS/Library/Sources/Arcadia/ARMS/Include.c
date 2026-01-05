@@ -22,6 +22,7 @@
 #include "Arcadia/ARMS/Internal/SlabMemoryManager.h"
 #include "Arcadia/ARMS/Internal/Statistics.h"
 
+#include "Arcadia/ARMS/Internal/TypeName.h" // The "type name" module.
 #include "Arcadia/ARMS/Internal/NotifyDestroy.h" // The "notify destroy" module.
 
 #include "Arcadia/ARMS/Internal/Tag.h"
@@ -55,8 +56,7 @@ typedef struct ARMS_Lock ARMS_Lock;
 
 struct ARMS_Type {
   ARMS_Type* next;
-  uint8_t* name;
-  size_t nameLength;
+  Arcadia_ARMS_TypeName* typeName;
   void* context;
   Arcadia_ARMS_TypeRemovedCallbackFunction* typeRemoved;
   Arcadia_ARMS_VisitCallbackFunction* visit;
@@ -133,6 +133,14 @@ Arcadia_ARMS_startup
       } break;
     };
 
+    if (Arcadia_ARMS_TypeNameModule_startup()) {
+      Arcadia_ARMS_MemoryManager_destroy((Arcadia_ARMS_MemoryManager*)g_slabMemoryManager);
+      g_slabMemoryManager = NULL;
+      Arcadia_ARMS_MemoryManager_destroy((Arcadia_ARMS_MemoryManager*)g_defaultMemoryManager);
+      g_defaultMemoryManager = NULL;
+      return Arcadia_ARMS_Status_EnvironmentFailed;
+    }
+
     g_types = NULL;
 
     g_allObjects = NULL;
@@ -144,6 +152,7 @@ Arcadia_ARMS_startup
 
   #if defined(Arcadia_ARMS_Configuration_WithNotifyDestroy) && 1 == Arcadia_ARMS_Configuration_WithNotifyDestroy
     if (Arcadia_ARMS_NotifyDestroyModule_startup()) {
+      Arcadia_ARMS_TypeNameModule_shutdown();
       Arcadia_ARMS_MemoryManager_destroy((Arcadia_ARMS_MemoryManager*)g_slabMemoryManager);
       g_slabMemoryManager = NULL;
       Arcadia_ARMS_MemoryManager_destroy((Arcadia_ARMS_MemoryManager*)g_defaultMemoryManager);
@@ -151,7 +160,6 @@ Arcadia_ARMS_startup
       return Arcadia_ARMS_Status_EnvironmentFailed;
     }
   #endif
-
   }
   g_referenceCount++;
   return Arcadia_ARMS_Status_Success;
@@ -182,14 +190,15 @@ Arcadia_ARMS_shutdown
     while (g_types) {
       ARMS_Type* type = g_types;
       g_types = type->next;
-      if (type->typeRemoved) {
-        type->typeRemoved(type->context, type->name, type->nameLength);
+      if (type->typeRemoved) {  
+        const Arcadia_ARMS_Natural8* bytes; Arcadia_ARMS_Size numberOfBytes;
+        Arcadia_ARMS_TypeName_getData(type->typeName, &bytes, &numberOfBytes);
+        type->typeRemoved(type->context, bytes, numberOfBytes);
       }
-      free(type->name);
-      type->name = NULL;
       free(type);
       type = NULL;
     }
+    Arcadia_ARMS_TypeNameModule_shutdown();
     Arcadia_ARMS_MemoryManager_destroy((Arcadia_ARMS_MemoryManager*)g_slabMemoryManager);
     g_slabMemoryManager = NULL;
     Arcadia_ARMS_MemoryManager_destroy((Arcadia_ARMS_MemoryManager*)g_defaultMemoryManager);
@@ -214,11 +223,15 @@ Arcadia_ARMS_addType
     return Arcadia_ARMS_Status_ArgumentValueInvalid;
   }
 
+  Arcadia_ARMS_TypeName* typeName = NULL;
+  Arcadia_ARMS_Status status = Arcadia_ARMS_TypeName_getOrCreate(&typeName, name, nameLength);
+  if (status) {
+    return status;
+  }
+
   for (ARMS_Type* type = g_types; NULL != type; type = type->next) {
-    if (type->nameLength == nameLength){
-      if (!memcmp(type->name, name, nameLength)) {
-        return Arcadia_ARMS_Status_TypeExists;
-      }
+    if (type->typeName == typeName){
+      return Arcadia_ARMS_Status_TypeExists;
     }
   }
 
@@ -227,15 +240,7 @@ Arcadia_ARMS_addType
     return Arcadia_ARMS_Status_AllocationFailed;
   }
 
-  type->nameLength = nameLength;
-  type->name = malloc(nameLength > 0 ? nameLength : 1);
-  if (!type->name) {
-    free(type);
-    type = NULL;
-    return Arcadia_ARMS_Status_AllocationFailed;
-  }
-  memcpy(type->name, name, nameLength);
-
+  type->typeName = typeName;
   type->context = context;
   type->typeRemoved = typeRemoved;
   type->visit = visit;
@@ -259,12 +264,17 @@ Arcadia_ARMS_allocate
   if (!pObject || !name) {
     return Arcadia_ARMS_Status_ArgumentValueInvalid;
   }
+
+  Arcadia_ARMS_TypeName* typeName = NULL;
+  Arcadia_ARMS_Status status = Arcadia_ARMS_TypeName_getOrCreate(&typeName, name, nameLength);
+  if (status) {
+    return status;
+  }
+
   ARMS_Type* type;
   for (type = g_types; NULL != type; type = type->next) {
-    if (type->nameLength == nameLength){
-      if (!memcmp(type->name, name, nameLength)) {
-        break;
-      }
+    if (type->typeName == typeName) {
+      break;
     }
   }
   if (!type) {

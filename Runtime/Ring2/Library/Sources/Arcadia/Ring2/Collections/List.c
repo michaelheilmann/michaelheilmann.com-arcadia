@@ -30,7 +30,7 @@ Arcadia_List_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
     Arcadia_ListDispatch* self
-  ); 
+  );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,

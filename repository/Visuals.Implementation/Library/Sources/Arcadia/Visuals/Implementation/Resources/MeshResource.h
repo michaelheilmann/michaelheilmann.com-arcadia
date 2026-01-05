@@ -19,6 +19,10 @@
 #include "Arcadia/Visuals/Implementation/Resource.h"
 #include "Arcadia/Math/Include.h"
 
+#define Arcadia_Visuals_Implementation_MeshResource_LocalToWorldMatrixDirty (1)
+#define Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty (2)
+#define Arcadia_Visuals_Implementation_MeshResource_VerticesDirty (4)
+
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.MeshResource", Arcadia_Visuals_Implementation_MeshResource,
                           u8"Arcadia.Visuals.Implementation.Resource");
 
@@ -31,6 +35,12 @@ struct Arcadia_Visuals_Implementation_MeshResourceDispatch {
 
 struct Arcadia_Visuals_Implementation_MeshResource {
   Arcadia_Visuals_Implementation_Resource _parent;
+  // The dirty flags.
+  Arcadia_Natural8Value dirty;
+  // The mesh-wide ambient color of the mesh.
+  Arcadia_Math_Color4Real32* meshAmbientColor;
+  // The local to world matrix of the mesh.
+  Arcadia_Math_Matrix4Real32* localToWorldMatrix;
 };
 
 void
@@ -42,7 +52,7 @@ Arcadia_Visuals_Implementation_MeshResource_setMeshAmbientColor
   );
 
 void
-Arcadia_Visuals_Implemention_MeshResource_setLocalToWorldMatrix
+Arcadia_Visuals_Implementation_MeshResource_setLocalToWorldMatrix
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_MeshResource* self,

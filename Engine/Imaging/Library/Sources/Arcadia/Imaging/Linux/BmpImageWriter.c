@@ -63,7 +63,7 @@ Arcadia_Imaging_Linux_BmpImageWriter_constructImpl
     Arcadia_Thread* thread,
     Arcadia_Imaging_Linux_BmpImageWriter* self
   );
-  
+
 static void
 Arcadia_Imaging_Linux_BmpImageWriter_initializeDispatchImpl
   (

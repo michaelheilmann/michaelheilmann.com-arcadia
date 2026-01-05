@@ -26,11 +26,13 @@ Arcadia_declareEnumerationType(u8"Arcadia.Visuals.VertexElementSyntactics", Arca
 
 enum Arcadia_Visuals_VertexElementSyntactics {
 
-  Arcadia_Visuals_VertexElementSyntactics_Real32Real32 = 1,
+  Arcadia_Visuals_VertexElementSyntactics_Real32 = 1,
 
-  Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32 = 2,
+  Arcadia_Visuals_VertexElementSyntactics_Real32Real32,
 
-  Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32Real32 = 3,
+  Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32,
+
+  Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32Real32,
 
 };
 

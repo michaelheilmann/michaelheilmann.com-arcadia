@@ -119,7 +119,7 @@ identical
   )
 {
   BINARY_OPERATION();
-  if (!Arcadia_Value_isObjectReferenceValue(&y)) {
+  if (Arcadia_Value_isObjectReferenceValue(&y)) {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getObjectReferenceValue(&x) == Arcadia_Value_getObjectReferenceValue(&y));
   } else {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
@@ -133,7 +133,7 @@ isEqualTo
   )
 {
   BINARY_OPERATION();
-  if (!Arcadia_Value_isObjectReferenceValue(&y)) {
+  if (Arcadia_Value_isObjectReferenceValue(&y)) {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getObjectReferenceValue(&x) == Arcadia_Value_getObjectReferenceValue(&y));
   } else {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
@@ -157,7 +157,7 @@ isNotEqualTo
   )
 {
   BINARY_OPERATION();
-  if (!Arcadia_Value_isObjectReferenceValue(&y)) {
+  if (Arcadia_Value_isObjectReferenceValue(&y)) {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getObjectReferenceValue(&x) != Arcadia_Value_getObjectReferenceValue(&y));
   } else {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
@@ -324,7 +324,12 @@ _Arcadia_Object_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_ObjectDispatch* self
   )
-{ }
+{
+  self->identical = &identical;
+  self->equalTo = &isEqualTo;
+  self->hash = &hash;
+  self->notEqualTo = &isNotEqualTo;
+}
 
 static void
 _Arcadia_Object_typeDestructing
@@ -515,15 +520,20 @@ Arcadia_Object_isEqualTo
   assert(NULL != other);
 
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
-  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+  assert(NULL != type);
+  Arcadia_ObjectDispatch* objectDispatch = (Arcadia_ObjectDispatch*)Arcadia_Type_getDispatch(type);
+  assert(NULL != objectDispatch);
+  assert(((Arcadia_Dispatch*)objectDispatch)->type == type);
+  assert(NULL != objectDispatch->equalTo);
 
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
   Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushValue(thread, &temporary);
   Arcadia_ValueStack_pushValue(thread, other);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  assert(NULL != operations && NULL != operations->equalTo);
-  operations->equalTo(thread);
+
+  objectDispatch->equalTo(thread);
+
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
@@ -546,14 +556,20 @@ Arcadia_Object_isNotEqualTo
   assert(NULL != other);
 
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
-  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+  assert(NULL != type);
+  Arcadia_ObjectDispatch* objectDispatch = (Arcadia_ObjectDispatch*)Arcadia_Type_getDispatch(type);
+  assert(NULL != objectDispatch);
+  assert(((Arcadia_Dispatch*)objectDispatch)->type == type);
+  assert(NULL != objectDispatch->notEqualTo);
 
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
   Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushValue(thread, &temporary);
   Arcadia_ValueStack_pushValue(thread, other);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  operations->notEqualTo(thread);
+
+  objectDispatch->notEqualTo(thread);
+
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
@@ -572,13 +588,18 @@ Arcadia_Object_getHash
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
-  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+  assert(NULL != type);
+  Arcadia_ObjectDispatch* objectDispatch = (Arcadia_ObjectDispatch*)Arcadia_Type_getDispatch(type);
+  assert(NULL != objectDispatch);
+  assert(((Arcadia_Dispatch*)objectDispatch)->type == type);
 
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
   Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushValue(thread, &temporary);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  operations->hash(thread);
+
+  objectDispatch->hash(thread);
+
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
@@ -598,19 +619,22 @@ Arcadia_Object_isIdenticalTo
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
-  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+  assert(NULL != type);
+  Arcadia_ObjectDispatch* objectDispatch = (Arcadia_ObjectDispatch*)Arcadia_Type_getDispatch(type);
+  assert(NULL != objectDispatch);
+  assert(((Arcadia_Dispatch*)objectDispatch)->type == type);
 
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
   Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushValue(thread, &temporary);
-  Arcadia_ValueStack_pushValue(thread, other);
-  Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  operations->identical(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+
+  objectDispatch->identical(thread);
+
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-
   Arcadia_BooleanValue returnValue = Arcadia_ValueStack_getBooleanValue(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1);
 
@@ -625,18 +649,22 @@ Arcadia_Object_toString
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self);
-  Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
+  assert(NULL != type);
+  Arcadia_ObjectDispatch* objectDispatch = (Arcadia_ObjectDispatch*)Arcadia_Type_getDispatch(type);
+  assert(NULL != objectDispatch);
+  assert(((Arcadia_Dispatch*)objectDispatch)->type == type);
 
+  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(self);
   Arcadia_Natural8Value n = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushValue(thread, &temporary);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  operations->toString(thread);
+
+  objectDispatch->toString(thread);
+
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-
   Arcadia_ImmutableUtf8String* string = Arcadia_ValueStack_getImmutableUtf8StringValue(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1);
 

@@ -38,6 +38,8 @@
 #include "Arcadia/Visuals/Scene/MeshNode.h"
 #include "Arcadia/Visuals/Scene/RenderingContextNode.h"
 #include "Arcadia/Visuals/Scene/ViewportNode.h"
+#include "Arcadia/Visuals/Scene/MaterialNode.h"
+#include "Arcadia/Visuals/Scene/TextureNode.h"
 
 #include "Arcadia/Visuals/Events/ApplicationQuitRequestedEvent.h"
 
@@ -56,16 +58,22 @@
 #include "Arcadia/Visuals/CullMode.h"
 #include "Arcadia/Visuals/DisplayDevice.h"
 #include "Arcadia/Visuals/DisplayMode.h"
-#include "Arcadia/Visuals/Texture.h"
 #include "Arcadia/Visuals/TextureAddressMode.h"
 #include "Arcadia/Visuals/TextureFilter.h"
 #include "Arcadia/Visuals/VertexDescriptor.h"
+#include "Arcadia/Visuals/VertexDescriptorBuilder.h"
 #include "Arcadia/Visuals/VertexElementDescriptor.h"
 #include "Arcadia/Visuals/VertexElementSemantics.h"
 #include "Arcadia/Visuals/VertexElementSyntactics.h"
 #include "Arcadia/Visuals/WindingMode.h"
 
 #include "Arcadia/Visuals/Scene/RenderScene.h"
+
+#include "Arcadia/Visuals/VPL/ConstantBlock.h"
+#include "Arcadia/Visuals/VPL/Field.h"
+#include "Arcadia/Visuals/VPL/VariableScalar.h"
+#include "Arcadia/Visuals/VPL/Program.h"
+#include "Arcadia/Visuals/VPL/Tree.h"
 
 #undef ARCADIA_VISUALS_PRIVATE
 #pragma pop_macro("ARCADIA_VISUALS_PRIVATE")

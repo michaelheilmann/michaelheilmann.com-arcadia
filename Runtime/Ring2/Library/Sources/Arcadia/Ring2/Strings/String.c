@@ -87,9 +87,6 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .equalTo = &isEqualToImpl,
-  .hash = &hashImpl,
-  .notEqualTo = &isNotEqualToImpl,
 };
 
 #define BINARY_OPERATION() \
@@ -251,7 +248,11 @@ Arcadia_String_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_StringDispatch* self
   )
-{ }
+{
+  ((Arcadia_ObjectDispatch*)self)->equalTo = &isEqualToImpl;
+  ((Arcadia_ObjectDispatch*)self)->hash = &hashImpl;
+  ((Arcadia_ObjectDispatch*)self)->notEqualTo = &isNotEqualToImpl;
+}
 
 static Arcadia_SizeValue
 hash

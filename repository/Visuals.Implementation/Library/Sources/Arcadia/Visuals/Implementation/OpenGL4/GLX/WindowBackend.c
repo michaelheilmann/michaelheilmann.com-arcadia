@@ -426,7 +426,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl
   ((Arcadia_Visuals_WindowBackendDispatch*)self)->setSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setSizeImpl;
 
   ((Arcadia_Visuals_WindowBackendDispatch*)self)->getFullscreen = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getFullscreenImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_BooleanValue)) & setFullscreenImpl;  
+  ((Arcadia_Visuals_WindowBackendDispatch*)self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_BooleanValue)) & setFullscreenImpl;
 }
 
 static void

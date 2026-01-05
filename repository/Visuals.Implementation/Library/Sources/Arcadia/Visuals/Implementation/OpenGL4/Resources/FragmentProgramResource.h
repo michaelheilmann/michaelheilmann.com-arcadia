@@ -36,8 +36,6 @@ struct Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResourceDispatch {
 
 struct Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource {
   Arcadia_Visuals_Implementation_FragmentProgramResource _parent;
-  Arcadia_BooleanValue dirty;
-  Arcadia_ImmutableByteArray* code;
   GLuint id;
 };
 
@@ -45,7 +43,8 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource*
 Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
+    Arcadia_Visuals_VPL_Program* program
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_FRAGMENTPROGRAMRESOURCE_H_INCLUDED

@@ -17,6 +17,7 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_FRAGMENTPROGRAMRESOURCE_H_INCLUDED
 
 #include "Arcadia/Visuals/Implementation/Resource.h"
+#include "Arcadia/Visuals/VPL/Program.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.FragmentProgramResource", Arcadia_Visuals_Implementation_FragmentProgramResource,
                           u8"Arcadia.Visuals.Implementation.Resource");
@@ -27,6 +28,8 @@ struct Arcadia_Visuals_Implementation_FragmentProgramResourceDispatch {
 
 struct Arcadia_Visuals_Implementation_FragmentProgramResource {
   Arcadia_Visuals_Implementation_Resource _parent;
+  Arcadia_BooleanValue dirty;
+  Arcadia_ImmutableByteArray* code;
 };
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_FRAGMENTPROGRAMRESOURCE_H_INCLUDED

@@ -46,7 +46,7 @@ Arcadia_ArrayList_constructImpl
 
 static void
 Arcadia_ArrayList_initializeDispatchImpl
-  (  
+  (
     Arcadia_Thread* thread,
     Arcadia_ArrayListDispatch* self
   );

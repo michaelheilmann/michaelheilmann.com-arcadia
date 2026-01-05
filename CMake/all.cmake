@@ -268,5 +268,10 @@ endmacro()
 
 # Can be used between `BeginProduct` and `EndProduct`.
 macro(OnHeaderFile target file)
-  list(APPEND ${target}.SourceFiles ${file})
+  list(APPEND ${target}.HeaderFiles ${file})
+endmacro()
+
+# Can be used between `BeginProduct` and `EndProduct`.
+macro(OnInlayFile target file)
+  list(APPEND ${target}.InlayFiles ${file})
 endmacro()

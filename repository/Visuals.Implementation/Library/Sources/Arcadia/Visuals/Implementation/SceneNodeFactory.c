@@ -183,7 +183,11 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshNodeImpl
     Arcadia_Visuals_Implementation_SceneNodeFactory* self,
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   )
-{ return Arcadia_Visuals_Implementation_Scene_MeshNode_create(thread, backendContext); }
+{
+  Arcadia_Visuals_VPL_Program * program = Arcadia_Visuals_VPL_Program_create(thread, Arcadia_Visuals_VPL_ProgramFlags_PerMeshColor);
+  Arcadia_Visuals_Scene_MaterialNode* material = Arcadia_Visuals_Scene_MaterialNode_create(thread, program);
+  return Arcadia_Visuals_Implementation_Scene_MeshNode_create(thread, backendContext, material);
+}
 
 static Arcadia_Visuals_Implementation_Scene_RenderingContextNode*
 Arcadia_Visuals_Implementation_SceneNodeFactory_createRenderingContextNodeImpl

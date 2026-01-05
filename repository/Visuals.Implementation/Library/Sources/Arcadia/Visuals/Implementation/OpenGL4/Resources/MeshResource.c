@@ -23,10 +23,6 @@
 
 #include <assert.h>
 
-#define Arcadia_Visuals_Implementation_OpenGL4_MeshResource_LocalToWorldMatrixDirty (1)
-#define Arcadia_Visuals_Implementation_OpenGL4_MeshResource_MeshAmbientColorDirty (2)
-#define Arcadia_Visuals_Implementation_OpenGL4_MeshResource_VerticesDirty (4)
-
 static void
 Arcadia_Visuals_Implementation_OpenGL4_MeshResource_constructImpl
   (
@@ -138,23 +134,11 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_constructImpl
   }
 
   self->meshConstantBuffer = NULL;
-
-  self->dirty = Arcadia_Visuals_Implementation_OpenGL4_MeshResource_LocalToWorldMatrixDirty
-              | Arcadia_Visuals_Implementation_OpenGL4_MeshResource_MeshAmbientColorDirty
-              | Arcadia_Visuals_Implementation_OpenGL4_MeshResource_VerticesDirty
-              ;
-
-  self->localToWorldMatrix = NULL;
-
   self->program = NULL;
   self->vertexBuffer = NULL;
 
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext =
     Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getType(thread));
-
-  self->meshAmbientColor = Arcadia_Math_Color4Real32_create(thread);
-  self->localToWorldMatrix = Arcadia_Math_Matrix4Real32_create(thread);
-  Arcadia_Math_Matrix4Real32_setIdentity(thread, self->localToWorldMatrix);
 
   self->meshConstantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
   self->program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_getType(thread));
@@ -176,6 +160,7 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_initializeDispatchImpl
     Arcadia_Visuals_Implementation_OpenGL4_MeshResourceDispatch* self
   )
 {
+  ((Arcadia_Visuals_Implementation_MeshResourceDispatch*)self)->setMeshAmbientColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Color4Real32*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setMeshAmbientColorImpl;
   ((Arcadia_Visuals_Implementation_MeshResourceDispatch*)self)->setLocalToWorldMatrix = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Matrix4Real32*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setLocalToWorldMatrixImpl;
 
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_loadImpl;
@@ -202,14 +187,7 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_MeshResource* self
   )
-{
-  if (self->meshAmbientColor) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->meshAmbientColor);
-  }
-  if (self->localToWorldMatrix) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->localToWorldMatrix);
-  }
-}
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_MeshResource_loadImpl
@@ -263,20 +241,21 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_renderImpl
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->vertexBuffer);
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->program);
 
-  if (self->dirty & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_MeshAmbientColorDirty) {
-    self->dirty &= ~Arcadia_Visuals_Implementation_OpenGL4_MeshResource_MeshAmbientColorDirty;
-  }
-  if (self->dirty & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_LocalToWorldMatrixDirty) {
+  if (((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty & (Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty | Arcadia_Visuals_Implementation_MeshResource_LocalToWorldMatrixDirty)) {
     Arcadia_Visuals_Implementation_ConstantBufferResource_clear(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->meshConstantBuffer);
-    Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->meshConstantBuffer, Arcadia_BooleanValue_True, self->localToWorldMatrix);
-    self->dirty &= ~Arcadia_Visuals_Implementation_OpenGL4_MeshResource_LocalToWorldMatrixDirty;
+    // @todo We need to ability to do sub-range updates:
+    // There is no need to rewrite every value if only one value is dirty.
+    Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->meshConstantBuffer, Arcadia_BooleanValue_True, ((Arcadia_Visuals_Implementation_MeshResource*)self)->localToWorldMatrix);
+    Arcadia_Visuals_Implementation_ConstantBufferResource_writeColor4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->meshConstantBuffer, ((Arcadia_Visuals_Implementation_MeshResource*)self)->meshAmbientColor);
+    ((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty &= ~Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty;
+    ((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty &= ~Arcadia_Visuals_Implementation_MeshResource_LocalToWorldMatrixDirty;
   }
 
   Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* viewerConstantBuffer = NULL;
   viewerConstantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)renderingContextNode->viewerConstantBuffer;
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshConstantBuffer);
   gl->glUseProgram(self->program->id);
-  gl->glBindFragDataLocation(self->program->id, 0, u8"fragmentColor");
+  gl->glBindFragDataLocation(self->program->id, 0, u8"_2_fragmentColor");
   gl->glBindVertexArray(self->vertexBuffer->vertexArrayID);
 
   GLuint blockIndex;
@@ -313,13 +292,10 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setMeshAmbientColorImpl
     Arcadia_Math_Color4Real32* meshAmbientColor
   )
 {
-#if 0
   Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(meshAmbientColor);
-  if (!Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->meshAmbientColor, &t))
-#endif
-  {
-    Arcadia_Math_Color4Real32_assign(thread, self->meshAmbientColor, meshAmbientColor);
-    self->dirty |= Arcadia_Visuals_Implementation_OpenGL4_MeshResource_MeshAmbientColorDirty;
+  if (!Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)((Arcadia_Visuals_Implementation_MeshResource*)self)->meshAmbientColor, &t)) {
+    Arcadia_Math_Color4Real32_assign(thread, ((Arcadia_Visuals_Implementation_MeshResource*)self)->meshAmbientColor, meshAmbientColor);
+    ((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty |= Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty;
   }
 }
 
@@ -331,13 +307,10 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setLocalToWorldMatrixImpl
     Arcadia_Math_Matrix4Real32* localToWorldMatrix
   )
 {
-#if 0
   Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(localToWorldMatrix);
-  if (!Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->localToWorldMatrix, &t))
-#endif
-  {
-    Arcadia_Math_Matrix4Real32_assign(thread, self->localToWorldMatrix, localToWorldMatrix);
-    self->dirty |= Arcadia_Visuals_Implementation_OpenGL4_MeshResource_LocalToWorldMatrixDirty;
+  if (!Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)((Arcadia_Visuals_Implementation_MeshResource*)self)->localToWorldMatrix, &t)) {
+    Arcadia_Math_Matrix4Real32_assign(thread, ((Arcadia_Visuals_Implementation_MeshResource*)self)->localToWorldMatrix, localToWorldMatrix);
+    ((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty |= Arcadia_Visuals_Implementation_MeshResource_LocalToWorldMatrixDirty;
   }
 }
 

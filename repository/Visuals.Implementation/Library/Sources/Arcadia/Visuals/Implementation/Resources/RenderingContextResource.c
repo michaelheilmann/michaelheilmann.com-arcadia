@@ -126,7 +126,7 @@ Arcadia_Visuals_Implementation_RenderingContextResource_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_RenderingContextResourceDispatch* self
   )
-{ 
+{
   self->setViewToProjectionMatrix = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_RenderingContextResource*, Arcadia_Math_Matrix4Real32*)) & Arcadia_Visuals_Implementation_RenderingContextResource_setViewToProjectionMatrixImpl;
   self->setWorldToViewMatrix = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_RenderingContextResource*, Arcadia_Math_Matrix4Real32*)) & Arcadia_Visuals_Implementation_RenderingContextResource_setWorldToViewMatrixImpl;
 }

@@ -16,7 +16,7 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/FragmentProgramResource.h"
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
-#include "Arcadia/Visuals/VPL/Backends/GLSL/Include.h"
+#include "Arcadia/Visuals/Implementation/VPL/GLSL/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Resources/Utilities.h"
 #include <assert.h>
 #include <string.h>
@@ -30,7 +30,7 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_constructImpl
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_initializeDispatchImpl
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResourceDispatch* self
   );
@@ -103,20 +103,20 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_Value t;
-    t = Arcadia_ValueStack_getValue(thread, 1);
-    Arcadia_ValueStack_pushValue(thread, &t);
-    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    Arcadia_Value t[2];
+    t[0] = Arcadia_ValueStack_getValue(thread, 2);
+    t[1] = Arcadia_ValueStack_getValue(thread, 1);
+    Arcadia_ValueStack_pushValue(thread, &t[0]);
+    Arcadia_ValueStack_pushValue(thread, &t[1]);
+    Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
 
-  self->dirty = Arcadia_BooleanValue_True;
-  self->code = NULL;
   self->id = 0;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
@@ -152,11 +152,7 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource* self
   )
-{
-  if (self->code) {
-    Arcadia_ImmutableByteArray_visit(thread, self->code);
-  }
-}
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_loadImpl
@@ -174,14 +170,10 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_loadImpl
       return;
     }
   }
-  if (self->dirty) {
-    Arcadia_Visuals_VPL_Backends_GLSL_Program* programAST = createDefaultProgram(thread);
-    Arcadia_ByteBuffer* codeByteBuffer = Arcadia_ByteBuffer_create(thread);
-    Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultFragmentShader(thread, programAST, codeByteBuffer);
-    self->code = Arcadia_ImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, codeByteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, codeByteBuffer));
+  if (((Arcadia_Visuals_Implementation_VertexProgramResource*)self)->dirty) {
     // (1) set shader source
     while (gl->glGetError()) { }
-    const GLchar* temporary = Arcadia_ImmutableByteArray_getBytes(thread, self->code);
+    const GLchar* temporary = Arcadia_ImmutableByteArray_getBytes(thread, ((Arcadia_Visuals_Implementation_VertexProgramResource*)self)->code);
     gl->glShaderSource(self->id, 1, &temporary, NULL);
     if (gl->glGetError()) {
       return;
@@ -207,7 +199,7 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_loadImpl
       infoLog = NULL;
       return;
     } else {
-      self->dirty = Arcadia_BooleanValue_False;
+      ((Arcadia_Visuals_Implementation_VertexProgramResource*)self)->dirty = Arcadia_BooleanValue_False;
     }
   }
 }
@@ -246,62 +238,20 @@ Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_renderImpl
     Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextNode
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
-  if (0 == self->id) {
-    // (1) create shader
-    self->id = gl->glCreateShader(GL_FRAGMENT_SHADER);
-    if (!self->id) {
-      return;
-    }
-  }
-  if (self->dirty) {
-    Arcadia_Visuals_VPL_Backends_GLSL_Program* programAST = createDefaultProgram(thread);
-    Arcadia_ByteBuffer* codeByteBuffer = Arcadia_ByteBuffer_create(thread);
-    Arcadia_Visuals_VPL_Backends_GLSL_Program_writeDefaultFragmentShader(thread, programAST, codeByteBuffer);
-    self->code = Arcadia_ImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, codeByteBuffer), Arcadia_ByteBuffer_getNumberOfBytes(thread, codeByteBuffer));
-    // (1) set shader source
-    while (gl->glGetError()) { }
-    const GLchar* temporary = Arcadia_ImmutableByteArray_getBytes(thread, self->code);
-    gl->glShaderSource(self->id, 1, &temporary, NULL);
-    if (gl->glGetError()) {
-      return;
-    }
-    // (2) compile shader
-    while (gl->glGetError()) { }
-    gl->glCompileShader(self->id);
-    if (gl->glGetError()) {
-      return;
-    }
-    // (3) check if compilation was successful
-    GLint success = GL_FALSE;
-    gl->glGetShaderiv(self->id, GL_COMPILE_STATUS, &success);
-    if (!success) {
-      GLuint infoLogLength;
-      gl->glGetShaderiv(self->id, GL_INFO_LOG_LENGTH, &infoLogLength);
-      GLchar* infoLog = malloc(sizeof(GLchar) + (infoLogLength + 1));
-      if (!infoLog) {
-        return;
-      }
-      gl->glGetShaderInfoLog(self->id, infoLogLength, NULL, infoLog);
-      free(infoLog);
-      infoLog = NULL;
-      return;
-    } else {
-      self->dirty = Arcadia_BooleanValue_False;
-    }
-  }
+  Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self);
 }
 
 Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource*
 Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
+    Arcadia_Visuals_VPL_Program* program
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  if (program) Arcadia_ValueStack_pushObjectReferenceValue(thread, program); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource);
 }

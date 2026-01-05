@@ -93,6 +93,14 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl
   );
 
 static void
+Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeColor4Real32Impl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
+    Arcadia_Math_Color4Real32 const* source
+  );
+
+static void
 Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real32Impl
   (
     Arcadia_Thread* thread,
@@ -158,6 +166,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_initializeDispatch
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_RenderingContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl;
 
   ((Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl;
+  ((Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->writeColor4Real32 = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, Arcadia_Math_Color4Real32 const*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeColor4Real32Impl;
   ((Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->writeMatrix4x4Real32 = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, Arcadia_BooleanValue, Arcadia_Math_Matrix4Real32 const*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real32Impl;
   ((Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->setData = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, const void*, Arcadia_SizeValue)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_setDataImpl;
 }
@@ -278,6 +287,17 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl
     Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self
   )
 { Arcadia_ByteBuffer_clear(thread, self->byteBuffer); self->dirty = Arcadia_BooleanValue_True; }
+
+static void
+Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeColor4Real32Impl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
+    Arcadia_Math_Color4Real32 const* source
+  )
+{
+  Arcadia_ByteBuffer_insertBackBytes(thread, self->byteBuffer, &(source->components[0]), sizeof(float) * 4);
+}
 
 static inline void
 Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeMatrix4x4Real32Impl

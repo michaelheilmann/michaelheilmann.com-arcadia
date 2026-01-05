@@ -37,15 +37,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResourceDispatch {
 struct Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource {
   Arcadia_Visuals_Implementation_VertexBufferResource _parent;
 
-  Arcadia_SizeValue numberOfVertices;
-
-  void* bytes;
-  Arcadia_SizeValue numberOfBytes;
-
-  Arcadia_BooleanValue vertexArrayDirty;
   GLuint vertexArrayID;
-
-  Arcadia_BooleanValue vertexBufferDirty;
   GLuint vertexBufferID;
 };
 

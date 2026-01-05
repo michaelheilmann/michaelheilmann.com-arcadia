@@ -25,7 +25,7 @@ Arcadia_Visuals_Linux_DisplayDevice_constructImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_DisplayDevice* self
   );
-  
+
 static void
 Arcadia_Visuals_Linux_DisplayDevice_initializeDispatchImpl
   (

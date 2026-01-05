@@ -1,7 +1,5 @@
 @{include("./Commons/header-common.i")}
-  
-  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=1'>
-  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=1'>
+
   <link rel='canonical' href='@{siteAddress}/'>
   
   <title>Michael Heilmann's Arcadia</title>

@@ -86,41 +86,15 @@ Arcadia_Names_destroy
     Arcadia_Names* names
   );
 
-static void
-_Arcadia_Names_onPreMark
-  (
-    Arcadia_Thread* thread,
-    bool purgeCache
-  );
-
-static void
-_Arcadia_Names_onFinalize
-  (
-    Arcadia_Thread* thread,
-    size_t* destroyed
-  );
-
-static void
-_Arcadia_Names_onVisit
-  (
-    Arcadia_Thread* thread
-  );
-
-static void
-_Arcadia_Names_onStartUp
-  (
-    Arcadia_Thread* thread
-  );
-
-static void
-_Arcadia_Names_onShutDown
-  (
-    Arcadia_Thread* thread
-  );
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #define Arcadia_Name_TypeName "Arcadia.Name"
+
+struct Arcadia_Names {
+  Arcadia_Name** buckets;
+  size_t size;
+  size_t capacity;
+};
 
 static Arcadia_Names* g_names = NULL;
 static uint32_t g_referenceCount = 0;

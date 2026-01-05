@@ -15,6 +15,7 @@
 
 #include "Arcadia/Visuals/Implementation/Resources/FragmentProgramResource.h"
 
+#include "Arcadia/Visuals/Implementation/VPL/GLSL/Include.h"
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
 #include <assert.h>
 
@@ -71,17 +72,25 @@ Arcadia_Visuals_Implementation_FragmentProgramResource_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_FragmentProgramResource_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
     Arcadia_Value t;
-    t = Arcadia_ValueStack_getValue(thread, 1);
+    t = Arcadia_ValueStack_getValue(thread, 2);
     Arcadia_ValueStack_pushValue(thread, &t);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
+  self->dirty = Arcadia_BooleanValue_True;
+  Arcadia_Visuals_VPL_Program* program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_VPL_Program_getType(thread));
+  Arcadia_ByteBuffer* codeBuffer = Arcadia_ByteBuffer_create(thread);
+  Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* t = Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_create(thread);
+  Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, t, program, codeBuffer);
+  Arcadia_ImmutableByteArray* code = Arcadia_ImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, codeBuffer),
+                                                                               Arcadia_ByteBuffer_getNumberOfBytes(thread, codeBuffer));
+  self->code = code;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -108,4 +117,8 @@ Arcadia_Visuals_Implementation_FragmentProgramResource_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_FragmentProgramResource* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->code) {
+    Arcadia_ImmutableByteArray_visit(thread, self->code);
+  }
+}

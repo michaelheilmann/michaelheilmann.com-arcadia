@@ -26,6 +26,7 @@ struct Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch {
 
   void (*setData)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, const void*, Arcadia_SizeValue);
   void (*clear)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*);
+  void (*writeColor4Real32)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, Arcadia_Math_Color4Real32 const* source);
   void (*writeMatrix4x4Real32)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, Arcadia_BooleanValue transpose, Arcadia_Math_Matrix4Real32 const* source);
 };
 
@@ -47,6 +48,14 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_clear
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_ConstantBufferResource* self
+  );
+
+void
+Arcadia_Visuals_Implementation_ConstantBufferResource_writeColor4Real32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResource* self,
+    Arcadia_Math_Color4Real32 const* source
   );
 
 void

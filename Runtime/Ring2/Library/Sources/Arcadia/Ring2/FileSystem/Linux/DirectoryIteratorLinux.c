@@ -154,7 +154,7 @@ Arcadia_DirectoryIteratorLinux_initializeDispatchImpl
 {
   ((Arcadia_DirectoryIteratorDispatch*)self)->getValue = (Arcadia_FilePath* (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) & Arcadia_DirectoryIteratorLinux_getValue;
   ((Arcadia_DirectoryIteratorDispatch*)self)->hasValue = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_hasValue;
-  ((Arcadia_DirectoryIteratorDispatch*)self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_nextValue;  
+  ((Arcadia_DirectoryIteratorDispatch*)self)->nextValue = (void (*)(Arcadia_Thread*, Arcadia_DirectoryIterator*)) &Arcadia_DirectoryIteratorLinux_nextValue;
 }
 
 Arcadia_DirectoryIteratorLinux*

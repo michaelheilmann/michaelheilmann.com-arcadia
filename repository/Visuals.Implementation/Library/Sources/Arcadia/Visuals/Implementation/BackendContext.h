@@ -47,7 +47,8 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
   (*createFragmentProgramResource)
     (
       Arcadia_Thread* thread,
-      Arcadia_Visuals_Implementation_BackendContext* self
+      Arcadia_Visuals_Implementation_BackendContext* self,
+      Arcadia_Visuals_VPL_Program* program
     );
 
   Arcadia_Visuals_Implementation_FrameBufferResource*
@@ -100,7 +101,8 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
   (*createVertexProgramResource)
     (
       Arcadia_Thread* thread,
-      Arcadia_Visuals_Implementation_BackendContext* self
+      Arcadia_Visuals_Implementation_BackendContext* self,
+      Arcadia_Visuals_VPL_Program* program
     );
 
   Arcadia_Visuals_Implementation_ViewportResource*
@@ -130,7 +132,8 @@ Arcadia_Visuals_Implementation_FragmentProgramResource*
 Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* self
+    Arcadia_Visuals_Implementation_BackendContext* self,
+    Arcadia_Visuals_VPL_Program* program
   );
 
 // Create a frame buffer resource.
@@ -197,7 +200,8 @@ Arcadia_Visuals_Implementation_VertexProgramResource*
 Arcadia_Visuals_Implementation_BackendContext_createVertexProgramResource
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* self
+    Arcadia_Visuals_Implementation_BackendContext* self,
+    Arcadia_Visuals_VPL_Program* program
   );
 
 // Create a viewport resource.

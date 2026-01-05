@@ -30,7 +30,7 @@ static void
 Arcadia_Visuals_Scene_Node_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Scene_NodeDispatch* self  
+    Arcadia_Visuals_Scene_NodeDispatch* self
   );
 
 static void

@@ -556,22 +556,7 @@ Arcadia_Value_getHash
     OnHash(Size);
     OnHash(Void);
     case Arcadia_ValueTag_ObjectReference: {
-      Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
-      Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
-
-      Arcadia_SizeValue n = Arcadia_ValueStack_getSize(thread);
-
-      Arcadia_ValueStack_pushValue(thread, self);
-      Arcadia_ValueStack_pushNatural8Value(thread, 1);
-
-      operations->hash(thread);
-      if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
-          Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
-          Arcadia_Thread_jump(thread);
-      }
-      Arcadia_SizeValue v = Arcadia_ValueStack_getSizeValue(thread, 0);
-      Arcadia_ValueStack_popValues(thread, 1);
-      return v;
+      return Arcadia_Object_getHash(thread, self->objectReferenceValue);
     } break;
     case Arcadia_ValueTag_Type: {
       return Arcadia_Type_getHash(thread, self->typeValue);

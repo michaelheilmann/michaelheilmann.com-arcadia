@@ -17,6 +17,7 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_VERTEXPROGRAMRESOURCE_H_INCLUDED
 
 #include "Arcadia/Visuals/Implementation/Resource.h"
+#include "Arcadia/Visuals/VPL/Program.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.VertexProgramResource", Arcadia_Visuals_Implementation_VertexProgramResource,
                           u8"Arcadia.Visuals.Implementation.Resource");
@@ -27,13 +28,8 @@ struct Arcadia_Visuals_Implementation_VertexProgramResourceDispatch {
 
 struct Arcadia_Visuals_Implementation_VertexProgramResource {
   Arcadia_Visuals_Implementation_Resource _parent;
+  Arcadia_BooleanValue dirty;
+  Arcadia_ImmutableByteArray* code;
 };
-
-Arcadia_Visuals_Implementation_VertexProgramResource*
-Arcadia_Visuals_Implementation_VertexProgramResource_create
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
-  );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_VERTEXPROGRAMRESOURCE_H_INCLUDED

@@ -258,6 +258,7 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
           (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
           (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
         );
+    Arcadia_Visuals_Scene_MeshNode_setBaseColor(thread, self->meshNode, Arcadia_Math_Color4Real32_create4(thread, 1.0f, 0.5f, 0.2f, 1.0f));
   }
 
   Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, self->viewportNodes[0], width, height);

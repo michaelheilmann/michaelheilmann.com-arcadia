@@ -1,6 +1,5 @@
 @{include("./../../../Documentation/Commons/header-common.i")}
-<link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=1'>
-<link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=1'>
+
 <link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=1'>
 <link rel='canonical' href='@{siteAddress}/repository/Arcadia.Machine/'>
 <title>Michael Heilmann's Arcadia Machine</title>

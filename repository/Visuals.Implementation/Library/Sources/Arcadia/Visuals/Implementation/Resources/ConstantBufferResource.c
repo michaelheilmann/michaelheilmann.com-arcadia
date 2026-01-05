@@ -126,6 +126,15 @@ Arcadia_Visuals_Implementation_ConstantBufferResource_clear
 { Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ConstantBufferResource, clear, self); }
 
 void
+Arcadia_Visuals_Implementation_ConstantBufferResource_writeColor4Real32
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ConstantBufferResource* self,
+    Arcadia_Math_Color4Real32 const* source
+  )
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ConstantBufferResource, writeColor4Real32, self, source); }
+
+void
 Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32
   (
     Arcadia_Thread* thread,

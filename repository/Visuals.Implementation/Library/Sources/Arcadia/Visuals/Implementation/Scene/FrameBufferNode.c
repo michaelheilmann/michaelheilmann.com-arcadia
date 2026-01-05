@@ -132,7 +132,7 @@ static void
 Arcadia_Visuals_Implementation_Scene_FrameBufferNode_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_Scene_FrameBufferNodeDispatch* self  
+    Arcadia_Visuals_Implementation_Scene_FrameBufferNodeDispatch* self
   )
 {
   ((Arcadia_Visuals_Scene_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_Scene_RenderingContextNode*)) & Arcadia_Visuals_Implementation_Scene_FrameBufferNode_renderImpl;

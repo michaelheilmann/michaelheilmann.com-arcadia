@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
+#include "Arcadia/Ring1/Implementation/TypeSystem/TypeKind.h"
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
@@ -51,7 +52,6 @@ typedef struct Arcadia_ObjectType_Operations {
   .construct = NULL, \
   .destruct = NULL, \
   .visit = NULL
-
 
 /// Type operations for all types.
 typedef struct Arcadia_Type_Operations {
@@ -119,35 +119,6 @@ typedef void (Arcadia_Type_TypeDestructingCallbackFunction)(void* context);
 typedef void Arcadia_Type;
 typedef Arcadia_Type* Arcadia_TypeValue;
 
-/// An enumeration of the type kinds.
-typedef enum Arcadia_TypeKind {
-
-  /// The "internal" type kind.
-  /// Examples of this type kind are
-  /// - <code>Arcadia.Atom</code>
-  /// - <code>Arcadia.ImmutableByteArray</code>
-  /// - <code>Arcadia.Memory</code>
-  /// - <code>Arcadia.Type</code>
-  Arcadia_TypeKind_Internal,
-
-  /// The "scalar" type kind.
-  /// Examples of this type are:
-  /// - <code>Arcadia.Boolean</code>
-  /// - <code>Arcadia.ForeignProcedure</code>
-  /// - <code>Arcadia.Integer(8|16|32|64)</code>
-  /// - <code>Arcadia.Natural(8|16|32|64)</code>
-  /// - <code>Arcadia.Real(32|64)</code>
-  /// - <code>Arcadia.Size</code>
-  /// - <code>Arcadia.Void</code>
-  Arcadia_TypeKind_Scalar,
-
-  /// The "object" type kind.
-  Arcadia_TypeKind_Object,
-
-  /// The "enumeration" type kind.
-  Arcadia_TypeKind_Enumeration,
-
-} Arcadia_TypeKind;
 
 static inline void
 Arcadia_Type_visit

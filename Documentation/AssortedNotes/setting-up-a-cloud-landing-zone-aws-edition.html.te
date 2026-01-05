@@ -1,6 +1,4 @@
   @{include("./../Commons/header-common.i")}
-  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=3'>
-  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=3'>
   <link rel='canonical' href='@{siteAddress}/assorted-notes/landing-zones-aws-edition'>
   <title>Setting up a cloud landing zone - AWS edition</title>
 </head>

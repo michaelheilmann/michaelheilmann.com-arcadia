@@ -31,7 +31,7 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
 
 static void
 Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_initializeDispatchImpl
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_Audials_Implementation_OpenAL_SoundSourceResourceDispatch* self
   );

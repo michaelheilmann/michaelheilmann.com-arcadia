@@ -1,6 +1,4 @@
   @{include("./../Commons/header-common.i")}
-  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=3'>
-  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=3'>
   <link rel='canonical' href='@{siteAddress}/assorted-notes/information-security-data-security-and-data-privacy-commonalities-similarities-and-differences'>
   <title>Information Security, Data Security, and Data Privacy - Commonalities, similarities, and differences</title>
 </head>

@@ -64,15 +64,16 @@ Arcadia_Visuals_VertexDescriptor_construct
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
-  self->vertexElementDescriptors = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  
+  self->stride = Arcadia_ValueStack_getSizeValue(thread, 2);
+  self->vertexElementDescriptors = Arcadia_ValueStack_getObjectReferenceValue(thread, 1);
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_ValueStack_popValues(thread, 2 + 1);
 }
 
 static void
@@ -98,10 +99,14 @@ Arcadia_Visuals_VertexDescriptor_visit
 Arcadia_Visuals_VertexDescriptor*
 Arcadia_Visuals_VertexDescriptor_create
   (
-    Arcadia_Thread* thread
+    Arcadia_Thread* thread,
+    Arcadia_SizeValue stride,
+    Arcadia_ImmutableList* vertexElementDescriptors
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  Arcadia_ValueStack_pushSizeValue(thread, stride);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)vertexElementDescriptors);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_VertexDescriptor);
 }

@@ -91,6 +91,24 @@ Arcadia_ValueStack_reverse
     Arcadia_SizeValue count
   );
 
+/// @brief Raise a value.
+/// @param thread A pointer to the thread.
+/// @param value The value to raise.
+/// @remarks
+/// The runtime can raise any value.
+/// Certain languages may impose additional restrictions.
+/// @remarks
+/// Raising a value consists of the following steps:
+/// - assign thread->raisedValue = raisedValue
+/// - Arcadia_Thread_setStatus(thread, Arcadia_Status_ValueRaised) is invoked.
+/// - Arcadia_Thread_jump(thread) is invoked.
+void
+Arcadia_Thread_raise
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value raisedValue
+  );
+
 /// @brief Push a jump target on the top of the jump target stack of this thread
 /// @param thread A pointer to this Arcadia_Thread object
 /// @undefined @a process does not refer to a Arcadia_Thread object

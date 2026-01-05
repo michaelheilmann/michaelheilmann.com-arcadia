@@ -16,8 +16,12 @@
 #if !defined(ARCADIA_VISUALS_VERTEXDESCRIPTOR_H_INCLUDED)
 #define ARCADIA_VISUALS_VERTEXDESCRIPTOR_H_INCLUDED
 
+#if !defined(ARCADIA_VISUALS_PRIVATE) || 1 != ARCADIA_VISUALS_PRIVATE
+  #error("do not include directly, include `Arcadia/Visuals/Include.h` instead")
+#endif
 #include "Arcadia/Visuals/VertexElementDescriptor.h"
 
+/// @brief Immutable descriptor of a vertex.
 Arcadia_declareObjectType(u8"Arcadia.Visuals.VertexDescriptor", Arcadia_Visuals_VertexDescriptor,
                           Arcadia_Object);
 
@@ -27,13 +31,10 @@ struct Arcadia_Visuals_VertexDescriptorDispatch {
 
 struct Arcadia_Visuals_VertexDescriptor {
   Arcadia_Object parent;
-  Arcadia_List* vertexElementDescriptors;
+  /// The stride, that is, the distance, in Bytes, from the start of one vertex to the start of the next vertex.  
+  Arcadia_SizeValue stride;
+  /// The list of vertex element descriptors.
+  Arcadia_ImmutableList* vertexElementDescriptors;
 };
-
-Arcadia_Visuals_VertexDescriptor*
-Arcadia_Visuals_VertexDescriptor_create
-  (
-    Arcadia_Thread* thread
-  );
 
 #endif // ARCADIA_VISUALS_VERTEXDESCRIPTOR_H_INCLUDED

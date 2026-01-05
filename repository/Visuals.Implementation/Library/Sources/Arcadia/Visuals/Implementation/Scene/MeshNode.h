@@ -38,7 +38,8 @@ Arcadia_Visuals_Implementation_Scene_MeshNode*
 Arcadia_Visuals_Implementation_Scene_MeshNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_Visuals_Scene_MaterialNode* material
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_SCENE_MESHNODE_H_INCLUDED

@@ -16,7 +16,7 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/RealToString/Real32ToString.h"
 
-#include "Arcadia/Ring1/Implementation/RealToString/Common.h"
+#include "Arcadia/Ring1/Implementation/RealToString/Common.i"
 #include "Arcadia/Ring1/Implementation/Real32_getBits.h"
 
 #include "Arcadia/Ring1/Implementation/RealToString/TablesReal32.i"

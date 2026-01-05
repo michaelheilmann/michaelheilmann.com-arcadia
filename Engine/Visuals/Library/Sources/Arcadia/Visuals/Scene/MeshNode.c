@@ -16,6 +16,11 @@
 #define ARCADIA_VISUALS_PRIVATE (1)
 #include "Arcadia/Visuals/Scene/MeshNode.h"
 
+#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Visuals/VertexDescriptorBuilder.h"
+
+#define Arcadia_Visuals_Scene_MeshNode_WithVertexColors (1)
+
 static void
 Arcadia_Visuals_Scene_MeshNode_constructImpl
   (
@@ -68,7 +73,7 @@ Arcadia_Visuals_Scene_MeshNode_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Scene_MeshNode_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
+  if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -76,11 +81,12 @@ Arcadia_Visuals_Scene_MeshNode_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  self->vertexDescriptor = Arcadia_Visuals_VertexDescriptor_create(thread);
+  Arcadia_Visuals_VertexDescriptorBuilder* vertexDescriptorBuilder = Arcadia_Visuals_VertexDescriptorBuilder_create(thread);
+
   Arcadia_List_insertBackObjectReferenceValue
     (
       thread,
-      self->vertexDescriptor->vertexElementDescriptors,
+      vertexDescriptorBuilder->vertexElementDescriptors,
       (Arcadia_ObjectReferenceValue)
       Arcadia_Visuals_VertexElementDescriptor_create
         (
@@ -90,48 +96,47 @@ Arcadia_Visuals_Scene_MeshNode_constructImpl
           Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32
         )
     );
+#if Arcadia_Visuals_Scene_MeshNode_WithVertexColors == 1
   Arcadia_List_insertBackObjectReferenceValue
     (
       thread,
-      self->vertexDescriptor->vertexElementDescriptors,
+      vertexDescriptorBuilder->vertexElementDescriptors,
       (Arcadia_ObjectReferenceValue)
       Arcadia_Visuals_VertexElementDescriptor_create
-      (
-        thread,
-        sizeof(Arcadia_Real32Value) * 3,
-        Arcadia_Visuals_VertexElementSemantics_AmbientRGBA,
-        Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32
-      )
+        (
+          thread,
+          sizeof(Arcadia_Real32Value) * 3,
+          Arcadia_Visuals_VertexElementSemantics_AmbientRGBA,
+          Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32Real32
+        )
     );
-  self->baseColor.red = 1;
-  self->baseColor.green = 1;
-  self->baseColor.blue = 1;
-  self->baseColor.alpha = 1;
+#endif
+  self->material = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Scene_MaterialNode_getType(thread));
+  self->vertexDescriptor = Arcadia_Visuals_VertexDescriptorBuilder_build(thread, vertexDescriptorBuilder);
+  self->baseColor = Arcadia_Math_Color4Real32_create4(thread, 1.f, 1.f, 1.f, 1.f);
   self->numberOfVertices = 3;
-  self->vertexPositions = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Real32Value) * 3 * 3);
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    self->vertexColors = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Real32Value) * 4 * 3);
-    Arcadia_Thread_popJumpTarget(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Memory_deallocateUnmanaged(thread, self->vertexPositions);
-    self->vertexPositions = NULL;
-    Arcadia_Thread_jump(thread);
-  }
+  Arcadia_SizeValue numberOfBytes = self->vertexDescriptor->stride * self->numberOfVertices;
+  self->vertices = Arcadia_Memory_allocateUnmanaged(thread, numberOfBytes);
+  Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(thread);
   static const Arcadia_Real32Value POSITIONS[] = {
     -0.5f, -0.5f, 0.0f,
      0.5f, -0.5f, 0.0f,
      0.0f,  0.5f, 0.0f,
   };
-  Arcadia_Memory_copy(thread, self->vertexPositions, &POSITIONS[0], sizeof(Arcadia_Real32Value) * 3 * 3);
   static const Arcadia_Real32Value COLORS[] = {
-    1.f, 1.f, 1.f, 1.f,
-    1.f, 1.f, 1.f, 1.f,
-    1.f, 1.f, 1.f, 1.f,
+    1.f, 0.f, 0.f, 1.f,
+    0.f, 1.f, 0.f, 1.f,
+    0.f, 0.f, 1.f, 1.f,
   };
-  Arcadia_Memory_copy(thread, self->vertexColors, &COLORS[0], sizeof(Arcadia_Real32Value) * 4 * 3);
+  Arcadia_ByteBuffer_clear(thread, temporary);
+  for (Arcadia_SizeValue i = 0, n = 3; i < n; ++i) {
+    Arcadia_ByteBuffer_insertBackBytes(thread, temporary, &POSITIONS[i * 3], sizeof(Arcadia_Real32Value) * 3);
+  #if Arcadia_Visuals_Scene_MeshNode_WithVertexColors == 1
+    Arcadia_ByteBuffer_insertBackBytes(thread, temporary, &COLORS[i * 4], sizeof(Arcadia_Real32Value) * 4);
+  #endif
+  }
+  Arcadia_Memory_copy(thread, self->vertices, Arcadia_ByteBuffer_getBytes(thread, temporary),
+                                              Arcadia_ByteBuffer_getNumberOfBytes(thread, temporary));
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -151,6 +156,12 @@ Arcadia_Visuals_Scene_MeshNode_visitImpl
     Arcadia_Visuals_Scene_MeshNode* self
   )
 {
+  if (self->material) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->material);
+  }
+  if (self->baseColor) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->baseColor);
+  }
   if (self->vertexDescriptor) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->vertexDescriptor);
   }
@@ -163,13 +174,9 @@ Arcadia_Visuals_Scene_MeshNode_destructImpl
     Arcadia_Visuals_Scene_MeshNode* self
   )
 {
-  if (self->vertexPositions) {
-    Arcadia_Memory_deallocateUnmanaged(thread, self->vertexPositions);
-    self->vertexPositions = NULL;
-  }
-  if (self->vertexColors) {
-    Arcadia_Memory_deallocateUnmanaged(thread, self->vertexColors);
-    self->vertexColors = NULL;
+  if (self->vertices) {
+    Arcadia_Memory_deallocateUnmanaged(thread, self->vertices);
+    self->vertices = NULL;
   }
 }
 
@@ -187,31 +194,18 @@ Arcadia_Visuals_Scene_MeshNode_setBaseColor
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_MeshNode* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
+    Arcadia_Math_Color4Real32* baseColor
   )
 {
-  self->baseColor.red = red;
-  self->baseColor.green = green;
-  self->baseColor.blue = blue;
-  self->baseColor.alpha = alpha;
+  Arcadia_Math_Color4Real32_assign(thread, self->baseColor, baseColor);
 }
 
-void
+Arcadia_Math_Color4Real32*
 Arcadia_Visuals_Scene_MeshNode_getBaseColor
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Scene_MeshNode* self,
-    Arcadia_Real32Value* red,
-    Arcadia_Real32Value* green,
-    Arcadia_Real32Value* blue,
-    Arcadia_Real32Value* alpha
+    Arcadia_Visuals_Scene_MeshNode* self
   )
 {
-  *red = self->baseColor.red;
-  *green = self->baseColor.green;
-  *blue = self->baseColor.blue;
-  *alpha = self->baseColor.alpha;
+  return Arcadia_Math_Color4Real32_create4v(thread, self->baseColor->components);
 }

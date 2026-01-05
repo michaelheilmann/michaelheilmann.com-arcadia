@@ -18,18 +18,33 @@
 
 #include "Arcadia/Visuals/Implementation/Resource.h"
 
+/// @brief Flag indicating the vertex data of a vertex buffer resource is dirty.
+#define Arcadia_Visuals_Implementation_VertexBufferResource_VertexDataDirty (1)
+
+/// @brief Flag indicating the vertex descriptor of a vertex buffer resource is dirty.
+#define Arcadia_Visuals_Implementation_VertexBufferResource_VertexDescriptorDirty (2)
+
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.VertexBufferResource", Arcadia_Visuals_Implementation_VertexBufferResource,
                           u8"Arcadia.Visuals.Implementation.Resource");
 
 struct Arcadia_Visuals_Implementation_VertexBufferResourceDispatch {
   Arcadia_Visuals_Implementation_ResourceDispatch _parent;
 
-  void (*setData)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self, Arcadia_SizeValue numberOfVertices, const void* bytes, Arcadia_SizeValue numberOfBytes);
+  void (*setData)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self, Arcadia_Visuals_VertexDescriptor* vertexDescriptor, Arcadia_SizeValue numberOfVertices, const void* bytes, Arcadia_SizeValue numberOfBytes);
   Arcadia_SizeValue (*getNumberOVertices)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self);
 };
 
 struct Arcadia_Visuals_Implementation_VertexBufferResource {
   Arcadia_Visuals_Implementation_Resource _parent;
+
+  Arcadia_Natural8Value dirty;
+
+  Arcadia_Visuals_VertexDescriptor* vertexDescriptor;
+
+  Arcadia_SizeValue numberOfVertices;
+
+  void* bytes;
+  Arcadia_SizeValue numberOfBytes;
 };
 
 void
@@ -37,6 +52,7 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setData
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self,
+    Arcadia_Visuals_VertexDescriptor* vertexDescriptor,
     Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes

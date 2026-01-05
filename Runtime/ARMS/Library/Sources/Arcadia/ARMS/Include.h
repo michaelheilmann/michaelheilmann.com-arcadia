@@ -21,6 +21,7 @@
 #include "Arcadia/ARMS/Natural8Type.h"
 #include "Arcadia/ARMS/StatusType.h"
 #include "Arcadia/ARMS/MemoryManager.h"
+#include "Arcadia/ARMS/TypeName.h"
 
 /// Alias for sizeof(expression).
 #define Arcadia_ARMS_SizeOf(expression) sizeof(expression)

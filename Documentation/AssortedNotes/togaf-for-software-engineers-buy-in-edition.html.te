@@ -1,6 +1,4 @@
   @{include("./../Commons/header-common.i")}
-  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=3'>
-  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=3'>
   <link rel='canonical' href='@{siteAddress}/assorted-notes/togaf-for-software-engineers-buy-in-edition'>
   <title>TOGAF for software engineers - Buy-in edition</title>
 </head>

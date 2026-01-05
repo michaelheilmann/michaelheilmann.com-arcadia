@@ -88,7 +88,7 @@ Arcadia_Visuals_WindowSizeChangedEvent_constructImpl
 
 static void
 Arcadia_Visuals_WindowSizeChangedEvent_initializeDispatchImpl
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_Visuals_WindowSizeChangedEventDispatch* self
   )
