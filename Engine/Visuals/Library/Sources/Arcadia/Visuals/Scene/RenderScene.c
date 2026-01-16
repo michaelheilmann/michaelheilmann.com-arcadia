@@ -16,28 +16,26 @@
 #define ARCADIA_VISUALS_PRIVATE (1)
 #include "Arcadia/Visuals/Scene/RenderScene.h"
 
-#include "Arcadia/Visuals/Scene/FrameBufferNode.h"
-
 void
 Arcadia_Visuals_renderScene
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_RenderingContextNode* renderingContextNode,
-    Arcadia_Visuals_Scene_MeshNode* meshNode,
+    Arcadia_Visuals_Scene_ModelNode* modelNode,
     Arcadia_Visuals_BackendContext* backendContext
   )
 {
   Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)renderingContextNode,
-                                                       backendContext);
+    backendContext);
   if (renderingContextNode->frameBufferNode) {
     // "rendering" the scene buffer activates it.
     Arcadia_Visuals_Scene_Node_render
-      (
-        thread,
-        (Arcadia_Visuals_Scene_Node*)renderingContextNode->frameBufferNode,
-        renderingContextNode
-      );
+    (
+      thread,
+      (Arcadia_Visuals_Scene_Node*)renderingContextNode->frameBufferNode,
+      renderingContextNode
+    );
   }
   Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)renderingContextNode->cameraNode, renderingContextNode);
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)meshNode, renderingContextNode);
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)modelNode, renderingContextNode);
 }

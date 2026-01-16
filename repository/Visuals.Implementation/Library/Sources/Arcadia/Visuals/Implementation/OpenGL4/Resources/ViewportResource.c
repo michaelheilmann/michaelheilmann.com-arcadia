@@ -51,10 +51,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
+    Arcadia_Math_Color4Real32* clearColor
   );
 
 static void
@@ -151,10 +148,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
 
-  self->clearColor.red = 193;
-  self->clearColor.green = 216;
-  self->clearColor.blue = 195;
-  self->clearColor.alpha = 255;
+  self->clearColor = Arcadia_Math_Color4Real32_create4(thread, 193.f / 255.f, 216.f / 255.f, 195.f / 255.f, 1.f);
 
   self->clearDepth = 1.f;
 
@@ -183,7 +177,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_initializeDispatchImpl
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_RenderingContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl;
 
   ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setCanvasSize = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setCanvasSizeImpl;
-  ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl;
+  ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Math_Color4Real32*)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl;
   ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setClearDepth = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearDepthImpl;
   ((Arcadia_Visuals_Implementation_ViewportResourceDispatch*)self)->setRelativeViewportRectangle = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ViewportResource*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setRelativeViewportRectangleImpl;
 }
@@ -202,23 +196,21 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->clearColor) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->clearColor);
+  }
+}
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_setClearColorImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ViewportResource* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
+    Arcadia_Math_Color4Real32* clearColor
   )
 {
-  self->clearColor.red = red;
-  self->clearColor.green = green;
-  self->clearColor.blue = blue;
-  self->clearColor.alpha = alpha;
+  Arcadia_Math_Color4Real32_assign(thread, self->clearColor, clearColor);
 }
 
 static void
@@ -309,10 +301,10 @@ Arcadia_Visuals_Implementation_OpenGL4_ViewportResource_renderImpl
   gl->glClearDepth(self->clearDepth);
   gl->glClear(GL_DEPTH_BUFFER_BIT);
 
-  gl->glClearColor((Arcadia_Real32Value)self->clearColor.red / 255.0f,
-                   (Arcadia_Real32Value)self->clearColor.green / 255.0f,
-                   (Arcadia_Real32Value)self->clearColor.blue / 255.0f,
-                   (Arcadia_Real32Value)self->clearColor.alpha / 255.0f);
+  gl->glClearColor(self->clearColor->components[0],
+                   self->clearColor->components[1],
+                   self->clearColor->components[2],
+                   self->clearColor->components[3]);
   gl->glClear(GL_COLOR_BUFFER_BIT);
 }
 

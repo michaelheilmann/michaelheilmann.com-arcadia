@@ -19,7 +19,7 @@
 #include "Arcadia/Ring1/Include.h"
 
 void
-Arcadia_SizeValue_toUtf8String
+Arcadia_SizeValue_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue sizeValue,
@@ -28,9 +28,9 @@ Arcadia_SizeValue_toUtf8String
   )
 {
 #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
-  Arcadia_Natural64Value_toUtf8String(thread, sizeValue, context, function);
+  Arcadia_Natural64Value_toUTF8String(thread, sizeValue, context, function);
 #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
-  Arcadia_Natural32Value_toUtf8String(thread, sizeValue, context, function);
+  Arcadia_Natural32Value_toUTF8String(thread, sizeValue, context, function);
 #else
   #error("environemnt not (yet) supported");
 #endif

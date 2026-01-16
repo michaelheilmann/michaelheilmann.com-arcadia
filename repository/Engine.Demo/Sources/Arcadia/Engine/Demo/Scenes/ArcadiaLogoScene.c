@@ -17,6 +17,7 @@
 
 #include "Arcadia/Engine/Demo/SceneManager.h"
 #include "Arcadia/Engine/Demo/Scenes/MainScene.h"
+#include "Arcadia/Engine/Demo/AssetUtilities.h"
 
 static void
 Arcadia_Engine_Demo_ArcadiaLogoScene_construct
@@ -111,31 +112,13 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_construct
   self->cameraNode = NULL;
   self->renderingContextNode = NULL;
   //
-  self->meshNode = NULL;
+  self->modelNode = NULL;
   //
   self->definitions = Arcadia_ADL_Definitions_create(thread);
+  //
   self->toLoad = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   //
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FilePath* path = Arcadia_FileSystem_getWorkingDirectory(thread, fileSystem);
-  Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, "Colors/CSS", sizeof("Colors/CSS") - 1));
-  Arcadia_DirectoryIterator* directoryIterator = Arcadia_FileSystem_createDirectoryIterator(thread, fileSystem, path);
-  Arcadia_FilePath* dot = Arcadia_FilePath_parseGeneric(thread, u8".", sizeof(u8".") - 1),
-                  * dotdot = Arcadia_FilePath_parseGeneric(thread, u8"..", sizeof(u8"..") - 1);
-  while (Arcadia_DirectoryIterator_hasValue(thread, directoryIterator)) {
-    Arcadia_FilePath* elementPath = Arcadia_DirectoryIterator_getValue(thread, directoryIterator);
-    if (Arcadia_FilePath_isEqualTo(thread, elementPath, dot) || Arcadia_FilePath_isEqualTo(thread, elementPath, dotdot)) {
-      Arcadia_DirectoryIterator_nextValue(thread, directoryIterator);
-    } else {
-      Arcadia_FilePath* temporary = Arcadia_FilePath_clone(thread, path);
-      Arcadia_FilePath_append(thread, temporary, elementPath);
-      elementPath = temporary;
-      //Arcadia_String* elementPathString = Arcadia_FilePath_toNative(thread, elementPath);
-      Arcadia_List_insertBackObjectReferenceValue(thread, self->toLoad, (Arcadia_Object*)elementPath);
-      //Arcadia_logf(Arcadia_LogFlags_Debug, "%s\n", Arcadia_String_getBytes(thread, elementPathString));
-      Arcadia_DirectoryIterator_nextValue(thread, directoryIterator);
-    }
-  }
+  Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, "Assets/Colors/CSS", sizeof("Assets/Colors/CSS") - 1), self->toLoad);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
@@ -178,8 +161,8 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_visit
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->renderingContextNode);
   }
 
-  if (self->meshNode) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->meshNode);
+  if (self->modelNode) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->modelNode);
   }
 
   if (self->toLoad) {
@@ -223,7 +206,7 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_updateLogics
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
       Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
       Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
-      Arcadia_ADL_Context_readFromString(thread, context, self->definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)));
+      Arcadia_ADL_Context_readFromString(thread, context, self->definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
@@ -235,7 +218,7 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_updateLogics
 }
 
 static void
-renderToFrameBuffer
+updateVisuals0
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_ArcadiaLogoScene* self,
@@ -250,76 +233,85 @@ renderToFrameBuffer
   if (!self->frameBufferNode) {
     self->frameBufferNode =
       Arcadia_Visuals_SceneNodeFactory_createFrameBufferNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
+        (
+          thread,
+          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+        );
   }
   // Ensure the "rendering context" node exists.
   if (!self->renderingContextNode) {
     self->renderingContextNode =
       Arcadia_Visuals_SceneNodeFactory_createRenderingContextNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
+        (
+          thread,
+          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+        );
   }
   // Ensure the "viewport" node exists.
   // Set its clear color and relative viewport rectangle.
   if (!self->viewportNode) {
+    Arcadia_ADL_ColorDefinition* d = getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Green.adl"),
+                                                                                   Arcadia_String_createFromCxxString(thread, "Assets/Colors.Green"));
     self->viewportNode =
       (Arcadia_Visuals_Scene_ViewportNode*)
       Arcadia_Visuals_SceneNodeFactory_createViewportNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
-    Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, self->viewportNode, 0.f, 255.f, 0.f, 255.f);
+        (
+          thread,
+          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+        );
+    Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, self->viewportNode, Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
     Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNode, 0.f, 0.f, 1.f, 1.f);
   }
   Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, self->viewportNode, width, height);
-
   // Ensure the "camera" node exists.
   if (!self->cameraNode) {
     self->cameraNode =
       (Arcadia_Visuals_Scene_CameraNode*)
       Arcadia_Visuals_SceneNodeFactory_createCameraNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
+        (
+          thread,
+          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+        );
   }
-
-  // Ensure the "mesh" node exists.
-  if (!self->meshNode) {
-    self->meshNode =
-      (Arcadia_Visuals_Scene_MeshNode*)
-      Arcadia_Visuals_SceneNodeFactory_createMeshNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
-    Arcadia_Visuals_Scene_MeshNode_setBaseColor(thread, self->meshNode, Arcadia_Math_Color4Real32_create4(thread, 1.0f, 0.5f, 0.2f, 1.0f));
+  if (!self->modelNode) {
+    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+    Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
+    Arcadia_List* files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+    Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, "Assets/LogoScene", sizeof("Assets/LogoScene") - 1), files);
+    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)files); i < n; ++i) {
+      Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, files, i, _Arcadia_FilePath_getType(thread));
+      Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
+      Arcadia_ADL_Context_readFromString(thread, context, self->definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
+    }
+    Arcadia_ADL_ModelDefinition* modelDefinition =
+      (Arcadia_ADL_ModelDefinition*)Arcadia_ADL_Definitions_getDefinitionOrNull(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "LogoScene.MeshColorModel"));
+    if (NULL == modelDefinition) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
+    self->modelNode =
+      (Arcadia_Visuals_Scene_ModelNode*)
+      Arcadia_Visuals_SceneNodeFactory_createModelNode
+        (
+          thread,
+          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
+          modelDefinition
+        );
   }
-
   // Assign the "viewport" node to the "camera" node.
   Arcadia_Visuals_Scene_CameraNode_setViewport(thread, self->cameraNode, self->viewportNode);
   // Assign the "camera" node to the "rendering context" node.
   Arcadia_Visuals_Scene_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
-  // Assign the "frame buffer" node to the "rendering context" node.
-  Arcadia_Visuals_Scene_RenderingContextNode_setFrameBufferNode(thread, self->renderingContextNode, self->frameBufferNode);
-  // Render the scene.
-  // @todo Do not pass "Arcadia.Visuals.Scene.MeshNode". Create and pass "Arcadia.Visuals.Scene.Group".
-  Arcadia_Visuals_renderScene(thread, self->renderingContextNode, self->meshNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
 }
 
 static void
-renderToDefaultFrameBuffer
+updateVisualsFrameBuffer
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_ArcadiaLogoScene* self,
@@ -328,79 +320,40 @@ renderToDefaultFrameBuffer
     Arcadia_Integer32Value height
   )
 {
+  updateVisuals0(thread, self, tick, width, height);
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
-
   // Ensure the "frame buffer" node exist.
   if (!self->frameBufferNode) {
     self->frameBufferNode =
       Arcadia_Visuals_SceneNodeFactory_createFrameBufferNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
+        (
+          thread,
+          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+        );
   }
-  // Ensure the "rendering context" node exists.
-  if (!self->renderingContextNode) {
-    self->renderingContextNode =
-      Arcadia_Visuals_SceneNodeFactory_createRenderingContextNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
-  }
-  // Ensure the "viewport" node exists.
-  // Set its clear color and relative viewport rectangle.
-  if (!self->viewportNode) {
-    self->viewportNode =
-      (Arcadia_Visuals_Scene_ViewportNode*)
-      Arcadia_Visuals_SceneNodeFactory_createViewportNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
-    Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, self->viewportNode, 0.f, 255.f, 0.f, 255.f);
-    Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNode, 0.f, 0.f, 1.f, 1.f);
-  }
-  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, self->viewportNode, width, height);
+  // Assign the "frame buffer" node to the "rendering context" node.
+  Arcadia_Visuals_Scene_RenderingContextNode_setFrameBufferNode(thread, self->renderingContextNode, self->frameBufferNode);
+  // Render the scene.
+  Arcadia_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+}
 
-  // Ensure the "camera" node exists.
-  if (!self->cameraNode) {
-    self->cameraNode =
-      (Arcadia_Visuals_Scene_CameraNode*)
-      Arcadia_Visuals_SceneNodeFactory_createCameraNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
-  }
-
-  // Ensure the "mesh" node exists.
-  if (!self->meshNode) {
-    self->meshNode =
-      (Arcadia_Visuals_Scene_MeshNode*)
-      Arcadia_Visuals_SceneNodeFactory_createMeshNode
-      (
-        thread,
-        (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-      );
-  }
-
-  // Assign the "viewport" node to the "camera" node.
-  Arcadia_Visuals_Scene_CameraNode_setViewport(thread, self->cameraNode, self->viewportNode);
-  // Assign the "camera" node to the "rendering context" node.
-  Arcadia_Visuals_Scene_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
-#if 1
+static void
+updateVisualsDefaultFrameBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_ArcadiaLogoScene* self,
+    Arcadia_Real64Value tick,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height
+  )
+{
+  updateVisuals0(thread, self, tick, width, height);
+  Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
   // Assign the "frame buffer" node to the "rendering context" node.
   Arcadia_Visuals_Scene_RenderingContextNode_setFrameBufferNode(thread, self->renderingContextNode, NULL);
-#endif
   // Render the scene.
-  // @todo Do not pass "Arcadia.Visuals.Scene.MeshNode". Create and pass "Arcadia.Visuals.Scene.Group".
-  Arcadia_Visuals_renderScene(thread, self->renderingContextNode, self->meshNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
 }
 
 static void
@@ -413,8 +366,8 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_updateVisuals
     Arcadia_Integer32Value height
   )
 {
-  renderToFrameBuffer(thread, self, tick, width, height);
-  renderToDefaultFrameBuffer(thread, self, tick, width, height);
+  updateVisualsFrameBuffer(thread, self, tick, width, height);
+  updateVisualsDefaultFrameBuffer(thread, self, tick, width, height);
 }
 
 Arcadia_Engine_Demo_ArcadiaLogoScene*

@@ -42,7 +42,8 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Configuration", Arcadia_Visuals_Configuration, u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Configuration", Arcadia_Visuals_Configuration,
+                         u8"Arcadia.Object", Arcadia_Object, &_typeOperations);
 
 static void
 Arcadia_Visuals_Configuration_visit
@@ -84,15 +85,15 @@ Arcadia_Visuals_Configuration_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  _self->opengl.version.major = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"4", sizeof(u8"4") - 1));
-  _self->opengl.version.minor = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"3", sizeof(u8"3") - 1));
+  _self->opengl.version.major = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"4", sizeof(u8"4") - 1));
+  _self->opengl.version.minor = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"3", sizeof(u8"3") - 1));
 
-  _self->depthBuffer.depthBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"24", sizeof(u8"24") - 1));
+  _self->depthBuffer.depthBits = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"24", sizeof(u8"24") - 1));
 
-  _self->colorBuffer.redBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
-  _self->colorBuffer.greenBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
-  _self->colorBuffer.blueBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
-  _self->colorBuffer.alphaBits = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
+  _self->colorBuffer.redBits = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
+  _self->colorBuffer.greenBits = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
+  _self->colorBuffer.blueBits = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
+  _self->colorBuffer.alphaBits = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"8", sizeof(u8"8") - 1));
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)_self, _type);
 }

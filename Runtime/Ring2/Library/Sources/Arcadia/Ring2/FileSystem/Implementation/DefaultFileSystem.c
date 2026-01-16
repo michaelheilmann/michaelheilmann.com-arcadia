@@ -550,7 +550,7 @@ Arcadia_DefaultFileSystem_getExecutableImpl
         n = lo;
         Arcadia_Memory_reallocateUnmanaged(thread, &p, n);
       } else {
-        Arcadia_FilePath* path = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, n))));
+        Arcadia_FilePath* path = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n))));
         Arcadia_Memory_deallocateUnmanaged(thread, p);
         p = NULL;
         Arcadia_Thread_popJumpTarget(thread);
@@ -577,7 +577,7 @@ Arcadia_DefaultFileSystem_getExecutableImpl
   }
   // `readlink` returns a string in some encoding.
   // We assume that this encoding is UTF-8 at the moment.
-  return Arcadia_FilePath_parseUnix(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, n))));
+  return Arcadia_FilePath_parseUnix(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n))));
 #else
   #error("environment not (yet) supported")
 #endif
@@ -705,7 +705,7 @@ Arcadia_DefaultFileSystem_getWorkingDirectoryImpl
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, pBuffer, dwBufferSize - 1)));
+    Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, pBuffer, dwBufferSize - 1)));
     Arcadia_FilePath* filePath = Arcadia_FilePath_parseWindows(thread, filePathString);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getSlabMemoryManager(), pBuffer);
@@ -725,7 +725,7 @@ Arcadia_DefaultFileSystem_getWorkingDirectoryImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, cwd, strlen(cwd))));
+  Arcadia_String* filePathString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, cwd, strlen(cwd))));
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseUnix(thread, filePathString);
   return filePath;
 #else

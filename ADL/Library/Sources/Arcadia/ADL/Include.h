@@ -22,12 +22,17 @@
 #include "Arcadia/ADL/Context.h"
 #include "Arcadia/ADL/Definition.h"
 #include "Arcadia/ADL/Definitions.h"
+#include "Arcadia/ADL/Diagnostics.h"
 #include "Arcadia/ADL/Reader.h"
 
+#include "Arcadia/ADL/Definitions/CheckerboardFillOperationDefinition.h"
 #include "Arcadia/ADL/Definitions/ColorDefinition.h"
 #include "Arcadia/ADL/Definitions/FillOperationDefinition.h"
-#include "Arcadia/ADL/Definitions/CheckerboardFillOperationDefinition.h"
+#include "Arcadia/ADL/Definitions/MaterialDefinition.h"
+#include "Arcadia/ADL/Definitions/ModelDefinition.h"
+#include "Arcadia/ADL/Definitions/MeshDefinition.h"
 #include "Arcadia/ADL/Definitions/PixelBufferDefinition.h"
+#include "Arcadia/ADL/Definitions/TextureDefinition.h"
 
 #undef ARCADIA_ADL_PRIVATE
 #pragma pop_macro("ARCADIA_ADL_PRIVATE")

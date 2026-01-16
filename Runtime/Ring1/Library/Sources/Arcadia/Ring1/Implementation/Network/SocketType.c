@@ -16,6 +16,9 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/Network/SocketType.h"
 
+#include "Arcadia/Ring1/Implementation/Types.h"
+#include <stddef.h>
+
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
 };

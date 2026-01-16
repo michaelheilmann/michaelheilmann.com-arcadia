@@ -22,7 +22,9 @@
 #include "Arcadia/Visuals/Implementation/Resources/FragmentProgramResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/FrameBufferResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/RenderingContextResource.h"
+#include "Arcadia/Visuals/Implementation/Resources/MaterialResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/MeshResource.h"
+#include "Arcadia/Visuals/Implementation/Resources/ModelResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/ProgramResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/TextureResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/VertexBufferResource.h"
@@ -65,13 +67,31 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
       Arcadia_Visuals_Implementation_BackendContext* self
     );
 
+  Arcadia_Visuals_Implementation_MaterialResource*
+  (*createMaterialResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_Implementation_BackendContext* self,
+      Arcadia_Visuals_Implementation_TextureResource* ambientTexture,
+      Arcadia_Visuals_Implementation_ProgramResource* program
+    );
+
   Arcadia_Visuals_Implementation_MeshResource*
   (*createMeshResource)
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self,
       Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer,
-      Arcadia_Visuals_Implementation_ProgramResource* program
+      Arcadia_Visuals_Implementation_MaterialResource* material
+    );
+
+  Arcadia_Visuals_Implementation_ModelResource*
+  (*createModelResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_Implementation_BackendContext* self,
+      Arcadia_Visuals_Implementation_MeshResource* mesh,
+      Arcadia_Visuals_Implementation_MaterialResource* material
     );
 
   Arcadia_Visuals_Implementation_ProgramResource*
@@ -154,6 +174,17 @@ Arcadia_Visuals_Implementation_BackendContext_createRenderingContextResource
     Arcadia_Visuals_Implementation_BackendContext* self
   );
 
+// Create a material resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Visuals_Implementation_MaterialResource*
+Arcadia_Visuals_Implementation_BackendContext_createMaterialResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_BackendContext* self,
+    Arcadia_Visuals_Implementation_TextureResource* ambientTexture,
+    Arcadia_Visuals_Implementation_ProgramResource* program
+  );
+
 // Create a mesh resource.
 // The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
 Arcadia_Visuals_Implementation_MeshResource*
@@ -162,7 +193,18 @@ Arcadia_Visuals_Implementation_BackendContext_createMeshResource
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self,
     Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer,
-    Arcadia_Visuals_Implementation_ProgramResource* program
+    Arcadia_Visuals_Implementation_MaterialResource* material
+  );
+
+// Create a model resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Visuals_Implementation_ModelResource*
+Arcadia_Visuals_Implementation_BackendContext_createModelResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_BackendContext* self,
+    Arcadia_Visuals_Implementation_MeshResource* mesh,
+    Arcadia_Visuals_Implementation_MaterialResource* material
   );
 
 // Create a program resource

@@ -284,8 +284,23 @@ Arcadia_Atom_visit
   )
 {
   self->lastVisited = getTickCount(thread);
-  Arcadia_ARMS_visit(self);
+  Arcadia_Process_visitObject(Arcadia_Thread_getProcess(thread), self);
 }
+
+#if defined(Arcadia_ARMS_Configuration_WithBarriers) && 1 == Arcadia_ARMS_Configuration_WithBarriers
+
+void
+Arcadia_Atom_ensureGray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_AtomValue self
+  )
+{
+  self->lastVisited = getTickCount(thread);
+  /*Arcadia_Process_ensureGray(Arcadia_Thread_getProcess(thread), self);*/
+}
+
+#endif
 
 void const*
 Arcadia_Atom_getBytes

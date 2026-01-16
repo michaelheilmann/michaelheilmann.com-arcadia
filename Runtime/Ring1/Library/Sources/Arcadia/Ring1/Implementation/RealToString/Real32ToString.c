@@ -330,7 +330,7 @@ toString32
 }
 
 void
-Arcadia_Real32Value_toUtf8String
+Arcadia_Real32Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Real32Value value,

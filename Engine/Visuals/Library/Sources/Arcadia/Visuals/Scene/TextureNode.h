@@ -13,105 +13,115 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_TEXTURE_H_INCLUDED)
-#define ARCADIA_VISUALS_TEXTURE_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_SCENE_TEXTURENODE_H_INCLUDED)
+#define ARCADIA_VISUALS_SCENE_TEXTURENODE_H_INCLUDED
 
 #if !defined(ARCADIA_VISUALS_PRIVATE) || 1 != ARCADIA_VISUALS_PRIVATE
   #error("do not include directly, include `Arcadia/Visuals/Include.h` instead")
 #endif
 
 #include "Arcadia/Visuals/Scene/Node.h"
-typedef struct Arcadia_Visuals_BackendContext Arcadia_Visuals_BackendContext;
+#include "Arcadia/ADL/Include.h"
+#include "Arcadia/Visuals/Scene/PixelBufferNode.h"
 #include "Arcadia/Visuals/TextureAddressMode.h"
 #include "Arcadia/Visuals/TextureFilter.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Texture", Arcadia_Visuals_Texture,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Scene.TextureNode", Arcadia_Visuals_Scene_TextureNode,
                           u8"Arcadia.Visuals.Scene.Node")
 
-struct Arcadia_Visuals_TextureDispatch {
+struct Arcadia_Visuals_Scene_TextureNodeDispatch {
   Arcadia_Visuals_Scene_NodeDispatch parent;
 
-  Arcadia_Visuals_TextureAddressMode (*getAddressModeU)(Arcadia_Thread*, Arcadia_Visuals_Texture*);
-  Arcadia_Visuals_TextureAddressMode (*getAddressModeV)(Arcadia_Thread*, Arcadia_Visuals_Texture*);
-  Arcadia_Integer32Value (*getHeight)(Arcadia_Thread*, Arcadia_Visuals_Texture*);
-  Arcadia_Visuals_TextureFilter (*getMagnificationFilter)(Arcadia_Thread*, Arcadia_Visuals_Texture*);
-  Arcadia_Visuals_TextureFilter (*getMinificationFilter)(Arcadia_Thread*, Arcadia_Visuals_Texture*);
-  Arcadia_Integer32Value (*getWidth)(Arcadia_Thread*, Arcadia_Visuals_Texture*);
-  void (*upload)(Arcadia_Thread*, Arcadia_Visuals_Texture*, Arcadia_Visuals_BackendContext*);
+  Arcadia_Visuals_TextureAddressMode (*getAddressModeU)(Arcadia_Thread*, Arcadia_Visuals_Scene_TextureNode*);
+  Arcadia_Visuals_TextureAddressMode (*getAddressModeV)(Arcadia_Thread*, Arcadia_Visuals_Scene_TextureNode*);
+  Arcadia_Integer32Value (*getHeight)(Arcadia_Thread*, Arcadia_Visuals_Scene_TextureNode*);
+  Arcadia_Visuals_TextureFilter (*getMagnificationFilter)(Arcadia_Thread*, Arcadia_Visuals_Scene_TextureNode*);
+  Arcadia_Visuals_TextureFilter (*getMinificationFilter)(Arcadia_Thread*, Arcadia_Visuals_Scene_TextureNode*);
+  Arcadia_Integer32Value (*getWidth)(Arcadia_Thread*, Arcadia_Visuals_Scene_TextureNode*);
 };
 
-struct Arcadia_Visuals_Texture {
+struct Arcadia_Visuals_Scene_TextureNode {
   Arcadia_Visuals_Scene_Node parent;
+
+  Arcadia_ADL_TextureDefinition* source;
+
+  // The pixel buffer node.
+  Arcadia_Visuals_Scene_PixelBufferNode* pixelBuffer;
+
+  // The address mode of this texture along the u-axis.
+  // @default Arcadia_Visuals_TextureAddressMode_Repeat.
+  Arcadia_Visuals_TextureAddressMode addressModeU;
+
+  // The address mode of this texture along the v-axis.
+  // @default Arcadia_Visuals_TextureAddressMode_Repeat.
+  Arcadia_Visuals_TextureAddressMode addressModeV;
+
+  // @brief The height, in pixels of the frame buffer.
+  // @default 240.
+  Arcadia_Integer32Value height;
+
+  // The texture magnification filter.
+  // @default Arcadia_Visuals_TextureFilter_Linear
+  Arcadia_Visuals_TextureFilter magnificationFilter;
+
+  // The texture minification filter.
+  // @default Arcadia_Visuals_TextureFilter_Linear
+  Arcadia_Visuals_TextureFilter minificationFilter;
+
+  // @brief The width, in pixels, of the frame buffer.
+  // @default 320.
+  Arcadia_Integer32Value width;
+
+  // Bitmask indicating what aspects of the texture are dirty.
+  Arcadia_Natural8Value dirtyBits;
 };
 
 /* Get the address mode of this texture for the u axis. */
 Arcadia_Visuals_TextureAddressMode
-Arcadia_Visuals_Texture_getAddressModeU
+Arcadia_Visuals_Scene_TextureNode_getAddressModeU
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Texture* self
+    Arcadia_Visuals_Scene_TextureNode* self
   );
 
 /* Get the address mode of this texture for the v axis. */
 Arcadia_Visuals_TextureAddressMode
-Arcadia_Visuals_Texture_getAddressModeV
+Arcadia_Visuals_Scene_TextureNode_getAddressModeV
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Texture* self
+    Arcadia_Visuals_Scene_TextureNode* self
   );
 
 /* Get the height, in pixels, of this texture. */
 Arcadia_Integer32Value
-Arcadia_Visuals_Texture_getHeight
+Arcadia_Visuals_Scene_TextureNode_getHeight
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Texture* self
+    Arcadia_Visuals_Scene_TextureNode* self
   );
 
 /* Get the magnification filter of this texture. */
 Arcadia_Visuals_TextureFilter
-Arcadia_Visuals_Texture_getMagnificationFilter
+Arcadia_Visuals_Scene_TextureNode_getMagnificationFilter
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Texture* self
+    Arcadia_Visuals_Scene_TextureNode* self
   );
 
 /* Get the minification filter of this texture. */
 Arcadia_Visuals_TextureFilter
-Arcadia_Visuals_Texture_getMinificationFilter
+Arcadia_Visuals_Scene_TextureNode_getMinificationFilter
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Texture* self
+    Arcadia_Visuals_Scene_TextureNode* self
   );
 
 /* Get the width, in pixels, of this texture. */
 Arcadia_Integer32Value
-Arcadia_Visuals_Texture_getWidth
+Arcadia_Visuals_Scene_TextureNode_getWidth
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Texture* self
+    Arcadia_Visuals_Scene_TextureNode* self
   );
 
-/**
- * @brief Update this texture for the specified backend context.
- * This function is effectively performing the following actions:
- * - First, if the texture backend is created in some old backend context and the specified backend context is null or different from the old backend context,
- *   destroy the texture backend of that texture in the old backend context.
- * - Second, if the specified backend context is not null,
- *   create the texture backend in the specified backend context.
- * - Third, if the texture backend is created and properties of the texture changed since the last call to this function,
- *   update the texture backend with the updated property values.
- * Unload uploads to other backend contexts.
- * @param thread A pointer to this thread.
- * @param self A pointer to this texture.
- * @param backendContext A pointer to the backend context or the null pointer.
- */
-void
-Arcadia_Visuals_Texture_upload
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Texture* self,
-    Arcadia_Visuals_BackendContext* backendContext
-  );
-
-#endif // ARCADIA_VISUALS_TEXTURE_H_INCLUDED
+#endif // ARCADIA_VISUALS_SCENE_TEXTURENODE_H_INCLUDED

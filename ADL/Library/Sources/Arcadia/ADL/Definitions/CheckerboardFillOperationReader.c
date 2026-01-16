@@ -17,6 +17,7 @@
 #include "Arcadia/ADL/Definitions/CheckerboardFillOperationReader.h"
 
 #include "Arcadia/DDLS/Include.h"
+#include "Arcadia/ADL/Reader.module.h"
 #include "Arcadia/ADL/Definitions/CheckerboardFillOperationDefinition.h"
 
 static const char* SCHEMA =
@@ -90,22 +91,6 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader_read
     Arcadia_DDL_Node* input
   );
 
-static Arcadia_String*
-getStringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  );
-
-static Arcadia_Integer32Value
-getInteger32Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  );
-
 static void
 Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader_constructImpl
   (
@@ -162,12 +147,12 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader_read
 {
   Arcadia_DDLS_ValidationContext_run(thread, self->validationContext, self->SCHEMANAME, input);
 
-  Arcadia_String* type = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
-  Arcadia_String* name = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
-  Arcadia_Integer32Value checkerWidth = getInteger32Value(thread, (Arcadia_DDL_MapNode*)input, self->CHECKERWIDTH);
-  Arcadia_Integer32Value checkerHeight = getInteger32Value(thread, (Arcadia_DDL_MapNode*)input, self->CHECKERHEIGHT);
-  Arcadia_String* firstCheckerColor = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->FIRSTCHECKERCOLOR);
-  Arcadia_String* secondCheckerColor = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->SECONDCHECKERCOLOR);
+  Arcadia_String* type = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
+  Arcadia_String* name = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
+  Arcadia_Integer32Value checkerWidth = Arcadia_ADL_Reader_getInteger32Value(thread, (Arcadia_DDL_MapNode*)input, self->CHECKERWIDTH);
+  Arcadia_Integer32Value checkerHeight = Arcadia_ADL_Reader_getInteger32Value(thread, (Arcadia_DDL_MapNode*)input, self->CHECKERHEIGHT);
+  Arcadia_String* firstCheckerColorName = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->FIRSTCHECKERCOLOR);
+  Arcadia_String* secondCheckerColorName = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->SECONDCHECKERCOLOR);
 
   // Assert the definition has the correct type.
   Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(self->TYPENAME);
@@ -184,78 +169,10 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader_read
         name,
         checkerWidth,
         checkerHeight,
-        firstCheckerColor,
-        secondCheckerColor
+        firstCheckerColorName,
+        secondCheckerColorName
       );
   return definition;
-}
-
-static Arcadia_String*
-getStringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
-    Arcadia_DDL_MapEntryNode* mapEntryNode =
-      (Arcadia_DDL_MapEntryNode*)
-      Arcadia_List_getObjectReferenceValueCheckedAt
-        (
-          thread,
-          (Arcadia_List*)mapNode->entries,
-          i,
-          _Arcadia_DDL_MapEntryNode_getType(thread)
-        );
-    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
-    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
-    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
-      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
-      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_StringNode_getType(thread))) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_DDL_StringNode* stringNode = (Arcadia_DDL_StringNode*)valueNode;
-      return stringNode->value;
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-  Arcadia_Thread_jump(thread);
-}
-
-static Arcadia_Integer32Value
-getInteger32Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
-    Arcadia_DDL_MapEntryNode* mapEntryNode =
-      (Arcadia_DDL_MapEntryNode*)
-      Arcadia_List_getObjectReferenceValueCheckedAt
-      (
-        thread,
-        (Arcadia_List*)mapNode->entries,
-        i,
-        _Arcadia_DDL_MapEntryNode_getType(thread)
-      );
-    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
-    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
-    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
-      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
-      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_NumberNode_getType(thread))) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_DDL_NumberNode* numberNode = (Arcadia_DDL_NumberNode*)valueNode;
-      return Arcadia_String_toInteger32(thread, numberNode->value);
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-  Arcadia_Thread_jump(thread);
 }
 
 static void

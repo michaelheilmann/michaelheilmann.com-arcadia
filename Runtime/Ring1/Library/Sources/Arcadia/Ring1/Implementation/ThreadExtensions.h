@@ -25,6 +25,7 @@
 #include "Arcadia/Ring1/Implementation/Atoms.h"
 #include "Arcadia/Ring1/Implementation/BigInteger/Include.h"
 #include "Arcadia/Ring1/Implementation/Boolean.h"
+#include "Arcadia/Ring1/Implementation/Enumeration.h"
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 #include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
@@ -85,9 +86,10 @@ Arcadia_ValueStack_is##Suffix \
 Define(Arcadia_AtomValue, AtomValue)
 Define(Arcadia_BigIntegerValue, BigIntegerValue)
 Define(Arcadia_BooleanValue, BooleanValue)
+Define(Arcadia_EnumerationValue, EnumerationValue)
 Define(Arcadia_ForeignProcedureValue, ForeignProcedureValue)
-Define(Arcadia_ImmutableByteArrayValue, ImmutableByteArrayValue)
-Define(Arcadia_ImmutableUtf8StringValue, ImmutableUtf8StringValue)
+Define(Arcadia_InternalImmutableByteArrayValue, InternalImmutableByteArrayValue)
+Define(Arcadia_ImmutableUTF8StringValue, ImmutableUTF8StringValue)
 Define(Arcadia_Integer16Value, Integer16Value)
 Define(Arcadia_Integer32Value, Integer32Value)
 Define(Arcadia_Integer64Value, Integer64Value)
@@ -115,7 +117,7 @@ Arcadia_ValueStack_getObjectReferenceValueChecked
 {
   Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_ValueStack_getObjectReferenceValue(thread, index);
   if (type) {
-    if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, objectReferenceValue), type)) {
+    if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, objectReferenceValue), type)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
     }

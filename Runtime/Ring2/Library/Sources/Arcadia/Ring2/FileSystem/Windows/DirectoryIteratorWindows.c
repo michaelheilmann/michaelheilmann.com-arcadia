@@ -161,7 +161,7 @@ Arcadia_DirectoryIteratorWindows_getValue
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
   } else {
-    Arcadia_String* fileNameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, self->data.cFileName, strlen(self->data.cFileName))));
+    Arcadia_String* fileNameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, self->data.cFileName, strlen(self->data.cFileName))));
     return Arcadia_FilePath_parseNative(thread, fileNameString);
   }
 }

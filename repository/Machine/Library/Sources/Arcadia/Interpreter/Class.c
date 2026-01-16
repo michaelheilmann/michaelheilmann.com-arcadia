@@ -163,7 +163,7 @@ R_Interpreter_Class_addConstructor
     R_Interpreter_Constructor* constructor
   )
 {
-  Arcadia_String* name = Arcadia_String_create_pn(Arcadia_Process_getThread(process), Arcadia_ImmutableByteArray_create(Arcadia_Process_getThread(process), u8"<constructor>", sizeof(u8"<constructor>") - 1));
+  Arcadia_String* name = Arcadia_String_create_pn(Arcadia_Process_getThread(process), Arcadia_InternalImmutableByteArray_create(Arcadia_Process_getThread(process), u8"<constructor>", sizeof(u8"<constructor>") - 1));
   Arcadia_Value key = Arcadia_Value_makeObjectReferenceValue(name);
   Arcadia_Value value = Arcadia_Map_get(Arcadia_Process_getThread(process), self->classMembers, key);
   if (!Arcadia_Value_isVoidValue(&value)) {
@@ -223,7 +223,7 @@ getClass
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue o = Arcadia_Value_getObjectReferenceValue(&v);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, o), _R_Interpreter_Class_getType(thread))) {
+  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, o), _R_Interpreter_Class_getType(thread))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -284,7 +284,7 @@ completeVariables
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)classMember); i < n; ++i) {
     Arcadia_Value value = Arcadia_List_getAt(thread, classMember, i);
     Arcadia_TypeValue valueType = Arcadia_Value_getType(thread, &value);
-    if (Arcadia_Type_isSubType(thread, valueType, _R_Interpreter_Variable_getType(thread))) {
+    if (Arcadia_Type_isDescendantType(thread, valueType, _R_Interpreter_Variable_getType(thread))) {
       R_Interpreter_Variable* variable = Arcadia_Value_getObjectReferenceValue(&value);
       variable->index = numberOfVariables++;
       variable->ready = Arcadia_BooleanValue_True;
@@ -345,7 +345,7 @@ R_Interpreter_Class_complete
   Arcadia_List* members = Arcadia_Map_getValues(thread, self->classMembers);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)members); i < n; ++i) {
     Arcadia_Value v = Arcadia_List_getAt(thread, members, i);
-    if (Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, &v), _R_Interpreter_Method_getType(thread))) {
+    if (Arcadia_Type_isDescendantType(thread, Arcadia_Value_getType(thread, &v), _R_Interpreter_Method_getType(thread))) {
       R_Interpreter_Method *m = Arcadia_Value_getObjectReferenceValue(&v);
       Arcadia_Value k2 = Arcadia_Value_makeObjectReferenceValue(m->unqualifiedName);
       Arcadia_Value v2 = Arcadia_Map_get(thread, self->methodDispatch, k2);

@@ -30,7 +30,7 @@ doRead
 {
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, p, n);
-  Arcadia_String* input = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, p, n));
+  Arcadia_String* input = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, p, n));
   Arcadia_DDL_Parser_setInput(thread, parser, input);
   Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, parser);
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run(thread, semanticalAnalysis, node);

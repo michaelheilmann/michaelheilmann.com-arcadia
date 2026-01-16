@@ -19,7 +19,11 @@
 #include "Arcadia/Visuals/Implementation/Scene/CameraNode.h"
 #include "Arcadia/Visuals/Implementation/Scene/FrameBufferNode.h"
 #include "Arcadia/Visuals/Implementation/Scene/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Scene/MaterialNode.h"
 #include "Arcadia/Visuals/Implementation/Scene/MeshNode.h"
+#include "Arcadia/Visuals/Implementation/Scene/ModelNode.h"
+#include "Arcadia/Visuals/Implementation/Scene/PixelBufferNode.h"
+#include "Arcadia/Visuals/Implementation/Scene/TextureNode.h"
 #include "Arcadia/Visuals/Implementation/Scene/ViewportNode.h"
 
 static void
@@ -66,12 +70,40 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_createFrameBufferNodeImpl
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   );
 
+static Arcadia_Visuals_Implementation_Scene_MaterialNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createMaterialNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_MaterialDefinition* source
+  );
+
 static Arcadia_Visuals_Implementation_Scene_MeshNode*
 Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshNodeImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_SceneNodeFactory* self,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_MeshDefinition* source
+  );
+
+static Arcadia_Visuals_Implementation_Scene_ModelNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createModelNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_ModelDefinition* source
+  );
+
+static Arcadia_Visuals_Implementation_Scene_PixelBufferNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createPixelBufferNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_PixelBufferDefinition* source
   );
 
 static Arcadia_Visuals_Implementation_Scene_RenderingContextNode*
@@ -80,6 +112,15 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_createRenderingContextNodeImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_SceneNodeFactory* self,
     Arcadia_Visuals_Implementation_BackendContext* backendContext
+  );
+
+static Arcadia_Visuals_Implementation_Scene_TextureNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createTextureNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_TextureDefinition* source
   );
 
 static Arcadia_Visuals_Implementation_Scene_ViewportNode*
@@ -135,11 +176,15 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_initializeDispatchImpl
     Arcadia_Visuals_Implementation_SceneNodeFactoryDispatch* self
   )
 {
-  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createCameraNode = (Arcadia_Visuals_Scene_CameraNode * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createCameraNodeImpl;
-  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createFrameBufferNode = (Arcadia_Visuals_Scene_FrameBufferNode * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createFrameBufferNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createCameraNode = (Arcadia_Visuals_Scene_CameraNode *(*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createCameraNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createFrameBufferNode = (Arcadia_Visuals_Scene_FrameBufferNode *(*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createFrameBufferNodeImpl;
   ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createRenderingContextNode = (Arcadia_Visuals_Scene_RenderingContextNode * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createRenderingContextNodeImpl;
-  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createMeshNode = (Arcadia_Visuals_Scene_MeshNode * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshNodeImpl;
-  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createViewportNode = (Arcadia_Visuals_Scene_ViewportNode * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createViewportNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createMaterialNode = (Arcadia_Visuals_Scene_MaterialNode *(*)(Arcadia_Thread*, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_MaterialDefinition*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createMaterialNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createMeshNode = (Arcadia_Visuals_Scene_MeshNode *(*)(Arcadia_Thread* thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_MeshDefinition*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createModelNode = (Arcadia_Visuals_Scene_ModelNode * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_ModelDefinition*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createModelNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createPixelBufferNode = (Arcadia_Visuals_Scene_PixelBufferNode * (*)(Arcadia_Thread * thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_PixelBufferDefinition*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createPixelBufferNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createTextureNode = (Arcadia_Visuals_Scene_TextureNode *(*)(Arcadia_Thread* thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_TextureDefinition*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createTextureNodeImpl;
+  ((Arcadia_Visuals_SceneNodeFactoryDispatch*)self)->createViewportNode = (Arcadia_Visuals_Scene_ViewportNode * (*)(Arcadia_Thread* thread, Arcadia_Visuals_SceneNodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_SceneNodeFactory_createViewportNodeImpl;
 }
 
 static void
@@ -165,7 +210,7 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_createCameraNodeImpl
     Arcadia_Visuals_Implementation_SceneNodeFactory* self,
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   )
-{ return Arcadia_Visuals_Implementation_Scene_CameraNode_create(thread, backendContext); }
+{ return Arcadia_Visuals_Implementation_Scene_CameraNode_create(thread, backendContext, self); }
 
 static Arcadia_Visuals_Implementation_Scene_FrameBufferNode*
 Arcadia_Visuals_Implementation_SceneNodeFactory_createFrameBufferNodeImpl
@@ -174,20 +219,47 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_createFrameBufferNodeImpl
     Arcadia_Visuals_Implementation_SceneNodeFactory* self,
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   )
-{ return Arcadia_Visuals_Implementation_Scene_FrameBufferNode_create(thread, backendContext); }
+{ return Arcadia_Visuals_Implementation_Scene_FrameBufferNode_create(thread, backendContext, self); }
+
+static Arcadia_Visuals_Implementation_Scene_MaterialNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createMaterialNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_MaterialDefinition* source
+  )
+{ return Arcadia_Visuals_Implementation_Scene_MaterialNode_create(thread, backendContext, self, source); }
 
 static Arcadia_Visuals_Implementation_Scene_MeshNode*
 Arcadia_Visuals_Implementation_SceneNodeFactory_createMeshNodeImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_SceneNodeFactory* self,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_MeshDefinition* source
   )
-{
-  Arcadia_Visuals_VPL_Program * program = Arcadia_Visuals_VPL_Program_create(thread, Arcadia_Visuals_VPL_ProgramFlags_PerMeshColor);
-  Arcadia_Visuals_Scene_MaterialNode* material = Arcadia_Visuals_Scene_MaterialNode_create(thread, program);
-  return Arcadia_Visuals_Implementation_Scene_MeshNode_create(thread, backendContext, material);
-}
+{ return Arcadia_Visuals_Implementation_Scene_MeshNode_create(thread, backendContext, self, source); }
+
+static Arcadia_Visuals_Implementation_Scene_ModelNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createModelNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_ModelDefinition* source
+  )
+{ return Arcadia_Visuals_Implementation_Scene_ModelNode_create(thread, backendContext, self, source); }
+
+static Arcadia_Visuals_Implementation_Scene_PixelBufferNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createPixelBufferNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_PixelBufferDefinition* source
+  )
+{ return Arcadia_Visuals_Implementation_Scene_PixelBufferNode_create(thread, backendContext, self, source); }
 
 static Arcadia_Visuals_Implementation_Scene_RenderingContextNode*
 Arcadia_Visuals_Implementation_SceneNodeFactory_createRenderingContextNodeImpl
@@ -196,7 +268,17 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_createRenderingContextNodeImpl
     Arcadia_Visuals_Implementation_SceneNodeFactory* self,
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   )
-{ return Arcadia_Visuals_Implementation_Scene_RenderingContextNode_create(thread, backendContext); }
+{ return Arcadia_Visuals_Implementation_Scene_RenderingContextNode_create(thread, backendContext, self); }
+
+static Arcadia_Visuals_Implementation_Scene_TextureNode*
+Arcadia_Visuals_Implementation_SceneNodeFactory_createTextureNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* self,
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_TextureDefinition* source
+  )
+{ return Arcadia_Visuals_Implementation_Scene_TextureNode_create(thread, backendContext, self, source); }
 
 static Arcadia_Visuals_Implementation_Scene_ViewportNode*
 Arcadia_Visuals_Implementation_SceneNodeFactory_createViewportNodeImpl
@@ -205,7 +287,7 @@ Arcadia_Visuals_Implementation_SceneNodeFactory_createViewportNodeImpl
     Arcadia_Visuals_Implementation_SceneNodeFactory* self,
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   )
-{ return Arcadia_Visuals_Implementation_Scene_ViewportNode_create(thread, backendContext); }
+{ return Arcadia_Visuals_Implementation_Scene_ViewportNode_create(thread, backendContext, self); }
 
 Arcadia_Visuals_Implementation_SceneNodeFactory*
 Arcadia_Visuals_Implementation_SceneNodeFactory_create

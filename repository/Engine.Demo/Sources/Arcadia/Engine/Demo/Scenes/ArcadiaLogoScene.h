@@ -30,7 +30,9 @@ struct Arcadia_Engine_Demo_ArcadiaLogoSceneDispatch {
 
 struct Arcadia_Engine_Demo_ArcadiaLogoScene {
   Arcadia_Engine_Demo_Scene parent;
+
   // The definitions.
+  // @todo This is should be inter-scene not intra-scene.
   Arcadia_ADL_Definitions* definitions;
   // A framebuffer node.
   Arcadia_Visuals_Scene_FrameBufferNode* frameBufferNode;
@@ -44,8 +46,8 @@ struct Arcadia_Engine_Demo_ArcadiaLogoScene {
   /// The duration the scene is displayed so far.
   Arcadia_Real64Value duration;
 
-  // The mesh (the scene).
-  Arcadia_Visuals_Scene_MeshNode* meshNode;
+  // The model (the scene).
+  Arcadia_Visuals_Scene_ModelNode* modelNode;
 
   // The list of ADL files to load.
   Arcadia_List* toLoad;

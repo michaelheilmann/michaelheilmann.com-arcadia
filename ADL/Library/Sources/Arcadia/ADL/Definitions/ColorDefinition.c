@@ -87,8 +87,8 @@ Arcadia_ADL_ColorDefinition_constructImpl
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 5);
     name = Arcadia_ValueStack_getValue(thread, 4);
-    Arcadia_ValueStack_pushValue(thread, &name);
     Arcadia_ValueStack_pushValue(thread, &definitions);
+    Arcadia_ValueStack_pushValue(thread, &name);
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }

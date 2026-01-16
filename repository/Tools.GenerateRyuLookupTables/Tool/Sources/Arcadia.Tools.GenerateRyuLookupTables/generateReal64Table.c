@@ -65,7 +65,7 @@ multiplier
   }
   Arcadia_BigInteger_setPowerOfFiveNatural32(thread, pow, i);
 #if _DEBUG
-  //Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, pow));
+  //Arcadia_printImmutableUTF8String(thread, Arcadia_BigInteger_toDecimalString(thread, pow));
   //Arcadia_printNewline(thread);
 #endif
   // length of 5^i in binary = ceil(log_2(5^i))
@@ -79,16 +79,16 @@ multiplier
   Arcadia_BigInteger* pow5DivPow2 = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_copy(thread, pow5DivPow2, pow);
 #if _DEBUG
-  //Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, pow5DivPow2));
+  //Arcadia_printImmutableUTF8String(thread, Arcadia_BigInteger_toDecimalString(thread, pow5DivPow2));
   //Arcadia_printNewline(thread);
 #endif
   Arcadia_BigInteger_shiftRightInteger64(thread, pow5DivPow2, pow5len - POW5_BITCOUNT);
 #if _DEBUG
-  //Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, pow5DivPow2));
+  //Arcadia_printImmutableUTF8String(thread, Arcadia_BigInteger_toDecimalString(thread, pow5DivPow2));
   //Arcadia_printNewline(thread);
 #endif
 #if _DEBUG
-  //Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, pow5DivPow2));
+  //Arcadia_printImmutableUTF8String(thread, Arcadia_BigInteger_toDecimalString(thread, pow5DivPow2));
   //Arcadia_printNewline(thread);
 #endif
   Arcadia_SizeValue j = Arcadia_BigInteger_getBitLength(thread, pow5DivPow2);
@@ -139,7 +139,7 @@ printTable
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* stringBuffer,
-    Arcadia_ImmutableUtf8String* name,
+    Arcadia_ImmutableUTF8String* name,
     Arcadia_List* table,
     Arcadia_SizeValue entriesPerLine
   )
@@ -147,9 +147,9 @@ printTable
   static const Arcadia_BooleanValue pad = Arcadia_BooleanValue_True;
   Arcadia_SizeValue length = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)table);
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"static const Arcadia_Natural64Value ");
-  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(name));
+  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUTF8StringValue(name));
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"[");
-  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromSize(thread, length)));
+  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromSize(thread, length)));
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"][2] = {\n");
   for (Arcadia_SizeValue i = 0; i < length; ++i) {
     Arcadia_BigInteger *pow5 = Arcadia_List_getBigIntegerValueAt(thread, table, i);
@@ -163,35 +163,35 @@ printTable
     } else {
       Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8" ");
     }
-    Arcadia_ImmutableUtf8String* string = NULL;
+    Arcadia_ImmutableUTF8String* string = NULL;
     Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"{ ");
     string = Arcadia_BigInteger_toDecimalString(thread, pow5Low);
-    if (pad && Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, string) < 20) { // fill to 20 code points of shorter
-      for (Arcadia_SizeValue j = 0, m = 20 - Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, string); j < m; ++j) {
+    if (pad && Arcadia_ImmutableUTF8String_getNumberOfCodePoints(thread, string) < 20) { // fill to 20 code points of shorter
+      for (Arcadia_SizeValue j = 0, m = 20 - Arcadia_ImmutableUTF8String_getNumberOfCodePoints(thread, string); j < m; ++j) {
         Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8" ");
       }
-    } else if (Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, string) > 20) {
+    } else if (Arcadia_ImmutableUTF8String_getNumberOfCodePoints(thread, string) > 20) {
 #if 1
       Arcadia_Thread_setStatus(thread, Arcadia_ProcessStatus_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
 #endif
     }
     Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"Arcadia_Natural64Value_Literal(");
-    Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(string));
+    Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUTF8StringValue(string));
     Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"), ");
     string = Arcadia_BigInteger_toDecimalString(thread, pow5High);
-    if (pad && Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, string) < 19) { // fill to 19 code points of shorter
-      for (Arcadia_SizeValue j = 0, m = 18 - Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, string); j < m; ++j) {
+    if (pad && Arcadia_ImmutableUTF8String_getNumberOfCodePoints(thread, string) < 19) { // fill to 19 code points of shorter
+      for (Arcadia_SizeValue j = 0, m = 18 - Arcadia_ImmutableUTF8String_getNumberOfCodePoints(thread, string); j < m; ++j) {
         Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8" ");
       }
-    } else if (Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, string) > 19) {
+    } else if (Arcadia_ImmutableUTF8String_getNumberOfCodePoints(thread, string) > 19) {
 #if 1
       Arcadia_Thread_setStatus(thread, Arcadia_ProcessStatus_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
 #endif
     }
     Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"Arcadia_Natural64Value_Literal(");
-    Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(string));
+    Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUTF8StringValue(string));
     Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"), ");
     Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8" }");
     if (i != length - 1) {
@@ -210,16 +210,16 @@ printOffsets
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* stringBuffer,
-    Arcadia_ImmutableUtf8String* name,
+    Arcadia_ImmutableUTF8String* name,
     Arcadia_List* table,
     Arcadia_SizeValue entriesPerLine
   )
 {
   Arcadia_SizeValue length = (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)table) + 15) / 16;
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"static const Arcadia_Natural32Value ");
-  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(name));
+  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUTF8StringValue(name));
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"[");
-  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromSize(thread,length)));
+  Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromSize(thread,length)));
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"] = {\n");
 #if 1
   for (Arcadia_SizeValue i = 0; i < length; ++i) {
@@ -233,7 +233,7 @@ printOffsets
     } else {
       Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8" ");
     }
-    Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromNatural32(thread, value)));
+    Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromNatural32(thread, value)));
     if (i != length - 1) {
       Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8",");
     }
@@ -265,17 +265,17 @@ doPrintLargeTables
   }
   //
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"#define REAL64_POW5_INV_BITCOUNT ");
-  Arcadia_StringBuffer_insertBack(thread, target, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromInteger32(thread, POW5_INV_BITCOUNT)));
+  Arcadia_StringBuffer_insertBack(thread, target, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromInteger32(thread, POW5_INV_BITCOUNT)));
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"\n");
   //
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"#define REAL64_POW5_BITCOUNT ");
-  Arcadia_StringBuffer_insertBack(thread, target, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromInteger32(thread, POW5_BITCOUNT)));
+  Arcadia_StringBuffer_insertBack(thread, target, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromInteger32(thread, POW5_BITCOUNT)));
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"\n");
   //
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"\n");
   //
-  printTable(thread, target, Arcadia_ImmutableUtf8String_create(thread, u8"REAL64_POW5_INV_SPLIT", sizeof(u8"REAL64_POW5_INV_SPLIT") - 1), largeInvTable, 2);
-  printTable(thread, target, Arcadia_ImmutableUtf8String_create(thread, u8"REAL64_POW5_SPLIT", sizeof(u8"REAL64_POW5_SPLIT") - 1), largeTable, 2);
+  printTable(thread, target, Arcadia_ImmutableUTF8String_create(thread, u8"REAL64_POW5_INV_SPLIT", sizeof(u8"REAL64_POW5_INV_SPLIT") - 1), largeInvTable, 2);
+  printTable(thread, target, Arcadia_ImmutableUTF8String_create(thread, u8"REAL64_POW5_SPLIT", sizeof(u8"REAL64_POW5_SPLIT") - 1), largeTable, 2);
   Arcadia_printStringBuffer(thread, target);
 }
 
@@ -316,7 +316,7 @@ doPrintSmallTables
     Arcadia_BigInteger* x = invMultiplier(thread, i);
     Arcadia_BigInteger_subtract3(thread, result, x, result);
   #if _DEBUG
-    Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, result));
+    Arcadia_printImmutableUTF8String(thread, Arcadia_BigInteger_toDecimalString(thread, result));
     Arcadia_printNewline(thread);
   #endif
     if (Arcadia_BigInteger_isNegative(thread, result) || Arcadia_BigInteger_compareTo(thread, result, TWO) > 0) {
@@ -347,19 +347,19 @@ doPrintSmallTables
 
   //
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"#define REAL64_POW5_INV_BITCOUNT ");
-  Arcadia_StringBuffer_insertBack(thread, target, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromInteger32(thread, POW5_INV_BITCOUNT)));
+  Arcadia_StringBuffer_insertBack(thread, target, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromInteger32(thread, POW5_INV_BITCOUNT)));
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"\n");
   //
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"#define REAL64_POW5_BITCOUNT ");
-  Arcadia_StringBuffer_insertBack(thread, target, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromInteger32(thread, POW5_BITCOUNT)));
+  Arcadia_StringBuffer_insertBack(thread, target, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromInteger32(thread, POW5_BITCOUNT)));
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"\n");
   //
   Arcadia_StringBuffer_insertBackCxxString(thread, target, u8"\n");
   //
-  printTable(thread, target, Arcadia_ImmutableUtf8String_create(thread, u8"REAL64_POW5_INV_SPLIT2", sizeof(u8"REAL64_POW5_INV_SPLIT2") - 1), smallInvTable, 1);
-  printOffsets(thread, target, Arcadia_ImmutableUtf8String_create(thread, u8"REAL64_POW5_OFFSETS", sizeof(u8"REAL64_POW5_OFFSETS") - 1), invErrorTable, 6);
-  printTable(thread, target, Arcadia_ImmutableUtf8String_create(thread, u8"REAL64_POW5_SPLIT2", sizeof(u8"REAL64_POW5_SPLIT2") - 1), smallTable, 1);
-  printOffsets(thread, target, Arcadia_ImmutableUtf8String_create(thread, u8"REAL64_POW5_OFFSETS", sizeof(u8"REAL64_POW5_OFFSETS") - 1), errorTable, 6);
+  printTable(thread, target, Arcadia_ImmutableUTF8String_create(thread, u8"REAL64_POW5_INV_SPLIT2", sizeof(u8"REAL64_POW5_INV_SPLIT2") - 1), smallInvTable, 1);
+  printOffsets(thread, target, Arcadia_ImmutableUTF8String_create(thread, u8"REAL64_POW5_OFFSETS", sizeof(u8"REAL64_POW5_OFFSETS") - 1), invErrorTable, 6);
+  printTable(thread, target, Arcadia_ImmutableUTF8String_create(thread, u8"REAL64_POW5_SPLIT2", sizeof(u8"REAL64_POW5_SPLIT2") - 1), smallTable, 1);
+  printOffsets(thread, target, Arcadia_ImmutableUTF8String_create(thread, u8"REAL64_POW5_OFFSETS", sizeof(u8"REAL64_POW5_OFFSETS") - 1), errorTable, 6);
 }
 
 void
@@ -397,11 +397,11 @@ Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table
   Arcadia_BigInteger_copy(thread, a, ONE);
   Arcadia_BigInteger_shiftLeftNatural8(thread, a, 64);
 #if _DEBUG
-  //Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, a));
+  //Arcadia_printImmutableUTF8String(thread, Arcadia_BigInteger_toDecimalString(thread, a));
 #endif
   Arcadia_BigInteger_subtract(thread, a, ONE);
 #if _DEBUG
-  //Arcadia_printImmutableUtf8String(thread, Arcadia_BigInteger_toDecimalString(thread, a));
+  //Arcadia_printImmutableUTF8String(thread, Arcadia_BigInteger_toDecimalString(thread, a));
 #endif
   if (Arcadia_ARMS_addNotifyDestroy(a, NULL, &MASK64, &onNotifyDestroy)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);

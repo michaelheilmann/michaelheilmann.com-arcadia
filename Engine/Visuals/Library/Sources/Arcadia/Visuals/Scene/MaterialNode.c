@@ -71,15 +71,34 @@ Arcadia_Visuals_Scene_MaterialNode_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Scene_MaterialNode_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_Value sceneNodeFactory = Arcadia_ValueStack_getValue(thread, 2);
+    Arcadia_ValueStack_pushValue(thread, &sceneNodeFactory);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  self->program = (Arcadia_Visuals_VPL_Program*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_VPL_Program_getType(thread));
+  self->source = (Arcadia_ADL_MaterialDefinition*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_ADL_MaterialDefinition_getType(thread));
+  Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)self->source);
+  switch (self->source->ambientColorSource) {
+    case Arcadia_ADL_AmbientColorSource_Mesh: {
+      self->program = Arcadia_Visuals_VPL_Program_create(thread, Arcadia_Visuals_VPL_ProgramFlags_MeshAmbientColor);
+    } break;
+    case Arcadia_ADL_AmbientColorSource_Vertex: {
+      self->program = Arcadia_Visuals_VPL_Program_create(thread, Arcadia_Visuals_VPL_ProgramFlags_VertexAmbientColor);
+    } break;
+    case Arcadia_ADL_AmbientColorSource_Texture: {
+      self->program = Arcadia_Visuals_VPL_Program_create(thread, Arcadia_Visuals_VPL_ProgramFlags_TextureAmbientColor);
+    } break;
+    default: {
+      Arcadia_logf(Arcadia_LogFlags_Error, "unknown/unsupported ADL value for Mesh.ambientSource\n");
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    } break;
+  };
+  self->ambientColorTexture = Arcadia_Visuals_SceneNodeFactory_createTextureNode(thread, ((Arcadia_Visuals_Scene_Node*)self)->sceneNodeFactory, NULL, (Arcadia_ADL_TextureDefinition*)self->source->ambientColorTexture->definition);
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -107,20 +126,13 @@ Arcadia_Visuals_Scene_MaterialNode_visitImpl
     Arcadia_Visuals_Scene_MaterialNode* self
   )
 {
+  if (self->source) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->source);
+  }
+  if (self->ambientColorTexture) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->ambientColorTexture);
+  }
   if (self->program) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->program);
   }
-}
-
-Arcadia_Visuals_Scene_MaterialNode*
-Arcadia_Visuals_Scene_MaterialNode_create
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_VPL_Program* program
-  )
-{
-  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)program);
-  Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Scene_MaterialNode);
 }

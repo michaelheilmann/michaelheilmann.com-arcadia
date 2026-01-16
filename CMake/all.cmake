@@ -226,6 +226,7 @@ macro(MyCopyFile target sourceFile targetFile)
   list(APPEND ${target}.copyFiles.targets ${targetFile})
 endmacro()
 
+# @param folder The IDE folder under which the targets are generated. Pass the empty string for the IDE root folder.
 macro(CopyProductAssets target folder sourceDirectory targetDirectory)
  #message(STATUS "=> target directory ${targetDirectory}")
  file(GLOB_RECURSE sourceFiles RELATIVE ${sourceDirectory} "${sourceDirectory}/*")
@@ -247,8 +248,12 @@ macro(CopyProductAssets target folder sourceDirectory targetDirectory)
  endforeach()
 
  add_custom_target(${target} ALL DEPENDS ${targetFiles})
- set_target_properties(${target} PROPERTIES FOLDER ${folder})
-
+ 
+ # If a folder was specified.
+ if (NOT "${folder}" STREQUAL "")
+   set_target_properties(${target} PROPERTIES FOLDER ${folder})
+ endif()
+ 
 endmacro()
 
 # Can be used between `BeginProduct` and `EndProduct`.

@@ -142,15 +142,35 @@ Arcadia_Visuals_Implementation_BackendContext_createRenderingContextResource
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createRenderingContextResource, self); }
 
+Arcadia_Visuals_Implementation_MaterialResource*
+Arcadia_Visuals_Implementation_BackendContext_createMaterialResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_BackendContext* self,
+    Arcadia_Visuals_Implementation_TextureResource* ambientTexture,
+    Arcadia_Visuals_Implementation_ProgramResource* program
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createMaterialResource, self, ambientTexture, program); }
+
 Arcadia_Visuals_Implementation_MeshResource*
 Arcadia_Visuals_Implementation_BackendContext_createMeshResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self,
     Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer,
-    Arcadia_Visuals_Implementation_ProgramResource* program
+    Arcadia_Visuals_Implementation_MaterialResource* material
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createMeshResource, self, vertexBuffer, program); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createMeshResource, self, vertexBuffer, material); }
+
+Arcadia_Visuals_Implementation_ModelResource*
+Arcadia_Visuals_Implementation_BackendContext_createModelResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_BackendContext* self,
+    Arcadia_Visuals_Implementation_MeshResource* mesh,
+    Arcadia_Visuals_Implementation_MaterialResource* material
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createModelResource, self, mesh, material); }
 
 Arcadia_Visuals_Implementation_ProgramResource*
 Arcadia_Visuals_Implementation_BackendContext_createProgramResource

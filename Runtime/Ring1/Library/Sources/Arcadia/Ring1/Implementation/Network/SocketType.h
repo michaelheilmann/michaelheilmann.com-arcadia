@@ -17,7 +17,6 @@
 #define ARCADIA_RING1_IMPLEMENTATION_NETWORK_SOCKETTYPE_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Enumeration.h"
-#include <stddef.h>
 
 /// An enumeration of socket types.
 Arcadia_declareEnumerationType(u8"Arcadia.Network.SocketType", Arcadia_Network_SocketType);

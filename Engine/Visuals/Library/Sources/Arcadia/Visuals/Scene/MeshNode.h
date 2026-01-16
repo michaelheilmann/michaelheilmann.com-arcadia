@@ -25,7 +25,7 @@
 
 // A "mesh node" consists of a
 // - an ambient base color: The ambient color used for each vertices of the vertices provide no color data
-// - a vertex descriptor: Must be of the form [xyz/position] or [xyz/position, rgba/ambient]. Describes the data in the vertex buffer
+// - a vertex descriptor: Must be of the form [xyz/position, rgba/ambient, uv/ambient]. Describes the data in the vertex buffer.
 // - a vertex buffer: The vertex data. Either of the form [xyz/position] or [xyz/position, rgba/ambient].
 // - a material
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Scene.MeshNode", Arcadia_Visuals_Scene_MeshNode,
@@ -37,19 +37,18 @@ struct Arcadia_Visuals_Scene_MeshNodeDispatch {
 
 struct Arcadia_Visuals_Scene_MeshNode {
   Arcadia_Visuals_Scene_Node _parent;
+  
+  /// The mesh definition.
+  Arcadia_ADL_MeshDefinition* source;
   /// A pointer to the vertex descriptor.
   Arcadia_Visuals_VertexDescriptor* vertexDescriptor;
-  // The base color of this mesh.
-  // The default value is (1, 1, 1, 1).
-  Arcadia_Math_Color4Real32* baseColor;
-  // The number of vertices of this mesh.
-  // The default is 3.
+  // The ambient color of this mesh.
+  Arcadia_Math_Color4Real32* ambientColor;
+  /// The number of vertices of this mesh.
   Arcadia_SizeValue numberOfVertices;
-  // Pointers to the positions of the vertices of this mesh.
-  // The default xyz values are [(-0.5, -0.5, 0.0), (0.5, -0.5, 0.0), (0.0, 0.5, 0.0)].
-  // The default rgba values are [(1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)].
+  /// Pointers to the positions of the vertices of this mesh.
   void* vertices;
-
+  
   Arcadia_Visuals_Scene_MaterialNode* material;
 };
 
@@ -62,7 +61,7 @@ Arcadia_Visuals_Scene_MeshNode_getNumberOfVertices
   );
 
 void
-Arcadia_Visuals_Scene_MeshNode_setBaseColor
+Arcadia_Visuals_Scene_MeshNode_setAmbientColor
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_MeshNode* self,
@@ -70,7 +69,7 @@ Arcadia_Visuals_Scene_MeshNode_setBaseColor
   );
 
 Arcadia_Math_Color4Real32*
-Arcadia_Visuals_Scene_MeshNode_getBaseColor
+Arcadia_Visuals_Scene_MeshNode_getAmbientColor
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_MeshNode* self

@@ -8,7 +8,7 @@ _fromMultiByte
     size_t n
   )
 {
-  return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, n)));
+  return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n)));
 }
 
 Arcadia_String*
@@ -39,7 +39,7 @@ _fromWideChar
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    s = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, q, m)));
+    s = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, q, m)));
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);

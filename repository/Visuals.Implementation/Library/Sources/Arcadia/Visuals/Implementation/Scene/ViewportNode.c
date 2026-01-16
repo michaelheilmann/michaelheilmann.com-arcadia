@@ -24,6 +24,8 @@
 #define RelativeRectangleDirty (4)
 #define CanvasSizeDirty (8)
 
+#define DirtyBitsAll (ClearColorDirty | ClearDepthDirty | RelativeRectangleDirty | CanvasSizeDirty)
+
 static void
 Arcadia_Visuals_Implementation_Scene_ViewportNode_constructImpl
   (
@@ -73,10 +75,7 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_setClearColorImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Scene_ViewportNode* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
+    Arcadia_Math_Color4Real32* clearColor
   );
 
 static void
@@ -132,29 +131,28 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_Scene_ViewportNode_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_Value sceneNodeFactory = Arcadia_ValueStack_getValue(thread, 1);
+    Arcadia_ValueStack_pushValue(thread, &sceneNodeFactory);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
+  if (Arcadia_ValueStack_isVoidValue(thread, 2)) {
     self->backendContext = NULL;
   } else {
-    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_BackendContext_getType(thread));
+    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_BackendContext_getType(thread));
     Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
   }
 
-  self->dirtyBits = ClearColorDirty | ClearDepthDirty | RelativeRectangleDirty | CanvasSizeDirty;
+  self->dirtyBits = DirtyBitsAll;
 
   self->viewportResource = NULL;
 
-  self->clearColor.red = 193;
-  self->clearColor.green = 216;
-  self->clearColor.blue = 195;
-  self->clearColor.alpha = 255;
+  self->clearColor = Arcadia_Math_Color4Real32_create4(thread, 193.f / 255.f, 216.f / 255.f, 195.f / 255.f, 1.f);
 
   self->clearDepth = 1.f;
 
@@ -178,7 +176,7 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_initializeDispatchImpl
   )
 {
   ((Arcadia_Visuals_Scene_ViewportNodeDispatch*)self)->setCanvasSize = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_ViewportNode*, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_setCanvasSizeImpl;
-  ((Arcadia_Visuals_Scene_ViewportNodeDispatch*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_ViewportNode*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_setClearColorImpl;
+  ((Arcadia_Visuals_Scene_ViewportNodeDispatch*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_ViewportNode*, Arcadia_Math_Color4Real32*)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_setClearColorImpl;
   ((Arcadia_Visuals_Scene_ViewportNodeDispatch*)self)->setClearDepth = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_ViewportNode*, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_setClearDepthImpl;
   ((Arcadia_Visuals_Scene_ViewportNodeDispatch*)self)->setRelativeViewportRectangle = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_ViewportNode*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_setRelativeViewportRectangleImpl;
   ((Arcadia_Visuals_Scene_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Scene_Node*, Arcadia_Visuals_Scene_RenderingContextNode*)) & Arcadia_Visuals_Implementation_Scene_ViewportNode_renderImpl;
@@ -210,16 +208,9 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_visitImpl
     Arcadia_Visuals_Implementation_Scene_ViewportNode* self
   )
 {
-#if 0
-  if (self->backendContext) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backendContext);
+  if (self->clearColor) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->clearColor);
   }
-#endif
-#if 0
-  if (self->viewportResource) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->viewportResource);
-  }
-#endif
 }
 
 static void
@@ -245,10 +236,7 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_renderImpl
                                                            renderingContextNode->renderingContextResource);
     if (self->dirtyBits & ClearColorDirty) {
       Arcadia_Visuals_Implementation_ViewportResource_setClearColor(thread, self->viewportResource,
-                                                                            self->clearColor.red,
-                                                                            self->clearColor.green,
-                                                                            self->clearColor.blue,
-                                                                            self->clearColor.alpha);
+                                                                            self->clearColor);
       self->dirtyBits &= ~ClearColorDirty;
     }
     if (self->dirtyBits & ClearDepthDirty) {
@@ -305,16 +293,10 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode_setClearColorImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Scene_ViewportNode* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
+    Arcadia_Math_Color4Real32* clearColor
   )
 {
-  self->clearColor.red = red;
-  self->clearColor.green = green;
-  self->clearColor.blue = blue;
-  self->clearColor.alpha = alpha;
+  Arcadia_Math_Color4Real32_assign(thread, self->clearColor, clearColor);
   self->dirtyBits |= ClearColorDirty;
 }
 
@@ -366,11 +348,13 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode*
 Arcadia_Visuals_Implementation_Scene_ViewportNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  if (sceneNodeFactory) Arcadia_ValueStack_pushObjectReferenceValue(thread, sceneNodeFactory); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_Scene_ViewportNode);
 }

@@ -75,8 +75,8 @@
         <li>Unicode functions</li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_EncodeCodePointCallbackContext">Arcadia_Unicode_EncodeCodePointCallbackContext</a></li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_EncodeCodePointCallbackFunction">Arcadia_Unicode_EncodeCodePointCallbackFunction</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_encodeCodePointsUtf8">Arcadia_Unicode_encodeCodePointsUtf8</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_isUtf8">Arcadia_Unicode_isUtf8</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_encodeCodePointsUTF8">Arcadia_Unicode_encodeCodePointsUTF8</a></li>
+        <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Unicode_isUTF8">Arcadia_Unicode_isUTF8</a></li>
 
         <li>Memory functions</li>
         <li><a href="@{siteAddress}/Arcadia/Ring1/#Arcadia_Memory_allocateUnmanaged">Arcadia_Memory_allocateUnmanaged</a></li>

@@ -1,6 +1,23 @@
 #include "Arcadia/Engine/Demo/Application.h"
 
 #include "Arcadia/Engine/Demo/Configuration.h"
+#include "Arcadia/Engine/Demo/Audials.h"
+#include "Arcadia/Engine/Demo/Visuals.h"
+#include <stdlib.h>
+
+static void
+Arcadia_Engine_Demo_Application_startupImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_Application* self
+  );
+
+static void
+Arcadia_Engine_Demo_Application_shutdownImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_Application* self
+  );
 
 static void
 Arcadia_Engine_Demo_Application_construct
@@ -35,8 +52,70 @@ static const Arcadia_Type_Operations _Arcadia_Engine_Demo_Application_typeOperat
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Engine.Demo.Application", Arcadia_Engine_Demo_Application,
-                         u8"Arcadia.Object", Arcadia_Object,
+                         u8"Arcadia.Engine.Application", Arcadia_Engine_Application,
                          &_Arcadia_Engine_Demo_Application_typeOperations);
+
+static void
+Arcadia_Engine_Demo_Application_startupImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_Application* self
+  )
+{
+  // Startup visuals.
+  Arcadia_Engine_Application_startupVisuals(thread, ((Arcadia_Engine_Application*)self)->engine, ((Arcadia_Engine_Application*)self)->configuration, ((Arcadia_Engine_Application*)self)->windows);
+  // Startup audials.
+  Arcadia_Engine_Application_startupAudials(thread, ((Arcadia_Engine_Application*)self)->engine, ((Arcadia_Engine_Application*)self)->configuration);
+}
+
+static void
+Arcadia_Engine_Demo_Application_shutdownImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_Application* self
+  )
+{ 
+  // Save the configuration.
+  // This can raise errors in particular because of input/output operations.
+  // We choose to ignore these errors and make sure that the cleanups below are performed.
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Cfg_saveConfiguration(thread, ((Arcadia_Engine_Application*)self)->configuration);
+    Arcadia_Thread_popJumpTarget(thread);
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+  }
+
+  // Ensure the windows are closed.
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Engine_Application*)self)->windows); i < n; ++i) {
+    Arcadia_Visuals_Window* window =
+      (Arcadia_Visuals_Window*)Arcadia_List_getObjectReferenceValueCheckedAt
+        (
+          thread,
+          ((Arcadia_Engine_Application*)self)->windows,
+          i,
+          _Arcadia_Visuals_Window_getType(thread)
+        );
+    Arcadia_Visuals_Window_close(thread, window);
+  }
+
+  // Clean the message queue. FIXME: The messages prevent the engine from being gc'ed.
+  while (Arcadia_Engine_dequeEvent(thread, ((Arcadia_Engine_Application*)self)->engine)) {
+    Arcadia_logf(Arcadia_LogFlags_Info, "%s:%d: purging message\n", __FILE__, __LINE__);
+  }
+
+  // Release the audials backend context.
+  if (((Arcadia_Engine_Application*)self)->engine && ((Arcadia_Engine_Application*)self)->engine->audialsBackendContext) {
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)((Arcadia_Engine_Application*)self)->engine->audialsBackendContext);
+    ((Arcadia_Engine_Application*)self)->engine->audialsBackendContext = NULL;
+  }
+  // Release the visuals backend context.
+  if (((Arcadia_Engine_Application*)self)->engine && ((Arcadia_Engine_Application*)self)->engine->visualsBackendContext) {
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)((Arcadia_Engine_Application*)self)->engine->visualsBackendContext);
+    ((Arcadia_Engine_Application*)self)->engine->visualsBackendContext = NULL;
+  }
+}
 
 static void
 Arcadia_Engine_Demo_Application_construct
@@ -55,12 +134,8 @@ Arcadia_Engine_Demo_Application_construct
     Arcadia_Thread_jump(thread);
   }
   //
-  self->quitRequested = Arcadia_BooleanValue_False;
-  self->configuration = (Arcadia_DDL_Node*)Cfg_loadConfiguration(thread);
-  self->engine = Arcadia_Engine_getOrCreate(thread);
-  self->windows = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  self->window = NULL;
-  self->sceneManager = Arcadia_Engine_Demo_SceneManager_create(thread, self->engine);
+  ((Arcadia_Engine_Application*)self)->configuration = (Arcadia_DDL_Node*)Cfg_loadConfiguration(thread);
+  self->sceneManager = Arcadia_Engine_Demo_SceneManager_create(thread, ((Arcadia_Engine_Application*)self)->engine);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
@@ -72,7 +147,11 @@ Arcadia_Engine_Demo_Application_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_ApplicationDispatch* self
   )
-{ }
+{ 
+  ((Arcadia_Engine_ApplicationDispatch*)self)->startup = (void (*)(Arcadia_Thread*,Arcadia_Engine_Application*))&Arcadia_Engine_Demo_Application_startupImpl;
+  ((Arcadia_Engine_ApplicationDispatch*)self)->shutdown = (void (*)(Arcadia_Thread*, Arcadia_Engine_Application*)) & Arcadia_Engine_Demo_Application_shutdownImpl;
+
+}
 
 static void
 Arcadia_Engine_Demo_Application_visit
@@ -81,20 +160,8 @@ Arcadia_Engine_Demo_Application_visit
     Arcadia_Engine_Demo_Application* self
   )
 {
-  if (self->engine) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->engine);
-  }
-  if (self->windows) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->windows);
-  }
-  if (self->window) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->window);
-  }
   if (self->sceneManager) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->sceneManager);
-  }
-  if (self->configuration) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->configuration);
   }
 }
 
@@ -109,23 +176,6 @@ Arcadia_Engine_Demo_Application_create
   ARCADIA_CREATEOBJECT(Arcadia_Engine_Demo_Application);
 }
 
-Arcadia_BooleanValue
-Arcadia_Engine_Demo_Application_getQuitRequested
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Demo_Application* self
-  )
-{ return self->quitRequested; }
-
-void
-Arcadia_Engine_Demo_Application_setQuitRequested
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Demo_Application* self,
-    Arcadia_BooleanValue quitRequested
-  )
-{ self->quitRequested = quitRequested; }
-
 void
 Arcadia_Engine_Demo_Application_onApplicationQuitRequestedEvent
   (
@@ -133,7 +183,7 @@ Arcadia_Engine_Demo_Application_onApplicationQuitRequestedEvent
     Arcadia_Engine_Demo_Application* self,
     Arcadia_Visuals_ApplicationQuitRequestedEvent* event
   )
-{ Arcadia_Engine_Demo_Application_setQuitRequested(thread, self, Arcadia_BooleanValue_True); }
+{ Arcadia_Engine_Application_setQuitRequested(thread, (Arcadia_Engine_Application*)self, Arcadia_BooleanValue_True); }
 
 void
 Arcadia_Engine_Demo_Application_onKeyboardKeyEvent
@@ -145,7 +195,7 @@ Arcadia_Engine_Demo_Application_onKeyboardKeyEvent
 {
   if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, event) == Arcadia_Visuals_KeyboardKeyAction_Released &&
     Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, event) == Arcadia_Visuals_KeyboardKey_Escape) {
-    Arcadia_Engine_Demo_Application_setQuitRequested(thread, self, Arcadia_BooleanValue_True);
+    Arcadia_Engine_Application_setQuitRequested(thread, (Arcadia_Engine_Application*)self, Arcadia_BooleanValue_True);
   } else if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, event) == Arcadia_Visuals_KeyboardKeyAction_Released &&
     Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, event) == Arcadia_Visuals_KeyboardKey_R) {
     Arcadia_logf(Arcadia_LogFlags_Info, "re-initializing backends\n");
@@ -175,6 +225,6 @@ Arcadia_Engine_Demo_Application_onWindowClosedEvent
     Arcadia_Visuals_WindowClosedEvent* event
   )
 {
-  Arcadia_List_filter(thread, self->windows, Arcadia_Value_makeObjectReferenceValue(event->window), &filterWindows);
-  Arcadia_Engine_Demo_Application_setQuitRequested(thread, self, Arcadia_BooleanValue_True);
+  Arcadia_List_filter(thread, ((Arcadia_Engine_Application*)self)->windows, Arcadia_Value_makeObjectReferenceValue(event->window), &filterWindows);
+  Arcadia_Engine_Application_setQuitRequested(thread, (Arcadia_Engine_Application*)self, Arcadia_BooleanValue_True);
 }

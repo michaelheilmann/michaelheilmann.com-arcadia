@@ -35,7 +35,7 @@
     ) \
   { \
     if (!g_##cName##_type) { \
-      g_##cName##_type = Arcadia_registerScalarType(thread, cilName, sizeof(cilName) - 1, typeOperations, &_##cName##_typeDestructing); \
+      g_##cName##_type = Arcadia_registerScalarType(thread, Arcadia_Names_getOrCreateName(thread, cilName, sizeof(cilName) - 1), typeOperations, &_##cName##_typeDestructing); \
     } \
     return g_##cName##_type; \
   }

@@ -21,15 +21,10 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-
+                   
   # Build "error.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/error.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/error.html"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-
-  # Build "news.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/news.html.te"
-                   "${REPOSITORY_SOURCE_DIR}/../.build/news.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "index.css".
@@ -47,16 +42,6 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
                    "${REPOSITORY_SOURCE_DIR}/../.build/assets/cxx-doc.css"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
-  # Build "roadmap.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/roadmap.html.te"
-                   "${REPOSITORY_SOURCE_DIR}/../.build/roadmap.html"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-
-  # Build "roadmap-archive.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.html.te"
-                   "${REPOSITORY_SOURCE_DIR}/../.build/roadmap-archive.html"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-
   # Build "imprint.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/imprint.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/imprint.html"
@@ -66,6 +51,14 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/data-protection-statement.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/data-protection-statement.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+                   
+  # Build "sitemap.xml" and ".htaccess".
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/sitemap.xml.te"
+                   "${REPOSITORY_SOURCE_DIR}/../.build/sitemap.xml"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/.htaccess.te"
+                   "${REPOSITORY_SOURCE_DIR}/../.build/.htaccess"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
   # Build "Specifications/MIL/index.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/MIL/index.html.te"
@@ -74,8 +67,9 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
 
 EndTemplateEngine()
 
+add_subdirectory("Arcadia")
 add_subdirectory("Specifications/Common Lexical Translations")
 add_subdirectory("Specifications/MDNP")
-add_subdirectory(Specifications/DDL)
-add_subdirectory(Specifications/DDLS)
-add_subdirectory(AssortedNotes)
+add_subdirectory("Specifications/DDL")
+add_subdirectory("Specifications/DDLS")
+add_subdirectory("AssortedNotes")

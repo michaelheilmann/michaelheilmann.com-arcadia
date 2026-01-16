@@ -105,25 +105,25 @@ getUtcDayOfWeekName
   Arcadia_ValueStack_popValues(thread, 1);
   switch (day) {
     case 1: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Monday", sizeof(u8"Monday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"Monday", sizeof(u8"Monday") - 1))));
     } break;
     case 2: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Tuesday", sizeof(u8"Tuesday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"Tuesday", sizeof(u8"Tuesday") - 1))));
     } break;
     case 3: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Wednesday", sizeof(u8"Wednesday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"Wednesday", sizeof(u8"Wednesday") - 1))));
     } break;
     case 4: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Thursday", sizeof(u8"Thursday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"Thursday", sizeof(u8"Thursday") - 1))));
     } break;
     case 5: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Friday", sizeof(u8"Friday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"Friday", sizeof(u8"Friday") - 1))));
     } break;
     case 6: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Saturday", sizeof(u8"Saturday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"Saturday", sizeof(u8"Saturday") - 1))));
     } break;
     case 7: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"Sunday", sizeof(u8"Sunday") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"Sunday", sizeof(u8"Sunday") - 1))));
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -160,40 +160,40 @@ getUtcMonthName
   Arcadia_ValueStack_popValues(thread, 1);
   switch (month) {
     case 1: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"January", sizeof(u8"January") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"January", sizeof(u8"January") - 1))));
     } break;
     case 2: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"February", sizeof(u8"February") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"February", sizeof(u8"February") - 1))));
     } break;
     case 3: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"March", sizeof(u8"March") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"March", sizeof(u8"March") - 1))));
     } break;
     case 4: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"April", sizeof(u8"April") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"April", sizeof(u8"April") - 1))));
     } break;
     case 5: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"May", sizeof(u8"May") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"May", sizeof(u8"May") - 1))));
     } break;
     case 6: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"June", sizeof(u8"June") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"June", sizeof(u8"June") - 1))));
     } break;
     case 7: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"July", sizeof(u8"July") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"July", sizeof(u8"July") - 1))));
     } break;
     case 8: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"August", sizeof(u8"August") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"August", sizeof(u8"August") - 1))));
     } break;
     case 9: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"September", sizeof(u8"September") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"September", sizeof(u8"September") - 1))));
     } break;
     case 10: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"October", sizeof(u8"October") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"October", sizeof(u8"October") - 1))));
     } break;
     case 11: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"November", sizeof(u8"November") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"November", sizeof(u8"November") - 1))));
     } break;
     case 12: {
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"December", sizeof(u8"December") - 1))));
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"December", sizeof(u8"December") - 1))));
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -227,27 +227,27 @@ Arcadia_TemplateEngine_registerTimeLibrary
 {
   Arcadia_Value k, v;
 
-  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"dayOfWeek", sizeof(u8"dayOfWeek") - 1))));
+  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"dayOfWeek", sizeof(u8"dayOfWeek") - 1))));
   v = Arcadia_Value_makeForeignProcedureValue(&getUtcDayOfWeek);
   Environment_set(thread, environment, k, v);
 
-  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"dayOfMonth", sizeof(u8"dayOfMonth") - 1))));
+  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"dayOfMonth", sizeof(u8"dayOfMonth") - 1))));
   v = Arcadia_Value_makeForeignProcedureValue(&getUtcDayOfMonth);
   Environment_set(thread, environment, k, v);
 
-  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"dayOfWeekName", sizeof(u8"dayOfWeekName") - 1))));
+  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"dayOfWeekName", sizeof(u8"dayOfWeekName") - 1))));
   v = Arcadia_Value_makeForeignProcedureValue(&getUtcDayOfWeekName);
   Environment_set(thread, environment, k, v);
 
-  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"month", sizeof(u8"month") - 1))));
+  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"month", sizeof(u8"month") - 1))));
   v = Arcadia_Value_makeForeignProcedureValue(&getUtcMonth);
   Environment_set(thread, environment, k, v);
 
-  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"monthName", sizeof(u8"monthName") - 1))));
+  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"monthName", sizeof(u8"monthName") - 1))));
   v = Arcadia_Value_makeForeignProcedureValue(&getUtcMonthName);
   Environment_set(thread, environment, k, v);
 
-  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"year", sizeof(u8"year") - 1))));
+  k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"year", sizeof(u8"year") - 1))));
   v = Arcadia_Value_makeForeignProcedureValue(&getUtcYear);
   Environment_set(thread, environment, k, v);
 }

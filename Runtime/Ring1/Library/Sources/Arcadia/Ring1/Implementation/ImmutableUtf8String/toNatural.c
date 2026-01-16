@@ -109,10 +109,10 @@ Arcadia_Natural16Value
 _toNatural16
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  Arcadia_Natural64Value w = _toNatural64(thread, immutableUtf8StringValue);
+  Arcadia_Natural64Value w = _toNatural64(thread, immutableUTF8StringValue);
   if (w > Arcadia_Natural16Value_Maximum) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);
@@ -125,10 +125,10 @@ Arcadia_Natural32Value
 _toNatural32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  Arcadia_Natural64Value w = _toNatural64(thread, immutableUtf8StringValue);
+  Arcadia_Natural64Value w = _toNatural64(thread, immutableUTF8StringValue);
   if (w > Arcadia_Natural32Value_Maximum) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);
@@ -141,12 +141,12 @@ Arcadia_Natural64Value
 _toNatural64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
   _State state;
-  _State_init(&state, Arcadia_ImmutableUtf8String_getBytes(thread, immutableUtf8StringValue),
-                      Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, immutableUtf8StringValue));
+  _State_init(&state, Arcadia_ImmutableUTF8String_getBytes(thread, immutableUTF8StringValue),
+                      Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
   Arcadia_Natural64Value value;
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -166,10 +166,10 @@ Arcadia_Natural8Value
 _toNatural8
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  Arcadia_Natural64Value w = _toNatural64(thread, immutableUtf8StringValue);
+  Arcadia_Natural64Value w = _toNatural64(thread, immutableUTF8StringValue);
   if (w > Arcadia_Natural8Value_Maximum) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);

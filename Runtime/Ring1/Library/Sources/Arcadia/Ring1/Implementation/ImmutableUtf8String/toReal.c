@@ -23,19 +23,19 @@ Arcadia_Real32Value
 _toReal32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  return (Arcadia_Real32Value)Arcadia_toReal64(thread, Arcadia_ImmutableUtf8String_getBytes(thread, immutableUtf8StringValue), Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, immutableUtf8StringValue));
+  return (Arcadia_Real32Value)Arcadia_toReal64(thread, Arcadia_ImmutableUTF8String_getBytes(thread, immutableUTF8StringValue), Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
 }
 
 Arcadia_Real64Value
 _toReal64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  return Arcadia_toReal64(thread, Arcadia_ImmutableUtf8String_getBytes(thread, immutableUtf8StringValue), Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, immutableUtf8StringValue));
+  return Arcadia_toReal64(thread, Arcadia_ImmutableUTF8String_getBytes(thread, immutableUTF8StringValue), Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
 
 }

@@ -1,0 +1,7 @@
+{
+  type : "Material",
+  name : "LogoScene.VertexColorMaterial",
+  materialType : "Blinn-Phong",
+  ambientColorSource : "Vertex",
+  ambientColorTexture : "LogoScene.Texture",
+}

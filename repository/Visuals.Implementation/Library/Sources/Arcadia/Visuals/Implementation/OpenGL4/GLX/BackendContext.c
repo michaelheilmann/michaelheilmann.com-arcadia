@@ -341,12 +341,12 @@ getDisplayDevice
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Arcadia_String* id =
-      Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(
-        Arcadia_ImmutableUtf8String_create(thread, monitorInfo->dsc_product_name,
+      Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(
+        Arcadia_ImmutableUTF8String_create(thread, monitorInfo->dsc_product_name,
                                            strlen(monitorInfo->dsc_product_name))));
     Arcadia_String* name =
-      Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(
-        Arcadia_ImmutableUtf8String_create(thread, monitorInfo->dsc_product_name,
+      Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(
+        Arcadia_ImmutableUTF8String_create(thread, monitorInfo->dsc_product_name,
                                            strlen(monitorInfo->dsc_product_name))));
     displayDevice =
       Arcadia_Visuals_Linux_DisplayDevice_create(thread, self, id, name);

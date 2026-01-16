@@ -19,6 +19,7 @@
 #include "Arcadia/Audials/Include.h"
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Engine/Demo/Scene.h"
+#include "Arcadia/ADL/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Demo.MainScene", Arcadia_Engine_Demo_MainScene,
                           u8"Arcadia.Engine.Demo.Scene");
@@ -29,6 +30,10 @@ struct Arcadia_Engine_Demo_MainSceneDispatch {
 
 struct Arcadia_Engine_Demo_MainScene {
   Arcadia_Engine_Demo_Scene parent;
+
+  // @todo This is should be inter-scene not intra-scene.
+  Arcadia_ADL_Definitions* definitions;
+
   // Two viewports, #1 and #2, one for each side of the window.
   Arcadia_Visuals_Scene_ViewportNode* viewportNodes[2];
   // A single camera, rendering the same scene twice, first to viewport #1 and the to viewport #2.
@@ -36,8 +41,8 @@ struct Arcadia_Engine_Demo_MainScene {
   // A single context, update with viewport- and camera-specific information for each render of the scene.
   Arcadia_Visuals_Scene_RenderingContextNode* renderingContextNode;
 
-  // The mesh (the scene).
-  Arcadia_Visuals_Scene_MeshNode* meshNode;
+  // The models (the scene).
+  Arcadia_Visuals_Scene_ModelNode* modelNode[2];
 
   // The sound source for some background sound effects.
   Arcadia_Audials_Scene_SoundSourceNode* soundSourceNode;

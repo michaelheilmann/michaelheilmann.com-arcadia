@@ -16,6 +16,8 @@
 #define ARCADIA_ADL_PRIVATE (1)
 #include "Arcadia/ADL/Reader.h"
 
+#include "Arcadia/ADL/Reader.module.h"
+
 static void
 Arcadia_ADL_Reader_constructImpl
   (

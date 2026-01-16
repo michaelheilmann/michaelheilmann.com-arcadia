@@ -51,7 +51,7 @@ testScanner4
     u8"$_\n"
     ;
   Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
-  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input))));
+  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
 
@@ -131,7 +131,7 @@ testScanner3
     u8"\n"
     ;
   Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
-  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input))));
+  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
   //
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
@@ -217,7 +217,7 @@ testScanner2
     u8"\n"
     ;
   Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
-  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input))));
+  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_Name, u8"Name", sizeof(u8"Name") - 1);
@@ -251,7 +251,7 @@ testScanner1
     u8""
     ;
   Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
-  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, input, strlen(input))));
+  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);

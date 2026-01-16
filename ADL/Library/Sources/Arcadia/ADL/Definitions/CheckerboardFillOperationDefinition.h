@@ -77,7 +77,7 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_create
   (
     Arcadia_Thread* thread,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_String* qualifiedName,
+    Arcadia_String* name,
     Arcadia_Integer32Value checkerWidth,
     Arcadia_Integer32Value checkerHeight,
     Arcadia_String* firstCheckerColorName,

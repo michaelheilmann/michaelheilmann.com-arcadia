@@ -25,7 +25,11 @@
 #include "Arcadia/Visuals/Scene/CameraNode.h"
 #include "Arcadia/Visuals/Scene/FrameBufferNode.h"
 #include "Arcadia/Visuals/Scene/RenderingContextNode.h"
+#include "Arcadia/Visuals/Scene/MaterialNode.h"
 #include "Arcadia/Visuals/Scene/MeshNode.h"
+#include "Arcadia/Visuals/Scene/ModelNode.h"
+#include "Arcadia/Visuals/Scene/PixelBufferNode.h"
+#include "Arcadia/Visuals/Scene/TextureNode.h"
 #include "Arcadia/Visuals/Scene/ViewportNode.h"
 
 /// The implementation of a scene node factory for visuals scene nodes.
@@ -59,12 +63,50 @@ struct Arcadia_Visuals_SceneNodeFactoryDispatch {
       Arcadia_Visuals_BackendContext* backendContext
     );
 
+  Arcadia_Visuals_Scene_MaterialNode*
+  (*createMaterialNode)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_SceneNodeFactory* self,
+      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_ADL_MaterialDefinition* source
+    );
+
   Arcadia_Visuals_Scene_MeshNode*
   (*createMeshNode)
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_SceneNodeFactory* self,
-      Arcadia_Visuals_BackendContext* backendContext
+      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_ADL_MeshDefinition* source
+    );
+
+  Arcadia_Visuals_Scene_ModelNode*
+  (*createModelNode)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_SceneNodeFactory* self,
+      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_ADL_ModelDefinition* source
+    );
+ 
+  Arcadia_Visuals_Scene_PixelBufferNode*
+  (*createPixelBufferNode)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_SceneNodeFactory* self,
+      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_ADL_PixelBufferDefinition* source
+    );
+
+
+  Arcadia_Visuals_Scene_TextureNode*
+  (*createTextureNode)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Visuals_SceneNodeFactory* self,
+      Arcadia_Visuals_BackendContext* backendContext,
+      Arcadia_ADL_TextureDefinition* source
     );
 
   Arcadia_Visuals_Scene_ViewportNode*
@@ -104,12 +146,49 @@ Arcadia_Visuals_SceneNodeFactory_createRenderingContextNode
     Arcadia_Visuals_BackendContext* backendContext
   );
 
+Arcadia_Visuals_Scene_MaterialNode*
+Arcadia_Visuals_SceneNodeFactory_createMaterialNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MaterialDefinition* source
+  );
+
 Arcadia_Visuals_Scene_MeshNode*
 Arcadia_Visuals_SceneNodeFactory_createMeshNode
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_SceneNodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MeshDefinition* source
+  );
+
+Arcadia_Visuals_Scene_ModelNode*
+Arcadia_Visuals_SceneNodeFactory_createModelNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_ModelDefinition* source
+  );
+
+Arcadia_Visuals_Scene_PixelBufferNode*
+Arcadia_Visuals_SceneNodeFactory_createPixelBufferNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_PixelBufferDefinition* source
+  );
+
+Arcadia_Visuals_Scene_TextureNode*
+Arcadia_Visuals_SceneNodeFactory_createTextureNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_TextureDefinition* source
   );
 
 Arcadia_Visuals_Scene_ViewportNode*

@@ -235,7 +235,7 @@ Arcadia_Visuals_Windows_Bitmap_toPixelBuffer
     for (int32_t x = 0; x < self->width; ++x) {
       int32_t sourceOffset = self->lineStride * y + (x * self->numberOfBitsPerPixel) / 8;
       uint8_t* source = sourceBytes + sourceOffset;
-      Arcadia_Imaging_PixelBuffer_setPixelRgba(thread, pixelBuffer, x, y, source[2], source[1], source[0], 255);
+      Arcadia_Imaging_PixelBuffer_setPixelRGBA(thread, pixelBuffer, x, y, source[2], source[1], source[0], 255);
     }
   }
   Arcadia_Imaging_PixelBuffer_reflectHorizontally(thread, pixelBuffer);

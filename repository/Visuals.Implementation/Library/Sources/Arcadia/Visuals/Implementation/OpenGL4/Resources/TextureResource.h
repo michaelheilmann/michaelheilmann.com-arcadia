@@ -48,10 +48,6 @@ struct Arcadia_Visuals_Implementation_OpenGL4_TextureResource {
   // Bitmask indicating what aspects of the texture are dirty.
   Arcadia_Natural8Value dirtyBits;
 
-  // @brief The height, in pixels of the frame buffer.
-  // @default 240.
-  Arcadia_Integer32Value height;
-
   // The OpenGL ID of this texture.
   GLuint id;
 
@@ -61,9 +57,9 @@ struct Arcadia_Visuals_Implementation_OpenGL4_TextureResource {
   // The texture minification filter.
   // @default Arcadia_Visuals_TextureFilter_Linear
   Arcadia_Visuals_TextureFilter minificationFilter;
-  // @brief The width, in pixels, of the frame buffer.
-  // @default 320.
-  Arcadia_Integer32Value width;
+  
+  /// @brief The pixel buffer storing the texture data.
+  Arcadia_Imaging_PixelBuffer* pixelBuffer;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_TextureResource*

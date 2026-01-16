@@ -59,6 +59,7 @@ Arcadia_ADL_Context_getOrCreate
  * @param self A pointer to this ADL context.
  * @param definitions A pointer to the ADL definitions to add the definition to.
  * @param input A pointer to the input DDL node.
+ * @param skipExisting If an ADL definition of the same name is already loaded, ignore newly loaded ADL definition(s) of that name.
  * @return A pointer to the ADL definition.
  */
 Arcadia_ADL_Definition*
@@ -67,7 +68,8 @@ Arcadia_ADL_Context_readFromNode
     Arcadia_Thread* thread,
     Arcadia_ADL_Context* self,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_DDL_Node* input
+    Arcadia_DDL_Node* input,
+    Arcadia_BooleanValue skipExisting
   );
 
 /**
@@ -76,6 +78,7 @@ Arcadia_ADL_Context_readFromNode
  * @param self A pointer to this ADL context.
  * @param definitions A pointer to the ADL definitions to add the definition to.
  * @param input A pointer to the input string.
+ * @param skipExisting If an ADL definition of the same name is already loaded, ignore newly loaded ADL definition(s) of that name.
  * @return A pointer to the ADL definition.
  */
 Arcadia_ADL_Definition*
@@ -84,7 +87,8 @@ Arcadia_ADL_Context_readFromString
     Arcadia_Thread* thread,
     Arcadia_ADL_Context* self,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_String* input
+    Arcadia_String* input,
+    Arcadia_BooleanValue skipExisting
   );
 
 #endif  // ARCADIA_ADL_CONTEXT_H_INCLUDED

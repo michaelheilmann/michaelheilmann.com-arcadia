@@ -116,7 +116,7 @@ Arcadia_Visuals_Linux_Icon_constructImpl
   for (Arcadia_SizeValue y = 0; y < self->height; ++y) {
     for (Arcadia_SizeValue x = 0; x < self->width; ++x) {
       Arcadia_Natural8Value red, green, blue, alpha;
-      Arcadia_Imaging_PixelBuffer_getPixelRgba(thread, pixelBuffer, x, y, &red, &green, &blue, &alpha);
+      Arcadia_Imaging_PixelBuffer_getPixelRGBA(thread, pixelBuffer, x, y, &red, &green, &blue, &alpha);
       *p++ = alpha << 24
            | blue << 16
            | green << 8

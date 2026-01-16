@@ -18,6 +18,7 @@
 
 #include <assert.h>
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Names.h"
 
 static void*
 Arcadia_allocateObject
@@ -351,7 +352,7 @@ _Arcadia_Object_getType
   }
   if (!g__Arcadia_Object_type) {
     g__Arcadia_Object_type = Arcadia_registerObjectType(thread,
-                                                        ObjectTypeName, sizeof(ObjectTypeName) - 1,
+                                                        Arcadia_Names_getOrCreateName(thread, ObjectTypeName, sizeof(ObjectTypeName) - 1),
                                                         sizeof(Arcadia_Object), NULL,
                                                         sizeof(Arcadia_ObjectDispatch),
                                                         (void(*)(Arcadia_Thread*,Arcadia_Dispatch*)) & _Arcadia_Object_initializeDispatchImpl,
@@ -641,7 +642,7 @@ Arcadia_Object_isIdenticalTo
   return returnValue;
 }
 
-Arcadia_ImmutableUtf8String*
+Arcadia_ImmutableUTF8String*
 Arcadia_Object_toString
   (
     Arcadia_Thread* thread,
@@ -665,7 +666,7 @@ Arcadia_Object_toString
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_ImmutableUtf8String* string = Arcadia_ValueStack_getImmutableUtf8StringValue(thread, 0);
+  Arcadia_ImmutableUTF8String* string = Arcadia_ValueStack_getImmutableUTF8StringValue(thread, 0);
   Arcadia_ValueStack_popValues(thread, 1);
 
   return string;

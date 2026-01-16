@@ -17,6 +17,7 @@
 #include "Arcadia/ADL/Definitions/PixelBufferReader.h"
 
 #include "Arcadia/ADL/Context.h"
+#include "Arcadia/ADL/Reader.module.h"
 #include "Arcadia/ADL/Definitions/PixelBufferDefinition.h"
 #include "Arcadia/ADL/Reference.h"
 
@@ -87,30 +88,6 @@ Arcadia_ADL_PixelBufferReader_read
     Arcadia_DDL_Node* input
   );
 
-static Arcadia_Natural32Value
-getNatural32Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  );
-
-static Arcadia_String*
-getStringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  );
-
-static Arcadia_List*
-getListValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  );
-
 static void
 Arcadia_ADL_PixelBufferReader_constructImpl
   (
@@ -167,10 +144,10 @@ Arcadia_ADL_PixelBufferReader_read
 {
   Arcadia_DDLS_ValidationContext_run(thread, self->validationContext, self->SCHEMANAME, input);
 
-  Arcadia_String* type = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
-  Arcadia_String* name = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
-  Arcadia_Natural32Value width = getNatural32Value(thread, (Arcadia_DDL_MapNode*)input, self->WIDTH);
-  Arcadia_Natural32Value height = getNatural32Value(thread, (Arcadia_DDL_MapNode*)input, self->HEIGHT);
+  Arcadia_String* type = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
+  Arcadia_String* name = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
+  Arcadia_Natural32Value width = Arcadia_ADL_Reader_getNatural32Value(thread, (Arcadia_DDL_MapNode*)input, self->WIDTH);
+  Arcadia_Natural32Value height = Arcadia_ADL_Reader_getNatural32Value(thread, (Arcadia_DDL_MapNode*)input, self->HEIGHT);
 
   // Assert the definition has the correct type.
   Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(self->TYPENAME);
@@ -179,11 +156,10 @@ Arcadia_ADL_PixelBufferReader_read
     Arcadia_Thread_jump(thread);
   }
 
-
   Arcadia_ADL_PixelBufferDefinition* definition = Arcadia_ADL_PixelBufferDefinition_create(thread, definitions, name, width, height);
 
   // Get the list.
-  Arcadia_List* operations = getListValue(thread, (Arcadia_DDL_MapNode*)input, self->OPERATIONS);
+  Arcadia_List* operations = Arcadia_ADL_Reader_getListValue(thread, (Arcadia_DDL_MapNode*)input, self->OPERATIONS);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)operations); i < n; ++i) {
     Arcadia_DDL_StringNode* operation = (Arcadia_DDL_StringNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, operations, i, _Arcadia_DDL_StringNode_getType(thread));
     Arcadia_ADL_Reference* operationReference = Arcadia_ADL_Reference_create(thread, definitions, operation->value);
@@ -191,108 +167,6 @@ Arcadia_ADL_PixelBufferReader_read
   }
 
   return definition;
-}
-
-static Arcadia_Natural32Value
-getNatural32Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
-    Arcadia_DDL_MapEntryNode* mapEntryNode =
-      (Arcadia_DDL_MapEntryNode*)
-      Arcadia_List_getObjectReferenceValueCheckedAt
-      (
-        thread,
-        (Arcadia_List*)mapNode->entries,
-        i,
-        _Arcadia_DDL_MapEntryNode_getType(thread)
-      );
-    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
-    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
-    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
-      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
-      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_NumberNode_getType(thread))) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_DDL_NumberNode* numberNode = (Arcadia_DDL_NumberNode*)valueNode;
-      return Arcadia_String_toNatural32(thread, numberNode->value);
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-  Arcadia_Thread_jump(thread);
-}
-
-static Arcadia_String*
-getStringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
-    Arcadia_DDL_MapEntryNode* mapEntryNode =
-      (Arcadia_DDL_MapEntryNode*)
-      Arcadia_List_getObjectReferenceValueCheckedAt
-      (
-        thread,
-        (Arcadia_List*)mapNode->entries,
-        i,
-        _Arcadia_DDL_MapEntryNode_getType(thread)
-      );
-    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
-    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
-    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
-      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
-      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_StringNode_getType(thread))) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_DDL_StringNode* stringNode = (Arcadia_DDL_StringNode*)valueNode;
-      return stringNode->value;
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-  Arcadia_Thread_jump(thread);
-}
-
-static Arcadia_List*
-getListValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
-    Arcadia_DDL_MapEntryNode* mapEntryNode =
-      (Arcadia_DDL_MapEntryNode*)
-      Arcadia_List_getObjectReferenceValueCheckedAt
-      (
-        thread,
-        (Arcadia_List*)mapNode->entries,
-        i,
-        _Arcadia_DDL_MapEntryNode_getType(thread)
-      );
-    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
-    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
-    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
-      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
-      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_ListNode_getType(thread))) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_DDL_ListNode* listNode = (Arcadia_DDL_ListNode*)valueNode;
-      return listNode->elements;
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-  Arcadia_Thread_jump(thread);
 }
 
 static void

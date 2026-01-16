@@ -126,7 +126,7 @@ Arcadia_Imaging_PixelBuffer_setLinePadding
 /// if the pixel has an alpha component.
 /// Otherwise it is assigned 255.
 void
-Arcadia_Imaging_PixelBuffer_getPixelRgba
+Arcadia_Imaging_PixelBuffer_getPixelRGBA
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_PixelBuffer* self,
@@ -158,7 +158,7 @@ Arcadia_Imaging_PixelBuffer_getPixelRgba
 /// <code>a</code> is assigned to the alpha component of the pixel
 /// if the pixel has an alpha component.
 void
-Arcadia_Imaging_PixelBuffer_setPixelRgba
+Arcadia_Imaging_PixelBuffer_setPixelRGBA
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_PixelBuffer* self,
@@ -301,6 +301,18 @@ Arcadia_Imaging_PixelBuffer_getNumberOfColumns
     Arcadia_Imaging_PixelBuffer* self
   );
 
+/// @brief Set the number of columns of this pixel buffer.
+/// @param self A pointer to this pixel buffer.
+/// @param numberOfColumns The new number of columns of this pixel buffer.
+/// @remarks Columns are added to /remove from the right side. 
+void
+Arcadia_Imaging_PixelBuffer_setNumberOfColumns
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBuffer* self,
+    Arcadia_Integer32Value numberOfColumns
+  );
+
 /// @brief Get the number of rows of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The number of rows of this pixel buffer.
@@ -309,6 +321,18 @@ Arcadia_Imaging_PixelBuffer_getNumberOfRows
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_PixelBuffer* self
+  );
+
+/// @brief Set the number of rows of this pixel buffer.
+/// @param self A pointer to this pixel buffer.
+/// @param numberOfRows The new number of rows of this pixel buffer.
+/// @remarks Rows are added to/remove from the bottom side. 
+void
+Arcadia_Imaging_PixelBuffer_setNumberOfRows
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBuffer* self,
+    Arcadia_Integer32Value numberOfRows
   );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -356,6 +380,8 @@ Arcadia_Imaging_PixelBuffer_createClone
     Arcadia_Imaging_PixelBuffer* other
   );
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /// @brief Get the width of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The width of this pixel buffer.
@@ -366,6 +392,18 @@ Arcadia_Imaging_PixelBuffer_getWidth
     Arcadia_Imaging_PixelBuffer* self
   );
 
+/// @brief Set the width of this pixel buffer.
+/// @param self A pointer to this pixel buffer.
+/// @param width The new width of this pixel buffer.
+/// @remarks Columns are added to /remove from the right side. 
+void
+Arcadia_Imaging_PixelBuffer_setWidth
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBuffer* self,
+    Arcadia_Integer32Value width
+  );
+
 /// @brief Get the height of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @return The height of this pixel buffer.
@@ -374,6 +412,42 @@ Arcadia_Imaging_PixelBuffer_getHeight
   (
     Arcadia_Thread* thread,
     Arcadia_Imaging_PixelBuffer* self
+  );
+
+/// @brief Set the height of this pixel buffer.
+/// @param self A pointer to this pixel buffer.
+/// @param height The new height of this pixel buffer.
+/// @remarks Rows are added to/remove from the bottom side. 
+void
+Arcadia_Imaging_PixelBuffer_setHeight
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBuffer* self,
+    Arcadia_Integer32Value height
+  );
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/// @brief Swap the contents of the this pixel buffer with the contents of another pixel buffer.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this pixel buffer.
+/// @param other A pointer to the other pixel buffer.
+void
+Arcadia_Imaging_PixelBuffer_swap
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* other
+  );
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void
+Arcadia_Imaging_PixelBuffer_assign
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Imaging_PixelBuffer* self,
+    Arcadia_Imaging_PixelBuffer* other
   );
 
 #endif // ARCADIA_IMAGING_PIXELBUFFER_H_INCLUDED

@@ -19,27 +19,27 @@
 #include "Arcadia/Ring1/Include.h"
 
 void
-Arcadia_Integer16Value_toUtf8String
+Arcadia_Integer16Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Integer16Value integer16Value,
     void* context,
     void (*function)(Arcadia_Thread* thread, void* context, const Arcadia_Natural8Value* bytes, Arcadia_SizeValue numberOfBytes)
   )
-{ Arcadia_Integer64Value_toUtf8String(thread, integer16Value, context, function); }
+{ Arcadia_Integer64Value_toUTF8String(thread, integer16Value, context, function); }
 
 void
-Arcadia_Integer32Value_toUtf8String
+Arcadia_Integer32Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value integer32Value,
     void* context,
     void (*function)(Arcadia_Thread* thread, void* context, const Arcadia_Natural8Value* bytes, Arcadia_SizeValue numberOfBytes)
   )
-{ Arcadia_Integer64Value_toUtf8String(thread, integer32Value, context, function); }
+{ Arcadia_Integer64Value_toUTF8String(thread, integer32Value, context, function); }
 
 void
-Arcadia_Integer64Value_toUtf8String
+Arcadia_Integer64Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Integer64Value integer64Value,
@@ -106,11 +106,11 @@ Arcadia_Integer64Value_toUtf8String
 }
 
 void
-Arcadia_Integer8Value_toUtf8String
+Arcadia_Integer8Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Integer8Value integer8Value,
     void* context,
     void (*function)(Arcadia_Thread* thread, void* context, const Arcadia_Natural8Value* bytes, Arcadia_SizeValue numberOfBytes)
   )
-{ Arcadia_Integer64Value_toUtf8String(thread, integer8Value, context, function); }
+{ Arcadia_Integer64Value_toUTF8String(thread, integer8Value, context, function); }

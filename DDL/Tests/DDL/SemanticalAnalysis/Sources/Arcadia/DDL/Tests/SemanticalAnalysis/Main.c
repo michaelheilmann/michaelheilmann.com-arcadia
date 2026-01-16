@@ -26,7 +26,7 @@ doSyntacticalAnalysis
     size_t n
   )
 {
-  Arcadia_String* input = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, n)));
+  Arcadia_String* input = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n)));
   Arcadia_DDL_Parser_setInput(thread, parser, input);
   return Arcadia_DDL_Parser_run(thread, parser);
 }

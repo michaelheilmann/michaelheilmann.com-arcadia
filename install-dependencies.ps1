@@ -13,10 +13,10 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-# This script downloads the prebuilt dependencies from the releases of `https://github.com/michaelheilmann/michaelheilmann.com-dependencies`.
+# This script downloads the prebuilt dependencies from the releases of `https://github.com/michaelheilmann/michaelheilmann.com-arcadia-dependencies`.
 
 # The source URL prefix.
-$urlPrefix="https://github.com/michaelheilmann/michaelheilmann.com-dependencies/releases/download/michaelheilmann.com-dependencies-v1.0.62"
+$urlPrefix="https://github.com/michaelheilmann/michaelheilmann.com-arcadia-dependencies/releases/download/michaelheilmann.com-dependencies-v1.0.62"
 
 # The target file prefix.
 $target = "C:/arcadia-dependencies"

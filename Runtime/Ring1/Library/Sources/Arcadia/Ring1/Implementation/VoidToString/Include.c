@@ -19,7 +19,7 @@
 #include "Arcadia/Ring1/Include.h"
 
 void
-Arcadia_VoidValue_toUtf8String
+Arcadia_VoidValue_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_VoidValue sizeValue,

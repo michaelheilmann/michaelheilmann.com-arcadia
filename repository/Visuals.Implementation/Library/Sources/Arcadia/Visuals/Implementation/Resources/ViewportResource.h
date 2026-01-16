@@ -28,10 +28,7 @@ struct Arcadia_Visuals_Implementation_ViewportResourceDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_ViewportResource* self,
-      Arcadia_Real32Value red,
-      Arcadia_Real32Value green,
-      Arcadia_Real32Value blue,
-      Arcadia_Real32Value alpha
+      Arcadia_Math_Color4Real32* clearColor
     );
 
   void (*setClearDepth)
@@ -73,10 +70,7 @@ Arcadia_Visuals_Implementation_ViewportResource_setClearColor
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_ViewportResource* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
+    Arcadia_Math_Color4Real32* clearColor
   );
 
 /// Set the clear depth.

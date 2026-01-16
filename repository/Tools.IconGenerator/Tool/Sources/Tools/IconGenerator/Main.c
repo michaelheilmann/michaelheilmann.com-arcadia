@@ -32,7 +32,7 @@ main1
   Arcadia_Value_setVoidValue(&target, Arcadia_VoidValue_Void);
   Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
-    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
+    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
@@ -60,7 +60,7 @@ main1
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
   if (Arcadia_Value_isVoidValue(&target)) {
-    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"target", sizeof(u8"target") - 1)));
+    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"target", sizeof(u8"target") - 1)));
   }
   Arcadia_List* pixelBufferList = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_SizeValue sizes[] = {
@@ -74,7 +74,7 @@ main1
     256,
   };
   Arcadia_Imaging_ImageManager* imageManager = Arcadia_Imaging_ImageManager_getOrCreate(thread);
-  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"ico", sizeof(u8"ico") - 1)));
+  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"ico", sizeof(u8"ico") - 1)));
   Arcadia_List* writers = Arcadia_Imaging_ImageManager_getWriters(thread, imageManager, extension);
   if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)writers)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);

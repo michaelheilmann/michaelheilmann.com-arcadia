@@ -31,7 +31,7 @@
 // The third argument is a pointer to a constant array of Bytes. The fourth argument is the number of Bytes in that array.
 // The Bytes are the conversion of the Real32 value @a value to an UTF-8 string.
 void
-Arcadia_Real64Value_toUtf8String
+Arcadia_Real64Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value value,

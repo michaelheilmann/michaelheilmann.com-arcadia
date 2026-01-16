@@ -25,7 +25,7 @@ checkNormalized
     char const* q
   )
 {
-  Arcadia_String* filePathStringSource = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, p, strlen(p))));
+  Arcadia_String* filePathStringSource = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, strlen(p))));
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, filePathStringSource);
   Arcadia_String* filePathStringTarget = Arcadia_FilePath_toNative(thread, filePath);
 

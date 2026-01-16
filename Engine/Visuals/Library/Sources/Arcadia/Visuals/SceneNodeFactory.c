@@ -131,14 +131,55 @@ Arcadia_Visuals_SceneNodeFactory_createRenderingContextNode
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Visuals_SceneNodeFactory, createRenderingContextNode, self, backendContext); }
 
+Arcadia_Visuals_Scene_MaterialNode*
+Arcadia_Visuals_SceneNodeFactory_createMaterialNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MaterialDefinition* source
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_SceneNodeFactory, createMaterialNode, self, backendContext, source); }
+
 Arcadia_Visuals_Scene_MeshNode*
 Arcadia_Visuals_SceneNodeFactory_createMeshNode
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_SceneNodeFactory* self,
-    Arcadia_Visuals_BackendContext* backendContext
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MeshDefinition* source
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_SceneNodeFactory, createMeshNode, self, backendContext); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_SceneNodeFactory, createMeshNode, self, backendContext, source); }
+
+Arcadia_Visuals_Scene_ModelNode*
+Arcadia_Visuals_SceneNodeFactory_createModelNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_ModelDefinition* source
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_SceneNodeFactory, createModelNode, self, backendContext, source); }
+
+Arcadia_Visuals_Scene_PixelBufferNode*
+Arcadia_Visuals_SceneNodeFactory_createPixelBufferNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_PixelBufferDefinition* source
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_SceneNodeFactory, createPixelBufferNode, self, backendContext, source); }
+
+Arcadia_Visuals_Scene_TextureNode*
+Arcadia_Visuals_SceneNodeFactory_createTextureNode
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_SceneNodeFactory* self,
+    Arcadia_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_TextureDefinition* source
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_SceneNodeFactory, createTextureNode, self, backendContext, source); }
 
 Arcadia_Visuals_Scene_ViewportNode*
 Arcadia_Visuals_SceneNodeFactory_createViewportNode

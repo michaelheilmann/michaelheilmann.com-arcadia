@@ -1,10 +1,10 @@
 <section class="cxx entity procedure">
 
-  <h1 id="Arcadia_Unicode_isUtf8">Arcadia_Unicode_isUtf8</h1>
+  <h1 id="Arcadia_Unicode_isUTF8">Arcadia_Unicode_isUTF8</h1>
 
   <my-signature><code>
   Arcadia_BooleanValue<br>
-  Arcadia_Unicode_isUtf8<br>
+  Arcadia_Unicode_isUTF8<br>
   &nbsp;(<br>
   &nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;const void* bytes,<br>

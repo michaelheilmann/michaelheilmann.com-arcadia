@@ -296,7 +296,7 @@ Arcadia_DDLS_Diagnostics_mapEntryNotExistsError
   Arcadia_StringBuffer_clear(thread, self->stringBuffer);
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"a map entry of name `");
   Arcadia_StringBuffer_insertBackString(thread, self->stringBuffer, name);
-  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` not exists but is not required by the type");
+  Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"` not exists but is required by the type");
   Arcadia_StringBuffer_insertBackCxxString(thread, self->stringBuffer, u8"\n");
   Arcadia_FileSystem* fs = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FileHandle* fd = Arcadia_FileSystem_createFileHandle(thread, fs);

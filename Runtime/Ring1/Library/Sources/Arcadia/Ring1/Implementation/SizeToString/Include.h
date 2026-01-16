@@ -20,7 +20,7 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 void
-Arcadia_SizeValue_toUtf8String
+Arcadia_SizeValue_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue sizeValue,

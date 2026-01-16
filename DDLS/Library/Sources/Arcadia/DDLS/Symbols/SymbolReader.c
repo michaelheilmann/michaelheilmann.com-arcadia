@@ -767,9 +767,6 @@ readSchemaSymbol
     Arcadia_DDLS_SchemaSymbol* schemaSymbol = Arcadia_DDLS_SchemaSymbol_create(thread, (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&name));
     // 2.3: Read `definition` element.
     Arcadia_Value definition = Arcadia_Map_get(thread, self->scope->symbols, self->DEFINITION);
-    Arcadia_Type* ty = Arcadia_Value_getType(thread, &definition);
-    Arcadia_Atom* tyn = Arcadia_Type_getName(ty);
-    tyn = NULL;
     if (!Arcadia_Value_isInstanceOf(thread, &definition, _Arcadia_DDL_MapNode_getType(thread))) {
       Arcadia_logf(Arcadia_LogFlags_Error, u8"`definition` not specified\n");
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);

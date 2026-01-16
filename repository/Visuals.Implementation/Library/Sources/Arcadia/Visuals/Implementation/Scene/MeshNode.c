@@ -13,6 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+#define ARCADIA_VISUALS_IMPLEMENTATION_PRIVATE (1)
 #include "Arcadia/Visuals/Implementation/Scene/MeshNode.h"
 
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
@@ -23,7 +24,10 @@
 #include "Arcadia/Visuals/Implementation/Resources/VertexBufferResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/VertexProgramResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/ViewportResource.h"
+
+#include "Arcadia/Visuals/Implementation/Scene/MaterialNode.h"
 #include "Arcadia/Visuals/Implementation/Scene/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Scene/TextureNode.h"
 
 static void
 Arcadia_Visuals_Implementation_Scene_MeshNode_constructImpl
@@ -94,23 +98,27 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_Scene_MeshNode_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (2 != numberOfArgumentValues) {
+  if (3 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_Value t = Arcadia_ValueStack_getValue(thread, 1);
-    Arcadia_ValueStack_pushValue(thread, &t);
-    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    Arcadia_Value sceneNodeFactory = Arcadia_ValueStack_getValue(thread, 2);
+    Arcadia_Value source = Arcadia_ValueStack_getValue(thread, 1);
+    Arcadia_ValueStack_pushValue(thread, &sceneNodeFactory);
+    Arcadia_ValueStack_pushValue(thread, &source);
+    Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
+  //
+  if (Arcadia_ValueStack_isVoidValue(thread, 3)) {
     self->backendContext = NULL;
   } else {
-    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_BackendContext_getType(thread));
+    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Visuals_Implementation_BackendContext_getType(thread));
     Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
   }
   self->meshResource = NULL;
+  //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -159,11 +167,15 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl
     Arcadia_Visuals_Implementation_Scene_RenderingContextNode* renderingContextNode
   )
 {
+  // (1) Render the material dependency.
+  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)((Arcadia_Visuals_Scene_MeshNode*)self)->material, (Arcadia_Visuals_Scene_RenderingContextNode*)renderingContextNode);
+  // (2) Set the backend context.
   Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)self, (Arcadia_Visuals_BackendContext*)renderingContextNode->backendContext);
+  // (3) Setup resources.
   if (self->backendContext) {
     if (!self->meshResource) {
       Arcadia_Visuals_Implementation_BackendContext* backendContext = self->backendContext;
-      // (1) vertex buffer
+      // (3.1) vertex buffer resource
       Arcadia_Visuals_Implementation_VertexBufferResource* vertexBufferResource = NULL;
       vertexBufferResource = Arcadia_Visuals_Implementation_BackendContext_createVertexBufferResource(thread, backendContext);
       Arcadia_Visuals_Implementation_VertexBufferResource_setData
@@ -175,37 +187,25 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl
           (void*)((Arcadia_Visuals_Scene_MeshNode*)self)->vertices,
           ((Arcadia_Visuals_Scene_MeshNode*)self)->numberOfVertices * ((Arcadia_Visuals_Scene_MeshNode*)self)->vertexDescriptor->stride
         );
-      // (2) program
-      Arcadia_Visuals_Scene_MaterialNode* material = ((Arcadia_Visuals_Scene_MeshNode*)self)->material;
-      Arcadia_Visuals_Implementation_VertexProgramResource* vertexProgramResource = NULL;
-      vertexProgramResource = Arcadia_Visuals_Implementation_BackendContext_createVertexProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)renderingContextNode->backendContext, material->program);
-      Arcadia_Visuals_Implementation_FragmentProgramResource* fragmentProgramResource = NULL;
-      fragmentProgramResource = Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)renderingContextNode->backendContext, material->program);
-      Arcadia_Visuals_Implementation_ProgramResource* programResource = NULL;
-      programResource = Arcadia_Visuals_Implementation_BackendContext_createProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext, vertexProgramResource, fragmentProgramResource);
-      // (3) mesh
+      // (3.2) mesh resource
+      Arcadia_Visuals_Implementation_Scene_MaterialNode* material = (Arcadia_Visuals_Implementation_Scene_MaterialNode*)((Arcadia_Visuals_Scene_MeshNode*)self)->material;
       self->meshResource =
         Arcadia_Visuals_Implementation_BackendContext_createMeshResource
           (
             thread,
             backendContext,
             vertexBufferResource,
-            programResource
+            material->materialResource
           );
       Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource);
-
-      // (4) Set the matrices of the mesh resource.
+      // (3.3) Set the matrices of the mesh resource.
+      // TODO: Add and utilize a model resource.
       Arcadia_Math_Matrix4Real32* localToWorldMatrix = Arcadia_Math_Matrix4Real32_create(thread);
       Arcadia_Math_Matrix4Real32_setIdentity(thread, localToWorldMatrix);
       Arcadia_Visuals_Implementation_MeshResource_setLocalToWorldMatrix(thread, self->meshResource, localToWorldMatrix);
-      // (5) Set the mesh ambient color of the mesh resource.
-      Arcadia_Visuals_Implementation_MeshResource_setMeshAmbientColor(thread, self->meshResource, ((Arcadia_Visuals_Scene_MeshNode*)self)->baseColor);
+      // (3.4) Set the mesh ambient color of the mesh resource.
+      Arcadia_Visuals_Implementation_MeshResource_setMeshAmbientColor(thread, self->meshResource, ((Arcadia_Visuals_Scene_MeshNode*)self)->ambientColor);
     }
-    // (6) Set the mesh context.
-    Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)renderingContextNode, (Arcadia_Visuals_Scene_RenderingContextNode*)renderingContextNode);
-    // (7) Render the mesh resource.
-    Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource,
-                                                           ((Arcadia_Visuals_Implementation_Scene_RenderingContextNode*)renderingContextNode)->renderingContextResource);
   }
 }
 
@@ -227,11 +227,9 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_setBackendContextImpl
   if (self->backendContext) {
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
   }
-  if (self->backendContext) {
-    if (self->meshResource) {
-      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource);
-      self->meshResource = NULL;
-    }
+  if (self->meshResource) {
+    Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource);
+    self->meshResource = NULL;
   }
   self->backendContext = backendContext;
 }
@@ -241,12 +239,14 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* backendContext,
-    Arcadia_Visuals_Scene_MaterialNode* material
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory,
+    Arcadia_ADL_MeshDefinition* source
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  if (material) Arcadia_ValueStack_pushObjectReferenceValue(thread, material); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  if (sceneNodeFactory) Arcadia_ValueStack_pushObjectReferenceValue(thread, sceneNodeFactory); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  if (source) Arcadia_ValueStack_pushObjectReferenceValue(thread, source); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 3);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_Scene_MeshNode);
 }

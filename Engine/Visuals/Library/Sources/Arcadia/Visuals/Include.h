@@ -35,11 +35,12 @@
 #include "Arcadia/Visuals/Scene/CameraNode.h"
 #include "Arcadia/Visuals/Scene/FrameBufferNode.h"
 #include "Arcadia/Visuals/Scene/Node.h"
-#include "Arcadia/Visuals/Scene/MeshNode.h"
-#include "Arcadia/Visuals/Scene/RenderingContextNode.h"
-#include "Arcadia/Visuals/Scene/ViewportNode.h"
 #include "Arcadia/Visuals/Scene/MaterialNode.h"
+#include "Arcadia/Visuals/Scene/MeshNode.h"
+#include "Arcadia/Visuals/Scene/PixelBufferNode.h"
+#include "Arcadia/Visuals/Scene/RenderingContextNode.h"
 #include "Arcadia/Visuals/Scene/TextureNode.h"
+#include "Arcadia/Visuals/Scene/ViewportNode.h"
 
 #include "Arcadia/Visuals/Events/ApplicationQuitRequestedEvent.h"
 
@@ -73,7 +74,7 @@
 #include "Arcadia/Visuals/VPL/Field.h"
 #include "Arcadia/Visuals/VPL/VariableScalar.h"
 #include "Arcadia/Visuals/VPL/Program.h"
-#include "Arcadia/Visuals/VPL/Tree.h"
+#include "Arcadia/Visuals/VPL/Tree/Include.h"
 
 #undef ARCADIA_VISUALS_PRIVATE
 #pragma pop_macro("ARCADIA_VISUALS_PRIVATE")

@@ -19,7 +19,6 @@
 #include "Arcadia/Visuals/Include.h"
 #include <string.h>
 
-
 static const char ZEROTERMINATOR =
   '\0'
   ;
@@ -106,7 +105,6 @@ static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
 };
-
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.VPL.Backends.GLSL.Transpiler", Arcadia_Visuals_VPL_Backends_GLSL_Transpiler,
                          u8"Arcadia.Object", Arcadia_Object,
@@ -337,7 +335,7 @@ onParameterVaribleDefinitionTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   );
 
@@ -346,7 +344,7 @@ onExpressionTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   );
 
@@ -355,7 +353,7 @@ onNameTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   );
 
@@ -364,7 +362,7 @@ onStatementListTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   );
 
@@ -373,7 +371,7 @@ onFunctionDefinitionTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   );
 
@@ -382,11 +380,11 @@ onParameterVaribleDefinitionTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   )
 {
-  if (tree->flags != Arcadia_Visuals_VPL_TreeFlags_ParameterVariableDefinition) {
+  if (tree->flags != Arcadia_Visuals_VPL_Tree_NodeFlags_ParameterVariableDefinition) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -400,65 +398,55 @@ onExpressionTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   )
 {
   switch (tree->flags) {
-    case Arcadia_Visuals_VPL_TreeFlags_Access: {
+    case Arcadia_Visuals_VPL_Tree_NodeFlags_BinaryExpr: {
+      Arcadia_Visuals_VPL_Tree_BinaryExprNode* binaryExpressionNode = (Arcadia_Visuals_VPL_Tree_BinaryExprNode*)tree;
       emitCxxString(thread, target, "(");
-      onExpressionTree(thread, self, tree->access.lhs, target);
-      emitCxxString(thread, target, ".");
-      onExpressionTree(thread, self, tree->access.rhs, target);
+      onExpressionTree(thread, self, binaryExpressionNode->lhs, target);
+      switch (binaryExpressionNode->kind) {
+        case Arcadia_Visuals_VPL_Tree_BinaryExprNodeFlags_Access: {
+          emitCxxString(thread, target, ".");
+        } break;
+        case Arcadia_Visuals_VPL_Tree_BinaryExprNodeFlags_Add: {
+          emitCxxString(thread, target, " + ");
+        } break;
+        case Arcadia_Visuals_VPL_Tree_BinaryExprNodeFlags_Subtract: {
+          emitCxxString(thread, target, " - ");
+        } break;
+        case Arcadia_Visuals_VPL_Tree_BinaryExprNodeFlags_Multiply: {
+          emitCxxString(thread, target, " * ");
+        } break;
+        case Arcadia_Visuals_VPL_Tree_BinaryExprNodeFlags_Divide: {
+          emitCxxString(thread, target, " / ");
+        } break;
+      };
+      onExpressionTree(thread, self, binaryExpressionNode->rhs, target);
       emitCxxString(thread, target, ")");
     } break;
-    case Arcadia_Visuals_VPL_TreeFlags_Add: {
-      emitCxxString(thread, target, "(");
-      onExpressionTree(thread, self, tree->add.lhs, target);
-      emitCxxString(thread, target, " + ");
-      onExpressionTree(thread, self, tree->add.rhs, target);
-      emitCxxString(thread, target, ")");
-    } break;
-    case Arcadia_Visuals_VPL_TreeFlags_Subtract: {
-      emitCxxString(thread, target, "(");
-      onExpressionTree(thread, self, tree->subtract.lhs, target);
-      emitCxxString(thread, target, " - ");
-      onExpressionTree(thread, self, tree->subtract.rhs, target);
-      emitCxxString(thread, target, ")");
-    } break;
-    case Arcadia_Visuals_VPL_TreeFlags_Multiply: {
-      emitCxxString(thread, target, "(");
-      onExpressionTree(thread, self, tree->multiply.lhs, target);
-      emitCxxString(thread, target, " * ");
-      onExpressionTree(thread, self, tree->multiply.rhs, target);
-      emitCxxString(thread, target, ")");
-    } break;
-    case Arcadia_Visuals_VPL_TreeFlags_Divide: {
-      emitCxxString(thread, target, "(");
-      onExpressionTree(thread, self, tree->divide.lhs, target);
-      emitCxxString(thread, target, " / ");
-      onExpressionTree(thread, self, tree->divide.rhs, target);
-      emitCxxString(thread, target, ")");
-    } break;
-    case Arcadia_Visuals_VPL_TreeFlags_Name: {
+
+    case Arcadia_Visuals_VPL_Tree_NodeFlags_Name: {
       emitString(thread, target, tree->name);
     } break;
-    case Arcadia_Visuals_VPL_TreeFlags_Number: {
+    case Arcadia_Visuals_VPL_Tree_NodeFlags_Number: {
       emitCxxString(thread, target, "(");
       emitString(thread, target, tree->literal);
       emitCxxString(thread, target, ")");
     } break;
-    case Arcadia_Visuals_VPL_TreeFlags_Call: {
+    case Arcadia_Visuals_VPL_Tree_NodeFlags_Call: {
       //emitCxxString(thread, target, "(");
       onExpressionTree(thread, self, tree->call.target, target);
       //emitCxxString(thread, target, ")");
       emitCxxString(thread, target, "(");
       if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->call.arguments) > 0) {
-        Arcadia_Visuals_VPL_Tree* argument;
-        argument = (Arcadia_Visuals_VPL_Tree*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->call.arguments, 0, _Arcadia_Visuals_VPL_Tree_getType(thread));
+        Arcadia_Visuals_VPL_Tree_Node* argument;
+        argument = (Arcadia_Visuals_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->call.arguments, 0, _Arcadia_Visuals_VPL_Tree_Node_getType(thread));
         onExpressionTree(thread, self, argument, target);
         for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->call.arguments); i < n; ++i) {
-          argument = (Arcadia_Visuals_VPL_Tree*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->call.arguments, i, _Arcadia_Visuals_VPL_Tree_getType(thread));
+          argument = (Arcadia_Visuals_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->call.arguments, i, _Arcadia_Visuals_VPL_Tree_Node_getType(thread));
           emitCxxString(thread, target, ", ");
           onExpressionTree(thread, self, argument, target);
         }
@@ -477,11 +465,11 @@ onNameTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   )
 {
-  if (tree->flags != Arcadia_Visuals_VPL_TreeFlags_Name) {
+  if (tree->flags != Arcadia_Visuals_VPL_Tree_NodeFlags_Name) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -493,39 +481,35 @@ onStatementListTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   )
 {
-  if (tree->flags != Arcadia_Visuals_VPL_TreeFlags_StatementList) {
+  if (tree->flags != Arcadia_Visuals_VPL_Tree_NodeFlags_StatementList) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->statementList); i < n; ++i) {
-    Arcadia_Visuals_VPL_Tree* a = (Arcadia_Visuals_VPL_Tree*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->statementList, i,
-                                                                                                           _Arcadia_Visuals_VPL_Tree_getType(thread));
+    Arcadia_Visuals_VPL_Tree_Node* a = (Arcadia_Visuals_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->statementList, i,
+                                                                                                                     _Arcadia_Visuals_VPL_Tree_Node_getType(thread));
     switch (a->flags) {
-      case Arcadia_Visuals_VPL_TreeFlags_Assignment: {
+      case Arcadia_Visuals_VPL_Tree_NodeFlags_Assignment: {
         emitCxxString(thread, target, u8"  ");
         onExpressionTree(thread, self, a->assignment.lhs, target);
         emitCxxString(thread, target, u8" = ");
         onExpressionTree(thread, self, a->assignment.rhs, target);
         emitCxxString(thread, target, ";\n");
       } break;
-      case Arcadia_Visuals_VPL_TreeFlags_VariableDefinition: {
+      case Arcadia_Visuals_VPL_Tree_NodeFlags_VariableDefinition: {
         emitCxxString(thread, target, u8"  ");
         onNameTree(thread, self, a->variableDefinition.type, target);
         emitCxxString(thread, target, u8" ");
         onNameTree(thread, self, a->variableDefinition.name, target);
         emitCxxString(thread, target, ";\n");
       } break;
-      case Arcadia_Visuals_VPL_TreeFlags_Access:
-      case Arcadia_Visuals_VPL_TreeFlags_Add:
-      case Arcadia_Visuals_VPL_TreeFlags_Call:
-      case Arcadia_Visuals_VPL_TreeFlags_Divide:
-      case Arcadia_Visuals_VPL_TreeFlags_Subtract:
-      case Arcadia_Visuals_VPL_TreeFlags_Multiply:
-      case Arcadia_Visuals_VPL_TreeFlags_Number: {
+      case Arcadia_Visuals_VPL_Tree_NodeFlags_BinaryExpr:
+      case Arcadia_Visuals_VPL_Tree_NodeFlags_Call:
+      case Arcadia_Visuals_VPL_Tree_NodeFlags_Number: {
         onExpressionTree(thread, self, a, target);
       } break;
       default: {
@@ -541,7 +525,7 @@ onFunctionDefinitionTree
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     Arcadia_ByteBuffer* target
   )
 {
@@ -551,11 +535,11 @@ onFunctionDefinitionTree
   emitCxxString(thread, target, "(");
 
   if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->functionDefinition.parameters) > 0) {
-    Arcadia_Visuals_VPL_Tree* parameter;
-    parameter = (Arcadia_Visuals_VPL_Tree*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->functionDefinition.parameters, 0, _Arcadia_Visuals_VPL_Tree_getType(thread));
+    Arcadia_Visuals_VPL_Tree_Node* parameter;
+    parameter = (Arcadia_Visuals_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->functionDefinition.parameters, 0, _Arcadia_Visuals_VPL_Tree_Node_getType(thread));
     onParameterVaribleDefinitionTree(thread, self, parameter, target);
     for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->functionDefinition.parameters); i < n; ++i) {
-      parameter = (Arcadia_Visuals_VPL_Tree*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->functionDefinition.parameters, i, _Arcadia_Visuals_VPL_Tree_getType(thread));
+      parameter = (Arcadia_Visuals_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->functionDefinition.parameters, i, _Arcadia_Visuals_VPL_Tree_Node_getType(thread));
       emitCxxString(thread, target, ", ");
       onParameterVaribleDefinitionTree(thread, self, parameter, target);
     }
@@ -572,22 +556,22 @@ static void
 OnCall1
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     va_list arguments
   )
 {
-  Arcadia_Visuals_VPL_Tree* argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree*);
+  Arcadia_Visuals_VPL_Tree_Node* argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree_Node*);
   while (argument) {
     Arcadia_List_insertBackObjectReferenceValue(thread, tree->call.arguments, (Arcadia_Object*)argument);
-    argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree*);
+    argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree_Node*);
   }
 }
 
-static Arcadia_Visuals_VPL_Tree*
+static Arcadia_Visuals_VPL_Tree_Node*
 OnCall0
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_VPL_Tree* target,
+    Arcadia_Visuals_VPL_Tree_Node* target,
     ...
   )
 {
@@ -596,7 +580,7 @@ OnCall0
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Visuals_VPL_Tree* tree = Arcadia_Visuals_VPL_Tree_makeCall(thread, target);
+    Arcadia_Visuals_VPL_Tree_Node* tree = Arcadia_Visuals_VPL_Tree_makeCall(thread, target);
     OnCall1(thread, tree, arguments);
     va_end(arguments);
     Arcadia_Thread_popJumpTarget(thread);
@@ -612,18 +596,18 @@ static void
 OnStatementList1
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_VPL_Tree* tree,
+    Arcadia_Visuals_VPL_Tree_Node* tree,
     va_list arguments
   )
 {
-  Arcadia_Visuals_VPL_Tree* argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree*);
+  Arcadia_Visuals_VPL_Tree_Node* argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree_Node*);
   while (argument) {
     Arcadia_List_insertBackObjectReferenceValue(thread, tree->statementList, (Arcadia_Object*)argument);
-    argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree*);
+    argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree_Node*);
   }
 }
 
-static Arcadia_Visuals_VPL_Tree*
+static Arcadia_Visuals_VPL_Tree_Node*
 OnStatementList0
   (
     Arcadia_Thread* thread,
@@ -635,7 +619,7 @@ OnStatementList0
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_Visuals_VPL_Tree* tree = Arcadia_Visuals_VPL_Tree_makeStatementList(thread);
+    Arcadia_Visuals_VPL_Tree_Node* tree = Arcadia_Visuals_VPL_Tree_makeStatementList(thread);
     OnStatementList1(thread, tree, arguments);
     va_end(arguments);
     Arcadia_Thread_popJumpTarget(thread);
@@ -655,10 +639,10 @@ OnParameterList1
     va_list arguments
   )
 {
-  Arcadia_Visuals_VPL_Tree* argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree*);
+  Arcadia_Visuals_VPL_Tree_Node* argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree_Node*);
   while (argument) {
     Arcadia_List_insertBackObjectReferenceValue(thread, list, (Arcadia_Object*)argument);
-    argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree*);
+    argument = va_arg(arguments, Arcadia_Visuals_VPL_Tree_Node*);
   }
 }
 
@@ -730,7 +714,31 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
     "#define _1_vertexPosition gl_Position\n" // We use a #define to rename gl_Position to _1_vertexPosition.
     ;
 
-  Arcadia_Visuals_VPL_Tree* mainFunctionDefinitionTree =
+  Arcadia_Visuals_VPL_Tree_Node* vertexColorAssignmentTree = NULL;
+  if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_MeshAmbientColor) {
+    vertexColorAssignmentTree =
+    OnAssignment
+      (
+        OnName("_1_vertexColor"),
+        OnAccess
+          (
+            OnName("_mesh0"),
+            OnName("ambientColor")
+          )
+      );
+  } else if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_VertexAmbientColor) {
+    vertexColorAssignmentTree =
+    OnAssignment
+      (
+        OnName("_1_vertexColor"),
+        OnName("_0_vertexColor")
+      );
+  } else {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+
+  Arcadia_Visuals_VPL_Tree_Node* mainFunctionDefinitionTree =
     OnFunctionDefinition
     (
       OnName("void"),
@@ -782,17 +790,9 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
                     )
                 )
             ),
-          OnAssignment
-            (
-              OnName("_1_vertexColor"),
-              OnAccess
-                (
-                  OnName("_mesh0"),
-                  OnName("color")
-                )
-            )                                       
+          vertexColorAssignmentTree                                  
         )
-  );
+    );
 
   emitCxxString(thread, target, DEFINES);
   onFunctionDefinitionTree(thread, self, mainFunctionDefinitionTree, target);
@@ -818,7 +818,7 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
     writeVariableScalar(thread, self, Context_FragmentShader, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), variableScalar, target);
   }
 
-  Arcadia_Visuals_VPL_Tree* mainFunctionDefinitionTree =
+  Arcadia_Visuals_VPL_Tree_Node* mainFunctionDefinitionTree =
     OnFunctionDefinition
       (
         OnName("void"),

@@ -17,6 +17,7 @@
 #include "Arcadia/ADL/Definitions/FillOperationReader.h"
 
 #include "Arcadia/DDLS/Include.h"
+#include "Arcadia/ADL/Reader.module.h"
 #include "Arcadia/ADL/Definitions/FillOperationDefinition.h"
 
 static const char* SCHEMA =
@@ -67,14 +68,6 @@ Arcadia_ADL_PixelBufferOperations_FillOperationReader_read
     Arcadia_ADL_Context* context,
     Arcadia_ADL_Definitions* definitions,
     Arcadia_DDL_Node* input
-  );
-
-static Arcadia_String*
-getStringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
   );
 
 static void
@@ -133,9 +126,9 @@ Arcadia_ADL_PixelBufferOperations_FillOperationReader_read
 {
   Arcadia_DDLS_ValidationContext_run(thread, self->validationContext, self->SCHEMANAME, input);
 
-  Arcadia_String* type = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
-  Arcadia_String* name = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
-  Arcadia_String* color = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->COLOR);
+  Arcadia_String* type = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
+  Arcadia_String* name = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
+  Arcadia_String* colorName = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->COLOR);
 ;
   // Assert the definition has the correct type.
   Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(self->TYPENAME);
@@ -144,42 +137,8 @@ Arcadia_ADL_PixelBufferOperations_FillOperationReader_read
     Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_ADL_PixelBufferOperations_FillOperationDefinition* definition = Arcadia_ADL_PixelBufferOperations_FillOperationDefinition_create(thread, definitions, name, color);
+  Arcadia_ADL_PixelBufferOperations_FillOperationDefinition* definition = Arcadia_ADL_PixelBufferOperations_FillOperationDefinition_create(thread, definitions, name, colorName);
   return definition;
-}
-
-static Arcadia_String*
-getStringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
-    Arcadia_DDL_MapEntryNode* mapEntryNode =
-      (Arcadia_DDL_MapEntryNode*)
-      Arcadia_List_getObjectReferenceValueCheckedAt
-      (
-        thread,
-        (Arcadia_List*)mapNode->entries,
-        i,
-        _Arcadia_DDL_MapEntryNode_getType(thread)
-      );
-    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
-    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
-    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
-      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
-      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_StringNode_getType(thread))) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_DDL_StringNode* stringNode = (Arcadia_DDL_StringNode*)valueNode;
-      return stringNode->value;
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-  Arcadia_Thread_jump(thread);
 }
 
 static void

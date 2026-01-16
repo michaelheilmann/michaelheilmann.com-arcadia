@@ -27,9 +27,22 @@ if (NOT TARGET ${MyTestName})
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Configure.h.i
                  ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Configure.h @ONLY)
   list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Configure.h.i)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Configure.h)
+  OnHeaderFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Configure.h)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Main.c)
+  OnSourceFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Main.c)
+
+  OnSourceFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Color.c)
+  OnHeaderFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Color.h)
+  OnSourceFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Material.c)
+  OnHeaderFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Material.h)
+  OnSourceFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Mesh.c)
+  OnHeaderFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Mesh.h)
+  OnSourceFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Model.c)
+  OnHeaderFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Model.h)
+  OnSourceFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/PixelBuffer.c)
+  OnHeaderFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/PixelBuffer.h)
+  OnSourceFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Texture.c)
+  OnHeaderFile(${MyTestName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.ADL.Tests.Definitions/Texture.h)
 
   list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.ADL ${MyProjectName}.DDLS ${MyProjectName}.DDL)
 

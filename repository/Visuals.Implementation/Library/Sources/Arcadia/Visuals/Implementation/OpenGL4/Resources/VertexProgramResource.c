@@ -173,7 +173,7 @@ Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource_loadImpl
   if (((Arcadia_Visuals_Implementation_VertexProgramResource*)self)->dirty) {
     // (1) set shader source
     while (gl->glGetError()) { }
-    const GLchar* temporary = Arcadia_ImmutableByteArray_getBytes(thread, ((Arcadia_Visuals_Implementation_VertexProgramResource*)self)->code);
+    const GLchar* temporary = Arcadia_InternalImmutableByteArray_getBytes(thread, ((Arcadia_Visuals_Implementation_VertexProgramResource*)self)->code);
     gl->glShaderSource(self->id, 1, &temporary, NULL);
     if (gl->glGetError()) {
       return;

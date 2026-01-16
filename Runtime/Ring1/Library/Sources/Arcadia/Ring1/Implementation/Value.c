@@ -45,11 +45,11 @@ Arcadia_Value_visit
     case Arcadia_ValueTag_ForeignProcedure: {
       /* Intentionally empty. */
     } break;
-    case Arcadia_ValueTag_ImmutableByteArray: {
-      Arcadia_ImmutableByteArray_visit(thread, self->immutableByteArrayValue);
+    case Arcadia_ValueTag_InternalImmutableByteArray: {
+      Arcadia_InternalImmutableByteArray_visit(thread, self->internalImmutableByteArrayValue);
     } break;
-    case Arcadia_ValueTag_ImmutableUtf8String: {
-      Arcadia_ImmutableUtf8String_visit(thread, self->immutableUtf8StringValue);
+    case Arcadia_ValueTag_ImmutableUTF8String: {
+      Arcadia_ImmutableUTF8String_visit(thread, self->immutableUTF8StringValue);
     } break;
     case Arcadia_ValueTag_Integer16: {
       /* Intentionally empty. */
@@ -93,6 +93,9 @@ Arcadia_Value_visit
     case Arcadia_ValueTag_Void: {
       /* Intentionally empty. */
     } break;
+    case Arcadia_ValueTag_Enumeration: {
+      Arcadia_Type_visit(thread, self->enumerationValue.type);
+    } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
@@ -120,11 +123,11 @@ Arcadia_Value_getType
     case Arcadia_ValueTag_ForeignProcedure: {
       return _Arcadia_ForeignProcedureValue_getType(thread);
     } break;
-    case Arcadia_ValueTag_ImmutableByteArray: {
-      return _Arcadia_ImmutableByteArrayValue_getType(thread);
+    case Arcadia_ValueTag_InternalImmutableByteArray: {
+      return _Arcadia_InternalImmutableByteArrayValue_getType(thread);
     } break;
-    case Arcadia_ValueTag_ImmutableUtf8String: {
-      return _Arcadia_ImmutableUtf8StringValue_getType(thread);
+    case Arcadia_ValueTag_ImmutableUTF8String: {
+      return _Arcadia_ImmutableUTF8StringValue_getType(thread);
     } break;
     case Arcadia_ValueTag_Integer16: {
       return _Arcadia_Integer16Value_getType(thread);
@@ -168,6 +171,9 @@ Arcadia_Value_getType
     case Arcadia_ValueTag_Void: {
       return _Arcadia_VoidValue_getType(thread);
     } break;
+    case Arcadia_ValueTag_Enumeration: {
+      return self->enumerationValue.type;
+    } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
@@ -203,7 +209,7 @@ Arcadia_Value_isEqualTo
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      // TODO: Add and use equalTo similar to BigInteger, ImmutableByteArray, ImmutableUtf8String, etc.
+      // TODO: Add and use equalTo similar to BigInteger, ImmutableByteArray, ImmutableUTF8String, etc.
       if (!Arcadia_Value_isAtomValue(other)) {
         return Arcadia_BooleanValue_False;
       }
@@ -212,8 +218,8 @@ Arcadia_Value_isEqualTo
     OnRelational(BigInteger, equalTo);
     OnRelational(Boolean, equalTo);
     OnRelational(ForeignProcedure, equalTo);
-    OnRelational(ImmutableByteArray, equalTo);
-    OnRelational(ImmutableUtf8String, equalTo);
+    OnRelational(InternalImmutableByteArray, equalTo);
+    OnRelational(ImmutableUTF8String, equalTo);
     OnRelational(Integer16, equalTo);
     OnRelational(Integer32, equalTo);
     OnRelational(Integer64, equalTo);
@@ -235,6 +241,10 @@ Arcadia_Value_isEqualTo
       }
       return self->typeValue == other->typeValue;
     } break;
+    case Arcadia_ValueTag_Enumeration: {
+      return self->enumerationValue.type == other->enumerationValue.type
+          && self->enumerationValue.value == other->enumerationValue.value;
+    } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
@@ -252,7 +262,7 @@ Arcadia_Value_isNotEqualTo
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      // TODO: Add and use notEqualTo similar to BigInteger, ImmutableByteArray, ImmutableUtf8String, etc.
+      // TODO: Add and use notEqualTo similar to BigInteger, ImmutableByteArray, ImmutableUTF8String, etc.
       if (!Arcadia_Value_isAtomValue(other)) {
         return Arcadia_BooleanValue_True;
       }
@@ -261,8 +271,8 @@ Arcadia_Value_isNotEqualTo
     OnRelational(BigInteger, notEqualTo);
     OnRelational(Boolean, notEqualTo);
     OnRelational(ForeignProcedure, notEqualTo);
-    OnRelational(ImmutableByteArray, notEqualTo);
-    OnRelational(ImmutableUtf8String, notEqualTo);
+    OnRelational(InternalImmutableByteArray, notEqualTo);
+    OnRelational(ImmutableUTF8String, notEqualTo);
     OnRelational(Integer16, notEqualTo);
     OnRelational(Integer32, notEqualTo);
     OnRelational(Integer64, notEqualTo);
@@ -284,6 +294,10 @@ Arcadia_Value_isNotEqualTo
       }
       return self->typeValue != other->typeValue;
     } break;
+    case Arcadia_ValueTag_Enumeration: {
+      return self->enumerationValue.type != other->enumerationValue.type
+          || self->enumerationValue.value != other->enumerationValue.value;
+    } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
@@ -304,8 +318,8 @@ Arcadia_Value_isLowerThan
     OnRelational(BigInteger, lowerThan);
     OnRelational(Boolean, lowerThan);
     OnRelational(ForeignProcedure, lowerThan);
-    OnRelational(ImmutableByteArray, lowerThan);
-    OnRelational(ImmutableUtf8String, lowerThan);
+    OnRelational(InternalImmutableByteArray, lowerThan);
+    OnRelational(ImmutableUTF8String, lowerThan);
     OnRelational(Integer16, lowerThan);
     OnRelational(Integer32, lowerThan);
     OnRelational(Integer64, lowerThan);
@@ -358,8 +372,8 @@ Arcadia_Value_isLowerThanOrEqualTo
     OnRelational(BigInteger, lowerThanOrEqualTo);
     OnRelational(Boolean, lowerThanOrEqualTo);
     OnRelational(ForeignProcedure, lowerThanOrEqualTo);
-    OnRelational(ImmutableByteArray, lowerThanOrEqualTo);
-    OnRelational(ImmutableUtf8String, lowerThanOrEqualTo);
+    OnRelational(InternalImmutableByteArray, lowerThanOrEqualTo);
+    OnRelational(ImmutableUTF8String, lowerThanOrEqualTo);
     OnRelational(Integer16, lowerThanOrEqualTo);
     OnRelational(Integer32, lowerThanOrEqualTo);
     OnRelational(Integer64, lowerThanOrEqualTo);
@@ -412,8 +426,8 @@ Arcadia_Value_isGreaterThan
     OnRelational(BigInteger, greaterThan);
     OnRelational(Boolean, greaterThan);
     OnRelational(ForeignProcedure, greaterThan);
-    OnRelational(ImmutableByteArray, greaterThan);
-    OnRelational(ImmutableUtf8String, greaterThan);
+    OnRelational(InternalImmutableByteArray, greaterThan);
+    OnRelational(ImmutableUTF8String, greaterThan);
     OnRelational(Integer16, greaterThan);
     OnRelational(Integer32, greaterThan);
     OnRelational(Integer64, greaterThan);
@@ -466,8 +480,8 @@ Arcadia_Value_isGreaterThanOrEqualTo
     OnRelational(BigInteger, greaterThanOrEqualTo);
     OnRelational(Boolean, greaterThanOrEqualTo);
     OnRelational(ForeignProcedure, greaterThanOrEqualTo);
-    OnRelational(ImmutableByteArray, greaterThanOrEqualTo);
-    OnRelational(ImmutableUtf8String, greaterThanOrEqualTo);
+    OnRelational(InternalImmutableByteArray, greaterThanOrEqualTo);
+    OnRelational(ImmutableUTF8String, greaterThanOrEqualTo);
     OnRelational(Integer16, greaterThanOrEqualTo);
     OnRelational(Integer32, greaterThanOrEqualTo);
     OnRelational(Integer64, greaterThanOrEqualTo);
@@ -541,8 +555,8 @@ Arcadia_Value_getHash
     OnHash(BigInteger);
     OnHash(Boolean);
     OnHash(ForeignProcedure);
-    OnHash(ImmutableByteArray);
-    OnHash(ImmutableUtf8String);
+    OnHash(InternalImmutableByteArray);
+    OnHash(ImmutableUTF8String);
     OnHash(Integer16);
     OnHash(Integer32);
     OnHash(Integer64);
@@ -560,6 +574,9 @@ Arcadia_Value_getHash
     } break;
     case Arcadia_ValueTag_Type: {
       return Arcadia_Type_getHash(thread, self->typeValue);
+    } break;
+    case Arcadia_ValueTag_Enumeration: {
+      return (Arcadia_SizeValue)self->enumerationValue.value ^ Arcadia_Type_getHash(thread, self->enumerationValue.type);
     } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);
@@ -590,8 +607,8 @@ Arcadia_Value_isInstanceOf
     OnIsInstanceOf(BigInteger);
     OnIsInstanceOf(Boolean);
     OnIsInstanceOf(ForeignProcedure);
-    OnIsInstanceOf(ImmutableByteArray);
-    OnIsInstanceOf(ImmutableUtf8String);
+    OnIsInstanceOf(InternalImmutableByteArray);
+    OnIsInstanceOf(ImmutableUTF8String);
     OnIsInstanceOf(Integer16);
     OnIsInstanceOf(Integer32);
     OnIsInstanceOf(Integer64);
@@ -609,6 +626,9 @@ Arcadia_Value_isInstanceOf
     } break;
     case Arcadia_ValueTag_Type: {
       return _Arcadia_Type_getType(thread) == type;
+    } break;
+    case Arcadia_ValueTag_Enumeration: {
+      return self->enumerationValue.type == type;
     } break;
     default: {
       Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: unreachable code reached\n", __FILE__, __LINE__);

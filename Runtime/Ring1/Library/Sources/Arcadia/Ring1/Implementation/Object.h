@@ -17,6 +17,7 @@
 #define ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Types.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Names.h"
 #include "Arcadia/ARMS/Include.h"
 typedef struct Arcadia_Value Arcadia_Value;
 
@@ -99,8 +100,12 @@ struct Arcadia_Object {
       g_##_cName##_type = Arcadia_registerObjectType \
         ( \
           thread, \
-          _cilName, \
-          sizeof(_cilName) - 1, \
+          Arcadia_Names_getOrCreateName \
+            ( \
+              thread, \
+              _cilName, \
+              sizeof(_cilName) - 1 \
+            ), \
           sizeof(_cName), \
           parentType, \
           sizeof(_cName##Dispatch), \
@@ -239,7 +244,7 @@ Arcadia_Object_isInstanceOf
     Arcadia_Object* object,
     Arcadia_Type* type
   )
-{ return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, object), type); }
+{ return Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, object), type); }
 
 /// "isEqualTo"
 Arcadia_BooleanValue
@@ -277,7 +282,7 @@ Arcadia_Object_isIdenticalTo
   );
 
 /// "toString"
-Arcadia_ImmutableUtf8String*
+Arcadia_ImmutableUTF8String*
 Arcadia_Object_toString
   (
     Arcadia_Thread* thread,

@@ -62,7 +62,7 @@ Arcadia_ADL_PixelBufferDefinition_create
   (
     Arcadia_Thread* thread,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_String* qualifiedName,
+    Arcadia_String* name,
     Arcadia_Natural32Value width,
     Arcadia_Natural32Value height
   );

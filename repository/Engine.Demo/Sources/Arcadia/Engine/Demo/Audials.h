@@ -21,7 +21,7 @@
 #include "Arcadia/Visuals/Include.h"
 
 void
-Arcadia_Engine_Demo_startupAudials
+Arcadia_Engine_Application_startupAudials
   (
     Arcadia_Thread* thread,
     Arcadia_Engine* engine,

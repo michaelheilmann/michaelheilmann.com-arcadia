@@ -48,12 +48,12 @@ Arcadia_Diagnostics_logValueStack
   for (Arcadia_SizeValue index = 0; index < size; ++index) {
     Arcadia_Value value = Arcadia_ValueStack_getValue(thread, index);
     Arcadia_TypeValue type = Arcadia_Value_getType(thread, &value);
-    Arcadia_AtomValue typeName = Arcadia_Type_getName(type);
+    Arcadia_Name* name = Arcadia_Type_getName(thread, type);
     Arcadia_logf(Arcadia_LogFlags_Debug,
                  "%zu) %.*s\n",
                  index,
-                 Arcadia_Atom_getNumberOfBytes(thread, typeName) > INT_MAX ? INT_MAX : Arcadia_Atom_getNumberOfBytes(thread, typeName),
-                 Arcadia_Atom_getBytes(thread, typeName));
+                 Arcadia_Name_getNumberOfBytes(thread, name) > INT_MAX ? INT_MAX : Arcadia_Name_getNumberOfBytes(thread, name),
+                 Arcadia_Name_getBytes(thread, name));
   }
 }
 
@@ -68,12 +68,12 @@ Arcadia_Diagnostics_logValueStackElement
 {
   Arcadia_Value value = Arcadia_ValueStack_getValue(thread, index);
   Arcadia_TypeValue type = Arcadia_Value_getType(thread, &value);
-  Arcadia_AtomValue typeName = Arcadia_Type_getName(type);
+  Arcadia_Name* name = Arcadia_Type_getName(thread, type);
   Arcadia_logf(logFlags,
                "%zu) %.*s\n",
                index,
-               Arcadia_Atom_getNumberOfBytes(thread, typeName) > INT_MAX ? INT_MAX : Arcadia_Atom_getNumberOfBytes(thread, typeName),
-               Arcadia_Atom_getBytes(thread, typeName));
+               Arcadia_Name_getNumberOfBytes(thread, name) > INT_MAX ? INT_MAX : Arcadia_Name_getNumberOfBytes(thread, name),
+               Arcadia_Name_getBytes(thread, name));
 }
 
 /* Diagnostics for a value. */
@@ -86,9 +86,9 @@ Arcadia_Diagnostics_logValue
   )
 {
   Arcadia_Type* type = Arcadia_Value_getType(thread, &value);
-  Arcadia_Atom* atom = Arcadia_Type_getName(type);
-  Arcadia_logf(logFlags, u8"%.*s\n", Arcadia_Atom_getNumberOfBytes(thread, atom) > INT_MAX ? INT_MAX : Arcadia_Atom_getNumberOfBytes(thread, atom),
-                                     Arcadia_Atom_getBytes(thread, atom));
+  Arcadia_Name* name = Arcadia_Type_getName(thread, type);
+  Arcadia_logf(logFlags, u8"%.*s\n", Arcadia_Name_getNumberOfBytes(thread, name) > INT_MAX ? INT_MAX : Arcadia_Name_getNumberOfBytes(thread, name),
+                                     Arcadia_Name_getBytes(thread, name));
 }
 
 /* Diagnostics for an object value. */
@@ -101,9 +101,9 @@ Arcadia_Diagnostics_logObjectType
   )
 {
   Arcadia_Type* type = Arcadia_Object_getType(thread, object);
-  Arcadia_Atom* atom = Arcadia_Type_getName(type);
-  Arcadia_logf(logFlags, u8"%.*s\n", Arcadia_Atom_getNumberOfBytes(thread, atom) > INT_MAX ? INT_MAX : Arcadia_Atom_getNumberOfBytes(thread, atom),
-                                     Arcadia_Atom_getBytes(thread, atom));
+  Arcadia_Name* name = Arcadia_Type_getName(thread, type);
+  Arcadia_logf(logFlags, u8"%.*s\n", Arcadia_Name_getNumberOfBytes(thread, name) > INT_MAX ? INT_MAX : Arcadia_Name_getNumberOfBytes(thread, name),
+                                     Arcadia_Name_getBytes(thread, name));
 }
 
 #endif

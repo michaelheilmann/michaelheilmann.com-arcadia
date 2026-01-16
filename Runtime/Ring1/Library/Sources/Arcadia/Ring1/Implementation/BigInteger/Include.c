@@ -337,7 +337,7 @@ _Arcadia_BigIntegerValue_getType
   )
 {
   if (!g_type) {
-    g_type = Arcadia_registerInternalType(thread, TypeName, sizeof(TypeName) - 1, &_typeOperations, &typeDestructing);
+    g_type = Arcadia_registerInternalType(thread, Arcadia_Names_getOrCreateName(thread, TypeName, sizeof(TypeName) - 1), &_typeOperations, &typeDestructing);
   }
   return g_type;
 }

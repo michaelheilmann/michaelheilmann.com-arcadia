@@ -208,3 +208,12 @@ Arcadia_Visuals_Implementation_TextureResource_setWidth
     Arcadia_Integer32Value width
   )
 { Arcadia_VirtualCall(Arcadia_Visuals_Implementation_TextureResource, setWidth, self, width); }
+
+void
+Arcadia_Visuals_Implementation_TextureResource_setPixelBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_TextureResource* self,
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
+  )
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_TextureResource, setPixelBuffer, self, pixelBuffer); }

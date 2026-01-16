@@ -30,7 +30,7 @@ test
     Arcadia_WeakReference_create
       (
         thread,
-        Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"x", sizeof(u8"x") - 1))
+        Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"x", sizeof(u8"x") - 1))
       );
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -39,7 +39,7 @@ test
     Arcadia_Value v;
 
     v = Arcadia_WeakReference_getValue(thread, weakReference);
-    Arcadia_Tests_assertTrue(thread, Arcadia_Value_isImmutableUtf8StringValue(&v));
+    Arcadia_Tests_assertTrue(thread, Arcadia_Value_isImmutableUTF8StringValue(&v));
 
     Arcadia_Process_runArms(Arcadia_Thread_getProcess(thread), false);
 

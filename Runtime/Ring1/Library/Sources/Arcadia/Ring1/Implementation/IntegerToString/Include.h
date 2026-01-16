@@ -25,7 +25,7 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 void
-Arcadia_Integer16Value_toUtf8String
+Arcadia_Integer16Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Integer16Value integer16Value,
@@ -34,7 +34,7 @@ Arcadia_Integer16Value_toUtf8String
   );
 
 void
-Arcadia_Integer32Value_toUtf8String
+Arcadia_Integer32Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value integer32Value,
@@ -43,7 +43,7 @@ Arcadia_Integer32Value_toUtf8String
   );
 
 void
-Arcadia_Integer64Value_toUtf8String
+Arcadia_Integer64Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Integer64Value integer64Value,
@@ -52,7 +52,7 @@ Arcadia_Integer64Value_toUtf8String
   );
 
 void
-Arcadia_Integer8Value_toUtf8String
+Arcadia_Integer8Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Integer8Value integer8Value,

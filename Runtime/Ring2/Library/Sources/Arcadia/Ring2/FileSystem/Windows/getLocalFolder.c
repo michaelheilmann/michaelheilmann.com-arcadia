@@ -70,7 +70,7 @@ Arcadia_DefaultFileSystem_getLocalFolderHelper
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    filePath = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, q, iResult - 1))));
+    filePath = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, q, iResult - 1))));
     Arcadia_Thread_popJumpTarget(thread);
     free(q);
     q = NULL;

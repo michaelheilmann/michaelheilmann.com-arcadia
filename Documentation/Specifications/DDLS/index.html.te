@@ -1,4 +1,5 @@
   @{include("./../../Commons/header-common.i")}
+  <style>
   @{include("./../specification.css.i")}
   </style>
 

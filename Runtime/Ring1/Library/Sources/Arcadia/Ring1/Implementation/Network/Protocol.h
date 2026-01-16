@@ -17,7 +17,6 @@
 #define ARCADIA_RING1_IMPLEMENTATION_NETWORK_PROTOCOL_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Enumeration.h"
-#include <stddef.h>
 
 /// An enumeration of network protocols.
 Arcadia_declareEnumerationType(u8"Arcadia.Network.Protocol", Arcadia_Network_Protocol);

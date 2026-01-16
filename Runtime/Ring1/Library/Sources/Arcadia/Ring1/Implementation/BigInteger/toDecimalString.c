@@ -20,14 +20,14 @@
 
 // The maximum number of deciaml digits of which the value can be stored in an uint32_t is 9.
 // We can also show this by simply observing its maximum value 4 294 967 295 which are 10 digits.
-Arcadia_ImmutableUtf8String*
+Arcadia_ImmutableUTF8String*
 Arcadia_BigInteger_toDecimalString
   (
     Arcadia_Thread* thread,
     Arcadia_BigIntegerValue self
   )
 {
-  Arcadia_ImmutableUtf8StringValue string = NULL;
+  Arcadia_ImmutableUTF8StringValue string = NULL;
   size_t i = 0, n = 2;
   uint8_t* p = malloc(2);
   if (!p) {
@@ -69,7 +69,7 @@ Arcadia_BigInteger_toDecimalString
       Arcadia_SizeValue numberOfDigits = i - firstDigitIndex;
       Arcadia_Memory_reverseMemory8(thread, p + firstDigitIndex, numberOfDigits);
     }
-    string = Arcadia_ImmutableUtf8String_create(thread, p, i);
+    string = Arcadia_ImmutableUTF8String_create(thread, p, i);
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);

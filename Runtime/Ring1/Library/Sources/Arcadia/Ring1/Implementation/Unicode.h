@@ -26,9 +26,9 @@
 #include "Arcadia/Ring1/Implementation/Unicode/Unicode.h"
 #include "Arcadia/Ring1/Implementation/Unicode/Utf8.h"
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_isUtf8
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_isUTF8
 Arcadia_BooleanValue
-Arcadia_Unicode_isUtf8
+Arcadia_Unicode_isUTF8
   (
     Arcadia_Thread* thread,
     const void* bytes,
@@ -42,9 +42,9 @@ typedef void Arcadia_Unicode_EncodeCodePointCallbackContext;
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_EncodeCodePointCallbackFunction
 typedef void (Arcadia_Unicode_EncodeCodePointCallbackFunction)(Arcadia_Thread*, Arcadia_Unicode_EncodeCodePointCallbackContext* context, const Arcadia_Natural8Value* bytes, Arcadia_SizeValue numberOfBytes);
 
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_encodeCodePointsUtf8
+// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_encodeCodePointsUTF8
 void
-Arcadia_Unicode_encodeCodePointsUtf8
+Arcadia_Unicode_encodeCodePointsUTF8
   (
     Arcadia_Thread* thread,
     Arcadia_Natural32Value const* codePoints,
@@ -79,7 +79,7 @@ Arcadia_Unicode_encodeCodePointsUtf32Le
 /// @remarks
 /// This function also validates if the sequence of Natural8 values is a valid code points.
 void
-Arcadia_Unicode_encodeBytesUtf8
+Arcadia_Unicode_encodeBytesUTF8
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,

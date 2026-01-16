@@ -708,7 +708,7 @@ setTitleImpl
   Arcadia_Value value;
   Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)title);
   Arcadia_StringBuffer_insertBack(thread, stringBuffer, value);
-  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"", 1)));
+  Arcadia_Value_setObjectReferenceValue(&value, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"", 1)));
   Arcadia_StringBuffer_insertBack(thread, stringBuffer, value);
 
   if (self->window) {

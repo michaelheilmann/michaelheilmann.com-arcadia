@@ -35,7 +35,7 @@ Arcadia_Visuals_KeyboardKey_toString
   #define Alias(alias, aliased)
   #define Define(name, value, description)\
     case Arcadia_Visuals_KeyboardKey_##name: {\
-      return Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, description, sizeof(description) - 1)); \
+      return Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, description, sizeof(description) - 1)); \
     };
   #include "Arcadia/Visuals/Events/KeyboardKey.i"
   #undef Define

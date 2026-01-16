@@ -85,8 +85,8 @@ Arcadia_ADL_Definition_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->definitions = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_ADL_Definitions_getType(thread));
-  self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
+  self->definitions = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_ADL_Definitions_getType(thread));
+  self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 2 + 1);
 }

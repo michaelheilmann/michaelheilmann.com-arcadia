@@ -18,6 +18,8 @@
 
 #include "Arcadia/Visuals/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
+typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_Implementation_SceneNodeFactory;
+
 typedef struct Arcadia_Visuals_Implementation_ViewportResource Arcadia_Visuals_Implementation_ViewportResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Scene.ViewportNode", Arcadia_Visuals_Implementation_Scene_ViewportNode,
@@ -35,16 +37,8 @@ struct Arcadia_Visuals_Implementation_Scene_ViewportNode {
   Arcadia_Visuals_Implementation_BackendContext* backendContext;
   Arcadia_Visuals_Implementation_ViewportResource* viewportResource;
 
-  struct {
-    // Default is 193.
-    Arcadia_Real32Value red;
-    // Default is 216.
-    Arcadia_Real32Value green;
-    // Default is 195.
-    Arcadia_Real32Value blue;
-    // Default is 255.
-    Arcadia_Real32Value alpha;
-  } clearColor;
+  // 193, 216, 195, 255
+  Arcadia_Math_Color4Real32* clearColor;
 
   // Default is 1.
   Arcadia_Real32Value clearDepth;
@@ -75,7 +69,8 @@ Arcadia_Visuals_Implementation_Scene_ViewportNode*
 Arcadia_Visuals_Implementation_Scene_ViewportNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_SCENE_VIEWPORTNODE_H_INCLUDED

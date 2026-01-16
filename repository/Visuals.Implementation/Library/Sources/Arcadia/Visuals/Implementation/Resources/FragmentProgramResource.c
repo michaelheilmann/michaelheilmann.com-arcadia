@@ -88,8 +88,8 @@ Arcadia_Visuals_Implementation_FragmentProgramResource_constructImpl
   Arcadia_ByteBuffer* codeBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* t = Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_create(thread);
   Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, t, program, codeBuffer);
-  Arcadia_ImmutableByteArray* code = Arcadia_ImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, codeBuffer),
-                                                                               Arcadia_ByteBuffer_getNumberOfBytes(thread, codeBuffer));
+  Arcadia_InternalImmutableByteArray* code = Arcadia_InternalImmutableByteArray_create(thread, Arcadia_ByteBuffer_getBytes(thread, codeBuffer),
+                                                                                               Arcadia_ByteBuffer_getNumberOfBytes(thread, codeBuffer));
   self->code = code;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
@@ -119,6 +119,6 @@ Arcadia_Visuals_Implementation_FragmentProgramResource_visitImpl
   )
 {
   if (self->code) {
-    Arcadia_ImmutableByteArray_visit(thread, self->code);
+    Arcadia_InternalImmutableByteArray_visit(thread, self->code);
   }
 }

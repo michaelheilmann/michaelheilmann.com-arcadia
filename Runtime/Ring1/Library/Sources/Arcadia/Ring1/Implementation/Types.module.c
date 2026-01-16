@@ -17,7 +17,7 @@
 #include "Arcadia/Ring1/Implementation/Types.module.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring1/Implementation/TypeSystem/Names.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Names.module.h"
 #include "Arcadia/Ring1/Implementation/Atoms.module.h"
 #include <limits.h>
 #include <assert.h>
@@ -83,7 +83,7 @@ TypeNode_finalizeCallback
     free(typeNode->dispatch);
     typeNode->dispatch = NULL;
   }
-  typeNode->typeName = NULL;
+  typeNode->name = NULL;
 }
 
 static void
@@ -93,7 +93,7 @@ TypeNode_visitCallback
     TypeNode* typeNode
   )
 {
-  Arcadia_Atom_visit(Arcadia_Process_getThread(process), typeNode->typeName);
+  Arcadia_Name_visit(Arcadia_Process_getThread(process), typeNode->name);
 }
 
 static TypeNodes*
@@ -218,30 +218,20 @@ Arcadia_Type_hasChildren
   return Arcadia_BooleanValue_False;
 }
 
-Arcadia_TypeKind
-Arcadia_Type_getKind
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  )
-{ return ((TypeNode*)self)->kind; }
-
 Arcadia_TypeValue
 Arcadia_registerInternalType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength,
+    Arcadia_Name* name,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t hash = Arcadia_Name_getHash(thread, name);
   assert(NULL != g_typeNodes);
   size_t index = hash % g_typeNodes->capacity;
   for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
-    if (typeNode->typeName == typeName) {
+    if (typeNode->name == name) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
@@ -249,7 +239,7 @@ Arcadia_registerInternalType
   TypeNode* typeNode = NULL;
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
   typeNode->kind = Arcadia_TypeKind_Internal;
-  typeNode->typeName = typeName;
+  typeNode->name = name;
   typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
@@ -275,17 +265,15 @@ Arcadia_TypeValue
 Arcadia_registerScalarType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength,
+    Arcadia_Name* name,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t hash = Arcadia_Name_getHash(thread, name);
   size_t index = hash % g_typeNodes->capacity;
   for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
-    if (typeNode->typeName == typeName) {
+    if (typeNode->name == name) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
@@ -293,7 +281,7 @@ Arcadia_registerScalarType
   TypeNode* typeNode = NULL;
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
   typeNode->kind = Arcadia_TypeKind_Scalar;
-  typeNode->typeName = typeName;
+  typeNode->name = name;
   typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = NULL;
   typeNode->valueSize = 0;
@@ -319,8 +307,7 @@ Arcadia_TypeValue
 Arcadia_registerObjectType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength,
+    Arcadia_Name* name,
     size_t valueSize,
     Arcadia_TypeValue parentObjectType,
     size_t dispatchSize,
@@ -329,21 +316,18 @@ Arcadia_registerObjectType
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t hash = Arcadia_Name_getHash(thread, name);
   size_t index = hash % g_typeNodes->capacity;
   for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
-    if (typeNode->typeName == typeName) {
+    if (typeNode->name == name) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
   }
-
   TypeNode* typeNode = NULL;
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
-
   typeNode->kind = Arcadia_TypeKind_Object;
-  typeNode->typeName = typeName;
+  typeNode->name = name;
   typeNode->typeOperations = typeOperations;
   typeNode->parentObjectType = parentObjectType;
 
@@ -403,18 +387,16 @@ Arcadia_TypeValue
 Arcadia_registerEnumerationType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength,
+    Arcadia_Name* name,
     size_t valueSize,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t hash = Arcadia_Name_getHash(thread, name);
   size_t index = hash % g_typeNodes->capacity;
   for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
-    if (typeNode->typeName == typeName) {
+    if (typeNode->name == name) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
@@ -422,8 +404,9 @@ Arcadia_registerEnumerationType
   TypeNode* typeNode = NULL;
   Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &typeNode, TypeNodeName, sizeof(TypeNodeName) - 1, sizeof(TypeNode));
   typeNode->kind = Arcadia_TypeKind_Enumeration;
-  typeNode->typeName = typeName;
+  typeNode->name = name;
   typeNode->typeOperations = typeOperations;
+  typeNode->parentObjectType = NULL;
   typeNode->valueSize = valueSize;
   typeNode->typeDestructing = typeDestructing;
 
@@ -443,7 +426,7 @@ Arcadia_registerEnumerationType
 }
 
 Arcadia_BooleanValue
-Arcadia_Type_isSubType
+Arcadia_Type_isDescendantType
   (
     Arcadia_Thread* thread,
     Arcadia_TypeValue self,
@@ -473,32 +456,19 @@ Arcadia_TypeValue
 Arcadia_getType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength
+    Arcadia_Name* name
   )
 {
-  Arcadia_AtomValue typeName = Arcadia_Atoms_getOrCreateAtom(thread, Arcadia_AtomKind_Name, name, nameLength);
-  size_t hash = Arcadia_Atom_getHash(thread, typeName);
+  size_t hash = Arcadia_Name_getHash(thread, name);
   size_t index = hash % g_typeNodes->capacity;
   for (TypeNode* typeNode = g_typeNodes->buckets[index]; NULL != typeNode; typeNode = typeNode->next) {
-    if (typeNode->typeName == typeName) {
+    if (typeNode->name == name) {
       return typeNode;
     }
   }
-  Arcadia_logf(Arcadia_LogFlags_Error, "type `%.*s` not found\n", nameLength > INT_MAX ? INT_MAX : nameLength, name);
+  Arcadia_logf(Arcadia_LogFlags_Error, "type `%.*s` not found\n", Arcadia_Name_getNumberOfBytes(thread, name) > INT_MAX ? INT_MAX : Arcadia_Name_getNumberOfBytes(thread, name), name);
   Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeNotExists);
   Arcadia_Thread_jump(thread);
-}
-
-Arcadia_AtomValue
-Arcadia_Type_getName
-  (
-    Arcadia_TypeValue type
-  )
-{
-  assert(NULL != type);
-  TypeNode* typeNode = (TypeNode*)type;
-  return typeNode->typeName;
 }
 
 Arcadia_Dispatch*
@@ -523,14 +493,6 @@ Arcadia_Type_getOperations
   return typeNode->typeOperations;
 }
 
-Arcadia_SizeValue
-Arcadia_Type_getHash
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  )
-{ return Arcadia_Atom_getHash(thread, Arcadia_Type_getName(self)); }
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 static TypeNode* g_memoryType = NULL;
@@ -549,7 +511,7 @@ _Arcadia_Memory_getType
   )
 {
   if (!g_memoryType) {
-    g_memoryType = Arcadia_registerInternalType(thread, u8"Arcadia.Memory", sizeof(u8"Arcadia.Memory") - 1, NULL, &memoryTypeDestructing);
+    g_memoryType = Arcadia_registerInternalType(thread, Arcadia_Names_getOrCreateName(thread, u8"Arcadia.Memory", sizeof(u8"Arcadia.Memory") - 1), NULL, &memoryTypeDestructing);
   }
   return g_memoryType;
 }
@@ -574,7 +536,7 @@ _Arcadia_Type_getType
   )
 {
   if (!g_typeType) {
-    g_typeType = Arcadia_registerInternalType(thread, u8"Arcadia.Type", sizeof(u8"Arcadia.Type") - 1, NULL, &typeTypeDestructing);
+    g_typeType = Arcadia_registerInternalType(thread, Arcadia_Names_getOrCreateName(thread, u8"Arcadia.Type", sizeof(u8"Arcadia.Type") - 1), NULL, &typeTypeDestructing);
   }
   return g_typeType;
 }
@@ -599,7 +561,7 @@ _Arcadia_AtomValue_getType
   )
 {
   if (!g_atomType) {
-    g_atomType = Arcadia_registerInternalType(thread, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, NULL, &atomTypeDestructing);
+    g_atomType = Arcadia_registerInternalType(thread, Arcadia_Names_getOrCreateName(thread, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1), NULL, &atomTypeDestructing);
   }
   return g_atomType;
 }

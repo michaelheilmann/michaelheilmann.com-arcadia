@@ -37,16 +37,8 @@ struct Arcadia_Visuals_Implementation_OpenGL4_ViewportResourceDispatch {
 struct Arcadia_Visuals_Implementation_OpenGL4_ViewportResource {
   Arcadia_Visuals_Implementation_ViewportResource _parent;
 
-  struct {
-    // Default is 193.
-    Arcadia_Real32Value red;
-    // Default is 216.
-    Arcadia_Real32Value green;
-    // Default is 195.
-    Arcadia_Real32Value blue;
-    // Default is 255.
-    Arcadia_Real32Value alpha;
-  } clearColor;
+  // Default is 193, 216, 195, 255.
+  Arcadia_Math_Color4Real32* clearColor;
 
   // Default is 1.
   Arcadia_Real32Value clearDepth;

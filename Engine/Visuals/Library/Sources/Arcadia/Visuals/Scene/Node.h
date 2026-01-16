@@ -21,6 +21,7 @@
 #endif
 #include "Arcadia/Math/Include.h"
 typedef struct Arcadia_Visuals_Scene_RenderingContextNode Arcadia_Visuals_Scene_RenderingContextNode;
+typedef struct Arcadia_Visuals_SceneNodeFactory Arcadia_Visuals_SceneNodeFactory;
 typedef struct Arcadia_Visuals_BackendContext Arcadia_Visuals_BackendContext;
 
 // The base of all visuals scene nodes.
@@ -38,6 +39,7 @@ struct Arcadia_Visuals_Scene_NodeDispatch {
 
 struct Arcadia_Visuals_Scene_Node {
   Arcadia_Object _parent;
+  Arcadia_Visuals_SceneNodeFactory* sceneNodeFactory;
 };
 
 // Change the backend context of this node.

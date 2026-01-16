@@ -27,6 +27,9 @@ struct Arcadia_DDLS_MapEntrySymbolDispatch {
 
 struct Arcadia_DDLS_MapEntrySymbol {
   Arcadia_DDLS_Symbol parent;
+  /// #Arcadia_BooleanValue_True if the entry is optional, #Arcadia_BooleanValue_False otherwise.
+  /// Default is #Arcadia_BooleanValue_False.
+  Arcadia_BooleanValue optional;
   Arcadia_String* entryName;
   Arcadia_DDLS_Symbol* entrySymbol;
 };

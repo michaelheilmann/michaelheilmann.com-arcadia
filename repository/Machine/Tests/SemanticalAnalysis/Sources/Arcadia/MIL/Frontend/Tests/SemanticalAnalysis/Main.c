@@ -125,7 +125,7 @@ testNativePrintProcedure
   Arcadia_Map* foreignProcedures = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 #define Define(Name,Function) \
   { \
-    Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, Name, sizeof(Name) - 1))); \
+    Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, Name, sizeof(Name) - 1))); \
     Arcadia_Value v = Arcadia_Value_makeForeignProcedureValue(&Function); \
     Arcadia_Map_set(thread, foreignProcedures, k, v, NULL, NULL); \
   }

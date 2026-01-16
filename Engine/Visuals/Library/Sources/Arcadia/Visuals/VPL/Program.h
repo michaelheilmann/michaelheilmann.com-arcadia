@@ -20,11 +20,14 @@
 
 #include "Arcadia/Visuals/VPL/Program.h"
 
-// Mutually exclusive to Arcadia_Visuals_VPL_ProgramFlags_PerVertexColor.
-#define Arcadia_Visuals_VPL_ProgramFlags_PerMeshColor (1)
+// Mutually exclusive to Arcadia_Visuals_VPL_ProgramFlags_VertexAmbientColor and Arcdia_Visuals_VPL_ProgramFlags_TextureAmbientColor.
+#define Arcadia_Visuals_VPL_ProgramFlags_MeshAmbientColor (1)
 
-// Mutually exclusive to Arcadia_Visuals_VPL_ProgramFlags_PerMeshColor.
-#define Arcadia_Visuals_VPL_ProgramFlags_PerVertexColor (2)
+// Mutually exclusive to Arcadia_Visuals_VPL_ProgramFlags_MeshAmbientColor and Arcadia_Visuals_VPL_ProgramFlags_TextureAmbientColor.
+#define Arcadia_Visuals_VPL_ProgramFlags_VertexAmbientColor (2)
+
+// Mutually exclusive to Arcadia_Visuals_VPL_ProgramFlags_MeshAmbientColor and Arcadia_Visuals_VPL_ProgramFlags_VertexAmbientColor.
+#define Arcadia_Visuals_VPL_ProgramFlags_TextureAmbientColor (3)
 
 // Programs are managed by the program manager.
 // Each program has a unique numeric ID.

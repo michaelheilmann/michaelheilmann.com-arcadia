@@ -71,6 +71,7 @@ Arcadia_ADL_PixelBufferDefinition_linkImpl
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->operations); i < n; ++i) {
     Arcadia_ADL_Reference* operation = (Arcadia_ADL_Reference*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, self->operations, i, _Arcadia_ADL_Reference_getType(thread));
     Arcadia_ADL_Reference_resolve(thread, operation);
+    Arcadia_ADL_Definition_link(thread, operation->definition);
   }
 }
 
@@ -94,8 +95,8 @@ Arcadia_ADL_PixelBufferDefinition_constructImpl
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 4);
     name = Arcadia_ValueStack_getValue(thread, 3);
-    Arcadia_ValueStack_pushValue(thread, &name);
     Arcadia_ValueStack_pushValue(thread, &definitions);
+    Arcadia_ValueStack_pushValue(thread, &name);
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
@@ -125,14 +126,14 @@ Arcadia_ADL_PixelBufferDefinition_create
   (
     Arcadia_Thread* thread,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_String* qualifiedName,
+    Arcadia_String* name,
     Arcadia_Natural32Value width,
     Arcadia_Natural32Value height
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
-  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)qualifiedName);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushNatural32Value(thread,width);
   Arcadia_ValueStack_pushNatural32Value(thread, height);
   Arcadia_ValueStack_pushNatural8Value(thread, 4);

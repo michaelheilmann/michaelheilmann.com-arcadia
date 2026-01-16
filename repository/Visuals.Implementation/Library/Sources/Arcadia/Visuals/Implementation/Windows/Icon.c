@@ -165,7 +165,7 @@ Arcadia_Visuals_Implementation_Windows_Icon_constructImpl
       uint32_t pixel = 0x000000000;
       // Set the alpha bits to 0x9F (semi-transparent) or 0xFF000000 (opaque).
       Arcadia_Natural8Value red, green, blue, alpha;
-      Arcadia_Imaging_PixelBuffer_getPixelRgba(thread, pixelBuffer, x, y, &red, &green, &blue, &alpha);
+      Arcadia_Imaging_PixelBuffer_getPixelRGBA(thread, pixelBuffer, x, y, &red, &green, &blue, &alpha);
       pixel |= alpha << 24;
       pixel |= red << 16;
       pixel |= green << 8;

@@ -70,6 +70,7 @@ Arcadia_DDLS_MapEntrySymbol_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
+  self->optional = Arcadia_BooleanValue_False;
   self->entryName = NULL;
   self->entrySymbol = NULL;
   //

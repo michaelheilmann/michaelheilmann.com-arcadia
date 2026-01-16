@@ -23,7 +23,7 @@ isBooleanNode
     Arcadia_Thread* thread,
     Arcadia_DDL_Node* node
   )
-{ return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_BooleanNode_getType(thread)); }
+{ return Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_BooleanNode_getType(thread)); }
 
 static Arcadia_BooleanValue
 isNumberNode
@@ -31,7 +31,7 @@ isNumberNode
     Arcadia_Thread* thread,
     Arcadia_DDL_Node* node
   )
-{ return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_NumberNode_getType(thread)); }
+{ return Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_NumberNode_getType(thread)); }
 
 static Arcadia_BooleanValue
 isStringNode
@@ -39,7 +39,7 @@ isStringNode
     Arcadia_Thread* thread,
     Arcadia_DDL_Node* node
   )
-{ return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_StringNode_getType(thread)); }
+{ return Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_StringNode_getType(thread)); }
 
 static Arcadia_BooleanValue
 isMapEntryNode
@@ -47,7 +47,7 @@ isMapEntryNode
     Arcadia_Thread* thread,
     Arcadia_DDL_Node* node
   )
-{ return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapEntryNode_getType(thread)); }
+{ return Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapEntryNode_getType(thread)); }
 
 static Arcadia_BooleanValue
 isMapNode
@@ -55,7 +55,7 @@ isMapNode
     Arcadia_Thread* thread,
     Arcadia_DDL_Node* node
   )
-{ return Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread)); }
+{ return Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread)); }
 
 static Arcadia_SizeValue
 _findIndex
@@ -86,7 +86,7 @@ _createBoolean
     Arcadia_BooleanValue value
   )
 {
-  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, name, strlen(name))));
+  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, name, strlen(name))));
   Arcadia_SizeValue i = _findIndex(thread, node, 0, nameString);
   Arcadia_DDL_MapEntryNode* e = NULL;
   if (i != Arcadia_SizeValue_Maximum) {
@@ -107,7 +107,7 @@ _createInteger32
     Arcadia_Integer32Value value
   )
 {
-  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, name, strlen(name))));
+  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, name, strlen(name))));
   Arcadia_SizeValue i = _findIndex(thread, node, 0, nameString);
   Arcadia_DDL_MapEntryNode* e = NULL;
   if (i != Arcadia_SizeValue_Maximum) {
@@ -128,7 +128,7 @@ _createString
     Arcadia_String* value
   )
 {
-  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, name, strlen(name))));
+  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, name, strlen(name))));
   Arcadia_SizeValue i = _findIndex(thread, node, 0, nameString);
   Arcadia_DDL_MapEntryNode* e = NULL;
   if (i != Arcadia_SizeValue_Maximum) {
@@ -150,7 +150,7 @@ _getOrCreateMap
     char const* name
   )
 {
-  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, name, strlen(name))));
+  Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, name, strlen(name))));
   Arcadia_SizeValue i = _findIndex(thread, node, 0, nameString);
   Arcadia_DDL_MapEntryNode* e = NULL;
   if (i != Arcadia_SizeValue_Maximum) {
@@ -209,7 +209,7 @@ Cfg2_getBoolean
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, names[i], strlen(names[i]))));
+    Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, names[i], strlen(names[i]))));
     Arcadia_SizeValue i = _findIndex(thread, (Arcadia_DDL_MapNode*)current, 0, nameString);
     if (i == Arcadia_SizeValue_Maximum) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
@@ -273,7 +273,7 @@ Cfg2_getInteger32
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, names[i], strlen(names[i]))));
+    Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, names[i], strlen(names[i]))));
     Arcadia_SizeValue i = _findIndex(thread, (Arcadia_DDL_MapNode*)current, 0, nameString);
     if (i == Arcadia_SizeValue_Maximum) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
@@ -337,7 +337,7 @@ Cfg2_getString
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, names[i], strlen(names[i]))));
+    Arcadia_String* nameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, names[i], strlen(names[i]))));
     Arcadia_SizeValue i = _findIndex(thread, (Arcadia_DDL_MapNode*)current, 0, nameString);
     if (i == Arcadia_SizeValue_Maximum) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);
@@ -451,7 +451,7 @@ Cfg_loadConfiguration
     Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread);
     Arcadia_DDL_Parser_setInput(thread, parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(byteBuffer)));
     Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, parser);
-    if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread))) {
+    if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }

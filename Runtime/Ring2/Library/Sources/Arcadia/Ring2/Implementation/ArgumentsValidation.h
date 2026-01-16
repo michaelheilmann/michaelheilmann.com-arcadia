@@ -31,7 +31,7 @@ Arcadia_ArgumentsValidation_getObjectReferenceValue
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_Value_getObjectReferenceValue(value);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, objectReferenceValue), type)) {
+  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, objectReferenceValue), type)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -54,7 +54,7 @@ Arcadia_ArgumentsValidation_getObjectReferenceValueOrNull
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue objectReferenceValue = Arcadia_Value_getObjectReferenceValue(value);
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, objectReferenceValue), type)) {
+  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, objectReferenceValue), type)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -146,22 +146,22 @@ Arcadia_ArgumentsValidation_getNatural64Value
   return Arcadia_Value_getNatural64Value(value);
 }
 
-static inline Arcadia_ImmutableUtf8StringValue
-Arcadia_ArgumentsValidation_getImmutableUtf8StringValue
+static inline Arcadia_ImmutableUTF8StringValue
+Arcadia_ArgumentsValidation_getImmutableUTF8StringValue
   (
     Arcadia_Thread* thread,
     Arcadia_Value const* value
   )
 {
-  if (!Arcadia_Value_isImmutableUtf8StringValue(value)) {
+  if (!Arcadia_Value_isImmutableUTF8StringValue(value)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return Arcadia_Value_getImmutableUtf8StringValue(value);
+  return Arcadia_Value_getImmutableUTF8StringValue(value);
 }
 
-static inline Arcadia_ImmutableUtf8StringValue
-Arcadia_ArgumentsValidation_getImmutableUtf8StringValueOrNull
+static inline Arcadia_ImmutableUTF8StringValue
+Arcadia_ArgumentsValidation_getImmutableUTF8StringValueOrNull
   (
     Arcadia_Thread* thread,
     Arcadia_Value const* value
@@ -170,11 +170,11 @@ Arcadia_ArgumentsValidation_getImmutableUtf8StringValueOrNull
   if (Arcadia_Value_isVoidValue(value)) {
     return NULL;
   }
-  if (!Arcadia_Value_isImmutableUtf8StringValue(value)) {
+  if (!Arcadia_Value_isImmutableUTF8StringValue(value)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return Arcadia_Value_getImmutableUtf8StringValue(value);
+  return Arcadia_Value_getImmutableUTF8StringValue(value);
 }
 
 #endif // ARCADIA_RING2_IMPLEMENTATION_ARGUMENTSVALIDATION_H_INCLUDED

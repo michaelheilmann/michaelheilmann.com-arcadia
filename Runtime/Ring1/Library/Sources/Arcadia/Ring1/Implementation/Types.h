@@ -20,12 +20,8 @@
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
-#include "Arcadia/Ring1/Implementation/TypeSystem/TypeKind.h"
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
-#include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Type.h"
 #include "Arcadia/Ring1/Implementation/Value.h"
-typedef struct Arcadia_Value Arcadia_Value;
 typedef struct Arcadia_Object Arcadia_Object;
 
 typedef void (Arcadia_Object_ConstructCallbackFunction)(Arcadia_Thread* thread, Arcadia_Object* self);
@@ -114,12 +110,6 @@ typedef void (Arcadia_Type_DestructObjectCallbackFunction)(Arcadia_Thread*, void
 /// Invoked when the type is destructing.
 typedef void (Arcadia_Type_TypeDestructingCallbackFunction)(void* context);
 
-/// The opaque C type representing a type.
-/// Types are not garbage collected. Once a type was added, it remains there until the process terminates.
-typedef void Arcadia_Type;
-typedef Arcadia_Type* Arcadia_TypeValue;
-
-
 static inline void
 Arcadia_Type_visit
   (
@@ -127,13 +117,6 @@ Arcadia_Type_visit
     Arcadia_TypeValue self
   )
 {/*Intentionally empty.*/}
-
-Arcadia_SizeValue
-Arcadia_Type_getHash
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  );
 
 /// @brief Get the size, in Bytes, of a value of this type.
 /// @param self A pointer to this type.
@@ -183,79 +166,25 @@ Arcadia_Type_hasChildren
     Arcadia_TypeValue self
   );
 
-/// @brief Get the type kind of this type.
-/// @param self A pointer to this type.
-/// @return The type kind of this type type.
-Arcadia_TypeKind
-Arcadia_Type_getKind
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  );
-
-/// @brief Get if this type is a subtype of another type.
+/// @brief Get if this type is a descendant type of another type.
 /// @param self A pointer to this type.
 /// @param other A pointer to the other type.
-/// @return Arcadia_BooleanValue_True if this type is a subtype of the othe type. Arcadia_BooleanValue_False otherwise.
+/// @return #Arcadia_BooleanValue_True if this type is a descendant type of the other type. #Arcadia_BooleanValue_False otherwise.
+/// @todo Rename to isDescendantType.
 Arcadia_BooleanValue
-Arcadia_Type_isSubType
+Arcadia_Type_isDescendantType
   (
     Arcadia_Thread* thread,
     Arcadia_TypeValue self,
     Arcadia_TypeValue other
   );
 
-/// @brief Get if this type is of the kind of type "internal".
-/// @param self A pointer to this type.
-/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "internal". #Arcadia_BooleanValue_False otherwise.
-static inline Arcadia_BooleanValue
-Arcadia_Type_isInternalKind
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  )
-{ return Arcadia_TypeKind_Internal == Arcadia_Type_getKind(thread, self); }
-
-/// @brief Get if this type is of the kind of type "scalar".
-/// @param self A pointer to this type.
-/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "scalar". #Arcadia_BooleanValue_False otherwise.
-static inline Arcadia_BooleanValue
-Arcadia_Type_isScalarKind
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  )
-{ return Arcadia_TypeKind_Scalar == Arcadia_Type_getKind(thread, self); }
-
-/// @brief Get if this type is of the kind of type "object".
-/// @param self A pointer to this type.
-/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "object". #Arcadia_BooleanValue_False otherwise.
-static inline Arcadia_BooleanValue
-Arcadia_Type_isObjectKind
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  )
-{ return Arcadia_TypeKind_Object == Arcadia_Type_getKind(thread, self); }
-
-/// @brief Get if this type is of the kind of type "enumeration".
-/// @param self A pointer to this type.
-/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "enumeration". #Arcadia_BooleanValue_False otherwise.
-static inline Arcadia_BooleanValue
-Arcadia_Type_isEnumerationtKind
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  )
-{ return Arcadia_TypeKind_Enumeration == Arcadia_Type_getKind(thread, self); }
-
 /* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
 Arcadia_TypeValue
 Arcadia_registerInternalType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength,
+    Arcadia_Name* name,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   );
@@ -265,8 +194,7 @@ Arcadia_TypeValue
 Arcadia_registerScalarType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength,
+    Arcadia_Name* name,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   );
@@ -276,8 +204,7 @@ Arcadia_TypeValue
 Arcadia_registerObjectType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength,
+    Arcadia_Name* name,
     size_t valueSize,
     Arcadia_TypeValue parentObjectType,
     size_t dispatchSize,
@@ -291,26 +218,10 @@ Arcadia_TypeValue
 Arcadia_registerEnumerationType
   (
     Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength,
+    Arcadia_Name* name,
     size_t valueSize,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
-  );
-
-/* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_TypeNotExists */
-Arcadia_TypeValue
-Arcadia_getType
-  (
-    Arcadia_Thread* thread,
-    char const* name,
-    size_t nameLength
-  );
-
-Arcadia_AtomValue
-Arcadia_Type_getName
-  (
-    Arcadia_TypeValue type
   );
 
 Arcadia_Dispatch*

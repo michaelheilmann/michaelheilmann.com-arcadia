@@ -17,6 +17,7 @@
 #include "Arcadia/Visuals/Scene/Node.h"
 
 #include "Arcadia/Visuals/BackendContext.h"
+#include "Arcadia/Visuals/SceneNodeFactory.h"
 #include <assert.h>
 
 static void
@@ -80,10 +81,11 @@ Arcadia_Visuals_Scene_Node_constructImpl
     Arcadia_Thread_jump(thread);
   }
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
+  if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  self->sceneNodeFactory = (Arcadia_Visuals_SceneNodeFactory*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_SceneNodeFactory_getType(thread));
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -110,7 +112,11 @@ Arcadia_Visuals_Scene_Node_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_Node* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->sceneNodeFactory) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->sceneNodeFactory);
+  }
+}
 
 void
 Arcadia_Visuals_Scene_Node_setBackendContext

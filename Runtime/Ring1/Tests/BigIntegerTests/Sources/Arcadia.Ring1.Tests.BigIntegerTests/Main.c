@@ -144,7 +144,7 @@ test5
   Arcadia_BigInteger_setNatural8(thread, p10, 10);
   Arcadia_BigInteger* v = Arcadia_BigInteger_create(thread);
 
-  Arcadia_Natural64Value u1 = Arcadia_ImmutableUtf8String_toNatural64(thread, Arcadia_ImmutableUtf8String_create(thread, p, n));
+  Arcadia_Natural64Value u1 = Arcadia_ImmutableUTF8String_toNatural64(thread, Arcadia_ImmutableUTF8String_create(thread, p, n));
   Arcadia_Natural64Value u2 = 0;
   for (Arcadia_SizeValue i = 0; i < n; ++i) {
     Arcadia_Natural8Value digit = ((Arcadia_Natural64Value)p[i]) - '0';

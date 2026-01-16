@@ -21,14 +21,12 @@
 #include "Arcadia/Visuals/Include.h"
 
 void
-Arcadia_Engine_Demo_startupVisuals
+Arcadia_Engine_Application_startupVisuals
   (
     Arcadia_Thread* thread,
     Arcadia_Engine* engine,
     Arcadia_DDL_Node* configuration,
-    Arcadia_Visuals_DisplayDevice** pDisplayDevice,
-    Arcadia_String** pWindowMode,
-    Arcadia_Visuals_Window** pWindow
+    Arcadia_List* windowList
   );
 
 #endif // ARCADIA_ENGINE_DEMO_VISUALS_H_INCLUDED

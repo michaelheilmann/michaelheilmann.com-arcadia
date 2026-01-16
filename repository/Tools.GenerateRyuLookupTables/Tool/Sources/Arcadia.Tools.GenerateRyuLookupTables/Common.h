@@ -26,17 +26,17 @@ Arcadia_printInteger32
   );
 
 void
-Arcadia_printImmutableUtf8String
+Arcadia_printImmutableUTF8String
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* string
+    Arcadia_ImmutableUTF8String* string
   );
 
 void
-Arcadia_printImmutableUtf8String
+Arcadia_printImmutableUTF8String
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* string
+    Arcadia_ImmutableUTF8String* string
   );
 
 void

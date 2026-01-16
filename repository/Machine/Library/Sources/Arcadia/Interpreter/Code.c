@@ -78,7 +78,7 @@ R_InterpreterState_decodeStringConstant
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Value_getType(thread, R_Interpreter_Code_Constants_getAt(thread, constants, indexValue)), _Arcadia_String_getType(thread))) {
+  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Value_getType(thread, R_Interpreter_Code_Constants_getAt(thread, constants, indexValue)), _Arcadia_String_getType(thread))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }

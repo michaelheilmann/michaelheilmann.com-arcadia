@@ -31,7 +31,7 @@ struct Arcadia_StringDispatch {
 
 struct Arcadia_String {
   Arcadia_Object _parent;
-  Arcadia_ImmutableUtf8String* immutableUtf8String;
+  Arcadia_ImmutableUTF8String* immutableUTF8String;
 };
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_create_pn
@@ -39,7 +39,7 @@ Arcadia_String*
 Arcadia_String_create_pn
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableByteArray* immutableByteArray
+    Arcadia_InternalImmutableByteArray* immutableByteArray
   );
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_create

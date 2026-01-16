@@ -128,23 +128,24 @@ findTypeByName
   )
 {
   Arcadia_Type* yy = Arcadia_Value_getTypeValue(&y);
-  Arcadia_Atom* b = Arcadia_Type_getName(yy);
+  Arcadia_Name* b = Arcadia_Type_getName(thread, yy);
   Arcadia_String* a = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&x);
-  return Arcadia_String_getNumberOfBytes(thread, a) == Arcadia_Atom_getNumberOfBytes(thread, b)
-      && !Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, a), Arcadia_Atom_getBytes(thread, b), Arcadia_String_getNumberOfBytes(thread, a));
+  return Arcadia_String_getNumberOfBytes(thread, a) == Arcadia_Name_getNumberOfBytes(thread, b)
+      && !Arcadia_Memory_compare(thread, Arcadia_String_getBytes(thread, a), Arcadia_Name_getBytes(thread, b), Arcadia_String_getNumberOfBytes(thread, a));
 }
 
 void
-Arcadia_Engine_Demo_startupVisuals
+Arcadia_Engine_Application_startupVisuals
   (
     Arcadia_Thread* thread,
     Arcadia_Engine* engine,
     Arcadia_DDL_Node* configuration,
-    Arcadia_Visuals_DisplayDevice** pDisplayDevice,
-    Arcadia_String** pWindowMode,
-    Arcadia_Visuals_Window** pWindow
+    Arcadia_List* windowList
   )
 {
+  Arcadia_Visuals_DisplayDevice* displayDevice = NULL;
+  Arcadia_String* windowMode = NULL;
+  Arcadia_Visuals_Window* window = NULL;
   // (1.1) Register visuals backends.
   Arcadia_Visuals_Implementation_registerBackends(thread, engine->visualBackendTypes);
   // (1.2) Register visuals scene node factory.
@@ -166,7 +167,7 @@ Arcadia_Engine_Demo_startupVisuals
         Arcadia_Thread_jump(thread);
       }
       Arcadia_Type* backendType = Arcadia_Value_getTypeValue(&backendTypeValue);
-      if (!Arcadia_Type_isSubType(thread, backendType, _Arcadia_Visuals_Backend_getType(thread))) {
+      if (!Arcadia_Type_isDescendantType(thread, backendType, _Arcadia_Visuals_Backend_getType(thread))) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }
@@ -183,7 +184,7 @@ Arcadia_Engine_Demo_startupVisuals
         Arcadia_Thread_jump(thread);
       }
       Arcadia_Type* backendType = Arcadia_Value_getTypeValue(&backendTypeValue);
-      if (!Arcadia_Type_isSubType(thread, backendType, _Arcadia_Visuals_Backend_getType(thread))) {
+      if (!Arcadia_Type_isDescendantType(thread, backendType, _Arcadia_Visuals_Backend_getType(thread))) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }
@@ -221,11 +222,10 @@ Arcadia_Engine_Demo_startupVisuals
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
-    *pDisplayDevice = (Arcadia_Visuals_DisplayDevice*)Arcadia_List_getObjectReferenceValueAt(thread, displayDevices, displayDeviceIndex);
+    displayDevice = (Arcadia_Visuals_DisplayDevice*)Arcadia_List_getObjectReferenceValueAt(thread, displayDevices, displayDeviceIndex);
   }
   // (4) Get the window mode.
   {
-    Arcadia_String* windowMode = NULL;
     char const* path[] = {
       u8"visuals",
       u8"windowMode",
@@ -242,7 +242,7 @@ Arcadia_Engine_Demo_startupVisuals
       Arcadia_BooleanValue found = Arcadia_BooleanValue_False;
       for (Arcadia_SizeValue i = 0, n = 3; i < n; ++i) {
         Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowMode);
-        Arcadia_Value b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, values[i], strlen(values[i])))));
+        Arcadia_Value b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, values[i], strlen(values[i])))));
         if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
           found = Arcadia_BooleanValue_True;
           break;
@@ -255,27 +255,26 @@ Arcadia_Engine_Demo_startupVisuals
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
-      windowMode = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1)));
+      windowMode = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1)));
       Cfg2_setString(thread, (Arcadia_DDL_Node*)configuration, path, 2, windowMode);
     }
-    *pWindowMode = windowMode;
   }
   // (5) Create and open a window, set its size and position according to the display device it is located on.
   {
-    Arcadia_Visuals_Window* window = Arcadia_Visuals_BackendContext_createWindow(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+    window = Arcadia_Visuals_BackendContext_createWindow(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
     Arcadia_Visuals_Window_open(thread, window);
     Arcadia_Integer32Value left, top, right, bottom;
-    Arcadia_Visuals_DisplayDevice_getBounds(thread, *pDisplayDevice, &left, &top, &right, &bottom);
+    Arcadia_Visuals_DisplayDevice_getBounds(thread, displayDevice, &left, &top, &right, &bottom);
     Arcadia_Visuals_Window_setPosition(thread, window, left, top);
     Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
-    *pWindow = window;
+    Arcadia_List_insertBackObjectReferenceValue(thread, windowList, (Arcadia_Object*)window);
   }
   // (6) Set window mode and resolution.
   {
     Arcadia_JumpTarget jumpTarget;
 
     // Set window mode.
-    Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(*pWindowMode);
+    Arcadia_Value a = Arcadia_Value_makeObjectReferenceValue(windowMode);
     Arcadia_Value b;
 
     // Although the resolution is ignored by non-full screen window modes,
@@ -292,7 +291,7 @@ Arcadia_Engine_Demo_startupVisuals
     } else {
       Arcadia_Thread_popJumpTarget(thread);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_Success);
-      Arcadia_Visuals_DisplayMode* displayMode = Arcadia_Visuals_DisplayDevice_getCurrentDisplayMode(thread, *pDisplayDevice);
+      Arcadia_Visuals_DisplayMode* displayMode = Arcadia_Visuals_DisplayDevice_getCurrentDisplayMode(thread, displayDevice);
       setDisplayMode(thread, configuration, Arcadia_Visuals_DisplayMode_getHorizontalResolution(thread, displayMode),
                                             Arcadia_Visuals_DisplayMode_getVerticalResolution(thread, displayMode),
                                             Arcadia_Visuals_DisplayMode_getColorDepth(thread, displayMode));
@@ -309,21 +308,21 @@ Arcadia_Engine_Demo_startupVisuals
       setVerticalSynchronization(thread, configuration, Arcadia_BooleanValue_False);
     }
     // Set the window mode and resolution.
-    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1))));
+    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1))));
     if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
-      Arcadia_Visuals_Window_setFullscreen(thread, *pWindow, Arcadia_BooleanValue_False);
+      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_False);
     }
-    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"borderless fullscreen window", sizeof(u8"borderless fullscreen window") - 1))));
+    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"borderless fullscreen window", sizeof(u8"borderless fullscreen window") - 1))));
     if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
-      Arcadia_Visuals_Window_setFullscreen(thread, *pWindow, Arcadia_BooleanValue_True);
+      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
     }
-    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"fullscreen", sizeof(u8"fullscreen") - 1))));
+    b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"fullscreen", sizeof(u8"fullscreen") - 1))));
     if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
-      Arcadia_Visuals_Window_setFullscreen(thread, *pWindow, Arcadia_BooleanValue_True);
+      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
       Arcadia_Visuals_DisplayMode* bestDisplayMode = NULL;
       Arcadia_Integer32Value horizontalResolution, verticalResolution, colorDepth;
       getDisplayMode(thread, configuration, &horizontalResolution, &verticalResolution, &colorDepth);
-      Arcadia_List* list = Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes(thread, *pDisplayDevice);
+      Arcadia_List* list = Arcadia_Visuals_DisplayDevice_getAvailableDisplayModes(thread, displayDevice);
       for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)list); i < n; ++i) {
         Arcadia_Visuals_DisplayMode* displayMode = (Arcadia_Visuals_DisplayMode*)Arcadia_List_getObjectReferenceValueAt(thread, list, i);
         if (horizontalResolution == Arcadia_Visuals_DisplayMode_getHorizontalResolution(thread, displayMode) &&
@@ -334,7 +333,7 @@ Arcadia_Engine_Demo_startupVisuals
         }
       }
       if (!bestDisplayMode) {
-        bestDisplayMode = Arcadia_Visuals_DisplayDevice_getCurrentDisplayMode(thread, *pDisplayDevice);
+        bestDisplayMode = Arcadia_Visuals_DisplayDevice_getCurrentDisplayMode(thread, displayDevice);
         setDisplayMode(thread, configuration, Arcadia_Visuals_DisplayMode_getHorizontalResolution(thread, bestDisplayMode),
                                               Arcadia_Visuals_DisplayMode_getVerticalResolution(thread, bestDisplayMode),
                                               Arcadia_Visuals_DisplayMode_getColorDepth(thread, bestDisplayMode));
@@ -342,9 +341,9 @@ Arcadia_Engine_Demo_startupVisuals
       if (bestDisplayMode) {
         Arcadia_Integer32Value left, top, right, bottom;
         Arcadia_Visuals_DisplayMode_apply(thread, bestDisplayMode);
-        Arcadia_Visuals_DisplayDevice_getBounds(thread, *pDisplayDevice, &left, &top, &right, &bottom);
-        Arcadia_Visuals_Window_setPosition(thread, *pWindow, left, top);
-        Arcadia_Visuals_Window_setSize(thread, *pWindow, right - left, bottom - top);
+        Arcadia_Visuals_DisplayDevice_getBounds(thread, displayDevice, &left, &top, &right, &bottom);
+        Arcadia_Visuals_Window_setPosition(thread, window, left, top);
+        Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
       }
     }
   }
@@ -354,21 +353,21 @@ Arcadia_Engine_Demo_startupVisuals
     Arcadia_Imaging_PixelBuffer* pixelBuffer;
     Arcadia_Integer32Value width, height;
     // Set the big icon.
-    Arcadia_Visuals_Window_getRequiredBigIconSize(thread, *pWindow, &width, &height);
+    Arcadia_Visuals_Window_getRequiredBigIconSize(thread, window, &width, &height);
     pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
     Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
     icon = Arcadia_Visuals_BackendContext_createIcon(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext, pixelBuffer);
-    Arcadia_Visuals_Window_setBigIcon(thread, *pWindow, icon);
+    Arcadia_Visuals_Window_setBigIcon(thread, window, icon);
 
     // Set the small icon.
-    Arcadia_Visuals_Window_getRequiredSmallIconSize(thread, *pWindow, &width, &height);
+    Arcadia_Visuals_Window_getRequiredSmallIconSize(thread, window, &width, &height);
     pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
     Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
     icon = Arcadia_Visuals_BackendContext_createIcon(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext, pixelBuffer);
-    Arcadia_Visuals_Window_setSmallIcon(thread, *pWindow, icon);
+    Arcadia_Visuals_Window_setSmallIcon(thread, window, icon);
 
     // Set the title.
-    Arcadia_Visuals_Window_setTitle(thread, *pWindow, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Liminality"));
+    Arcadia_Visuals_Window_setTitle(thread, window, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Liminality"));
   }
   // (8) Create the scene node factory.
   {
@@ -384,7 +383,7 @@ Arcadia_Engine_Demo_startupVisuals
         Arcadia_Thread_jump(thread);
       }
       Arcadia_Type* scneNodeFactoryType = Arcadia_Value_getTypeValue(&scneNodeFactoryTypeValue);
-      if (!Arcadia_Type_isSubType(thread, scneNodeFactoryType, _Arcadia_Visuals_SceneNodeFactory_getType(thread))) {
+      if (!Arcadia_Type_isDescendantType(thread, scneNodeFactoryType, _Arcadia_Visuals_SceneNodeFactory_getType(thread))) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }

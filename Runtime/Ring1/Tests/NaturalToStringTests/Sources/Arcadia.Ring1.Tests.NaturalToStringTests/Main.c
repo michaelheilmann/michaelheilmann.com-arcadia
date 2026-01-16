@@ -27,8 +27,8 @@ testFixture
     Arcadia_Natural64Value v
   )
 {
-  Arcadia_ImmutableUtf8String* u = Arcadia_ImmutableUtf8String_createFromNatural64(thread, v);
-  Arcadia_Natural64Value w = Arcadia_ImmutableUtf8String_toNatural64(thread, u);
+  Arcadia_ImmutableUTF8String* u = Arcadia_ImmutableUTF8String_createFromNatural64(thread, v);
+  Arcadia_Natural64Value w = Arcadia_ImmutableUTF8String_toNatural64(thread, u);
   Arcadia_Tests_assertTrue(thread, v == w);
 }
 

@@ -132,7 +132,7 @@ execute1
           }
         } else if (Arcadia_Value_isObjectReferenceValue(&calleeValue)) {
           Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&calleeValue);
-          if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, object), _R_Interpreter_Procedure_getType(thread))) {
+          if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, object), _R_Interpreter_Procedure_getType(thread))) {
             R_Interpreter_ThreadState_beginProcedureCall(process, interpreterThread, 0, (R_Interpreter_Procedure*)object);
           } else {
             Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);

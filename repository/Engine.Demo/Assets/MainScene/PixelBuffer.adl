@@ -1,0 +1,9 @@
+{
+  type : "PixelBuffer",
+  name : "LogoScene.PixelBuffer",
+  width: 256,
+  height: 256,
+  operations : [
+    "LogoScene.FillOperation",
+  ],
+}

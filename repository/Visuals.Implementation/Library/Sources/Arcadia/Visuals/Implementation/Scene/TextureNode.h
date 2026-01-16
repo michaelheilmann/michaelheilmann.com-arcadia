@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_TEXTURE_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_TEXTURE_H_INCLUDED
+#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_TEXTURENODE_H_INCLUDED)
+#define ARCADIA_VISUALS_IMPLEMENTATION_TEXTURENODE_H_INCLUDED
 
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_PRIVATE) || 1 != ARCADIA_VISUALS_IMPLEMENTATION_PRIVATE
   #error("do not include directly, include `Arcadia/Visuals/Implementation/Include.h` instead")
@@ -22,18 +22,20 @@
 
 #include "Arcadia/Visuals/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
+typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_Implementation_SceneNodeFactory;
+
 typedef struct Arcadia_Visuals_Implementation_TextureResource Arcadia_Visuals_Implementation_TextureResource;
 
 // The implementation of a texture.
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Scene.TextureNode", Arcadia_Visuals_Implementation_Scene_TextureNode,
-                          u8"Arcadia.Visuals.Texture");
+                          u8"Arcadia.Visuals.Scene.TextureNode");
 
 struct Arcadia_Visuals_Implementation_Scene_TextureNodeDispatch {
-  Arcadia_Visuals_TextureDispatch parent;
+  Arcadia_Visuals_Scene_TextureNodeDispatch parent;
 };
 
 struct Arcadia_Visuals_Implementation_Scene_TextureNode {
-  Arcadia_Visuals_Texture parent;
+  Arcadia_Visuals_Scene_TextureNode parent;
   // Bitmask of the dirty properties, that is, properties which were not uploaded.
   Arcadia_Natural8Value dirtyBits;
   // The backend context.
@@ -42,12 +44,14 @@ struct Arcadia_Visuals_Implementation_Scene_TextureNode {
   Arcadia_Visuals_Implementation_TextureResource* textureResource;
 };
 
-// @param backendContext A pointert to the backend context or the null pointer.
+// @param backendContext A pointer to the backend context or the null pointer.
 Arcadia_Visuals_Implementation_Scene_TextureNode*
 Arcadia_Visuals_Implementation_Scene_TextureNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory,
+    Arcadia_ADL_TextureDefinition* source
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_TEXTURE_H_INCLUDED
+#endif // ARCADIA_VISUALS_IMPLEMENTATION_TEXTURENODE_H_INCLUDED

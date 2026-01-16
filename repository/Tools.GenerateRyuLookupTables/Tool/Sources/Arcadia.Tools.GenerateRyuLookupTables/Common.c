@@ -26,17 +26,17 @@ Arcadia_printInteger32
     Arcadia_Integer32Value integer32
   )
 {
-  Arcadia_printImmutableUtf8String(thread, Arcadia_ImmutableUtf8String_createFromInteger32(thread, integer32));
+  Arcadia_printImmutableUTF8String(thread, Arcadia_ImmutableUTF8String_createFromInteger32(thread, integer32));
 }
 
 void
-Arcadia_printImmutableUtf8String
+Arcadia_printImmutableUTF8String
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* string
+    Arcadia_ImmutableUTF8String* string
   )
 {
-  fwrite(Arcadia_ImmutableUtf8String_getBytes(thread, string), 1, Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, string), stdout);
+  fwrite(Arcadia_ImmutableUTF8String_getBytes(thread, string), 1, Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, string), stdout);
 }
 
 void

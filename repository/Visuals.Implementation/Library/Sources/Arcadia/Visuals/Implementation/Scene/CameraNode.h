@@ -18,6 +18,8 @@
 
 #include "Arcadia/Visuals/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
+typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_Implementation_SceneNodeFactory;
+
 typedef struct Arcadia_Visuals_Implementation_ConstantBufferResource Arcadia_Visuals_Implementation_ConstantBufferResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Scene.CameraNode", Arcadia_Visuals_Implementation_Scene_CameraNode,
@@ -41,7 +43,8 @@ Arcadia_Visuals_Implementation_Scene_CameraNode*
 Arcadia_Visuals_Implementation_Scene_CameraNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_SCENE_CAMERANODE_H_INCLUDED

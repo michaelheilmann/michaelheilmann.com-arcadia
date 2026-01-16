@@ -94,11 +94,11 @@ Arcadia_UTF8Writer_writeCodePoints
 { Arcadia_VirtualCall(Arcadia_UTF8Writer, writeCodePoints, self, codePoints, numberOfCodePoints); }
 
 void
-Arcadia_UTF8Writer_writeImmutableUtf8String
+Arcadia_UTF8Writer_writeImmutableUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8Writer* self,
-    Arcadia_ImmutableUtf8String* immutableUTF8String
+    Arcadia_ImmutableUTF8String* immutableUTF8String
   )
 { Arcadia_VirtualCall(Arcadia_UTF8Writer, writeImmutableUTF8String, self, immutableUTF8String); }
 

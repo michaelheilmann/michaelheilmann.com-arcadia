@@ -20,34 +20,34 @@
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural64.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
-typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
+typedef struct Arcadia_ImmutableUTF8String Arcadia_ImmutableUTF8String;
 
 Arcadia_Natural16Value
 _toNatural16
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 Arcadia_Natural32Value
 _toNatural32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 Arcadia_Natural64Value
 _toNatural64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 Arcadia_Natural8Value
 _toNatural8
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TONATURAL_H_INCLUDED

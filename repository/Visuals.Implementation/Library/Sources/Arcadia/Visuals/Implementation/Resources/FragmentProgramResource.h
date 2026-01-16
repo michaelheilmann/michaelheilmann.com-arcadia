@@ -29,7 +29,7 @@ struct Arcadia_Visuals_Implementation_FragmentProgramResourceDispatch {
 struct Arcadia_Visuals_Implementation_FragmentProgramResource {
   Arcadia_Visuals_Implementation_Resource _parent;
   Arcadia_BooleanValue dirty;
-  Arcadia_ImmutableByteArray* code;
+  Arcadia_InternalImmutableByteArray* code;
 };
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_FRAGMENTPROGRAMRESOURCE_H_INCLUDED

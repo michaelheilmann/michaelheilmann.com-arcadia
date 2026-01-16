@@ -185,7 +185,7 @@ Arcadia_Imaging_ImageWriterParameters_hasPath
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->object);
-  return Arcadia_Type_isSubType(thread, type, _Arcadia_String_getType(thread));
+  return Arcadia_Type_isDescendantType(thread, type, _Arcadia_String_getType(thread));
 }
 
 Arcadia_String*
@@ -210,7 +210,7 @@ Arcadia_Imaging_ImageWriterParameters_hasByteBuffer
   )
 {
   Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->object);
-  return Arcadia_Type_isSubType(thread, type, _Arcadia_ByteBuffer_getType(thread));
+  return Arcadia_Type_isDescendantType(thread, type, _Arcadia_ByteBuffer_getType(thread));
 }
 
 Arcadia_ByteBuffer*

@@ -16,7 +16,10 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_ENUMERATION_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_ENUMERATION_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Types.h"
+#include "Arcadia/Ring1/Implementation/Configure.h"
+#include "Arcadia/Ring1/Implementation/Integer32.h"
+typedef struct Arcadia_Thread Arcadia_Thread;
+typedef void Arcadia_Type;
 
 /// R(untime) ex(tension) macro.
 /// @param _cilName UTF-8 string literal for the Machine Interface Language type name of the type.
@@ -51,9 +54,25 @@
     ) \
   { \
     if (!g_##_cName##_type) { \
-      g_##_cName##_type = Arcadia_registerEnumerationType(thread, _cilName, sizeof(_cilName) - 1, sizeof(_cName), _cTypeOperations, &_##_cName##_typeDestructing); \
+      g_##_cName##_type = Arcadia_registerEnumerationType(thread, Arcadia_Names_getOrCreateName(thread, _cilName, sizeof(_cilName) - 1), sizeof(_cName), _cTypeOperations, &_##_cName##_typeDestructing); \
     } \
     return g_##_cName##_type; \
   }
+  
+typedef struct Arcadia_EnumerationValue {
+  Arcadia_Type* type;
+  Arcadia_Integer32Value value;  
+} Arcadia_EnumerationValue;
+
+static inline Arcadia_EnumerationValue
+Arcadia_EnumerationValue_make
+  (
+    Arcadia_Type* type,
+    Arcadia_Integer32Value value
+  )
+{
+  Arcadia_EnumerationValue temporary = { .type = type, .value = value };
+  return temporary;
+}
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_ENUMERATION_H_INCLUDED

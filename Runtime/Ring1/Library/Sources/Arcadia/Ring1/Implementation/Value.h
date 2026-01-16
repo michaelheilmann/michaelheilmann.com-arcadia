@@ -22,6 +22,8 @@
 
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 
+#include "Arcadia/Ring1/Implementation/Enumeration.h"
+
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 
 #include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
@@ -56,8 +58,8 @@
 
 #define Arcadia_ValueTag_ForeignProcedure (4)
 
-#define Arcadia_ValueTag_ImmutableByteArray (5)
-#define Arcadia_ValueTag_ImmutableUtf8String (6)
+#define Arcadia_ValueTag_InternalImmutableByteArray (5)
+#define Arcadia_ValueTag_ImmutableUTF8String (6)
 
 #define Arcadia_ValueTag_Integer16 (7)
 #define Arcadia_ValueTag_Integer32 (8)
@@ -78,6 +80,8 @@
 
 #define Arcadia_ValueTag_Type (19)
 
+#define Arcadia_ValueTag_Enumeration (20)
+
 // The tag for type "Void" must be 0.
 #define Arcadia_ValueTag_Void (0)
 
@@ -96,8 +100,8 @@ typedef struct Arcadia_Value {
 
     Define(Arcadia, ForeignProcedure, foreignProcedure)
 
-    Define(Arcadia, ImmutableByteArray, immutableByteArray)
-    Define(Arcadia, ImmutableUtf8String, immutableUtf8String)
+    Define(Arcadia, InternalImmutableByteArray, internalImmutableByteArray)
+    Define(Arcadia, ImmutableUTF8String, immutableUTF8String)
 
     Define(Arcadia, Integer16, integer16)
     Define(Arcadia, Integer32, integer32)
@@ -119,6 +123,8 @@ typedef struct Arcadia_Value {
     Define(Arcadia, Type, type)
 
     Define(Arcadia, Void, void)
+
+    Define(Arcadia, Enumeration, enumeration)
 
   #undef Define
   };
@@ -178,8 +184,8 @@ Define(Arcadia, Boolean, boolean)
 
 Define(Arcadia, ForeignProcedure, foreignProcedure)
 
-Define(Arcadia, ImmutableByteArray, immutableByteArray)
-Define(Arcadia, ImmutableUtf8String, immutableUtf8String)
+Define(Arcadia, InternalImmutableByteArray, internalImmutableByteArray)
+Define(Arcadia, ImmutableUTF8String, immutableUTF8String)
 
 Define(Arcadia, Integer16, integer16)
 Define(Arcadia, Integer32, integer32)
@@ -201,6 +207,8 @@ Define(Arcadia, Size, size)
 Define(Arcadia, Type, type)
 
 Define(Arcadia, Void, void)
+
+Define(Arcadia, Enumeration, enumeration)
 
 #undef Define
 

@@ -67,11 +67,11 @@ Arcadia_UTF8ByteBufferWriter_writeCodePointsImpl
   );
 
 static void
-Arcadia_UTF8ByteBufferWriter_writeImmutableUtf8StringImpl
+Arcadia_UTF8ByteBufferWriter_writeImmutableUTF8StringImpl
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8ByteBufferWriter* self,
-    Arcadia_ImmutableUtf8String* string
+    Arcadia_ImmutableUTF8String* string
   );
 
 static void
@@ -127,7 +127,7 @@ Arcadia_UTF8ByteBufferWriter_initializeDispatchImpl
 {
   ((Arcadia_UTF8WriterDispatch*)self)->writeBytes = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, void const*, Arcadia_SizeValue)) & Arcadia_UTF8ByteBufferWriter_writeBytesImpl;
   ((Arcadia_UTF8WriterDispatch*)self)->writeCodePoints = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_Natural32Value const*, Arcadia_SizeValue)) & Arcadia_UTF8ByteBufferWriter_writeCodePointsImpl;
-  ((Arcadia_UTF8WriterDispatch*)self)->writeImmutableUTF8String = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_ImmutableUtf8String*)) & Arcadia_UTF8ByteBufferWriter_writeImmutableUtf8StringImpl;
+  ((Arcadia_UTF8WriterDispatch*)self)->writeImmutableUTF8String = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_ImmutableUTF8String*)) & Arcadia_UTF8ByteBufferWriter_writeImmutableUTF8StringImpl;
   ((Arcadia_UTF8WriterDispatch*)self)->writeString = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*, Arcadia_String*)) & Arcadia_UTF8ByteBufferWriter_writeStringImpl;
   ((Arcadia_UTF8WriterDispatch*)self)->flush = (void (*)(Arcadia_Thread*, Arcadia_UTF8Writer*)) & Arcadia_UTF8ByteBufferWriter_flushImpl;
 }
@@ -161,7 +161,7 @@ Arcadia_UTF8ByteBufferWriter_writeBytesImpl
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Unicode_encodeBytesUtf8(thread, bytes, numberOfBytes, self->target, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&Arcadia_ByteBuffer_insertBackBytes);
+  Arcadia_Unicode_encodeBytesUTF8(thread, bytes, numberOfBytes, self->target, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&Arcadia_ByteBuffer_insertBackBytes);
 }
 
 static void
@@ -173,18 +173,18 @@ Arcadia_UTF8ByteBufferWriter_writeCodePointsImpl
     Arcadia_SizeValue numberOfCodePoints
   )
 {
-  Arcadia_Unicode_encodeCodePointsUtf8(thread, codePoints, numberOfCodePoints, self->target, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&Arcadia_ByteBuffer_insertBackBytes);
+  Arcadia_Unicode_encodeCodePointsUTF8(thread, codePoints, numberOfCodePoints, self->target, (Arcadia_Unicode_EncodeCodePointCallbackFunction*)&Arcadia_ByteBuffer_insertBackBytes);
 }
 
 static void
-Arcadia_UTF8ByteBufferWriter_writeImmutableUtf8StringImpl
+Arcadia_UTF8ByteBufferWriter_writeImmutableUTF8StringImpl
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8ByteBufferWriter* self,
-    Arcadia_ImmutableUtf8String* string
+    Arcadia_ImmutableUTF8String* string
   )
 {
-  Arcadia_ByteBuffer_insertBackBytes(thread, self->target, Arcadia_ImmutableUtf8String_getBytes(thread, string), Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, string));
+  Arcadia_ByteBuffer_insertBackBytes(thread, self->target, Arcadia_ImmutableUTF8String_getBytes(thread, string), Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, string));
 }
 
 static void

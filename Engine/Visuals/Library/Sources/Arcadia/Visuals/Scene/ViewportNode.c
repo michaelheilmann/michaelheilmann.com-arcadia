@@ -53,12 +53,14 @@ Arcadia_Visuals_Scene_ViewportNode_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Scene_ViewportNode_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
+  if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_Value sceneNodeFactory = Arcadia_ValueStack_getValue(thread, 1);
+    Arcadia_ValueStack_pushValue(thread, &sceneNodeFactory);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
@@ -78,12 +80,9 @@ Arcadia_Visuals_Scene_ViewportNode_setClearColor
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_ViewportNode* self,
-    Arcadia_Real32Value red,
-    Arcadia_Real32Value green,
-    Arcadia_Real32Value blue,
-    Arcadia_Real32Value alpha
+    Arcadia_Math_Color4Real32* clearColor
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_Scene_ViewportNode, setClearColor, self, red, green, blue, alpha); }
+{ Arcadia_VirtualCall(Arcadia_Visuals_Scene_ViewportNode, setClearColor, self, clearColor); }
 
 void
 Arcadia_Visuals_Scene_ViewportNode_setClearDepth

@@ -17,6 +17,7 @@
 #include "Arcadia/ADL/Definitions/ColorReader.h"
 
 #include "Arcadia/DDLS/Include.h"
+#include "Arcadia/ADL/Reader.module.h"
 #include "Arcadia/ADL/Definitions/ColorDefinition.h"
 
 static const char* SCHEMA =
@@ -83,22 +84,6 @@ Arcadia_ADL_ColorReader_read
     Arcadia_DDL_Node* input
   );
 
-static Arcadia_Natural8Value
-getNatural8Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  );
-
-static Arcadia_String*
-getStringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  );
-
 static void
 Arcadia_ADL_ColorReader_constructImpl
   (
@@ -155,11 +140,11 @@ Arcadia_ADL_ColorReader_read
 {
   Arcadia_DDLS_ValidationContext_run(thread, self->validationContext, self->SCHEMANAME, input);
 
-  Arcadia_String* type = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
-  Arcadia_String* name = getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
-  Arcadia_Natural8Value red = getNatural8Value(thread, (Arcadia_DDL_MapNode*)input, self->RED);
-  Arcadia_Natural8Value green = getNatural8Value(thread, (Arcadia_DDL_MapNode*)input, self->GREEN);
-  Arcadia_Natural8Value blue = getNatural8Value(thread, (Arcadia_DDL_MapNode*)input, self->BLUE);
+  Arcadia_String* type = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
+  Arcadia_String* name = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
+  Arcadia_Natural8Value red = Arcadia_ADL_Reader_getNatural8Value(thread, (Arcadia_DDL_MapNode*)input, self->RED);
+  Arcadia_Natural8Value green = Arcadia_ADL_Reader_getNatural8Value(thread, (Arcadia_DDL_MapNode*)input, self->GREEN);
+  Arcadia_Natural8Value blue = Arcadia_ADL_Reader_getNatural8Value(thread, (Arcadia_DDL_MapNode*)input, self->BLUE);
 
   // Assert the definition has the correct type.
   Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(self->TYPENAME);
@@ -170,74 +155,6 @@ Arcadia_ADL_ColorReader_read
 
   Arcadia_ADL_ColorDefinition* definition = Arcadia_ADL_ColorDefinition_create(thread, definitions, name, red, green, blue);
   return definition;
-}
-
-static Arcadia_Natural8Value
-getNatural8Value
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
-    Arcadia_DDL_MapEntryNode* mapEntryNode =
-      (Arcadia_DDL_MapEntryNode*)
-      Arcadia_List_getObjectReferenceValueCheckedAt
-      (
-        thread,
-        (Arcadia_List*)mapNode->entries,
-        i,
-        _Arcadia_DDL_MapEntryNode_getType(thread)
-      );
-    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
-    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
-    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
-      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
-      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_NumberNode_getType(thread))) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_DDL_NumberNode* numberNode = (Arcadia_DDL_NumberNode*)valueNode;
-      return Arcadia_String_toNatural8(thread, numberNode->value);
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-  Arcadia_Thread_jump(thread);
-}
-
-static Arcadia_String*
-getStringValue
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_MapNode* mapNode,
-    Arcadia_String* key
-  )
-{
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
-    Arcadia_DDL_MapEntryNode* mapEntryNode =
-      (Arcadia_DDL_MapEntryNode*)
-      Arcadia_List_getObjectReferenceValueCheckedAt
-      (
-        thread,
-        (Arcadia_List*)mapNode->entries,
-        i,
-        _Arcadia_DDL_MapEntryNode_getType(thread)
-      );
-    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
-    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
-    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
-      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
-      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_StringNode_getType(thread))) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_DDL_StringNode* stringNode = (Arcadia_DDL_StringNode*)valueNode;
-      return stringNode->value;
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-  Arcadia_Thread_jump(thread);
 }
 
 static void

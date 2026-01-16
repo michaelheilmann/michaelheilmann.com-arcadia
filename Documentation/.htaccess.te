@@ -1,0 +1,25 @@
+RewriteEngine On
+
+# rewrite http to https
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,NC]
+
+# rewrite www to non-www
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1%{REQUEST_URI} [R=301,NC]
+
+# do not allow access to this file
+<Files ".htaccess">
+Require all denied
+</Files>
+
+# Do not reveal information to potential attackers.
+ErrorDocument 500 /error.html
+ErrorDocument 403 /error.html
+ErrorDocument 404 /error.html
+
+# 2025-12-12: "/specifications/common-lexical-specification" was renamed to "specifications/common-lexical-translations".
+RewriteRule ^specifications/common-lexical-specification(.*)$ https://michaelheilmann.com/specifications/common-lexical-translations [R=301,L]
+
+# 2025-12-12: "/specifications/context-free-grammars" was renamed to "specifications/mathematical-definitions-notations-and-proofs".
+RewriteRule ^specifications/context-free-grammars(.*)$ https://michaelheilmann.com/specifications/mathematical-definitions-notations-and-proofs [R=301,L]

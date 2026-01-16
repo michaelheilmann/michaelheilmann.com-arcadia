@@ -19,6 +19,7 @@
 #include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Names.module.h"
 #include "Arcadia/Ring1/Implementation/Atoms.module.h"
 #include "Arcadia/Ring1/Implementation/Thread.private.h"
 #include "Arcadia/Ring1/Implementation/Types.module.h"
@@ -26,6 +27,7 @@
 
 typedef const ModuleInfo* (GetModuleInfo)();
 static GetModuleInfo* g_modules[] = {
+  &Arcadia_Names_getModule,
   &Arcadia_Atoms_getModule,
   &Arcadia_Types_getModule,
 };

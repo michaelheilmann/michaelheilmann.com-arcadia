@@ -21,6 +21,7 @@
 #endif
 
 #include "Arcadia/Ring1/Implementation/Configure.h"
+#include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
@@ -80,6 +81,23 @@ Arcadia_Atom_visit
     Arcadia_Thread* thread,
     Arcadia_AtomValue self
   );
+
+#if defined(Arcadia_ARMS_Configuration_WithBarriers) && 1 == Arcadia_ARMS_Configuration_WithBarriers
+
+/// @brief
+/// Ensure this Arcadia_Atom object is gray.
+/// @param thread
+/// A pointer to this Arcadia_Thread object.
+/// @param self
+/// A pointer to this Arcadia_Atom object.
+void
+Arcadia_Atom_ensureGray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_AtomValue self
+  );
+
+#endif
 
 /// @brief
 /// Get a pointer to the Bytes of this atom.

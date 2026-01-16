@@ -14,6 +14,8 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include "Arcadia/Engine/Demo/Configuration.h"
+#include "Arcadia/Engine/Demo/Audials.h"
+#include "Arcadia/Engine/Demo/Visuals.h"
 #include <stdlib.h>
 
 #include "Arcadia/Ring1/Include.h"
@@ -22,8 +24,7 @@
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/DDL/Include.h"
 
-#include "Arcadia/Engine/Demo/Audials.h"
-#include "Arcadia/Engine/Demo/Visuals.h"
+
 // The application.
 #include "Arcadia/Engine/Demo/Application.h"
 // The main scene.
@@ -48,17 +49,12 @@ main1
     Arcadia_Engine_Demo_Application* application1 = Arcadia_Engine_Demo_Application_create(thread);
     Arcadia_Object_lock(thread, (Arcadia_Object*)application1);
     application = application1;
-    Arcadia_String* windowMode = NULL;
-    Arcadia_Visuals_DisplayDevice* displayDevice = NULL;
-    // (1) Startup visuals.
-    Arcadia_Engine_Demo_startupVisuals(thread, application->engine, application->configuration, &displayDevice, &windowMode, &application->window);
+    // Startup the application.
+    Arcadia_Engine_Application_startup(thread, (Arcadia_Engine_Application*)application);
 
-    // (2) Startup audials.
-    Arcadia_Engine_Demo_startupAudials(thread, application->engine, application->configuration);
+    Arcadia_Engine_Demo_SceneManager_setScene(thread, application->sceneManager, (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_ArcadiaLogoScene_create(thread, ((Arcadia_Engine_Application*)application)->engine, application->sceneManager));
 
-    Arcadia_Engine_Demo_SceneManager_setScene(thread, application->sceneManager, (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_ArcadiaLogoScene_create(thread, application->engine, application->sceneManager));
-
-
+    // One run of the GC before entering the main loop.
     Arcadia_Process_stepArms(process);
 
     // (8) Enter the message loop.
@@ -66,34 +62,33 @@ main1
     oldTick = Arcadia_getTickCount(thread);
     newTick = oldTick;
     deltaTick = (newTick > oldTick) ? newTick - oldTick : 0;
-    while (!Arcadia_Engine_Demo_Application_getQuitRequested(thread, application)) {
+    while (!Arcadia_Engine_Application_getQuitRequested(thread, (Arcadia_Engine_Application*)application)) {
       Arcadia_Process_stepArms(process);
-      Arcadia_Audials_BackendContext_update(thread, (Arcadia_Audials_BackendContext*)application->engine->audialsBackendContext);
-      Arcadia_Visuals_BackendContext_update(thread, (Arcadia_Visuals_BackendContext*)application->engine->visualsBackendContext);
-      for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)application->windows); i < n; ++i) {
+      Arcadia_Audials_BackendContext_update(thread, (Arcadia_Audials_BackendContext*)((Arcadia_Engine_Application*)application)->engine->audialsBackendContext);
+      Arcadia_Visuals_BackendContext_update(thread, (Arcadia_Visuals_BackendContext*)((Arcadia_Engine_Application*)application)->engine->visualsBackendContext);
+      Arcadia_Engine_Demo_Scene_updateLogics(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick);
+
+      for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Engine_Application*)application)->windows); i < n; ++i) {
         Arcadia_Visuals_Window* window =
           (Arcadia_Visuals_Window*)
           Arcadia_List_getObjectReferenceValueCheckedAt
             (
               thread,
-              application->windows,
+              ((Arcadia_Engine_Application*)application)->windows,
               i,
               _Arcadia_Visuals_Window_getType(thread)
             );
         Arcadia_Visuals_Window_beginRender(thread, window);
+        {
+          Arcadia_Integer32Value width, height;
+          Arcadia_Visuals_Window_getCanvasSize(thread, window, &width, &height);
+          Arcadia_Engine_Demo_Scene_updateLogics(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick);
+          Arcadia_Engine_Demo_Scene_updateAudials(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick, width, height);
+          Arcadia_Engine_Demo_Scene_updateVisuals(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick, width, height);
+        }
         Arcadia_Visuals_Window_endRender(thread, window);
       }
-      Arcadia_Visuals_Window_beginRender(thread, application->window);
-      {
-        Arcadia_Integer32Value width, height;
-        Arcadia_Visuals_Window_getCanvasSize(thread, application->window, &width, &height);
-        Arcadia_Engine_Demo_Scene_updateLogics(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick);
-        Arcadia_Engine_Demo_Scene_updateAudials(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick, width, height);
-        Arcadia_Engine_Demo_Scene_updateVisuals(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick, width, height);
-      }
-      Arcadia_Visuals_Window_endRender(thread, application->window);
-
-      Arcadia_Engine_Event* event = Arcadia_Engine_dequeEvent(thread, application->engine);
+      Arcadia_Engine_Event* event = Arcadia_Engine_dequeEvent(thread, ((Arcadia_Engine_Application*)application)->engine);
       if (NULL != event) {
         if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_ApplicationQuitRequestedEvent_getType(thread))) {
           Arcadia_Visuals_ApplicationQuitRequestedEvent* applicationQuitRequestdEvent = (Arcadia_Visuals_ApplicationQuitRequestedEvent*)event;
@@ -112,27 +107,8 @@ main1
       newTick = Arcadia_getTickCount(thread);
       deltaTick = (newTick > oldTick) ? newTick - oldTick : 0;
     }
-
-    // (9) Ensure the window is closed.
-    Arcadia_Visuals_Window_close(thread, application->window);
-
-    Cfg_saveConfiguration(thread, application->configuration);
-
+    Arcadia_Engine_Application_shutdown(thread, (Arcadia_Engine_Application*)application);
     Arcadia_Thread_popJumpTarget(thread);
-
-    // (10) Clean the message queue. FIXME: The messages prevent the engine from being gc'ed.
-    while (Arcadia_Engine_dequeEvent(thread, application->engine)) {
-      Arcadia_logf(Arcadia_LogFlags_Info, "%s:%d: purging message\n", __FILE__, __LINE__);
-    }
-
-    if (application->engine && application->engine->audialsBackendContext) {
-      Arcadia_Object_unlock(thread, (Arcadia_Object*)application->engine->audialsBackendContext);
-      application->engine->audialsBackendContext = NULL;
-    }
-    if (application->engine && application->engine->visualsBackendContext) {
-      Arcadia_Object_unlock(thread, (Arcadia_Object*)application->engine->visualsBackendContext);
-      application->engine->visualsBackendContext = NULL;
-    }
     if (application) {
       Arcadia_Object_unlock(thread, (Arcadia_Object*)application);
       application = NULL;
@@ -140,19 +116,7 @@ main1
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     if (application) {
-      if (application->window) {
-        // (9) Ensure the window is closed.
-        Arcadia_Visuals_Window_close(thread, application->window);
-        application->window = NULL;
-      }
-      if (application->engine && application->engine->audialsBackendContext) {
-        Arcadia_Object_unlock(thread, (Arcadia_Object*)application->engine->audialsBackendContext);
-        application->engine->audialsBackendContext = NULL;
-      }
-      if (application->engine && application->engine->visualsBackendContext) {
-        Arcadia_Object_unlock(thread, (Arcadia_Object*)application->engine->visualsBackendContext);
-        application->engine->visualsBackendContext = NULL;
-      }
+      Arcadia_Engine_Application_shutdown(thread, (Arcadia_Engine_Application*)application);
     }
     if (application) {
       Arcadia_Object_unlock(thread, (Arcadia_Object*)application);

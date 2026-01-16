@@ -123,11 +123,11 @@ Arcadia_defineObjectType(u8"Arcadia.String", Arcadia_String,
   from##Suffix \
     ( \
       Arcadia_Thread* thread, \
-      Arcadia_ImmutableUtf8String** pImmutableUtf8String, \
+      Arcadia_ImmutableUTF8String** pImmutableUTF8String, \
       Type##Value value \
     ) \
   { \
-    *pImmutableUtf8String = Arcadia_ImmutableUtf8String_createFrom##Suffix(thread, value); \
+    *pImmutableUTF8String = Arcadia_ImmutableUTF8String_createFrom##Suffix(thread, value); \
   }
 
 On(Arcadia_Boolean, Boolean)
@@ -148,28 +148,28 @@ static void
 fromImmutableByteArray
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String** pImmutableUtf8String,
-    Arcadia_ImmutableByteArray* value
+    Arcadia_ImmutableUTF8String** pImmutableUTF8String,
+    Arcadia_InternalImmutableByteArray* value
   )
 {
-  *pImmutableUtf8String =
-    Arcadia_ImmutableUtf8String_create
+  *pImmutableUTF8String =
+    Arcadia_ImmutableUTF8String_create
       (
         thread,
-        Arcadia_ImmutableByteArray_getBytes(thread, value),
-        Arcadia_ImmutableByteArray_getNumberOfBytes(thread, value)
+        Arcadia_InternalImmutableByteArray_getBytes(thread, value),
+        Arcadia_InternalImmutableByteArray_getNumberOfBytes(thread, value)
       );
 }
 
 static void
-fromImmutableUtf8String
+fromImmutableUTF8String
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String** pImmutableUtf8String,
-    Arcadia_ImmutableUtf8String* value
+    Arcadia_ImmutableUTF8String** pImmutableUTF8String,
+    Arcadia_ImmutableUTF8String* value
   )
 {
-  *pImmutableUtf8String = value;
+  *pImmutableUTF8String = value;
 }
 
 static void
@@ -190,50 +190,50 @@ Arcadia_String_constructImpl
   }
   Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1);
   if (Arcadia_Value_isBooleanValue(&x)) {
-    fromBoolean(thread, &self->immutableUtf8String, Arcadia_Value_getBooleanValue(&x));
+    fromBoolean(thread, &self->immutableUTF8String, Arcadia_Value_getBooleanValue(&x));
   } else if (Arcadia_Value_isInteger16Value(&x)) {
-    fromInteger16(thread, &self->immutableUtf8String, Arcadia_Value_getInteger16Value(&x));
+    fromInteger16(thread, &self->immutableUTF8String, Arcadia_Value_getInteger16Value(&x));
   } else if (Arcadia_Value_isInteger32Value(&x)) {
-    fromInteger32(thread, &self->immutableUtf8String, Arcadia_Value_getInteger32Value(&x));
+    fromInteger32(thread, &self->immutableUTF8String, Arcadia_Value_getInteger32Value(&x));
   } else if (Arcadia_Value_isInteger64Value(&x)) {
-    fromInteger64(thread, &self->immutableUtf8String, Arcadia_Value_getInteger64Value(&x));
+    fromInteger64(thread, &self->immutableUTF8String, Arcadia_Value_getInteger64Value(&x));
   } else if (Arcadia_Value_isInteger8Value(&x)) {
-    fromInteger8(thread, &self->immutableUtf8String, Arcadia_Value_getInteger8Value(&x));
+    fromInteger8(thread, &self->immutableUTF8String, Arcadia_Value_getInteger8Value(&x));
   } else if (Arcadia_Value_isNatural16Value(&x)) {
-    fromNatural16(thread, &self->immutableUtf8String, Arcadia_Value_getNatural16Value(&x));
+    fromNatural16(thread, &self->immutableUTF8String, Arcadia_Value_getNatural16Value(&x));
   } else if (Arcadia_Value_isNatural32Value(&x)) {
-    fromNatural32(thread, &self->immutableUtf8String, Arcadia_Value_getNatural32Value(&x));
+    fromNatural32(thread, &self->immutableUTF8String, Arcadia_Value_getNatural32Value(&x));
   } else if (Arcadia_Value_isNatural64Value(&x)) {
-    fromNatural64(thread, &self->immutableUtf8String, Arcadia_Value_getNatural64Value(&x));
+    fromNatural64(thread, &self->immutableUTF8String, Arcadia_Value_getNatural64Value(&x));
   } else if (Arcadia_Value_isNatural8Value(&x)) {
-    fromNatural8(thread, &self->immutableUtf8String, Arcadia_Value_getNatural8Value(&x));
-  } if (Arcadia_Value_isImmutableByteArrayValue(&x)) {
-    fromImmutableByteArray(thread, &self->immutableUtf8String, Arcadia_Value_getImmutableByteArrayValue(&x));
-  } else if (Arcadia_Value_isImmutableUtf8StringValue(&x)) {
-    fromImmutableUtf8String(thread, &self->immutableUtf8String, Arcadia_Value_getImmutableUtf8StringValue(&x));
+    fromNatural8(thread, &self->immutableUTF8String, Arcadia_Value_getNatural8Value(&x));
+  } if (Arcadia_Value_isInternalImmutableByteArrayValue(&x)) {
+    fromImmutableByteArray(thread, &self->immutableUTF8String, Arcadia_Value_getInternalImmutableByteArrayValue(&x));
+  } else if (Arcadia_Value_isImmutableUTF8StringValue(&x)) {
+    fromImmutableUTF8String(thread, &self->immutableUTF8String, Arcadia_Value_getImmutableUTF8StringValue(&x));
   } else if (Arcadia_Value_isObjectReferenceValue(&x)) {
     Arcadia_ObjectReferenceValue referenceValue = Arcadia_Value_getObjectReferenceValue(&x);
-    if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_ByteBuffer_getType(thread))) {
+    if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_ByteBuffer_getType(thread))) {
       Arcadia_ByteBuffer* object = (Arcadia_ByteBuffer*)referenceValue;
-      self->immutableUtf8String =
-        Arcadia_ImmutableUtf8String_create
+      self->immutableUTF8String =
+        Arcadia_ImmutableUTF8String_create
           (
             thread,
             Arcadia_ByteBuffer_getBytes(thread, object),
             Arcadia_ByteBuffer_getNumberOfBytes(thread, object)
           );
-    } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_String_getType(thread))) {
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_String_getType(thread))) {
       Arcadia_String* object = (Arcadia_String*)referenceValue;
-      self->immutableUtf8String = object->immutableUtf8String;
-    } else if (Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_StringBuffer_getType(thread))) {
+      self->immutableUTF8String = object->immutableUTF8String;
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, referenceValue), _Arcadia_StringBuffer_getType(thread))) {
       Arcadia_StringBuffer* object = (Arcadia_StringBuffer*)referenceValue;
-      self->immutableUtf8String = Arcadia_ImmutableUtf8String_create(thread, Arcadia_StringBuffer_getBytes(thread, object), Arcadia_StringBuffer_getNumberOfBytes(thread, object));
+      self->immutableUTF8String = Arcadia_ImmutableUTF8String_create(thread, Arcadia_StringBuffer_getBytes(thread, object), Arcadia_StringBuffer_getNumberOfBytes(thread, object));
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
     }
   } else if (Arcadia_Value_isVoidValue(&x)) {
-    fromVoid(thread, &self->immutableUtf8String, Arcadia_Value_getVoidValue(&x));
+    fromVoid(thread, &self->immutableUTF8String, Arcadia_Value_getVoidValue(&x));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
@@ -287,25 +287,25 @@ isEqualToImpl
   }
   assert(NULL != b0);
   assert(Arcadia_Object_isInstanceOf(thread, b0, _Arcadia_Object_getType(thread)));
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, b0), _Arcadia_String_getType(thread))) {
+  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, b0), _Arcadia_String_getType(thread))) {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
     return;
   }
   Arcadia_String* a1 = (Arcadia_String*)a0;
   Arcadia_String* b1 = (Arcadia_String*)b0;
-  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, a1->immutableUtf8String) ==
-      Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, b1->immutableUtf8String) &&
-      Arcadia_ImmutableUtf8String_getHash(thread, a1->immutableUtf8String) ==
-      Arcadia_ImmutableUtf8String_getHash(thread, b1->immutableUtf8String)) {
+  if (Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, a1->immutableUTF8String) ==
+      Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, b1->immutableUTF8String) &&
+      Arcadia_ImmutableUTF8String_getHash(thread, a1->immutableUTF8String) ==
+      Arcadia_ImmutableUTF8String_getHash(thread, b1->immutableUTF8String)) {
     Arcadia_ValueStack_pushBooleanValue
       (
         thread,
         !Arcadia_Memory_compare
           (
             thread,
-            Arcadia_ImmutableUtf8String_getBytes(thread, a1->immutableUtf8String),
-            Arcadia_ImmutableUtf8String_getBytes(thread, b1->immutableUtf8String),
-            Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, a1->immutableUtf8String)
+            Arcadia_ImmutableUTF8String_getBytes(thread, a1->immutableUTF8String),
+            Arcadia_ImmutableUTF8String_getBytes(thread, b1->immutableUTF8String),
+            Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, a1->immutableUTF8String)
           )
       );
   } else {
@@ -321,7 +321,7 @@ hashImpl
 {
   UNARY_OPERATION();
   Arcadia_String* self1 = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&x);
-  Arcadia_ValueStack_pushSizeValue(thread, Arcadia_ImmutableUtf8String_getHash(thread, self1->immutableUtf8String));
+  Arcadia_ValueStack_pushSizeValue(thread, Arcadia_ImmutableUTF8String_getHash(thread, self1->immutableUTF8String));
 }
 
 static void
@@ -341,16 +341,16 @@ isNotEqualToImpl
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
     return;
   }
-  if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, b0), _Arcadia_String_getType(thread))) {
+  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, b0), _Arcadia_String_getType(thread))) {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
     return;
   }
   Arcadia_String* a1 = (Arcadia_String*)a0;
   Arcadia_String* b1 = (Arcadia_String*)b0;
-  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, a1->immutableUtf8String) !=
-      Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, b1->immutableUtf8String) ||
-      Arcadia_ImmutableUtf8String_getHash(thread, a1->immutableUtf8String) !=
-      Arcadia_ImmutableUtf8String_getHash(thread, b1->immutableUtf8String)) {
+  if (Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, a1->immutableUTF8String) !=
+      Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, b1->immutableUTF8String) ||
+      Arcadia_ImmutableUTF8String_getHash(thread, a1->immutableUTF8String) !=
+      Arcadia_ImmutableUTF8String_getHash(thread, b1->immutableUTF8String)) {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
     return;
   }
@@ -360,9 +360,9 @@ isNotEqualToImpl
       Arcadia_Memory_compare
         (
           thread,
-          Arcadia_ImmutableUtf8String_getBytes(thread, a1->immutableUtf8String),
-          Arcadia_ImmutableUtf8String_getBytes(thread, b1->immutableUtf8String),
-          Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, a1->immutableUtf8String)
+          Arcadia_ImmutableUTF8String_getBytes(thread, a1->immutableUTF8String),
+          Arcadia_ImmutableUTF8String_getBytes(thread, b1->immutableUTF8String),
+          Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, a1->immutableUTF8String)
         )
     );
 }
@@ -374,7 +374,7 @@ Arcadia_String_visit
     Arcadia_String* string
   )
 {
-  Arcadia_ImmutableUtf8String_visit(thread, string->immutableUtf8String);
+  Arcadia_ImmutableUTF8String_visit(thread, string->immutableUTF8String);
 }
 
 static void
@@ -570,11 +570,11 @@ Arcadia_String*
 Arcadia_String_create_pn
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableByteArray* immutableByteArray
+    Arcadia_InternalImmutableByteArray* immutableByteArray
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushImmutableByteArrayValue(thread, immutableByteArray);
+  Arcadia_ValueStack_pushInternalImmutableByteArrayValue(thread, immutableByteArray);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
   ARCADIA_CREATEOBJECT(Arcadia_String);
 }
@@ -601,12 +601,12 @@ Arcadia_String_endsWith_pn
     Arcadia_SizeValue numberOfBytes
   )
 {
-  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self->immutableUtf8String) < numberOfBytes) {
+  if (Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, self->immutableUTF8String) < numberOfBytes) {
     return Arcadia_BooleanValue_False;
   }
-  Arcadia_SizeValue d = Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self->immutableUtf8String) - numberOfBytes;
+  Arcadia_SizeValue d = Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, self->immutableUTF8String) - numberOfBytes;
   return !Arcadia_Memory_compare(thread,
-                                 Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String) + d,
+                                 Arcadia_ImmutableUTF8String_getBytes(thread, self->immutableUTF8String) + d,
                                  bytes, numberOfBytes);
 }
 
@@ -619,11 +619,11 @@ Arcadia_String_startsWith_pn
     Arcadia_SizeValue numberOfBytes
   )
 {
-  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self->immutableUtf8String) < numberOfBytes) {
+  if (Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, self->immutableUTF8String) < numberOfBytes) {
     return Arcadia_BooleanValue_False;
   }
   return !Arcadia_Memory_compare(thread,
-                                 Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String),
+                                 Arcadia_ImmutableUTF8String_getBytes(thread, self->immutableUTF8String),
                                  bytes, numberOfBytes);
 }
 
@@ -634,7 +634,7 @@ Arcadia_String_getNumberOfBytes
     Arcadia_String const* self
   )
 {
-  return Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self->immutableUtf8String);
+  return Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, self->immutableUTF8String);
 }
 
 Arcadia_Natural8Value const*
@@ -644,7 +644,7 @@ Arcadia_String_getBytes
     Arcadia_String const* self
   )
 {
-  return Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String);
+  return Arcadia_ImmutableUTF8String_getBytes(thread, self->immutableUTF8String);
 }
 
 Arcadia_Natural8Value
@@ -669,7 +669,7 @@ Arcadia_String_getNumberOfCodePoints
     Arcadia_String const* self
   )
 {
-  return Arcadia_ImmutableUtf8String_getNumberOfCodePoints(thread, self->immutableUtf8String);
+  return Arcadia_ImmutableUTF8String_getNumberOfCodePoints(thread, self->immutableUTF8String);
 }
 
 #if 0
@@ -696,8 +696,8 @@ Arcadia_String_isEqualTo_pn
     Arcadia_SizeValue numberOfBytes
   )
 {
-  if (Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, self->immutableUtf8String) == numberOfBytes) {
-    return !Arcadia_Memory_compare(thread, Arcadia_ImmutableUtf8String_getBytes(thread, self->immutableUtf8String),
+  if (Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, self->immutableUTF8String) == numberOfBytes) {
+    return !Arcadia_Memory_compare(thread, Arcadia_ImmutableUTF8String_getBytes(thread, self->immutableUTF8String),
                                    bytes, numberOfBytes);
   } else {
     return Arcadia_BooleanValue_False;
@@ -710,7 +710,7 @@ Arcadia_String_toBoolean
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toBoolean(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toBoolean(thread, self->immutableUTF8String); }
 
 Arcadia_Integer16Value
 Arcadia_String_toInteger16
@@ -718,7 +718,7 @@ Arcadia_String_toInteger16
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toInteger16(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toInteger16(thread, self->immutableUTF8String); }
 
 Arcadia_Integer32Value
 Arcadia_String_toInteger32
@@ -726,7 +726,7 @@ Arcadia_String_toInteger32
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toInteger32(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toInteger32(thread, self->immutableUTF8String); }
 
 Arcadia_Integer64Value
 Arcadia_String_toInteger64
@@ -734,7 +734,7 @@ Arcadia_String_toInteger64
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toInteger64(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toInteger64(thread, self->immutableUTF8String); }
 
 Arcadia_Integer8Value
 Arcadia_String_toInteger8
@@ -742,7 +742,7 @@ Arcadia_String_toInteger8
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toInteger8(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toInteger8(thread, self->immutableUTF8String); }
 
 Arcadia_Natural16Value
 Arcadia_String_toNatural16
@@ -750,7 +750,7 @@ Arcadia_String_toNatural16
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toNatural16(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toNatural16(thread, self->immutableUTF8String); }
 
 Arcadia_Natural32Value
 Arcadia_String_toNatural32
@@ -758,7 +758,7 @@ Arcadia_String_toNatural32
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toNatural32(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toNatural32(thread, self->immutableUTF8String); }
 
 Arcadia_Natural64Value
 Arcadia_String_toNatural64
@@ -766,7 +766,7 @@ Arcadia_String_toNatural64
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toNatural64(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toNatural64(thread, self->immutableUTF8String); }
 
 Arcadia_Natural8Value
 Arcadia_String_toNatural8
@@ -774,7 +774,7 @@ Arcadia_String_toNatural8
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toNatural8(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toNatural8(thread, self->immutableUTF8String); }
 
 Arcadia_Real32Value
 Arcadia_String_toReal32
@@ -798,7 +798,7 @@ Arcadia_String_toVoid
     Arcadia_Thread* thread,
     Arcadia_String const* self
   )
-{ return Arcadia_ImmutableUtf8String_toVoid(thread, self->immutableUtf8String); }
+{ return Arcadia_ImmutableUTF8String_toVoid(thread, self->immutableUTF8String); }
 
 Arcadia_String*
 Arcadia_String_createFromBoolean
@@ -806,7 +806,7 @@ Arcadia_String_createFromBoolean
     Arcadia_Thread* thread,
     Arcadia_BooleanValue booleanValue
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromBoolean(thread, booleanValue))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromBoolean(thread, booleanValue))); }
 
 Arcadia_String*
 Arcadia_String_createFromInteger16
@@ -814,7 +814,7 @@ Arcadia_String_createFromInteger16
     Arcadia_Thread* thread,
     Arcadia_Integer16Value integer16Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromInteger16(thread, integer16Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromInteger16(thread, integer16Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromInteger32
@@ -822,7 +822,7 @@ Arcadia_String_createFromInteger32
     Arcadia_Thread* thread,
     Arcadia_Integer32Value integer32Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromInteger32(thread, integer32Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromInteger32(thread, integer32Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromInteger64
@@ -830,7 +830,7 @@ Arcadia_String_createFromInteger64
     Arcadia_Thread* thread,
     Arcadia_Integer64Value integer64Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromInteger64(thread, integer64Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromInteger64(thread, integer64Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromInteger8
@@ -838,7 +838,7 @@ Arcadia_String_createFromInteger8
     Arcadia_Thread* thread,
     Arcadia_Integer8Value integer8Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromInteger8(thread, integer8Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromInteger8(thread, integer8Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromNatural16
@@ -846,7 +846,7 @@ Arcadia_String_createFromNatural16
     Arcadia_Thread* thread,
     Arcadia_Natural16Value natural16Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromNatural16(thread, natural16Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromNatural16(thread, natural16Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromNatural32
@@ -854,7 +854,7 @@ Arcadia_String_createFromNatural32
     Arcadia_Thread* thread,
     Arcadia_Natural32Value natural32Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromNatural32(thread, natural32Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromNatural32(thread, natural32Value))); }
 
 
 Arcadia_String*
@@ -863,7 +863,7 @@ Arcadia_String_createFromNatural64
     Arcadia_Thread* thread,
     Arcadia_Natural64Value natural64Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromNatural64(thread, natural64Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromNatural64(thread, natural64Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromNatural8
@@ -871,7 +871,7 @@ Arcadia_String_createFromNatural8
     Arcadia_Thread* thread,
     Arcadia_Natural8Value natural8Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromNatural8(thread, natural8Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromNatural8(thread, natural8Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromReal32
@@ -879,7 +879,7 @@ Arcadia_String_createFromReal32
     Arcadia_Thread* thread,
     Arcadia_Real32Value real32Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromReal32(thread, real32Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromReal32(thread, real32Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromReal64
@@ -887,7 +887,7 @@ Arcadia_String_createFromReal64
     Arcadia_Thread* thread,
     Arcadia_Real64Value real64Value
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromReal64(thread, real64Value))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromReal64(thread, real64Value))); }
 
 Arcadia_String*
 Arcadia_String_createFromSize
@@ -895,7 +895,7 @@ Arcadia_String_createFromSize
     Arcadia_Thread* thread,
     Arcadia_SizeValue sizeValue
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromSize(thread, sizeValue))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromSize(thread, sizeValue))); }
 
 Arcadia_String*
 Arcadia_String_createFromVoid
@@ -903,4 +903,4 @@ Arcadia_String_createFromVoid
     Arcadia_Thread* thread,
     Arcadia_VoidValue voidValue
   )
-{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_createFromVoid(thread, voidValue))); }
+{ return Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_createFromVoid(thread, voidValue))); }

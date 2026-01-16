@@ -17,7 +17,6 @@
 #define ARCADIA_RING1_IMPLEMENTATION_NETWORK_ADDRESSFAMILY_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Enumeration.h"
-#include <stddef.h>
 
 /// An enumeration of network address families.
 Arcadia_declareEnumerationType(u8"Arcadia.Network.AddressFamily", Arcadia_Network_AddressFamily);

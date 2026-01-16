@@ -34,9 +34,9 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getExtensions
             Arcadia_String_create
               (
                 thread,
-                Arcadia_Value_makeImmutableUtf8StringValue
+                Arcadia_Value_makeImmutableUTF8StringValue
                   (
-                    Arcadia_ImmutableUtf8String_create(thread, start, current - start)
+                    Arcadia_ImmutableUTF8String_create(thread, start, current - start)
                   )
               )
           );

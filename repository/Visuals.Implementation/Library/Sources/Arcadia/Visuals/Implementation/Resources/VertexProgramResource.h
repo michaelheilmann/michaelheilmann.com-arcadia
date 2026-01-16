@@ -29,7 +29,7 @@ struct Arcadia_Visuals_Implementation_VertexProgramResourceDispatch {
 struct Arcadia_Visuals_Implementation_VertexProgramResource {
   Arcadia_Visuals_Implementation_Resource _parent;
   Arcadia_BooleanValue dirty;
-  Arcadia_ImmutableByteArray* code;
+  Arcadia_InternalImmutableByteArray* code;
 };
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_VERTEXPROGRAMRESOURCE_H_INCLUDED

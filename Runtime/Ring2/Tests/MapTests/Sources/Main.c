@@ -28,11 +28,11 @@ mapTest1
 {
   Arcadia_Map* m = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_Value k, v;
-  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
-  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
+  Arcadia_Value_setObjectReferenceValue(&k, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
+  Arcadia_Value_setObjectReferenceValue(&v, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"https://michaelheilmann.com", sizeof(u8"https://michaelheilmann.com") - 1)));
   Arcadia_Map_set(thread, m, k, v, NULL, NULL);
   Arcadia_Value k2, v2;
-  Arcadia_Value_setObjectReferenceValue(&k2, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
+  Arcadia_Value_setObjectReferenceValue(&k2, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"siteAddress", sizeof(u8"siteAddress") - 1)));
   v2 = Arcadia_Map_get(thread, m, k2);
 }
 

@@ -113,6 +113,17 @@ Arcadia_BigInteger_visit
     Arcadia_BigIntegerValue self
   );
 
+#if defined(Arcadia_ARMS_Configuration_WithBarriers) && 1 == Arcadia_ARMS_Configuration_WithBarriers
+
+void
+Arcadia_BigInteger_ensureGray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_BigIntegerValue self
+  );
+
+#endif
+
 /// @return A pointer to an "foreign value" type of name "Arcadia.ImmutableByteArray".
 Arcadia_TypeValue
 _Arcadia_BigIntegerValue_getType

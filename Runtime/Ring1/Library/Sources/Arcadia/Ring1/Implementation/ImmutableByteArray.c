@@ -31,8 +31,8 @@ onTypeRemoved
   )
 { g_registered = Arcadia_BooleanValue_False; }
 
-Arcadia_ImmutableByteArray*
-Arcadia_ImmutableByteArray_create
+Arcadia_InternalImmutableByteArray*
+Arcadia_InternalImmutableByteArray_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,
@@ -43,7 +43,7 @@ Arcadia_ImmutableByteArray_create
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (SIZE_MAX - sizeof(Arcadia_ImmutableByteArray) < numberOfBytes) {
+  if (SIZE_MAX - sizeof(Arcadia_InternalImmutableByteArray) < numberOfBytes) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -51,34 +51,46 @@ Arcadia_ImmutableByteArray_create
     Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), TypeName, sizeof(TypeName) - 1, thread, &onTypeRemoved, NULL, NULL);
     g_registered = Arcadia_BooleanValue_True;
   }
-  Arcadia_ImmutableByteArray*array = NULL;
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableByteArray) + numberOfBytes);
+  Arcadia_InternalImmutableByteArray*array = NULL;
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_InternalImmutableByteArray) + numberOfBytes);
   Arcadia_Memory_copy(thread, array->bytes, bytes, numberOfBytes);
   array->numberOfBytes = numberOfBytes;
   return array;
 }
 
 void
-Arcadia_ImmutableByteArray_visit
+Arcadia_InternalImmutableByteArray_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableByteArrayValue self
+    Arcadia_InternalImmutableByteArrayValue self
   )
 { Arcadia_Process_visitObject(Arcadia_Thread_getProcess(thread), self); }
 
-Arcadia_Natural8Value const*
-Arcadia_ImmutableByteArray_getBytes
+#if defined(Arcadia_ARMS_Configuration_WithBarriers) && 1 == Arcadia_ARMS_Configuration_WithBarriers
+
+void
+Arcadia_InternalImmutableByteArray_ensureGray
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableByteArrayValue self
+    Arcadia_InternalImmutableByteArrayValue self
+  )
+{ /*Arcadia_Process_ensureGray(Arcadia_Thread_getProcess(thread), self);*/ }
+
+#endif
+
+Arcadia_Natural8Value const*
+Arcadia_InternalImmutableByteArray_getBytes
+  (
+    Arcadia_Thread* thread,
+    Arcadia_InternalImmutableByteArrayValue self
   )
 { return self->bytes; }
 
 Arcadia_SizeValue
-Arcadia_ImmutableByteArray_getNumberOfBytes
+Arcadia_InternalImmutableByteArray_getNumberOfBytes
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableByteArrayValue self
+    Arcadia_InternalImmutableByteArrayValue self
   )
 { return self->numberOfBytes; }
 
@@ -139,8 +151,8 @@ isEqualTo
   )
 {
   BINARY_OPERATION();
-  if (Arcadia_Value_isImmutableByteArrayValue(&y)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getImmutableByteArrayValue(&x) == Arcadia_Value_getImmutableByteArrayValue(&y));
+  if (Arcadia_Value_isInternalImmutableByteArrayValue(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getInternalImmutableByteArrayValue(&x) == Arcadia_Value_getInternalImmutableByteArrayValue(&y));
   } else {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
@@ -153,7 +165,7 @@ hash
   )
 {
   UNARY_OPERATION();
-  Arcadia_ValueStack_pushSizeValue(thread, (Arcadia_SizeValue)(uintptr_t)Arcadia_Value_getImmutableByteArrayValue(&x));
+  Arcadia_ValueStack_pushSizeValue(thread, (Arcadia_SizeValue)(uintptr_t)Arcadia_Value_getInternalImmutableByteArrayValue(&x));
 }
 
 static void
@@ -163,8 +175,8 @@ isNotEqualTo
   )
 {
   BINARY_OPERATION();
-  if (Arcadia_Value_isImmutableByteArrayValue(&y)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getImmutableByteArrayValue(&x) != Arcadia_Value_getImmutableByteArrayValue(&y));
+  if (Arcadia_Value_isInternalImmutableByteArrayValue(&y)) {
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_Value_getInternalImmutableByteArrayValue(&x) != Arcadia_Value_getInternalImmutableByteArrayValue(&y));
   } else {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
   }
@@ -182,13 +194,13 @@ typeDestructing
 }
 
 Arcadia_TypeValue
-_Arcadia_ImmutableByteArrayValue_getType
+_Arcadia_InternalImmutableByteArrayValue_getType
   (
     Arcadia_Thread* thread
   )
 {
   if (!g_type) {
-    g_type = Arcadia_registerInternalType(thread, TypeName, sizeof(TypeName) - 1, &_typeOperations, &typeDestructing);
+    g_type = Arcadia_registerInternalType(thread, Arcadia_Names_getOrCreateName(thread, TypeName, sizeof(TypeName) - 1), &_typeOperations, &typeDestructing);
   }
   return g_type;
 }

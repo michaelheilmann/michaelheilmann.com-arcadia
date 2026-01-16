@@ -98,7 +98,7 @@ Context_constructImpl
     u8"  generatorHome : \"https://michaelheilmann.com\",\n"
     u8"}\n"
     ;
-  Arcadia_String* sourceString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, sourceBytes, sizeof(sourceBytes) - 1)));
+  Arcadia_String* sourceString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, sourceBytes, sizeof(sourceBytes) - 1)));
   self->environment = Environment_loadString(thread, sourceString);
   Arcadia_TemplateEngine_registerTimeLibrary(thread, self->environment);
 

@@ -107,18 +107,20 @@ Arcadia_Visuals_Implementation_Scene_FrameBufferNode_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_Scene_FrameBufferNode_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_Value sceneNodeFactory = Arcadia_ValueStack_getValue(thread, 1);
+    Arcadia_ValueStack_pushValue(thread, &sceneNodeFactory);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
+  if (Arcadia_ValueStack_isVoidValue(thread, 2)) {
     self->backendContext = NULL;
   } else {
-    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_BackendContext_getType(thread));
+    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_BackendContext_getType(thread));
     Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
   }
   self->width = 320;
@@ -248,11 +250,13 @@ Arcadia_Visuals_Implementation_Scene_FrameBufferNode*
 Arcadia_Visuals_Implementation_Scene_FrameBufferNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  if (sceneNodeFactory) Arcadia_ValueStack_pushObjectReferenceValue(thread, sceneNodeFactory); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_Scene_FrameBufferNode);
 }

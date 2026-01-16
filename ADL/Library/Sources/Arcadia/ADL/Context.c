@@ -21,7 +21,11 @@
 #include "Arcadia/ADL/Definitions/ColorReader.h"
 #include "Arcadia/ADL/Definitions/CheckerboardFillOperationReader.h"
 #include "Arcadia/ADL/Definitions/FillOperationReader.h"
+#include "Arcadia/ADL/Definitions/MaterialReader.h"
+#include "Arcadia/ADL/Definitions/MeshReader.h"
+#include "Arcadia/ADL/Definitions/ModelReader.h"
 #include "Arcadia/ADL/Definitions/PixelBufferReader.h"
+#include "Arcadia/ADL/Definitions/TextureReader.h"
 
 static void
 Arcadia_ADL_Context_constructImpl
@@ -65,7 +69,8 @@ readFromString
     Arcadia_Thread* thread,
     Arcadia_ADL_Context* self,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_String* input
+    Arcadia_String* input,
+    Arcadia_BooleanValue skipExisting
   );
 
 static Arcadia_ADL_Definition*
@@ -74,7 +79,8 @@ readFromNode
     Arcadia_Thread* thread,
     Arcadia_ADL_Context* self,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_DDL_MapNode* input
+    Arcadia_DDL_MapNode* input,
+    Arcadia_BooleanValue skipExisting
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -112,7 +118,11 @@ Arcadia_ADL_Context_constructImpl
   self->readers = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   //
   {
-    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_PixelBufferOperations_FillOperationReader_create(thread);
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_ColorReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_PixelBufferReader_create(thread);
     Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
   }
   {
@@ -120,11 +130,24 @@ Arcadia_ADL_Context_constructImpl
     Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
   }
   {
-    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_ColorReader_create(thread);
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_PixelBufferOperations_FillOperationReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  //
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_MaterialReader_create(thread);
     Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
   }
   {
-    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_PixelBufferReader_create(thread);
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_MeshReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_ModelReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_TextureReader_create(thread);
     Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
   }
   //
@@ -214,7 +237,8 @@ readFromString
     Arcadia_Thread* thread,
     Arcadia_ADL_Context* self,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_String* input
+    Arcadia_String* input,
+    Arcadia_BooleanValue skipExisting
   )
 {
   Arcadia_DDL_DefaultReader* reader = (Arcadia_DDL_DefaultReader*)Arcadia_DDL_DefaultReader_create(thread);
@@ -224,7 +248,7 @@ readFromString
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
-  return readFromNode(thread, self, definitions, (Arcadia_DDL_MapNode*)node);
+  return readFromNode(thread, self, definitions, (Arcadia_DDL_MapNode*)node, skipExisting);
 }
 
 
@@ -234,7 +258,8 @@ readFromNode
     Arcadia_Thread* thread,
     Arcadia_ADL_Context* self,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_DDL_MapNode* input
+    Arcadia_DDL_MapNode* input,
+    Arcadia_BooleanValue skipExisting
   )
 {
   // (1) Retrieve reader.
@@ -256,13 +281,17 @@ readFromNode
   // (3) Assert there is no definition of the same name in the definitions already.
   Arcadia_Value temporary = Arcadia_Map_get(thread, definitions->definitions, Arcadia_Value_makeObjectReferenceValue(definition->name));
   if (!Arcadia_Value_isVoidValue(&temporary)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_Exists);
-    Arcadia_Thread_jump(thread);
+    if (!skipExisting) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_Exists);
+      Arcadia_Thread_jump(thread);
+    }
+    return (Arcadia_ADL_Definition*)Arcadia_Value_getObjectReferenceValueChecked(thread, temporary, _Arcadia_ADL_Definition_getType(thread));
+  } else {
+    // (4) Register the definition.
+    Arcadia_Map_set(thread, definitions->definitions, Arcadia_Value_makeObjectReferenceValue(definition->name), Arcadia_Value_makeObjectReferenceValue(definition), NULL, NULL);
+    // (5) Return the definition.
+    return definition;
   }
-  // (4) Register the definition.
-  Arcadia_Map_set(thread, definitions->definitions, Arcadia_Value_makeObjectReferenceValue(definition->name), Arcadia_Value_makeObjectReferenceValue(definition), NULL, NULL);
-  // (5) Return the definition.
-  return definition;
 }
 
 static Arcadia_ADL_Context* g_instance = NULL;
@@ -295,7 +324,8 @@ Arcadia_ADL_Context_readFromNode
     Arcadia_Thread* thread,
     Arcadia_ADL_Context* self,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_DDL_Node* input
+    Arcadia_DDL_Node* input,
+    Arcadia_BooleanValue skipExisting
   )
 {
   if (!input) {
@@ -308,7 +338,7 @@ Arcadia_ADL_Context_readFromNode
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
-  return readFromNode(thread, self, definitions, (Arcadia_DDL_MapNode*)input);
+  return readFromNode(thread, self, definitions, (Arcadia_DDL_MapNode*)input, skipExisting);
 }
 
 Arcadia_ADL_Definition*
@@ -317,7 +347,8 @@ Arcadia_ADL_Context_readFromString
     Arcadia_Thread* thread,
     Arcadia_ADL_Context* self,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_String* input
+    Arcadia_String* input,
+    Arcadia_BooleanValue skipExisting
   )
 {
   if (!input) {
@@ -325,5 +356,5 @@ Arcadia_ADL_Context_readFromString
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return readFromString(thread, self, definitions, input);
+  return readFromString(thread, self, definitions, input, skipExisting);
 }

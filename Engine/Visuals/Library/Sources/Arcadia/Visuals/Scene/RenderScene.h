@@ -21,13 +21,14 @@
 #endif
 #include "Arcadia/Visuals/Scene/RenderingContextNode.h"
 #include "Arcadia/Visuals/Scene/MeshNode.h"
+#include "Arcadia/Visuals/Scene/ModelNode.h"
 
 void
 Arcadia_Visuals_renderScene
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Scene_RenderingContextNode* renderingContextNode,
-    Arcadia_Visuals_Scene_MeshNode* meshNode,
+    Arcadia_Visuals_Scene_ModelNode* modelNode,
     Arcadia_Visuals_BackendContext* backendContext
   );
 

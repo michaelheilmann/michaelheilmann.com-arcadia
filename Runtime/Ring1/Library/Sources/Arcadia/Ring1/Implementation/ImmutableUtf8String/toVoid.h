@@ -17,13 +17,13 @@
 #define ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TOVOID_H_INCLUDED
 
 #include "Arcadia/Ring1/Implementation/Void.h"
-typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
+typedef struct Arcadia_ImmutableUTF8String Arcadia_ImmutableUTF8String;
 
 Arcadia_VoidValue
 _toVoid
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TOVOID_H_INCLUDED

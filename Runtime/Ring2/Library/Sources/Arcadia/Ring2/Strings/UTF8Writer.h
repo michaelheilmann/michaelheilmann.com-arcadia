@@ -31,7 +31,7 @@ struct Arcadia_UTF8WriterDispatch {
   Arcadia_ObjectDispatch _parent;
   void (*writeBytes)(Arcadia_Thread*, Arcadia_UTF8Writer* self, const void* bytes, Arcadia_SizeValue numberOfBytes);
   void (*writeCodePoints)(Arcadia_Thread*, Arcadia_UTF8Writer* self, Arcadia_Natural32Value const* codePoints, Arcadia_SizeValue numberOfCodePoints);
-  void (*writeImmutableUTF8String)(Arcadia_Thread* thread, Arcadia_UTF8Writer* self, Arcadia_ImmutableUtf8String* string);
+  void (*writeImmutableUTF8String)(Arcadia_Thread* thread, Arcadia_UTF8Writer* self, Arcadia_ImmutableUTF8String* string);
   void (*writeString)(Arcadia_Thread* thread, Arcadia_UTF8Writer* self, Arcadia_String* string);
   void (*flush)(Arcadia_Thread* thread, Arcadia_UTF8Writer* self);
 };
@@ -59,11 +59,11 @@ Arcadia_UTF8Writer_writeCodePoints
   );
 
 void
-Arcadia_UTF8Writer_writeImmutableUtf8String
+Arcadia_UTF8Writer_writeImmutableUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_UTF8Writer* self,
-    Arcadia_ImmutableUtf8String* string
+    Arcadia_ImmutableUTF8String* string
   );
 
 void

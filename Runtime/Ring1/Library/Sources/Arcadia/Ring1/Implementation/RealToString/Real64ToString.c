@@ -371,7 +371,7 @@ toString64
 }
 
 void
-Arcadia_Real64Value_toUtf8String
+Arcadia_Real64Value_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value value,

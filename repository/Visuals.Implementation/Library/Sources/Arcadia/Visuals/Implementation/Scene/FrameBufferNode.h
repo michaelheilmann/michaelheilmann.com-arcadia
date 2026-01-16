@@ -18,6 +18,8 @@
 
 #include "Arcadia/Visuals/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
+typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_Implementation_SceneNodeFactory;
+
 typedef struct Arcadia_Visuals_Implementation_FrameBufferResource Arcadia_Visuals_Implementation_FrameBufferResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Scene.FrameBufferNode", Arcadia_Visuals_Implementation_Scene_FrameBufferNode,
@@ -44,7 +46,8 @@ Arcadia_Visuals_Implementation_Scene_FrameBufferNode*
 Arcadia_Visuals_Implementation_Scene_FrameBufferNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_SCENE_FRAMEBUFFERNODE_H_INCLUDED

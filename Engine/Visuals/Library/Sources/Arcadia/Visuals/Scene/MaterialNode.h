@@ -17,6 +17,9 @@
 #define ARCADIA_VISUALS_SCENE_MATERIALNODE_H_INCLUDED
 
 #include "Arcadia/Visuals/Scene/Node.h"
+#include "Arcadia/ADL/Include.h"
+typedef struct Arcadia_Visuals_SceneNodeFactory Arcadia_Visuals_SceneNodeFactory;
+typedef struct Arcadia_Visuals_Scene_TextureNode Arcadia_Visuals_Scene_TextureNode;
 typedef struct Arcadia_Visuals_VPL_Program Arcadia_Visuals_VPL_Program;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Scene.MaterialNode", Arcadia_Visuals_Scene_MaterialNode,
@@ -28,14 +31,9 @@ struct Arcadia_Visuals_Scene_MaterialNodeDispatch {
 
 struct Arcadia_Visuals_Scene_MaterialNode {
   Arcadia_Visuals_Scene_Node parent;
+  Arcadia_ADL_MaterialDefinition* source;
+  Arcadia_Visuals_Scene_TextureNode* ambientColorTexture;
   Arcadia_Visuals_VPL_Program* program;
 };
-
-Arcadia_Visuals_Scene_MaterialNode*
-Arcadia_Visuals_Scene_MaterialNode_create
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_VPL_Program* program
-  );
 
 #endif  // ARCADIA_VISUALS_SCENE_MATERIALNODE_H_INCLUDED

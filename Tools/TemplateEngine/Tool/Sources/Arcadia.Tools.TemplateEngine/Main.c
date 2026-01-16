@@ -19,12 +19,14 @@
 #include "Arcadia.Tools.TemplateEngine.Library/Context.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 
+/*
+ * @todo Use the call stack functionality to ensure proper stack unwinding.
+ * @param arguments List of strings, a string represents a command-line argument.
+ */
 void
 main1
   (
-    Arcadia_Thread* thread,
-    int argc,
-    char** argv
+    Arcadia_Thread* thread
   )
 {
   Arcadia_Value sourceFileValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
@@ -33,11 +35,13 @@ main1
                 dependenciesFileValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void),
                 logFileValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
 
-  Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  for (int argi = 1; argi < argc; ++argi) {
-    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
-    Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
+  if (Arcadia_ValueStack_getNatural8Value(thread, 0) != 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
+  Arcadia_List* arguments = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
+  Arcadia_ValueStack_popValues(thread, 2);
+
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
     Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
     Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argument);
@@ -137,7 +141,13 @@ main
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    main1(thread, argc, argv);
+    Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+    for (int argi = 1; argi < argc; ++argi) {
+      Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_Object*)Arcadia_String_createFromCxxString(thread, argv[argi]));
+    }
+    Arcadia_ValueStack_pushObjectReferenceValue(thread,(Arcadia_Object*)arguments);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    main1(thread);
   }
   Arcadia_Thread_popJumpTarget(thread);
   Arcadia_Status status = Arcadia_Thread_getStatus(thread);

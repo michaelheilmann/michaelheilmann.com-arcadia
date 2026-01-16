@@ -20,34 +20,34 @@
 #include "Arcadia/Ring1/Implementation/Integer32.h"
 #include "Arcadia/Ring1/Implementation/Integer64.h"
 #include "Arcadia/Ring1/Implementation/Integer8.h"
-typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
+typedef struct Arcadia_ImmutableUTF8String Arcadia_ImmutableUTF8String;
 
 Arcadia_Integer16Value
 _toInteger16
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 Arcadia_Integer32Value
 _toInteger32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 Arcadia_Integer64Value
 _toInteger64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 Arcadia_Integer8Value
 _toInteger8
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   );
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_TOINTEGER_H_INCLUDED

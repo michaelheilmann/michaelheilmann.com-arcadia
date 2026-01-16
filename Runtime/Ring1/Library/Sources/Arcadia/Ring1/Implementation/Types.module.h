@@ -26,9 +26,13 @@
 typedef struct TypeNode TypeNode;
 
 struct TypeNode {
+  /// Pointer to the successor in the bucket list or the null pointer.
   TypeNode* next;
-  Arcadia_AtomValue typeName;
+  /// The kind of this type.
   Arcadia_TypeKind kind;
+  /// The name of this type.
+  Arcadia_Name* name;
+
   TypeNode* parentObjectType;
   Arcadia_SizeValue valueSize;
   Arcadia_Type_Operations const* typeOperations;

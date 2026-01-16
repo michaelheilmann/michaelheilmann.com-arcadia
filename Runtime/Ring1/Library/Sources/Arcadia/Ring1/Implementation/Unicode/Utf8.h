@@ -21,7 +21,7 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/Unicode/Unicode.h"
 
-#define Arcadia_Configuration_Unicode_Utf8_ClassifyFirstByteOptimization (1)
+#define Arcadia_Configuration_Unicode_UTF8_ClassifyFirstByteOptimization (1)
 
 /// @brief
 /// The first Byte of an code point encoded in UTF-8 encoding denotes the number of subsequent Bytes.
@@ -32,20 +32,20 @@
 /// @return
 /// 1, 2, 3, or 4 or Arcadia_SizeValue_Maximum.
 static inline Arcadia_SizeValue
-Arcadia_Unicode_Utf8_classifyFirstByte
+Arcadia_Unicode_UTF8_classifyFirstByte
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value value
   );
 
 static Arcadia_SizeValue
-Arcadia_Unicode_Utf8_classifyFirstByte
+Arcadia_Unicode_UTF8_classifyFirstByte
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value value
   )
 {
-#if Arcadia_Configuration_Unicode_Utf8_ClassifyFirstByteOptimization == 1
+#if Arcadia_Configuration_Unicode_UTF8_ClassifyFirstByteOptimization == 1
   if ((value & 0x80) == 0x00) {
     // To determine if the first Byte is in the range 0xxx xxxx,
     // mask the Byte with 1000 0000 / 0x80. If the result is 0,
@@ -69,7 +69,7 @@ Arcadia_Unicode_Utf8_classifyFirstByte
   } else {
     return Arcadia_SizeValue_Maximum;
   }
-#elif Arcadia_Configuration_Unicode_Utf8_ClassifyFirstByteOptimization == 0
+#elif Arcadia_Configuration_Unicode_UTF8_ClassifyFirstByteOptimization == 0
   if (value <= 0x7F) { /* 0b01111111 */
     // To determine if the first Byte is in the range 0xxx xxxx, we must ensure that the first Bit is 0.
     // If x is smaller than or equal to 0111 1111 / 0x7f then the first Bit is 0.

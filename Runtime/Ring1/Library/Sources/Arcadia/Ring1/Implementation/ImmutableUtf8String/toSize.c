@@ -22,13 +22,13 @@ Arcadia_SizeValue
 _toSize
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
 #if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
-  return _toNatural64(thread, immutableUtf8StringValue);
+  return _toNatural64(thread, immutableUTF8StringValue);
 #elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
-  return _toNatural32(thread, immutableUtf8StringValue);
+  return _toNatural32(thread, immutableUTF8StringValue);
 #else
   #error("environemnt not (yet) supported");
 #endif

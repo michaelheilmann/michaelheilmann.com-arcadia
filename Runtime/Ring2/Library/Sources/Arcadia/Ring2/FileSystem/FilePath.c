@@ -231,7 +231,7 @@ normalize
   }
   if (!self->root && Arcadia_Collection_isEmpty(thread, (Arcadia_Collection*)self->fileNames)) {
     // If the path is empty, then the path is `.`.
-    Arcadia_List_insertBackObjectReferenceValue(thread, self->fileNames, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8".", sizeof(u8".") - 1)));
+    Arcadia_List_insertBackObjectReferenceValue(thread, self->fileNames, (Arcadia_ObjectReferenceValue)Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8".", sizeof(u8".") - 1)));
   }
 }
 
@@ -338,7 +338,7 @@ parseUnixFilePath
 
   if (isSlash(thread, &context)) {
     target->relative = Arcadia_BooleanValue_False;
-    target->root = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"/", sizeof(u8"/") - 1));
+    target->root = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"/", sizeof(u8"/") - 1));
     next(thread, &context);
   }
   // read the remaining directories
@@ -386,7 +386,7 @@ parseGenericFilePath
 
   if (isSlash(thread, &context)) {
     target->relative = Arcadia_BooleanValue_False;
-    target->root = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"/", sizeof(u8"/") - 1));
+    target->root = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"/", sizeof(u8"/") - 1));
     next(thread, &context);
   }
   // read the remaining directories

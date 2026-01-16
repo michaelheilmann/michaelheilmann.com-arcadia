@@ -194,7 +194,7 @@ Arcadia_DirectoryIteratorLinux_getValue
   )
 {
   if (self->dirent) {
-    Arcadia_String* fileNameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, self->dirent->d_name, strlen(self->dirent->d_name))));
+    Arcadia_String* fileNameString = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, self->dirent->d_name, strlen(self->dirent->d_name))));
     return Arcadia_FilePath_parseNative(thread, fileNameString);
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);

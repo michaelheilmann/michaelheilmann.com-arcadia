@@ -101,8 +101,8 @@ Arcadia_ADL_PixelBufferOperations_FillOperationDefinition_constructImpl
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 3);
     name = Arcadia_ValueStack_getValue(thread, 2);
-    Arcadia_ValueStack_pushValue(thread, &name);
     Arcadia_ValueStack_pushValue(thread, &definitions);
+    Arcadia_ValueStack_pushValue(thread, &name);
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
@@ -133,13 +133,13 @@ Arcadia_ADL_PixelBufferOperations_FillOperationDefinition_create
   (
     Arcadia_Thread* thread,
     Arcadia_ADL_Definitions* definitions,
-    Arcadia_String* qualifiedName,
+    Arcadia_String* name,
     Arcadia_String* colorName
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)definitions);
-  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)qualifiedName);
+  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)name);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)colorName);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
   ARCADIA_CREATEOBJECT(Arcadia_ADL_PixelBufferOperations_FillOperationDefinition);

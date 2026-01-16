@@ -84,7 +84,7 @@ classifyFirstByte
 }
 
 Arcadia_BooleanValue
-Arcadia_Unicode_isUtf8
+Arcadia_Unicode_isUTF8
   (
     Arcadia_Thread* thread,
     void const* bytes,
@@ -141,7 +141,7 @@ Arcadia_Unicode_isUtf8
 }
 
 void
-Arcadia_Unicode_encodeCodePointsUtf8
+Arcadia_Unicode_encodeCodePointsUTF8
   (
     Arcadia_Thread* thread,
     Arcadia_Natural32Value const* codePoints,
@@ -320,7 +320,7 @@ Arcadia_Unicode_encodeCodePointsUtf32Le
 }
 
 void
-Arcadia_Unicode_encodeBytesUtf8
+Arcadia_Unicode_encodeBytesUTF8
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,

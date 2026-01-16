@@ -34,7 +34,7 @@ main1
   Arcadia_Value_setVoidValue(&target, Arcadia_VoidValue_Void);
   Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
-    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
+    Arcadia_String* argument = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, argv[argi], strlen(argv[argi])));
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
@@ -62,7 +62,7 @@ main1
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
   if (Arcadia_Value_isVoidValue(&target)) {
-    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, u8"target", sizeof(u8"target") - 1)));
+    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"target", sizeof(u8"target") - 1)));
   }
 
   Arcadia_String* pathPrefixString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&target);

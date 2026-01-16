@@ -56,7 +56,7 @@ createConstantBlocks
   type = self->MAT4;
   Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
   // vec4 color;
-  name = Arcadia_String_createFromCxxString(thread, u8"color");
+  name = Arcadia_String_createFromCxxString(thread, u8"ambientColor");
   type = self->VEC4;
   Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
   // create the constant block "mesh"

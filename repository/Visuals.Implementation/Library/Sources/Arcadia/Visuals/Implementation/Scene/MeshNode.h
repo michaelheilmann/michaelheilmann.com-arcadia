@@ -18,6 +18,8 @@
 
 #include "Arcadia/Visuals/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
+typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_Implementation_SceneNodeFactory;
+
 typedef struct Arcadia_Visuals_Implementation_MeshResource Arcadia_Visuals_Implementation_MeshResource;
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Scene.MeshNode", Arcadia_Visuals_Implementation_Scene_MeshNode,
@@ -29,7 +31,6 @@ struct Arcadia_Visuals_Implementation_Scene_MeshNodeDispatch {
 
 struct Arcadia_Visuals_Implementation_Scene_MeshNode {
   Arcadia_Visuals_Scene_MeshNode _parent;
-
   Arcadia_Visuals_Implementation_BackendContext* backendContext;
   Arcadia_Visuals_Implementation_MeshResource* meshResource;
 };
@@ -39,7 +40,8 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* backendContext,
-    Arcadia_Visuals_Scene_MaterialNode* material
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory,
+    Arcadia_ADL_MeshDefinition* source
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_SCENE_MESHNODE_H_INCLUDED

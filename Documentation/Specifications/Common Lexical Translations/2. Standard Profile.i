@@ -273,9 +273,9 @@ Lexical.EscapeSequence : #5c #75
   <li><code>Lexical.DoubleQuote {Lexical.DoubleQuotedStringCharacter} Lexical.DoubleQuote</code> has the leading double quote and the trailing double quote removed.</li>
   <li><code>Lexical.SingleQuote {Lexical.SingleQuotedStringCharacter} Lexical.SingleQuote</code> has the leading single quote and the trailing single quote removed.</li>
   <li><code>#5c #5c</code> (double "REVERSE SOLIDUS") are replaced by <code>#5c</code> ("REVERSE SOLIDUS")</li>
-  <li><code>#5c #64</code> ("REVERSE SOLIDUS" followed by "LATIN SMALL LETTER B") are replaced by <code>#7</code> ("BELL")>/li>
+  <li><code>#5c #64</code> ("REVERSE SOLIDUS" followed by "LATIN SMALL LETTER B") are replaced by <code>#7</code> ("BELL")</li>
   <li><code>#5c #66</code> ("REVERSE SOLIDUS" followed by "LATIN SMALL LETTER F") are replaced by <code>#c</code> ("FORM FEED")</li>
-  <li><code>#5c #6e</code> ("REVERSE SOLIDUS" followed by "LATIN SMALL LETTER N") are replaced by <code>#a</code> ("LINE FEED")>/li>
+  <li><code>#5c #6e</code> ("REVERSE SOLIDUS" followed by "LATIN SMALL LETTER N") are replaced by <code>#a</code> ("LINE FEED")</li>
   <li><code>#5c #72</code> ("REVERSE SOLIDUS" followed by "LATIN SMALL LETTER R") are replaced by <code>#d</code> ("CARRIAGE RETURN")</li>
   <li><code>#5c #72</code> ("REVERSE SOLIDUS" followed by "LATIN SMALL LETTER T") are replaced by <code>#9</code> ("TAB")</li>
   <li><code>#5c 'u' Lexical.HexadecimalDigit Lexical.HexadecimalDigit Lexical.HexadecimalDigit Lexical.HexadecimalDigit</code> is replaced

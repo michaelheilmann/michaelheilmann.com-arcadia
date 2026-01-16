@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
+#include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Integer16.h"
 #include "Arcadia/Ring1/Implementation/Integer32.h"
@@ -34,11 +35,11 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 #include "Arcadia/Ring1/Implementation/Void.h"
 
-typedef struct Arcadia_ImmutableUtf8String Arcadia_ImmutableUtf8String;
+typedef struct Arcadia_ImmutableUTF8String Arcadia_ImmutableUTF8String;
 
-typedef Arcadia_ImmutableUtf8String* Arcadia_ImmutableUtf8StringValue;
+typedef Arcadia_ImmutableUTF8String* Arcadia_ImmutableUTF8StringValue;
 
-struct Arcadia_ImmutableUtf8String {
+struct Arcadia_ImmutableUTF8String {
   Arcadia_SizeValue hash;
   Arcadia_SizeValue numberOfBytes;
   Arcadia_Natural8Value bytes[];
@@ -51,8 +52,8 @@ struct Arcadia_ImmutableUtf8String {
 /// @return A pointer to the immmutable UTF8 string object.
 /// @error #Arcadia_Status_ArgumentInvalid @a bytes ia null pointer
 /// @error #Arcadia_Status_ArgumentInvalid the sequence of Bytes is an UTF8 string
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_create
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_create
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,
@@ -63,8 +64,8 @@ Arcadia_ImmutableUtf8String_create
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param booleanValue The Arcadia_BooleanValue value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromBoolean
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromBoolean
   (
     Arcadia_Thread* thread,
     Arcadia_BooleanValue booleanValue
@@ -74,8 +75,8 @@ Arcadia_ImmutableUtf8String_createFromBoolean
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param integer16Value The Arcadia_Integer16Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromInteger16
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromInteger16
   (
     Arcadia_Thread* thread,
     Arcadia_Integer16Value integer16Value
@@ -85,8 +86,8 @@ Arcadia_ImmutableUtf8String_createFromInteger16
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param integer32Value The Arcadia_Integer32Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromInteger32
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromInteger32
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value integer32Value
@@ -96,8 +97,8 @@ Arcadia_ImmutableUtf8String_createFromInteger32
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param integer64Value The Arcadia_Integer64Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromInteger64
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromInteger64
   (
     Arcadia_Thread* thread,
     Arcadia_Integer64Value integer64Value
@@ -107,8 +108,8 @@ Arcadia_ImmutableUtf8String_createFromInteger64
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param integer8Value The Arcadia_Integer8Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromInteger8
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromInteger8
   (
     Arcadia_Thread* thread,
     Arcadia_Integer8Value integer8Value
@@ -118,8 +119,8 @@ Arcadia_ImmutableUtf8String_createFromInteger8
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param natural16Value The Arcadia_Natural16Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromNatural16
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromNatural16
   (
     Arcadia_Thread* thread,
     Arcadia_Natural16Value natural16Value
@@ -129,8 +130,8 @@ Arcadia_ImmutableUtf8String_createFromNatural16
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param natural32Value The Arcadia_Natural32Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromNatural32
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromNatural32
   (
     Arcadia_Thread* thread,
     Arcadia_Natural32Value natural32Value
@@ -140,8 +141,8 @@ Arcadia_ImmutableUtf8String_createFromNatural32
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param natural64Value The Arcadia_Natural64Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromNatural64
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromNatural64
   (
     Arcadia_Thread* thread,
     Arcadia_Natural64Value natural64Value
@@ -151,8 +152,8 @@ Arcadia_ImmutableUtf8String_createFromNatural64
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param natural8Value The Arcadia_Natural8Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromNatural8
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromNatural8
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value natural8Value
@@ -162,8 +163,8 @@ Arcadia_ImmutableUtf8String_createFromNatural8
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param voidValue The Arcadia_Real32Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromReal32
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromReal32
   (
     Arcadia_Thread* thread,
     Arcadia_Real32Value real32Value
@@ -173,8 +174,8 @@ Arcadia_ImmutableUtf8String_createFromReal32
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param voidValue The Arcadia_Real64Value value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromReal64
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromReal64
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value real64Value
@@ -184,8 +185,8 @@ Arcadia_ImmutableUtf8String_createFromReal64
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param voidValue The Arcadia_SizeValue value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromSize
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromSize
   (
     Arcadia_Thread* thread,
     Arcadia_SizeValue sizeValue
@@ -195,21 +196,42 @@ Arcadia_ImmutableUtf8String_createFromSize
 /// @param thread A pointer to the Arcadia_Thread object.
 /// @param voidValue The Arcadia_VoidValue value.
 /// @return A pointer to the immmutable UTF8 string object.
-Arcadia_ImmutableUtf8String*
-Arcadia_ImmutableUtf8String_createFromVoid
+Arcadia_ImmutableUTF8String*
+Arcadia_ImmutableUTF8String_createFromVoid
   (
     Arcadia_Thread* thread,
     Arcadia_VoidValue voidValue
   );
 
-/// @brief Visit this immutable UTF8 string object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @brief
+/// Visit this Arcadia_ImmutableUTF8String object.
+/// @param thread
+/// A pointer to the Arcadia_Thread object.
+/// @param self
+/// A pointer to this Arcadia_ImmutableUTF8String object.
 void
-Arcadia_ImmutableUtf8String_visit
+Arcadia_ImmutableUTF8String_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
+
+#if defined(Arcadia_ARMS_Configuration_WithBarriers) && 1 == Arcadia_ARMS_Configuration_WithBarriers
+
+/// @brief
+/// Ensure this Arcadia_ImmutableUTF8String object is gray.
+/// @param thread
+/// A pointer to this Arcadia_Thread object.
+/// @param self
+/// A pointer to this Arcadia_ImmutableUTF8String object.
+void
+Arcadia_ImmutableUTF8String_ensureGray
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUTF8StringValue self
+  );
+
+#endif
 
 /// @brief Get a pointer to the Bytes of this immutable UTF8 string object.
 /// @param thread A pointer to the Arcadia_Thread object.
@@ -217,10 +239,10 @@ Arcadia_ImmutableUtf8String_visit
 /// @return A pointer to the Bytes of this immutable UTF8 stirng object.
 /// @warning The Bytes of the array must not be modified.
 Arcadia_Natural8Value const*
-Arcadia_ImmutableUtf8String_getBytes
+Arcadia_ImmutableUTF8String_getBytes
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Get the number of Bytes in this immutable UTF8 string object.
@@ -228,10 +250,10 @@ Arcadia_ImmutableUtf8String_getBytes
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The number of Bytes in this immutable UTF8 string object.
 Arcadia_SizeValue
-Arcadia_ImmutableUtf8String_getNumberOfBytes
+Arcadia_ImmutableUTF8String_getNumberOfBytes
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Get the hash of this immutable UTF8 string object.
@@ -239,10 +261,10 @@ Arcadia_ImmutableUtf8String_getNumberOfBytes
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The hash of this immutable UTF8 string object.
 Arcadia_SizeValue
-Arcadia_ImmutableUtf8String_getHash
+Arcadia_ImmutableUTF8String_getHash
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Get the number of code points of this immutable UTF8 string object.
@@ -250,10 +272,10 @@ Arcadia_ImmutableUtf8String_getHash
 /// @param self A pointer to this immutable UTF8 string object.
 /// @return The number of code points of this immutable UTF8 string object.
 Arcadia_SizeValue
-Arcadia_ImmutableUtf8String_getNumberOfCodePoints
+Arcadia_ImmutableUTF8String_getNumberOfCodePoints
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into a Boolean value.
@@ -262,10 +284,10 @@ Arcadia_ImmutableUtf8String_getNumberOfCodePoints
 /// @return The Boolean value.
 /// @error #Arcadia_Status_ConversionFailed the string is not a Boolean literal
 Arcadia_BooleanValue
-Arcadia_ImmutableUtf8String_toBoolean
+Arcadia_ImmutableUTF8String_toBoolean
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer16 value.
@@ -274,10 +296,10 @@ Arcadia_ImmutableUtf8String_toBoolean
 /// @return The Integer16 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer16 literal
 Arcadia_Integer16Value
-Arcadia_ImmutableUtf8String_toInteger16
+Arcadia_ImmutableUTF8String_toInteger16
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer32 value.
@@ -286,10 +308,10 @@ Arcadia_ImmutableUtf8String_toInteger16
 /// @return The Integer32 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer32 literal
 Arcadia_Integer32Value
-Arcadia_ImmutableUtf8String_toInteger32
+Arcadia_ImmutableUTF8String_toInteger32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer64 value.
@@ -298,10 +320,10 @@ Arcadia_ImmutableUtf8String_toInteger32
 /// @return The Integer64 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer64 literal
 Arcadia_Integer64Value
-Arcadia_ImmutableUtf8String_toInteger64
+Arcadia_ImmutableUTF8String_toInteger64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer8 value.
@@ -310,10 +332,10 @@ Arcadia_ImmutableUtf8String_toInteger64
 /// @return The Integer8 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer8 literal
 Arcadia_Integer8Value
-Arcadia_ImmutableUtf8String_toInteger8
+Arcadia_ImmutableUTF8String_toInteger8
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural16 value.
@@ -322,10 +344,10 @@ Arcadia_ImmutableUtf8String_toInteger8
 /// @return The Natural16 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural16 literal
 Arcadia_Natural16Value
-Arcadia_ImmutableUtf8String_toNatural16
+Arcadia_ImmutableUTF8String_toNatural16
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural32 value.
@@ -334,10 +356,10 @@ Arcadia_ImmutableUtf8String_toNatural16
 /// @return The Natural32 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural32 literal
 Arcadia_Natural32Value
-Arcadia_ImmutableUtf8String_toNatural32
+Arcadia_ImmutableUTF8String_toNatural32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural64 value.
@@ -346,10 +368,10 @@ Arcadia_ImmutableUtf8String_toNatural32
 /// @return The Natural64 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural64 literal
 Arcadia_Natural64Value
-Arcadia_ImmutableUtf8String_toNatural64
+Arcadia_ImmutableUTF8String_toNatural64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural8 value.
@@ -358,10 +380,10 @@ Arcadia_ImmutableUtf8String_toNatural64
 /// @return The Natural8 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural8 literal
 Arcadia_Natural8Value
-Arcadia_ImmutableUtf8String_toNatural8
+Arcadia_ImmutableUTF8String_toNatural8
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Real32 value.
@@ -370,10 +392,10 @@ Arcadia_ImmutableUtf8String_toNatural8
 /// @return The Real32 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Real32 literal
 Arcadia_Real32Value
-Arcadia_ImmutableUtf8String_toReal32
+Arcadia_ImmutableUTF8String_toReal32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Real64 value.
@@ -382,10 +404,10 @@ Arcadia_ImmutableUtf8String_toReal32
 /// @return The Real64 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Real64 literal
 Arcadia_Real64Value
-Arcadia_ImmutableUtf8String_toReal64
+Arcadia_ImmutableUTF8String_toReal64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into an Size value.
@@ -394,10 +416,10 @@ Arcadia_ImmutableUtf8String_toReal64
 /// @return The Size value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Size literal
 Arcadia_SizeValue
-Arcadia_ImmutableUtf8String_toSize
+Arcadia_ImmutableUTF8String_toSize
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
 /// @brief Convert this immutable UTF8 string object into a Void value.
@@ -406,15 +428,15 @@ Arcadia_ImmutableUtf8String_toSize
 /// @return The Void value.
 /// @error #Arcadia_Status_ConversionFailed the string is not a Void literal
 Arcadia_VoidValue
-Arcadia_ImmutableUtf8String_toVoid
+Arcadia_ImmutableUTF8String_toVoid
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8StringValue self
+    Arcadia_ImmutableUTF8StringValue self
   );
 
-/// @return A pointer to an "foreign value" type of name "Arcadia.ImmutableUtf8String".
+/// @return A pointer to an "foreign value" type of name "Arcadia.ImmutableUTF8String".
 Arcadia_TypeValue
-_Arcadia_ImmutableUtf8StringValue_getType
+_Arcadia_ImmutableUTF8StringValue_getType
   (
     Arcadia_Thread* thread
   );

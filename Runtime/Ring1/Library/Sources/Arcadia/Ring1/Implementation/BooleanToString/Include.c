@@ -19,7 +19,7 @@
 #include "Arcadia/Ring1/Include.h"
 
 void
-Arcadia_BooleanValue_toUtf8String
+Arcadia_BooleanValue_toUTF8String
   (
     Arcadia_Thread* thread,
     Arcadia_BooleanValue booleanValue,

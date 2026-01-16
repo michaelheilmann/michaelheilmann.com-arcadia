@@ -19,7 +19,7 @@
 #include "Arcadia/Ring1/Include.h"
 
 Arcadia_SizeValue
-_hashUtf8
+_hashUTF8
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value const* bytes,

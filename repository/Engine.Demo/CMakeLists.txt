@@ -64,16 +64,19 @@ if (NOT TARGET ${MyDemoName})
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/SceneManager.c)
   list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/SceneManager.h)
 
+  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/AssetUtilities.c)
+  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/AssetUtilities.h)
+
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Application.c)
   list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Application.h)
 
-  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Audials.Implementation ${MyProjectName}.Visuals.Implementation)
+  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Audials.Implementation ${MyProjectName}.Visuals.Implementation)
 
   EndProduct(${MyDemoName})
 
   # Copy assets.
-  add_custom_command(TARGET ${MyDemoName} POST_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${${MyDemoName}.WorkingDirectory})
+  CopyProductAssets(${MyDemoName}.CopyAssets "" ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
+  add_dependencies(${MyDemoName} ${MyDemoName}.CopyAssets)
 
   endif()
 endif()

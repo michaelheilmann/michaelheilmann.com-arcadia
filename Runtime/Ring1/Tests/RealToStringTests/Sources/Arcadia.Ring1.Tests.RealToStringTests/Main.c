@@ -27,8 +27,8 @@ testFixture32
     Arcadia_Real32Value v
   )
 {
-  Arcadia_ImmutableUtf8String* u = Arcadia_ImmutableUtf8String_createFromReal32(thread, v);
-  Arcadia_Real32Value w = Arcadia_ImmutableUtf8String_toReal32(thread, u);
+  Arcadia_ImmutableUTF8String* u = Arcadia_ImmutableUTF8String_createFromReal32(thread, v);
+  Arcadia_Real32Value w = Arcadia_ImmutableUTF8String_toReal32(thread, u);
   Arcadia_Tests_assertTrue(thread, v == w);
 }
 
@@ -39,8 +39,8 @@ testFixture64
     Arcadia_Real64Value v
   )
 {
-  Arcadia_ImmutableUtf8String* u = Arcadia_ImmutableUtf8String_createFromReal64(thread, v);
-  Arcadia_Real64Value w = Arcadia_ImmutableUtf8String_toReal64(thread, u);
+  Arcadia_ImmutableUTF8String* u = Arcadia_ImmutableUTF8String_createFromReal64(thread, v);
+  Arcadia_Real64Value w = Arcadia_ImmutableUTF8String_toReal64(thread, u);
   Arcadia_Tests_assertTrue(thread, v == w);
 }
 

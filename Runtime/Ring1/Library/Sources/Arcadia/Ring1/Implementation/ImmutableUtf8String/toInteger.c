@@ -97,10 +97,10 @@ Arcadia_Integer16Value
 _toInteger16
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  Arcadia_Integer64Value v = _toInteger64(thread, immutableUtf8StringValue);
+  Arcadia_Integer64Value v = _toInteger64(thread, immutableUTF8StringValue);
   if (v < Arcadia_Integer16Value_Minimum || v > Arcadia_Integer16Value_Maximum) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);
@@ -112,10 +112,10 @@ Arcadia_Integer32Value
 _toInteger32
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  Arcadia_Integer64Value v = _toInteger64(thread, immutableUtf8StringValue);
+  Arcadia_Integer64Value v = _toInteger64(thread, immutableUTF8StringValue);
   if (v < Arcadia_Integer32Value_Minimum || v > Arcadia_Integer32Value_Maximum) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);
@@ -127,12 +127,12 @@ Arcadia_Integer64Value
 _toInteger64
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
   _State state;
-  _State_init(&state, Arcadia_ImmutableUtf8String_getBytes(thread, immutableUtf8StringValue),
-                      Arcadia_ImmutableUtf8String_getNumberOfBytes(thread, immutableUtf8StringValue));
+  _State_init(&state, Arcadia_ImmutableUTF8String_getBytes(thread, immutableUTF8StringValue),
+                      Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
   Arcadia_Integer64Value value;
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -152,10 +152,10 @@ Arcadia_Integer8Value
 _toInteger8
   (
     Arcadia_Thread* thread,
-    Arcadia_ImmutableUtf8String* immutableUtf8StringValue
+    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  Arcadia_Integer64Value v = _toInteger64(thread, immutableUtf8StringValue);
+  Arcadia_Integer64Value v = _toInteger64(thread, immutableUTF8StringValue);
   if (v < Arcadia_Integer8Value_Minimum || v > Arcadia_Integer8Value_Maximum) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ConversionFailed);
     Arcadia_Thread_jump(thread);

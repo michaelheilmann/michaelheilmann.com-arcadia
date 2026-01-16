@@ -18,7 +18,7 @@
 
 #include "Arcadia/Ring1/Include.h"
 
-#define TypeName u8"Arcadia.ImmutableUtf8String"
+#define TypeName u8"Arcadia.ImmutableUTF8String"
 
 void
 _ensureTypeRegistered

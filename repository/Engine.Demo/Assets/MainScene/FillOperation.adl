@@ -1,0 +1,8 @@
+{
+  type : "PixelBufferOperations.CheckerboardFillOperation",
+  name : "LogoScene.FillOperation",
+  checkerWidth : 32,
+  checkerHeight : 32,
+  firstCheckerColor : "LogoScene.FirstColor",
+  secondCheckerColor : "LogoScene.SecondColor",
+}

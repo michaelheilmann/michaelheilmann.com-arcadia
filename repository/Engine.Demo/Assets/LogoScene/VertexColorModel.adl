@@ -1,0 +1,6 @@
+{
+  type : "Model",
+  name : "LogoScene.VertexColorModel",
+  mesh : "LogoScene.VertexColorMesh",
+  material : "LogoScene.VertexColorMaterial",
+}

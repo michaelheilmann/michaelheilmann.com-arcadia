@@ -26,19 +26,7 @@ raiseNotAPixelBufferDefinition
     Arcadia_String* key
   )
 {
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"ADL definition `");
-  Arcadia_StringBuffer_insertBackString(thread, message, key);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"` is not a pixel buffer definition\n");
-
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, message);
-
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-  Arcadia_Thread_jump(thread);
+  Arcadia_ADL_Diagnostics_raiseNotAPixelBufferDefinition(thread, key);
 }
 
 Arcadia_NoReturn() static void
@@ -48,21 +36,8 @@ raiseADLPixelBufferOperationNotYetSupported
     Arcadia_String* key
   )
 {
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"ADL pixel buffer operation `");
-  Arcadia_StringBuffer_insertBackString(thread, message, key);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"` is not (yet) supported\n");
-
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, message);
-
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-  Arcadia_Thread_jump(thread);
+  Arcadia_ADL_Diagnostics_raisePixelBufferOperationNotYetSupported(thread, key);
 }
-
 
 Arcadia_NoReturn() static void
 raiseADLDefinitionNotFound
@@ -71,19 +46,7 @@ raiseADLDefinitionNotFound
     Arcadia_String* key
   )
 {
-  Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"starting ADL definition `");
-  Arcadia_StringBuffer_insertBackString(thread, message, key);
-  Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"` not found\n");
-
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
-  Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
-
-  Arcadia_FileHandle_writeStringBuffer(thread, fileHandle, message);
-
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-  Arcadia_Thread_jump(thread);
+  Arcadia_ADL_Diagnostics_raiseDefinitionNotFound(thread, key);
 }
 
 Arcadia_NoReturn() static void
@@ -134,7 +97,7 @@ loadADL
   Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
   Arcadia_ByteBuffer* contents = Arcadia_FileSystem_getFileContents(thread, fileSystem, path);
   // (3)
-  return Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(contents)));
+  return Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(contents)), Arcadia_BooleanValue_True);
 }
 
 static void
@@ -231,7 +194,7 @@ main1
     raiseNotAPixelBufferDefinition(thread, definition->name); // this is an internal error
   }
   Arcadia_Imaging_ImageManager* imageManager = Arcadia_Imaging_ImageManager_getOrCreate(thread);
-  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUtf8StringValue(Arcadia_ImmutableUtf8String_create(thread, u8"png", sizeof(u8"png") - 1)));
+  Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"png", sizeof(u8"png") - 1)));
   Arcadia_List* writers = Arcadia_Imaging_ImageManager_getWriters(thread, imageManager, extension);
   if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)writers)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NotExists);

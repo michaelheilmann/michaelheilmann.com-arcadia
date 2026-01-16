@@ -24,16 +24,6 @@
 
 typedef struct Arcadia_Name Arcadia_Name;
 
-typedef struct Arcadia_Names Arcadia_Names;
-
-struct Arcadia_Name {
-  Arcadia_Name* next;
-  uint64_t lastVisited;
-  size_t hashValue;
-  size_t numberOfBytes;
-  char bytes[];
-};
-
 /// @brief Visit this name.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this name.
@@ -78,8 +68,11 @@ Arcadia_Name_getBytes
     Arcadia_Name* self
   );
 
-Arcadia_DeclareModule("Arcadia.Names", Arcadia_Names);
-
+/// @brief Get or create a name for the given Bytes.
+/// @param thread A pointer to this thread.
+/// @param bytes A pointer to an array of @a numberOfBytes Bytes.
+/// @param numberOfBytes The number of Bytes in the array pointed to by @a bytes.
+/// @return A pointer to the name.
 Arcadia_Name*
 Arcadia_Names_getOrCreateName
   (

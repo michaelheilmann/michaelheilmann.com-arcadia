@@ -153,7 +153,7 @@ Arcadia_UTF8StringReader_nextImpl
     self->codePoint = CodePoint_End;
   } else {
     Arcadia_Natural8Value byte = Arcadia_String_getByteAt(thread, self->source, self->byteIndex);
-    Arcadia_SizeValue expectedNumberOfBytes = Arcadia_Unicode_Utf8_classifyFirstByte(thread, byte);
+    Arcadia_SizeValue expectedNumberOfBytes = Arcadia_Unicode_UTF8_classifyFirstByte(thread, byte);
     if (expectedNumberOfBytes == Arcadia_SizeValue_Maximum || numberOfBytes - self->byteIndex < expectedNumberOfBytes) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
       Arcadia_Thread_jump(thread);

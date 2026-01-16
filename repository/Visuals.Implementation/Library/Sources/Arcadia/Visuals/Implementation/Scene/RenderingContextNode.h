@@ -20,6 +20,8 @@
 #include "Arcadia/Math/Include.h"
 #include "Arcadia/Visuals/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
+typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_Implementation_SceneNodeFactory;
+
 typedef struct Arcadia_Visuals_Implementation_RenderingContextResource Arcadia_Visuals_Implementation_RenderingContextResource;
 
 // This represents the mutable state of a rendering.
@@ -47,7 +49,8 @@ Arcadia_Visuals_Implementation_Scene_RenderingContextNode*
 Arcadia_Visuals_Implementation_Scene_RenderingContextNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* backendContext
+    Arcadia_Visuals_Implementation_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_SceneNodeFactory* sceneNodeFactory
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_SCENE_RENDERINGCONTEXTNODE_H_INCLUDED

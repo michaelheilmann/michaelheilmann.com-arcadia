@@ -18,6 +18,10 @@
 
 #include "Arcadia/Visuals/Implementation/Resource.h"
 
+// the texture resource maintains an insernal pixel buffer buffer (Arcadia_Imaging_PixelBuffer).
+// When the texture resource is created, its size 256 x 256, its format is RGBA, its default color is opaque black.
+// setPixelBuffer copies the data, that is, the source pixel buffer is not required anymore.
+// setWidth and setHeight adjust the width and the height of the internal pixel buffer.
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.TextureResource", Arcadia_Visuals_Implementation_TextureResource,
                           u8"Arcadia.Visuals.Implementation.Resource");
 
@@ -43,6 +47,8 @@ struct Arcadia_Visuals_Implementation_TextureResourceDispatch {
   void (*setMinificationFilter)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Visuals_TextureFilter);
 
   void (*setWidth)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Integer32Value);
+
+  void (*setPixelBuffer)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Imaging_PixelBuffer*);
 };
 
 struct Arcadia_Visuals_Implementation_TextureResource {
@@ -137,6 +143,14 @@ Arcadia_Visuals_Implementation_TextureResource_setWidth
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_TextureResource* self,
     Arcadia_Integer32Value width
+  );
+
+void
+Arcadia_Visuals_Implementation_TextureResource_setPixelBuffer
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_TextureResource* self,
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_TEXTURERESOURCE_H_INCLUDED

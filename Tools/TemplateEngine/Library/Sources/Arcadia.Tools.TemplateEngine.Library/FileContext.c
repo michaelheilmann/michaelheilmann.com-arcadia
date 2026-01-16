@@ -184,7 +184,7 @@ getLiteral
     FileContext* context
   )
 {
-  return Arcadia_String_create_pn(thread, Arcadia_ImmutableByteArray_create(thread, context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz));
+  return Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz));
 }
 
 static void
@@ -267,7 +267,7 @@ evalInvoke
     string = Arcadia_String_createFromInteger8(thread, Arcadia_Value_getInteger8Value(&targetValue));
   } else  if (Arcadia_Value_isObjectReferenceValue(&targetValue)) {
     Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&targetValue);
-    if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, object), _Arcadia_String_getType(thread))) {
+    if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, object), _Arcadia_String_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
     }
@@ -312,7 +312,7 @@ evalAst
         Arcadia_Thread_jump(thread);
       }
       Arcadia_Object* object = Arcadia_Value_getObjectReferenceValue(&v);
-      if (!Arcadia_Type_isSubType(thread, Arcadia_Object_getType(thread, object), _Arcadia_String_getType(thread))) {
+      if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, object), _Arcadia_String_getType(thread))) {
         // Error.
         Arcadia_StringBuffer* sb = Arcadia_StringBuffer_create(thread);
         Arcadia_StringBuffer_insertBackCxxString(thread, sb, u8"variable `");
