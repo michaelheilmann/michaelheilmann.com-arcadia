@@ -1,0 +1,59 @@
+// The author of this software is Michael Heilmann (contact@michaelheilmann.com).
+//
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+#if !defined(ARCADIA_ENGINE_DEMO_SCENES_MAINMENUSCENE_H_INCLUDED)
+#define ARCADIA_ENGINE_DEMO_SCENES_MAINMENUSCENE_H_INCLUDED
+
+#include "Arcadia/Audials/Include.h"
+#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Demo/Scene.h"
+#include "Arcadia/ADL/Include.h"
+
+Arcadia_declareObjectType(u8"Arcadia.Engine.Demo.MainMenuScene", Arcadia_Engine_Demo_MainMenuScene,
+                          u8"Arcadia.Engine.Demo.Scene");
+
+struct Arcadia_Engine_Demo_MainMenuSceneDispatch {
+  Arcadia_Engine_Demo_SceneDispatch parent;
+};
+
+struct Arcadia_Engine_Demo_MainMenuScene {
+  Arcadia_Engine_Demo_Scene parent;
+
+  // @todo This is should be inter-scene not intra-scene.
+  Arcadia_ADL_Definitions* definitions;
+
+  // The viewport.
+  Arcadia_Visuals_Scene_ViewportNode* viewportNode;
+  // A single camera, re-attached to the respective viewport / model combination for rendering.
+  Arcadia_Visuals_Scene_CameraNode* cameraNode;
+  // A single context, re-update with the information for the respective viewport / model combination for rendering.
+  Arcadia_Visuals_Scene_RenderingContextNode* renderingContextNode;
+
+  // The models, thee of them.
+  Arcadia_Visuals_Scene_ModelNode* modelNode;
+
+  // The sound source for some background sound effects.
+  Arcadia_Audials_Scene_SoundSourceNode* soundSourceNode;
+};
+
+Arcadia_Engine_Demo_MainMenuScene*
+Arcadia_Engine_Demo_MainMenuScene_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine* engine,
+    Arcadia_Engine_Demo_SceneManager* sceneManager
+  );
+
+#endif // ARCADIA_ENGINE_DEMO_SCENES_MAINMENUSCENE_H_INCLUDED

@@ -2,14 +2,7 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_SHARED_FUNCTIONS_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
-
-#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  #include <GL/glcorearb.h>
-#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
-  #include <GL/glcorearb.h>
-#else
-  #error("environment not (yet) supported")
-#endif
+#include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
 
 // unmanaged
 typedef struct _Arcadia_Visuals_Implementation_OpenGL4_Functions _Arcadia_Visuals_Implementation_OpenGL4_Functions;

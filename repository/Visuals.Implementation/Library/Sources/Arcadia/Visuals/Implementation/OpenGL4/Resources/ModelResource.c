@@ -119,13 +119,22 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
 
+  self->constantBuffer = NULL;
   self->mesh = NULL;
   self->material = NULL;
+
+  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext =
+    Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getType(thread));
+
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Arcadia_Object* o;
+
+    o = (Arcadia_Object*)Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
+    Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
+    self->constantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)o;
 
     o = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_OpenGL4_MeshResource_getType(thread));
     Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
@@ -145,6 +154,10 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_constructImpl
     if (self->mesh) {
       Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->mesh);
       self->mesh = NULL;
+    }
+    if (self->constantBuffer) {
+      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBuffer);
+      self->constantBuffer = NULL;
     }
     Arcadia_Thread_jump(thread);
   }
@@ -174,6 +187,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_destructImpl
     Arcadia_Visuals_Implementation_OpenGL4_ModelResource* self
   )
 {
+  assert(NULL == self->constantBuffer);
   assert(NULL == self->mesh);
   assert(NULL == self->material);
 }
@@ -195,6 +209,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_loadImpl
 {
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->mesh);
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->material);
+  Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->material);
 }
 
 static void
@@ -212,6 +227,10 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_unlinkImpl
     Arcadia_Visuals_Implementation_OpenGL4_ModelResource* self
   )
 {
+  if (self->constantBuffer) {
+    Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBuffer);
+    self->constantBuffer = NULL;
+  }
   if (self->mesh) {
     Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->mesh);
     self->mesh = NULL;
@@ -231,6 +250,20 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_renderImpl
     Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextResource
   )
 {
+  // Invoke our load function.
+  Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self);
+
+  if (((Arcadia_Visuals_Implementation_ModelResource*)self)->dirty & (Arcadia_Visuals_Implementation_ModelResource_LocalToWorldMatrixDirty)) {
+    Arcadia_Visuals_Implementation_ConstantBufferResource_clear(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->constantBuffer);
+    // @todo We need to ability to do sub-range updates:
+    // There is no need to rewrite every value if only one value is dirty.
+    Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->constantBuffer, Arcadia_BooleanValue_True, ((Arcadia_Visuals_Implementation_ModelResource*)self)->localToWorldMatrix);
+    ((Arcadia_Visuals_Implementation_ModelResource*)self)->dirty &= ~Arcadia_Visuals_Implementation_ModelResource_LocalToWorldMatrixDirty;
+    
+    Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBuffer);
+  }
+
+
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
   _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
 
@@ -238,35 +271,55 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_renderImpl
   Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->mesh, renderingContextResource);
 
   Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* viewerConstantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)renderingContextResource->viewerConstantBuffer;
-  Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->mesh->meshConstantBuffer);
   //
   gl->glUseProgram(self->material->program->id);
   gl->glBindFragDataLocation(self->material->program->id, 0, u8"_2_fragmentColor");
   gl->glBindVertexArray(self->mesh->vertexBuffer->vertexArrayID);
 
-  GLuint blockIndex;
   //
+  if (self->material->ambientColorSource == Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Texture) {
+    while (gl->glGetError()) { }
+    assert(0 != self->material->ambientColorTexture->id);
+    gl->glBindTexture(GL_TEXTURE_2D, self->material->ambientColorTexture->id);
+    if (gl->glGetError()) {
+      return;
+    }
+  }
+  GLuint uniformBlockIndex;
+  // Bind the "viewer" constant block.
   while (gl->glGetError()) { }
-  blockIndex = gl->glGetUniformBlockIndex(self->material->program->id, "viewer");
-  if (GL_INVALID_INDEX == blockIndex) {
+  uniformBlockIndex = gl->glGetUniformBlockIndex(self->material->program->id, "viewer");
+  if (GL_INVALID_INDEX == uniformBlockIndex) {
     return;
   }
-  gl->glUniformBlockBinding(self->material->program->id, blockIndex, 0);
+  gl->glUniformBlockBinding(self->material->program->id, uniformBlockIndex, 0);
   gl->glBindBufferBase(GL_UNIFORM_BUFFER, 0, viewerConstantBuffer->bufferID);
   if (gl->glGetError()) {
     return;
   }
-  //
+  // Bind the "mesh" constant block.
   while (gl->glGetError()) { }
-  blockIndex = gl->glGetUniformBlockIndex(self->material->program->id, "mesh");
-  if (GL_INVALID_INDEX == blockIndex) {
+  uniformBlockIndex = gl->glGetUniformBlockIndex(self->material->program->id, "mesh");
+  if (GL_INVALID_INDEX == uniformBlockIndex) {
     return;
   }
-  gl->glUniformBlockBinding(self->material->program->id, blockIndex, 1);
-  gl->glBindBufferBase(GL_UNIFORM_BUFFER, 1, self->mesh->meshConstantBuffer->bufferID);
+  gl->glUniformBlockBinding(self->material->program->id, uniformBlockIndex, 1);
+  gl->glBindBufferBase(GL_UNIFORM_BUFFER, 1, self->mesh->constantBuffer->bufferID);
   if (gl->glGetError()) {
     return;
   }
+  // Bind the "model" constant block.
+  while (gl->glGetError()) { }
+  uniformBlockIndex = gl->glGetUniformBlockIndex(self->material->program->id, "model");
+  if (GL_INVALID_INDEX == uniformBlockIndex) {
+    return;
+  }
+  gl->glUniformBlockBinding(self->material->program->id, uniformBlockIndex, 2);
+  gl->glBindBufferBase(GL_UNIFORM_BUFFER, 2, self->constantBuffer->bufferID);
+  if (gl->glGetError()) {
+    return;
+  }
+  //
   gl->glDrawArrays(GL_TRIANGLES, 0, Arcadia_Visuals_Implementation_VertexBufferResource_getNumberOfVertices(thread, (Arcadia_Visuals_Implementation_VertexBufferResource*)self->mesh->vertexBuffer));
 }
 

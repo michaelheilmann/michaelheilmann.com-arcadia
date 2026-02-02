@@ -25,6 +25,7 @@
     </p>
     @{include("./1. lists.i")}
     @{include("./2. context-free-grammars.i")}
+    @{include("./3. computer-arithmetic.i")}
   </div>
   <div class="right-column">
     <nav>

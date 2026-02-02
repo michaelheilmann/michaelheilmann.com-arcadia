@@ -16,6 +16,8 @@ struct Arcadia_Engine_Demo_ApplicationDispatch {
 
 struct Arcadia_Engine_Demo_Application {
   Arcadia_Engine_Application parent;
+  /// @brief A pointer to the signal slot or null.
+  Arcadia_Slot* sceneOnQuitRequestedSlot;
   /// @brief A pointer to the scene manager.
   Arcadia_Engine_Demo_SceneManager* sceneManager;
 };
@@ -24,22 +26,6 @@ Arcadia_Engine_Demo_Application*
 Arcadia_Engine_Demo_Application_create
   (
     Arcadia_Thread* thread
-  );
-
-void
-Arcadia_Engine_Demo_Application_onApplicationQuitRequestedEvent
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Demo_Application* self,
-    Arcadia_Visuals_ApplicationQuitRequestedEvent* event
-  );
-
-void
-Arcadia_Engine_Demo_Application_onKeyboardKeyEvent
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Demo_Application* self,
-    Arcadia_Visuals_KeyboardKeyEvent* event
   );
 
 void

@@ -164,24 +164,27 @@ Arcadia_Visuals_Implementation_Scene_MaterialNode_renderImpl
       //
       Arcadia_Visuals_Implementation_TextureResource* textureResource =
         ((Arcadia_Visuals_Implementation_Scene_TextureNode*)((Arcadia_Visuals_Scene_MaterialNode*)self)->ambientColorTexture)->textureResource;
-  
-      self->materialResource = Arcadia_Visuals_Implementation_BackendContext_createMaterialResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext, textureResource, programResource);
+
+      Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource = Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Mesh;
+      switch (((Arcadia_Visuals_Scene_MaterialNode*)self)->source->ambientColorSource) {
+        case Arcadia_ADL_AmbientColorSource_Mesh: {
+          ambientColorSource = Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Mesh;
+        } break;
+        case Arcadia_ADL_AmbientColorSource_Vertex: {
+          ambientColorSource = Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Vertex;
+        } break;
+        case Arcadia_ADL_AmbientColorSource_Texture: {
+          ambientColorSource = Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Texture;
+        } break;
+        default: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+          Arcadia_Thread_jump(thread);
+        } break;
+      };
+ 
+      self->materialResource = Arcadia_Visuals_Implementation_BackendContext_createMaterialResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext, ambientColorSource, textureResource, programResource);
       Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->materialResource);
     }
-#if 0
-    if (!self->programResource) {
-      Arcadia_Visuals_Implementation_BackendContext* backendContext = self->backendContext;
-
-      Arcadia_Visuals_Implementation_VertexProgramResource* vertexProgramResource = NULL;
-      vertexProgramResource = Arcadia_Visuals_Implementation_BackendContext_createVertexProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)renderingContextNode->backendContext,
-                                                                                                        ((Arcadia_Visuals_Scene_MaterialNode*)self)->program);
-      Arcadia_Visuals_Implementation_FragmentProgramResource* fragmentProgramResource = NULL;
-      fragmentProgramResource = Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)renderingContextNode->backendContext,
-                                                                                                           ((Arcadia_Visuals_Scene_MaterialNode*)self)->program);
-      self->programResource = Arcadia_Visuals_Implementation_BackendContext_createProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext, vertexProgramResource, fragmentProgramResource);
-      Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->programResource);
-    }
-#endif
   }
 }
 

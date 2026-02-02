@@ -19,6 +19,12 @@
 #include "Arcadia/Visuals/Implementation/Resource.h"
 #include "Arcadia/Math/Include.h"
 
+typedef enum Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource {
+  Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Mesh,
+  Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Vertex,
+  Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Texture,
+} Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource;
+
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.MaterialResource", Arcadia_Visuals_Implementation_MaterialResource,
                           u8"Arcadia.Visuals.Implementation.Resource");
 

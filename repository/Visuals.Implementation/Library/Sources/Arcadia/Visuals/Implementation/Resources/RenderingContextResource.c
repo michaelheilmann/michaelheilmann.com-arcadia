@@ -164,7 +164,7 @@ Arcadia_Visuals_Implementation_RenderingContextResource_setViewToProjectionMatri
     Arcadia_Math_Matrix4Real32* viewToProjectionMatrix
   )
 {
-  self->viewToProjectionMatrix = viewToProjectionMatrix;
+  Arcadia_Math_Matrix4Real32_assign(thread, self->viewToProjectionMatrix, viewToProjectionMatrix);
   self->dirty |= Arcadia_Visuals_Implementation_RenderingContextResource_ViewToProjectionMatrixDirty;
 }
 
@@ -176,7 +176,7 @@ Arcadia_Visuals_Implementation_RenderingContextResource_setWorldToViewMatrixImpl
     Arcadia_Math_Matrix4Real32* worldToViewMatrix
   )
 {
-  self->worldToViewMatrix = worldToViewMatrix;
+  Arcadia_Math_Matrix4Real32_assign(thread, self->worldToViewMatrix, worldToViewMatrix);
   self->dirty |= Arcadia_Visuals_Implementation_RenderingContextResource_WorldToViewMatrixDirty;
 }
 

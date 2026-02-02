@@ -32,5 +32,5 @@
   <script defer id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@@4/tex-mml-chtml.js"></script>
 
   <!-- Cascading Style Sheets. -->
-  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=4'>
-  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=4'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/reset.css?v=5'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/index.css?v=5'>

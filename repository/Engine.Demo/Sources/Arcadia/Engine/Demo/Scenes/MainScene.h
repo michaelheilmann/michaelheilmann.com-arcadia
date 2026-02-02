@@ -34,15 +34,15 @@ struct Arcadia_Engine_Demo_MainScene {
   // @todo This is should be inter-scene not intra-scene.
   Arcadia_ADL_Definitions* definitions;
 
-  // Two viewports, #1 and #2, one for each side of the window.
-  Arcadia_Visuals_Scene_ViewportNode* viewportNodes[2];
-  // A single camera, rendering the same scene twice, first to viewport #1 and the to viewport #2.
+  // Two viewports, three of them.
+  Arcadia_Visuals_Scene_ViewportNode* viewportNodes[3];
+  // A single camera, re-attached to the respective viewport / model combination for rendering.
   Arcadia_Visuals_Scene_CameraNode* cameraNode;
-  // A single context, update with viewport- and camera-specific information for each render of the scene.
+  // A single context, re-update with the information for the respective viewport / model combination for rendering.
   Arcadia_Visuals_Scene_RenderingContextNode* renderingContextNode;
 
-  // The models (the scene).
-  Arcadia_Visuals_Scene_ModelNode* modelNode[2];
+  // The models, thee of them.
+  Arcadia_Visuals_Scene_ModelNode* modelNode[3];
 
   // The sound source for some background sound effects.
   Arcadia_Audials_Scene_SoundSourceNode* soundSourceNode;

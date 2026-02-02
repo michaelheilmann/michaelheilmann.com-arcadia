@@ -42,8 +42,6 @@ struct Arcadia_ADL_MeshReader {
   Arcadia_String* TYPENAME;
   // The string `ambientColor` cached here.
   Arcadia_String* AMBIENTCOLOR;
-  // The string `material` cached here.
-  Arcadia_String* MATERIAL;
   // The string `vertexPositions` cached here.
   Arcadia_String* VERTEXPOSITIONS;
   // The string `vertexAmbientColors` cached here.

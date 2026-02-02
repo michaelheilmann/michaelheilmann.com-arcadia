@@ -34,8 +34,7 @@ Arcadia_Visuals_ApplicationQuitRequestedEvent*
 Arcadia_Visuals_ApplicationQuitRequestedEvent_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Natural64Value timestamp,
-    Arcadia_Visuals_BackendContext* backendContext
+    Arcadia_Natural64Value timestamp
   );
 
 #endif // ARCADIA_VISUALS_EVENTS_APPLICATIONQUITREQUESTEDEVENT_H_INCLUDED

@@ -136,6 +136,7 @@ Arcadia_Engine_Demo_Application_construct
   //
   ((Arcadia_Engine_Application*)self)->configuration = (Arcadia_DDL_Node*)Cfg_loadConfiguration(thread);
   self->sceneManager = Arcadia_Engine_Demo_SceneManager_create(thread, ((Arcadia_Engine_Application*)self)->engine);
+  self->sceneOnQuitRequestedSlot = NULL;
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
@@ -174,32 +175,6 @@ Arcadia_Engine_Demo_Application_create
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
   ARCADIA_CREATEOBJECT(Arcadia_Engine_Demo_Application);
-}
-
-void
-Arcadia_Engine_Demo_Application_onApplicationQuitRequestedEvent
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Demo_Application* self,
-    Arcadia_Visuals_ApplicationQuitRequestedEvent* event
-  )
-{ Arcadia_Engine_Application_setQuitRequested(thread, (Arcadia_Engine_Application*)self, Arcadia_BooleanValue_True); }
-
-void
-Arcadia_Engine_Demo_Application_onKeyboardKeyEvent
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Demo_Application* self,
-    Arcadia_Visuals_KeyboardKeyEvent* event
-  )
-{
-  if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, event) == Arcadia_Visuals_KeyboardKeyAction_Released &&
-    Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, event) == Arcadia_Visuals_KeyboardKey_Escape) {
-    Arcadia_Engine_Application_setQuitRequested(thread, (Arcadia_Engine_Application*)self, Arcadia_BooleanValue_True);
-  } else if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, event) == Arcadia_Visuals_KeyboardKeyAction_Released &&
-    Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, event) == Arcadia_Visuals_KeyboardKey_R) {
-    Arcadia_logf(Arcadia_LogFlags_Info, "re-initializing backends\n");
-  }
 }
 
 static Arcadia_BooleanValue

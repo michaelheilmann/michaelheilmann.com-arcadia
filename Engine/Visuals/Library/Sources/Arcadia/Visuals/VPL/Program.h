@@ -44,15 +44,21 @@ struct Arcadia_Visuals_VPL_Program {
   /// The flags for this program.
   /// Must be one of Arcadia_Visuals_VPL_ProgramFlags_PerMeshColor or Arcadia_Visuals_VPL_ProgramFlags_PerVertexColor.
   Arcadia_Natural8Value flags;
-  // 'mat4' as used by the VPL.
-  // happens that this currently coincides with 'vec4' in GLSL.
+  // `mat4` as used by the VPL.
+  // Happens that this currently coincides with `mat4` in GLSL.
   Arcadia_String* MAT4;
-  // 'vec4' as used by the VPL.
-  // happens that this currently coincides with 'vec4' in GLSL.
+  // `vec4` as used by the VPL.
+  // Happens that this currently coincides with `vec4` in GLSL.
   Arcadia_String* VEC4;
-  // 'vec3' as used by the VPL.
-  // happens that this currently coincides with 'vec3' in GLSL.
+  // `vec3` as used by the VPL.
+  // Happens that this currently coincides with `vec3` in GLSL.
   Arcadia_String* VEC3;
+  // `vec2` as used by the VPL.
+  // Happens that this currently coincides with `vec2` in GLSL.
+  Arcadia_String* VEC2;
+  // `sampler2D` as used by the VPL.
+  // Happens that this currently coincides with `sampler2D` in GLSL.
+  Arcadia_String* SAMPLER2D;
   // The list of vertex program constant blocks of this program.
   Arcadia_List* constantBlocks;
   // The list of vertex program variable scalars of this program.

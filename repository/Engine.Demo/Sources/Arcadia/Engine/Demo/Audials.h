@@ -18,7 +18,6 @@
 
 #include "Arcadia/DDL/Include.h"
 #include "Arcadia/Audials/Include.h"
-#include "Arcadia/Visuals/Include.h"
 
 void
 Arcadia_Engine_Application_startupAudials

@@ -17,15 +17,8 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_MATERIALRESOURCE_H_INCLUDED
 
 #include "Arcadia/Visuals/Implementation/Resources/MaterialResource.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
 typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Visuals_Implementation_OpenGL4_BackendContext;
-
-#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  #include <GL/glcorearb.h> // For GLuint.
-#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
-  #include <GL/glcorearb.h> // For GLuint.
-#else
-  #error("environment not (yet) supported")
-#endif
 
 typedef struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource;
 typedef struct Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource;
@@ -41,7 +34,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_MaterialResourceDispatch {
 
 struct Arcadia_Visuals_Implementation_OpenGL4_MaterialResource {
   Arcadia_Visuals_Implementation_MaterialResource _parent;
-
+  Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource;
   Arcadia_Visuals_Implementation_OpenGL4_TextureResource* ambientColorTexture;
   Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* program;
 };
@@ -51,6 +44,7 @@ Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
     Arcadia_Visuals_Implementation_OpenGL4_TextureResource* ambientColorTexture,
     Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* program
   );

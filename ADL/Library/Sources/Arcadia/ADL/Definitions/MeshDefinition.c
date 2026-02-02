@@ -74,12 +74,6 @@ Arcadia_ADL_MeshDefinition_linkImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-
-  Arcadia_ADL_Reference_resolve(thread, self->material);
-  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)self->material->definition, _Arcadia_ADL_MaterialDefinition_getType(thread))) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
-    Arcadia_Thread_jump(thread);
-  }
 }
 
 static void
@@ -98,9 +92,6 @@ Arcadia_ADL_MeshDefinition_visitImpl
   if (self->ambientColor) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->ambientColor);
   }
-  if (self->material) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->material);
-  }
 }
 
 static void
@@ -113,26 +104,24 @@ Arcadia_ADL_MeshDefinition_constructImpl
   Arcadia_TypeValue _type = _Arcadia_ADL_MeshDefinition_getType(thread);
   {
     Arcadia_Value definitions, name;
-    definitions = Arcadia_ValueStack_getValue(thread, 8);
-    name = Arcadia_ValueStack_getValue(thread, 7);
+    definitions = Arcadia_ValueStack_getValue(thread, 7);
+    name = Arcadia_ValueStack_getValue(thread, 6);
     Arcadia_ValueStack_pushValue(thread, &definitions);
     Arcadia_ValueStack_pushValue(thread, &name);
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 8 != numberOfArgumentValues) {
+  if (Arcadia_ValueStack_getSize(thread) < 1 || 7 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->numberOfVertices = Arcadia_ValueStack_getSizeValue(thread, 6);
-  self->vertexPositions = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 5);
-  self->vertexAmbientColors = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 4);
-  self->vertexAmbientTextureCoordinates = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 3);
+  self->numberOfVertices = Arcadia_ValueStack_getSizeValue(thread, 5);
+  self->vertexPositions = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 4);
+  self->vertexAmbientColors = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 3);
+  self->vertexAmbientTextureCoordinates = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 2);
   self->ambientColor = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
-                                                            (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread)));
-  self->material = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
-                                                        (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
+                                                            (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -157,8 +146,7 @@ Arcadia_ADL_MeshDefinition_create
     Arcadia_InternalImmutableByteArray* vertexPositions,
     Arcadia_InternalImmutableByteArray* vertexAmbientColors,
     Arcadia_InternalImmutableByteArray* vertexAmbientTextureCoordinates,
-    Arcadia_String* ambientColorName,
-    Arcadia_String* materialName
+    Arcadia_String* ambientColorName
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
@@ -169,8 +157,7 @@ Arcadia_ADL_MeshDefinition_create
   Arcadia_ValueStack_pushInternalImmutableByteArrayValue(thread, vertexAmbientColors);
   Arcadia_ValueStack_pushInternalImmutableByteArrayValue(thread, vertexAmbientTextureCoordinates);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)ambientColorName);
-  Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)materialName);
-  Arcadia_ValueStack_pushNatural8Value(thread, 8);
+  Arcadia_ValueStack_pushNatural8Value(thread, 7);
   ARCADIA_CREATEOBJECT(Arcadia_ADL_MeshDefinition);
 }
 

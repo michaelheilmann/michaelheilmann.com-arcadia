@@ -29,7 +29,6 @@ struct Arcadia_Visuals_ApplicationEventDispatch {
 
 struct Arcadia_Visuals_ApplicationEvent {
   Arcadia_Engine_Event _parent;
-  Arcadia_Visuals_BackendContext* backendContext;
 };
 
 #endif // ARCADIA_VISUALS_EVENTS_APPLICATIONEVENT_H_INCLUDED

@@ -17,16 +17,10 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_MODELRESOURCE_H_INCLUDED
 
 #include "Arcadia/Visuals/Implementation/Resources/ModelResource.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
 typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Visuals_Implementation_OpenGL4_BackendContext;
 
-#if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
-  #include <GL/glcorearb.h> // For GLuint.
-#elif Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux
-  #include <GL/glcorearb.h> // For GLuint.
-#else
-  #error("environment not (yet) supported")
-#endif
-
+typedef struct Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource;
 typedef struct Arcadia_Visuals_Implementation_OpenGL4_MeshResource Arcadia_Visuals_Implementation_OpenGL4_MeshResource;
 typedef struct Arcadia_Visuals_Implementation_OpenGL4_MaterialResource Arcadia_Visuals_Implementation_OpenGL4_MaterialResource;
 
@@ -40,6 +34,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_ModelResourceDispatch {
 struct Arcadia_Visuals_Implementation_OpenGL4_ModelResource {
   Arcadia_Visuals_Implementation_ModelResource _parent;
 
+  Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* constantBuffer;
   Arcadia_Visuals_Implementation_OpenGL4_MeshResource* mesh;
   Arcadia_Visuals_Implementation_OpenGL4_MaterialResource* material;
 };

@@ -25,21 +25,21 @@ if (NOT TARGET ${MyModule})
   BeginProduct(${MyModule} library)
 
   if (${MyModule}.Direct3D12.Enabled)
-    set(${MyModule}.Configuration.Direct3D12.Enabled 1)
+    set(${MyModule}.Direct3D12.Enabled 1)
   else()
-    set(${MyModule}.Configuration.Direct3D12.Enabled 0)
+    set(${MyModule}.Direct3D12.Enabled 0)
   endif()
 
   if (${MyModule}.OpenGL4.Enabled)
-    set(${MyModule}.Configuration.OpenGL4.Enabled 1)
+    set(${MyModule}.OpenGL4.Enabled 1)
   else()
-    set(${MyModule}.Configuration.OpenGL4.Enabled 0)
+    set(${MyModule}.OpenGL4.Enabled 0)
   endif()
 
   if (${MyModule}.Vulkan.Enabled)
-    set(${MyModule}.Configuration.Vulkan.Enabled 1)
+    set(${MyModule}.Vulkan.Enabled 1)
   else()
-    set(${MyModule}.Configuration.Vulkan.Enabled 0)
+    set(${MyModule}.Vulkan.Enabled 0)
   endif()
 
   # X11/OpenGL under Linux.
@@ -177,8 +177,8 @@ if (NOT TARGET ${MyModule})
     OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/TextureResource.c)
     OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/TextureResource.h)
 
-    OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/Utilities.c)
-    OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Resources/Utilities.h)
+    OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.c)
+    OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h)
 
     OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.c)
     OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h)

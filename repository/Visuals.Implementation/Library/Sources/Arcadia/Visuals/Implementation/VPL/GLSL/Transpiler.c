@@ -24,7 +24,7 @@ static const char ZEROTERMINATOR =
   ;
 
 static const char* HEADER =
-  "#version 330 core\n"
+  "#version 420 core\n"
   ;
 
 static void
@@ -128,8 +128,10 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_constructImpl
   }
   Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
   self->MAT4 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"mat4");
+  self->VEC2 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec2");
   self->VEC3 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec3");
   self->VEC4 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec4");
+  self->SAMPLER2D = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"sampler2D");
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
@@ -152,11 +154,17 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_visitImpl
   if (self->MAT4) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->MAT4);
   }
+  if (self->VEC2) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC2);
+  }
   if (self->VEC3) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC3);
   }
   if (self->VEC4) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC4);
+  }
+  if (self->SAMPLER2D) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->SAMPLER2D);
   }
 }
 
@@ -206,10 +214,14 @@ writeType
   Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue(type);
   if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->MAT4, &v)) {
     emitString(thread, target, self->MAT4);
+  } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->VEC2, &v)) {
+    emitString(thread, target, self->VEC2);
   } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->VEC3, &v)) {
     emitString(thread, target, self->VEC3);
   } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->VEC4, &v)) {
     emitString(thread, target, self->VEC4);
+  } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->SAMPLER2D, &v)) {
+    emitString(thread, target, self->SAMPLER2D);
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
@@ -229,41 +241,71 @@ writeVariableScalar
 {
   switch (context) {
     case Context_VertexShader: {
-      if (variableScalar->flags == Arcadia_Visuals_VPL_VariableScalarFlags_Vertex) {
-        emitCxxString(thread, target, "layout(location = ");
-        emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
-        emitCxxString(thread, target, u8") ");
-        emitCxxString(thread, target, u8"in");
+      if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_Vertex) == Arcadia_Visuals_VPL_ScalarFlags_Vertex) {
+        if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_Constant) == Arcadia_Visuals_VPL_ScalarFlags_Constant) {
+          emitCxxString(thread, target, "layout(binding = ");
+          emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
+          emitCxxString(thread, target, u8") ");
+          emitCxxString(thread, target, u8"uniform");
+        } else {
+          emitCxxString(thread, target, "layout(location = ");
+          emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
+          emitCxxString(thread, target, u8") ");
+          emitCxxString(thread, target, u8"in");
+        }
         emitCxxString(thread, target, u8" ");
         writeType(thread, self, variableScalar->type, target);
         emitCxxString(thread, target, u8" ");
         emitString(thread, target, variableScalar->name);
         emitCxxString(thread, target, u8";\n");
-      } else if (variableScalar->flags == Arcadia_Visuals_VPL_VariableScalarFlags_Fragment) {
-        emitCxxString(thread, target, u8"out");
-        emitCxxString(thread, target, u8" ");
-        writeType(thread, self, variableScalar->type, target);
-        emitCxxString(thread, target, u8" ");
-        emitString(thread, target, variableScalar->name);
-        emitCxxString(thread, target, u8";\n");
+      } else if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_Fragment) == Arcadia_Visuals_VPL_ScalarFlags_Fragment) {
+        if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_Constant) == 0) {
+          emitCxxString(thread, target, u8"out");
+          emitCxxString(thread, target, u8" ");
+          writeType(thread, self, variableScalar->type, target);
+          emitCxxString(thread, target, u8" ");
+          emitString(thread, target, variableScalar->name);
+          emitCxxString(thread, target, u8";\n");
+        }
+      } else if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_FrameBuffer) == Arcadia_Visuals_VPL_ScalarFlags_FrameBuffer) {
+        /*Intentionally empty.*/
+      } else {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+        Arcadia_Thread_jump(thread);
       }
     } break;
     case Context_FragmentShader: {
-      if (variableScalar->flags == Arcadia_Visuals_VPL_VariableScalarFlags_Fragment) {
-        emitCxxString(thread, target, u8"in");
+      if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_Vertex) == Arcadia_Visuals_VPL_ScalarFlags_Vertex) {
+        /*Intentionally empty.*/
+      } else if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_Fragment) == Arcadia_Visuals_VPL_ScalarFlags_Fragment) {
+        if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_Constant) == Arcadia_Visuals_VPL_ScalarFlags_Constant) {
+          emitCxxString(thread, target, "layout(binding = ");
+          emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
+          emitCxxString(thread, target, u8") ");
+          emitCxxString(thread, target, u8"uniform");
+        } else {
+          emitCxxString(thread, target, u8"in");
+        }
         emitCxxString(thread, target, u8" ");
         writeType(thread, self, variableScalar->type, target);
         emitCxxString(thread, target, u8" ");
         emitString(thread, target, variableScalar->name);
         emitCxxString(thread, target, u8";\n");
-      } else if (variableScalar->flags == Arcadia_Visuals_VPL_VariableScalarFlags_FrameBuffer) {
+      } else if ((variableScalar->flags & Arcadia_Visuals_VPL_ScalarFlags_FrameBuffer) == Arcadia_Visuals_VPL_ScalarFlags_FrameBuffer) {
         emitCxxString(thread, target, u8"out");
         emitCxxString(thread, target, u8" ");
         writeType(thread, self, variableScalar->type, target);
         emitCxxString(thread, target, u8" ");
         emitString(thread, target, variableScalar->name);
         emitCxxString(thread, target, u8";\n");
+      } else {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+        Arcadia_Thread_jump(thread);
       }
+    } break;
+    default: {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
     } break;
   };
 }
@@ -703,7 +745,7 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
 #define OnAdd(_lhs, _rhs) Arcadia_Visuals_VPL_Tree_makeAdd(thread, _lhs, _rhs)
 #define OnSubtract(_lhs, _rhs) Arcadia_Visuals_VPL_Tree_makeSubtract(thread, _lhs, _rhs)
 #define OnAccess(_lhs, _rhs) Arcadia_Visuals_VPL_Tree_makeAccess(thread, _lhs, _rhs)
-#define OnNumber(_number) Arcadia_Visuals_VPL_Tree_makeNumber(thread, _number)
+#define OnNumber(_number) Arcadia_Visuals_VPL_Tree_makeNumber(thread, Arcadia_String_createFromCxxString(thread, _number))
 #define OnCall(_target, ...) OnCall0(thread, _target, __VA_ARGS__ __VA_OPT__(,) NULL)
 #define OnStatementList(...) OnStatementList0(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
 #define OnParameterList(...) OnParameterList0(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
@@ -717,21 +759,28 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
   Arcadia_Visuals_VPL_Tree_Node* vertexColorAssignmentTree = NULL;
   if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_MeshAmbientColor) {
     vertexColorAssignmentTree =
-    OnAssignment
-      (
-        OnName("_1_vertexColor"),
-        OnAccess
-          (
-            OnName("_mesh0"),
-            OnName("ambientColor")
-          )
-      );
+      OnAssignment
+        (
+          OnName("_1_vertexColor"),
+          OnAccess
+            (
+              OnName("_mesh0"),
+              OnName("ambientColor")
+            )
+        );
   } else if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_VertexAmbientColor) {
     vertexColorAssignmentTree =
-    OnAssignment
+      OnAssignment
+        (
+          OnName("_1_vertexColor"),
+          OnName("_0_vertexAmbientColor")
+        );
+  } else if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_TextureAmbientColor) {
+    vertexColorAssignmentTree =
+      OnAssignment
       (
         OnName("_1_vertexColor"),
-        OnName("_0_vertexColor")
+        OnName("_0_vertexAmbientColor")
       );
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -770,8 +819,8 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
                         ),
                       OnAccess
                         (
-                          OnName("_mesh0"),
-                          OnName("model")
+                          OnName("_model0"),
+                          OnName("localToWorld")
                         )
                     )
                 )
@@ -790,6 +839,11 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
                     )
                 )
             ),
+          OnAssignment
+          (
+            OnName("_1_vertexAmbientColorTextureCoordinate"),
+            OnName("_0_vertexAmbientColorTextureCoordinate")
+          ),
           vertexColorAssignmentTree                                  
         )
     );
@@ -818,13 +872,39 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
     writeVariableScalar(thread, self, Context_FragmentShader, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), variableScalar, target);
   }
 
+  Arcadia_Visuals_VPL_Tree_Node* fragmentColorAssignmentTree = NULL;
+  if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_TextureAmbientColor) {
+  #if 0
+    fragmentColorAssignmentTree =
+      OnAssignment
+        (
+          OnName("_2_fragmentColor"),
+          OnName("_1_vertexColor")
+        );
+  #else
+    fragmentColorAssignmentTree =
+      OnAssignment
+        (
+          OnName("_2_fragmentColor"),
+          OnCall
+            (
+              OnName("texture2D"),
+              OnName("_0_ambientColorTexture"),
+              OnName("_1_vertexAmbientColorTextureCoordinate")
+            )
+        );
+  #endif
+  } else {
+    fragmentColorAssignmentTree = OnAssignment(OnName("_2_fragmentColor"), OnName("_1_vertexColor"));
+  }
+
   Arcadia_Visuals_VPL_Tree_Node* mainFunctionDefinitionTree =
     OnFunctionDefinition
       (
         OnName("void"),
         OnName("main"),
         OnParameterList(),
-        OnStatementList(OnAssignment(OnName("_2_fragmentColor"), OnName("_1_vertexColor")))
+        OnStatementList(fragmentColorAssignmentTree)
       );
   onFunctionDefinitionTree(thread, self, mainFunctionDefinitionTree, target);
   Arcadia_ByteBuffer_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);

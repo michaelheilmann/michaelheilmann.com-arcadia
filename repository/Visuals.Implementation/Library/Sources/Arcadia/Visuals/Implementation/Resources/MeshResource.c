@@ -80,15 +80,11 @@ Arcadia_Visuals_Implementation_MeshResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  self->dirty = Arcadia_Visuals_Implementation_MeshResource_LocalToWorldMatrixDirty
-              | Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty
+  self->dirty = Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty
               | Arcadia_Visuals_Implementation_MeshResource_VerticesDirty
               ;
   //
   self->meshAmbientColor = Arcadia_Math_Color4Real32_create4(thread, 1.f, 1.f, 1.f, 1.f);
-  //
-  self->localToWorldMatrix = Arcadia_Math_Matrix4Real32_create(thread);
-  Arcadia_Math_Matrix4Real32_setIdentity(thread, self->localToWorldMatrix);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
@@ -120,9 +116,6 @@ Arcadia_Visuals_Implementation_MeshResource_visitImpl
   if (self->meshAmbientColor) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->meshAmbientColor);
   }
-  if (self->localToWorldMatrix) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->localToWorldMatrix);
-  }
 }
 
 void
@@ -133,12 +126,3 @@ Arcadia_Visuals_Implementation_MeshResource_setMeshAmbientColor
     Arcadia_Math_Color4Real32* meshAmbientColor
   )
 { Arcadia_VirtualCall(Arcadia_Visuals_Implementation_MeshResource, setMeshAmbientColor, self, meshAmbientColor); }
-
-void
-Arcadia_Visuals_Implementation_MeshResource_setLocalToWorldMatrix
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_MeshResource* self,
-    Arcadia_Math_Matrix4Real32* localToWorld
-  )
-{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_MeshResource, setLocalToWorldMatrix, self, localToWorld); }

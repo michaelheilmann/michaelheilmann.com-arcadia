@@ -747,7 +747,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_mapKeyboardKey
 
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotImplemented);
-      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_Thread_jump(thread);
     } break;
   };
 
@@ -801,8 +801,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_updateImpl
         Arcadia_Visuals_ApplicationQuitRequestedEvent_create
           (
             thread,
-            Arcadia_getTickCount(thread),
-            (Arcadia_Visuals_BackendContext*)self
+            Arcadia_getTickCount(thread)
           );
       Arcadia_Engine_enqueEvent(thread, Arcadia_Engine_getOrCreate(thread), event);
     }

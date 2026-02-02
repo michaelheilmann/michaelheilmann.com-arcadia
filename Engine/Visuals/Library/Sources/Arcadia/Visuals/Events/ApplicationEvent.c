@@ -61,23 +61,19 @@ Arcadia_Visuals_ApplicationEvent_constructImpl
     Arcadia_Visuals_ApplicationEvent* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_ApplicationEvent_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
-  if (2 != numberOfArgumentValues1) {
+  Arcadia_TypeValue type = _Arcadia_Visuals_ApplicationEvent_getType(thread);
+  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
     Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 1));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor(thread, _type, self);
+    Arcadia_superTypeConstructor(thread, type, self);
   }
-  //
-  self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 0, _Arcadia_Visuals_BackendContext_getType(thread));
-  //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1);
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, type);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues+1);
 }
 
 static void
@@ -94,8 +90,5 @@ Arcadia_Visuals_ApplicationEvent_visit
     Arcadia_Thread* thread,
     Arcadia_Visuals_ApplicationEvent* self
   )
-{
-  if (self->backendContext) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backendContext);
-  }
-}
+{ }
+

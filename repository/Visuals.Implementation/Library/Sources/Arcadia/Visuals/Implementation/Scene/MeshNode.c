@@ -167,15 +167,13 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl
     Arcadia_Visuals_Implementation_Scene_RenderingContextNode* renderingContextNode
   )
 {
-  // (1) Render the material dependency.
-  Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)((Arcadia_Visuals_Scene_MeshNode*)self)->material, (Arcadia_Visuals_Scene_RenderingContextNode*)renderingContextNode);
-  // (2) Set the backend context.
+  // (1) Set the backend context.
   Arcadia_Visuals_Scene_Node_setBackendContext(thread, (Arcadia_Visuals_Scene_Node*)self, (Arcadia_Visuals_BackendContext*)renderingContextNode->backendContext);
-  // (3) Setup resources.
+  // (2) Setup resources.
   if (self->backendContext) {
     if (!self->meshResource) {
       Arcadia_Visuals_Implementation_BackendContext* backendContext = self->backendContext;
-      // (3.1) vertex buffer resource
+      // (2.1) vertex buffer resource
       Arcadia_Visuals_Implementation_VertexBufferResource* vertexBufferResource = NULL;
       vertexBufferResource = Arcadia_Visuals_Implementation_BackendContext_createVertexBufferResource(thread, backendContext);
       Arcadia_Visuals_Implementation_VertexBufferResource_setData
@@ -187,23 +185,16 @@ Arcadia_Visuals_Implementation_Scene_MeshNode_renderImpl
           (void*)((Arcadia_Visuals_Scene_MeshNode*)self)->vertices,
           ((Arcadia_Visuals_Scene_MeshNode*)self)->numberOfVertices * ((Arcadia_Visuals_Scene_MeshNode*)self)->vertexDescriptor->stride
         );
-      // (3.2) mesh resource
-      Arcadia_Visuals_Implementation_Scene_MaterialNode* material = (Arcadia_Visuals_Implementation_Scene_MaterialNode*)((Arcadia_Visuals_Scene_MeshNode*)self)->material;
+      // (2.2) mesh resource
       self->meshResource =
         Arcadia_Visuals_Implementation_BackendContext_createMeshResource
           (
             thread,
             backendContext,
-            vertexBufferResource,
-            material->materialResource
+            vertexBufferResource
           );
       Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshResource);
-      // (3.3) Set the matrices of the mesh resource.
-      // TODO: Add and utilize a model resource.
-      Arcadia_Math_Matrix4Real32* localToWorldMatrix = Arcadia_Math_Matrix4Real32_create(thread);
-      Arcadia_Math_Matrix4Real32_setIdentity(thread, localToWorldMatrix);
-      Arcadia_Visuals_Implementation_MeshResource_setLocalToWorldMatrix(thread, self->meshResource, localToWorldMatrix);
-      // (3.4) Set the mesh ambient color of the mesh resource.
+      // (2.3) Set the mesh ambient color of the mesh resource.
       Arcadia_Visuals_Implementation_MeshResource_setMeshAmbientColor(thread, self->meshResource, ((Arcadia_Visuals_Scene_MeshNode*)self)->ambientColor);
     }
   }

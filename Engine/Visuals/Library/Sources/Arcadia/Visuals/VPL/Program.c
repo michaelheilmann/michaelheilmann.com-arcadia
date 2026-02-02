@@ -18,7 +18,7 @@
 #include "Arcadia/Languages/Include.h"
 #include "Arcadia/Visuals/VPL/ConstantBlock.h"
 #include "Arcadia/Visuals/VPL/Field.h"
-#include "Arcadia/Visuals/VPL/VariableScalar.h"
+#include "Arcadia/Visuals/VPL/Scalar.h"
 
 static void
 createConstantBlocks
@@ -32,42 +32,58 @@ createConstantBlocks
   Arcadia_List* fields = NULL;
   Arcadia_String* name = NULL, * type = NULL;
 
-  // create fields of block "viewer"
-  fields = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  name = Arcadia_String_createFromCxxString(thread, u8"projection");
-  type = self->MAT4;
-  Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
-  name = Arcadia_String_createFromCxxString(thread, u8"view");
-  type = self->MAT4;
-  Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
-  constantBlock =
-    Arcadia_Visuals_VPL_ConstantBlock_create
-      (
-        thread,
-        Arcadia_String_createFromCxxString(thread, u8"viewer"),
-        (Arcadia_List*)Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(fields))
-      );
-  Arcadia_List_insertBackObjectReferenceValue(thread, constantBlocks, (Arcadia_Object*)constantBlock);
-
-  // create the fields of block "mesh"
-  fields = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  // mat4 model;
-  name = Arcadia_String_createFromCxxString(thread, u8"model");
-  type = self->MAT4;
-  Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
-  // vec4 color;
-  name = Arcadia_String_createFromCxxString(thread, u8"ambientColor");
-  type = self->VEC4;
-  Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
-  // create the constant block "mesh"
-  constantBlock =
-    Arcadia_Visuals_VPL_ConstantBlock_create
-      (
-        thread,
-        Arcadia_String_createFromCxxString(thread, u8"mesh"),
-        (Arcadia_List*)Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(fields))
-      );
-  Arcadia_List_insertBackObjectReferenceValue(thread, constantBlocks, (Arcadia_Object*)constantBlock);
+  {
+    // create fields of block "viewer"
+    fields = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+    name = Arcadia_String_createFromCxxString(thread, u8"projection");
+    type = self->MAT4;
+    Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
+    name = Arcadia_String_createFromCxxString(thread, u8"view");
+    type = self->MAT4;
+    Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
+    constantBlock =
+      Arcadia_Visuals_VPL_ConstantBlock_create
+        (
+          thread,
+          Arcadia_String_createFromCxxString(thread, u8"viewer"),
+          (Arcadia_List*)Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(fields))
+        );
+    Arcadia_List_insertBackObjectReferenceValue(thread, constantBlocks, (Arcadia_Object*)constantBlock);
+  }
+  {
+    // create the fields of block "model"
+    fields = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+    // mat4 localToWorld;
+    name = Arcadia_String_createFromCxxString(thread, u8"localToWorld");
+    type = self->MAT4;
+    Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
+    // create the constant block "mesh"
+    constantBlock =
+      Arcadia_Visuals_VPL_ConstantBlock_create
+        (
+          thread,
+          Arcadia_String_createFromCxxString(thread, u8"model"),
+          (Arcadia_List*)Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(fields))
+        );
+    Arcadia_List_insertBackObjectReferenceValue(thread, constantBlocks, (Arcadia_Object*)constantBlock);
+  }
+  {
+    // create the fields of block "mesh"
+    fields = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+    // vec4 color;
+    name = Arcadia_String_createFromCxxString(thread, u8"ambientColor");
+    type = self->VEC4;
+    Arcadia_List_insertBackObjectReferenceValue(thread, fields, Arcadia_Visuals_VPL_Field_create(thread, name, type));
+    // create the constant block "mesh"
+    constantBlock =
+      Arcadia_Visuals_VPL_ConstantBlock_create
+        (
+          thread,
+          Arcadia_String_createFromCxxString(thread, u8"mesh"),
+          (Arcadia_List*)Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(fields))
+        );
+    Arcadia_List_insertBackObjectReferenceValue(thread, constantBlocks, (Arcadia_Object*)constantBlock);
+  }
 }
 
 static void
@@ -85,7 +101,7 @@ createVariableScalars
       (
         thread,
         0,
-        Arcadia_Visuals_VPL_VariableScalarFlags_Vertex,
+        Arcadia_Visuals_VPL_ScalarFlags_Variable | Arcadia_Visuals_VPL_ScalarFlags_Vertex,
         Arcadia_String_createFromCxxString(thread, u8"_0_vertexPosition"),
         self->VEC3
       );
@@ -97,9 +113,44 @@ createVariableScalars
       (
         thread,
         1,
-        Arcadia_Visuals_VPL_VariableScalarFlags_Vertex,
-        Arcadia_String_createFromCxxString(thread, u8"_0_vertexColor"),
+        Arcadia_Visuals_VPL_ScalarFlags_Variable | Arcadia_Visuals_VPL_ScalarFlags_Vertex,
+        Arcadia_String_createFromCxxString(thread, u8"_0_vertexAmbientColor"),
         self->VEC4
+      );
+  Arcadia_List_insertBackObjectReferenceValue(thread, variableScalars, (Arcadia_Object*)variableScalar);
+
+  // the texture coordinate of the vertex adressing the ambient color texture
+  variableScalar =
+    Arcadia_Visuals_VPL_VariableScalar_create
+      (
+        thread,
+        2,
+        Arcadia_Visuals_VPL_ScalarFlags_Variable | Arcadia_Visuals_VPL_ScalarFlags_Vertex,
+        Arcadia_String_createFromCxxString(thread, u8"_0_vertexAmbientColorTextureCoordinate"),
+        self->VEC2
+      );
+  Arcadia_List_insertBackObjectReferenceValue(thread, variableScalars, (Arcadia_Object*)variableScalar);
+
+  // the texture coordinate of the vertex adressing the ambient color texture
+  variableScalar =
+    Arcadia_Visuals_VPL_VariableScalar_create
+    (
+      thread,
+      -1,
+      Arcadia_Visuals_VPL_ScalarFlags_Variable | Arcadia_Visuals_VPL_ScalarFlags_Fragment,
+      Arcadia_String_createFromCxxString(thread, u8"_1_vertexAmbientColorTextureCoordinate"),
+      self->VEC2
+    );
+  Arcadia_List_insertBackObjectReferenceValue(thread, variableScalars, (Arcadia_Object*)variableScalar);
+
+  variableScalar =
+    Arcadia_Visuals_VPL_VariableScalar_create
+      (
+        thread,
+        0,
+        Arcadia_Visuals_VPL_ScalarFlags_Constant | Arcadia_Visuals_VPL_ScalarFlags_Fragment,
+        Arcadia_String_createFromCxxString(thread, u8"_0_ambientColorTexture"),
+        self->SAMPLER2D
       );
   Arcadia_List_insertBackObjectReferenceValue(thread, variableScalars, (Arcadia_Object*)variableScalar);
 
@@ -109,7 +160,7 @@ createVariableScalars
       (
         thread,
         -1,
-        Arcadia_Visuals_VPL_VariableScalarFlags_Fragment,
+        Arcadia_Visuals_VPL_ScalarFlags_Variable | Arcadia_Visuals_VPL_ScalarFlags_Fragment,
         Arcadia_String_createFromCxxString(thread, u8"_1_vertexColor"),
         self->VEC4
       );
@@ -121,7 +172,7 @@ createVariableScalars
       (
         thread,
         -1,
-        Arcadia_Visuals_VPL_VariableScalarFlags_FrameBuffer,
+        Arcadia_Visuals_VPL_ScalarFlags_Variable | Arcadia_Visuals_VPL_ScalarFlags_FrameBuffer,
         Arcadia_String_createFromCxxString(thread, u8"_2_fragmentColor"),
         self->VEC4
       );
@@ -183,8 +234,10 @@ Arcadia_Visuals_VPL_Program_constructImpl
   self->flags = Arcadia_ValueStack_getNatural8Value(thread, 1);
   Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
   self->MAT4 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"mat4");
+  self->VEC2 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec2");
   self->VEC3 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec3");
   self->VEC4 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec4");
+  self->SAMPLER2D = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"sampler2D");
   self->constantBlocks = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   self->variableScalars = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   createConstantBlocks(thread, self, self->constantBlocks);
@@ -211,11 +264,17 @@ Arcadia_Visuals_VPL_Program_visitImpl
   if (self->MAT4) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->MAT4);
   }
+  if (self->VEC2) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC2);
+  }
   if (self->VEC3) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC3);
   }
   if (self->VEC4) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC4);
+  }
+  if (self->SAMPLER2D) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->SAMPLER2D);
   }
   if (self->constantBlocks) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->constantBlocks);

@@ -72,6 +72,7 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self,
+      Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
       Arcadia_Visuals_Implementation_TextureResource* ambientTexture,
       Arcadia_Visuals_Implementation_ProgramResource* program
     );
@@ -81,8 +82,7 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self,
-      Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer,
-      Arcadia_Visuals_Implementation_MaterialResource* material
+      Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer
     );
 
   Arcadia_Visuals_Implementation_ModelResource*
@@ -181,6 +181,7 @@ Arcadia_Visuals_Implementation_BackendContext_createMaterialResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self,
+    Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
     Arcadia_Visuals_Implementation_TextureResource* ambientTexture,
     Arcadia_Visuals_Implementation_ProgramResource* program
   );
@@ -192,8 +193,7 @@ Arcadia_Visuals_Implementation_BackendContext_createMeshResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer,
-    Arcadia_Visuals_Implementation_MaterialResource* material
+    Arcadia_Visuals_Implementation_VertexBufferResource* vertexBuffer
   );
 
 // Create a model resource.

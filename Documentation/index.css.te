@@ -224,57 +224,53 @@ body.my-index-page-1 div.topic div.header {
   display: inline;
   font-size: var(--h6-font-size);
 }
+
 body.my-index-page-1 div.topic div.body {
-  /*display: inline;*/
   font-size: var(--default-font-size);
+
+  padding-top: 1rem;
+  margin-top: 1rem;
+  border-top-style: solid;
 }
-body.my-index-page-1 div.topic div.body > a {
-  /*
-  font-size: 1rem;
-  text-decoration: none;
-  */
-  margin-left: 2rem;
-}
+
 body.my-index-page-1 header {
   flex-grow: 0;
   display: flex;
   flex-direction: row;
 }
+
 body.my-index-page-1 main {
   flex-grow: 1;
   display: flex;
   flex-direction: row;
 }
+
 body.my-index-page-1 footer {
   flex-grow: 0;
   display: flex;
   flex-direction: row;
 }
-body.my-index-page-1 header > div:first-child {
-  flex-grow:0;
-  display: flex;
-  flex-direction: column;
-  padding-left: 2rem;
-  padding-top: 2rem;
-}
+
 body.my-index-page-1 header > div:nth-child(2) {
   flex-grow: 1;
 }
+
 body.my-index-page-1 header > div:last-child {
   flex-grow:0;
   padding-right: 2rem;
   padding-bottom: 2rem;
 }
 
-
 body.my-index-page-1 main > div:first-child {
   flex-grow:0;
   padding-left: 2rem;
   padding-bottom: 2rem;
 }
+
 body.my-index-page-1 main > div:nth-child(2) {
   flex-grow: 1;
 }
+
 body.my-index-page-1 main > div:last-child {
   flex-grow:0;
   padding-right: 2rem;
@@ -383,19 +379,12 @@ body.my-index-page-1 div.entries {
   flex-direction:column;
 }
 
-body.my-index-page-1 div.entries > a {
-  margin-left: 0rem;
-}
-
 body.my-index-page-1 footer > div > div {
   line-height: 1rem;
 }
 
 body.my-index-page-1 footer > div > div > a {
   text-decoration: none;
-}
-
-body.my-subindex-page-1 div.body {
 }
 
 body.my-subindex-page-1 main > div {
@@ -406,34 +395,12 @@ body.my-subindex-page-1 main > div {
   justify-content: space-evenly;
 }
 
-body.my-subindex-page-1 div.banner {
-  display: flex; flex-direction: column;
-  background-color: black;
-  color: white;
-}
-
-body.my-subindex-page-1 div.banner > div:first-child {
-  flex-grow: 0;
-  display: flex;
-  flex-direction: column;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
 body.my-subindex-page-1 header {
   background-color: var(--black);
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   padding-right: 16px;
   font-size: 1rem;
-}
-
-body.my-subindex-page-1 header > div:last-child {
-  flex-grow: 0;
-  padding-right: 0rem;
-  padding-bottom: 0rem;
 }
 
 body.my-subindex-page-1 header a {
@@ -476,10 +443,30 @@ body.my-index-page-1 div.entries {
   display:flex; flex-direction:column;
 }
 
-body.my-index-page-1 div.entries > a {
-  margin-left: 2rem;
-}
-
 div.banner {
   font-size: var(--h3-font-size);  
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+div.banner {
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+body.my-index-page-1 div.banner {
+  background-color: white;
+  color: black;
+}
+
+body.my-subindex-page-1 header div.banner {
+  background-color: black;
+  color: white;
+}
+
+body.my-subindex-page-1 header div.navigation.breadcrumbs {
+  padding-top: 2rem;
+  padding-left: 2rem;
 }

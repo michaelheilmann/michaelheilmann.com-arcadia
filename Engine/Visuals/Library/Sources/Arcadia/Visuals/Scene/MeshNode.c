@@ -123,18 +123,14 @@ Arcadia_Visuals_Scene_MeshNode_constructImpl
           Arcadia_Visuals_VertexElementSyntactics_Real32Real32
         )
     );
-  Arcadia_Visuals_SceneNodeFactory* sceneNodeFactory =
-    (Arcadia_Visuals_SceneNodeFactory*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_SceneNodeFactory_getType(thread));
   Arcadia_ADL_MeshDefinition* source = (Arcadia_ADL_MeshDefinition*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_ADL_MeshDefinition_getType(thread));
   Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)source);
-  Arcadia_ADL_MaterialDefinition* materialDefinition = (Arcadia_ADL_MaterialDefinition*)source->material->definition;
   Arcadia_ADL_ColorDefinition* ambientColorDefinition = (Arcadia_ADL_ColorDefinition*)source->ambientColor->definition;
   self->source = source;
   // TODO:
   // Each mesh creates its own material node for an ADL material definition.
   // This is wasteful.
   // Meshes using the same ADL material definition should use the material node.
-  self->material = Arcadia_Visuals_SceneNodeFactory_createMaterialNode(thread, sceneNodeFactory, NULL, materialDefinition);
   self->vertexDescriptor = Arcadia_Visuals_VertexDescriptorBuilder_build(thread, vertexDescriptorBuilder);
   self->ambientColor = Arcadia_Math_Color4Real32_create4(thread, ambientColorDefinition->red / 255.f,
                                                                  ambientColorDefinition->green / 255.f,
@@ -150,7 +146,7 @@ Arcadia_Visuals_Scene_MeshNode_constructImpl
   Arcadia_InternalImmutableByteArray* vertexAmbientRGBA = Arcadia_ADL_MeshDefinition_getVertexAmbientColors(thread, source);
   Arcadia_Real32Value const* vertexAmbientRGBBytes = (Arcadia_Real32Value const*)Arcadia_InternalImmutableByteArray_getBytes(thread, vertexAmbientRGBA);
 
-  Arcadia_InternalImmutableByteArray* vertexAmbientUV = Arcadia_ADL_MeshDefinition_getVertexAmbientColors(thread, source);
+  Arcadia_InternalImmutableByteArray* vertexAmbientUV = Arcadia_ADL_MeshDefinition_getVertexAmbientTextureCoordinates(thread, source);
   Arcadia_Real32Value const* vertexAmbientUVBytes = (Arcadia_Real32Value const*)Arcadia_InternalImmutableByteArray_getBytes(thread, vertexAmbientUV);
 
   Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(thread);
@@ -182,9 +178,6 @@ Arcadia_Visuals_Scene_MeshNode_visitImpl
 {
   if (self->source) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->source);
-  }
-  if (self->material) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->material);
   }
   if (self->ambientColor) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->ambientColor);

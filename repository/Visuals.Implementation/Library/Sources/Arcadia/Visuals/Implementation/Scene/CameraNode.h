@@ -22,6 +22,9 @@ typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_I
 
 typedef struct Arcadia_Visuals_Implementation_ConstantBufferResource Arcadia_Visuals_Implementation_ConstantBufferResource;
 
+#define Arcadia_Visuals_Implementation_Scene_CameraNode_ViewToProjectionMatrixDirty (1)
+#define Arcadia_Visuals_Implementation_Scene_CameraNode_WorldToViewMatrixDirty (2)
+
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Scene.CameraNode", Arcadia_Visuals_Implementation_Scene_CameraNode,
                           u8"Arcadia.Visuals.Scene.CameraNode");
 
@@ -32,9 +35,9 @@ struct Arcadia_Visuals_Implementation_Scene_CameraNodeDispatch {
 struct Arcadia_Visuals_Implementation_Scene_CameraNode {
   Arcadia_Visuals_Scene_CameraNode _parent;
 
+  Arcadia_Natural8Value dirtyBits;
   Arcadia_Math_Matrix4Real32* worldToViewMatrix;
   Arcadia_Math_Matrix4Real32* viewToProjectionMatrix;
-
   Arcadia_Visuals_Implementation_BackendContext* backendContext;
   Arcadia_Visuals_Implementation_ConstantBufferResource* constantBufferResource;
 };

@@ -18,7 +18,7 @@
 
 #include "Arcadia/Visuals/VPL/ConstantBlock.h"
 #include "Arcadia/Visuals/VPL/Field.h"
-#include "Arcadia/Visuals/VPL/VariableScalar.h"
+#include "Arcadia/Visuals/VPL/Scalar.h"
 #include "Arcadia/Visuals/VPL/Program.h"
 #include "Arcadia/Visuals/Implementation/VPL/GLSL/Transpiler.h"
 

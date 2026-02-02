@@ -52,7 +52,6 @@ struct Arcadia_ADL_MeshDefinition {
   Arcadia_InternalImmutableByteArray* vertexAmbientColors;
   Arcadia_InternalImmutableByteArray* vertexAmbientTextureCoordinates;
   Arcadia_ADL_Reference* ambientColor;
-  Arcadia_ADL_Reference* material;
 };
 
 Arcadia_ADL_MeshDefinition*
@@ -65,8 +64,7 @@ Arcadia_ADL_MeshDefinition_create
     Arcadia_InternalImmutableByteArray* vertexPositions,
     Arcadia_InternalImmutableByteArray* vertexAmbientColors,
     Arcadia_InternalImmutableByteArray* vertexAmbientTextureCoordinates,
-    Arcadia_String* ambientColorName,
-    Arcadia_String* materialName
+    Arcadia_String* ambientColorName
   );
 
 Arcadia_SizeValue

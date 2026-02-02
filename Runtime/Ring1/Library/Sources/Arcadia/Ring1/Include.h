@@ -94,6 +94,8 @@
 
 #include "Arcadia/Ring1/Implementation/RealToString/Include.h"
 
+#include "Arcadia/Ring1/Implementation/Signals/Include.h"
+
 #include "Arcadia/Ring1/Implementation/StringToInteger/Include.h"
 #include "Arcadia/Ring1/Implementation/StringToNatural/Include.h"
 #include "Arcadia/Ring1/Implementation/StringToReal/toReal32.h"

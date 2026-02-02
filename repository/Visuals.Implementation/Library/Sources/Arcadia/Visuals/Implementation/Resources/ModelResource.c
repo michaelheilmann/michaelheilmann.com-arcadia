@@ -31,9 +31,17 @@ Arcadia_Visuals_Implementation_ModelResource_initializeDispatchImpl
     Arcadia_Visuals_Implementation_ModelResourceDispatch* self
   );
 
+static void
+Arcadia_Visuals_Implementation_ModelResource_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ModelResource* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_ModelResource_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_ModelResource_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -66,6 +74,10 @@ Arcadia_Visuals_Implementation_ModelResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
+  self->dirty = Arcadia_Visuals_Implementation_ModelResource_LocalToWorldMatrixDirty;
+  //
+  self->localToWorldMatrix = Arcadia_Math_Matrix4Real32_create(thread);
+  Arcadia_Math_Matrix4Real32_setIdentity(thread, self->localToWorldMatrix);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
@@ -79,3 +91,24 @@ Arcadia_Visuals_Implementation_ModelResource_initializeDispatchImpl
     Arcadia_Visuals_Implementation_ModelResourceDispatch* self
   )
 { }
+
+static void
+Arcadia_Visuals_Implementation_ModelResource_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ModelResource* self
+  )
+{
+  if (self->localToWorldMatrix) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->localToWorldMatrix);
+  }
+}
+
+void
+Arcadia_Visuals_Implementation_ModelResource_setLocalToWorldMatrix
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ModelResource* self,
+    Arcadia_Math_Matrix4Real32* localToWorldMatrix
+  )
+{ Arcadia_VirtualCall(Arcadia_Visuals_Implementation_ModelResource, setLocalToWorldMatrix, self, localToWorldMatrix); }

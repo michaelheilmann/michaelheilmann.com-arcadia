@@ -106,13 +106,13 @@ Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (3 != numberOfArgumentValues) {
+  if (4 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
     Arcadia_Value t;
-    t = Arcadia_ValueStack_getValue(thread, 3);
+    t = Arcadia_ValueStack_getValue(thread, 4);
     Arcadia_ValueStack_pushValue(thread, &t);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -120,6 +120,8 @@ Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_constructImpl
 
   self->ambientColorTexture = NULL;
   self->program = NULL;
+
+  self->ambientColorSource = Arcadia_ValueStack_getInteger32Value(thread, 3);
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -239,14 +241,16 @@ Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
+    Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
     Arcadia_Visuals_Implementation_OpenGL4_TextureResource* ambientColorTexture,
     Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* program
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushInteger32Value(thread, ambientColorSource);
   if (ambientColorTexture) Arcadia_ValueStack_pushObjectReferenceValue(thread, ambientColorTexture); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (program) Arcadia_ValueStack_pushObjectReferenceValue(thread, program); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  Arcadia_ValueStack_pushNatural8Value(thread, 3);
+  Arcadia_ValueStack_pushNatural8Value(thread, 4);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_MaterialResource);
 }

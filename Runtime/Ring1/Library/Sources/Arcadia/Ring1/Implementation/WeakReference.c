@@ -147,14 +147,17 @@ Arcadia_WeakReference_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 == numberOfArgumentValues1) {
+  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (0 == numberOfArgumentValues) {
     self->value = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
-  } else if (1 == numberOfArgumentValues1) {
+  } else if (1 == numberOfArgumentValues) {
     self->value = Arcadia_ValueStack_getValue(thread, 1);
     switch (Arcadia_Value_getTag(&self->value)) {
       case Arcadia_ValueTag_Atom: {
-        Arcadia_ARMS_addNotifyDestroy(self->value.atomValue, self, NULL, &callback);
+        if (Arcadia_ARMS_addNotifyDestroy(self->value.atomValue, self, NULL, &callback)) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        }
       } break;
       case Arcadia_ValueTag_BigInteger: {
       } break;
@@ -162,10 +165,16 @@ Arcadia_WeakReference_constructImpl
       case Arcadia_ValueTag_ForeignProcedure: {
       } break;
       case Arcadia_ValueTag_InternalImmutableByteArray: {
-        Arcadia_ARMS_addNotifyDestroy(self->value.internalImmutableByteArrayValue, self, NULL, &callback);
+        if (Arcadia_ARMS_addNotifyDestroy(self->value.internalImmutableByteArrayValue, self, NULL, &callback)) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        }
       } break;
       case Arcadia_ValueTag_ImmutableUTF8String: {
-        Arcadia_ARMS_addNotifyDestroy(self->value.immutableUTF8StringValue, self, NULL, &callback);
+        if (Arcadia_ARMS_addNotifyDestroy(self->value.immutableUTF8StringValue, self, NULL, &callback)) {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+          Arcadia_Thread_jump(thread);
+        }
       } break;
       case Arcadia_ValueTag_Integer16:
       case Arcadia_ValueTag_Integer32:
@@ -195,7 +204,7 @@ Arcadia_WeakReference_constructImpl
     Arcadia_Thread_jump(thread);
   }
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void

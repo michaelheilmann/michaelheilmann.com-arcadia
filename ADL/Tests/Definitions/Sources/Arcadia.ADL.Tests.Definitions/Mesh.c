@@ -114,7 +114,6 @@ testMeshDefinition1
     "  type : \"Mesh\",\n"
     "  name : \"MyGame.Meshes.MyMesh\",\n"
     "  ambientColor : \"MyGame.Colors.MyWhite\",\n"
-    "  material : \"MyGame.Materials.MyMaterial\",\n"
     "  vertexPositions : [],\n"
     "  vertexAmbientColors : [],\n"
     "  vertexAmbientColorTextureCoordinates: [],\n"

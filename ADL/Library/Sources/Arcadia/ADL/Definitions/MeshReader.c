@@ -50,13 +50,6 @@ static const char* SCHEMA =
   "      },\n"
   "      {\n"
   "        kind : \"MapEntry\",\n"
-  "        name : \"material\",\n"
-  "        type : {\n"
-  "          kind : \"String\",\n"
-  "        },\n"
-  "      },\n"
-  "      {\n"
-  "        kind : \"MapEntry\",\n"
   "        name : \"vertexPositions\",\n"
   "        type : {\n"
   "          kind : \"List\",\n"
@@ -166,7 +159,6 @@ Arcadia_ADL_MeshReader_read
   Arcadia_String* type = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->TYPE);
   Arcadia_String* name = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->NAME);
   Arcadia_String* ambientColorName = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->AMBIENTCOLOR);
-  Arcadia_String* materialName = Arcadia_ADL_Reader_getStringValue(thread, (Arcadia_DDL_MapNode*)input, self->MATERIAL);
 
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_List* list; Arcadia_SizeValue numberOfVertices, n;
@@ -237,8 +229,7 @@ Arcadia_ADL_MeshReader_read
         vertexPositions,
         vertexAmbientColors,
         vertexAmbientColorTextureCoordinates,
-        ambientColorName,
-        materialName
+        ambientColorName
       );
   return definition;
 }
@@ -277,7 +268,6 @@ Arcadia_ADL_MeshReader_constructImpl
   self->TYPENAME = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"Mesh");
   //
   self->AMBIENTCOLOR = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"ambientColor");
-  self->MATERIAL = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"material");
   //
   self->VERTEXPOSITIONS = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"vertexPositions");
   self->VERTEXAMBIENTCOLORS = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"vertexAmbientColors");
@@ -325,9 +315,6 @@ Arcadia_ADL_MeshReader_visitImpl
   //
   if (self->AMBIENTCOLOR) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->AMBIENTCOLOR);
-  }
-  if (self->MATERIAL) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->MATERIAL);
   }
   //
   if (self->VERTEXPOSITIONS) {

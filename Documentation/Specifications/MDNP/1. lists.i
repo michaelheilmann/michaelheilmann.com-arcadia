@@ -1,10 +1,5 @@
 <h2 id="list">1 Lists</h2>
 
-<p>
-This document is the specification of the <em>Data Definition Language Schema</em>, or <em>DDLS</em> for short.
-DDLS is a declarative language for defining the structure and constraints for data described by a <a href="@{siteAddress}/specifications/data-definition-language">DDL</a>  programs.
-</p>
-
 <h2>1.1 List</h2>
 <p>
 A list is an ordered list of mathematical objects.

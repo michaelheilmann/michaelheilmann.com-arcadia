@@ -164,33 +164,20 @@ Arcadia_Visuals_Implementation_Scene_RenderingContextNode_renderImpl
           );
       Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->renderingContextResource);
     }
-
-    // @todo Track if the matrices were actually modified.
-    // (1) Hardcoded matrices for now:
-    Arcadia_Math_Matrix4Real32_setIdentity(thread, ((Arcadia_Visuals_Scene_RenderingContextNode*)self)->worldToViewMatrix);
-    // (1.1) World-to-View matrix: Move the camera along the positive right axis and along the positive z axis by multiplying the camera position by `translate(0, 0, 1)`.
-    // However, as we actually do not transform the camera position but the position of the objects in world space,
-    // we actually have to use the inverse `inverse(translate(0, 0, 1))`.
-    Arcadia_Math_MatrixReal32Value_setTranslation(thread, ((Arcadia_Visuals_Scene_RenderingContextNode*)self)->worldToViewMatrix, 0.f, 0.f, -1.f);
-    // (1.2) View-to-Projection matrix: Use a perspective projection matrix for the camera.
-    Arcadia_Math_Matrix4x4Real32_setPerspectiveProjection(thread, ((Arcadia_Visuals_Scene_RenderingContextNode*)self)->viewToProjectionMatrix, 60.f, 4.f / 3.f, 0.1f, +100.f);
-
+    // Pass the matrices to the backend.
     Arcadia_Visuals_Implementation_RenderingContextResource_setWorldToViewMatrix(thread, self->renderingContextResource, ((Arcadia_Visuals_Scene_RenderingContextNode*)self)->worldToViewMatrix);
     Arcadia_Visuals_Implementation_RenderingContextResource_setViewToProjectionMatrix(thread, self->renderingContextResource, ((Arcadia_Visuals_Scene_RenderingContextNode*)self)->viewToProjectionMatrix);
 
+    // Load the resouurce.
     Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->renderingContextResource);
     if (((Arcadia_Visuals_Scene_RenderingContextNode*)self)->frameBufferNode) {
       Arcadia_Visuals_Scene_Node_render(thread, (Arcadia_Visuals_Scene_Node*)((Arcadia_Visuals_Scene_RenderingContextNode*)self)->frameBufferNode, (Arcadia_Visuals_Scene_RenderingContextNode*)self);
-#if 1
       // If there is a frame buffer to render to, render to that frame buffer.
       Arcadia_Visuals_Implementation_Scene_FrameBufferNode* frameBufferNode = (Arcadia_Visuals_Implementation_Scene_FrameBufferNode*)((Arcadia_Visuals_Scene_RenderingContextNode*)self)->frameBufferNode;
       Arcadia_Visuals_Implementation_RenderingContextResource_setTargetFrameBuffer(thread, self->renderingContextResource, frameBufferNode->frameBufferResource);
-#endif
     } else {
-#if 1
       // Otherwise render to the default frame buffer.
       Arcadia_Visuals_Implementation_RenderingContextResource_setTargetFrameBuffer(thread, self->renderingContextResource, NULL);
-#endif
     }
   }
 }

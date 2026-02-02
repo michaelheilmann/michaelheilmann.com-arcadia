@@ -18,15 +18,31 @@
 
 #include "Arcadia/Visuals/Implementation/Resource.h"
 
+#define Arcadia_Visuals_Implementation_ModelResource_LocalToWorldMatrixDirty (1)
+
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Resources.ModelResource", Arcadia_Visuals_Implementation_ModelResource,
                           u8"Arcadia.Visuals.Implementation.Resource");
 
 struct Arcadia_Visuals_Implementation_ModelResourceDispatch {
   Arcadia_Visuals_Implementation_ResourceDispatch _parent;
+  void (*setLocalToWorldMatrix)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ModelResource*, Arcadia_Math_Matrix4Real32*);
 };
 
 struct Arcadia_Visuals_Implementation_ModelResource {
   Arcadia_Visuals_Implementation_Resource _parent;
+  // The dirty flags.
+  Arcadia_Natural8Value dirty;
+  // The local to world matrix of the model.
+  // The default value is the identity matrix.
+  Arcadia_Math_Matrix4Real32* localToWorldMatrix;
 };
+
+void
+Arcadia_Visuals_Implementation_ModelResource_setLocalToWorldMatrix
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_ModelResource* self,
+    Arcadia_Math_Matrix4Real32* localToWorldMatrix
+  );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_RESOURCES_MODELRESOURCE_H_INCLUDED

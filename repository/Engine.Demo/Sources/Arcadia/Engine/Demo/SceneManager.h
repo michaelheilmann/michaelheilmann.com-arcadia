@@ -32,10 +32,12 @@ struct Arcadia_Engine_Demo_SceneManagerDispatch {
 
 struct Arcadia_Engine_Demo_SceneManager {
   Arcadia_Object parent;
-  /* The engine. */
+  // The engine.
   Arcadia_Engine* engine;
-  /* The current scene. */
+  // The current scene.
   Arcadia_Engine_Demo_Scene* scene;
+  // When a scene truly changed.
+  Arcadia_Signal* sceneChangedEvent;
 };
 
 /// @return The active scene or null.

@@ -27,7 +27,6 @@
 // - an ambient base color: The ambient color used for each vertices of the vertices provide no color data
 // - a vertex descriptor: Must be of the form [xyz/position, rgba/ambient, uv/ambient]. Describes the data in the vertex buffer.
 // - a vertex buffer: The vertex data. Either of the form [xyz/position] or [xyz/position, rgba/ambient].
-// - a material
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Scene.MeshNode", Arcadia_Visuals_Scene_MeshNode,
                           u8"Arcadia.Visuals.Scene.Node")
 
@@ -48,8 +47,6 @@ struct Arcadia_Visuals_Scene_MeshNode {
   Arcadia_SizeValue numberOfVertices;
   /// Pointers to the positions of the vertices of this mesh.
   void* vertices;
-  
-  Arcadia_Visuals_Scene_MaterialNode* material;
 };
 
 void

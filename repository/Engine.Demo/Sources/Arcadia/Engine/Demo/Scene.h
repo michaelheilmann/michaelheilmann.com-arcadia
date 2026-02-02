@@ -13,12 +13,18 @@ struct Arcadia_Engine_Demo_SceneDispatch {
   void (*updateAudials)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value, Arcadia_Integer32Value, Arcadia_Integer32Value);
   void (*updateLogics)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value tick);
   void (*updateVisuals)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value, Arcadia_Integer32Value, Arcadia_Integer32Value);
+  
+  void (*handleKeyboardKeyEvent)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_KeyboardKeyEvent*);
+  void (*handleMouseButtonEvent)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_MouseButtonEvent*);
+  void (*handleMousePointerEvent)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_MousePointerEvent*);
 };
 
 struct Arcadia_Engine_Demo_Scene {
   Arcadia_Object parent;
   Arcadia_Engine* engine;
   Arcadia_Engine_Demo_SceneManager* sceneManager;
+  /// The "application quit request" event.
+  Arcadia_Signal* applicationQuitRequestSignal;
 };
 
 void
@@ -47,6 +53,30 @@ Arcadia_Engine_Demo_Scene_updateVisuals
     Arcadia_Real64Value tick,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
+  );
+
+void
+Arcadia_Engine_Demo_Scene_handleKeyboardKeyEvent
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_Scene* self,
+    Arcadia_Visuals_KeyboardKeyEvent* event
+  );
+
+void
+Arcadia_Engine_Demo_Scene_handleMouseButtonEvent
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_Scene* self,
+    Arcadia_Visuals_MouseButtonEvent* event
+  );
+
+void
+Arcadia_Engine_Demo_Scene_handleMousePointerEvent
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_Scene* self,
+    Arcadia_Visuals_MousePointerEvent* event
   );
 
 #endif // ARCADIA_ENGINE_DEMO_SCENE_H_INCLUDED

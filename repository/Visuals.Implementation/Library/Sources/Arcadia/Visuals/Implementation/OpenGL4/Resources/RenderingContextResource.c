@@ -165,7 +165,6 @@ Arcadia_Visuals_Implementation_OpenGL4_RenderingContextResource_loadImpl
   static const Arcadia_Natural8Value matrixMask = Arcadia_Visuals_Implementation_RenderingContextResource_ViewToProjectionMatrixDirty
                                                 | Arcadia_Visuals_Implementation_RenderingContextResource_WorldToViewMatrixDirty
                                                 ;
-
   if (((Arcadia_Visuals_Implementation_RenderingContextResource*)self)->dirty & matrixMask) {
     Arcadia_Visuals_Implementation_ConstantBufferResource_clear(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)((Arcadia_Visuals_Implementation_RenderingContextResource*)self)->viewerConstantBuffer);
     Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)((Arcadia_Visuals_Implementation_RenderingContextResource*)self)->viewerConstantBuffer, Arcadia_BooleanValue_True, ((Arcadia_Visuals_Implementation_RenderingContextResource*)self)->viewToProjectionMatrix);

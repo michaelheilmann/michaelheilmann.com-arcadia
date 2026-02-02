@@ -104,12 +104,12 @@ Arcadia_Engine_Demo_MainScene_constructImpl
   //
   self->definitions = Arcadia_ADL_Definitions_create(thread);
   //
-  self->viewportNodes[0] = NULL;
-  self->viewportNodes[1] = NULL;
   self->cameraNode = NULL;
   self->renderingContextNode = NULL;
-  self->modelNode[0] = NULL;
-  self->modelNode[1] = NULL;
+  for (Arcadia_SizeValue i = 0; i < 3; ++i) {
+    self->modelNode[i] = NULL;
+    self->viewportNodes[i] = NULL;
+  }
   //
   self->soundSourceNode = NULL;
   //
@@ -144,21 +144,17 @@ Arcadia_Engine_Demo_MainScene_visit
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->renderingContextNode);
   }
 
-  if (self->viewportNodes[0]) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->viewportNodes[0]);
-  }
-  if (self->viewportNodes[1]) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->viewportNodes[1]);
-  }
   if (self->cameraNode) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->cameraNode);
   }
 
-  if (self->modelNode[0]) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->modelNode[0]);
-  }
-  if (self->modelNode[1]) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->modelNode[1]);
+  for (Arcadia_SizeValue i = 0; i < 3; ++i) {
+    if (self->modelNode[i]) {
+      Arcadia_Object_visit(thread, (Arcadia_Object*)self->modelNode[i]);
+    }
+    if (self->viewportNodes[i]) {
+      Arcadia_Object_visit(thread, (Arcadia_Object*)self->viewportNodes[i]);
+    }
   }
 
   if (self->soundSourceNode) {
@@ -216,6 +212,16 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
 {
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
 
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
+  Arcadia_List* files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, "Assets/LogoScene", sizeof("Assets/LogoScene") - 1), files);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)files); i < n; ++i) {
+    Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, files, i, _Arcadia_FilePath_getType(thread));
+    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
+    Arcadia_ADL_Context_readFromString(thread, context, self->definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
+  }
+
   if (!self->renderingContextNode) {
     self->renderingContextNode =
       Arcadia_Visuals_SceneNodeFactory_createRenderingContextNode
@@ -226,34 +232,6 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
         );
   }
 
-  if (!self->viewportNodes[0]) {
-    Arcadia_ADL_ColorDefinition* d = getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Red.adl"),
-                                                                                   Arcadia_String_createFromCxxString(thread, "Colors.Red"));
-    self->viewportNodes[0] =
-      (Arcadia_Visuals_Scene_ViewportNode*)
-      Arcadia_Visuals_SceneNodeFactory_createViewportNode
-        (
-          thread,
-          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-        );
-    Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, self->viewportNodes[0], Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
-    Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNodes[0], 0.f, 0.f, 0.5f, 1.f);
-  }
-  if (!self->viewportNodes[1]) {
-    Arcadia_ADL_ColorDefinition* d = getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Green.adl"),
-                                                                                   Arcadia_String_createFromCxxString(thread, "Colors.Green"));
-    self->viewportNodes[1] =
-      (Arcadia_Visuals_Scene_ViewportNode*)
-      Arcadia_Visuals_SceneNodeFactory_createViewportNode
-        (
-          thread,
-          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-        );
-    Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, self->viewportNodes[1], Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
-    Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNodes[1], 0.5f, 0.f, 1.0f, 1.f);
-  }
 
   if (!self->cameraNode) {
     self->cameraNode =
@@ -265,75 +243,68 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
           (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
-  if (!self->modelNode[0]) {
-    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-    Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
-    Arcadia_List* files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-    Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, "Assets/LogoScene", sizeof("Assets/LogoScene") - 1), files);
-    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)files); i < n; ++i) {
-      Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, files, i, _Arcadia_FilePath_getType(thread));
-      Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
-      Arcadia_ADL_Context_readFromString(thread, context, self->definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
+
+  Arcadia_ADL_ColorDefinition* CLEARCOLORS[] = 
+    {
+      getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Red.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "Colors.Red")),
+      getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Green.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "Colors.Green")),
+      getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Blue.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "Colors.Blue")),
+    };
+
+  Arcadia_ADL_ModelDefinition* MODELS[] =
+    {
+      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/LogoScene/MeshColorModel.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "LogoScene.MeshColorModel")),
+      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/LogoScene/VertexColorModel.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "LogoScene.VertexColorModel")),
+      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/LogoScene/TextureColorModel.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "LogoScene.TextureColorModel")),
+    };
+
+  for (Arcadia_SizeValue i = 0; i < 3; ++i) {
+    if (!self->viewportNodes[i]) {
+      Arcadia_ADL_ColorDefinition* d = CLEARCOLORS[i];
+      self->viewportNodes[i] =
+        (Arcadia_Visuals_Scene_ViewportNode*)
+        Arcadia_Visuals_SceneNodeFactory_createViewportNode
+          (
+            thread,
+            (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+            (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+          );
+      Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, self->viewportNodes[i], Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
+      Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNodes[i], (i + 0) * 1.f / 3.f, 0.f, (i + 1) * 1.f / 3.f, 1.f);
     }
-    Arcadia_ADL_ModelDefinition* modelDefinition =
-      (Arcadia_ADL_ModelDefinition*)Arcadia_ADL_Definitions_getDefinitionOrNull(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "LogoScene.MeshColorModel"));
-    if (NULL == modelDefinition) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
+
+    if (!self->modelNode[i]) {
+      Arcadia_ADL_ModelDefinition* modelDefinition = MODELS[i];
+      if (NULL == modelDefinition) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
+      self->modelNode[i] =
+        (Arcadia_Visuals_Scene_ModelNode*)
+        Arcadia_Visuals_SceneNodeFactory_createModelNode
+          (
+            thread,
+            (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+            (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
+            modelDefinition
+          );
     }
-    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
-    self->modelNode[0] =
-      (Arcadia_Visuals_Scene_ModelNode*)
-      Arcadia_Visuals_SceneNodeFactory_createModelNode
-        (
-          thread,
-          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
-          modelDefinition
-        );
+
+    Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, self->viewportNodes[i], width, height);
+    // Assign "viewport" node to "camera" node.
+    Arcadia_Visuals_Scene_CameraNode_setViewport(thread, self->cameraNode, self->viewportNodes[i]);
+    Arcadia_Visuals_Scene_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
+    // Render the scene.
+    Arcadia_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode[i], (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+
   }
-  if (!self->modelNode[1]) {
-    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-    Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
-    Arcadia_List* files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-    Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, "Assets/LogoScene", sizeof("Assets/LogoScene") - 1), files);
-    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)files); i < n; ++i) {
-      Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, files, i, _Arcadia_FilePath_getType(thread));
-      Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
-      Arcadia_ADL_Context_readFromString(thread, context, self->definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
-    }
-    Arcadia_ADL_ModelDefinition* modelDefinition =
-      (Arcadia_ADL_ModelDefinition*)Arcadia_ADL_Definitions_getDefinitionOrNull(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "LogoScene.VertexColorModel"));
-    if (NULL == modelDefinition) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
-    self->modelNode[1] =
-      (Arcadia_Visuals_Scene_ModelNode*)
-      Arcadia_Visuals_SceneNodeFactory_createModelNode
-        (
-          thread,
-          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
-          modelDefinition
-        );
-  }
-
-  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, self->viewportNodes[0], width, height);
-  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, self->viewportNodes[1], width, height);
-
-  // Assign "viewport" node #1 to "camera" node.
-  Arcadia_Visuals_Scene_CameraNode_setViewport(thread, self->cameraNode, self->viewportNodes[0]);
-  Arcadia_Visuals_Scene_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
-  // Render the scene.
-  Arcadia_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode[0], (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
-
-  // Assign "viewport" node #2 to "camera" node.
-  Arcadia_Visuals_Scene_CameraNode_setViewport(thread, self->cameraNode, self->viewportNodes[1]);
-  Arcadia_Visuals_Scene_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
-  // Render the scene.
-  Arcadia_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode[1], (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
 }
 
 Arcadia_Engine_Demo_MainScene*

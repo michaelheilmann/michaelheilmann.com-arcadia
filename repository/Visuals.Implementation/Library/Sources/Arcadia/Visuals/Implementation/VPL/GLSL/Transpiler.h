@@ -36,15 +36,21 @@ struct Arcadia_Visuals_VPL_Backends_GLSL_TranspilerDispatch {
 
 struct Arcadia_Visuals_VPL_Backends_GLSL_Transpiler {
   Arcadia_Object _parent;
-  // 'mat4' as used by the VPL.
-  // happens that this currently coincides with 'vec4' in GLSL.
+  // `mat4` as used by the VPL.
+  // happens that this currently coincides with `mat4` in GLSL.
   Arcadia_String* MAT4;
-  // 'vec4' as used by the VPL.
-  // happens that this currently coincides with 'vec4' in GLSL.
+  // `vec4` as used by the VPL.
+  // Happens that this currently coincides with `vec4` in GLSL.
   Arcadia_String* VEC4;
-  // 'vec3' as used by the VPL.
-  // happens that this currently coincides with 'vec3' in GLSL.
+  // `vec3` as used by the VPL.
+  // Happens that this currently coincides with `vec3` in GLSL.
   Arcadia_String* VEC3;
+  // `vec2` as used by the VPL.
+  // Happens that this currently coincides with `vec2` in GLSL.
+  Arcadia_String* VEC2;
+  // `sampler2D` as used by the VPL.
+  // Happens that this currently coincides with `sampler2D` in GLSL.
+  Arcadia_String* SAMPLER2D;
 };
 
 Arcadia_Visuals_VPL_Backends_GLSL_Transpiler*

@@ -18,18 +18,83 @@
 #include "Arcadia/Engine/Demo/Visuals.h"
 #include <stdlib.h>
 
-#include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring2/Include.h"
-#include "Arcadia/Audials/Include.h"
-#include "Arcadia/Visuals/Include.h"
 #include "Arcadia/DDL/Include.h"
 
-
-// The application.
+// The demo's application.
 #include "Arcadia/Engine/Demo/Application.h"
-// The main scene.
+
+// The demo's logo scene, the intial scene of the game.
 #include "Arcadia/Engine/Demo/Scenes/ArcadiaLogoScene.h"
-#include "Arcadia/Engine/Demo/Scenes/MainScene.h"
+
+// [receiver, sender, argument]
+static void
+onQuitRequested
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (3 != numberOfArgumentValues) {
+    Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  // Receiver.
+  Arcadia_Engine_Demo_Application* application =
+    (Arcadia_Engine_Demo_Application*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Engine_Demo_Application_getType(thread));
+  // Argument.
+  Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_Demo_Application_getType(thread));
+  // The sender is at index 1.
+  Arcadia_Engine_Application_setQuitRequested(thread, (Arcadia_Engine_Application*)application, Arcadia_BooleanValue_True);
+}
+
+// [receiver, sender, oldScene, newScene]
+static void
+onSceneChanged
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (4 != numberOfArgumentValues) {
+    Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    Arcadia_Engine_Demo_Application* self = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 4, _Arcadia_Engine_Demo_Application_getType(thread));
+    Arcadia_Engine_Demo_Scene* oldScene = NULL,
+                             * newScene = NULL;
+    //
+    if (Arcadia_ValueStack_isVoidValue(thread, 2)) {
+    } else if (Arcadia_ValueStack_isObjectReferenceValue(thread, 2)) {
+      oldScene = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Engine_Demo_Scene_getType(thread));
+    } else {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+    //
+    if (Arcadia_ValueStack_isVoidValue(thread, 1)) {
+    } else if (Arcadia_ValueStack_isObjectReferenceValue(thread, 1)) {
+      newScene = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_Demo_Scene_getType(thread));
+    } else {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+    if (self->sceneOnQuitRequestedSlot) {
+      Arcadia_Slot_disconnect(thread, self->sceneOnQuitRequestedSlot);
+    }
+    if (newScene) {
+      self->sceneOnQuitRequestedSlot = Arcadia_Signal_connect(thread, newScene->applicationQuitRequestSignal, (Arcadia_Object*)self, &onQuitRequested);
+    }
+    Arcadia_Thread_popJumpTarget(thread);
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Thread_jump(thread);
+  }
+}
 
 void
 main1
@@ -51,6 +116,8 @@ main1
     application = application1;
     // Startup the application.
     Arcadia_Engine_Application_startup(thread, (Arcadia_Engine_Application*)application);
+    Arcadia_Signal_connect(thread, application->sceneManager->sceneChangedEvent, (Arcadia_Object*)application,
+                                                                                 &onSceneChanged);
 
     Arcadia_Engine_Demo_SceneManager_setScene(thread, application->sceneManager, (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_ArcadiaLogoScene_create(thread, ((Arcadia_Engine_Application*)application)->engine, application->sceneManager));
 
@@ -90,17 +157,24 @@ main1
       }
       Arcadia_Engine_Event* event = Arcadia_Engine_dequeEvent(thread, ((Arcadia_Engine_Application*)application)->engine);
       if (NULL != event) {
-        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_ApplicationQuitRequestedEvent_getType(thread))) {
-          Arcadia_Visuals_ApplicationQuitRequestedEvent* applicationQuitRequestdEvent = (Arcadia_Visuals_ApplicationQuitRequestedEvent*)event;
-          Arcadia_Engine_Demo_Application_onApplicationQuitRequestedEvent(thread, application, applicationQuitRequestdEvent);
-        }
         if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_WindowClosedEvent_getType(thread))) {
           Arcadia_Visuals_WindowClosedEvent* windowClosedEvent = (Arcadia_Visuals_WindowClosedEvent*)event;
           Arcadia_Engine_Demo_Application_onWindowClosedEvent(thread, application, windowClosedEvent);
         }
+        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_MouseButtonEvent_getType(thread))) {
+          Arcadia_Visuals_MouseButtonEvent* e = (Arcadia_Visuals_MouseButtonEvent*)event;
+          Arcadia_Engine_Demo_Scene* scene = Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager);
+          Arcadia_Engine_Demo_Scene_handleMouseButtonEvent(thread, scene, e);
+        }
+        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_MousePointerEvent_getType(thread))) {
+          Arcadia_Visuals_MousePointerEvent* e = (Arcadia_Visuals_MousePointerEvent*)event;
+          Arcadia_Engine_Demo_Scene* scene = Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager);
+          Arcadia_Engine_Demo_Scene_handleMousePointerEvent(thread, scene, e);
+        }
         if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_KeyboardKeyEvent_getType(thread))) {
-          Arcadia_Visuals_KeyboardKeyEvent* keyboardKeyEvent = (Arcadia_Visuals_KeyboardKeyEvent*)event;
-          Arcadia_Engine_Demo_Application_onKeyboardKeyEvent(thread, application, keyboardKeyEvent);
+          Arcadia_Visuals_KeyboardKeyEvent* e = (Arcadia_Visuals_KeyboardKeyEvent*)event;
+          Arcadia_Engine_Demo_Scene* scene = Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager);
+          Arcadia_Engine_Demo_Scene_handleKeyboardKeyEvent(thread, scene, e);
         }
       }
       oldTick = newTick;

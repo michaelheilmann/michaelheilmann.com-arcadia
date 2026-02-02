@@ -78,6 +78,7 @@ Arcadia_Engine_Demo_SceneManager_constructImpl
   }
   self->engine = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_getType(thread));
   self->scene = NULL;
+  self->sceneChangedEvent = Arcadia_Signal_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -105,6 +106,9 @@ Arcadia_Engine_Demo_SceneManager_visitImpl
     Arcadia_Engine_Demo_SceneManager* self
   )
 {
+  if (self->sceneChangedEvent) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->sceneChangedEvent);
+  }
   if (self->engine) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->engine);
   }
@@ -128,7 +132,27 @@ Arcadia_Engine_Demo_SceneManager_setScene
     Arcadia_Engine_Demo_SceneManager* self,
     Arcadia_Engine_Demo_Scene* scene
   )
-{ self->scene = scene; }
+{
+  if (self->scene != scene) {
+    Arcadia_Object* oldValue = (Arcadia_Object*)self->scene;
+    Arcadia_Object* newValue = (Arcadia_Object*)scene;
+    self->scene = scene;
+    if (oldValue) Arcadia_ValueStack_pushObjectReferenceValue(thread, oldValue); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+    if (newValue) Arcadia_ValueStack_pushObjectReferenceValue(thread, newValue); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+    Arcadia_ValueStack_pushNatural8Value(thread, 2);
+    Arcadia_JumpTarget jumpTarget;
+    Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+    if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_Signal_emit(thread, self->sceneChangedEvent, (Arcadia_Object*)self);
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_ValueStack_popValues(thread, 2 + 1);
+    } else {
+      Arcadia_Thread_popJumpTarget(thread);
+      Arcadia_ValueStack_popValues(thread, 2 + 1);
+      Arcadia_Thread_jump(thread);
+    }
+  }
+}
 
 Arcadia_Engine_Demo_SceneManager*
 Arcadia_Engine_Demo_SceneManager_create

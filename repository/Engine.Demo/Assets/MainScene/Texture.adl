@@ -1,5 +1,0 @@
-{
-  type  : "Texture",
-  name  : "LogoScene.Texture",
-  pixelBuffer : "LogoScene.PixelBuffer",
-}

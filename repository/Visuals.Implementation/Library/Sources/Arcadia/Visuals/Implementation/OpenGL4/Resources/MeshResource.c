@@ -86,14 +86,6 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setMeshAmbientColorImpl
     Arcadia_Math_Color4Real32* meshAmbientColor
   );
 
-static void
-Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setLocalToWorldMatrixImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_MeshResource* self,
-    Arcadia_Math_Matrix4Real32* localToWorldMatrix
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_MeshResource_constructImpl,
@@ -119,24 +111,23 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_constructImpl
 {
   Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_MeshResource_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (3 != numberOfArgumentValues) {
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
     Arcadia_Value t;
-    t = Arcadia_ValueStack_getValue(thread, 3);
+    t = Arcadia_ValueStack_getValue(thread, 2);
     Arcadia_ValueStack_pushValue(thread, &t);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
 
-  self->meshConstantBuffer = NULL;
+  self->constantBuffer = NULL;
   self->vertexBuffer = NULL;
-  self->material = NULL;
 
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext =
-    Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getType(thread));
+    Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getType(thread));
 
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
@@ -145,30 +136,22 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_constructImpl
 
     o = (Arcadia_Object*)Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
     Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
-    self->meshConstantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)o;
+    self->constantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)o;
     
-    o = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_getType(thread));
+    o = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_getType(thread));
     Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
     self->vertexBuffer = (Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource*)o;
-
-    o = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_getType(thread));
-    Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
-    self->material = (Arcadia_Visuals_Implementation_OpenGL4_MaterialResource*)o;
 
     Arcadia_Thread_popJumpTarget(thread);
   } else {
     Arcadia_Thread_popJumpTarget(thread);
-    if (self->material) {
-      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->material);
-      self->material = NULL;
-    }
     if (self->vertexBuffer) {
       Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->vertexBuffer);
       self->vertexBuffer = NULL;
     }
-    if (self->meshConstantBuffer) {
-      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshConstantBuffer);
-      self->meshConstantBuffer = NULL;
+    if (self->constantBuffer) {
+      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBuffer);
+      self->constantBuffer = NULL;
     }
     Arcadia_Thread_jump(thread);
   }
@@ -186,7 +169,6 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_initializeDispatchImpl
   )
 {
   ((Arcadia_Visuals_Implementation_MeshResourceDispatch*)self)->setMeshAmbientColor = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Color4Real32*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setMeshAmbientColorImpl;
-  ((Arcadia_Visuals_Implementation_MeshResourceDispatch*)self)->setLocalToWorldMatrix = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Math_Matrix4Real32*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setLocalToWorldMatrixImpl;
 
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_loadImpl;
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_unloadImpl;
@@ -201,9 +183,8 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_destructImpl
     Arcadia_Visuals_Implementation_OpenGL4_MeshResource* self
   )
 {
-  assert(NULL == self->meshConstantBuffer);
+  assert(NULL == self->constantBuffer);
   assert(NULL == self->vertexBuffer);
-  assert(NULL == self->material);
 }
 
 static void
@@ -220,7 +201,9 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_loadImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_MeshResource* self
   )
-{/*Intentionally empty.*/}
+{
+  Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBuffer);
+}
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_MeshResource_unloadImpl
@@ -237,17 +220,13 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_unlinkImpl
     Arcadia_Visuals_Implementation_OpenGL4_MeshResource* self
   )
 {
-  if (self->meshConstantBuffer) {
-    Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->meshConstantBuffer);
-    self->meshConstantBuffer = NULL;
+  if (self->constantBuffer) {
+    Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBuffer);
+    self->constantBuffer = NULL;
   }
   if (self->vertexBuffer) {
     Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->vertexBuffer);
     self->vertexBuffer = NULL;
-  }
-  if (self->material) {
-    Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->material);
-    self->material = NULL;
   }
   ((Arcadia_Visuals_Implementation_Resource*)self)->context = NULL;
 }
@@ -261,16 +240,13 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_renderImpl
   )
 {
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->vertexBuffer);
-  Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->material);
 
-  if (((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty & (Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty | Arcadia_Visuals_Implementation_MeshResource_LocalToWorldMatrixDirty)) {
-    Arcadia_Visuals_Implementation_ConstantBufferResource_clear(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->meshConstantBuffer);
+  if (((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty & (Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty)) {
+    Arcadia_Visuals_Implementation_ConstantBufferResource_clear(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->constantBuffer);
     // @todo We need to ability to do sub-range updates:
     // There is no need to rewrite every value if only one value is dirty.
-    Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->meshConstantBuffer, Arcadia_BooleanValue_True, ((Arcadia_Visuals_Implementation_MeshResource*)self)->localToWorldMatrix);
-    Arcadia_Visuals_Implementation_ConstantBufferResource_writeColor4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->meshConstantBuffer, ((Arcadia_Visuals_Implementation_MeshResource*)self)->meshAmbientColor);
+    Arcadia_Visuals_Implementation_ConstantBufferResource_writeColor4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->constantBuffer, ((Arcadia_Visuals_Implementation_MeshResource*)self)->meshAmbientColor);
     ((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty &= ~Arcadia_Visuals_Implementation_MeshResource_MeshAmbientColorDirty;
-    ((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty &= ~Arcadia_Visuals_Implementation_MeshResource_LocalToWorldMatrixDirty;
   }
 }
 
@@ -289,34 +265,17 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setMeshAmbientColorImpl
   }
 }
 
-static void
-Arcadia_Visuals_Implementation_OpenGL4_MeshResource_setLocalToWorldMatrixImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_MeshResource* self,
-    Arcadia_Math_Matrix4Real32* localToWorldMatrix
-  )
-{
-  Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(localToWorldMatrix);
-  if (!Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)((Arcadia_Visuals_Implementation_MeshResource*)self)->localToWorldMatrix, &t)) {
-    Arcadia_Math_Matrix4Real32_assign(thread, ((Arcadia_Visuals_Implementation_MeshResource*)self)->localToWorldMatrix, localToWorldMatrix);
-    ((Arcadia_Visuals_Implementation_MeshResource*)self)->dirty |= Arcadia_Visuals_Implementation_MeshResource_LocalToWorldMatrixDirty;
-  }
-}
-
 Arcadia_Visuals_Implementation_OpenGL4_MeshResource*
 Arcadia_Visuals_Implementation_OpenGL4_MeshResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
-    Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBuffer,
-    Arcadia_Visuals_Implementation_OpenGL4_MaterialResource* material
+    Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBuffer
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   if (vertexBuffer) Arcadia_ValueStack_pushObjectReferenceValue(thread, vertexBuffer); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  if (material) Arcadia_ValueStack_pushObjectReferenceValue(thread, material); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  Arcadia_ValueStack_pushNatural8Value(thread, 3);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_MeshResource);
 }

@@ -44,6 +44,7 @@ Define(PFNGLSCISSORPROC, glScissor)
 
 Define(PFNGLGENTEXTURESPROC, glGenTextures)
 Define(PFNGLDELETETEXTURESPROC, glDeleteTextures)
+Define(PFNGLACTIVETEXTUREPROC, glActiveTexture)
 
 Define(PFNGLBINDTEXTUREPROC, glBindTexture)
 Define(PFNGLTEXIMAGE2DPROC, glTexImage2D)

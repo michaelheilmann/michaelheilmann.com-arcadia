@@ -24,9 +24,9 @@
 </head>
 <body class="my-content-page-1">
   <header>
-  <div>
-  <a href="@{siteAddress}/">Home</a>
-  </div>
+    <div class="navigation breadcrumbs">
+      <a href="@{siteAddress}/">Home</a>
+    </div>
   </header>
   <main>
     <div class="left-column"></div>

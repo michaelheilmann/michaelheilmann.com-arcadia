@@ -1,7 +1,7 @@
 {
   type : "Color",
   name : "LogoScene.FirstColor",
-  red : 167,
+  red : 255,
   green : 255,
-  blue : 181,
+  blue : 255,
 }

@@ -404,7 +404,7 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_loadImpl
       if (self->dirtyBits & PixelsDirty) {
         gl->glTexImage2D(GL_TEXTURE_2D,
                          0,
-                         GL_RGB,
+                         GL_RGBA,
                          Arcadia_Imaging_PixelBuffer_getWidth(thread, self->pixelBuffer),
                          Arcadia_Imaging_PixelBuffer_getHeight(thread, self->pixelBuffer),
                          0,

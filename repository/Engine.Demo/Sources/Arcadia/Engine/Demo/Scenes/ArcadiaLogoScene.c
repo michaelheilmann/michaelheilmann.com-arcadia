@@ -17,6 +17,7 @@
 
 #include "Arcadia/Engine/Demo/SceneManager.h"
 #include "Arcadia/Engine/Demo/Scenes/MainScene.h"
+#include "Arcadia/Engine/Demo/Scenes/MainMenuScene.h"
 #include "Arcadia/Engine/Demo/AssetUtilities.h"
 
 static void
@@ -193,7 +194,7 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_updateLogics
   /* The loading screen fades in and fades out over a duration of 3 secods. After 3.25 seconds we move to the next scene. */
   if (self->duration > 3250 && 0 == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->toLoad)) {
     Arcadia_Engine_Demo_SceneManager_setScene(thread, ((Arcadia_Engine_Demo_Scene*)self)->sceneManager,
-                                              (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_MainScene_create(thread, ((Arcadia_Engine_Demo_Scene*)self)->engine, ((Arcadia_Engine_Demo_Scene*)self)->sceneManager));
+                                              (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_MainMenuScene_create(thread, ((Arcadia_Engine_Demo_Scene*)self)->engine, ((Arcadia_Engine_Demo_Scene*)self)->sceneManager));
   }
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_SizeValue n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->toLoad);
@@ -277,6 +278,9 @@ updateVisuals0
           (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
+  Arcadia_Math_Matrix4Real32* viewToProjectionMatrix = Arcadia_Math_Matrix4Real32_create(thread);
+  Arcadia_Math_Matrix4x4Real32_setOrthographicProjection(thread, viewToProjectionMatrix, -1, +1, -1, +1, -1, +1);
+  Arcadia_Visuals_Scene_CameraNode_setViewToProjectionMatrix(thread, self->cameraNode, viewToProjectionMatrix);
   if (!self->modelNode) {
     Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
     Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);

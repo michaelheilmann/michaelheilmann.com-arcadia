@@ -17,7 +17,7 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/VPL/GLSL/Include.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Resources/Utilities.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
 #include <assert.h>
 #include <string.h>
 
