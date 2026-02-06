@@ -112,13 +112,13 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
   self->instanceHandle = NULL;
   self->classAtom = 0;
   self->windowHandle = NULL;
   self->deviceContextHandle = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void

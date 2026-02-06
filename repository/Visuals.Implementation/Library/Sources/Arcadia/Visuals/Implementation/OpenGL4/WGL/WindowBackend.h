@@ -19,7 +19,7 @@
 #include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Windows/Icon.h"
-typedef struct Arcadia_Visuals_Windows_DisplayDevice Arcadia_Visuals_Windows_DisplayDevice;
+typedef struct Arcadia_Engine_Visuals_Windows_DisplayDevice Arcadia_Engine_Visuals_Windows_DisplayDevice;
 
 #if !defined(WIN32_LEAN_AND_MEAN)
   #define WIN32_LEAN_AND_MEAN
@@ -33,11 +33,11 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpennGL4.WGL.WindowB
                           u8"Arcadia.Visuals.WindowBackend");
 
 struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackendDispatch {
-  Arcadia_Visuals_WindowBackendDispatch _parent;
+  Arcadia_Engine_Visuals_WindowBackendDispatch _parent;
 };
 
 struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend {
-  Arcadia_Visuals_WindowBackend _parent;
+  Arcadia_Engine_Visuals_WindowBackend _parent;
   Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext;
 
   HWND windowHandle;
@@ -52,7 +52,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* backendContext,
-    Arcadia_Visuals_Windows_DisplayDevice* displayDevice
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* displayDevice
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED

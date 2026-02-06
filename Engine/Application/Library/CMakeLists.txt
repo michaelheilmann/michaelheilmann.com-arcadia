@@ -30,7 +30,7 @@ if (NOT TARGET ${MyModule})
   OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Application.c)
   OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Application.h)
 
-  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Visuals ${MyProjectName}.Audials ${MyProjectName}.Imaging ${MyProjectName}.Math ${MyProjectName}.Engine ${MyProjectName}.Ring2)
+  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Engine.Visuals ${MyProjectName}.Engine.Audials ${MyProjectName}.Imaging ${MyProjectName}.Math ${MyProjectName}.Engine ${MyProjectName}.Ring2)
 
   EndProduct(${MyModule})
 

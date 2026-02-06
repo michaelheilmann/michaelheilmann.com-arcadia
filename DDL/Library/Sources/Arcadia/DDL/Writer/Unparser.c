@@ -342,19 +342,18 @@ Arcadia_DataDefinitionLanguage_Unparser_constructImpl
   )
 {
   Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Unparser_getType(thread);
-  //
-  {
-    Arcadia_ValueStack_pushNatural8Value(thread, 0);
-    Arcadia_superTypeConstructor(thread, _type, self);
-  }
   if (Arcadia_ValueStack_getSize(thread) < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  {
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor(thread, _type, self);
+  }
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void

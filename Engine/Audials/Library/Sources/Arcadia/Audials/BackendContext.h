@@ -13,44 +13,27 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_AUDIALS_BACKENDCONTEXT_H_INCLUDED)
-#define ARCADIA_AUDIALS_BACKENDCONTEXT_H_INCLUDED
+#if !defined(ARCADIA_AUDIALS_DEFAULTBACKENDCONTEXT_H_INCLUDED)
+#define ARCADIA_AUDIALS_DEFAULTBACKENDCONTEXT_H_INCLUDED
 
 #include "Arcadia/Engine/Include.h"
 
 /// @code
-/// class Arcadia.Audials.BackendContext extends Arcadia.Engine.BackendContext {
-///
+/// class Arcadia.Engine.Audials.BackendContextBase extends Arcadia.Engine.Audials.BackendContext {
 ///   constructor
 ///     (
 ///     )
-///
-///   method update
-///     (
-///     ) : Void
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Audials.BackendContext", Arcadia_Audials_BackendContext,
-                          u8"Arcadia.Engine.BackendContext")
+Arcadia_declareObjectType(u8"Arcadia.Engine.Audials.BackendContextBase", Arcadia_Engine_Audials_BackendContextBase,
+                          u8"Arcadia.Engine.Audials.BackendContext")
 
-struct Arcadia_Audials_BackendContextDispatch {
-  Arcadia_Engine_BackendContextDispatch parent;
-
-  void (*update)(Arcadia_Thread* thread, Arcadia_Audials_BackendContext* self);
+struct Arcadia_Engine_Audials_BackendContextBaseDispatch {
+  Arcadia_Engine_Audials_BackendContextDispatch parent;
 };
 
-struct Arcadia_Audials_BackendContext {
-  Arcadia_Engine_BackendContext _parent;
+struct Arcadia_Engine_Audials_BackendContextBase {
+  Arcadia_Engine_Audials_BackendContext _parent;
 };
 
-/// @brief Update this backend context.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this backend context.
-void
-Arcadia_Audials_BackendContext_update
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContext* self
-  );
-
-#endif // ARCADIA_AUDIALS_BACKENDCONTEXT_H_INCLUDED
+#endif // ARCADIA_AUDIALS_DEFAULTBACKENDCONTEXT_H_INCLUDED

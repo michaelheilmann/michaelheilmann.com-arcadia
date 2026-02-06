@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 4.1.3)
 
-set(MyModule ${MyProjectName}.Audials.Implementation)
+set(MyModule ${MyProjectName}.Engine.Audials.Implementation)
 
 if (NOT TARGET ${MyModule})
   option(${MyModule}.OpenAL.Enabled "TRUE enables OpenAL support. FALSE disables OpenAL support. Default is FALSE" FALSE)
@@ -30,22 +30,22 @@ if (NOT TARGET ${MyModule})
 
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Windows} AND ${${MyModule}.OpenAL.Enabled})
     # Use OpenAL under Windows if enabled.
-    set(${MyModule}.Backend ${${MyModule}.Backend.OpenAl})
+    set(${MyModule}.Backend ${${MyModule}.Backend.OpenAL})
     set(MyDependenciesDirectory "C:/arcadia-dependencies")
     list(APPEND ${MyModule}.PrivateLibraries ${OPENGL_LIBRARIES})
     if (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X64})
-      set(${MyModule}.OpenAl.Libraries ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/openal-soft/lib/OpenAL32.lib winmm.lib Avrt.lib)
-      set(${MyModule}.OpenAl.HeaderFilesDirectory ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/openal-soft/include)
+      set(${MyModule}.OpenAL.Libraries ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/openal-soft/lib/OpenAL32.lib winmm.lib Avrt.lib)
+      set(${MyModule}.OpenAL.HeaderFilesDirectory ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/openal-soft/include)
     elseif (${${MyModule}.InstructionSetArchitecture} STREQUAL ${${MyModule}.InstructionSetArchitecture.X86})
-      set(${MyModule}.OpenAl.Libraries ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/openal-soft/lib/OpenAL32.lib winmm.lib Avrt.lib)
-      set(${MyModule}.OpenAl.HeaderFilesDirectory ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/openal-soft/include)
+      set(${MyModule}.OpenAL.Libraries ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/openal-soft/lib/OpenAL32.lib winmm.lib Avrt.lib)
+      set(${MyModule}.OpenAL.HeaderFilesDirectory ${MyDependenciesDirectory}/x86/$<LOWER_CASE:$<CONFIG>>/openal-soft/include)
     else()
       message(FATAL_ERROR " - unsupported instruction set architecture")
     endif()
-    message(STATUS " - ${MyModule}.OpenAl.Libraries = ${${MyModule}.OpenAl.Libraries}")
-    list(APPEND ${MyModule}.PrivateLibraries ${${MyModule}.OpenAl.Libraries})
-    message(STATUS " - ${MyModule}.OpenAl.HeaderFilesDirectory = ${${MyModule}.OpenAl.HeaderFilesDirectory}")
-    list(APPEND ${MyModule}.IncludeDirectories ${${MyModule}.OpenAl.HeaderFilesDirectory})
+    message(STATUS " - ${MyModule}.OpenAL.Libraries = ${${MyModule}.OpenAL.Libraries}")
+    list(APPEND ${MyModule}.PrivateLibraries ${${MyModule}.OpenAL.Libraries})
+    message(STATUS " - ${MyModule}.OpenAL.HeaderFilesDirectory = ${${MyModule}.OpenAL.HeaderFilesDirectory}")
+    list(APPEND ${MyModule}.IncludeDirectories ${${MyModule}.OpenAL.HeaderFilesDirectory})
   endif()
 
   if (${${MyModule}.OperatingSystem} STREQUAL ${${MyModule}.OperatingSystem.Linux} AND ${${MyModule}.OpenAL.Enabled})
@@ -69,8 +69,8 @@ if (NOT TARGET ${MyModule})
 
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Resource.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Resource.h)
-  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/SceneNodeFactory.c)
-  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/SceneNodeFactory.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/NodeFactory.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/NodeFactory.h)
 
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Resources/SoundSourceResource.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Resources/SoundSourceResource.h)
@@ -85,15 +85,15 @@ if (NOT TARGET ${MyModule})
   list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/BackendContext.c)
   list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/OpenAL/BackendContext.h)
 
-  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Scene/SoundSourceNode.c)
-  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Scene/SoundSourceNode.h)
+  list(APPEND ${MyModule}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Nodes/SoundSourceNode.c)
+  list(APPEND ${MyModule}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Nodes/SoundSourceNode.h)
 
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h @ONLY)
   list(APPEND ${MyModule}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h.i)
   list(APPEND ${MyModule}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h)
 
-  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Audials ${MyProjectName}.Ring2)
+  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Engine.Audials ${MyProjectName}.Ring2)
   EndProduct(${MyModule})
   set_target_properties(${MyModule} PROPERTIES FOLDER "Backends")
 

@@ -35,17 +35,17 @@ struct Arcadia_Engine_Demo_MainScene {
   Arcadia_ADL_Definitions* definitions;
 
   // Two viewports, three of them.
-  Arcadia_Visuals_Scene_ViewportNode* viewportNodes[3];
+  Arcadia_Engine_Visuals_ViewportNode* viewportNodes[3];
   // A single camera, re-attached to the respective viewport / model combination for rendering.
-  Arcadia_Visuals_Scene_CameraNode* cameraNode;
+  Arcadia_Engine_Visuals_CameraNode* cameraNode;
   // A single context, re-update with the information for the respective viewport / model combination for rendering.
-  Arcadia_Visuals_Scene_RenderingContextNode* renderingContextNode;
+  Arcadia_Engine_Visuals_RenderingContextNode* renderingContextNode;
 
   // The models, thee of them.
-  Arcadia_Visuals_Scene_ModelNode* modelNode[3];
+  Arcadia_Engine_Visuals_ModelNode* modelNode[3];
 
   // The sound source for some background sound effects.
-  Arcadia_Audials_Scene_SoundSourceNode* soundSourceNode;
+  Arcadia_Engine_Audials_SoundSourceNode* soundSourceNode;
 };
 
 Arcadia_Engine_Demo_MainScene*

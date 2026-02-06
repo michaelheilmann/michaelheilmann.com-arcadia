@@ -18,7 +18,7 @@
 
 #include "Arcadia/Ring2/Include.h"
 
-Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.FileContext", Environment,
+Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Environment", Environment,
                           u8"Arcadia.Object");
 
 struct EnvironmentDispatch {

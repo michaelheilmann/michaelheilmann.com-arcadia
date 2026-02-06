@@ -1,4 +1,4 @@
-  @{include("./Commons/header-common.i")}
+  @{include("./../../Commons/header-common.i")}
   <link rel='canonical' href='@{siteAddress}/specifications/mil/index.html'>
   <title>Machine Interface Language</title>
   <style>

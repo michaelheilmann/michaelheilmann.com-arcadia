@@ -27,14 +27,14 @@
 ///   construct(width:Integer32, height: Integer32)
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Bitmap", Arcadia_Visuals_Windows_Bitmap,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.Bitmap", Arcadia_Engine_Visuals_Windows_Bitmap,
                           u8"Arcadia.Object");
 
-struct Arcadia_Visuals_Windows_BitmapDispatch {
+struct Arcadia_Engine_Visuals_Windows_BitmapDispatch {
   Arcadia_ObjectDispatch _parent;
 };
 
-struct Arcadia_Visuals_Windows_Bitmap {
+struct Arcadia_Engine_Visuals_Windows_Bitmap {
   Arcadia_Object _parent;
   HDC hDeviceContext;
   HBITMAP hBitmap;
@@ -46,8 +46,8 @@ struct Arcadia_Visuals_Windows_Bitmap {
   Arcadia_Natural8Value pixelFormat;
 };
 
-Arcadia_Visuals_Windows_Bitmap*
-Arcadia_Visuals_Windows_Bitmap_create
+Arcadia_Engine_Visuals_Windows_Bitmap*
+Arcadia_Engine_Visuals_Windows_Bitmap_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
@@ -55,20 +55,20 @@ Arcadia_Visuals_Windows_Bitmap_create
   );
 
 void
-Arcadia_Visuals_Windows_Bitmap_fill
+Arcadia_Engine_Visuals_Windows_Bitmap_fill
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Bitmap* self,
+    Arcadia_Engine_Visuals_Windows_Bitmap* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
     Arcadia_Natural8Value b
   );
 
 Arcadia_Imaging_PixelBuffer*
-Arcadia_Visuals_Windows_Bitmap_toPixelBuffer
+Arcadia_Engine_Visuals_Windows_Bitmap_toPixelBuffer
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Bitmap* self
+    Arcadia_Engine_Visuals_Windows_Bitmap* self
   );
 
 #endif // ARCADIA_VISUALS_WINDOWS_BITMAP_H_INCLUDED

@@ -22,11 +22,14 @@
 
 #include "Arcadia/Engine/Backend.h"
 #include "Arcadia/Engine/BackendContext.h"
+#include "Arcadia/Engine/Audials/BackendContext.h"
+#include "Arcadia/Engine/Visuals/BackendContext.h"
 
 #include "Arcadia/Engine/Engine.h"
 #include "Arcadia/Engine/Event.h"
 
-#include "Arcadia/Engine/SceneNodeFactory.h"
+#include "Arcadia/Engine/Node.h"
+#include "Arcadia/Engine/NodeFactory.h"
 
 #undef ARCADIA_ENGINE_PRIVATE
 #pragma pop_macro("ARCADIA_ENGINE_PRIVATE")

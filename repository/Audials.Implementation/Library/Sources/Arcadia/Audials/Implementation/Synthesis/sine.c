@@ -13,11 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_AUDIALS_IMPLEMENTATION_PRIVATE (1)
+#define ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_PRIVATE (1)
 #include "Arcadia/Audials/Implementation/Synthesis/sine.h"
 
 void
-Arcadia_Audials_Synthesis_generateSineWave
+Arcadia_Engine_Audials_Synthesis_generateSineWave
   (
     Arcadia_Thread* thread,
     Arcadia_ByteBuffer* targetBuffer,

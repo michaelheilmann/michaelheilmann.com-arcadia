@@ -32,11 +32,11 @@ struct Arcadia_Visuals_Implementation_OpenGL4_TextureResource {
 
   // The address mode of this texture along the u-axis.
   // @default Arcadia_Visuals_TextureAddressMode_Repeat.
-  Arcadia_Visuals_TextureAddressMode addressModeU;
+  Arcadia_Engine_Visuals_TextureAddressMode addressModeU;
 
   // The address mode of this texture along the v-axis.
   // @default Arcadia_Visuals_TextureAddressMode_Repeat.
-  Arcadia_Visuals_TextureAddressMode addressModeV;
+  Arcadia_Engine_Visuals_TextureAddressMode addressModeV;
 
   // Bitmask indicating what aspects of the texture are dirty.
   Arcadia_Natural8Value dirtyBits;
@@ -46,10 +46,10 @@ struct Arcadia_Visuals_Implementation_OpenGL4_TextureResource {
 
   // The texture magnification filter.
   // @default Arcadia_Visuals_TextureFilter_Linear
-  Arcadia_Visuals_TextureFilter magnificationFilter;
+  Arcadia_Engine_Visuals_TextureFilter magnificationFilter;
   // The texture minification filter.
   // @default Arcadia_Visuals_TextureFilter_Linear
-  Arcadia_Visuals_TextureFilter minificationFilter;
+  Arcadia_Engine_Visuals_TextureFilter minificationFilter;
   
   /// @brief The pixel buffer storing the texture data.
   Arcadia_Imaging_PixelBuffer* pixelBuffer;

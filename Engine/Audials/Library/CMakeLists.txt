@@ -15,7 +15,7 @@
 
 cmake_minimum_required(VERSION 4.1.3)
 
-set(MyModule ${MyProjectName}.Audials)
+set(MyModule ${MyProjectName}.Engine.Audials)
 
 if (NOT TARGET ${MyModule})
   BeginProduct(${MyModule} library)
@@ -23,13 +23,13 @@ if (NOT TARGET ${MyModule})
   OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Include.c)
   OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Include.h)
 
-  OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Scene/Node.c)
-  OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Scene/Node.h)
-  OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Scene/SoundSourceNode.c)
-  OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Scene/SoundSourceNode.h)
+  OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Audials/Node.c)
+  OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Audials/Node.h)
+  OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Audials/NodeFactory.c)
+  OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Audials/NodeFactory.h)
 
-  OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/SceneNodeFactory.c)
-  OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/SceneNodeFactory.h)
+  OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Audials/Nodes/SoundSourceNode.c)
+  OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Audials/Nodes/SoundSourceNode.h)
 
   OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Backend.c)
   OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Backend.h)

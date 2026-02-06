@@ -55,8 +55,8 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
-                         u8"Arcadia.Visuals.BackendContext", Arcadia_Visuals_BackendContext,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
+                         u8"Arcadia.Engine.Visuals.BackendContextBase", Arcadia_Engine_Visuals_BackendContextBase,
                          &_typeOperations);
 
 static void

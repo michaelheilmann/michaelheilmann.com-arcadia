@@ -16,6 +16,7 @@
 #if !defined(ARCADIA_TEMPLATEENGINE_FILECONTEXT_H_INCLUDED)
 #define ARCADIA_TEMPLATEENGINE_FILECONTEXT_H_INCLUDED
 
+#include "Arcadia.Tools.TemplateEngine.Library/Directives/Parser.h"
 #include "Arcadia/Ring2/Include.h"
 typedef struct Context Context;
 typedef struct Environment Environment;
@@ -29,6 +30,7 @@ struct FileContextDispatch {
 
 struct FileContext {
   Arcadia_Object _parent;
+
   /// The underlaying context.
   Context* context;
   /// The path to the including file.
@@ -39,6 +41,9 @@ struct FileContext {
   Arcadia_UTF8Reader* reader;
   /// The environment.
   Environment* environment;
+
+  /// The directives parser.
+  Directives_Parser* parser;
 
 };
 

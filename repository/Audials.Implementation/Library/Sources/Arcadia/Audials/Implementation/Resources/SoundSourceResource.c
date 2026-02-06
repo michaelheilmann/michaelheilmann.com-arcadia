@@ -16,38 +16,38 @@
 #include "Arcadia/Audials/Implementation/Resources/SoundSourceResource.h"
 
 static void
-Arcadia_Audials_Implementation_SoundSourceResource_constructImpl
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_SoundSourceResource_initializeDispatchImpl
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResourceDispatch* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch* self
   );
 
 static void
-Arcadia_Audials_Implementation_SoundSourceResource_destructImpl
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_SoundSourceResource_visitImpl
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Audials_Implementation_SoundSourceResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Audials_Implementation_SoundSourceResource_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Audials_Implementation_SoundSourceResource_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_Implementation_SoundSourceResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Audials_Implementation_SoundSourceResource_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Audials_Implementation_SoundSourceResource_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -55,18 +55,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Audials.Implementation.SoundSourceResource", Arcadia_Audials_Implementation_SoundSourceResource,
-                         u8"Arcadia.Audials.Implementation.Resource", Arcadia_Audials_Implementation_Resource,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Audials.Implementation.SoundSourceResource", Arcadia_Engine_Audials_Implementation_SoundSourceResource,
+                         u8"Arcadia.Engine.Audials.Implementation.Resource", Arcadia_Engine_Audials_Implementation_Resource,
                          &_typeOperations);
 
 static void
-Arcadia_Audials_Implementation_SoundSourceResource_constructImpl
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Audials_Implementation_SoundSourceResource_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Audials_Implementation_SoundSourceResource_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
   if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -84,74 +84,74 @@ Arcadia_Audials_Implementation_SoundSourceResource_constructImpl
 }
 
 static void
-Arcadia_Audials_Implementation_SoundSourceResource_initializeDispatchImpl
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResourceDispatch* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch* self
   )
 { }
 
 static void
-Arcadia_Audials_Implementation_SoundSourceResource_destructImpl
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   )
 {/*Intentionally empty.*/}
 
 static void
-Arcadia_Audials_Implementation_SoundSourceResource_visitImpl
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   )
 {/*Intentionally empty.*/}
 
 Arcadia_BooleanValue
-Arcadia_Audials_Implementation_SoundSourceResource_isPlaying
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_isPlaying
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Audials_Implementation_SoundSourceResource, isPlaying, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Audials_Implementation_SoundSourceResource, isPlaying, self); }
 
 void
-Arcadia_Audials_Implementation_SoundSourceResource_pause
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_pause
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   )
-{ Arcadia_VirtualCall(Arcadia_Audials_Implementation_SoundSourceResource, pause, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Audials_Implementation_SoundSourceResource, pause, self); }
 
 void
-Arcadia_Audials_Implementation_SoundSourceResource_play
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_play
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   )
-{ Arcadia_VirtualCall(Arcadia_Audials_Implementation_SoundSourceResource, play, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Audials_Implementation_SoundSourceResource, play, self); }
 
 void
-Arcadia_Audials_Implementation_SoundSourceResource_stop
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_stop
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   )
-{ Arcadia_VirtualCall(Arcadia_Audials_Implementation_SoundSourceResource, stop, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Audials_Implementation_SoundSourceResource, stop, self); }
 
 void
-Arcadia_Audials_Implementation_SoundSourceResource_setVolume
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_setVolume
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self,
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self,
     Arcadia_Real32Value volume
   )
-{ Arcadia_VirtualCall(Arcadia_Audials_Implementation_SoundSourceResource, setVolume, self, volume); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Audials_Implementation_SoundSourceResource, setVolume, self, volume); }
 
 Arcadia_Real32Value
-Arcadia_Audials_Implementation_SoundSourceResource_getVolume
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_getVolume
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Audials_Implementation_SoundSourceResource, getVolume, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Audials_Implementation_SoundSourceResource, getVolume, self); }

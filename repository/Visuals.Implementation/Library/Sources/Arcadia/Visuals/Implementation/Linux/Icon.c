@@ -37,33 +37,19 @@ Arcadia_Visuals_Linux_Icon_destruct
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
+  Arcadia_ObjectType_Operations_Initializer,
   .construct = &Arcadia_Visuals_Linux_Icon_constructImpl,
   .destruct = &Arcadia_Visuals_Linux_Icon_destruct,
   .visit = NULL,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
+  Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
-  .add = NULL,
-  .and = NULL,
-  .concatenate = NULL,
-  .divide = NULL,
-  .equalTo = NULL,
-  .greaterThan = NULL,
-  .greaterThanOrEqualTo = NULL,
-  .hash = NULL,
-  .lowerThan = NULL,
-  .lowerThanOrEqualTo = NULL,
-  .multiply = NULL,
-  .negate = NULL,
-  .not = NULL,
-  .notEqualTo = NULL,
-  .or = NULL,
-  .subtract = NULL,
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Linux.Icon", Arcadia_Visuals_Linux_Icon,
-                         u8"Arcadia.Visuals.Icon", Arcadia_Visuals_Icon,
+                         u8"Arcadia.Engine.Visuals.Icon", Arcadia_Engine_Visuals_Icon,
                          &_typeOperations);
 
 static void

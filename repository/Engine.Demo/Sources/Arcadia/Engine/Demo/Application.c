@@ -89,15 +89,15 @@ Arcadia_Engine_Demo_Application_shutdownImpl
 
   // Ensure the windows are closed.
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Engine_Application*)self)->windows); i < n; ++i) {
-    Arcadia_Visuals_Window* window =
-      (Arcadia_Visuals_Window*)Arcadia_List_getObjectReferenceValueCheckedAt
+    Arcadia_Engine_Visuals_Window* window =
+      (Arcadia_Engine_Visuals_Window*)Arcadia_List_getObjectReferenceValueCheckedAt
         (
           thread,
           ((Arcadia_Engine_Application*)self)->windows,
           i,
-          _Arcadia_Visuals_Window_getType(thread)
+          _Arcadia_Engine_Visuals_Window_getType(thread)
         );
-    Arcadia_Visuals_Window_close(thread, window);
+    Arcadia_Engine_Visuals_Window_close(thread, window);
   }
 
   // Clean the message queue. FIXME: The messages prevent the engine from being gc'ed.
@@ -197,7 +197,7 @@ Arcadia_Engine_Demo_Application_onWindowClosedEvent
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Application* self,
-    Arcadia_Visuals_WindowClosedEvent* event
+    Arcadia_Engine_Visuals_WindowClosedEvent* event
   )
 {
   Arcadia_List_filter(thread, ((Arcadia_Engine_Application*)self)->windows, Arcadia_Value_makeObjectReferenceValue(event->window), &filterWindows);

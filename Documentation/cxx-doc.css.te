@@ -114,3 +114,80 @@ section.cxx table tr td {
 section.cxx table + p {
   margin-top: 1rem;
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* The following are used in the documentation of C elements. */
+
+/* Signatures of C elements.*/
+my-signature {
+  display: block;
+}
+
+/* Summaries of C elements. */
+my-summary {
+  display: block;
+  margin: var(--h6-margin);
+}
+
+/* Parameters of a C function. */
+my-parameters {
+  display: block;
+  margin: var(--h6-margin);
+  font-weight: bold;
+}
+
+/* Return value of a C function. */
+my-return-value {
+  display: block;
+  margin: var(--h6-margin);
+  font-weight: bold;
+}
+
+/* Errors of a C function. */
+my-errors {
+  display: block;
+  margin: var(--h6-margin);
+  font-weight: bold;
+}
+
+/* Elements of a C enumeration. */
+my-elements {
+  display: block;
+  margin: var(--h6-margin);
+  font-weight: bold;
+}
+
+/* Meta variables used in documentation of C elements. */
+body.my-content-page-1 my-mv {
+  font-family: my-code-font;
+}
+
+/* Meta variables used in documentation of C elements. */
+body.my-content-page-1 my-mv::before {
+  content: "<";
+}
+
+/* Meta variables used in documentation of C elements. */
+body.my-content-page-1 my-mv::after {
+  content: ">";
+}
+
+/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
+/*h4 ~ my-signature, h4 ~ my-summary,*/h4 ~ my-parameters, h4 ~ my-errors, h4 ~ my-return-value {
+  font-size: var(--h4-font-size);
+}
+
+/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
+/*h5 ~ my-signature, h5 ~ my-summary,*/h5 ~ my-parameters, h5 ~ my-errors, h5 ~ my-return-value {
+  font-size: var(--h5-font-size);
+}
+
+/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
+/*h6 ~ my-signature, h6 ~ my-summary,*/h6 ~ my-parameters, h6 ~ my-errors, h6 ~ my-return-value {
+  font-size: var(--h6-font-size);
+}
+
+/* Ensure a table followed by a paragraph are properly separated. */
+table + p {
+  margin-top: 1rem;
+}

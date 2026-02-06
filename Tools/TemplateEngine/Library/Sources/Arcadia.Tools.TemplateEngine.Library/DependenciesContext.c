@@ -193,6 +193,19 @@ DependenciesContext_write
     }
     Arcadia_UTF8Writer_writeString(thread, writer, Arcadia_String_createFromCxxString(thread, u8"\r\n"));
   }
+  {
+    // (1) Ensure the path is absolute.
+    if (!Arcadia_FilePath_isAbsolute(thread, self->dependenciesFilePath)) {
+      Arcadia_FilePath* workingDirectory = Arcadia_FileSystem_getWorkingDirectory(thread, Arcadia_FileSystem_getOrCreate(thread));
+      Arcadia_FilePath_append(thread, workingDirectory, self->dependenciesFilePath);
+      self->dependenciesFilePath = workingDirectory;
+    }
+    // (2) Remove the filename component. If there is no file name, this fails.
+    Arcadia_FilePath* directories = Arcadia_FilePath_clone(thread, self->dependenciesFilePath);
+    Arcadia_List_removeBack(thread, (Arcadia_List*)directories->fileNames, 1);
+    // (3) Ensure all directories exist.
+    Arcadia_FileSystem_createDirectoryFiles(thread, Arcadia_FileSystem_getOrCreate(thread), directories);
+  }
   // (3) Write the file contents.
   Arcadia_FileSystem_setFileContents(thread, Arcadia_FileSystem_getOrCreate(thread), self->dependenciesFilePath, byteBuffer);
 }

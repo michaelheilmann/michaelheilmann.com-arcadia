@@ -1,7 +1,7 @@
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_VertexElementSyntactics">Arcadia_Visuals_VertexElementSyntactics</h1>
+<h1 id="Arcadia_Engine_Visuals_VertexElementSyntactics">Arcadia_Engine_Visuals_VertexElementSyntactics</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_VertexElementSyntactics Arcadia_Visuals_VertexElementSyntactics;
+typedef enum Arcadia_Engine_Visuals_VertexElementSyntactics Arcadia_Engine_Visuals_VertexElementSyntactics;
 </code></my-signature>
 
 <my-summary>
@@ -14,7 +14,7 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSyntactics_Real32Real32</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32</code>
     </div>
     <div>
     The vertex element consists of two consecutive Arcadia_Real32Value values.
@@ -23,7 +23,7 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32Real32</code>
     </div>
     <div>
     The vertex element consists of three consecutive Arcadia_Real32Value values.
@@ -32,7 +32,7 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32Real32</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32Real32Real32</code>
     </div>
     <div>
     The vertex element consists of four consecutive Arcadia_Real32Value values.

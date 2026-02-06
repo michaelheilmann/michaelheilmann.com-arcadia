@@ -16,30 +16,30 @@
 #include "Arcadia/Visuals/Implementation/Windows/Bitmap.h"
 
 static void
-Arcadia_Visuals_Windows_Bitmap_constructImpl
+Arcadia_Engine_Visuals_Windows_Bitmap_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Bitmap* self
+    Arcadia_Engine_Visuals_Windows_Bitmap* self
   );
 
 static void
-Arcadia_Visuals_Windows_Bitmap_initializeDispatchImpl
+Arcadia_Engine_Visuals_Windows_Bitmap_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_BitmapDispatch* self
+    Arcadia_Engine_Visuals_Windows_BitmapDispatch* self
   );
 
 static void
-Arcadia_Visuals_Windows_Bitmap_destruct
+Arcadia_Engine_Visuals_Windows_Bitmap_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Bitmap* self
+    Arcadia_Engine_Visuals_Windows_Bitmap* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Windows_Bitmap_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Windows_Bitmap_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Windows_Bitmap_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Windows_Bitmap_destruct,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -47,18 +47,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Bitmap", Arcadia_Visuals_Windows_Bitmap,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.Bitmap", Arcadia_Engine_Visuals_Windows_Bitmap,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_Windows_Bitmap_constructImpl
+Arcadia_Engine_Visuals_Windows_Bitmap_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Bitmap* self
+    Arcadia_Engine_Visuals_Windows_Bitmap* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_Bitmap_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_Windows_Bitmap_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -67,8 +67,8 @@ Arcadia_Visuals_Windows_Bitmap_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (2 != numberOfArgumentValues1) {
+  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (2 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -151,22 +151,22 @@ Arcadia_Visuals_Windows_Bitmap_constructImpl
   hBrush = NULL;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void
-Arcadia_Visuals_Windows_Bitmap_initializeDispatchImpl
+Arcadia_Engine_Visuals_Windows_Bitmap_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_BitmapDispatch* self
+    Arcadia_Engine_Visuals_Windows_BitmapDispatch* self
   )
 { }
 
 static void
-Arcadia_Visuals_Windows_Bitmap_destruct
+Arcadia_Engine_Visuals_Windows_Bitmap_destruct
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Bitmap* self
+    Arcadia_Engine_Visuals_Windows_Bitmap* self
   )
 {
   if (NULL != self->hBitmap) {
@@ -179,8 +179,8 @@ Arcadia_Visuals_Windows_Bitmap_destruct
   }
 }
 
-Arcadia_Visuals_Windows_Bitmap*
-Arcadia_Visuals_Windows_Bitmap_create
+Arcadia_Engine_Visuals_Windows_Bitmap*
+Arcadia_Engine_Visuals_Windows_Bitmap_create
   (
     Arcadia_Thread* thread,
     Arcadia_Integer32Value width,
@@ -191,14 +191,14 @@ Arcadia_Visuals_Windows_Bitmap_create
   Arcadia_ValueStack_pushInteger32Value(thread, width);
   Arcadia_ValueStack_pushInteger32Value(thread, height);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_Bitmap);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Windows_Bitmap);
 }
 
 void
-Arcadia_Visuals_Windows_Bitmap_fill
+Arcadia_Engine_Visuals_Windows_Bitmap_fill
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Bitmap* self,
+    Arcadia_Engine_Visuals_Windows_Bitmap* self,
     Arcadia_Natural8Value r,
     Arcadia_Natural8Value g,
     Arcadia_Natural8Value b
@@ -217,10 +217,10 @@ Arcadia_Visuals_Windows_Bitmap_fill
 }
 
 Arcadia_Imaging_PixelBuffer*
-Arcadia_Visuals_Windows_Bitmap_toPixelBuffer
+Arcadia_Engine_Visuals_Windows_Bitmap_toPixelBuffer
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_Bitmap* self
+    Arcadia_Engine_Visuals_Windows_Bitmap* self
   )
 {
   DIBSECTION dibSection;

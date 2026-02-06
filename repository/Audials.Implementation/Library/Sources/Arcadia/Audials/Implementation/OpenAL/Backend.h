@@ -13,26 +13,26 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_BACKEND_H_INCLUDED)
-#define ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_BACKEND_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_BACKEND_H_INCLUDED)
+#define ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_BACKEND_H_INCLUDED
 
 #include "Arcadia/Audials/Include.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Audials.Implementation.OpenAL.Backend", Arcadia_Audials_Implementation_OpenAL_Backend,
-                          Arcadia_Audials_Backend);
+Arcadia_declareObjectType(u8"Arcadia.Engine.Audials.Implementation.OpenAL.Backend", Arcadia_Engine_Audials_Implementation_OpenAL_Backend,
+                          Arcadia_Engine_Audials_Backend);
 
-struct Arcadia_Audials_Implementation_OpenAL_BackendDispatch {
-  Arcadia_Audials_BackendDispatch parent;
+struct Arcadia_Engine_Audials_Implementation_OpenAL_BackendDispatch {
+  Arcadia_Engine_Audials_BackendDispatch parent;
 };
 
-struct Arcadia_Audials_Implementation_OpenAL_Backend {
-  Arcadia_Audials_Backend parent;
+struct Arcadia_Engine_Audials_Implementation_OpenAL_Backend {
+  Arcadia_Engine_Audials_Backend parent;
 };
 
-Arcadia_Audials_Implementation_OpenAL_Backend*
-Arcadia_Audials_Implementation_OpenAL_Backend_create
+Arcadia_Engine_Audials_Implementation_OpenAL_Backend*
+Arcadia_Engine_Audials_Implementation_OpenAL_Backend_create
   (
     Arcadia_Thread* thread
   );
 
-#endif // ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_BACKEND_H_INCLUDED
+#endif // ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_BACKEND_H_INCLUDED

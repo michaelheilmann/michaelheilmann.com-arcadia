@@ -25,35 +25,7 @@
 #pragma push_macro("far")
 #undef far
 
-/// @brief Assign this matrix the values of a perspective projection transformation matrix.
-/// @param self A pointer to this matrix.
-/// @param fieldOfView
-/// The field of view angle, in degrees, in the y direction.
-/// Must be positive.
-/// @param aspectRatio
-/// The aspect ratio that determines the field of view in the x-direction. The aspect ratio is the ratio of width and height.
-/// Must be positive.
-/// @param near The distance from the viewer to the near clippingplane.
-/// Must be positive.
-/// @param far The distance from the viewer to the far clipping plane.
-/// Must be positive.
-/// @remarks
-/// An orthographic projection transformation matrix has the following form
-/// @code
-/// f/aspect 0                           0                               0
-/// 0        f                           0                               0
-/// 0        0 (near + far) / (near - far)   2 * near * far / (near - far)
-/// 0        0                          -1                               0
-/// @endcode
-/// where
-/// @code
-/// f = cot(degreesToRadians(fieldOfView) / 2)
-/// @endcode
-/// @remarks
-/// The resulting matrix sets up the axes as follows
-/// - the positive z-axis points out of the screen (negative z-axis points into the screen)
-/// - the positive x-axis points to the right
-/// - the positive y-axis points to the top
+// https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setPerspectiveProjection
 void
 Arcadia_Math_Matrix4x4Real32_setPerspectiveProjection
   (
@@ -65,6 +37,7 @@ Arcadia_Math_Matrix4x4Real32_setPerspectiveProjection
     Arcadia_Real32Value far
   );
 
+// https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setPerspectiveProjection
 void
 Arcadia_Math_Matrix4x4Real64_setPerspectiveProjection
   (

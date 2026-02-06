@@ -23,109 +23,109 @@
 #define VolumeDirty (2)
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_initializeDispatchImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResourceDispatch* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResourceDispatch* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_destructImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_visitImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_renderImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_unlinkImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_unlinkImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_unloadImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_unloadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static Arcadia_BooleanValue
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_pause
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_pause
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_play
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_play
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_stop
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_stop
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_setVolume
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_setVolume
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self,
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self,
     Arcadia_Real32Value volume
   );
 
 static Arcadia_Real32Value
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_getVolume
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getVolume
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -133,18 +133,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Audials.Implementation.OpenAL.SoundSourceResource", Arcadia_Audials_Implementation_OpenAL_SoundSourceResource,
-                         u8"Arcadia.Audials.Implementation.SoundSourceResource", Arcadia_Audials_Implementation_SoundSourceResource,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Audials.Implementation.OpenAL.SoundSourceResource", Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource,
+                         u8"Arcadia.Engine.Audials.Implementation.SoundSourceResource", Arcadia_Engine_Audials_Implementation_SoundSourceResource,
                          &_typeOperations);
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getType(thread);
   Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
   if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
@@ -170,31 +170,31 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_initializeDispatchImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResourceDispatch* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResourceDispatch* self
   )
 {
   //
-  ((Arcadia_Audials_Implementation_SoundSourceResourceDispatch*)self)->isPlaying = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Audials_Implementation_SoundSourceResource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying;
-  ((Arcadia_Audials_Implementation_SoundSourceResourceDispatch*)self)->play = (void (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_SoundSourceResource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_play;
-  ((Arcadia_Audials_Implementation_SoundSourceResourceDispatch*)self)->pause = (void (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_SoundSourceResource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_pause;
-  ((Arcadia_Audials_Implementation_SoundSourceResourceDispatch*)self)->stop = (void (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_SoundSourceResource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_stop;
-  ((Arcadia_Audials_Implementation_SoundSourceResourceDispatch*)self)->setVolume = (void (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_SoundSourceResource*, Arcadia_Real32Value)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_setVolume;
-  ((Arcadia_Audials_Implementation_SoundSourceResourceDispatch*)self)->getVolume = (Arcadia_Real32Value(*)(Arcadia_Thread*, Arcadia_Audials_Implementation_SoundSourceResource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_getVolume;
+  ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->isPlaying = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying;
+  ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->play = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_play;
+  ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->pause = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_pause;
+  ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->stop = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_stop;
+  ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->setVolume = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*, Arcadia_Real32Value)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_setVolume;
+  ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->getVolume = (Arcadia_Real32Value(*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getVolume;
   //
-  ((Arcadia_Audials_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_Resource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl;
-  ((Arcadia_Audials_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_Resource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_unlinkImpl;
-  ((Arcadia_Audials_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_Resource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_unloadImpl;
-  ((Arcadia_Audials_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Audials_Implementation_Resource*)) & Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_renderImpl;
+  ((Arcadia_Engine_Audials_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_Resource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl;
+  ((Arcadia_Engine_Audials_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_Resource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_unlinkImpl;
+  ((Arcadia_Engine_Audials_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_Resource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_unloadImpl;
+  ((Arcadia_Engine_Audials_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_Resource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_renderImpl;
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_destructImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
   assert(0 == self->alBufferID);
@@ -202,10 +202,10 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_destructImpl
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_visitImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
   if (self->byteBuffer) {
@@ -214,13 +214,13 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_visitImpl
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
-  //Arcadia_Audials_Implementation_OpenAL_BackendContext* context = (Arcadia_Audials_Implementation_OpenAL_BackendContext*)((Arcadia_Audials_Implementation_Resource*)self)->context;
+  //Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* context = (Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext*)((Arcadia_Engine_Audials_Implementation_Resource*)self)->context;
   if (0 == self->alBufferID) {
     alGenBuffers(1, &self->alBufferID);
     if (alGetError()) {
@@ -252,7 +252,7 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
       Arcadia_ByteBuffer* sourceVoiceBuffer = Arcadia_ByteBuffer_create(thread);
       Arcadia_Natural8Value numberOfChannels;
       Arcadia_Natural16Value sampleRate;
-      Arcadia_Audials_Synthesis_generateSineWave(thread, sourceVoiceBuffer, &numberOfChannels, &sampleRate);
+      Arcadia_Engine_Audials_Synthesis_generateSineWave(thread, sourceVoiceBuffer, &numberOfChannels, &sampleRate);
       if (numberOfChannels == 1) {
         alBufferData(self->alBufferID, AL_FORMAT_MONO16,   Arcadia_ByteBuffer_getBytes(thread, sourceVoiceBuffer),
                                                            Arcadia_ByteBuffer_getNumberOfBytes(thread, sourceVoiceBuffer),
@@ -277,35 +277,35 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_renderImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
-  Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl(thread, self);
+  Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl(thread, self);
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_unlinkImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_unlinkImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
   assert(0 == self->alBufferID);
   assert(0 == self->alSourceID);
-  ((Arcadia_Audials_Implementation_Resource*)self)->context = NULL;
+  ((Arcadia_Engine_Audials_Implementation_Resource*)self)->context = NULL;
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_unloadImpl
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_unloadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
-  //Arcadia_Audials_Implementation_OpenAL_BackendContext* context = (Arcadia_Audials_Implementation_OpenAL_BackendContext*)((Arcadia_Audials_Implementation_Resource*)self)->context;
+  //Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* context = (Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext*)((Arcadia_Engine_Audials_Implementation_Resource*)self)->context;
   if (self->alSourceID) {
     alDeleteSources(1, &self->alSourceID);
     self->alSourceID = 0;
@@ -317,10 +317,10 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_unloadImpl
 }
 
 static Arcadia_BooleanValue
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
   if (!self->alSourceID) {
@@ -337,10 +337,10 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_pause
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_pause
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
   if (!self->alSourceID) {
@@ -355,17 +355,17 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_pause
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_play
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_play
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
   if (!self->alSourceID) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (!Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying(thread, self)) {
+  if (!Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_isPlaying(thread, self)) {
     alSourcePlay(self->alSourceID);
     if (alGetError()) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -375,10 +375,10 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_play
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_stop
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_stop
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
   if (!self->alSourceID) {
@@ -393,10 +393,10 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_stop
 }
 
 static void
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_setVolume
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_setVolume
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self,
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self,
     Arcadia_Real32Value volume
   )
 {
@@ -422,22 +422,22 @@ Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_setVolume
 }
 
 static Arcadia_Real32Value
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_getVolume
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getVolume
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_SoundSourceResource* self
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 { return self->volume; }
 
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource*
-Arcadia_Audials_Implementation_OpenAL_SoundSourceResource_create
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource*
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_OpenAL_BackendContext* backendContext
+    Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* backendContext
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Audials_Implementation_OpenAL_SoundSourceResource);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource);
 }

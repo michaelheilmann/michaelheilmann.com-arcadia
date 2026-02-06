@@ -19,14 +19,14 @@
 #include "Arcadia/Audials/BackendContext.h"
 
 // An audials backend.
-Arcadia_declareObjectType(u8"Arcadia.Audials.Backend", Arcadia_Audials_Backend,
+Arcadia_declareObjectType(u8"Arcadia.Audials.Backend", Arcadia_Engine_Audials_Backend,
                           u8"Arcadia.Engine.Backend");
 
-struct Arcadia_Audials_BackendDispatch {
+struct Arcadia_Engine_Audials_BackendDispatch {
   Arcadia_Engine_BackendDispatch parent;
 };
 
-struct Arcadia_Audials_Backend {
+struct Arcadia_Engine_Audials_Backend {
   Arcadia_Engine_Backend _parent;
 };
 

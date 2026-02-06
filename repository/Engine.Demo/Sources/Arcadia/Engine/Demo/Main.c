@@ -43,7 +43,7 @@ onQuitRequested
   Arcadia_Engine_Demo_Application* application =
     (Arcadia_Engine_Demo_Application*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Engine_Demo_Application_getType(thread));
   // Argument.
-  Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_Demo_Application_getType(thread));
+  Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_ApplicationQuitRequestedEvent_getType(thread));
   // The sender is at index 1.
   Arcadia_Engine_Application_setQuitRequested(thread, (Arcadia_Engine_Application*)application, Arcadia_BooleanValue_True);
 }
@@ -131,34 +131,34 @@ main1
     deltaTick = (newTick > oldTick) ? newTick - oldTick : 0;
     while (!Arcadia_Engine_Application_getQuitRequested(thread, (Arcadia_Engine_Application*)application)) {
       Arcadia_Process_stepArms(process);
-      Arcadia_Audials_BackendContext_update(thread, (Arcadia_Audials_BackendContext*)((Arcadia_Engine_Application*)application)->engine->audialsBackendContext);
-      Arcadia_Visuals_BackendContext_update(thread, (Arcadia_Visuals_BackendContext*)((Arcadia_Engine_Application*)application)->engine->visualsBackendContext);
+      Arcadia_Engine_BackendContext_update(thread, (Arcadia_Engine_BackendContext*)((Arcadia_Engine_Application*)application)->engine->audialsBackendContext);
+      Arcadia_Engine_BackendContext_update(thread, (Arcadia_Engine_BackendContext*)((Arcadia_Engine_Application*)application)->engine->visualsBackendContext);
       Arcadia_Engine_Demo_Scene_updateLogics(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick);
 
       for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Engine_Application*)application)->windows); i < n; ++i) {
-        Arcadia_Visuals_Window* window =
-          (Arcadia_Visuals_Window*)
+        Arcadia_Engine_Visuals_Window* window =
+          (Arcadia_Engine_Visuals_Window*)
           Arcadia_List_getObjectReferenceValueCheckedAt
             (
               thread,
               ((Arcadia_Engine_Application*)application)->windows,
               i,
-              _Arcadia_Visuals_Window_getType(thread)
+              _Arcadia_Engine_Visuals_Window_getType(thread)
             );
-        Arcadia_Visuals_Window_beginRender(thread, window);
+        Arcadia_Engine_Visuals_Window_beginRender(thread, window);
         {
           Arcadia_Integer32Value width, height;
-          Arcadia_Visuals_Window_getCanvasSize(thread, window, &width, &height);
+          Arcadia_Engine_Visuals_Window_getCanvasSize(thread, window, &width, &height);
           Arcadia_Engine_Demo_Scene_updateLogics(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick);
           Arcadia_Engine_Demo_Scene_updateAudials(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick, width, height);
           Arcadia_Engine_Demo_Scene_updateVisuals(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick, width, height);
         }
-        Arcadia_Visuals_Window_endRender(thread, window);
+        Arcadia_Engine_Visuals_Window_endRender(thread, window);
       }
       Arcadia_Engine_Event* event = Arcadia_Engine_dequeEvent(thread, ((Arcadia_Engine_Application*)application)->engine);
       if (NULL != event) {
-        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_WindowClosedEvent_getType(thread))) {
-          Arcadia_Visuals_WindowClosedEvent* windowClosedEvent = (Arcadia_Visuals_WindowClosedEvent*)event;
+        if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Engine_Visuals_WindowClosedEvent_getType(thread))) {
+          Arcadia_Engine_Visuals_WindowClosedEvent* windowClosedEvent = (Arcadia_Engine_Visuals_WindowClosedEvent*)event;
           Arcadia_Engine_Demo_Application_onWindowClosedEvent(thread, application, windowClosedEvent);
         }
         if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)event, _Arcadia_Visuals_MouseButtonEvent_getType(thread))) {

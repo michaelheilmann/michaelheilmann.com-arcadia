@@ -20,7 +20,7 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/SystemWindow.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"
-typedef struct Arcadia_Visuals_Implementation_SceneNodeFactory Arcadia_Visuals_Implementation_SceneNodeFactory;
+typedef struct Arcadia_Visuals_Implementation_NodeFactory Arcadia_Visuals_Implementation_NodeFactory;
 
 #if !defined(WIN32_LEAN_AND_MEAN)
   #define WIN32_LEAN_AND_MEAN

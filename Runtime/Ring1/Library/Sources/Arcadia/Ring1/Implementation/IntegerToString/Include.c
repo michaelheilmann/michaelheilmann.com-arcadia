@@ -47,8 +47,13 @@ Arcadia_Integer64Value_toUTF8String
     void (*function)(Arcadia_Thread* thread, void* context, const Arcadia_Natural8Value* bytes, Arcadia_SizeValue numberOfBytes)
   )
 {
-  // TODO: Properly determine the maximal length.
-  static Arcadia_Natural8Value bytes[512];
+  // The maximum value of a int64_t is 2^63-1 = 9,223,372,036,854,775,807.
+  // The minimum value of a int64_t is 2^64 = 9,223,372,036,854,775,808.
+  // These are 19 decimal digit symbol.
+  // Plus one more symbol for the sign, these are 20 symbols.
+  // We allocate 32 symbols in paranoia mode.
+  // Note we do not use a static buffer to be thread-safe.
+  Arcadia_Natural8Value bytes[32];
 
   Arcadia_Integer64Value valueTemporary;
   Arcadia_SizeValue numberOfDigits = 0;

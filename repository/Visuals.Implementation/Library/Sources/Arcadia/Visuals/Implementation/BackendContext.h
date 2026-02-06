@@ -32,11 +32,11 @@
 #include "Arcadia/Visuals/Implementation/Resources/VertexProgramResource.h"
 
 /// Base of all OpenGL4 backend contexts.
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
-                          u8"Arcadia.Visuals.BackendContext");
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
+                          u8"Arcadia.Engine.Visuals.BackendContextBase");
 
 struct Arcadia_Visuals_Implementation_BackendContextDispatch {
-  Arcadia_Visuals_BackendContextDispatch _parent;
+  Arcadia_Engine_Visuals_BackendContextBaseDispatch _parent;
 
   Arcadia_Visuals_Implementation_ConstantBufferResource*
   (*createConstantBufferResource)
@@ -134,7 +134,7 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
 };
 
 struct Arcadia_Visuals_Implementation_BackendContext {
-  Arcadia_Visuals_BackendContext _parent;
+  Arcadia_Engine_Visuals_BackendContextBase _parent;
 };
 
 // Create a constant buffer resource.

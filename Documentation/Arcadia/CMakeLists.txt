@@ -38,3 +38,5 @@ BeginTemplateEngine(${MyProjectName}.Website.Arcadia.Generate "Website/Arcadia")
                    "${CMAKE_CURRENT_SOURCE_DIR}/../website.env")
 
 EndTemplateEngine()
+
+add_subdirectory("Engine-Concepts")

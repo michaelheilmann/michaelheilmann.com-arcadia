@@ -145,11 +145,11 @@ Arcadia_Engine_Application_startupVisuals
 {
   Arcadia_Visuals_DisplayDevice* displayDevice = NULL;
   Arcadia_String* windowMode = NULL;
-  Arcadia_Visuals_Window* window = NULL;
+  Arcadia_Engine_Visuals_Window* window = NULL;
   // (1.1) Register visuals backends.
-  Arcadia_Visuals_Implementation_registerBackends(thread, engine->visualBackendTypes);
-  // (1.2) Register visuals scene node factory.
-  Arcadia_Visuals_Implementation_registerSceneNodeFactories(thread, engine->visualSceneNodeFactoryTypes);
+  Arcadia_Visuals_Implementation_registerBackends(thread, engine->visualsBackendTypes);
+  // (1.2) Register the visuals node factory.
+  Arcadia_Visuals_Implementation_registerNodeFactories(thread, engine->visualsNodeFactoryTypes);
   // (2) Select visuals system.
   {
     char const* path[] = {
@@ -161,7 +161,7 @@ Arcadia_Engine_Application_startupVisuals
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
       Arcadia_String* backendTypeName = Cfg2_getString(thread, (Arcadia_DDL_Node*)configuration, path, 2);
-      Arcadia_Value backendTypeValue = Arcadia_HashSet_findFirst(thread, (Arcadia_HashSet*)engine->visualBackendTypes, Arcadia_Value_makeObjectReferenceValue(backendTypeName), &findTypeByName);
+      Arcadia_Value backendTypeValue = Arcadia_HashSet_findFirst(thread, (Arcadia_HashSet*)engine->visualsBackendTypes, Arcadia_Value_makeObjectReferenceValue(backendTypeName), &findTypeByName);
       if (!Arcadia_Value_isTypeValue(&backendTypeValue)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
@@ -178,7 +178,7 @@ Arcadia_Engine_Application_startupVisuals
       Arcadia_Thread_popJumpTarget(thread);
       Arcadia_String* backendTypeName = Arcadia_String_createFromCxxString(thread, u8"Arcadia.Visuals.Implementation.OpenGL4.Backend");
       Cfg2_setString(thread, (Arcadia_DDL_Node*)configuration, path, 2, backendTypeName);
-      Arcadia_Value backendTypeValue = Arcadia_HashSet_findFirst(thread, (Arcadia_HashSet*)engine->visualBackendTypes, Arcadia_Value_makeObjectReferenceValue(backendTypeName), &findTypeByName);
+      Arcadia_Value backendTypeValue = Arcadia_HashSet_findFirst(thread, (Arcadia_HashSet*)engine->visualsBackendTypes, Arcadia_Value_makeObjectReferenceValue(backendTypeName), &findTypeByName);
       if (!Arcadia_Value_isTypeValue(&backendTypeValue)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
@@ -191,14 +191,14 @@ Arcadia_Engine_Application_startupVisuals
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
       backend = (Arcadia_Engine_Backend*)ARCADIA_CREATEOBJECT0(thread, backendType, Arcadia_ValueStack_getSize(thread) - 1);
     }
-    Arcadia_Visuals_BackendContext* temporary = (Arcadia_Visuals_BackendContext*)Arcadia_Engine_Backend_createBackendContext(thread, backend);
+    Arcadia_Engine_Visuals_BackendContextBase* temporary = (Arcadia_Engine_Visuals_BackendContextBase*)Arcadia_Engine_Backend_createBackendContext(thread, backend);
     Arcadia_Object_lock(thread, (Arcadia_Object*)temporary);
     engine->visualsBackendContext = (Arcadia_Engine_BackendContext*)temporary;
   }
   // (3) Select display device (aka "monitor").
   {
-    Arcadia_List* displayDevices = Arcadia_Visuals_BackendContext_getDisplayDevices(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
-    Arcadia_Visuals_Diagnostics_dumpDevices(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+    Arcadia_List* displayDevices = Arcadia_Engine_Visuals_BackendContextBase_getDisplayDevices(thread, (Arcadia_Engine_Visuals_BackendContextBase*)engine->visualsBackendContext);
+    Arcadia_Visuals_Diagnostics_dumpDevices(thread, (Arcadia_Engine_Visuals_BackendContextBase*)engine->visualsBackendContext);
     Arcadia_Integer32Value displayDeviceIndex = 0;
     char const* path[] = {
       u8"visuals",
@@ -261,12 +261,12 @@ Arcadia_Engine_Application_startupVisuals
   }
   // (5) Create and open a window, set its size and position according to the display device it is located on.
   {
-    window = Arcadia_Visuals_BackendContext_createWindow(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
-    Arcadia_Visuals_Window_open(thread, window);
+    window = Arcadia_Engine_Visuals_BackendContextBase_createWindow(thread, (Arcadia_Engine_Visuals_BackendContextBase*)engine->visualsBackendContext);
+    Arcadia_Engine_Visuals_Window_open(thread, window);
     Arcadia_Integer32Value left, top, right, bottom;
     Arcadia_Visuals_DisplayDevice_getBounds(thread, displayDevice, &left, &top, &right, &bottom);
-    Arcadia_Visuals_Window_setPosition(thread, window, left, top);
-    Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
+    Arcadia_Engine_Visuals_Window_setPosition(thread, window, left, top);
+    Arcadia_Engine_Visuals_Window_setSize(thread, window, right - left, bottom - top);
     Arcadia_List_insertBackObjectReferenceValue(thread, windowList, (Arcadia_Object*)window);
   }
   // (6) Set window mode and resolution.
@@ -310,15 +310,15 @@ Arcadia_Engine_Application_startupVisuals
     // Set the window mode and resolution.
     b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"windowed", sizeof(u8"windowed") - 1))));
     if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
-      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_False);
+      Arcadia_Engine_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_False);
     }
     b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"borderless fullscreen window", sizeof(u8"borderless fullscreen window") - 1))));
     if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
-      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
+      Arcadia_Engine_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
     }
     b = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"fullscreen", sizeof(u8"fullscreen") - 1))));
     if (Arcadia_Value_isEqualTo(thread, &a, &b)) {
-      Arcadia_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
+      Arcadia_Engine_Visuals_Window_setFullscreen(thread, window, Arcadia_BooleanValue_True);
       Arcadia_Visuals_DisplayMode* bestDisplayMode = NULL;
       Arcadia_Integer32Value horizontalResolution, verticalResolution, colorDepth;
       getDisplayMode(thread, configuration, &horizontalResolution, &verticalResolution, &colorDepth);
@@ -342,58 +342,58 @@ Arcadia_Engine_Application_startupVisuals
         Arcadia_Integer32Value left, top, right, bottom;
         Arcadia_Visuals_DisplayMode_apply(thread, bestDisplayMode);
         Arcadia_Visuals_DisplayDevice_getBounds(thread, displayDevice, &left, &top, &right, &bottom);
-        Arcadia_Visuals_Window_setPosition(thread, window, left, top);
-        Arcadia_Visuals_Window_setSize(thread, window, right - left, bottom - top);
+        Arcadia_Engine_Visuals_Window_setPosition(thread, window, left, top);
+        Arcadia_Engine_Visuals_Window_setSize(thread, window, right - left, bottom - top);
       }
     }
   }
   // (7) Set the window icons and the window title.
   {
-    Arcadia_Visuals_Icon* icon;
+    Arcadia_Engine_Visuals_Icon* icon;
     Arcadia_Imaging_PixelBuffer* pixelBuffer;
     Arcadia_Integer32Value width, height;
     // Set the big icon.
-    Arcadia_Visuals_Window_getRequiredBigIconSize(thread, window, &width, &height);
+    Arcadia_Engine_Visuals_Window_getRequiredBigIconSize(thread, window, &width, &height);
     pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
     Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
-    icon = Arcadia_Visuals_BackendContext_createIcon(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext, pixelBuffer);
-    Arcadia_Visuals_Window_setBigIcon(thread, window, icon);
+    icon = Arcadia_Engine_Visuals_BackendContextBase_createIcon(thread, (Arcadia_Engine_Visuals_BackendContextBase*)engine->visualsBackendContext, pixelBuffer);
+    Arcadia_Engine_Visuals_Window_setBigIcon(thread, window, icon);
 
     // Set the small icon.
-    Arcadia_Visuals_Window_getRequiredSmallIconSize(thread, window, &width, &height);
+    Arcadia_Engine_Visuals_Window_getRequiredSmallIconSize(thread, window, &width, &height);
     pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
     Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
-    icon = Arcadia_Visuals_BackendContext_createIcon(thread, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext, pixelBuffer);
-    Arcadia_Visuals_Window_setSmallIcon(thread, window, icon);
+    icon = Arcadia_Engine_Visuals_BackendContextBase_createIcon(thread, (Arcadia_Engine_Visuals_BackendContextBase*)engine->visualsBackendContext, pixelBuffer);
+    Arcadia_Engine_Visuals_Window_setSmallIcon(thread, window, icon);
 
     // Set the title.
-    Arcadia_Visuals_Window_setTitle(thread, window, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Liminality"));
+    Arcadia_Engine_Visuals_Window_setTitle(thread, window, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Liminality"));
   }
-  // (8) Create the scene node factory.
+  // (8) Create the node factory.
   {
-    Arcadia_Engine_SceneNodeFactory* sceneNodeFactory = NULL;
+    Arcadia_Engine_NodeFactory* nodeFactory = NULL;
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
       Arcadia_List* temporary = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-      Arcadia_Set_getAll(thread, engine->visualSceneNodeFactoryTypes, temporary);
-      Arcadia_Value scneNodeFactoryTypeValue = Arcadia_List_getAt(thread, temporary, 0);
-      if (!Arcadia_Value_isTypeValue(&scneNodeFactoryTypeValue)) {
+      Arcadia_Set_getAll(thread, engine->visualsNodeFactoryTypes, temporary);
+      Arcadia_Value nodeFactoryTypeValue = Arcadia_List_getAt(thread, temporary, 0);
+      if (!Arcadia_Value_isTypeValue(&nodeFactoryTypeValue)) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }
-      Arcadia_Type* scneNodeFactoryType = Arcadia_Value_getTypeValue(&scneNodeFactoryTypeValue);
-      if (!Arcadia_Type_isDescendantType(thread, scneNodeFactoryType, _Arcadia_Visuals_SceneNodeFactory_getType(thread))) {
+      Arcadia_Type* nodeFactoryType = Arcadia_Value_getTypeValue(&nodeFactoryTypeValue);
+      if (!Arcadia_Type_isDescendantType(thread, nodeFactoryType, _Arcadia_Engine_Visuals_NodeFactory_getType(thread))) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
         Arcadia_Thread_jump(thread);
       }
       Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      sceneNodeFactory = (Arcadia_Engine_SceneNodeFactory*)ARCADIA_CREATEOBJECT0(thread, scneNodeFactoryType, Arcadia_ValueStack_getSize(thread) - 1);
+      nodeFactory = (Arcadia_Engine_NodeFactory*)ARCADIA_CREATEOBJECT0(thread, nodeFactoryType, Arcadia_ValueStack_getSize(thread) - 1);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
       Arcadia_Thread_jump(thread);
     }
-    engine->visualsSceneNodeFactory = sceneNodeFactory;
+    engine->visualsNodeFactory = nodeFactory;
   }
 }

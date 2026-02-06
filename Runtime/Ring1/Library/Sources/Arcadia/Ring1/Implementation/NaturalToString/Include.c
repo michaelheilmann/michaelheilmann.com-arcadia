@@ -47,8 +47,12 @@ Arcadia_Natural64Value_toUTF8String
     void (*function)(Arcadia_Thread* thread, void* context, const Arcadia_Natural8Value* bytes, Arcadia_SizeValue numberOfBytes)
   )
 {
-  // TODO: Properly determine the maximal length.
-  static Arcadia_Natural8Value bytes[512];
+  // The maximum value of a uint64_t is 2^64-1 = 18,446,744,073,709,551,615.
+  // These are 20 decimal digit symbol.
+  // Plus one more symbol for a sign, these are 21 symbols.
+  // We allocate 32 symbols in paranoia mode.
+  // Note we do not use a static buffer to be thread-safe.
+  Arcadia_Natural8Value bytes[32];
 
   Arcadia_Natural64Value valueTemporary;
   Arcadia_SizeValue numberOfDigits = 0;

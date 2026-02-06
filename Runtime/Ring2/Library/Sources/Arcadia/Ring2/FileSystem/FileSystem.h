@@ -175,12 +175,7 @@ struct Arcadia_FileSystem {
 };
 
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryFile
-/// @brief Create a directory file.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this file system.
-/// @param path A pointer to the path.
-/// @error Arcadia_Status_NotFound
-/// one or more intermediate directories do not exist; this function will only create the final directory in the path.
+// Arcadia_Status_OperationFailed if the file exists but is not a directory file or creation failed
 void
 Arcadia_FileSystem_createDirectoryFile
   (
@@ -343,6 +338,14 @@ Arcadia_FileSystem*
 Arcadia_FileSystem_getOrCreate
   (
     Arcadia_Thread* thread
+  );
+
+void
+Arcadia_FileSystem_createDirectoryFiles
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
   );
 
 #endif // ARCADIA_RING2_FILESYSTEM_FILESYSTEM_H_INCLUDED

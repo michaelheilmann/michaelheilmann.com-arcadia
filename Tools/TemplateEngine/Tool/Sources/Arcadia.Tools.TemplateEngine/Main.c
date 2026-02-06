@@ -273,12 +273,6 @@ main1
   context->environmentFilePath = environmentFilePath;
   context->dependenciesFilePath = dependenciesFilePath;
 
-  context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
-  context->targetBuffer = Arcadia_ByteBuffer_create(thread);
-  context->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->targetBuffer);
-  context->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
-  context->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, context->temporaryBuffer);
-
   environment->enclosing = context->environment;
   context->environment = environment;
 

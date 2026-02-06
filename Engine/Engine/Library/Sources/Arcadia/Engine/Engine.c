@@ -84,15 +84,15 @@ Arcadia_Engine_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  self->visualBackendTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
-  self->visualSceneNodeFactoryTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
+  self->visualsBackendTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
+  self->visualsNodeFactoryTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
   self->visualsBackendContext = NULL;
-  self->visualsSceneNodeFactory = NULL;
+  self->visualsNodeFactory = NULL;
 
   self->audialsBackendTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
-  self->audialsSceneNodeFactoryTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
+  self->audialsNodeFactoryTypes = (Arcadia_Set*)Arcadia_HashSet_create(thread);
   self->audialsBackendContext = NULL;
-  self->audialsSceneNodeFactory = NULL;
+  self->audialsNodeFactory = NULL;
 
   self->events = (Arcadia_Deque*)Arcadia_ArrayDeque_create(thread);
 
@@ -115,30 +115,30 @@ Arcadia_Engine_visitImpl
     Arcadia_Engine* self
   )
 {
-  if (self->visualBackendTypes) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualBackendTypes);
+  if (self->visualsBackendTypes) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsBackendTypes);
   }
-  if (self->visualSceneNodeFactoryTypes) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualSceneNodeFactoryTypes);
+  if (self->visualsNodeFactoryTypes) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsNodeFactoryTypes);
   }
   if (self->visualsBackendContext) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsBackendContext);
   }
-  if (self->visualsSceneNodeFactory) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsSceneNodeFactory);
+  if (self->visualsNodeFactory) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->visualsNodeFactory);
   }
 
   if (self->audialsBackendTypes) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsBackendTypes);
   }
-  if (self->audialsSceneNodeFactoryTypes) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsSceneNodeFactoryTypes);
+  if (self->audialsNodeFactoryTypes) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsNodeFactoryTypes);
   }
   if (self->audialsBackendContext) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsBackendContext);
   }
-  if (self->audialsSceneNodeFactory) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsSceneNodeFactory);
+  if (self->audialsNodeFactory) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->audialsNodeFactory);
   }
 
   if (self->events) {

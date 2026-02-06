@@ -27,11 +27,11 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.WindowBa
                           u8"Arcadia.Visuals.WindowBackend");
 
 struct Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackendDispatch {
-  Arcadia_Visuals_WindowBackendDispatch _parent;
+  Arcadia_Engine_Visuals_WindowBackendDispatch _parent;
 };
 
 struct Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend {
-  Arcadia_Visuals_WindowBackend _parent;
+  Arcadia_Engine_Visuals_WindowBackend _parent;
 
   // Each window holds a lock on the application
   // as it uses the atoms and the display of the

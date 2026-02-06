@@ -108,14 +108,17 @@ Context_constructImpl
   self->environmentFilePath = NULL;
   self->logFilePath = NULL;
 
-  self->targetBuffer = NULL;
-  self->target = NULL;
-  self->temporaryBuffer = NULL;
-  self->temporary = NULL;
-  self->stack = NULL;
   self->files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   self->dependenciesContext = DependenciesContext_create(thread);
   self->consoleLog = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
+
+  self->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
+
+  self->targetBuffer = Arcadia_ByteBuffer_create(thread);
+  self->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->targetBuffer);
+  
+  self->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
+  self->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->temporaryBuffer);
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);

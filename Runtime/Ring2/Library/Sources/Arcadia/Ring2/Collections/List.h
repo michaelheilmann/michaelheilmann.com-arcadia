@@ -87,6 +87,33 @@ Arcadia_List_removeAt
     Arcadia_SizeValue count
   );
 
+static inline void
+Arcadia_List_removeBack
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self,
+    Arcadia_SizeValue count
+  )
+{
+  Arcadia_SizeValue size = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self);
+  if (!size) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_Empty);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_List_removeAt(thread, self, size - 1 - count, count);
+}
+
+static inline void
+Arcadia_List_removeFront
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self,
+    Arcadia_SizeValue count
+  )
+{
+  Arcadia_List_removeAt(thread, self, 0, count);
+}
+
 Arcadia_List*
 Arcadia_List_filter
   (

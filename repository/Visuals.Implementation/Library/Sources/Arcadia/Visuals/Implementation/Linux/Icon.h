@@ -24,14 +24,14 @@
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.Icon", Arcadia_Visuals_Linux_Icon,
-                          u8"Arcadia.Visuals.Icon")
+                          u8"Arcadia.Engine.Visuals.Icon")
 
 struct Arcadia_Visuals_Linux_IconDispatch {
-  Arcadia_Visuals_IconDispatch _parent;
+  Arcadia_Engine_Visuals_IconDispatch _parent;
 };
 
 struct Arcadia_Visuals_Linux_Icon {
-  Arcadia_Visuals_Icon _parent;
+  Arcadia_Engine_Visuals_Icon _parent;
   /// The width, in pixels, of the icon.
   /// Always non-negative.
   Arcadia_Integer32Value width;

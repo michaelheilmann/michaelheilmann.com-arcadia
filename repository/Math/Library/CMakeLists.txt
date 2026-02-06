@@ -31,59 +31,59 @@ if (NOT TARGET ${MyLibraryName})
   BeginTemplateEngine(${MyLibraryName}.GenerateFiles "Math")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real32.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real32.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real64.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real64.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real32.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real32.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real64.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real64.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real32.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real32.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.env")
 
   EndTemplateEngine()
@@ -95,24 +95,24 @@ if (NOT TARGET ${MyLibraryName})
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.c)
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.h)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.h)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real32.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real32.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real64.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real64.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real32.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real32.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real64.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real64.h)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real32.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real32.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.h)
 
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setOrthographicProjection.c)
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setOrthographicProjection.h)
@@ -158,5 +158,6 @@ if (NOT TARGET ${MyLibraryName})
   # @todo This is hackish, fixme.
   add_dependencies(${MyLibraryName} ${MyLibraryName}.GenerateFiles)
   set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Math")
+  target_include_directories(${MyLibraryName} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources)
 
 endif()

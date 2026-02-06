@@ -4,7 +4,7 @@
 @{include("ApplicationQuitRequestedEvent.i")}
 @{include("CanvasActivationStateChangedEvent.i")}
 @{include("CanvasEvent.i")}
-@{include("CanvasDpiChangedEvent.i")}
+@{include("CanvasDPIChangedEvent.i")}
 @{include("CanvasSizeChangedEvent.i")}
 @{include("CullMode.i")}
 @{include("DepthCompareFunction.i")}

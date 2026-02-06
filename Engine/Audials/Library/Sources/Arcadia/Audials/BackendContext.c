@@ -16,30 +16,30 @@
 #include "Arcadia/Audials/BackendContext.h"
 
 static void
-Arcadia_Audials_BackendContext_constructImpl
+Arcadia_Engine_Audials_BackendContextBase_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContext* self
+    Arcadia_Engine_Audials_BackendContextBase* self
   );
 
 static void
-Arcadia_Audials_BackendContext_initializeDispatchImpl
+Arcadia_Engine_Audials_BackendContextBase_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContextDispatch* self
+    Arcadia_Engine_Audials_BackendContextBaseDispatch* self
   );
 
 static void
-Arcadia_Audials_BackendContext_visitImpl
+Arcadia_Engine_Audials_BackendContextBase_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContext* self
+    Arcadia_Engine_Audials_BackendContextBase* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Audials_BackendContext_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Audials_BackendContext_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_BackendContextBase_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Audials_BackendContextBase_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -47,18 +47,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Audials.BackendContext", Arcadia_Audials_BackendContext,
-                         u8"Arcadia.Engine.BackendContext", Arcadia_Engine_BackendContext,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Audials.BackendContextBase", Arcadia_Engine_Audials_BackendContextBase,
+                         u8"Arcadia.Engine.Audials.BackendContext", Arcadia_Engine_Audials_BackendContext,
                          &_typeOperations);
 
 static void
-Arcadia_Audials_BackendContext_constructImpl
+Arcadia_Engine_Audials_BackendContextBase_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContext* self
+    Arcadia_Engine_Audials_BackendContextBase* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Audials_BackendContext_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Audials_BackendContextBase_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -72,25 +72,17 @@ Arcadia_Audials_BackendContext_constructImpl
 }
 
 static void
-Arcadia_Audials_BackendContext_initializeDispatchImpl
+Arcadia_Engine_Audials_BackendContextBase_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContextDispatch* self
+    Arcadia_Engine_Audials_BackendContextBaseDispatch* self
   )
 { }
 
 static void
-Arcadia_Audials_BackendContext_visitImpl
+Arcadia_Engine_Audials_BackendContextBase_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContext* self
+    Arcadia_Engine_Audials_BackendContextBase* self
   )
 {/*Intentionally empty.*/}
-
-void
-Arcadia_Audials_BackendContext_update
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Audials_BackendContext* self
-  )
-{ Arcadia_VirtualCall(Arcadia_Audials_BackendContext, update, self); }

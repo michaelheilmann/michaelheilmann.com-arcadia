@@ -58,7 +58,7 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setDataImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self,
-    Arcadia_Visuals_VertexDescriptor* vertexDescriptor,
+    Arcadia_Engine_Visuals_VertexDescriptor* vertexDescriptor,
     Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -101,8 +101,8 @@ Arcadia_Visuals_Implementation_VertexBufferResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  Arcadia_Visuals_VertexDescriptorBuilder* vertexDescriptorBuilder = Arcadia_Visuals_VertexDescriptorBuilder_create(thread);
-  self->vertexDescriptor = Arcadia_Visuals_VertexDescriptorBuilder_build(thread, vertexDescriptorBuilder);
+  Arcadia_Engine_Visuals_VertexDescriptorBuilder* vertexDescriptorBuilder = Arcadia_Engine_Visuals_VertexDescriptorBuilder_create(thread);
+  self->vertexDescriptor = Arcadia_Engine_Visuals_VertexDescriptorBuilder_build(thread, vertexDescriptorBuilder);
   //
   self->numberOfVertices = 0;
   self->numberOfBytes = 0;
@@ -164,7 +164,7 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setDataImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self,
-    Arcadia_Visuals_VertexDescriptor* vertexDescriptor,
+    Arcadia_Engine_Visuals_VertexDescriptor* vertexDescriptor,
     Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes
@@ -184,7 +184,7 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setData
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self,
-    Arcadia_Visuals_VertexDescriptor* vertexDescriptor,
+    Arcadia_Engine_Visuals_VertexDescriptor* vertexDescriptor,
     Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes

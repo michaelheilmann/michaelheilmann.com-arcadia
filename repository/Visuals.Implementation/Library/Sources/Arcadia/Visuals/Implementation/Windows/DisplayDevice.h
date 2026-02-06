@@ -25,17 +25,17 @@
   #define NOCOMM
 #endif
 #include <Windows.h>
-typedef struct Arcadia_Visuals_Windows_DisplayMode Arcadia_Visuals_Windows_DisplayMode;
+typedef struct Arcadia_Engine_Visuals_Windows_DisplayMode Arcadia_Engine_Visuals_Windows_DisplayMode;
 
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.DisplayDevice", Arcadia_Visuals_Windows_DisplayDevice,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.DisplayDevice", Arcadia_Engine_Visuals_Windows_DisplayDevice,
                           u8"Arcadia.Visuals.DisplayDevice");
 
-struct Arcadia_Visuals_Windows_DisplayDeviceDispatch {
+struct Arcadia_Engine_Visuals_Windows_DisplayDeviceDispatch {
   Arcadia_Visuals_DisplayDeviceDispatch _parent;
 };
 
-struct Arcadia_Visuals_Windows_DisplayDevice {
+struct Arcadia_Engine_Visuals_Windows_DisplayDevice {
   Arcadia_Visuals_DisplayDevice _parent;
   // The ID of the adapter / monitor combination.
   // Example: \\.\DISPLAY
@@ -54,13 +54,13 @@ struct Arcadia_Visuals_Windows_DisplayDevice {
   Arcadia_Integer32Value left, top, right, bottom;
 
   /// The current display mode of this display device.
-  Arcadia_Visuals_Windows_DisplayMode* currentDisplayMode;
+  Arcadia_Engine_Visuals_Windows_DisplayMode* currentDisplayMode;
   /// The list of available display modes of this display device.
   Arcadia_List* availableDisplayModes;
 };
 
-Arcadia_Visuals_Windows_DisplayDevice*
-Arcadia_Visuals_Windows_DisplayDevice_create
+Arcadia_Engine_Visuals_Windows_DisplayDevice*
+Arcadia_Engine_Visuals_Windows_DisplayDevice_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* id,

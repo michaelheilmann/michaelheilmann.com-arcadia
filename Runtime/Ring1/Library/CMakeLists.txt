@@ -102,6 +102,7 @@ if (NOT TARGET ${MyLibraryName})
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Signals/Internal.h)
 
   # << Signals
+
   # >> String to number
 
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/StringToInteger/Include.c)

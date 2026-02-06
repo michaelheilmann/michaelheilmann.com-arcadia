@@ -29,7 +29,7 @@ if (NOT TARGET ${MyTool})
 
     list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BitmapFontGenerator/Main.c)
 
-    list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Visuals.Implementation)
+    list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Engine.Visuals.Implementation)
 
   else()
 

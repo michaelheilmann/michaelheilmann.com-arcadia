@@ -52,9 +52,8 @@ Arcadia_Engine_Event_constructImpl
   )
 {
   Arcadia_TypeValue _type = _Arcadia_Engine_Event_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
-  if (1 != numberOfArgumentValues1) {
+  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -63,10 +62,10 @@ Arcadia_Engine_Event_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  self->timestamp = Arcadia_ValueStack_getNatural64Value(thread, 0);
+  self->timestamp = Arcadia_ValueStack_getNatural64Value(thread, 1);
   //
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void

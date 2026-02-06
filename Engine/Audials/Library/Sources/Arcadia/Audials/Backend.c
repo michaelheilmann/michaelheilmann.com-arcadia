@@ -16,22 +16,22 @@
 #include "Arcadia/Audials/Backend.h"
 
 static void
-Arcadia_Audials_Backend_constructImpl
+Arcadia_Engine_Audials_Backend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Backend* self
+    Arcadia_Engine_Audials_Backend* self
   );
 
 static void
-Arcadia_Audials_Backend_initializeDispatchImpl
+Arcadia_Engine_Audials_Backend_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_BackendDispatch* self
+    Arcadia_Engine_Audials_BackendDispatch* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Audials_Backend_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_Backend_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -39,18 +39,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Audials.Backend", Arcadia_Audials_Backend,
+Arcadia_defineObjectType(u8"Arcadia.Audials.Backend", Arcadia_Engine_Audials_Backend,
                          u8"Arcadia.Engine.Backend", Arcadia_Engine_Backend,
                          &_typeOperations);
 
 static void
-Arcadia_Audials_Backend_constructImpl
+Arcadia_Engine_Audials_Backend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Backend* self
+    Arcadia_Engine_Audials_Backend* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Audials_Backend_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Audials_Backend_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -64,9 +64,9 @@ Arcadia_Audials_Backend_constructImpl
 }
 
 static void
-Arcadia_Audials_Backend_initializeDispatchImpl
+Arcadia_Engine_Audials_Backend_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_BackendDispatch* self
+    Arcadia_Engine_Audials_BackendDispatch* self
   )
 { }

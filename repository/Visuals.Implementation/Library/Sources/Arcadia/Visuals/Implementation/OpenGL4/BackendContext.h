@@ -21,8 +21,8 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"
 
 /// Base of all OpenGL4 backend contexts.
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_BackendContext,
-                          u8"Arcadia.Visuals.Implementation.BackendContext");
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.Implementation.OpenGL4.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_BackendContext,
+                          u8"Arcadia.Engine.Visuals.Implementation.BackendContext");
 
 struct Arcadia_Visuals_Implementation_OpenGL4_BackendContextDispatch {
   Arcadia_Visuals_Implementation_BackendContextDispatch _parent;

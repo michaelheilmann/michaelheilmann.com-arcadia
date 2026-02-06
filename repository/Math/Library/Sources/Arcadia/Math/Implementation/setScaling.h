@@ -19,19 +19,7 @@
 #include "Arcadia/Math/Implementation/Matrix4Real32.h"
 #include "Arcadia/Math/Implementation/Matrix4Real64.h"
 
-/// @brief Assign this matrix the values of a scaling transformation matrix.
-/// @param self A pointer to this matrix.
-/// @param x The scaling along the x-axis.
-/// @param y The scaling along the y-axis.
-/// @param z The scaling along the z-axis.
-/// @remarks
-/// A scaling transformation matrix has the following form:
-/// @code
-/// x 0 0 0
-/// 0 y 0 0
-/// 0 0 z 0
-/// 0 0 0 1
-/// @endcode
+// https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setScaling
 void
 Arcadia_Math_MatrixReal32Value_setScaling
   (
@@ -42,19 +30,7 @@ Arcadia_Math_MatrixReal32Value_setScaling
     Arcadia_Real32Value z
   );
 
-/// @brief Assign this matrix the values of a scaling transformation matrix.
-/// @param self A pointer to this matrix.
-/// @param x The scaling along the x-axis.
-/// @param y The scaling along the y-axis.
-/// @param z The scaling along the z-axis.
-/// @remarks
-/// A scaling transformation matrix has the following form:
-/// @code
-/// x 0 0 0
-/// 0 y 0 0
-/// 0 0 z 0
-/// 0 0 0 1
-/// @endcode
+// https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setScaling
 void
 Arcadia_Math_MatrixReal64Value_setScaling
   (

@@ -13,40 +13,40 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED)
-#define ARCADIA_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED)
+#define ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED
 
 #include "Arcadia/Audials/Include.h"
-typedef struct Arcadia_Audials_Implementation_SoundSourceResource Arcadia_Audials_Implementation_SoundSourceResource;
+typedef struct Arcadia_Engine_Audials_Implementation_SoundSourceResource Arcadia_Engine_Audials_Implementation_SoundSourceResource;
 
 /// @code
-/// class Arcadia.Audials.Implementation.BackendContext extends Arcadia.Audials.BackendContext {
+/// class Arcadia.Engine.Audials.Implementation.BackendContext extends Arcadia.Audials.BackendContext {
 ///   constructor()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Audials.Implementation.BackendContext", Arcadia_Audials_Implementation_BackendContext,
-                          u8"Arcadia.Audials.BackendContext");
+Arcadia_declareObjectType(u8"Arcadia.Engine.Audials.Implementation.BackendContext", Arcadia_Engine_Audials_Implementation_BackendContext,
+                          u8"Arcadia.Engine.Audials.BackendContextBase");
 
-struct Arcadia_Audials_Implementation_BackendContextDispatch {
-  Arcadia_Audials_BackendContextDispatch _parent;
+struct Arcadia_Engine_Audials_Implementation_BackendContextDispatch {
+  Arcadia_Engine_Audials_BackendContextBaseDispatch _parent;
 
-  Arcadia_Audials_Implementation_SoundSourceResource*
+  Arcadia_Engine_Audials_Implementation_SoundSourceResource*
   (*createSoundSourceResource)
     (
       Arcadia_Thread* thread,
-      Arcadia_Audials_Implementation_BackendContext* self
+      Arcadia_Engine_Audials_Implementation_BackendContext* self
     );
 };
 
-struct Arcadia_Audials_Implementation_BackendContext {
-  Arcadia_Audials_BackendContext _parent;
+struct Arcadia_Engine_Audials_Implementation_BackendContext {
+  Arcadia_Engine_Audials_BackendContextBase _parent;
 };
 
-Arcadia_Audials_Implementation_SoundSourceResource*
-Arcadia_Audials_Implementation_BackendContext_createSoundSourceResource
+Arcadia_Engine_Audials_Implementation_SoundSourceResource*
+Arcadia_Engine_Audials_Implementation_BackendContext_createSoundSourceResource
   (
     Arcadia_Thread* thread,
-    Arcadia_Audials_Implementation_BackendContext* self
+    Arcadia_Engine_Audials_Implementation_BackendContext* self
   );
 
-#endif // ARCADIA_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED
+#endif // ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED

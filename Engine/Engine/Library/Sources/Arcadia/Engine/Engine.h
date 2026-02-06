@@ -21,7 +21,7 @@
 #endif
 #include "Arcadia/Ring2/Include.h"
 typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
-typedef struct Arcadia_Engine_SceneNodeFactory Arcadia_Engine_SceneNodeFactory;
+typedef struct Arcadia_Engine_NodeFactory Arcadia_Engine_NodeFactory;
 typedef struct Arcadia_Engine_BackendContext Arcadia_Engine_BackendContext;
 
 /// @code
@@ -44,24 +44,24 @@ struct Arcadia_Engine {
   Arcadia_Object _parent;
 
   /// Set of Arcadia.Visuals.Backend derived type objects.
-  Arcadia_Set* visualBackendTypes;
-  /// Set of Arcadia.Visuals.SceneNodeFactory derived type objects.
-  Arcadia_Set* visualSceneNodeFactoryTypes;
+  Arcadia_Set* visualsBackendTypes;
+  /// Set of Arcadia.Visuals.NodeFactory derived type objects.
+  Arcadia_Set* visualsNodeFactoryTypes;
 
   /// Set of Arcadia.Audials.Backend derived type objects.
   Arcadia_Set* audialsBackendTypes;
-  /// Set of Arcadia.Audials.SceneNodeFactory derived type objects.
-  Arcadia_Set* audialsSceneNodeFactoryTypes;
+  /// Set of Arcadia.Audials.NodeFactory derived type objects.
+  Arcadia_Set* audialsNodeFactoryTypes;
 
   /// Pointer to the active visuals backend context if any, null otherwise.
   Arcadia_Engine_BackendContext* visualsBackendContext;
-  /// The visuals scene node factory.
-  Arcadia_Engine_SceneNodeFactory* visualsSceneNodeFactory;
+  /// The visuals node factory.
+  Arcadia_Engine_NodeFactory* visualsNodeFactory;
 
   /// Pointer to the active audials backend context if any, null otherwise.
   Arcadia_Engine_BackendContext* audialsBackendContext;
-  /// The audials scene node factory.
-  Arcadia_Engine_SceneNodeFactory* audialsSceneNodeFactory;
+  /// The audials node factory.
+  Arcadia_Engine_NodeFactory* audialsNodeFactory;
 
   /// @brief The event queue.
   Arcadia_Deque* events;

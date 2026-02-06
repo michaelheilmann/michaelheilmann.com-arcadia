@@ -38,7 +38,6 @@
 <link rel='stylesheet' href='https://michaelheilmann.com/assets/cxx-doc.css?v=1'>
 <link rel='canonical' href='https://michaelheilmann.com/Arcadia/Visuals/'>
 <title>Michael Heilmann's Arcadia Visuals</title>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
 </style>
 </head>
@@ -279,10 +278,10 @@
 
 <section class="cxx entity object">
 
-  <h1 id="Arcadia_Visuals_CanvasDpiChangedEvent">[MIL] Arcadia.Visuals.CanvasDpiChangedEvent</h1>
+  <h1 id="Arcadia_Visuals_CanvasDPIChangedEvent">[MIL] Arcadia.Visuals.CanvasDPIChangedEvent</h1>
 
   <my-signature><code>
-  class Arcadia.Visuals.CanvasDpiChangedEvent extends Arcadia.Visuals.CanvasEvent { ... }
+  class Arcadia.Visuals.CanvasDPIChangedEvent extends Arcadia.Visuals.CanvasEvent { ... }
   </code></my-signature>
 
   <my-summary>
@@ -296,13 +295,13 @@
 <!-- TODO: This should be "mil" scope not "cxx" scope. -->
 <section class="cxx entity method">
 
-  <h1 id="Arcadia.Visuals.CanvasDpiChangedEvent.construct">
-  [MIL] Arcadia.Visuals.CanvasDpiChangedEvent.construct
+  <h1 id="Arcadia.Visuals.CanvasDPIChangedEvent.construct">
+  [MIL] Arcadia.Visuals.CanvasDPIChangedEvent.construct
   </h1>
 
   <my-signature><code>
     void<br>
-    Arcadia.Visuals.CanvasDpiChangedEvent.construct<br>
+    Arcadia.Visuals.CanvasDPIChangedEvent.construct<br>
     &nbsp;&nbsp;(<br>
     &nbsp;&nbsp;&nbsp;&nbsp;Arcadia.Natural64 timeStamp,<br>
     &nbsp;&nbsp;&nbsp;&nbsp;Arcadia.Natural32 horizontalDpi,<br>
@@ -404,9 +403,9 @@
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_CullMode">Arcadia_Visuals_CullMode</h1>
+<h1 id="Arcadia_Engine_Visuals_CullMode">Arcadia_Engine_Visuals_CullMode</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_CullMode Arcadia_Visuals_CullMode;
+typedef enum Arcadia_Engine_Visuals_CullMode Arcadia_Engine_Visuals_CullMode;
 </code></my-signature>
 
 <my-summary>
@@ -419,29 +418,29 @@ A cull mode identifies a technique for deciding wether a fragment is removed bas
   <h1>Elements</h1>
 
   <div>
-    <div><code>Arcadia_Visuals_CullMode_None</code></div>
+    <div><code>Arcadia_Engine_Visuals_CullMode_None</code></div>
     <div>Neither front-facing nor back-facing fragments are culled.</div>
   </div>
   <div>
-    <div><code>Arcadia_Visuals_CullMode_Front</code></div>
+    <div><code>Arcadia_Engine_Visuals_CullMode_Front</code></div>
     <div>Front-facing fragments are culled.</div>
   </div>
   <div>
-    <div><code>Arcadia_Visuals_CullMode_Back</code></div>
+    <div><code>Arcadia_Engine_Visuals_CullMode_Back</code></div>
     <div>Back-facing fragments are culled.</div>
   </div>
   <div>
-    <div><code>Arcadia_Visuals_CullMode_FrontAndBack</code></div>
+    <div><code>Arcadia_Engine_Visuals_CullMode_FrontAndBack</code></div>
     <div>
     Both front-facing and back-facing fragments are culled.
-    This is an alias of <code>Arcadia_Visuals_CullMode_BackAndFront</code>.
+    This is an alias of <code>Arcadia_Engine_Visuals_CullMode_BackAndFront</code>.
     </div>
   </div>
   <div>
-    <div><code>Arcadia_Visuals_CullMode_BackAndFront</code></div>
+    <div><code>Arcadia_Engine_Visuals_CullMode_BackAndFront</code></div>
     <div>
     Both back-facing and front-facing fragments are culled.
-    This is an alias of <code>Arcadia_Visuals_CullMode_FrontAndBack</code>.
+    This is an alias of <code>Arcadia_Engine_Visuals_CullMode_FrontAndBack</code>.
     </div>
   </div>
 
@@ -450,9 +449,9 @@ A cull mode identifies a technique for deciding wether a fragment is removed bas
 </section>
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_DepthCompareFunction">Arcadia_Visuals_DepthCompareFunction</h1>
+<h1 id="Arcadia_Engine_Visuals_DepthCompareFunction">Arcadia_Engine_Visuals_DepthCompareFunction</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_DepthCompareFunction Arcadia_Visuals_DepthCompareFunction;
+typedef enum Arcadia_Engine_Visuals_DepthCompareFunction Arcadia_Engine_Visuals_DepthCompareFunction;
 </code></my-signature>
 
 <my-summary>
@@ -465,56 +464,56 @@ A depth compare function identifies a technique that compares depth value of an 
   <h1>Elements</h1>
 
   <div>
-    <div><code>Arcadia_Visuals_DepthComparefunction_Always</code></div>
+    <div><code>Arcadia_Engine_Visuals_DepthComparefunction_Always</code></div>
     <div>
     The incoming fragment always passes.
     </div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_DepthCompareFunction_Never</code></div>
+    <div><code>Arcadia_Engine_Visuals_DepthCompareFunction_Never</code></div>
     <div>
     The incoming fragment never passes.
     </div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_DepthCompareFunction_EqualTo</code></div>
+    <div><code>Arcadia_Engine_Visuals_DepthCompareFunction_EqualTo</code></div>
     <div>
     The incoming fragment passes if its depth value is equal to its corresponding depth value in the depth buffer.
     </div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_DepthCompareFunction_NotEqualTo</code></div>
+    <div><code>Arcadia_Engine_Visuals_DepthCompareFunction_NotEqualTo</code></div>
     <div>
     The incoming fragment passes if its depth value is not equal to its corresponding depth value in the depth buffer.
     </div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_DepthCompareFunction_LessThan</code></div>
+    <div><code>Arcadia_Engine_Visuals_DepthCompareFunction_LessThan</code></div>
     <div>
     The incoming fragment passes if its depth value is less than its corresponding depth value in the depth buffer.
     </div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_DepthCompareFunction_LessThanOrEqualTo</code></div>
+    <div><code>Arcadia_Engine_Visuals_DepthCompareFunction_LessThanOrEqualTo</code></div>
     <div>
     The incoming fragment passes if its depth value is less than or equal to its corresponding depth value in the depth buffer.
     </div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_DepthCompareFunction_GreaterThan</code></div>
+    <div><code>Arcadia_Engine_Visuals_DepthCompareFunction_GreaterThan</code></div>
     <div>
     The incoming fragment passes if its depth value is greater than its corresponding depth value in the depth buffer.
     </div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_DepthCompareFunction_GreaterThanOrEqualTo</code></div>
+    <div><code>Arcadia_Engine_Visuals_DepthCompareFunction_GreaterThanOrEqualTo</code></div>
     <div>
     The incoming fragment passes if its depth value is greater than or equal to its corresponding depth value in the depth buffer.
     </div>
@@ -579,10 +578,10 @@ A depth compare function identifies a technique that compares depth value of an 
 
 <section class="cxx entity enumeration">
 
-  <h1 id="Arcadia_Visuals_FillMode">Arcadia_Visuals_FillMode</h1>
+  <h1 id="Arcadia_Engine_Visuals_FillMode">Arcadia_Engine_Visuals_FillMode</h1>
 
   <my-signature><code>
-  typedef enum Arcadia_Visuals_FillMode Arcadia_Visuals_FillMode;
+  typedef enum Arcadia_Engine_Visuals_FillMode Arcadia_Engine_Visuals_FillMode;
   </code></my-signature>
 
   <my-summary>
@@ -595,17 +594,17 @@ A depth compare function identifies a technique that compares depth value of an 
     <h1>Elements</h1>
 
     <div>
-      <div><code>Arcadia_Visuals_FillMode_Point</code></div>
+      <div><code>Arcadia_Engine_Visuals_FillMode_Point</code></div>
       <div>Polygon vertices that are marked as the start of a boundary edge are drawn as points.</div>
     </div>
 
     <div>
-      <div><code>Arcadia_Visuals_FillMode_Line</code></div>
+      <div><code>Arcadia_Engine_Visuals_FillMode_Line</code></div>
       <div>Boundary edges of the polygon are drawn as line segments.</div>
     </div>
 
     <div class="enumeration-element">
-      <div><code>Arcadia_Visuals_FillMode_Solid</code></div>
+      <div><code>Arcadia_Engine_Visuals_FillMode_Solid</code></div>
       <div>The interior of the polygon is filled.</div>
     </div>
 
@@ -1946,9 +1945,9 @@ Get the number of Bytes of a pixel of a pixel format.
 </section>
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_TextureAddressMode">Arcadia_Visuals_TextureAddressMode</h1>
+<h1 id="Arcadia_Engine_Visuals_TextureAddressMode">Arcadia_Engine_Visuals_TextureAddressMode</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_TextureAddressMode Arcadia_Visuals_TextureAddressMode;
+typedef enum Arcadia_Engine_Visuals_TextureAddressMode Arcadia_Engine_Visuals_TextureAddressMode;
 </code></my-signature>
 
 <my-summary>
@@ -1961,7 +1960,7 @@ A texture address mode identifies a technique for resolving uv coordinates that 
   <h1>Elements</h1>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureAddressMode_ClampToEdge</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureAddressMode_ClampToEdge</code></div>
     <div>
     uv coordinates outside of the range of [0,1] are assigned the color of the uv coordinate at 0 or 1, respectively.
     This usually corresponds to GL_TEXTURE_WRAP_S/GL_TEXTURE_WRAP_T with GL_CLAMP_TO_EDGE in OpenGL and D3D12_TEXTURE_ADDRESS_MODE_CLAMP in Direct3D 12.
@@ -1969,7 +1968,7 @@ A texture address mode identifies a technique for resolving uv coordinates that 
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureAddressMode_ClampToBorder</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureAddressMode_ClampToBorder</code></div>
     <div>
     uv coordinates outside of the range of [0,1] are assigned the border color of the texture.
     This usually corresponds to GL_TEXTURE_WRAP_S/GL_TEXTURE_WRAP_T with GL_CLAMP_TO_BORDER in OpenGL and D3D12_TEXTURE_ADDRESS_MODE_BORDER in Direct3D 12.
@@ -1977,7 +1976,7 @@ A texture address mode identifies a technique for resolving uv coordinates that 
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureAddressMode_Repeat</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureAddressMode_Repeat</code></div>
     <div>
     Tile the texture at every uv coordinate integer junction.
     For example, for the u coordinates between 0 and 3, the texture is repeated three times.
@@ -1986,7 +1985,7 @@ A texture address mode identifies a technique for resolving uv coordinates that 
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureAddressMode_MirroredRepeat</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureAddressMode_MirroredRepeat</code></div>
     <div>
     Tile and flip the texture at every uv coordinate integer junction.
     For example, for the u coordinates between 0 and 3, the texture is repeated three times.
@@ -2001,9 +2000,9 @@ A texture address mode identifies a technique for resolving uv coordinates that 
 </section>
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_TextureFilter">Arcadia_Visuals_TextureFilter</h1>
+<h1 id="Arcadia_Engine_Visuals_TextureFilter">Arcadia_Engine_Visuals_TextureFilter</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_TextureFilter Arcadia_Visuals_TextureFilter;
+typedef enum Arcadia_Engine_Visuals_TextureFilter Arcadia_Engine_Visuals_TextureFilter;
 </code></my-signature>
 
 <my-summary>
@@ -2016,17 +2015,17 @@ A texture filter identifies a technique to compute the pixel value closed to the
   <h1>Elements</h1>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureFilter_Nearest</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureFilter_Nearest</code></div>
     <div>
     Filter using the texture element that is nearest (in Manhatten distance) to the specified uv coordinates.
     </div>
   </div>
   <div>
-    <div><code>Arcadia_Visuals_TextureFilter_Linear</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureFilter_Linear</code></div>
     <div>
     Returns the weighted average of the four texture elements that are closest to the specified uv coordinates.
     These can include items wrapped or repeated from other parts of the texture, depending on the
-    <a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_TextureAddressMode">texture address mode</a>.
+    <a href="https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Engine_Visuals_TextureAddressMode">texture address mode</a>.
     </div>
   </div>
 
@@ -2035,9 +2034,9 @@ A texture filter identifies a technique to compute the pixel value closed to the
 </section>
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_VertexElementSemantics">Arcadia_Visuals_VertexElementSemantics</h1>
+<h1 id="Arcadia_Engine_Visuals_VertexElementSemantics">Arcadia_Engine_Visuals_VertexElementSemantics</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_VertexElementSemantics Arcadia_Visuals_VertexElementSemantics;
+typedef enum Arcadia_Engine_Visuals_VertexElementSemantics Arcadia_Engine_Visuals_VertexElementSemantics;
 </code></my-signature>
 
 <my-summary>
@@ -2049,29 +2048,29 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSemantics_PositionXyz</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSemantics_PositionXyz</code>
     </div>
     <div>
     The vertex element denotes a position coordinate.
-    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32, then this the position coordinate is in XY space (model, local, or global).
-    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32, then this the position coordinate is in XYZ space (model, local, or global).
+    If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32, then this the position coordinate is in XY space (model, local, or global).
+    If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32Real32, then this the position coordinate is in XYZ space (model, local, or global).
     </div>
   </div>
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSemantics_AmbientRgba</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSemantics_AmbientRgba</code>
     </div>
     <div>
     The vertex element denotes an ambient color coordinate.
     <ul>
-      <li>If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32, then the color is in [0,1] RGB space.
+      <li>If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32Real32, then the color is in [0,1] RGB space.
       The first Arcadia_Real32Value indicates the intensity of the red component,
       the second Arcadia_Real32Value indicates the intensity of the green component,
       the third Arcadia_Real32Value indicates the intensity of the blue component.
       0 indicates minimum intensity, 1 indicates maximum intensity.
       </li>
-      <li>If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32Real32, then the color is in [0,1] RGBA space.
+      <li>If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32Real32Real32, then the color is in [0,1] RGBA space.
       The first Arcadia_Real32Value indicates the intensity of the red component,
       the second Arcadia_Real32Value indicates the intensity of the green component,
       the third Arcadia_Real32Value indicates the intensity of the blue component.
@@ -2085,11 +2084,11 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSemantics_AmbientUv</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSemantics_AmbientUv</code>
     </div>
     <div>
     The vertex element denotes a texture coordinates for an ambient texture.
-    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32, then this the texture coordinate is in UV space.
+    If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32, then this the texture coordinate is in UV space.
     </div>
   </div>
 
@@ -2098,9 +2097,9 @@ An enumeration of pixel formats.
 </section>
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_VertexElementSyntactics">Arcadia_Visuals_VertexElementSyntactics</h1>
+<h1 id="Arcadia_Engine_Visuals_VertexElementSyntactics">Arcadia_Engine_Visuals_VertexElementSyntactics</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_VertexElementSyntactics Arcadia_Visuals_VertexElementSyntactics;
+typedef enum Arcadia_Engine_Visuals_VertexElementSyntactics Arcadia_Engine_Visuals_VertexElementSyntactics;
 </code></my-signature>
 
 <my-summary>
@@ -2113,7 +2112,7 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSyntactics_Real32Real32</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32</code>
     </div>
     <div>
     The vertex element consists of two consecutive Arcadia_Real32Value values.
@@ -2122,7 +2121,7 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32Real32</code>
     </div>
     <div>
     The vertex element consists of three consecutive Arcadia_Real32Value values.
@@ -2131,7 +2130,7 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32Real32</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32Real32Real32</code>
     </div>
     <div>
     The vertex element consists of four consecutive Arcadia_Real32Value values.
@@ -2143,9 +2142,9 @@ An enumeration of pixel formats.
 </section>
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_WindingMode">Arcadia_Visuals_WindingMode</h1>
+<h1 id="Arcadia_Engine_Visuals_WindingMode">Arcadia_Engine_Visuals_WindingMode</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_WindingMode Arcadia_Visuals_WindingMode;
+typedef enum Arcadia_Engine_Visuals_WindingMode Arcadia_Engine_Visuals_WindingMode;
 </code></my-signature>
 
 <my-summary>
@@ -2157,12 +2156,12 @@ An enumeration of winding modes.
   <h1>Elements</h1>
 
   <div>
-    <div><code>Arcadia_Visuals_WindingMode_Clockwise</code></div>
+    <div><code>Arcadia_Engine_Visuals_WindingMode_Clockwise</code></div>
     <div>Clockwise winding mode.</div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_WindingMode_CounterClockwise</code></div>
+    <div><code>Arcadia_Engine_Visuals_WindingMode_CounterClockwise</code></div>
     <div>Counter clockwise winding mode.</div>
   </div>
 
@@ -2182,14 +2181,14 @@ An enumeration of winding modes.
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasEvent_construct">[MIL] Arcadia.Visuals.CanvasEvent.construct</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasActivationStateChangedEvent">[MIL] Arcadia.Visuals.CanvasActivationStateChangedEvent</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasActivationStateChangedEvent_construct">[MIL] Arcadia.Visuals.CanvasActivationStateChangedEvent.construct</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasDpiChangedEvent">[MIL] Arcadia.Visuals.CanvasDpiChangedEvent</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasDpiChangedEvent_construct">[MIL] Arcadia.Visuals.CanvasDpiChangedEvent.construct</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasDPIChangedEvent">[MIL] Arcadia.Visuals.CanvasDPIChangedEvent</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasDPIChangedEvent_construct">[MIL] Arcadia.Visuals.CanvasDPIChangedEvent.construct</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasSizeChangedEvent">[MIL] ArcadiaVisuals.CanvasSizeChangedEvent</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CanvasSizeChangedEvent_construct">[MIL] Arcadia.Visuals.CanvasSizeChangedEvent.construct</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_CullMode">Arcadia_Visuals_CullMode</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_DepthCompareFunction">Arcadia_Visuals_DepthCompareFunction</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_CullMode">Arcadia_Engine_Visuals_CullMode</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_DepthCompareFunction">Arcadia_Engine_Visuals_DepthCompareFunction</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_Event">[MIL] Arcadia.Visuals.Event</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_FillMode">Arcadia_Visuals_FillMode</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_FillMode">Arcadia_Engine_Visuals_FillMode</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_KeyboardKey">Arcadia_Visuals_KeyboardKey</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_KeyboardKeyAction">Arcadia_Visuals_KeyboardKeyAction</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_KeyboardKeyEvent">[MIL] Arcadia.Visuals.KeyboardKeyEvent</a></li>
@@ -2205,11 +2204,11 @@ An enumeration of winding modes.
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat">Arcadia_Visuals_PixelFormat</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfComponents">Arcadia_Visuals_PixelFormat_getNumberOfComponents</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfBytes">Arcadia_Visuals_PixelFormat_getNumberOfBytes</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_TextureAddressMode">Arcadia_Visuals_TextureAddressMode</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_TextureFilter">Arcadia_Visuals_TextureFilter</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_VertexElementSemantics">Arcadia_Visuals_VertexElementSemantics</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_VertexElementSyntactics">Arcadia_Visuals_VertexElementSyntactics</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_WindingMode">Arcadia_Visuals_WindingMode</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_TextureAddressMode">Arcadia_Engine_Visuals_TextureAddressMode</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_TextureFilter">Arcadia_Engine_Visuals_TextureFilter</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_VertexElementSemantics">Arcadia_Engine_Visuals_VertexElementSemantics</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_VertexElementSyntactics">Arcadia_Engine_Visuals_VertexElementSyntactics</a></li>
+        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_WindingMode">Arcadia_Engine_Visuals_WindingMode</a></li>
 
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_WindowClosed">[MIL] Arcadia.Visuals.WindowClosed</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_WindowClosed_construct">[MIL] Arcadia.Visuals.WindowClosed.construct</a></li>
@@ -2226,7 +2225,7 @@ An enumeration of winding modes.
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 2 February 2026.</div>
+      <div>Last modified on 11 February 2026.</div>
     </div>
   </footer>
   </body>

@@ -262,3 +262,32 @@ Arcadia_FileSystem_getOrCreate
     Arcadia_Thread* thread
   )
 { return (Arcadia_FileSystem*)Arcadia_DefaultFileSystem_getOrCreate(thread); }
+
+void
+Arcadia_FileSystem_createDirectoryFiles
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileSystem* self,
+    Arcadia_FilePath* path
+  )
+{
+  // Ensure each path component exists.
+  Arcadia_SizeValue n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)path->fileNames);
+  if (!n) {
+    // (2) We cannot create file system roots. Remarks: At this point, path is required to be path->isRelative = true.
+    return;
+  }
+  // (3) Begin at the topmost component.
+  Arcadia_FilePath* temporary = Arcadia_FilePath_clone(thread, path);
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)temporary->fileNames);
+  for (Arcadia_SizeValue i = 0; i < n - 1; ++i) { 
+    Arcadia_String* suffixString = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)path->fileNames, i,
+                                                                                                  _Arcadia_String_getType(thread));
+    Arcadia_FilePath* suffix = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, suffixString), Arcadia_String_getNumberOfBytes(thread, suffixString));
+    Arcadia_FilePath_append(thread, temporary, suffix);
+    // Raises Arcadia_Status_OperationFailed if
+    // - a component exists but is not a directory file
+    // - a component could not be created
+    Arcadia_FileSystem_createDirectoryFile(thread, Arcadia_FileSystem_getOrCreate(thread), temporary);
+  }  
+}

@@ -1,4 +1,4 @@
-@{include("./book/disclaimer.i")}
+@{include("./disclaimer.i")}
 
 <h2>I Introduction</h2>
 

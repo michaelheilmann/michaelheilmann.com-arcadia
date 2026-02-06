@@ -30,7 +30,7 @@ Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.VertexBufferResource
 struct Arcadia_Visuals_Implementation_VertexBufferResourceDispatch {
   Arcadia_Visuals_Implementation_ResourceDispatch _parent;
 
-  void (*setData)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self, Arcadia_Visuals_VertexDescriptor* vertexDescriptor, Arcadia_SizeValue numberOfVertices, const void* bytes, Arcadia_SizeValue numberOfBytes);
+  void (*setData)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self, Arcadia_Engine_Visuals_VertexDescriptor* vertexDescriptor, Arcadia_SizeValue numberOfVertices, const void* bytes, Arcadia_SizeValue numberOfBytes);
   Arcadia_SizeValue (*getNumberOVertices)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_VertexBufferResource* self);
 };
 
@@ -39,7 +39,7 @@ struct Arcadia_Visuals_Implementation_VertexBufferResource {
 
   Arcadia_Natural8Value dirty;
 
-  Arcadia_Visuals_VertexDescriptor* vertexDescriptor;
+  Arcadia_Engine_Visuals_VertexDescriptor* vertexDescriptor;
 
   Arcadia_SizeValue numberOfVertices;
 
@@ -52,7 +52,7 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setData
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_VertexBufferResource* self,
-    Arcadia_Visuals_VertexDescriptor* vertexDescriptor,
+    Arcadia_Engine_Visuals_VertexDescriptor* vertexDescriptor,
     Arcadia_SizeValue numberOfVertices,
     const void* bytes,
     Arcadia_SizeValue numberOfBytes

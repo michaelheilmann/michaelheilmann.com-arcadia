@@ -17,30 +17,30 @@
 #include "Arcadia/Visuals/WindowBackend.h"
 
 static void
-Arcadia_Visuals_WindowBackend_constructImpl
+Arcadia_Engine_Visuals_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 static void
-Arcadia_Visuals_WindowBackend_initializeDispatchImpl
+Arcadia_Engine_Visuals_WindowBackend_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackendDispatch* self
+    Arcadia_Engine_Visuals_WindowBackendDispatch* self
   );
 
 static void
-Arcadia_Visuals_WindowBackend_visit
+Arcadia_Engine_Visuals_WindowBackend_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_WindowBackend_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_WindowBackend_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_WindowBackend_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_WindowBackend_visit,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -48,18 +48,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.WindowBackend", Arcadia_Visuals_WindowBackend,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.WindowBackend", Arcadia_Engine_Visuals_WindowBackend,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_WindowBackend_constructImpl
+Arcadia_Engine_Visuals_WindowBackend_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_WindowBackend_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_WindowBackend_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -83,18 +83,18 @@ Arcadia_Visuals_WindowBackend_constructImpl
 }
 
 static void
-Arcadia_Visuals_WindowBackend_initializeDispatchImpl
+Arcadia_Engine_Visuals_WindowBackend_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackendDispatch* self
+    Arcadia_Engine_Visuals_WindowBackendDispatch* self
   )
 { }
 
 static void
-Arcadia_Visuals_WindowBackend_visit
+Arcadia_Engine_Visuals_WindowBackend_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
 {
   if (self->title) {
@@ -106,179 +106,179 @@ Arcadia_Visuals_WindowBackend_visit
 }
 
 void
-Arcadia_Visuals_WindowBackend_open
+Arcadia_Engine_Visuals_WindowBackend_open
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, open, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, open, self); }
 
 void
-Arcadia_Visuals_WindowBackend_close
+Arcadia_Engine_Visuals_WindowBackend_close
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, close, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, close, self); }
 
 void
-Arcadia_Visuals_WindowBackend_update
+Arcadia_Engine_Visuals_WindowBackend_update
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, update, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, update, self); }
 
 void
-Arcadia_Visuals_WindowBackend_getRequiredBigIconSize
+Arcadia_Engine_Visuals_WindowBackend_getRequiredBigIconSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, getRequiredBigIconSize, self, width, height); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, getRequiredBigIconSize, self, width, height); }
 
 void
-Arcadia_Visuals_WindowBackend_getRequiredSmallIconSize
+Arcadia_Engine_Visuals_WindowBackend_getRequiredSmallIconSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, getRequiredSmallIconSize, self, width, height); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, getRequiredSmallIconSize, self, width, height); }
 
-Arcadia_Visuals_Icon*
-Arcadia_Visuals_WindowBackend_getBigIcon
+Arcadia_Engine_Visuals_Icon*
+Arcadia_Engine_Visuals_WindowBackend_getBigIcon
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_WindowBackend, getBigIcon, self); }
-
-void
-Arcadia_Visuals_WindowBackend_setBigIcon
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
-    Arcadia_Visuals_Icon* icon
-  )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, setBigIcon, self, icon); }
-
-Arcadia_Visuals_Icon*
-Arcadia_Visuals_WindowBackend_getSmallIcon
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
-  )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_WindowBackend, getSmallIcon, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_WindowBackend, getBigIcon, self); }
 
 void
-Arcadia_Visuals_WindowBackend_setSmallIcon
+Arcadia_Engine_Visuals_WindowBackend_setBigIcon
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
-    Arcadia_Visuals_Icon* icon
+    Arcadia_Engine_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_Icon* icon
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, setSmallIcon, self, icon); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, setBigIcon, self, icon); }
+
+Arcadia_Engine_Visuals_Icon*
+Arcadia_Engine_Visuals_WindowBackend_getSmallIcon
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_WindowBackend* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_WindowBackend, getSmallIcon, self); }
+
+void
+Arcadia_Engine_Visuals_WindowBackend_setSmallIcon
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_Icon* icon
+  )
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, setSmallIcon, self, icon); }
 
 Arcadia_String*
-Arcadia_Visuals_WindowBackend_getTitle
+Arcadia_Engine_Visuals_WindowBackend_getTitle
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_WindowBackend, getTitle, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_WindowBackend, getTitle, self); }
 
 void
-Arcadia_Visuals_WindowBackend_setTitle
+Arcadia_Engine_Visuals_WindowBackend_setTitle
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_String* title
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, setTitle, self, title); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, setTitle, self, title); }
 
 void
-Arcadia_Visuals_WindowBackend_getCanvasSize
+Arcadia_Engine_Visuals_WindowBackend_getCanvasSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, getCanvasSize, self, width, height); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, getCanvasSize, self, width, height); }
 
 void
-Arcadia_Visuals_WindowBackend_beginRender
+Arcadia_Engine_Visuals_WindowBackend_beginRender
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, beginRender, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, beginRender, self); }
 
 void
-Arcadia_Visuals_WindowBackend_endRender
+Arcadia_Engine_Visuals_WindowBackend_endRender
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, endRender, self); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, endRender, self); }
 
 void
-Arcadia_Visuals_WindowBackend_setPosition
+Arcadia_Engine_Visuals_WindowBackend_setPosition
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value left,
     Arcadia_Integer32Value top
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, setPosition, self, left, top); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, setPosition, self, left, top); }
 
 void
-Arcadia_Visuals_WindowBackend_getPosition
+Arcadia_Engine_Visuals_WindowBackend_getPosition
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, getPosition, self, left, top); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, getPosition, self, left, top); }
 
 void
-Arcadia_Visuals_WindowBackend_setSize
+Arcadia_Engine_Visuals_WindowBackend_setSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, setSize, self, width, height); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, setSize, self, width, height); }
 
 void
-Arcadia_Visuals_WindowBackend_getSize
+Arcadia_Engine_Visuals_WindowBackend_getSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, getSize, self, width, height); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, getSize, self, width, height); }
 
 Arcadia_BooleanValue
-Arcadia_Visuals_WindowBackend_getFullscreen
+Arcadia_Engine_Visuals_WindowBackend_getFullscreen
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_WindowBackend, getFullscreen, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_WindowBackend, getFullscreen, self); }
 
 void
-Arcadia_Visuals_WindowBackend_setFullscreen
+Arcadia_Engine_Visuals_WindowBackend_setFullscreen
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_BooleanValue fullscreen
   )
-{ Arcadia_VirtualCall(Arcadia_Visuals_WindowBackend, setFullscreen, self, fullscreen); }
+{ Arcadia_VirtualCall(Arcadia_Engine_Visuals_WindowBackend, setFullscreen, self, fullscreen); }

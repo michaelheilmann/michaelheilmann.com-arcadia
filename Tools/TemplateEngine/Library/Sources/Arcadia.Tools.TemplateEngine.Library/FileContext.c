@@ -17,7 +17,8 @@
 
 #include <stdio.h> // @todo Remove references to `stdio.h`.
 
-#include "Arcadia.Tools.TemplateEngine.Library/Ast.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Directives/Parser.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Directives/Tree.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Context.h"
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 
@@ -36,166 +37,15 @@ is
   return expectedCodePoint == currentCodePoint;
 }
 
-static Arcadia_BooleanValue
-isSign
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  return is(thread, context, '+') || is(thread, context, '-');
-}
-
-static Arcadia_BooleanValue
-isLetter
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
-    return Arcadia_BooleanValue_False;
-  }
-  Arcadia_Natural32Value current = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
-  return ('A' <= current && current <= 'Z')
-      || ('a' <= current && current <= 'z');
-}
-
-static Arcadia_BooleanValue
-isDigit
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
-    return Arcadia_BooleanValue_False;
-  }
-  Arcadia_Natural32Value current = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
-  return ('0' <= current && current <= '9');
-}
-
-static Arcadia_BooleanValue
-isUnderscore
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  return is(thread, context, '_');
-}
-
-static Arcadia_BooleanValue
-isLeftParenthesis
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  return is(thread, context, '(');
-}
-
-static Arcadia_BooleanValue
-isRightParenthesis
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  return is(thread, context, ')');
-}
-
-static void
-onIdentifier
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  if (!isUnderscore(thread, context) && !isLetter(thread, context)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  do {
-    Arcadia_Natural32Value targetCodePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
-    Arcadia_UTF8Writer_writeCodePoints(thread, context->context->temporary, &targetCodePoint, 1);
-    Arcadia_UTF8Reader_next(thread, context->reader);
-  } while (isUnderscore(thread, context) || isLetter(thread, context) || isDigit(thread, context));
-}
-
-static void
-onString
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  if (!is(thread, context, '"')) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_UTF8Reader_next(thread, context->reader);
-
-  Arcadia_BooleanValue lastWasSlash = Arcadia_BooleanValue_False;
-  while (true) {
-    if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_Natural32Value current = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
-    if (lastWasSlash) {
-      switch (current) {
-        case '\\': {
-          Arcadia_Natural32Value targetCodePoint = '\\';
-          Arcadia_UTF8Writer_writeCodePoints(thread, context->context->temporary, &targetCodePoint, 1);
-          lastWasSlash = Arcadia_BooleanValue_False;
-        } break;
-        case '"': {
-          Arcadia_Natural32Value targetCodePoint = '"';
-          Arcadia_UTF8Writer_writeCodePoints(thread, context->context->temporary, &targetCodePoint, 1);
-          lastWasSlash = Arcadia_BooleanValue_False;
-        } break;
-        default: {
-          Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-          Arcadia_Thread_jump(thread);
-        } break;
-      };
-    } else {
-      if (current == '"') {
-        Arcadia_UTF8Reader_next(thread, context->reader);
-        return;
-      } else if (current == '\\') {
-        lastWasSlash = Arcadia_BooleanValue_True;
-        Arcadia_UTF8Reader_next(thread, context->reader);
-      } else {
-        Arcadia_UTF8Writer_writeCodePoints(thread, context->context->temporary, &current, 1);
-        Arcadia_UTF8Reader_next(thread, context->reader);
-      }
-    }
-  }
-  Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-  Arcadia_Thread_jump(thread);
-}
-
-static Arcadia_String*
-getLiteral
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  return Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, context->context->temporaryBuffer->p, context->context->temporaryBuffer->sz));
-}
-
 static void
 evalInvoke
   (
     Arcadia_Thread* thread,
     FileContext* context,
-    Ast* ast
+    Directives_Tree* ast
   )
 {
-  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->name);
+  Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->invoke.name);
   Arcadia_Value v = Environment_get(thread, context->environment, k, Arcadia_BooleanValue_True);
   if (Arcadia_Value_isVoidValue(&v)) {
     // Error.
@@ -224,37 +74,26 @@ evalInvoke
   Arcadia_ForeignProcedure* p = Arcadia_Value_getForeignProcedureValue(&v);
   Arcadia_Value targetValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
 
-#if 0
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-#endif
-    Arcadia_SizeValue oldStackSize = Arcadia_ValueStack_getSize(thread);
-    Arcadia_SizeValue numberOfValues = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->arguments);
-    if (numberOfValues > Arcadia_Natural8Value_Maximum - 1) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    for (Arcadia_SizeValue i = 0, n = numberOfValues; i < n; ++i) {
-      Arcadia_Value temporary = Arcadia_List_getAt(thread, ast->arguments, i);
-      Arcadia_ValueStack_pushValue(thread, &temporary);
-    }
-    Arcadia_ValueStack_pushNatural8Value(thread, numberOfValues);
-    (*p)(thread);
-    if (oldStackSize > Arcadia_ValueStack_getSize(thread) || (Arcadia_ValueStack_getSize(thread) - oldStackSize) != 1) {
-      Arcadia_ValueStack_popValues(thread, Arcadia_ValueStack_getSize(thread) - oldStackSize);
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
-      Arcadia_Thread_jump(thread);
-    }
-    targetValue = Arcadia_ValueStack_getValue(thread, 0);
-    Arcadia_ValueStack_popValues(thread, 1);
-#if 0
-    Arcadia_Thread_popJumpTarget(thread);
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
+  Arcadia_SizeValue oldStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_SizeValue numberOfValues = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->invoke.arguments);
+  if (numberOfValues > Arcadia_Natural8Value_Maximum - 1) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-#endif
+  for (Arcadia_SizeValue i = 0, n = numberOfValues; i < n; ++i) {
+    Arcadia_Value temporary = Arcadia_List_getAt(thread, ast->invoke.arguments, i);
+    Arcadia_ValueStack_pushValue(thread, &temporary);
+  }
+  Arcadia_ValueStack_pushNatural8Value(thread, numberOfValues);
+  (*p)(thread);
+  if (oldStackSize > Arcadia_ValueStack_getSize(thread) || (Arcadia_ValueStack_getSize(thread) - oldStackSize) != 1) {
+    Arcadia_ValueStack_popValues(thread, Arcadia_ValueStack_getSize(thread) - oldStackSize);
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+    Arcadia_Thread_jump(thread);
+  }
+  targetValue = Arcadia_ValueStack_getValue(thread, 0);
+  Arcadia_ValueStack_popValues(thread, 1);
+
 
   Arcadia_String* string = NULL;
   if (Arcadia_Value_isInteger16Value(&targetValue)) {
@@ -285,12 +124,16 @@ evalAst
   (
     Arcadia_Thread* thread,
     FileContext* context,
-    Ast* ast
+    Directives_Tree* ast
   )
 {
   switch (ast->type) {
-    case Arcadia_TemplateEngine_AstKind_GetVariable: {
-      Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->name);
+    case Directives_TreeKind_At: {
+      Arcadia_Natural32Value targetCodePoint = '@';
+      Arcadia_UTF8Writer_writeCodePoints(thread, context->context->target, &targetCodePoint, 1);
+    } break;
+    case Directives_TreeKind_GetVariable: {
+      Arcadia_Value k = Arcadia_Value_makeObjectReferenceValue((Arcadia_ObjectReferenceValue)ast->getVariable.name);
       Arcadia_Value v = Environment_get(thread, context->environment, k, Arcadia_BooleanValue_True);
       if (Arcadia_Value_isVoidValue(&v)) {
         // Error.
@@ -324,13 +167,13 @@ evalAst
       }
       Arcadia_ByteBuffer_insertBackBytes(thread, context->context->targetBuffer, Arcadia_String_getBytes(thread, (Arcadia_String*)object), Arcadia_String_getNumberOfBytes(thread, (Arcadia_String*)object));
     } break;
-    case Arcadia_TemplateEngine_AstKind_Invoke: {
-      if (Arcadia_String_isEqualTo_pn(thread, ast->name, u8"include", sizeof(u8"include") - 1)) {
-        if (1 != Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->arguments)) {
+    case Directives_TreeKind_Invoke: {
+      if (Arcadia_String_isEqualTo_pn(thread, ast->invoke.name, u8"include", sizeof(u8"include") - 1)) {
+        if (1 != Arcadia_Collection_getSize(thread, (Arcadia_Collection*)ast->invoke.arguments)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
           Arcadia_Thread_jump(thread);
         }
-        Arcadia_Object* object = Arcadia_List_getObjectReferenceValueAt(thread, ast->arguments, 0);
+        Arcadia_Object* object = Arcadia_List_getObjectReferenceValueAt(thread, ast->invoke.arguments, 0);
         if (!Arcadia_Object_isInstanceOf(thread, object, _Arcadia_String_getType(thread))) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
           Arcadia_Thread_jump(thread);
@@ -345,88 +188,24 @@ evalAst
         evalInvoke(thread, context, ast);
       }
     } break;
-    default: {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
-    } break;
-  }
-}
-
-static Ast*
-onExpression
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  Ast* ast = NULL;
-  Arcadia_ByteBuffer_clear(thread, context->context->temporaryBuffer);
-  onIdentifier(thread, context);
-  Arcadia_String* name = getLiteral(thread, context);
-  Arcadia_String* argument = NULL;
-  if (isLeftParenthesis(thread, context)) {
-    ast = Ast_create(thread, Arcadia_TemplateEngine_AstKind_Invoke, name);
-    Arcadia_UTF8Reader_next(thread, context->reader);
-    if (is(thread, context, '"')) {
-      Arcadia_ByteBuffer_clear(thread, context->context->temporaryBuffer);
-      onString(thread, context);
-      argument = getLiteral(thread, context);
-      Arcadia_List_insertBackObjectReferenceValue(thread, ast->arguments, (Arcadia_ObjectReferenceValue)argument);
-    }
-    if (!isRightParenthesis(thread, context)) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_UTF8Reader_next(thread, context->reader);
-  } else {
-    ast = Ast_create(thread, Arcadia_TemplateEngine_AstKind_GetVariable, name);
-  }
-  return ast;
-}
-
-static void
-onStatement
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  Ast* ast = onExpression(thread, context);
-  evalAst(thread, context, ast);
-}
-
-static void
-onDirective
-  (
-    Arcadia_Thread* thread,
-    FileContext* context
-  )
-{
-  if (!Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural32Value current = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
-  switch (current) {
-    case '@': {
-      Arcadia_Natural32Value targetCodePoint = '@';
-      Arcadia_UTF8Writer_writeCodePoints(thread, context->context->target, &targetCodePoint, 1);
-      Arcadia_UTF8Reader_next(thread, context->reader);
-    } break;
-    case '{': {
-      Arcadia_UTF8Reader_next(thread, context->reader);
-      onStatement(thread, context);
-      if (!is(thread, context, '}')) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-        Arcadia_Thread_jump(thread);
-      }
-      Arcadia_UTF8Reader_next(thread, context->reader);
+    case Directives_TreeKind_String: {
+      Arcadia_UTF8Writer_writeString(thread, context->context->target, ast->string);
     } break;
     default: {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     } break;
-  };
+  }
+}
+
+static Directives_Tree*
+parseDirective
+  (
+    Arcadia_Thread* thread,
+    FileContext* context
+  )
+{
+  return Directives_Parser_run(thread, context->parser);
 }
 
 static void
@@ -503,6 +282,9 @@ FileContext_visit
   if (self->includingFilePath) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->includingFilePath);
   }
+  if (self->parser) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->parser);
+  }
 }
 
 static void
@@ -535,6 +317,8 @@ FileContext_constructImpl
 
   self->reader = NULL;
 
+  self->parser = NULL;
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
@@ -564,7 +348,6 @@ FileContext_create
   Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_ObjectReferenceValue)includedFilePath);
   Arcadia_ValueStack_pushNatural8Value(thread, 4);
   ARCADIA_CREATEOBJECT(FileContext);
-
 }
 
 void
@@ -598,12 +381,17 @@ FileContext_execute
   }
 
   context->reader = (Arcadia_UTF8Reader*)Arcadia_UTF8ByteBufferReader_create(thread, sourceByteBuffer);
+  if (!context->parser) {
+    context->parser = Directives_Parser_create(thread, Arcadia_FilePath_toGeneric(thread, context->includedFilePath), 0, context->reader);
+  }
 
   while (Arcadia_UTF8Reader_hasCodePoint(thread, context->reader)) {
     Arcadia_Natural32Value sourceCodePoint = Arcadia_UTF8Reader_getCodePoint(thread, context->reader);
     if (sourceCodePoint == '@') {
       Arcadia_UTF8Reader_next(thread, context->reader);
-      onDirective(thread, context);
+      Directives_Parser_setInput(thread, context->parser, Arcadia_FilePath_toGeneric(thread, context->includedFilePath), 1, context->reader);
+      Directives_Tree* ast = parseDirective(thread, context);
+      evalAst(thread, context, ast);
     } else {
       Arcadia_Natural32Value targetCodePoint = sourceCodePoint;
       Arcadia_UTF8Writer_writeCodePoints(thread, context->context->target, &targetCodePoint, 1);

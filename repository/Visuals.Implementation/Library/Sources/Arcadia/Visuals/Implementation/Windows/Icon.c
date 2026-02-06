@@ -48,7 +48,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.Windows.Icon", Arcadia_Visuals_Implementation_Windows_Icon,
-                         u8"Arcadia.Visuals.Icon", Arcadia_Visuals_Icon,
+                         u8"Arcadia.Engine.Visuals.Icon", Arcadia_Engine_Visuals_Icon,
                          &_typeOperations);
 
 static void
@@ -67,8 +67,8 @@ Arcadia_Visuals_Implementation_Windows_Icon_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues1) {
+  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -198,7 +198,7 @@ Arcadia_Visuals_Implementation_Windows_Icon_constructImpl
 
   self->hIcon = hIcon;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void

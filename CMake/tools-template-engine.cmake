@@ -68,16 +68,43 @@ macro(EndTemplateEngine)
       list(GET ${target}.templateEngine.sources ${i} sourceFile)
       list(GET ${target}.templateEngine.targets ${i} targetFile)
       list(GET ${target}.templateEngine.environments ${i} environmentFile)
+      
+      cmake_path(IS_ABSOLUTE sourceFile isAbsolute)
+      if (NOT isAbsolute)
+        message(FATAL_ERROR "source file path is not absolute")
+      endif()
+      
+      cmake_path(IS_ABSOLUTE targetFile isAbsolute)
+      if (NOT isAbsolute)
+        message(FATAL_ERROR "target file path is not absolute")
+      endif()
+    
+      cmake_path(IS_ABSOLUTE environmentFile isAbsolute)
+      if (NOT isAbsolute)
+        message(FATAL_ERROR "environment file path is not absolute")
+      endif()
+      
+      # Compute the path of the dependencies file from the source file.
+      set(dependenciesFile "${sourceFile}")
+      cmake_path(RELATIVE_PATH dependenciesFile BASE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE dependenciesFile)
+      cmake_path(ABSOLUTE_PATH dependenciesFile BASE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} OUTPUT_VARIABLE dependenciesFile)
+      cmake_path(APPEND_STRING dependenciesFile ".dependencies" OUTPUT_VARIABLE dependenciesFile)
+
+      cmake_path(IS_ABSOLUTE dependenciesFile isAbsolute)
+      if (NOT isAbsolute)
+        message(FATAL_ERROR "dependencies file path is not absolute")
+      endif()
+      message(STATUS "dependencies file = ${dependenciesFile}")
 
       #message(STATUS " - ${target} copy file `${sourceFile}` to `${targetFile}")
       
       # Add custom command and custom target.
       add_custom_command(OUTPUT ${targetFile}
-                         COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}" --dependencies="${sourceFile}.dependencies"
+                         COMMAND $<TARGET_FILE:${MyProjectName}.Tools.TemplateEngine> --source="${sourceFile}" --target="${targetFile}" --environment="${environmentFile}" --dependencies="${dependenciesFile}"
                          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                          VERBATIM
-                         DEPFILE "${sourceFile}.dependencies"
-                         COMMENT "${sourceFile} / ${environmentFile} => ${targetFile}"
+                         DEPFILE "${dependenciesFile}"
+                         COMMENT "${sourceFile} / ${environmentFile} => ${targetFile} / ${dependenciesFile}"
                          DEPENDS ${MyProjectName}.Tools.TemplateEngine ${sourceFile} ${environmentFile})
       set_source_files_properties(${targetFile} PROPERTIES GENERATED 1)
       string(RANDOM LENGTH 64 randomLength)

@@ -21,56 +21,56 @@
 #endif
 #include "Arcadia/Engine/Include.h"
 #include "Arcadia/Imaging/Include.h"
-#include "Arcadia/Visuals/Icon.h"
-typedef struct Arcadia_Visuals_Window Arcadia_Visuals_Window;
+#include "Arcadia/Engine/Visuals/Icon.h"
+typedef struct Arcadia_Engine_Visuals_Window Arcadia_Engine_Visuals_Window;
 
 // "Arcadia.Visuals.WindowBackend" is the ancestor class of all window backends.
 // An instance of this in "closed" state when it is created.
 // A successful call to "Arcadia.Visuals.WindowBackend.open" puts the window in "opened" state.
 // The window is put in "closed" state if it is destructed or by a successful call to "Arcadia.Visuals.WindowBackend.close".
-Arcadia_declareObjectType(u8"Arcadia.Visuals.WindowBackend", Arcadia_Visuals_WindowBackend,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.WindowBackend", Arcadia_Engine_Visuals_WindowBackend,
                           u8"Arcadia.Object");
 
-struct Arcadia_Visuals_WindowBackendDispatch {
+struct Arcadia_Engine_Visuals_WindowBackendDispatch {
   Arcadia_ObjectDispatch _parent;
 
-  void (*open)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
-  void (*close)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
-  void (*update)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
+  void (*open)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*);
+  void (*close)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*);
+  void (*update)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*);
 
-  void (*getRequiredBigIconSize)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*getRequiredBigIconSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
-  void (*getRequiredSmallIconSize)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*getRequiredSmallIconSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
-  Arcadia_Visuals_Icon* (*getBigIcon)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
-  void (*setBigIcon)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*);
+  Arcadia_Engine_Visuals_Icon* (*getBigIcon)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*);
+  void (*setBigIcon)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Engine_Visuals_Icon*);
 
-  Arcadia_Visuals_Icon* (*getSmallIcon)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend* self);
-  void (*setSmallIcon)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*);
+  Arcadia_Engine_Visuals_Icon* (*getSmallIcon)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend* self);
+  void (*setSmallIcon)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Engine_Visuals_Icon*);
 
-  Arcadia_String* (*getTitle)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
-  void (*setTitle)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_String*);
+  Arcadia_String* (*getTitle)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*);
+  void (*setTitle)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_String*);
 
-  void (*getCanvasSize)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*getCanvasSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
-  void (*beginRender)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
-  void (*endRender)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
+  void (*beginRender)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*);
+  void (*endRender)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*);
 
-  void (*setPosition)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value);
-  void (*getPosition)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*setPosition)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value);
+  void (*getPosition)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
-  void (*setSize)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value);
-  void (*getSize)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
+  void (*setSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value);
+  void (*getSize)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*);
 
-  Arcadia_BooleanValue(*getFullscreen)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*);
-  void (*setFullscreen)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_BooleanValue);
+  Arcadia_BooleanValue(*getFullscreen)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*);
+  void (*setFullscreen)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_BooleanValue);
 };
 
-struct Arcadia_Visuals_WindowBackend {
+struct Arcadia_Engine_Visuals_WindowBackend {
   Arcadia_Object _parent;
 
   // Pointer to the window backend if any, a null pointer otherwise.
-  Arcadia_Visuals_Window* window;
+  Arcadia_Engine_Visuals_Window* window;
 
   // #Arcadia_BooleanValue_True if the window is a fullscreen window.
   // #Arcadia_BooleanValue_False otherwise.
@@ -100,29 +100,29 @@ struct Arcadia_Visuals_WindowBackend {
 /// @brief Ensure this window is opened.
 /// @param self A pointer to this window.
 void
-Arcadia_Visuals_WindowBackend_open
+Arcadia_Engine_Visuals_WindowBackend_open
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief Ensure this window is closed.
 /// @param self A pointer to this window.
 void
-Arcadia_Visuals_WindowBackend_close
+Arcadia_Engine_Visuals_WindowBackend_close
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief Update this window.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this window.
 void
-Arcadia_Visuals_WindowBackend_update
+Arcadia_Engine_Visuals_WindowBackend_update
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief Get the size (width and height), in pixels, of a big window icon.
@@ -133,10 +133,10 @@ Arcadia_Visuals_WindowBackend_update
 /// - <code>*width</code> was assigned the width, in pixels, required for a big window icon.
 /// - <code>*height</code> was assigned the height, in pixels, required for a big window icon.
 void
-Arcadia_Visuals_WindowBackend_getRequiredBigIconSize
+Arcadia_Engine_Visuals_WindowBackend_getRequiredBigIconSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -149,10 +149,10 @@ Arcadia_Visuals_WindowBackend_getRequiredBigIconSize
 /// - <code>*width</code> was assigned the width, in pixels, required for a small window icon.
 /// - <code>*height</code> was assigned the height, in pixels, required for a small window icon.
 void
-Arcadia_Visuals_WindowBackend_getRequiredSmallIconSize
+Arcadia_Engine_Visuals_WindowBackend_getRequiredSmallIconSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -160,11 +160,11 @@ Arcadia_Visuals_WindowBackend_getRequiredSmallIconSize
 /// @brief Get the big icon.
 /// @param self A pointer to this window.
 /// @return A pointer to the icon that is currently assigned. A null pointer of no icon is currently assigned.
-Arcadia_Visuals_Icon*
-Arcadia_Visuals_WindowBackend_getBigIcon
+Arcadia_Engine_Visuals_Icon*
+Arcadia_Engine_Visuals_WindowBackend_getBigIcon
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief Set or remove the big icon.
@@ -172,21 +172,21 @@ Arcadia_Visuals_WindowBackend_getBigIcon
 /// @param icon A pointer to the icon to be assigned.
 /// Pass a null pointer to remove the icon that is currently assigned.
 void
-Arcadia_Visuals_WindowBackend_setBigIcon
+Arcadia_Engine_Visuals_WindowBackend_setBigIcon
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
-    Arcadia_Visuals_Icon* icon
+    Arcadia_Engine_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_Icon* icon
   );
 
 /// @brief Get the small icon.
 /// @param self A pointer to this window.
 /// @return A pointer to the icon that is currently assigned. A null pointer of no icon is currently assigned.
-Arcadia_Visuals_Icon*
-Arcadia_Visuals_WindowBackend_getSmallIcon
+Arcadia_Engine_Visuals_Icon*
+Arcadia_Engine_Visuals_WindowBackend_getSmallIcon
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief Set or remove the small icon.
@@ -194,31 +194,31 @@ Arcadia_Visuals_WindowBackend_getSmallIcon
 /// @param icon A pointer to the icon to be assigned.
 /// Pass a null pointer to remove the icon that is currently assigned.
 void
-Arcadia_Visuals_WindowBackend_setSmallIcon
+Arcadia_Engine_Visuals_WindowBackend_setSmallIcon
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
-    Arcadia_Visuals_Icon* icon
+    Arcadia_Engine_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_Icon* icon
   );
 
 /// @brief Get the title.
 /// @param self A pointer to this window.
 /// @return The title.
 Arcadia_String*
-Arcadia_Visuals_WindowBackend_getTitle
+Arcadia_Engine_Visuals_WindowBackend_getTitle
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief Set the title.
 /// @param self A pointer to this window.
 /// @param title The title.
 void
-Arcadia_Visuals_WindowBackend_setTitle
+Arcadia_Engine_Visuals_WindowBackend_setTitle
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_String* title
   );
 
@@ -229,10 +229,10 @@ Arcadia_Visuals_WindowBackend_setTitle
 /// @param height A pointer to a <code>Arcadia_Integer32Value</code> variable.
 /// On success, that variable is assigned the height, in pixels, of the canvas.
 void
-Arcadia_Visuals_WindowBackend_getCanvasSize
+Arcadia_Engine_Visuals_WindowBackend_getCanvasSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -241,20 +241,20 @@ Arcadia_Visuals_WindowBackend_getCanvasSize
 /// @param self A pointer to ths window.
 /// @warning The successful calls to Window_beginRender and Window_endRender must be balanced.
 void
-Arcadia_Visuals_WindowBackend_beginRender
+Arcadia_Engine_Visuals_WindowBackend_beginRender
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief End rendering to this window.
 /// @param self A pointer to this window.
 /// @warning The successful calls to Window_beginRender and Window_endRender must be balanced.
 void
-Arcadia_Visuals_WindowBackend_endRender
+Arcadia_Engine_Visuals_WindowBackend_endRender
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief Set the position of this window.
@@ -264,10 +264,10 @@ Arcadia_Visuals_WindowBackend_endRender
 /// This window was assigned the left position @a left.
 /// This window was assigned the top position @ top.
 void
-Arcadia_Visuals_WindowBackend_setPosition
+Arcadia_Engine_Visuals_WindowBackend_setPosition
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value left,
     Arcadia_Integer32Value top
   );
@@ -280,10 +280,10 @@ Arcadia_Visuals_WindowBackend_setPosition
 /// <code>*left</code> was assigned the left position of this window.
 /// <code>*top</code> was assigned the top position of this window.
 void
-Arcadia_Visuals_WindowBackend_getPosition
+Arcadia_Engine_Visuals_WindowBackend_getPosition
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top
   );
@@ -295,10 +295,10 @@ Arcadia_Visuals_WindowBackend_getPosition
 /// This window was assigned the width @a width.
 /// This window was assigned the height @ height.
 void
-Arcadia_Visuals_WindowBackend_setSize
+Arcadia_Engine_Visuals_WindowBackend_setSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value width,
     Arcadia_Integer32Value height
   );
@@ -310,10 +310,10 @@ Arcadia_Visuals_WindowBackend_setSize
 /// <code>*width</code> was assigned the width of this window.
 /// <code>*height</code> was assigned the height of this window.
 void
-Arcadia_Visuals_WindowBackend_getSize
+Arcadia_Engine_Visuals_WindowBackend_getSize
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_Integer32Value* width,
     Arcadia_Integer32Value* height
   );
@@ -322,20 +322,20 @@ Arcadia_Visuals_WindowBackend_getSize
 /// @param self A pointer to this window.
 /// @return #Arcadia_BooleanValue_True if this window is a fullscreen window. #Arcadia_BooleanValue_False if this window is a non-fullscreen window.
 Arcadia_BooleanValue
-Arcadia_Visuals_WindowBackend_getFullscreen
+Arcadia_Engine_Visuals_WindowBackend_getFullscreen
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self
+    Arcadia_Engine_Visuals_WindowBackend* self
   );
 
 /// @brief Set if this window is a fullscreen window.
 /// @param self A pointer to this window.
 /// @param fullscreen #Arcadia_BooleanValue_True makes this window a fullscreen window. #Arcadia_BooleanValue_False makes this window a non-fullscreen window.
 void
-Arcadia_Visuals_WindowBackend_setFullscreen
+Arcadia_Engine_Visuals_WindowBackend_setFullscreen
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_WindowBackend* self,
+    Arcadia_Engine_Visuals_WindowBackend* self,
     Arcadia_BooleanValue fullscreen
   );
 

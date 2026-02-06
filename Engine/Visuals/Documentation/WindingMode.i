@@ -1,7 +1,7 @@
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_WindingMode">Arcadia_Visuals_WindingMode</h1>
+<h1 id="Arcadia_Engine_Visuals_WindingMode">Arcadia_Engine_Visuals_WindingMode</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_WindingMode Arcadia_Visuals_WindingMode;
+typedef enum Arcadia_Engine_Visuals_WindingMode Arcadia_Engine_Visuals_WindingMode;
 </code></my-signature>
 
 <my-summary>
@@ -13,12 +13,12 @@ An enumeration of winding modes.
   <h1>Elements</h1>
 
   <div>
-    <div><code>Arcadia_Visuals_WindingMode_Clockwise</code></div>
+    <div><code>Arcadia_Engine_Visuals_WindingMode_Clockwise</code></div>
     <div>Clockwise winding mode.</div>
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_WindingMode_CounterClockwise</code></div>
+    <div><code>Arcadia_Engine_Visuals_WindingMode_CounterClockwise</code></div>
     <div>Counter clockwise winding mode.</div>
   </div>
 

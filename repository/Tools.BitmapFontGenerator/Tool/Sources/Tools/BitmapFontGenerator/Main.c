@@ -61,8 +61,8 @@ main1
   if (Arcadia_Value_isVoidValue(&target)) {
     Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"target", sizeof(u8"target") - 1)));
   }
-  Arcadia_Visuals_Windows_TextureFont* font = Arcadia_Visuals_Windows_TextureFont_create(thread);
-  Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Visuals_Windows_TextureFont_getPixelBuffer(thread, font);
+  Arcadia_Engine_Visuals_Windows_TextureFont* font = Arcadia_Engine_Visuals_Windows_TextureFont_create(thread);
+  Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Engine_Visuals_Windows_TextureFont_getPixelBuffer(thread, font);
   Arcadia_Imaging_ImageManager* imageManager = Arcadia_Imaging_ImageManager_getOrCreate(thread);
   Arcadia_String* extension = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, u8"png", sizeof(u8"png") - 1)));
   Arcadia_List* writers = Arcadia_Imaging_ImageManager_getWriters(thread, imageManager, extension);

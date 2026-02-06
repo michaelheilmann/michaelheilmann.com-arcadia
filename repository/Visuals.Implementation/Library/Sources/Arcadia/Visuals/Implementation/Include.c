@@ -27,16 +27,16 @@
   #include "Arcadia/Visuals/Implementation/Vulkan/Backend.h"
 #endif
 
-#include "Arcadia/Visuals/Implementation/SceneNodeFactory.h"
+#include "Arcadia/Visuals/Implementation/NodeFactory.h"
 
 void
-Arcadia_Visuals_Implementation_registerSceneNodeFactories
+Arcadia_Visuals_Implementation_registerNodeFactories
   (
     Arcadia_Thread* thread,
     Arcadia_Set* types
   )
 {
-  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_SceneNodeFactory_getType(thread)), NULL);
+  Arcadia_Set_add(thread, types, Arcadia_Value_makeTypeValue(_Arcadia_Visuals_Implementation_NodeFactory_getType(thread)), NULL);
 }
 
 void

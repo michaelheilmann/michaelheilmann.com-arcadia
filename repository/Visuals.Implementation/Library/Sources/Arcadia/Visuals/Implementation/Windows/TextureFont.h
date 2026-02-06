@@ -29,23 +29,23 @@
 ///   constructor()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.TextureFontWindows", Arcadia_Visuals_Windows_TextureFont,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.TextureFontWindows", Arcadia_Engine_Visuals_Windows_TextureFont,
                           u8"Arcadia.Object");
 
-struct Arcadia_Visuals_Windows_TextureFontDispatch {
+struct Arcadia_Engine_Visuals_Windows_TextureFontDispatch {
   Arcadia_ObjectDispatch _parent;
 };
 
-struct Arcadia_Visuals_Windows_TextureFont {
+struct Arcadia_Engine_Visuals_Windows_TextureFont {
   Arcadia_Object _parent;
-  Arcadia_Visuals_Windows_Bitmap* bitmap;
+  Arcadia_Engine_Visuals_Windows_Bitmap* bitmap;
   HFONT hFont;
   HDC hDeviceContext;
   Arcadia_Natural32Value codePoint;
 };
 
-Arcadia_Visuals_Windows_TextureFont*
-Arcadia_Visuals_Windows_TextureFont_create
+Arcadia_Engine_Visuals_Windows_TextureFont*
+Arcadia_Engine_Visuals_Windows_TextureFont_create
   (
     Arcadia_Thread* thread
   );
@@ -54,15 +54,15 @@ void
 TextureFontWindows_setCodePoint
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_TextureFont* self,
+    Arcadia_Engine_Visuals_Windows_TextureFont* self,
     Arcadia_Natural32Value codePoint
   );
 
 Arcadia_Imaging_PixelBuffer*
-Arcadia_Visuals_Windows_TextureFont_getPixelBuffer
+Arcadia_Engine_Visuals_Windows_TextureFont_getPixelBuffer
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_TextureFont* self
+    Arcadia_Engine_Visuals_Windows_TextureFont* self
   );
 
 #endif // ARCADIA_VISUALS_WINDOWS_TEXTUREFONT_H_INCLUDED

@@ -17,29 +17,29 @@
 #define ARCADIA_VISUALS_WINDOWS_DISPLAYMODE_H_INCLUDED
 
 #include "Arcadia/Visuals/Include.h"
-typedef struct Arcadia_Visuals_Windows_DisplayDevice Arcadia_Visuals_Windows_DisplayDevice;
+typedef struct Arcadia_Engine_Visuals_Windows_DisplayDevice Arcadia_Engine_Visuals_Windows_DisplayDevice;
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.DisplayMode", Arcadia_Visuals_Windows_DisplayMode,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.DisplayMode", Arcadia_Engine_Visuals_Windows_DisplayMode,
                           u8"Arcadia.Visuals.DisplayMode");
 
-struct Arcadia_Visuals_Windows_DisplayModeDispatch {
+struct Arcadia_Engine_Visuals_Windows_DisplayModeDispatch {
   Arcadia_Visuals_DisplayModeDispatch _parent;
 };
 
-struct Arcadia_Visuals_Windows_DisplayMode {
+struct Arcadia_Engine_Visuals_Windows_DisplayMode {
   Arcadia_Visuals_DisplayMode _parent;
-  Arcadia_Visuals_Windows_DisplayDevice* device;
+  Arcadia_Engine_Visuals_Windows_DisplayDevice* device;
   Arcadia_Integer32Value horizontalResolution;
   Arcadia_Integer32Value verticalResolution;
   Arcadia_Integer32Value colorDepth;
   Arcadia_Integer32Value frequency;
 };
 
-Arcadia_Visuals_Windows_DisplayMode*
-Arcadia_Visuals_Windows_DisplayMode_create
+Arcadia_Engine_Visuals_Windows_DisplayMode*
+Arcadia_Engine_Visuals_Windows_DisplayMode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* device,
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* device,
     Arcadia_Integer32Value horizontalResolution,
     Arcadia_Integer32Value verticalResolution,
     Arcadia_Integer32Value colorDepth,

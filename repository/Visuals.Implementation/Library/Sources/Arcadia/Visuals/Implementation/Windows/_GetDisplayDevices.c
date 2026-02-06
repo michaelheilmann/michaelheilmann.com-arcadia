@@ -9,7 +9,7 @@ typedef struct EnumDisplayMonitorsContext {
 } EnumDisplayMonitorsContext;
 
 static Arcadia_String*
-Arcadia_Visuals_Windows_System_getAdapterName
+Arcadia_Engine_Visuals_Windows_System_getAdapterName
   (
     Arcadia_Thread* thread,
     const CHAR* p
@@ -31,7 +31,7 @@ Arcadia_Visuals_Windows_System_getAdapterName
 }
 
 static Arcadia_String*
-Arcadia_Visuals_Windows_System_getMonitorName
+Arcadia_Engine_Visuals_Windows_System_getMonitorName
     (
       Arcadia_Thread* thread,
       const CHAR* p
@@ -149,11 +149,11 @@ enumDisplayMonitorsCallback
     // (1) Get the ID.
     Arcadia_String* id = _fromMultiByte(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice, strlen(monitorInfoEx.szDevice));
     // (2) Get the monitor name.
-    Arcadia_String* monitorName = Arcadia_Visuals_Windows_System_getMonitorName(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice);
+    Arcadia_String* monitorName = Arcadia_Engine_Visuals_Windows_System_getMonitorName(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice);
     // (2) Get the adapter name
-    Arcadia_String* adapterName = Arcadia_Visuals_Windows_System_getAdapterName(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice);
+    Arcadia_String* adapterName = Arcadia_Engine_Visuals_Windows_System_getAdapterName(enumDisplayMonitorsContext->thread, monitorInfoEx.szDevice);
 
-    Arcadia_Visuals_Windows_DisplayDevice* displayDevice = Arcadia_Visuals_Windows_DisplayDevice_create(enumDisplayMonitorsContext->thread, id, adapterName, monitorName);
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* displayDevice = Arcadia_Engine_Visuals_Windows_DisplayDevice_create(enumDisplayMonitorsContext->thread, id, adapterName, monitorName);
     displayDevice->left = monitorInfoEx.rcMonitor.left;
     displayDevice->top = monitorInfoEx.rcMonitor.top;
     displayDevice->right = monitorInfoEx.rcMonitor.right;

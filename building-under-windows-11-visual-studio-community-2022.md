@@ -44,19 +44,19 @@ which is either x64 or x86 for Windows. You can explicitly select one of these t
 
 #### Further Options
 
-- `Arcadia.Visuals.Implementation.OpenGL4.Enabled`
-`TRUE` enables OpenGL 4 support in *Arcadia Visuals*, `FALSE` disables it. Default is `FALSE`.
+- `Arcadia.Engine.Visuals.Implementation.OpenGL4.Enabled`
+`TRUE` enables OpenGL 4 support in *Arcadia Engine Visuals*, `FALSE` disables it. Default is `FALSE`.
 \
-To enable OpenGL 4 support, add the parameter `-D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=TRUE` to the cmake command.
-To disable OpenGL 4 support, add the parameter `-D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=FALSE` to the cmake command.
+To enable OpenGL 4 support, add the parameter `-D"Arcadia.Engine.Visuals.Implementation.OpenGL4.Enabled"=TRUE` to the cmake command.
+To disable OpenGL 4 support, add the parameter `-D"Arcadia.Engine.Visuals.Implementation.OpenGL4.Enabled"=FALSE` to the cmake command.
 \
 *Important*: Ensure that the dependencies are installed by executing the script [/install-dependencies.ps1](/install-dependencies.ps1).
 
-- `Arcadia.Audials.Implementation.OpenAL.Enabled`
-`TRUE` enables OpenAL support in *Arcadia Audials*, `FALSE` disables it. Default is `FALSE`.
+- `Arcadia.Engine.Audials.Implementation.OpenAL.Enabled`
+`TRUE` enables OpenAL support in *Arcadia Engine Audials*, `FALSE` disables it. Default is `FALSE`.
 \
-To enable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=TRUE` to the cmake command.
-To disable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=FALSE` to the cmake command.
+To enable OpenAL support, add the parameter `-D"Arcadia.Engine.Audials.Implementation.OpenAL.Enabled"=TRUE` to the cmake command.
+To disable OpenAL support, add the parameter `-D"Arcadia.Engine.Audials.Implementation.OpenAL.Enabled"=FALSE` to the cmake command.
 \
 *Important*: Ensure that the dependencies are installed by executing the script [/install-dependencies.ps1](/install-dependencies.ps1).
 
@@ -64,5 +64,5 @@ To disable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.
 The typical command line for x64 build files is hence:
 ```
 cd C:/build/x64
-cmake C:/sources -A x64 -D"Arcadia.Visuals.Implementation.OpenGL4"=TRUE -D"Arcadia.Audials.Implementation.OpenAL"=TRUE
+cmake C:/sources -A x64 -D"Arcadia.Engine.Visuals.Implementation.OpenGL4"=TRUE -D"Arcadia.Engine.Audials.Implementation.OpenAL"=TRUE
 ```

@@ -15,7 +15,7 @@
 
 #include "Arcadia.Tools.TemplateEngine.Library/Environment.h"
 
-#include "Arcadia.Tools.TemplateEngine.Library/Ast.h"
+#include "Arcadia.Tools.TemplateEngine.Library/Directives/Tree.h"
 #include "Arcadia/DDL/Include.h"
 
 static void
@@ -85,12 +85,8 @@ Environment_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  if (1 != numberOfArgumentValues1) {
+  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (1 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -101,7 +97,7 @@ Environment_constructImpl
   }
   self->variables = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void

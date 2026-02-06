@@ -22,9 +22,9 @@
 
 #include "Arcadia/Audials/Backend.h"
 #include "Arcadia/Audials/BackendContext.h"
-#include "Arcadia/Audials/Scene/Node.h"
-#include "Arcadia/Audials/Scene/SoundSourceNode.h"
-#include "Arcadia/Audials/SceneNodeFactory.h"
+#include "Arcadia/Engine/Audials/Node.h"
+#include "Arcadia/Engine/Audials/NodeFactory.h"
+#include "Arcadia/Engine/Audials/Nodes/SoundSourceNode.h"
 
 #undef ARCADIA_AUDIALS_PRIVATE
 #pragma pop_macro("ARCADIA_AUDIALS_PRIVATE")

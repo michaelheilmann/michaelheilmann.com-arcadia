@@ -74,6 +74,22 @@ Arcadia_Engine_Demo_MainMenuScene_handleKeyboardKeyEventImpl
     Arcadia_Visuals_KeyboardKeyEvent* event
   );
 
+static void
+Arcadia_Engine_Demo_MainMenuScene_handleMouseButtonEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainMenuScene* self,
+    Arcadia_Visuals_MouseButtonEvent* event
+  );
+
+static void
+Arcadia_Engine_Demo_MainMenuScene_handleMousePointerEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainMenuScene* self,
+    Arcadia_Visuals_MousePointerEvent* event
+  );
+
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_Demo_MainMenuScene_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Demo_MainMenuScene_constructImpl,
@@ -116,7 +132,6 @@ Arcadia_Engine_Demo_MainMenuScene_constructImpl
   self->renderingContextNode = NULL;
   self->modelNode = NULL;
   self->viewportNode = NULL;
-
   //
   self->soundSourceNode = NULL;
   //
@@ -135,7 +150,8 @@ Arcadia_Engine_Demo_MainMenuScene_initializeDispatchImpl
   ((Arcadia_Engine_Demo_SceneDispatch*)self)->updateLogics = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value)) & Arcadia_Engine_Demo_MainMenuScene_updateLogicsImpl;
   ((Arcadia_Engine_Demo_SceneDispatch*)self)->updateVisuals = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value, Arcadia_Integer32Value, Arcadia_Integer32Value)) & Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl;
   ((Arcadia_Engine_Demo_SceneDispatch*)self)->handleKeyboardKeyEvent = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_KeyboardKeyEvent*)) & Arcadia_Engine_Demo_MainMenuScene_handleKeyboardKeyEventImpl;
-
+  ((Arcadia_Engine_Demo_SceneDispatch*)self)->handleMouseButtonEvent = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_MouseButtonEvent*)) & Arcadia_Engine_Demo_MainMenuScene_handleMouseButtonEventImpl;
+  ((Arcadia_Engine_Demo_SceneDispatch*)self)->handleMousePointerEvent = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_MousePointerEvent*)) & Arcadia_Engine_Demo_MainMenuScene_handleMousePointerEventImpl;
 }
 
 static void
@@ -182,19 +198,19 @@ Arcadia_Engine_Demo_MainMenuScene_updateAudialsImpl
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
   if (!self->soundSourceNode) {
     self->soundSourceNode =
-      Arcadia_Audials_SceneNodeFactory_createSoundSourceNode
+      Arcadia_Engine_Audials_NodeFactory_createSoundSourceNode
         (
           thread,
-          (Arcadia_Audials_SceneNodeFactory*)engine->audialsSceneNodeFactory,
-          (Arcadia_Audials_BackendContext*)engine->audialsBackendContext
+          (Arcadia_Engine_Audials_NodeFactory*)engine->audialsNodeFactory,
+          (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext
         );
   }
-  Arcadia_Audials_Scene_Node_setBackendContext(thread, (Arcadia_Audials_Scene_Node*)self->soundSourceNode, (Arcadia_Audials_BackendContext*)engine->audialsBackendContext);
-  Arcadia_Audials_Scene_Node_render(thread, (Arcadia_Audials_Scene_Node*)self->soundSourceNode);
-  Arcadia_Audials_Scene_SoundSourceNode_setVolume(thread, self->soundSourceNode, 0.125f);
-  if (!Arcadia_Audials_Scene_SoundSourceNode_isPlaying(thread, self->soundSourceNode)) {
-    Arcadia_Audials_Scene_SoundSourceNode_stop(thread, self->soundSourceNode);
-    Arcadia_Audials_Scene_SoundSourceNode_play(thread, self->soundSourceNode);
+  Arcadia_Engine_Node_setAudialsBackendContext(thread, (Arcadia_Engine_Node*)self->soundSourceNode, (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext);
+  Arcadia_Engine_Audials_Node_render(thread, (Arcadia_Engine_Audials_Node*)self->soundSourceNode);
+  Arcadia_Engine_Audials_SoundSourceNode_setVolume(thread, self->soundSourceNode, 0.125f);
+  if (!Arcadia_Engine_Audials_SoundSourceNode_isPlaying(thread, self->soundSourceNode)) {
+    Arcadia_Engine_Audials_SoundSourceNode_stop(thread, self->soundSourceNode);
+    Arcadia_Engine_Audials_SoundSourceNode_play(thread, self->soundSourceNode);
   }
 }
 
@@ -231,10 +247,10 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
 
   if (!self->renderingContextNode) {
     self->renderingContextNode =
-      Arcadia_Visuals_SceneNodeFactory_createRenderingContextNode
+      Arcadia_Engine_Visuals_NodeFactory_createRenderingContextNode
         (
           thread,
-          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
           (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
@@ -242,17 +258,17 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
 
   if (!self->cameraNode) {
     self->cameraNode =
-      (Arcadia_Visuals_Scene_CameraNode*)
-      Arcadia_Visuals_SceneNodeFactory_createCameraNode
+      (Arcadia_Engine_Visuals_CameraNode*)
+      Arcadia_Engine_Visuals_NodeFactory_createCameraNode
         (
           thread,
-          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
           (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
   Arcadia_Math_Matrix4Real32* viewToProjectionMatrix = Arcadia_Math_Matrix4Real32_create(thread);
   Arcadia_Math_Matrix4x4Real32_setOrthographicProjection(thread, viewToProjectionMatrix, -1, +1, -1, +1, -1, +1);
-  Arcadia_Visuals_Scene_CameraNode_setViewToProjectionMatrix(thread, self->cameraNode, viewToProjectionMatrix);
+  Arcadia_Engine_Visuals_CameraNode_setViewToProjectionMatrix(thread, self->cameraNode, viewToProjectionMatrix);
 
   Arcadia_ADL_ColorDefinition* CLEARCOLORS[] = 
     {
@@ -269,18 +285,18 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
   if (!self->viewportNode) {
     Arcadia_ADL_ColorDefinition* d = CLEARCOLORS[0];
     self->viewportNode =
-      (Arcadia_Visuals_Scene_ViewportNode*)
-      Arcadia_Visuals_SceneNodeFactory_createViewportNode
+      (Arcadia_Engine_Visuals_ViewportNode*)
+      Arcadia_Engine_Visuals_NodeFactory_createViewportNode
         (
           thread,
-          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
           (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
         );
-    Arcadia_Visuals_Scene_ViewportNode_setClearColor(thread, self->viewportNode, Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
-    Arcadia_Visuals_Scene_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNode, 0.f, 0.f, 1.f, 1.f);
+    Arcadia_Engine_Visuals_ViewportNode_setClearColor(thread, self->viewportNode, Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
+    Arcadia_Engine_Visuals_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNode, 0.f, 0.f, 1.f, 1.f);
   }
 
-  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, self->viewportNode, width, height);
+  Arcadia_Engine_Visuals_ViewportNode_setCanvasSize(thread, self->viewportNode, width, height);
 
   if (!self->modelNode) {
     Arcadia_ADL_ModelDefinition* modelDefinition = MODELS[0];
@@ -290,22 +306,22 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
     }
     Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
     self->modelNode =
-      (Arcadia_Visuals_Scene_ModelNode*)
-      Arcadia_Visuals_SceneNodeFactory_createModelNode
+      (Arcadia_Engine_Visuals_ModelNode*)
+      Arcadia_Engine_Visuals_NodeFactory_createModelNode
         (
           thread,
-          (Arcadia_Visuals_SceneNodeFactory*)engine->visualsSceneNodeFactory,
+          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
           (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
           modelDefinition
         );
   }
 
-  Arcadia_Visuals_Scene_ViewportNode_setCanvasSize(thread, self->viewportNode, width, height);
+  Arcadia_Engine_Visuals_ViewportNode_setCanvasSize(thread, self->viewportNode, width, height);
   // Assign "viewport" node to "camera" node.
-  Arcadia_Visuals_Scene_CameraNode_setViewport(thread, self->cameraNode, self->viewportNode);
-  Arcadia_Visuals_Scene_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
+  Arcadia_Engine_Visuals_CameraNode_setViewport(thread, self->cameraNode, self->viewportNode);
+  Arcadia_Engine_Visuals_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
   // Render the scene.
-  Arcadia_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Engine_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
 }
 
 static void
@@ -328,6 +344,24 @@ Arcadia_Engine_Demo_MainMenuScene_handleKeyboardKeyEventImpl
     Arcadia_logf(Arcadia_LogFlags_Info, "re-initializing backends\n");
   }
 }
+
+static void
+Arcadia_Engine_Demo_MainMenuScene_handleMouseButtonEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainMenuScene* self,
+    Arcadia_Visuals_MouseButtonEvent* event
+  )
+{ }
+
+static void
+Arcadia_Engine_Demo_MainMenuScene_handleMousePointerEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainMenuScene* self,
+    Arcadia_Visuals_MousePointerEvent* event
+  )
+{ }
 
 Arcadia_Engine_Demo_MainMenuScene*
 Arcadia_Engine_Demo_MainMenuScene_create

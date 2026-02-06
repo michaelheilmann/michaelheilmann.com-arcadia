@@ -60,11 +60,6 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
                    "${REPOSITORY_SOURCE_DIR}/../.build/.htaccess"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
-  # Build "Specifications/MIL/index.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Specifications/MIL/index.html.te"
-                   "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mil/index.html"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-
 EndTemplateEngine()
 
 add_subdirectory("Arcadia")
@@ -73,3 +68,4 @@ add_subdirectory("Specifications/MDNP")
 add_subdirectory("Specifications/DDL")
 add_subdirectory("Specifications/DDLS")
 add_subdirectory("InformationSecurity")
+add_subdirectory("Specifications/MIL")

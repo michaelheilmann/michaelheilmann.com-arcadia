@@ -237,7 +237,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.GLX.WindowBackend", Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend,
-                         u8"Arcadia.Visuals.WindowBackend", Arcadia_Visuals_WindowBackend,
+                         u8"Arcadia.Visuals.WindowBackend", Arcadia_Engine_Visuals_WindowBackend,
                          &_typeOperations);
 
 static void
@@ -304,11 +304,11 @@ filter
     Arcadia_Value value
   )
 {
-  Arcadia_Visuals_Window* window = (Arcadia_Visuals_Window*)Arcadia_Value_getObjectReferenceValue(&context);
+  Arcadia_Engine_Visuals_Window* window = (Arcadia_Engine_Visuals_Window*)Arcadia_Value_getObjectReferenceValue(&context);
   Arcadia_WeakReference* weakReferenceElement = (Arcadia_WeakReference*)Arcadia_Value_getObjectReferenceValue(&value);
   Arcadia_Value valueElement = Arcadia_WeakReference_getValue(thread, weakReferenceElement);
   if (Arcadia_Value_isObjectReferenceValue(&valueElement)) {
-    Arcadia_Visuals_Window* windowElement = (Arcadia_Visuals_Window*)Arcadia_Value_getObjectReferenceValue(&valueElement);
+    Arcadia_Engine_Visuals_Window* windowElement = (Arcadia_Engine_Visuals_Window*)Arcadia_Value_getObjectReferenceValue(&valueElement);
     if (window == windowElement) {
       return Arcadia_BooleanValue_False;
     }
@@ -338,7 +338,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct
   #endif
     self->screen = NULL;
   }
-  Arcadia_List_filter(thread, ((Arcadia_Visuals_BackendContext*)self->backendContext)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
+  Arcadia_List_filter(thread, ((Arcadia_Engine_Visuals_BackendContextBase*)self->backendContext)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
   if (self->backendContext) {
     Arcadia_Object_unlock(thread, self->backendContext);
     self->backendContext = NULL;
@@ -399,34 +399,34 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl
     Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackendDispatch* self
   )
 {
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->open = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & openImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->close = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & closeImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->open = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*)) & openImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->close = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*)) & closeImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getRequiredBigIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredBigIconSizeImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getRequiredSmallIconSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredSmallIconSizeImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getRequiredBigIconSize = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredBigIconSizeImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getRequiredSmallIconSize = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getRequiredSmallIconSizeImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getBigIcon = (Arcadia_Visuals_Icon*(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getBigIconImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->setBigIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*)) & setBigIconImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getBigIcon = (Arcadia_Engine_Visuals_Icon*(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*)) & getBigIconImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->setBigIcon = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Engine_Visuals_Icon*)) & setBigIconImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getSmallIcon = (Arcadia_Visuals_Icon*(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getSmallIconImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->setSmallIcon = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Visuals_Icon*)) & setSmallIconImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getSmallIcon = (Arcadia_Engine_Visuals_Icon*(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*)) & getSmallIconImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->setSmallIcon = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Engine_Visuals_Icon*)) & setSmallIconImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getTitle = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getTitleImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->setTitle = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_String*)) & setTitleImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getTitle = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*)) & getTitleImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->setTitle = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_String*)) & setTitleImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getCanvasSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getCanvasSize = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getCanvasSizeImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->beginRender = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*))&beginRenderImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->endRender = (void(*)(Arcadia_Thread*,Arcadia_Visuals_WindowBackend*))&endRenderImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->beginRender = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*))&beginRenderImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->endRender = (void(*)(Arcadia_Thread*,Arcadia_Engine_Visuals_WindowBackend*))&endRenderImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getPositionImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->setPosition = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setPositionImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getPosition = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getPositionImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->setPosition = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setPositionImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getSizeImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->setSize = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setSizeImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getSize = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & getSizeImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->setSize = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & setSizeImpl;
 
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->getFullscreen = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*)) & getFullscreenImpl;
-  ((Arcadia_Visuals_WindowBackendDispatch*)self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Visuals_WindowBackend*, Arcadia_BooleanValue)) & setFullscreenImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->getFullscreen = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*)) & getFullscreenImpl;
+  ((Arcadia_Engine_Visuals_WindowBackendDispatch*)self)->setFullscreen = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_WindowBackend*, Arcadia_BooleanValue)) & setFullscreenImpl;
 }
 
 static void
@@ -450,10 +450,10 @@ openImpl
     int screenId = DefaultScreen(self->backendContext->display);
 
     Window rootWindow = RootWindowOfScreen(self->screen);
-    int windowX = ((Arcadia_Visuals_WindowBackend*)self)->bounds.left;
-    int windowY = ((Arcadia_Visuals_WindowBackend*)self)->bounds.top;
-    int windowW = ((Arcadia_Visuals_WindowBackend*)self)->bounds.width;
-    int windowH = ((Arcadia_Visuals_WindowBackend*)self)->bounds.height;
+    int windowX = ((Arcadia_Engine_Visuals_WindowBackend*)self)->bounds.left;
+    int windowY = ((Arcadia_Engine_Visuals_WindowBackend*)self)->bounds.top;
+    int windowW = ((Arcadia_Engine_Visuals_WindowBackend*)self)->bounds.width;
+    int windowH = ((Arcadia_Engine_Visuals_WindowBackend*)self)->bounds.height;
     // Does not seem to have an effect when using GNOME.
     int windowBorderWidth = 0;
     int windowClass = InputOutput;
@@ -573,7 +573,7 @@ getFullscreenImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
-{ return ((Arcadia_Visuals_Window*)self)->fullscreen; }
+{ return ((Arcadia_Engine_Visuals_Window*)self)->fullscreen; }
 
 static void
 setFullscreenImpl
@@ -584,7 +584,7 @@ setFullscreenImpl
   )
 {
   if (self->window) {
-    if (((Arcadia_Visuals_WindowBackend*)self)->fullscreen != fullscreen) {
+    if (((Arcadia_Engine_Visuals_WindowBackend*)self)->fullscreen != fullscreen) {
 
       struct {
         unsigned long   flags;
@@ -606,7 +606,7 @@ setFullscreenImpl
                                                    32, PropModeReplace, (unsigned char *)&hints,
                                                    5);
       XSync(self->backendContext->display, False);
-      ((Arcadia_Visuals_WindowBackend*)self)->fullscreen = fullscreen;
+      ((Arcadia_Engine_Visuals_WindowBackend*)self)->fullscreen = fullscreen;
       if (Arcadia_Visuals_Implementation_Linux_hasX11Error(thread)) {
         Arcadia_Visuals_Implementation_Linux_clearX11Error(thread);
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -614,7 +614,7 @@ setFullscreenImpl
       }
     }
   } else {
-    ((Arcadia_Visuals_WindowBackend*)self)->fullscreen = fullscreen;
+    ((Arcadia_Engine_Visuals_WindowBackend*)self)->fullscreen = fullscreen;
   }
 }
 
@@ -690,7 +690,7 @@ getTitleImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* self
   )
-{ return ((Arcadia_Visuals_Window*)self)->title; }
+{ return ((Arcadia_Engine_Visuals_Window*)self)->title; }
 
 static void
 setTitleImpl
@@ -715,7 +715,7 @@ setTitleImpl
     XStoreName(self->backendContext->display, self->window,
                Arcadia_StringBuffer_getBytes(thread, stringBuffer));
   }
-  ((Arcadia_Visuals_Window*)self)->title = title;
+  ((Arcadia_Engine_Visuals_Window*)self)->title = title;
 }
 
 static void

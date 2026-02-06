@@ -1,7 +1,7 @@
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_VertexElementSemantics">Arcadia_Visuals_VertexElementSemantics</h1>
+<h1 id="Arcadia_Engine_Visuals_VertexElementSemantics">Arcadia_Engine_Visuals_VertexElementSemantics</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_VertexElementSemantics Arcadia_Visuals_VertexElementSemantics;
+typedef enum Arcadia_Engine_Visuals_VertexElementSemantics Arcadia_Engine_Visuals_VertexElementSemantics;
 </code></my-signature>
 
 <my-summary>
@@ -13,29 +13,29 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSemantics_PositionXyz</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSemantics_PositionXyz</code>
     </div>
     <div>
     The vertex element denotes a position coordinate.
-    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32, then this the position coordinate is in XY space (model, local, or global).
-    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32, then this the position coordinate is in XYZ space (model, local, or global).
+    If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32, then this the position coordinate is in XY space (model, local, or global).
+    If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32Real32, then this the position coordinate is in XYZ space (model, local, or global).
     </div>
   </div>
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSemantics_AmbientRgba</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSemantics_AmbientRgba</code>
     </div>
     <div>
     The vertex element denotes an ambient color coordinate.
     <ul>
-      <li>If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32, then the color is in [0,1] RGB space.
+      <li>If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32Real32, then the color is in [0,1] RGB space.
       The first Arcadia_Real32Value indicates the intensity of the red component,
       the second Arcadia_Real32Value indicates the intensity of the green component,
       the third Arcadia_Real32Value indicates the intensity of the blue component.
       0 indicates minimum intensity, 1 indicates maximum intensity.
       </li>
-      <li>If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32Real32Real32, then the color is in [0,1] RGBA space.
+      <li>If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32Real32Real32, then the color is in [0,1] RGBA space.
       The first Arcadia_Real32Value indicates the intensity of the red component,
       the second Arcadia_Real32Value indicates the intensity of the green component,
       the third Arcadia_Real32Value indicates the intensity of the blue component.
@@ -49,11 +49,11 @@ An enumeration of pixel formats.
 
   <div>
     <div>
-      <code>Arcadia_Visuals_VertexElementSemantics_AmbientUv</code>
+      <code>Arcadia_Engine_Visuals_VertexElementSemantics_AmbientUv</code>
     </div>
     <div>
     The vertex element denotes a texture coordinates for an ambient texture.
-    If the vertex syntax is Arcadia_Visuals_VertexElementSyntax_Real32Real32, then this the texture coordinate is in UV space.
+    If the vertex syntax is Arcadia_Engine_Visuals_VertexElementSyntax_Real32Real32, then this the texture coordinate is in UV space.
     </div>
   </div>
 

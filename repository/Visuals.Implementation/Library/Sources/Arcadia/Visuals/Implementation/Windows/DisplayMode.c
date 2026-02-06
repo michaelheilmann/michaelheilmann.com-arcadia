@@ -19,65 +19,65 @@
 #include "Arcadia/Visuals/Implementation/Windows/DisplayDevice.h"
 
 static void
-Arcadia_Visuals_Windows_DisplayMode_constructImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   );
 
 static void
-Arcadia_Visuals_Windows_DisplayMode_initializeDispatchImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayModeDispatch* self
+    Arcadia_Engine_Visuals_Windows_DisplayModeDispatch* self
   );
 
 static void
-Arcadia_Visuals_Windows_DisplayMode_visitImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   );
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   );
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Windows_DisplayMode_getVerticalResolutionImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_getVerticalResolutionImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   );
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Windows_DisplayMode_getColorDepthImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_getColorDepthImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   );
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Windows_DisplayMode_getFrequencyImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_getFrequencyImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   );
 
 static void
-Arcadia_Visuals_Windows_DisplayMode_applyImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_applyImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Windows_DisplayMode_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Windows_DisplayMode_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Windows_DisplayMode_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Windows_DisplayMode_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -85,18 +85,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.DisplayMode", Arcadia_Visuals_Windows_DisplayMode,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.DisplayMode", Arcadia_Engine_Visuals_Windows_DisplayMode,
                          u8"Arcadia.Visuals.DisplayMode", Arcadia_Visuals_DisplayMode,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_Windows_DisplayMode_constructImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_DisplayMode_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_Windows_DisplayMode_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -105,39 +105,39 @@ Arcadia_Visuals_Windows_DisplayMode_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (5 != numberOfArgumentValues1) {
+  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (5 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->device = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 5, _Arcadia_Visuals_Windows_DisplayDevice_getType(thread));
+  self->device = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 5, _Arcadia_Engine_Visuals_Windows_DisplayDevice_getType(thread));
   self->horizontalResolution = Arcadia_ValueStack_getInteger32Value(thread, 4);
   self->verticalResolution = Arcadia_ValueStack_getInteger32Value(thread, 3);
   self->colorDepth = Arcadia_ValueStack_getInteger32Value(thread, 2);
   self->frequency = Arcadia_ValueStack_getInteger32Value(thread, 1);
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void
-Arcadia_Visuals_Windows_DisplayMode_initializeDispatchImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayModeDispatch* self
+    Arcadia_Engine_Visuals_Windows_DisplayModeDispatch* self
   )
 {
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getHorizontalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl;
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getVerticalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getVerticalResolutionImpl;
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getColorDepth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getColorDepthImpl;
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getFrequency = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_getFrequencyImpl;
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->apply = (void(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Visuals_Windows_DisplayMode_applyImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getHorizontalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getVerticalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getVerticalResolutionImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getColorDepth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getColorDepthImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getFrequency = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getFrequencyImpl;
+  ((Arcadia_Visuals_DisplayModeDispatch*)self)->apply = (void(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_applyImpl;
 }
 
 static void
-Arcadia_Visuals_Windows_DisplayMode_visitImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   )
 {
   if (self->device) {
@@ -146,42 +146,42 @@ Arcadia_Visuals_Windows_DisplayMode_visitImpl
 }
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   )
 { return self->horizontalResolution; }
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Windows_DisplayMode_getVerticalResolutionImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_getVerticalResolutionImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   )
 { return self->verticalResolution; }
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Windows_DisplayMode_getColorDepthImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_getColorDepthImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   )
 { return self->colorDepth; }
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Windows_DisplayMode_getFrequencyImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_getFrequencyImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   )
 { return self->frequency; }
 
 static void
-Arcadia_Visuals_Windows_DisplayMode_applyImpl
+Arcadia_Engine_Visuals_Windows_DisplayMode_applyImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayMode* self
+    Arcadia_Engine_Visuals_Windows_DisplayMode* self
   )
 {
   Arcadia_StringBuffer* deviceName = Arcadia_StringBuffer_create(thread);
@@ -255,11 +255,11 @@ Arcadia_Visuals_Windows_DisplayMode_applyImpl
   }
 }
 
-Arcadia_Visuals_Windows_DisplayMode*
-Arcadia_Visuals_Windows_DisplayMode_create
+Arcadia_Engine_Visuals_Windows_DisplayMode*
+Arcadia_Engine_Visuals_Windows_DisplayMode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* device,
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* device,
     Arcadia_Integer32Value horizontalResolution,
     Arcadia_Integer32Value verticalResolution,
     Arcadia_Integer32Value colorDepth,
@@ -273,5 +273,5 @@ Arcadia_Visuals_Windows_DisplayMode_create
   Arcadia_ValueStack_pushInteger32Value(thread, colorDepth);
   Arcadia_ValueStack_pushInteger32Value(thread, frequency);
   Arcadia_ValueStack_pushNatural8Value(thread, 5);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_DisplayMode);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Windows_DisplayMode);
 }

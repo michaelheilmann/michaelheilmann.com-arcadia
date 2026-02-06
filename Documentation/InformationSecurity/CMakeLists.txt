@@ -47,9 +47,6 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate.AssortedNotes "Website")
                    "${REPOSITORY_SOURCE_DIR}/../.build/information-security/setting-up-a-cloud-landing-zone-aws-edition.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/../website.env")
                    
-  # Build "index.html".
-  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/book/index.html.te"
-                   "${REPOSITORY_SOURCE_DIR}/../.build/information-security/book/index.html"
-                   "${CMAKE_CURRENT_SOURCE_DIR}/../website.env")
-
 EndTemplateEngine()
+
+add_subdirectory("book")

@@ -54,7 +54,6 @@ Arcadia_declareObjectType(u8"Arcadia.Engine.BackendContext", Arcadia_Engine_Back
 
 struct Arcadia_Engine_BackendContextDispatch {
   Arcadia_ObjectDispatch _parent;
-
   void (*update)(Arcadia_Thread* thread, Arcadia_Engine_BackendContext* self);
 };
 

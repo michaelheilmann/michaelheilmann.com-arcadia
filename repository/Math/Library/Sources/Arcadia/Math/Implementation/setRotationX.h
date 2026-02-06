@@ -19,23 +19,7 @@
 #include "Arcadia/Math/Implementation/Matrix4Real32.h"
 #include "Arcadia/Math/Implementation/Matrix4Real64.h"
 
-/// @{
-/// @brief Assign this matrix the values of a rotation transformation matrix representing a counter-clockwise rotation around the x-axis by the specified number of degrees.
-/// @param self A pointer to this matrix.
-/// @param a The angle of rotation, in degrees.
-/// @remarks
-/// A rotation transformation matrix for a counter-clockwise rotation around the x-axis by a number of degrees a has the following form:
-/// @code
-/// 1  0  0  0
-/// 0  c -s  0
-/// 0  s  c  0
-/// 0  0  0  1
-/// @endcode
-/// where
-/// @code
-/// c = cos(a)
-/// s = sin(a)
-/// @endcode
+// https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setRotationX
 void
 Arcadia_Math_MatrixReal32Value_setRotationX
   (
@@ -44,6 +28,7 @@ Arcadia_Math_MatrixReal32Value_setRotationX
     Arcadia_Real32Value a
   );
 
+// https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setRotationX
 void
 Arcadia_Math_MatrixReal64Value_setRotationX
   (
@@ -51,7 +36,5 @@ Arcadia_Math_MatrixReal64Value_setRotationX
     Arcadia_Math_Matrix4Real64* self,
     Arcadia_Real64Value a
   );
-
-/// @}
 
 #endif // ARCADIA_MATH_IMPLEMENTATION_SETROTATIONX_H_INCLUDE

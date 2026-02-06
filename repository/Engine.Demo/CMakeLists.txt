@@ -22,17 +22,15 @@ if (NOT TARGET ${MyDemoName})
   set(${MyDemoName}.Enabled FALSE)
 
   # This demo requires at least one rendering backend.
-  if (${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled})
+  if (${${MyProjectName}.Engine.Visuals.Implementation.OpenGL4.Enabled})
     set(${MyDemoName}.Enabled TRUE)
   endif()
-  if (${${MyProjectName}.Visuals.Implementation.Direct3D12.Enabled})
+  if (${${MyProjectName}.Engine.Visuals.Implementation.Direct3D12.Enabled})
     set(${MyDemoName}.Enabled TRUE)
   endif()
-  if (${${MyProjectName}.Visuals.Implementation.Vulkan.Enabled})
+  if (${${MyProjectName}.Engine.Visuals.Implementation.Vulkan.Enabled})
     set(${MyDemoName}.Enabled TRUE)
   endif()
-
-  if (${${MyProjectName}.Visuals.Implementation.OpenGL4.Enabled})
 
   BeginProduct(${MyDemoName} executable)
 
@@ -72,13 +70,14 @@ if (NOT TARGET ${MyDemoName})
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Application.c)
   list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Application.h)
 
-  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Audials.Implementation ${MyProjectName}.Visuals.Implementation)
+  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Engine.Audials.Implementation ${MyProjectName}.Engine.Visuals.Implementation)
 
   EndProduct(${MyDemoName})
 
   # Copy assets.
-  CopyProductAssets(${MyDemoName}.CopyAssets "" ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
-  add_dependencies(${MyDemoName} ${MyDemoName}.CopyAssets)
-
+  if (${MyDemoName}.Enabled)
+    CopyProductAssets(${MyDemoName}.CopyAssets "" ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
+    add_dependencies(${MyDemoName} ${MyDemoName}.CopyAssets)
   endif()
+
 endif()

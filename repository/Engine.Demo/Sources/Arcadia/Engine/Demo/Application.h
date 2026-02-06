@@ -33,7 +33,7 @@ Arcadia_Engine_Demo_Application_onWindowClosedEvent
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Application* self,
-    Arcadia_Visuals_WindowClosedEvent* event
+    Arcadia_Engine_Visuals_WindowClosedEvent* event
   );
 
 #endif // ARCADIA_ENGINE_DEMO_APPLICATION_H_INCLUDED

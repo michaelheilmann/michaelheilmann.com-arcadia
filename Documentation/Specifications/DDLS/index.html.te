@@ -8,7 +8,7 @@
 </head>
 <body class="my-content-page-1">
   <header>
-  @{include("./../mathjax-definitions.i")}
+  @{include("./../../Commons/mathjax-definitions.i")}
   <div>
   <a href="@{siteAddress}/">Home</a>
   </div>

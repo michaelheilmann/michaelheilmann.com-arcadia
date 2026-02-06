@@ -169,8 +169,8 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_BackendContext,
-                         u8"Arcadia.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.Implementation.OpenGL4.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_BackendContext,
+                         u8"Arcadia.Engine.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
                          &_typeOperations);
 
 static Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*

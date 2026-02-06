@@ -39,21 +39,21 @@ An out of source build is the recommended way of building *michaelheilmann.com*.
 
 #### Further Options
 
-- `Arcadia.Visuals.Implementation.OpenGL4.Enabled`
-`TRUE` enables OpenGL 4 support in *Arcadia Visuals*, `FALSE` disables it. Default is `FALSE`.
+- `Arcadia.Engine.Visuals.Implementation.OpenGL4.Enabled`
+`TRUE` enables OpenGL 4 support in *Arcadia Engine Visuals*, `FALSE` disables it. Default is `FALSE`.
 \
-To enable OpenGL support, add the parameter `-D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=TRUE` to the cmake command.
+To enable OpenGL support, add the parameter `-D"Arcadia.Engine.Visuals.Implementation.OpenGL4.Enabled"=TRUE` to the cmake command.
 To disable OpenGL support, add the parameter `-D"Arcadia.Visuals.Implementation.OpenGL4.Enabled"=FALSE` to the cmake command.
 
-- `Arcadia.Audials.Implementation.OpenAL.Enabled`
-`TRUE` enables OpenAL support in *Arcadia Audials*, `FALSE` disables it. Default is `FALSE`.
+- `Arcadia.Engine.Audials.Implementation.OpenAL.Enabled`
+`TRUE` enables OpenAL support in *Arcadia Engine Audials*, `FALSE` disables it. Default is `FALSE`.
 \
-To enable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=TRUE` to the cmake command.
-To disable OpenAL support, add the parameter `-D"Arcadia.Audials.Implementation.OpenAL.Enabled"=FALSE` to the cmake command.
+To enable OpenAL support, add the parameter `-D"Arcadia.Engine.Audials.Implementation.OpenAL.Enabled"=TRUE` to the cmake command.
+To disable OpenAL support, add the parameter `-D"Arcadia.Engine.Audials.Implementation.OpenAL.Enabled"=FALSE` to the cmake command.
 
 #### Example command line
 The typical command line for x64 build files is hence:
 ```
 cd ~/build
-cmake ~/sources -D"Arcadia.Visuals.Implementation.OpenGL4"=TRUE -D"Arcadia.Audials.Implementation.OpenAL"=TRUE
+cmake ~/sources -D"Arcadia.Engine.Visuals.Implementation.OpenGL4"=TRUE -D"Arcadia.Engine.Audials.Implementation.OpenAL"=TRUE
 ```

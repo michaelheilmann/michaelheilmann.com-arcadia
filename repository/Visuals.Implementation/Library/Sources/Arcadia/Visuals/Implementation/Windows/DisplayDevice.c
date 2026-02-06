@@ -19,59 +19,59 @@
 #include "Arcadia/Visuals/Implementation/Windows/DisplayMode.h"
 
 static void
-Arcadia_Visuals_Windows_DisplayDevice_constructImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   );
 
 static void
-Arcadia_Visuals_Windows_DisplayDevice_initializeDispatchImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDeviceDispatch* self
+    Arcadia_Engine_Visuals_Windows_DisplayDeviceDispatch* self
   );
 
 static void
-Arcadia_Visuals_Windows_DisplayDevice_visitImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   );
 
-static Arcadia_Visuals_Windows_DisplayMode*
-Arcadia_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl
+static Arcadia_Engine_Visuals_Windows_DisplayMode*
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   );
 
 static Arcadia_List*
-Arcadia_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   );
 
 static Arcadia_String*
-Arcadia_Visuals_Windows_DisplayDevice_getIdImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getIdImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   );
 
 static Arcadia_String*
-Arcadia_Visuals_Windows_DisplayDevice_getNameImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getNameImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   );
 
 static void
-Arcadia_Visuals_Windows_DisplayDevice_getBoundsImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getBoundsImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self,
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self,
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top,
     Arcadia_Integer32Value* right,
@@ -80,8 +80,8 @@ Arcadia_Visuals_Windows_DisplayDevice_getBoundsImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Windows_DisplayDevice_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Windows_DisplayDevice_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Windows_DisplayDevice_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Windows_DisplayDevice_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -89,18 +89,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.DisplayDevice", Arcadia_Visuals_Windows_DisplayDevice,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.DisplayDevice", Arcadia_Engine_Visuals_Windows_DisplayDevice,
                          u8"Arcadia.Visuals.DisplayDevice", Arcadia_Visuals_DisplayDevice,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_Windows_DisplayDevice_constructImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Windows_DisplayDevice_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_Windows_DisplayDevice_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -109,8 +109,8 @@ Arcadia_Visuals_Windows_DisplayDevice_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (3 != numberOfArgumentValues1) {
+  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (3 != numberOfArgumentValues) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -120,28 +120,28 @@ Arcadia_Visuals_Windows_DisplayDevice_constructImpl
   self->availableDisplayModes = NULL;
   self->currentDisplayMode = NULL;
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
 }
 
 static void
-Arcadia_Visuals_Windows_DisplayDevice_initializeDispatchImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDeviceDispatch* self
+    Arcadia_Engine_Visuals_Windows_DisplayDeviceDispatch* self
   )
 {
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getCurrentDisplayMode = (Arcadia_Visuals_DisplayMode * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl;
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getAvailableDisplayModes = (Arcadia_List * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl;
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getId = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Windows_DisplayDevice_getIdImpl;
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Visuals_Windows_DisplayDevice_getNameImpl;
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getBounds = (void (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Visuals_Windows_DisplayDevice_getBoundsImpl;
+  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getCurrentDisplayMode = (Arcadia_Visuals_DisplayMode * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl;
+  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getAvailableDisplayModes = (Arcadia_List * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl;
+  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getId = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getIdImpl;
+  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getNameImpl;
+  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getBounds = (void (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getBoundsImpl;
 }
 
 static void
-Arcadia_Visuals_Windows_DisplayDevice_visitImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   )
 {
   if (self->id) {
@@ -161,11 +161,11 @@ Arcadia_Visuals_Windows_DisplayDevice_visitImpl
   }
 }
 
-static Arcadia_Visuals_Windows_DisplayMode*
-Arcadia_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl
+static Arcadia_Engine_Visuals_Windows_DisplayMode*
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   )
 {
   if (!self->currentDisplayMode) {
@@ -196,7 +196,7 @@ Arcadia_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl
       Arcadia_Thread_jump(thread);
     }
     self->currentDisplayMode =
-      Arcadia_Visuals_Windows_DisplayMode_create
+      Arcadia_Engine_Visuals_Windows_DisplayMode_create
         (
           thread,
           self,
@@ -210,10 +210,10 @@ Arcadia_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl
 }
 
 static Arcadia_List*
-Arcadia_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   )
 {
   if (!self->availableDisplayModes) {
@@ -243,8 +243,8 @@ Arcadia_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl
       if (0 == (devMode.dmFields & DM_DISPLAYFREQUENCY)) {
         continue;
       }
-      Arcadia_Visuals_Windows_DisplayMode* displayMode =
-        Arcadia_Visuals_Windows_DisplayMode_create
+      Arcadia_Engine_Visuals_Windows_DisplayMode* displayMode =
+        Arcadia_Engine_Visuals_Windows_DisplayMode_create
           (
             thread,
             self,
@@ -266,18 +266,18 @@ Arcadia_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl
 }
 
 static Arcadia_String*
-Arcadia_Visuals_Windows_DisplayDevice_getIdImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getIdImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   )
 { return self->id; }
 
 static Arcadia_String*
-Arcadia_Visuals_Windows_DisplayDevice_getNameImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getNameImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self
   )
 {
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
@@ -288,10 +288,10 @@ Arcadia_Visuals_Windows_DisplayDevice_getNameImpl
 }
 
 static void
-Arcadia_Visuals_Windows_DisplayDevice_getBoundsImpl
+Arcadia_Engine_Visuals_Windows_DisplayDevice_getBoundsImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Windows_DisplayDevice* self,
+    Arcadia_Engine_Visuals_Windows_DisplayDevice* self,
     Arcadia_Integer32Value* left,
     Arcadia_Integer32Value* top,
     Arcadia_Integer32Value* right,
@@ -304,8 +304,8 @@ Arcadia_Visuals_Windows_DisplayDevice_getBoundsImpl
   *bottom = self->bottom;
 }
 
-Arcadia_Visuals_Windows_DisplayDevice*
-Arcadia_Visuals_Windows_DisplayDevice_create
+Arcadia_Engine_Visuals_Windows_DisplayDevice*
+Arcadia_Engine_Visuals_Windows_DisplayDevice_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* id,
@@ -318,6 +318,6 @@ Arcadia_Visuals_Windows_DisplayDevice_create
   Arcadia_ValueStack_pushObjectReferenceValue(thread, adapter);
   Arcadia_ValueStack_pushObjectReferenceValue(thread, monitor);
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Windows_DisplayDevice);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Windows_DisplayDevice);
 }
 

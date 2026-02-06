@@ -212,23 +212,23 @@ Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_loadImpl
     // The vertex pointers.
     Arcadia_SizeValue stride = ((Arcadia_Visuals_Implementation_VertexBufferResource*)self)->vertexDescriptor->stride;
     for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Visuals_Implementation_VertexBufferResource*)self)->vertexDescriptor->vertexElementDescriptors); i < n; ++i) {
-      Arcadia_Visuals_VertexElementDescriptor* vertexElementDescriptor = (Arcadia_Visuals_VertexElementDescriptor*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)((Arcadia_Visuals_Implementation_VertexBufferResource*)self)->vertexDescriptor->vertexElementDescriptors, i, _Arcadia_Visuals_VertexElementDescriptor_getType(thread));
+      Arcadia_Engine_Visuals_VertexElementDescriptor* vertexElementDescriptor = (Arcadia_Engine_Visuals_VertexElementDescriptor*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)((Arcadia_Visuals_Implementation_VertexBufferResource*)self)->vertexDescriptor->vertexElementDescriptors, i, _Arcadia_Engine_Visuals_VertexElementDescriptor_getType(thread));
       GLint glType;
       GLsizei glSize;
       switch (vertexElementDescriptor->syntactics) {
-        case Arcadia_Visuals_VertexElementSyntactics_Real32: {
+        case Arcadia_Engine_Visuals_VertexElementSyntactics_Real32: {
           glType = GL_FLOAT;
           glSize = 1;
         } break;
-        case Arcadia_Visuals_VertexElementSyntactics_Real32Real32: {
+        case Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32: {
           glType = GL_FLOAT;
           glSize = 2;
         } break;
-        case Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32: {
+        case Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32Real32: {
           glType = GL_FLOAT;
           glSize = 3;
         } break;
-        case Arcadia_Visuals_VertexElementSyntactics_Real32Real32Real32Real32: {
+        case Arcadia_Engine_Visuals_VertexElementSyntactics_Real32Real32Real32Real32: {
           glType = GL_FLOAT;
           glSize = 4;
         } break;

@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_BACKENDCONTEXT_H_INCLUDED)
-#define ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_BACKENDCONTEXT_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_BACKENDCONTEXT_H_INCLUDED)
+#define ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_BACKENDCONTEXT_H_INCLUDED
 
 #include "Arcadia/Audials/Implementation/BackendContext.h"
 
@@ -24,19 +24,19 @@
 #include <math.h>
 
 /// @code
-/// class Arcadia.Audials.Implementation.OpenAL.BackendContext extends Arcadia.Audials.BackendContext {
+/// class Arcadia.Engine.Audials.Implementation.OpenAL.BackendContext extends Arcadia.Audials.BackendContext {
 ///   constructor()
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Audials.Implementation.OpenAL.BackendContext", Arcadia_Audials_Implementation_OpenAL_BackendContext,
-                          u8"Arcadia.Audials.Implementation.BackendContext");
+Arcadia_declareObjectType(u8"Arcadia.Engine.Audials.Implementation.OpenAL.BackendContext", Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext,
+                          u8"Arcadia.Engine.Audials.Implementation.BackendContext");
 
-struct Arcadia_Audials_Implementation_OpenAL_BackendContextDispatch {
-  Arcadia_Audials_Implementation_BackendContextDispatch _parent;
+struct Arcadia_Engine_Audials_Implementation_OpenAL_BackendContextDispatch {
+  Arcadia_Engine_Audials_Implementation_BackendContextDispatch _parent;
 };
 
-struct Arcadia_Audials_Implementation_OpenAL_BackendContext {
-  Arcadia_Audials_Implementation_BackendContext _parent;
+struct Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext {
+  Arcadia_Engine_Audials_Implementation_BackendContext _parent;
 
   // The list of resources.
   Arcadia_List* resources;
@@ -46,16 +46,16 @@ struct Arcadia_Audials_Implementation_OpenAL_BackendContext {
 };
 
 // @todo Make private.
-Arcadia_Audials_Implementation_OpenAL_BackendContext*
-Arcadia_Audials_Implementation_OpenAL_BackendContext_create
+Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext*
+Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_create
   (
     Arcadia_Thread* thread
   );
 
-Arcadia_Audials_Implementation_OpenAL_BackendContext*
-Arcadia_Audials_Implementation_OpenAL_BackendContext_getOrCreate
+Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext*
+Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_getOrCreate
   (
     Arcadia_Thread* thread
   );
 
-#endif // ARCADIA_AUDIALS_IMPLEMENTATION_OPENAL_BACKENDCONTEXT_H_INCLUDED
+#endif // ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_BACKENDCONTEXT_H_INCLUDED

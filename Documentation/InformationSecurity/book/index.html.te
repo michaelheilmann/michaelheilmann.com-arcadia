@@ -1,4 +1,4 @@
-  @{include("./../Commons/header-common.i")}
+  @{include("./../../Commons/header-common.i")}
 
   <style>
   </style>
@@ -9,7 +9,7 @@
 
   <body class="my-content-page-1">
     <header>
-      @{include("./../Commons/mathjax-definitions.i")}
+      @{include("./../../Commons/mathjax-definitions.i")}
       <div class="navigation breadcrumbs">
         <a href="@{siteAddress}/">Home</a>
       </div>
@@ -24,7 +24,7 @@
       <div class="abstract">
       </div>
       
-    @{include("./book/01-introduction.i")}
+    @{include("./01-introduction.i")}
       
       </div>
       <div class="right-column">

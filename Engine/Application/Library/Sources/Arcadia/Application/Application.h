@@ -15,7 +15,7 @@ struct Arcadia_Engine_ApplicationDispatch {
 
   void (*onApplicationQuitRequestedEvent)(Arcadia_Thread*, Arcadia_Engine_Application*, Arcadia_Visuals_ApplicationQuitRequestedEvent*);
   void (*onKeyboardKeyEvent)(Arcadia_Thread*, Arcadia_Engine_Application*, Arcadia_Visuals_KeyboardKeyEvent*);
-  void (*onWindowClosedEvent)(Arcadia_Thread*, Arcadia_Engine_Application*, Arcadia_Visuals_WindowClosedEvent*);
+  void (*onWindowClosedEvent)(Arcadia_Thread*, Arcadia_Engine_Application*, Arcadia_Engine_Visuals_WindowClosedEvent*);
 };
 
 struct Arcadia_Engine_Application {

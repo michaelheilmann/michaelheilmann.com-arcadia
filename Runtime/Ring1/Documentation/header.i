@@ -1,6 +1,6 @@
   @{include("./../../../Documentation/Commons/header-common.i")}
 
-  <link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=1'>
+  <link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=5'>
   <link rel='canonical' href='@{siteAddress}/Arcadia/Ring1/'>
   <title>Michael Heilmann's Arcadia Ring 1</title>
   <style>
@@ -8,6 +8,7 @@
 </head>
 <body class="my-content-page-1">
   <header>
+    @{include("./../../../Documentation/Commons/mathjax-definitions.i")}
     <div>
     <a href="@{siteAddress}/">Home</a>
     </div>

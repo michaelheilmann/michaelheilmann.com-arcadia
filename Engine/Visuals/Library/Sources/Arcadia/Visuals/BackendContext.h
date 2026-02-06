@@ -13,18 +13,18 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_BACKENDCONTEXT_H_INCLUDED)
-#define ARCADIA_VISUALS_BACKENDCONTEXT_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_BACKENDCONTEXTBASE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_BACKENDCONTEXTBASE_H_INCLUDED
 
 #if !defined(ARCADIA_VISUALS_PRIVATE) || 1 != ARCADIA_VISUALS_PRIVATE
   #error("do not include directly, include `Arcadia/Visuals/Include.h` instead")
 #endif
-#include "Arcadia/Visuals/Icon.h"
-#include "Arcadia/Visuals/Window.h"
+#include "Arcadia/Engine/Visuals/Icon.h"
+#include "Arcadia/Engine/Visuals/Window.h"
 typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
 
 /// @code
-/// class Arcadia.Visuals.BackendContext extends Arcadia.Engine.BackendContext {
+/// class Arcadia.Engine.Visuals.BackendContextBase extends Arcadia.Engine.Visuals.BackendContext {
 ///
 ///   constructor
 ///     (
@@ -56,58 +56,47 @@ typedef struct Arcadia_Engine_Event Arcadia_Engine_Event;
 ///
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.BackendContext", Arcadia_Visuals_BackendContext,
-                          u8"Arcadia.Engine.BackendContext");
+Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.BackendContextBase", Arcadia_Engine_Visuals_BackendContextBase,
+                          u8"Arcadia.Engine.Visuals.BackendContext");
 
-struct Arcadia_Visuals_BackendContextDispatch {
-  Arcadia_Engine_BackendContextDispatch _parent;
+struct Arcadia_Engine_Visuals_BackendContextBaseDispatch {
+  Arcadia_Engine_Visuals_BackendContextDispatch _parent;
 
-  Arcadia_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self, Arcadia_Imaging_PixelBuffer* pixelBuffer);
-  Arcadia_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
-  Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
-  void (*update)(Arcadia_Thread* thread, Arcadia_Visuals_BackendContext* self);
+  Arcadia_Engine_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContextBase* self, Arcadia_Imaging_PixelBuffer* pixelBuffer);
+  Arcadia_Engine_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContextBase* self);
+  Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContextBase* self);
 };
 
-struct Arcadia_Visuals_BackendContext {
-  Arcadia_Engine_BackendContext _parent;
+struct Arcadia_Engine_Visuals_BackendContextBase {
+  Arcadia_Engine_Visuals_BackendContext _parent;
 
   /// @brief List of windows.
   Arcadia_List* windows;
 };
 
-Arcadia_Visuals_Icon*
-Arcadia_Visuals_BackendContext_createIcon
+Arcadia_Engine_Visuals_Icon*
+Arcadia_Engine_Visuals_BackendContextBase_createIcon
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self,
+    Arcadia_Engine_Visuals_BackendContextBase* self,
     Arcadia_Imaging_PixelBuffer* pixelBuffer
   );
 
-Arcadia_Visuals_Window*
-Arcadia_Visuals_BackendContext_createWindow
+Arcadia_Engine_Visuals_Window*
+Arcadia_Engine_Visuals_BackendContextBase_createWindow
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
+    Arcadia_Engine_Visuals_BackendContextBase* self
   );
 
 /// @brief Enumerate all display devices.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this backend context.
 Arcadia_List*
-Arcadia_Visuals_BackendContext_getDisplayDevices
+Arcadia_Engine_Visuals_BackendContextBase_getDisplayDevices
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
+    Arcadia_Engine_Visuals_BackendContextBase* self
   );
 
-/// @brief Update this backend context.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this backend context.
-void
-Arcadia_Visuals_BackendContext_update
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
-  );
-
-#endif // ARCADIA_VISUALS_BACKENDCONTEXT_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_BACKENDCONTEXTBASE_H_INCLUDED

@@ -1,7 +1,7 @@
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_TextureAddressMode">Arcadia_Visuals_TextureAddressMode</h1>
+<h1 id="Arcadia_Engine_Visuals_TextureAddressMode">Arcadia_Engine_Visuals_TextureAddressMode</h1>
 <my-signature><code>
-typedef enum Arcadia_Visuals_TextureAddressMode Arcadia_Visuals_TextureAddressMode;
+typedef enum Arcadia_Engine_Visuals_TextureAddressMode Arcadia_Engine_Visuals_TextureAddressMode;
 </code></my-signature>
 
 <my-summary>
@@ -14,7 +14,7 @@ A texture address mode identifies a technique for resolving uv coordinates that 
   <h1>Elements</h1>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureAddressMode_ClampToEdge</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureAddressMode_ClampToEdge</code></div>
     <div>
     uv coordinates outside of the range of [0,1] are assigned the color of the uv coordinate at 0 or 1, respectively.
     This usually corresponds to GL_TEXTURE_WRAP_S/GL_TEXTURE_WRAP_T with GL_CLAMP_TO_EDGE in OpenGL and D3D12_TEXTURE_ADDRESS_MODE_CLAMP in Direct3D 12.
@@ -22,7 +22,7 @@ A texture address mode identifies a technique for resolving uv coordinates that 
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureAddressMode_ClampToBorder</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureAddressMode_ClampToBorder</code></div>
     <div>
     uv coordinates outside of the range of [0,1] are assigned the border color of the texture.
     This usually corresponds to GL_TEXTURE_WRAP_S/GL_TEXTURE_WRAP_T with GL_CLAMP_TO_BORDER in OpenGL and D3D12_TEXTURE_ADDRESS_MODE_BORDER in Direct3D 12.
@@ -30,7 +30,7 @@ A texture address mode identifies a technique for resolving uv coordinates that 
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureAddressMode_Repeat</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureAddressMode_Repeat</code></div>
     <div>
     Tile the texture at every uv coordinate integer junction.
     For example, for the u coordinates between 0 and 3, the texture is repeated three times.
@@ -39,7 +39,7 @@ A texture address mode identifies a technique for resolving uv coordinates that 
   </div>
 
   <div>
-    <div><code>Arcadia_Visuals_TextureAddressMode_MirroredRepeat</code></div>
+    <div><code>Arcadia_Engine_Visuals_TextureAddressMode_MirroredRepeat</code></div>
     <div>
     Tile and flip the texture at every uv coordinate integer junction.
     For example, for the u coordinates between 0 and 3, the texture is repeated three times.

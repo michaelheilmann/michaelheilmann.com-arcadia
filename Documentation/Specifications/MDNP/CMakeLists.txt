@@ -17,7 +17,6 @@ cmake_minimum_required(VERSION 4.1.3)
 
 BeginTemplateEngine(${MyProjectName}.Website.Specifications.MathematicalDefinitionsNotationsAndProofs "Website")
 
-  # Build "specifications/mathematical-definitions-notations-and-proofs/index.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/specifications/mathematical-definitions-notations-and-proofs/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/../../website.env")

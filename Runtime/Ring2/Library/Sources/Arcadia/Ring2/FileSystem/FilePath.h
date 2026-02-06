@@ -173,4 +173,30 @@ Arcadia_FilePath_append
     Arcadia_FilePath* other
   );
 
+/// @brief Return the root path component if any.
+/// @return The root path component if any, null otherwise.
+/// @remarks
+/// For Linux, this is `/`.
+/// For Windows this is something like `C:\` in native form.
+Arcadia_FilePath*
+Arcadia_FilePath_getRootPath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  );
+
+/// @brief Return the relative path if any.
+/// @return The relative path componetn if any, null otherwise.
+/// @remarks
+/// For `C:\` on Windows or for `/` on Linux this function returns null.
+/// For `C:\x` on Windows or for `/x` on Linux this is `x`.
+/// For `C:\x\y` on Windows or for `/x/y` on Linux this is `x\y`.
+/// For `C:\x\y\a.txt` on Windows or for `/x/y/a.txt` this is `x/y/a.txt`. 
+Arcadia_FilePath*
+Arcadia_FilePath_getRelativePath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  );
+
 #endif // ARCADIA_RING2_FILESYSTEM_FILEPATH_H_INCLUDED

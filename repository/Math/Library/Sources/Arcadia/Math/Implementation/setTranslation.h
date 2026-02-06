@@ -19,19 +19,7 @@
 #include "Arcadia/Math/Implementation/Matrix4Real32.h"
 #include "Arcadia/Math/Implementation/Matrix4Real64.h"
 
-/// @brief Assign this matrix the values of a translation transformation matrix.
-/// @param self A pointer to this matrix.
-/// @param x The translation along the x-axis.
-/// @param y The translation along the y-axis.
-/// @param z The translation along the z-axis.
-/// @remarks
-/// A translation transformation matrix has the following form:
-/// @code
-/// 1 0 0 x
-/// 0 1 0 y
-/// 0 0 1 z
-/// 0 0 0 1
-/// @endcode
+// https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setTranslation
 void
 Arcadia_Math_MatrixReal32Value_setTranslation
   (
@@ -42,19 +30,7 @@ Arcadia_Math_MatrixReal32Value_setTranslation
     Arcadia_Real32Value z
   );
 
-/// @brief Assign this matrix the values of a translation transformation matrix.
-/// @param self A pointer to this matrix.
-/// @param x The translation along the x-axis.
-/// @param y The translation along the y-axis.
-/// @param z The translation along the z-axis.
-/// @remarks
-/// A translation transformation matrix has the following form:
-/// @code
-/// 1 0 0 x
-/// 0 1 0 y
-/// 0 0 1 z
-/// 0 0 0 1
-/// @endcode
+// https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setTranslation
 void
 Arcadia_Math_MatrixReal64Value_setTranslation
   (

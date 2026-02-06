@@ -27,7 +27,7 @@
 #endif
 
 void
-Arcadia_Visuals_Implementation_registerSceneNodeFactories
+Arcadia_Visuals_Implementation_registerNodeFactories
   (
     Arcadia_Thread* thread,
     Arcadia_Set* types

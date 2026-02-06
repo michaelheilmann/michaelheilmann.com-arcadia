@@ -99,7 +99,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createIconImpl
     Arcadia_Imaging_PixelBuffer* pixelBuffer
   );
 
-static Arcadia_Visuals_Window*
+static Arcadia_Engine_Visuals_Window*
 Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createWindowImpl
   (
     Arcadia_Thread* thread,
@@ -275,22 +275,22 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createIconImpl
   return icon;
 }
 
-static Arcadia_Visuals_Window*
+static Arcadia_Engine_Visuals_Window*
 Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createWindowImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* self
   )
 {
-  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create(thread, self);
-  Arcadia_Visuals_Window* window = Arcadia_Visuals_Window_create(thread);
+  Arcadia_Engine_Visuals_WindowBackend* windowBackend = (Arcadia_Engine_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_create(thread, self);
+  Arcadia_Engine_Visuals_Window* window = Arcadia_Engine_Visuals_Window_create(thread);
   Arcadia_WeakReference* windowWeakReference =
     Arcadia_WeakReference_create
       (
         thread,
         Arcadia_Value_makeObjectReferenceValue(windowBackend)
       );
-  Arcadia_List_insertBackObjectReferenceValue(thread, ((Arcadia_Visuals_BackendContext*)self)->windows, (Arcadia_Object*)windowWeakReference);
+  Arcadia_List_insertBackObjectReferenceValue(thread, ((Arcadia_Engine_Visuals_BackendContextBase*)self)->windows, (Arcadia_Object*)windowWeakReference);
   window->backend = windowBackend;
   windowBackend->window = window;
   return window;
@@ -584,8 +584,8 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_findWindow
     Window x11window
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Visuals_BackendContext*)self)->windows); i < n; ++i) {
-    Arcadia_WeakReference* weakReference = (Arcadia_WeakReference*)Arcadia_List_getObjectReferenceValueAt(thread, ((Arcadia_Visuals_BackendContext*)self)->windows, i);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)((Arcadia_Engine_Visuals_BackendContextBase*)self)->windows); i < n; ++i) {
+    Arcadia_WeakReference* weakReference = (Arcadia_WeakReference*)Arcadia_List_getObjectReferenceValueAt(thread, ((Arcadia_Engine_Visuals_BackendContextBase*)self)->windows, i);
     Arcadia_Value value = Arcadia_WeakReference_getValue(thread, weakReference);
     if (Arcadia_Value_isObjectReferenceValue(&value)) {
       Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend* window = (Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend*)Arcadia_Value_getObjectReferenceValue(&value);
@@ -639,11 +639,11 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_onKeyReleaseEvent
     XKeyEvent* x11event
   )
 {
-  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_findWindow(thread, self, x11event->window);
+  Arcadia_Engine_Visuals_WindowBackend* windowBackend = (Arcadia_Engine_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_findWindow(thread, self, x11event->window);
   if (!windowBackend) {
     return;
   }
-  Arcadia_Visuals_Window* window = windowBackend->window;
+  Arcadia_Engine_Visuals_Window* window = windowBackend->window;
   if (!window) {
     return;
   }
@@ -677,11 +677,11 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_onConfigureNotifyEvent
     XConfigureEvent* x11event
   )
 {
-  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_findWindow(thread, self, x11event->window);
+  Arcadia_Engine_Visuals_WindowBackend* windowBackend = (Arcadia_Engine_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_findWindow(thread, self, x11event->window);
   if (!windowBackend) {
     return;
   }
-  Arcadia_Visuals_Window* window = windowBackend->window;
+  Arcadia_Engine_Visuals_Window* window = windowBackend->window;
   if (!window) {
     return;
   }
@@ -691,22 +691,22 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_onConfigureNotifyEvent
   int height = x11event->height + x11event->border_width * 2;
   bool positionChanged = false,
        sizeChanged = false;
-  if (((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.left != left ||
-      ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.top != top) {
-    ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.left = left;
-    ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.top = top;
+  if (((Arcadia_Engine_Visuals_WindowBackend*)windowBackend)->bounds.left != left ||
+      ((Arcadia_Engine_Visuals_WindowBackend*)windowBackend)->bounds.top != top) {
+    ((Arcadia_Engine_Visuals_WindowBackend*)windowBackend)->bounds.left = left;
+    ((Arcadia_Engine_Visuals_WindowBackend*)windowBackend)->bounds.top = top;
     positionChanged = true;
   }
-  if (((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.width != width ||
-      ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.height != height) {
-    ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.width = width;
-    ((Arcadia_Visuals_WindowBackend*)windowBackend)->bounds.height = height;
+  if (((Arcadia_Engine_Visuals_WindowBackend*)windowBackend)->bounds.width != width ||
+      ((Arcadia_Engine_Visuals_WindowBackend*)windowBackend)->bounds.height != height) {
+    ((Arcadia_Engine_Visuals_WindowBackend*)windowBackend)->bounds.width = width;
+    ((Arcadia_Engine_Visuals_WindowBackend*)windowBackend)->bounds.height = height;
     sizeChanged = true;
   }
   if (positionChanged) {
     Arcadia_Engine_Event* event =
       (Arcadia_Engine_Event*)
-      Arcadia_Visuals_WindowPositionChangedEvent_create
+      Arcadia_Engine_Visuals_WindowPositionChangedEvent_create
         (
           thread,
           Arcadia_getTickCount(thread),
@@ -719,7 +719,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_onConfigureNotifyEvent
   if (sizeChanged) {
     Arcadia_Engine_Event* event =
       (Arcadia_Engine_Event*)
-      Arcadia_Visuals_WindowSizeChangedEvent_create
+      Arcadia_Engine_Visuals_WindowSizeChangedEvent_create
         (
           thread,
           Arcadia_getTickCount(thread),
@@ -739,17 +739,17 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_onDeleteWindowEvent
     XClientMessageEvent* x11event
   )
 {
-  Arcadia_Visuals_WindowBackend* windowBackend = (Arcadia_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_findWindow(thread, self, x11event->window);
+  Arcadia_Engine_Visuals_WindowBackend* windowBackend = (Arcadia_Engine_Visuals_WindowBackend*)Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_findWindow(thread, self, x11event->window);
   if (!windowBackend) {
     return;
   }
-  Arcadia_Visuals_Window* window = windowBackend->window;
+  Arcadia_Engine_Visuals_Window* window = windowBackend->window;
   if (!window) {
     return;
   }
   Arcadia_Engine_Event* event =
     (Arcadia_Engine_Event*)
-    Arcadia_Visuals_WindowClosedEvent_create
+    Arcadia_Engine_Visuals_WindowClosedEvent_create
       (
         thread,
         Arcadia_getTickCount(thread),
@@ -959,10 +959,10 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_initializeDispatchImpl
   )
 {
   ((Arcadia_Visuals_Implementation_OpenGL4_BackendContextDispatch*)self)->getFunctions = (_Arcadia_Visuals_Implementation_OpenGL4_Functions* (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_OpenGL4_BackendContext*))&getFunctionsImpl;
-  ((Arcadia_Visuals_BackendContextDispatch*)self)->createIcon = (Arcadia_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*, Arcadia_Imaging_PixelBuffer*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createIconImpl;
-  ((Arcadia_Visuals_BackendContextDispatch*)self)->createWindow = (Arcadia_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createWindowImpl;
-  ((Arcadia_Visuals_BackendContextDispatch*)self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getDisplayDevicesImpl;
-  ((Arcadia_Visuals_BackendContextDispatch*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Visuals_BackendContext*)) &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_updateImpl;
+  ((Arcadia_Engine_Visuals_BackendContextBaseDispatch*)self)->createIcon = (Arcadia_Engine_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContextBase*, Arcadia_Imaging_PixelBuffer*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createIconImpl;
+  ((Arcadia_Engine_Visuals_BackendContextBaseDispatch*)self)->createWindow = (Arcadia_Engine_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContextBase*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createWindowImpl;
+  ((Arcadia_Engine_Visuals_BackendContextBaseDispatch*)self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContextBase*)) & Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getDisplayDevicesImpl;
+  ((Arcadia_Engine_BackendContextDispatch*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Engine_BackendContext*)) &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_updateImpl;
 }
 
 static void

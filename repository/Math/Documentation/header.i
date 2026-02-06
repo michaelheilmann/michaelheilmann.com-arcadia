@@ -1,12 +1,14 @@
-@{include("./../../../Documentation/Commons/header-common.i")}
-<link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=1'>
-<link rel='canonical' href='@{siteAddress}/repository/Arcadia/Math/'>
-<title>Michael Heilmann's Arcadia Math</title>
-<style>
-</style>
+  @{include("./../../../Documentation/Commons/header-common.i")}
+
+  <link rel='stylesheet' href='@{siteAddress}/assets/cxx-doc.css?v=5'>
+  <link rel='canonical' href='@{siteAddress}/Arcadia/Math/'>
+  <title>Michael Heilmann's Arcadia Math</title>
+  <style>
+  </style>
 </head>
 <body class="my-content-page-1">
   <header>
+    @{include("./../../../Documentation/Commons/mathjax-definitions.i")}
     <div>
     <a href="@{siteAddress}/">Home</a>
     </div>

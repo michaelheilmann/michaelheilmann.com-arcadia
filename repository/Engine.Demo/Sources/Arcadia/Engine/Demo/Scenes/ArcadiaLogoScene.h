@@ -35,19 +35,19 @@ struct Arcadia_Engine_Demo_ArcadiaLogoScene {
   // @todo This is should be inter-scene not intra-scene.
   Arcadia_ADL_Definitions* definitions;
   // A framebuffer node.
-  Arcadia_Visuals_Scene_FrameBufferNode* frameBufferNode;
+  Arcadia_Visuals_FrameBufferNode* frameBufferNode;
   // One viewport.
-  Arcadia_Visuals_Scene_ViewportNode* viewportNode;
+  Arcadia_Engine_Visuals_ViewportNode* viewportNode;
   // A single camera.
-  Arcadia_Visuals_Scene_CameraNode* cameraNode;
+  Arcadia_Engine_Visuals_CameraNode* cameraNode;
   // A single context, update with viewport- and camera-specific information for each render of the scene.
-  Arcadia_Visuals_Scene_RenderingContextNode* renderingContextNode;
+  Arcadia_Engine_Visuals_RenderingContextNode* renderingContextNode;
 
   /// The duration the scene is displayed so far.
   Arcadia_Real64Value duration;
 
   // The model (the scene).
-  Arcadia_Visuals_Scene_ModelNode* modelNode;
+  Arcadia_Engine_Visuals_ModelNode* modelNode;
 
   // The list of ADL files to load.
   Arcadia_List* toLoad;

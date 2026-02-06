@@ -17,30 +17,30 @@
 #include "Arcadia/Visuals/BackendContext.h"
 
 static void
-Arcadia_Visuals_BackendContext_constructImpl
+Arcadia_Engine_Visuals_BackendContextBase_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
+    Arcadia_Engine_Visuals_BackendContextBase* self
   );
 
 static void
-Arcadia_Visuals_BackendContext_initializeDispatchImpl
+Arcadia_Engine_Visuals_BackendContextBase_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContextDispatch* self
+    Arcadia_Engine_Visuals_BackendContextBaseDispatch* self
   );
 
 static void
-Arcadia_Visuals_BackendContext_visitImpl
+Arcadia_Engine_Visuals_BackendContextBase_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
+    Arcadia_Engine_Visuals_BackendContextBase* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) &Arcadia_Visuals_BackendContext_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_BackendContext_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) &Arcadia_Engine_Visuals_BackendContextBase_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_BackendContextBase_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -48,18 +48,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.BackendContext", Arcadia_Visuals_BackendContext,
-                         u8"Arcadia.Engine.BackendContext", Arcadia_Engine_BackendContext,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.BackendContextBase", Arcadia_Engine_Visuals_BackendContextBase,
+                         u8"Arcadia.Engine.Visuals.BackendContext", Arcadia_Engine_Visuals_BackendContext,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_BackendContext_constructImpl
+Arcadia_Engine_Visuals_BackendContextBase_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
+    Arcadia_Engine_Visuals_BackendContextBase* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_BackendContext_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_BackendContextBase_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -74,18 +74,18 @@ Arcadia_Visuals_BackendContext_constructImpl
 }
 
 static void
-Arcadia_Visuals_BackendContext_initializeDispatchImpl
+Arcadia_Engine_Visuals_BackendContextBase_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContextDispatch* self
+    Arcadia_Engine_Visuals_BackendContextBaseDispatch* self
   )
 { }
 
 static void
-Arcadia_Visuals_BackendContext_visitImpl
+Arcadia_Engine_Visuals_BackendContextBase_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
+    Arcadia_Engine_Visuals_BackendContextBase* self
   )
 {
   if (self->windows) {
@@ -93,35 +93,28 @@ Arcadia_Visuals_BackendContext_visitImpl
   }
 }
 
-Arcadia_Visuals_Icon*
-Arcadia_Visuals_BackendContext_createIcon
+Arcadia_Engine_Visuals_Icon*
+Arcadia_Engine_Visuals_BackendContextBase_createIcon
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self,
+    Arcadia_Engine_Visuals_BackendContextBase* self,
     Arcadia_Imaging_PixelBuffer* pixelBuffer
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_BackendContext, createIcon, self, pixelBuffer); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContextBase, createIcon, self, pixelBuffer); }
 
-Arcadia_Visuals_Window*
-Arcadia_Visuals_BackendContext_createWindow
+Arcadia_Engine_Visuals_Window*
+Arcadia_Engine_Visuals_BackendContextBase_createWindow
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
+    Arcadia_Engine_Visuals_BackendContextBase* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_BackendContext, createWindow, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContextBase, createWindow, self); }
 
 Arcadia_List*
-Arcadia_Visuals_BackendContext_getDisplayDevices
+Arcadia_Engine_Visuals_BackendContextBase_getDisplayDevices
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
+    Arcadia_Engine_Visuals_BackendContextBase* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_BackendContext, getDisplayDevices, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContextBase, getDisplayDevices, self); }
 
-void
-Arcadia_Visuals_BackendContext_update
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_BackendContext* self
-  )
-{ Arcadia_VirtualCall(Arcadia_Visuals_BackendContext, update, self); }

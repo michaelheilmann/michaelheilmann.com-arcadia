@@ -71,6 +71,24 @@ default code font
 }
 
 
+/* Theme #1
+ * For themting, we use "scoped CSS variables". 
+ */
+html.my-theme-1 {
+  --html-text-color: var(--black);
+  --html-background-color: var(--white);
+   
+  --header-a-color: var(--white);
+  --header-text-color: var(--white);
+  --header-background-color: var(--black);
+  
+  --footer-a-color: var(--blue);
+  --footer-text-color: var(--white);
+  --footer-background-color: var(--black);
+  
+  --a-color: var(--blue);
+}
+
 :root {
   --h1-margin: 0.67em 0;
   --h1-font-size: 2.5rem !important;
@@ -99,7 +117,7 @@ default code font
 }
 
 a {
-  color: var(--blue);
+  color: var(--a-color);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -112,7 +130,7 @@ html.my-theme-1 {
 
 html.my-theme-1 code {
   font-family: var(--font-family-code);
-  color: var(--black);
+  color: var(--html-text-color);
   font-size: var(--default-font-size);
 }
 
@@ -138,8 +156,8 @@ body.my-error-page-1, body.my-content-page-1 {
 }
 
 body.my-error-page-1 header, body.my-content-page-1 header {
-  background-color: var(--black);
-  /*min-height: 16px;*/
+  background-color: var(--header-background-color);
+  
   display: flex;
   flex-direction: row;
   padding-left: 16px;
@@ -150,7 +168,7 @@ body.my-error-page-1 header, body.my-content-page-1 header {
 
 body.my-error-page-1 header a, body.my-content-page-1 header a {
   text-decoration: none;
-  color: var(--white);
+  color: var(--header-text-color);
 }
 
 body.my-error-page-1 main,
@@ -270,24 +288,6 @@ body.my-error-page-1 h6, body.my-content-page-1 h6 {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-div.topic div p a {
-  font-size: var(--default-font-size);
-  text-decoration: none;
-}
-
-body.my-index-page-1 div.topic div.header {
-  display: inline;
-  font-size: var(--h6-font-size);
-}
-
-body.my-index-page-1 div.topic div.body {
-  font-size: var(--default-font-size);
-
-  padding-top: 1rem;
-  margin-top: 1rem;
-  border-top-style: solid;
-}
-
 body.my-index-page-1 header {
   flex-grow: 0;
   display: flex;
@@ -347,84 +347,6 @@ body.my-index-page-1 footer > div:last-child {
   padding-bottom: 2rem;
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* The following are used in the documentation of C elements. */
-
-/* Signatures of C elements.*/
-my-signature {
-  display: block;
-}
-
-/* Summaries of C elements. */
-my-summary {
-  display: block;
-  margin: var(--h6-margin);
-}
-
-/* Parameters of a C function. */
-my-parameters {
-  display: block;
-  margin: var(--h6-margin);
-  font-weight: bold;
-}
-
-/* Return value of a C function. */
-my-return-value {
-  display: block;
-  margin: var(--h6-margin);
-  font-weight: bold;
-}
-
-/* Errors of a C function. */
-my-errors {
-  display: block;
-  margin: var(--h6-margin);
-  font-weight: bold;
-}
-
-/* Elements of a C enumeration. */
-my-elements {
-  display: block;
-  margin: var(--h6-margin);
-  font-weight: bold;
-}
-
-/* Meta variables used in documentation of C elements. */
-body.my-content-page-1 my-mv {
-  display: inline;
-  font-family: my-code-font;
-  font-size: var(--default-font-size);
-}
-
-/* Meta variables used in documentation of C elements. */
-body.my-content-page-1 my-mv::before {
-  content: "<";
-}
-
-/* Meta variables used in documentation of C elements. */
-body.my-content-page-1 my-mv::after {
-  content: ">";
-}
-
-/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
-/*h4 ~ my-signature, h4 ~ my-summary,*/h4 ~ my-parameters, h4 ~ my-errors, h4 ~ my-return-value {
-  font-size: var(--h4-font-size);
-}
-
-/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
-/*h5 ~ my-signature, h5 ~ my-summary,*/h5 ~ my-parameters, h5 ~ my-errors, h5 ~ my-return-value {
-  font-size: var(--h5-font-size);
-}
-
-/* Proper sizing for my-signature, my-summary, my-parameters, my-errors, and my-return-value. */
-/*h6 ~ my-signature, h6 ~ my-summary,*/h6 ~ my-parameters, h6 ~ my-errors, h6 ~ my-return-value {
-  font-size: var(--h6-font-size);
-}
-
-/* Ensure a table followed by a paragraph are properly separated. */
-table + p {
-  margin-top: 1rem;
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* The following are used for index and subindex pages. */
@@ -451,7 +373,7 @@ body.my-subindex-page-1 main > div {
 }
 
 body.my-subindex-page-1 header {
-  background-color: var(--black);
+  background-color: var(--header-background-color);
   display: flex;
   flex-direction: column;
   padding-right: 16px;
@@ -460,12 +382,7 @@ body.my-subindex-page-1 header {
 
 body.my-subindex-page-1 header a {
   text-decoration: none;
-  color: var(--white);
-}
-
-body.my-subindex-page-1 div.topic:not(:first-child) {
-  border-left-style: solid;
-  border-left-width: 1px;
+  color: var(--header-a-color);
 }
 
 body.my-index-page-1 main > div {
@@ -474,15 +391,6 @@ body.my-index-page-1 main > div {
   column-gap: 2rem;
   flex-direction: row;
   justify-content: space-evenly;
-}
-
-body.my-index-page-1 div.topic {
-  background-color: rgb(250,250,250);
-  padding-left: 16px;
-  padding-right: 16px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  width: calc(100%/3);
 }
 
 body.my-index-page-1 footer > div > div {
@@ -512,16 +420,55 @@ div.banner {
 }
 
 body.my-index-page-1 div.banner {
-  background-color: white;
-  color: black;
+  background-color: var(--white);
+  color: var(--black);
 }
 
 body.my-subindex-page-1 header div.banner {
-  background-color: black;
-  color: white;
+  background-color: var(--black);
+  color: var(--white);
 }
 
 body.my-subindex-page-1 header div.navigation.breadcrumbs {
   padding-top: 2rem;
   padding-left: 2rem;
 }
+
+/* Copyright (c) 2024-2025 Michael Heilmann. All rights reserved. */
+div.topic div p a {
+  font-size: var(--default-font-size);
+  text-decoration: none;
+}
+
+body.my-index-page-1 div.topic div.header {
+  display: inline;
+  font-size: var(--h6-font-size);
+}
+
+body.my-index-page-1 div.topic div.body {
+  font-size: var(--default-font-size);
+
+  padding-top: 1rem;
+  margin-top: 1rem;
+  border-top-style: solid;
+}
+
+body.my-subindex-page-1 div.topic:not(:first-child) {
+  border-left-style: solid;
+  border-left-width: 1px;
+}
+
+body.my-index-page-1 div.topic {
+  background-color: rgb(250,250,250);
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  width: calc(100%/3);
+}
+
+body.my-index-page-1 div.topic {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
