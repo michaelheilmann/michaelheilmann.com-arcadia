@@ -38,26 +38,24 @@ main1
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
-    Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
-    Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argument);
-    Arcadia_String* key = NULL,
-                  * value = NULL;
-    if (!Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r, &key, &value)) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
+    Arcadia_String* argumentString = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
+    Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argumentString);
+    Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r);
+    if (argument->syntacticalError) {
+      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString);
     }
-    if (Arcadia_String_isEqualTo_pn(thread, key, u8"target", sizeof(u8"target") - 1)) {
-      if (!value) {
-        Arcadia_CommandLine_raiseNoValueError(thread, key);
+    if (Arcadia_String_isEqualTo_pn(thread, argument->name, u8"target", sizeof(u8"target") - 1)) {
+      if (!argument->value) {
+        Arcadia_CommandLine_raiseNoValueError(thread, argument->name);
       }
-      Arcadia_Value_setObjectReferenceValue(&target, value);
+      Arcadia_Value_setObjectReferenceValue(&target, argument->value);
     } else {
-      Arcadia_CommandLine_raiseUnknownArgumentError(thread, key, value);
+      Arcadia_CommandLine_raiseUnknownArgumentError(thread, argument->name, argument->value);
     }
-    fwrite(Arcadia_String_getBytes(thread, key), 1, Arcadia_String_getNumberOfBytes(thread, key), stdout);
-    if (value) {
+    fwrite(Arcadia_String_getBytes(thread, argument->name), 1, Arcadia_String_getNumberOfBytes(thread, argument->name), stdout);
+    if (argument->value) {
       fwrite(u8"=", 1, sizeof(u8"=") - 1, stdout);
-      fwrite(Arcadia_String_getBytes(thread, value), 1, Arcadia_String_getNumberOfBytes(thread, value), stdout);
+      fwrite(Arcadia_String_getBytes(thread, argument->value), 1, Arcadia_String_getNumberOfBytes(thread, argument->value), stdout);
     }
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }

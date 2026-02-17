@@ -19,10 +19,10 @@
 #include "Arcadia/Ring2/Include.h"
 
 /// Symbolic constant for the Arcadia_Real32Value representation of PI.
-#define Arcadia_PI_Real32Value 3.1415926f
+#define Arcadia_Math_PI_Real32Value 3.1415926f
 
 /// Symbolic constant for the Arcadia_Real64Value representation of PI.
-#define Arcadia_PI_Real64Value 3.1415926
+#define Arcadia_Math_PI_Real64Value 3.1415926
 
 /// @{
 /// @brief Convert an angle in radians into a corresponding angle in degrees.
@@ -34,14 +34,14 @@
 /// That is, we compute \f$\frac{a\cdot 360}{2\pi}\f$.
 /// This can be simplified to \f$\frac{180 a}{\pi}\f$ and to \f$a \frac{180}{\pi}\f$.
 Arcadia_Real32Value
-Arcadia_radiansToDegreesReal32Value
+Arcadia_Math_radiansToDegreesReal32Value
   (
     Arcadia_Thread* thread,
     Arcadia_Real32Value a
   );
 
 Arcadia_Real64Value
-Arcadia_radiansToDegreesReal64Value
+Arcadia_Math_radiansToDegreesReal64Value
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value a
@@ -60,14 +60,14 @@ Arcadia_radiansToDegreesReal64Value
 /// This can be simplified to  \f$\frac{a\pi}{180}\f$ and to \f$a \frac{\pi}{180}\f$.
 /// \f$\frac{\pi}{180}\f$ can be precomputed.
 Arcadia_Real32Value
-Arcadia_degreesToRadiansReal32Value
+Arcadia_Math_degreesToRadiansReal32Value
   (
     Arcadia_Thread* thread,
     Arcadia_Real32Value a
   );
 
 Arcadia_Real64Value
-Arcadia_degreesToRadiansReal64Value
+Arcadia_Math_degreesToRadiansReal64Value
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value a

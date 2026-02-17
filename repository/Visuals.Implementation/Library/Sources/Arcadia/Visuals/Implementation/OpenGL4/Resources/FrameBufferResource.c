@@ -87,7 +87,7 @@ Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource* self,
-    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextNode
+    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
   );
 
 static void
@@ -171,7 +171,7 @@ Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_initializeDispatchImp
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_loadImpl;
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_unloadImpl;
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_RenderingContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_renderImpl;
+  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_EnterPassResource*)) & Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_renderImpl;
 }
 
 static void
@@ -252,7 +252,7 @@ Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource* self,
-    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextNode
+    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
   )
 {/*Intentionally empty.*/}
 

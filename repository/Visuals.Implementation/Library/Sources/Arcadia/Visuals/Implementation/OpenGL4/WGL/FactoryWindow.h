@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_VISUALS_OPENGL_WGL_FACTORYWINDOW_H_INCLUDED)
 #define ARCADIA_VISUALS_OPENGL_WGL_FACTORYWINDOW_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #if !defined(WIN32_LEAN_AND_MEAN)
   #define WIN32_LEAN_AND_MEAN
 #endif

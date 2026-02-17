@@ -20,9 +20,11 @@
 #undef ARCADIA_MATH_PRIVATE
 #define ARCADIA_MATH_PRIVATE (1)
 
+#include "Arcadia/Math/Implementation/crossProduct.h"
 #include "Arcadia/Math/Implementation/Configure.h"
 #include "Arcadia/Math/Implementation/Color4Real32.h"
 #include "Arcadia/Math/Implementation/Color4Real64.h"
+#include "Arcadia/Math/Implementation/QuaternionReal32.h"
 #include "Arcadia/Math/Implementation/setOrthographicProjection.h"
 #include "Arcadia/Math/Implementation/setPerspectiveProjection.h"
 #include "Arcadia/Math/Implementation/setRotationX.h"

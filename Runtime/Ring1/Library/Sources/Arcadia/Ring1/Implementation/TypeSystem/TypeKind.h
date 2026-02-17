@@ -23,6 +23,12 @@
 /// An enumeration of the type kinds.
 typedef enum Arcadia_TypeKind {
 
+  /// The "enumeration" type kind.
+  Arcadia_TypeKind_Enumeration,
+
+  /// The "interface" type kind.
+  Arcadia_TypeKind_Interface,
+
   /// The "internal" type kind.
   /// Examples of this type kind are
   /// - <code>Arcadia.Atom</code>
@@ -30,6 +36,9 @@ typedef enum Arcadia_TypeKind {
   /// - <code>Arcadia.Memory</code>
   /// - <code>Arcadia.Type</code>
   Arcadia_TypeKind_Internal,
+
+  /// The "object" type kind.
+  Arcadia_TypeKind_Object,
 
   /// The "scalar" type kind.
   /// Examples of this type are:
@@ -41,12 +50,6 @@ typedef enum Arcadia_TypeKind {
   /// - <code>Arcadia.Size</code>
   /// - <code>Arcadia.Void</code>
   Arcadia_TypeKind_Scalar,
-
-  /// The "object" type kind.
-  Arcadia_TypeKind_Object,
-
-  /// The "enumeration" type kind.
-  Arcadia_TypeKind_Enumeration,
 
 } Arcadia_TypeKind;
 

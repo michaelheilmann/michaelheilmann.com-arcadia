@@ -21,7 +21,7 @@
 
 // https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setRotationX
 void
-Arcadia_Math_MatrixReal32Value_setRotationX
+Arcadia_Math_Matrix4x4Real32Value_setRotationX
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real32* self,
@@ -30,7 +30,7 @@ Arcadia_Math_MatrixReal32Value_setRotationX
 
 // https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setRotationX
 void
-Arcadia_Math_MatrixReal64Value_setRotationX
+Arcadia_Math_Matrix4x4Real64Value_setRotationX
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real64* self,

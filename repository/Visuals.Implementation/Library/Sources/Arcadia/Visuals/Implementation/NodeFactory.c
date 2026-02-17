@@ -18,7 +18,7 @@
 
 #include "Arcadia/Visuals/Implementation/Nodes/CameraNode.h"
 #include "Arcadia/Visuals/Implementation/Nodes/FrameBufferNode.h"
-#include "Arcadia/Visuals/Implementation/Nodes/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Nodes/EnterPassNode.h"
 #include "Arcadia/Visuals/Implementation/Nodes/MaterialNode.h"
 #include "Arcadia/Visuals/Implementation/Nodes/MeshNode.h"
 #include "Arcadia/Visuals/Implementation/Nodes/ModelNode.h"
@@ -106,8 +106,8 @@ Arcadia_Visuals_Implementation_NodeFactory_createPixelBufferNodeImpl
     Arcadia_ADL_PixelBufferDefinition* source
   );
 
-static Arcadia_Engine_Visuals_Implementation_RenderingContextNode*
-Arcadia_Visuals_Implementation_NodeFactory_createRenderingContextNodeImpl
+static Arcadia_Engine_Visuals_Implementation_EnterPassNode*
+Arcadia_Visuals_Implementation_NodeFactory_createEnterPassNodeImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_NodeFactory* self,
@@ -143,8 +143,8 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcardia.Visuals.Implementation.NodeFactory", Arcadia_Visuals_Implementation_NodeFactory,
-                         u8"Arcadia.Visuals.NodeFactory", Arcadia_Engine_Visuals_NodeFactory,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.NodeFactory", Arcadia_Visuals_Implementation_NodeFactory,
+                         u8"Arcadia.Engine.Visuals.NodeFactory", Arcadia_Engine_Visuals_NodeFactory,
                          &_typeOperations);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -178,7 +178,7 @@ Arcadia_Visuals_Implementation_NodeFactory_initializeDispatchImpl
 {
   ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createCameraNode = (Arcadia_Engine_Visuals_CameraNode *(*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_NodeFactory_createCameraNodeImpl;
   ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createFrameBufferNode = (Arcadia_Visuals_FrameBufferNode *(*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_NodeFactory_createFrameBufferNodeImpl;
-  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createRenderingContextNode = (Arcadia_Engine_Visuals_RenderingContextNode * (*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_NodeFactory_createRenderingContextNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createEnterPassNode = (Arcadia_Engine_Visuals_EnterPassNode * (*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_NodeFactory_createEnterPassNodeImpl;
   ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createMaterialNode = (Arcadia_Engine_Visuals_MaterialNode *(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_MaterialDefinition*)) & Arcadia_Visuals_Implementation_NodeFactory_createMaterialNodeImpl;
   ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createMeshNode = (Arcadia_Engine_Visuals_MeshNode *(*)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_MeshDefinition*)) & Arcadia_Visuals_Implementation_NodeFactory_createMeshNodeImpl;
   ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createModelNode = (Arcadia_Engine_Visuals_ModelNode * (*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_ModelDefinition*)) & Arcadia_Visuals_Implementation_NodeFactory_createModelNodeImpl;
@@ -261,14 +261,14 @@ Arcadia_Visuals_Implementation_NodeFactory_createPixelBufferNodeImpl
   )
 { return Arcadia_Engine_Visuals_Implementation_PixelBufferNode_create(thread, backendContext, source); }
 
-static Arcadia_Engine_Visuals_Implementation_RenderingContextNode*
-Arcadia_Visuals_Implementation_NodeFactory_createRenderingContextNodeImpl
+static Arcadia_Engine_Visuals_Implementation_EnterPassNode*
+Arcadia_Visuals_Implementation_NodeFactory_createEnterPassNodeImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_NodeFactory* self,
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   )
-{ return Arcadia_Engine_Visuals_Implementation_RenderingContextNode_create(thread, backendContext); }
+{ return Arcadia_Engine_Visuals_Implementation_EnterPassNode_create(thread, backendContext); }
 
 static Arcadia_Engine_Visuals_Implementation_TextureNode*
 Arcadia_Visuals_Implementation_NodeFactory_createTextureNodeImpl

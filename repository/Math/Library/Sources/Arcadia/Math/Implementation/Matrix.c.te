@@ -29,6 +29,18 @@ Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}Dispatch* self
   );
+  
+static void
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_equalTo
+  (
+    Arcadia_Thread* thread
+  );
+
+static void
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_notEqualTo
+  (
+    Arcadia_Thread* thread
+  );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
@@ -104,22 +116,22 @@ Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_constructImpl
     Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix});
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
+  if (0 == _numberOfArguments) {
+    for (Arcadia_SizeValue i = 0; i < @{dimensionality}; ++i) {
+      for (Arcadia_SizeValue j = 0; j < @{dimensionality}; ++j) {
+        self->elements[i][j] = @{zeroScalarLiteral};
+      }
+    }
+  } else {
+    Arcadia_Thread_setStatus(thread,  Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  for (Arcadia_SizeValue i = 0; i < @{dimensionality}; ++i) {
-    for (Arcadia_SizeValue j = 0; j < @{dimensionality}; ++j) {
-      self->elements[i][j] = @{zeroScalarLiteral};
-    }
-  }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix});
 }
 
 static void
@@ -128,7 +140,84 @@ Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}Dispatch* self
   )
-{ }
+{
+  ((Arcadia_ObjectDispatch*)self)->equalTo = &Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_equalTo;
+  ((Arcadia_ObjectDispatch*)self)->notEqualTo = &Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_notEqualTo;
+}
+
+static void
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_equalTo
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (2 != numberOfArguments) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* self = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_getType(thread));
+  if (!Arcadia_ValueStack_isObjectReferenceValue(thread, 1)) {
+    Arcadia_ValueStack_popValues(thread, 3);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
+    return;
+  }
+  Arcadia_Object* otherObject = Arcadia_ValueStack_getObjectReferenceValue(thread, 1);
+  if (!Arcadia_Object_isInstanceOf(thread, otherObject, _Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_getType(thread))) {
+    Arcadia_ValueStack_popValues(thread, 3);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
+    return;
+  }
+  Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* other = (Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}*)otherObject;
+  for (Arcadia_SizeValue i = 0, n = @{dimensionality}; i < n; ++i) {
+    for (Arcadia_SizeValue j = 0, m = @{dimensionality}; j < m; ++j) {
+      if (self->elements[i][j] != other->elements[i][j]) {
+        Arcadia_ValueStack_popValues(thread, 3);
+        Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
+        return;
+      }
+    }
+  }
+  Arcadia_ValueStack_popValues(thread, 3);
+  Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
+}
+
+static void
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_notEqualTo
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  if (2 != numberOfArguments) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* self = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_getType(thread));
+  if (!Arcadia_ValueStack_isObjectReferenceValue(thread, 1)) {
+    Arcadia_ValueStack_popValues(thread, 3);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
+    return;
+  }
+  Arcadia_Object* otherObject = Arcadia_ValueStack_getObjectReferenceValue(thread, 1);
+  if (!Arcadia_Object_isInstanceOf(thread, otherObject, _Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_getType(thread))) {
+    Arcadia_ValueStack_popValues(thread, 3);
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
+    return;
+  }
+  Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* other = (Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}*)otherObject;
+  for (Arcadia_SizeValue i = 0, n = @{dimensionality}; i < n; ++i) {
+    for (Arcadia_SizeValue j = 0, m = @{dimensionality}; j < m; ++j) {
+      if (self->elements[i][j] != other->elements[i][j]) {
+        Arcadia_ValueStack_popValues(thread, 3);
+        Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_True);
+        return;
+      }
+    }
+  }
+  Arcadia_ValueStack_popValues(thread, 3);
+  Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
+}
 
 void
 Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_assign
@@ -213,4 +302,38 @@ Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_lerp
       }
     }
   }
+}
+
+void
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_setWithValues
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* self,
+    @{scalarType} const* values
+  )
+{
+  for (Arcadia_SizeValue i = 0; i < @{dimensionality}; ++i) {
+    for (Arcadia_SizeValue j = 0; j < @{dimensionality}; ++j) {
+      self->elements[i][j] = values[i * @{dimensionality} + j];
+    }
+  }
+}
+
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}*
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_multiply
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* self,
+    Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* other
+  )
+{
+  Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* result = Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_create(thread);
+  for (Arcadia_SizeValue i = 0; i < @{dimensionality}; ++i) {
+    for (Arcadia_SizeValue j = 0; j < @{dimensionality}; ++j) {
+      for (Arcadia_SizeValue k = 0; k < @{dimensionality}; ++k) {
+        result->elements[i][j] += self->elements[i][k] * other->elements[k][j];
+      }
+    }
+  }
+  return result;
 }

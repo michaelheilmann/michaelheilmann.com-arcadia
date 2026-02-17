@@ -16,7 +16,6 @@
 #define ARCADIA_ENGINE_PRIVATE (1)
 #include "Arcadia/Engine/Audials/BackendContext.h"
 
-#if 1
 static void
 Arcadia_Engine_Audials_BackendContext_constructImpl
   (
@@ -88,4 +87,3 @@ Arcadia_Engine_Audials_BackendContext_visitImpl
     Arcadia_Engine_Audials_BackendContext* self
   )
 {/*Intentionally empty.*/}
-#endif

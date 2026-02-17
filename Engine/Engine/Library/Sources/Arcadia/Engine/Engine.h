@@ -43,14 +43,14 @@ struct Arcadia_EngineDispatch {
 struct Arcadia_Engine {
   Arcadia_Object _parent;
 
-  /// Set of Arcadia.Visuals.Backend derived type objects.
+  /// Set of Arcadia.Engine.Visuals.Backend derived type objects.
   Arcadia_Set* visualsBackendTypes;
-  /// Set of Arcadia.Visuals.NodeFactory derived type objects.
+  /// Set of Arcadia.Engine.Visuals.NodeFactory derived type objects.
   Arcadia_Set* visualsNodeFactoryTypes;
 
-  /// Set of Arcadia.Audials.Backend derived type objects.
+  /// Set of Arcadia.Engine.Audials.Backend derived type objects.
   Arcadia_Set* audialsBackendTypes;
-  /// Set of Arcadia.Audials.NodeFactory derived type objects.
+  /// Set of Arcadia.Engine.Audials.NodeFactory derived type objects.
   Arcadia_Set* audialsNodeFactoryTypes;
 
   /// Pointer to the active visuals backend context if any, null otherwise.

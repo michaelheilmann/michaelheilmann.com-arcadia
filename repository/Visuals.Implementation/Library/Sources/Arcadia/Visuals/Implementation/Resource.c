@@ -141,7 +141,7 @@ Arcadia_Visuals_Implementation_Resource_render
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Resource* self,
-    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextResource
+    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextResource
   )
 { Arcadia_VirtualCall(Arcadia_Visuals_Implementation_Resource, render, self, renderingContextResource); }
 

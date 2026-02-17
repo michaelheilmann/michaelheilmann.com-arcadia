@@ -21,16 +21,84 @@
 #endif
 
 #include "Arcadia/Engine/BackendContext.h"
+#include "Arcadia/Imaging/Include.h"
+typedef struct Arcadia_Engine_Visuals_Icon Arcadia_Engine_Visuals_Icon;
+typedef struct Arcadia_Engine_Visuals_Window Arcadia_Engine_Visuals_Window;
 
+/// @code
+/// class Arcadia.Engine.Visuals.BackendContextBase extends Arcadia.Engine.Visuals.BackendContext {
+///
+///   constructor
+///     (
+///     )
+///
+///   method
+///   createIcon
+///     (
+///       width : Arcadia.Integer32,
+///       height : Arcadia.Integer32,
+///       red : Arcadia.Natural8,
+///       green : Arcadia.Natural8,
+///       blue : Arcadia.Natural8,
+///       alpha : Arcadia.Natural8
+///     )
+///     : Arcadia.Engine,Visuals.Icon
+///
+///   method
+///   createWindow
+///     (
+///     )
+///     : Arcadia.Engine.Visuals.Window
+///
+///   method
+///   getDisplayDevices
+///     (
+///     )
+///     : Arcadia.List
+///
+/// }
+/// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.BackendContext", Arcadia_Engine_Visuals_BackendContext,
                           u8"Arcadia.Engine.BackendContext");
 
 struct Arcadia_Engine_Visuals_BackendContextDispatch {
   Arcadia_Engine_BackendContextDispatch _parent;
+
+  Arcadia_Engine_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self, Arcadia_Imaging_PixelBuffer* pixelBuffer);
+  Arcadia_Engine_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self);
+  Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self);
 };
 
 struct Arcadia_Engine_Visuals_BackendContext {
   Arcadia_Engine_BackendContext _parent;
+
+  /// @brief List of windows.
+  Arcadia_List* windows;
 };
+
+Arcadia_Engine_Visuals_Icon*
+Arcadia_Engine_Visuals_BackendContext_createIcon
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
+  );
+
+Arcadia_Engine_Visuals_Window*
+Arcadia_Engine_Visuals_BackendContext_createWindow
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  );
+
+/// @brief Enumerate all display devices.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this backend context.
+Arcadia_List*
+Arcadia_Engine_Visuals_BackendContext_getDisplayDevices
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  );
 
 #endif // ARCADIA_ENGINE_VISUALS_BACKENDCONTEXT_H_INCLUDED

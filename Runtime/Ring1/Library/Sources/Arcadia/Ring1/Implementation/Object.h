@@ -61,7 +61,7 @@ struct Arcadia_Object {
 
 #define Arcadia_superTypeConstructor(_thread, _type, _self) \
   { \
-    Arcadia_Type_getOperations(Arcadia_Type_getParentObjectType(thread, _type))->objectTypeOperations->construct(_thread, (Arcadia_Object*)_self); \
+    Arcadia_Type_getOperations(Arcadia_ObjectType_getParentObjectType(thread, _type))->objectTypeOperations->construct(_thread, (Arcadia_Object*)_self); \
   }
 
 /// R(untime) ex(tension) macro.
@@ -291,12 +291,28 @@ Arcadia_Object_toString
 
 /// Utility macro to define the body of a virtual call with return value.
 #define Arcadia_VirtualCallWithReturn(Type, Function, ...) \
-  Type##Dispatch* d = (Type##Dispatch*)Arcadia_Type_getDispatch(Arcadia_Object_getType(thread, (Arcadia_Object*)self)); \
+  Arcadia_Type* t = Arcadia_Object_getType(thread, (Arcadia_Object*)self); \
+  Type##Dispatch* d = (Type##Dispatch*)Arcadia_ObjectType_getDispatch(t); \
   return d->Function(thread, __VA_ARGS__);
 
 /// Utility macro to define the body of a virtual call without return value.
 #define Arcadia_VirtualCall(Type, Function, ...) \
-  Type##Dispatch* d = (Type##Dispatch*)Arcadia_Type_getDispatch(Arcadia_Object_getType(thread, (Arcadia_Object*)self)); \
+  Arcadia_Type* t = Arcadia_Object_getType(thread, (Arcadia_Object*)self); \
+  Type##Dispatch* d = (Type##Dispatch*)Arcadia_ObjectType_getDispatch(t); \
   d->Function(thread, __VA_ARGS__);
+
+/// Utility macro to define the header of a constructor.
+#define Arcadia_EnterConstructor(Type) \
+  Arcadia_TypeValue _type = _##Type##_getType(thread); \
+  if (Arcadia_ValueStack_getSize(thread) < 1) { \
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption); \
+    Arcadia_Thread_jump(thread); \
+  } \
+  Arcadia_Natural8Value _numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
+
+/// Utility macro to define the footer of a constructor.
+#define Arcadia_LeaveConstructor(Type) \
+  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type); \
+  Arcadia_ValueStack_popValues(thread, _numberOfArguments + 1);
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED

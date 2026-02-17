@@ -15,7 +15,7 @@
 
 #include "Arcadia/Visuals/Implementation/Windows/DisplayMode.h"
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/Windows/DisplayDevice.h"
 
 static void
@@ -86,7 +86,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.DisplayMode", Arcadia_Engine_Visuals_Windows_DisplayMode,
-                         u8"Arcadia.Visuals.DisplayMode", Arcadia_Visuals_DisplayMode,
+                         u8"Arcadia.Engine.Visuals.DisplayMode", Arcadia_Engine_Visuals_DisplayMode,
                          &_typeOperations);
 
 static void
@@ -126,11 +126,11 @@ Arcadia_Engine_Visuals_Windows_DisplayMode_initializeDispatchImpl
     Arcadia_Engine_Visuals_Windows_DisplayModeDispatch* self
   )
 {
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getHorizontalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl;
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getVerticalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getVerticalResolutionImpl;
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getColorDepth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getColorDepthImpl;
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->getFrequency = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getFrequencyImpl;
-  ((Arcadia_Visuals_DisplayModeDispatch*)self)->apply = (void(*)(Arcadia_Thread*, Arcadia_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_applyImpl;
+  ((Arcadia_Engine_Visuals_DisplayModeDispatch*)self)->getHorizontalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getHorizontalResolutionImpl;
+  ((Arcadia_Engine_Visuals_DisplayModeDispatch*)self)->getVerticalResolution = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getVerticalResolutionImpl;
+  ((Arcadia_Engine_Visuals_DisplayModeDispatch*)self)->getColorDepth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getColorDepthImpl;
+  ((Arcadia_Engine_Visuals_DisplayModeDispatch*)self)->getFrequency = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_getFrequencyImpl;
+  ((Arcadia_Engine_Visuals_DisplayModeDispatch*)self)->apply = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayMode*)) & Arcadia_Engine_Visuals_Windows_DisplayMode_applyImpl;
 }
 
 static void

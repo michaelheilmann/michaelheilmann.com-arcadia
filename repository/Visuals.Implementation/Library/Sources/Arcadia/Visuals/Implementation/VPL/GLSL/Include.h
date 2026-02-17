@@ -16,10 +16,7 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_VPL_GLSL_INCLUDE_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_VPL_GLSL_INCLUDE_H_INCLUDED
 
-#include "Arcadia/Visuals/VPL/ConstantBlock.h"
-#include "Arcadia/Visuals/VPL/Field.h"
-#include "Arcadia/Visuals/VPL/Scalar.h"
-#include "Arcadia/Visuals/VPL/Program.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/VPL/GLSL/Transpiler.h"
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_VPL_GLSL_INCLUDE_H_INCLUDED

@@ -16,7 +16,7 @@
 #define ARCADIA_RING1_PRIVATE (1)
 #include "Arcadia/Ring1/Implementation/TypeSystem/Type.h"
 
-#include "Arcadia/Ring1/Implementation/Types.module.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Types.module.h"
 #include <assert.h>
 
 Arcadia_Name*

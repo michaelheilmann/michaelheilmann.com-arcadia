@@ -95,6 +95,9 @@ if (NOT TARGET ${MyLibraryName})
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.c)
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.h)
 
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/QuaternionReal32.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/QuaternionReal32.h)
+
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.c)
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.h)
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.c)
@@ -114,6 +117,8 @@ if (NOT TARGET ${MyLibraryName})
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.c)
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.h)
 
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/crossProduct.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/crossProduct.h)
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setOrthographicProjection.c)
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setOrthographicProjection.h)
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setPerspectiveProjection.c)

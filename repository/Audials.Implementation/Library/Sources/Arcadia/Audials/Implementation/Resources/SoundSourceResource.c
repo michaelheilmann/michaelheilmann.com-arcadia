@@ -140,6 +140,23 @@ Arcadia_Engine_Audials_Implementation_SoundSourceResource_stop
 { Arcadia_VirtualCall(Arcadia_Engine_Audials_Implementation_SoundSourceResource, stop, self); }
 
 void
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_setIsLooping
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self,
+    Arcadia_BooleanValue isLooping
+  )
+{ Arcadia_VirtualCall(Arcadia_Engine_Audials_Implementation_SoundSourceResource, setIsLooping, self, isLooping); }
+
+Arcadia_BooleanValue
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_getIsLooping
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Audials_Implementation_SoundSourceResource, getIsLooping, self); }
+
+void
 Arcadia_Engine_Audials_Implementation_SoundSourceResource_setVolume
   (
     Arcadia_Thread* thread,

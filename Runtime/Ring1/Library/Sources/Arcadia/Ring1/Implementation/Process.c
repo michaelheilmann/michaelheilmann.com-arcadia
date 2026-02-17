@@ -22,7 +22,7 @@
 #include "Arcadia/Ring1/Implementation/TypeSystem/Names.module.h"
 #include "Arcadia/Ring1/Implementation/Atoms.module.h"
 #include "Arcadia/Ring1/Implementation/Thread.private.h"
-#include "Arcadia/Ring1/Implementation/Types.module.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Types.module.h"
 #include <stdbool.h>
 
 typedef const ModuleInfo* (GetModuleInfo)();

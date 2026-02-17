@@ -16,8 +16,7 @@
 #if !defined(ARCADIA_ENGINE_DEMO_SCENES_PRELOADINGSCENE_H_INCLUDED)
 #define ARCADIA_ENGINE_DEMO_SCENES_PRELOADINGSCENE_H_INCLUDED
 
-#include "Arcadia/Audials/Include.h"
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Engine/Demo/Scene.h"
 #include "Arcadia/ADL/Include.h"
 
@@ -41,7 +40,7 @@ struct Arcadia_Engine_Demo_ArcadiaLogoScene {
   // A single camera.
   Arcadia_Engine_Visuals_CameraNode* cameraNode;
   // A single context, update with viewport- and camera-specific information for each render of the scene.
-  Arcadia_Engine_Visuals_RenderingContextNode* renderingContextNode;
+  Arcadia_Engine_Visuals_EnterPassNode* enterPassNode;
 
   /// The duration the scene is displayed so far.
   Arcadia_Real64Value duration;

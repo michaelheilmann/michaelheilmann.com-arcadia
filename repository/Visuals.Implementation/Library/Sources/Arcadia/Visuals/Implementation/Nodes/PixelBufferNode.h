@@ -20,7 +20,7 @@
   #error("do not include directly, include `Arcadia/Visuals/Implementation/Include.h` instead")
 #endif
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
 typedef struct Arcadia_Visuals_Implementation_TextureResource Arcadia_Visuals_Implementation_TextureResource;
 

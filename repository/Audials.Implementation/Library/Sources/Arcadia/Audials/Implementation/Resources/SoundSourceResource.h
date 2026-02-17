@@ -29,6 +29,8 @@ struct Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch {
   void (*pause)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*);
   void (*play)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*);
   void (*stop)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*);
+  void (*setIsLooping)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*, Arcadia_BooleanValue);
+  Arcadia_BooleanValue (*getIsLooping)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*);
   void (*setVolume)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*, Arcadia_Real32Value);
   Arcadia_Real32Value(*getVolume)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*);
 };
@@ -60,6 +62,21 @@ Arcadia_Engine_Audials_Implementation_SoundSourceResource_play
 
 void
 Arcadia_Engine_Audials_Implementation_SoundSourceResource_stop
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self
+  );
+
+void
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_setIsLooping
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_Implementation_SoundSourceResource* self,
+    Arcadia_BooleanValue isLooping
+  );
+
+Arcadia_BooleanValue
+Arcadia_Engine_Audials_Implementation_SoundSourceResource_getIsLooping
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_Implementation_SoundSourceResource* self

@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_WINDOWS_DISPLAYDEVICE_H_INCLUDED
 
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #if !defined(WIN32_LEAN_AND_MEAN)
   #define WIN32_LEAN_AND_MEAN
 #endif
@@ -29,14 +29,14 @@ typedef struct Arcadia_Engine_Visuals_Windows_DisplayMode Arcadia_Engine_Visuals
 
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Windows.DisplayDevice", Arcadia_Engine_Visuals_Windows_DisplayDevice,
-                          u8"Arcadia.Visuals.DisplayDevice");
+                          u8"Arcadia.Engine.Visuals.DisplayDevice");
 
 struct Arcadia_Engine_Visuals_Windows_DisplayDeviceDispatch {
-  Arcadia_Visuals_DisplayDeviceDispatch _parent;
+  Arcadia_Engine_Visuals_DisplayDeviceDispatch _parent;
 };
 
 struct Arcadia_Engine_Visuals_Windows_DisplayDevice {
-  Arcadia_Visuals_DisplayDevice _parent;
+  Arcadia_Engine_Visuals_DisplayDevice _parent;
   // The ID of the adapter / monitor combination.
   // Example: \\.\DISPLAY
   Arcadia_String* id;

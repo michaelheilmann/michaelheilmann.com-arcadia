@@ -75,7 +75,7 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_MeshResource* self,
-    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextNode
+    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
   );
 
 static void
@@ -173,7 +173,7 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_initializeDispatchImpl
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_loadImpl;
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_unloadImpl;
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_RenderingContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_renderImpl;
+  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_EnterPassResource*)) & Arcadia_Visuals_Implementation_OpenGL4_MeshResource_renderImpl;
 }
 
 static void
@@ -236,7 +236,7 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_MeshResource* self,
-    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextResource
+    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextResource
   )
 {
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->vertexBuffer);

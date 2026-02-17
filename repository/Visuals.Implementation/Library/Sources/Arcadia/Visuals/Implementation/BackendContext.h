@@ -16,41 +16,30 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 
 #include "Arcadia/Visuals/Implementation/Resources/ConstantBufferResource.h"
-#include "Arcadia/Visuals/Implementation/Resources/FragmentProgramResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/FrameBufferResource.h"
-#include "Arcadia/Visuals/Implementation/Resources/RenderingContextResource.h"
+#include "Arcadia/Visuals/Implementation/Resources/EnterPassResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/MaterialResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/MeshResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/ModelResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/ProgramResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/TextureResource.h"
 #include "Arcadia/Visuals/Implementation/Resources/VertexBufferResource.h"
-#include "Arcadia/Visuals/Implementation/Resources/ViewportResource.h"
-#include "Arcadia/Visuals/Implementation/Resources/VertexProgramResource.h"
 
 /// Base of all OpenGL4 backend contexts.
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
-                          u8"Arcadia.Engine.Visuals.BackendContextBase");
+                          u8"Arcadia.Engine.Visuals.BackendContext");
 
 struct Arcadia_Visuals_Implementation_BackendContextDispatch {
-  Arcadia_Engine_Visuals_BackendContextBaseDispatch _parent;
+  Arcadia_Engine_Visuals_BackendContextDispatch _parent;
 
   Arcadia_Visuals_Implementation_ConstantBufferResource*
   (*createConstantBufferResource)
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self
-    );
-
-  Arcadia_Visuals_Implementation_FragmentProgramResource*
-  (*createFragmentProgramResource)
-    (
-      Arcadia_Thread* thread,
-      Arcadia_Visuals_Implementation_BackendContext* self,
-      Arcadia_Visuals_VPL_Program* program
     );
 
   Arcadia_Visuals_Implementation_FrameBufferResource*
@@ -60,8 +49,8 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
       Arcadia_Visuals_Implementation_BackendContext* self
     );
 
-  Arcadia_Visuals_Implementation_RenderingContextResource*
-  (*createRenderingContextResource)
+  Arcadia_Visuals_Implementation_EnterPassResource*
+  (*createEnterPassResource)
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self
@@ -99,8 +88,7 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self,
-      Arcadia_Visuals_Implementation_VertexProgramResource* vertexProgram,
-      Arcadia_Visuals_Implementation_FragmentProgramResource* fragmentProgram
+      Arcadia_Visuals_VPL_Program* program
     );
 
   Arcadia_Visuals_Implementation_TextureResource*
@@ -116,25 +104,10 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self
     );
-
-  Arcadia_Visuals_Implementation_VertexProgramResource*
-  (*createVertexProgramResource)
-    (
-      Arcadia_Thread* thread,
-      Arcadia_Visuals_Implementation_BackendContext* self,
-      Arcadia_Visuals_VPL_Program* program
-    );
-
-  Arcadia_Visuals_Implementation_ViewportResource*
-  (*createViewportResource)
-    (
-      Arcadia_Thread* thread,
-      Arcadia_Visuals_Implementation_BackendContext* self
-    );
 };
 
 struct Arcadia_Visuals_Implementation_BackendContext {
-  Arcadia_Engine_Visuals_BackendContextBase _parent;
+  Arcadia_Engine_Visuals_BackendContext _parent;
 };
 
 // Create a constant buffer resource.
@@ -144,16 +117,6 @@ Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self
-  );
-
-// Create a fragment program resource.
-// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
-Arcadia_Visuals_Implementation_FragmentProgramResource*
-Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_VPL_Program* program
   );
 
 // Create a frame buffer resource.
@@ -167,8 +130,8 @@ Arcadia_Visuals_Implementation_BackendContext_createFrameBufferResource
 
 // Create a rendering context resource.
 // The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
-Arcadia_Visuals_Implementation_RenderingContextResource*
-Arcadia_Visuals_Implementation_BackendContext_createRenderingContextResource
+Arcadia_Visuals_Implementation_EnterPassResource*
+Arcadia_Visuals_Implementation_BackendContext_createEnterPassResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self
@@ -214,8 +177,7 @@ Arcadia_Visuals_Implementation_BackendContext_createProgramResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_Implementation_VertexProgramResource* vertexProgram,
-    Arcadia_Visuals_Implementation_FragmentProgramResource* fragmentProgram
+    Arcadia_Visuals_VPL_Program* program
   );
 
 // Create a texture resource
@@ -231,25 +193,6 @@ Arcadia_Visuals_Implementation_BackendContext_createTextureResource
 // The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
 Arcadia_Visuals_Implementation_VertexBufferResource*
 Arcadia_Visuals_Implementation_BackendContext_createVertexBufferResource
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* self
-  );
-
-// Create a vertex program resource.
-// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
-Arcadia_Visuals_Implementation_VertexProgramResource*
-Arcadia_Visuals_Implementation_BackendContext_createVertexProgramResource
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_VPL_Program* program
-  );
-
-// Create a viewport resource.
-// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
-Arcadia_Visuals_Implementation_ViewportResource*
-Arcadia_Visuals_Implementation_BackendContext_createViewportResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self

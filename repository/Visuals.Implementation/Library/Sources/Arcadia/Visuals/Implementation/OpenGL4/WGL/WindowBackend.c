@@ -15,7 +15,6 @@
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/WindowBackend.h"
 
-#include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/Windows/_WindowText.h"
 #include <limits.h>
 
@@ -260,7 +259,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend_destruct
     DeleteObject(self->windowHandle);
     self->windowHandle = NULL;
   }
-  Arcadia_List_filter(thread, ((Arcadia_Engine_Visuals_BackendContextBase*)self->backendContext)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
+  Arcadia_List_filter(thread, ((Arcadia_Engine_Visuals_BackendContext*)self->backendContext)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
   if (NULL != self->backendContext) {
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
     self->backendContext = NULL;

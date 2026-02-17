@@ -16,7 +16,6 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_BACKENDCONTEXT_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_BACKENDCONTEXT_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/SystemWindow.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"

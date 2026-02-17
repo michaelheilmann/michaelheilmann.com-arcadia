@@ -16,15 +16,8 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_INCLUDE_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/Configure.h"
-
-#if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  #include "Arcadia/Visuals/Implementation/Windows/TextureFont.h"
-#elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-#else
-  #error("environment not (yet) supported")
-#endif
 
 void
 Arcadia_Visuals_Implementation_registerNodeFactories

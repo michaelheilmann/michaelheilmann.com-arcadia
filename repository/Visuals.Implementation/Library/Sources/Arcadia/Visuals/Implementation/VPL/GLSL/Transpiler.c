@@ -16,7 +16,7 @@
 #include "Arcadia/Visuals/Implementation/VPL/GLSL/Transpiler.h"
 
 #include "Arcadia/Languages/Include.h"
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include <string.h>
 
 static const char ZEROTERMINATOR =
@@ -132,8 +132,45 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_constructImpl
   self->VEC3 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec3");
   self->VEC4 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec4");
   self->SAMPLER2D = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"sampler2D");
+  self->names = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+
+#define Define(vpl, glsl) \
+  { \
+    Arcadia_String* source = Arcadia_String_createFromCxxString(thread, vpl); \
+    Arcadia_String* target = Arcadia_String_createFromCxxString(thread, glsl); \
+    Arcadia_Map_set(thread, self->names, Arcadia_Value_makeObjectReferenceValue(source), Arcadia_Value_makeObjectReferenceValue(target), NULL, NULL); \
+  }
+
+  // Passes mesh information to the vertex program.
+  Define("vertexProgram.inputs.mesh", "_mesh0");
+  // Passes model information to the vertex program.
+  Define("vertexProgram.inputs.model", "_model0");
+  // Passes viewer information to the vertex program.
+  Define("vertexProgram.inputs.viewer", "_viewer0");
+  // Passses the per-vertex ambient color into to vertex program.
+  Define("vertexProgram.inputs.vertex.ambientColor", "_0_vertexAmbientColor");
+
+  // Passes the per-vertex ambient color texture coordinates into the vertex program.
+  Define("vertexProgram.inputs.vertex.ambientColorTextureCoordinate", "_0_vertexAmbientColorTextureCoordinate");
+
+  // Pass vertex program -> fragment program ambient color.
+  Define("fragmentProgram.inputs.vertex.ambientColor", "_1_vertexColor"); // TODO: _1_vertexAmbientColor
+  // Pass vertex program -> fragment program ambient color texture coordinates.
+  Define("fragmentProgram.inputs.vertex.ambientColorTextureCoordinate", "_1_vertexAmbientColorTextureCoordinate");
+
+  // Pass vertex-program -> fragment program position.
+  Define("fragmentProgram.inputs.vertex.position", "_1_vertexPosition");
+  // Passes the per-vertex position into the vertex program.
+  Define("vertexProgram.inputs.vertex.position", "_0_vertexPosition");
+
+#undef Define
+
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
+}
+
+static Arcadia_String* mapName(Arcadia_Thread* thread, Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* self, Arcadia_String* name) {
+  return (Arcadia_String*)Arcadia_Map_getObjectReferenceValueChecked(thread, self->names, Arcadia_Value_makeObjectReferenceValue(name), _Arcadia_String_getType(thread));
 }
 
 static void
@@ -165,6 +202,9 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_visitImpl
   }
   if (self->SAMPLER2D) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->SAMPLER2D);
+  }
+  if (self->names) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->names);
   }
 }
 
@@ -740,6 +780,7 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
 #define OnVariableDefinition(_type, _name) Arcadia_Visuals_VPL_Tree_makeVariableDefinition(thread, _type, _name)
 #define OnAssignment(_lhs, _rhs) Arcadia_Visuals_VPL_Tree_makeAssignment(thread, _lhs, _rhs)
 #define OnName(_name) Arcadia_Visuals_VPL_Tree_makeName(thread, Arcadia_String_createFromCxxString(thread, _name))
+#define OnName2(_name) Arcadia_Visuals_VPL_Tree_makeName(thread, mapName(thread, self, Arcadia_String_createFromCxxString(thread, _name)))
 #define OnMultiply(_lhs, _rhs) Arcadia_Visuals_VPL_Tree_makeMultiply(thread, _lhs, _rhs)
 #define OnDivide(_lhs, _rhs) Arcadia_Visuals_VPL_Tree_makeDivide(thread, _lhs, _rhs)
 #define OnAdd(_lhs, _rhs) Arcadia_Visuals_VPL_Tree_makeAdd(thread, _lhs, _rhs)
@@ -761,26 +802,26 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
     vertexColorAssignmentTree =
       OnAssignment
         (
-          OnName("_1_vertexColor"),
+          OnName2("fragmentProgram.inputs.vertex.ambientColor"),
           OnAccess
             (
-              OnName("_mesh0"),
-              OnName("ambientColor")
+              OnName2("vertexProgram.inputs.mesh"),
+              OnName("ambientColor") // getGlobal("vertexProgram.inputs.mesh.ambientColor")
             )
         );
   } else if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_VertexAmbientColor) {
     vertexColorAssignmentTree =
       OnAssignment
         (
-          OnName("_1_vertexColor"),
-          OnName("_0_vertexAmbientColor")
+          OnName2("fragmentProgram.inputs.vertex.ambientColor"),
+          OnName2("vertexProgram.inputs.vertex.ambientColor")
         );
   } else if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_TextureAmbientColor) {
     vertexColorAssignmentTree =
       OnAssignment
       (
-        OnName("_1_vertexColor"),
-        OnName("_0_vertexAmbientColor")
+        OnName2("fragmentProgram.inputs.vertex.ambientColor"),
+        OnName2("vertexProgram.inputs.vertex.ambientColor")
       );
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -807,19 +848,19 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
                 (
                   OnAccess
                     (
-                      OnName("_viewer0"),
-                      OnName("projection")
+                      OnName2("vertexProgram.inputs.viewer"),
+                      OnName("viewToProjection")
                     ),
                   OnMultiply
                     (
                       OnAccess
                         (
-                          OnName("_viewer0"),
-                          OnName("view")
+                          OnName2("vertexProgram.inputs.viewer"),
+                          OnName("worldToView")
                         ),
                       OnAccess
                         (
-                          OnName("_model0"),
+                          OnName2("vertexProgram.inputs.model"),
                           OnName("localToWorld")
                         )
                     )
@@ -827,23 +868,23 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
             ),
           OnAssignment
             (
-              OnName("_1_vertexPosition"),
+              OnName2("fragmentProgram.inputs.vertex.position"),
               OnMultiply
                 (
                   OnName("mvp"),
                   OnCall
                     (
                       OnName("vec4"),
-                      OnAccess(OnName("_0_vertexPosition"), OnName("xyz")),
+                      OnAccess(OnName2("vertexProgram.inputs.vertex.position"), OnName("xyz")), // getGlobal("vertexProgram.inputs.vertex.position")
                       OnName("1.0")
                     )
                 )
             ),
           OnAssignment
-          (
-            OnName("_1_vertexAmbientColorTextureCoordinate"),
-            OnName("_0_vertexAmbientColorTextureCoordinate")
-          ),
+            (
+              OnName2("fragmentProgram.inputs.vertex.ambientColorTextureCoordinate"),
+              OnName2("vertexProgram.inputs.vertex.ambientColorTextureCoordinate")
+            ),
           vertexColorAssignmentTree                                  
         )
     );
@@ -874,14 +915,6 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
 
   Arcadia_Visuals_VPL_Tree_Node* fragmentColorAssignmentTree = NULL;
   if (program->flags == Arcadia_Visuals_VPL_ProgramFlags_TextureAmbientColor) {
-  #if 0
-    fragmentColorAssignmentTree =
-      OnAssignment
-        (
-          OnName("_2_fragmentColor"),
-          OnName("_1_vertexColor")
-        );
-  #else
     fragmentColorAssignmentTree =
       OnAssignment
         (
@@ -890,12 +923,11 @@ Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
             (
               OnName("texture2D"),
               OnName("_0_ambientColorTexture"),
-              OnName("_1_vertexAmbientColorTextureCoordinate")
+              OnName2("fragmentProgram.inputs.vertex.ambientColorTextureCoordinate")
             )
         );
-  #endif
   } else {
-    fragmentColorAssignmentTree = OnAssignment(OnName("_2_fragmentColor"), OnName("_1_vertexColor"));
+    fragmentColorAssignmentTree = OnAssignment(OnName("_2_fragmentColor"), OnName2("fragmentProgram.inputs.vertex.ambientColor"));
   }
 
   Arcadia_Visuals_VPL_Tree_Node* mainFunctionDefinitionTree =

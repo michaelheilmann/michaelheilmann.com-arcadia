@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_WINDOWBACKEND_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_WINDOWBACKEND_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/GLX/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Linux/Icon.h"
 

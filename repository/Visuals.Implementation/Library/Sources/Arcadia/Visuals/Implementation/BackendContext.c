@@ -56,7 +56,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
-                         u8"Arcadia.Engine.Visuals.BackendContextBase", Arcadia_Engine_Visuals_BackendContextBase,
+                         u8"Arcadia.Engine.Visuals.BackendContext", Arcadia_Engine_Visuals_BackendContext,
                          &_typeOperations);
 
 static void
@@ -117,15 +117,6 @@ Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createConstantBufferResource, self); }
 
-Arcadia_Visuals_Implementation_FragmentProgramResource*
-Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_VPL_Program* program
-  )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createFragmentProgramResource, self, program); }
-
 Arcadia_Visuals_Implementation_FrameBufferResource*
 Arcadia_Visuals_Implementation_BackendContext_createFrameBufferResource
   (
@@ -134,13 +125,13 @@ Arcadia_Visuals_Implementation_BackendContext_createFrameBufferResource
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createFrameBufferResource, self); }
 
-Arcadia_Visuals_Implementation_RenderingContextResource*
-Arcadia_Visuals_Implementation_BackendContext_createRenderingContextResource
+Arcadia_Visuals_Implementation_EnterPassResource*
+Arcadia_Visuals_Implementation_BackendContext_createEnterPassResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createRenderingContextResource, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createEnterPassResource, self); }
 
 Arcadia_Visuals_Implementation_MaterialResource*
 Arcadia_Visuals_Implementation_BackendContext_createMaterialResource
@@ -177,10 +168,9 @@ Arcadia_Visuals_Implementation_BackendContext_createProgramResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_Implementation_VertexProgramResource* vertexProgram,
-    Arcadia_Visuals_Implementation_FragmentProgramResource* fragmentProgram
+    Arcadia_Visuals_VPL_Program* program
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createProgramResource, self, vertexProgram, fragmentProgram); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createProgramResource, self, program); }
 
 Arcadia_Visuals_Implementation_TextureResource*
 Arcadia_Visuals_Implementation_BackendContext_createTextureResource
@@ -197,20 +187,3 @@ Arcadia_Visuals_Implementation_BackendContext_createVertexBufferResource
     Arcadia_Visuals_Implementation_BackendContext* self
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createVertexBufferResource, self); }
-
-Arcadia_Visuals_Implementation_VertexProgramResource*
-Arcadia_Visuals_Implementation_BackendContext_createVertexProgramResource
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_VPL_Program* program
-  )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createVertexProgramResource, self, program); }
-
-Arcadia_Visuals_Implementation_ViewportResource*
-Arcadia_Visuals_Implementation_BackendContext_createViewportResource
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_BackendContext* self
-  )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createViewportResource, self); }

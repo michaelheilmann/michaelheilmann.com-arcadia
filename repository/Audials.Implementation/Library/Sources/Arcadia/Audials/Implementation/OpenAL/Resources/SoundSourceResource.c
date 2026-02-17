@@ -20,7 +20,9 @@
 #include <assert.h>
 
 #define DataDirty (1)
-#define VolumeDirty (2)
+#define IsLoopingDirty (2)
+#define VolumeDirty (4)
+#define AllDirty (DataDirty|IsLoopingDirty|VolumeDirty)
 
 static void
 Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
@@ -107,6 +109,21 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_stop
   );
 
 static void
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_setIsLooping
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self,
+    Arcadia_BooleanValue isLooping
+  );
+
+static Arcadia_BooleanValue
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getIsLooping
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
+  );
+
+static void
 Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_setVolume
   (
     Arcadia_Thread* thread,
@@ -158,9 +175,10 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
+  self->isLooping = Arcadia_BooleanValue_False;
   self->volume = 1.f;
   //
-  self->dirtyBits = DataDirty | VolumeDirty;
+  self->dirtyBits = AllDirty;
   self->byteBuffer = Arcadia_ByteBuffer_create(thread);
   self->alBufferID = 0;
   self->alSourceID = 0;
@@ -181,6 +199,8 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_initializeDispa
   ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->play = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_play;
   ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->pause = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_pause;
   ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->stop = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_stop;
+  ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->setIsLooping = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*, Arcadia_BooleanValue)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_setIsLooping;
+  ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->getIsLooping = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getIsLooping;
   ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->setVolume = (void (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*, Arcadia_Real32Value)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_setVolume;
   ((Arcadia_Engine_Audials_Implementation_SoundSourceResourceDispatch*)self)->getVolume = (Arcadia_Real32Value(*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_SoundSourceResource*)) & Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getVolume;
   //
@@ -220,14 +240,13 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
     Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
-  //Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* context = (Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext*)((Arcadia_Engine_Audials_Implementation_Resource*)self)->context;
   if (0 == self->alBufferID) {
     alGenBuffers(1, &self->alBufferID);
     if (alGetError()) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
       Arcadia_Thread_jump(thread);
     }
-    self->dirtyBits |= DataDirty | VolumeDirty;
+    self->dirtyBits |= AllDirty;
   }
   if (0 == self->alSourceID) {
     alGenSources(1, &self->alSourceID);
@@ -239,11 +258,25 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
     }
     alSourcei(self->alSourceID, AL_LOOPING, AL_FALSE);
     alSourcei(self->alSourceID, AL_SOURCE_RELATIVE, AL_TRUE);
-    self->dirtyBits |= DataDirty | VolumeDirty;
+    self->dirtyBits |= AllDirty;
   }
+  // Volumne.
   if (self->dirtyBits & VolumeDirty) {
-    alSourcef(self->alSourceID, AL_GAIN, 1.0f);
+    alSourcef(self->alSourceID, AL_GAIN, self->volume);
+    if (alGetError()) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+      Arcadia_Thread_jump(thread);
+    }
     self->dirtyBits &= ~VolumeDirty;
+  }
+  // Looping.
+  if (self->dirtyBits & IsLoopingDirty) {
+    alSourcei(self->alSourceID, AL_LOOPING, self->isLooping ? AL_TRUE : AL_FALSE);
+    if (alGetError()) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+      Arcadia_Thread_jump(thread);
+    }
+    self->dirtyBits &= ~IsLoopingDirty;
   }
   if (self->dirtyBits & DataDirty) {
     Arcadia_JumpTarget jumpTarget;
@@ -252,7 +285,7 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
       Arcadia_ByteBuffer* sourceVoiceBuffer = Arcadia_ByteBuffer_create(thread);
       Arcadia_Natural8Value numberOfChannels;
       Arcadia_Natural16Value sampleRate;
-      Arcadia_Engine_Audials_Synthesis_generateSineWave(thread, sourceVoiceBuffer, &numberOfChannels, &sampleRate);
+      Arcadia_Engine_Audials_Synthesis_generateSineWave(thread, sourceVoiceBuffer, Arcadia_Engine_Audials_Format_Integer16, 2, &numberOfChannels, &sampleRate);
       if (numberOfChannels == 1) {
         alBufferData(self->alBufferID, AL_FORMAT_MONO16,   Arcadia_ByteBuffer_getBytes(thread, sourceVoiceBuffer),
                                                            Arcadia_ByteBuffer_getNumberOfBytes(thread, sourceVoiceBuffer),
@@ -390,6 +423,28 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_stop
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
   }
+}
+
+static void
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_setIsLooping
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self,
+    Arcadia_BooleanValue isLooping
+  )
+{
+  self->dirtyBits |= self->isLooping != isLooping ? IsLoopingDirty : 0;
+  self->isLooping = isLooping;
+}
+
+static Arcadia_BooleanValue
+Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getIsLooping
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
+  )
+{
+  return self->isLooping;
 }
 
 static void

@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_LINUX_ICON_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_LINUX_ICON_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 
 /// @code
 /// class Arcadia.Visuals.Linux.Icon {

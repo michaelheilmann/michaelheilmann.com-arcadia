@@ -16,9 +16,9 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_RESOURCE_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_RESOURCE_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Math/Include.h"
-typedef struct Arcadia_Visuals_Implementation_RenderingContextResource Arcadia_Visuals_Implementation_RenderingContextResource;
+typedef struct Arcadia_Visuals_Implementation_EnterPassResource Arcadia_Visuals_Implementation_EnterPassResource;
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
 
 // A "resource" is owned by a "backend context". That is, the "backend context" holds a STRONG reference to its "resources".
@@ -32,7 +32,7 @@ struct Arcadia_Visuals_Implementation_ResourceDispatch {
   void (*load)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self);
   void (*unload)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self);
   void (*unlink)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self);
-  void (*render)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self, Arcadia_Visuals_Implementation_RenderingContextResource*);
+  void (*render)(Arcadia_Thread* thread, Arcadia_Visuals_Implementation_Resource* self, Arcadia_Visuals_Implementation_EnterPassResource*);
 };
 
 struct Arcadia_Visuals_Implementation_Resource {
@@ -82,7 +82,7 @@ Arcadia_Visuals_Implementation_Resource_render
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_Resource* self,
-    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextResource
+    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextResource
   );
 
 void

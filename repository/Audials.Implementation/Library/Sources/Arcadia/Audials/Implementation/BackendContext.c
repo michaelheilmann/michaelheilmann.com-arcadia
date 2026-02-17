@@ -66,7 +66,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Engine.Audials.Implementation.BackendContext", Arcadia_Engine_Audials_Implementation_BackendContext,
-                         u8"Arcadia.Engine.Audials.BackendContextBase", Arcadia_Engine_Audials_BackendContextBase,
+                         u8"Arcadia.Engine.Audials.BackendContext", Arcadia_Engine_Audials_BackendContext,
                          &_typeOperations);
 
 static void

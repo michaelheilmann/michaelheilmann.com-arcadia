@@ -25,6 +25,11 @@
 /// @brief The opaque C type representing a type.
 /// Types are not garbage collected. Once a type was added, it remains there until the process terminates.
 typedef void Arcadia_Type;
+typedef void Arcadia_EnumerationType;
+typedef void Arcadia_InterfaceType;
+typedef void Arcadia_InternalType;
+typedef void Arcadia_ObjectType;
+typedef void Arcadia_ScalarType;
 
 /// @brief A pointer to a type or the null pointer.
 typedef Arcadia_Type* Arcadia_TypeValue;
@@ -75,6 +80,28 @@ Arcadia_Type_getKind
     Arcadia_TypeValue self
   );
 
+/// @brief Get if this type is of the kind of type "enumeration".
+/// @param self A pointer to this type.
+/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "enumeration". #Arcadia_BooleanValue_False otherwise.
+static inline bool
+Arcadia_Type_isEnumerationtKind
+  (
+    Arcadia_Thread* thread,
+    Arcadia_TypeValue self
+  )
+{ return Arcadia_TypeKind_Enumeration == Arcadia_Type_getKind(thread, self); }
+
+/// @brief Get if this type is of the kind of type "interface".
+/// @param self A pointer to this type.
+/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "interface". #Arcadia_BooleanValue_False otherwise.
+static inline bool
+Arcadia_Type_isInterfacelKind
+  (
+    Arcadia_Thread* thread,
+    Arcadia_TypeValue self
+  )
+{ return Arcadia_TypeKind_Interface == Arcadia_Type_getKind(thread, self); }
+
 /// @brief Get if this type is of the kind of type "internal".
 /// @param self A pointer to this type.
 /// @return #Arcadia_BooleanValue_True if the type is of the kind of type "internal". #Arcadia_BooleanValue_False otherwise.
@@ -85,17 +112,6 @@ Arcadia_Type_isInternalKind
     Arcadia_TypeValue self
   )
 { return Arcadia_TypeKind_Internal == Arcadia_Type_getKind(thread, self); }
-
-/// @brief Get if this type is of the kind of type "scalar".
-/// @param self A pointer to this type.
-/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "scalar". #Arcadia_BooleanValue_False otherwise.
-static inline bool
-Arcadia_Type_isScalarKind
-  (
-    Arcadia_Thread* thread,
-    Arcadia_TypeValue self
-  )
-{ return Arcadia_TypeKind_Scalar == Arcadia_Type_getKind(thread, self); }
 
 /// @brief Get if this type is of the kind of type "object".
 /// @param self A pointer to this type.
@@ -108,15 +124,15 @@ Arcadia_Type_isObjectKind
   )
 { return Arcadia_TypeKind_Object == Arcadia_Type_getKind(thread, self); }
 
-/// @brief Get if this type is of the kind of type "enumeration".
+/// @brief Get if this type is of the kind of type "scalar".
 /// @param self A pointer to this type.
-/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "enumeration". #Arcadia_BooleanValue_False otherwise.
+/// @return #Arcadia_BooleanValue_True if the type is of the kind of type "scalar". #Arcadia_BooleanValue_False otherwise.
 static inline bool
-Arcadia_Type_isEnumerationtKind
+Arcadia_Type_isScalarKind
   (
     Arcadia_Thread* thread,
     Arcadia_TypeValue self
   )
-{ return Arcadia_TypeKind_Enumeration == Arcadia_Type_getKind(thread, self); }
+{ return Arcadia_TypeKind_Scalar == Arcadia_Type_getKind(thread, self); }
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_TYPESYSTEM_TYPE_H_INCLUDED

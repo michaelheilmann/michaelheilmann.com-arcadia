@@ -114,6 +114,17 @@ Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_lerp
     @{scalarType} t
   );
 
+/// @@brief Normalize this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@error #Arcadia_Status_DivisionByZero The vector is the zero vector.
+void
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_normalize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self
+  );
+
 /// @@brief Get the length of this vector.
 /// @@param thread A pointer to this thread.
 /// @@param self A pointer to this vector.
@@ -134,6 +145,30 @@ Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_getSquaredLength
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self
+  );
+  
+/// @@brief Compute the dot product of this vector and another vector.
+/// @@param self A pointer to this vector.
+/// @@param other A pointer to the other vector.
+/// @@return The dot product.
+@{scalarType}
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_dotProduct
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* other
+  );
+
+/// @@brief Multiply the elements of this vector with a scalar and assign the result to this vector.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this vector.
+/// @@param s The scalar
+void
+Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}_multiplyScalar
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Vector@{dimensionality}@{scalarSuffix}* self,
+    @{scalarType} s
   );
 
 #endif // ARCADIA_MATH_IMPLEMENTATION_VECTOR@{dimensionality}@{scalarSuffixUppercase}_H_INCLUDED

@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_NODES_MESHNODE_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_NODES_MESHNODE_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
 typedef struct Arcadia_Visuals_Implementation_MeshResource Arcadia_Visuals_Implementation_MeshResource;
 

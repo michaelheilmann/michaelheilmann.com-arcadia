@@ -16,10 +16,11 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_NODES_VIEWPORTNODE_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_NODES_VIEWPORTNODE_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
-typedef struct Arcadia_Visuals_Implementation_ViewportResource Arcadia_Visuals_Implementation_ViewportResource;
 
+// This does not operate any resources.
+// Arcadia.Engine.Visuals.EnterPassNode operates the required resources for this node.
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.Implementation.ViewportNode", Arcadia_Engine_Visuals_Implementation_ViewportNode,
                           u8"Arcadia.Engine.Visuals.ViewportNode");
 
@@ -33,11 +34,16 @@ struct Arcadia_Engine_Visuals_Implementation_ViewportNode {
   Arcadia_Natural8Value dirtyBits;
 
   Arcadia_Visuals_Implementation_BackendContext* backendContext;
-  Arcadia_Visuals_Implementation_ViewportResource* viewportResource;
 
-  // 193, 216, 195, 255
+  // If the color buffer should be cleared.
+  // Default value is #Arcadia_BooleanValue_True.
+  Arcadia_BooleanValue clearColorBuffer;
+  // Default value is 193, 216, 195, 255.
   Arcadia_Math_Color4Real32* clearColor;
 
+  // If the depth buffer should be cleared.
+  // Default value is #Arcadia_BooleanValue_True.
+  Arcadia_BooleanValue clearDepthBuffer;
   // Default is 1.
   Arcadia_Real32Value clearDepth;
 

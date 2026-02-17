@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_BACKENDCONTEXT_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_GLX_BACKENDCONTEXT_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"
 #include <X11/Xlib.h> // For Atom.

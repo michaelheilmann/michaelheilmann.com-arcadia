@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_VISUALS_WINDOWS_TEXTUREFONT_H_INCLUDED)
 #define ARCADIA_VISUALS_WINDOWS_TEXTUREFONT_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/Windows/Bitmap.h"
 #include "Arcadia/Imaging/PixelBuffer.h"
 

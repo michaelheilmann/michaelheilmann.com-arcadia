@@ -23,7 +23,7 @@
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>@{siteAddress}/Arcadia/Visuals/</loc>
+        <loc>@{siteAddress}/Arcadia/Engine/</loc>
         <lastmod>2026-01-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>

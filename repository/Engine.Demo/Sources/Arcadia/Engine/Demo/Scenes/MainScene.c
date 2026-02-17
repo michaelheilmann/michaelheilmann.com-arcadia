@@ -105,7 +105,7 @@ Arcadia_Engine_Demo_MainScene_constructImpl
   self->definitions = Arcadia_ADL_Definitions_create(thread);
   //
   self->cameraNode = NULL;
-  self->renderingContextNode = NULL;
+  self->enterPassNode = NULL;
   for (Arcadia_SizeValue i = 0; i < 3; ++i) {
     self->modelNode[i] = NULL;
     self->viewportNodes[i] = NULL;
@@ -140,8 +140,8 @@ Arcadia_Engine_Demo_MainScene_visit
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->definitions);
   }
 
-  if (self->renderingContextNode) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->renderingContextNode);
+  if (self->enterPassNode) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->enterPassNode);
   }
 
   if (self->cameraNode) {
@@ -222,9 +222,9 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
     Arcadia_ADL_Context_readFromString(thread, context, self->definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
   }
 
-  if (!self->renderingContextNode) {
-    self->renderingContextNode =
-      Arcadia_Engine_Visuals_NodeFactory_createRenderingContextNode
+  if (!self->enterPassNode) {
+    self->enterPassNode =
+      Arcadia_Engine_Visuals_NodeFactory_createEnterPassNode
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
@@ -298,11 +298,11 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
     }
 
     Arcadia_Engine_Visuals_ViewportNode_setCanvasSize(thread, self->viewportNodes[i], width, height);
-    // Assign "viewport" node to "camera" node.
-    Arcadia_Engine_Visuals_CameraNode_setViewport(thread, self->cameraNode, self->viewportNodes[i]);
-    Arcadia_Engine_Visuals_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
+    // Assign the "viewport" node and "camera" node to the "enter pass" node.
+    Arcadia_Engine_Visuals_EnterPassNode_setViewportNode(thread, self->enterPassNode, self->viewportNodes[i]);
+    Arcadia_Engine_Visuals_EnterPassNode_setCameraNode(thread, self->enterPassNode, self->cameraNode);
     // Render the scene.
-    Arcadia_Engine_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode[i], (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+    Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode[i], (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
 
   }
 }

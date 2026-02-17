@@ -338,7 +338,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct
   #endif
     self->screen = NULL;
   }
-  Arcadia_List_filter(thread, ((Arcadia_Engine_Visuals_BackendContextBase*)self->backendContext)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
+  Arcadia_List_filter(thread, ((Arcadia_Engine_Visuals_BackendContext*)self->backendContext)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
   if (self->backendContext) {
     Arcadia_Object_unlock(thread, self->backendContext);
     self->backendContext = NULL;

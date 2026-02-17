@@ -21,7 +21,7 @@
 
 #include "Arcadia/Visuals/Implementation/Nodes/MeshNode.h"
 #include "Arcadia/Visuals/Implementation/Nodes/MaterialNode.h"
-#include "Arcadia/Visuals/Implementation/Nodes/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Nodes/EnterPassNode.h"
 #include "Arcadia/Visuals/Implementation/Nodes/TextureNode.h"
 
 static void
@@ -57,7 +57,7 @@ Arcadia_Engine_Visuals_Implementation_ModelNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_ModelNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   );
 
 static void
@@ -124,7 +124,7 @@ Arcadia_Engine_Visuals_Implementation_ModelNode_initializeDispatchImpl
     Arcadia_Engine_Visuals_Implementation_ModelNodeDispatch* self
   )
 {
-  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_RenderingContextNode*)) & Arcadia_Engine_Visuals_Implementation_ModelNode_renderImpl;
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_Implementation_ModelNode_renderImpl;
   ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_Implementation_ModelNode_setVisualsBackendContextImpl;
 }
 
@@ -158,15 +158,15 @@ Arcadia_Engine_Visuals_Implementation_ModelNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_ModelNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   )
 {
   // (1) Render the material dependency.
   Arcadia_Engine_Visuals_Implementation_MaterialNode* materialNode = (Arcadia_Engine_Visuals_Implementation_MaterialNode*)((Arcadia_Engine_Visuals_ModelNode*)self)->material;
-  Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)materialNode, (Arcadia_Engine_Visuals_RenderingContextNode*)renderingContextNode);
+  Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)materialNode, (Arcadia_Engine_Visuals_EnterPassNode*)renderingContextNode);
   // (2) Render the mesh dependency.
   Arcadia_Engine_Visuals_Implementation_MeshNode* meshNode = (Arcadia_Engine_Visuals_Implementation_MeshNode*)((Arcadia_Engine_Visuals_ModelNode*)self)->mesh;
-  Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)meshNode, (Arcadia_Engine_Visuals_RenderingContextNode*)renderingContextNode);
+  Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)meshNode, (Arcadia_Engine_Visuals_EnterPassNode*)renderingContextNode);
   // (3) Create the model resource.
   if (self->backendContext) {
     if (!self->modelResource) {
@@ -178,11 +178,9 @@ Arcadia_Engine_Visuals_Implementation_ModelNode_renderImpl
   }
   // (4) Perform actual render to frame buffer.
   if (self->backendContext) {
-    // (4.1) Render the rendering context.
-    Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)renderingContextNode, (Arcadia_Engine_Visuals_RenderingContextNode*)renderingContextNode);
     // (4.2) Render the mesh resource.
     Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->modelResource,
-                                                   ((Arcadia_Engine_Visuals_Implementation_RenderingContextNode*)renderingContextNode)->renderingContextResource);
+                                                   ((Arcadia_Engine_Visuals_Implementation_EnterPassNode*)renderingContextNode)->enterPassResource);
   }
 }
 

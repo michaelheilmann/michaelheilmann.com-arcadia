@@ -2,7 +2,6 @@
 #define ARCADIA_ENGINE_DEMO_APPLICATION_H_INCLUDED
 
 #include "Arcadia/DDL/Include.h"
-#include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Engine/Demo/Scene.h"
 #include "Arcadia/Engine/Demo/SceneManager.h"
 #include "Arcadia/Application/Include.h"

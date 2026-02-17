@@ -1,7 +1,7 @@
 #if !defined(ARCADIA_ENGINE_DEMO_SCENE_H_INCLUDED)
 #define ARCADIA_ENGINE_DEMO_SCENE_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 typedef struct Arcadia_Engine_Demo_SceneManager Arcadia_Engine_Demo_SceneManager;
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Demo.Scene", Arcadia_Engine_Demo_Scene,
@@ -27,6 +27,7 @@ struct Arcadia_Engine_Demo_Scene {
   Arcadia_Signal* applicationQuitRequestSignal;
 };
 
+/// @param tick The tick, in milliseconds.
 void
 Arcadia_Engine_Demo_Scene_updateAudials
   (
@@ -37,6 +38,7 @@ Arcadia_Engine_Demo_Scene_updateAudials
     Arcadia_Integer32Value height
   );
 
+/// @param tick The tick, in milliseconds.
 void
 Arcadia_Engine_Demo_Scene_updateLogics
   (
@@ -45,6 +47,7 @@ Arcadia_Engine_Demo_Scene_updateLogics
     Arcadia_Real64Value tick
   );
 
+/// @param tick The tick, in milliseconds.
 void
 Arcadia_Engine_Demo_Scene_updateVisuals
   (

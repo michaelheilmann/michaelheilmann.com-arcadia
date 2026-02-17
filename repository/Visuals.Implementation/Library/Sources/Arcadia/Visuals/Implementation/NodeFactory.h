@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_NODEFACTORY_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_NODEFACTORY_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.NodeFactory", Arcadia_Visuals_Implementation_NodeFactory,
                           Arcadia_Engine_Visuals_NodeFactory);

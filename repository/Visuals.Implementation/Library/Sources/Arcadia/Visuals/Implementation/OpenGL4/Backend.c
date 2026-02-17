@@ -92,7 +92,7 @@ static const Arcadia_Type_Operations _Arcadia_Visuals_Implementation_OpenGL4_Bac
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.Backend", Arcadia_Visuals_Implementation_OpenGL4_Backend,
-                         u8"Arcadia.Visuals.Backend", Arcadia_Visuals_Backend,
+                         u8"Arcadia.Engine.Visuals.Backend", Arcadia_Engine_Visuals_Backend,
                          &_Arcadia_Visuals_Implementation_OpenGL4_Backend_typeOperations);
 
 static Arcadia_String*

@@ -121,39 +121,37 @@ main1
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, (Arcadia_ObjectReferenceValue)argument);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments); i < n; ++i) {
-    Arcadia_String* argument = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
-    Arcadia_UTF8StringReader *r = Arcadia_UTF8StringReader_create(thread, argument);
-    Arcadia_String *key = NULL,
-                   *value = NULL;
-    if (!Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r, &key, &value)) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
+    Arcadia_String* argumentString = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, arguments, i);
+    Arcadia_UTF8StringReader *r = Arcadia_UTF8StringReader_create(thread, argumentString);
+    Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r);
+    if (argument->syntacticalError) {
+      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString);
     }
-    if (Arcadia_String_isEqualTo_pn(thread, key, u8"definition", sizeof(u8"definition") - 1)) {
-      if (!value) {
-        raiseNoValueError(thread, key);
+    if (Arcadia_String_isEqualTo_pn(thread, argument->name, u8"definition", sizeof(u8"definition") - 1)) {
+      if (!argument->value) {
+        raiseNoValueError(thread, argument->name);
       }
-      definition = loadADL(thread, definitions, value);
-    } else if (Arcadia_String_isEqualTo_pn(thread, key, u8"target", sizeof(u8"target") - 1)) {
-      if (!value) {
-        raiseNoValueError(thread, key);
+      definition = loadADL(thread, definitions, argument->value);
+    } else if (Arcadia_String_isEqualTo_pn(thread, argument->name, u8"target", sizeof(u8"target") - 1)) {
+      if (!argument->value) {
+        raiseNoValueError(thread, argument->name);
       }
-      Arcadia_Value_setObjectReferenceValue(&target, value);
-    } else if (Arcadia_String_isEqualTo_pn(thread, key, u8"start", sizeof(u8"start") - 1)) {
-      if (!value) {
-        raiseNoValueError(thread, key);
+      Arcadia_Value_setObjectReferenceValue(&target, argument->value);
+    } else if (Arcadia_String_isEqualTo_pn(thread, argument->name, u8"start", sizeof(u8"start") - 1)) {
+      if (!argument->value) {
+        raiseNoValueError(thread, argument->name);
       }
-      Arcadia_Value_setObjectReferenceValue(&start, value);
+      Arcadia_Value_setObjectReferenceValue(&start, argument->value);
     } else {
-      raiseUnknownArgumentError(thread, key, value);
+      raiseUnknownArgumentError(thread, argument->name, argument->value);
     }
     Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, Arcadia_FileSystem_getOrCreate(thread));
     Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
     Arcadia_SizeValue numberOfArguments = 0;
-    Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)key); numberOfArguments++;
-    if (value) {
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)argument->name); numberOfArguments++;
+    if (argument->value) {
       Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)Arcadia_String_createFromCxxString(thread, u8" = ")); numberOfArguments++;
-      Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)value); numberOfArguments++;
+      Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)argument->value); numberOfArguments++;
     }
     Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)Arcadia_String_createFromCxxString(thread, u8"\n")); numberOfArguments++;
     Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)fileHandle); numberOfArguments++;

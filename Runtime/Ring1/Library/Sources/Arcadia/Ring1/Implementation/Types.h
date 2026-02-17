@@ -122,20 +122,30 @@ Arcadia_Type_visit
 /// @param self A pointer to this type.
 /// @return The size, in Bytes, of a value of this type.
 Arcadia_SizeValue
-Arcadia_Type_getValueSize
+Arcadia_EnumerationType_getValueSize
   (
     Arcadia_Thread* thread,
-    Arcadia_TypeValue self
+    Arcadia_EnumerationType* self
+  );
+
+/// @brief Get the size, in Bytes, of a value of this type.
+/// @param self A pointer to this type.
+/// @return The size, in Bytes, of a value of this type.
+Arcadia_SizeValue
+Arcadia_ObjectType_getValueSize
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ObjectType* self
   );
 
 /// @brief Get the parent object type of this type.
 /// @param self A pointer to this type.
 /// @return A pointer to the parent object type of this type if any. The null pointer otherwise.
 Arcadia_TypeValue
-Arcadia_Type_getParentObjectType
+Arcadia_ObjectType_getParentObjectType
   (
     Arcadia_Thread* thread,
-    Arcadia_TypeValue self
+    Arcadia_ObjectType* self
   );
 
 /// @brief Get the visit object callback function of this type.
@@ -181,17 +191,29 @@ Arcadia_Type_isDescendantType
 
 /* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
 Arcadia_TypeValue
-Arcadia_registerInternalType
+Arcadia_registerEnumerationType
   (
     Arcadia_Thread* thread,
     Arcadia_Name* name,
+    size_t valueSize,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
 /* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
 Arcadia_TypeValue
-Arcadia_registerScalarType
+Arcadia_registerInterfaceType
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Name* name,
+    size_t dispatchSize,
+    Arcadia_Type_Operations const* typeOperations,
+    Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
+  );
+
+/* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
+Arcadia_TypeValue
+Arcadia_registerInternalType
   (
     Arcadia_Thread* thread,
     Arcadia_Name* name,
@@ -215,19 +237,18 @@ Arcadia_registerObjectType
 
 /* Arcadia_Status_ArgumentValueInvalid, Arcadia_Status_AllocationFailed, Arcadia_Status_TypeExists */
 Arcadia_TypeValue
-Arcadia_registerEnumerationType
+Arcadia_registerScalarType
   (
     Arcadia_Thread* thread,
     Arcadia_Name* name,
-    size_t valueSize,
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   );
 
 Arcadia_Dispatch*
-Arcadia_Type_getDispatch
+Arcadia_ObjectType_getDispatch
   (
-    Arcadia_TypeValue type
+    Arcadia_ObjectType* type
   );
 
 Arcadia_Type_Operations const*

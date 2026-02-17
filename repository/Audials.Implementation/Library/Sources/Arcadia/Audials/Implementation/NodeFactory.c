@@ -67,8 +67,8 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcardia.Audials.Implementation.NodeFactory", Arcadia_Engine_Audials_Implementation_NodeFactory,
-                         u8"Arcadia.Audials.NodeFactory", Arcadia_Engine_Audials_NodeFactory,
+Arcadia_defineObjectType(u8"Arcadia.Audials.Implementation.NodeFactory", Arcadia_Engine_Audials_Implementation_NodeFactory,
+                         u8"Arcadia.Engine.Audials.NodeFactory", Arcadia_Engine_Audials_NodeFactory,
                          &_typeOperations);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

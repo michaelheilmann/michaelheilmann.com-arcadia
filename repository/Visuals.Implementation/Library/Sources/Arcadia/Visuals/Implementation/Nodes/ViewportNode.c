@@ -16,15 +16,19 @@
 #include "Arcadia/Visuals/Implementation/Nodes/ViewportNode.h"
 
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
-#include "Arcadia/Visuals/Implementation/Nodes/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Nodes/EnterPassNode.h"
 #include <assert.h>
 
 #define ClearColorDirty (1)
-#define ClearDepthDirty (2)
-#define RelativeRectangleDirty (4)
-#define CanvasSizeDirty (8)
+#define ClearColorBufferDirty (2)
 
-#define DirtyBitsAll (ClearColorDirty | ClearDepthDirty | RelativeRectangleDirty | CanvasSizeDirty)
+#define ClearDepthDirty (4)
+#define ClearDepthBufferDirty (8)
+
+#define RelativeRectangleDirty (16)
+#define CanvasSizeDirty (32)
+
+#define DirtyBitsAll (ClearColorDirty | ClearColorBufferDirty | ClearDepthDirty | ClearDepthBufferDirty | RelativeRectangleDirty | CanvasSizeDirty)
 
 static void
 Arcadia_Engine_Visuals_Implementation_ViewportNode_constructImpl
@@ -59,7 +63,7 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   );
 
 static void
@@ -68,6 +72,29 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_setVisualsBackendContextImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
     Arcadia_Visuals_Implementation_BackendContext* backendContext
+  );
+
+static Arcadia_BooleanValue
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearColorBufferImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self
+  );
+
+static void
+Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearColorBufferImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_BooleanValue clearColorBuffer
+  );
+
+static Arcadia_Math_Color4Real32*
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearColorImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_Math_Color4Real32* clearColor
   );
 
 static void
@@ -79,11 +106,44 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearColorImpl
   );
 
 static void
+Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearDepthBufferImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_BooleanValue clearDepthBuffer
+  );
+
+static Arcadia_BooleanValue
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearDepthBufferImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self
+  );
+
+static Arcadia_Real32Value
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearDepthImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self
+  );
+
+static void
 Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearDepthImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
     Arcadia_Real32Value depth
+  );
+
+static void
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getRelativeViewportRectangleImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_Real32Value* left,
+    Arcadia_Real32Value* bottom,
+    Arcadia_Real32Value* right,
+    Arcadia_Real32Value* top
   );
 
 static void
@@ -95,6 +155,15 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_setRelativeViewportRectangleI
     Arcadia_Real32Value bottom,
     Arcadia_Real32Value right,
     Arcadia_Real32Value top
+  );
+
+static void
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getCanvasSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_Real32Value* width,
+    Arcadia_Real32Value* height
   );
 
 static void
@@ -148,10 +217,10 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_constructImpl
 
   self->dirtyBits = DirtyBitsAll;
 
-  self->viewportResource = NULL;
-
+  self->clearColorBuffer = Arcadia_BooleanValue_True;
   self->clearColor = Arcadia_Math_Color4Real32_create4(thread, 193.f / 255.f, 216.f / 255.f, 195.f / 255.f, 1.f);
 
+  self->clearDepthBuffer = Arcadia_BooleanValue_True;
   self->clearDepth = 1.f;
 
   self->relativeViewportRectangle.left = 0.f;
@@ -173,11 +242,25 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_initializeDispatchImpl
     Arcadia_Engine_Visuals_Implementation_ViewportNodeDispatch* self
   )
 {
+  ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->getCanvasSize = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*, Arcadia_Real32Value*, Arcadia_Real32Value*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_getCanvasSizeImpl;
   ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->setCanvasSize = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_setCanvasSizeImpl;
+  
+  ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->getClearColorBuffer = (Arcadia_BooleanValue (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearColorBufferImpl;
+  ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->setClearColorBuffer = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*, Arcadia_BooleanValue)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearColorBufferImpl;
+
+  ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->getClearColor = (Arcadia_Math_Color4Real32* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearColorImpl;
   ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->setClearColor = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*, Arcadia_Math_Color4Real32*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearColorImpl;
+
+  ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->getClearDepthBuffer = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearDepthBufferImpl;
+  ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->setClearDepthBuffer = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*, Arcadia_BooleanValue)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearDepthBufferImpl;
+
+  ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->getClearDepth = (Arcadia_Real32Value(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearDepthImpl;
   ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->setClearDepth = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*, Arcadia_Real32Value)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearDepthImpl;
+  
+  ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->getRelativeViewportRectangle = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*, Arcadia_Real32Value*, Arcadia_Real32Value*, Arcadia_Real32Value*, Arcadia_Real32Value*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_getRelativeViewportRectangleImpl;
   ((Arcadia_Engine_Visuals_ViewportNodeDispatch*)self)->setRelativeViewportRectangle = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_ViewportNode*, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value, Arcadia_Real32Value)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_setRelativeViewportRectangleImpl;
-  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_RenderingContextNode*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_renderImpl;
+  
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_renderImpl;
   ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_Implementation_ViewportNode_setVisualsBackendContextImpl;
 }
 
@@ -189,10 +272,12 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_destructImpl
   )
 {
   if (self->backendContext) {
+#if 0
     if (self->viewportResource) {
       Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource);
       self->viewportResource = NULL;
     }
+#endif
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
     self->backendContext = NULL;
     self->dirtyBits = ClearColorDirty | ClearDepthDirty | RelativeRectangleDirty | CanvasSizeDirty;
@@ -216,11 +301,12 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   )
 {
   Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)renderingContextNode->backendContext);
   if (self->backendContext) {
+#if 0
     if (!self->viewportResource) {
       self->viewportResource =
         Arcadia_Visuals_Implementation_BackendContext_createViewportResource
@@ -231,16 +317,24 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_renderImpl
       Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource);
     }
     Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource,
-                                                           renderingContextNode->renderingContextResource);
+                                                           renderingContextNode->enterPassResource);
     if (self->dirtyBits & ClearColorDirty) {
       Arcadia_Visuals_Implementation_ViewportResource_setClearColor(thread, self->viewportResource,
                                                                             self->clearColor);
       self->dirtyBits &= ~ClearColorDirty;
     }
+    if (self->dirtyBits & ClearColorBufferDirty) {
+      Arcadia_Visuals_Implementation_ViewportResource_setClearColorBuffer(thread, self->viewportResource, self->clearColorBuffer);
+      self->dirtyBits &= ~ClearColorBufferDirty;
+    }
     if (self->dirtyBits & ClearDepthDirty) {
       Arcadia_Visuals_Implementation_ViewportResource_setClearDepth(thread, self->viewportResource,
                                                                             self->clearDepth);
       self->dirtyBits &= ~ClearDepthDirty;
+    }
+    if (self->dirtyBits & ClearDepthBufferDirty) {
+      Arcadia_Visuals_Implementation_ViewportResource_setClearDepthBuffer(thread, self->viewportResource, self->clearDepthBuffer);
+      self->dirtyBits &= ~ClearDepthBufferDirty;
     }
     if (self->dirtyBits & RelativeRectangleDirty) {
       Arcadia_Visuals_Implementation_ViewportResource_setRelativeViewportRectangle(thread, self->viewportResource,
@@ -256,6 +350,7 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_renderImpl
                                                                             self->canvasSize.height);
       self->dirtyBits &= ~CanvasSizeDirty;
     }
+#endif
   }
 }
 
@@ -278,12 +373,47 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_setVisualsBackendContextImpl
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
   }
   if (self->backendContext) {
+#if 0
     if (self->viewportResource) {
       Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource);
       self->viewportResource = NULL;
     }
+#endif
   }
   self->backendContext = backendContext;
+}
+
+static Arcadia_BooleanValue
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearColorBufferImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self
+  )
+{ return self->clearColorBuffer; }
+
+static void
+Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearColorBufferImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_BooleanValue clearColorBuffer
+  )
+{ 
+  self->clearColorBuffer = clearColorBuffer;
+  self->dirtyBits |= ClearColorBufferDirty;
+}
+
+static Arcadia_Math_Color4Real32*
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearColorImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_Math_Color4Real32* clearColor
+  )
+{
+  Arcadia_Math_Color4Real32* clone = Arcadia_Math_Color4Real32_create(thread);
+  Arcadia_Math_Color4Real32_assign(thread, clone, self->clearColor);
+  return clone;
 }
 
 static void
@@ -298,6 +428,34 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearColorImpl
   self->dirtyBits |= ClearColorDirty;
 }
 
+static Arcadia_BooleanValue
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearDepthBufferImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self
+  )
+{ return self->clearDepthBuffer; }
+
+static void
+Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearDepthBufferImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_BooleanValue clearDepthBuffer
+  )
+{
+  self->clearDepthBuffer = clearDepthBuffer;
+  self->dirtyBits |= ClearDepthBufferDirty;
+}
+
+static Arcadia_Real32Value
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getClearDepthImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self
+  )
+{ return self->clearDepth; }
+
 static void
 Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearDepthImpl
   (
@@ -309,6 +467,24 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_setClearDepthImpl
   self->clearDepth = depth;
   self->dirtyBits |= ClearDepthDirty;
 }
+
+static void
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getRelativeViewportRectangleImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_Real32Value* left,
+    Arcadia_Real32Value* bottom,
+    Arcadia_Real32Value* right,
+    Arcadia_Real32Value* top
+  )
+{
+  *left = self->relativeViewportRectangle.left;
+  *bottom = self->relativeViewportRectangle.bottom;
+  *right = self->relativeViewportRectangle.right;
+  *top = self->relativeViewportRectangle.top;
+}
+
 
 static void
 Arcadia_Engine_Visuals_Implementation_ViewportNode_setRelativeViewportRectangleImpl
@@ -326,6 +502,19 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_setRelativeViewportRectangleI
   self->relativeViewportRectangle.right = right;
   self->relativeViewportRectangle.top = top;
   self->dirtyBits |= RelativeRectangleDirty;
+}
+
+static void
+Arcadia_Engine_Visuals_Implementation_ViewportNode_getCanvasSizeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_ViewportNode* self,
+    Arcadia_Real32Value* width,
+    Arcadia_Real32Value* height
+  )
+{
+  *width = self->canvasSize.width;
+  *height = self->canvasSize.height;
 }
 
 static void

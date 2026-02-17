@@ -15,7 +15,6 @@
 
 #include "Arcadia/Visuals/Implementation/Windows/DisplayDevice.h"
 
-#include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/Windows/DisplayMode.h"
 
 static void
@@ -90,7 +89,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Visuals.Windows.DisplayDevice", Arcadia_Engine_Visuals_Windows_DisplayDevice,
-                         u8"Arcadia.Visuals.DisplayDevice", Arcadia_Visuals_DisplayDevice,
+                         u8"Arcadia.Engine.Visuals.DisplayDevice", Arcadia_Engine_Visuals_DisplayDevice,
                          &_typeOperations);
 
 static void
@@ -130,11 +129,11 @@ Arcadia_Engine_Visuals_Windows_DisplayDevice_initializeDispatchImpl
     Arcadia_Engine_Visuals_Windows_DisplayDeviceDispatch* self
   )
 {
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getCurrentDisplayMode = (Arcadia_Visuals_DisplayMode * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl;
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getAvailableDisplayModes = (Arcadia_List * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl;
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getId = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getIdImpl;
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getNameImpl;
-  ((Arcadia_Visuals_DisplayDeviceDispatch*)self)->getBounds = (void (*)(Arcadia_Thread*, Arcadia_Visuals_DisplayDevice*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getBoundsImpl;
+  ((Arcadia_Engine_Visuals_DisplayDeviceDispatch*)self)->getCurrentDisplayMode = (Arcadia_Engine_Visuals_DisplayMode * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getCurrentDisplayModeImpl;
+  ((Arcadia_Engine_Visuals_DisplayDeviceDispatch*)self)->getAvailableDisplayModes = (Arcadia_List * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getAvailableDisplayModesImpl;
+  ((Arcadia_Engine_Visuals_DisplayDeviceDispatch*)self)->getId = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getIdImpl;
+  ((Arcadia_Engine_Visuals_DisplayDeviceDispatch*)self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayDevice*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getNameImpl;
+  ((Arcadia_Engine_Visuals_DisplayDeviceDispatch*)self)->getBounds = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_DisplayDevice*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Engine_Visuals_Windows_DisplayDevice_getBoundsImpl;
 }
 
 static void

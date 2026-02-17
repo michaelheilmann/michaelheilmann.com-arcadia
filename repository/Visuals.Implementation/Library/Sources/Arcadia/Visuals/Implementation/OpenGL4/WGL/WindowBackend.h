@@ -16,7 +16,6 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_WINDOWBACKEND_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Windows/Icon.h"
 typedef struct Arcadia_Engine_Visuals_Windows_DisplayDevice Arcadia_Engine_Visuals_Windows_DisplayDevice;
@@ -42,7 +41,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend {
 
   HWND windowHandle;
   HDC deviceContextHandle;
-
+  
   Arcadia_Visuals_Implementation_Windows_Icon* smallIcon;
   Arcadia_Visuals_Implementation_Windows_Icon* bigIcon;
 };

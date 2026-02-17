@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_OPENGL_WGL_FACTORYCONTEXT_H_INCLUDED
 
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/FactoryWindow.h"
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 
 #if !defined(WIN32_LEAN_AND_MEAN)
   #define WIN32_LEAN_AND_MEAN

@@ -16,8 +16,7 @@
 #if !defined(ARCADIA_ENGINE_DEMO_SCENES_MAINSCENE_H_INCLUDED)
 #define ARCADIA_ENGINE_DEMO_SCENES_MAINSCENE_H_INCLUDED
 
-#include "Arcadia/Audials/Include.h"
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Engine/Demo/Scene.h"
 #include "Arcadia/ADL/Include.h"
 
@@ -39,7 +38,7 @@ struct Arcadia_Engine_Demo_MainScene {
   // A single camera, re-attached to the respective viewport / model combination for rendering.
   Arcadia_Engine_Visuals_CameraNode* cameraNode;
   // A single context, re-update with the information for the respective viewport / model combination for rendering.
-  Arcadia_Engine_Visuals_RenderingContextNode* renderingContextNode;
+  Arcadia_Engine_Visuals_EnterPassNode* enterPassNode;
 
   // The models, thee of them.
   Arcadia_Engine_Visuals_ModelNode* modelNode[3];

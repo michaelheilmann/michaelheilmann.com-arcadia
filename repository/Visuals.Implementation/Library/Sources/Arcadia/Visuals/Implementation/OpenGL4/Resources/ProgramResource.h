@@ -20,9 +20,6 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
 typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Visuals_Implementation_OpenGL4_BackendContext;
 
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource;
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource;
-
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ProgramResource", Arcadia_Visuals_Implementation_OpenGL4_ProgramResource,
                           u8"Arcadia.Visuals.Implementation.ProgramResource");
 
@@ -33,10 +30,14 @@ struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResourceDispatch {
 struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResource {
   Arcadia_Visuals_Implementation_ProgramResource _parent;
   Arcadia_BooleanValue dirty;
-  Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource* vertexProgram;
-  Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource* fragmentProgram;
-
-  GLuint id;
+  /// The underlaying VPL program.
+  Arcadia_Visuals_VPL_Program* program;
+  // The OpenGL ID of the fragment shader.
+  GLuint fragmentShaderID;
+  // The OpenGL ID of the vertex shader.
+  GLuint vertexShaderID;
+  // The OpenGL ID of the program.
+  GLuint programID;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*
@@ -44,8 +45,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
-    Arcadia_Visuals_Implementation_OpenGL4_VertexProgramResource* vertexProgram,
-    Arcadia_Visuals_Implementation_OpenGL4_FragmentProgramResource* fragmentProgram
+    Arcadia_Visuals_VPL_Program* program
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED

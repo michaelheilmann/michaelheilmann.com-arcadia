@@ -21,7 +21,7 @@
 #endif
 #include "Arcadia/Ring2/Include.h"
 
-// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Event
+// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Event
 Arcadia_declareObjectType(u8"Arcadia.Engine.Event", Arcadia_Engine_Event,
                           u8"Arcadia.Object");
 

@@ -16,3 +16,4 @@
 cmake_minimum_required(VERSION 4.1.3)
 
 add_subdirectory(Library)
+add_subdirectory(Documentation)

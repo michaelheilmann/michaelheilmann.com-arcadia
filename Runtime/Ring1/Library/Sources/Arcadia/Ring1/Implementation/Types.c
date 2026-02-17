@@ -14,4 +14,4 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING1_PRIVATE (1)
-#include "Arcadia/Ring1/Implementation/Types.module.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Types.module.h"

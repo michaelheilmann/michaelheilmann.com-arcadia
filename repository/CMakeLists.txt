@@ -32,5 +32,4 @@ add_subdirectory(Visuals.Implementation)
 add_subdirectory(Audials.Implementation)
 
 add_subdirectory(Tools.IconGenerator)
-add_subdirectory(Tools.BitmapFontGenerator)
 add_subdirectory(Tools.GenerateRyuLookupTables)

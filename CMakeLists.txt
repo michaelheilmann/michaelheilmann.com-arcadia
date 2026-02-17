@@ -34,8 +34,6 @@ add_subdirectory(ADL)
 add_subdirectory(Imaging)
 
 add_subdirectory(Engine/Engine)
-add_subdirectory(Engine/Audials)
-add_subdirectory(Engine/Visuals)
 add_subdirectory(Engine/Application)
 
 add_subdirectory(Documentation)

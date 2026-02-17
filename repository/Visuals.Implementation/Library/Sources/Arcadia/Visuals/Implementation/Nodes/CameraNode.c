@@ -16,8 +16,14 @@
 #include "Arcadia/Visuals/Implementation/Nodes/CameraNode.h"
 
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
-#include "Arcadia/Visuals/Implementation/Nodes/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Nodes/EnterPassNode.h"
 #include <assert.h>
+
+#define ViewToProjectionMatrixDirty (1)
+#define WorldToViewMatrixDirty (2)
+
+#define DirtyBitsAll (ViewToProjectionMatrixDirty | WorldToViewMatrixDirty)
+
 
 static void
 Arcadia_Engine_Visuals_Implementation_CameraNode_constructImpl
@@ -52,7 +58,7 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_CameraNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   );
 
 static void
@@ -63,12 +69,26 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_setVisualsBackendContextImpl
     Arcadia_Visuals_Implementation_BackendContext* backendContext
   );
 
+static Arcadia_Math_Matrix4Real32*
+Arcadia_Engine_Visuals_Implementation_CameraNode_getViewToProjectionMatrixImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_CameraNode* self
+  );
+
 static void
 Arcadia_Engine_Visuals_Implementation_CameraNode_setViewToProjectionMatrixImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_CameraNode* self,
     Arcadia_Math_Matrix4Real32* viewToProjectionMatrix
+  );
+
+static Arcadia_Math_Matrix4Real32*
+Arcadia_Engine_Visuals_Implementation_CameraNode_getWorldToViewMatrixImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_CameraNode* self
   );
 
 static void
@@ -119,6 +139,8 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_constructImpl
     Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
   }
 
+  self->dirtyBits = DirtyBitsAll;
+
   self->viewToProjectionMatrix = Arcadia_Math_Matrix4Real32_create(thread);
   Arcadia_Math_Matrix4Real32_setIdentity(thread, self->viewToProjectionMatrix);
 
@@ -130,10 +152,8 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_constructImpl
   // Move the camera along the positive right axis and along the positive z axis by multiplying the camera position by `translate(0, 0, 1)`.
   // However, as we actually do not transform the camera position but the position of the objects in world space,
   // we actually have to use the inverse `inverse(translate(0, 0, 1))`.
-  //Arcadia_Math_Matrix4Real32* worldToViewMatrix = Arcadia_Math_Matrix4Real32_create(thread);
-  Arcadia_Math_MatrixReal32Value_setTranslation(thread, self->worldToViewMatrix, 0.f, 0.f, -1.f);
-
-  self->constantBufferResource = NULL;
+  //Arcadia_Math_Matrix4x4Real32* worldToViewMatrix = Arcadia_Math_Matrix4Real32_create(thread);
+  Arcadia_Math_Matrix4x4Real32Value_setTranslation(thread, self->worldToViewMatrix, 0.f, 0.f, -1.f);
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
@@ -147,11 +167,17 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_initializeDispatchImpl
   )
 {
   ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render =
-    (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_RenderingContextNode*)) & Arcadia_Engine_Visuals_Implementation_CameraNode_renderImpl;
+    (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_Implementation_CameraNode_renderImpl;
   ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext =
     (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_Implementation_CameraNode_setVisualsBackendContextImpl;
+
+  ((Arcadia_Engine_Visuals_CameraNodeDispatch*)self)->getViewToProjectionMatrix =
+    (Arcadia_Math_Matrix4Real32* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_CameraNode*)) & Arcadia_Engine_Visuals_Implementation_CameraNode_getViewToProjectionMatrixImpl;
   ((Arcadia_Engine_Visuals_CameraNodeDispatch*)self)->setViewToProjectionMatrix =
     (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_CameraNode*, Arcadia_Math_Matrix4Real32*)) & Arcadia_Engine_Visuals_Implementation_CameraNode_setViewToProjectionMatrixImpl;
+
+  ((Arcadia_Engine_Visuals_CameraNodeDispatch*)self)->getWorldToViewMatrix =
+    (Arcadia_Math_Matrix4Real32* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_CameraNode*)) & Arcadia_Engine_Visuals_Implementation_CameraNode_getWorldToViewMatrixImpl;
   ((Arcadia_Engine_Visuals_CameraNodeDispatch*)self)->setWorldToViewMatrix =
     (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_CameraNode*, Arcadia_Math_Matrix4Real32*)) & Arcadia_Engine_Visuals_Implementation_CameraNode_setWorldToViewMatrixImpl;
 }
@@ -164,10 +190,6 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_destructImpl
   )
 {
   if (self->backendContext) {
-    if (self->constantBufferResource) {
-      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBufferResource);
-      self->constantBufferResource = NULL;
-    }
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
     self->backendContext = NULL;
   }
@@ -194,25 +216,14 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_CameraNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   )
 {
   Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)renderingContextNode->backendContext);
   if (self->backendContext) {
-    if (!self->constantBufferResource) {
-      Arcadia_Visuals_Implementation_BackendContext* backendContext = self->backendContext;
-      self->constantBufferResource = Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource(thread, backendContext);
-      Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBufferResource);
+    if (self->dirtyBits & DirtyBitsAll) {
+      self->dirtyBits &= ~(DirtyBitsAll);
     }
-    if (self->dirtyBits & (Arcadia_Engine_Visuals_Implementation_CameraNode_WorldToViewMatrixDirty |Arcadia_Engine_Visuals_Implementation_CameraNode_ViewToProjectionMatrixDirty)) {
-      Arcadia_Engine_Visuals_RenderingContextNode_setViewToProjectionMatrix(thread, (Arcadia_Engine_Visuals_RenderingContextNode*)renderingContextNode, self->viewToProjectionMatrix);
-      Arcadia_Engine_Visuals_RenderingContextNode_setWorldToViewMatrix(thread, (Arcadia_Engine_Visuals_RenderingContextNode*)renderingContextNode, self->worldToViewMatrix);
-      self->dirtyBits &= ~(Arcadia_Engine_Visuals_Implementation_CameraNode_WorldToViewMatrixDirty | Arcadia_Engine_Visuals_Implementation_CameraNode_ViewToProjectionMatrixDirty);
-    }
-
-    // Render the viewport.
-    Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)((Arcadia_Engine_Visuals_CameraNode*)self)->viewport,
-                                              (Arcadia_Engine_Visuals_RenderingContextNode*)renderingContextNode);
   }
 }
 
@@ -235,12 +246,20 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_setVisualsBackendContextImpl
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
   }
   if (self->backendContext) {
-    if (self->constantBufferResource) {
-      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBufferResource);
-      self->constantBufferResource = NULL;
-    }
   }
   self->backendContext = backendContext;
+}
+
+static Arcadia_Math_Matrix4Real32*
+Arcadia_Engine_Visuals_Implementation_CameraNode_getViewToProjectionMatrixImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_CameraNode* self
+  )
+{ 
+  Arcadia_Math_Matrix4Real32* clone = Arcadia_Math_Matrix4Real32_create(thread);
+  Arcadia_Math_Matrix4Real32_assign(thread, clone, self->viewToProjectionMatrix);
+  return clone;
 }
 
 static void
@@ -252,7 +271,19 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_setViewToProjectionMatrixImpl
   )
 { 
   Arcadia_Math_Matrix4Real32_assign(thread, self->viewToProjectionMatrix, viewToProjectionMatrix);
-  self->dirtyBits |= Arcadia_Engine_Visuals_Implementation_CameraNode_ViewToProjectionMatrixDirty;
+  self->dirtyBits |= ViewToProjectionMatrixDirty;
+}
+
+static Arcadia_Math_Matrix4Real32*
+Arcadia_Engine_Visuals_Implementation_CameraNode_getWorldToViewMatrixImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_CameraNode* self
+  )
+{
+  Arcadia_Math_Matrix4Real32* clone = Arcadia_Math_Matrix4Real32_create(thread);
+  Arcadia_Math_Matrix4Real32_assign(thread, clone, self->worldToViewMatrix);
+  return clone;
 }
 
 static void
@@ -264,7 +295,7 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_setWorldToViewMatrixImpl
   )
 { 
   Arcadia_Math_Matrix4Real32_assign(thread, self->worldToViewMatrix, worldToViewMatrix);
-  self->dirtyBits |= Arcadia_Engine_Visuals_Implementation_CameraNode_WorldToViewMatrixDirty;
+  self->dirtyBits |= WorldToViewMatrixDirty;
 }
 
 Arcadia_Engine_Visuals_Implementation_CameraNode*

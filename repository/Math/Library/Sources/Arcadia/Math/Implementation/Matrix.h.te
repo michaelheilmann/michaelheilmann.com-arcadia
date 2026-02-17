@@ -134,4 +134,30 @@ Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_lerp
     @{scalarType} t
   );
 
+/// @@brief Assign the specified values to this matrix.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this matrix.
+/// @@param values A pointer to an array or of @{dimensionality}*@{dimensionality} values.
+/// The element @@code{i, j} is assigned the value @@code{i * @{dimensionality} + j} from that array.
+void
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_setWithValues
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* self,
+    @{scalarType} const* values
+  );
+
+/// @@brief Compute the product of this matrix with another matrix.
+/// @@param thread A pointer to this thread.
+/// @@param self A pointer to this matrix.
+/// @@param other A pointer to the other matrix.
+/// @@return The product matrix.
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}*
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_multiply
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* self,
+    Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}* other
+  );
+
 #endif // ARCADIA_MATH_IMPLEMENTATION_MATRIX@{dimensionality}@{scalarSuffixUppercase}_H_INCLUDED

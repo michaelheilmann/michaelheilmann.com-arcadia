@@ -18,7 +18,7 @@
 
 #include "Arcadia/Ring2/Include.h"
 
-// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Imaging_PixelFormat
+// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Imaging_PixelFormat
 Arcadia_declareEnumerationType(u8"Arcadia.Imaging.PixelFormat", Arcadia_Imaging_PixelFormat);
 
 enum Arcadia_Imaging_PixelFormat {
@@ -43,7 +43,7 @@ enum Arcadia_Imaging_PixelFormat {
 
 };
 
-// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Imaging_PixelFormat_getBytesPerPixel
+// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Imaging_PixelFormat_getBytesPerPixel
 Arcadia_SizeValue
 Arcadia_Imaging_PixelFormat_getNumberOfBytes
   (
@@ -51,7 +51,7 @@ Arcadia_Imaging_PixelFormat_getNumberOfBytes
     Arcadia_Imaging_PixelFormat self
   );
 
-// https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Imaging_PixelFormat_getNumberComponents
+// https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Imaging_PixelFormat_getNumberComponents
 Arcadia_SizeValue
 Arcadia_Imaging_PixelFormat_getNumberOfComponents
   (

@@ -38,5 +38,6 @@
 #include "Arcadia/Ring1/Implementation/Numerics/sin.h"
 #include "Arcadia/Ring1/Implementation/Numerics/quotientRemainder.h"
 #include "Arcadia/Ring1/Implementation/Numerics/sqrt.h"
+#include "Arcadia/Ring1/Implementation/Numerics/tan.h"
 
 #endif // ARCADIA_RING1_IMPLEMENTATION_NUMERICS_INCLUDE_H_INCLUDED

@@ -111,7 +111,7 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_construct
   //
   self->viewportNode = NULL;
   self->cameraNode = NULL;
-  self->renderingContextNode = NULL;
+  self->enterPassNode = NULL;
   //
   self->modelNode = NULL;
   //
@@ -158,8 +158,8 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_visit
   if (self->cameraNode) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->cameraNode);
   }
-  if (self->renderingContextNode) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->renderingContextNode);
+  if (self->enterPassNode) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->enterPassNode);
   }
 
   if (self->modelNode) {
@@ -193,8 +193,9 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_updateLogics
   self->duration += tick;
   /* The loading screen fades in and fades out over a duration of 3 secods. After 3.25 seconds we move to the next scene. */
   if (self->duration > 3250 && 0 == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->toLoad)) {
-    Arcadia_Engine_Demo_SceneManager_setScene(thread, ((Arcadia_Engine_Demo_Scene*)self)->sceneManager,
-                                              (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_MainMenuScene_create(thread, ((Arcadia_Engine_Demo_Scene*)self)->engine, ((Arcadia_Engine_Demo_Scene*)self)->sceneManager));
+    //Arcadia_Engine_Demo_Scene* nextScene = (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_MainScene_create(thread, ((Arcadia_Engine_Demo_Scene*)self)->engine, ((Arcadia_Engine_Demo_Scene*)self)->sceneManager);
+    Arcadia_Engine_Demo_Scene* nextScene = (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_MainMenuScene_create(thread, ((Arcadia_Engine_Demo_Scene*)self)->engine, ((Arcadia_Engine_Demo_Scene*)self)->sceneManager);
+    Arcadia_Engine_Demo_SceneManager_setScene(thread, ((Arcadia_Engine_Demo_Scene*)self)->sceneManager, nextScene);
   }
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_SizeValue n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->toLoad);
@@ -241,9 +242,9 @@ updateVisuals0
         );
   }
   // Ensure the "rendering context" node exists.
-  if (!self->renderingContextNode) {
-    self->renderingContextNode =
-      Arcadia_Engine_Visuals_NodeFactory_createRenderingContextNode
+  if (!self->enterPassNode) {
+    self->enterPassNode =
+      Arcadia_Engine_Visuals_NodeFactory_createEnterPassNode
         (
           thread,
           (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
@@ -308,10 +309,9 @@ updateVisuals0
           modelDefinition
         );
   }
-  // Assign the "viewport" node to the "camera" node.
-  Arcadia_Engine_Visuals_CameraNode_setViewport(thread, self->cameraNode, self->viewportNode);
-  // Assign the "camera" node to the "rendering context" node.
-  Arcadia_Engine_Visuals_RenderingContextNode_setCameraNode(thread, self->renderingContextNode, self->cameraNode);
+  // Assign the "viewport" node and "camera" node to the "enter pass" node.
+  Arcadia_Engine_Visuals_EnterPassNode_setViewportNode(thread, self->enterPassNode, self->viewportNode);
+  Arcadia_Engine_Visuals_EnterPassNode_setCameraNode(thread, self->enterPassNode, self->cameraNode);
 }
 
 static void
@@ -337,9 +337,9 @@ updateVisualsFrameBuffer
         );
   }
   // Assign the "frame buffer" node to the "rendering context" node.
-  Arcadia_Engine_Visuals_RenderingContextNode_setFrameBufferNode(thread, self->renderingContextNode, self->frameBufferNode);
+  Arcadia_Engine_Visuals_EnterPassNode_setFrameBufferNode(thread, self->enterPassNode, self->frameBufferNode);
   // Render the scene.
-  Arcadia_Engine_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
 }
 
 static void
@@ -355,9 +355,9 @@ updateVisualsDefaultFrameBuffer
   updateVisuals0(thread, self, tick, width, height);
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
   // Assign the "frame buffer" node to the "rendering context" node.
-  Arcadia_Engine_Visuals_RenderingContextNode_setFrameBufferNode(thread, self->renderingContextNode, NULL);
+  Arcadia_Engine_Visuals_EnterPassNode_setFrameBufferNode(thread, self->enterPassNode, NULL);
   // Render the scene.
-  Arcadia_Engine_Visuals_renderScene(thread, self->renderingContextNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+  Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
 }
 
 static void

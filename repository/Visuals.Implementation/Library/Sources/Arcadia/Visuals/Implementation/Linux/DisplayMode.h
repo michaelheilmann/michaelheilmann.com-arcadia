@@ -16,7 +16,7 @@
 #if !defined (ARCADIA_VISUALS_IMPLEMENTATION_LINUX_DISPLAYMODE_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_LINUX_DISPLAYMODE_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 typedef struct Arcadia_Visuals_Linux_DisplayDevice Arcadia_Visuals_Linux_DisplayDevice;
 
 // https://www.x.org/releases/current/doc/index.html
@@ -24,14 +24,14 @@ typedef struct Arcadia_Visuals_Linux_DisplayDevice Arcadia_Visuals_Linux_Display
 #include <X11/extensions/Xrandr.h>
 
 Arcadia_declareObjectType(u8"Arcadia.Visuals.Linux.DisplayMode", Arcadia_Visuals_Linux_DisplayMode,
-                          u8"Arcadia.Visuals.DisplayMode");
+                          u8"Arcadia.Engine.Visuals.DisplayMode");
 
 struct Arcadia_Visuals_Linux_DisplayModeDispatch {
-  Arcadia_Visuals_DisplayModeDispatch _parent;
+  Arcadia_Engine_Visuals_DisplayModeDispatch _parent;
 };
 
 struct Arcadia_Visuals_Linux_DisplayMode {
-  Arcadia_Visuals_DisplayMode _parent;
+  Arcadia_Engine_Visuals_DisplayMode _parent;
   Arcadia_Visuals_Linux_DisplayDevice* device;
   RRMode modeId;
   Arcadia_Integer32Value horizontalResolution;

@@ -22,45 +22,45 @@
 #define Arcadia_PI_Real64Value 3.1415926
 
 Arcadia_Real32Value
-Arcadia_radiansToDegreesReal32Value
+Arcadia_Math_radiansToDegreesReal32Value
   (
     Arcadia_Thread* thread,
     Arcadia_Real32Value a
   )
 {
-  static const Arcadia_Real32Value x = 180.f / Arcadia_PI_Real32Value;
+  static const Arcadia_Real32Value x = 180.f / Arcadia_Math_PI_Real32Value;
   return a * x;
 }
 
 Arcadia_Real64Value
-Arcadia_radiansToDegreesReal64Value
+Arcadia_Math_radiansToDegreesReal64Value
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value a
   )
 {
-  static const Arcadia_Real64Value x = 180. / Arcadia_PI_Real64Value;
+  static const Arcadia_Real64Value x = 180. / Arcadia_Math_PI_Real64Value;
   return a * x;
 }
 
 Arcadia_Real32Value
-Arcadia_degreesToRadiansReal32Value
+Arcadia_Math_degreesToRadiansReal32Value
   (
     Arcadia_Thread* thread,
     Arcadia_Real32Value a
   )
 {
-  static const Arcadia_Real32Value x = Arcadia_PI_Real32Value / 180.f;
+  static const Arcadia_Real32Value x = Arcadia_Math_PI_Real32Value / 180.f;
   return a * x;
 }
 
 Arcadia_Real64Value
-Arcadia_degreesToRadiansReal64Value
+Arcadia_Math_degreesToRadiansReal64Value
   (
     Arcadia_Thread* thread,
     Arcadia_Real64Value a
   )
 {
-  static const Arcadia_Real64Value x = Arcadia_PI_Real64Value / 180.;
+  static const Arcadia_Real64Value x = Arcadia_Math_PI_Real64Value / 180.;
   return a * x;
 }

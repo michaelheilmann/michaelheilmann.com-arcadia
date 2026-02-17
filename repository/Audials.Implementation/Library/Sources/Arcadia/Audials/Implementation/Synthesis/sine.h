@@ -18,11 +18,23 @@
 
 #include "Arcadia/Ring2/Include.h"
 
+typedef enum Arcadia_Engine_Audials_Format {
+
+  /// Symmetric format. [0,255]. Silence at 0.
+  Arcadia_Engine_Audials_Format_Natural8,
+
+  /// Asymmetic format. [-32768,+32767]. Silence at 0.
+  Arcadia_Engine_Audials_Format_Integer16
+
+} Arcadia_Engine_Audials_Format;
+
 void
 Arcadia_Engine_Audials_Synthesis_generateSineWave
   (
     Arcadia_Thread* thread,
     Arcadia_ByteBuffer* targetBuffer,
+    Arcadia_Engine_Audials_Format format,
+    Arcadia_Integer32Value seconds,
     Arcadia_Natural8Value* channels,
     Arcadia_Natural16Value* sampleRate
   );

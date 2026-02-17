@@ -18,14 +18,14 @@
 #include "Arcadia/Math/Implementation/trigonometry.h"
 
 void
-Arcadia_Math_MatrixReal32Value_setRotationX
+Arcadia_Math_Matrix4x4Real32Value_setRotationX
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real32* self,
     Arcadia_Real32Value a
   )
 {
-  a = Arcadia_degreesToRadiansReal32Value(thread, a);
+  a = Arcadia_Math_degreesToRadiansReal32Value(thread, a);
   Arcadia_Real32Value c = Arcadia_cosReal32Value(thread, a);
   Arcadia_Real32Value s = Arcadia_sinReal32Value(thread, a);
 
@@ -55,14 +55,14 @@ Arcadia_Math_MatrixReal32Value_setRotationX
 }
 
 void
-Arcadia_Math_MatrixReal64Value_setRotationX
+Arcadia_Math_Matrix4x4Real64Value_setRotationX
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real64* self,
     Arcadia_Real64Value a
   )
 {
-  a = Arcadia_degreesToRadiansReal64Value(thread, a);
+  a = Arcadia_Math_degreesToRadiansReal64Value(thread, a);
   Arcadia_Real64Value c = Arcadia_cosReal64Value(thread, a);
   Arcadia_Real64Value s = Arcadia_sinReal64Value(thread, a);
 

@@ -93,7 +93,7 @@ if (NOT TARGET ${MyModule})
   list(APPEND ${MyModule}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h.i)
   list(APPEND ${MyModule}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Audials/Implementation/Configure.h)
 
-  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Engine.Audials ${MyProjectName}.Ring2)
+  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Engine)
   EndProduct(${MyModule})
   set_target_properties(${MyModule} PROPERTIES FOLDER "Backends")
 

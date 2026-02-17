@@ -17,7 +17,7 @@
 #include "Arcadia/Visuals/Implementation/Nodes/PixelBufferNode.h"
 
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
-#include "Arcadia/Visuals/Implementation/Nodes/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Nodes/EnterPassNode.h"
 #include "Arcadia/Visuals/Implementation/Resource.h"
 
 static void
@@ -46,7 +46,7 @@ Arcadia_Engine_Visuals_Implementation_PixelBufferNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_PixelBufferNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   );
 
 static void
@@ -108,7 +108,7 @@ Arcadia_Engine_Visuals_Implementation_PixelBufferNode_initializeDispatchImpl
     Arcadia_Engine_Visuals_Implementation_PixelBufferNodeDispatch* self
   )
 {
-  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_RenderingContextNode*)) & Arcadia_Engine_Visuals_Implementation_PixelBufferNode_renderImpl;
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_Implementation_PixelBufferNode_renderImpl;
   ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_Implementation_PixelBufferNode_setVisualsBackendContextImpl;
 }
 
@@ -130,7 +130,7 @@ Arcadia_Engine_Visuals_Implementation_PixelBufferNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_PixelBufferNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   )
 {
   Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)renderingContextNode->backendContext);

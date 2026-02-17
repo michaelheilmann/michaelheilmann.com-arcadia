@@ -24,7 +24,7 @@
 
 #include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
-#include "Arcadia/Ring2/Implementation/CommandLine.h"
+#include "Arcadia/Ring2/CommandLine/Include.h"
 #include "Arcadia/Ring2/FileSystem/Include.h"
 #include "Arcadia/Ring2/Strings/Include.h"
 

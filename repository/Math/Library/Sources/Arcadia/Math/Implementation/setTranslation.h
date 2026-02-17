@@ -21,7 +21,7 @@
 
 // https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setTranslation
 void
-Arcadia_Math_MatrixReal32Value_setTranslation
+Arcadia_Math_Matrix4x4Real32Value_setTranslation
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real32* self,
@@ -32,7 +32,7 @@ Arcadia_Math_MatrixReal32Value_setTranslation
 
 // https://michaelheilmann.com/Arcadia/Math/#Arcadia_Math_Matrix*x**_setTranslation
 void
-Arcadia_Math_MatrixReal64Value_setTranslation
+Arcadia_Math_Matrix4x4Real64Value_setTranslation
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real64* self,

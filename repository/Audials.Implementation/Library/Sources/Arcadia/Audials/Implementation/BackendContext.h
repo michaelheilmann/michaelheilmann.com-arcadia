@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED)
 #define ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED
 
-#include "Arcadia/Audials/Include.h"
+#include "Arcadia/Engine/Include.h"
 typedef struct Arcadia_Engine_Audials_Implementation_SoundSourceResource Arcadia_Engine_Audials_Implementation_SoundSourceResource;
 
 /// @code
@@ -25,10 +25,10 @@ typedef struct Arcadia_Engine_Audials_Implementation_SoundSourceResource Arcadia
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Engine.Audials.Implementation.BackendContext", Arcadia_Engine_Audials_Implementation_BackendContext,
-                          u8"Arcadia.Engine.Audials.BackendContextBase");
+                          u8"Arcadia.Engine.Audials.BackendContext");
 
 struct Arcadia_Engine_Audials_Implementation_BackendContextDispatch {
-  Arcadia_Engine_Audials_BackendContextBaseDispatch _parent;
+  Arcadia_Engine_Audials_BackendContextDispatch _parent;
 
   Arcadia_Engine_Audials_Implementation_SoundSourceResource*
   (*createSoundSourceResource)
@@ -39,7 +39,7 @@ struct Arcadia_Engine_Audials_Implementation_BackendContextDispatch {
 };
 
 struct Arcadia_Engine_Audials_Implementation_BackendContext {
-  Arcadia_Engine_Audials_BackendContextBase _parent;
+  Arcadia_Engine_Audials_BackendContext _parent;
 };
 
 Arcadia_Engine_Audials_Implementation_SoundSourceResource*

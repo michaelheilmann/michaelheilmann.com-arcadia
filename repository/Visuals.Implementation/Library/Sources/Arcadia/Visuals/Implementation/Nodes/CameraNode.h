@@ -16,13 +16,11 @@
 #if !defined(ARCADIA_VISUALS_IMPLEMENTATION_NODES_CAMERANODE_H_INCLUDED)
 #define ARCADIA_VISUALS_IMPLEMENTATION_NODES_CAMERANODE_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 typedef struct Arcadia_Visuals_Implementation_BackendContext Arcadia_Visuals_Implementation_BackendContext;
-typedef struct Arcadia_Visuals_Implementation_ConstantBufferResource Arcadia_Visuals_Implementation_ConstantBufferResource;
 
-#define Arcadia_Engine_Visuals_Implementation_CameraNode_ViewToProjectionMatrixDirty (1)
-#define Arcadia_Engine_Visuals_Implementation_CameraNode_WorldToViewMatrixDirty (2)
-
+// This does not operate any resources.
+// Arcadia.Engine.Visuals.EnterPassNode operates the required resources for this node.
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.Implementation.CameraNode", Arcadia_Engine_Visuals_Implementation_CameraNode,
                           u8"Arcadia.Engine.Visuals.CameraNode");
 
@@ -37,7 +35,6 @@ struct Arcadia_Engine_Visuals_Implementation_CameraNode {
   Arcadia_Math_Matrix4Real32* worldToViewMatrix;
   Arcadia_Math_Matrix4Real32* viewToProjectionMatrix;
   Arcadia_Visuals_Implementation_BackendContext* backendContext;
-  Arcadia_Visuals_Implementation_ConstantBufferResource* constantBufferResource;
 };
 
 Arcadia_Engine_Visuals_Implementation_CameraNode*

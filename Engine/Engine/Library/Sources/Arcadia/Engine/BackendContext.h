@@ -25,7 +25,7 @@
 /// The base of all backend context.
 ///
 /// @details
-/// A backend context is either an "audials" backend context (Arcadia.Audials.BackendContext) or a "visuals" backend context (Arcadia.Visuals.BackendContext).
+/// A backend context is either an "audials" backend context (Arcadia.Engine.Audials.BackendContext) or a "visuals" backend context (Arcadia.Engine.Visuals.BackendContext).
 /// The engine maintains pointers to the active backend context of the respective type.
 ///
 /// The attempt to create a backend context of a type with an active of that type is an error.

@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_VISUALS_WINDOWS_BITMAP_H_INCLUDED)
 #define ARCADIA_VISUALS_WINDOWS_BITMAP_H_INCLUDED
 
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Imaging/PixelBuffer.h"
 
 #define WIN32_LEAN_AND_MEAN

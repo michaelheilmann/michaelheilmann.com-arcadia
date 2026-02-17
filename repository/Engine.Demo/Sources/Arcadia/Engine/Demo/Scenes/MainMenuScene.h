@@ -16,8 +16,7 @@
 #if !defined(ARCADIA_ENGINE_DEMO_SCENES_MAINMENUSCENE_H_INCLUDED)
 #define ARCADIA_ENGINE_DEMO_SCENES_MAINMENUSCENE_H_INCLUDED
 
-#include "Arcadia/Audials/Include.h"
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Engine/Demo/Scene.h"
 #include "Arcadia/ADL/Include.h"
 
@@ -39,13 +38,49 @@ struct Arcadia_Engine_Demo_MainMenuScene {
   // A single camera, re-attached to the respective viewport / model combination for rendering.
   Arcadia_Engine_Visuals_CameraNode* cameraNode;
   // A single context, re-update with the information for the respective viewport / model combination for rendering.
-  Arcadia_Engine_Visuals_RenderingContextNode* renderingContextNode;
+  Arcadia_Engine_Visuals_EnterPassNode* enterPassNode;
 
   // The models, thee of them.
   Arcadia_Engine_Visuals_ModelNode* modelNode;
 
+  // The 'W', 'A', 'S', and 'D' latches.
+  Arcadia_BooleanValue latches[4];
+  struct {
+    Arcadia_Real32Value oldx;
+    Arcadia_Real32Value oldy;
+  } mousePosition;
+  Arcadia_BooleanValue mouseInWindow;
+
   // The sound source for some background sound effects.
   Arcadia_Engine_Audials_SoundSourceNode* soundSourceNode;
+
+  struct {
+
+    /// The forward vector of the viewer.
+    Arcadia_Math_Vector3Real32* forward;
+
+    /// The up vector of the viewer.
+    Arcadia_Math_Vector3Real32* up;
+
+    /// The right vector of the viewer.
+    Arcadia_Math_Vector3Real32* right;
+
+    /// The position of the viewer.
+    Arcadia_Math_Vector3Real32* position;
+
+    /// "pitch" is the angle, in degrees, of a counter-clockwise rotation of the camera around its local x-axis
+    /// The initial value is @a 0.
+    Arcadia_Real32Value pitch;
+    
+    /// "yaw" is the angle, in degrees, of a counter-clockwise rotation of the camera around its local y-axis.
+    /// The initial value is @a 0.
+    Arcadia_Real32Value yaw;
+
+    /// "roll" is the angle, in degrees, of a counter-clockwise rotation of the camera around its local z-axis
+    /// The initial value is @a 0.
+    Arcadia_Real32Value roll;
+
+  } viewer;
 };
 
 Arcadia_Engine_Demo_MainMenuScene*

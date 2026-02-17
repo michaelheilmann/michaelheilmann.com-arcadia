@@ -73,7 +73,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
-    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextNode
+    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
   );
 
 static void
@@ -163,7 +163,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_initializeDispatch
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_loadImpl;
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_unloadImpl;
   ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_RenderingContextResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl;
+  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_EnterPassResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl;
 
   ((Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->clear = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_clearImpl;
   ((Arcadia_Visuals_Implementation_ConstantBufferResourceDispatch*)self)->writeColor4Real32 = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_ConstantBufferResource*, Arcadia_Math_Color4Real32 const*)) & Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_writeColor4Real32Impl;
@@ -247,7 +247,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* self,
-    Arcadia_Visuals_Implementation_RenderingContextResource* renderingContextNode
+    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
   )
 {
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;

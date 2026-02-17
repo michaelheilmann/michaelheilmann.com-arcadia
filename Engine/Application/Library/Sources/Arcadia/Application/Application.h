@@ -2,8 +2,7 @@
 #define ARCADIA_APPLICATION_APPLICATION_H_INCLUDED
 
 #include "Arcadia/DDL/Include.h"
-
-#include "Arcadia/Visuals/Include.h"
+#include "Arcadia/Engine/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Application", Arcadia_Engine_Application,
                           u8"Arcadia.Object");

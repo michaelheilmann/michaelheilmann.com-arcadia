@@ -68,6 +68,7 @@ Arcadia_Engine_Visuals_BackendContext_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  self->windows = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, 0 + 1);
 }
@@ -86,4 +87,33 @@ Arcadia_Engine_Visuals_BackendContext_visitImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_BackendContext* self
   )
-{}
+{
+  if (self->windows) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->windows);
+  }
+}
+
+Arcadia_Engine_Visuals_Icon*
+Arcadia_Engine_Visuals_BackendContext_createIcon
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_Imaging_PixelBuffer* pixelBuffer
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createIcon, self, pixelBuffer); }
+
+Arcadia_Engine_Visuals_Window*
+Arcadia_Engine_Visuals_BackendContext_createWindow
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createWindow, self); }
+
+Arcadia_List*
+Arcadia_Engine_Visuals_BackendContext_getDisplayDevices
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, getDisplayDevices, self); }

@@ -56,7 +56,7 @@ static const Arcadia_Type_Operations _Arcadia_Engine_Node_typeOperations = {
   .objectTypeOperations = &_Arcadia_Engine_Node_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcardia.Engine.Node", Arcadia_Engine_Node,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Node", Arcadia_Engine_Node,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_Arcadia_Engine_Node_typeOperations);
 

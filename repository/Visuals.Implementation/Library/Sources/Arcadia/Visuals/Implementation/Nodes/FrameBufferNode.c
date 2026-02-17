@@ -17,7 +17,7 @@
 
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/Resources/FrameBufferResource.h"
-#include "Arcadia/Visuals/Implementation/Nodes/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Nodes/EnterPassNode.h"
 
 static void
 Arcadia_Engine_Visuals_Implementation_FrameBufferNode_constructImpl
@@ -52,7 +52,7 @@ Arcadia_Engine_Visuals_Implementation_FrameBufferNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_FrameBufferNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   );
 
 static void
@@ -134,7 +134,7 @@ Arcadia_Engine_Visuals_Implementation_FrameBufferNode_initializeDispatchImpl
     Arcadia_Engine_Visuals_Implementation_FrameBufferNodeDispatch* self
   )
 {
-  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_RenderingContextNode*)) & Arcadia_Engine_Visuals_Implementation_FrameBufferNode_renderImpl;
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_Implementation_FrameBufferNode_renderImpl;
   ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_Implementation_FrameBufferNode_setVisualsBackendContextImpl;
   ((Arcadia_Visuals_FrameBufferNodeDispatch*)self)->setSize = (void (*)(Arcadia_Thread*, Arcadia_Visuals_FrameBufferNode*, Arcadia_Integer32Value, Arcadia_Integer32Value)) & Arcadia_Engine_Visuals_Implementation_FrameBufferNode_setSizeImpl;
   ((Arcadia_Visuals_FrameBufferNodeDispatch*)self)->getSize = (void (*)(Arcadia_Thread*, Arcadia_Visuals_FrameBufferNode*, Arcadia_Integer32Value*, Arcadia_Integer32Value*)) & Arcadia_Engine_Visuals_Implementation_FrameBufferNode_getSizeImpl;
@@ -170,7 +170,7 @@ Arcadia_Engine_Visuals_Implementation_FrameBufferNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_FrameBufferNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   )
 {
   Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)renderingContextNode->backendContext);

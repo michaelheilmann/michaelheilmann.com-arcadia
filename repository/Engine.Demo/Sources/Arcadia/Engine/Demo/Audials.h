@@ -17,7 +17,7 @@
 #define ARCADIA_ENGINE_DEMO_AUDIALS_H_INCLUDED
 
 #include "Arcadia/DDL/Include.h"
-#include "Arcadia/Audials/Include.h"
+#include "Arcadia/Engine/Include.h"
 
 void
 Arcadia_Engine_Application_startupAudials

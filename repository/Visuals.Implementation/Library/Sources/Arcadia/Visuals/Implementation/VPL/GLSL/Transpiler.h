@@ -51,6 +51,8 @@ struct Arcadia_Visuals_VPL_Backends_GLSL_Transpiler {
   // `sampler2D` as used by the VPL.
   // Happens that this currently coincides with `sampler2D` in GLSL.
   Arcadia_String* SAMPLER2D;
+  // Map from VPL names to GLSL names.
+  Arcadia_Map* names;
 };
 
 Arcadia_Visuals_VPL_Backends_GLSL_Transpiler*

@@ -16,7 +16,7 @@
 #include "Arcadia/Math/Implementation/setTranslation.h"
 
 void
-Arcadia_Math_MatrixReal32Value_setTranslation
+Arcadia_Math_Matrix4x4Real32Value_setTranslation
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real32* self,
@@ -47,7 +47,7 @@ Arcadia_Math_MatrixReal32Value_setTranslation
 }
 
 void
-Arcadia_Math_MatrixReal64Value_setTranslation
+Arcadia_Math_Matrix4x4Real64Value_setTranslation
   (
     Arcadia_Thread* thread,
     Arcadia_Math_Matrix4Real64* self,
@@ -56,23 +56,23 @@ Arcadia_Math_MatrixReal64Value_setTranslation
     Arcadia_Real64Value z
   )
 {
-  self->elements[0][0] = 1.f;
-  self->elements[1][0] = 0.f;
-  self->elements[2][0] = 0.f;
-  self->elements[3][0] = 0.f;
+  self->elements[0][0] = 1.;
+  self->elements[1][0] = 0.;
+  self->elements[2][0] = 0.;
+  self->elements[3][0] = 0.;
 
-  self->elements[0][1] = 0.f;
-  self->elements[1][1] = 1.f;
-  self->elements[2][1] = 0.f;
-  self->elements[3][1] = 0.f;
+  self->elements[0][1] = 0.;
+  self->elements[1][1] = 1.;
+  self->elements[2][1] = 0.;
+  self->elements[3][1] = 0.;
 
-  self->elements[0][2] = 0.f;
-  self->elements[1][2] = 0.f;
-  self->elements[2][2] = 1.f;
-  self->elements[3][2] = 0.f;
+  self->elements[0][2] = 0.;
+  self->elements[1][2] = 0.;
+  self->elements[2][2] = 1.;
+  self->elements[3][2] = 0.;
 
   self->elements[0][3] = x;
   self->elements[1][3] = y;
   self->elements[2][3] = z;
-  self->elements[3][3] = 1.f;
+  self->elements[3][3] = 1.;
 }

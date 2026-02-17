@@ -18,7 +18,7 @@
 
 #include "Arcadia/Visuals/Implementation/Nodes/TextureNode.h"
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
-#include "Arcadia/Visuals/Implementation/Nodes/RenderingContextNode.h"
+#include "Arcadia/Visuals/Implementation/Nodes/EnterPassNode.h"
 #include "Arcadia/Visuals/Implementation/Resource.h"
 
 static void
@@ -47,7 +47,7 @@ Arcadia_Engine_Visuals_Implementation_MaterialNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_MaterialNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   );
 
 static void
@@ -112,7 +112,7 @@ Arcadia_Engine_Visuals_Implementation_MaterialNode_initializeDispatchImpl
     Arcadia_Engine_Visuals_Implementation_MaterialNodeDispatch* self
   )
 {
-  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_RenderingContextNode*)) & Arcadia_Engine_Visuals_Implementation_MaterialNode_renderImpl;
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_Implementation_MaterialNode_renderImpl;
   ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_Implementation_MaterialNode_setVisualsBackendContextImpl;
 }
 
@@ -138,27 +138,18 @@ Arcadia_Engine_Visuals_Implementation_MaterialNode_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_MaterialNode* self,
-    Arcadia_Engine_Visuals_Implementation_RenderingContextNode* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_EnterPassNode* renderingContextNode
   )
 {
   Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)renderingContextNode->backendContext);
-  Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)((Arcadia_Engine_Visuals_MaterialNode*)self)->ambientColorTexture, (Arcadia_Engine_Visuals_RenderingContextNode*)renderingContextNode);
+  Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)((Arcadia_Engine_Visuals_MaterialNode*)self)->ambientColorTexture, (Arcadia_Engine_Visuals_EnterPassNode*)renderingContextNode);
   if (self->backendContext) {
     if (!self->materialResource) {
       Arcadia_Visuals_Implementation_BackendContext* backendContext = self->backendContext;
       //
-      Arcadia_Visuals_Implementation_VertexProgramResource* vertexProgramResource = NULL;
-      vertexProgramResource = Arcadia_Visuals_Implementation_BackendContext_createVertexProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)renderingContextNode->backendContext,
-        ((Arcadia_Engine_Visuals_MaterialNode*)self)->program);
-      //
-      Arcadia_Visuals_Implementation_FragmentProgramResource* fragmentProgramResource = NULL;
-      fragmentProgramResource = Arcadia_Visuals_Implementation_BackendContext_createFragmentProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)renderingContextNode->backendContext,
-        ((Arcadia_Engine_Visuals_MaterialNode*)self)->program);
-      //
       Arcadia_Visuals_Implementation_ProgramResource* programResource = 
         Arcadia_Visuals_Implementation_BackendContext_createProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext,
-                                                                                    vertexProgramResource,
-                                                                                    fragmentProgramResource);
+                                                                                    ((Arcadia_Engine_Visuals_MaterialNode*)self)->program);
       //
       Arcadia_Visuals_Implementation_TextureResource* textureResource =
         ((Arcadia_Engine_Visuals_Implementation_TextureNode*)((Arcadia_Engine_Visuals_MaterialNode*)self)->ambientColorTexture)->textureResource;

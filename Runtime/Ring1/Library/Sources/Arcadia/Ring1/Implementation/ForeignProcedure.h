@@ -24,6 +24,12 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 typedef struct Arcadia_Value Arcadia_Value;
 
+/// The foreign procedure has the following calling convention:
+/// It can expect the stack to be non-empty.
+/// The element on top of the stack is a Natural8 value indicating the number of arguments.
+/// The foreign procedure MUST remove this Natural8 value AND n values where n is the value of the Natural8Value from the stack.
+/// If the fp raises an error, then it may leave any number of values on the stack. These will be removed by the caller.
+/// If the fp raises no error, it shall leave a single value on the stack which is the return value.
 typedef void (Arcadia_ForeignProcedure)(Arcadia_Thread* thread);
 
 typedef Arcadia_ForeignProcedure* Arcadia_ForeignProcedureValue;
