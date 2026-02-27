@@ -42,6 +42,11 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
                    "${REPOSITORY_SOURCE_DIR}/../.build/assets/cxx-doc.css"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
 
+  # Build "about.html".
+  OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/about.html.te"
+                   "${REPOSITORY_SOURCE_DIR}/../.build/about.html"
+                   "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
+
   # Build "imprint.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/imprint.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/imprint.html"

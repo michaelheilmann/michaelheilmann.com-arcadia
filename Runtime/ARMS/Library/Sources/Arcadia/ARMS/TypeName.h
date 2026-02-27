@@ -23,6 +23,7 @@
 
 typedef struct Arcadia_ARMS_TypeName Arcadia_ARMS_TypeName;
 
+/** TOOD: The set of types and the set of type names are monotonically non-decreasing until they are destroyed when the process ends. */
 Arcadia_ARMS_Status
 Arcadia_ARMS_TypeName_getOrCreate
   (
@@ -37,6 +38,20 @@ Arcadia_ARMS_TypeName_getData
     Arcadia_ARMS_TypeName* typeName,
     const Arcadia_ARMS_Natural8** bytes,
     Arcadia_ARMS_Size* numberOfBytes
+  );
+
+/** TOOD: Add reference counting for type names. */
+void
+Arcadia_ARMS_TypeName_ref
+  (
+    Arcadia_ARMS_TypeName* typeName
+  );
+
+/** TOOD: Add reference counting for type names. */
+void
+Arcadia_ARMS_TypeName_unref
+  (
+    Arcadia_ARMS_TypeName* typeName
   );
 
 #endif // ARCADIA_ARMS_TYPENAME_H_INCLUDED

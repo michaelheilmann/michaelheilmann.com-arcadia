@@ -24,6 +24,26 @@ if (NOT MyProjectIsDefined)
   include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/all.cmake)
 endif()
 
+set(CPACK_PACKAGE_NAME "Arcadia")
+
+set(CPACK_PACKAGE_VENDOR "Michael Heilmann")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Arcadia executable files")
+set(CPACK_PACKAGE_CONTACT "contact@michaelheilmann.com")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://michaelheilmann.com/")
+
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(CPACK_INSTRUCTIONSETARCHITECTURE "x64")
+elseif (CMAKE_SIZEOF_VOID_P EQUAL 4)
+  set(CPACK_INSTRUCTIONSETARCHITECTURE "x86")
+endif()
+
+set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${CPACK_INSTRUCTIONSETARCHITECTURE})
+
 add_subdirectory(Runtime/ARMS)
 add_subdirectory(Runtime/Ring1)
 add_subdirectory(Runtime/Ring2)
@@ -36,10 +56,14 @@ add_subdirectory(Media)
 add_subdirectory(Imaging)
 
 add_subdirectory(Engine/Engine)
+add_subdirectory(Engine/UI)
 add_subdirectory(Engine/Application)
 add_subdirectory(Engine/Audials.Implementation)
 
 add_subdirectory(Documentation)
 add_subdirectory(Tools/TemplateEngine)
 add_subdirectory(Tools/MaterialGenerator)
+
 add_subdirectory(repository)
+
+include(CPack)

@@ -70,7 +70,7 @@ if (NOT TARGET ${MyDemoName})
   list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Application.c)
   list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Application.h)
 
-  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Engine.Audials.Implementation ${MyProjectName}.Engine.Visuals.Implementation)
+  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Engine.UI ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Engine.Audials.Implementation ${MyProjectName}.Engine.Visuals.Implementation)
 
   EndProduct(${MyDemoName})
 
