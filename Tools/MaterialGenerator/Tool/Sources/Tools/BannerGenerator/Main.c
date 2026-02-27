@@ -164,7 +164,7 @@ main1
   if (!Arcadia_Value_isInstanceOf(thread, &start, _Arcadia_String_getType(thread))) {
     raiseRequiredArgumentMissingError(thread, Arcadia_String_createFromCxxString(thread, u8"start"));
   }
-  Arcadia_Imaging_PixelBuffer* pixelBuffer = NULL;
+  Arcadia_Media_PixelBuffer* pixelBuffer = NULL;
   Arcadia_ADL_Definitions_link(thread, definitions);
   definition = (Arcadia_ADL_Definition*)Arcadia_ADL_Definitions_getDefinitionOrNull(thread, definitions, Arcadia_Value_getObjectReferenceValueChecked(thread, start, _Arcadia_String_getType(thread)));
   if (!definition) {
@@ -172,21 +172,21 @@ main1
   }
   if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)definition, _Arcadia_ADL_PixelBufferDefinition_getType(thread))) {
     Arcadia_ADL_PixelBufferDefinition* p = (Arcadia_ADL_PixelBufferDefinition*)definition;
-    pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, p->width, p->height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
+    pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, p->width, p->height, Arcadia_Media_PixelFormat_AlphaRedGreenBlueNatural8);
     for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)p->operations); i < n; ++i) {
       Arcadia_ADL_Reference* e = (Arcadia_ADL_Reference*)Arcadia_List_getObjectReferenceValueAt(thread, p->operations, i);
-      Arcadia_Imaging_Operation* operation;
+      Arcadia_Media_PixelBufferOperation* operation;
       if (!e->definition) {
         raiseADLPixelBufferOperationNotYetSupported(thread, e->definitionName);
       }
       if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)e->definition, _Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_getType(thread))) {
-        operation = (Arcadia_Imaging_Operation*)Arcadia_Imaging_Operations_CheckerboardFill_create(thread, (Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition*)e->definition);
+        operation = (Arcadia_Media_PixelBufferOperation*)Arcadia_Media_PixelBufferOperations_CheckerboardFill_create(thread, (Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition*)e->definition);
       } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)e->definition, _Arcadia_ADL_PixelBufferOperations_FillOperationDefinition_getType(thread))) {
-        operation = (Arcadia_Imaging_Operation*)Arcadia_Imaging_Operations_Fill_create(thread, (Arcadia_ADL_PixelBufferOperations_FillOperationDefinition*)e->definition);
+        operation = (Arcadia_Media_PixelBufferOperation*)Arcadia_Media_PixelBufferOperations_Fill_create(thread, (Arcadia_ADL_PixelBufferOperations_FillOperationDefinition*)e->definition);
       } else {
         raiseADLPixelBufferOperationNotYetSupported(thread, e->definitionName);
       }
-      Arcadia_Imaging_Operation_apply(thread, operation, pixelBuffer);
+      Arcadia_Media_PixelBufferOperation_apply(thread, operation, pixelBuffer);
     }
   } else {
     raiseNotAPixelBufferDefinition(thread, definition->name); // this is an internal error

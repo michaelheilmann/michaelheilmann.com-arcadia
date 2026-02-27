@@ -18,7 +18,11 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
 #include <assert.h>
-#include "Arcadia/Visuals/Implementation/VPL/GLSL/Include.h"
+#include "Arcadia/VPL/Include.h"
+
+#define VertexShaderDirty (1)
+#define FragmentShaderDirty (2)
+#define ProgramDirty (4)
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
@@ -53,15 +57,14 @@ typedef enum ShaderType {
   FragmentShader,
 } ShaderType;
 
-static Arcadia_BooleanValue
-createOrUpdateShader
+static GLuint
+createShader
   (
     Arcadia_Thread* thread,
     _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl,
-    Arcadia_BooleanValue* dirty,
-    GLuint* id,
     ShaderType shaderType,
-    Arcadia_Visuals_VPL_Program* program
+    Arcadia_Map* constantBlockMapping,
+    Arcadia_VPL_Program* program
   );
 
 static void
@@ -130,11 +133,13 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
     Arcadia_superTypeConstructor(thread, _type, self);
   }
 
-  self->dirty = Arcadia_BooleanValue_True;
+  self->dirty = VertexShaderDirty | FragmentShaderDirty | ProgramDirty;
   self->vertexShaderID = 0;
   self->fragmentShaderID = 0;
   self->programID = 0;
-  self->program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_VPL_Program_getType(thread));
+  self->program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_VPL_Program_getType(thread));
+  self->constantBlockMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  self->constantBlockBindings = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
@@ -172,88 +177,112 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl
     Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
+  if (self->constantBlockBindings) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->constantBlockBindings);
+  }
+  if (self->constantBlockMapping) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->constantBlockMapping);
+  }
   if (self->program) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->program);
   }
 }
 
-static Arcadia_BooleanValue
-createOrUpdateShader
+static GLuint
+createShader
   (
     Arcadia_Thread* thread,
     _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl,
-    Arcadia_BooleanValue *dirty,
-    GLuint* id,
     ShaderType shaderType,
-    Arcadia_Visuals_VPL_Program* program
+    Arcadia_Map* constantBlockMapping,
+    Arcadia_VPL_Program* program
   )
 {
-  if (0 == *id) {
-    switch (shaderType) {
-      case VertexShader: {
-        *id = gl->glCreateShader(GL_VERTEX_SHADER);
-        *dirty = Arcadia_BooleanValue_True;
-      } break;
-      case FragmentShader: {
-        *id = gl->glCreateShader(GL_FRAGMENT_SHADER);
-        *dirty = Arcadia_BooleanValue_True;
-      } break;
-      default: {
-        return Arcadia_BooleanValue_False;
-      } break;
-    };
-    if (0 == *id) {
+  GLuint id = 0;
+  switch (shaderType) {
+    case VertexShader: {
+      id = gl->glCreateShader(GL_VERTEX_SHADER);
+    } break;
+    case FragmentShader: {
+      id = gl->glCreateShader(GL_FRAGMENT_SHADER);
+    } break;
+    default: {
       return Arcadia_BooleanValue_False;
-    }
+    } break;
+  };
+  if (0 == id) {
+    return id;
   }
-  if (*dirty) {
-    Arcadia_ByteBuffer* code = Arcadia_ByteBuffer_create(thread);
-    switch (shaderType) {
-      case VertexShader: {
-        Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_create(thread);
-        Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, code);
-      } break;
-      case FragmentShader: {
-        Arcadia_Visuals_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_create(thread);
-        Arcadia_Visuals_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, code);
-      } break;
-      default: {
-        return Arcadia_BooleanValue_False;
-      } break;
-    };
-    // (1) set shader source
-    while (gl->glGetError()) { }
-    const GLchar* temporary = Arcadia_ByteBuffer_getBytes(thread, code);
-    gl->glShaderSource(*id, 1, &temporary, NULL);
-    if (gl->glGetError()) {
+  Arcadia_ByteBuffer* code = Arcadia_ByteBuffer_create(thread);
+  switch (shaderType) {
+    case VertexShader: {
+      Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
+      Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantBlockMapping, code);
+    } break;
+    case FragmentShader: {
+      Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
+      Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantBlockMapping, code);
+    } break;
+    default: {
       return Arcadia_BooleanValue_False;
-    }
-    // (2) compile shader
-    while (gl->glGetError()) { }
-    gl->glCompileShader(*id);
-    if (gl->glGetError()) {
-      return Arcadia_BooleanValue_False;
-    }
-    // (3) check if compilation was successful
-    GLint success = GL_FALSE;
-    gl->glGetShaderiv(*id, GL_COMPILE_STATUS, &success);
-    if (!success) {
-      GLuint infoLogLength;
-      gl->glGetShaderiv(*id, GL_INFO_LOG_LENGTH, &infoLogLength);
-      GLchar* infoLog = malloc(sizeof(GLchar) + (infoLogLength + 1));
-      if (!infoLog) {
-        return Arcadia_BooleanValue_False;
-      }
-      gl->glGetShaderInfoLog(*id, infoLogLength, NULL, infoLog);
-      free(infoLog);
-      infoLog = NULL;
-      return Arcadia_BooleanValue_False;
-    } else {
-      *dirty = Arcadia_BooleanValue_False;
-    }
+    } break;
+  };
+  // (1) set shader source
+  while (gl->glGetError()) { }
+  const GLchar* temporary = Arcadia_ByteBuffer_getBytes(thread, code);
+  gl->glShaderSource(id, 1, &temporary, NULL);
+  if (gl->glGetError()) {
+    gl->glDeleteShader(id);
+    id = 0;
+    return 0;
   }
-  return Arcadia_BooleanValue_True;
+  // (2) compile shader
+  while (gl->glGetError()) { }
+  gl->glCompileShader(id);
+  if (gl->glGetError()) {
+    gl->glDeleteShader(id);
+    id = 0;
+    return 0;
+  }
+  // (3) check if compilation was successful
+  GLint success = GL_FALSE;
+  gl->glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    GLuint infoLogLength;
+    gl->glGetShaderiv(id, GL_INFO_LOG_LENGTH, &infoLogLength);
+    GLchar* infoLog = malloc(sizeof(GLchar) + (infoLogLength + 1));
+    if (!infoLog) {
+      gl->glDeleteShader(id);
+      id = 0;
+      return 0;
+    }
+    gl->glGetShaderInfoLog(id, infoLogLength, NULL, infoLog);
+    free(infoLog);
+    infoLog = NULL;
+    gl->glDeleteShader(id);
+    id = 0;
+    return 0;
+  }
+  return id;
 }
+
+// @return The OpenGL ID of the uniform block.
+static GLuint
+getUniformBlockIndex
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_VPL_ConstantRecord* constantBlock
+  )
+{
+  Arcadia_String* nameGL = (Arcadia_String*)Arcadia_Map_getObjectReferenceValueChecked(thread, self->constantBlockMapping, Arcadia_Value_makeObjectReferenceValue(constantBlock->name), _Arcadia_String_getType(thread));
+
+  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+  while (gl->glGetError()) { }
+  return gl->glGetUniformBlockIndex(self->programID, Arcadia_String_getBytes(thread, nameGL));
+}
+
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
@@ -265,21 +294,45 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
   _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
 
-  Arcadia_BooleanValue vertexShaderDirty = Arcadia_BooleanValue_False,
-                       fragmentShaderDirty = Arcadia_BooleanValue_False;
-  if (!createOrUpdateShader(thread, gl, &vertexShaderDirty, &self->vertexShaderID, VertexShader, self->program)) {
-    return;
+  if (self->dirty) {
+    // If something is dirty, everything is dirty.
+    self->dirty |= VertexShaderDirty | FragmentShaderDirty | ProgramDirty;
   }
-  if (!createOrUpdateShader(thread, gl, &fragmentShaderDirty, &self->fragmentShaderID, FragmentShader, self->program)) {
-    return;
+  if (self->dirty) {
+    // If something is dirty, destroy the vertex shader, the fragment shader, and the program.
+    Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->constantBlockBindings);
+    Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->constantBlockMapping);
+
+    if (self->programID) {
+      gl->glDeleteProgram(self->programID);
+      self->programID = 0;
+    }
+    if (self->fragmentShaderID) {
+      gl->glDeleteShader(self->fragmentShaderID);
+      self->fragmentShaderID = 0;
+    }
+    if (self->vertexShaderID) {
+      gl->glDeleteShader(self->vertexShaderID);
+      self->vertexShaderID = 0;
+    }
+  }
+  if (0 == self->vertexShaderID) {
+    self->vertexShaderID = createShader(thread, gl, VertexShader, self->constantBlockMapping, self->program);
+    if (!self->vertexShaderID) {
+      return;
+    }
+  }
+  if (0 == self->fragmentShaderID) {
+    self->fragmentShaderID = createShader(thread, gl, FragmentShader, self->constantBlockMapping, self->program);
+    if (!self->fragmentShaderID) {
+      return;
+    }
   }
   if (0 == self->programID) {
     self->programID = gl->glCreateProgram();
     if (0 == self->programID) {
       return;
     }
-  }
-  if (self->dirty) {
     // (1) attach vertex program
     while (gl->glGetError()) { }
     gl->glAttachShader(self->programID, self->vertexShaderID);
@@ -299,10 +352,28 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
     gl->glGetProgramiv(self->programID, GL_LINK_STATUS, &success);
     if (!success) {
       return;
-    } else {
-      self->dirty = Arcadia_BooleanValue_False;
+    }
+    // Rebuilt the mappings.
+    // (1) Iterate over the VPL constant blocks.
+    // (2) For each block,  lookup its OpenGL name.
+    // (3) Get its uniform block index given that name. The block might be optimized out, ignore it if it was not found.
+    // (4) Set the uniform binding for the black. Add (name,binding) to self->constantBlockBindings.
+    Arcadia_List* constantBlocks = Arcadia_VPL_Program_getConstantBlocks(thread, self->program);
+    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)constantBlocks), uniformBlockBindingIndex = 0; i < n; ++i) {
+      Arcadia_VPL_ConstantRecord* constantBlock = (Arcadia_VPL_ConstantRecord*)Arcadia_List_getObjectReferenceValueAt(thread, constantBlocks, i);
+      GLuint uniformBlockIndex = getUniformBlockIndex(thread, self, constantBlock);
+      if (GL_INVALID_INDEX == uniformBlockIndex) {
+        continue;
+      }
+      gl->glUniformBlockBinding(self->programID, uniformBlockIndex, uniformBlockBindingIndex);
+      if (gl->glGetError()) {
+        return;
+      }
+      Arcadia_Map_set(thread, self->constantBlockBindings, Arcadia_Value_makeObjectReferenceValue(constantBlock->name), Arcadia_Value_makeSizeValue(uniformBlockBindingIndex), NULL, NULL);
+      uniformBlockBindingIndex++;
     }
   }
+  self->dirty = 0;
 }
 
 static void
@@ -361,7 +432,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
-    Arcadia_Visuals_VPL_Program* program
+    Arcadia_VPL_Program* program
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);

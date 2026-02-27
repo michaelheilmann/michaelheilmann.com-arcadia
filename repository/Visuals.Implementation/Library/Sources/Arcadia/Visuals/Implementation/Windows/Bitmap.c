@@ -133,7 +133,7 @@ Arcadia_Engine_Visuals_Windows_Bitmap_constructImpl
   self->lineStride = (int32_t)lineStride;
   self->linePadding = (uint32_t)linePadding;
   self->numberOfBitsPerPixel = 24;
-  self->pixelFormat = Arcadia_Imaging_PixelFormat_Bn8Gn8Rn8;
+  self->pixelFormat = Arcadia_Media_PixelFormat_BlueGreenRedNatural8;
 
   HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
   if (!hBrush) {
@@ -216,7 +216,7 @@ Arcadia_Engine_Visuals_Windows_Bitmap_fill
   hBrush = NULL;
 }
 
-Arcadia_Imaging_PixelBuffer*
+Arcadia_Media_PixelBuffer*
 Arcadia_Engine_Visuals_Windows_Bitmap_toPixelBuffer
   (
     Arcadia_Thread* thread,
@@ -230,14 +230,14 @@ Arcadia_Engine_Visuals_Windows_Bitmap_toPixelBuffer
   }
   uint8_t* sourceBytes = dibSection.dsBm.bmBits;
   // Currently, we assume that NativeWindowsBitmap is BGR format.
-  Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, self->width, self->height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
+  Arcadia_Media_PixelBuffer* pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, self->width, self->height, Arcadia_Media_PixelFormat_AlphaRedGreenBlueNatural8);
   for (int32_t y = 0; y < self->height; ++y) {
     for (int32_t x = 0; x < self->width; ++x) {
       int32_t sourceOffset = self->lineStride * y + (x * self->numberOfBitsPerPixel) / 8;
       uint8_t* source = sourceBytes + sourceOffset;
-      Arcadia_Imaging_PixelBuffer_setPixelRGBA(thread, pixelBuffer, x, y, source[2], source[1], source[0], 255);
+      Arcadia_Media_PixelBuffer_setPixelRGBA(thread, pixelBuffer, x, y, source[2], source[1], source[0], 255);
     }
   }
-  Arcadia_Imaging_PixelBuffer_reflectHorizontally(thread, pixelBuffer);
+  Arcadia_Media_PixelBuffer_reflectHorizontally(thread, pixelBuffer);
   return pixelBuffer;
 }

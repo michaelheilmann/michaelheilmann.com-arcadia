@@ -26,27 +26,27 @@
 #include "Arcadia/Imaging/ImageWriterParameters.h"
 
 static Arcadia_ImmutableList*
-Arcadia_Imaging_Windows_PngImageWriter_getSupportedTypes
+Arcadia_Imaging_Windows_PNGImageWriter_getSupportedTypes
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self
+    Arcadia_Imaging_Windows_PNGImageWriter* self
   );
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_writeToPathImpl
+Arcadia_Imaging_Windows_PNGImageWriter_writeToPathImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self,
+    Arcadia_Imaging_Windows_PNGImageWriter* self,
     Arcadia_String* extension,
     Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
   );
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_writeToByteBufferImpl
+Arcadia_Imaging_Windows_PNGImageWriter_writeToByteBufferImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self,
+    Arcadia_Imaging_Windows_PNGImageWriter* self,
     Arcadia_String* extension,
     Arcadia_List* sourcePixelBuffers,
     Arcadia_ByteBuffer* targetByteBuffer
@@ -56,8 +56,8 @@ static void
 configure
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self,
-    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_Windows_PNGImageWriter* self,
+    Arcadia_Media_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters
   )
 {
@@ -68,8 +68,8 @@ static void
 getFormat
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self,
-    Arcadia_Imaging_PixelBuffer* sourcePixelBuffer,
+    Arcadia_Imaging_Windows_PNGImageWriter* self,
+    Arcadia_Media_PixelBuffer* sourcePixelBuffer,
     Arcadia_Imaging_ImageWriterParameters* parameters,
     GUID const** guid
   )
@@ -78,20 +78,20 @@ getFormat
 }
 
 static Arcadia_ImmutableList*
-Arcadia_Imaging_Windows_PngImageWriter_getSupportedTypes
+Arcadia_Imaging_Windows_PNGImageWriter_getSupportedTypes
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self
+    Arcadia_Imaging_Windows_PNGImageWriter* self
   )
 {
   return self->supportedTypes;
 }
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_writeToPathImpl
+Arcadia_Imaging_Windows_PNGImageWriter_writeToPathImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self,
+    Arcadia_Imaging_Windows_PNGImageWriter* self,
     Arcadia_String* extension,
     Arcadia_List* sourcePixelBuffers,
     Arcadia_String* targetPath
@@ -102,23 +102,23 @@ Arcadia_Imaging_Windows_PngImageWriter_writeToPathImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer =
-    (Arcadia_Imaging_PixelBuffer*)
+  Arcadia_Media_PixelBuffer* sourcePixelBuffer =
+    (Arcadia_Media_PixelBuffer*)
     Arcadia_List_getObjectReferenceValueCheckedAt
       (
         thread,
         sourcePixelBuffers,
         0,
-        _Arcadia_Imaging_PixelBuffer_getType(thread)
+        _Arcadia_Media_PixelBuffer_getType(thread)
       );
-  Arcadia_Imaging_Windows_WicImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WicImageWriterBase*)self, sourcePixelBuffer, parameters);
+  Arcadia_Imaging_Windows_WICImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WICImageWriterBase*)self, sourcePixelBuffer, parameters);
 }
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_writeToByteBufferImpl
+Arcadia_Imaging_Windows_PNGImageWriter_writeToByteBufferImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self,
+    Arcadia_Imaging_Windows_PNGImageWriter* self,
     Arcadia_String* extension,
     Arcadia_List* sourcePixelBuffers,
     Arcadia_ByteBuffer* targetByteBuffer
@@ -129,23 +129,23 @@ Arcadia_Imaging_Windows_PngImageWriter_writeToByteBufferImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer =
-    (Arcadia_Imaging_PixelBuffer*)
+  Arcadia_Media_PixelBuffer* sourcePixelBuffer =
+    (Arcadia_Media_PixelBuffer*)
     Arcadia_List_getObjectReferenceValueCheckedAt
       (
         thread,
         sourcePixelBuffers,
         0,
-        _Arcadia_Imaging_PixelBuffer_getType(thread)
+        _Arcadia_Media_PixelBuffer_getType(thread)
       );
-  Arcadia_Imaging_Windows_WicImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WicImageWriterBase*)self, sourcePixelBuffer, parameters);
+  Arcadia_Imaging_Windows_WICImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WICImageWriterBase*)self, sourcePixelBuffer, parameters);
 }
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_write
+Arcadia_Imaging_Windows_PNGImageWriter_write
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self,
+    Arcadia_Imaging_Windows_PNGImageWriter* self,
     Arcadia_List* source,
     Arcadia_Imaging_ImageWriterParameters* target
   )
@@ -156,31 +156,31 @@ Arcadia_Imaging_Windows_PngImageWriter_write
     Arcadia_Thread_jump(thread);
   }
   Arcadia_ObjectReferenceValue sourceObject = Arcadia_List_getObjectReferenceValueAt(thread, source, 0);
-  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Imaging_PixelBuffer_getType(thread))) {
+  if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, sourceObject), _Arcadia_Media_PixelBuffer_getType(thread))) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Imaging_PixelBuffer* sourcePixelBuffer = (Arcadia_Imaging_PixelBuffer*)sourceObject;
-  Arcadia_Imaging_Windows_WicImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WicImageWriterBase*)self, sourcePixelBuffer, target);
+  Arcadia_Media_PixelBuffer* sourcePixelBuffer = (Arcadia_Media_PixelBuffer*)sourceObject;
+  Arcadia_Imaging_Windows_WICImageWriterBase_doWrite(thread, (Arcadia_Imaging_Windows_WICImageWriterBase*)self, sourcePixelBuffer, target);
 }
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_constructImpl
+Arcadia_Imaging_Windows_PNGImageWriter_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self
+    Arcadia_Imaging_Windows_PNGImageWriter* self
   );
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_initializeDispatchImpl
+Arcadia_Imaging_Windows_PNGImageWriter_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriterDispatch* self
+    Arcadia_Imaging_Windows_PNGImageWriterDispatch* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Imaging_Windows_PngImageWriter_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Imaging_Windows_PNGImageWriter_constructImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -188,18 +188,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Imaging.Windows.PngImageWriter", Arcadia_Imaging_Windows_PngImageWriter,
-                         u8"Arcadia.Imaging.Windows.WicImagerWriterBase", Arcadia_Imaging_Windows_WicImageWriterBase,
+Arcadia_defineObjectType(u8"Arcadia.Imaging.Windows.PNGImageWriter", Arcadia_Imaging_Windows_PNGImageWriter,
+                         u8"Arcadia.Imaging.Windows.WICImagerWriterBase", Arcadia_Imaging_Windows_WICImageWriterBase,
                          &_typeOperations);
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_constructImpl
+Arcadia_Imaging_Windows_PNGImageWriter_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriter* self
+    Arcadia_Imaging_Windows_PNGImageWriter* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Imaging_Windows_PngImageWriter_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_Imaging_Windows_PNGImageWriter_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -219,25 +219,25 @@ Arcadia_Imaging_Windows_PngImageWriter_constructImpl
 }
 
 static void
-Arcadia_Imaging_Windows_PngImageWriter_initializeDispatchImpl
+Arcadia_Imaging_Windows_PNGImageWriter_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_Windows_PngImageWriterDispatch* self
+    Arcadia_Imaging_Windows_PNGImageWriterDispatch* self
   )
 {
-  ((Arcadia_Imaging_ImageWriterDispatch*)self)->getSupportedTypes = (Arcadia_ImmutableList * (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*)) & Arcadia_Imaging_Windows_PngImageWriter_getSupportedTypes;
-  ((Arcadia_Imaging_ImageWriterDispatch*)self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & Arcadia_Imaging_Windows_PngImageWriter_write;
-  ((Arcadia_Imaging_Windows_WicImageWriterBaseDispatch*)self)->getFormat = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*, GUID const**)) & getFormat;
-  ((Arcadia_Imaging_Windows_WicImageWriterBaseDispatch*)self)->configure = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WicImageWriterBase*, Arcadia_Imaging_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*)) & configure;
+  ((Arcadia_Imaging_ImageWriterDispatch*)self)->getSupportedTypes = (Arcadia_ImmutableList * (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*)) & Arcadia_Imaging_Windows_PNGImageWriter_getSupportedTypes;
+  ((Arcadia_Imaging_ImageWriterDispatch*)self)->write = (void (*)(Arcadia_Thread*, Arcadia_Imaging_ImageWriter*, Arcadia_List*, Arcadia_Imaging_ImageWriterParameters*)) & Arcadia_Imaging_Windows_PNGImageWriter_write;
+  ((Arcadia_Imaging_Windows_WICImageWriterBaseDispatch*)self)->getFormat = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WICImageWriterBase*, Arcadia_Media_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*, GUID const**)) & getFormat;
+  ((Arcadia_Imaging_Windows_WICImageWriterBaseDispatch*)self)->configure = (void (*)(Arcadia_Thread*, Arcadia_Imaging_Windows_WICImageWriterBase*, Arcadia_Media_PixelBuffer*, Arcadia_Imaging_ImageWriterParameters*)) & configure;
 }
 
-Arcadia_Imaging_Windows_PngImageWriter*
-Arcadia_Imaging_Windows_PngImageWriter_create
+Arcadia_Imaging_Windows_PNGImageWriter*
+Arcadia_Imaging_Windows_PNGImageWriter_create
   (
     Arcadia_Thread* thread
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   Arcadia_ValueStack_pushNatural8Value(thread, 0);
-  ARCADIA_CREATEOBJECT(Arcadia_Imaging_Windows_PngImageWriter);
+  ARCADIA_CREATEOBJECT(Arcadia_Imaging_Windows_PNGImageWriter);
 }

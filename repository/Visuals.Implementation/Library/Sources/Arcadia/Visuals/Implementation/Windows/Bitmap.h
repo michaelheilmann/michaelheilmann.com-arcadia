@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_WINDOWS_BITMAP_H_INCLUDED
 
 #include "Arcadia/Engine/Include.h"
-#include "Arcadia/Imaging/PixelBuffer.h"
+#include "Arcadia/Media/PixelBuffer.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -64,7 +64,7 @@ Arcadia_Engine_Visuals_Windows_Bitmap_fill
     Arcadia_Natural8Value b
   );
 
-Arcadia_Imaging_PixelBuffer*
+Arcadia_Media_PixelBuffer*
 Arcadia_Engine_Visuals_Windows_Bitmap_toPixelBuffer
   (
     Arcadia_Thread* thread,

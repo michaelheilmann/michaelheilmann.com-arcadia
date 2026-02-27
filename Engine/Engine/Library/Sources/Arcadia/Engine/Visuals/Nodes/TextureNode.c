@@ -100,31 +100,31 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-static Arcadia_Imaging_PixelBuffer*
+static Arcadia_Media_PixelBuffer*
 makePixelBuffer
   (
     Arcadia_Thread* thread,
     Arcadia_ADL_PixelBufferDefinition* source
   )
 {
-  Arcadia_Imaging_PixelBuffer* target = Arcadia_Imaging_PixelBuffer_create(thread, 0, source->width, source->height, Arcadia_Imaging_PixelFormat_Rn8Gn8Bn8An8);
+  Arcadia_Media_PixelBuffer* target = Arcadia_Media_PixelBuffer_create(thread, 0, source->width, source->height, Arcadia_Media_PixelFormat_RedGreenBlueAlphaNatural8);
 
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)source->operations); i < n; ++i) {
     Arcadia_ADL_Reference* e = (Arcadia_ADL_Reference*)Arcadia_List_getObjectReferenceValueAt(thread, source->operations, i);
-    Arcadia_Imaging_Operation* operation;
+    Arcadia_Media_PixelBufferOperation* operation;
     if (!e->definition) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
       Arcadia_Thread_jump(thread);
     }
     if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)e->definition, _Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_getType(thread))) {
-      operation = (Arcadia_Imaging_Operation*)Arcadia_Imaging_Operations_CheckerboardFill_create(thread, (Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition*)e->definition);
+      operation = (Arcadia_Media_PixelBufferOperation*)Arcadia_Media_PixelBufferOperations_CheckerboardFill_create(thread, (Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition*)e->definition);
     } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)e->definition, _Arcadia_ADL_PixelBufferOperations_FillOperationDefinition_getType(thread))) {
-      operation = (Arcadia_Imaging_Operation*)Arcadia_Imaging_Operations_Fill_create(thread, (Arcadia_ADL_PixelBufferOperations_FillOperationDefinition*)e->definition);
+      operation = (Arcadia_Media_PixelBufferOperation*)Arcadia_Media_PixelBufferOperations_Fill_create(thread, (Arcadia_ADL_PixelBufferOperations_FillOperationDefinition*)e->definition);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_Imaging_Operation_apply(thread, operation, target);
+    Arcadia_Media_PixelBufferOperation_apply(thread, operation, target);
   }
 
   return target;

@@ -88,7 +88,7 @@ struct Arcadia_Visuals_Implementation_BackendContextDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Visuals_Implementation_BackendContext* self,
-      Arcadia_Visuals_VPL_Program* program
+      Arcadia_VPL_Program* program
     );
 
   Arcadia_Visuals_Implementation_TextureResource*
@@ -177,7 +177,7 @@ Arcadia_Visuals_Implementation_BackendContext_createProgramResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_VPL_Program* program
+    Arcadia_VPL_Program* program
   );
 
 // Create a texture resource

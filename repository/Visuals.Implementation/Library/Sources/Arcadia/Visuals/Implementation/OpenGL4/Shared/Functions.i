@@ -1,3 +1,4 @@
+// *Buffer*
 Define(PFNGLGENBUFFERSPROC, glGenBuffers)
 Define(PFNGLDELETEBUFFERSPROC, glDeleteBuffers)
 Define(PFNGLBINDBUFFERPROC, glBindBuffer)
@@ -6,6 +7,7 @@ Define(PFNGLBUFFERDATAPROC, glBufferData)
 
 Define(PFNGLBINDFRAGDATALOCATIONPROC, glBindFragDataLocation)
 
+// *VertexArray*
 Define(PFNGLGENVERTEXARRAYSPROC, glGenVertexArrays)
 Define(PFNGLDELETEVERTEXARRAYSPROC, glDeleteVertexArrays)
 Define(PFNGLBINDVERTEXARRAYPROC, glBindVertexArray)
@@ -50,11 +52,18 @@ Define(PFNGLBINDTEXTUREPROC, glBindTexture)
 Define(PFNGLTEXIMAGE2DPROC, glTexImage2D)
 Define(PFNGLTEXPARAMETERIPROC, glTexParameteri)
 
+// *Framebuffer*
 Define(PFNGLGENFRAMEBUFFERSPROC, glGenFramebuffers)
 Define(PFNGLDELETEFRAMEBUFFERSPROC, glDeleteFramebuffers)
-
+Define(PFNGLFRAMEBUFFERRENDERBUFFERPROC, glFramebufferRenderbuffer)
 Define(PFNGLFRAMEBUFFERTEXTURE2DPROC, glFramebufferTexture2D)
 Define(PFNGLBINDFRAMEBUFFERPROC, glBindFramebuffer)
+
+// *Renderbuffer*
+Define(PFNGLGENRENDERBUFFERSPROC, glGenRenderbuffers)
+Define(PFNGLDELETERENDERBUFFERSPROC, glDeleteRenderbuffers)
+Define(PFNGLBINDRENDERBUFFERPROC, glBindRenderbuffer)
+Define(PFNGLRENDERBUFFERSTORAGEPROC, glRenderbufferStorage)
 
 Define(PFNGLGETINTEGERVPROC, glGetIntegerv)
 

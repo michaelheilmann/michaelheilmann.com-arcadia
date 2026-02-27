@@ -19,7 +19,6 @@
 #include "Arcadia/Imaging/ImageManager.h"
 #include "Arcadia/Imaging/ImageWriter.h"
 
-#include "Arcadia/Imaging/Operations/CheckerboardFill.h"
-#include "Arcadia/Imaging/Operations/Fill.h"
+#include "Arcadia/Media/Include.h"
 
 #endif // ARCADIA_IMAGING_INCLUDE_H_INCLUDED

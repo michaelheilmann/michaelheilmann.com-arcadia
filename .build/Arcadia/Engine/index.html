@@ -36,8 +36,8 @@
   <link rel='stylesheet' href='https://michaelheilmann.com/assets/index.css?v=5'>
 
 <link rel='stylesheet' href='https://michaelheilmann.com/assets/cxx-doc.css?v=1'>
-<link rel='canonical' href='https://michaelheilmann.com/Arcadia/Visuals/'>
-<title>Michael Heilmann's Arcadia Visuals</title>
+<link rel='canonical' href='https://michaelheilmann.com/Arcadia/Engine/'>
+<title>Michael Heilmann's Arcadia Engine</title>
 <style>
 </style>
 </head>
@@ -50,13 +50,14 @@
 <main>
   <div class="left-column"></div>
   <div class="center-column">
-  <h1>Michael Heilmann's Arcadia Visuals</h1>
+  <h1>Michael Heilmann's Arcadia Engine</h1>
   <p>
-  This is the documentation for Michael  Heilmann's Arcadia Visuals.
-  Arcadia Visuals provides</p>
+  This is the documentation for Michael Heilmann's Arcadia Engine.
+  Arcadia Engine provides</p>
   <ul>
-    <li>an uniform interface to modern graphics APIs like OpenGL 4.x, DirectX12, and Vulkan</li>
-    <li>visual asset (e.g., images, meshes) loading, saving, and synthesis functionality</li>
+    <li>an uniform interface to modern visuals APIs like OpenGL 4.x, DirectX12, and Vulkan</li>
+    <li>an uniform interface to modern audials APIs like OpenAL</li>
+    <li>interactive rendering of ADL-based content using these APIs</li>
   </ul>
 
 <h2>Documentation</h2>
@@ -1727,224 +1728,6 @@ An enumeration of actions of a mouse pointer.
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <section class="cxx entity enumeration">
-<h1 id="Arcadia_Visuals_PixelFormat">Arcadia_Visuals_PixelFormat</h1>
-<my-signature><code>
-typedef enum Arcadia_Visuals_PixelFormat Arcadia_Visuals_PixelFormat;
-</code></my-signature>
-
-<my-summary>
-An enumeration of pixel formats.
-</my-summary>
-
-<section class="cxx enumeration-elements">
-
-  <h1>Elements</h1>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_An8Ln8</code>
-    </div>
-    <div>
-    Two Arcadia_Natural8Value values layout out consecutively in memory.
-    The first value denotes the intensity of the alpha component.
-    The second value denotes the intensity of the luminance component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_An8Bn8Gn8Rn8</code>
-    </div>
-    <div>
-    Four Arcadia_Natural8Value values layed out consecutively in memory.
-    The first value denotes the intensity of the alpha component.
-    The second value denotes the intensity of the blue component,
-    the third value denotes the intensity of the green component, and
-    the fourth value denotes the intensity of the red component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_An8Rn8Gn8Bn8</code>
-    </div>
-    <div>
-    Four Arcadia_Natural8Value values layed out consecutively in memory.
-    The first value denotes the intensity of the alpha component.
-    The second value denotes the intensity of the red component,
-    the third value denotes the intensity of the green component, and
-    the fourth value denotes the intensity of the blue component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8</code>
-    </div>
-    <div>
-    Three Arcadia_Natural8Value values layed out consecutively in memory.
-    The first value denotes the intensity of the blue component,
-    the second value denotes the intensity of the green component, and
-    the third value denotes the intensity of the red component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_Bn8Gn8Rn8An8</code>
-    </div>
-    <div>
-    Four Arcadia_Natural8Value values layed out consecutively in memory.
-    The first value denotes the intensity of the blue component,
-    the second value denotes the intensity of the green component, and
-    the third value denotes the intensity of the red component.
-    The fourth value denotes the intensity of the alpha component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_Ln8</code>
-    </div>
-    <div>
-    One Arcadia_Natural8Value value.
-    The value denotes the intensity of the luminance component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_Ln8An8</code>
-    </div>
-    <div>
-    Two Arcadia_Natural8Value values layout out consecutively in memory.
-    The first value denotes the intensity of the luminance component.
-    The second value denotes the intensity of the alpha component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8</code>
-    </div>
-    <div>
-    Three Arcadia_Natural8Value values layed out consecutively in memory.
-    The first value denotes the intensity of the red component,
-    the second value denotes the intensity of the green component, and
-    the third value denotes the intensity of the blue component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <code>Arcadia_Visuals_PixelFormat_Rn8Gn8Bn8An8</code>
-    </div>
-    <div>
-    Four Arcadia_Natural8Value values layed out consecutively in memory.
-    The first value denotes the intensity of the red component,
-    the second value denotes the intensity of the green component, and
-    the third value denotes the intensity of the blue component.
-    The fourth value denotes the intensity of the alpha component.
-    A component value of 0 indicates least intensity.
-    A component value of 255 indicates greatest intensity.
-    </div>
-  </div>
-
-</section>
-
-</section>
-
-<section class="cxx entity procedure">
-<h1 id="Arcadia_Visuals_PixelFormat_getNumberOfComponents">Arcadia_Visuals_PixelFormat_getNumberOfComponents</h1>
-<my-signature><code>
-Arcadia_SizeValue<br>
-Arcadia_Visuals_PixelFormat_getNumberOfComponents<br>
-&nbsp;&nbsp;(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Visuals_PixelFormat self<br>
-&nbsp;&nbsp;)
-</code></my-signature>
-
-<my-summary>
-Get the number of components of a pixel of a pixel format.
-</my-summary>
-
-<section class="cxx parameters">
-
-  <h1>Parameters</h1>
-
-  <div>
-    <div><a href="#">Arcadia_Thread</a>* thread</div>
-    <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-  </div>
-  <div>
-    <div>Arcadia_Visuals_PixelFormat self</div>
-    <div>This pixel format.</div>
-  </div>
-
-</section>
-
-<section class="cxx return-value">
-<h1>Return value</h1>
-<p>The number of components of a pixel of this pixel format.</p>
-</section>
-
-</section>
-
-<section class="cxx entity procedure">
-<h1 id="Arcadia_Visuals_PixelFormat_getNumberOfBytes">Arcadia_Visuals_PixelFormat_getNumberOfBytes</h1>
-<my-signature><code>
-Arcadia_SizeValue
-Arcadia_Visuals_PixelFormat_getNumberOfBytes<br>
-&nbsp;&nbsp;(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Visuals_PixelFormat self<br>
-&nbsp;&nbsp;)
-</code></my-signature>
-
-<my-summary>
-Get the number of Bytes of a pixel of a pixel format.
-</my-summary>
-
-<section class="cxx parameters">
-
-  <h1>Parameters</h1>
-
-  <div>
-    <div><a href="#">Arcadia_Thread</a>* thread</div>
-    <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-  </div>
-  <div>
-    <div>Arcadia_Visuals_PixelFormat self</div>
-    <div>This pixel format.</div>
-  </div>
-
-</section>
-
-<section class="cxx return-value">
-<h1>Return value</h1>
-<p>The number of Bytes of a pixel of this pixel format.</p>
-</section>
-
-</section>
-
-<section class="cxx entity enumeration">
 <h1 id="Arcadia_Engine_Visuals_TextureAddressMode">Arcadia_Engine_Visuals_TextureAddressMode</h1>
 <my-signature><code>
 typedef enum Arcadia_Engine_Visuals_TextureAddressMode Arcadia_Engine_Visuals_TextureAddressMode;
@@ -2201,9 +1984,6 @@ An enumeration of winding modes.
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_MousePointerAction">Arcadia_Visuals_MousePointerAction</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_MousePointerEvent">[MIL] Arcadia.Visuals.MousePointerEvent</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_MousePointerEvent_construct">[MIL] Arcadia.Visuals.MousePointerEvent.construct</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat">Arcadia_Visuals_PixelFormat</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfComponents">Arcadia_Visuals_PixelFormat_getNumberOfComponents</a></li>
-        <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfBytes">Arcadia_Visuals_PixelFormat_getNumberOfBytes</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_TextureAddressMode">Arcadia_Engine_Visuals_TextureAddressMode</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_TextureFilter">Arcadia_Engine_Visuals_TextureFilter</a></li>
         <li><a href="https://michaelheilmann.com/Arcadia/Visuals/#Arcadia_Engine_Visuals_VertexElementSemantics">Arcadia_Engine_Visuals_VertexElementSemantics</a></li>
@@ -2225,7 +2005,7 @@ An enumeration of winding modes.
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 22 February 2026.</div>
+      <div>Last modified on 27 February 2026.</div>
     </div>
   </footer>
   </body>

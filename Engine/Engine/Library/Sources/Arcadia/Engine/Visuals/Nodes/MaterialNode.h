@@ -23,7 +23,7 @@
 #include "Arcadia/ADL/Include.h"
 typedef struct Arcadia_Engine_Visuals_NodeFactory Arcadia_Engine_Visuals_NodeFactory;
 typedef struct Arcadia_Engine_Visuals_TextureNode Arcadia_Engine_Visuals_TextureNode;
-typedef struct Arcadia_Visuals_VPL_Program Arcadia_Visuals_VPL_Program;
+typedef struct Arcadia_VPL_Program Arcadia_VPL_Program;
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.MaterialNode", Arcadia_Engine_Visuals_MaterialNode,
                           u8"Arcadia.Engine.Visuals.Node");
@@ -36,7 +36,7 @@ struct Arcadia_Engine_Visuals_MaterialNode {
   Arcadia_Engine_Visuals_Node parent;
   Arcadia_ADL_MaterialDefinition* source;
   Arcadia_Engine_Visuals_TextureNode* ambientColorTexture;
-  Arcadia_Visuals_VPL_Program* program;
+  Arcadia_VPL_Program* program;
 };
 
 #endif  // ARCADIA_ENGINE_VISUALS_NODES_MATERIALNODE_H_INCLUDED

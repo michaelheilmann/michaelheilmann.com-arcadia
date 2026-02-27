@@ -79,7 +79,15 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ModelResource* self,
-    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
+    Arcadia_Visuals_Implementation_EnterPassResource* enterPassResource
+  );
+
+static GLuint
+getUniformBlockBindingIndex
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_String* nameVPL
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
@@ -242,12 +250,28 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_unlinkImpl
   ((Arcadia_Visuals_Implementation_Resource*)self)->context = NULL;
 }
 
+static GLuint
+getUniformBlockBindingIndex
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_String* nameVPL
+  )
+{
+  Arcadia_Value temporary = Arcadia_Map_get(thread, self->constantBlockBindings, Arcadia_Value_makeObjectReferenceValue(nameVPL));
+  if (!Arcadia_Value_isSizeValue(&temporary)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
+    Arcadia_Thread_jump(thread);
+  }
+  return (GLuint)Arcadia_Value_getSizeValue(&temporary);
+}
+
 static void
 Arcadia_Visuals_Implementation_OpenGL4_ModelResource_renderImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ModelResource* self,
-    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextResource
+    Arcadia_Visuals_Implementation_EnterPassResource* enterPassResource
   )
 {
   // Invoke our load function.
@@ -267,10 +291,10 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_renderImpl
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
   _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
 
-  Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->material, renderingContextResource);
-  Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->mesh, renderingContextResource);
+  Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->material, enterPassResource);
+  Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->mesh, enterPassResource);
 
-  Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* viewerConstantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)renderingContextResource->viewerConstantBuffer;
+  Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* viewerConstantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)enterPassResource->viewerConstantBuffer;
   //
   gl->glUseProgram(self->material->program->programID);
   gl->glBindFragDataLocation(self->material->program->programID, 0, u8"_2_fragmentColor");
@@ -285,40 +309,22 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_renderImpl
       return;
     }
   }
-  GLuint uniformBlockIndex;
+  GLuint uniformBlockBindingIndex;
   // Bind the "viewer" constant block.
-  // @todo "viewer" is the GLSL block name. This name should be querified from the program object using the VPL names.
-  while (gl->glGetError()) { }
-  uniformBlockIndex = gl->glGetUniformBlockIndex(self->material->program->programID, "viewer");
-  if (GL_INVALID_INDEX == uniformBlockIndex) {
-    return;
-  }
-  gl->glUniformBlockBinding(self->material->program->programID, uniformBlockIndex, 0);
-  gl->glBindBufferBase(GL_UNIFORM_BUFFER, 0, viewerConstantBuffer->bufferID);
+  uniformBlockBindingIndex = getUniformBlockBindingIndex(thread, self->material->program, Arcadia_String_createFromCxxString(thread, u8"viewer"));
+  gl->glBindBufferBase(GL_UNIFORM_BUFFER, uniformBlockBindingIndex, viewerConstantBuffer->bufferID);
   if (gl->glGetError()) {
     return;
   }
   // Bind the "mesh" constant block.
-  // @todo "mesh" is the GLSL block name. This name should be querified from the program object using the VPL names.
-  while (gl->glGetError()) { }
-  uniformBlockIndex = gl->glGetUniformBlockIndex(self->material->program->programID, "mesh");
-  if (GL_INVALID_INDEX == uniformBlockIndex) {
-    return;
-  }
-  gl->glUniformBlockBinding(self->material->program->programID, uniformBlockIndex, 1);
-  gl->glBindBufferBase(GL_UNIFORM_BUFFER, 1, self->mesh->constantBuffer->bufferID);
+  uniformBlockBindingIndex = getUniformBlockBindingIndex(thread, self->material->program, Arcadia_String_createFromCxxString(thread, u8"mesh"));
+  gl->glBindBufferBase(GL_UNIFORM_BUFFER, uniformBlockBindingIndex, self->mesh->constantBuffer->bufferID);
   if (gl->glGetError()) {
     return;
   }
   // Bind the "model" constant block.
-  // @todo "model" is the GLSL block name. This name should be querified from the program object using the VPL names.
-  while (gl->glGetError()) { }
-  uniformBlockIndex = gl->glGetUniformBlockIndex(self->material->program->programID, "model");
-  if (GL_INVALID_INDEX == uniformBlockIndex) {
-    return;
-  }
-  gl->glUniformBlockBinding(self->material->program->programID, uniformBlockIndex, 2);
-  gl->glBindBufferBase(GL_UNIFORM_BUFFER, 2, self->constantBuffer->bufferID);
+  uniformBlockBindingIndex = getUniformBlockBindingIndex(thread, self->material->program, Arcadia_String_createFromCxxString(thread, u8"model"));
+  gl->glBindBufferBase(GL_UNIFORM_BUFFER, uniformBlockBindingIndex, self->constantBuffer->bufferID);
   if (gl->glGetError()) {
     return;
   }

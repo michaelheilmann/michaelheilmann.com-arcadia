@@ -17,9 +17,6 @@
 @{include("MouseButtonEvent.i")}
 @{include("MousePointerAction.i")}
 @{include("MousePointerEvent.i")}
-@{include("PixelFormat.i")}
-@{include("PixelFormat_getNumberOfComponents.i")}
-@{include("PixelFormat_getNumberOfBytes.i")}
 @{include("TextureAddressMode.i")}
 @{include("TextureFilter.i")}
 @{include("VertexElementSemantics.i")}

@@ -74,13 +74,13 @@ Arcadia_Visuals_Linux_Icon_constructImpl
     Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_Imaging_PixelBuffer* pixelBuffer = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Imaging_PixelBuffer_getType(thread));
-  pixelBuffer = Arcadia_Imaging_PixelBuffer_createClone(thread, pixelBuffer);
-  Arcadia_Imaging_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
+  Arcadia_Media_PixelBuffer* pixelBuffer = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Media_PixelBuffer_getType(thread));
+  pixelBuffer = Arcadia_Media_PixelBuffer_createClone(thread, pixelBuffer);
+  Arcadia_Media_PixelBuffer_setPixelFormat(thread, pixelBuffer, Arcadia_Media_PixelFormat_AlphaRedGreenBlueNatural8);
 
   Arcadia_Natural32Value dummy, numberOfPixels, numberOfBytes;
-  if (!Arcadia_safeMultiplyNatural32Value(thread, (Arcadia_Natural32Value)Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer),
-                                                  (Arcadia_Natural32Value)Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer), &dummy, &numberOfPixels)) {
+  if (!Arcadia_safeMultiplyNatural32Value(thread, (Arcadia_Natural32Value)Arcadia_Media_PixelBuffer_getWidth(thread, pixelBuffer),
+                                                  (Arcadia_Natural32Value)Arcadia_Media_PixelBuffer_getHeight(thread, pixelBuffer), &dummy, &numberOfPixels)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -93,8 +93,8 @@ Arcadia_Visuals_Linux_Icon_constructImpl
     Arcadia_Thread_jump(thread);
   }
   self->numberOfBytes = numberOfBytes;
-  self->width = Arcadia_Imaging_PixelBuffer_getWidth(thread, pixelBuffer);
-  self->height = Arcadia_Imaging_PixelBuffer_getHeight(thread, pixelBuffer);
+  self->width = Arcadia_Media_PixelBuffer_getWidth(thread, pixelBuffer);
+  self->height = Arcadia_Media_PixelBuffer_getHeight(thread, pixelBuffer);
   self->bytes = Arcadia_Memory_allocateUnmanaged(thread, numberOfBytes);
   self->bytes[0] = (Arcadia_Natural32Value)self->width;
   self->bytes[1] = (Arcadia_Natural32Value)self->height;
@@ -102,7 +102,7 @@ Arcadia_Visuals_Linux_Icon_constructImpl
   for (Arcadia_SizeValue y = 0; y < self->height; ++y) {
     for (Arcadia_SizeValue x = 0; x < self->width; ++x) {
       Arcadia_Natural8Value red, green, blue, alpha;
-      Arcadia_Imaging_PixelBuffer_getPixelRGBA(thread, pixelBuffer, x, y, &red, &green, &blue, &alpha);
+      Arcadia_Media_PixelBuffer_getPixelRGBA(thread, pixelBuffer, x, y, &red, &green, &blue, &alpha);
       *p++ = alpha << 24
            | blue << 16
            | green << 8
@@ -138,7 +138,7 @@ Arcadia_Visuals_Linux_Icon*
 Arcadia_Visuals_Linux_Icon_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_PixelBuffer* pixelBuffer
+    Arcadia_Media_PixelBuffer* pixelBuffer
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);

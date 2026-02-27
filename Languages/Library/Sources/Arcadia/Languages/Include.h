@@ -21,6 +21,7 @@
 
 #include "Arcadia/Languages/Diagnostics.h"
 #include "Arcadia/Languages/Scanner.h"
+#include "Arcadia/Languages/Scope.h"
 #include "Arcadia/Languages/StringTable.h"
 
 #undef ARCADIA_LANGUAGES_PRIVATE

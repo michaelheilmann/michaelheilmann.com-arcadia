@@ -52,7 +52,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_TextureResource {
   Arcadia_Engine_Visuals_TextureFilter minificationFilter;
   
   /// @brief The pixel buffer storing the texture data.
-  Arcadia_Imaging_PixelBuffer* pixelBuffer;
+  Arcadia_Media_PixelBuffer* pixelBuffer;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_TextureResource*

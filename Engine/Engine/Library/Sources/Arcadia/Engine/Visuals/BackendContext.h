@@ -64,7 +64,7 @@ Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.BackendContext", Arcadia_Eng
 struct Arcadia_Engine_Visuals_BackendContextDispatch {
   Arcadia_Engine_BackendContextDispatch _parent;
 
-  Arcadia_Engine_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self, Arcadia_Imaging_PixelBuffer* pixelBuffer);
+  Arcadia_Engine_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self, Arcadia_Media_PixelBuffer* pixelBuffer);
   Arcadia_Engine_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self);
   Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self);
 };
@@ -81,7 +81,7 @@ Arcadia_Engine_Visuals_BackendContext_createIcon
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_BackendContext* self,
-    Arcadia_Imaging_PixelBuffer* pixelBuffer
+    Arcadia_Media_PixelBuffer* pixelBuffer
   );
 
 Arcadia_Engine_Visuals_Window*

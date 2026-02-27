@@ -214,6 +214,6 @@ Arcadia_Visuals_Implementation_TextureResource_setPixelBuffer
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_TextureResource* self,
-    Arcadia_Imaging_PixelBuffer* pixelBuffer
+    Arcadia_Media_PixelBuffer* pixelBuffer
   )
 { Arcadia_VirtualCall(Arcadia_Visuals_Implementation_TextureResource, setPixelBuffer, self, pixelBuffer); }

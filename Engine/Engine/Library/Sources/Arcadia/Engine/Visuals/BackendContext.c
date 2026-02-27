@@ -98,7 +98,7 @@ Arcadia_Engine_Visuals_BackendContext_createIcon
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_BackendContext* self,
-    Arcadia_Imaging_PixelBuffer* pixelBuffer
+    Arcadia_Media_PixelBuffer* pixelBuffer
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createIcon, self, pixelBuffer); }
 

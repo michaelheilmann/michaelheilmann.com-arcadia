@@ -36,7 +36,7 @@ struct Arcadia_Engine_Visuals_PixelBufferNode {
   // The pixel buffer definition.
   Arcadia_ADL_PixelBufferDefinition* source;
   // The pixel buffer.
-  Arcadia_Imaging_PixelBuffer* pixelBuffer;
+  Arcadia_Media_PixelBuffer* pixelBuffer;
 };
 
 #endif // ARCADIA_ENGINE_VISUALS_NODES_PIXELBUFFERNODE_H_INCLUDED

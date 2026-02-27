@@ -350,19 +350,19 @@ Arcadia_Engine_Application_startupVisuals
   // (7) Set the window icons and the window title.
   {
     Arcadia_Engine_Visuals_Icon* icon;
-    Arcadia_Imaging_PixelBuffer* pixelBuffer;
+    Arcadia_Media_PixelBuffer* pixelBuffer;
     Arcadia_Integer32Value width, height;
     // Set the big icon.
     Arcadia_Engine_Visuals_Window_getRequiredBigIconSize(thread, window, &width, &height);
-    pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
-    Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
+    pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, width, height, Arcadia_Media_PixelFormat_AlphaRedGreenBlueNatural8);
+    Arcadia_Media_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
     icon = Arcadia_Engine_Visuals_BackendContext_createIcon(thread, (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext, pixelBuffer);
     Arcadia_Engine_Visuals_Window_setBigIcon(thread, window, icon);
 
     // Set the small icon.
     Arcadia_Engine_Visuals_Window_getRequiredSmallIconSize(thread, window, &width, &height);
-    pixelBuffer = Arcadia_Imaging_PixelBuffer_create(thread, 0, width, height, Arcadia_Imaging_PixelFormat_An8Rn8Gn8Bn8);
-    Arcadia_Imaging_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
+    pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, width, height, Arcadia_Media_PixelFormat_AlphaRedGreenBlueNatural8);
+    Arcadia_Media_PixelBuffer_fill(thread, pixelBuffer, 47, 47, 47, 255);
     icon = Arcadia_Engine_Visuals_BackendContext_createIcon(thread, (Arcadia_Engine_Visuals_BackendContext*)engine->visualsBackendContext, pixelBuffer);
     Arcadia_Engine_Visuals_Window_setSmallIcon(thread, window, icon);
 

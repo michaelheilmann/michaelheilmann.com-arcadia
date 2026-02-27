@@ -31,10 +31,13 @@ add_subdirectory(Languages)
 add_subdirectory(DDL)
 add_subdirectory(DDLS)
 add_subdirectory(ADL)
+add_subdirectory(VPL)
+add_subdirectory(Media)
 add_subdirectory(Imaging)
 
 add_subdirectory(Engine/Engine)
 add_subdirectory(Engine/Application)
+add_subdirectory(Engine/Audials.Implementation)
 
 add_subdirectory(Documentation)
 add_subdirectory(Tools/TemplateEngine)

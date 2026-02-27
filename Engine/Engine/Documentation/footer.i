@@ -30,9 +30,6 @@
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_MousePointerAction">Arcadia_Visuals_MousePointerAction</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_MousePointerEvent">[MIL] Arcadia.Visuals.MousePointerEvent</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_MousePointerEvent_construct">[MIL] Arcadia.Visuals.MousePointerEvent.construct</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat">Arcadia_Visuals_PixelFormat</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfComponents">Arcadia_Visuals_PixelFormat_getNumberOfComponents</a></li>
-        <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Visuals_PixelFormat_getNumberOfBytes">Arcadia_Visuals_PixelFormat_getNumberOfBytes</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Engine_Visuals_TextureAddressMode">Arcadia_Engine_Visuals_TextureAddressMode</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Engine_Visuals_TextureFilter">Arcadia_Engine_Visuals_TextureFilter</a></li>
         <li><a href="@{siteAddress}/Arcadia/Visuals/#Arcadia_Engine_Visuals_VertexElementSemantics">Arcadia_Engine_Visuals_VertexElementSemantics</a></li>

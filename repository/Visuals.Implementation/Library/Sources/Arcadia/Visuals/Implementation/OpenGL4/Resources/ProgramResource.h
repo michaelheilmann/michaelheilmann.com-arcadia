@@ -29,15 +29,20 @@ struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResourceDispatch {
 
 struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResource {
   Arcadia_Visuals_Implementation_ProgramResource _parent;
-  Arcadia_BooleanValue dirty;
+  Arcadia_Natural8Value dirty;
   /// The underlaying VPL program.
-  Arcadia_Visuals_VPL_Program* program;
+  Arcadia_VPL_Program* program;
   // The OpenGL ID of the fragment shader.
   GLuint fragmentShaderID;
   // The OpenGL ID of the vertex shader.
   GLuint vertexShaderID;
   // The OpenGL ID of the program.
   GLuint programID;
+  // A map from VPL constant block names to OpenGL uniform block names as used by glGetUniformBlockIndex.
+  Arcadia_Map* constantBlockMapping;
+  /// A map from VPL constant block names to OpenGL uniform block binding IDs as specified by glUniformBlockBinding(programID, uniformBlockID, uniformmBlockBindingID).
+  /// Specify the name of a VPL constant block and obtain the uniform block binding ID to be used with glBindBufferBase(GL_UNIFORM_BUFFER, uniformBlockBindingID, uniformBufferID).
+  Arcadia_Map* constantBlockBindings;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*
@@ -45,7 +50,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
-    Arcadia_Visuals_VPL_Program* program
+    Arcadia_VPL_Program* program
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED

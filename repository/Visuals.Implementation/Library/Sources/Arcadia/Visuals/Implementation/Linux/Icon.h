@@ -50,7 +50,7 @@ Arcadia_Visuals_Linux_Icon*
 Arcadia_Visuals_Linux_Icon_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_PixelBuffer* pixelBuffer
+    Arcadia_Media_PixelBuffer* pixelBuffer
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_LINUX_ICON_H_INCLUDED

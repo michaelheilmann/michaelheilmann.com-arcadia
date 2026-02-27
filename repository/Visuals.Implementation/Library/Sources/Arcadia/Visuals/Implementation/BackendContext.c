@@ -168,7 +168,7 @@ Arcadia_Visuals_Implementation_BackendContext_createProgramResource
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_BackendContext* self,
-    Arcadia_Visuals_VPL_Program* program
+    Arcadia_VPL_Program* program
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_BackendContext, createProgramResource, self, program); }
 

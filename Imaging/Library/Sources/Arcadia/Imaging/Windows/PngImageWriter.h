@@ -18,20 +18,20 @@
 
 #include "Arcadia/Imaging/Windows/WicImageWriterBase.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Imaging.Windows.PngImageWriter", Arcadia_Imaging_Windows_PngImageWriter,
-                          u8"Arcadia.Imaging.Windows.WicImageWriterBase");
+Arcadia_declareObjectType(u8"Arcadia.Imaging.Windows.PNGImageWriter", Arcadia_Imaging_Windows_PNGImageWriter,
+                          u8"Arcadia.Imaging.Windows.WICImageWriterBase");
 
-struct Arcadia_Imaging_Windows_PngImageWriterDispatch {
-  Arcadia_Imaging_Windows_WicImageWriterBaseDispatch parent;
+struct Arcadia_Imaging_Windows_PNGImageWriterDispatch {
+  Arcadia_Imaging_Windows_WICImageWriterBaseDispatch parent;
 };
 
-struct Arcadia_Imaging_Windows_PngImageWriter {
-  Arcadia_Imaging_Windows_WicImageWriterBase _parent;
+struct Arcadia_Imaging_Windows_PNGImageWriter {
+  Arcadia_Imaging_Windows_WICImageWriterBase _parent;
   Arcadia_ImmutableList* supportedTypes;
 };
 
-Arcadia_Imaging_Windows_PngImageWriter*
-Arcadia_Imaging_Windows_PngImageWriter_create
+Arcadia_Imaging_Windows_PNGImageWriter*
+Arcadia_Imaging_Windows_PNGImageWriter_create
   (
     Arcadia_Thread* thread
   );

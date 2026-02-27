@@ -88,7 +88,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createIconImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* self,
-    Arcadia_Imaging_PixelBuffer* pixelBuffer
+    Arcadia_Media_PixelBuffer* pixelBuffer
   );
 
 static Arcadia_Engine_Visuals_Window*
@@ -301,7 +301,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createIconImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* self,
-    Arcadia_Imaging_PixelBuffer* pixelBuffer
+    Arcadia_Media_PixelBuffer* pixelBuffer
   )
 {
   Arcadia_Visuals_Linux_Icon* icon = Arcadia_Visuals_Linux_Icon_create(thread, pixelBuffer);
@@ -1254,7 +1254,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_initializeDispatchImpl
   )
 {
   ((Arcadia_Visuals_Implementation_OpenGL4_BackendContextDispatch*)self)->getFunctions = (_Arcadia_Visuals_Implementation_OpenGL4_Functions* (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_OpenGL4_BackendContext*))&getFunctionsImpl;
-  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createIcon = (Arcadia_Engine_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*, Arcadia_Imaging_PixelBuffer*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createIconImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createIcon = (Arcadia_Engine_Visuals_Icon* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*, Arcadia_Media_PixelBuffer*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createIconImpl;
   ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createWindow = (Arcadia_Engine_Visuals_Window* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*))&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_createWindowImpl;
   ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->getDisplayDevices = (Arcadia_List* (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getDisplayDevicesImpl;
   ((Arcadia_Engine_BackendContextDispatch*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Engine_BackendContext*)) &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_updateImpl;

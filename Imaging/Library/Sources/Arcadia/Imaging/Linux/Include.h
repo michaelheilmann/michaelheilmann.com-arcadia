@@ -16,7 +16,6 @@
 #if !defined(ARCADIA_IMAGING_LINUX_INCLUDE_H_INCLUDED)
 #define ARCADIA_IMAGING_LINUX_INCLUDE_H_INCLUDED
 
-#include "Arcadia/Ring2/Include.h"
-#include "Arcadia/Imaging/PixelBuffer.h"
+#include "Arcadia/Media/Include.h"
 
 #endif // ARCADIA_IMAGING_LINUX_INCLUDE_H_INCLUDED

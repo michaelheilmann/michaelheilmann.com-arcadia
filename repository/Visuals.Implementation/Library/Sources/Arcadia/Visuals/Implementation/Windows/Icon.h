@@ -49,7 +49,7 @@ Arcadia_Visuals_Implementation_Windows_Icon*
 Arcadia_Visuals_Implementation_Windows_Icon_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Imaging_PixelBuffer* pixelBuffer
+    Arcadia_Media_PixelBuffer* pixelBuffer
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_WINDOWS_ICON_H_INCLUDED

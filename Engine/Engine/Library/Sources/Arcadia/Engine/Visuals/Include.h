@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_ENGINE_VISUALS_INCLUDE2_H_INCLUDED)
-#define ARCADIA_ENGINE_VISUALS_INCLUDE2_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_INCLUDE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_INCLUDE_H_INCLUDED
 
 #include "Arcadia/Engine/Visuals/Backend.h"
 #include "Arcadia/Engine/Visuals/BackendContext.h"
@@ -50,11 +50,8 @@
 #include "Arcadia/Engine/Visuals/VertexElementDescriptor.h"
 #include "Arcadia/Engine/Visuals/VertexElementSemantics.h"
 #include "Arcadia/Engine/Visuals/VertexElementSyntactics.h"
-#include "Arcadia/Engine/Visuals/VPL/ConstantBlock.h"
-#include "Arcadia/Engine/Visuals/VPL/Field.h"
-#include "Arcadia/Engine/Visuals/VPL/Scalar.h"
-#include "Arcadia/Engine/Visuals/VPL/Program.h"
-#include "Arcadia/Engine/Visuals/VPL/Tree/Include.h"
+
+#include "Arcadia/VPL/Include.h"
 
 #include "Arcadia/Engine/Visuals/WindingMode.h"
 
@@ -83,4 +80,4 @@
 #include "Arcadia/Engine/Visuals/DisplayMode.h"
 //}
 
-#endif // ARCADIA_ENGINE_VISUALS_INCLUDE2_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_INCLUDE_H_INCLUDED

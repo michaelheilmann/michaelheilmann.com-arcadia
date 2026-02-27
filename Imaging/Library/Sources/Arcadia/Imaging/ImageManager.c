@@ -17,14 +17,14 @@
 
 #include "Arcadia/Imaging/ImageWriter.h"
 
-#include "Arcadia/Imaging/IcoImageWriter.h"
+#include "Arcadia/Imaging/ICOImageWriter.h"
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  #include "Arcadia/Imaging/Windows/BmpImageWriter.h"
-  #include "Arcadia/Imaging/Windows/PngImageWriter.h"
-  #include "Arcadia/Imaging/Windows/TifImageWriter.h"
+  #include "Arcadia/Imaging/Windows/BMPImageWriter.h"
+  #include "Arcadia/Imaging/Windows/PNGImageWriter.h"
+  #include "Arcadia/Imaging/Windows/TIFImageWriter.h"
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  #include "Arcadia/Imaging/Linux/BmpImageWriter.h"
-  #include "Arcadia/Imaging/Linux/PngImageWriter.h"
+  #include "Arcadia/Imaging/Linux/BMPImageWriter.h"
+  #include "Arcadia/Imaging/Linux/PNGImageWriter.h"
 #else
   #error("environment not (yet) supported")
 #endif
@@ -100,19 +100,19 @@ Arcadia_Imaging_ImageManager_constructImpl
   self->writers = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Imaging_ImageWriter* writer = NULL;
 
-  writer = (Arcadia_Imaging_ImageWriter*)IcoImageWriter_create(thread);
+  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_ICOImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
-  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_BmpImageWriter_create(thread);
+  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_BMPImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
-  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_PngImageWriter_create(thread);
+  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_PNGImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
-  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_TifImageWriter_create(thread);
+  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Windows_TIFImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
-  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Linux_PngImageWriter_create(thread);
+  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Linux_PNGImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
-  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Linux_BmpImageWriter_create(thread);
+  writer = (Arcadia_Imaging_ImageWriter*)Arcadia_Imaging_Linux_BMPImageWriter_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->writers, writer);
 #else
   #error("environment not (yet) supported")
