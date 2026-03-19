@@ -672,21 +672,6 @@ Arcadia_String_getNumberOfCodePoints
   return Arcadia_ImmutableUTF8String_getNumberOfCodePoints(thread, self->immutableUTF8String);
 }
 
-#if 0
-Arcadia_String*
-Arcadia_String_getSubString
-  (
-    Arcadia_String const* self,
-    Arcadia_SizeValue index,
-    Arcadia_SizeValue length
-  )
-{
-  Arcadia_SizeValue byteIndex, byteLength;
-  getByteRange(index, length, &byteIndex, &byteLength, Arcadia_ImmutableByteArray_getBytes(self->immutableByteArray), Arcadia_ImmutableByteArray_getNumberOfBytes(self->immutableByteArray));
-  return NULL;
-}
-#endif
-
 Arcadia_BooleanValue
 Arcadia_String_isEqualTo_pn
   (

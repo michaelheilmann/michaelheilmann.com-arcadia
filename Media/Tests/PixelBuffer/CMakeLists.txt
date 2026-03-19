@@ -20,7 +20,7 @@ set(MyTestName ${MyProjectName}.Media.Tests.PixelBuffer)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Media.Tests.PixelBuffer/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Media.Tests.PixelBuffer/Main.c)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Media)
 

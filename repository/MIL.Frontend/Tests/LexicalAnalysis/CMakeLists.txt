@@ -24,9 +24,9 @@ if (NOT TARGET ${MyTestName})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Configure.h @ONLY)
   list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Configure.h.i)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Configure.h)
+  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Configure.h)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Main.c)
+  OnSourceFile(${MyTestName} Arcadia/MIL/Frontend/Tests/LexicalAnalysis/Main.c)
 
   list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend)
 

@@ -20,7 +20,7 @@ set(MyDemoName ${MyProjectName}.Ring2.Demo.ConsoleDemo)
 # Create demo executable.
 BeginProduct(${MyDemoName} executable)
 
-list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
+OnSourceFile(${MyDemoName} Main.c)
 
 list(APPEND ${MyDemoName}.Libraries ${MyProjectName}.Ring2)
 

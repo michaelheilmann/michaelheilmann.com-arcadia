@@ -15,25 +15,25 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyModule ${MyProjectName}.Application)
+set(MyLibraryName ${MyProjectName}.Application)
 
-if (NOT TARGET ${MyModule})
+if (NOT TARGET ${MyLibraryName})
 
-  BeginProduct(${MyModule} library)
+  BeginProduct(${MyLibraryName} library)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Application/Configure.h @ONLY)
-  OnConfigurationTemplateFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Configure.h.i)
-  OnConfigurationFile(${MyModule} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Application/Configure.h)
+  OnConfigurationTemplateFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Configure.h.i)
+  OnConfigurationFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Application/Configure.h)
 
-  OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Include.c)
-  OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Include.h)
-  OnSourceFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Application.c)
-  OnHeaderFile(${MyModule} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Application.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Application/Include.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Application/Include.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Application/Application.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Application/Application.h)
 
-  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Engine ${MyProjectName}.Imaging ${MyProjectName}.Math ${MyProjectName}.Ring2)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Engine ${MyProjectName}.Imaging ${MyProjectName}.Math ${MyProjectName}.Ring2)
 
-  EndProduct(${MyModule})
+  EndProduct(${MyLibraryName})
 
-  set_target_properties(${MyModule} PROPERTIES FOLDER "Engine")
+  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Engine")
 
 endif()

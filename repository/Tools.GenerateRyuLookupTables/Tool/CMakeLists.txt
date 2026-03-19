@@ -25,16 +25,16 @@ if (NOT TARGET ${MyExecutableName})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h @ONLY)
   list(APPEND ${MyExecutableName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h.i)
-  list(APPEND ${MyExecutableName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h)
+  OnConfigurationFile(${MyExecutableName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h)
 
-  list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Main.c)
+  OnSourceFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/Main.c)
 
-  list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.c)
-  list(APPEND ${MyExecutableName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.h)
-  list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.c)
-  list(APPEND ${MyExecutableName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.h)
-  list(APPEND ${MyExecutableName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Common.c)
-  list(APPEND ${MyExecutableName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Common.h)
+  OnSourceFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.c)
+  OnHeaderFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.h)
+  OnSourceFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.c)
+  OnHeaderFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.h)
+  OnSourceFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/Common.c)
+  OnHeaderFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/Common.h)
 
   list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Ring2 ${MyProjectName}.Ring1)
 

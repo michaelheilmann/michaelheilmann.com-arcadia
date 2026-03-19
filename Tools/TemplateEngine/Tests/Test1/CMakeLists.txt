@@ -23,10 +23,10 @@ BeginProduct(${MyTestName} test)
 # Configuration files.
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.Test1/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.Test1/Configure.h @ONLY)
 list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.Test1/Configure.h.i)
-list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.Test1/Configure.h)
+OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.Test1/Configure.h)
 
 # Source and header files.
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.Test1/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Tools.TemplateEngine.Tests.Test1/Main.c)
 
 # Libraries.
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library)

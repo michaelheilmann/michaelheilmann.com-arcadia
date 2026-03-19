@@ -20,7 +20,7 @@ set(MyTestName ${MyProjectName}.Ring1.Tests.StringToIntegerTests)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.StringToInteger/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Ring1.Tests.StringToInteger/Main.c)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1)
 

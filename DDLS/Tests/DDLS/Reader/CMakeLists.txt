@@ -24,11 +24,11 @@ if (NOT TARGET ${MyTestName})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/Reader/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/Reader/Configure.h @ONLY)
   list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/Reader/Configure.h.i)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/Reader/Configure.h)
+  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/Reader/Configure.h)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/Reader/Main.c)
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/Reader/Schema1.c)
-  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/Reader/Schema1.h)
+  OnSourceFile(${MyTestName} Arcadia/DDLS/Tests/Reader/Main.c)
+  OnSourceFile(${MyTestName} Arcadia/DDLS/Tests/Reader/Schema1.c)
+  OnHeaderFile(${MyTestName} Arcadia/DDLS/Tests/Reader/Schema1.h)
 
   list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.DDLS ${MyProjectName}.DDL)
 

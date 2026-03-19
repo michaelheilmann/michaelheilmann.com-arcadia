@@ -23,9 +23,9 @@ if (NOT TARGET ${MyTool})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BannerGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/BannerGenerator/Configure.h @ONLY)
   list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BannerGenerator/Configure.h.i)
-  list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/BannerGenerator/Configure.h)
+  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/BannerGenerator/Configure.h)
 
-  list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/BannerGenerator/Main.c)
+  OnSourceFile(${MyTool} Tools/BannerGenerator/Main.c)
 
   list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.ADL ${MyProjectName}.Imaging ${MyProjectName}.DDL)
 
@@ -44,7 +44,7 @@ if (NOT TARGET ${MyTool})
 
   set_target_properties(${MyTool} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "${COMMAND_LINE}")
 
-  install(TARGETS ${MyTool} RUNTIME DESTINATION bin/$<CONFIG>) # Wrap into *Product API.
+  #install(TARGETS ${MyTool} RUNTIME DESTINATION bin/$<CONFIG>) # Wrap into *Product API.
   set_target_properties(${MyTool} PROPERTIES FOLDER "Tools/MaterialGenerator") # Wrap into *Product API.
 
 endif()

@@ -155,6 +155,8 @@ Arcadia_Engine_Demo_MainMenuScene_constructImpl
   self->viewer.pitch = 0.f;
   self->viewer.roll = 0.f;
   //
+  self->uiCanvasNode = Arcadia_Engine_UI_CanvasNode_create(thread);
+  //
   self->latches[0] = Arcadia_BooleanValue_False;
   self->latches[1] = Arcadia_BooleanValue_False;
   self->latches[2] = Arcadia_BooleanValue_False;
@@ -223,6 +225,10 @@ Arcadia_Engine_Demo_MainMenuScene_visit
 
   if (self->soundSourceNode) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->soundSourceNode);
+  }
+
+  if (self->uiCanvasNode) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->uiCanvasNode);
   }
 }
 
@@ -329,6 +335,10 @@ Arcadia_Engine_Demo_MainMenuScene_updateLogicsImpl
   }
   Arcadia_Math_Vector3Real32_multiplyScalar(thread, v, tick/1000.f*4.f); // TOOD: Remove magic constants. This is effectively 4 meters per second.
   Arcadia_Math_Vector3Real32_add(thread, self->viewer.position, v);
+
+  if (!self->uiCanvasNode) {
+    self->uiCanvasNode = Arcadia_Engine_UI_CanvasNode_create(thread);
+  }
 }
 
 static void
@@ -461,6 +471,16 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
   Arcadia_Engine_Visuals_EnterPassNode_setCameraNode(thread, self->enterPassNode, self->cameraNode);
   // Render the models.
   Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+
+  if (!self->uiCanvasNode) {
+    self->uiCanvasNode = Arcadia_Engine_UI_CanvasNode_create(thread);
+  }
+  // Tell the UI canvas the size of the visuals canvas.
+  Arcadia_Engine_UI_CanvasNode_setVisualsCanvasSize(thread, self->uiCanvasNode, width, height);
+  // The position and the size of tge UI canvas.
+  Arcadia_Engine_UI_WidgetNode_setPosition(thread, (Arcadia_Engine_UI_WidgetNode*)self->uiCanvasNode, 0, 0);
+  Arcadia_Engine_UI_WidgetNode_setSize(thread, (Arcadia_Engine_UI_WidgetNode*)self->uiCanvasNode, width, height);
+  //Arcadia_Engine_UI_WidgetNode_updateVisuals(thread, self->uiCanvasNode);
 }
 
 static void

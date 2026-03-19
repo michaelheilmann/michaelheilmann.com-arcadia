@@ -19,6 +19,7 @@
 #include "Arcadia/Engine/Include.h"
 #include "Arcadia/Engine/Demo/Scene.h"
 #include "Arcadia/ADL/Include.h"
+#include "Arcadia/Engine/UI/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Demo.MainMenuScene", Arcadia_Engine_Demo_MainMenuScene,
                           u8"Arcadia.Engine.Demo.Scene");
@@ -53,6 +54,8 @@ struct Arcadia_Engine_Demo_MainMenuScene {
 
   // The sound source for some background sound effects.
   Arcadia_Engine_Audials_SoundSourceNode* soundSourceNode;
+  // The user interface.
+  Arcadia_Engine_UI_CanvasNode* uiCanvasNode;
 
   struct {
 

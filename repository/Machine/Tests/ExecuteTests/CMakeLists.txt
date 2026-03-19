@@ -21,7 +21,7 @@ set(MyTestName ${MyProjectName}.Machine.Tests.Execute)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Main.c)
+OnSourceFile(${MyTestName} Main.c)
 
 list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Machine)
 

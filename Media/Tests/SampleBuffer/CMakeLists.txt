@@ -20,7 +20,7 @@ set(MyTestName ${MyProjectName}.Media.Tests.SampleBuffer)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Media.Tests.SampleBuffer/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Media.Tests.SampleBuffer/Main.c)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Media)
 

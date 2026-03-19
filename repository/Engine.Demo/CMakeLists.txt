@@ -38,39 +38,39 @@ if (NOT TARGET ${MyDemoName})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Engine/Demo/Configure.h @ONLY)
   list(APPEND ${MyDemoName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configure.h.i)
-  list(APPEND ${MyDemoName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Engine/Demo/Configure.h)
+  OnConfigurationFile(${MyDemoName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Engine/Demo/Configure.h)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Main.c)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Main.c)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Audials.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Audials.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Audials.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Audials.h)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Visuals.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Visuals.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Visuals.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Visuals.h)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Configuration.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Configuration.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Configuration.h)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Scene.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Scene.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Scene.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Scene.h)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Scenes/ArcadiaLogoScene.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Scenes/ArcadiaLogoScene.h)
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Scenes/MainScene.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Scenes/MainScene.h)
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Scenes/MainMenuScene.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Scenes/MainMenuScene.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Scenes/ArcadiaLogoScene.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Scenes/ArcadiaLogoScene.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Scenes/MainScene.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Scenes/MainScene.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Scenes/MainMenuScene.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Scenes/MainMenuScene.h)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/SceneManager.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/SceneManager.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/SceneManager.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/SceneManager.h)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/AssetUtilities.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/AssetUtilities.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/AssetUtilities.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/AssetUtilities.h)
 
-  list(APPEND ${MyDemoName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Application.c)
-  list(APPEND ${MyDemoName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Engine/Demo/Application.h)
+  OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Application.c)
+  OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Application.h)
 
-  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Engine.Audials.Implementation ${MyProjectName}.Engine.Visuals.Implementation)
+  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Engine.UI ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Engine.Audials.Implementation ${MyProjectName}.Engine.Visuals.Implementation)
 
   EndProduct(${MyDemoName})
 

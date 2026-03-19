@@ -22,7 +22,19 @@ test1
   (
     Arcadia_Thread* thread
   )
-{/*@todo Add some tests.*/}
+{
+  Arcadia_Math_Vector3Real32* u = Arcadia_Math_Vector3Real32_create(thread);
+  Arcadia_Math_Vector3Real32* v = Arcadia_Math_Vector3Real32_create(thread);
+  Arcadia_Value t;
+  t = Arcadia_Value_makeObjectReferenceValue(v);
+
+if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)u, &t)) {
+
+  }
+  if (Arcadia_Object_isNotEqualTo(thread, (Arcadia_Object*)u, &t)) {
+
+  }
+}
 
 int
 main

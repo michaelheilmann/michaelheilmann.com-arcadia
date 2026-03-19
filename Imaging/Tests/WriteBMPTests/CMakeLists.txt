@@ -20,7 +20,7 @@ set(MyTestName ${MyProjectName}.Imaging.Tests.WriteBMPTests)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Imaging.Tests.WriteBMPTests/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Imaging.Tests.WriteBMPTests/Main.c)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Imaging)
 

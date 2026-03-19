@@ -20,11 +20,11 @@ set(MyTestName ${MyProjectName}.Ring2.Tests.UTF8)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring2.Tests.UTF8/Main.c)
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring2.Tests.UTF8/readWrite.c)
-list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring2.Tests.UTF8/readWrite.h)
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring2.Tests.UTF8/read.c)
-list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring2.Tests.UTF8/read.h)
+OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/readWrite.c)
+OnHeaderFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/readWrite.h)
+OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/read.c)
+OnHeaderFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/read.h)
 
 list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Ring2)
 

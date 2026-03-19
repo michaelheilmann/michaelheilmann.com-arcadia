@@ -20,7 +20,7 @@ set(MyTestName ${MyProjectName}.Ring1.Tests.RealToStringTests)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.RealToStringTests/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Ring1.Tests.RealToStringTests/Main.c)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1)
 
