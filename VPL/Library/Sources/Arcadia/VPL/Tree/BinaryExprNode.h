@@ -39,7 +39,7 @@
 // <expression> '=' <expression>
 #define Arcadia_VPL_Tree_BinaryExprNodeFlags_Assignment (5)
 
-/// For Arcadia_VPL_Tree_NodeFlags_(Add|Subtract|Multiply|Divide|Access).
+/// <binary expr> : <access expr> | <add expr> | <subtract expr> | <multiply expr> | <divide expr> | <assign expr>
 Arcadia_declareObjectType(u8"Arcadia.VPL.Tree.BinaryExprNode", Arcadia_VPL_Tree_BinaryExprNode,
                           u8"Arcadia.VPL.Tree.Node");
 
@@ -50,7 +50,8 @@ struct Arcadia_VPL_Tree_BinaryExprNodeDispatch {
 struct Arcadia_VPL_Tree_BinaryExprNode {
   Arcadia_VPL_Tree_Node _parent;
   Arcadia_Integer32Value kind;
-  Arcadia_VPL_Tree_Node* lhs, * rhs;
+  Arcadia_VPL_Tree_Node* lhs;
+  Arcadia_VPL_Tree_Node* rhs;
 };
 
 Arcadia_VPL_Tree_BinaryExprNode*

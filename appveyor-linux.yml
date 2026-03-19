@@ -22,16 +22,16 @@ skip_tags: true
 
 install:
     - sh: sudo apt-get --assume-yes install libopenal-dev
-    - sh: |
-        sudo apt-get remove cmake -y
-        mkdir /tmp/cmake
-        cd /tmp/cmake 
-        wget https://github.com/Kitware/CMake/releases/download/v4.1.3/cmake-4.1.3.tar.gz
-        tar xf cmake-4.1.3.tar.gz
-        cd cmake-4.1.3
-        ./configure
-        make
-        sudo make install
+    #- sh: |
+    #    sudo apt-get remove cmake -y
+    #    mkdir /tmp/cmake
+    #    cd /tmp/cmake 
+    #    wget https://github.com/Kitware/CMake/releases/download/v4.1.3/cmake-4.1.3.tar.gz
+    #    tar xf cmake-4.1.3.tar.gz
+    #    cd cmake-4.1.3
+    #    ./configure
+    #    make
+    #    sudo make install
 
 # Generate solution and project files.
 before_build:

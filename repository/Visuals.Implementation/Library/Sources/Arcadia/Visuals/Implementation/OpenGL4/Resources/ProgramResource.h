@@ -31,18 +31,23 @@ struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResource {
   Arcadia_Visuals_Implementation_ProgramResource _parent;
   Arcadia_Natural8Value dirty;
   /// The underlaying VPL program.
-  Arcadia_VPL_Program* program;
+  Arcadia_VPL_Symbols_Program* program;
   // The OpenGL ID of the fragment shader.
   GLuint fragmentShaderID;
   // The OpenGL ID of the vertex shader.
   GLuint vertexShaderID;
   // The OpenGL ID of the program.
   GLuint programID;
-  // A map from VPL constant block names to OpenGL uniform block names as used by glGetUniformBlockIndex.
-  Arcadia_Map* constantBlockMapping;
-  /// A map from VPL constant block names to OpenGL uniform block binding IDs as specified by glUniformBlockBinding(programID, uniformBlockID, uniformmBlockBindingID).
-  /// Specify the name of a VPL constant block and obtain the uniform block binding ID to be used with glBindBufferBase(GL_UNIFORM_BUFFER, uniformBlockBindingID, uniformBufferID).
-  Arcadia_Map* constantBlockBindings;
+  // A map from VPL constant record names/VPL constant scalar names to OpenGL uniform block names / OpenGL uniform names as used by glGetUniformBlockIndex / glGetUniformLocation.
+  Arcadia_Map* constantMapping;
+  /// A map from "VPL constant names" to
+  /// - for "VPL constant record"s: OpenGL uniform block binding IDs as specified by glUniformBlockBinding(programID, uniformBlockID, uniformmBlockBindingID).
+  ///   Specify the name of a VPL constant record and obtain the uniform block binding ID to be used with glBindBufferBase(GL_UNIFORM_BUFFER, uniformBlockBindingID, uniformBufferID).
+  /// - for "VPL constant scalar"s: OpenGL uniform locations as specified by gl(Get/Set)Uniform(programID, uniformLocation, ...).
+  Arcadia_Map* constantBindings;
+  /// The OpenGL/GLSL name of the fragment color output variable.
+  /// Must be assigned a color buffer index using `glBindFragDataLocation(programID, targetFrameBufferIndex, fragmentColorOutput)`.
+  Arcadia_String* fragmentColorOutput;
 };
 
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*
@@ -50,7 +55,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
-    Arcadia_VPL_Program* program
+    Arcadia_VPL_Symbols_Program* program
   );
 
 #endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED

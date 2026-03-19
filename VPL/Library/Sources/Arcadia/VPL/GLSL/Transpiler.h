@@ -17,13 +17,13 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_VPL_GLSL_TRANSPILER_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
-typedef struct Arcadia_VPL_SemanticalAnalysis Arcadia_VPL_SemanticalAnalysis;
-typedef struct Arcadia_VPL_Program Arcadia_VPL_Program;
+typedef struct Arcadia_VPL_Symbols_Program Arcadia_VPL_Symbols_Program;
 
 typedef enum Context{
   Context_VertexShader,
   Context_FragmentShader,
 } Context;
+
 
 // Programs are managed by the program manager.
 // Each program has a unique numeric ID.
@@ -37,25 +37,15 @@ struct Arcadia_VPL_Backends_GLSL_TranspilerDispatch {
 
 struct Arcadia_VPL_Backends_GLSL_Transpiler {
   Arcadia_Object _parent;
-  /// The semantical analysis stage.
-  Arcadia_VPL_SemanticalAnalysis* semanticalAnalysis;
-  // `mat4` as used by the VPL.
-  // happens that this currently coincides with `mat4` in GLSL.
-  Arcadia_String* MAT4;
-  // `vec4` as used by the VPL.
-  // Happens that this currently coincides with `vec4` in GLSL.
-  Arcadia_String* VEC4;
-  // `vec3` as used by the VPL.
-  // Happens that this currently coincides with `vec3` in GLSL.
-  Arcadia_String* VEC3;
-  // `vec2` as used by the VPL.
-  // Happens that this currently coincides with `vec2` in GLSL.
-  Arcadia_String* VEC2;
-  // `sampler2D` as used by the VPL.
-  // Happens that this currently coincides with `sampler2D` in GLSL.
-  Arcadia_String* SAMPLER2D;
-  // Map from VPL names to GLSL names.
-  Arcadia_Map* names;
+
+  /// @brief The number of constant blocks emitted so far.
+  Arcadia_Natural32Value numberOfConstantBlocks;
+
+  /// @brief A mapping from symbols to names.
+  /// For example, we map the builtin procedure symbol "texture2D" to the name "texture2D" in the target language.
+  /// For example, we map the name "fragmentProgram_inputs_vertex_ambientColor" to some computed name which does not cause conflicts in the target language.
+  /// This mapping must be computed before emitting the target language code (obviously).
+  Arcadia_Map* symbolNameMapping;
 };
 
 Arcadia_VPL_Backends_GLSL_Transpiler*
@@ -64,24 +54,28 @@ Arcadia_VPL_Backends_GLSL_Transpiler_create
     Arcadia_Thread* thread
   );
 
+/// @param constantMapping maps "VPL constant record names" / "VPL constant scalar names" to "OpenGL/GLSL uniform block names" and "OpenGL/GLSL uniform names".
 void
 Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Program* program,
-    Arcadia_Map* constantBlockMapping,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_Map* constantMapping,
+    Arcadia_Map* vertexShaderVariableScalarMapping,
     Arcadia_ByteBuffer* target
   );
 
-// @param constantBlockMapping A map from VPL constant block names to OpenGL uniform block names as used by glGetUniformBlockIndex.
+/// @param constantMapping maps "VPL constant record names" / "VPL constant scalar names" to "OpenGL/GLSL uniform block names" and "OpenGL/GLSL uniform names".
 void
 Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Program* program,
-    Arcadia_Map* constantBlockMapping,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_Map* constantMapping,
+    Arcadia_Map* fragmentShaderVariableScalarMapping,
+    Arcadia_String** fragmentColorOutput,
     Arcadia_ByteBuffer* target
   );
 

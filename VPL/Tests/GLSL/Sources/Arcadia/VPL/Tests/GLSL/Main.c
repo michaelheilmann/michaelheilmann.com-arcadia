@@ -21,15 +21,18 @@ test1
     Arcadia_Thread* thread
   )
 { 
-  Arcadia_VPL_Program* program = Arcadia_VPL_Program_create(thread, Arcadia_VPL_ProgramFlags_MeshAmbientColor);
+  Arcadia_VPL_Symbols_Program* program = Arcadia_VPL_Symbols_Program_createProgram(thread, Arcadia_VPL_Symbols_ProgramFlags_MeshAmbientColor);
   Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
-  Arcadia_Map* constantBlockMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* constantMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* vertexShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* fragmentShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_String* fragmentColorOutput = NULL;
 
   Arcadia_ByteBuffer* vertexShaderCode = Arcadia_ByteBuffer_create(thread);
-  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantBlockMapping, vertexShaderCode);
+  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantMapping, vertexShaderVariableScalarMapping, vertexShaderCode);
 
   Arcadia_ByteBuffer* fragmentShaderCode = Arcadia_ByteBuffer_create(thread);
-  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantBlockMapping, fragmentShaderCode);
+  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantMapping, fragmentShaderVariableScalarMapping , &fragmentColorOutput, fragmentShaderCode);
 
   Arcadia_FilePath* vertexShaderPath = Arcadia_FileSystem_getWorkingDirectory(thread, Arcadia_FileSystem_getOrCreate(thread));
   Arcadia_FilePath_append(thread, vertexShaderPath, Arcadia_FilePath_parseGeneric(thread, u8"vertex-shader-mesh-ambient-color.txt", sizeof(u8"vertex-shader-mesh-ambient-color.txt") - 1));
@@ -46,15 +49,18 @@ test2
     Arcadia_Thread* thread
   )
 {
-  Arcadia_VPL_Program* program = Arcadia_VPL_Program_create(thread, Arcadia_VPL_ProgramFlags_VertexAmbientColor);
+  Arcadia_VPL_Symbols_Program* program = Arcadia_VPL_Symbols_Program_createProgram(thread, Arcadia_VPL_Symbols_ProgramFlags_VertexAmbientColor);
   Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
-  Arcadia_Map* constantBlockMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* constantMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* vertexShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* fragmentShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_String* fragmentColorOutput = NULL;
 
   Arcadia_ByteBuffer* vertexShaderCode = Arcadia_ByteBuffer_create(thread);
-  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantBlockMapping, vertexShaderCode);
+  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantMapping, vertexShaderVariableScalarMapping, vertexShaderCode);
 
   Arcadia_ByteBuffer* fragmentShaderCode = Arcadia_ByteBuffer_create(thread);
-  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantBlockMapping, fragmentShaderCode);
+  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantMapping, fragmentShaderVariableScalarMapping , &fragmentColorOutput, fragmentShaderCode);
 
   Arcadia_FilePath* vertexShaderPath = Arcadia_FileSystem_getWorkingDirectory(thread, Arcadia_FileSystem_getOrCreate(thread));
   Arcadia_FilePath_append(thread, vertexShaderPath, Arcadia_FilePath_parseGeneric(thread, u8"vertex-shader-vertex-ambient-color.txt", sizeof(u8"vertex-shader-vertex-ambient-color.txt") - 1));
@@ -71,15 +77,18 @@ test3
     Arcadia_Thread* thread
   )
 {
-  Arcadia_VPL_Program* program = Arcadia_VPL_Program_create(thread, Arcadia_VPL_ProgramFlags_TextureAmbientColor);
+  Arcadia_VPL_Symbols_Program* program = Arcadia_VPL_Symbols_Program_createProgram(thread, Arcadia_VPL_Symbols_ProgramFlags_TextureAmbientColor);
   Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
-  Arcadia_Map* constantBlockMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* constantMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* vertexShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* fragmentShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_String* fragmentColorOutput = NULL;
 
   Arcadia_ByteBuffer* vertexShaderCode = Arcadia_ByteBuffer_create(thread);
-  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantBlockMapping, vertexShaderCode);
+  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantMapping, vertexShaderVariableScalarMapping, vertexShaderCode);
 
   Arcadia_ByteBuffer* fragmentShaderCode = Arcadia_ByteBuffer_create(thread);
-  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantBlockMapping, fragmentShaderCode);
+  Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantMapping, fragmentShaderVariableScalarMapping , &fragmentColorOutput, fragmentShaderCode);
 
   Arcadia_FilePath* vertexShaderPath = Arcadia_FileSystem_getWorkingDirectory(thread, Arcadia_FileSystem_getOrCreate(thread));
   Arcadia_FilePath_append(thread, vertexShaderPath, Arcadia_FilePath_parseGeneric(thread, u8"vertex-shader-texture-ambient-color.txt", sizeof(u8"vertex-shader-texture-ambient-color.txt") - 1));

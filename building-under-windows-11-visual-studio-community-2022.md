@@ -4,7 +4,7 @@
 *michaelheilmann.com* requires
 - *Microsoft Visual Studio Community 2022* version 17.9.2 or better.
   *Microsoft Visual Studio Community 2022* is available at [https://visualstudio.microsoft.com/vs/community/](https://visualstudio.microsoft.com/vs/community/).
-- *Kitware CMake* version 4.1.3 or better.
+- *Kitware CMake* version 3.29 or better.
   *Kitware CMake* is available at [https://cmake.org/](https://cmake.org/).
 - *PowerShell*
 
@@ -64,5 +64,5 @@ To disable OpenAL support, add the parameter `-D"Arcadia.Engine.Audials.Implemen
 The typical command line for x64 build files is hence:
 ```
 cd C:/build/x64
-cmake C:/sources -A x64 -D"Arcadia.Engine.Visuals.Implementation.OpenGL4"=TRUE -D"Arcadia.Engine.Audials.Implementation.OpenAL"=TRUE
+cmake C:/sources -A x64 -D"Arcadia.Engine.Visuals.Implementation.OpenGL4.Enabled"=TRUE -D"Arcadia.Engine.Audials.Implementation.OpenAL.Enabled"=TRUE
 ```

@@ -13,33 +13,35 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_VPL_BUILTINTYPE_H_INCLUDED)
-#define ARCADIA_VISUALS_VPL_BUILTINTYPE_H_INCLUDED
+#if !defined(ARCADIA_VPL_SYMBOLS_BUILTINTYPE_H_INCLUDED)
+#define ARCADIA_VPL_SYMBOLS_BUILTINTYPE_H_INCLUDED
 
 #if !defined(ARCADIA_VPL_PRIVATE) || 1 != ARCADIA_VPL_PRIVATE
   #error("do not include directly, include `Arcadia/VPL/Include.h` instead")
 #endif
-#include "Arcadia/Ring2/Include.h"
+#include "Arcadia/VPL/Symbols/Symbol.h"
 
 // A member of a constant record.
-Arcadia_declareObjectType(u8"Arcadia.VPL.BuiltinType", Arcadia_VPL_BuiltinType,
-                          u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.VPL.Symbols.BuiltinType", Arcadia_VPL_Symbols_BuiltinType,
+                          u8"Arcadia.VPL.Symbols.Symbol");
 
-struct Arcadia_VPL_BuiltinTypeDispatch {
-  Arcadia_ObjectDispatch _parent;
+struct Arcadia_VPL_Symbols_BuiltinTypeDispatch {
+  Arcadia_VPL_Symbols_SymbolDispatch _parent;
 };
 
-struct Arcadia_VPL_BuiltinType {
-  Arcadia_Object _parent;
+struct Arcadia_VPL_Symbols_BuiltinType {
+  Arcadia_VPL_Symbols_Symbol _parent;
   Arcadia_String* name;
   Arcadia_String* type;
+  // The scope of this builtin type.
+  Arcadia_Languages_Scope* scope;
 };
 
-Arcadia_VPL_BuiltinType*
-Arcadia_VPL_BuiltinType_create
+Arcadia_VPL_Symbols_BuiltinType*
+Arcadia_VPL_Symbols_BuiltinType_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* name
   );
 
-#endif // ARCADIA_VISUALS_VPL_BUILTINTYPE_H_INCLUDED
+#endif // ARCADIA_VPL_SYMBOLS_BUILTINTYPE_H_INCLUDED

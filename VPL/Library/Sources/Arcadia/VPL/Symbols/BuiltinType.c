@@ -19,29 +19,44 @@
 #include <string.h>
 
 static void
-Arcadia_VPL_BuiltinType_constructImpl
+Arcadia_VPL_Symbols_BuiltinType_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_BuiltinType* self
+    Arcadia_VPL_Symbols_BuiltinType* self
   );
 
 static void
-Arcadia_VPL_BuiltinType_initializeDispatchImpl
+Arcadia_VPL_Symbols_BuiltinType_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_BuiltinTypeDispatch* self
+    Arcadia_VPL_Symbols_BuiltinTypeDispatch* self
   );
 
 static void
-Arcadia_VPL_Block_BuiltinType_visitImpl
+Arcadia_VPL_Symbols_BuiltinType_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_BuiltinType* self
+    Arcadia_VPL_Symbols_BuiltinType* self
+  );
+
+static Arcadia_String*
+Arcadia_VPL_Symbols_BuiltinType_getNameImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_BuiltinType* self
+  );
+
+static void
+Arcadia_VPL_Symbols_BuiltinType_resolveTypesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_BuiltinType* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_BuiltinType_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_BuiltinType_constructImpl,
+  .visit = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_BuiltinType_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -49,53 +64,75 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-
-Arcadia_defineObjectType(u8"Arcadia.VPL.BuiltinType", Arcadia_VPL_BuiltinType,
-                         u8"Arcadia.Object", Arcadia_Object,
+Arcadia_defineObjectType(u8"Arcadia.VPL.Symbols.BuiltinType", Arcadia_VPL_Symbols_BuiltinType,
+                         u8"Arcadia.VPL.Symbols.Symbol", Arcadia_VPL_Symbols_Symbol,
                          &_typeOperations);
 
 static void
-Arcadia_VPL_BuiltinType_constructImpl
+Arcadia_VPL_Symbols_BuiltinType_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_BuiltinType* self
+    Arcadia_VPL_Symbols_BuiltinType* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_VPL_BuiltinType);
+  Arcadia_EnterConstructor(Arcadia_VPL_Symbols_BuiltinType);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != _numberOfArguments) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  self->scope = NULL;
   self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
-  Arcadia_LeaveConstructor(Arcadia_VPL_BuiltinType);
+  Arcadia_LeaveConstructor(Arcadia_VPL_Symbols_BuiltinType);
 }
 
 static void
-Arcadia_VPL_BuiltinType_initializeDispatchImpl
+Arcadia_VPL_Symbols_BuiltinType_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_BuiltinTypeDispatch* self
+    Arcadia_VPL_Symbols_BuiltinTypeDispatch* self
   )
-{ }
+{
+  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_BuiltinType_getNameImpl;
+  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->resolveTypes = (void (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_BuiltinType_resolveTypesImpl;
+}
 
 static void
-Arcadia_VPL_Block_BuiltinType_visitImpl
+Arcadia_VPL_Symbols_BuiltinType_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_BuiltinType* self
+    Arcadia_VPL_Symbols_BuiltinType* self
   )
 {
   if (self->name) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->name);
   }
+  if (self->scope) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
+  }
 }
 
-Arcadia_VPL_BuiltinType*
-Arcadia_VPL_BuiltinType_create
+static Arcadia_String*
+Arcadia_VPL_Symbols_BuiltinType_getNameImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_BuiltinType* self
+  )
+{ return self->name; }
+
+static void
+Arcadia_VPL_Symbols_BuiltinType_resolveTypesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_BuiltinType* self
+  )
+{/*Intentionally empty.*/}
+
+Arcadia_VPL_Symbols_BuiltinType*
+Arcadia_VPL_Symbols_BuiltinType_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* name
@@ -108,5 +145,5 @@ Arcadia_VPL_BuiltinType_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_BuiltinType);
+  ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_BuiltinType);
 }

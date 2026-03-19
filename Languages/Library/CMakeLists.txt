@@ -13,7 +13,7 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-cmake_minimum_required(VERSION 4.1.3)
+cmake_minimum_required(VERSION 3.29)
 
 # Create library.
 set(MyLibraryName ${MyProjectName}.Languages)
@@ -35,6 +35,8 @@ if (NOT TARGET ${MyLibraryName})
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Languages/Scope.h)
   OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Languages/Diagnostics.c)
   OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Languages/Diagnostics.h)
+  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Languages/mangleName.c)
+  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Languages/mangleName.h)
 
   list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Ring2)
 

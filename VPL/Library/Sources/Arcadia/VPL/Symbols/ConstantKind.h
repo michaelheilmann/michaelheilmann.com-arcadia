@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_VPL_CONSTANTKIND_H_INCLUDED)
-#define ARCADIA_VISUALS_VPL_CONSTANTKIND_H_INCLUDED
+#if !defined(ARCADIA_VPL_SYMBOLS_CONSTANTKIND_H_INCLUDED)
+#define ARCADIA_VPL_SYMBOLS_CONSTANTKIND_H_INCLUDED
 
 #if !defined(ARCADIA_VPL_PRIVATE) || 1 != ARCADIA_VPL_PRIVATE
   #error("do not include directly, include `Arcadia/VPL/Include.h` instead")
@@ -22,11 +22,11 @@
 #include "Arcadia/Ring2/Include.h"
 
 // An enumeration of kinds of constants.
-Arcadia_declareEnumerationType(u8"Arcadia.VPL.ConstantKind", Arcadia_VPL_ConstantKind);
+Arcadia_declareEnumerationType(u8"Arcadia.VPL.Symbols.ConstantKind", Arcadia_VPL_ConstantKind);
 
 enum Arcadia_VPL_ConstantKind {
   Arcadia_VPL_ConstantKind_Record,
   Arcadia_VPL_ConstantKind_Scalar,
 };
 
-#endif // ARCADIA_VISUALS_VPL_CONSTANTKIND_H_INCLUDED
+#endif // ARCADIA_VPL_SYMBOLS_CONSTANTKIND_H_INCLUDED

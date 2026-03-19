@@ -20,5 +20,5 @@ static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
 };
 
-Arcadia_defineEnumerationType(u8"Arcadia.VPL.ConstantKind", Arcadia_VPL_ConstantKind,
+Arcadia_defineEnumerationType(u8"Arcadia.VPL.Symbols.ConstantKind", Arcadia_VPL_ConstantKind,
                               &_typeOperations);

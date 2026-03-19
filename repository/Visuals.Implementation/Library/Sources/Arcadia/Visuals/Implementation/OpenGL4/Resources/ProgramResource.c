@@ -63,8 +63,10 @@ createShader
     Arcadia_Thread* thread,
     _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl,
     ShaderType shaderType,
-    Arcadia_Map* constantBlockMapping,
-    Arcadia_VPL_Program* program
+    Arcadia_Map* constantMapping,
+    Arcadia_Map* variableScalarMapping,
+    Arcadia_String** fragmentColorOutput,
+    Arcadia_VPL_Symbols_Program* program
   );
 
 static void
@@ -137,9 +139,10 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
   self->vertexShaderID = 0;
   self->fragmentShaderID = 0;
   self->programID = 0;
-  self->program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_VPL_Program_getType(thread));
-  self->constantBlockMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
-  self->constantBlockBindings = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  self->program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_VPL_Symbols_Program_getType(thread));
+  self->constantMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  self->constantBindings = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  self->fragmentColorOutput = NULL;
 
   Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
   Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
@@ -177,11 +180,14 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_visitImpl
     Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
-  if (self->constantBlockBindings) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->constantBlockBindings);
+  if (self->constantBindings) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->constantBindings);
   }
-  if (self->constantBlockMapping) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->constantBlockMapping);
+  if (self->constantMapping) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->constantMapping);
+  }
+  if (self->fragmentColorOutput) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->fragmentColorOutput);
   }
   if (self->program) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->program);
@@ -194,8 +200,10 @@ createShader
     Arcadia_Thread* thread,
     _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl,
     ShaderType shaderType,
-    Arcadia_Map* constantBlockMapping,
-    Arcadia_VPL_Program* program
+    Arcadia_Map* constantMapping,
+    Arcadia_Map* variableScalarMapping,
+    Arcadia_String** fragmentColorOutput,
+    Arcadia_VPL_Symbols_Program* program
   )
 {
   GLuint id = 0;
@@ -217,11 +225,12 @@ createShader
   switch (shaderType) {
     case VertexShader: {
       Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
-      Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantBlockMapping, code);
+      Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader(thread, transpiler, program, constantMapping, variableScalarMapping, code);
+      *fragmentColorOutput = NULL;
     } break;
     case FragmentShader: {
       Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
-      Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantBlockMapping, code);
+      Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader(thread, transpiler, program, constantMapping, variableScalarMapping, fragmentColorOutput, code);
     } break;
     default: {
       return Arcadia_BooleanValue_False;
@@ -266,23 +275,39 @@ createShader
   return id;
 }
 
-// @return The OpenGL ID of the uniform block.
+// @return The OpenGL/GLSL uniform location for a VPL constant scalar.
+static GLuint
+getUniformLocation
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
+    Arcadia_VPL_Symbols_ConstantScalar* constantScalar
+  )
+{
+  Arcadia_String* nameGL = (Arcadia_String*)Arcadia_Map_getObjectReferenceValueChecked(thread, self->constantMapping, Arcadia_Value_makeObjectReferenceValue(constantScalar->name), _Arcadia_String_getType(thread));
+
+  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+  while (gl->glGetError()) { }
+  return gl->glGetUniformLocation(self->programID, Arcadia_String_getBytes(thread, nameGL));
+}
+
+// @return The OpenGL/GLSL uniform block index for a VPL constant record.
 static GLuint
 getUniformBlockIndex
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self,
-    Arcadia_VPL_ConstantRecord* constantBlock
+    Arcadia_VPL_Symbols_ConstantRecord* constantRecord
   )
 {
-  Arcadia_String* nameGL = (Arcadia_String*)Arcadia_Map_getObjectReferenceValueChecked(thread, self->constantBlockMapping, Arcadia_Value_makeObjectReferenceValue(constantBlock->name), _Arcadia_String_getType(thread));
+  Arcadia_String* nameGL = (Arcadia_String*)Arcadia_Map_getObjectReferenceValueChecked(thread, self->constantMapping, Arcadia_Value_makeObjectReferenceValue(constantRecord->name), _Arcadia_String_getType(thread));
 
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
   _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
   while (gl->glGetError()) { }
   return gl->glGetUniformBlockIndex(self->programID, Arcadia_String_getBytes(thread, nameGL));
 }
-
 
 static void
 Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
@@ -291,6 +316,9 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
     Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
+  Arcadia_Map* vertexShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map* fragmentShaderVariableScalarMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+
   Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
   _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
 
@@ -300,8 +328,8 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
   }
   if (self->dirty) {
     // If something is dirty, destroy the vertex shader, the fragment shader, and the program.
-    Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->constantBlockBindings);
-    Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->constantBlockMapping);
+    Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->constantBindings);
+    Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->constantMapping);
 
     if (self->programID) {
       gl->glDeleteProgram(self->programID);
@@ -317,13 +345,14 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
     }
   }
   if (0 == self->vertexShaderID) {
-    self->vertexShaderID = createShader(thread, gl, VertexShader, self->constantBlockMapping, self->program);
+    Arcadia_String* dummy = NULL;
+    self->vertexShaderID = createShader(thread, gl, VertexShader, self->constantMapping, vertexShaderVariableScalarMapping , &dummy, self->program);
     if (!self->vertexShaderID) {
       return;
     }
   }
   if (0 == self->fragmentShaderID) {
-    self->fragmentShaderID = createShader(thread, gl, FragmentShader, self->constantBlockMapping, self->program);
+    self->fragmentShaderID = createShader(thread, gl, FragmentShader, self->constantMapping, fragmentShaderVariableScalarMapping, &self->fragmentColorOutput, self->program);
     if (!self->fragmentShaderID) {
       return;
     }
@@ -353,24 +382,38 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_loadImpl
     if (!success) {
       return;
     }
-    // Rebuilt the mappings.
-    // (1) Iterate over the VPL constant blocks.
-    // (2) For each block,  lookup its OpenGL name.
-    // (3) Get its uniform block index given that name. The block might be optimized out, ignore it if it was not found.
-    // (4) Set the uniform binding for the black. Add (name,binding) to self->constantBlockBindings.
-    Arcadia_List* constantBlocks = Arcadia_VPL_Program_getConstantBlocks(thread, self->program);
-    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)constantBlocks), uniformBlockBindingIndex = 0; i < n; ++i) {
-      Arcadia_VPL_ConstantRecord* constantBlock = (Arcadia_VPL_ConstantRecord*)Arcadia_List_getObjectReferenceValueAt(thread, constantBlocks, i);
-      GLuint uniformBlockIndex = getUniformBlockIndex(thread, self, constantBlock);
-      if (GL_INVALID_INDEX == uniformBlockIndex) {
-        continue;
+    // Rebuilt the bindings.
+    Arcadia_List* constants = Arcadia_VPL_Symbols_Program_getConstants(thread, self->program);
+    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)constants), uniformBlockBindingIndex = 0; i < n; ++i) {
+      Arcadia_VPL_Symbols_Constant* constant = (Arcadia_VPL_Symbols_Constant*)Arcadia_List_getObjectReferenceValueAt(thread, constants, i);
+      if (Arcadia_VPL_Symbols_Constant_getKind(thread, constant) == Arcadia_VPL_ConstantKind_Record) {
+        // (1) Get the OpenGL/GLSL name of the constant record.
+        // (2) Get the uniform block index given that name.
+        // (3) If the uniform block was not found, advance to next constant record.
+        // (4) Otherwise add the entry <constant record name> -> <uniform block index> to self.constantBindings.
+        Arcadia_VPL_Symbols_ConstantRecord* constantRecord = (Arcadia_VPL_Symbols_ConstantRecord*)constant;
+        GLuint uniformBlockIndex = getUniformBlockIndex(thread, self, constantRecord);
+        if (GL_INVALID_INDEX == uniformBlockIndex) {
+          continue;
+        }
+        gl->glUniformBlockBinding(self->programID, uniformBlockIndex, uniformBlockBindingIndex);
+        if (gl->glGetError()) {
+          return;
+        }
+        Arcadia_Map_set(thread, self->constantBindings, Arcadia_Value_makeObjectReferenceValue(constantRecord->name), Arcadia_Value_makeSizeValue(uniformBlockBindingIndex), NULL, NULL);
+        uniformBlockBindingIndex++;
+      } else if (Arcadia_VPL_Symbols_Constant_getKind(thread, constant) == Arcadia_VPL_ConstantKind_Scalar) {
+        // (1) Get the OpenGL/GLSL name of the constant scalar.
+        // (2) Get the uniform location given that name.
+        // (3) If the uniform was not found, advance to next constant record.
+        // (4) Otherwise add the entry <constant scalar name> -> <uniform location> to self.constantBindings.
+        Arcadia_VPL_Symbols_ConstantScalar* constantScalar = (Arcadia_VPL_Symbols_ConstantScalar*)constant;
+        GLuint uniformLocation = getUniformLocation(thread, self, constantScalar);
+        if (GL_INVALID_INDEX == uniformLocation) {
+          continue;
+        }
+        Arcadia_Map_set(thread, self->constantBindings, Arcadia_Value_makeObjectReferenceValue(constantScalar->name), Arcadia_Value_makeSizeValue(uniformLocation), NULL, NULL);
       }
-      gl->glUniformBlockBinding(self->programID, uniformBlockIndex, uniformBlockBindingIndex);
-      if (gl->glGetError()) {
-        return;
-      }
-      Arcadia_Map_set(thread, self->constantBlockBindings, Arcadia_Value_makeObjectReferenceValue(constantBlock->name), Arcadia_Value_makeSizeValue(uniformBlockBindingIndex), NULL, NULL);
-      uniformBlockBindingIndex++;
     }
   }
   self->dirty = 0;
@@ -432,7 +475,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create
   (
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
-    Arcadia_VPL_Program* program
+    Arcadia_VPL_Symbols_Program* program
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);

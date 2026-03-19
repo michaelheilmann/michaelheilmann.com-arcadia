@@ -19,30 +19,30 @@
 #include <string.h>
 
 static void
-Arcadia_VPL_Constant_constructImpl
+Arcadia_VPL_Symbols_Constant_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_Constant* self
+    Arcadia_VPL_Symbols_Constant* self
   );
 
 static void
-Arcadia_VPL_Constant_initializeDispatchImpl
+Arcadia_VPL_Symbols_Constant_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantDispatch* self
+    Arcadia_VPL_Symbols_ConstantDispatch* self
   );
 
 static void
-Arcadia_VPL_Constant_visitImpl
+Arcadia_VPL_Symbols_Constant_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_Constant* self
+    Arcadia_VPL_Symbols_Constant* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Constant_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_VPL_Constant_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_Constant_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_VPL_Symbols_Constant_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -50,18 +50,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.VPL.Constant", Arcadia_VPL_Constant,
-                         u8"Arcadia.Object", Arcadia_Object,
+Arcadia_defineObjectType(u8"Arcadia.VPL.Symbols.Constant", Arcadia_VPL_Symbols_Constant,
+                         u8"Arcadia.VPL.Symbols.Symbol", Arcadia_VPL_Symbols_Symbol,
                          &_typeOperations);
 
 static void
-Arcadia_VPL_Constant_constructImpl
+Arcadia_VPL_Symbols_Constant_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_Constant* self
+    Arcadia_VPL_Symbols_Constant* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_VPL_Constant);
+  Arcadia_EnterConstructor(Arcadia_VPL_Symbols_Constant);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -70,37 +70,29 @@ Arcadia_VPL_Constant_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_LeaveConstructor(Arcadia_VPL_Constant);
+  Arcadia_LeaveConstructor(Arcadia_VPL_Symbols_Constant);
 }
 
 static void
-Arcadia_VPL_Constant_initializeDispatchImpl
+Arcadia_VPL_Symbols_Constant_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantDispatch* self
+    Arcadia_VPL_Symbols_ConstantDispatch* self
   )
 { }
 
 static void
-Arcadia_VPL_Constant_visitImpl
+Arcadia_VPL_Symbols_Constant_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_Constant* self
+    Arcadia_VPL_Symbols_Constant* self
   )
 {/*Intentionally empty.*/}
 
 Arcadia_VPL_ConstantKind
-Arcadia_VPL_Constant_getKind
+Arcadia_VPL_Symbols_Constant_getKind
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_Constant* self
+    Arcadia_VPL_Symbols_Constant* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_VPL_Constant, getKind, self); }
-
-Arcadia_String*
-Arcadia_VPL_Constant_getName
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Constant* self
-  )
-{ Arcadia_VirtualCallWithReturn(Arcadia_VPL_Constant, getName, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_VPL_Symbols_Constant, getKind, self); }

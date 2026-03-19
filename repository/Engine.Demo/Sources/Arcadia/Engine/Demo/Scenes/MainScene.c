@@ -66,6 +66,30 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
     Arcadia_Integer32Value height
   );
 
+static void
+Arcadia_Engine_Demo_MainScene_handleKeyboardKeyEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainScene* self,
+    Arcadia_Visuals_KeyboardKeyEvent* event
+  );
+
+static void
+Arcadia_Engine_Demo_MainScene_handleMouseButtonEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainScene* self,
+    Arcadia_Visuals_MouseButtonEvent* event
+  );
+
+static void
+Arcadia_Engine_Demo_MainScene_handleMousePointerEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainScene* self,
+    Arcadia_Visuals_MousePointerEvent* event
+  );
+
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_Demo_MainScene_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Demo_MainScene_constructImpl,
@@ -127,6 +151,10 @@ Arcadia_Engine_Demo_MainScene_initializeDispatchImpl
   ((Arcadia_Engine_Demo_SceneDispatch*)self)->updateAudials = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value, Arcadia_Integer32Value, Arcadia_Integer32Value)) & Arcadia_Engine_Demo_MainScene_updateAudials;
   ((Arcadia_Engine_Demo_SceneDispatch*)self)->updateLogics = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value)) & Arcadia_Engine_Demo_MainScene_updateLogics;
   ((Arcadia_Engine_Demo_SceneDispatch*)self)->updateVisuals = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value, Arcadia_Integer32Value, Arcadia_Integer32Value)) & Arcadia_Engine_Demo_MainScene_updateVisuals;
+
+  ((Arcadia_Engine_Demo_SceneDispatch*)self)->handleKeyboardKeyEvent = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_KeyboardKeyEvent*)) & Arcadia_Engine_Demo_MainScene_handleKeyboardKeyEventImpl;
+  ((Arcadia_Engine_Demo_SceneDispatch*)self)->handleMouseButtonEvent = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_MouseButtonEvent*)) & Arcadia_Engine_Demo_MainScene_handleMouseButtonEventImpl;
+  ((Arcadia_Engine_Demo_SceneDispatch*)self)->handleMousePointerEvent = (void (*)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_MousePointerEvent*)) & Arcadia_Engine_Demo_MainScene_handleMousePointerEventImpl;
 }
 
 static void
@@ -185,6 +213,7 @@ Arcadia_Engine_Demo_MainScene_updateAudials
   Arcadia_Engine_Node_setAudialsBackendContext(thread, (Arcadia_Engine_Node*)self->soundSourceNode, (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext);
   Arcadia_Engine_Audials_Node_render(thread, (Arcadia_Engine_Audials_Node*)self->soundSourceNode);
   Arcadia_Engine_Audials_SoundSourceNode_setVolume(thread, self->soundSourceNode, 0.125f);
+  Arcadia_Engine_Audials_SoundSourceNode_setIsLooping(thread, self->soundSourceNode, Arcadia_BooleanValue_True);
   if (!Arcadia_Engine_Audials_SoundSourceNode_isPlaying(thread, self->soundSourceNode)) {
     Arcadia_Engine_Audials_SoundSourceNode_stop(thread, self->soundSourceNode);
     Arcadia_Engine_Audials_SoundSourceNode_play(thread, self->soundSourceNode);
@@ -306,6 +335,45 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
 
   }
 }
+
+static void
+Arcadia_Engine_Demo_MainScene_handleKeyboardKeyEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainScene* self,
+    Arcadia_Visuals_KeyboardKeyEvent* event
+  )
+{
+  if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, event) == Arcadia_Visuals_KeyboardKeyAction_Released &&
+      Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, event) == Arcadia_Visuals_KeyboardKey_Escape) {
+    Arcadia_Visuals_ApplicationQuitRequestedEvent* e = Arcadia_Visuals_ApplicationQuitRequestedEvent_create(thread, Arcadia_getTickCount(thread));
+    Arcadia_ValueStack_pushObjectReferenceValue(thread, (Arcadia_Object*)e);
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
+    Arcadia_Signal_emit(thread, ((Arcadia_Engine_Demo_Scene*)self)->applicationQuitRequestSignal, (Arcadia_Object*)self);
+    Arcadia_ValueStack_popValues(thread, 2);
+  } else if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, event) == Arcadia_Visuals_KeyboardKeyAction_Released &&
+    Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, event) == Arcadia_Visuals_KeyboardKey_R) {
+    Arcadia_logf(Arcadia_LogFlags_Info, "re-initializing backends\n");
+  }
+}
+
+static void
+Arcadia_Engine_Demo_MainScene_handleMouseButtonEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainScene* self,
+    Arcadia_Visuals_MouseButtonEvent* event
+  )
+{ }
+
+static void
+Arcadia_Engine_Demo_MainScene_handleMousePointerEventImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainScene* self,
+    Arcadia_Visuals_MousePointerEvent* event
+  )
+{ }
 
 Arcadia_Engine_Demo_MainScene*
 Arcadia_Engine_Demo_MainScene_create

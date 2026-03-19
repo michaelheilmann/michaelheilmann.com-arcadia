@@ -272,12 +272,6 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_destructImpl
   )
 {
   if (self->backendContext) {
-#if 0
-    if (self->viewportResource) {
-      Arcadia_Visuals_Implementation_Resource_unref(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource);
-      self->viewportResource = NULL;
-    }
-#endif
     Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
     self->backendContext = NULL;
     self->dirtyBits = ClearColorDirty | ClearDepthDirty | RelativeRectangleDirty | CanvasSizeDirty;
@@ -306,51 +300,7 @@ Arcadia_Engine_Visuals_Implementation_ViewportNode_renderImpl
 {
   Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)renderingContextNode->backendContext);
   if (self->backendContext) {
-#if 0
-    if (!self->viewportResource) {
-      self->viewportResource =
-        Arcadia_Visuals_Implementation_BackendContext_createViewportResource
-          (
-            thread,
-            self->backendContext
-          );
-      Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource);
-    }
-    Arcadia_Visuals_Implementation_Resource_render(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewportResource,
-                                                           renderingContextNode->enterPassResource);
-    if (self->dirtyBits & ClearColorDirty) {
-      Arcadia_Visuals_Implementation_ViewportResource_setClearColor(thread, self->viewportResource,
-                                                                            self->clearColor);
-      self->dirtyBits &= ~ClearColorDirty;
-    }
-    if (self->dirtyBits & ClearColorBufferDirty) {
-      Arcadia_Visuals_Implementation_ViewportResource_setClearColorBuffer(thread, self->viewportResource, self->clearColorBuffer);
-      self->dirtyBits &= ~ClearColorBufferDirty;
-    }
-    if (self->dirtyBits & ClearDepthDirty) {
-      Arcadia_Visuals_Implementation_ViewportResource_setClearDepth(thread, self->viewportResource,
-                                                                            self->clearDepth);
-      self->dirtyBits &= ~ClearDepthDirty;
-    }
-    if (self->dirtyBits & ClearDepthBufferDirty) {
-      Arcadia_Visuals_Implementation_ViewportResource_setClearDepthBuffer(thread, self->viewportResource, self->clearDepthBuffer);
-      self->dirtyBits &= ~ClearDepthBufferDirty;
-    }
-    if (self->dirtyBits & RelativeRectangleDirty) {
-      Arcadia_Visuals_Implementation_ViewportResource_setRelativeViewportRectangle(thread, self->viewportResource,
-                                                                                           self->relativeViewportRectangle.left,
-                                                                                           self->relativeViewportRectangle.bottom,
-                                                                                           self->relativeViewportRectangle.right,
-                                                                                           self->relativeViewportRectangle.top);
-      self->dirtyBits &= ~RelativeRectangleDirty;
-    }
-    if (self->dirtyBits & CanvasSizeDirty) {
-      Arcadia_Visuals_Implementation_ViewportResource_setCanvasSize(thread, self->viewportResource,
-                                                                            self->canvasSize.width,
-                                                                            self->canvasSize.height);
-      self->dirtyBits &= ~CanvasSizeDirty;
-    }
-#endif
+    /*Intentionally empty.*/
   }
 }
 

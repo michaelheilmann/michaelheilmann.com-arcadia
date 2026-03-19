@@ -13,14 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VPL_CONSTANTSCALAR_H_INCLUDED)
-#define ARCADIA_VPL_CONSTANTSCALAR_H_INCLUDED
+#if !defined(ARCADIA_VPL_SYMBOLS_CONSTANTSCALAR_H_INCLUDED)
+#define ARCADIA_VPL_SYMBOLS_CONSTANTSCALAR_H_INCLUDED
 
 #if !defined(ARCADIA_VPL_PRIVATE) || 1 != ARCADIA_VPL_PRIVATE
   #error("do not include directly, include `Arcadia/VPL/Include.h` instead")
 #endif
 #include "Arcadia/VPL/Symbols/Constant.h"
-typedef struct Arcadia_VPL_Program Arcadia_VPL_Program;
+typedef struct Arcadia_VPL_Symbols_Program Arcadia_VPL_Symbols_Program;
 
 // A constant scalar.
 // The "constant scalar" maps to an "uniform block" of the scalar's name containing a single field called "value".
@@ -28,19 +28,19 @@ typedef struct Arcadia_VPL_Program Arcadia_VPL_Program;
 // ```
 // 'constant' 'scalar' <name> ':' <type> ';'
 // ```
-Arcadia_declareObjectType(u8"Arcadia.VPL.ConstantScalar", Arcadia_VPL_ConstantScalar,
-                          u8"Arcadia.VPL.Constant");
+Arcadia_declareObjectType(u8"Arcadia.VPL.Symbols.ConstantScalar", Arcadia_VPL_Symbols_ConstantScalar,
+                          u8"Arcadia.VPL.Symbols.Constant");
 
-struct Arcadia_VPL_ConstantScalarDispatch {
-  Arcadia_VPL_ConstantDispatch _parent;
+struct Arcadia_VPL_Symbols_ConstantScalarDispatch {
+  Arcadia_VPL_Symbols_ConstantDispatch _parent;
 };
 
-struct Arcadia_VPL_ConstantScalar {
-  Arcadia_VPL_Constant _parent;
+struct Arcadia_VPL_Symbols_ConstantScalar {
+  Arcadia_VPL_Symbols_Constant _parent;
   Arcadia_String* name;
-  Arcadia_String* type;
+  Arcadia_VPL_Symbols_Symbol* type;
   /// The program owning this constant scalar.
-  Arcadia_VPL_Program* program;
+  Arcadia_VPL_Symbols_Program* program;
 };
 
 /// @brief Create a constant scalar.
@@ -48,13 +48,13 @@ struct Arcadia_VPL_ConstantScalar {
 /// @param name The name.
 /// @param type The type.
 /// @param program The program.
-Arcadia_VPL_ConstantScalar*
-Arcadia_VPL_ConstantScalar_create
+Arcadia_VPL_Symbols_ConstantScalar*
+Arcadia_VPL_Symbols_ConstantScalar_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* name,
-    Arcadia_String* type,
-    Arcadia_VPL_Program* program
+    Arcadia_VPL_Symbols_Symbol* type,
+    Arcadia_VPL_Symbols_Program* program
   );
 
-#endif // ARCADIA_VPL_CONSTANTSCALAR_H_INCLUDED
+#endif // ARCADIA_VPL_SYMBOLS_CONSTANTSCALAR_H_INCLUDED

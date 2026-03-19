@@ -19,7 +19,16 @@
 #if !defined(ARCADIA_VPL_PRIVATE) || 1 != ARCADIA_VPL_PRIVATE
   #error("do not include directly, include `Arcadia/VPL/Include.h` instead")
 #endif
+
 #include "Arcadia/VPL/Tree/BinaryExprNode.h"
+#include "Arcadia/VPL/Tree/CallExprNode.h"
+#include "Arcadia/VPL/Tree/ConstantRecordDefnNode.h"
+#include "Arcadia/VPL/Tree/NameExprNode.h"
+#include "Arcadia/VPL/Tree/NumberExprNode.h"
 #include "Arcadia/VPL/Tree/Node.h"
+#include "Arcadia/VPL/Tree/NodeFactory.h"
+#include "Arcadia/VPL/Tree/ProcedureDefnNode.h"
+#include "Arcadia/VPL/Tree/ProgramDefnNode.h"
+#include "Arcadia/VPL/Tree/VariableDefnNode.h"
 
 #endif // ARCADIA_VISUALS_VPL_TREE_INCLUDE_H_INCLUDED

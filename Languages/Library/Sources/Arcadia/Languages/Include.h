@@ -20,6 +20,7 @@
 #define ARCADIA_LANGUAGES_PRIVATE (1)
 
 #include "Arcadia/Languages/Diagnostics.h"
+#include "Arcadia/Languages/mangleName.h"
 #include "Arcadia/Languages/Scanner.h"
 #include "Arcadia/Languages/Scope.h"
 #include "Arcadia/Languages/StringTable.h"

@@ -1266,11 +1266,6 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_visitImpl
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->systemWindow);
   }
   // "visitation" of "resources" is not necessary as "backend context" holds a GC lock for this object.
-#if 0
-  if (self->resources) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->resources);
-  }
-#endif
 }
 
 static Arcadia_List*

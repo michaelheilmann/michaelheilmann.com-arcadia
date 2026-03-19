@@ -32,6 +32,21 @@
           Its mission is to give developers, artists, and tinkerer's a future-proof space where games aren't just built - they are understood, reborn, and kept alive.
           </p>
           <p>Find out more under <a href='@{siteAddress}/Arcadia/'>@{siteAddress}/Arcadia/</a></p>
+          <div style="margin-top: 1.5rem; font-weight: bold">Update 2026-02-24</div>
+          <div>
+            <ul style="list-style-position: inside">
+              <li><em>Arcadia Engine.Visuals</em> and <em>Arcadia Engine.Audials</em> were merged into <em>Arcadia Engine</em>; this acknowledges that more complex nodes, for example a user interface, use both audials and visuals</li>
+              <li>pixel buffers and pixel formats, and pixel buffer operations, as well as sample buffers, sample formats, and sample buffer operations were assembled into <em>Arcadia Media</em>; this library will subsume most procedural functionality</li>
+              <li>confine external functionality related to image loading and saving into <em>Arcadia ImageIO</em> library. This library supports the formats bmp, ico (both the bmp and png variants), and png on all platforms.</li>
+              <li><em>Arcadia ADL</em>, which stands for <em>Asset Description Language</em>, which is not yet documented, adds support for descriptions of 
+                <ul>
+                  <li>pixel buffers, fill, checkerboard fill</li>
+                  <li>sample buffers, generation of sine waves and white noise</li>
+                  <li>textures, meshes, models</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

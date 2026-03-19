@@ -13,11 +13,15 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+#define ARCADIA_VPL_PRIVATE (1)
 #include "Arcadia/VPL/GLSL/Transpiler.h"
 
 #include "Arcadia/Languages/Include.h"
+#include "Arcadia/VPL/Tree/Include.h"
+#include "Arcadia/VPL/Symbols/Include.h"
 #include "Arcadia/VPL/SemanticalAnalysis.h"
-#include "Arcadia/VPL/Include.h"
+#include "Arcadia/VPL/ResolvePhase.h"
+
 #include <string.h>
 
 static const char ZEROTERMINATOR =
@@ -27,6 +31,14 @@ static const char ZEROTERMINATOR =
 static const char* HEADER =
   "#version 420 core\n"
   ;
+
+static Arcadia_String*
+S
+  (
+    Arcadia_Thread* thread,
+    const char* string
+  )
+{ return Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), string); }
 
 static void
 emitCxxString
@@ -49,7 +61,7 @@ writeType
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_String* type,
+    Arcadia_VPL_Symbols_Symbol* type,
     Arcadia_ByteBuffer* target
   );
 
@@ -59,8 +71,8 @@ writeVariableScalar
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Context context,
-    Arcadia_Map* symbols,
-    Arcadia_VPL_VariableScalar* variableScalar,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_VPL_Symbols_VariableScalar* variableScalar,
     Arcadia_ByteBuffer* target
   );
 
@@ -70,9 +82,9 @@ writeConstantScalar
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Context context,
-    Arcadia_Map* constantBlockMapping,
-    Arcadia_Map* symbols,
-    Arcadia_VPL_ConstantScalar* constantScalar,
+    Arcadia_Map* constantMapping,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_VPL_Symbols_ConstantScalar* constantScalar,
     Arcadia_ByteBuffer* target
   );
 
@@ -82,9 +94,9 @@ writeConstantRecord
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Context context,
-    Arcadia_Map* constantBlockMapping,
-    Arcadia_Map* symbols,
-    Arcadia_VPL_ConstantRecord* constantBlock,
+    Arcadia_Map* constantMapping,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_VPL_Symbols_ConstantRecord* constantBlock,
     Arcadia_ByteBuffer* target
   );
 
@@ -131,65 +143,17 @@ Arcadia_VPL_Backends_GLSL_Transpiler_constructImpl
     Arcadia_VPL_Backends_GLSL_Transpiler* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_VPL_Backends_GLSL_Transpiler_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_VPL_Backends_GLSL_Transpiler);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->semanticalAnalysis = Arcadia_VPL_SemanticalAnalysis_create(thread);
-  Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
-  self->MAT4 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"mat4");
-  self->VEC2 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec2");
-  self->VEC3 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec3");
-  self->VEC4 = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"vec4");
-  self->SAMPLER2D = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, stringTable, u8"sampler2D");
-  self->names = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
-
-#define Define(vpl, glsl) \
-  { \
-    Arcadia_String* source = Arcadia_String_createFromCxxString(thread, vpl); \
-    Arcadia_String* target = Arcadia_String_createFromCxxString(thread, glsl); \
-    Arcadia_Map_set(thread, self->names, Arcadia_Value_makeObjectReferenceValue(source), Arcadia_Value_makeObjectReferenceValue(target), NULL, NULL); \
-  }
-
-  // Passes mesh information to the vertex program.
-  Define("vertexProgram.inputs.mesh", "_mesh0");
-  // Passes model information to the vertex program.
-  Define("vertexProgram.inputs.model", "_model0");
-  // Passes viewer information to the vertex program.
-  Define("vertexProgram.inputs.viewer", "_viewer0");
-  // Passses the per-vertex ambient color into to vertex program.
-  Define("vertexProgram.inputs.vertex.ambientColor", "_0_vertexAmbientColor");
-
-  // Passes the per-vertex ambient color texture coordinates into the vertex program.
-  Define("vertexProgram.inputs.vertex.ambientColorTextureCoordinate", "_0_vertexAmbientColorTextureCoordinate");
-
-  // Pass vertex program -> fragment program ambient color.
-  Define("fragmentProgram.inputs.vertex.ambientColor", "_1_vertexAmbientColor");
-  // Pass vertex program -> fragment program ambient color texture coordinates.
-  Define("fragmentProgram.inputs.vertex.ambientColorTextureCoordinate", "_1_vertexAmbientColorTextureCoordinate");
-
-  // Vertex position input of fragment program.
-  // This is an output for the vertex program and an input for the fragment program.
-  Define("fragmentProgram.inputs.vertex.position", "_1_vertexPosition");
-  // Vertex position input of vertex program.
-  // This is an input for the vertex program.
-  Define("vertexProgram.inputs.vertex.position", "_0_vertexPosition");
-  // Output of fragment program to rasterizer.
-  Define("rasterizerProgram.inputs.fragmentColor", "_2_fragmentColor");
-
-#undef Define
-
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
-}
-
-static Arcadia_String* mapName(Arcadia_Thread* thread, Arcadia_VPL_Backends_GLSL_Transpiler* self, Arcadia_String* name) {
-  return (Arcadia_String*)Arcadia_Map_getObjectReferenceValueChecked(thread, self->names, Arcadia_Value_makeObjectReferenceValue(name), _Arcadia_String_getType(thread));
+  self->symbolNameMapping = NULL;
+  Arcadia_LeaveConstructor(Arcadia_VPL_Backends_GLSL_Transpiler);
 }
 
 static void
@@ -207,26 +171,8 @@ Arcadia_VPL_Backends_GLSL_Transpiler_visitImpl
     Arcadia_VPL_Backends_GLSL_Transpiler* self
   )
 {
-  if (self->semanticalAnalysis) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->semanticalAnalysis);
-  }
-  if (self->MAT4) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->MAT4);
-  }
-  if (self->VEC2) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC2);
-  }
-  if (self->VEC3) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC3);
-  }
-  if (self->VEC4) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->VEC4);
-  }
-  if (self->SAMPLER2D) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->SAMPLER2D);
-  }
-  if (self->names) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->names);
+  if (self->symbolNameMapping) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->symbolNameMapping);
   }
 }
 
@@ -248,9 +194,7 @@ emitCxxString
     Arcadia_ByteBuffer* target,
     const char* p
   )
-{
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, p, strlen(p));
-}
+{ Arcadia_ByteBuffer_insertBackBytes(thread, target, p, strlen(p)); }
 
 static void
 emitString
@@ -259,35 +203,28 @@ emitString
     Arcadia_ByteBuffer* target,
     Arcadia_String* p
   )
-{
-  Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, p),
-                                                     Arcadia_String_getNumberOfBytes(thread, p));
-}
+{ Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, p), Arcadia_String_getNumberOfBytes(thread, p)); }
 
 static void
 writeType
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_String* type,
+    Arcadia_VPL_Symbols_Symbol* type,
     Arcadia_ByteBuffer* target
   )
 {
-  Arcadia_Value v = Arcadia_Value_makeObjectReferenceValue(type);
-  if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->MAT4, &v)) {
-    emitString(thread, target, self->MAT4);
-  } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->VEC2, &v)) {
-    emitString(thread, target, self->VEC2);
-  } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->VEC3, &v)) {
-    emitString(thread, target, self->VEC3);
-  } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->VEC4, &v)) {
-    emitString(thread, target, self->VEC4);
-  } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)self->SAMPLER2D, &v)) {
-    emitString(thread, target, self->SAMPLER2D);
-  } else {
+  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)type, _Arcadia_VPL_Symbols_BuiltinType_getType(thread))) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_Value nameValue = Arcadia_Map_get(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(type));
+  if (Arcadia_Value_isVoidValue(&nameValue)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
+  Arcadia_String* nameString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValueChecked(thread, nameValue, _Arcadia_String_getType(thread));
+  emitString(thread, target, nameString);
 }
 
 static void
@@ -296,40 +233,45 @@ writeVariableScalar
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Context context,
-    Arcadia_Map* symbols,
-    Arcadia_VPL_VariableScalar* variableScalar,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_VPL_Symbols_VariableScalar* variableScalar,
     Arcadia_ByteBuffer* target
   )
 {
   switch (context) {
     case Context_VertexShader: {
-      if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_Vertex) == Arcadia_VPL_ScalarFlags_Vertex) {
-        if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_Constant) == Arcadia_VPL_ScalarFlags_Constant) {
-          emitCxxString(thread, target, "layout(binding = ");
-          emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
-          emitCxxString(thread, target, u8") ");
-          emitCxxString(thread, target, u8"uniform");
-        } else {
-          emitCxxString(thread, target, "layout(location = ");
-          emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
-          emitCxxString(thread, target, u8") ");
-          emitCxxString(thread, target, u8"in");
-        }
+      if ((variableScalar->flags & Arcadia_VPL_Symbols_VariableScalarFlags_VertexProcessing) == Arcadia_VPL_Symbols_VariableScalarFlags_VertexProcessing) {
+        emitCxxString(thread, target, "layout(location = ");
+        emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
+        emitCxxString(thread, target, u8") ");
+        emitCxxString(thread, target, u8"in");
         emitCxxString(thread, target, u8" ");
         writeType(thread, self, variableScalar->type, target);
         emitCxxString(thread, target, u8" ");
-        emitString(thread, target, variableScalar->name);
+
+        Arcadia_String* mangledName = Arcadia_Languages_mangleName(thread, Arcadia_Value_makeObjectReferenceValue(variableScalar->name));
+        Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(variableScalar), Arcadia_Value_makeObjectReferenceValue(mangledName), NULL, NULL);
+
+        emitString(thread, target, mangledName);
+
         emitCxxString(thread, target, u8";\n");
-      } else if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_Fragment) == Arcadia_VPL_ScalarFlags_Fragment) {
-        if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_Constant) == 0) {
+      } else if ((variableScalar->flags & Arcadia_VPL_Symbols_VariableScalarFlags_FragmentProcessing) == Arcadia_VPL_Symbols_VariableScalarFlags_FragmentProcessing) {
+        if (Arcadia_VPL_Symbols_VariableScalarFlags_PositionSemantics == (variableScalar->flags & Arcadia_VPL_Symbols_VariableScalarFlags_PositionSemantics)) {
+          Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(variableScalar), Arcadia_Value_makeObjectReferenceValue(S(thread, "gl_Position")), NULL, NULL);
+        } else {
           emitCxxString(thread, target, u8"out");
           emitCxxString(thread, target, u8" ");
           writeType(thread, self, variableScalar->type, target);
           emitCxxString(thread, target, u8" ");
-          emitString(thread, target, variableScalar->name);
+
+          Arcadia_String* mangledName = Arcadia_Languages_mangleName(thread, Arcadia_Value_makeObjectReferenceValue(variableScalar->name));
+          Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(variableScalar), Arcadia_Value_makeObjectReferenceValue(mangledName), NULL, NULL);
+
+          emitString(thread, target, mangledName);
+
           emitCxxString(thread, target, u8";\n");
         }
-      } else if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_FrameBuffer) == Arcadia_VPL_ScalarFlags_FrameBuffer) {
+      } else if ((variableScalar->flags & Arcadia_VPL_Symbols_VariableScalarFlags_PixelProcessing) == Arcadia_VPL_Symbols_VariableScalarFlags_PixelProcessing) {
         /*Intentionally empty.*/
       } else {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -337,28 +279,31 @@ writeVariableScalar
       }
     } break;
     case Context_FragmentShader: {
-      if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_Vertex) == Arcadia_VPL_ScalarFlags_Vertex) {
+      if ((variableScalar->flags & Arcadia_VPL_Symbols_VariableScalarFlags_VertexProcessing) == Arcadia_VPL_Symbols_VariableScalarFlags_VertexProcessing) {
         /*Intentionally empty.*/
-      } else if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_Fragment) == Arcadia_VPL_ScalarFlags_Fragment) {
-        if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_Constant) == Arcadia_VPL_ScalarFlags_Constant) {
-          emitCxxString(thread, target, "layout(binding = ");
-          emitString(thread, target, Arcadia_String_createFromInteger32(thread, variableScalar->location));
-          emitCxxString(thread, target, u8") ");
-          emitCxxString(thread, target, u8"uniform");
-        } else {
-          emitCxxString(thread, target, u8"in");
-        }
+      } else if ((variableScalar->flags & Arcadia_VPL_Symbols_VariableScalarFlags_FragmentProcessing) == Arcadia_VPL_Symbols_VariableScalarFlags_FragmentProcessing) {
+        emitCxxString(thread, target, u8"in");
         emitCxxString(thread, target, u8" ");
         writeType(thread, self, variableScalar->type, target);
         emitCxxString(thread, target, u8" ");
-        emitString(thread, target, variableScalar->name);
+
+        Arcadia_String* mangledName = Arcadia_Languages_mangleName(thread, Arcadia_Value_makeObjectReferenceValue(variableScalar->name));
+        Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(variableScalar), Arcadia_Value_makeObjectReferenceValue(mangledName), NULL, NULL);
+
+        emitString(thread, target, mangledName);
+
         emitCxxString(thread, target, u8";\n");
-      } else if ((variableScalar->flags & Arcadia_VPL_ScalarFlags_FrameBuffer) == Arcadia_VPL_ScalarFlags_FrameBuffer) {
+      } else if ((variableScalar->flags & Arcadia_VPL_Symbols_VariableScalarFlags_PixelProcessing) == Arcadia_VPL_Symbols_VariableScalarFlags_PixelProcessing) {
         emitCxxString(thread, target, u8"out");
         emitCxxString(thread, target, u8" ");
         writeType(thread, self, variableScalar->type, target);
         emitCxxString(thread, target, u8" ");
-        emitString(thread, target, variableScalar->name);
+
+        Arcadia_String* mangledName = Arcadia_Languages_mangleName(thread, Arcadia_Value_makeObjectReferenceValue(variableScalar->name));
+        Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(variableScalar), Arcadia_Value_makeObjectReferenceValue(mangledName), NULL, NULL);
+
+        emitString(thread, target, mangledName);
+
         emitCxxString(thread, target, u8";\n");
       } else {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -378,12 +323,30 @@ writeConstantScalar
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Context context,
-    Arcadia_Map* constantBlockMapping,
-    Arcadia_Map* symbols,
-    Arcadia_VPL_ConstantScalar* constantScalar,
+    Arcadia_Map* constantMapping,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_VPL_Symbols_ConstantScalar* constantScalar,
     Arcadia_ByteBuffer* target
   )
-{ }
+{ 
+  // <uniform> : 'uniform' <type> <instance name>;
+  Arcadia_String* name = Arcadia_VPL_Symbols_Symbol_getName(thread, (Arcadia_VPL_Symbols_Symbol*)constantScalar);
+
+  // Add the VPL constant scalar name to GL uniform scalar name to the map.
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
+  Arcadia_StringBuffer_insertCodePointBack(thread, stringBuffer, '\0');
+  Arcadia_String* glName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
+  Arcadia_Map_set(thread, constantMapping, Arcadia_Value_makeObjectReferenceValue(name), Arcadia_Value_makeObjectReferenceValue(glName), NULL, NULL);
+  Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(constantScalar), Arcadia_Value_makeObjectReferenceValue(name), NULL, NULL);
+
+  emitCxxString(thread, target, u8"uniform");
+  emitCxxString(thread, target, u8"  ");
+  writeType(thread, self, constantScalar->type, target);
+  emitCxxString(thread, target, u8"  ");
+  emitString(thread, target, constantScalar->name);
+  emitCxxString(thread, target, u8";\n");
+}
 
 static void
 writeConstantRecord
@@ -391,13 +354,13 @@ writeConstantRecord
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
     Context context,
-    Arcadia_Map* constantBlockMapping,
-    Arcadia_Map* symbols,
-    Arcadia_VPL_ConstantRecord* constantBlock,
+    Arcadia_Map* constantMapping,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_VPL_Symbols_ConstantRecord* constantBlock,
     Arcadia_ByteBuffer* target
   )
 {
-  // <constant block> : 'layout(std140)' 'uniform' <name> '{' <fields> '} '_'<name> ';'
+  // <uniform block> : 'layout(std140)' 'uniform' <name> '{' <fields> '} '_'<name> ';'
   // <fields>: <field> ';' <fields>
   //         |
   // <field> : <type> <name>
@@ -416,31 +379,29 @@ writeConstantRecord
   //
   // - <instance name> and <block name> of a block must be different.
 
-  Arcadia_String* name = constantBlock->name;
+  Arcadia_String* name = Arcadia_VPL_Symbols_Symbol_getName(thread, (Arcadia_VPL_Symbols_Symbol*)constantBlock);
 
   // Add the VPL constant block name to GL uniform block name to the map.
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
   Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
   Arcadia_StringBuffer_insertCodePointBack(thread, stringBuffer, '\0');
-  Arcadia_String* glBlockName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
-  Arcadia_Map_set(thread, constantBlockMapping, Arcadia_Value_makeObjectReferenceValue(constantBlock->name), Arcadia_Value_makeObjectReferenceValue(glBlockName), NULL, NULL);
+  Arcadia_String* glName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
+  Arcadia_Map_set(thread, constantMapping, Arcadia_Value_makeObjectReferenceValue(name), Arcadia_Value_makeObjectReferenceValue(glName), NULL, NULL);
 
-  // ensure there is no block in the blocks visited so far with the same name.
-  // create an unique numeric id for that block.
-  Arcadia_Value id = Arcadia_Map_get(thread, symbols, Arcadia_Value_makeObjectReferenceValue(name));
-  if (!Arcadia_Value_isVoidValue(&id)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-    Arcadia_Thread_jump(thread);
-  }
-  id = Arcadia_Value_makeSizeValue(Arcadia_Collection_getSize(thread, (Arcadia_Collection*)symbols));
-  Arcadia_Map_set(thread, symbols, Arcadia_Value_makeObjectReferenceValue(name), id, NULL, NULL);
+  // Generate an <instance name>.
+  Arcadia_StringBuffer_clear(thread, stringBuffer);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, "_");
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, Arcadia_String_createFromNatural32(thread, self->numberOfConstantBlocks++));
+  Arcadia_String* glInstanceName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
+  Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(constantBlock), Arcadia_Value_makeObjectReferenceValue(glInstanceName), NULL, NULL);
 
-  Arcadia_List* fields = Arcadia_VPL_ConstantRecord_getFields(thread, constantBlock);
+  Arcadia_List* fields = Arcadia_VPL_Symbols_ConstantRecord_getFields(thread, constantBlock);
   emitCxxString(thread, target, u8"layout(std140) uniform ");
   Arcadia_ByteBuffer_insertBackBytes(thread, target, Arcadia_String_getBytes(thread, name), Arcadia_String_getNumberOfBytes(thread, name));
   emitCxxString(thread, target, u8" {\n");
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)fields); i < n; ++i) {
-    Arcadia_VPL_ConstantRecordField* field = Arcadia_List_getObjectReferenceValueAt(thread, fields, i);
+    Arcadia_VPL_Symbols_Variable* field = Arcadia_List_getObjectReferenceValueAt(thread, fields, i);
     emitCxxString(thread, target, u8"  ");
     writeType(thread, self, field->type, target);
     emitCxxString(thread, target, u8" ");
@@ -448,15 +409,12 @@ writeConstantRecord
     emitCxxString(thread, target, u8";\n");
   }
   emitCxxString(thread, target, u8"}");
-  Arcadia_String* temporary = Arcadia_String_createFromSize(thread, Arcadia_Value_getSizeValue(&id));
-  emitCxxString(thread, target, u8"_");
-  emitString(thread, target, constantBlock->name);
-  emitString(thread, target, temporary);
+  emitString(thread, target, glInstanceName);
   emitCxxString(thread, target, u8";\n");
 }
 
 static void
-onParameterVaribleDefinitionTree
+onParameterVariableDefinitionTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
@@ -465,7 +423,7 @@ onParameterVaribleDefinitionTree
   );
 
 static void
-onExpressionTree
+onExprTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
@@ -474,11 +432,11 @@ onExpressionTree
   );
 
 static void
-onNameTree
+onNameExprTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Tree_Node* tree,
+    Arcadia_VPL_Tree_NameExprNode* tree,
     Arcadia_ByteBuffer* target
   );
 
@@ -487,21 +445,21 @@ onStatementListTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Tree_Node* tree,
+    Arcadia_List* statementList,
     Arcadia_ByteBuffer* target
   );
 
 static void
-onFunctionDefinitionTree
+onProcedureSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Tree_Node* tree,
+    Arcadia_VPL_Symbols_Procedure* symbol,
     Arcadia_ByteBuffer* target
   );
 
 static void
-onParameterVaribleDefinitionTree
+onParameterVariableDefinitionTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
@@ -509,17 +467,17 @@ onParameterVaribleDefinitionTree
     Arcadia_ByteBuffer* target
   )
 {
-  if (tree->flags != Arcadia_VPL_Tree_NodeFlags_ParameterVariableDefinition) {
+  if (tree->flags != Arcadia_VPL_Tree_NodeFlags_VariableDefinition) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  onNameTree(thread, self, tree->parameterVariableDefinition.type, target);
+  writeType(thread, self, ((Arcadia_VPL_Tree_VariableDefnNode*)tree)->typeSymbol, target);
   emitCxxString(thread, target, " ");
-  onNameTree(thread, self, tree->parameterVariableDefinition.name, target);
+  emitString(thread, target, ((Arcadia_VPL_Tree_VariableDefnNode*)tree)->name);
 }
 
 static void
-onExpressionTree
+onExprTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
@@ -529,75 +487,76 @@ onExpressionTree
 {
   switch (tree->flags) {
     case Arcadia_VPL_Tree_NodeFlags_BinaryExpr: {
-      Arcadia_VPL_Tree_BinaryExprNode* binaryExpressionNode = (Arcadia_VPL_Tree_BinaryExprNode*)tree;
+      Arcadia_VPL_Tree_BinaryExprNode* binaryExpression = (Arcadia_VPL_Tree_BinaryExprNode*)tree;
 
-      switch (binaryExpressionNode->kind) {
+      switch (binaryExpression->kind) {
         case Arcadia_VPL_Tree_BinaryExprNodeFlags_Access: {
           emitCxxString(thread, target, "(");
-          onExpressionTree(thread, self, binaryExpressionNode->lhs, target);
+          onExprTree(thread, self, binaryExpression->lhs, target);
           emitCxxString(thread, target, ".");
-          onExpressionTree(thread, self, binaryExpressionNode->rhs, target);
+          onExprTree(thread, self, binaryExpression->rhs, target);
           emitCxxString(thread, target, ")");
         } break;
         case Arcadia_VPL_Tree_BinaryExprNodeFlags_Add: {
           emitCxxString(thread, target, "(");
-          onExpressionTree(thread, self, binaryExpressionNode->lhs, target);
+          onExprTree(thread, self, binaryExpression->lhs, target);
           emitCxxString(thread, target, " + ");
-          onExpressionTree(thread, self, binaryExpressionNode->rhs, target);
+          onExprTree(thread, self, binaryExpression->rhs, target);
           emitCxxString(thread, target, ")");
         } break;
         case Arcadia_VPL_Tree_BinaryExprNodeFlags_Subtract: {
           emitCxxString(thread, target, "(");
-          onExpressionTree(thread, self, binaryExpressionNode->lhs, target);
+          onExprTree(thread, self, binaryExpression->lhs, target);
           emitCxxString(thread, target, " - ");
-          onExpressionTree(thread, self, binaryExpressionNode->rhs, target);
+          onExprTree(thread, self, binaryExpression->rhs, target);
           emitCxxString(thread, target, ")");
         } break;
         case Arcadia_VPL_Tree_BinaryExprNodeFlags_Multiply: {
           emitCxxString(thread, target, "(");
-          onExpressionTree(thread, self, binaryExpressionNode->lhs, target);
+          onExprTree(thread, self, binaryExpression->lhs, target);
           emitCxxString(thread, target, " * ");
-          onExpressionTree(thread, self, binaryExpressionNode->rhs, target);
+          onExprTree(thread, self, binaryExpression->rhs, target);
           emitCxxString(thread, target, ")");
         } break;
         case Arcadia_VPL_Tree_BinaryExprNodeFlags_Divide: {
           emitCxxString(thread, target, "(");
-          onExpressionTree(thread, self, binaryExpressionNode->lhs, target);
+          onExprTree(thread, self, binaryExpression->lhs, target);
           emitCxxString(thread, target, " / ");
-          onExpressionTree(thread, self, binaryExpressionNode->rhs, target);
+          onExprTree(thread, self, binaryExpression->rhs, target);
           emitCxxString(thread, target, ")");
         } break;
         case Arcadia_VPL_Tree_BinaryExprNodeFlags_Assignment: {
           emitCxxString(thread, target, u8"  ");
-          onExpressionTree(thread, self, binaryExpressionNode->lhs, target);
+          onExprTree(thread, self, binaryExpression->lhs, target);
           emitCxxString(thread, target, u8" = ");
-          onExpressionTree(thread, self, binaryExpressionNode->rhs, target);
+          onExprTree(thread, self, binaryExpression->rhs, target);
           emitCxxString(thread, target, ";\n");
         } break;
       };
     } break;
 
-    case Arcadia_VPL_Tree_NodeFlags_Name: {
-      emitString(thread, target, tree->name.name);
+    case Arcadia_VPL_Tree_NodeFlags_NameExpr: {
+      onNameExprTree(thread, self, (Arcadia_VPL_Tree_NameExprNode*)tree, target);
     } break;
-    case Arcadia_VPL_Tree_NodeFlags_Number: {
+    case Arcadia_VPL_Tree_NodeFlags_NumberExpr: {
       emitCxxString(thread, target, "(");
-      emitString(thread, target, tree->literal);
+      emitString(thread, target, ((Arcadia_VPL_Tree_NumberExprNode*)tree)->literal);
       emitCxxString(thread, target, ")");
     } break;
-    case Arcadia_VPL_Tree_NodeFlags_Call: {
+    case Arcadia_VPL_Tree_NodeFlags_CallExpr: {
+      Arcadia_VPL_Tree_CallExprNode* callExprNode = (Arcadia_VPL_Tree_CallExprNode*)tree;
       //emitCxxString(thread, target, "(");
-      onExpressionTree(thread, self, tree->call.target, target);
+      onExprTree(thread, self, callExprNode->target, target);
       //emitCxxString(thread, target, ")");
       emitCxxString(thread, target, "(");
-      if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->call.arguments) > 0) {
+      if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)callExprNode->arguments) > 0) {
         Arcadia_VPL_Tree_Node* argument;
-        argument = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->call.arguments, 0, _Arcadia_VPL_Tree_Node_getType(thread));
-        onExpressionTree(thread, self, argument, target);
-        for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->call.arguments); i < n; ++i) {
-          argument = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->call.arguments, i, _Arcadia_VPL_Tree_Node_getType(thread));
+        argument = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, callExprNode->arguments, 0, _Arcadia_VPL_Tree_Node_getType(thread));
+        onExprTree(thread, self, argument, target);
+        for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)callExprNode->arguments); i < n; ++i) {
+          argument = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, callExprNode->arguments, i, _Arcadia_VPL_Tree_Node_getType(thread));
           emitCxxString(thread, target, ", ");
-          onExpressionTree(thread, self, argument, target);
+          onExprTree(thread, self, argument, target);
         }
       }
       emitCxxString(thread, target, ")");
@@ -610,19 +569,55 @@ onExpressionTree
 }
 
 static void
-onNameTree
+onNameExprTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Tree_Node* tree,
+    Arcadia_VPL_Tree_NameExprNode* node,
     Arcadia_ByteBuffer* target
   )
 {
-  if (tree->flags != Arcadia_VPL_Tree_NodeFlags_Name) {
+  if (!node->symbol) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node->symbol, _Arcadia_VPL_Symbols_ConstantRecord_getType(thread))) {
+    // Name refers to a constant record. Get the name from the VPL symbol -> GLSL name mapping.
+    Arcadia_Value nameValue = Arcadia_Map_get(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(node->symbol));
+    if (Arcadia_Value_isVoidValue(&nameValue)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_String* nameString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValueChecked(thread, nameValue, _Arcadia_String_getType(thread));
+    emitString(thread, target, nameString);
+  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node->symbol, _Arcadia_VPL_Symbols_VariableScalar_getType(thread))) {
+    // Name refers to a variable scalar. Get the name from the VPL symbol -> GLSL name mapping.
+    Arcadia_Value nameValue = Arcadia_Map_get(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(node->symbol));
+    if (Arcadia_Value_isVoidValue(&nameValue)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_String* nameString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValueChecked(thread, nameValue, _Arcadia_String_getType(thread));
+    emitString(thread, target, nameString);
+  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node->symbol, _Arcadia_VPL_Symbols_BuiltinType_getType(thread))) {
+    // Name refers to a builtin type. Get the name from the VPL symbol -> GLSL name mapping.
+    Arcadia_Value nameValue = Arcadia_Map_get(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(node->symbol));
+    if (Arcadia_Value_isVoidValue(&nameValue)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_String* nameString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValueChecked(thread, nameValue, _Arcadia_String_getType(thread));
+    emitString(thread, target, nameString);
+  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node->symbol, _Arcadia_VPL_Symbols_Variable_getType(thread))) {
+    emitString(thread, target, ((Arcadia_VPL_Symbols_Variable*)node->symbol)->name);
+  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node->symbol, _Arcadia_VPL_Symbols_Procedure_getType(thread))) {
+    emitString(thread, target, ((Arcadia_VPL_Symbols_Procedure*)node->symbol)->name);
+  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)node->symbol, _Arcadia_VPL_Symbols_ConstantScalar_getType(thread))) {
+    emitString(thread, target, ((Arcadia_VPL_Symbols_ConstantScalar*)node->symbol)->name);
+  } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  emitString(thread, target, tree->name.name);
 }
 
 static void
@@ -630,29 +625,25 @@ onStatementListTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Tree_Node* tree,
+    Arcadia_List* statementList,
     Arcadia_ByteBuffer* target
   )
 {
-  if (tree->flags != Arcadia_VPL_Tree_NodeFlags_StatementList) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->statementList); i < n; ++i) {
-    Arcadia_VPL_Tree_Node* a = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->statementList, i,
-                                                                                                                     _Arcadia_VPL_Tree_Node_getType(thread));
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)statementList); i < n; ++i) {
+    Arcadia_VPL_Tree_Node* a = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, statementList, i,
+                                                                                                     _Arcadia_VPL_Tree_Node_getType(thread));
     switch (a->flags) {
       case Arcadia_VPL_Tree_NodeFlags_VariableDefinition: {
         emitCxxString(thread, target, u8"  ");
-        onNameTree(thread, self, a->variableDefinition.type, target);
+        writeType(thread, self, ((Arcadia_VPL_Tree_VariableDefnNode*)a)->typeSymbol, target);
         emitCxxString(thread, target, u8" ");
-        onNameTree(thread, self, a->variableDefinition.name, target);
+        emitString(thread, target, ((Arcadia_VPL_Tree_VariableDefnNode*)a)->name);
         emitCxxString(thread, target, ";\n");
       } break;
       case Arcadia_VPL_Tree_NodeFlags_BinaryExpr:
-      case Arcadia_VPL_Tree_NodeFlags_Call:
-      case Arcadia_VPL_Tree_NodeFlags_Number: {
-        onExpressionTree(thread, self, a, target);
+      case Arcadia_VPL_Tree_NodeFlags_CallExpr:
+      case Arcadia_VPL_Tree_NodeFlags_NumberExpr: {
+        onExprTree(thread, self, a, target);
       } break;
       default: {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
@@ -663,54 +654,56 @@ onStatementListTree
 }
 
 static void
-onFunctionDefinitionTree
+onProcedureSymbol
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Tree_Node* tree,
+    Arcadia_VPL_Symbols_Procedure* symbol,
     Arcadia_ByteBuffer* target
   )
 {
-  onNameTree(thread, self, tree->functionDefinition.returnValueType, target);
+  Arcadia_VPL_Tree_ProcedureDefnNode* node = (Arcadia_VPL_Tree_ProcedureDefnNode*)symbol->node;
+  onNameExprTree(thread, self, ((Arcadia_VPL_Tree_ProcedureDefnNode*)node)->returnValueType, target);
   emitCxxString(thread, target, " ");
-  onNameTree(thread, self, tree->functionDefinition.name, target);
+  emitString(thread, target, ((Arcadia_VPL_Tree_ProcedureDefnNode*)node)->name);
   emitCxxString(thread, target, "(");
 
-  if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->functionDefinition.parameters) > 0) {
+  if (Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->parameters) > 0) {
     Arcadia_VPL_Tree_Node* parameter;
-    parameter = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->functionDefinition.parameters, 0, _Arcadia_VPL_Tree_Node_getType(thread));
-    onParameterVaribleDefinitionTree(thread, self, parameter, target);
-    for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)tree->functionDefinition.parameters); i < n; ++i) {
-      parameter = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, tree->functionDefinition.parameters, i, _Arcadia_VPL_Tree_Node_getType(thread));
+    parameter = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, node->parameters, 0, _Arcadia_VPL_Tree_Node_getType(thread));
+    onParameterVariableDefinitionTree(thread, self, parameter, target);
+    for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->parameters); i < n; ++i) {
+      parameter = (Arcadia_VPL_Tree_Node*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, node->parameters, i, _Arcadia_VPL_Tree_Node_getType(thread));
       emitCxxString(thread, target, ", ");
-      onParameterVaribleDefinitionTree(thread, self, parameter, target);
+      onParameterVariableDefinitionTree(thread, self, parameter, target);
     }
   }
 
   emitCxxString(thread, target, ")");
   emitCxxString(thread, target, " ");
   emitCxxString(thread, target, "{\n");
-  onStatementListTree(thread, self, tree->functionDefinition.body, target);
+  onStatementListTree(thread, self, node->body, target);
   emitCxxString(thread, target, "}\n");
 }
 
+// read Arcadia_Object* pointers and put them into a list until a null pointer is reached.
 static void
-OnCall1
+gather
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_Tree_Node* tree,
+    Arcadia_List* list,
     va_list arguments
   )
 {
-  Arcadia_VPL_Tree_Node* argument = va_arg(arguments, Arcadia_VPL_Tree_Node*);
+  Arcadia_Object* argument = va_arg(arguments, Arcadia_Object*);
   while (argument) {
-    Arcadia_List_insertBackObjectReferenceValue(thread, tree->call.arguments, (Arcadia_Object*)argument);
-    argument = va_arg(arguments, Arcadia_VPL_Tree_Node*);
+    Arcadia_List_insertBackObjectReferenceValue(thread, list, argument);
+    argument = va_arg(arguments, Arcadia_Object*);
   }
 }
 
 static Arcadia_VPL_Tree_Node*
-OnCall0
+TreeBuilder_callExpr1
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Tree_Node* target,
@@ -722,8 +715,8 @@ OnCall0
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_VPL_Tree_Node* tree = Arcadia_VPL_Tree_makeCall(thread, target);
-    OnCall1(thread, tree, arguments);
+    Arcadia_VPL_Tree_Node* tree = Arcadia_VPL_Tree_NodeFactory_makeCallExpr(thread, target);
+    gather(thread, ((Arcadia_VPL_Tree_CallExprNode*)tree)->arguments, arguments);
     va_end(arguments);
     Arcadia_Thread_popJumpTarget(thread);
     return tree;
@@ -731,85 +724,77 @@ OnCall0
     va_end(arguments);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_jump(thread);
-  }
-}
-
-static void
-OnStatementList1
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Tree_Node* tree,
-    va_list arguments
-  )
-{
-  Arcadia_VPL_Tree_Node* argument = va_arg(arguments, Arcadia_VPL_Tree_Node*);
-  while (argument) {
-    Arcadia_List_insertBackObjectReferenceValue(thread, tree->statementList, (Arcadia_Object*)argument);
-    argument = va_arg(arguments, Arcadia_VPL_Tree_Node*);
-  }
-}
-
-static Arcadia_VPL_Tree_Node*
-OnStatementList0
-  (
-    Arcadia_Thread* thread,
-    ...
-  )
-{
-  va_list arguments;
-  va_start(arguments, thread);
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_VPL_Tree_Node* tree = Arcadia_VPL_Tree_makeStatementList(thread);
-    OnStatementList1(thread, tree, arguments);
-    va_end(arguments);
-    Arcadia_Thread_popJumpTarget(thread);
-    return tree;
-  } else {
-    va_end(arguments);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_jump(thread);
-  }
-}
-
-static void
-OnParameterList1
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* list,
-    va_list arguments
-  )
-{
-  Arcadia_VPL_Tree_Node* argument = va_arg(arguments, Arcadia_VPL_Tree_Node*);
-  while (argument) {
-    Arcadia_List_insertBackObjectReferenceValue(thread, list, (Arcadia_Object*)argument);
-    argument = va_arg(arguments, Arcadia_VPL_Tree_Node*);
   }
 }
 
 static Arcadia_List*
-OnParameterList0
+TreeBuilder_list1
   (
     Arcadia_Thread* thread,
     ...
   )
 {
-  va_list arguments;
-  va_start(arguments, thread);
+  va_list elements;
+  va_start(elements, thread);
   Arcadia_JumpTarget jumpTarget;
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Arcadia_List* list = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-    OnParameterList1(thread, list, arguments);
-    va_end(arguments);
+    gather(thread, list, elements);
+    va_end(elements);
     Arcadia_Thread_popJumpTarget(thread);
     return list;
   } else {
-    va_end(arguments);
+    va_end(elements);
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_jump(thread);
   }
+}
+
+#define TreeBuilder_variableDefn(_type, _name) Arcadia_VPL_Tree_NodeFactory_makeVariableDefn(thread, _name, _type)
+
+#define TreeBuilder_assignmentExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeAssignmentExpr(thread, _lhs, _rhs)
+
+#define TreeBuilder_multiplyExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeMultiplyExpr(thread, _lhs, _rhs)
+
+#define TreeBuilder_divideExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeDivideExpr(thread, _lhs, _rhs)
+
+#define TreeBuilder_addExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeAddExpr(thread, _lhs, _rhs)
+
+#define TreeBuilder_subtractExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeSubtractExpr(thread, _lhs, _rhs)
+
+#define TreeBuilder_accessExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeAccessExpr(thread, _lhs, _rhs)
+
+#define TreeBuilder_realNumberExpr(_number) Arcadia_VPL_Tree_NodeFactory_makeNumberExpr(thread, S(thread, _number))
+
+#define TreeBuilder_callExpr(_target, ...) TreeBuilder_callExpr1(thread, _target, __VA_ARGS__ __VA_OPT__(,) NULL)
+
+#define TreeBuilder_statementList(...) TreeBuilder_list1(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
+
+#define TreeBuilder_parameterList(...) TreeBuilder_list1(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
+
+#define TreeBuilder_modifierList(...) TreeBuilder_list1(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
+
+#define TreeBuilder_name(_name) (Arcadia_VPL_Tree_Node*)Arcadia_VPL_Tree_NodeFactory_makeNameExpr(thread, S(thread, _name))
+
+#define TreeBuilder_procedureDefn(_modifiers, _returnValueType, _name, _parameters, _body) \
+  Arcadia_VPL_Tree_NodeFactory_makeProcedureDefn(thread, _modifiers, (Arcadia_VPL_Tree_NameExprNode*)_returnValueType, _name, _parameters, _body)
+
+static Arcadia_Map*
+computeInitialSymbolNameMapping
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_Program* program
+  )
+{ 
+  Arcadia_Map* map = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  Arcadia_Map_set(thread, map, Arcadia_Value_makeObjectReferenceValue(program->MAT4), Arcadia_Value_makeObjectReferenceValue(S(thread, "mat4")), NULL, NULL);
+  Arcadia_Map_set(thread, map, Arcadia_Value_makeObjectReferenceValue(program->SAMPLER2D), Arcadia_Value_makeObjectReferenceValue(S(thread, "sampler2D")), NULL, NULL);
+  Arcadia_Map_set(thread, map, Arcadia_Value_makeObjectReferenceValue(program->VEC2), Arcadia_Value_makeObjectReferenceValue(S(thread, "vec2")), NULL, NULL);
+  Arcadia_Map_set(thread, map, Arcadia_Value_makeObjectReferenceValue(program->VEC3), Arcadia_Value_makeObjectReferenceValue(S(thread, "vec3")), NULL, NULL);
+  Arcadia_Map_set(thread, map, Arcadia_Value_makeObjectReferenceValue(program->VEC4), Arcadia_Value_makeObjectReferenceValue(S(thread, "vec4")), NULL, NULL);
+  Arcadia_Map_set(thread, map, Arcadia_Value_makeObjectReferenceValue(program->VOID), Arcadia_Value_makeObjectReferenceValue(S(thread, "void")), NULL, NULL);
+  return map;
 }
 
 void
@@ -817,147 +802,134 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Program* program,
-    Arcadia_Map* constantBlockMapping,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_Map* constantMapping,
+    Arcadia_Map* vertexShaderVariableScalarMapping,
     Arcadia_ByteBuffer* target
   )
 {
-  // The global scope.
-  if (!program->scope) {
-    Arcadia_VPL_SemanticalAnalysis_run(thread, self->semanticalAnalysis, program);
-  }
-
+  self->symbolNameMapping = computeInitialSymbolNameMapping(thread, program);
+  self->numberOfConstantBlocks = 0;
   emitCxxString(thread, target, HEADER);
 
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)program->variableScalars); i < n; ++i) {
-    Arcadia_VPL_VariableScalar* variableScalar =
-      (Arcadia_VPL_VariableScalar*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, program->variableScalars, i,
-                                                                                         _Arcadia_VPL_VariableScalar_getType(thread));
-    writeVariableScalar(thread, self, Context_VertexShader, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), variableScalar, target);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)program->vertexStage->variableScalars); i < n; ++i) {
+    Arcadia_VPL_Symbols_VariableScalar* variableScalar =
+      (Arcadia_VPL_Symbols_VariableScalar*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, program->vertexStage->variableScalars, i,
+                                                                                         _Arcadia_VPL_Symbols_VariableScalar_getType(thread));
+    writeVariableScalar(thread, self, Context_VertexShader, program, variableScalar, target);
   }
 
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)program->constants); i < n; ++i) {
-    Arcadia_VPL_Constant* constant = (Arcadia_VPL_Constant*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, program->constants, i, _Arcadia_VPL_Constant_getType(thread));
-    if (Arcadia_VPL_Constant_getKind(thread, constant) == Arcadia_VPL_ConstantKind_Record) {
-      writeConstantRecord(thread, self, Context_VertexShader, constantBlockMapping, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)),
-                          (Arcadia_VPL_ConstantRecord*)constant, target);
+    Arcadia_VPL_Symbols_Constant* constant = (Arcadia_VPL_Symbols_Constant*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, program->constants, i, _Arcadia_VPL_Symbols_Constant_getType(thread));
+    if (Arcadia_VPL_Symbols_Constant_getKind(thread, constant) == Arcadia_VPL_ConstantKind_Record) {
+      writeConstantRecord(thread, self, Context_VertexShader, constantMapping, program, (Arcadia_VPL_Symbols_ConstantRecord*)constant, target);
+    } else if (Arcadia_VPL_Symbols_Constant_getKind(thread, constant) == Arcadia_VPL_ConstantKind_Scalar) {
+      writeConstantScalar(thread, self, Context_VertexShader, constantMapping, program, (Arcadia_VPL_Symbols_ConstantScalar*)constant, target);
     }
   }
 
-#define OnVariableDefinition(_type, _name) Arcadia_VPL_Tree_makeVariableDefinition(thread, _type, _name)
-#define OnAssignment(_lhs, _rhs) Arcadia_VPL_Tree_makeAssignment(thread, _lhs, _rhs)
-#define OnName(_name) Arcadia_VPL_Tree_makeName(thread, Arcadia_String_createFromCxxString(thread, _name))
-#define OnName2(_name) Arcadia_VPL_Tree_makeName(thread, mapName(thread, self, Arcadia_String_createFromCxxString(thread, _name)))
-#define OnMultiply(_lhs, _rhs) Arcadia_VPL_Tree_makeMultiply(thread, _lhs, _rhs)
-#define OnDivide(_lhs, _rhs) Arcadia_VPL_Tree_makeDivide(thread, _lhs, _rhs)
-#define OnAdd(_lhs, _rhs) Arcadia_VPL_Tree_makeAdd(thread, _lhs, _rhs)
-#define OnSubtract(_lhs, _rhs) Arcadia_VPL_Tree_makeSubtract(thread, _lhs, _rhs)
-#define OnAccess(_lhs, _rhs) Arcadia_VPL_Tree_makeAccess(thread, _lhs, _rhs)
-#define OnNumber(_number) Arcadia_VPL_Tree_makeNumber(thread, Arcadia_String_createFromCxxString(thread, _number))
-#define OnCall(_target, ...) OnCall0(thread, _target, __VA_ARGS__ __VA_OPT__(,) NULL)
-#define OnStatementList(...) OnStatementList0(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
-#define OnParameterList(...) OnParameterList0(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
-#define OnFunctionDefinition(_returnValueType, _name, _parameters, _body) \
-  Arcadia_VPL_Tree_makeFunctionDefinition(thread, _returnValueType, _name, _parameters, _body)
-
-  static const char* DEFINES =
-    "#define _1_vertexPosition gl_Position\n" // We use a #define to rename gl_Position to _1_vertexPosition.
-    ;
-
   Arcadia_VPL_Tree_Node* vertexColorAssignmentTree = NULL;
-  if (program->flags == Arcadia_VPL_ProgramFlags_MeshAmbientColor) {
+  if (program->flags == Arcadia_VPL_Symbols_ProgramFlags_MeshAmbientColor) {
     vertexColorAssignmentTree =
-      OnAssignment
+      TreeBuilder_assignmentExpr
         (
-          OnName2("fragmentProgram.inputs.vertex.ambientColor"),
-          OnAccess
+          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
+          TreeBuilder_accessExpr
             (
-              OnName2("vertexProgram.inputs.mesh"),
-              OnName("ambientColor") // getGlobal("vertexProgram.inputs.mesh.ambientColor")
+              TreeBuilder_name("mesh"),
+              TreeBuilder_name("ambientColor")
             )
         );
-  } else if (program->flags == Arcadia_VPL_ProgramFlags_VertexAmbientColor) {
+  } else if (program->flags == Arcadia_VPL_Symbols_ProgramFlags_VertexAmbientColor) {
     vertexColorAssignmentTree =
-      OnAssignment
+      TreeBuilder_assignmentExpr
         (
-          OnName2("fragmentProgram.inputs.vertex.ambientColor"),
-          OnName2("vertexProgram.inputs.vertex.ambientColor")
+          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
+          TreeBuilder_name("vertexProgram_inputs_vertex_ambientColor")
         );
-  } else if (program->flags == Arcadia_VPL_ProgramFlags_TextureAmbientColor) {
+  } else if (program->flags == Arcadia_VPL_Symbols_ProgramFlags_TextureAmbientColor) {
     vertexColorAssignmentTree =
-      OnAssignment
-      (
-        OnName2("fragmentProgram.inputs.vertex.ambientColor"),
-        OnName2("vertexProgram.inputs.vertex.ambientColor")
-      );
+      TreeBuilder_assignmentExpr
+        (
+          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
+          TreeBuilder_name("vertexProgram_inputs_vertex_ambientColor")
+        );
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_VPL_Tree_Node* mainFunctionDefinitionTree =
-    OnFunctionDefinition
-    (
-      OnName("void"),
-      OnName("main"),
-      OnParameterList(),
-      OnStatementList
-        (
-          OnVariableDefinition
-            (
-              OnName("mat4"),
-              OnName("mvp")
-            ),
-          OnAssignment
-            (
-              OnName("mvp"),
-              OnMultiply
-                (
-                  OnAccess
-                    (
-                      OnName2("vertexProgram.inputs.viewer"),
-                      OnName("viewToProjection")
-                    ),
-                  OnMultiply
-                    (
-                      OnAccess
-                        (
-                          OnName2("vertexProgram.inputs.viewer"),
-                          OnName("worldToView")
-                        ),
-                      OnAccess
-                        (
-                          OnName2("vertexProgram.inputs.model"),
-                          OnName("localToWorld")
-                        )
-                    )
-                )
-            ),
-          OnAssignment
-            (
-              OnName2("fragmentProgram.inputs.vertex.position"),
-              OnMultiply
-                (
-                  OnName("mvp"),
-                  OnCall
-                    (
-                      OnName("vec4"),
-                      OnAccess(OnName2("vertexProgram.inputs.vertex.position"), OnName("xyz")), // getGlobal("vertexProgram.inputs.vertex.position")
-                      OnName("1.0")
-                    )
-                )
-            ),
-          OnAssignment
-            (
-              OnName2("fragmentProgram.inputs.vertex.ambientColorTextureCoordinate"),
-              OnName2("vertexProgram.inputs.vertex.ambientColorTextureCoordinate")
-            ),
-          vertexColorAssignmentTree                                  
-        )
-    );
+  Arcadia_VPL_Tree_ProcedureDefnNode* tree =
+    TreeBuilder_procedureDefn
+      (
+        TreeBuilder_modifierList(S(thread, "vertex")),
+        TreeBuilder_name("void"),
+        S(thread, "main"),
+        TreeBuilder_parameterList(),
+        TreeBuilder_statementList
+          (
+            TreeBuilder_variableDefn
+              (
+                S(thread, "mat4"),
+                S(thread, "mvp")
+              ),
+            TreeBuilder_assignmentExpr
+              (
+                TreeBuilder_name("mvp"),
+                TreeBuilder_multiplyExpr
+                  (
+                    TreeBuilder_accessExpr
+                      (
+                        TreeBuilder_name("viewer"),
+                        TreeBuilder_name("viewToProjection")
+                      ),
+                    TreeBuilder_multiplyExpr
+                      (
+                        TreeBuilder_accessExpr
+                          (
+                            TreeBuilder_name("viewer"),
+                            TreeBuilder_name("worldToView")
+                          ),
+                        TreeBuilder_accessExpr
+                          (
+                            TreeBuilder_name("model"),
+                            TreeBuilder_name("localToWorld")
+                          )
+                      )
+                  )
+              ),
+            TreeBuilder_assignmentExpr
+              (
+                TreeBuilder_name("fragmentProgram_inputs_vertex_position"),
+                TreeBuilder_multiplyExpr
+                  (
+                    TreeBuilder_name("mvp"),
+                    TreeBuilder_callExpr
+                      (
+                        TreeBuilder_name("vec4"),
+                        TreeBuilder_accessExpr
+                          (
+                            TreeBuilder_name("vertexProgram_inputs_vertex_position"),
+                            TreeBuilder_name("xyz")
+                          ),
+                        TreeBuilder_realNumberExpr("1.0")
+                      )
+                  )
+              ),
+            TreeBuilder_assignmentExpr
+              (
+                TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColorTextureCoordinate"),
+                TreeBuilder_name("vertexProgram_inputs_vertex_ambientColorTextureCoordinate")
+              ),
+            vertexColorAssignmentTree                                  
+          )
+      );
 
-  emitCxxString(thread, target, DEFINES);
-  onFunctionDefinitionTree(thread, self, mainFunctionDefinitionTree, target);
+  program->vertexStage->mainProcedure = EnterPhase_enterProcedure(thread, program, tree);
+  Arcadia_Languages_Scope_enter(thread, program->vertexStage->scope, program->vertexStage->mainProcedure->name, (Arcadia_Object*)program->vertexStage->mainProcedure);
+  Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread), program);
+
+  onProcedureSymbol(thread, self, program->vertexStage->mainProcedure, target);
 
   // the zero terminator
   Arcadia_ByteBuffer_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);
@@ -968,49 +940,72 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Backends_GLSL_Transpiler* self,
-    Arcadia_VPL_Program* program,
-    Arcadia_Map* constantBlockMapping,
+    Arcadia_VPL_Symbols_Program* program,
+    Arcadia_Map* constantMapping,
+    Arcadia_Map* fragmentShaderVariableScalarMapping,
+    Arcadia_String** fragmentColorOutput,
     Arcadia_ByteBuffer* target
   )
 {
-  // The global scope.
-  if (!program->scope) {
-    Arcadia_VPL_SemanticalAnalysis_run(thread, self->semanticalAnalysis, program);
+  self->symbolNameMapping = computeInitialSymbolNameMapping(thread, program);
+  self->numberOfConstantBlocks = 0;
+  emitCxxString(thread, target, HEADER);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)program->fragmentStage->variableScalars); i < n; ++i) {
+    Arcadia_VPL_Symbols_VariableScalar* variableScalar =
+      (Arcadia_VPL_Symbols_VariableScalar*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, program->fragmentStage->variableScalars, i,
+                                                                                         _Arcadia_VPL_Symbols_VariableScalar_getType(thread));
+    writeVariableScalar(thread, self, Context_FragmentShader, program, variableScalar, target);
   }
 
-  emitCxxString(thread, target, HEADER);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)program->variableScalars); i < n; ++i) {
-    Arcadia_VPL_VariableScalar* variableScalar =
-      (Arcadia_VPL_VariableScalar*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, program->variableScalars, i,
-                                                                                         _Arcadia_VPL_VariableScalar_getType(thread));
-    writeVariableScalar(thread, self, Context_FragmentShader, (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void)), variableScalar, target);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)program->constants); i < n; ++i) {
+    Arcadia_VPL_Symbols_Constant* constant = (Arcadia_VPL_Symbols_Constant*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, program->constants, i, _Arcadia_VPL_Symbols_Constant_getType(thread));
+    if (Arcadia_VPL_Symbols_Constant_getKind(thread, constant) == Arcadia_VPL_ConstantKind_Record) {
+      writeConstantRecord(thread, self, Context_FragmentShader, constantMapping, program, (Arcadia_VPL_Symbols_ConstantRecord*)constant, target);
+    } else if (Arcadia_VPL_Symbols_Constant_getKind(thread, constant) == Arcadia_VPL_ConstantKind_Scalar) {
+      writeConstantScalar(thread, self, Context_FragmentShader, constantMapping, program, (Arcadia_VPL_Symbols_ConstantScalar*)constant, target);
+    }
   }
 
   Arcadia_VPL_Tree_Node* fragmentColorAssignmentTree = NULL;
-  if (program->flags == Arcadia_VPL_ProgramFlags_TextureAmbientColor) {
+  if (program->flags == Arcadia_VPL_Symbols_ProgramFlags_TextureAmbientColor) {
     fragmentColorAssignmentTree =
-      OnAssignment
+      TreeBuilder_assignmentExpr
         (
-          OnName2("rasterizerProgram.inputs.fragmentColor"),
-          OnCall
+          TreeBuilder_name("rasterizerProgram_inputs_fragmentColor"),
+          TreeBuilder_callExpr
             (
-              OnName("texture2D"),
-              OnName("_0_ambientColorTexture"),
-              OnName2("fragmentProgram.inputs.vertex.ambientColorTextureCoordinate")
+              TreeBuilder_name("texture2D"),
+              TreeBuilder_name("ambientColorTexture"),
+              TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColorTextureCoordinate")
             )
         );
   } else {
-    fragmentColorAssignmentTree = OnAssignment(OnName2("rasterizerProgram.inputs.fragmentColor"), OnName2("fragmentProgram.inputs.vertex.ambientColor"));
+    fragmentColorAssignmentTree =
+      TreeBuilder_assignmentExpr
+        (
+          TreeBuilder_name("rasterizerProgram_inputs_fragmentColor"),
+          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor")
+        );
   }
 
-  Arcadia_VPL_Tree_Node* mainFunctionDefinitionTree =
-    OnFunctionDefinition
+  Arcadia_VPL_Tree_ProcedureDefnNode* tree =
+    TreeBuilder_procedureDefn
       (
-        OnName("void"),
-        OnName("main"),
-        OnParameterList(),
-        OnStatementList(fragmentColorAssignmentTree)
+        TreeBuilder_modifierList(S(thread, "fragment")),
+        TreeBuilder_name("void"),
+        S(thread, "main"),
+        TreeBuilder_parameterList(),
+        TreeBuilder_statementList(fragmentColorAssignmentTree)
       );
-  onFunctionDefinitionTree(thread, self, mainFunctionDefinitionTree, target);
+  program->fragmentStage->mainProcedure = EnterPhase_enterProcedure(thread, program, tree);
+  Arcadia_Languages_Scope_enter(thread, program->fragmentStage->scope, program->fragmentStage->mainProcedure->name, (Arcadia_Object*)program->fragmentStage->mainProcedure);
+  Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread), program);
+
+  onProcedureSymbol(thread, self, program->fragmentStage->mainProcedure, target);
   Arcadia_ByteBuffer_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);
+
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"_2_fragmentColor");
+  Arcadia_StringBuffer_insertCodePointBack(thread, stringBuffer, '\0');
+  *fragmentColorOutput = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }

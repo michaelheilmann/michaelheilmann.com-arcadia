@@ -17,15 +17,15 @@
 #include "Arcadia/ADL/Context.h"
 
 #include "Arcadia/ADL/Definitions.h"
-
-#include "Arcadia/ADL/Definitions/ColorReader.h"
-#include "Arcadia/ADL/Definitions/CheckerboardFillOperationReader.h"
-#include "Arcadia/ADL/Definitions/FillOperationReader.h"
-#include "Arcadia/ADL/Definitions/MaterialReader.h"
-#include "Arcadia/ADL/Definitions/MeshReader.h"
-#include "Arcadia/ADL/Definitions/ModelReader.h"
-#include "Arcadia/ADL/Definitions/PixelBufferReader.h"
-#include "Arcadia/ADL/Definitions/TextureReader.h"
+#include "Arcadia/ADL/Reader.h"
+#include "Arcadia/ADL/Definitions/Visuals/CheckerboardFillOperationReader.h"
+#include "Arcadia/ADL/Definitions/Visuals/ColorReader.h"
+#include "Arcadia/ADL/Definitions/Visuals/FillOperationReader.h"
+#include "Arcadia/ADL/Definitions/Visuals/MaterialReader.h"
+#include "Arcadia/ADL/Definitions/Visuals/ModelReader.h"
+#include "Arcadia/ADL/Definitions/Visuals/MeshReader.h"
+#include "Arcadia/ADL/Definitions/Visuals/PixelBufferReader.h"
+#include "Arcadia/ADL/Definitions/Visuals/TextureReader.h"
 
 static void
 Arcadia_ADL_Context_constructImpl

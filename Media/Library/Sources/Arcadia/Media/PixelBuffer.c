@@ -494,25 +494,6 @@ Arcadia_Media_PixelBuffer_setLinePadding
       Arcadia_Thread_jump(thread);
     }
     Arcadia_Integer32Value bytesPerPixel = Arcadia_Media_PixelFormat_getNumberOfBytes(thread, self->pixelFormat);
-#if 0
-    switch (self->pixelFormat) {
-      case Arcadia_Media_PixelFormat_Alphan8Bn8Gn8Rn8:
-      case Arcadia_Media_PixelFormat_An8Rn8Gn8Bn8:
-      case Arcadia_Media_PixelFormat_Bn8Gn8Rn8An8:
-      case Arcadia_Media_PixelFormat_Rn8Gn8Bn8An8:
-      {
-        bytesPerPixel = 4;
-      } break;
-      case Arcadia_Media_PixelFormat_Bn8Gn8Rn8:
-      case Arcadia_Media_PixelFormat_Rn8Gn8Bn8: {
-        bytesPerPixel = 3;
-      } break;
-      default: {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-        Arcadia_Thread_jump(thread);
-      } break;
-    }
-#endif
     Arcadia_Integer32Value oldLinePadding = self->linePadding;
     Arcadia_Integer32Value newLinePadding = linePadding;
     Arcadia_Natural8Value* oldBytes = self->bytes;

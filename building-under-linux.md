@@ -6,7 +6,7 @@
   - Debian: `sudo apt-get install build-essential`
 - *gcc* version 11.4.0 or better
   - Debian: `sudo apt-get install gcc`
-- *cmake* version 4.1.3 or better
+- *cmake* version 3.29 or better
   - Debian: `sudo apt-get install cmake` or compile and install from source code.
 - *libpng* version 1.6 or better
   - Debian:`sudo apt-get install libpng-dev`
@@ -55,5 +55,5 @@ To disable OpenAL support, add the parameter `-D"Arcadia.Engine.Audials.Implemen
 The typical command line for x64 build files is hence:
 ```
 cd ~/build
-cmake ~/sources -D"Arcadia.Engine.Visuals.Implementation.OpenGL4"=TRUE -D"Arcadia.Engine.Audials.Implementation.OpenAL"=TRUE
+cmake ~/sources -D"Arcadia.Engine.Visuals.Implementation.OpenGL4.Enabled"=TRUE -D"Arcadia.Engine.Audials.Implementation.OpenAL.Enabled"=TRUE
 ```

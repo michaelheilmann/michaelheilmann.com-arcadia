@@ -601,12 +601,6 @@ _Arcadia_Types_onStartUp
     Arcadia_Thread_jump(thread);
   }
   if (g_referenceCount == 0) {
-#if 0
-    if (!g_typeNodeRegistered) {
-      Arcadia_Process_registerType(process, TypeNodeName, sizeof(TypeNodeName) - 1, process, &TypeNode_typeRemovedCallback, &TypeNode_visitCallback, &TypeNode_finalizeCallback);
-      g_typeNodeRegistered = Arcadia_BooleanValue_True;
-    }
-#endif
     startupDependencies(thread);
     g_typeNodes = TypeNodes_create(process);
     if (!g_typeNodes) {

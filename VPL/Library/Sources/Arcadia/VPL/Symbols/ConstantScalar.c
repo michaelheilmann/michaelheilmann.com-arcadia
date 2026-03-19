@@ -16,49 +16,56 @@
 #define ARCADIA_VPL_PRIVATE (1)
 #include "Arcadia/VPL/Symbols/ConstantScalar.h"
 
-#include "Arcadia/VPL/Program.h"
+#include "Arcadia/VPL/Symbols/Program.h"
 
 #include <string.h>
 
 static void
-Arcadia_VPL_ConstantScalar_constructImpl
+Arcadia_VPL_Symbols_ConstantScalar_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalar* self
+    Arcadia_VPL_Symbols_ConstantScalar* self
   );
 
 static void
-Arcadia_VPL_ConstantScalar_initializeDispatchImpl
+Arcadia_VPL_Symbols_ConstantScalar_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalarDispatch* self
+    Arcadia_VPL_Symbols_ConstantScalarDispatch* self
   );
 
 static void
-Arcadia_VPL_ConstantScalar_visitImpl
+Arcadia_VPL_Symbols_ConstantScalar_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalar* self
+    Arcadia_VPL_Symbols_ConstantScalar* self
   );
 
 static Arcadia_VPL_ConstantKind
-Arcadia_VPL_ConstantScalar_getKindImpl
+Arcadia_VPL_Symbols_ConstantScalar_getKindImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalar* self
+    Arcadia_VPL_Symbols_ConstantScalar* self
   );
 
 static Arcadia_String*
-Arcadia_VPL_ConstantScalar_getNameImpl
+Arcadia_VPL_Symbols_ConstantScalar_getNameImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalar* self
+    Arcadia_VPL_Symbols_ConstantScalar* self
+  );
+
+static void
+Arcadia_VPL_Symbols_ConstantScalar_resolveTypesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_Program* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_ConstantScalar_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_VPL_ConstantScalar_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_ConstantScalar_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_VPL_Symbols_ConstantScalar_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -66,48 +73,49 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.VPL.ConstantScalar", Arcadia_VPL_ConstantScalar,
-                         u8"Arcadia.VPL.Constant", Arcadia_VPL_Constant,
+Arcadia_defineObjectType(u8"Arcadia.VPL.Symbols.ConstantScalar", Arcadia_VPL_Symbols_ConstantScalar,
+                         u8"Arcadia.VPL.Symbols.Constant", Arcadia_VPL_Symbols_Constant,
                          &_typeOperations);
 
 static void
-Arcadia_VPL_ConstantScalar_constructImpl
+Arcadia_VPL_Symbols_ConstantScalar_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalar* self
+    Arcadia_VPL_Symbols_ConstantScalar* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_VPL_ConstantScalar);
+  Arcadia_EnterConstructor(Arcadia_VPL_Symbols_ConstantScalar);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (2 != _numberOfArguments) {
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_String_getType(thread));
-  self->type = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread));
-  self->program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_VPL_Program_getType(thread));
-  Arcadia_LeaveConstructor(Arcadia_VPL_ConstantScalar);
+  self->type = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_VPL_Symbols_Symbol_getType(thread));
+  self->program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_VPL_Symbols_Program_getType(thread));
+  Arcadia_LeaveConstructor(Arcadia_VPL_Symbols_ConstantScalar);
 }
 
 static void
-Arcadia_VPL_ConstantScalar_initializeDispatchImpl
+Arcadia_VPL_Symbols_ConstantScalar_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalarDispatch* self
+    Arcadia_VPL_Symbols_ConstantScalarDispatch* self
   )
 { 
-  ((Arcadia_VPL_ConstantDispatch*)self)->getKind = (Arcadia_VPL_ConstantKind (*)(Arcadia_Thread*, Arcadia_VPL_Constant*))&Arcadia_VPL_ConstantScalar_getKindImpl;
-  ((Arcadia_VPL_ConstantDispatch*)self)->getName = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_VPL_Constant*)) & Arcadia_VPL_ConstantScalar_getNameImpl;
+  ((Arcadia_VPL_Symbols_ConstantDispatch*)self)->getKind = (Arcadia_VPL_ConstantKind (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Constant*))&Arcadia_VPL_Symbols_ConstantScalar_getKindImpl;
+  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->getName = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_ConstantScalar_getNameImpl;
+  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->resolveTypes = (void (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_ConstantScalar_resolveTypesImpl;
 }
 
 static void
-Arcadia_VPL_ConstantScalar_visitImpl
+Arcadia_VPL_Symbols_ConstantScalar_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalar* self
+    Arcadia_VPL_Symbols_ConstantScalar* self
   )
 {
   if (self->name) {
@@ -122,28 +130,36 @@ Arcadia_VPL_ConstantScalar_visitImpl
 }
 
 static Arcadia_VPL_ConstantKind
-Arcadia_VPL_ConstantScalar_getKindImpl
+Arcadia_VPL_Symbols_ConstantScalar_getKindImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalar* self
+    Arcadia_VPL_Symbols_ConstantScalar* self
   )
 { return Arcadia_VPL_ConstantKind_Scalar; }
 
 static Arcadia_String*
-Arcadia_VPL_ConstantScalar_getNameImpl
+Arcadia_VPL_Symbols_ConstantScalar_getNameImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_VPL_ConstantScalar* self
+    Arcadia_VPL_Symbols_ConstantScalar* self
   )
 { return self->name; }
 
-Arcadia_VPL_ConstantScalar*
-Arcadia_VPL_ConstantScalar_create
+static void
+Arcadia_VPL_Symbols_ConstantScalar_resolveTypesImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_Program* self
+  )
+{/*Intentionally empty.*/}
+
+Arcadia_VPL_Symbols_ConstantScalar*
+Arcadia_VPL_Symbols_ConstantScalar_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* name,
-    Arcadia_String* type,
-    Arcadia_VPL_Program* program
+    Arcadia_VPL_Symbols_Symbol* type,
+    Arcadia_VPL_Symbols_Program* program
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
@@ -163,5 +179,5 @@ Arcadia_VPL_ConstantScalar_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 3);
-  ARCADIA_CREATEOBJECT(Arcadia_VPL_ConstantScalar);
+  ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_ConstantScalar);
 }

@@ -74,13 +74,13 @@ Arcadia_Memory_copy
   }
   // Determine if the intervals a = [a.start, a.end] and b = [b.start, b.end] DO overlap.
   //
-  // They do NOT overlap if condition [1] or condition [2] is fulfilled:
+  // They DO NOT overlap if condition [1] or condition [2] is fulfilled:
   // [1] a is completely behind b that is a.start > b.end.
   // [2] b is completely behind a that is b.start > a.end
   // That is, they do not overlap if
   // ([1] OR [1])
   // holds.
-  // Consequently, a and b overlap if
+  // Consequently, a and b DO overlap if
   // NOT ([1] OR [2])
   // holds which can be rewritten
   //     NOT ([1] OR [2])
@@ -88,10 +88,10 @@ Arcadia_Memory_copy
   // <=> NOT (a.start > b.end) AND NOT (b.start > a.end)
   // <=> a.start <= b.end AND b.start <= a.end
   //
-  // Now let s.start = ((uintptr_t)p), a.end = ((uintptr_t)p) + n, b.start = ((uintptr_t)q), b.end = ((uintptr_t)q) + n to obtain
-  bool overlapping = (((uintptr_t)p) <= ((uintptr_t)q) + n)
-                  && (((uintptr_t)q) <= ((uintptr_t)p) + n);
-  if (!overlapping) {
+  // Now let s.start = ((uintptr_t)p), a.end = ((uintptr_t)p) + n, b.start = ((uintptr_t const)q), b.end = ((uintptr_t const)q) + n to obtain
+  bool overlapping = (((uintptr_t)p) <= ((uintptr_t const)q) + n)
+                  && (((uintptr_t const)q) <= ((uintptr_t)p) + n);
+  if (overlapping) {
     memmove(p, q, n);
   } else {
     memcpy(p, q, n);

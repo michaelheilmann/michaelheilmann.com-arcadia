@@ -20,12 +20,7 @@
 #undef ARCADIA_VPL_PRIVATE
 #define ARCADIA_VPL_PRIVATE (1)
 
-#include "Arcadia/VPL/Symbols/ConstantRecord.h"
-#include "Arcadia/VPL/Symbols/ConstantScalar.h"
-#include "Arcadia/VPL/Symbols/ConstantRecordField.h"
-#include "Arcadia/VPL/Symbols/Scalar.h"
-#include "Arcadia/VPL/Symbols/BuiltinType.h"
-#include "Arcadia/VPL/Program.h"
+#include "Arcadia/VPL/Symbols/Include.h"
 #include "Arcadia/VPL/Tree/Include.h"
 
 #include "Arcadia/VPL/GLSL/Include.h"

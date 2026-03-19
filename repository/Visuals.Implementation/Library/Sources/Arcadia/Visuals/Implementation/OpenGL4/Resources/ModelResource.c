@@ -217,7 +217,6 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_loadImpl
 {
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->mesh);
   Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->material);
-  Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->material);
 }
 
 static void
@@ -258,7 +257,7 @@ getUniformBlockBindingIndex
     Arcadia_String* nameVPL
   )
 {
-  Arcadia_Value temporary = Arcadia_Map_get(thread, self->constantBlockBindings, Arcadia_Value_makeObjectReferenceValue(nameVPL));
+  Arcadia_Value temporary = Arcadia_Map_get(thread, self->constantBindings, Arcadia_Value_makeObjectReferenceValue(nameVPL));
   if (!Arcadia_Value_isSizeValue(&temporary)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationFailed);
     Arcadia_Thread_jump(thread);
@@ -297,13 +296,15 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_renderImpl
   Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* viewerConstantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)enterPassResource->viewerConstantBuffer;
   //
   gl->glUseProgram(self->material->program->programID);
-  gl->glBindFragDataLocation(self->material->program->programID, 0, u8"_2_fragmentColor");
+  //
+  gl->glBindFragDataLocation(self->material->program->programID, 0, Arcadia_String_getBytes(thread, self->material->program->fragmentColorOutput));
   gl->glBindVertexArray(self->mesh->vertexBuffer->vertexArrayID);
 
   //
   if (self->material->ambientColorSource == Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource_Texture) {
     while (gl->glGetError()) { }
     assert(0 != self->material->ambientColorTexture->id);
+    gl->glActiveTexture(GL_TEXTURE0);
     gl->glBindTexture(GL_TEXTURE_2D, self->material->ambientColorTexture->id);
     if (gl->glGetError()) {
       return;
