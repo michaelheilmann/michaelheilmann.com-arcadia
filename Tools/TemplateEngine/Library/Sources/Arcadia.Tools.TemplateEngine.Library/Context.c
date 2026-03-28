@@ -116,7 +116,7 @@ Context_constructImpl
 
   self->targetBuffer = Arcadia_ByteBuffer_create(thread);
   self->target = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->targetBuffer);
-  
+
   self->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
   self->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->temporaryBuffer);
 

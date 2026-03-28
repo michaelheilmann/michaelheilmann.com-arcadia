@@ -36,24 +36,24 @@
 // @endcode
 //
 // @code
-// 
+//
 // enumeration Arcadia.ADL.MaterialType {
 //   BlinnPhong,
 // }
-// 
+//
 // enumeration Arcadia.ADL.AmbientSource {
 //   Mesh,
 //   Vertex,
 //   Texture,
 // }
-// 
+//
 // class Arcadia.ADL.MaterialDefinition extends Arcadia.ADL.Definition {
 //
 //   constructor(definitions : Arcadia.ADL.Definitions, name : Arcadia.String,
 //               materialType : Arcadial.ADL.MaterialType, ambientColorSource : Arcadia.ADL.AmbientColorSource)
 //
 // };
-// 
+//
 // @endcode
 Arcadia_declareObjectType(u8"Arcadia.ADL.MaterialDefinition", Arcadia_ADL_MaterialDefinition,
                           u8"Arcadia.ADL.Definition");

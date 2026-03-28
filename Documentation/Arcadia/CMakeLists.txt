@@ -16,7 +16,7 @@
 cmake_minimum_required(VERSION 3.29)
 
 BeginTemplateEngine(${MyProjectName}.Website.Arcadia.Generate "Website/Arcadia")
-                   
+
   # Build "Arcadia/index.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/index.html"
@@ -31,7 +31,7 @@ BeginTemplateEngine(${MyProjectName}.Website.Arcadia.Generate "Website/Arcadia")
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/roadmap-archive.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/roadmap-archive.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/../website.env")
-                   
+
   # Build "Arcadia/news.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/news.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/Arcadia/news.html"

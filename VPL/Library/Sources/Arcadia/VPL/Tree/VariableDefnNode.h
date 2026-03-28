@@ -25,7 +25,7 @@
 
 // <variable definition> : <name> ':' <type name> <modifiers>
 // <modifier>            : <modifier>*
-// <modifier>            : 'constant' 
+// <modifier>            : 'constant'
 //                       / 'variable'
 Arcadia_declareObjectType(u8"Arcadia.VPL.Tree.VariableDefnNode", Arcadia_VPL_Tree_VariableDefnNode,
                           u8"Arcadia.VPL.Tree.Node");

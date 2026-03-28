@@ -12,7 +12,7 @@
 
   <!-- Crap specific to iOS. PNG must be 180 x 180 pixels. color attribute is obsolete. -->
   <link rel='apple-touch-icon' href='https://michaelheilmann.com/assets/favicon/apple-touch-icon-180x180.png'>
-  
+
   <script>
   MathJax = {
     startup: {
@@ -27,7 +27,7 @@
     }
   }
   </script>
-  
+
   <!-- @todo Do not use external CDNs. Do use self-hosting. -->
   <script defer id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 
@@ -202,18 +202,18 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv>* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> left,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> right,<br> 
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> right,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> bottom,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> top,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> near,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> far<br>   
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> far<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
   <my-summary>
   <p>Assign the elements of this <code>Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv></code> object the values of an orthographic projection matrix.
   This function is defined for \(4 \times 4\).</p>
-  
+
   <p>The projection matrix is defined as</p>
   \[
 	\begin{matrix}
@@ -248,7 +248,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
     <tr><td><code>Real32Value</code>         </td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code>         </td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   </my-summary>
 
   <section class="cxx parameters">
@@ -300,16 +300,16 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv>* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> fieldOfView,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> aspectRatio,<br> 
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> aspectRatio,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> near,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> far<br>   
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> far<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
   <my-summary>
   <p>Assign the elements of this <code>Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv></code> object the values of a perspective projection matrix.
   This function is defined for \(4 \times 4\).</p>
-  
+
   <p>The projection matrix is defined as</p>
   \[
 	\begin{matrix}
@@ -336,7 +336,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
     <tr><td><code>Real32Value</code>         </td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code>         </td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   </my-summary>
 
   <section class="cxx parameters">
@@ -383,7 +383,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv>* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> angle<br>   
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> angle<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -391,7 +391,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   <p>Assign the elements of this <code>Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv></code> object the values of a rotation matrix.
   This matrix represents a counter-clockwise rotation by <code>angle</code> degrees around the x-axis.
   This function is defined for \(4 \times 4\).</p>
-  
+
   <p>The rotation matrix is defined as
   \[
 	\begin{matrix}
@@ -402,7 +402,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 	\end{matrix}
   \]
   where \(c=\cos(a)\) and \(s=\sin(a)\).</p>
-  
+
   <p>
   <my-mv>ElementTypeSuffix</my-mv> indicates the <em>Arcadia</em> type of the elements and parameters denoted by <my-mv>ElementType</my-mv>.
   The following table lists the <my-mv>ElementTypeSuffix</my-mv> and the corresponding <my-mv>ElementType</my-mv>.
@@ -413,7 +413,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
     <tr><td><code>Real32Value</code>         </td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code>         </td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   </my-summary>
 
   <section class="cxx parameters">
@@ -444,7 +444,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv>* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> angle<br>   
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> angle<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -452,7 +452,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   <p>Assign the elements of this <code>Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv></code> object the values of a rotation matrix.
   This matrix represents a counter-clockwise rotation by <code>angle</code> degrees around the y-axis.
   This function is defined for \(4 \times 4\).</p>
- 
+
   <p>The rotation matrix is defined as
   \[
 	\begin{matrix}
@@ -463,7 +463,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 	\end{matrix}
   \]
   where \(c=\cos(a)\) and \(s=\sin(a)\).</p>
-  
+
   <p>
   <my-mv>ElementTypeSuffix</my-mv> indicates the <em>Arcadia</em> type of the elements and parameters denoted by <my-mv>ElementType</my-mv>.
   The following table lists the <my-mv>ElementTypeSuffix</my-mv> and the corresponding <my-mv>ElementType</my-mv>.
@@ -474,7 +474,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
     <tr><td><code>Real32Value</code>         </td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code>         </td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   </my-summary>
 
   <section class="cxx parameters">
@@ -505,7 +505,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   &nbsp;&nbsp;(<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv>* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> angle<br>   
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> angle<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -513,7 +513,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   <p>Assign the elements of this <code>Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv></code> object the values of a rotation matrix.
   This matrix represents a counter-clockwise rotation by <code>angle</code> degrees around the z-axis.
   This function is defined for \(4 \times 4\).</p>
- 
+
   <p>The rotation matrix is defined as
   \[
 	\begin{matrix}
@@ -524,7 +524,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 	\end{matrix}
   \]
   where \(c=\cos(a)\) and \(s=\sin(a)\).</p>
-  
+
   <p>
   <my-mv>ElementTypeSuffix</my-mv> indicates the <em>Arcadia</em> type of the elements and parameters denoted by <my-mv>ElementType</my-mv>.
   The following table lists the <my-mv>ElementTypeSuffix</my-mv> and the corresponding <my-mv>ElementType</my-mv>.
@@ -535,7 +535,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
     <tr><td><code>Real32Value</code>         </td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code>         </td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   </my-summary>
 
   <section class="cxx parameters">
@@ -567,8 +567,8 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv>* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> x,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> y,<br>   
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> z<br>     
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> y,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> z<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -576,7 +576,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   <p>Assign the elements of this <code>Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv></code> object the values of a scaling matrix.
   This matrix represents a scalings along the x-, y-, and z-axis.
   This function is defined for \(4 \times 4\).</p>
-  
+
   <p>The rotation matrix is defined as
   \[
 	\begin{matrix}
@@ -586,7 +586,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 	 0 &  0 &  0 &  1
 	\end{matrix}
   \]</p>
-  
+
   <p>
   <my-mv>ElementTypeSuffix</my-mv> indicates the <em>Arcadia</em> type of the elements and parameters denoted by <my-mv>ElementType</my-mv>.
   The following table lists the <my-mv>ElementTypeSuffix</my-mv> and the corresponding <my-mv>ElementType</my-mv>.
@@ -597,7 +597,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
     <tr><td><code>Real32Value</code>         </td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code>         </td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   </my-summary>
 
   <section class="cxx parameters">
@@ -637,8 +637,8 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv>Value* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> x,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> y,<br> 
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> z<br>   
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> y,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> z<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
@@ -655,7 +655,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
 	\end{matrix}
   \]
   <p>where \(x\), \(y\), and \(z\) is the translation along the x, y, and z axis, respectively.</p>
-  
+
   <p>
   <my-mv>ElementTypeSuffix</my-mv> indicates the <em>Arcadia</em> type of the elements and parameters denoted by <my-mv>ElementType</my-mv>.
   The following table lists the <my-mv>ElementTypeSuffix</my-mv> and the corresponding <my-mv>ElementType</my-mv>.
@@ -666,7 +666,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
     <tr><td><code>Real32Value</code>         </td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code>         </td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   </my-summary>
 
   <section class="cxx parameters">
@@ -755,7 +755,7 @@ refer to <a href="https://github.com/michaelheilmann/michaelheilmann.com-arcadia
     <div class="center-column"></div>
     <div class="right-column">
       <div>Website maintained by Michael Heilmann.</div>
-      <div>Last modified on 20 March 2026.</div>
+      <div>Last modified on 28 March 2026.</div>
     </div>
   </footer>
   </body>

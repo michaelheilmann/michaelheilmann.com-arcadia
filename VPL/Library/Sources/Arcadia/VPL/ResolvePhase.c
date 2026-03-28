@@ -167,7 +167,7 @@ onResolveName
     Arcadia_VPL_Tree_NameExprNode* nameExprNode
   )
 {
-  Arcadia_Object* symbol = Arcadia_Languages_Scope_lookup(thread, scope, nameExprNode->name, Arcadia_BooleanValue_True); 
+  Arcadia_Object* symbol = Arcadia_Languages_Scope_lookup(thread, scope, nameExprNode->name, Arcadia_BooleanValue_True);
   if (!symbol) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
@@ -331,7 +331,7 @@ onExprNode
     Arcadia_Languages_Scope* scope,
     Arcadia_VPL_Tree_Node* exprNode
   )
-{ 
+{
   if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)exprNode, _Arcadia_VPL_Tree_BinaryExprNode_getType(thread))) {
     Arcadia_VPL_Tree_BinaryExprNode* binaryExprNode = (Arcadia_VPL_Tree_BinaryExprNode*)exprNode;
     switch (binaryExprNode->kind) {
@@ -369,7 +369,7 @@ onExprNode
     Arcadia_VPL_Tree_NameExprNode* nameExprNode = (Arcadia_VPL_Tree_NameExprNode*)exprNode;
     onResolveName(thread, self, procedure, scope, ResolveFlags_Variable | ResolveFlags_VariableScalar | ResolveFlags_ConstantScalar, nameExprNode);
   } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)exprNode, _Arcadia_VPL_Tree_NumberExprNode_getType(thread))) {
-    /* 
+    /*
      * TODO: We can get away with not assigning a type for now.
      * The float and double built-in types as well as the built-in integer types should be added.
      * The NumberExprNode should convey the required information to determine its type.
@@ -389,7 +389,7 @@ onStatNode
     Arcadia_Languages_Scope* scope,
     Arcadia_VPL_Tree_Node* statNode
   )
-{ 
+{
   if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)statNode, _Arcadia_VPL_Tree_VariableDefnNode_getType(thread))) {
     Arcadia_VPL_Tree_VariableDefnNode* variableDefnNode = (Arcadia_VPL_Tree_VariableDefnNode*)statNode;
     Arcadia_Object* typeSymbol = Arcadia_Languages_Scope_lookup(thread, scope, variableDefnNode->type, Arcadia_BooleanValue_True);
@@ -412,7 +412,7 @@ onProcedure
     Arcadia_VPL_ResolvePhase* self,
     Arcadia_VPL_Symbols_Procedure* procedure
   )
-{ 
+{
   Arcadia_VPL_Tree_ProcedureDefnNode* procedureDefnNode = (Arcadia_VPL_Tree_ProcedureDefnNode*)procedure->node;
   Arcadia_Languages_Scope* scope = Arcadia_Languages_Scope_create(thread, procedure->scope);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)procedureDefnNode->body); i < n; ++i) {
@@ -445,7 +445,7 @@ onProgram
     Arcadia_VPL_ResolvePhase* self,
     Arcadia_VPL_Symbols_Program* program
   )
-{ 
+{
   Arcadia_List* entries = Arcadia_Map_getValues(thread, program->scope->entries);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)entries); i < n; ++i) {
     Arcadia_VPL_Symbols_Symbol* symbol = (Arcadia_VPL_Symbols_Symbol*)Arcadia_List_getObjectReferenceValueAt(thread, entries, i);

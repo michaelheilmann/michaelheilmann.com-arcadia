@@ -101,15 +101,6 @@ Arcadia_VPL_Symbols_Program_create
     Arcadia_Natural8Value flags
   );
 
-/// @return A pointer to the constant block if it was found. The null pointer if it was not found.
-Arcadia_VPL_Symbols_ConstantRecord*
-Arcadia_VPL_Symbols_Program_getConstantRecordByName
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Program* self,
-    Arcadia_String* name
-  );
-
 Arcadia_List*
 Arcadia_VPL_Symbols_Program_getConstants
   (
@@ -122,6 +113,20 @@ Arcadia_VPL_Symbols_Program_createProgram
   (
     Arcadia_Thread* thread,
     Arcadia_Natural8Value flags
+  );
+
+Arcadia_VPL_Tree_ProcedureDefnNode*
+Arcadia_VPL_Symbols_Program_createVertexShaderMainProcedureTree
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_Program* self
+  );
+
+Arcadia_VPL_Tree_ProcedureDefnNode*
+Arcadia_VPL_Symbols_Program_createFragmentShaderMainProcedureTree
+  (
+    Arcadia_Thread* thread,
+    Arcadia_VPL_Symbols_Program* self
   );
 
 #endif // ARCADIA_VPL_SYMBOLS_PROGRAM_H_INCLUDED

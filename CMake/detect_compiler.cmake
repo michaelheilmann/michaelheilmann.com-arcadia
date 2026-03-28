@@ -13,38 +13,106 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
+
+
+# An unknown ASM compiler.
+set(Arcadia_Compiler_ASM_Unknown 0)
+
+# The "MASM" ASM compiler.
+set(Arcadia_Compiler_ASM_MASM 1)
+
+# The "NASM" ASM compiler.
+set(Arcadia_Compiler_ASM_NASM 2)
+
+function(Arcadia_DetectCompilerASM result)
+  if (CMAKE_ASM_MASM_COMPILER)
+    enable_language(ASM_MASM)
+    set(${result} ${Arcadia_Compiler_ASM_MASM} PARENT_SCOPE)
+  elseif(CMAKE_ASM_NASM_COMPILER)
+    enable_language_(ASM_NASM)
+    set(${result} ${Arcadia_Compiler_ASM_NASM} PARENT_SCOPE)
+  else()
+    set(${result} ${Arcadia_Compiler_ASM_Unknown} PARENT_SCOPE)
+  endif()
+endfunction()
+
+
+
+# An unknown C compiler.
+set(Arcadia_Compiler_C_Unknown 0)
+#set(${${target}.Compiler.C.Unknown}.Help "<unknown C compiler>")
+
+# The "Clang" C compiler.
+set(Arcadia_Compiler_C_Clang 1)
+
+# The "GCC" C compiler.
+set(Arcadia_Compiler_C_GCC 2)
+
+# The "MSVC" C compiler.
+set(Arcadia_Compiler_C_MSVC 3)
+
+function(Arcadia_DetectCompilerC result)
+  if (CMAKE_C_COMPILER)
+    if (CMAKE_C_COMPILER_ID)
+      if (CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
+        set(${result} ${Arcadia_Compiler_C_Clang} PARENT_SCOPE)
+      elseif (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+        set(${result} ${Arcadia_Compiler_C_Clang} PARENT_SCOPE)
+      elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        set(${result} ${Arcadia_Compiler_C_GCC} PARENT_SCOPE)
+      elseif (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+        set(${result} ${Arcadia_Compiler_C_MSVC} PARENT_SCOPE)
+      else()
+        set(${result} ${Arcadia_Compiler_C_Unknown} PARENT_SCOPE)
+      endif()
+    else()
+      set(${result} ${Arcadia_Compiler_C_Unknown} PARENT_SCOPE)
+    endif()
+  else()
+    set(${result} ${Arcadia_Compiler_C_Unknown} PARENT_SCOPE)
+  endif()
+endfunction()
+
+
+
 # SUMMARY
 # Define an enumeration of MASM compilers and detect the MASM compiler.
 #
 # DETAIL
 # Define an enumeration of MASM compilers and detect the MASM compiler.
 # The detailed steps are:
-# a) The numeration constants ${target}.Compiler.Masm.(Unknown|Ms) are defined.
+# a) The numeration constants ${target}_Compiler_ASM_(Unknown|MASM|NAMS) are defined.
 #    Each constant is a string of an unique name identifying a C compiler.
-# b) The constant ${target}.Compiler.Masm is set to the {target}.Compiler.Masm.* values denoting the detected Masm compiler.
+# b) The constant ${target}_Compiler_ASM is set to one of the {target}_Compiler_ASM_* values denoting the detected Masm compiler.
 #
 # PARAM target The target.
-macro(DetectCompilerMasm target)
-   # An unknown MASM compiler.
-  set(${target}.Compiler.Masm.Unknown 0)
-  set(${${target}.Compiler.Masm.Unknown}.Help "<unknown MASM compiler>")
-
+macro(DetectCompilerASM target)
+   # An unknown ASM compiler.
+  set(${target}_Compiler_ASM_Unknown ${Arcadia_Compiler_ASM_Unknown})
   # MASM.
-  set(${target}.Compiler.Masm.Ms 1)
-  set(${${target}.Compiler.Masm.Ms}.Help "MASM")
+  set(${target}_Compiler_ASM_MASM ${Arcadia_Compiler_ASM_MASM})
+  # NASM.
+  set(${target}_Compiler_ASM_NASM ${Arcadia_Compiler_ASM_NASM})
 
   # Initialize if not yet initialized.
-  if (NOT DEFINED ${target}.Compiler.Masm)
-    set(${target}.Compiler.Masm ${${target}.Compiler.Masm.Unknown})
-    set(${target}.Configuration.Compiler.Masm ${${target}.Configuration.Compiler.Masm.Unknown})
-    # Perform detection.
-    if (CMAKE_ASM_MASM_COMPILER)
-      enable_language(ASM_MASM)
-      set(${target}.Compiler.Masm ${${target}.Compiler.Masm.Ms})
-      set(${target}.Configuration.Compiler.Masm ${${target}.Compiler.Masm.Ms})
+  if (NOT DEFINED ${target}_Compiler_ASM)
+    Arcadia_DetectCompilerASM(${target}_Compiler_ASM)
+  endif()
+
+  set(VERBOSE TRUE)
+  
+  if (VERBOSE) 
+    if (${target}_Compiler_ASM STREQUAL ${target}_Compiler_ASM_Unknown)
+      message( STATUS " - ${target} ASM compiler: unknown")
+    elseif (${target}_Compiler_ASM STREQUAL ${target}_Compiler_ASM_MASM)
+      message( STATUS " - ${target} ASM compiler: MASM")
+    elseif (${target}_Compiler_ASM STREQUAL ${target}_Compiler_ASM_NASM)
+      message( STATUS " - ${target} ASM compiler: NASM")
+    else()
+      message(FATAL_ERROR "<internal error>") 
     endif()
   endif()
-  message( STATUS " - ${target} MASM compiler: ${${${target}.Compiler.Masm}.Help}")
+
 endmacro()
 
 # SUMMARY
@@ -53,49 +121,43 @@ endmacro()
 # DETAIL
 # Define an enumeration of C compilers and detect the C compiler.
 # The detailed steps are:
-# a) The enumeration constants ${target}.Compiler.C.(Unknown|Clang|Msvc|Gcc) are defined.
+# a) The enumeration constants ${target}_Compiler_C_(Unknown|Clang|MSVC|GCC) are defined.
 #    Each constant is a string of an unique name identifying a C compiler.
-# b) The constant ${target}.Compiler.C is set to the {target}.Compiler.C.* values denoting the detected C compiler.
+# b) The constant ${target}_Compiler_C is set to one of the the {target}_Compiler_C_* values denoting the detected C compiler.
 #
 # PARAM target The target.
 macro(DetectCompilerC target)
   # An unknown C compiler.
-  set(${target}.Compiler.C.Unknown 0)
-  set(${${target}.Compiler.C.Unknown}.Help "<unknown C compiler>")
+  set(${target}_Compiler_C_Unknown ${Arcadia_Compiler_C_Unknown})
 
   # CLANG.
-  set(${target}.Compiler.C.Clang 1)
-  set(${${target}.Compiler.C.Clang}.Help "CLANG")
+  set(${target}_Compiler_C_Clang ${Arcadia_Compiler_C_Clang})
 
   # GCC.
-  set(${target}.Compiler.C.Gcc 2)
-  set(${${target}.Compiler.C.Gcc}.Help "GCC")
+  set(${target}_Compiler_C_GCC ${Arcadia_Compiler_C_GCC})
 
   # MSVC.
-  set(${target}.Compiler.C.Msvc 3)
-  set(${${target}.Compiler.C.Msvc}.Help "MSVC")
+  set(${target}_Compiler_C_MSVC ${Arcadia_Compiler_C_MSVC})
 
   # Initialize if not yet initialized.
-  if (NOT DEFINED ${target}.Compiler.C)
-    set(${target}.Compiler.C ${${target}.Compiler.C.Unknown})
+  if (NOT DEFINED ${target}_Compiler_C)
+    Arcadia_DetectCompilerC(${target}_Compiler_C)
   endif()
-
-  # Perform detection.
-  if (CMAKE_C_COMPILER)
-    if (CMAKE_C_COMPILER_ID)
-      if (CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
-        set(${target}.Compiler.C ${${target}.Compiler.C.Clang})
-      endif()
-      if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
-        set(${target}.Compiler.C ${${target}.Compiler.C.Clang})
-      endif()
-      if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
-        set(${target}.Compiler.C ${${target}.Compiler.C.Gcc})
-      endif()
-      if (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-        set(${target}.Compiler.C ${${target}.Compiler.C.Msvc})
-      endif()
+  
+  set(VERBOSE TRUE)
+  
+  if (VERBOSE) 
+    if (${target}_Compiler_C STREQUAL ${target}_Compiler_C_Unknown)
+      message( STATUS " - ${target} C compiler: unknown")
+    elseif (${target}_Compiler_C STREQUAL ${target}_Compiler_C_Clang)
+      message( STATUS " - ${target} C compiler: Clang")
+    elseif (${target}_Compiler_C STREQUAL ${target}_Compiler_C_GCC)
+      message( STATUS " - ${target} C compiler: GCC")
+    elseif (${target}_Compiler_C STREQUAL ${target}_Compiler_C_MSVC)
+      message( STATUS " - ${target} C compiler: MSVC")
+    else()
+      message(FATAL_ERROR "<internal error>") 
     endif()
   endif()
-  message( STATUS " - ${target} C compiler: ${${${target}.Compiler.C}.Help}")
+
 endmacro()

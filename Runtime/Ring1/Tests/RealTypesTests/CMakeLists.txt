@@ -20,9 +20,9 @@ set(MyTestName ${MyProjectName}.Ring1.Tests.RealTypes)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.RealTypes/Main.c)
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.RealTypes/realTypes.c)
-list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Ring1.Tests.RealTypes/realTypes.h)
+OnSourceFile(${MyTestName} Arcadia.Ring1.Tests.RealTypes/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Ring1.Tests.RealTypes/realTypes.c)
+OnHeaderFile(${MyTestName} Arcadia.Ring1.Tests.RealTypes/realTypes.h)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1)
 

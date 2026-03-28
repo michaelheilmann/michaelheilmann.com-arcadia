@@ -52,21 +52,21 @@ struct Arcadia_Visuals_Implementation_EnterPassResourceDispatch {
       Arcadia_Visuals_Implementation_EnterPassResource*,
       Arcadia_Visuals_Implementation_FrameBufferResource*
     );
-  
+
   void (*setViewToProjectionMatrix)
     (
       Arcadia_Thread*,
       Arcadia_Visuals_Implementation_EnterPassResource*,
       Arcadia_Math_Matrix4Real32*
     );
-  
+
   void (*setWorldToViewMatrix)
     (
       Arcadia_Thread*,
       Arcadia_Visuals_Implementation_EnterPassResource*,
       Arcadia_Math_Matrix4Real32*
     );
-  
+
   void (*setClearColorBuffer)
     (
       Arcadia_Thread* thread,
@@ -124,21 +124,21 @@ struct Arcadia_Visuals_Implementation_EnterPassResource {
 
   // The world space to view space matrix.
   Arcadia_Math_Matrix4Real32* worldToViewMatrix;
-  
+
   // The view space to projection space matrix.
   Arcadia_Math_Matrix4Real32* viewToProjectionMatrix;
 
   // The canvas size.
   struct {
-  
+
     // The width of the canvas.
     // Default is 320.
     Arcadia_Real32Value width;
-  
+
     // The height of the canvas.
     // Default is 240.
     Arcadia_Real32Value height;
-  
+
   } canvasSize;
 
   struct {

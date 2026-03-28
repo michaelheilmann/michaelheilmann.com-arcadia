@@ -23,14 +23,14 @@
 #
 # PARAM target The target.
 macro(ConfigureWarningsAndErrors target)
-  if (NOT DEFINED ${target}.Compiler.C)
+  if (NOT DEFINED ${target}_Compiler_C)
     message(FATAL_ERROR "please execute DetectCompiler before ConfigureWarningsAndErrors")
   endif()
-  if (${${target}.Compiler.C} EQUAL ${${target}.Compiler.C.Gcc})
+  if (${${target}_Compiler_C} EQUAL ${${target}_Compiler_C_GCC})
     target_compile_options(${target} BEFORE PRIVATE "-Werror=implicit-function-declaration")
   endif()
 
-  if(${${target}.Compiler.C} EQUAL ${${target}.Compiler.C.Msvc})
+  if(${${target}_Compiler_C} EQUAL ${${target}_Compiler_C_MSVC})
     set(${target}.CompileOptions "")
     # C4090:  'opertion' : different 'modifier' qualifiers
     list(APPEND ${target}.CompileOptions "/we4090")

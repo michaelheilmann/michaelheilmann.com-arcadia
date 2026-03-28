@@ -31,14 +31,14 @@ test1
   Arcadia_List_insertBackInteger32Value(thread, sampleRates, 8000);
   Arcadia_List_insertBackInteger32Value(thread, sampleRates, 11025);
   Arcadia_List_insertBackInteger32Value(thread, sampleRates, 16000);
-  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 22050);   
-  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 32000);   
-  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 37800);   
-  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 44100);   
-  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 47250);   
-  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 48000);   
-  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 50000);   
-  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 50400);     
+  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 22050);
+  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 32000);
+  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 37800);
+  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 44100);
+  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 47250);
+  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 48000);
+  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 50000);
+  Arcadia_List_insertBackInteger32Value(thread, sampleRates, 50400);
 
   Arcadia_List_insertBackInteger32Value(thread, sampleRates, 64000);
   Arcadia_List_insertBackInteger32Value(thread, sampleRates, 88200);

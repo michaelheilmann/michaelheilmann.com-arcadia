@@ -31,7 +31,7 @@ struct Arcadia_Engine_Visuals_VertexDescriptorDispatch {
 
 struct Arcadia_Engine_Visuals_VertexDescriptor {
   Arcadia_Object parent;
-  /// The stride, that is, the distance, in Bytes, from the start of one vertex to the start of the next vertex.  
+  /// The stride, that is, the distance, in Bytes, from the start of one vertex to the start of the next vertex.
   Arcadia_SizeValue stride;
   /// The list of vertex element descriptors.
   Arcadia_ImmutableList* vertexElementDescriptors;

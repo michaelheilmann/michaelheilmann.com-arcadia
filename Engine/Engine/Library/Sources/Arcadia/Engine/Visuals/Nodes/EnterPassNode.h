@@ -25,11 +25,11 @@ typedef struct Arcadia_Engine_Visuals_ViewportNode Arcadia_Engine_Visuals_Viewpo
 typedef struct Arcadia_Visuals_FrameBufferNode Arcadia_Visuals_FrameBufferNode;
 
 // An enter pass node.
-// Inputs: 
+// Inputs:
 //  - viewport
 //  - camera
 //  - canvas size
-// 
+//
 // Actions:
 // - Updates the viewport and the camera with the canvas size information.
 // - Writes the viewport information and the camera information into a pass buffer.

@@ -147,7 +147,7 @@ Arcadia_Engine_Visuals_Implementation_MaterialNode_renderImpl
     if (!self->materialResource) {
       Arcadia_Visuals_Implementation_BackendContext* backendContext = self->backendContext;
       //
-      Arcadia_Visuals_Implementation_ProgramResource* programResource = 
+      Arcadia_Visuals_Implementation_ProgramResource* programResource =
         Arcadia_Visuals_Implementation_BackendContext_createProgramResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext,
                                                                                     ((Arcadia_Engine_Visuals_MaterialNode*)self)->program);
       //
@@ -170,7 +170,7 @@ Arcadia_Engine_Visuals_Implementation_MaterialNode_renderImpl
           Arcadia_Thread_jump(thread);
         } break;
       };
- 
+
       self->materialResource = Arcadia_Visuals_Implementation_BackendContext_createMaterialResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext, ambientColorSource, textureResource, programResource);
       Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->materialResource);
     }

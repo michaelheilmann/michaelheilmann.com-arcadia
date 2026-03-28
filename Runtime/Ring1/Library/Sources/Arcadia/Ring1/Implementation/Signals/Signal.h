@@ -42,7 +42,7 @@ Arcadia_Signal_create
   (
     Arcadia_Thread* thread
   );
-  
+
 /// @brief Connect to this signal.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this signal.

@@ -59,7 +59,7 @@
 #include "Arcadia/Engine/Visuals/WindowBackend.h"
 
 //{
-// 
+//
 #include "Arcadia/Engine/Visuals/Diagnostics.h"
 
 #include "Arcadia/Engine/Visuals/Events/ApplicationQuitRequestedEvent.h"

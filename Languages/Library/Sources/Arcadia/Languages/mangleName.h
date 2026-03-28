@@ -21,7 +21,7 @@
 // The name mangler encodes the sequence of UTF-8 Bytes (x_1, ..., x_n) of an input string
 // as a prefix 'x' plus a sequence of hexadeicmal numbers y_1, ..., y_, that is as ('x', y_1, ..., y_n).
 // Each hexadecimal numbers are using small caps and is padded with a zero
-// if its number of hex digits is smaller than 2. 
+// if its number of hex digits is smaller than 2.
 // For example:
 // a) the single Byte sequence (0) would be represented as ('x', '00')
 // b) the single Byte sequence (7) would be represented by ('x', '07')

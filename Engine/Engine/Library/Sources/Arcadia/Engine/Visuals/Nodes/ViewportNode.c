@@ -92,7 +92,7 @@ Arcadia_Engine_Visuals_ViewportNode_setClearColorBuffer
 
 Arcadia_Math_Color4Real32*
 Arcadia_Engine_Visuals_ViewportNode_getClearColor
-  ( 
+  (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_ViewportNode* self
   )

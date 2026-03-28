@@ -34,7 +34,7 @@ struct Arcadia_VPL_Symbols_ConstantDispatch {
 struct Arcadia_VPL_Symbols_Constant {
   Arcadia_VPL_Symbols_Symbol _parent;
 };
-  
+
 /// @brief Get the kind of this constant.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this constant.

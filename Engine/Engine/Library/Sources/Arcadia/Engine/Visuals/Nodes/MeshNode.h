@@ -36,7 +36,7 @@ struct Arcadia_Engine_Visuals_MeshNodeDispatch {
 
 struct Arcadia_Engine_Visuals_MeshNode {
   Arcadia_Engine_Visuals_Node _parent;
-  
+
   /// The mesh definition.
   Arcadia_ADL_MeshDefinition* source;
   /// A pointer to the vertex descriptor.

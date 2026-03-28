@@ -46,13 +46,6 @@ Arcadia_VPL_Symbols_BuiltinType_getNameImpl
     Arcadia_VPL_Symbols_BuiltinType* self
   );
 
-static void
-Arcadia_VPL_Symbols_BuiltinType_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_BuiltinType* self
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_BuiltinType_constructImpl,
@@ -97,7 +90,6 @@ Arcadia_VPL_Symbols_BuiltinType_initializeDispatchImpl
   )
 {
   ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->getName = (Arcadia_String * (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_BuiltinType_getNameImpl;
-  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->resolveTypes = (void (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_BuiltinType_resolveTypesImpl;
 }
 
 static void
@@ -122,14 +114,6 @@ Arcadia_VPL_Symbols_BuiltinType_getNameImpl
     Arcadia_VPL_Symbols_BuiltinType* self
   )
 { return self->name; }
-
-static void
-Arcadia_VPL_Symbols_BuiltinType_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_BuiltinType* self
-  )
-{/*Intentionally empty.*/}
 
 Arcadia_VPL_Symbols_BuiltinType*
 Arcadia_VPL_Symbols_BuiltinType_create

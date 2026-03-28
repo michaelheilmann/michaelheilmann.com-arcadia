@@ -40,13 +40,6 @@ Arcadia_VPL_Symbols_Procedure_visitImpl
     Arcadia_VPL_Symbols_Procedure* self
   );
 
-static void
-Arcadia_VPL_Symbols_Procedure_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Procedure* self
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_Procedure_constructImpl,
@@ -93,9 +86,7 @@ Arcadia_VPL_Symbols_Procedure_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_ProcedureDispatch* self
   )
-{
-  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->resolveTypes = (void (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_Procedure_resolveTypesImpl;
-}
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_VPL_Symbols_Procedure_visitImpl
@@ -123,14 +114,6 @@ Arcadia_VPL_Symbols_Procedure_visitImpl
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->returnValueType);
   }
 }
-
-static void
-Arcadia_VPL_Symbols_Procedure_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Procedure* self
-  )
-{ }
 
 Arcadia_VPL_Symbols_Procedure*
 Arcadia_VPL_Symbols_Procedure_create

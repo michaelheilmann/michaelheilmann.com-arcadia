@@ -27,12 +27,12 @@
 //typedef struct Arcadia_Engine_Visuals_BackendContext Arcadia_Engine_Visuals_BackendContext;
 
 /// The base of all nodes.
-/// 
+///
 /// The bases of implementations specific to audials and visuals can be found in Arcadia.Audials and Arcadia.Visuals, respectively.
 ///
 /// Nodes hold references to "resources". "resources" are the representation of nodes in terms of the audials and visuals backends.
 /// "resources" are managed by nodes using explicit reference counting.
-/// 
+///
 /// A "resource" is owned by a "backend context".
 /// That is, the "backend context" holds a STRONG reference to its "resources".
 /// In addition, the "backend context" retains a GC lock unless its "resources" such that they are only gc'ed if the "backend context" drops this lock.

@@ -102,18 +102,6 @@ Arcadia_String_getNumberOfCodePoints
     Arcadia_String const* self
   );
 
-#if 0
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_getSubString
-Arcadia_String*
-Arcadia_String_getSubString
-  (
-    Arcadia_Thread* thread,
-    Arcadia_String const* self,
-    Arcadia_SizeValue index,
-    Arcadia_SizeValue length
-  );
-#endif
-
 // https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_isEqualTo_pn
 Arcadia_BooleanValue
 Arcadia_String_isEqualTo_pn

@@ -273,7 +273,7 @@ Arcadia_Engine_Demo_MainScene_updateVisuals
         );
   }
 
-  Arcadia_ADL_ColorDefinition* CLEARCOLORS[] = 
+  Arcadia_ADL_ColorDefinition* CLEARCOLORS[] =
     {
       getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Red.adl"),
                                                     Arcadia_String_createFromCxxString(thread, "Colors.Red")),

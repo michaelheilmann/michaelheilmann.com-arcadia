@@ -146,7 +146,7 @@ Arcadia_ADL_ModelReader_read
     Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_ADL_ModelDefinition* definition =  
+  Arcadia_ADL_ModelDefinition* definition =
     Arcadia_ADL_ModelDefinition_create
       (
         thread,

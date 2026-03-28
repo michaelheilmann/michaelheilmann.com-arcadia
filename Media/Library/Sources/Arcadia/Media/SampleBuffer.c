@@ -82,7 +82,7 @@ Arcadia_Media_SampleBuffer_constructImpl
     Arcadia_SizeValue bytes = (bytesPerSample * self->length * self->sampleRate);
     self->bytes = Arcadia_Memory_allocateUnmanaged(thread, bytes);
     Arcadia_Memory_copy(thread, self->bytes, other->bytes, bytes);
-    
+
     Arcadia_LeaveConstructor(Arcadia_Media_SampleBuffer);
   } else if (3 == _numberOfArguments) {
     {

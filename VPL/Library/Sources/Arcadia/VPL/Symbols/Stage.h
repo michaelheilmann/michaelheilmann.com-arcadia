@@ -47,10 +47,6 @@ struct Arcadia_VPL_Symbols_Stage {
   // This list is initially empty.
   Arcadia_List* variableScalars;
 
-  /// The "main" procedure of the stage.
-  /// Initially, this is a null pointer.
-  Arcadia_VPL_Symbols_Procedure* mainProcedure;
-
   /// The stage scope.
   Arcadia_Languages_Scope* scope;
 };

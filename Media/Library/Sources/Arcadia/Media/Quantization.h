@@ -23,28 +23,28 @@
 /// @brief Quantize a Arcadia.Real32 value value to Arcadia.Integer16.
 /// @param x The Arcadia.Real32 value.
 /// @return The Arcadia.Integer16 value.
-/// 
+///
 /// @remarks
 /// x := x
-/// 
+///
 /// raise #Arcadia_Status_ArgumentInvalid if x1 is no number (V1)
 ///
 /// x2 := -1 if x1 is less than -1
 /// x2 := +1 if x1 is greater than +1
 /// x2 := x1 otherwise
-/// 
+///
 /// Observation: less than -1 and greater than +1 also covers the cases when x is -infinity or +infinity, respectively.
-/// 
+///
 /// x3 := x2 + 1
 /// x4 := x3 / 2
 ///
 /// Observation: x3 is now within the bounds of [0,1]
 ///
 /// x5 := x4 * 65535 - 32768
-/// 
+///
 /// x4 = 0 yields x5 := -32768 = Arcadia.Integer32.Minimum
 /// x4 = 1 yields x5 := +37267 = Arcadia.Integer32.Maximum
-/// 
+///
 /// y := x5
 static inline Arcadia_Integer16Value
 Arcadia_Media_quantizeInteger16
@@ -69,7 +69,7 @@ Arcadia_Media_quantizeInteger16
   x = (x + 1.f) / 2.f;
 
   x = x * 65535.f - 32768.f;
- 
+
   // Clamp again to ensure x stays within bounds despite potential floating-point imprecisions.
   if (x < Arcadia_Integer16Value_Minimum) {
     x = Arcadia_Integer16Value_Minimum;
@@ -84,28 +84,28 @@ Arcadia_Media_quantizeInteger16
 /// @brief Quantize a Arcadia.Real32 value value to Arcadia.Integer8.
 /// @param x The Arcadia.Real32 value.
 /// @return The Arcadia.Integer8 value.
-/// 
+///
 /// @remarks
 /// x := x
-/// 
+///
 /// raise #Arcadia_Status_ArgumentInvalid if x1 is no number (V1)
 ///
 /// x2 := -1 if x1 is less than -1
 /// x2 := +1 if x1 is greater than +1
 /// x2 := x1 otherwise
-/// 
+///
 /// Observation: less than -1 and greater than +1 also covers the cases when x is -infinity or +infinity, respectively.
-/// 
+///
 /// x3 := x2 + 1
 /// x4 := x3 / 2
 ///
 /// Observation: x3 is now within the bounds of [0,1]
 ///
 /// x5 := x4 * 255 - 128
-/// 
+///
 /// x4 = 0 yields x5 := -128 = Arcadia.Integer8.Minimum
 /// x4 = 1 yields x5 := +127 = Arcadia.Integer8.Maximum
-/// 
+///
 /// y := x5
 static inline Arcadia_Integer8Value
 Arcadia_Media_quantizeInteger8
@@ -145,28 +145,28 @@ Arcadia_Media_quantizeInteger8
 /// @brief Quantize a Arcadia.Real32 value value to Arcadia.Natural16.
 /// @param x The Arcadia.Real32 value.
 /// @return The Arcadia.Natural16 value.
-/// 
+///
 /// @remarks
 /// x := x
-/// 
+///
 /// raise #Arcadia_Status_ArgumentInvalid if x1 is no number (V1)
 ///
 /// x2 := -1 if x1 is less than -1
 /// x2 := +1 if x1 is greater than +1
 /// x2 := x1 otherwise
-/// 
+///
 /// Observation: less than -1 and greater than +1 also covers the cases when x is -infinity or +infinity, respectively.
-/// 
+///
 /// x3 := x2 + 1
 /// x4 := x3 / 2
 ///
 /// Observation: x3 is now within the bounds of [0,1]
 ///
 /// x5 := x4 * 65535
-/// 
+///
 /// x4 = 0 yields x5 := 0 = Arcadia.Natural16.Minimum
 /// x4 = 1 yields x5 := 65535 = Arcadia.Natural16.Maximum
-/// 
+///
 /// y := x5
 static inline Arcadia_Natural16Value
 Arcadia_Media_quantizeNatural16
@@ -191,8 +191,8 @@ Arcadia_Media_quantizeNatural16
   x = (x + 1.f) / 2.f;
 
   x = x * 65535.f;
-  
-  
+
+
   // Clamp again to ensure x stays within bounds despite potential floating-point imprecisions.
   if (x < Arcadia_Natural16Value_Minimum) {
     x = Arcadia_Natural16Value_Minimum;
@@ -207,28 +207,28 @@ Arcadia_Media_quantizeNatural16
 /// @brief Quantize a Arcadia.Real32 value value to Arcadia.Natural8.
 /// @param x The Arcadia.Real32 value.
 /// @return The Arcadia.Natural8 value.
-/// 
+///
 /// @remarks
 /// x := x
-/// 
+///
 /// raise #Arcadia_Status_ArgumentInvalid if x1 is no number (V1)
 ///
 /// x2 := -1 if x1 is less than -1
 /// x2 := +1 if x1 is greater than +1
 /// x2 := x1 otherwise
-/// 
+///
 /// Observation: less than -1 and greater than +1 also covers the cases when x is -infinity or +infinity, respectively.
-/// 
+///
 /// x3 := x2 + 1
 /// x4 := x3 / 2
 ///
 /// Observation: x3 is now within the bounds of [0,1]
 ///
 /// x5 := x4 * 255
-/// 
+///
 /// x4 = 0 yields x5 := 0 = Arcadia.Natural8.Minimum
 /// x4 = 1 yields x5 := 255 = Arcadia.Natural8.Maximum
-/// 
+///
 /// y := x5
 static Arcadia_Natural8Value
 Arcadia_Media_quantizeNatural8

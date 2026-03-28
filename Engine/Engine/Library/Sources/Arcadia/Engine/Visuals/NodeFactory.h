@@ -89,7 +89,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
       Arcadia_Visuals_BackendContext* backendContext,
       Arcadia_ADL_ModelDefinition* source
     );
- 
+
   Arcadia_Engine_Visuals_PixelBufferNode*
   (*createPixelBufferNode)
     (

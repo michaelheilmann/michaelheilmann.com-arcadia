@@ -11,17 +11,17 @@
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_PixelBuffer_getLineStride">Arcadia_Media_PixelBuffer_getLineStride</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_PixelBuffer_getPixelFormat">Arcadia_Media_PixelBuffer_getPixelFormat</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_PixelBuffer_getWidth">Arcadia_Media_PixelBuffer_getWidth</a></li>
-        
+
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_PixelFormat">Arcadia_Media_PixelFormat</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_PixelFormat_getNumberOfComponents">Arcadia_Media_PixelFormat_getNumberOfComponents</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_PixelFormat_getNumberOfBytes">Arcadia_Media_PixelFormat_getNumberOfBytes</a></li>
-        
+
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_SampleBuffer">Arcadia_Media_SampleBuffer</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_SampleBuffer_create">Arcadia_Media_SampleBuffer_create</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_SampleBuffer_getLength">Arcadia_Media_SampleBuffer_getLength</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_SampleBuffer_getSampleFormat">Arcadia_Media_SampleBuffer_getSampleFormat</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_SampleBuffer_getSampleRate">Arcadia_Media_SampleBuffer_getSampleRate</a></li>
-        
+
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_SampleFormat">Arcadia_Media_SampleFormat</a></li>
         <li><a href="@{siteAddress}/Arcadia/Media/#Arcadia_Media_SampleFormat_getNumberOfBytes">Arcadia_Media_SampleFormat_getNumberOfBytes</a></li>
         </ul>

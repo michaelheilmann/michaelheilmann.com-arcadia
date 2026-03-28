@@ -32,43 +32,43 @@
 
 
 
-#define Arcadia_ARMS_Configuration_InstructionSetArchitecture_Unknown @Arcadia.ARMS.InstructionSetArchitecture.Unknown@
-#define Arcadia_ARMS_Configuration_InstructionSetArchitecture_X86 @Arcadia.ARMS.InstructionSetArchitecture.X86@
-#define Arcadia_ARMS_Configuration_InstructionSetArchitecture_X64 @Arcadia.ARMS.InstructionSetArchitecture.X64@
+#define Arcadia_ARMS_Configuration_InstructionSetArchitecture_Unknown @Arcadia.ARMS_InstructionSetArchitecture_Unknown@
+#define Arcadia_ARMS_Configuration_InstructionSetArchitecture_X86 @Arcadia.ARMS_InstructionSetArchitecture_X86@
+#define Arcadia_ARMS_Configuration_InstructionSetArchitecture_X64 @Arcadia.ARMS_InstructionSetArchitecture_X64@
 
-#define Arcadia_ARMS_Configuration_InstructionSetArchitecture @Arcadia.ARMS.InstructionSetArchitecture@
-
-
-
-#define Arcadia_ARMS_Configuration_OperatingSystem_Unknown @Arcadia.ARMS.OperatingSystem.Unknown@
-#define Arcadia_ARMS_Configuration_OperatingSystem_Cygwin @Arcadia.ARMS.OperatingSystem.Cygwin@
-#define Arcadia_ARMS_Configuration_OperatingSystem_Ios @Arcadia.ARMS.OperatingSystem.Ios@
-#define Arcadia_ARMS_Configuration_OperatingSystem_IosSimulator @Arcadia.ARMS.OperatingSystem.IosSimulator@
-#define Arcadia_ARMS_Configuration_OperatingSystem_Linux @Arcadia.ARMS.OperatingSystem.Linux@
-#define Arcadia_ARMS_Configuration_OperatingSystem_Macos @Arcadia.ARMS.OperatingSystem.Macos@
-#define Arcadia_ARMS_Configuration_OperatingSystem_Mingw @Arcadia.ARMS.OperatingSystem.Mingw@
-#define Arcadia_ARMS_Configuration_OperatingSystem_Msys @Arcadia.ARMS.OperatingSystem.Msys@
-#define Arcadia_ARMS_Configuration_OperatingSystem_Unix @Arcadia.ARMS.OperatingSystem.Unix@
-#define Arcadia_ARMS_Configuration_OperatingSystem_Windows @Arcadia.ARMS.OperatingSystem.Windows@
-
-#define Arcadia_ARMS_Configuration_OperatingSystem @Arcadia.ARMS.OperatingSystem@
+#define Arcadia_ARMS_Configuration_InstructionSetArchitecture @Arcadia.ARMS_InstructionSetArchitecture@
 
 
 
-#define Arcadia_ARMS_Configuration_CompilerC_Unknown @Arcadia.ARMS.Compiler.C.Unknown@
-#define Arcadia_ARMS_Configuration_CompilerC_Clang @Arcadia.ARMS.Compiler.C.Clang@
-#define Arcadia_ARMS_Configuration_CompilerC_Gcc @Arcadia.ARMS.Compiler.C.Gcc@
-#define Arcadia_ARMS_Configuration_CompilerC_Msvc @Arcadia.ARMS.Compiler.C.Msvc@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Unknown @Arcadia.ARMS_OperatingSystem_Unknown@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Cygwin @Arcadia.ARMS_OperatingSystem_Cygwin@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Ios @Arcadia.ARMS_OperatingSystem_IOS@
+#define Arcadia_ARMS_Configuration_OperatingSystem_IosSimulator @Arcadia.ARMS_OperatingSystem_IOSSimulator@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Linux @Arcadia.ARMS_OperatingSystem_Linux@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Macos @Arcadia.ARMS_OperatingSystem_Macos@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Mingw @Arcadia.ARMS_OperatingSystem_Mingw@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Msys @Arcadia.ARMS_OperatingSystem_MSYS@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Unix @Arcadia.ARMS_OperatingSystem_Unix@
+#define Arcadia_ARMS_Configuration_OperatingSystem_Windows @Arcadia.ARMS_OperatingSystem_Windows@
 
-#define Arcadia_ARMS_Configuration_CompilerC @Arcadia.ARMS.Compiler.C@
+#define Arcadia_ARMS_Configuration_OperatingSystem @Arcadia.ARMS_OperatingSystem@
 
 
 
-#define Arcadia_ARMS_Configuration_ByteOrder_Unknown @Arcadia.ARMS.ByteOrder.Unknown@
-#define Arcadia_ARMS_Configuration_ByteOrder_BigEndian @Arcadia.ARMS.ByteOrder.BigEndian@
-#define Arcadia_ARMS_Configuration_ByteOrder_LittleEndian @Arcadia.ARMS.ByteOrder.LittleEndian@
+#define Arcadia_ARMS_Configuration_CompilerC_Unknown @Arcadia.ARMS_Compiler_C_Unknown@
+#define Arcadia_ARMS_Configuration_CompilerC_Clang @Arcadia.ARMS_Compiler_C_Clang@
+#define Arcadia_ARMS_Configuration_CompilerC_Gcc @Arcadia.ARMS_Compiler_C_GCC@
+#define Arcadia_ARMS_Configuration_CompilerC_Msvc @Arcadia.ARMS_Compiler_C_MSVC@
 
-#define Arcadia_ARMS_Configuration_ByteOrder @Arcadia.ARMS.ByteOrder@
+#define Arcadia_ARMS_Configuration_CompilerC @Arcadia.ARMS_Compiler_C@
+
+
+
+#define Arcadia_ARMS_Configuration_ByteOrder_Unknown @Arcadia.ARMS_ByteOrder_Unknown@
+#define Arcadia_ARMS_Configuration_ByteOrder_BigEndian @Arcadia.ARMS_ByteOrder_BigEndian@
+#define Arcadia_ARMS_Configuration_ByteOrder_LittleEndian @Arcadia.ARMS_ByteOrder_LittleEndian@
+
+#define Arcadia_ARMS_Configuration_ByteOrder @Arcadia.ARMS_ByteOrder@
 
 
 

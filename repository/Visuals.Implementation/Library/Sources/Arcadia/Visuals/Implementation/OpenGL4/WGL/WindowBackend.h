@@ -41,7 +41,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_WGL_WindowBackend {
 
   HWND windowHandle;
   HDC deviceContextHandle;
-  
+
   Arcadia_Visuals_Implementation_Windows_Icon* smallIcon;
   Arcadia_Visuals_Implementation_Windows_Icon* bigIcon;
 };

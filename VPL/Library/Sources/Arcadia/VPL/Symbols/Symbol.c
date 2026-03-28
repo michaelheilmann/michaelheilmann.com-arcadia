@@ -96,11 +96,3 @@ Arcadia_VPL_Symbols_Symbol_getName
     Arcadia_VPL_Symbols_Symbol* self
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_VPL_Symbols_Symbol, getName, self); }
-
-void
-Arcadia_VPL_Symbols_Symbol_resolveTypes
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Symbol* self
-  )
-{ Arcadia_VirtualCall(Arcadia_VPL_Symbols_Symbol, resolveTypes, self); }

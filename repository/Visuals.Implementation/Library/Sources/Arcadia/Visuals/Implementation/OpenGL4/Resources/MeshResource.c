@@ -137,7 +137,7 @@ Arcadia_Visuals_Implementation_OpenGL4_MeshResource_constructImpl
     o = (Arcadia_Object*)Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
     Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
     self->constantBuffer = (Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*)o;
-    
+
     o = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_getType(thread));
     Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
     self->vertexBuffer = (Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource*)o;

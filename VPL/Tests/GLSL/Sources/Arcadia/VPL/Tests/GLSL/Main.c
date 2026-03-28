@@ -20,7 +20,7 @@ test1
   (
     Arcadia_Thread* thread
   )
-{ 
+{
   Arcadia_VPL_Symbols_Program* program = Arcadia_VPL_Symbols_Program_createProgram(thread, Arcadia_VPL_Symbols_ProgramFlags_MeshAmbientColor);
   Arcadia_VPL_Backends_GLSL_Transpiler* transpiler = Arcadia_VPL_Backends_GLSL_Transpiler_create(thread);
   Arcadia_Map* constantMapping = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));

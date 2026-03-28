@@ -13,7 +13,7 @@ struct Arcadia_Engine_Demo_SceneDispatch {
   void (*updateAudials)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value, Arcadia_Integer32Value, Arcadia_Integer32Value);
   void (*updateLogics)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value tick);
   void (*updateVisuals)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Real64Value, Arcadia_Integer32Value, Arcadia_Integer32Value);
-  
+
   void (*handleKeyboardKeyEvent)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_KeyboardKeyEvent*);
   void (*handleMouseButtonEvent)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_MouseButtonEvent*);
   void (*handleMousePointerEvent)(Arcadia_Thread*, Arcadia_Engine_Demo_Scene*, Arcadia_Visuals_MousePointerEvent*);

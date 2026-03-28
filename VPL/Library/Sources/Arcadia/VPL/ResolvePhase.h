@@ -25,12 +25,12 @@ Arcadia_declareObjectType(u8"Arcadia.VPL.ResolvePhase", Arcadia_VPL_ResolvePhase
 
 struct Arcadia_VPL_ResolvePhaseDispatch {
   Arcadia_ObjectDispatch _parent;
-};  
-                         
+};
+
 struct Arcadia_VPL_ResolvePhase {
   Arcadia_Object _parent;
 };
-      
+
 Arcadia_VPL_ResolvePhase*
 Arcadia_VPL_ResolvePhase_create
   (

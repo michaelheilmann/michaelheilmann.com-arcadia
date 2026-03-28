@@ -24,9 +24,9 @@ if (NOT TARGET ${MyTestName})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/SchemaReferenceValidation/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/SchemaReferenceValidation/Configure.h @ONLY)
   list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/SchemaReferenceValidation/Configure.h.i)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/SchemaReferenceValidation/Configure.h)
+  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDLS/Tests/SchemaReferenceValidation/Configure.h)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDLS/Tests/SchemaReferenceValidation/Main.c)
+  OnSourceFile(${MyTestName} Arcadia/DDLS/Tests/SchemaReferenceValidation/Main.c)
 
   list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.DDLS ${MyProjectName}.DDL)
 

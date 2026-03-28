@@ -58,7 +58,7 @@ endif()
 #   - ${target}.PrivateLibaries  List of libraries only visible from within ${target}. Initially defined but empty
 #   - ${target}.Enabled          TRUE if the product should be built. FALSE otherwise. Defaults to TRUE.
 #
-# - if ${type} is `template`   
+# - if ${type} is `template`
 macro(BeginProduct target type)
   set(${target}.SourceFiles "")
   set(${target}.HeaderFiles "")
@@ -72,11 +72,11 @@ macro(BeginProduct target type)
   set(${target}.IncludeDirectories "")
   set(${target}.Enabled TRUE)
   DetectCompilerC(${target})
-  DetectCompilerMasm(${target})
+  DetectCompilerASM(${target})
   DetectByteOrder(${target})
   DetectOperatingSystem(${target})
   DetectInstructionSetArchitecture(${target})
-  
+
   BeginFileCopy(${target})
 
   # Store the product type.
@@ -114,8 +114,29 @@ macro(EndProduct target)
       message(FATAL_ERROR "unknown/unsupported product type")
     endif()
 
+    # Configure warnings and errors.
     ConfigureWarningsAndErrors(${target})
     
+    # Configure installation directory.
+    set(${target}.InstallationDirectory "${target}")
+    get_property(is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+    if (is_multi_config)
+      set(${target}.InstallationDirectory "${${target}.InstallationDirectory}/$<CONFIG>")
+    else()
+      set(${target}.InstallationDirectory "${${target}.InstallationDirectory}/${CMAKE_BUILD_TYPE}")
+    endif()
+    if (${target}_InstructionSetArchitecture STREQUAL ${target}_InstructionSetArchitecture_X64)
+      set(${target}.InstallationDirectory "${${target}.InstallationDirectory}/x64")
+    elseif (${target}_InstructionSetArchitecture STREQUAL ${target}_InstructionSetArchitecture_X86)
+      set(${target}.InstallationDirectory "${${target}.InstallationDirectory}/x86")
+    else()
+      message(FATAL_ERROR " - unsupported instruction set architecture")
+    endif()
+    set(${target}.InstallationDirectories.Binaries  ${${target}.InstallationDirectory}/bin)
+    set(${target}.InstallationDirectories.Libraries ${${target}.InstallationDirectory}/lib)
+    set(${target}.InstallationDirectories.Archives  ${${target}.InstallationDirectory}/lib)
+    set(${target}.InstallationDirectories.Includes  ${${target}.InstallationDirectory}/include)
+
     # Combine all file lists into a single list.
     set (allFiles "")
     foreach (e ${${target}.HeaderFiles})
@@ -136,27 +157,66 @@ macro(EndProduct target)
     foreach (e ${${target}.AssemblerFiles})
       list(APPEND allFiles ${e})
     endforeach()
-    
+
     # Support for resource files under windows.
     if (${${target}.OperatingSystem} STREQUAL ${${target}.OperatingSystem.Windows} AND ${target}.Windows.ResourceFile)
       list(APPEND allFiles ${${target}.Windows.ResourceFile})
     endif()
+    
+    set(${target}.PublicFiles "")
+    set(${target}.PrivateFiles "")
+    # source files, assembler files, and configuration template files are ALWAYS private.
+    # Header files, inlay files, and configuration files are by default public and can be marked as private.
+    foreach (file ${${target}.InlayFiles})
+      get_source_file_property(_isPrivate ${file} PRIVATE)
+      if (NOT _isPrivate)
+        list(APPEND ${target}.PublicFiles ${file})
+      else()
+        list(APPEND ${target}.PrivateFiles ${file})   
+      endif()
+    endforeach()
+    foreach (file ${${target}.HeaderFiles})
+      get_source_file_property(_isPrivate ${file} PRIVATE)
+      if (NOT _isPrivate)
+        list(APPEND ${target}.PublicFiles ${file})
+      else()
+        list(APPEND ${target}.PrivateFiles ${file}) 
+      endif()
+    endforeach()
+    foreach (file ${${target}.ConfigurationFiles})
+      get_source_file_property(_isPrivate ${file} PRIVATE)
+      if (NOT _isPrivate)
+        list(APPEND ${target}.PublicFiles ${file})
+      else()
+        list(APPEND ${target}.PrivateFiles ${file}) 
+      endif()
+    endforeach()
 
-    target_sources(${target} PRIVATE ${allFiles})
+    target_sources(${target}
+                   PUBLIC FILE_SET publicHeaders
+                   TYPE HEADERS
+                   BASE_DIRS
+                   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Sources>
+                   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/Sources>
+                   FILES ${${target}.PublicFiles}
+       
+                   PRIVATE
+                   ${${target}.PrivateFiles}
+                   ${${target}.AssemblerFiles}
+                   ${${target}.ConfigurationTemplateFiles}
+                   ${${target}.SourceFiles})
 
     # Assign source groups to the files.
-    # For this to work, the files must reside in ${CMAKE_CURRENT_SOURCE_DIR} or in ${CMAKE_CURRENT_BINARY_DIR}.  
+    # For this to work, the files must reside in ${CMAKE_CURRENT_SOURCE_DIR} or in ${CMAKE_CURRENT_BINARY_DIR}.
     foreach (file ${allFiles})
-      string_starts_with(result ${file} ${CMAKE_CURRENT_SOURCE_DIR})
-      if (${result})
-        source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${file})    
+      string_starts_with(isInSourceDir ${file} ${CMAKE_CURRENT_SOURCE_DIR})
+      string_starts_with(isInBinaryDir ${file} ${CMAKE_CURRENT_BINARY_DIR})
+      if (${isInSourceDir})
+        source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Sources" FILES ${file})
+      elseif (${isInBinaryDir})
+        source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} PREFIX "Sources" FILES ${file})
       else()
-        string_starts_with(result ${file} ${CMAKE_CURRENT_BINARY_DIR})
-        if(${result})
-          source_group(TREE ${CMAKE_CURRENT_BINARY_DIR} FILES ${file})
-        else()
-          message(FATAL_ERROR "unknown/unsupported source directory: ${file}")
-        endif() 
+        message(FATAL_ERROR "unknown/unsupported source directory: ${file}")
       endif()
     endforeach()
 
@@ -168,13 +228,13 @@ macro(EndProduct target)
     if (${${target}.Type} STREQUAL library)
 
       target_include_directories(${target} PRIVATE ${${target}.IncludeDirectories})
-      target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
-      target_include_directories(${target} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Sources)
+      target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Sources> $<INSTALL_INTERFACE:${${target}.InstallationDirectories.Includes}>)
+      target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/Sources>)
 
     elseif (${${target}.Type} STREQUAL executable)
 
       target_include_directories(${target} PRIVATE ${${target}.IncludeDirectories})
-      target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
+      target_include_directories(${target} PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Sources> $<INSTALL_INTERFACE:${${target}.InstallationDirectories.Includes}>)
       target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Sources)
 
       set_property(TARGET ${target} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${${target}.WorkingDirectory})
@@ -182,8 +242,8 @@ macro(EndProduct target)
     elseif (${${target}.Type} STREQUAL test)
 
       target_include_directories(${target} PRIVATE ${${target}.IncludeDirectories})
-      target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
-      target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/Sources)
+      target_include_directories(${target} PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Sources> $<INSTALL_INTERFACE:${${target}.InstallationDirectories.Includes}>)
+      target_include_directories(${target} PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/Sources>)
 
       # Possible alternative is `add_test(NAME ${target} COMMAND ${target} WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>)`.
       add_test(NAME ${target} COMMAND ${target} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
@@ -202,8 +262,40 @@ macro(EndProduct target)
                                 PROPERTIES
                                 COMPILE_FLAGS "/safeseh")
   endif()
-  
+
   EndFileCopy()
+  
+  if (${target}.Install)
+
+
+    if (${${target}.Type} STREQUAL library)
+
+      install(TARGETS ${target}
+              EXPORT ArcadiaTargets
+              RUNTIME
+                DESTINATION ${${target}.InstallationDirectories.Binaries}
+              ARCHIVE
+                DESTINATION ${${target}.InstallationDirectories.Archives}
+              LIBRARY
+                DESTINATION ${${target}.InstallationDirectory.Libraries}
+              FILE_SET publicHeaders
+                DESTINATION ${${target}.InstallationDirectories.Includes})
+      
+    elseif (${${target}.Type} STREQUAL executable)
+      
+      install(TARGETS ${target}
+              RUNTIME DESTINATION ${${target}.InstallationDirectory}/Binaries)
+    
+    elseif (${${target}.Type} STREQUAL test)
+    
+    install(TARGETS ${target}
+              RUNTIME DESTINATION ${${target}.InstallationDirectory}/Binaries)
+
+    else()
+      message(FATAL_ERROR "unknown/unsupported product type")
+    endif()
+
+  endif()
 
 endmacro()
 
@@ -248,12 +340,37 @@ macro(CopyProductAssets target folder sourceDirectory targetDirectory)
  endforeach()
 
  add_custom_target(${target} ALL DEPENDS ${targetFiles})
- 
+
  # If a folder was specified.
  if (NOT "${folder}" STREQUAL "")
    set_target_properties(${target} PROPERTIES FOLDER ${folder})
  endif()
- 
+
+endmacro()
+
+# Define a template file.
+# The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
+# If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
+# Can be used between `BeginProduct` and `EndProduct`.
+# TODO: Raise an error if the file does not exist.
+macro(OnTemplateFile target file)
+  set (extra_args ${ARGN})
+  list(LENGTH extra_args extra_args_count)
+  if (${extra_args_count} GREATER 0)
+    list(GET extra_args 0 optional_arg)
+  endif()
+
+  if (GENERATED IN_LIST extra_args)
+    cmake_path(SET _temporary ${CMAKE_CURRENT_BINARY_DIR}/Sources/${file})
+    set_source_files_properties(${_temporary} PROPERTIES GENERATED ON)
+  else()
+    cmake_path(SET _temporary ${CMAKE_CURRENT_SOURCE_DIR}/Sources/${file})
+    #set_source_files_properties(${_temporary} PROPERTIES GENERATED OFF)
+  endif()
+
+  list(APPEND ${target}.TemplateFiles ${file})
+
+  unset(optional_arg)
 endmacro()
 
 # Can be used between `BeginProduct` and `EndProduct`.
@@ -266,17 +383,90 @@ macro(OnConfigurationTemplateFile target file)
   list(APPEND ${target}.ConfigurationTemplateFiles ${file})
 endmacro()
 
+# Define an inlay file.
+# The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
+# If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
 # Can be used between `BeginProduct` and `EndProduct`.
-macro(OnSourceFile target file)
-  list(APPEND ${target}.SourceFiles ${file})
-endmacro()
-
-# Can be used between `BeginProduct` and `EndProduct`.
-macro(OnHeaderFile target file)
-  list(APPEND ${target}.HeaderFiles ${file})
-endmacro()
-
-# Can be used between `BeginProduct` and `EndProduct`.
+# TODO: Raise an error if the file does not exist.
 macro(OnInlayFile target file)
-  list(APPEND ${target}.InlayFiles ${file})
+  set (extra_args ${ARGN})
+  list(LENGTH extra_args extra_args_count)
+  if (${extra_args_count} GREATER 0)
+    list(GET extra_args 0 optional_arg)
+  endif()
+
+  if (GENERATED IN_LIST extra_args)
+    cmake_path(SET _temporary ${CMAKE_CURRENT_BINARY_DIR}/Sources/${file})
+    set_source_files_properties(${_temporary} PROPERTIES GENERATED ON)
+  else()
+    cmake_path(SET _temporary ${CMAKE_CURRENT_SOURCE_DIR}/Sources/${file})
+    #set_source_files_properties(${_temporary} PROPERTIES GENERATED OFF)
+  endif()
+  
+  if (PRIVATE IN_LIST extra_args)
+    set_source_files_properties(${_temporary} PROPERTIES PRIVATE ON)
+  endif()
+
+  list(APPEND ${target}.InlayFiles ${_temporary})
+
+  unset(optional_arg)
+endmacro()
+
+
+# Define a header file.
+# The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
+# If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
+# Can be used between `BeginProduct` and `EndProduct`.
+# TODO: Raise an error if the file does not exist.
+macro(OnHeaderFile target file)
+  set (extra_args ${ARGN})
+  list(LENGTH extra_args extra_args_count)
+  if (${extra_args_count} GREATER 0)
+    list(GET extra_args 0 optional_arg)
+  endif()
+
+  if (GENERATED IN_LIST extra_args)
+    cmake_path(SET _temporary ${CMAKE_CURRENT_BINARY_DIR}/Sources/${file})
+    set_source_files_properties(${_temporary} PROPERTIES GENERATED ON)
+  else()
+    cmake_path(SET _temporary ${CMAKE_CURRENT_SOURCE_DIR}/Sources/${file})
+    #set_source_files_properties(${_temporary} PROPERTIES GENERATED OFF)
+  endif()
+  
+  if (PRIVATE IN_LIST extra_args)
+    set_source_files_properties(${_temporary} PROPERTIES PRIVATE ON)
+  endif()
+
+  list(APPEND ${target}.HeaderFiles ${_temporary})
+
+  unset(optional_arg)
+endmacro()
+
+# Define a source file.
+# The path is relative to `${CMAKE_CURRENT_SOURCE_DIR}/Sources`.
+# If the optional argument `GENERATED` is supplied, then the path is relative to `${CMAKE_CURRENT_BINARY_DIR}/Sources`.
+# Can be used between `BeginProduct` and `EndProduct`.
+# TODO: Raise an error if the file does not exist.
+macro(OnSourceFile target file)
+  set (extra_args ${ARGN})
+  list(LENGTH extra_args extra_args_count)
+  if (${extra_args_count} GREATER 0)
+    list(GET extra_args 0 optional_arg)
+  endif()
+
+  if (GENERATED IN_LIST extra_args)
+    cmake_path(SET _temporary ${CMAKE_CURRENT_BINARY_DIR}/Sources/${file})
+    set_source_files_properties(${_temporary} PROPERTIES GENERATED ON)
+  else()
+    cmake_path(SET _temporary ${CMAKE_CURRENT_SOURCE_DIR}/Sources/${file})
+    #set_source_files_properties(${_temporary} PROPERTIES GENERATED OFF)
+  endif()
+  
+  if (PRIVATE IN_LIST extra_args)
+    set_source_files_properties(${_temporary} PROPERTIES PRIVATE ON)
+  endif()
+
+  list(APPEND ${target}.SourceFiles ${_temporary})
+
+  unset(optional_arg)
 endmacro()

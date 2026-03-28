@@ -192,7 +192,7 @@ main1
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_CommandLine_fileNotFoundError(thread, (Arcadia_String*)Arcadia_ArgumentsValidation_getObjectReferenceValue(thread, &sourceFileValue, _Arcadia_String_getType(thread)));
-  } 
+  }
   // `target` is required
   if (Arcadia_Value_isVoidValue(&targetFileValue)) {
     Arcadia_CommandLine_requiredArgumentMissingError(thread, Arcadia_String_createFromCxxString(thread, u8"target"));

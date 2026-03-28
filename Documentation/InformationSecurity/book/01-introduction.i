@@ -5,7 +5,7 @@
 <p>
 An information system is a system of actors with the goal of processing    information
 , that is create, acquire, store, process, dispose, and disseminate information,  according to  the
-information sytem's specification. Actors interact to adjust the system and process information.           
+information sytem's specification. Actors interact to adjust the system and process information.
 That specification defines the expected behavior of the information system including its  goals and
 ,most importantly, its constraints. We characterize information security as the discipline       of
 protecting the information system from access, use, disruption, modification, or destruction by actors
@@ -29,7 +29,7 @@ of information systems. Chapter <a href="#">Chapter II Categories of Information
 before <a href="#">Chapter III "Observe, Enforce, Redefine"</a> discusses SAs in greater detail.</p>
 
 <p>To operationalize, we can, however, add certain meta-requirements to the specification. One popular pick of requirements are
-the requirements o f<em>confidentiality</em>, <em>integrity</em>, and <em>availability</em>:</p> 
+the requirements o f<em>confidentiality</em>, <em>integrity</em>, and <em>availability</em>:</p>
 
 <ul>
   <li><b>confidentiality</b>: the information system shall ensure confidentiality of information.

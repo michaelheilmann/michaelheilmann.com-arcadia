@@ -71,7 +71,7 @@ Arcadia_CommandLineArgument_constructImpl
     self->value = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   } else {
     self->value = NULL;
-  } 
+  }
   Arcadia_LeaveConstructor(Arcadia_CommandLineArgument);
 }
 

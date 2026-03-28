@@ -230,8 +230,8 @@ Arcadia_Math_QuaternionReal32_getSquaredLength
        + self->elements[1] * self->elements[1]
        + self->elements[2] * self->elements[2]
        + self->elements[3] * self->elements[3];
-} 
-  
+}
+
 void
 Arcadia_Math_QuaternionReal32_assign
   (
@@ -256,8 +256,8 @@ Arcadia_Math_QuaternionReal32_toRotationMatrix
     Arcadia_Math_Matrix4Real32* target
   )
 {
-  Arcadia_Real32Value x = self->elements[0], 
-                      y = self->elements[1], 
+  Arcadia_Real32Value x = self->elements[0],
+                      y = self->elements[1],
                       z = self->elements[2],
                       w = self->elements[3];
   Arcadia_Real32Value const values[] = {

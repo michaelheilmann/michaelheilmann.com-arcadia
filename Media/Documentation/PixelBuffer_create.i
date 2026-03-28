@@ -25,17 +25,17 @@
       <div><a href="#">Arcadia_Thread</a>* thread</div>
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
-    
+
     <div>
       <div><a href="#">Arcadia_Integer32Value</a> linePadding</div>
       <div>The number of Bytes after the end of a line. Must be non-negative.</div>
     </div>
-    
+
     <div>
       <div><a href="#">Arcadia_Integer32Value</a> numberOfColumns</div>
       <div>The number of columns of the pixel buffer. Must be non-negative.</div>
     </div>
-    
+
     <div>
       <div><a href="#">Arcadia_Integer32Value</a> numberOfRows</div>
       <div>The number of rows of the pixel buffer. Must be non-negative.</div>
@@ -45,7 +45,7 @@
       <div><a href="#">Arcadia_Media_PixelFormat</a> pixelFormat</div>
       <div>The pixel format of the pixel buffer.</div>
     </div>
-    
+
   </section>
 
   <section class="cxx errors">

@@ -20,6 +20,7 @@
   #error("do not include directly, include `Arcadia/VPL/Include.h` instead")
 #endif
 #include "Arcadia/Languages/Include.h"
+#include "Arcadia/VPL/Configure.h"
 
 // A constant. Can be either a constant record or a constant scalar.
 Arcadia_declareObjectType(u8"Arcadia.VPL.Symbols.Symbol", Arcadia_VPL_Symbols_Symbol,
@@ -28,7 +29,6 @@ Arcadia_declareObjectType(u8"Arcadia.VPL.Symbols.Symbol", Arcadia_VPL_Symbols_Sy
 struct Arcadia_VPL_Symbols_SymbolDispatch {
   Arcadia_ObjectDispatch _parent;
   Arcadia_String* (*getName)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*);
-  void (*resolveTypes)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*);
 };
 
 struct Arcadia_VPL_Symbols_Symbol {
@@ -41,16 +41,6 @@ struct Arcadia_VPL_Symbols_Symbol {
 /// @return The name of this symbol.
 Arcadia_String*
 Arcadia_VPL_Symbols_Symbol_getName
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Symbol* self
-  );
-
-/// @brief Resolve type names.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this symbol.
-void
-Arcadia_VPL_Symbols_Symbol_resolveTypes
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_Symbol* self

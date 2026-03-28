@@ -282,7 +282,7 @@ _Arcadia_Names_onFinalize
     Arcadia_Thread* thread,
     size_t* finalized
   )
-{ 
+{
   if (finalized) {
     *finalized = 0;
   }

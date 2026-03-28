@@ -21,6 +21,8 @@
 #include "Arcadia/VPL/Symbols/Include.h"
 #include "Arcadia/VPL/SemanticalAnalysis.h"
 #include "Arcadia/VPL/ResolvePhase.h"
+#include "Arcadia/VPL/TreeBuilder.h"
+#include "Arcadia/VPL/Configure.h"
 
 #include <string.h>
 
@@ -328,7 +330,7 @@ writeConstantScalar
     Arcadia_VPL_Symbols_ConstantScalar* constantScalar,
     Arcadia_ByteBuffer* target
   )
-{ 
+{
   // <uniform> : 'uniform' <type> <instance name>;
   Arcadia_String* name = Arcadia_VPL_Symbols_Symbol_getName(thread, (Arcadia_VPL_Symbols_Symbol*)constantScalar);
 
@@ -686,99 +688,38 @@ onProcedureSymbol
   emitCxxString(thread, target, "}\n");
 }
 
-// read Arcadia_Object* pointers and put them into a list until a null pointer is reached.
-static void
-gather
-  (
-    Arcadia_Thread* thread,
-    Arcadia_List* list,
-    va_list arguments
-  )
-{
-  Arcadia_Object* argument = va_arg(arguments, Arcadia_Object*);
-  while (argument) {
-    Arcadia_List_insertBackObjectReferenceValue(thread, list, argument);
-    argument = va_arg(arguments, Arcadia_Object*);
-  }
-}
-
-static Arcadia_VPL_Tree_Node*
-TreeBuilder_callExpr1
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Tree_Node* target,
-    ...
-  )
-{
-  va_list arguments;
-  va_start(arguments, target);
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_VPL_Tree_Node* tree = Arcadia_VPL_Tree_NodeFactory_makeCallExpr(thread, target);
-    gather(thread, ((Arcadia_VPL_Tree_CallExprNode*)tree)->arguments, arguments);
-    va_end(arguments);
-    Arcadia_Thread_popJumpTarget(thread);
-    return tree;
-  } else {
-    va_end(arguments);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_jump(thread);
-  }
-}
-
 static Arcadia_List*
-TreeBuilder_list1
+getProcedures
   (
     Arcadia_Thread* thread,
-    ...
+    Arcadia_VPL_Backends_GLSL_Transpiler* self,
+    Context context,
+    Arcadia_VPL_Symbols_Program* program
   )
 {
-  va_list elements;
-  va_start(elements, thread);
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    Arcadia_List* list = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-    gather(thread, list, elements);
-    va_end(elements);
-    Arcadia_Thread_popJumpTarget(thread);
-    return list;
-  } else {
-    va_end(elements);
-    Arcadia_Thread_popJumpTarget(thread);
-    Arcadia_Thread_jump(thread);
+  Arcadia_List* list = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_VPL_Symbols_Stage* stage = NULL;
+  switch (context) {
+    case Context_FragmentShader: {
+      stage = program->fragmentStage;
+    } break;
+    case Context_VertexShader: {
+      stage = program->vertexStage;
+    } break;
+    default: {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
+    } break;
+  };
+  Arcadia_List* objects = Arcadia_Map_getValues(thread, stage->scope->entries);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)objects); i < n; ++i) {
+    Arcadia_Object* object = Arcadia_List_getObjectReferenceValueAt(thread, objects, i);
+    if (Arcadia_Object_isInstanceOf(thread, object, _Arcadia_VPL_Symbols_Procedure_getType(thread))) {
+      Arcadia_List_insertBackObjectReferenceValue(thread, list, object);
+    }
   }
+  return list;
 }
-
-#define TreeBuilder_variableDefn(_type, _name) Arcadia_VPL_Tree_NodeFactory_makeVariableDefn(thread, _name, _type)
-
-#define TreeBuilder_assignmentExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeAssignmentExpr(thread, _lhs, _rhs)
-
-#define TreeBuilder_multiplyExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeMultiplyExpr(thread, _lhs, _rhs)
-
-#define TreeBuilder_divideExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeDivideExpr(thread, _lhs, _rhs)
-
-#define TreeBuilder_addExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeAddExpr(thread, _lhs, _rhs)
-
-#define TreeBuilder_subtractExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeSubtractExpr(thread, _lhs, _rhs)
-
-#define TreeBuilder_accessExpr(_lhs, _rhs) Arcadia_VPL_Tree_NodeFactory_makeAccessExpr(thread, _lhs, _rhs)
-
-#define TreeBuilder_realNumberExpr(_number) Arcadia_VPL_Tree_NodeFactory_makeNumberExpr(thread, S(thread, _number))
-
-#define TreeBuilder_callExpr(_target, ...) TreeBuilder_callExpr1(thread, _target, __VA_ARGS__ __VA_OPT__(,) NULL)
-
-#define TreeBuilder_statementList(...) TreeBuilder_list1(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
-
-#define TreeBuilder_parameterList(...) TreeBuilder_list1(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
-
-#define TreeBuilder_modifierList(...) TreeBuilder_list1(thread, __VA_ARGS__ __VA_OPT__(,) NULL)
-
-#define TreeBuilder_name(_name) (Arcadia_VPL_Tree_Node*)Arcadia_VPL_Tree_NodeFactory_makeNameExpr(thread, S(thread, _name))
-
-#define TreeBuilder_procedureDefn(_modifiers, _returnValueType, _name, _parameters, _body) \
-  Arcadia_VPL_Tree_NodeFactory_makeProcedureDefn(thread, _modifiers, (Arcadia_VPL_Tree_NameExprNode*)_returnValueType, _name, _parameters, _body)
 
 static Arcadia_Map*
 computeInitialSymbolNameMapping
@@ -786,7 +727,7 @@ computeInitialSymbolNameMapping
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_Program* program
   )
-{ 
+{
   Arcadia_Map* map = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   Arcadia_Map_set(thread, map, Arcadia_Value_makeObjectReferenceValue(program->MAT4), Arcadia_Value_makeObjectReferenceValue(S(thread, "mat4")), NULL, NULL);
   Arcadia_Map_set(thread, map, Arcadia_Value_makeObjectReferenceValue(program->SAMPLER2D), Arcadia_Value_makeObjectReferenceValue(S(thread, "sampler2D")), NULL, NULL);
@@ -827,109 +768,12 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
       writeConstantScalar(thread, self, Context_VertexShader, constantMapping, program, (Arcadia_VPL_Symbols_ConstantScalar*)constant, target);
     }
   }
-
-  Arcadia_VPL_Tree_Node* vertexColorAssignmentTree = NULL;
-  if (program->flags == Arcadia_VPL_Symbols_ProgramFlags_MeshAmbientColor) {
-    vertexColorAssignmentTree =
-      TreeBuilder_assignmentExpr
-        (
-          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
-          TreeBuilder_accessExpr
-            (
-              TreeBuilder_name("mesh"),
-              TreeBuilder_name("ambientColor")
-            )
-        );
-  } else if (program->flags == Arcadia_VPL_Symbols_ProgramFlags_VertexAmbientColor) {
-    vertexColorAssignmentTree =
-      TreeBuilder_assignmentExpr
-        (
-          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
-          TreeBuilder_name("vertexProgram_inputs_vertex_ambientColor")
-        );
-  } else if (program->flags == Arcadia_VPL_Symbols_ProgramFlags_TextureAmbientColor) {
-    vertexColorAssignmentTree =
-      TreeBuilder_assignmentExpr
-        (
-          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
-          TreeBuilder_name("vertexProgram_inputs_vertex_ambientColor")
-        );
-  } else {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-
-  Arcadia_VPL_Tree_ProcedureDefnNode* tree =
-    TreeBuilder_procedureDefn
-      (
-        TreeBuilder_modifierList(S(thread, "vertex")),
-        TreeBuilder_name("void"),
-        S(thread, "main"),
-        TreeBuilder_parameterList(),
-        TreeBuilder_statementList
-          (
-            TreeBuilder_variableDefn
-              (
-                S(thread, "mat4"),
-                S(thread, "mvp")
-              ),
-            TreeBuilder_assignmentExpr
-              (
-                TreeBuilder_name("mvp"),
-                TreeBuilder_multiplyExpr
-                  (
-                    TreeBuilder_accessExpr
-                      (
-                        TreeBuilder_name("viewer"),
-                        TreeBuilder_name("viewToProjection")
-                      ),
-                    TreeBuilder_multiplyExpr
-                      (
-                        TreeBuilder_accessExpr
-                          (
-                            TreeBuilder_name("viewer"),
-                            TreeBuilder_name("worldToView")
-                          ),
-                        TreeBuilder_accessExpr
-                          (
-                            TreeBuilder_name("model"),
-                            TreeBuilder_name("localToWorld")
-                          )
-                      )
-                  )
-              ),
-            TreeBuilder_assignmentExpr
-              (
-                TreeBuilder_name("fragmentProgram_inputs_vertex_position"),
-                TreeBuilder_multiplyExpr
-                  (
-                    TreeBuilder_name("mvp"),
-                    TreeBuilder_callExpr
-                      (
-                        TreeBuilder_name("vec4"),
-                        TreeBuilder_accessExpr
-                          (
-                            TreeBuilder_name("vertexProgram_inputs_vertex_position"),
-                            TreeBuilder_name("xyz")
-                          ),
-                        TreeBuilder_realNumberExpr("1.0")
-                      )
-                  )
-              ),
-            TreeBuilder_assignmentExpr
-              (
-                TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColorTextureCoordinate"),
-                TreeBuilder_name("vertexProgram_inputs_vertex_ambientColorTextureCoordinate")
-              ),
-            vertexColorAssignmentTree                                  
-          )
-      );
-
-  program->vertexStage->mainProcedure = EnterPhase_enterProcedure(thread, program, tree);
-  Arcadia_Languages_Scope_enter(thread, program->vertexStage->scope, program->vertexStage->mainProcedure->name, (Arcadia_Object*)program->vertexStage->mainProcedure);
   Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread), program);
-
-  onProcedureSymbol(thread, self, program->vertexStage->mainProcedure, target);
+  Arcadia_List* procedures = getProcedures(thread, self, Context_VertexShader, program);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)procedures); i < n; ++i) {
+    Arcadia_VPL_Symbols_Procedure* procedure = (Arcadia_VPL_Symbols_Procedure*)Arcadia_List_getObjectReferenceValueAt(thread, procedures, i);
+    onProcedureSymbol(thread, self, procedure, target);
+  }
 
   // the zero terminator
   Arcadia_ByteBuffer_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);
@@ -965,43 +809,14 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
       writeConstantScalar(thread, self, Context_FragmentShader, constantMapping, program, (Arcadia_VPL_Symbols_ConstantScalar*)constant, target);
     }
   }
-
-  Arcadia_VPL_Tree_Node* fragmentColorAssignmentTree = NULL;
-  if (program->flags == Arcadia_VPL_Symbols_ProgramFlags_TextureAmbientColor) {
-    fragmentColorAssignmentTree =
-      TreeBuilder_assignmentExpr
-        (
-          TreeBuilder_name("rasterizerProgram_inputs_fragmentColor"),
-          TreeBuilder_callExpr
-            (
-              TreeBuilder_name("texture2D"),
-              TreeBuilder_name("ambientColorTexture"),
-              TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColorTextureCoordinate")
-            )
-        );
-  } else {
-    fragmentColorAssignmentTree =
-      TreeBuilder_assignmentExpr
-        (
-          TreeBuilder_name("rasterizerProgram_inputs_fragmentColor"),
-          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor")
-        );
+  Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread), program);
+  Arcadia_List* procedures = getProcedures(thread, self, Context_FragmentShader, program);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)procedures); i < n; ++i) {
+    Arcadia_VPL_Symbols_Procedure* procedure = (Arcadia_VPL_Symbols_Procedure*)Arcadia_List_getObjectReferenceValueAt(thread, procedures, i);
+    onProcedureSymbol(thread, self, procedure, target);
   }
 
-  Arcadia_VPL_Tree_ProcedureDefnNode* tree =
-    TreeBuilder_procedureDefn
-      (
-        TreeBuilder_modifierList(S(thread, "fragment")),
-        TreeBuilder_name("void"),
-        S(thread, "main"),
-        TreeBuilder_parameterList(),
-        TreeBuilder_statementList(fragmentColorAssignmentTree)
-      );
-  program->fragmentStage->mainProcedure = EnterPhase_enterProcedure(thread, program, tree);
-  Arcadia_Languages_Scope_enter(thread, program->fragmentStage->scope, program->fragmentStage->mainProcedure->name, (Arcadia_Object*)program->fragmentStage->mainProcedure);
-  Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread), program);
-
-  onProcedureSymbol(thread, self, program->fragmentStage->mainProcedure, target);
+  // the zero terminator
   Arcadia_ByteBuffer_insertBackBytes(thread, target, &ZEROTERMINATOR, 1);
 
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);

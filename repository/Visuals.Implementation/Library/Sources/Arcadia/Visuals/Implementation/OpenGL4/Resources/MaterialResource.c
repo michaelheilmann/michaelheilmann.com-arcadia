@@ -134,7 +134,7 @@ Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_constructImpl
 
     o = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_getType(thread));
     Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
-    self->program = (Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*)o; 
+    self->program = (Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*)o;
 
    Arcadia_Thread_popJumpTarget(thread);
   } else {

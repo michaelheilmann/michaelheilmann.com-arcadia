@@ -35,7 +35,7 @@ struct Arcadia_Math_QuaternionReal32 {
 /// @brief Create the quaternion (x,y,z,w).
 /// @param thread A pointer to this thread.
 /// @param x, y, z, w The values for the x, y, z, and w elements of the quaternion.
-/// @return A pointer to the quaternion. 
+/// @return A pointer to the quaternion.
 Arcadia_Math_QuaternionReal32*
 Arcadia_Math_QuaternionReal32_create
   (
@@ -58,7 +58,7 @@ Arcadia_Math_QuaternionReal32_setFromAxisAngle
     Arcadia_Math_Vector3Real32* axis,
     Arcadia_Real32Value angle
   );
-  
+
 /// @brief Normalize this quaterion.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this quaternion.
@@ -69,7 +69,7 @@ Arcadia_Math_QuaternionReal32_normalize
     Arcadia_Thread* thread,
     Arcadia_Math_QuaternionReal32* self
   );
-  
+
 /// @brief Get the length of this quaternion.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this quaternion.
@@ -80,7 +80,7 @@ Arcadia_Math_QuaternionReal32_getLength
     Arcadia_Thread* thread,
     Arcadia_Math_QuaternionReal32* self
   );
- 
+
 /// @brief Get the squared length of this quaternion.
 /// @param thread A pointer to this thread.
 /// @param self A pointer to this quaternion.

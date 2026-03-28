@@ -1081,7 +1081,7 @@ Arcadia_Media_PixelBuffer_setHeight
         Arcadia_Natural8Value r, g, b, a;
         Arcadia_Media_PixelBuffer_getPixelRGBA(thread, self, x, y, &r, &g, &b, &a);
         Arcadia_Media_PixelBuffer_setPixelRGBA(thread, temporary, x, y, r, g, b, a);
-      } 
+      }
     }
     Arcadia_Media_PixelBuffer_swap(thread, self, temporary);
   } else if (self->height > height) {

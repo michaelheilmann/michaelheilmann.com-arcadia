@@ -21,7 +21,7 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/index.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/index.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-                   
+
   # Build "error.html".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/error.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/error.html"
@@ -51,7 +51,7 @@ BeginTemplateEngine(${MyProjectName}.Website.Generate "Website")
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/data-protection-statement.html.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/data-protection-statement.html"
                    "${CMAKE_CURRENT_SOURCE_DIR}/website.env")
-                   
+
   # Build "sitemap.xml" and ".htaccess".
   OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/sitemap.xml.te"
                    "${REPOSITORY_SOURCE_DIR}/../.build/sitemap.xml"

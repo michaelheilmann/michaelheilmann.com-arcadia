@@ -56,7 +56,7 @@ Arcadia_VPL_Symbols_Variable_create
     Arcadia_Thread* thread,
     Arcadia_String* name,
     Arcadia_VPL_Symbols_Symbol* type,
-    Arcadia_VPL_Symbols_Symbol* enclosing,  
+    Arcadia_VPL_Symbols_Symbol* enclosing,
     Arcadia_VPL_Tree_Node* node
   );
 

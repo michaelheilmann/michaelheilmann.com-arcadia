@@ -222,7 +222,7 @@ Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource_renderImpl
                       b = ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->canvasSize.height * ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->relativeViewportRectangle.bottom,
                       w = ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->canvasSize.width * ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->relativeViewportRectangle.right
                         - ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->canvasSize.width * ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->relativeViewportRectangle.left,
-                      h = ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->canvasSize.height * ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->relativeViewportRectangle.top 
+                      h = ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->canvasSize.height * ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->relativeViewportRectangle.top
                         - ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->canvasSize.height * ((Arcadia_Visuals_Implementation_EnterPassResource*)self)->relativeViewportRectangle.bottom;
   gl->glViewport(l, b, w, h);
   gl->glEnable(GL_SCISSOR_TEST);

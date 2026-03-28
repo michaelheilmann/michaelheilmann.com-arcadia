@@ -68,7 +68,7 @@ Arcadia_Engine_Visuals_VertexDescriptor_construct
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  
+
   self->stride = Arcadia_ValueStack_getSizeValue(thread, 2);
   self->vertexElementDescriptors = Arcadia_ValueStack_getObjectReferenceValue(thread, 1);
 

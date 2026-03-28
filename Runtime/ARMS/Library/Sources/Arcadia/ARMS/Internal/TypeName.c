@@ -31,7 +31,7 @@ typedef struct Table Table;
 //  Let HI1 = log2(HI0). HI0 is in the range 0, 1, 2, ... .
 //  The program fails if HI1 is less than 2.
 //  HI = HI1 - 1 is the maximal capacity of the table. As HI1 is at least 3, HI is at least 2.
-// 
+//
 // Minimal capacity of the table as power of two
 //  The initial size of the buckets array is 1 << L0.
 //  The maximal size of the buckets array is 1 << HI.
@@ -125,13 +125,13 @@ initialize
     return Arcadia_ARMS_Status_EnvironmentFailed;
   }
   g_maximalCapacityPowerOfTwo = n - 1;
-  
+
   // (2) compute mimimal capacity
   g_minimalCapacityPowerOfTwo = 3;
   if (g_minimalCapacityPowerOfTwo > g_maximalCapacityPowerOfTwo) {
     g_minimalCapacityPowerOfTwo = g_maximalCapacityPowerOfTwo;
   }
-  
+
   return Arcadia_ARMS_Status_Success;
 }
 
@@ -178,7 +178,7 @@ onPostInsert
 {
   // This function keeps doubling the capacity until the ratio sz / cp is smaller than 0.75.
   // In most cases, this loop will be executed exactly once.
-  // To illustrate that: 
+  // To illustrate that:
   // Assume an already unlikely ratio 2^k / 2^k = 1 which is attained by sz = cp,
   // then doubling the capacity once will immediatly bring down the ratio to 2^k / 2^(k+1) = 0.5.
   while (true) {
@@ -206,7 +206,7 @@ Arcadia_ARMS_TypeNameModule_startup
 {
   if (!g_table) {
     if (initialize()) {
-      return Arcadia_ARMS_Status_EnvironmentFailed;    
+      return Arcadia_ARMS_Status_EnvironmentFailed;
     }
   }
   g_table = malloc(sizeof(Table));
@@ -292,7 +292,7 @@ Arcadia_ARMS_TypeName_getData
     const Arcadia_ARMS_Natural8** bytes,
     Arcadia_ARMS_Size* numberOfBytes
   )
-{ 
+{
   if (!typeName || !bytes || !numberOfBytes) {
     return Arcadia_ARMS_Status_ArgumentValueInvalid;
   }

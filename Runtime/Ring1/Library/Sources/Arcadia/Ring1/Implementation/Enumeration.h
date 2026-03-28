@@ -58,10 +58,10 @@ typedef void Arcadia_Type;
     } \
     return g_##_cName##_type; \
   }
-  
+
 typedef struct Arcadia_EnumerationValue {
   Arcadia_Type* type;
-  Arcadia_Integer32Value value;  
+  Arcadia_Integer32Value value;
 } Arcadia_EnumerationValue;
 
 static inline Arcadia_EnumerationValue

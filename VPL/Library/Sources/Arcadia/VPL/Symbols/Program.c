@@ -20,6 +20,8 @@
 #include "Arcadia/VPL/Tree/Include.h"
 #include "Arcadia/VPL/SemanticalAnalysis.h"
 #include "Arcadia/VPL/Symbols/Include.h"
+#include "Arcadia/VPL/TreeBuilder.h"
+#include "Arcadia/VPL/Configure.h"
 
 static Arcadia_String*
 S
@@ -191,40 +193,153 @@ createVariableScalarDefns
   return defns;
 }
 
-static void
-createVertexShaderMainFunction
+Arcadia_VPL_Tree_ProcedureDefnNode*
+Arcadia_VPL_Symbols_Program_createVertexShaderMainProcedureTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_Program* self
   )
 {
-  Arcadia_List* modifiers = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, modifiers, (Arcadia_Object*)S(thread, u8"vertex"));
-  Arcadia_VPL_Tree_ProcedureDefnNode* procedureDefnNode = Arcadia_VPL_Tree_ProcedureDefnNode_create(thread, modifiers,
-                                                                                                            Arcadia_VPL_Tree_NameExprNode_create(thread, S(thread, u8"void")),
-                                                                                                            S(thread, u8"main"),
-                                                                                                            (Arcadia_List*)Arcadia_ArrayList_create(thread),
-                                                                                                            (Arcadia_List*)Arcadia_ArrayList_create(thread));
-  Arcadia_VPL_Symbols_Procedure* procedure = Arcadia_VPL_Symbols_Procedure_create(thread, 0, procedureDefnNode->name, (Arcadia_VPL_Symbols_Symbol*)self->vertexStage, (Arcadia_VPL_Tree_Node*)procedureDefnNode);
-  (NULL != procedure);
+  Arcadia_VPL_Tree_Node* vertexColorAssignmentTree = NULL;
+  if (self->flags == Arcadia_VPL_Symbols_ProgramFlags_MeshAmbientColor) {
+    vertexColorAssignmentTree =
+      TreeBuilder_assignmentExpr
+        (
+          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
+          TreeBuilder_accessExpr
+            (
+              TreeBuilder_name("mesh"),
+              TreeBuilder_name("ambientColor")
+            )
+        );
+  } else if (self->flags == Arcadia_VPL_Symbols_ProgramFlags_VertexAmbientColor) {
+    vertexColorAssignmentTree =
+      TreeBuilder_assignmentExpr
+        (
+          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
+          TreeBuilder_name("vertexProgram_inputs_vertex_ambientColor")
+        );
+  } else if (self->flags == Arcadia_VPL_Symbols_ProgramFlags_TextureAmbientColor) {
+    vertexColorAssignmentTree =
+      TreeBuilder_assignmentExpr
+        (
+          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor"),
+          TreeBuilder_name("vertexProgram_inputs_vertex_ambientColor")
+        );
+  } else {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+
+  Arcadia_VPL_Tree_ProcedureDefnNode* tree =
+    TreeBuilder_procedureDefn
+      (
+        TreeBuilder_modifierList(S(thread, "vertex")),
+        TreeBuilder_name("void"),
+        S(thread, "main"),
+        TreeBuilder_parameterList(),
+        TreeBuilder_statementList
+          (
+            TreeBuilder_variableDefn
+              (
+                S(thread, "mat4"),
+                S(thread, "mvp")
+              ),
+            TreeBuilder_assignmentExpr
+              (
+                TreeBuilder_name("mvp"),
+                TreeBuilder_multiplyExpr
+                  (
+                    TreeBuilder_accessExpr
+                      (
+                        TreeBuilder_name("viewer"),
+                        TreeBuilder_name("viewToProjection")
+                      ),
+                    TreeBuilder_multiplyExpr
+                      (
+                        TreeBuilder_accessExpr
+                          (
+                            TreeBuilder_name("viewer"),
+                            TreeBuilder_name("worldToView")
+                          ),
+                        TreeBuilder_accessExpr
+                          (
+                            TreeBuilder_name("model"),
+                            TreeBuilder_name("localToWorld")
+                          )
+                      )
+                  )
+              ),
+            TreeBuilder_assignmentExpr
+              (
+                TreeBuilder_name("fragmentProgram_inputs_vertex_position"),
+                TreeBuilder_multiplyExpr
+                  (
+                    TreeBuilder_name("mvp"),
+                    TreeBuilder_callExpr
+                      (
+                        TreeBuilder_name("vec4"),
+                        TreeBuilder_accessExpr
+                          (
+                            TreeBuilder_name("vertexProgram_inputs_vertex_position"),
+                            TreeBuilder_name("xyz")
+                          ),
+                        TreeBuilder_realNumberExpr("1.0")
+                      )
+                  )
+              ),
+            TreeBuilder_assignmentExpr
+              (
+                TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColorTextureCoordinate"),
+                TreeBuilder_name("vertexProgram_inputs_vertex_ambientColorTextureCoordinate")
+              ),
+            vertexColorAssignmentTree
+          )
+      );
+
+  return tree;
 }
 
-static void
-createFragmentShaderMainFunction
+Arcadia_VPL_Tree_ProcedureDefnNode*
+Arcadia_VPL_Symbols_Program_createFragmentShaderMainProcedureTree
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_Program* self
   )
 {
-  Arcadia_List* modifiers = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, modifiers, (Arcadia_Object*)S(thread, u8"fragment"));
-  Arcadia_VPL_Tree_ProcedureDefnNode* procedureDefnNode = Arcadia_VPL_Tree_ProcedureDefnNode_create(thread, modifiers,
-                                                                                                            Arcadia_VPL_Tree_NameExprNode_create(thread, S(thread, u8"void")),
-                                                                                                            S(thread, u8"main"),
-                                                                                                            (Arcadia_List*)Arcadia_ArrayList_create(thread),
-                                                                                                            (Arcadia_List*)Arcadia_ArrayList_create(thread));
-  Arcadia_VPL_Symbols_Procedure* procedure = Arcadia_VPL_Symbols_Procedure_create(thread, 0, procedureDefnNode->name, (Arcadia_VPL_Symbols_Symbol*)self->fragmentStage, (Arcadia_VPL_Tree_Node*)procedureDefnNode);
-  (NULL != procedure);
+  Arcadia_VPL_Tree_Node* fragmentColorAssignmentTree = NULL;
+  if (self->flags == Arcadia_VPL_Symbols_ProgramFlags_TextureAmbientColor) {
+    fragmentColorAssignmentTree =
+      TreeBuilder_assignmentExpr
+        (
+          TreeBuilder_name("rasterizerProgram_inputs_fragmentColor"),
+          TreeBuilder_callExpr
+            (
+              TreeBuilder_name("texture2D"),
+              TreeBuilder_name("ambientColorTexture"),
+              TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColorTextureCoordinate")
+            )
+        );
+  } else {
+    fragmentColorAssignmentTree =
+      TreeBuilder_assignmentExpr
+        (
+          TreeBuilder_name("rasterizerProgram_inputs_fragmentColor"),
+          TreeBuilder_name("fragmentProgram_inputs_vertex_ambientColor")
+        );
+  }
+
+  Arcadia_VPL_Tree_ProcedureDefnNode* tree =
+    TreeBuilder_procedureDefn
+      (
+        TreeBuilder_modifierList(S(thread, "fragment")),
+        TreeBuilder_name("void"),
+        S(thread, "main"),
+        TreeBuilder_parameterList(),
+        TreeBuilder_statementList(fragmentColorAssignmentTree)
+      );
+
+  return tree;
 }
 
 static void
@@ -243,13 +358,6 @@ Arcadia_VPL_Symbols_Program_initializeDispatchImpl
 
 static void
 Arcadia_VPL_Symbols_Program_visitImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Program* self
-  );
-
-static void
-Arcadia_VPL_Symbols_Program_resolveTypesImpl
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_Program* self
@@ -355,9 +463,7 @@ Arcadia_VPL_Symbols_Program_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_ProgramDispatch* self
   )
-{ 
-  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->resolveTypes = (void (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_Program_resolveTypesImpl;
-}
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_VPL_Symbols_Program_visitImpl
@@ -401,14 +507,6 @@ Arcadia_VPL_Symbols_Program_visitImpl
   }
 }
 
-static void
-Arcadia_VPL_Symbols_Program_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Program* self
-  )
-{/*Intentionally empty.*/}
-
 Arcadia_VPL_Symbols_Program*
 Arcadia_VPL_Symbols_Program_create
   (
@@ -422,33 +520,13 @@ Arcadia_VPL_Symbols_Program_create
   ARCADIA_CREATEOBJECT(Arcadia_VPL_Symbols_Program);
 }
 
-Arcadia_VPL_Symbols_ConstantRecord*
-Arcadia_VPL_Symbols_Program_getConstantRecordByName
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Program* self,
-    Arcadia_String* name
-  )
-{ 
-  Arcadia_Value temporary = Arcadia_Value_makeObjectReferenceValue(name);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->constants); i < n; ++i) {
-    Arcadia_VPL_Symbols_Constant* e = (Arcadia_VPL_Symbols_Constant*)Arcadia_List_getObjectReferenceValueAt(thread, self->constants, i);
-    if (Arcadia_VPL_Symbols_Constant_getKind(thread, e) == Arcadia_VPL_ConstantKind_Record) {
-      if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)Arcadia_VPL_Symbols_Symbol_getName(thread, (Arcadia_VPL_Symbols_Symbol*)e), &temporary)) {
-        return (Arcadia_VPL_Symbols_ConstantRecord*)e;
-      }
-    }
-  }
-  return NULL;
-}
-
 Arcadia_List*
 Arcadia_VPL_Symbols_Program_getConstants
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_Program* self
   )
-{ 
+{
   Arcadia_List* clone = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->constants); i < n; ++i) {
     Arcadia_List_insertBack(thread, clone, Arcadia_List_getAt(thread, self->constants, i));
@@ -498,13 +576,20 @@ Arcadia_VPL_Symbols_Program_createProgram
       Arcadia_List_insertBackObjectReferenceValue(thread, program->programDefnNode->elements, Arcadia_List_getObjectReferenceValueCheckedAt(thread, source, i, _Arcadia_VPL_Tree_Node_getType(thread)));
     }
   }
+  // (2.5) Create the syntactic form for the vertex shader main procedure.
+  {
+    Arcadia_VPL_Tree_Node* defnNode = (Arcadia_VPL_Tree_Node*)Arcadia_VPL_Symbols_Program_createVertexShaderMainProcedureTree(thread, program);
+    Arcadia_List_insertBackObjectReferenceValue(thread, program->programDefnNode->elements, (Arcadia_Object*)defnNode);
+  }
+  // (2.6) Create the syntactic form for the fragment shader main procedure.
+  {
+    Arcadia_VPL_Tree_Node* defnNode = (Arcadia_VPL_Tree_Node*)Arcadia_VPL_Symbols_Program_createFragmentShaderMainProcedureTree(thread, program);
+    Arcadia_List_insertBackObjectReferenceValue(thread, program->programDefnNode->elements, (Arcadia_Object*)defnNode);
+  }
 
   // (3) See description of method for more information.
-  Arcadia_VPL_SemanticalAnalysis_step1(thread, semanticalAnalysis, program);
-  //Arcadia_VPL_SemanticalAnalysis_step2(thread, semanticalAnalysis, program);
-
-  Arcadia_VPL_Symbols_Symbol_resolveTypes(thread, (Arcadia_VPL_Symbols_Symbol*)program);
   Arcadia_VPL_SemanticalAnalysis_run(thread, semanticalAnalysis, program);
+
   return program;
 }
 

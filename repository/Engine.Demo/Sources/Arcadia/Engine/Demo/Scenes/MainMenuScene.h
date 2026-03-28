@@ -71,7 +71,7 @@ struct Arcadia_Engine_Demo_MainMenuScene {
     /// "pitch" is the angle, in degrees, of a counter-clockwise rotation of the camera around its local x-axis
     /// The initial value is @a 0.
     Arcadia_Real32Value pitch;
-    
+
     /// "yaw" is the angle, in degrees, of a counter-clockwise rotation of the camera around its local y-axis.
     /// The initial value is @a 0.
     Arcadia_Real32Value yaw;

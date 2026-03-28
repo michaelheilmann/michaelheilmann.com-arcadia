@@ -224,7 +224,7 @@ onConstantRecordField
     Arcadia_VPL_Symbols_Variable* field,
     Arcadia_VPL_Symbols_Program* program
   )
-{ 
+{
   Arcadia_VPL_Symbols_ConstantRecord* enclosing = (Arcadia_VPL_Symbols_ConstantRecord*)field->enclosing;
   Arcadia_Object* object = Arcadia_Languages_Scope_lookup(thread, enclosing->scope, field->name, Arcadia_BooleanValue_False);
   if (object) {
@@ -380,7 +380,7 @@ Step1_onConstantScalarEnter
     Arcadia_VPL_Symbols_Program* program,
     Arcadia_VPL_Tree_VariableDefnNode* defn
   )
-{ 
+{
   if (!Arcadia_VPL_Tree_VariableDefnNode_isConstant(thread, defn)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
@@ -424,7 +424,7 @@ Step1_onConstantRecordEnter
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    Arcadia_VPL_Symbols_Variable* varSym = Arcadia_VPL_Symbols_Variable_create(thread, varDefn->name, varTypeSym, (Arcadia_VPL_Symbols_Symbol*)sym, (Arcadia_VPL_Tree_Node*)varDefn); 
+    Arcadia_VPL_Symbols_Variable* varSym = Arcadia_VPL_Symbols_Variable_create(thread, varDefn->name, varTypeSym, (Arcadia_VPL_Symbols_Symbol*)sym, (Arcadia_VPL_Tree_Node*)varDefn);
     if (!Arcadia_Languages_Scope_enter(thread, sym->scope, varSym->name, (Arcadia_Object*)varSym)) {
       conflictingDefinitionError(thread, self, program);
     }
@@ -434,7 +434,7 @@ Step1_onConstantRecordEnter
 }
 
 void
-Arcadia_VPL_SemanticalAnalysis_step1
+Arcadia_VPL_SemanticalAnalysis_run
   (
     Arcadia_Thread* thread,
     Arcadia_VPL_SemanticalAnalysis* self,
@@ -466,69 +466,4 @@ Arcadia_VPL_SemanticalAnalysis_step1
       Arcadia_Thread_jump(thread);
     }
   }
-}
-
-void
-Arcadia_VPL_SemanticalAnalysis_run
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_SemanticalAnalysis* self,
-    Arcadia_VPL_Symbols_Program* program
-  )
-{ }
-
-// TODO: The procedure should be entered into a stage, not a program.
-Arcadia_VPL_Symbols_Procedure*
-EnterPhase_enterProcedure
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Program* programSymbol, 
-    Arcadia_VPL_Tree_ProcedureDefnNode* procedureDefnNode
-  )
-{
-  // TODO: Create once in constructor for semantical analysis.
-  Arcadia_VPL_ModifiersUtilities* modifiersUtilities = Arcadia_VPL_ModifiersUtilities_create(thread);
-  Arcadia_Natural8Value flags = Arcadia_VPL_ModifiersUtilities_procedureModifiers(thread, modifiersUtilities, procedureDefnNode->modifiers);
-
-  Arcadia_VPL_Symbols_Procedure* procedureSymbol = NULL;
-  Arcadia_Languages_Scope* enclosingScope = NULL;
-  if (flags & Arcadia_VPL_Symbols_ProcedureFlags_VertexStage) {
-    enclosingScope = programSymbol->vertexStage->scope;
-    procedureSymbol = Arcadia_VPL_Symbols_Procedure_create(thread, flags, procedureDefnNode->name, (Arcadia_VPL_Symbols_Symbol*)programSymbol->vertexStage, (Arcadia_VPL_Tree_Node*)procedureDefnNode);
-  } else if (flags & Arcadia_VPL_Symbols_ProcedureFlags_FragmentStage) {
-    enclosingScope = programSymbol->fragmentStage->scope;
-    procedureSymbol = Arcadia_VPL_Symbols_Procedure_create(thread, flags, procedureDefnNode->name, (Arcadia_VPL_Symbols_Symbol*)programSymbol->fragmentStage, (Arcadia_VPL_Tree_Node*)procedureDefnNode);
-  } else if(flags & Arcadia_VPL_Symbols_ProcedureFlags_Builtin) {
-    enclosingScope = programSymbol->scope;
-    procedureSymbol = Arcadia_VPL_Symbols_Procedure_create(thread, flags, procedureDefnNode->name, (Arcadia_VPL_Symbols_Symbol*)programSymbol, (Arcadia_VPL_Tree_Node*)procedureDefnNode);
-  } else {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-    Arcadia_Thread_jump(thread);
-  }
-  // Resolve the return type symbol.
-  Arcadia_Object* returnValueTypeSymbol = NULL;
-  returnValueTypeSymbol = Arcadia_Languages_Scope_lookup(thread, enclosingScope, procedureDefnNode->returnValueType->name, Arcadia_BooleanValue_True);
-  if (!returnValueTypeSymbol || !Arcadia_Object_isInstanceOf(thread, returnValueTypeSymbol, _Arcadia_VPL_Symbols_BuiltinType_getType(thread))) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_LexicalError);
-    Arcadia_Thread_jump(thread);
-  }
-  procedureSymbol->returnValueType = (Arcadia_VPL_Symbols_BuiltinType*)returnValueTypeSymbol;
-  procedureDefnNode->returnValueType->symbol = (Arcadia_VPL_Symbols_Symbol*)returnValueTypeSymbol;
-  // Create the scope.
-  procedureSymbol->scope = Arcadia_Languages_Scope_create(thread, enclosingScope);
-  // Enter the parameters.
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)procedureDefnNode->parameters); i < n; ++i) {
-    Arcadia_VPL_Tree_VariableDefnNode* parameterDefnNode = (Arcadia_VPL_Tree_VariableDefnNode*)Arcadia_List_getObjectReferenceValueAt(thread, procedureDefnNode->parameters, i);
-    // Resolve the paramter type symbol.
-    Arcadia_VPL_Symbols_Symbol* typeSymbol = (Arcadia_VPL_Symbols_Symbol*)Arcadia_Languages_Scope_lookup(thread, programSymbol->scope, parameterDefnNode->type, Arcadia_BooleanValue_True);
-    if (!typeSymbol || !Arcadia_Object_isInstanceOf(thread, returnValueTypeSymbol, _Arcadia_VPL_Symbols_BuiltinType_getType(thread))) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
-      Arcadia_Thread_jump(thread);
-    }
-    parameterDefnNode->typeSymbol = typeSymbol;
-    Arcadia_VPL_Symbols_Variable* parameterSymbol = Arcadia_VPL_Symbols_Variable_create(thread, parameterDefnNode->name, typeSymbol, (Arcadia_VPL_Symbols_Symbol*)procedureSymbol, (Arcadia_VPL_Tree_Node*)parameterDefnNode);
-    Arcadia_List_insertBackObjectReferenceValue(thread, procedureSymbol->parameters, (Arcadia_Object*)parameterSymbol);
-    Arcadia_Languages_Scope_enter(thread, procedureSymbol->scope, parameterSymbol->name, (Arcadia_Object*)parameterSymbol);
-  }
-  return procedureSymbol;
 }

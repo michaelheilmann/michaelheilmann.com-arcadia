@@ -1,6 +1,6 @@
 # The author of this software is Michael Heilmann (contact@michaelheilmann.com).
 #
-# Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
+# Copyright(c) 2024-2025 Michael Heilmann (contact@michaelheilmann.com).
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose without fee is hereby granted, provided that this entire notice
@@ -13,17 +13,6 @@
 # REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 # OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-cmake_minimum_required(VERSION 3.29)
+@PACKAGE_INIT@
 
-set(MyTestName ${MyProjectName}.Ring2.Tests.StringBufferTests)
-
-# Create test executable.
-BeginProduct(${MyTestName} test)
-
-OnSourceFile(${MyTestName} Main.c)
-
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring2)
-
-EndProduct(${MyTestName})
-
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring2")
+include("${CMAKE_CURRENT_LIST_DIR}/CMake/ArcadiaTargets.cmake")

@@ -1,13 +1,13 @@
 <div class="news-item">
 
   <div class="news-item-header">
-  
+
     <h2>2025-12-24</h2>
-  
+
   </div>
 
   <div class="news-item-body">
-  
+
     <p>
     <a href="@{siteAddress}/specifications/data-definition-language-schema/">Data Definition Language Schema specification</a> was updated to version 0.2
     This new version includes the <em>Choice</em> node:
@@ -29,7 +29,7 @@
       <li>zlib</li>
     </ul>
     <p>The binary archive is available as a <a href="https://github.com/michaelheilmann/michaelheilmann.com-dependencies/releases/tag/michaelheilmann.com-dependencies-v1.0.62">release</a>.</p>
-  
+
   </div>
 
-</div> 
+</div>

@@ -20,7 +20,7 @@ set(MyTestName ${MyProjectName}.Math.Tests.VectorTests)
 # Create test executable.
 BeginProduct(${MyTestName} test)
 
-list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Math.Tests.VectorTests/Main.c)
+OnSourceFile(${MyTestName} Arcadia.Math.Tests.VectorTests/Main.c)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Math)
 

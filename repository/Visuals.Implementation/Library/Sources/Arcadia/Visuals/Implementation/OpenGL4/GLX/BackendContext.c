@@ -790,7 +790,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_onButtonPressEvent
         x,
         y
       );
-  Arcadia_Engine_enqueEvent(thread, Arcadia_Engine_getOrCreate(thread), event); 
+  Arcadia_Engine_enqueEvent(thread, Arcadia_Engine_getOrCreate(thread), event);
 }
 
 static void

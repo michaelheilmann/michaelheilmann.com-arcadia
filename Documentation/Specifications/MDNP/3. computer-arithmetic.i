@@ -13,7 +13,7 @@ For example 101, 0101, 00101, ... all represent the value 5 by the above formula
   <li>Let \(x\) and \(y\) be natural number binary strings representing natural numbers \(a\) and \(b\).</li>
   <li>Let the width of \(x\) be \(n\) and the width of \(y\) be \(m\), respectively, where \(n, m &gt; 0\).</li>
   <li>Let \(k = \textit{max}\left(n, m\right)\).</li>
-  <li>  
+  <li>
   Compute
   \[
   c := a \circ b \mod 2^k
@@ -24,7 +24,7 @@ For example 101, 0101, 00101, ... all represent the value 5 by the above formula
   \(c\) is in the bounds of \([0,2^k-1]\) and hence can be represented by binary string of \(k\) bits.
   </li>
   <li>
-  The result of the operation is \(z\) the binary string representation of \(c\) by \(k\) bits.  
+  The result of the operation is \(z\) the binary string representation of \(c\) by \(k\) bits.
   </li>
 </ul>
 
@@ -44,7 +44,7 @@ For example 101, 0101, 00101, ... all represent the value 5 by the above formula
   \(c\) is representable by a binary string of length \(k\).
   </li>
   <li>
-  The result of the operation is either undefined or \(z\) the representation of \(c\) by \(k\) bits. 
+  The result of the operation is either undefined or \(z\) the representation of \(c\) by \(k\) bits.
   </li>
 </ul>
 
@@ -97,5 +97,5 @@ To obtain the integer number it represents compute \(- x_{n-1} 2^{n-1} + \sum_{i
   <li>
   \(c\) is in the bounds of \([-(2^{k-1}), (2^{k-1} -1)]\) and hence can be represented by \(k\) bits.
   </li>
-  <li>The result of the operation is \(z\) the representation of \(c\) by \(k\) bits.</li>  
+  <li>The result of the operation is \(z\) the representation of \(c\) by \(k\) bits.</li>
 </ul>

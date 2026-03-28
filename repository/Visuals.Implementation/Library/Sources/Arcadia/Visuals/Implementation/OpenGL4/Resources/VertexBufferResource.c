@@ -242,7 +242,7 @@ Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_loadImpl
       if (GL_NO_ERROR != gl->glGetError()) {
         return;
       }
-    } 
+    }
     ((Arcadia_Visuals_Implementation_VertexBufferResource*)self)->dirty &= ~Arcadia_Visuals_Implementation_VertexBufferResource_VertexDescriptorDirty;
   }
 }

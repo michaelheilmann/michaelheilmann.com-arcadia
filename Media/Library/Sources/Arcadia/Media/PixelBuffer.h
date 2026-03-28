@@ -289,7 +289,7 @@ Arcadia_Media_PixelBuffer_getNumberOfColumns
 /// @brief Set the number of columns of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @param numberOfColumns The new number of columns of this pixel buffer.
-/// @remarks Columns are added to /remove from the right side. 
+/// @remarks Columns are added to /remove from the right side.
 void
 Arcadia_Media_PixelBuffer_setNumberOfColumns
   (
@@ -309,7 +309,7 @@ Arcadia_Media_PixelBuffer_getNumberOfRows
 /// @brief Set the number of rows of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @param numberOfRows The new number of rows of this pixel buffer.
-/// @remarks Rows are added to/remove from the bottom side. 
+/// @remarks Rows are added to/remove from the bottom side.
 void
 Arcadia_Media_PixelBuffer_setNumberOfRows
   (
@@ -373,7 +373,7 @@ Arcadia_Media_PixelBuffer_getWidth
 /// @brief Set the width of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @param width The new width of this pixel buffer.
-/// @remarks Columns are added to /remove from the right side. 
+/// @remarks Columns are added to /remove from the right side.
 void
 Arcadia_Media_PixelBuffer_setWidth
   (
@@ -393,7 +393,7 @@ Arcadia_Media_PixelBuffer_getHeight
 /// @brief Set the height of this pixel buffer.
 /// @param self A pointer to this pixel buffer.
 /// @param height The new height of this pixel buffer.
-/// @remarks Rows are added to/remove from the bottom side. 
+/// @remarks Rows are added to/remove from the bottom side.
 void
 Arcadia_Media_PixelBuffer_setHeight
   (

@@ -55,13 +55,6 @@ Arcadia_VPL_Symbols_ConstantScalar_getNameImpl
     Arcadia_VPL_Symbols_ConstantScalar* self
   );
 
-static void
-Arcadia_VPL_Symbols_ConstantScalar_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Program* self
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_ConstantScalar_constructImpl,
@@ -105,10 +98,9 @@ Arcadia_VPL_Symbols_ConstantScalar_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_ConstantScalarDispatch* self
   )
-{ 
+{
   ((Arcadia_VPL_Symbols_ConstantDispatch*)self)->getKind = (Arcadia_VPL_ConstantKind (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Constant*))&Arcadia_VPL_Symbols_ConstantScalar_getKindImpl;
   ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->getName = (Arcadia_String*(*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_ConstantScalar_getNameImpl;
-  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->resolveTypes = (void (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_ConstantScalar_resolveTypesImpl;
 }
 
 static void
@@ -144,14 +136,6 @@ Arcadia_VPL_Symbols_ConstantScalar_getNameImpl
     Arcadia_VPL_Symbols_ConstantScalar* self
   )
 { return self->name; }
-
-static void
-Arcadia_VPL_Symbols_ConstantScalar_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Program* self
-  )
-{/*Intentionally empty.*/}
 
 Arcadia_VPL_Symbols_ConstantScalar*
 Arcadia_VPL_Symbols_ConstantScalar_create

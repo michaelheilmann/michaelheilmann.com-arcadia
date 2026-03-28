@@ -50,7 +50,7 @@ struct Arcadia_Visuals_Implementation_OpenGL4_TextureResource {
   // The texture minification filter.
   // @default Arcadia_Visuals_TextureFilter_Linear
   Arcadia_Engine_Visuals_TextureFilter minificationFilter;
-  
+
   /// @brief The pixel buffer storing the texture data.
   Arcadia_Media_PixelBuffer* pixelBuffer;
 };

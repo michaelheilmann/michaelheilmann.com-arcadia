@@ -18,35 +18,35 @@
 
 
 
-#define Arcadia_Configuration_InstructionSetArchitecture_Unknown @Arcadia.Ring1.InstructionSetArchitecture.Unknown@
-#define Arcadia_Configuration_InstructionSetArchitecture_X86 @Arcadia.Ring1.InstructionSetArchitecture.X86@
-#define Arcadia_Configuration_InstructionSetArchitecture_X64 @Arcadia.Ring1.InstructionSetArchitecture.X64@
+#define Arcadia_Configuration_InstructionSetArchitecture_Unknown @Arcadia.Ring1_InstructionSetArchitecture_Unknown@
+#define Arcadia_Configuration_InstructionSetArchitecture_X86 @Arcadia.Ring1_InstructionSetArchitecture_X86@
+#define Arcadia_Configuration_InstructionSetArchitecture_X64 @Arcadia.Ring1_InstructionSetArchitecture_X64@
 
-#define Arcadia_Configuration_InstructionSetArchitecture @Arcadia.Ring1.InstructionSetArchitecture@
-
-
-
-#define Arcadia_Configuration_OperatingSystem_Unknown @Arcadia.Ring1.OperatingSystem.Unknown@
-#define Arcadia_Configuration_OperatingSystem_Cygwin @Arcadia.Ring1.OperatingSystem.Cygwin@
-#define Arcadia_Configuration_OperatingSystem_Ios @Arcadia.Ring1.OperatingSystem.Ios@
-#define Arcadia_Configuration_OperatingSystem_IosSimulator @Arcadia.Ring1.OperatingSystem.IosSimulator@
-#define Arcadia_Configuration_OperatingSystem_Linux @Arcadia.Ring1.OperatingSystem.Linux@
-#define Arcadia_Configuration_OperatingSystem_Macos @Arcadia.Ring1.OperatingSystem.Macos@
-#define Arcadia_Configuration_OperatingSystem_Mingw @Arcadia.Ring1.OperatingSystem.Mingw@
-#define Arcadia_Configuration_OperatingSystem_Msys @Arcadia.Ring1.OperatingSystem.Msys@
-#define Arcadia_Configuration_OperatingSystem_Unix @Arcadia.Ring1.OperatingSystem.Unix@
-#define Arcadia_Configuration_OperatingSystem_Windows @Arcadia.Ring1.OperatingSystem.Windows@
-
-#define Arcadia_Configuration_OperatingSystem @Arcadia.Ring1.OperatingSystem@
+#define Arcadia_Configuration_InstructionSetArchitecture @Arcadia.Ring1_InstructionSetArchitecture@
 
 
 
-#define Arcadia_Configuration_CompilerC_Unknown @Arcadia.Ring1.Compiler.C.Unknown@
-#define Arcadia_Configuration_CompilerC_Clang @Arcadia.Ring1.Compiler.C.Clang@
-#define Arcadia_Configuration_CompilerC_Gcc @Arcadia.Ring1.Compiler.C.Gcc@
-#define Arcadia_Configuration_CompilerC_Msvc @Arcadia.Ring1.Compiler.C.Msvc@
+#define Arcadia_Configuration_OperatingSystem_Unknown @Arcadia.Ring1_OperatingSystem_Unknown@
+#define Arcadia_Configuration_OperatingSystem_Cygwin @Arcadia.Ring1_OperatingSystem_Cygwin@
+#define Arcadia_Configuration_OperatingSystem_Ios @Arcadia.Ring1_OperatingSystem_IOS@
+#define Arcadia_Configuration_OperatingSystem_IosSimulator @Arcadia.Ring1_OperatingSystem_IOSSimulator@
+#define Arcadia_Configuration_OperatingSystem_Linux @Arcadia.Ring1_OperatingSystem_Linux@
+#define Arcadia_Configuration_OperatingSystem_Macos @Arcadia.Ring1_OperatingSystem_MacOS@
+#define Arcadia_Configuration_OperatingSystem_Mingw @Arcadia.Ring1_OperatingSystem_MinGW@
+#define Arcadia_Configuration_OperatingSystem_Msys @Arcadia.Ring1_OperatingSystem_MSYS@
+#define Arcadia_Configuration_OperatingSystem_Unix @Arcadia.Ring1_OperatingSystem_Unix@
+#define Arcadia_Configuration_OperatingSystem_Windows @Arcadia.Ring1_OperatingSystem_Windows@
 
-#define Arcadia_Configuration_CompilerC @Arcadia.Ring1.Compiler.C@
+#define Arcadia_Configuration_OperatingSystem @Arcadia.Ring1_OperatingSystem@
+
+
+
+#define Arcadia_Configuration_CompilerC_Unknown @Arcadia.Ring1_Compiler_C_Unknown@
+#define Arcadia_Configuration_CompilerC_Clang @Arcadia.Ring1_Compiler_C_Clang@
+#define Arcadia_Configuration_CompilerC_Gcc @Arcadia.Ring1_Compiler_C_GCC@
+#define Arcadia_Configuration_CompilerC_Msvc @Arcadia.Ring1_Compiler_C_MSVC@
+
+#define Arcadia_Configuration_CompilerC @Arcadia.Ring1_Compiler_C@
 
 
 
@@ -55,11 +55,11 @@
 
 
 
-#define Arcadia_Configuration_ByteOrder_Unknown @Arcadia.Ring1.ByteOrder.Unknown@
-#define Arcadia_Configuration_ByteOrder_BigEndian @Arcadia.Ring1.ByteOrder.BigEndian@
-#define Arcadia_Configuration_ByteOrder_LittleEndian @Arcadia.Ring1.ByteOrder.LittleEndian@
+#define Arcadia_Configuration_ByteOrder_Unknown @Arcadia.Ring1_ByteOrder_Unknown@
+#define Arcadia_Configuration_ByteOrder_BigEndian @Arcadia.Ring1_ByteOrder_BigEndian@
+#define Arcadia_Configuration_ByteOrder_LittleEndian @Arcadia.Ring1_ByteOrder_LittleEndian@
 
-#define Arcadia_Configuration_ByteOrder @Arcadia.Ring1.ByteOrder@
+#define Arcadia_Configuration_ByteOrder @Arcadia.Ring1_ByteOrder@
 
 
 

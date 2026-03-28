@@ -150,7 +150,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_constructImpl
 
     o = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_getType(thread));
     Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)o);
-    self->material = (Arcadia_Visuals_Implementation_OpenGL4_MaterialResource*)o; 
+    self->material = (Arcadia_Visuals_Implementation_OpenGL4_MaterialResource*)o;
 
    Arcadia_Thread_popJumpTarget(thread);
   } else {
@@ -282,7 +282,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_renderImpl
     // There is no need to rewrite every value if only one value is dirty.
     Arcadia_Visuals_Implementation_ConstantBufferResource_writeMatrix4x4Real32(thread, (Arcadia_Visuals_Implementation_ConstantBufferResource*)self->constantBuffer, Arcadia_BooleanValue_True, ((Arcadia_Visuals_Implementation_ModelResource*)self)->localToWorldMatrix);
     ((Arcadia_Visuals_Implementation_ModelResource*)self)->dirty &= ~Arcadia_Visuals_Implementation_ModelResource_LocalToWorldMatrixDirty;
-    
+
     Arcadia_Visuals_Implementation_Resource_load(thread, (Arcadia_Visuals_Implementation_Resource*)self->constantBuffer);
   }
 

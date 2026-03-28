@@ -280,7 +280,7 @@ Arcadia_FileSystem_createDirectoryFiles
   // (3) Begin at the topmost component.
   Arcadia_FilePath* temporary = Arcadia_FilePath_clone(thread, path);
   Arcadia_Collection_clear(thread, (Arcadia_Collection*)temporary->fileNames);
-  for (Arcadia_SizeValue i = 0; i < n - 1; ++i) { 
+  for (Arcadia_SizeValue i = 0; i < n - 1; ++i) {
     Arcadia_String* suffixString = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)path->fileNames, i,
                                                                                                   _Arcadia_String_getType(thread));
     Arcadia_FilePath* suffix = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, suffixString), Arcadia_String_getNumberOfBytes(thread, suffixString));
@@ -289,5 +289,5 @@ Arcadia_FileSystem_createDirectoryFiles
     // - a component exists but is not a directory file
     // - a component could not be created
     Arcadia_FileSystem_createDirectoryFile(thread, Arcadia_FileSystem_getOrCreate(thread), temporary);
-  }  
+  }
 }

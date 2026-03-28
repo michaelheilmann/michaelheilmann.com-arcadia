@@ -256,7 +256,7 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_getViewToProjectionMatrixImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Implementation_CameraNode* self
   )
-{ 
+{
   Arcadia_Math_Matrix4Real32* clone = Arcadia_Math_Matrix4Real32_create(thread);
   Arcadia_Math_Matrix4Real32_assign(thread, clone, self->viewToProjectionMatrix);
   return clone;
@@ -269,7 +269,7 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_setViewToProjectionMatrixImpl
     Arcadia_Engine_Visuals_Implementation_CameraNode* self,
     Arcadia_Math_Matrix4Real32* viewToProjectionMatrix
   )
-{ 
+{
   Arcadia_Math_Matrix4Real32_assign(thread, self->viewToProjectionMatrix, viewToProjectionMatrix);
   self->dirtyBits |= ViewToProjectionMatrixDirty;
 }
@@ -293,7 +293,7 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_setWorldToViewMatrixImpl
     Arcadia_Engine_Visuals_Implementation_CameraNode* self,
     Arcadia_Math_Matrix4Real32* worldToViewMatrix
   )
-{ 
+{
   Arcadia_Math_Matrix4Real32_assign(thread, self->worldToViewMatrix, worldToViewMatrix);
   self->dirtyBits |= WorldToViewMatrixDirty;
 }

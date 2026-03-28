@@ -23,15 +23,15 @@ if (NOT TARGET ${MyTestName})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h @ONLY)
   list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h.i)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h)
+  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Configure.h)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Main.c)
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/EnterPass.c)
-  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/EnterPass.h)
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/StatementsContext.c)
-  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/StatementsContext.h)
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.c)
-  list(APPEND ${MyTestName}.HeaderFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.h)
+  OnSourceFile(${MyTestName} Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Main.c)
+  OnSourceFile(${MyTestName} Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/EnterPass.c)
+  OnHeaderFile(${MyTestName} Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/EnterPass.h)
+  OnSourceFile(${MyTestName} Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/StatementsContext.c)
+  OnHeaderFile(${MyTestName} Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/StatementsContext.h)
+  OnSourceFile(${MyTestName} Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.c)
+  OnHeaderFile(${MyTestName} Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.h)
 
   list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Machine)
 

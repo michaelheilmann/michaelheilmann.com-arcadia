@@ -197,7 +197,7 @@ createMaterialResourceImpl
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
     Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
     Arcadia_Visuals_Implementation_OpenGL4_TextureResource* ambientTexture,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* programResource 
+    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* programResource
   )
 {
   Arcadia_Visuals_Implementation_OpenGL4_MaterialResource* resource = Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self, ambientColorSource, ambientTexture, programResource);

@@ -134,7 +134,7 @@ Arcadia_Engine_Demo_Scene_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_SceneDispatch* self
   )
-{ 
+{
   self->updateAudials = &Arcadia_Engine_Demo_Scene_updateAudialsImpl;
   self->updateLogics = &Arcadia_Engine_Demo_Scene_updateLogicsImpl;
   self->updateVisuals = &Arcadia_Engine_Demo_Scene_updateVisualsImpl;

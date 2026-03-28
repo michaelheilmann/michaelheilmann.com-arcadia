@@ -35,7 +35,7 @@ Arcadia_Math_Color4Real32Value_lerp
     result->components[1] = s * (self->components[1]) + t * (other->components[1]);
     result->components[2] = s * (self->components[2]) + t * (other->components[2]);
     result->components[3] = s * (self->components[3]) + t * (other->components[3]);
-  }  
+  }
 }
 
 void
@@ -58,5 +58,5 @@ Arcadia_Math_Color4Real64Value_lerp
     result->components[1] = s * (self->components[1]) + t * (other->components[1]);
     result->components[2] = s * (self->components[2]) + t * (other->components[2]);
     result->components[3] = s * (self->components[3]) + t * (other->components[3]);
-  }  
+  }
 }

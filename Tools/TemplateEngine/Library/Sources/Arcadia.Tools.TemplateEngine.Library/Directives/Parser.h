@@ -63,7 +63,7 @@ Directives_Tree*
 Directives_Parser_run
   (
     Arcadia_Thread* thread,
-    Directives_Parser* self  
+    Directives_Parser* self
   );
 
 #endif // ARCADIA_TEMPLATEENGINE_DIRECTIVES_PARSER_H_INCLUDED

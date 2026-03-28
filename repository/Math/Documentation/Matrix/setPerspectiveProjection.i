@@ -9,16 +9,16 @@
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv>* self,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> fieldOfView,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> aspectRatio,<br> 
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> aspectRatio,<br>
   &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> near,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> far<br>   
+  &nbsp;&nbsp;&nbsp;&nbsp;<my-mv>ElementType</my-mv> far<br>
   &nbsp;&nbsp;)
   </code></my-signature>
 
   <my-summary>
   <p>Assign the elements of this <code>Arcadia_Math_Matrix<my-mv>NumberOfColumns</my-mv>x<my-mv>NumberOfRows</my-mv><my-mv>ElementTypeSuffix</my-mv></code> object the values of a perspective projection matrix.
   This function is defined for \(4 \times 4\).</p>
-  
+
   <p>The projection matrix is defined as</p>
   \[
 	\begin{matrix}
@@ -45,7 +45,7 @@
     <tr><td><code>Real32Value</code>         </td><td><code>Arcadia_Real32Value</code></td></tr>
     <tr><td><code>Real64Value</code>         </td><td><code>Arcadia_Real64Value</code></td></tr>
   </table>
-  
+
   </my-summary>
 
   <section class="cxx parameters">

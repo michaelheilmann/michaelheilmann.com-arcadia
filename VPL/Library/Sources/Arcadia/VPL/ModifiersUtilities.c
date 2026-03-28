@@ -111,7 +111,7 @@ Arcadia_VPL_ModifiersUtilities_visitImpl
     Arcadia_Thread* thread,
     Arcadia_VPL_ModifiersUtilities* self
   )
-{ 
+{
   if (self->temporary) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporary);
   }
@@ -250,7 +250,7 @@ Arcadia_VPL_ModifiersUtilities_procedureModifiers
     }
     flags |= Arcadia_VPL_Symbols_ProcedureFlags_VertexStage;
   }
-  // At this point at most one of `fragment`, `pixel`, and `vertex` is specified. 
+  // At this point at most one of `fragment`, `pixel`, and `vertex` is specified.
   if (Arcadia_Set_contains(thread, self->temporary, Arcadia_Value_makeObjectReferenceValue(self->BUILTIN))) {
     if (flags & allStageFlags) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);

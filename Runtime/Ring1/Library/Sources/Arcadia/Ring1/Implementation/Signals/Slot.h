@@ -51,7 +51,7 @@ Arcadia_Slot_create
     Arcadia_Object* receiver,
     Arcadia_ForeignProcedure* procedure
   );
-  
+
 void
 Arcadia_Slot_disconnect
   (

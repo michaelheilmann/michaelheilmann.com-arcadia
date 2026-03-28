@@ -90,7 +90,7 @@ Arcadia_Engine_Visuals_ModelNode_constructImpl
   // (3) create the mesh node and the material node
   Arcadia_ADL_MeshDefinition* meshDefinition = (Arcadia_ADL_MeshDefinition*)source->mesh->definition;
   Arcadia_ADL_MaterialDefinition* materialDefinition = (Arcadia_ADL_MaterialDefinition*)source->material->definition;
-  
+
   Arcadia_Engine* engine = Arcadia_Engine_getOrCreate(thread);
   self->mesh = Arcadia_Engine_Visuals_NodeFactory_createMeshNode(thread, (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory, NULL, meshDefinition);
   self->material = Arcadia_Engine_Visuals_NodeFactory_createMaterialNode(thread, (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory, NULL, materialDefinition);

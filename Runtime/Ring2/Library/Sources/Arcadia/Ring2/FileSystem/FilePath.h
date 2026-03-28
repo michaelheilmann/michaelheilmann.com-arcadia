@@ -191,7 +191,7 @@ Arcadia_FilePath_getRootPath
 /// For `C:\` on Windows or for `/` on Linux this function returns null.
 /// For `C:\x` on Windows or for `/x` on Linux this is `x`.
 /// For `C:\x\y` on Windows or for `/x/y` on Linux this is `x\y`.
-/// For `C:\x\y\a.txt` on Windows or for `/x/y/a.txt` this is `x/y/a.txt`. 
+/// For `C:\x\y\a.txt` on Windows or for `/x/y/a.txt` this is `x/y/a.txt`.
 Arcadia_FilePath*
 Arcadia_FilePath_getRelativePath
   (

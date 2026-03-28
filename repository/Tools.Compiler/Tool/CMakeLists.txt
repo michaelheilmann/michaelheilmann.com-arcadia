@@ -23,9 +23,9 @@ if (NOT TARGET ${MyTool})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Compiler/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Compiler/Configure.h @ONLY)
   list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Compiler/Configure.h.i)
-  list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Compiler/Configure.h)
+  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Compiler/Configure.h)
 
-  list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Compiler/Main.c)
+  OnSourceFile(${MyTool} Arcadia/Compiler/Main.c)
 
   list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.MIL.AST)
 

@@ -220,7 +220,7 @@ Arcadia_ADL_MeshReader_read
     Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_ADL_MeshDefinition* definition =  
+  Arcadia_ADL_MeshDefinition* definition =
     Arcadia_ADL_MeshDefinition_create
       (
         thread,

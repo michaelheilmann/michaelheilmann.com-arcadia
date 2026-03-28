@@ -74,7 +74,7 @@ Arcadia_Engine_Demo_Application_shutdownImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_Application* self
   )
-{ 
+{
   // Save the configuration.
   // This can raise errors in particular because of input/output operations.
   // We choose to ignore these errors and make sure that the cleanups below are performed.
@@ -148,7 +148,7 @@ Arcadia_Engine_Demo_Application_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Demo_ApplicationDispatch* self
   )
-{ 
+{
   ((Arcadia_Engine_ApplicationDispatch*)self)->startup = (void (*)(Arcadia_Thread*,Arcadia_Engine_Application*))&Arcadia_Engine_Demo_Application_startupImpl;
   ((Arcadia_Engine_ApplicationDispatch*)self)->shutdown = (void (*)(Arcadia_Thread*, Arcadia_Engine_Application*)) & Arcadia_Engine_Demo_Application_shutdownImpl;
 

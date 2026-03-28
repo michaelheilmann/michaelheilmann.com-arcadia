@@ -23,7 +23,7 @@
 static Arcadia_ARMS_Status
 check1
   (
-  ) 
+  )
 {
   Arcadia_ARMS_TypeName* a, * b;
   if (Arcadia_ARMS_TypeName_getOrCreate(&a, u8"a", strlen(u8"a"))) {

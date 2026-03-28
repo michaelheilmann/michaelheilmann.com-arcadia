@@ -92,7 +92,7 @@ Arcadia_Signal_visit
 {
   Nodes* nodes = (Nodes*)self->pimpl;
   for (size_t i = 0, n = nodes->size; i < n; ++i) {
-    Arcadia_Slot* slot = nodes->elements[i]; 
+    Arcadia_Slot* slot = nodes->elements[i];
     if (slot) {
       Arcadia_Object_visit(thread, (Arcadia_Object*)slot);
     }
@@ -188,11 +188,11 @@ Arcadia_Signal_connect
 
 // This takes transforms
 // @code
-// [arguments, numberOfArguments] 
+// [arguments, numberOfArguments]
 // @endcode
 // to
 // @code
-// [receiver, sender, arguments, numberOfArguments + 2] 
+// [receiver, sender, arguments, numberOfArguments + 2]
 // @endcode
 // @todo
 // Guard against numeric overflows.
@@ -234,7 +234,7 @@ Arcadia_Signal_emit
   Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     for (Arcadia_SizeValue i = 0, n = nodes->size; i < n; ++i) {
-      Arcadia_Slot* slot = nodes->elements[i];  
+      Arcadia_Slot* slot = nodes->elements[i];
       if (!slot) {
         continue;
       }

@@ -24,12 +24,12 @@
       <div><a href="#">Arcadia_Thread</a>* thread</div>
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
     </div>
-    
+
     <div>
       <div><a href="#">Arcadia_Integer32Value</a> length</div>
       <div>The length of the sample buffer. Must be non-negative.</div>
     </div>
-    
+
     <div>
       <div><a href="#">Arcadia_Integer32Value</a> sampleRate</div>
       <div>The sample rate, in Hertz, of the sample buffer. Must be non-negative.</div>
@@ -39,7 +39,7 @@
       <div><a href="#">Arcadia_Media_SampleFormat</a> sampleFormat</div>
       <div>The sample format of the sample buffer.</div>
     </div>
-    
+
   </section>
 
   <section class="cxx errors">

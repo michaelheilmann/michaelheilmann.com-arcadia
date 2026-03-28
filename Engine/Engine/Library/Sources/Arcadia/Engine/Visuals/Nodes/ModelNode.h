@@ -34,9 +34,9 @@ struct Arcadia_Engine_Visuals_ModelNodeDispatch {
 
 struct Arcadia_Engine_Visuals_ModelNode {
   Arcadia_Engine_Visuals_Node _parent;
-  
+
   /// The model definition.
-  Arcadia_ADL_ModelDefinition* source; 
+  Arcadia_ADL_ModelDefinition* source;
   /// The mesh of this model.
   Arcadia_Engine_Visuals_MeshNode* mesh;
   /// The material of this model.

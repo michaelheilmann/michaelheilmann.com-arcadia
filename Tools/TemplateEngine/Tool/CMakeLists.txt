@@ -15,25 +15,26 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTool ${MyProjectName}.Tools.TemplateEngine)
+set(MyToolName ${MyProjectName}.Tools.TemplateEngine)
 
-if (NOT TARGET ${MyTool})
+if (NOT TARGET ${MyToolName})
 
-  BeginProduct(${MyTool} executable)
+  BeginProduct(${MyToolName} executable)
 
-  set(${MyTool}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
+  set(${MyToolName}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h @ONLY)
-  list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
-  list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h)
+  list(APPEND ${MyToolName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h.i)
+  OnConfigurationFile(${MyToolName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine/Configure.h)
 
-  list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine/Main.c)
+  OnSourceFile(${MyToolName} Arcadia.Tools.TemplateEngine/Main.c)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library)
+  list(APPEND ${MyToolName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library)
 
-  EndProduct(${MyTool})
+  set(${MyToolName}.Install TRUE)
 
-  install(TARGETS ${MyTool} RUNTIME DESTINATION bin/$<CONFIG>) # Wrap into *Product API.
-  set_target_properties(${MyTool} PROPERTIES FOLDER "Tools/TemplateEngine") # Wrap into *Product API.
+  EndProduct(${MyToolName})
+
+  set_target_properties(${MyToolName} PROPERTIES FOLDER "Tools/TemplateEngine")
 
 endif()

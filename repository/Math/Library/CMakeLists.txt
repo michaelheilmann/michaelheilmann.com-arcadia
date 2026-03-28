@@ -21,69 +21,69 @@ set(MyLibraryName ${MyProjectName}.Math)
 if (NOT TARGET ${MyLibraryName})
   BeginProduct(${MyLibraryName} library)
 
-  list (APPEND ${MyLibraryName}.TemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.c.te)
-  list (APPEND ${MyLibraryName}.TemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.h.te)
-  list (APPEND ${MyLibraryName}.TemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.c.te)
-  list (APPEND ${MyLibraryName}.TemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.h.te)
-  list (APPEND ${MyLibraryName}.TemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te)
-  list (APPEND ${MyLibraryName}.TemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te)
+  OnTemplateFile(${MyLibraryName} Arcadia/Math/Implementation/Matrix.c.te)
+  OnTemplateFile(${MyLibraryName} Arcadia/Math/Implementation/Matrix.h.te)
+  OnTemplateFile(${MyLibraryName} Arcadia/Math/Implementation/Color.c.te)
+  OnTemplateFile(${MyLibraryName} Arcadia/Math/Implementation/Color.h.te)
+  OnTemplateFile(${MyLibraryName} Arcadia/Math/Implementation/Vector.c.te)
+  OnTemplateFile(${MyLibraryName} Arcadia/Math/Implementation/Vector.h.te)
 
   BeginTemplateEngine(${MyLibraryName}.GenerateFiles "Math")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real32.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real32.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real32.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real64.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real64.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector3Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real32.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real32.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real32.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real64.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real64.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Vector4Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real32.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real32.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real32.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Matrix4Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color4Real64.env")
 
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.c.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.c"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.c"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.env")
     OnTemplateEngine("${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color.h.te"
-                     "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.h"
+                     "${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.h"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Color4Real32.env")
 
   EndTemplateEngine()
@@ -92,70 +92,70 @@ if (NOT TARGET ${MyLibraryName})
   OnConfigurationTemplateFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/Configure.h.i)
   OnConfigurationFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Math/Implementation/Configure.h)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Include.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Include.h)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/QuaternionReal32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/QuaternionReal32.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/QuaternionReal32.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/QuaternionReal32.h)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real32.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Color4Real64.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/Color4Real32.c GENERATED)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/Color4Real32.h GENERATED)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/Color4Real64.c GENERATED)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/Color4Real64.h GENERATED)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real32.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real64.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector3Real64.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real32.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real64.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Vector4Real64.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/Vector3Real32.c GENERATED)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/Vector3Real32.h GENERATED)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/Vector3Real64.c GENERATED)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/Vector3Real64.h GENERATED)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/Vector4Real32.c GENERATED)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/Vector4Real32.h GENERATED)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/Vector4Real64.c GENERATED)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/Vector4Real64.h GENERATED)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real32.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real32.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>/Sources/Arcadia/Math/Implementation/Matrix4Real64.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/Matrix4Real32.c GENERATED)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/Matrix4Real32.h GENERATED)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/Matrix4Real64.c GENERATED)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/Matrix4Real64.h GENERATED)
 
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/crossProduct.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/crossProduct.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setOrthographicProjection.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setOrthographicProjection.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setPerspectiveProjection.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setPerspectiveProjection.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setRotationX.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setRotationX.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setRotationY.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setRotationY.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setRotationZ.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setRotationZ.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setScaling.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setScaling.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setTranslation.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/setTranslation.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/trigonometry.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/trigonometry.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/lerp.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Implementation/lerp.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/crossProduct.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/crossProduct.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/setOrthographicProjection.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/setOrthographicProjection.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/setPerspectiveProjection.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/setPerspectiveProjection.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/setRotationX.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/setRotationX.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/setRotationY.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/setRotationY.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/setRotationZ.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/setRotationZ.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/setScaling.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/setScaling.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/setTranslation.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/setTranslation.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/trigonometry.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/trigonometry.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Implementation/lerp.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Implementation/lerp.h)
 
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.h)
-  OnSourceFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.c)
-  OnHeaderFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Math/Include.h)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Include.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Include.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Include.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Math/Include.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Math/Include.h)
 
   list(APPEND ${MyLibraryName}.Libraries Arcadia.Ring2)
 
   if (${${MyLibraryName}.Compiler.Masm} STREQUAL ${${MyLibraryName}.Compiler.Masm.Ms})
-	  if (${${MyLibraryName}.InstructionSetArchitecture} STREQUAL ${${MyLibraryName}.InstructionSetArchitecture.X64})
-      elseif (${${MyLibraryName}.InstructionSetArchitecture} STREQUAL ${${MyLibraryName}.InstructionSetArchitecture.X86})
+	  if (${${MyLibraryName}_InstructionSetArchitecture} STREQUAL ${${MyLibraryName}_InstructionSetArchitecture_X64})
+      elseif (${${MyLibraryName}_InstructionSetArchitecture} STREQUAL ${${MyLibraryName}_InstructionSetArchitecture_X86})
 	  endif()
-	  if (${${MyLibraryName}.InstructionSetArchitecture} STREQUAL ${${MyLibraryName}.InstructionSetArchitecture.X64})
-      elseif (${${MyLibraryName}.InstructionSetArchitecture} STREQUAL ${${MyLibraryName}.InstructionSetArchitecture.X86})
+	  if (${${MyLibraryName}_InstructionSetArchitecture} STREQUAL ${${MyLibraryName}_InstructionSetArchitecture_X64})
+      elseif (${${MyLibraryName}_InstructionSetArchitecture} STREQUAL ${${MyLibraryName}_InstructionSetArchitecture_X86})
 	  endif()
   endif()
 
-  if (${${MyLibraryName}.OperatingSystem} STREQUAL ${${MyLibraryName}.OperatingSystem.Linux})
+  if (${${MyLibraryName}_OperatingSystem} STREQUAL ${${MyLibraryName}_OperatingSystem_Linux})
     list(APPEND ${MyLibraryName}.Libraries m)
   endif()
 

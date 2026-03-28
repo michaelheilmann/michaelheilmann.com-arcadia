@@ -39,13 +39,6 @@ Arcadia_VPL_Symbols_Stage_visitImpl
     Arcadia_VPL_Symbols_Stage* self
   );
 
-static void
-Arcadia_VPL_Symbols_Stage_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Stage* self
-  );
-
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_Stage_constructImpl,
@@ -80,7 +73,6 @@ Arcadia_VPL_Symbols_Stage_constructImpl
   self->program = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_VPL_Symbols_Program_getType(thread));
   self->flags = Arcadia_ValueStack_getNatural8Value(thread, 1);
   self->variableScalars = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  self->mainProcedure = NULL;
   self->scope = NULL;
   Arcadia_LeaveConstructor(Arcadia_VPL_Symbols_Stage);
 }
@@ -91,9 +83,7 @@ Arcadia_VPL_Symbols_Stage_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_VPL_Symbols_StageDispatch* self
   )
-{
-  ((Arcadia_VPL_Symbols_SymbolDispatch*)self)->resolveTypes = (void (*)(Arcadia_Thread*, Arcadia_VPL_Symbols_Symbol*)) & Arcadia_VPL_Symbols_Stage_resolveTypesImpl;
-}
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_VPL_Symbols_Stage_visitImpl
@@ -108,21 +98,10 @@ Arcadia_VPL_Symbols_Stage_visitImpl
   if (self->variableScalars) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->variableScalars);
   }
-  if (self->mainProcedure) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->mainProcedure);
-  }
   if (self->scope) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->scope);
   }
 }
-
-static void
-Arcadia_VPL_Symbols_Stage_resolveTypesImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_VPL_Symbols_Stage* self
-  )
-{/*Intentionally empty.*/}
 
 Arcadia_VPL_Symbols_Stage*
 Arcadia_VPL_Symbols_Stage_create

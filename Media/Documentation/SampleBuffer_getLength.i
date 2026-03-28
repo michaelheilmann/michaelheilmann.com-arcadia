@@ -20,7 +20,7 @@
     <div>
       <div><a href="#">Arcadia_Thread</a>* thread</div>
       <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>   
+    </div>
     <div>
       <div><a href="#">Arcadia_Media_SampleBuffer</a>* self</div>
       <div>A pointer to this sample buffer.</div>

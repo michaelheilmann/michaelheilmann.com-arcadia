@@ -120,7 +120,7 @@ parseExpression
     Arcadia_Thread* thread,
     Directives_Parser* self
   );
-  
+
 static Directives_Tree*
 parseStatement
   (
@@ -178,7 +178,7 @@ Directives_Parser_visit
   if (self->temporaryBuffer) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->temporaryBuffer);
   }
-} 
+}
 
 static void
 Directives_Parser_constructImpl
@@ -204,7 +204,7 @@ Directives_Parser_constructImpl
 
   self->file = (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_String_getType(thread));
   self->line = Arcadia_ValueStack_getNatural64Value(thread, 2);
-  self->reader = (Arcadia_UTF8Reader*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_UTF8Reader_getType(thread)); 
+  self->reader = (Arcadia_UTF8Reader*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_UTF8Reader_getType(thread));
 
   self->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
   self->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->temporaryBuffer);

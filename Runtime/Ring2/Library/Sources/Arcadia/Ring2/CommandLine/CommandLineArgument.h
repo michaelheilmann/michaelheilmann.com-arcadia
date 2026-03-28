@@ -18,15 +18,15 @@ struct Arcadia_CommandLineArgumentDispatch {
 
 struct Arcadia_CommandLineArgument {
   Arcadia_Object _parent;
-  
+
   /// #Arcadia_BooleanValue_True if the command-line argument has a syntactical error.
   /// #Arcadia_BooleanValue_False otherwise.
   Arcadia_BooleanValue syntacticalError;
-  
+
   /// The name. Must not be null of syntacticalError is #Arcadia_BooleanValue_False.
   /// Must be null if syntacticalError is #Arcadia_BooleanValue_True.
   Arcadia_String* name;
-  
+
   /// The value. May be null.
   Arcadia_String* value;
 };

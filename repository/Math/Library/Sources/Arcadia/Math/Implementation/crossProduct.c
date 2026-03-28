@@ -22,8 +22,8 @@ Arcadia_Math_Vector3Real32_crossProduct
     Arcadia_Math_Vector3Real32* u,
     Arcadia_Math_Vector3Real32* v
   )
-{ 
-  Arcadia_Real32Value values[] = 
+{
+  Arcadia_Real32Value values[] =
     {
       u->elements[1] * v->elements[2] - u->elements[2] * v->elements[1],
       u->elements[2] * v->elements[0] - u->elements[0] * v->elements[2],

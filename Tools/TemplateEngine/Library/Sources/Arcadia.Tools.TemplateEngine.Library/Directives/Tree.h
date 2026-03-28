@@ -34,7 +34,7 @@ Arcadia_declareObjectType(u8"Arcadia.TemplateEngine.Directives.Tree", Directives
 /// <arguments> : e
 ///             | <argument>
 ///             | <argument> <argumentRest>
-/// <argumentRest> : ',' <argument> <arguments> 
+/// <argumentRest> : ',' <argument> <arguments>
 #define Directives_TreeKind_Invoke (4)
 
 struct Directives_TreeDispatch {

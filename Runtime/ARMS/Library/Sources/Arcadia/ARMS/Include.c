@@ -190,7 +190,7 @@ Arcadia_ARMS_shutdown
     while (g_types) {
       ARMS_Type* type = g_types;
       g_types = type->next;
-      if (type->typeRemoved) {  
+      if (type->typeRemoved) {
         const Arcadia_ARMS_Natural8* bytes; Arcadia_ARMS_Size numberOfBytes;
         Arcadia_ARMS_TypeName_getData(type->typeName, &bytes, &numberOfBytes);
         type->typeRemoved(type->context, bytes, numberOfBytes);

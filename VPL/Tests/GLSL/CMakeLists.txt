@@ -24,9 +24,9 @@ if (NOT TARGET ${MyTestName})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h @ONLY)
   list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h.i)
-  list(APPEND ${MyTestName}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h)
+  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h)
 
-  list(APPEND ${MyTestName}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Main.c)
+  OnSourceFile(${MyTestName} Arcadia/VPL/Tests/GLSL/Main.c)
 
   list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.VPL ${MyProjectName}.DDL)
 

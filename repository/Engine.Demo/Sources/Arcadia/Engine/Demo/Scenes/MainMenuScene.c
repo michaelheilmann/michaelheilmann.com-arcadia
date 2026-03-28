@@ -373,7 +373,7 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
           (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
         );
   }
-  // We use a right-handed coordinate system.  
+  // We use a right-handed coordinate system.
   // -negative z-axis forward, positive z-axis backward
   // -negative y-axis down, positive y-axis up
   // -negative x-axis left, positive x-axis right
@@ -410,7 +410,7 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
   Arcadia_Math_Matrix4Real32* worldToViewMatrix = tmp;
   Arcadia_Engine_Visuals_CameraNode_setWorldToViewMatrix(thread, self->cameraNode, worldToViewMatrix);
 
-  Arcadia_ADL_ColorDefinition* CLEARCOLORS[] = 
+  Arcadia_ADL_ColorDefinition* CLEARCOLORS[] =
     {
       getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Red.adl"),
                                                     Arcadia_String_createFromCxxString(thread, "Colors.Red")),
@@ -510,7 +510,7 @@ Arcadia_Engine_Demo_MainMenuScene_handleKeyboardKeyEventImpl
       Arcadia_Visuals_KeyboardKeyEvent_getKey(thread, event) == Arcadia_Visuals_KeyboardKey_Escape) {
     Arcadia_Visuals_ApplicationQuitRequestedEvent* e = Arcadia_Visuals_ApplicationQuitRequestedEvent_create(thread, Arcadia_getTickCount(thread));
     Arcadia_ValueStack_pushObjectReferenceValue(thread,  (Arcadia_Object*)e);
-    Arcadia_ValueStack_pushNatural8Value(thread, 1);   
+    Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_Signal_emit(thread, ((Arcadia_Engine_Demo_Scene*)self)->applicationQuitRequestSignal, (Arcadia_Object*)self);
     Arcadia_ValueStack_popValues(thread, 2);
   } else if (Arcadia_Visuals_KeyboardKeyEvent_getAction(thread, event) == Arcadia_Visuals_KeyboardKeyAction_Released &&
@@ -535,7 +535,7 @@ Arcadia_Engine_Demo_MainMenuScene_handleMousePointerEventImpl
     Arcadia_Engine_Demo_MainMenuScene* self,
     Arcadia_Visuals_MousePointerEvent* event
   )
-{ 
+{
   switch (event->action) {
     case Arcadia_Visuals_MousePointerAction_Entered: {
       self->mouseInWindow = Arcadia_BooleanValue_True;
@@ -550,7 +550,7 @@ Arcadia_Engine_Demo_MainMenuScene_handleMousePointerEventImpl
         self->mouseInWindow = Arcadia_BooleanValue_True;
         self->mousePosition.oldx = (Arcadia_Real32Value)event->x;
         self->mousePosition.oldy = (Arcadia_Real32Value)event->y;
-      }     
+      }
       Arcadia_Real32Value delta;
       // "yaw" is the counter-clockwise rotation around the y-axis in a right-handed coordinate system.
       // By the right-hand rule, we determine y-going up.

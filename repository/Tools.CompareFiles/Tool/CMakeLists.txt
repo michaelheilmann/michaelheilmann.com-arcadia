@@ -23,9 +23,9 @@ if (NOT TARGET ${MyTool})
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/CompareFiles/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/CompareFiles/Configure.h @ONLY)
   list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/CompareFiles/Configure.h.i)
-  list(APPEND ${MyTool}.ConfigurationFiles ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/CompareFiles/Configure.h)
+  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/CompareFiles/Configure.h)
 
-  list(APPEND ${MyTool}.SourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/CompareFiles/Main.c)
+  OnSourceFile(${MyTool} Tools/CompareFiles/Main.c)
 
   list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Ring2)
 

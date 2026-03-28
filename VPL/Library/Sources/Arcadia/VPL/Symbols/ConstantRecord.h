@@ -26,7 +26,7 @@ typedef struct Arcadia_VPL_Symbols_Program Arcadia_VPL_Symbols_Program;
 // A constant record. Contains members.
 // The "constant block" maps to an "uniform block" in OpenGL which can both be accessed from any stage (e.g., vertex, fragment, etc.).
 // An uniform block cannot be modified by the stages.
-// 
+//
 // ```
 // 'constant' 'record' <name>
 // '{'
