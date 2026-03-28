@@ -161,19 +161,20 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
     Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource);
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
     Arcadia_Value t;
-    t = Arcadia_ValueStack_getValue(thread, 1);
+    t = Arcadia_ValueStack_getValue(thread, 2);
     Arcadia_ValueStack_pushValue(thread, &t);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
+  //
+  self->sampleBuffer = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Media_SampleBuffer_getType(thread));
   //
   self->isLooping = Arcadia_BooleanValue_False;
   self->volume = 1.f;
@@ -183,8 +184,7 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
   self->alBufferID = 0;
   self->alSourceID = 0;
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource);
 }
 
 static void
@@ -228,6 +228,9 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_visitImpl
     Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
+  if (self->sampleBuffer) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->sampleBuffer);
+  }
   if (self->byteBuffer) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->byteBuffer);
   }
@@ -282,14 +285,13 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_loadImpl
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Integer32Value sampleRate = 44100;
-      Arcadia_Media_SampleBuffer* sampleBuffer = Arcadia_Media_SampleBuffer_create(thread, 2, sampleRate, Arcadia_Media_SampleFormat_Integer16);
-      Arcadia_Media_SampleBufferOperations_WhiteNoise* operation = Arcadia_Media_SampleBufferOperations_WhiteNoise_create(thread);
-      //Arcadia_Media_SampleBufferOperations_SineWave* operation = Arcadia_Media_SampleBufferOperations_SineWave_create(thread, 110);
-      Arcadia_Media_SampleBufferOperation_apply(thread, (Arcadia_Media_SampleBufferOperation*)operation, sampleBuffer);
-      alBufferData(self->alBufferID, AL_FORMAT_MONO16, sampleBuffer->bytes,
-                                                       sampleBuffer->length * sampleBuffer->sampleRate * Arcadia_Media_SampleFormat_getNumberOfBytes(thread, sampleBuffer->sampleFormat),
-                                                       sampleRate);
+      if (self->sampleBuffer->sampleFormat != Arcadia_Media_SampleFormat_Integer16) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
+        Arcadia_Thread_jump(thread);
+      }
+      alBufferData(self->alBufferID, AL_FORMAT_MONO16, self->sampleBuffer->bytes,
+                                                       self->sampleBuffer->length * self->sampleBuffer->sampleRate * Arcadia_Media_SampleFormat_getNumberOfBytes(thread, self->sampleBuffer->sampleFormat),
+                                                       self->sampleBuffer->sampleRate);
       alSourcei(self->alSourceID, AL_BUFFER, self->alBufferID);
       if (alGetError()) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -333,7 +335,6 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_unloadImpl
     Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource* self
   )
 {
-  //Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* context = (Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext*)((Arcadia_Engine_Audials_Implementation_Resource*)self)->context;
   if (self->alSourceID) {
     alDeleteSources(1, &self->alSourceID);
     self->alSourceID = 0;
@@ -483,11 +484,13 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource*
 Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* backendContext
+    Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* backendContext,
+    Arcadia_Media_SampleBuffer* sampleBuffer
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
-  Arcadia_ValueStack_pushNatural8Value(thread, 1);
+  if (sampleBuffer) Arcadia_ValueStack_pushObjectReferenceValue(thread, sampleBuffer); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
   ARCADIA_CREATEOBJECT(Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource);
 }

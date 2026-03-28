@@ -45,6 +45,24 @@ if (NOT TARGET ${MyLibraryName})
   OnSourceFile(${MyLibraryName} Arcadia/ADL/Reference.c)
   OnHeaderFile(${MyLibraryName} Arcadia/ADL/Reference.h)
 
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/Include.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/Include.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/AddSineWaveOperationDefinition.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/AddSineWaveOperationDefinition.h)
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/AddSineWaveOperationReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/AddSineWaveOperationReader.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/AddWhiteNoiseOperationDefinition.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/AddWhiteNoiseOperationDefinition.h)
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/AddWhiteNoiseOperationReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/AddWhiteNoiseOperationReader.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/SampleBufferDefinition.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/SampleBufferDefinition.h)
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/SampleBufferReader.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/Audials/SampleBufferReader.h)
+
   OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/Visuals/Include.c)
   OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/Visuals/Include.h)
 

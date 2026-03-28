@@ -22,7 +22,7 @@
 
 #include "Arcadia/Engine/Visuals/Node.h"
 #include "Arcadia/ADL/Include.h"
-#include "Arcadia/Imaging/Include.h"
+#include "Arcadia/PixelBufferIO/Include.h"
 
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.PixelBufferNode", Arcadia_Engine_Visuals_PixelBufferNode,
                           u8"Arcadia.Engine.Visuals.Node")

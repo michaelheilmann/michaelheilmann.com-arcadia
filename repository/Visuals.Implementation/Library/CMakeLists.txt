@@ -85,7 +85,6 @@ if (NOT TARGET ${MyModule})
 
   # Enable WGL/OpenGL 4 under Windows.
   if (${${MyModule}_OperatingSystem} STREQUAL ${${MyModule}_OperatingSystem_Windows} AND ${${MyModule}.OpenGL4.Enabled})
-    set(MyDependenciesDirectory "C:/arcadia-dependencies")
     find_package(OpenGL REQUIRED)
     if (${${MyModule}_InstructionSetArchitecture} STREQUAL ${${MyModule}_InstructionSetArchitecture_X64})
       set(${MyModule}.OpenGL.HeaderFilesDirectory ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/opengl/includes)
@@ -252,7 +251,7 @@ if (NOT TARGET ${MyModule})
     OnHeaderFile(${MyModule} Arcadia/Visuals/Implementation/OpenGL4/WGL/WindowBackend.h)
   endif()
 
-  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Engine ${MyProjectName}.Imaging)
+  list(APPEND ${MyModule}.Libraries ${MyProjectName}.Engine ${MyProjectName}.PixelBufferIO)
   list(APPEND ${MyModule}.PrivateLibraries ${MyProjectName}.Math ${MyProjectName}.Ring2 ${MyProjectName}.DDL)
 
   EndProduct(${MyModule})

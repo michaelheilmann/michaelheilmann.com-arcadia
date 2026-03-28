@@ -103,7 +103,7 @@ Arcadia_ADL_MeshDefinition_constructImpl
     Arcadia_ADL_MeshDefinition* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_MeshDefinition_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_MeshDefinition);
   {
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 7);
@@ -124,8 +124,7 @@ Arcadia_ADL_MeshDefinition_constructImpl
   self->vertexAmbientTextureCoordinates = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 2);
   self->ambientColor = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
                                                             (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_MeshDefinition);
 }
 
 static void

@@ -242,7 +242,7 @@ Arcadia_ADL_MeshReader_constructImpl
     Arcadia_ADL_MeshReader* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_MeshReader_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_MeshReader);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -274,8 +274,7 @@ Arcadia_ADL_MeshReader_constructImpl
   self->VERTEXAMBIENTCOLORS = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"vertexAmbientColors");
   self->VERTEXAMBIENTCOLORTEXTURECOORDINATES = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"vertexAmbientColorTextureCoordinates");
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_MeshReader);
 }
 
 static void

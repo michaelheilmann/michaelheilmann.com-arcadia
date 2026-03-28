@@ -165,12 +165,12 @@ Arcadia_ADL_ColorReader_constructImpl
     Arcadia_ADL_ColorReader* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_ColorReader_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_ColorReader);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -195,8 +195,7 @@ Arcadia_ADL_ColorReader_constructImpl
   self->GREEN = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"green");
   self->BLUE = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"blue");
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_ColorReader);
 }
 
 static void

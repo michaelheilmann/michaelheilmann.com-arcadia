@@ -18,6 +18,11 @@
 
 #include "Arcadia/ADL/Definitions.h"
 #include "Arcadia/ADL/Reader.h"
+
+#include "Arcadia/ADL/Definitions/Audials/SampleBufferReader.h"
+#include "Arcadia/ADL/Definitions/Audials/AddSineWaveOperationReader.h"
+#include "Arcadia/ADL/Definitions/Audials/AddWhiteNoiseOperationReader.h"
+
 #include "Arcadia/ADL/Definitions/Visuals/CheckerboardFillOperationReader.h"
 #include "Arcadia/ADL/Definitions/Visuals/ColorReader.h"
 #include "Arcadia/ADL/Definitions/Visuals/FillOperationReader.h"
@@ -116,6 +121,19 @@ Arcadia_ADL_Context_constructImpl
   }
   //
   self->readers = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  //
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_SampleBufferReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_AddSineWaveOperationReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_AddWhiteNoiseOperationReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
   //
   {
     Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_ColorReader_create(thread);

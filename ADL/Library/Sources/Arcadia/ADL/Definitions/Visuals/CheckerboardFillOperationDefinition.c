@@ -105,7 +105,7 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_constructI
     Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition);
   {
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 6);
@@ -115,7 +115,7 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_constructI
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 6 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (6 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -128,8 +128,7 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition_constructI
   self->secondCheckerColor = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
                                                          (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 6 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationDefinition);
 }
 
 static void

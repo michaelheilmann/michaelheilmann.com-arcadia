@@ -31,6 +31,7 @@ struct Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResourceDispatch 
 
 struct Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource {
   Arcadia_Engine_Audials_Implementation_SoundSourceResource _parent;
+  Arcadia_Media_SampleBuffer* sampleBuffer;
   Arcadia_BooleanValue isLooping;
   Arcadia_Real32Value volume;
   Arcadia_Natural8Value dirtyBits;
@@ -43,7 +44,8 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource*
 Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* backendContext
+    Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* backendContext,
+    Arcadia_Media_SampleBuffer* sampleBuffer
   );
 
 #endif // ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_RESOURCES_SOUNDSOURCERESOURCE_H_INCLUDED

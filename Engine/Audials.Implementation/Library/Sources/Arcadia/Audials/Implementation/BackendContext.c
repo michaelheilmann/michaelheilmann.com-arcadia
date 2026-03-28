@@ -126,6 +126,7 @@ Arcadia_Engine_Audials_Implementation_SoundSourceResource*
 Arcadia_Engine_Audials_Implementation_BackendContext_createSoundSourceResource
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Audials_Implementation_BackendContext* self
+    Arcadia_Engine_Audials_Implementation_BackendContext* self,
+    Arcadia_Media_SampleBuffer* sampleBuffer
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Audials_Implementation_BackendContext, createSoundSourceResource, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Audials_Implementation_BackendContext, createSoundSourceResource, self, sampleBuffer); }

@@ -20,6 +20,8 @@
   - Debian: `sudo apt-get install libglx-dev`
 - Recommended: *OpenAL development headers and libraries*
   - Debian: `sudo apt-get install mesa-common-dev`
+- Recommended: *libFLAC development headers and libraries*
+  - Debian: `sudo apt-get install libflac-dev`
 
 ## Building the program
 The following instructions will perform an out-of-source build. An out-of-source build does not modify the source directory

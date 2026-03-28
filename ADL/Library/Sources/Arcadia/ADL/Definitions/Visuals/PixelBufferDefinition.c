@@ -20,6 +20,7 @@
 #include "Arcadia/ADL/Reader.module.h"
 #include "Arcadia/ADL/Reference.h"
 #include "Arcadia/ADL/Definitions/Visuals/Include.h"
+
 static void
 Arcadia_ADL_PixelBufferDefinition_linkImpl
   (
@@ -83,7 +84,11 @@ Arcadia_ADL_PixelBufferDefinition_visitImpl
     Arcadia_Thread* thread,
     Arcadia_ADL_PixelBufferDefinition* self
   )
-{/*Intentionally empty.*/}
+{
+  if (self->operations) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->operations);
+  }
+}
 
 static void
 Arcadia_ADL_PixelBufferDefinition_constructImpl
@@ -92,7 +97,7 @@ Arcadia_ADL_PixelBufferDefinition_constructImpl
     Arcadia_ADL_PixelBufferDefinition* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_PixelBufferDefinition_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_PixelBufferDefinition);
   {
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 4);
@@ -102,15 +107,14 @@ Arcadia_ADL_PixelBufferDefinition_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 4 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (4 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->operations = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   self->width = Arcadia_ValueStack_getNatural32Value(thread, 2);
   self->height = Arcadia_ValueStack_getNatural32Value(thread, 1);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 4 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_PixelBufferDefinition);
 }
 
 static void

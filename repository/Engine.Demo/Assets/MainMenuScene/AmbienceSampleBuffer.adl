@@ -1,0 +1,8 @@
+{
+  type : "SampleBuffer",
+  name : "MainScene.AmbienceSampleBuffer",
+  duration : 1000,
+  operations : [
+    "MainScene.Internal.Ambience.AddWhiteNoise"
+  ],
+}

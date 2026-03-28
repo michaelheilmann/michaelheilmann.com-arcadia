@@ -27,7 +27,7 @@ if (NOT TARGET ${MyTool})
 
   OnSourceFile(${MyTool} Tools/IconGenerator/Main.c)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Imaging ${MyProjectName}.Machine)
+  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.PixelBufferIO ${MyProjectName}.Machine)
 
   EndProduct(${MyTool})
 

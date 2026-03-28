@@ -34,7 +34,8 @@ struct Arcadia_Engine_Audials_Implementation_BackendContextDispatch {
   (*createSoundSourceResource)
     (
       Arcadia_Thread* thread,
-      Arcadia_Engine_Audials_Implementation_BackendContext* self
+      Arcadia_Engine_Audials_Implementation_BackendContext* self,
+      Arcadia_Media_SampleBuffer* sampleBuffer
     );
 };
 
@@ -46,7 +47,8 @@ Arcadia_Engine_Audials_Implementation_SoundSourceResource*
 Arcadia_Engine_Audials_Implementation_BackendContext_createSoundSourceResource
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Audials_Implementation_BackendContext* self
+    Arcadia_Engine_Audials_Implementation_BackendContext* self,
+    Arcadia_Media_SampleBuffer* sampleBuffer
   );
 
 #endif // ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_BACKENDCONTEXT_H_INCLUDED

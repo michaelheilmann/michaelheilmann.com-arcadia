@@ -106,7 +106,7 @@ Arcadia_ADL_ModelDefinition_constructImpl
     Arcadia_ADL_ModelDefinition* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_ModelDefinition_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_ModelDefinition);
   {
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 4);
@@ -116,8 +116,7 @@ Arcadia_ADL_ModelDefinition_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 4 != numberOfArgumentValues) {
+  if (4 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -125,8 +124,7 @@ Arcadia_ADL_ModelDefinition_constructImpl
                                             (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_String_getType(thread)));
   self->material = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
                                                 (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_ModelDefinition);
 }
 
 static void

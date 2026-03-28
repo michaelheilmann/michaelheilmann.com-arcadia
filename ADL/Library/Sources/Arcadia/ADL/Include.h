@@ -25,6 +25,7 @@
 #include "Arcadia/ADL/Diagnostics.h"
 #include "Arcadia/ADL/Reader.h"
 
+#include "Arcadia/ADL/Definitions/Audials/Include.h"
 #include "Arcadia/ADL/Definitions/Visuals/Include.h"
 
 #undef ARCADIA_ADL_PRIVATE

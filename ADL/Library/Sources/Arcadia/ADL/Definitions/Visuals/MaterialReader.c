@@ -224,7 +224,7 @@ Arcadia_ADL_MaterialReader_constructImpl
     Arcadia_ADL_MaterialReader* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_MaterialReader_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_MaterialReader);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -260,8 +260,7 @@ Arcadia_ADL_MaterialReader_constructImpl
   //
   self->AMBIENTCOLORTEXTURE = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"ambientColorTexture");
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_MaterialReader);
 }
 
 static void

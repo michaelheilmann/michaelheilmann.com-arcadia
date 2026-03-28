@@ -70,7 +70,7 @@ if (NOT TARGET ${MyDemoName})
   OnSourceFile(${MyDemoName} Arcadia/Engine/Demo/Application.c)
   OnHeaderFile(${MyDemoName} Arcadia/Engine/Demo/Application.h)
 
-  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Engine.Audials.Implementation ${MyProjectName}.Engine.Visuals.Implementation)
+  list(APPEND ${MyDemoName}.PrivateLibraries ${MyProjectName}.Engine.UI ${MyProjectName}.Application ${MyProjectName}.ADL ${MyProjectName}.DDL ${MyProjectName}.Engine.Audials.Implementation ${MyProjectName}.Engine.Visuals.Implementation)
 
   EndProduct(${MyDemoName})
 

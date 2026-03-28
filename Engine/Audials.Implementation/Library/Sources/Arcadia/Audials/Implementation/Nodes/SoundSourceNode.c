@@ -244,12 +244,21 @@ Arcadia_Engine_Audials_Implementation_SoundSourceNode_renderImpl
   if (self->backendContext) {
     if (!self->soundSourceResource) {
       Arcadia_Engine_Audials_Implementation_BackendContext* backendContext = self->backendContext;
-      // (1) sound source
+
+      // (1) sound wave
+      Arcadia_Integer32Value sampleRate = 44100;
+      Arcadia_Media_SampleBuffer* sampleBuffer = Arcadia_Media_SampleBuffer_create(thread, 2, sampleRate, Arcadia_Media_SampleFormat_Integer16);
+      Arcadia_Media_SampleBufferOperations_WhiteNoise* operation = Arcadia_Media_SampleBufferOperations_WhiteNoise_create(thread);
+      //Arcadia_Media_SampleBufferOperations_SineWave* operation = Arcadia_Media_SampleBufferOperations_SineWave_create(thread, 110);
+      Arcadia_Media_SampleBufferOperation_apply(thread, (Arcadia_Media_SampleBufferOperation*)operation, sampleBuffer);
+
+      // (2) sound source
       self->soundSourceResource =
         Arcadia_Engine_Audials_Implementation_BackendContext_createSoundSourceResource
           (
             thread,
-            backendContext
+            backendContext,
+            sampleBuffer
           );
       Arcadia_Engine_Audials_Implementation_Resource_ref(thread, (Arcadia_Engine_Audials_Implementation_Resource*)self->soundSourceResource);
     }

@@ -155,6 +155,8 @@ Arcadia_Engine_Demo_MainMenuScene_constructImpl
   self->viewer.pitch = 0.f;
   self->viewer.roll = 0.f;
   //
+  self->uiCanvasNode = Arcadia_Engine_UI_CanvasNode_create(thread);
+  //
   self->latches[0] = Arcadia_BooleanValue_False;
   self->latches[1] = Arcadia_BooleanValue_False;
   self->latches[2] = Arcadia_BooleanValue_False;
@@ -223,6 +225,10 @@ Arcadia_Engine_Demo_MainMenuScene_visit
 
   if (self->soundSourceNode) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->soundSourceNode);
+  }
+
+  if (self->uiCanvasNode) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->uiCanvasNode);
   }
 }
 
@@ -329,6 +335,10 @@ Arcadia_Engine_Demo_MainMenuScene_updateLogicsImpl
   }
   Arcadia_Math_Vector3Real32_multiplyScalar(thread, v, tick/1000.f*4.f); // TOOD: Remove magic constants. This is effectively 4 meters per second.
   Arcadia_Math_Vector3Real32_add(thread, self->viewer.position, v);
+
+  if (!self->uiCanvasNode) {
+    self->uiCanvasNode = Arcadia_Engine_UI_CanvasNode_create(thread);
+  }
 }
 
 static void
@@ -346,7 +356,7 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
   Arcadia_List* files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, "Assets/LogoScene", sizeof("Assets/LogoScene") - 1), files);
+  Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, "Assets/MainMenuScene", sizeof("Assets/MainMenuScene") - 1), files);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)files); i < n; ++i) {
     Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, files, i, _Arcadia_FilePath_getType(thread));
     Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
@@ -418,8 +428,8 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
 
   Arcadia_ADL_ModelDefinition* MODELS[] =
     {
-      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/LogoScene/TextureColorModel.adl"),
-                                                    Arcadia_String_createFromCxxString(thread, "LogoScene.TextureColorModel")),
+      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/MainMenuScene/TextureColorModel.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "MainMenuScene.TextureColorModel")),
     };
 
   if (!self->viewportNode) {
@@ -461,6 +471,16 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
   Arcadia_Engine_Visuals_EnterPassNode_setCameraNode(thread, self->enterPassNode, self->cameraNode);
   // Render the models.
   Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+
+  if (!self->uiCanvasNode) {
+    self->uiCanvasNode = Arcadia_Engine_UI_CanvasNode_create(thread);
+  }
+  // Tell the UI canvas the size of the visuals canvas.
+  Arcadia_Engine_UI_CanvasNode_setVisualsCanvasSize(thread, self->uiCanvasNode, width, height);
+  // The position and the size of tge UI canvas.
+  Arcadia_Engine_UI_WidgetNode_setPosition(thread, (Arcadia_Engine_UI_WidgetNode*)self->uiCanvasNode, 0, 0);
+  Arcadia_Engine_UI_WidgetNode_setSize(thread, (Arcadia_Engine_UI_WidgetNode*)self->uiCanvasNode, width, height);
+  //Arcadia_Engine_UI_WidgetNode_updateVisuals(thread, self->uiCanvasNode);
 }
 
 static void

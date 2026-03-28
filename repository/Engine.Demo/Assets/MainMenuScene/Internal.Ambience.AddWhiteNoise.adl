@@ -1,0 +1,4 @@
+{
+  type : "AddWhiteNoiseOperation",
+  name : "MainScene.Internal.Ambience.AddWhiteNoiseOperation",
+}

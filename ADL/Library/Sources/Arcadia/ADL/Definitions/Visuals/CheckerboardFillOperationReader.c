@@ -183,12 +183,12 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader_constructImpl
     Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -214,8 +214,7 @@ Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader_constructImpl
   self->CHECKERWIDTH = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"checkerWidth");
   self->CHECKERHEIGHT = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"checkerHeight");
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_PixelBufferOperations_CheckerboardFillOperationReader);
 }
 
 static void

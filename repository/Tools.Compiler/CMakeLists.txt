@@ -15,4 +15,6 @@
 
 cmake_minimum_required(VERSION 3.29)
 
+add_subdirectory(Library)
 add_subdirectory(Tool)
+add_subdirectory(Tests)

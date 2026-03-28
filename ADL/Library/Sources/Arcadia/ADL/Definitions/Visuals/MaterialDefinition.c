@@ -93,7 +93,7 @@ Arcadia_ADL_MaterialDefinition_constructImpl
     Arcadia_ADL_MaterialDefinition* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_MaterialDefinition_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_MaterialDefinition);
   {
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 5);
@@ -121,8 +121,7 @@ Arcadia_ADL_MaterialDefinition_constructImpl
   self->ambientColorSource = (Arcadia_ADL_AmbientColorSource)ambientColorSource.value;
   self->ambientColorTexture = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
                                                            Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 5 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_MaterialDefinition);
 }
 
 static void

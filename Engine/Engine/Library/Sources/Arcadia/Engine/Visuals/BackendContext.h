@@ -21,7 +21,7 @@
 #endif
 
 #include "Arcadia/Engine/BackendContext.h"
-#include "Arcadia/Imaging/Include.h"
+#include "Arcadia/PixelBufferIO/Include.h"
 typedef struct Arcadia_Engine_Visuals_Icon Arcadia_Engine_Visuals_Icon;
 typedef struct Arcadia_Engine_Visuals_Window Arcadia_Engine_Visuals_Window;
 

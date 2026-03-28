@@ -87,7 +87,7 @@ Arcadia_ADL_ColorDefinition_constructImpl
     Arcadia_ADL_ColorDefinition* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_ColorDefinition_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_ColorDefinition);
   {
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 5);
@@ -97,15 +97,14 @@ Arcadia_ADL_ColorDefinition_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 5 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (5 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->red = Arcadia_ValueStack_getNatural8Value(thread, 3);
   self->green = Arcadia_ValueStack_getNatural8Value(thread, 2);
   self->blue = Arcadia_ValueStack_getNatural8Value(thread, 1);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 5 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_ColorDefinition);
 }
 
 static void

@@ -181,7 +181,7 @@ if (NOT TARGET ${MyLibraryName})
   OnHeaderFile(${MyLibraryName} Arcadia/Engine/Audials/Nodes/SoundSourceNode.h)
   # <<
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.VPL ${MyProjectName}.Math ${MyProjectName}.Imaging)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.VPL ${MyProjectName}.Math ${MyProjectName}.PixelBufferIO)
   list(APPEND ${MyLibraryName}.PrivateLibraries ${MyProjectName}.Ring2 ${MyProjectName}.DDL)
 
   EndProduct(${MyLibraryName})

@@ -17,7 +17,7 @@
 #include <stdio.h> // @todo Remove references to `stdio.h`.
 #include <string.h>
 #include "Arcadia/Include.h"
-#include "Arcadia/Imaging/Include.h"
+#include "Arcadia/PixelBufferIO/Include.h"
 
 // @todo Remove references to `stdio.h`.
 static void

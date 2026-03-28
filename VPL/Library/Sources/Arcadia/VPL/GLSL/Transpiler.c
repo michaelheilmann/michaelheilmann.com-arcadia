@@ -19,9 +19,7 @@
 #include "Arcadia/Languages/Include.h"
 #include "Arcadia/VPL/Tree/Include.h"
 #include "Arcadia/VPL/Symbols/Include.h"
-#include "Arcadia/VPL/SemanticalAnalysis.h"
 #include "Arcadia/VPL/ResolvePhase.h"
-#include "Arcadia/VPL/TreeBuilder.h"
 #include "Arcadia/VPL/Configure.h"
 
 #include <string.h>

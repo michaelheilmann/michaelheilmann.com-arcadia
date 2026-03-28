@@ -31,7 +31,6 @@ if (NOT TARGET ${MyModule})
   if (${${MyModule}_OperatingSystem} STREQUAL ${${MyModule}_OperatingSystem_Windows} AND ${${MyModule}.OpenAL.Enabled})
     # Use OpenAL under Windows if enabled.
     set(${MyModule}.Backend ${${MyModule}.Backend.OpenAL})
-    set(MyDependenciesDirectory "C:/arcadia-dependencies")
     list(APPEND ${MyModule}.PrivateLibraries ${OPENGL_LIBRARIES})
     if (${${MyModule}_InstructionSetArchitecture} STREQUAL ${${MyModule}_InstructionSetArchitecture_X64})
       set(${MyModule}.OpenAL.Libraries ${MyDependenciesDirectory}/x64/$<LOWER_CASE:$<CONFIG>>/openal-soft/lib/OpenAL32.lib winmm.lib Avrt.lib)
