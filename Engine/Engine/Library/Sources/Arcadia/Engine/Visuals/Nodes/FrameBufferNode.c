@@ -41,6 +41,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_FrameBufferNode_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_FrameBufferNode_destructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_FrameBufferNode_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

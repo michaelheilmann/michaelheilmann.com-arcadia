@@ -21,30 +21,31 @@
 /// constructor(methodName:Arcadia.String, methodParameters:Arcadia.List, methodBody:Arcadia.List)
 /// @endcode
 static void
-Arcadia_MIL_MethodDefinitionNode_constructImpl
+Arcadia_MIL_AST_MethodDefinitionNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_MethodDefinitionNode* self
+    Arcadia_MIL_AST_MethodDefinitionNode* self
   );
 
 static void
-Arcadia_MIL_MethodDefinitionNode_initializeDispatchImpl
+Arcadia_MIL_AST_MethodDefinitionNode_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_MethodDefinitionNodeDispatch* self
+    Arcadia_MIL_AST_MethodDefinitionNodeDispatch* self
   );
 
 static void
-Arcadia_MIL_MethodDefinitionNode_visit
+Arcadia_MIL_AST_MethodDefinitionNode_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_MethodDefinitionNode* self
+    Arcadia_MIL_AST_MethodDefinitionNode* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_MethodDefinitionNode_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_MethodDefinitionNode_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_AST_MethodDefinitionNode_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_AST_MethodDefinitionNode_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_AST_MethodDefinitionNode_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -52,18 +53,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.MIL.AST.MethodDefinitionNode", Arcadia_MIL_MethodDefinitionNode,
+Arcadia_defineObjectType(u8"Arcadia.MIL.AST.MethodDefinitionNode", Arcadia_MIL_AST_MethodDefinitionNode,
                          u8"Arcadia.MIL.AST.DefinitionNode", Arcadia_MIL_AST_DefinitionNode,
                          &_typeOperations);
 
 static void
-Arcadia_MIL_MethodDefinitionNode_constructImpl
+Arcadia_MIL_AST_MethodDefinitionNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_MethodDefinitionNode* self
+    Arcadia_MIL_AST_MethodDefinitionNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_MethodDefinitionNode_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_MIL_AST_MethodDefinitionNode_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -89,18 +90,18 @@ Arcadia_MIL_MethodDefinitionNode_constructImpl
 }
 
 static void
-Arcadia_MIL_MethodDefinitionNode_initializeDispatchImpl
+Arcadia_MIL_AST_MethodDefinitionNode_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_MethodDefinitionNodeDispatch* self
+    Arcadia_MIL_AST_MethodDefinitionNodeDispatch* self
   )
 { }
 
 static void
-Arcadia_MIL_MethodDefinitionNode_visit
+Arcadia_MIL_AST_MethodDefinitionNode_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_MethodDefinitionNode* self
+    Arcadia_MIL_AST_MethodDefinitionNode* self
   )
 {
   if (self->nativeName) {
@@ -117,8 +118,8 @@ Arcadia_MIL_MethodDefinitionNode_visit
   }
 }
 
-Arcadia_MIL_MethodDefinitionNode*
-Arcadia_MIL_MethodDefinitionNode_create
+Arcadia_MIL_AST_MethodDefinitionNode*
+Arcadia_MIL_AST_MethodDefinitionNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* nativeName,
@@ -149,5 +150,5 @@ Arcadia_MIL_MethodDefinitionNode_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 4);
-  ARCADIA_CREATEOBJECT(Arcadia_MIL_MethodDefinitionNode);
+  ARCADIA_CREATEOBJECT(Arcadia_MIL_AST_MethodDefinitionNode);
 }

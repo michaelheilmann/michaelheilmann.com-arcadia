@@ -30,7 +30,7 @@ main1
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, argv[argi], strlen(argv[argi]));
+      Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, argv[argi]));
       Arcadia_List_insertBackObjectReferenceValue(thread, filePaths, filePath);
       Arcadia_Thread_popJumpTarget(thread);
     } else {

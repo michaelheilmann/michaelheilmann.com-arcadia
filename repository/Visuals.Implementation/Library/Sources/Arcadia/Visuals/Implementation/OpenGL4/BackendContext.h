@@ -17,7 +17,7 @@
 #define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_BACKENDCONTEXT_H_INCLUDED
 
 #include "Arcadia/Visuals/Implementation/BackendContext.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Functions.h"
 
 /// Base of all OpenGL4 backend contexts.
 Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.Implementation.OpenGL4.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_BackendContext,

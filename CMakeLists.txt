@@ -24,6 +24,20 @@ if (NOT MyProjectIsDefined)
   include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/all.cmake)
 endif()
 
+# Prepend custom modules directory to module path.
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/")
+
+# Detect the operating system.
+Arcadia_DetectOperatingSystem(operatingSystem)
+
+# Detect the instruction set architecture.
+Arcadia_DetectInstructionSetArchitecture(instructionSetArchitecture)
+
+# For windows, we need to define our dependencies directory.
+if (operatingSystem STREQUAL Arcadia_OperatingSystem_Windows)
+  # TODO: Make this an option.
+  set(MyDependenciesDirectory "C:/arcadia-dependencies")
+endif()
 add_subdirectory(Runtime/ARMS)
 add_subdirectory(Runtime/Ring1)
 add_subdirectory(Runtime/Ring2)
@@ -33,7 +47,7 @@ add_subdirectory(DDLS)
 add_subdirectory(ADL)
 add_subdirectory(VPL)
 add_subdirectory(Media)
-add_subdirectory(Imaging)
+add_subdirectory(PixelBufferIO)
 
 add_subdirectory(Engine/Engine)
 add_subdirectory(Engine/Application)
@@ -41,5 +55,5 @@ add_subdirectory(Engine/Audials.Implementation)
 
 add_subdirectory(Documentation)
 add_subdirectory(Tools/TemplateEngine)
-add_subdirectory(Tools/MaterialGenerator)
+add_subdirectory(Tools/PixelBufferGenerator)
 add_subdirectory(repository)

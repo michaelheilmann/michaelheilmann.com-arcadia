@@ -179,7 +179,7 @@ evalAst
           Arcadia_Thread_jump(thread);
         }
         Arcadia_String* string = (Arcadia_String*)object;
-        Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
+        Arcadia_FilePath* filePath = Arcadia_FilePath_parseGeneric(thread, string);
         Arcadia_Value value;
         Arcadia_Value_setObjectReferenceValue(&value, filePath);
         Arcadia_Stack_push(thread, context->context->stack, value);
@@ -241,6 +241,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&FileContext_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&FileContext_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&FileContext_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&FileContext_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

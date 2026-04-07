@@ -27,7 +27,7 @@
 
     <div>
       <div><a href="#">Arcadia_Integer32Value</a> length</div>
-      <div>The length of the sample buffer. Must be non-negative.</div>
+      <div>The length of the sample buffer, in seconds. Must be non-negative.</div>
     </div>
 
     <div>

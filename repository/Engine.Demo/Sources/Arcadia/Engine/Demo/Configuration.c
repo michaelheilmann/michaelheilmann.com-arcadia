@@ -395,12 +395,12 @@ Cfg_saveConfiguration
 
   // (2) Ensure the product's configuration folder exists.
   file = Arcadia_FilePath_clone(thread, file);
-  Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, u8"Demo", sizeof(u8"Demo") - 1));
+  Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Demo")));
   Arcadia_FileSystem_createDirectoryFile(thread, fileSystem, file);
 
   // (3) Create/update configuration file.
   file = Arcadia_FilePath_clone(thread, file);
-  Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, u8"Configuration.txt", sizeof(u8"Configuration.txt") - 1));
+  Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Configuration.txt")));
 
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_DataDefinitionLanguage_Unparser* unparser = Arcadia_DataDefinitionLanguage_Unparser_create(thread);
@@ -424,12 +424,12 @@ Cfg_loadConfiguration
 
   // (2) Ensure the product's configuration folder exists.
   file = Arcadia_FilePath_clone(thread, file);
-  Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, u8"Demo", sizeof(u8"Demo") - 1));
+  Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Demo")));
   Arcadia_FileSystem_createDirectoryFile(thread, fileSystem, file);
 
   // (3) Ensure the product's configuration file exists.
   file = Arcadia_FilePath_clone(thread, file);
-  Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, u8"Configuration.txt", sizeof(u8"Configuration.txt") - 1));
+  Arcadia_FilePath_append(thread, file, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Configuration.txt")));
   if (!Arcadia_FileSystem_regularFileExists(thread, fileSystem, file)) {
     // Create a configuration file with an empty map.
     Arcadia_DataDefinitionLanguage_Unparser* unparser = Arcadia_DataDefinitionLanguage_Unparser_create(thread);

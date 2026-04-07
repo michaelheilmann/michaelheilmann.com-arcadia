@@ -25,8 +25,8 @@ Arcadia_Engine_Demo_AssetUtilities_enumerateFiles
   }
 
   Arcadia_DirectoryIterator* directoryIterator = Arcadia_FileSystem_createDirectoryIterator(thread, fileSystem, filePath);
-  Arcadia_FilePath* dot = Arcadia_FilePath_parseGeneric(thread, u8".", sizeof(u8".") - 1),
-                  * dotdot = Arcadia_FilePath_parseGeneric(thread, u8"..", sizeof(u8"..") - 1);
+  Arcadia_FilePath* dot = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8".")),
+                  * dotdot = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8".."));
   while (Arcadia_DirectoryIterator_hasValue(thread, directoryIterator)) {
     Arcadia_FilePath* elementPath = Arcadia_DirectoryIterator_getValue(thread, directoryIterator);
     if (Arcadia_FilePath_isEqualTo(thread, elementPath, dot) || Arcadia_FilePath_isEqualTo(thread, elementPath, dotdot)) {
@@ -53,7 +53,7 @@ getColorDefinition
   Arcadia_ADL_Definition* definition = Arcadia_ADL_Definitions_getDefinitionOrNull(thread, definitions, name);
   if (!definition) {
     Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
-    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, filePath), Arcadia_String_getNumberOfBytes(thread, filePath)));
+    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, filePath));
     definition = Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
   }
   if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)definition, _Arcadia_ADL_ColorDefinition_getType(thread))) {
@@ -76,7 +76,7 @@ getMaterialDefinition
   Arcadia_ADL_Definition* definition = Arcadia_ADL_Definitions_getDefinitionOrNull(thread, definitions, name);
   if (!definition) {
     Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
-    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, filePath), Arcadia_String_getNumberOfBytes(thread, filePath)));
+    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, filePath));
     definition = Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
   }
   if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)definition, _Arcadia_ADL_MaterialDefinition_getType(thread))) {
@@ -99,7 +99,7 @@ getMeshDefinition
   Arcadia_ADL_Definition* definition = Arcadia_ADL_Definitions_getDefinitionOrNull(thread, definitions, name);
   if (!definition) {
     Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
-    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, filePath), Arcadia_String_getNumberOfBytes(thread, filePath)));
+    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, filePath));
     definition = Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
   }
   if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)definition, _Arcadia_ADL_MeshDefinition_getType(thread))) {
@@ -122,7 +122,7 @@ getModelDefinition
   Arcadia_ADL_Definition* definition = Arcadia_ADL_Definitions_getDefinitionOrNull(thread, definitions, name);
   if (!definition) {
     Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
-    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, filePath), Arcadia_String_getNumberOfBytes(thread, filePath)));
+    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, filePath));
     definition = Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
   }
   if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)definition, _Arcadia_ADL_ModelDefinition_getType(thread))) {

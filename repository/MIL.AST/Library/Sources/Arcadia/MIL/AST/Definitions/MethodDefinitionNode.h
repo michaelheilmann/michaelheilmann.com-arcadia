@@ -22,14 +22,14 @@
 /// class Arcadia.MIL.AST.MethodDefinitionNode extends Arcadia.MIL.AST.DefinitionNode
 /// @endcode
 /// See https://michaelheilmann.com/specifications/mil/#method-definition for more information.
-Arcadia_declareObjectType(u8"Arcadia.MIL.AST.MethodDefinitionNode", Arcadia_MIL_MethodDefinitionNode,
+Arcadia_declareObjectType(u8"Arcadia.MIL.AST.MethodDefinitionNode", Arcadia_MIL_AST_MethodDefinitionNode,
                           u8"Arcadia.MIL.AST.DefinitionNode");
 
-struct Arcadia_MIL_MethodDefinitionNodeDispatch {
+struct Arcadia_MIL_AST_MethodDefinitionNodeDispatch {
   Arcadia_MIL_AST_DefinitionNodeDispatch _parent;
 };
 
-struct Arcadia_MIL_MethodDefinitionNode {
+struct Arcadia_MIL_AST_MethodDefinitionNode {
   Arcadia_MIL_AST_DefinitionNode _parent;
   Arcadia_String* nativeName;
   Arcadia_String* methodName;
@@ -37,8 +37,8 @@ struct Arcadia_MIL_MethodDefinitionNode {
   Arcadia_List* methodBody;
 };
 
-Arcadia_MIL_MethodDefinitionNode*
-Arcadia_MIL_MethodDefinitionNode_create
+Arcadia_MIL_AST_MethodDefinitionNode*
+Arcadia_MIL_AST_MethodDefinitionNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* nativeName,

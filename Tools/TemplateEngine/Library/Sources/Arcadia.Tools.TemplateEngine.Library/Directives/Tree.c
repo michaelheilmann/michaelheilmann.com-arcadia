@@ -45,9 +45,10 @@ Directives_Tree_initializeDispatchImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Directives_Tree_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Directives_Tree_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Directives_Tree_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Directives_Tree_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Directives_Tree_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Directives_Tree_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

@@ -45,6 +45,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_MIL_AST_BinaryInstructionNod
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_AST_BinaryInstructionNode_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_AST_BinaryInstructionNode_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_AST_BinaryInstructionNode_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_MIL_AST_BinaryInstructionNode_typeOperations = {

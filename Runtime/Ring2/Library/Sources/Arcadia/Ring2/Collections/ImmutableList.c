@@ -109,9 +109,10 @@ Arcadia_ImmutableList_removeAtImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_ImmutableList_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Arcadia_ImmutableList_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_ImmutableList_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_ImmutableList_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_ImmutableList_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ImmutableList_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_ImmutableList_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

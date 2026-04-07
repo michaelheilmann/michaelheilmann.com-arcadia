@@ -43,6 +43,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Symbols_Stage_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_VPL_Symbols_Stage_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_VPL_Symbols_Stage_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

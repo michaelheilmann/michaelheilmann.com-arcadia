@@ -81,9 +81,10 @@ Arcadia_Visuals_Implementation_OpenGL4_Backend_visit
 
 static const Arcadia_ObjectType_Operations _Arcadia_Visuals_Implementation_OpenGL4_Backend_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) &Arcadia_Visuals_Implementation_OpenGL4_Backend_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Backend_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Backend_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Backend_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_Backend_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Visuals_Implementation_OpenGL4_Backend_typeOperations = {

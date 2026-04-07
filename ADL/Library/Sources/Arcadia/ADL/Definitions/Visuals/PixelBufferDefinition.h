@@ -29,7 +29,7 @@
 //   name  : "MyGame.CheckerboardPixelBuffer",
 //   width : 320,
 //   height : 240,
-//   operations [],
+//   operations : [ ... ],
 // }
 // @endcode
 //

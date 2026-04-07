@@ -75,6 +75,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_Parser_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_MIL_Parser_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Parser_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_Parser_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -229,7 +230,7 @@ onConstructorDefinition
     Arcadia_MIL_Parser* self
   );
 
-static Arcadia_MIL_MethodDefinitionNode*
+static Arcadia_MIL_AST_MethodDefinitionNode*
 onMethodDefinition
   (
     Arcadia_Thread* thread,
@@ -791,7 +792,7 @@ onInstructionStatement
 }
 
 /// variableDefinitionStatement : 'variable' name endOfStatement
-static Arcadia_MIL_VariableDefinitionStatementNode*
+static Arcadia_MIL_AST_VariableDefinitionStatementNode*
 onVariableDefinitionStatement
   (
     Arcadia_Thread* thread,
@@ -807,7 +808,7 @@ onVariableDefinitionStatement
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_MIL_VariableDefinitionStatementNode* statement = Arcadia_MIL_VariableDefinitionStatementNode_create(thread, getText(thread, self));
+  Arcadia_MIL_AST_VariableDefinitionStatementNode* statement = Arcadia_MIL_AST_VariableDefinitionStatementNode_create(thread, getText(thread, self));
   next(thread, self);
   onEndOfStatement(thread, self);
   while (is(thread, self, Arcadia_MIL_WordType_LineTerminator)) {
@@ -834,7 +835,7 @@ onStatement
   }
   // variableDefinitionStatement : 'variable' name
   if (is(thread, self, Arcadia_MIL_WordType_Variable)) {
-    Arcadia_MIL_VariableDefinitionStatementNode* statementAst = onVariableDefinitionStatement(thread, self);
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* statementAst = onVariableDefinitionStatement(thread, self);
     return (Arcadia_MIL_AST_StatementNode*)statementAst;
   }
   // labelDefinitionStatement : name ':'
@@ -1003,7 +1004,7 @@ onConstructorDefinition
 // methodDefinition : 'method' ('native' string)? methodName methodParameters? methodBody?
 // methodParameters : parameters
 // methodBody : '{' statements '}'
-static Arcadia_MIL_MethodDefinitionNode*
+static Arcadia_MIL_AST_MethodDefinitionNode*
 onMethodDefinition
   (
     Arcadia_Thread* thread,
@@ -1055,7 +1056,7 @@ onMethodDefinition
   while (is(thread, self, Arcadia_MIL_WordType_LineTerminator)) {
     next(thread, self);
   }
-  Arcadia_MIL_MethodDefinitionNode* methodDefinitionAst = Arcadia_MIL_MethodDefinitionNode_create(thread, nativeName, methodName, methodParameters, methodBody);
+  Arcadia_MIL_AST_MethodDefinitionNode* methodDefinitionAst = Arcadia_MIL_AST_MethodDefinitionNode_create(thread, nativeName, methodName, methodParameters, methodBody);
   return methodDefinitionAst;
 }
 

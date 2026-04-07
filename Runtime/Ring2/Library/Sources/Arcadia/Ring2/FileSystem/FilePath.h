@@ -114,8 +114,7 @@ Arcadia_FilePath*
 Arcadia_FilePath_parseGeneric
   (
     Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
+    Arcadia_String* string
   );
 
 Arcadia_String*

@@ -52,9 +52,10 @@ Arcadia_Slot_initializeDispatchImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Slot_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Arcadia_Slot_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_Slot_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Slot_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Slot_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Slot_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Slot_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

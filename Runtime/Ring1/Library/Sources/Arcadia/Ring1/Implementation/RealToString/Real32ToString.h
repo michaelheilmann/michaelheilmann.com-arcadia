@@ -17,7 +17,7 @@
 #define ARCADIA_RING1_IMPLEMENTATION_REALTOSTRING_REAL32STRING_H_INCLUDED
 
 #if !defined(ARCADIA_RING1_PRIVATE)
-#error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
+  #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
 #include "Arcadia/Ring1/Implementation/Natural8.h"

@@ -76,8 +76,9 @@ Arcadia_UTF8StringReader_getLengthImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_UTF8StringReader_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_UTF8StringReader_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_UTF8StringReader_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_UTF8StringReader_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

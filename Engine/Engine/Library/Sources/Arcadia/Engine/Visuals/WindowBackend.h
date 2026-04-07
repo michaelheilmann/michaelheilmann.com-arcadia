@@ -19,8 +19,7 @@
 #if !defined(ARCADIA_ENGINE_PRIVATE) || 1 != ARCADIA_ENGINE_PRIVATE
   #error("do not include directly, include `Arcadia/Engine/Include.h` instead")
 #endif
-//#include "Arcadia/Engine/Include.h"
-#include "Arcadia/Imaging/Include.h"
+#include "Arcadia/PixelBufferIO/Include.h"
 #include "Arcadia/Engine/Visuals/Icon.h"
 typedef struct Arcadia_Engine_Visuals_Window Arcadia_Engine_Visuals_Window;
 

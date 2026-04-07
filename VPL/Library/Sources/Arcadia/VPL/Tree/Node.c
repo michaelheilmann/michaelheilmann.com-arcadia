@@ -41,13 +41,13 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_VPL_Tree_Node_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_VPL_Tree_Node_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_VPL_Tree_Node_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
   .objectTypeOperations = &_objectTypeOperations,
 };
-
 
 Arcadia_defineObjectType(u8"Arcadia.VPL.Tree.Node", Arcadia_VPL_Tree_Node,
                          u8"Arcadia.Object", Arcadia_Object,

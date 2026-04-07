@@ -41,6 +41,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDL_MapNode_objectTypeOperat
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DDL_MapNode_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDL_MapNode_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_DDL_MapNode_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_DDL_MapNode_typeOperations = {

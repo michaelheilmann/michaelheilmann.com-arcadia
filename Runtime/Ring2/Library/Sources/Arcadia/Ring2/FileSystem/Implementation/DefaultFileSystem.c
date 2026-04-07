@@ -237,6 +237,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DefaultFileSystem_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_DefaultFileSystem_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DefaultFileSystem_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_DefaultFileSystem_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -497,11 +498,11 @@ Arcadia_DefaultFileSystem_getConfigurationDirectoryImpl
 {
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   Arcadia_FilePath* filePath = Arcadia_DefaultFileSystem_getLocalFolderHelper(thread, self);
-  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia", sizeof(u8"Michael Heilmann's Arcadia") - 1));
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Arcadia")));
   return filePath;
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   Arcadia_FilePath* filePath = Arcadia_DefaultFileSystem_getHomeFolderHelper(thread, self);
-  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia/Configurations", sizeof(u8"Michael Heilmann's Arcadia/Configurations") - 1));
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Arcadia/Configurations")));
   return filePath;
 #else
   #error("environment not (yet) supported")
@@ -667,11 +668,11 @@ Arcadia_DefaultFileSystem_getSaveFolderImpl
 {
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   Arcadia_FilePath* filePath = Arcadia_DefaultFileSystem_getRoamingFolderHelper(thread, self);
-  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia", sizeof(u8"Michael Heilmann's Arcadia") - 1));
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Arcadia")));
   return filePath;
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   Arcadia_FilePath* filePath  = Arcadia_DefaultFileSystem_getHomeFolderHelper(thread, self);
-  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, u8"Michael Heilmann's Arcadia/Saves", sizeof(u8"Michael Heilmann's Arcadia/Saves") - 1));
+  Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Michael Heilmann's Arcadia/Saves")));
   return filePath;
 #else
   #error("environment not (yet) supported")

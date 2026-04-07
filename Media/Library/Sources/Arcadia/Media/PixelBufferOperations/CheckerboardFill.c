@@ -47,8 +47,9 @@ Arcadia_Media_PixelBufferOperations_CheckerboardFill_apply
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Media_PixelBufferOperations_CheckerboardFill_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_Media_PixelBufferOperations_CheckerboardFill_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Media_PixelBufferOperations_CheckerboardFill_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Media_PixelBufferOperations_CheckerboardFill_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Media_PixelBufferOperations_CheckerboardFill_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

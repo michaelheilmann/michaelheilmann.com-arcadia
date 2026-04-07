@@ -68,6 +68,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_FileLog_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FileLog_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_FileLog_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

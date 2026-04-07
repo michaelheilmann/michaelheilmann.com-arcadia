@@ -225,6 +225,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_ArrayDeque_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_ArrayDeque_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ArrayDeque_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_ArrayDeque_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

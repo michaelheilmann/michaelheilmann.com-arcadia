@@ -41,8 +41,9 @@ R_Interpreter_Class_visit
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & R_Interpreter_Class_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&R_Interpreter_Class_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&R_Interpreter_Class_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&R_Interpreter_Class_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

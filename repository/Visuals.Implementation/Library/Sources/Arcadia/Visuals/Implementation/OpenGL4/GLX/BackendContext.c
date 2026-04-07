@@ -285,6 +285,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_constructImpl,
   .destruct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_destruct,
   .visit = &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

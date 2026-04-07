@@ -65,6 +65,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_Engine_Audials_Implementatio
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_Implementation_OpenAL_Backend_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Audials_Implementation_OpenAL_Backend_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Audials_Implementation_OpenAL_Backend_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Audials_Implementation_OpenAL_Backend_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Engine_Audials_Implementation_OpenAL_Backend_typeOperations = {

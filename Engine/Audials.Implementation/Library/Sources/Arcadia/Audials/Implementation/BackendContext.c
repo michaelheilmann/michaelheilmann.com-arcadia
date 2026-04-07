@@ -58,6 +58,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_Implementation_BackendContext_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Audials_Implementation_BackendContext_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Audials_Implementation_BackendContext_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Audials_Implementation_BackendContext_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -126,6 +127,7 @@ Arcadia_Engine_Audials_Implementation_SoundSourceResource*
 Arcadia_Engine_Audials_Implementation_BackendContext_createSoundSourceResource
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Audials_Implementation_BackendContext* self
+    Arcadia_Engine_Audials_Implementation_BackendContext* self,
+    Arcadia_Media_SampleBuffer* sampleBuffer
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Audials_Implementation_BackendContext, createSoundSourceResource, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Audials_Implementation_BackendContext, createSoundSourceResource, self, sampleBuffer); }

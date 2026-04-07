@@ -25,22 +25,22 @@
 /// @code
 /// variableDefinitionStatement : 'variable' name
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.MIL.VariableDefinitionStatementNode", Arcadia_MIL_VariableDefinitionStatementNode,
+Arcadia_declareObjectType(u8"Arcadia.MIL.AST.VariableDefinitionStatementNode", Arcadia_MIL_AST_VariableDefinitionStatementNode,
                           u8"Arcadia.MIL.AST.DefinitionStatementNode");
 
-struct Arcadia_MIL_VariableDefinitionStatementNodeDispatch {
+struct Arcadia_MIL_AST_VariableDefinitionStatementNodeDispatch {
   Arcadia_MIL_AST_DefinitionStatementNodeDispatch parent;
 };
 
-struct Arcadia_MIL_VariableDefinitionStatementNode {
+struct Arcadia_MIL_AST_VariableDefinitionStatementNode {
   Arcadia_MIL_AST_DefinitionStatementNode parent;
   Arcadia_String* variableName;
 };
 
 /// @brief Create a MIL variable definition statement AST node.
 /// @return A pointer to this MIL variable definition statement AST node.
-Arcadia_MIL_VariableDefinitionStatementNode*
-Arcadia_MIL_VariableDefinitionStatementNode_create
+Arcadia_MIL_AST_VariableDefinitionStatementNode*
+Arcadia_MIL_AST_VariableDefinitionStatementNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* variableName

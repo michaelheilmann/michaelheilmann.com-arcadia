@@ -42,6 +42,7 @@ Arcadia_Collection_isEmptyImpl
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Collection_constructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Collection_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

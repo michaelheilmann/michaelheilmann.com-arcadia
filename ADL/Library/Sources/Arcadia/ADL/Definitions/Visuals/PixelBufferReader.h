@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_ADL_DEFINITIONS_VISUALS_PIXELBUFFERREADERH_INCLUDED)
-#define ARCADIA_ADL_DEFINITIONS_VISUALS_PIXELBUFFERREADERH_INCLUDED
+#if !defined(ARCADIA_ADL_DEFINITIONS_VISUALS_PIXELBUFFERREADER_H_INCLUDED)
+#define ARCADIA_ADL_DEFINITIONS_VISUALS_PIXELBUFFERREADER_H_INCLUDED
 
 #if !defined(ARCADIA_ADL_PRIVATE)
   #error("do not include directly, include `Arcadia/ADL/Include.h` instead")
@@ -22,7 +22,7 @@
 #include "Arcadia/ADL/Reader.h"
 #include "Arcadia/DDLS/Include.h"
 
-Arcadia_declareObjectType(u8"Arcadia.ADL.PixelBufferReaderr", Arcadia_ADL_PixelBufferReader,
+Arcadia_declareObjectType(u8"Arcadia.ADL.PixelBufferReader", Arcadia_ADL_PixelBufferReader,
                           u8"Arcadia.ADL.Reader");
 
 struct Arcadia_ADL_PixelBufferReaderDispatch {
@@ -58,4 +58,4 @@ Arcadia_ADL_PixelBufferReader_create
     Arcadia_Thread* thread
   );
 
-#endif  // ARCADIA_ADL_DEFINITIONS_VISUALS_PIXELBUFFERREADERH_INCLUDED
+#endif // ARCADIA_ADL_DEFINITIONS_VISUALS_PIXELBUFFERREADER_H_INCLUDED

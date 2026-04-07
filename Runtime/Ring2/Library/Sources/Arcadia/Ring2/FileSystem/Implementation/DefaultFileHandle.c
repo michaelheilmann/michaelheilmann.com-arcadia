@@ -159,6 +159,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DefaultFileHandle_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_DefaultFileHandle_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DefaultFileHandle_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_DefaultFileHandle_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

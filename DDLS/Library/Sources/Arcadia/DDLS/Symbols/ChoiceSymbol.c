@@ -40,6 +40,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_DDLS_ChoiceSymbol_objectType
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DDLS_ChoiceSymbol_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_DDLS_ChoiceSymbol_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_DDLS_ChoiceSymbol_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_DDLS_ChoiceSymbol_typeOperations = {

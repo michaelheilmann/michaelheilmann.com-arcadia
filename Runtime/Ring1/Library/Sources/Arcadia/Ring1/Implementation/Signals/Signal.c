@@ -54,9 +54,10 @@ Arcadia_Signal_initializeDispatchImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Signal_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Arcadia_Signal_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_Signal_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Signal_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Signal_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Signal_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Signal_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

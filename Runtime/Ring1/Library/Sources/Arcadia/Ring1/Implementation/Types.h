@@ -35,6 +35,7 @@ typedef struct Arcadia_Dispatch {
 
 /// The type of an initializer function for a dispatch.
 typedef void (Arcadia_Dispatch_InitializerCallback)(Arcadia_Thread* thread, Arcadia_Dispatch* dispatch);
+typedef Arcadia_Dispatch_InitializerCallback Arcadia_ObjectDispatch_InitializeCallbackFunction;
 
 
 /// Type operations for object types.
@@ -42,12 +43,14 @@ typedef struct Arcadia_ObjectType_Operations {
   Arcadia_Object_ConstructCallbackFunction* construct;
   Arcadia_Object_DestructCallbackFunction* destruct;
   Arcadia_Object_VisitCallbackFunction* visit;
+  Arcadia_Dispatch_InitializerCallback* initializeDispatch;
 } Arcadia_ObjectType_Operations;
 
 #define Arcadia_ObjectType_Operations_Initializer \
   .construct = NULL, \
   .destruct = NULL, \
-  .visit = NULL
+  .visit = NULL, \
+  .initializeDispatch = NULL
 
 /// Type operations for all types.
 typedef struct Arcadia_Type_Operations {

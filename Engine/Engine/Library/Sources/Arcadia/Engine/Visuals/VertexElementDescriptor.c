@@ -45,6 +45,7 @@ Arcadia_Engine_Visuals_VertexElementDescriptor_isNotEqualTo
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_Visuals_VertexElementDescriptor_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Engine_Visuals_VertexElementDescriptor_construct,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_VertexElementDescriptor_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Engine_Visuals_VertexElementDescriptor_typeOperations = {

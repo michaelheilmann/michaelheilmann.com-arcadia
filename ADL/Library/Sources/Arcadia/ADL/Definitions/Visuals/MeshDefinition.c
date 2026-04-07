@@ -51,8 +51,9 @@ Arcadia_ADL_MeshDefinition_initializeDispatchImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_ADL_MeshDefinition_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_ADL_MeshDefinition_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_ADL_MeshDefinition_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ADL_MeshDefinition_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_ADL_MeshDefinition_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -103,7 +104,7 @@ Arcadia_ADL_MeshDefinition_constructImpl
     Arcadia_ADL_MeshDefinition* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_MeshDefinition_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_MeshDefinition);
   {
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 7);
@@ -124,8 +125,7 @@ Arcadia_ADL_MeshDefinition_constructImpl
   self->vertexAmbientTextureCoordinates = Arcadia_ValueStack_getInternalImmutableByteArrayValue(thread, 2);
   self->ambientColor = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
                                                             (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_MeshDefinition);
 }
 
 static void

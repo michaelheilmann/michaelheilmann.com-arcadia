@@ -126,8 +126,9 @@ Arcadia_ADL_MaterialReader_visitImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_ADL_MaterialReader_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_ADL_MaterialReader_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_ADL_MaterialReader_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ADL_MaterialReader_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_ADL_MaterialReader_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -224,7 +225,7 @@ Arcadia_ADL_MaterialReader_constructImpl
     Arcadia_ADL_MaterialReader* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_MaterialReader_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_MaterialReader);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -260,8 +261,7 @@ Arcadia_ADL_MaterialReader_constructImpl
   //
   self->AMBIENTCOLORTEXTURE = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"ambientColorTexture");
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_MaterialReader);
 }
 
 static void

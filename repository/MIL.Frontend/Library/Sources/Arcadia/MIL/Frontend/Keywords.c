@@ -67,6 +67,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_Keywords_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_MIL_Keywords_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Keywords_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_Keywords_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

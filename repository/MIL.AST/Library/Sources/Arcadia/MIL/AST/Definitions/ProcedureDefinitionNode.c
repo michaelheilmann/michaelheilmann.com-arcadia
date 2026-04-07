@@ -45,6 +45,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_AST_ProcedureDefinitionNode_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_AST_ProcedureDefinitionNode_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_AST_ProcedureDefinitionNode_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

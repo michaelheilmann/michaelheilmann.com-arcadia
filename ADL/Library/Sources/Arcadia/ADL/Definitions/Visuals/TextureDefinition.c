@@ -51,8 +51,9 @@ Arcadia_ADL_TextureDefinition_initializeDispatchImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_ADL_TextureDefinition_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_ADL_TextureDefinition_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_ADL_TextureDefinition_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ADL_TextureDefinition_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_ADL_TextureDefinition_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -98,7 +99,7 @@ Arcadia_ADL_TextureDefinition_constructImpl
     Arcadia_ADL_TextureDefinition* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_TextureDefinition_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_TextureDefinition);
   {
     Arcadia_Value definitions, name;
     definitions = Arcadia_ValueStack_getValue(thread, 3);
@@ -108,15 +109,13 @@ Arcadia_ADL_TextureDefinition_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 3 != numberOfArgumentValues) {
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->pixelBuffer = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
                                                    Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_TextureDefinition);
 }
 
 static void

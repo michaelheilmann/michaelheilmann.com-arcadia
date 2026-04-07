@@ -75,6 +75,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = &Arcadia_DirectoryIteratorLinux_constructImpl,
   .destruct = &Arcadia_DirectoryIteratorLinux_destructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_DirectoryIteratorLinux_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

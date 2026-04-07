@@ -46,9 +46,10 @@ Arcadia_Engine_Visuals_NodeFactory_visit
 
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_Visuals_NodeFactory_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Engine_Visuals_NodeFactory_construct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_construct,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Engine_Visuals_NodeFactory_typeOperations = {

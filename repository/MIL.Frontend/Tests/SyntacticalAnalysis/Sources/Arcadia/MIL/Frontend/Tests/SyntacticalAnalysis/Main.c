@@ -45,10 +45,10 @@ main1
   )
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
-  onTest(thread, Arcadia_FilePath_parseGeneric(thread, u8"Assets/Procedures.mil", sizeof(u8"Assets/Procedures.mil") - 1));
-  onTest(thread, Arcadia_FilePath_parseGeneric(thread, u8"Assets/Classes.mil", sizeof(u8"Assets/Classes.mil") - 1));
-  onTest(thread, Arcadia_FilePath_parseGeneric(thread, u8"Assets/Statements.mil", sizeof(u8"Assets/Statements.mil") - 1));
-  onTest(thread, Arcadia_FilePath_parseGeneric(thread, u8"Assets/Variables.mil", sizeof(u8"Assets/Variables.mil") - 1));
+  onTest(thread, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Assets/Procedures.mil")));
+  onTest(thread, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Assets/Classes.mil")));
+  onTest(thread, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Assets/Statements.mil")));
+  onTest(thread, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Assets/Variables.mil")));
 }
 
 int

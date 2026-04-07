@@ -31,9 +31,9 @@ main1
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Context* context = Context_create(thread);
 
-  context->sourceFilePath = Arcadia_FilePath_parseGeneric(thread, u8"HelloWorld.t", strlen(u8"HelloWorld.t"));
-  context->targetFilePath = Arcadia_FilePath_parseGeneric(thread, u8"HelloWorld.txt", strlen(u8"HelloWorld.txt"));
-  context->dependenciesFilePath = Arcadia_FilePath_parseGeneric(thread, u8"HelloWorld.txt.dependencies", strlen(u8"HelloWorld.txt.dependencies"));
+  context->sourceFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"HelloWorld.t"));
+  context->targetFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"HelloWorld.txt"));
+  context->dependenciesFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"HelloWorld.txt.dependencies"));
   context->environmentFilePath = NULL;
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
@@ -55,9 +55,9 @@ recursiveInclude1
 {
   Context* context = Context_create(thread);
 
-  context->sourceFilePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude1.t", strlen(u8"recursiveInclude1.t"));
-  context->targetFilePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude1.txt", strlen(u8"recursiveInclude1.txt"));
-  context->dependenciesFilePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude1.txt.dependencies", strlen(u8"recursiveInclude1.txt.dependencies"));
+  context->sourceFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"recursiveInclude1.t"));
+  context->targetFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"recursiveInclude1.txt"));
+  context->dependenciesFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"recursiveInclude1.txt.dependencies"));
   context->environmentFilePath = NULL;
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
@@ -87,9 +87,9 @@ recursiveInclude2
 {
   Context* context = Context_create(thread);
 
-  context->sourceFilePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude2.t", strlen(u8"recursiveInclude2.t"));
-  context->targetFilePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude2.txt", strlen(u8"recursiveInclude2.txt"));
-  context->dependenciesFilePath = Arcadia_FilePath_parseGeneric(thread, u8"recursiveInclude2.txt.dependencies", strlen(u8"recursiveInclude2.txt.dependencies"));
+  context->sourceFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"recursiveInclude2.t"));
+  context->targetFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"recursiveInclude2.txt"));
+  context->dependenciesFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"recursiveInclude2.txt.dependencies"));
   context->environmentFilePath = NULL;
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);
@@ -121,9 +121,9 @@ time
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Context* context = Context_create(thread);
 
-  context->sourceFilePath = Arcadia_FilePath_parseGeneric(thread, u8"time.t", strlen(u8"time.t"));
-  context->targetFilePath = Arcadia_FilePath_parseGeneric(thread, u8"time.txt", strlen(u8"time.txt"));
-  context->dependenciesFilePath = Arcadia_FilePath_parseGeneric(thread, u8"time.txt.dependencies", strlen(u8"time.txt.dependencies"));
+  context->sourceFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"time.t"));
+  context->targetFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"time.txt"));
+  context->dependenciesFilePath = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"time.txt.dependencies"));
   context->environmentFilePath = NULL;
 
   context->stack = (Arcadia_Stack*)Arcadia_ArrayStack_create(thread);

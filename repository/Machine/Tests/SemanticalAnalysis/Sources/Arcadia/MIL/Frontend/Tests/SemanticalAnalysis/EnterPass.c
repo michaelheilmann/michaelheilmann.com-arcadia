@@ -78,7 +78,7 @@ onMethodDefinition
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
-    Arcadia_MIL_MethodDefinitionNode* definitionAst
+    Arcadia_MIL_AST_MethodDefinitionNode* definitionAst
   );
 
 static R_Interpreter_Code*
@@ -442,7 +442,7 @@ onVariableDefinitionStatement
     R_Interpreter_ProcessState* interpreterProcessState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_VariableDefinitionStatementNode* variableDefinitionStatement
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* variableDefinitionStatement
   )
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
@@ -470,8 +470,8 @@ onStatements
     Arcadia_MIL_AST_StatementNode* statement = (Arcadia_MIL_AST_StatementNode*)objectElementValue;
     if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_InstructionStatementNode_getType(thread))) {
       onExpressionStatement(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_InstructionStatementNode*)statement);
-    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_VariableDefinitionStatementNode_getType(thread))) {
-      onVariableDefinitionStatement(process, interpreterProcessState, code, context, (Arcadia_MIL_VariableDefinitionStatementNode*)statement);
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_VariableDefinitionStatementNode_getType(thread))) {
+      onVariableDefinitionStatement(process, interpreterProcessState, code, context, (Arcadia_MIL_AST_VariableDefinitionStatementNode*)statement);
     } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_LabelDefinitionStatementNode_getType(thread))) {
       onLabelDefinitionStatement(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_LabelDefinitionStatementNode*)statement);
     } else {
@@ -630,7 +630,7 @@ onMethodDefinition
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
-    Arcadia_MIL_MethodDefinitionNode* definitionAst
+    Arcadia_MIL_AST_MethodDefinitionNode* definitionAst
   )
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
@@ -722,7 +722,7 @@ onClassBodyDefinition
     Arcadia_ObjectReferenceValue element = Arcadia_List_getObjectReferenceValueAt(thread, classBodyAst, i);
     if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MIL_AST_ConstructorDefinitionNode_getType(thread))) {
       onConstructorDefinition(thread, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
-    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MIL_MethodDefinitionNode_getType(thread))) {
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MIL_AST_MethodDefinitionNode_getType(thread))) {
       onMethodDefinition(thread, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
     } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MIL_AST_FieldDefinitionNode_getType(thread))) {
       onObjectVariableDefinition(thread, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
@@ -801,6 +801,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_SemanticalAnalysis_EnterPass_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_SemanticalAnalysis_EnterPass_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_SemanticalAnalysis_EnterPass_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

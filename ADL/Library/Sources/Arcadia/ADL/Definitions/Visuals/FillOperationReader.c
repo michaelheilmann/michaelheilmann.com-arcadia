@@ -94,8 +94,9 @@ Arcadia_ADL_PixelBufferOperations_FillOperationReader_visitImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_ADL_PixelBufferOperations_FillOperationReader_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_ADL_PixelBufferOperations_FillOperationReader_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_ADL_PixelBufferOperations_FillOperationReader_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ADL_PixelBufferOperations_FillOperationReader_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_ADL_PixelBufferOperations_FillOperationReader_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -149,12 +150,12 @@ Arcadia_ADL_PixelBufferOperations_FillOperationReader_constructImpl
     Arcadia_ADL_PixelBufferOperations_FillOperationReader* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_PixelBufferOperations_FillOperationReader_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_PixelBufferOperations_FillOperationReader);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -177,8 +178,7 @@ Arcadia_ADL_PixelBufferOperations_FillOperationReader_constructImpl
   //
   self->COLOR = Arcadia_Languages_StringTable_getOrCreateStringFromCxxString(thread, Arcadia_Languages_StringTable_getOrCreate(thread), u8"color");
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_PixelBufferOperations_FillOperationReader);
 }
 
 static void

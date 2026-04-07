@@ -57,8 +57,9 @@ Arcadia_getRandomReal32Value
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Media_SampleBufferOperations_WhiteNoise_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Media_SampleBufferOperations_WhiteNoise_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Media_SampleBufferOperations_WhiteNoise_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Media_SampleBufferOperations_WhiteNoise_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

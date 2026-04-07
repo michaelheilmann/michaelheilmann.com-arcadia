@@ -43,6 +43,7 @@ static const Arcadia_ObjectType_Operations _Arcadia_MIL_CallableContext_objectTy
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_CallableContext_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_CallableContext_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_CallableContext_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_MIL_CallableContext_typeOperations = {
@@ -170,7 +171,7 @@ Arcadia_MIL_CallableContext_onLocalVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* context,
     Arcadia_String* name,
-    Arcadia_MIL_VariableDefinitionStatementNode* ast
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* ast
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->variables); i < n; ++i) {

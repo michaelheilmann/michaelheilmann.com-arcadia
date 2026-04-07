@@ -33,6 +33,7 @@ Arcadia_Engine_Visuals_ViewportNode_initializeDispatchImpl
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_ViewportNode_constructImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_ViewportNode_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

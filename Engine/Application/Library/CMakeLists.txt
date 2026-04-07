@@ -30,7 +30,7 @@ if (NOT TARGET ${MyLibraryName})
   OnSourceFile(${MyLibraryName} Arcadia/Application/Application.c)
   OnHeaderFile(${MyLibraryName} Arcadia/Application/Application.h)
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Engine ${MyProjectName}.Imaging ${MyProjectName}.Math ${MyProjectName}.Ring2)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Engine ${MyProjectName}.PixelBufferIO ${MyProjectName}.Math ${MyProjectName}.Ring2)
 
   EndProduct(${MyLibraryName})
 

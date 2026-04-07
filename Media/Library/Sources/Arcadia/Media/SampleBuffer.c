@@ -50,6 +50,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Media_SampleBuffer_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Media_SampleBuffer_destruct,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Media_SampleBuffer_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

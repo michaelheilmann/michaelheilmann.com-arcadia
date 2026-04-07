@@ -29,7 +29,7 @@
 
   <section class="cxx return-value">
     <h1>Return value</h1>
-    <p>The length of this sample buffer.</p>
+    <p>The length of this sample buffer, in seconds.</p>
   </section>
 
 </section>

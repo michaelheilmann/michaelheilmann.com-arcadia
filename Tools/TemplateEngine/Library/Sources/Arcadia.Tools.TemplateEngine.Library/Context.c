@@ -57,9 +57,10 @@ Context_visit
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Context_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Context_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Context_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Context_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Context_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Context_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

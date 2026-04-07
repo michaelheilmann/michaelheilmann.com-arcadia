@@ -22,6 +22,7 @@ skip_tags: true
 
 install:
     - sh: sudo apt-get --assume-yes install libopenal-dev
+    - sh: sudo apt-get --assume-yes install libflac-dev
     #- sh: |
     #    sudo apt-get remove cmake -y
     #    mkdir /tmp/cmake

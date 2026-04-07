@@ -52,6 +52,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_FileSystem_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_FileSystem_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FileSystem_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_FileSystem_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -283,7 +284,7 @@ Arcadia_FileSystem_createDirectoryFiles
   for (Arcadia_SizeValue i = 0; i < n - 1; ++i) {
     Arcadia_String* suffixString = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)path->fileNames, i,
                                                                                                   _Arcadia_String_getType(thread));
-    Arcadia_FilePath* suffix = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, suffixString), Arcadia_String_getNumberOfBytes(thread, suffixString));
+    Arcadia_FilePath* suffix = Arcadia_FilePath_parseGeneric(thread, suffixString);
     Arcadia_FilePath_append(thread, temporary, suffix);
     // Raises Arcadia_Status_OperationFailed if
     // - a component exists but is not a directory file

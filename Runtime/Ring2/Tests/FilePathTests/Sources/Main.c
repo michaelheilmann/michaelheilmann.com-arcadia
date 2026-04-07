@@ -57,7 +57,7 @@ regressionTest1
   )
 {
   Arcadia_String* u = Arcadia_String_createFromCxxString(thread, u8"./../../x/y");
-  Arcadia_FilePath* v = Arcadia_FilePath_parseGeneric(thread, Arcadia_String_getBytes(thread, u), Arcadia_String_getNumberOfBytes(thread, u));
+  Arcadia_FilePath* v = Arcadia_FilePath_parseGeneric(thread, u);
   Arcadia_String* w = Arcadia_FilePath_toGeneric(thread, v);
 
   Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(w);

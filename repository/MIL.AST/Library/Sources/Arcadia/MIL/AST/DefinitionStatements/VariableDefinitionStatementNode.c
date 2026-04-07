@@ -21,30 +21,31 @@
 /// constructor(name:Arcadia.String)
 /// @endcode
 static void
-Arcadia_MIL_VariableDefinitionStatementNode_constructImpl
+Arcadia_MIL_AST_VariableDefinitionStatementNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_VariableDefinitionStatementNode* self
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* self
   );
 
 static void
-Arcadia_MIL_VariableDefinitionStatementNode_initializeDispatchImpl
+Arcadia_MIL_AST_VariableDefinitionStatementNode_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_VariableDefinitionStatementNode* self
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* self
   );
 
 static void
-Arcadia_MIL_VariableDefinitionStatementNode_visit
+Arcadia_MIL_AST_VariableDefinitionStatementNode_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_VariableDefinitionStatementNode* self
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_VariableDefinitionStatementNode_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_VariableDefinitionStatementNode_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_AST_VariableDefinitionStatementNode_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_AST_VariableDefinitionStatementNode_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_AST_VariableDefinitionStatementNode_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -52,18 +53,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.MIL.AST.VariableDefinitionStatementNode", Arcadia_MIL_VariableDefinitionStatementNode,
+Arcadia_defineObjectType(u8"Arcadia.MIL.AST.VariableDefinitionStatementNode", Arcadia_MIL_AST_VariableDefinitionStatementNode,
                          u8"Arcadia.MIL.AST.DefinitionStatementNode", Arcadia_MIL_AST_DefinitionStatementNode,
                          &_typeOperations);
 
 static void
-Arcadia_MIL_VariableDefinitionStatementNode_constructImpl
+Arcadia_MIL_AST_VariableDefinitionStatementNode_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_VariableDefinitionStatementNode* self
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_VariableDefinitionStatementNode_getType(thread);
+  Arcadia_TypeValue _type = _Arcadia_MIL_AST_VariableDefinitionStatementNode_getType(thread);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -78,23 +79,23 @@ Arcadia_MIL_VariableDefinitionStatementNode_constructImpl
 }
 
 static void
-Arcadia_MIL_VariableDefinitionStatementNode_initializeDispatchImpl
+Arcadia_MIL_AST_VariableDefinitionStatementNode_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_VariableDefinitionStatementNode* self
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* self
   )
 { }
 
 static void
-Arcadia_MIL_VariableDefinitionStatementNode_visit
+Arcadia_MIL_AST_VariableDefinitionStatementNode_visit
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_VariableDefinitionStatementNode* self
+    Arcadia_MIL_AST_VariableDefinitionStatementNode* self
   )
 { Arcadia_Object_visit(thread, (Arcadia_Object*)self->variableName); }
 
-Arcadia_MIL_VariableDefinitionStatementNode*
-Arcadia_MIL_VariableDefinitionStatementNode_create
+Arcadia_MIL_AST_VariableDefinitionStatementNode*
+Arcadia_MIL_AST_VariableDefinitionStatementNode_create
   (
     Arcadia_Thread* thread,
     Arcadia_String* variableName
@@ -107,5 +108,5 @@ Arcadia_MIL_VariableDefinitionStatementNode_create
     Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_MIL_VariableDefinitionStatementNode);
+  ARCADIA_CREATEOBJECT(Arcadia_MIL_AST_VariableDefinitionStatementNode);
 }

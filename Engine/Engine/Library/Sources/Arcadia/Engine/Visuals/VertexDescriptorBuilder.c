@@ -41,8 +41,9 @@ Arcadia_Engine_Visuals_VertexDescriptorBuilder_visit
 
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_Visuals_VertexDescriptorBuilder_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_Engine_Visuals_VertexDescriptorBuilder_construct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_VertexDescriptorBuilder_construct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_VertexDescriptorBuilder_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_VertexDescriptorBuilder_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Engine_Visuals_VertexDescriptorBuilder_typeOperations = {

@@ -447,6 +447,7 @@ static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_FilePath_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_FilePath_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_FilePath_visit,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_FilePath_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -672,8 +673,7 @@ Arcadia_FilePath*
 Arcadia_FilePath_parseGeneric
   (
     Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes
+    Arcadia_String* string
   )
 {
   Arcadia_FilePath* self = Arcadia_FilePath_create(thread);
@@ -682,7 +682,7 @@ Arcadia_FilePath_parseGeneric
   self->root = NULL;
   self->fileNames = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
-  Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, bytes, numberOfBytes);
+  Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, Arcadia_String_getBytes(thread, string), Arcadia_String_getNumberOfBytes(thread, string));
   parseGenericFilePath(thread, self, byteBuffer);
   normalize(thread, self);
   return self;

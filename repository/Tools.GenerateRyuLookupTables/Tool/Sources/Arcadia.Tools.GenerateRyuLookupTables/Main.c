@@ -73,7 +73,7 @@ main1
   Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table(thread, Arcadia_BooleanValue_True, resultString);
   Arcadia_ByteBuffer_insertBackBytes(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
   path = Arcadia_FilePath_clone(thread, pathPrefix);
-  Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, u8"BigTablesReal64.i", sizeof("BigTablesReal64.i") - 1));
+  Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"BigTablesReal64.i")));
   Arcadia_FileSystem_setFileContents(thread, fileSystem, path, resultBytes);
   Arcadia_StringBuffer_clear(thread, resultString);
   Arcadia_ByteBuffer_clear(thread, resultBytes);
@@ -81,7 +81,7 @@ main1
   Arcadia_Tools_RyuLookupTableGenerator_generateReal64Table(thread, Arcadia_BooleanValue_False, resultString);
   Arcadia_ByteBuffer_insertBackBytes(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
   path = Arcadia_FilePath_clone(thread, pathPrefix);
-  Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, u8"SmallTablesReal64.i", sizeof("SmallTablesReal64.i") - 1));
+  Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"SmallTablesReal64.i")));
   Arcadia_FileSystem_setFileContents(thread, fileSystem, path, resultBytes);
   Arcadia_StringBuffer_clear(thread, resultString);
   Arcadia_ByteBuffer_clear(thread, resultBytes);
@@ -89,7 +89,7 @@ main1
   Arcadia_Tools_RyuLookupTableGenerator_generateReal32Table(thread, resultString);
   Arcadia_ByteBuffer_insertBackBytes(thread, resultBytes, Arcadia_StringBuffer_getBytes(thread, resultString), Arcadia_StringBuffer_getNumberOfBytes(thread, resultString));
   path = Arcadia_FilePath_clone(thread, pathPrefix);
-  Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, u8"TablesReal32.i", sizeof("TablesReal32.i") - 1));
+  Arcadia_FilePath_append(thread, path, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"TablesReal32.i")));
   Arcadia_FileSystem_setFileContents(thread, fileSystem, path, resultBytes);
   Arcadia_StringBuffer_clear(thread, resultString);
   Arcadia_ByteBuffer_clear(thread, resultBytes);

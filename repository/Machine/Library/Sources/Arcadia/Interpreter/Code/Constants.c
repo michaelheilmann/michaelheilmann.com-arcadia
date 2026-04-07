@@ -55,9 +55,10 @@ getOrCreate
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&R_Interpreter_Code_Constants_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {

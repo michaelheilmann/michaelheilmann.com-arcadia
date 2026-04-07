@@ -18,7 +18,7 @@
 
 #include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
-#include "Arcadia/Visuals/Implementation/OpenGL4/Shared/Functions.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/Functions.h"
 #include <X11/Xlib.h> // For Atom.
 #include <GL/glx.h> // For XVisualInfo and GLXFBConfig.
 
