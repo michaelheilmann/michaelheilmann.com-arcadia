@@ -187,7 +187,7 @@ test7
   Arcadia_BigInteger_setNatural8(thread, w, Arcadia_Natural64Value_Literal(1));
   Arcadia_BigInteger_shiftLeftNatural8(thread, w, Arcadia_Natural8Value_NumberOfBits);
   Arcadia_BigInteger_subtractInteger8(thread, w, Arcadia_Integer8Value_Literal(1));
-  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, v, w));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_isEqualTo(thread, v, w));
 }
 
 // Regression. Natural16.Maximum == 1 << Natural16.NumberOfbits - 1.
@@ -204,7 +204,7 @@ test8
   Arcadia_BigInteger_setNatural8(thread, w, Arcadia_Natural64Value_Literal(1));
   Arcadia_BigInteger_shiftLeftNatural8(thread, w, Arcadia_Natural16Value_NumberOfBits);
   Arcadia_BigInteger_subtractInteger8(thread, w, Arcadia_Integer8Value_Literal(1));
-  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, v, w));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_isEqualTo(thread, v, w));
 }
 
 // Regression. Natural32.Maximum == 1 << Natural32.NumberOfbits - 1.
@@ -221,7 +221,7 @@ test9
   Arcadia_BigInteger_setNatural8(thread, w, Arcadia_Natural64Value_Literal(1));
   Arcadia_BigInteger_shiftLeftNatural8(thread, w, Arcadia_Natural32Value_NumberOfBits);
   Arcadia_BigInteger_subtractInteger8(thread, w, Arcadia_Integer8Value_Literal(1));
-  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, v, w));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_isEqualTo(thread, v, w));
 }
 
 // Regression. Natural64.Maximum == 1 << Natural64.NumberOBits - 1.
@@ -238,7 +238,7 @@ test10
   Arcadia_BigInteger_setNatural8(thread, w, Arcadia_Natural64Value_Literal(1));
   Arcadia_BigInteger_shiftLeftNatural8(thread, w, Arcadia_Natural64Value_NumberOfBits);
   Arcadia_BigInteger_subtractInteger8(thread, w, Arcadia_Integer8Value_Literal(1));
-  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, v, w));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_isEqualTo(thread, v, w));
 }
 
 // TODO: Subsume this under an a tool called environment compatibility tester.

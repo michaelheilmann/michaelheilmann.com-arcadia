@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_ADL_PRIVATE (1)
+#define ARCADIA_ADL_MODULE (1)
 #include "Arcadia/ADL/Definitions.h"
 
 #include "Arcadia/ADL/Definition.h"
@@ -74,18 +74,17 @@ Arcadia_ADL_Definitions_constructImpl
     Arcadia_ADL_Definitions* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_Definitions_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_Definitions);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->definitions = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_Definitions);
 }
 
 static void

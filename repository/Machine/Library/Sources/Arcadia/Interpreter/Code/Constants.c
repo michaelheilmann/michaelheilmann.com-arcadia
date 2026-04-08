@@ -77,12 +77,12 @@ constructImpl
     R_Interpreter_Code_Constants* self
   )
 {
-  Arcadia_TypeValue _type = _R_Interpreter_Code_Constants_getType(thread);
+  Arcadia_EnterConstructor(R_Interpreter_Code_Constants);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -90,8 +90,7 @@ constructImpl
   self->sz = 0;
   self->cp = 0;
   self->p = Arcadia_Memory_allocateUnmanaged(thread, 0);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(R_Interpreter_Code_Constants);
 }
 
 static void
@@ -100,7 +99,7 @@ R_Interpreter_Code_Constants_initializeDispatchImpl
     Arcadia_Thread* thread,
     R_Interpreter_Code_ConstantsDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 destructImpl

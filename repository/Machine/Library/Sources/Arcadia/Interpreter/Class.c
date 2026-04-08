@@ -62,7 +62,7 @@ R_Interpreter_Class_constructImpl
     R_Interpreter_Class* self
   )
 {
-  Arcadia_TypeValue _type = _R_Interpreter_Class_getType(thread);
+  Arcadia_EnterConstructor(R_Interpreter_Class);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -85,9 +85,8 @@ R_Interpreter_Class_constructImpl
   self->extendedClass = NULL;
 
   self->complete = Arcadia_BooleanValue_False;
-
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2 + 1);
+  
+  Arcadia_LeaveConstructor(R_Interpreter_Class);
 }
 
 static void
@@ -96,7 +95,7 @@ R_Interpreter_Class_initializeDispatchImpl
     Arcadia_Thread* thread,
     R_Interpreter_ClassDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 R_Interpreter_Class_visit

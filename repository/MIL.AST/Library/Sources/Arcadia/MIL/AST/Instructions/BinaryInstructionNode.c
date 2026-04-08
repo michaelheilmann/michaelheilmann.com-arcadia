@@ -64,12 +64,12 @@ Arcadia_MIL_AST_BinaryInstructionNode_constructImpl
     Arcadia_MIL_AST_BinaryInstructionNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_AST_BinaryInstructionNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_AST_BinaryInstructionNode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 4 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (4 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -79,8 +79,7 @@ Arcadia_MIL_AST_BinaryInstructionNode_constructImpl
   self->operand1 = (Arcadia_MIL_AST_OperandNode*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_MIL_AST_OperandNode_getType(thread));
   self->operand2 = (Arcadia_MIL_AST_OperandNode*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_MIL_AST_OperandNode_getType(thread));
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 4 + 1);
+  Arcadia_LeaveConstructor(Arcadia_MIL_AST_BinaryInstructionNode);
 }
 
 static void
@@ -89,7 +88,7 @@ Arcadia_MIL_AST_BinaryInstructionNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_BinaryInstructionNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_MIL_AST_BinaryInstructionNode_visit

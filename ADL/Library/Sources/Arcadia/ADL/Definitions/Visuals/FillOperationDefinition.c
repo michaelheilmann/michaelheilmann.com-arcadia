@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_ADL_PRIVATE (1)
+#define ARCADIA_ADL_MODULE (1)
 #include "Arcadia/ADL/Definitions/Visuals/FillOperationDefinition.h"
 
 #include "Arcadia/ADL/Context.h"
@@ -112,7 +112,6 @@ Arcadia_ADL_PixelBufferOperations_FillOperationDefinition_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
   self->color = Arcadia_ADL_Reference_create(thread, ((Arcadia_ADL_Definition*)self)->definitions,
                                              (Arcadia_String*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread)));
 

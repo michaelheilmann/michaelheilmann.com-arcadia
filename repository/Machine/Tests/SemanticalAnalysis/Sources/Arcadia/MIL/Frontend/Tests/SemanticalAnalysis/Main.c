@@ -76,10 +76,10 @@ onPhase1
     Arcadia_Thread* thread,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ModuleNode* moduleAst
+    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode
   )
 {
-  Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule(thread, R_Interpreter_ProcessState_get(), symbolTable, foreignProcedures, moduleAst);
+  Arcadia_MIL_SemanticalAnalysis_EnterPass_onCompilationUnit(thread, R_Interpreter_ProcessState_get(), symbolTable, foreignProcedures, compilationUnitNode);
 }
 
 static void
@@ -106,12 +106,12 @@ compile
     Arcadia_ByteBuffer* sourceFileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
 
     Arcadia_MIL_Parser_setInput(thread, parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sourceFileContents)));
-    Arcadia_MIL_AST_ModuleNode* moduleAst = Arcadia_MIL_Parser_run(thread, parser);
-    Arcadia_List_insertBackObjectReferenceValue(thread, moduleAsts, moduleAst);
+    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode = Arcadia_MIL_Parser_run(thread, parser);
+    Arcadia_List_insertBackObjectReferenceValue(thread, moduleAsts, compilationUnitNode);
   }
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)moduleAsts); i < n; ++i) {
-    Arcadia_MIL_AST_ModuleNode* moduleAst = Arcadia_List_getObjectReferenceValueAt(thread, moduleAsts, i);
-    onPhase1(thread, symbolTable, foreignProcedures, moduleAst);
+    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode = Arcadia_List_getObjectReferenceValueAt(thread, moduleAsts, i);
+    onPhase1(thread, symbolTable, foreignProcedures, compilationUnitNode);
   }
 }
 

@@ -36,7 +36,7 @@ Arcadia_Math_QuaternionReal32_initializeDispatchImpl
   );
 
 static void
-Arcadia_Math_QuaternionReal32_equalTo
+Arcadia_Math_QuaternionReal32_isEqualTo
   (
     Arcadia_Thread* thread
   );
@@ -88,12 +88,12 @@ Arcadia_Math_QuaternionReal32_initializeDispatchImpl
     Arcadia_Math_QuaternionReal32Dispatch* self
   )
 {
-  ((Arcadia_ObjectDispatch*)self)->equalTo = &Arcadia_Math_QuaternionReal32_equalTo;
-  ((Arcadia_ObjectDispatch*)self)->notEqualTo = &Arcadia_Math_QuaternionReal32_notEqualTo;
+  ((Arcadia_ObjectDispatch*)self)->isEqualTo = &Arcadia_Math_QuaternionReal32_isEqualTo;
+  ((Arcadia_ObjectDispatch*)self)->isNotEqualTo = &Arcadia_Math_QuaternionReal32_notEqualTo;
 }
 
 static void
-Arcadia_Math_QuaternionReal32_equalTo
+Arcadia_Math_QuaternionReal32_isEqualTo
   (
     Arcadia_Thread* thread
   )

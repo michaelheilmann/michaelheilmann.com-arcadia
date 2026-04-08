@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/Logging/LogCategory.h"
 
 static const Arcadia_Type_Operations _typeOperations = {

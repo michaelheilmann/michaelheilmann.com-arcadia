@@ -68,13 +68,13 @@ Arcadia_Engine_Demo_SceneManager_constructImpl
   )
 {
   Arcadia_EnterConstructor(Arcadia_Engine_Demo_SceneManager);
-  if (1 != _numberOfArguments) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
+  }
+  if (1 != _numberOfArguments) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   self->engine = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_getType(thread));
   self->scene = NULL;

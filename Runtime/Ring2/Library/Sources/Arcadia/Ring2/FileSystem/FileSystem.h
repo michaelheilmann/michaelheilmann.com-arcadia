@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING2_FILESYSTEM_FILESYSTEM_H_INCLUDED)
 #define ARCADIA_RING2_FILESYSTEM_FILESYSTEM_H_INCLUDED
 
-#if !defined(ARCADIA_RING2_PRIVATE)
+#if !defined(ARCADIA_RING2_MODULE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 
@@ -184,7 +184,7 @@ Arcadia_FileSystem_createDirectoryFile
     Arcadia_FilePath* path
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/Arcadia_FileSystem_createDirectoryIterator
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_FileSystem_createDirectoryIterator
 Arcadia_DirectoryIterator*
 Arcadia_FileSystem_createDirectoryIterator
   (

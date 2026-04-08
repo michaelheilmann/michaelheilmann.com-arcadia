@@ -37,10 +37,18 @@ Arcadia_Engine_Audials_SoundSourceNode_destructImpl
     Arcadia_Engine_Audials_SoundSourceNode* self
   );
 
+static void
+Arcadia_Engine_Audials_SoundSourceNode_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_SoundSourceNode* self
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_SoundSourceNode_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Audials_SoundSourceNode_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Audials_SoundSourceNode_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Audials_SoundSourceNode_initializeDispatchImpl,
 };
 
@@ -60,19 +68,17 @@ Arcadia_Engine_Audials_SoundSourceNode_constructImpl
     Arcadia_Engine_Audials_SoundSourceNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Audials_SoundSourceNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
+  Arcadia_EnterConstructor(Arcadia_Engine_Audials_SoundSourceNode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  if (1 != _numberOfArguments) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  self->source = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_ADL_SampleBufferDefinition_getType(thread));
+  Arcadia_LeaveConstructor(Arcadia_Engine_Audials_SoundSourceNode);
 }
 
 static void
@@ -81,7 +87,7 @@ Arcadia_Engine_Audials_SoundSourceNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_SoundSourceNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Audials_SoundSourceNode_destructImpl
@@ -90,6 +96,18 @@ Arcadia_Engine_Audials_SoundSourceNode_destructImpl
     Arcadia_Engine_Audials_SoundSourceNode* self
   )
 {/*Intentionally empty.*/}
+
+static void
+Arcadia_Engine_Audials_SoundSourceNode_visitImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_SoundSourceNode* self
+  )
+{ 
+  if (self->source) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->source);
+  }
+}
 
 Arcadia_BooleanValue
 Arcadia_Engine_Audials_SoundSourceNode_isPlaying

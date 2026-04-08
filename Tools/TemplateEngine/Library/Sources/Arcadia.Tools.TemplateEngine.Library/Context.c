@@ -79,17 +79,12 @@ Context_constructImpl
     Context* self
   )
 {
-  Arcadia_TypeValue _type = _Context_getType(thread);
+  Arcadia_EnterConstructor(Context);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues1) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -121,8 +116,7 @@ Context_constructImpl
   self->temporaryBuffer = Arcadia_ByteBuffer_create(thread);
   self->temporary = (Arcadia_UTF8Writer*)Arcadia_UTF8ByteBufferWriter_create(thread, self->temporaryBuffer);
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_LeaveConstructor(Context);
 }
 
 static void
@@ -131,7 +125,7 @@ Context_initializeDispatchImpl
     Arcadia_Thread* thread,
     ContextDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Context_destruct

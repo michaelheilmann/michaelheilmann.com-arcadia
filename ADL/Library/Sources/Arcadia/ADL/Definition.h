@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_ADL_DEFINITION_H_INCLUDED)
 #define ARCADIA_ADL_DEFINITION_H_INCLUDED
 
-#if !defined(ARCADIA_ADL_PRIVATE)
+#if !defined(ARCADIA_ADL_MODULE)
   #error("do not include directly, include `Arcadia/ADL/Include.h` instead")
 #endif
 #include "Arcadia/Ring2/Include.h"
@@ -67,6 +67,11 @@ Arcadia_ADL_Definition_getName
     Arcadia_ADL_Definition* self
   );
 
+/// @brief Resolve references of this definition.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this definition.
+/// @see Arcadia_ADL_Reference_resolve
+/// @todo We need a post link step which is executed after successful linking.
 void
 Arcadia_ADL_Definition_link
   (

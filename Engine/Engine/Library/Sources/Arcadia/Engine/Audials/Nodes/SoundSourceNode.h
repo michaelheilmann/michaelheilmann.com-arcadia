@@ -41,10 +41,12 @@ struct Arcadia_Engine_Audials_SoundSourceNodeDispatch {
 
 struct Arcadia_Engine_Audials_SoundSourceNode {
   Arcadia_Engine_Audials_Node _parent;
+  // The sample buffer definition used by this sound source.
+  Arcadia_ADL_SampleBufferDefinition* source;
 };
 
-/* Get if playing.
-   Raises an error if this is invoked before the resource was rendered. */
+// Get if this sound source is playing.
+// Raises an error if this is invoked before the resource was rendered.
 Arcadia_BooleanValue
 Arcadia_Engine_Audials_SoundSourceNode_isPlaying
   (
@@ -52,8 +54,8 @@ Arcadia_Engine_Audials_SoundSourceNode_isPlaying
     Arcadia_Engine_Audials_SoundSourceNode* self
   );
 
-/* Pause: If playing, halt playback.
-   Raises an error if this is invoked before the resource was rendered. */
+// Pause: If playing, halt playback.
+// Raises an error if this is invoked before the resource was rendered. */
 void
 Arcadia_Engine_Audials_SoundSourceNode_pause
   (
@@ -61,8 +63,8 @@ Arcadia_Engine_Audials_SoundSourceNode_pause
     Arcadia_Engine_Audials_SoundSourceNode* self
   );
 
-/* Play: If stopped or paused. Start playback at current position.
-   Raises an error if this is invoked before the resource was rendered. */
+// Play: If stopped or paused. Start playback at current position.
+// Raises an error if this is invoked before the resource was rendered. */
 void
 Arcadia_Engine_Audials_SoundSourceNode_play
   (
@@ -70,7 +72,7 @@ Arcadia_Engine_Audials_SoundSourceNode_play
     Arcadia_Engine_Audials_SoundSourceNode* self
   );
 
-/* Stop: If playing, halt playback. Rewind. */
+// Stop: If playing, halt playback. Rewind.
 void
 Arcadia_Engine_Audials_SoundSourceNode_stop
   (
@@ -78,7 +80,7 @@ Arcadia_Engine_Audials_SoundSourceNode_stop
     Arcadia_Engine_Audials_SoundSourceNode* self
   );
 
-/* Sets if looping. */
+// Sets if looping.
 void
 Arcadia_Engine_Audials_SoundSourceNode_setIsLooping
   (
@@ -87,7 +89,7 @@ Arcadia_Engine_Audials_SoundSourceNode_setIsLooping
     Arcadia_BooleanValue isLooping
   );
 
-/* Gets if looping. Default is Arcadia_BooleanValue_False. */
+// Gets if looping. Default is Arcadia_BooleanValue_False.
 Arcadia_BooleanValue
 Arcadia_Engine_Audials_SoundSourceNode_getIsLooping
   (
@@ -95,7 +97,7 @@ Arcadia_Engine_Audials_SoundSourceNode_getIsLooping
     Arcadia_Engine_Audials_SoundSourceNode* self
   );
 
-/* Sets the volume. The parameter value is clamped to [0,1]. Arcadia_Status_ArgumentValue is raised if volume is not a number. */
+// Sets the volume. The parameter value is clamped to [0,1]. Arcadia_Status_ArgumentValue is raised if volume is not a number.
 void
 Arcadia_Engine_Audials_SoundSourceNode_setVolume
   (
@@ -104,7 +106,7 @@ Arcadia_Engine_Audials_SoundSourceNode_setVolume
     Arcadia_Real32Value volume
   );
 
-/* Gets the volume. The return value is within [0,1]. Default is 1.  */
+// Gets the volume. The return value is within [0,1]. Default is 1.
 Arcadia_Real32Value
 Arcadia_Engine_Audials_SoundSourceNode_getVolume
   (

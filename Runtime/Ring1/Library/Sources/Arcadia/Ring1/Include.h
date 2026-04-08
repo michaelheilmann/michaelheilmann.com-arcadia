@@ -16,8 +16,13 @@
 #if !defined(ARCADIA_RING1_INCLUDE_H_INCLUDED)
 #define ARCADIA_RING1_INCLUDE_H_INCLUDED
 
-#pragma push_macro("ARCADIA_RING1_PRIVATE")
-#define ARCADIA_RING1_PRIVATE (1)
+// If a file x belongs to a module a and ARCADIA_a_MODULE is not defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_RING1_MODULE")
+#define ARCADIA_RING1_MODULE (1)
+
+// If a file x of a module a is not an export file of that module and ARCADIA_a_EXPORT is defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_RING1_EXPORT")
+#define ARCADIA_RING1_EXPORT (1)
 
 #include "Arcadia/Ring1/Implementation/Arrays.h"
 
@@ -36,6 +41,8 @@
 #include "Arcadia/Ring1/Implementation/getTickCount.h"
 
 #include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8StringExtensions.h"
 
 #include "Arcadia/Ring1/Implementation/Integer16.h"
 #include "Arcadia/Ring1/Implementation/Integer32.h"
@@ -101,7 +108,7 @@
 #include "Arcadia/Ring1/Implementation/StringToReal/toReal32.h"
 #include "Arcadia/Ring1/Implementation/StringToReal/toReal64.h"
 
-#include "Arcadia/Ring1/Implementation/Types.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Include.h"
 
 #include "Arcadia/Ring1/Implementation/Value.h"
 
@@ -109,7 +116,10 @@
 
 #include "Arcadia/Ring1/Implementation/WeakReference.h"
 
-#undef ARCADIA_RING1_PRIVATE
-#pragma pop_macro("ARCADIA_RING1_PRIVATE")
+#undef ARCADIA_RING1_EXPORT
+#pragma pop_macro("ARCADIA_RING1_EXPORT")
+
+#undef ARCADIA_RING1_MODULE
+#pragma pop_macro("ARCADIA_RING1_MODULE")
 
 #endif // ARCADIA_RING1_INCLUDE_H_INCLUDED

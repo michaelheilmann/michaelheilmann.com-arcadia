@@ -23,8 +23,6 @@ BeginProduct(${MyTestName} test)
 OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/Main.c)
 OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/readWrite.c)
 OnHeaderFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/readWrite.h)
-OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/read.c)
-OnHeaderFile(${MyTestName} Arcadia.Ring2.Tests.UTF8/read.h)
 
 list(APPEND ${MyTestName}.Libraries ${MyProjectName}.Ring2)
 

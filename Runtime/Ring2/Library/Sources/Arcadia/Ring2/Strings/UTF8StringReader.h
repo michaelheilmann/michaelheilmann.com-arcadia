@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING2_STRINGS_UTF8STRINGREADER_H_INCLUDED)
 #define ARCADIA_RING2_STRINGS_UTF8STRINGREADER_H_INCLUDED
 
-#if !defined(ARCADIA_RING2_PRIVATE)
+#if !defined(ARCADIA_RING2_MODULE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 
@@ -33,9 +33,7 @@ struct Arcadia_UTF8StringReaderDispatch {
 struct Arcadia_UTF8StringReader {
   Arcadia_UTF8Reader parent;
   Arcadia_String* source;
-  Arcadia_SizeValue byteIndex;
-  Arcadia_Natural32Value byteLength;
-  Arcadia_Natural32Value codePoint;
+  _Arcadia_UTF8ArrayIterator iterator;
 };
 
 Arcadia_UTF8StringReader*

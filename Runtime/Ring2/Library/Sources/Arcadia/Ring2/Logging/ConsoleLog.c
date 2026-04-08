@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/Logging/ConsoleLog.h"
 
 #include "Arcadia/Ring2/FileSystem/Include.h"
@@ -141,6 +141,9 @@ Arcadia_ConsoleLog_infoImpl
     writeBytes(thread, self, u8"\033[38;2;0;255;0m", sizeof(u8"\033[38;2;0;255;0m") - 1);
   }
   writeBytes(thread, self, p, n);
+  if (self->colorEnabled) {
+    writeBytes(thread, self, u8"\033[0m", sizeof(u8"\033[0m") - 1);
+  }
 }
 
 static void

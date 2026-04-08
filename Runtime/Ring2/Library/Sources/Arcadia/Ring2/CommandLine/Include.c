@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/CommandLine/Include.h"
 
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
@@ -260,7 +260,8 @@ void
 Arcadia_CommandLine_raiseRequiredArgumentMissingError
   (
     Arcadia_Thread* thread,
-    Arcadia_String* key
+    Arcadia_String* key,
+    Arcadia_Log* log
   )
 {
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
@@ -282,7 +283,8 @@ Arcadia_CommandLine_raiseUnknownArgumentError
   (
     Arcadia_Thread* thread,
     Arcadia_String* key,
-    Arcadia_String* value
+    Arcadia_String* value,
+    Arcadia_Log* log
   )
 {
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
@@ -303,7 +305,8 @@ void
 Arcadia_CommandLine_raiseNoValueError
   (
     Arcadia_Thread* thread,
-    Arcadia_String* key
+    Arcadia_String* key,
+    Arcadia_Log* log
   )
 {
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
@@ -326,7 +329,8 @@ Arcadia_CommandLine_raiseValueInvalidError
   (
     Arcadia_Thread* thread,
     Arcadia_String* key,
-    Arcadia_String* value
+    Arcadia_String* value,
+    Arcadia_Log* log
   )
 {
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
@@ -348,7 +352,8 @@ void
 Arcadia_CommandLine_raiseAlreadySpecifiedError
   (
     Arcadia_Thread* thread,
-    Arcadia_String* key
+    Arcadia_String* key,
+    Arcadia_Log* log
   )
 {
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
@@ -370,7 +375,8 @@ void
 Arcadia_CommandLine_invalidCommandLineArgumentError
   (
     Arcadia_Thread* thread,
-    Arcadia_String* argument
+    Arcadia_String* argument,
+    Arcadia_Log* log
   )
 {
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);

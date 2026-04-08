@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toBoolean.h"
 
 #include "Arcadia/Ring1/Include.h"

@@ -13,10 +13,10 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Network/Protocol.h"
 
-#include "Arcadia/Ring1/Implementation/Types.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Include.h"
 #include <stddef.h>
 
 static const Arcadia_Type_Operations _typeOperations = {

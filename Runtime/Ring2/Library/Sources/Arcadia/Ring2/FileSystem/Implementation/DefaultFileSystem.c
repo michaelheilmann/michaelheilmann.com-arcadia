@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/FileSystem/Implementation/DefaultFileSystem.h"
 
 #include "Arcadia/Ring2/FileSystem/Implementation/DefaultFileHandle.h"
@@ -470,7 +470,8 @@ Arcadia_DefaultFileSystem_directoryFileExistsImpl
   Arcadia_String* nativePathString = Arcadia_FilePath_toNative(thread, path);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(thread, nativePathString));
-  return (dwFileAttributes != INVALID_FILE_ATTRIBUTES);
+  return ((dwFileAttributes != INVALID_FILE_ATTRIBUTES) &&
+          (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   struct stat stat;
   if(-1 == lstat(Arcadia_String_getBytes(thread, nativePathString), &stat)) {
@@ -745,7 +746,7 @@ Arcadia_DefaultFileSystem_regularFileExistsImpl
   Arcadia_String* nativePathString = Arcadia_FilePath_toNative(thread, path);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(thread, nativePathString));
-  return (dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
+  return ((dwFileAttributes != INVALID_FILE_ATTRIBUTES) &&
          !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
 #elif Arcadia_Configuration_OperatingSystem_Linux == Arcadia_Configuration_OperatingSystem
   struct stat stat;

@@ -52,9 +52,8 @@ Arcadia_Engine_Visuals_ViewportNode_constructImpl
     Arcadia_Engine_Visuals_ViewportNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_ViewportNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_ViewportNode);
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -62,8 +61,7 @@ Arcadia_Engine_Visuals_ViewportNode_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_ViewportNode);
 }
 
 static void
@@ -72,7 +70,7 @@ Arcadia_Engine_Visuals_ViewportNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_ViewportNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_BooleanValue
 Arcadia_Engine_Visuals_ViewportNode_getClearColorBuffer

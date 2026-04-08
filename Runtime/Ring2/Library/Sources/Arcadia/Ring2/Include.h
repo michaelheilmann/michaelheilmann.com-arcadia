@@ -16,9 +16,13 @@
 #if !defined(ARCADIA_RING2_INCLUDE_H_INCLUDED)
 #define ARCADIA_RING2_INCLUDE_H_INCLUDED
 
-#pragma push_macro("ARCADIA_RING2_PRIVATE")
-#undef ARCADIA_RING2_PRIVATE
-#define ARCADIA_RING2_PRIVATE (1)
+// If a file x belongs to a module a and ARCADIA_a_MODULE is not defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_RING2_MODULE")
+#define ARCADIA_RING2_MODULE (1)
+
+// If a file x of a module a is not an export file of that module and ARCADIA_a_EXPORT is defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_RING2_EXPORT")
+#define ARCADIA_RING2_EXPORT (1)
 
 #include "Arcadia/Ring2/Collections/Include.h"
 
@@ -108,7 +112,10 @@ Arcadia_Diagnostics_logObjectType
 
 #endif
 
-#undef ARCADIA_RING2_PRIVATE
-#pragma pop_macro("ARCADIA_RING2_PRIVATE")
+#undef ARCADIA_RING2_EXPORT
+#pragma pop_macro("ARCADIA_RING2_EXPORT")
+
+#undef ARCADIA_RING2_MODULE
+#pragma pop_macro("ARCADIA_RING2_MODULE")
 
 #endif // ARCADIA_RING2_INCLUDE_H_INCLUDED

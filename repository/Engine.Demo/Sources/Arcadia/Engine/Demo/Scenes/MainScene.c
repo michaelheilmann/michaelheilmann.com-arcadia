@@ -113,7 +113,7 @@ Arcadia_Engine_Demo_MainScene_constructImpl
     Arcadia_Engine_Demo_MainScene* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Demo_MainScene_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Demo_MainScene);
   {
     Arcadia_Value engine = Arcadia_ValueStack_getValue(thread, 1),
                   sceneManager = Arcadia_ValueStack_getValue(thread, 2);
@@ -138,8 +138,7 @@ Arcadia_Engine_Demo_MainScene_constructImpl
   //
   self->soundSourceNode = NULL;
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Demo_MainScene);
 }
 
 static void
@@ -203,12 +202,19 @@ Arcadia_Engine_Demo_MainScene_updateAudials
 {
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
   if (!self->soundSourceNode) {
+    Arcadia_ADL_SampleBufferDefinition* SAMPLEBUFFERS[] =
+    {
+      getSampleBufferDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, u8"Assets/MainScene/AmbienceSampleBuffer.adl"),
+                                                           Arcadia_String_createFromCxxString(thread, u8"MainScene.AmbienceSampleBuffer")),
+    };
+    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)SAMPLEBUFFERS[0]);
     self->soundSourceNode =
       Arcadia_Engine_Audials_NodeFactory_createSoundSourceNode
         (
           thread,
           (Arcadia_Engine_Audials_NodeFactory*)engine->audialsNodeFactory,
-          (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext
+          (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext,
+          SAMPLEBUFFERS[0]
         );
   }
   Arcadia_Engine_Node_setAudialsBackendContext(thread, (Arcadia_Engine_Node*)self->soundSourceNode, (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext);

@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING1_BIGINTEGER_GREATERTHAN_H_INCLUDED)
 #define ARCADIA_RING1_BIGINTEGER_GREATERTHAN_H_INCLUDED
 
-#if !defined(ARCADIA_RING1_PRIVATE)
+#if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
@@ -35,7 +35,7 @@ typedef Arcadia_BigInteger* Arcadia_BigIntegerValue;
 
 // Get if this BigInteger is greater than another BigInteger.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThan
+Arcadia_BigInteger_isGreaterThan
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -44,7 +44,7 @@ Arcadia_BigInteger_greaterThan
 
 // Get if this BigInteger is greater than an Integer16.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanInteger16
+Arcadia_BigInteger_isGreaterThanInteger16
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -53,7 +53,7 @@ Arcadia_BigInteger_greaterThanInteger16
 
 // Get if this BigInteger is greater than an Integer32.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanInteger32
+Arcadia_BigInteger_isGreaterThanInteger32
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -62,7 +62,7 @@ Arcadia_BigInteger_greaterThanInteger32
 
 // Get if this BigInteger is greater than an Integer64.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanInteger64
+Arcadia_BigInteger_isGreaterThanInteger64
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -71,7 +71,7 @@ Arcadia_BigInteger_greaterThanInteger64
 
 // Get if this BigInteger is greater than an Integer8.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanInteger8
+Arcadia_BigInteger_isGreaterThanInteger8
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -80,7 +80,7 @@ Arcadia_BigInteger_greaterThanInteger8
 
 // Get if this BigInteger is greater than a Natural16.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanNatural16
+Arcadia_BigInteger_isGreaterThanNatural16
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -89,7 +89,7 @@ Arcadia_BigInteger_greaterThanNatural16
 
 // Get if this BigInteger is greater than a Natural32.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanNatural32
+Arcadia_BigInteger_isGreaterThanNatural32
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -98,7 +98,7 @@ Arcadia_BigInteger_greaterThanNatural32
 
 // Get if this BigInteger is greater than a Natural64.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanNatural64
+Arcadia_BigInteger_isGreaterThanNatural64
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -107,7 +107,7 @@ Arcadia_BigInteger_greaterThanNatural64
 
 // Get if this BigInteger is greater than to a Natural8.
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanNatural8
+Arcadia_BigInteger_isGreaterThanNatural8
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,

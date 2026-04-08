@@ -1,7 +1,7 @@
 #if !defined(ARCADIA_RING1_DIAGNOSTICS_H_INCLUDED)
 #define ARCADIA_RING1_DIAGNOSTICS_H_INCLUDED
 
-#if !defined(ARCADIA_RING1_PRIVATE)
+#if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 

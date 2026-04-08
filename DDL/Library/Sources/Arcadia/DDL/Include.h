@@ -16,8 +16,14 @@
 #if !defined(ARCADIA_DDL_INCLUDE_H_INCLUDED)
 #define ARCADIA_DDL_INCLUDE_H_INCLUDED
 
-#pragma push_macro("ARCADIA_DDL_PRIVATE")
-#define ARCADIA_DDL_PRIVATE (1)
+// If a file x belongs to a module a and ARCADIA_a_MODULE is not defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_DDL_MODULE")
+#define ARCADIA_DDL_MODULE (1)
+
+// If a file x of a module a is not an export file of that module and ARCADIA_a_EXPORT is defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_DDL_EXPORT")
+#define ARCADIA_DDL_EXPORT (1)
+
 #include "Arcadia/DDL/Reader/Keywords.h"
 #include "Arcadia/DDL/Reader/DefaultReader.h"
 #include "Arcadia/DDL/Reader/Parser.h"
@@ -25,7 +31,11 @@
 #include "Arcadia/DDL/Reader/WordType.h"
 #include "Arcadia/DDL/SemanticalAnalysis.h"
 #include "Arcadia/DDL/Writer/Unparser.h"
-#undef ARCADIA_DDL_PRIVATE
-#pragma pop_macro("ARCADIA_DDL_PRIVATE")
+
+#undef ARCADIA_DDL_EXPORT
+#pragma pop_macro("ARCADIA_DDL_EXPORT")
+
+#undef ARCADIA_DDL_MODULE
+#pragma pop_macro("ARCADIA_DDL_MODULE")
 
 #endif // ARCADIA_DDL_INCLUDE_H_INCLUDED

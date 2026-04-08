@@ -103,17 +103,16 @@ Directives_Tree_constructImpl
     Directives_Tree* self
   )
 {
-  Arcadia_TypeValue _type = _Directives_Tree_getType(thread);
+  Arcadia_EnterConstructor(Directives_Tree);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Natural8Value numberOfArguments = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
+  if (_numberOfArguments < 1) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->type = Arcadia_ValueStack_getInteger32Value(thread, numberOfArguments);
+  self->type = Arcadia_ValueStack_getInteger32Value(thread, _numberOfArguments);
   switch (self->type) {
     case Directives_TreeKind_At: {
 
@@ -133,8 +132,7 @@ Directives_Tree_constructImpl
       Arcadia_Thread_jump(thread);
     } break;
   };
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArguments + 1);
+  Arcadia_LeaveConstructor(Directives_Tree);
 }
 
 static void
@@ -143,7 +141,7 @@ Directives_Tree_initializeDispatchImpl
     Arcadia_Thread* thread,
     Directives_TreeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Directives_Tree*
 Directives_Tree_create

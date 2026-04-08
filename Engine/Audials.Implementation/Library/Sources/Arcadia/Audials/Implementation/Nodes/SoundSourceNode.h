@@ -42,7 +42,8 @@ Arcadia_Engine_Audials_Implementation_SoundSourceNode*
 Arcadia_Engine_Audials_Implementation_SoundSourceNode_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Audials_Implementation_BackendContext* backendContext
+    Arcadia_Engine_Audials_Implementation_BackendContext* backendContext,
+    Arcadia_ADL_SampleBufferDefinition* source
   );
 
 #endif // ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_NODES_SOUNDSOURCENODE_H_INCLUDED

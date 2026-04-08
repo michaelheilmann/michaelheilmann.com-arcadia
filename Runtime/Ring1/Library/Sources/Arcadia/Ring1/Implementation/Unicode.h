@@ -16,25 +16,18 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_UNICODE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_UNICODE_H_INCLUDED
 
+#if 0
 #include "Arcadia/Ring1/Implementation/Boolean.h"
 #include "Arcadia/Ring1/Implementation/Natural32.h"
 #include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Unicode/Unicode.h"
 #include "Arcadia/Ring1/Implementation/Size.h"
+#endif
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 
 #include "Arcadia/Ring1/Implementation/Unicode/Unicode.h"
-#include "Arcadia/Ring1/Implementation/Unicode/Utf8.h"
-
-// https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_isUTF8
-Arcadia_BooleanValue
-Arcadia_Unicode_isUTF8
-  (
-    Arcadia_Thread* thread,
-    const void* bytes,
-    Arcadia_SizeValue numberOfBytes,
-    Arcadia_SizeValue* numberOfSymbols
-  );
+#include "Arcadia/Ring1/Implementation/Unicode/isUTF8.h"
+#include "Arcadia/Ring1/Implementation/Unicode/UTF8.h"
+#include "Arcadia/Ring1/Implementation/Unicode/UTF8ArrayIterator.h"
 
 // https://michaelheilmann.com/Arcadia/Ring1/#Arcadia_Unicode_EncodeCodePointCallbackContext
 typedef void Arcadia_Unicode_EncodeCodePointCallbackContext;

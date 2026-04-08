@@ -235,22 +235,21 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_constructImpl
     Arcadia_DataDefinitionLanguage_SemanticalAnalysis* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_SemanticalAnalysis_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DataDefinitionLanguage_SemanticalAnalysis);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
   self->map = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DataDefinitionLanguage_SemanticalAnalysis);
 }
 
 static void
@@ -259,7 +258,7 @@ Arcadia_DataDefinitionLanguage_SemanticalAnalysis_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_SemanticalAnalysisDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_DataDefinitionLanguage_SemanticalAnalysis_visit

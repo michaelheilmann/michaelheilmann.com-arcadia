@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_DDL_PRIVATE (1)
+#define ARCADIA_DDL_MODULE (1)
 #include "Arcadia/DDL/Writer/Unparser.h"
 
 #include "Arcadia/DDL/Include.h"
@@ -342,19 +342,17 @@ Arcadia_DataDefinitionLanguage_Unparser_constructImpl
     Arcadia_DataDefinitionLanguage_Unparser* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DataDefinitionLanguage_Unparser_getType(thread);
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
+  Arcadia_EnterConstructor(Arcadia_DataDefinitionLanguage_Unparser);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
+  if (0 != _numberOfArguments) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_DataDefinitionLanguage_Unparser);
 }
 
 static void
@@ -363,7 +361,7 @@ Arcadia_DataDefinitionLanguage_Unparser_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_DataDefinitionLanguage_UnparserDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_DataDefinitionLanguage_Unparser_visit

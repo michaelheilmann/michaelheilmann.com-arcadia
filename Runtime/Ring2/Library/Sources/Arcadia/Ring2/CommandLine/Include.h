@@ -16,11 +16,12 @@
 #if !defined(ARCADIA_RING2_COMMANDLINE_INCLUDE_H_INCLUDED)
 #define ARCADIA_RING2_COMMANDLINE_INCLUDE_H_INCLUDED
 
-#if !defined(ARCADIA_RING2_PRIVATE)
+#if !defined(ARCADIA_RING2_MODULE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 
 #include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Logging/Include.h"
 #include "Arcadia/Ring2/Strings/Include.h"
 #include "Arcadia/Ring2/CommandLine/CommandLineArgument.h"
 
@@ -42,7 +43,8 @@ void
 Arcadia_CommandLine_raiseRequiredArgumentMissingError
   (
     Arcadia_Thread* thread,
-    Arcadia_String* key
+    Arcadia_String* key,
+    Arcadia_Log* log
   );
 
 void
@@ -50,14 +52,16 @@ Arcadia_CommandLine_raiseUnknownArgumentError
   (
     Arcadia_Thread* thread,
     Arcadia_String* key,
-    Arcadia_String* value
+    Arcadia_String* value,
+    Arcadia_Log* log
   );
 
 void
 Arcadia_CommandLine_raiseNoValueError
   (
     Arcadia_Thread* thread,
-    Arcadia_String* key
+    Arcadia_String* key,
+    Arcadia_Log* log
   );
 
 void
@@ -65,21 +69,24 @@ Arcadia_CommandLine_raiseValueInvalidError
   (
     Arcadia_Thread* thread,
     Arcadia_String* key,
-    Arcadia_String* value
+    Arcadia_String* value,
+    Arcadia_Log* log
   );
 
 void
 Arcadia_CommandLine_raiseAlreadySpecifiedError
   (
     Arcadia_Thread* thread,
-    Arcadia_String* key
+    Arcadia_String* key,
+    Arcadia_Log* log
   );
 
 void
 Arcadia_CommandLine_invalidCommandLineArgumentError
   (
     Arcadia_Thread* thread,
-    Arcadia_String* argument
+    Arcadia_String* argument,
+    Arcadia_Log* log
   );
 
 #endif // ARCADIA_RING2_COMMANDLINE_INCLUDE_H_INCLUDED

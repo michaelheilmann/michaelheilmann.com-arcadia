@@ -64,12 +64,12 @@ Arcadia_MIL_AST_ProcedureDefinitionNode_constructImpl
     Arcadia_MIL_AST_ProcedureDefinitionNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_AST_ProcedureDefinitionNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_AST_ProcedureDefinitionNode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 5 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (5 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -86,8 +86,7 @@ Arcadia_MIL_AST_ProcedureDefinitionNode_constructImpl
   } else {
     self->procedureBody = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 5 + 1);
+  Arcadia_LeaveConstructor(Arcadia_MIL_AST_ProcedureDefinitionNode);
 }
 
 static void
@@ -96,7 +95,7 @@ Arcadia_MIL_AST_ProcedureDefinitionNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ProcedureDefinitionNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_MIL_AST_ProcedureDefinitionNode_visit

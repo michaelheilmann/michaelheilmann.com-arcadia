@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_DDL_WRITER_UNPARSER_H_INCLUDED)
 #define ARCADIA_DDL_WRITER_UNPARSER_H_INCLUDED
 
-#if !defined(ARCADIA_DDL_PRIVATE) || 1 != ARCADIA_DDL_PRIVATE
+#if !defined(ARCADIA_DDL_MODULE) || 1 != ARCADIA_DDL_MODULE
   #error("do not include directly, include `Arcadia/DDL/Include.h` instead")
 #endif
 

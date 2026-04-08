@@ -16,14 +16,14 @@
 #if !defined(ARCADIA_ADL_READER_MODULE_H_INCLUDED)
 #define ARCADIA_ADL_READER_MODULE_H_INCLUDED
 
-#if !defined(ARCADIA_ADL_PRIVATE)
+#if !defined(ARCADIA_ADL_MODULE)
   #error("do not include directly, include `Arcadia/ADL/Include.h` instead")
 #endif
 #include "Arcadia/ADL/Reader.h"
 
 /**
  * @todo DDL maps are represented by lists hence O(n) for each search.
- * The DDL maps (hence lists) in typical ADL programs are usually not big, converting lists to hash tables and using hash tables could be more expensive.
+ * The DDL maps (actually lists) in typical ADL programs are usually not big, converting lists to hash tables and using hash tables could be more expensive.
  * We need to look into that. We could also use a "lazy conversion". As soon as a ADL map is accessed, build and cache the hash table.
  */
 static inline Arcadia_Integer32Value
@@ -156,6 +156,40 @@ Arcadia_ADL_Reader_getNatural8Value
       }
       Arcadia_DDL_NumberNode* numberNode = (Arcadia_DDL_NumberNode*)valueNode;
       return Arcadia_String_toNatural8(thread, numberNode->value);
+    }
+  }
+  Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+  Arcadia_Thread_jump(thread);
+}
+
+static inline Arcadia_Real32Value
+Arcadia_ADL_Reader_getReal32Value
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_MapNode* mapNode,
+    Arcadia_String* key
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)mapNode->entries); i < n; ++i) {
+    Arcadia_DDL_MapEntryNode* mapEntryNode =
+      (Arcadia_DDL_MapEntryNode*)
+      Arcadia_List_getObjectReferenceValueCheckedAt
+        (
+          thread,
+          (Arcadia_List*)mapNode->entries,
+          i,
+          _Arcadia_DDL_MapEntryNode_getType(thread)
+        );
+    Arcadia_DDL_NameNode* keyNode = mapEntryNode->key;
+    Arcadia_Value t = Arcadia_Value_makeObjectReferenceValue(key);
+    if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)keyNode->value, &t)) {
+      Arcadia_DDL_Node* valueNode = mapEntryNode->value;
+      if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)valueNode, _Arcadia_DDL_NumberNode_getType(thread))) {
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+        Arcadia_Thread_jump(thread);
+      }
+      Arcadia_DDL_NumberNode* numberNode = (Arcadia_DDL_NumberNode*)valueNode;
+      return Arcadia_String_toReal32(thread, numberNode->value);
     }
   }
   Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);

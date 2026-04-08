@@ -16,6 +16,14 @@
 #if !defined(ARCADIA_MEDIA_INCLUDE_H_INCLUDED)
 #define ARCADIA_MEDIA_INCLUDE_H_INCLUDED
 
+// If a file x belongs to a module a and ARCADIA_a_MODULE is not defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_MEDIA_MODULE")
+#define ARCADIA_MEDIA_MODULE (1)
+
+// If a file x of a module a is not an export file of that module and ARCADIA_a_EXPORT is defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_MEDIA_EXPORT")
+#define ARCADIA_MEDIA_EXPORT (1)
+
 #include "Arcadia/Media/PixelBuffer.h"
 #include "Arcadia/Media/PixelBufferOperations/CheckerboardFill.h"
 #include "Arcadia/Media/PixelBufferOperations/Fill.h"
@@ -23,8 +31,14 @@
 #include "Arcadia/Media/PixelFormat.h"
 
 #include "Arcadia/Media/SampleBuffer.h"
-#include "Arcadia/Media/SampleBufferOperations/SineWave.h"
-#include "Arcadia/Media/SampleBufferOperations/WhiteNoise.h"
+#include "Arcadia/Media/DSP/SineWave.h"
+#include "Arcadia/Media/DSP/WhiteNoise.h"
 #include "Arcadia/Media/SampleFormat.h"
+
+#undef ARCADIA_MEDIA_EXPORT
+#pragma pop_macro("ARCADIA_MEDIA_EXPORT")
+
+#undef ARCADIA_MEDIA_MODULE
+#pragma pop_macro("ARCADIA_MEDIA_MODULE")
 
 #endif // ARCADIA_MEDIA_INCLUDE_H_INCLUDED

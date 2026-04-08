@@ -283,7 +283,7 @@ R_Instructions_isEqualTo
 
   Arcadia_TypeValue firstOperandType = Arcadia_Value_getType(thread, firstOperandValue);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
-  if (!operations->equalTo) {
+  if (!operations->isEqualTo) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -291,7 +291,7 @@ R_Instructions_isEqualTo
   Arcadia_ValueStack_pushValue(thread, firstOperandValue);
   Arcadia_ValueStack_pushValue(thread, secondOperandValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  operations->equalTo(thread);
+  operations->isEqualTo(thread);
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
@@ -320,7 +320,7 @@ R_Instructions_isGreaterThan
 
   Arcadia_TypeValue firstOperandType = Arcadia_Value_getType(thread, firstOperandValue);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
-  if (!operations->greaterThan) {
+  if (!operations->isGreaterThan) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -328,7 +328,7 @@ R_Instructions_isGreaterThan
   Arcadia_ValueStack_pushValue(thread, firstOperandValue);
   Arcadia_ValueStack_pushValue(thread, secondOperandValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  operations->greaterThan(thread);
+  operations->isGreaterThan(thread);
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
@@ -357,7 +357,7 @@ R_Instructions_isGreaterThanOrEqualTo
 
   Arcadia_TypeValue firstOperandType = Arcadia_Value_getType(thread, firstOperandValue);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
-  if (!operations->greaterThanOrEqualTo) {
+  if (!operations->isGreaterThanOrEqualTo) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -365,7 +365,7 @@ R_Instructions_isGreaterThanOrEqualTo
   Arcadia_ValueStack_pushValue(thread, firstOperandValue);
   Arcadia_ValueStack_pushValue(thread, secondOperandValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  operations->greaterThanOrEqualTo(thread);
+  operations->isGreaterThanOrEqualTo(thread);
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
@@ -408,7 +408,7 @@ R_Instructions_isLowerThan
 
   Arcadia_TypeValue firstOperandType = Arcadia_Value_getType(thread, firstOperandValue);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
-  if (!operations->lowerThan) {
+  if (!operations->isLowerThan) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -416,7 +416,7 @@ R_Instructions_isLowerThan
   Arcadia_ValueStack_pushValue(thread, firstOperandValue);
   Arcadia_ValueStack_pushValue(thread, secondOperandValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  operations->lowerThan(thread);
+  operations->isLowerThan(thread);
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
@@ -445,7 +445,7 @@ R_Instructions_isLowerThanOrEqualTo
 
   Arcadia_TypeValue firstOperandType = Arcadia_Value_getType(thread, firstOperandValue);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
-  if (!operations->lowerThanOrEqualTo) {
+  if (!operations->isLowerThanOrEqualTo) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -453,7 +453,7 @@ R_Instructions_isLowerThanOrEqualTo
   Arcadia_ValueStack_pushValue(thread, firstOperandValue);
   Arcadia_ValueStack_pushValue(thread, secondOperandValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  operations->lowerThanOrEqualTo(thread);
+  operations->isLowerThanOrEqualTo(thread);
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
@@ -595,7 +595,7 @@ R_Instructions_isNotEqualTo
 
   Arcadia_TypeValue firstOperandType = Arcadia_Value_getType(thread, firstOperandValue);
   Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(firstOperandType);
-  if (!operations->notEqualTo) {
+  if (!operations->isNotEqualTo) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -603,7 +603,7 @@ R_Instructions_isNotEqualTo
   Arcadia_ValueStack_pushValue(thread, firstOperandValue);
   Arcadia_ValueStack_pushValue(thread, secondOperandValue);
   Arcadia_ValueStack_pushNatural8Value(thread, 2);
-  operations->notEqualTo(thread);
+  operations->isNotEqualTo(thread);
   if (n + 1 != Arcadia_ValueStack_getSize(thread)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);

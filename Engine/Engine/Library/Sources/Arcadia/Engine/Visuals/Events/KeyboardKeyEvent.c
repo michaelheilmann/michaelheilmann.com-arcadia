@@ -52,13 +52,8 @@ Arcadia_Visuals_KeyboardKeyEvent_constructImpl
     Arcadia_Visuals_KeyboardKeyEvent* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_KeyboardKeyEvent_getType(thread);
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (3 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_KeyboardKeyEvent);
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -71,8 +66,7 @@ Arcadia_Visuals_KeyboardKeyEvent_constructImpl
   self->action = Arcadia_ValueStack_getInteger32Value(thread, 2);
   self->key = Arcadia_ValueStack_getInteger32Value(thread, 1);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_KeyboardKeyEvent);
 }
 
 static void
@@ -81,7 +75,7 @@ Arcadia_Visuals_KeyboardKeyEvent_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_KeyboardKeyEventDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_Visuals_KeyboardKeyEvent*
 Arcadia_Visuals_KeyboardKeyEvent_create

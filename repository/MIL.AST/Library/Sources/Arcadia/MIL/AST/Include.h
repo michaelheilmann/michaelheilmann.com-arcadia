@@ -25,6 +25,10 @@
 #include "Arcadia/MIL/AST/OperandNode.h"
 #include "Arcadia/MIL/AST/StatementNode.h"
 
+#include "Arcadia/MIL/AST/CompilationUnitNode.h"
+
+#include "Arcadia/MIL/AST/IdentifierNode.h"
+
 #include "Arcadia/MIL/AST/Instructions/BinaryInstructionNode.h"
 #include "Arcadia/MIL/AST/Instructions/InvokeInstructionNode.h"
 #include "Arcadia/MIL/AST/Instructions/JumpInstructionNode.h"
@@ -48,6 +52,7 @@
 #include "Arcadia/MIL/AST/Definitions/EnumerationDefinitionNode.h"
 #include "Arcadia/MIL/AST/Definitions/FieldDefinitionNode.h"
 #include "Arcadia/MIL/AST/Definitions/MethodDefinitionNode.h"
+#include "Arcadia/MIL/AST/Definitions/ModuleDefinitionNode.h"
 #include "Arcadia/MIL/AST/Definitions/ProcedureDefinitionNode.h"
 
 #include "Arcadia/MIL/AST/DefinitionStatements/LabelDefinitionStatementNode.h"

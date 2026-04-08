@@ -71,9 +71,8 @@ Arcadia_Engine_Visuals_MeshNode_constructImpl
     Arcadia_Engine_Visuals_MeshNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_MeshNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_MeshNode);
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -155,8 +154,7 @@ Arcadia_Engine_Visuals_MeshNode_constructImpl
   }
   Arcadia_Memory_copy(thread, self->vertices, Arcadia_ByteBuffer_getBytes(thread, temporary),
                                               Arcadia_ByteBuffer_getNumberOfBytes(thread, temporary));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_MeshNode);
 }
 
 static void
@@ -165,7 +163,7 @@ Arcadia_Engine_Visuals_MeshNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_MeshNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_MeshNode_visitImpl

@@ -68,17 +68,16 @@ Arcadia_Engine_Visuals_NodeFactory_construct
     Arcadia_Engine_Visuals_NodeFactory* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_NodeFactory_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_NodeFactory);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_NodeFactory);
 }
 
 static void
@@ -87,7 +86,7 @@ Arcadia_Engine_Visuals_NodeFactory_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactoryDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_NodeFactory_destruct

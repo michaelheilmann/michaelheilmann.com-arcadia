@@ -53,13 +53,16 @@ Arcadia_MIL_AST_StatementNode_constructImpl
     Arcadia_MIL_AST_StatementNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_AST_StatementNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_AST_StatementNode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  if (0 != _numberOfArguments) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_LeaveConstructor(Arcadia_MIL_AST_StatementNode);
 }
 
 static void
@@ -68,4 +71,4 @@ Arcadia_MIL_AST_StatementNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_StatementNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}

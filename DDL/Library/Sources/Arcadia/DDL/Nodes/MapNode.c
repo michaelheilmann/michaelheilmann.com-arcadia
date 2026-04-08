@@ -60,19 +60,18 @@ Arcadia_DDL_MapNode_constructImpl
     Arcadia_DDL_MapNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDL_MapNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDL_MapNode);
   {
     Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDL_NodeType_Map);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->entries = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1);
+  Arcadia_LeaveConstructor(Arcadia_DDL_MapNode);
 }
 
 static void
@@ -81,7 +80,7 @@ Arcadia_DDL_MapNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_DDL_MapNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_DDL_MapNode_visitImpl

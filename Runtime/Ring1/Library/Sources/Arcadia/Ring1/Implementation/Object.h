@@ -16,31 +16,30 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_OBJECT_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/Types.h"
-#include "Arcadia/Ring1/Implementation/TypeSystem/Names.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Include.h"
 #include "Arcadia/ARMS/Include.h"
 typedef struct Arcadia_Value Arcadia_Value;
 
 typedef struct Arcadia_Object Arcadia_Object;
 
 typedef struct Arcadia_ObjectDispatch {
-  Arcadia_Dispatch parent;
+  Arcadia_Type* type;
 
   Arcadia_ForeignProcedure* add;
   Arcadia_ForeignProcedure* and;
   Arcadia_ForeignProcedure* concatenate;
   Arcadia_ForeignProcedure* divide;
-  Arcadia_ForeignProcedure* identical;
-  Arcadia_ForeignProcedure* equalTo;
-  Arcadia_ForeignProcedure* greaterThan;
-  Arcadia_ForeignProcedure* greaterThanOrEqualTo;
-  Arcadia_ForeignProcedure* hash;
-  Arcadia_ForeignProcedure* lowerThan;
-  Arcadia_ForeignProcedure* lowerThanOrEqualTo;
+  Arcadia_ForeignProcedure* getHash;
+  Arcadia_ForeignProcedure* isIdenticalTo;
+  Arcadia_ForeignProcedure* isEqualTo;
+  Arcadia_ForeignProcedure* isGreaterThan;
+  Arcadia_ForeignProcedure* isGreaterThanOrEqualTo;
+  Arcadia_ForeignProcedure* isLowerThan;
+  Arcadia_ForeignProcedure* isLowerThanOrEqualTo;
   Arcadia_ForeignProcedure* multiply;
   Arcadia_ForeignProcedure* negate;
   Arcadia_ForeignProcedure* not;
-  Arcadia_ForeignProcedure* notEqualTo;
+  Arcadia_ForeignProcedure* isNotEqualTo;
   Arcadia_ForeignProcedure* or;
   Arcadia_ForeignProcedure* subtract;
   Arcadia_ForeignProcedure* toString;
@@ -109,7 +108,6 @@ struct Arcadia_Object {
           sizeof(_cName), \
           parentType, \
           sizeof(_cName##Dispatch), \
-          (void(*)(Arcadia_Thread*,Arcadia_Dispatch*))&_cName##_initializeDispatchImpl, \
           _cTypeOperations, \
           &_##_cName##_typeDestructing \
         ); \

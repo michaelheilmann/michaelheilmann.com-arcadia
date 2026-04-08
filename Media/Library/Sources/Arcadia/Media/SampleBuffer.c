@@ -17,6 +17,8 @@
 #include "Arcadia/Media/SampleBuffer.h"
 
 #include "Arcadia/Media/SampleFormat.h"
+#include "Arcadia/Media/DSP.h"
+#include "Arcadia/Media/Quantization.h"
 
 /// @code
 /// construct(seconds:Integer32,sampleFormat:Arcadia.Media.SampleFormat)
@@ -221,4 +223,59 @@ Arcadia_Media_SampleBuffer_createClone
   }
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
   ARCADIA_CREATEOBJECT(Arcadia_Media_SampleBuffer);
+}
+
+void
+Arcadia_Media_SampleBuffer_fill
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Media_SampleBuffer* self,
+    Arcadia_Media_DSP* dsp
+  )
+{
+  // @todo If Arcadia_Media_DSP_generate could directly write to an array of Bytes, we would not have to allocate a temporary Byte buffer.
+  // However, we could actually use a Byte buffer as the backing array of the sample buffer.
+  const Arcadia_Integer32Value SAMPLERATE = Arcadia_Media_SampleBuffer_getSampleRate(thread, self);
+  const Arcadia_Integer32Value NUMBEROFSAMPLES = SAMPLERATE * Arcadia_Media_SampleBuffer_getLength(thread, self);
+  Arcadia_ByteBuffer* temporary = Arcadia_ByteBuffer_create(thread);
+  Arcadia_Media_DSP_generate(thread, (Arcadia_Media_DSP*)dsp, Arcadia_Media_SampleBuffer_getSampleRate(thread, self), NUMBEROFSAMPLES, temporary);
+
+  switch (Arcadia_Media_SampleBuffer_getSampleFormat(thread, self)) {
+    case Arcadia_Media_SampleFormat_Integer16: {
+      Arcadia_Real32Value* source = (Arcadia_Real32Value*)Arcadia_ByteBuffer_getBytes(thread, temporary);
+      Arcadia_Integer16Value* p = (Arcadia_Integer16Value*)self->bytes;
+      for (Arcadia_SizeValue i = 0; i < NUMBEROFSAMPLES; ++i) {
+        Arcadia_Integer16Value sample = Arcadia_Media_quantizeInteger16(thread, source[i]);
+        p[i] = sample;
+      }
+    } break;
+    case Arcadia_Media_SampleFormat_Integer8: {
+      Arcadia_Real32Value* source = (Arcadia_Real32Value*)Arcadia_ByteBuffer_getBytes(thread, temporary);
+      Arcadia_Integer16Value* p = (Arcadia_Integer16Value*)self->bytes;
+      for (Arcadia_SizeValue i = 0; i < NUMBEROFSAMPLES; ++i) {
+        Arcadia_Integer16Value sample = Arcadia_Media_quantizeInteger16(thread, source[i]);
+        p[i] = sample;
+      }
+    } break;
+    case Arcadia_Media_SampleFormat_Natural16: {
+      Arcadia_Real32Value* source = (Arcadia_Real32Value*)Arcadia_ByteBuffer_getBytes(thread, temporary);
+      Arcadia_Natural16Value* p = (Arcadia_Natural16Value*)self->bytes;
+      for (Arcadia_SizeValue i = 0; i < NUMBEROFSAMPLES; ++i) {
+        Arcadia_Natural16Value sample = Arcadia_Media_quantizeNatural16(thread, source[i]);
+        p[i] = sample;
+      }
+    } break;
+    case Arcadia_Media_SampleFormat_Natural8: {
+      Arcadia_Real32Value* source = (Arcadia_Real32Value*)Arcadia_ByteBuffer_getBytes(thread, temporary);
+      Arcadia_Natural8Value* p = (Arcadia_Natural8Value*)self->bytes;
+      for (Arcadia_SizeValue i = 0; i < NUMBEROFSAMPLES; ++i) {
+        Arcadia_Natural8Value sample = Arcadia_Media_quantizeNatural8(thread, source[i]);
+        p[i] = sample;
+      }
+    } break;
+    default: {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
+    } break;
+  };
 }

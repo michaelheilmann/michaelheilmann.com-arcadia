@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/WeakReference.h"
 
 #include "Arcadia/ARMS/Include.h"
@@ -52,8 +52,8 @@ Arcadia_WeakReference_initializeDispatchImpl
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_WeakReference_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Arcadia_WeakReference_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_WeakReference_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_WeakReference_destruct,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_WeakReference_visit,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_WeakReference_initializeDispatchImpl,
 };

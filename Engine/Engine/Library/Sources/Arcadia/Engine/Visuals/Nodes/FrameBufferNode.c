@@ -60,9 +60,8 @@ Arcadia_Visuals_FrameBufferNode_constructImpl
     Arcadia_Visuals_FrameBufferNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_FrameBufferNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_FrameBufferNode);
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -70,8 +69,7 @@ Arcadia_Visuals_FrameBufferNode_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_FrameBufferNode);
 }
 
 static void
@@ -80,7 +78,7 @@ Arcadia_Visuals_FrameBufferNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_FrameBufferNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Visuals_FrameBufferNode_destructImpl

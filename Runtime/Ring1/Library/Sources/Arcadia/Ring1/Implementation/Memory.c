@@ -13,12 +13,12 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Memory.h"
 
 #include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
-#include "Arcadia/Ring1/Implementation/Thread.private.h"
+#include "Arcadia/Ring1/Implementation/Thread.module.h"
 #include <stdbool.h>
 #include <string.h>
 

@@ -52,10 +52,8 @@ Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
     Arcadia_Visuals_CanvasActivationStateChangedEvent* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_CanvasActivationStateChangedEvent_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
-  if (2 != numberOfArgumentValues1) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_CanvasActivationStateChangedEvent);
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -67,8 +65,7 @@ Arcadia_Visuals_CanvasActivationStateChangedEvent_constructImpl
   //
   self->active = Arcadia_ValueStack_getBooleanValue(thread, 1);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_CanvasActivationStateChangedEvent);
 }
 
 static void
@@ -77,7 +74,7 @@ Arcadia_Visuals_CanvasActivationStateChangedEvent_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_CanvasActivationStateChangedEventDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_Visuals_CanvasActivationStateChangedEvent*
 Arcadia_Visuals_CanvasActivationStateChangedEvent_create

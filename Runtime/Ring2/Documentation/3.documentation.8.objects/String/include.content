@@ -13,6 +13,25 @@
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromBoolean.i")}
+
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromInteger16.i")}
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromInteger32.i")}
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromInteger64.i")}
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromInteger8.i")}
+
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromNatural16.i")}
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromNatural32.i")}
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromNatural64.i")}
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromNatural8.i")}
+
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromReal32.i")}
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromReal64.i")}
+
+@{include("3.documentation.8.objects/String/Arcadia_String_createFromVoid.i")}
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
 <section class="cxx entity method">
 
   <h1 id="Arcadia_String_create_pn">
@@ -316,671 +335,56 @@
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
+@{include("3.documentation.8.objects/String/Arcadia_String_getNumberOfBytes.i")}
+                                                                           
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-  <h1 id="Arcadia_String_getNumberOfBytes">Arcadia_String_getNumberOfBytes</h1>
-
-  <my-signature><code>
-  Arcadia_SizeValue<br>
-  Arcadia_String_getNumberOfBytes<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get the size, in Bytes, of this string.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The size, in Bytes, of this string.</p>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_getByteAt.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_getByteAt">Arcadia_String_getByteAt</h1>
-
-  <my-signature><code>
-  Arcadia_Natural8Value<br>
-  Arcadia_String_getByteAt<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_SizeValue index<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Get the Byte value at the specified index.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-    <div>
-      <div>Arcadia_SizeValue index</div>
-      <div>The index. Must be within the bounds <code>[0,n)</code> where <code>n</code> is the size, in Bytes, of this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The Byte value.</p>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toBoolean.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toBoolean">Arcadia_String_toBoolean</h1>
-
-  <my-signature><code>
-  Arcadia_BooleanValue<br>
-  Arcadia_String_toBoolean<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as boolean literal and convert the boolean represented by that literal into an <code>Arcadia_BooleanValue</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The boolean value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <tr>
-      <td>Arcadia_Status_ArgumentTypeInvalid</td>
-      <td><code>self</code> is a null pointer.</td>
-    </tr>
-    <tr>
-      <td>Arcadia_Status_ConversionFailed</td>
-      <td>The symbols of this string cannot be interpreted as a boolean literal. Valid boolean literals are <code>true</code> and <code>false</code>, both case sensitve.</td>
-    </tr>
-  </<section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toInteger16.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toInteger16">Arcadia_String_toInteger16</h1>
-
-  <my-signature><code>
-  Arcadia_Integer16Value<br>
-  Arcadia_String_toInteger16<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as decimal integer literal and convert the number represented by that integer literal into an <code>Arcadia_Integer16Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-    <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The integer value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</div>
-      <div>The symbols of this string cannot be interpreted as a decimal integer literal or
-      the number represented by the literal cannot be represented a value of type <code>Arcadia_Integer16Value</code>.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toInteger32.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toInteger32">Arcadia_String_toInteger32</h1>
-
-  <my-signature><code>
-  Arcadia_Integer32Value<br>
-  Arcadia_String_toInteger32<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer32Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The integer value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</div>
-      <div>The symbols of this string cannot be interpreted as a decimal integer literal or
-      the number represented by the literal cannot be represented a value of type <code>
-      Arcadia_Integer32Value</code>.
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toInteger64.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toInteger64">Arcadia_String_toInteger64</h1>
-
-  <my-signature><code>
-  Arcadia_Integer64Value<br>
-  Arcadia_String_toInteger64<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer64Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The integer value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</div>
-      <div>The symbols of this string cannot be interpreted as a decimal integer literal or
-           the number represented by the literal cannot be represented a value of type <code>
-           Arcadia_Integer64Value</code>.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toInteger8.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toInteger8">Arcadia_String_toInteger8</h1>
-
-  <my-signature><code>
-  Arcadia_Integer8Value<br>
-  Arcadia_String_toInteger8<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as decimal integer literal and convert the number represented by that literal into an <code>Arcadia_Integer8Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-    <div>
-      <div>Arcadia_String* self</div><div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The integer value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</dov>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</div>
-      <div>The symbols of this string cannot be interpreted as a decimal integer literal or
-      the number represented by the integer literal cannot be represented a value of type <code>Arcadia_Integer8Value</code>.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toNatural16.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toNatural16">Arcadia_String_toNatural16</h1>
-
-  <my-signature><code>
-  Arcadia_Natural16Value<br>
-  Arcadia_Stringg_toNatural16<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural16Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The natural value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</td>
-      <div>The symbols of this string cannot be interpreted as a decimal natural literal or
-      the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural16Value</code>.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toNatural32.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toNatural32">Arcadia_String_toNatural32</h1>
-
-  <my-signature><code>
-  Arcadia_Natural32Value<br>
-  Arcadia_String_toNatural32<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural32Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-    <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The natural value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</div>
-      <div>The symbols of this string cannot be interpreted as a decimal natural literal or
-      the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural32Value</code>.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toNatural64.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toNatural64">Arcadia_String_toNatural64</h1>
-
-  <my-signature><code>
-  Arcadia_Natural64Value<br>
-  Arcadia_String_toNatural64<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural64Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The natural value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-    <div>Arcadia_Status_ArgumentTypeInvalid</div>
-    <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-    <div>Arcadia_Status_ConversionFailed</td>
-    <div>The symbols of this string cannot be interpreted as a decimal natural literal or
-    the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural64Value</code>.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toNatural8.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toNatural8">Arcadia_String_toNatural8</h1>
-
-  <my-signature><code>
-  Arcadia_Natural8Value<br>
-  Arcadia_String_toNatural8<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as a decimal natural literal and convert the number represented by that literal into an <code>Arcadia_Natural8Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The natural value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</td>
-      <div>The symbols of this string cannot be interpreted as a decimal natural literal or
-      the number represented by the literal cannot be represented a value of type <code>Arcadia_Natural8Value</code>.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toReal32.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toReal32">Arcadia_String_toReal32</h1>
-
-  <my-signature><code>
-  Arcadia_Real32Value<br>
-  Arcadia_String_toReal32<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>Arcadia_Real32Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The <code>Arcadia_Real32Value</code> value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</div>
-      <div>The symbols of this string cannot be interpreted as a decimal real literal or
-      the number represented by the literal cannot be represented a value of type <code>Arcadia_Real32Value</code>.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toReal64.i")}
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toReal64">Arcadia_String_toReal64</h1>
-
-  <my-signature><code>
-  Arcadia_Real64Value<br>
-  Arcadia_String_toReal64<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as a decimal real literal and convert the number represented by that literal into an <code>Arcadia_Real64Value</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <div>
-      <div><a href="#">Arcadia_Thread</a>* thread</div>
-      <div>A pointer to the <code>Arcadia_Thread</code> object.</div>
-    </div>
-    <div>
-      <div>Arcadia_String* self</div>
-      <div>A pointer to this string.</div>
-    </div>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The <code>Arcadia_Real64Value</code> value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</div>
-      <div>The symbols of this string cannot be interpreted as a decimal real literal or
-      the number represented by the literal cannot be represented a value of type <code>Arcadia_Real64Value</code>.</div>
-    </div>
-  </section>
-
-</section>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-<section class="cxx entity method">
-
-  <h1 id="Arcadia_String_toVoid">Arcadia_String_toVoid</h1>
-
-  <my-signature><code>
-  Arcadia_VoidValue<br>
-  Arcadia_String_toVoid<br>
-  &nbsp;&nbsp;(<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_Thread* thread,<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Arcadia_String const* self<br>
-  &nbsp;&nbsp;)
-  </code></my-signature>
-
-  <my-summary>
-  Interprete the symbols of this string as a void literal and convert the void value represented by that literal into an <code>Arcadia_VoidValue</code>.
-  </my-summary>
-
-  <section class="cxx parameters">
-    <h1>Parameters</h1>
-    <tr><td><a href="#">Arcadia_Thread</a>* thread</td><td>A pointer to the <code>Arcadia_Thread</code> object.</td></tr>
-    <tr><td>Arcadia_String* self</td><td>A pointer to this string.</td></tr>
-  </section>
-
-  <section class="cxx return-value">
-    <h1>Return value</h1>
-    <p>The void value.</p>
-  </section>
-
-  <section class="cxx errors">
-    <h1>Errors</h1>
-    <div>
-      <div>Arcadia_Status_ArgumentTypeInvalid</div>
-      <div><code>self</code> is a null pointer.</div>
-    </div>
-    <div>
-      <div>Arcadia_Status_ConversionFailed</div>
-      <div>The symbols of this string cannot be interpreted as a void literal. The valid void literal is <code>void</code>, case sensitve.</div>
-    </div>
-  </section>
-
-</section>
+@{include("3.documentation.8.objects/String/Arcadia_String_toVoid.i")}

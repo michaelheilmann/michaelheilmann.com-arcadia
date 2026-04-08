@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_ATOMS_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_ATOMS_H_INCLUDED
 
-#if !defined(ARCADIA_RING1_PRIVATE)
+#if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
@@ -27,28 +27,15 @@
 #include "Arcadia/Ring1/Implementation/Size.h"
 
 /// @brief
-/// "names" are interned (canoncialized) sequences of Bytes.
-/// Furthermore, such sequences fulfil multiple criteria:
-/// - they are non-empty UTF8 Byte sequences
-/// - they are a qualified name or unqualified name
+/// Atoms are UTF-8 strings which can be compared by address for equality and inequality.
 /// @remarks
-/// @code
-/// name : namePart ('.' namePart)*
-/// namePart : ('_' | letter) ('_' | letter | digit)*
-/// letter : ('a' - 'z') | ('A' - 'Z')
-/// digit : '0' - '9'
-/// @endcode
-/// @remarks
-/// Caching: Atoms are kept in a data structure which allows efficient lookup of an atom by a sequence of Bytes.
+/// Atoms are kept in a data structure which allows efficient lookup of an atom by a sequence of Bytes.
 /// Atoms maintain an age. Atoms below a certain age are marked as "life" during premark phase (unless purge cache is specified).
 /// If an atom is dead, then in the finalize callback, its ADDRESS and its HASH value are used to effieciently remove the atom from the set of atoms.
 typedef struct Arcadia_Atom Arcadia_Atom;
+
 /// @brief Type of a pointer to an atom.
 typedef Arcadia_Atom* Arcadia_AtomValue;
-
-/// A flag for creating an atom.
-/// See R_Atoms_getOrCreateAtom
-#define Arcadia_AtomKind_Name (1)
 
 /// @brief
 /// Get or create an atom.

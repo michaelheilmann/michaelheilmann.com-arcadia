@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/FileSystem/Linux/getHomeFolder.h"
 
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Linux || \

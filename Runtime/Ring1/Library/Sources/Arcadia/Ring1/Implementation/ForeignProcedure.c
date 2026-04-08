@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 
 #include "Arcadia/Ring1/Implementation/_defineScalarType.h"
@@ -26,7 +26,7 @@ isEqualTo
   );
 
 static void
-hash
+getHash
   (
     Arcadia_Thread* thread
   );
@@ -39,9 +39,9 @@ isNotEqualTo
 
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
-  .equalTo = &isEqualTo,
-  .hash = &hash,
-  .notEqualTo = &isNotEqualTo,
+  .isEqualTo = &isEqualTo,
+  .getHash = &getHash,
+  .isNotEqualTo = &isNotEqualTo,
 };
 
 #define BINARY_OPERATION() \
@@ -84,7 +84,7 @@ isEqualTo
 }
 
 static void
-hash
+getHash
   (
     Arcadia_Thread* thread
   )

@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Value.h"
 
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
@@ -209,29 +209,29 @@ Arcadia_Value_isEqualTo
 {
   switch (self->tag) {
     case Arcadia_ValueTag_Atom: {
-      // TODO: Add and use equalTo similar to BigInteger, ImmutableByteArray, ImmutableUTF8String, etc.
+      // TODO: Add and use isEqualTo similar to BigInteger, ImmutableByteArray, ImmutableUTF8String, etc.
       if (!Arcadia_Value_isAtomValue(other)) {
         return Arcadia_BooleanValue_False;
       }
       return self->atomValue == other->atomValue;
     } break;
-    OnRelational(BigInteger, equalTo);
-    OnRelational(Boolean, equalTo);
-    OnRelational(ForeignProcedure, equalTo);
-    OnRelational(InternalImmutableByteArray, equalTo);
-    OnRelational(ImmutableUTF8String, equalTo);
-    OnRelational(Integer16, equalTo);
-    OnRelational(Integer32, equalTo);
-    OnRelational(Integer64, equalTo);
-    OnRelational(Integer8, equalTo);
-    OnRelational(Natural16, equalTo);
-    OnRelational(Natural32, equalTo);
-    OnRelational(Natural64, equalTo);
-    OnRelational(Natural8, equalTo);
-    OnRelational(Real32, equalTo);
-    OnRelational(Real64, equalTo);
-    OnRelational(Size, equalTo);
-    OnRelational(Void, equalTo);
+    OnRelational(BigInteger, isEqualTo);
+    OnRelational(Boolean, isEqualTo);
+    OnRelational(ForeignProcedure, isEqualTo);
+    OnRelational(InternalImmutableByteArray, isEqualTo);
+    OnRelational(ImmutableUTF8String, isEqualTo);
+    OnRelational(Integer16, isEqualTo);
+    OnRelational(Integer32, isEqualTo);
+    OnRelational(Integer64, isEqualTo);
+    OnRelational(Integer8, isEqualTo);
+    OnRelational(Natural16, isEqualTo);
+    OnRelational(Natural32, isEqualTo);
+    OnRelational(Natural64, isEqualTo);
+    OnRelational(Natural8, isEqualTo);
+    OnRelational(Real32, isEqualTo);
+    OnRelational(Real64, isEqualTo);
+    OnRelational(Size, isEqualTo);
+    OnRelational(Void, isEqualTo);
     case Arcadia_ValueTag_ObjectReference: {
       return Arcadia_Object_isEqualTo(thread, self->objectReferenceValue, other);
     } break;
@@ -268,23 +268,23 @@ Arcadia_Value_isNotEqualTo
       }
       return self->atomValue != other->atomValue;
     } break;
-    OnRelational(BigInteger, notEqualTo);
-    OnRelational(Boolean, notEqualTo);
-    OnRelational(ForeignProcedure, notEqualTo);
-    OnRelational(InternalImmutableByteArray, notEqualTo);
-    OnRelational(ImmutableUTF8String, notEqualTo);
-    OnRelational(Integer16, notEqualTo);
-    OnRelational(Integer32, notEqualTo);
-    OnRelational(Integer64, notEqualTo);
-    OnRelational(Integer8, notEqualTo);
-    OnRelational(Natural16, notEqualTo);
-    OnRelational(Natural32, notEqualTo);
-    OnRelational(Natural64, notEqualTo);
-    OnRelational(Natural8, notEqualTo);
-    OnRelational(Real32, notEqualTo);
-    OnRelational(Real64, notEqualTo);
-    OnRelational(Size, notEqualTo);
-    OnRelational(Void, notEqualTo);
+    OnRelational(BigInteger, isNotEqualTo);
+    OnRelational(Boolean, isNotEqualTo);
+    OnRelational(ForeignProcedure, isNotEqualTo);
+    OnRelational(InternalImmutableByteArray, isNotEqualTo);
+    OnRelational(ImmutableUTF8String, isNotEqualTo);
+    OnRelational(Integer16, isNotEqualTo);
+    OnRelational(Integer32, isNotEqualTo);
+    OnRelational(Integer64, isNotEqualTo);
+    OnRelational(Integer8, isNotEqualTo);
+    OnRelational(Natural16, isNotEqualTo);
+    OnRelational(Natural32, isNotEqualTo);
+    OnRelational(Natural64, isNotEqualTo);
+    OnRelational(Natural8, isNotEqualTo);
+    OnRelational(Real32, isNotEqualTo);
+    OnRelational(Real64, isNotEqualTo);
+    OnRelational(Size, isNotEqualTo);
+    OnRelational(Void, isNotEqualTo);
     case Arcadia_ValueTag_ObjectReference: {
       return Arcadia_Object_isNotEqualTo(thread, self->objectReferenceValue, other);
     } break;
@@ -314,24 +314,24 @@ Arcadia_Value_isLowerThan
   )
 {
   switch (self->tag) {
-    OnRelational(Atom, lowerThan);
-    OnRelational(BigInteger, lowerThan);
-    OnRelational(Boolean, lowerThan);
-    OnRelational(ForeignProcedure, lowerThan);
-    OnRelational(InternalImmutableByteArray, lowerThan);
-    OnRelational(ImmutableUTF8String, lowerThan);
-    OnRelational(Integer16, lowerThan);
-    OnRelational(Integer32, lowerThan);
-    OnRelational(Integer64, lowerThan);
-    OnRelational(Integer8, lowerThan);
-    OnRelational(Natural16, lowerThan);
-    OnRelational(Natural32, lowerThan);
-    OnRelational(Natural64, lowerThan);
-    OnRelational(Natural8, lowerThan);
-    OnRelational(Real32, lowerThan);
-    OnRelational(Real64, lowerThan);
-    OnRelational(Size, lowerThan);
-    OnRelational(Void, lowerThan);
+    OnRelational(Atom, isLowerThan);
+    OnRelational(BigInteger, isLowerThan);
+    OnRelational(Boolean, isLowerThan);
+    OnRelational(ForeignProcedure, isLowerThan);
+    OnRelational(InternalImmutableByteArray, isLowerThan);
+    OnRelational(ImmutableUTF8String, isLowerThan);
+    OnRelational(Integer16, isLowerThan);
+    OnRelational(Integer32, isLowerThan);
+    OnRelational(Integer64, isLowerThan);
+    OnRelational(Integer8, isLowerThan);
+    OnRelational(Natural16, isLowerThan);
+    OnRelational(Natural32, isLowerThan);
+    OnRelational(Natural64, isLowerThan);
+    OnRelational(Natural8, isLowerThan);
+    OnRelational(Real32, isLowerThan);
+    OnRelational(Real64, isLowerThan);
+    OnRelational(Size, isLowerThan);
+    OnRelational(Void, isLowerThan);
     case Arcadia_ValueTag_ObjectReference: {
       Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
@@ -339,7 +339,7 @@ Arcadia_Value_isLowerThan
       Arcadia_ValueStack_pushValue(thread, self);
       Arcadia_ValueStack_pushValue(thread, other);
       Arcadia_ValueStack_pushNatural8Value(thread, 2);
-      operations->lowerThan(thread);
+      operations->isLowerThan(thread);
       if (Arcadia_ValueStack_getSize(thread) != oldValueStackSize + 1) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
         Arcadia_Thread_jump(thread);
@@ -368,24 +368,24 @@ Arcadia_Value_isLowerThanOrEqualTo
   )
 {
   switch (self->tag) {
-    OnRelational(Atom, lowerThanOrEqualTo);
-    OnRelational(BigInteger, lowerThanOrEqualTo);
-    OnRelational(Boolean, lowerThanOrEqualTo);
-    OnRelational(ForeignProcedure, lowerThanOrEqualTo);
-    OnRelational(InternalImmutableByteArray, lowerThanOrEqualTo);
-    OnRelational(ImmutableUTF8String, lowerThanOrEqualTo);
-    OnRelational(Integer16, lowerThanOrEqualTo);
-    OnRelational(Integer32, lowerThanOrEqualTo);
-    OnRelational(Integer64, lowerThanOrEqualTo);
-    OnRelational(Integer8, lowerThanOrEqualTo);
-    OnRelational(Natural16, lowerThanOrEqualTo);
-    OnRelational(Natural32, lowerThanOrEqualTo);
-    OnRelational(Natural64, lowerThanOrEqualTo);
-    OnRelational(Natural8, lowerThanOrEqualTo);
-    OnRelational(Real32, lowerThanOrEqualTo);
-    OnRelational(Real64, lowerThanOrEqualTo);
-    OnRelational(Size, lowerThanOrEqualTo);
-    OnRelational(Void, lowerThanOrEqualTo);
+    OnRelational(Atom, isLowerThanOrEqualTo);
+    OnRelational(BigInteger, isLowerThanOrEqualTo);
+    OnRelational(Boolean, isLowerThanOrEqualTo);
+    OnRelational(ForeignProcedure, isLowerThanOrEqualTo);
+    OnRelational(InternalImmutableByteArray, isLowerThanOrEqualTo);
+    OnRelational(ImmutableUTF8String, isLowerThanOrEqualTo);
+    OnRelational(Integer16, isLowerThanOrEqualTo);
+    OnRelational(Integer32, isLowerThanOrEqualTo);
+    OnRelational(Integer64, isLowerThanOrEqualTo);
+    OnRelational(Integer8, isLowerThanOrEqualTo);
+    OnRelational(Natural16, isLowerThanOrEqualTo);
+    OnRelational(Natural32, isLowerThanOrEqualTo);
+    OnRelational(Natural64, isLowerThanOrEqualTo);
+    OnRelational(Natural8, isLowerThanOrEqualTo);
+    OnRelational(Real32, isLowerThanOrEqualTo);
+    OnRelational(Real64, isLowerThanOrEqualTo);
+    OnRelational(Size, isLowerThanOrEqualTo);
+    OnRelational(Void, isLowerThanOrEqualTo);
     case Arcadia_ValueTag_ObjectReference: {
       Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
@@ -393,7 +393,7 @@ Arcadia_Value_isLowerThanOrEqualTo
       Arcadia_ValueStack_pushValue(thread, self);
       Arcadia_ValueStack_pushValue(thread, other);
       Arcadia_ValueStack_pushNatural8Value(thread, 2);
-      operations->lowerThanOrEqualTo(thread);
+      operations->isLowerThanOrEqualTo(thread);
       if (Arcadia_ValueStack_getSize(thread) != oldValueStackSize + 1) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
         Arcadia_Thread_jump(thread);
@@ -422,24 +422,24 @@ Arcadia_Value_isGreaterThan
   )
 {
   switch (self->tag) {
-    OnRelational(Atom, greaterThan);
-    OnRelational(BigInteger, greaterThan);
-    OnRelational(Boolean, greaterThan);
-    OnRelational(ForeignProcedure, greaterThan);
-    OnRelational(InternalImmutableByteArray, greaterThan);
-    OnRelational(ImmutableUTF8String, greaterThan);
-    OnRelational(Integer16, greaterThan);
-    OnRelational(Integer32, greaterThan);
-    OnRelational(Integer64, greaterThan);
-    OnRelational(Integer8, greaterThan);
-    OnRelational(Natural16, greaterThan);
-    OnRelational(Natural32, greaterThan);
-    OnRelational(Natural64, greaterThan);
-    OnRelational(Natural8, greaterThan);
-    OnRelational(Real32, greaterThan);
-    OnRelational(Real64, greaterThan);
-    OnRelational(Size, greaterThan);
-    OnRelational(Void, greaterThan);
+    OnRelational(Atom, isGreaterThan);
+    OnRelational(BigInteger, isGreaterThan);
+    OnRelational(Boolean, isGreaterThan);
+    OnRelational(ForeignProcedure, isGreaterThan);
+    OnRelational(InternalImmutableByteArray, isGreaterThan);
+    OnRelational(ImmutableUTF8String, isGreaterThan);
+    OnRelational(Integer16, isGreaterThan);
+    OnRelational(Integer32, isGreaterThan);
+    OnRelational(Integer64, isGreaterThan);
+    OnRelational(Integer8, isGreaterThan);
+    OnRelational(Natural16, isGreaterThan);
+    OnRelational(Natural32, isGreaterThan);
+    OnRelational(Natural64, isGreaterThan);
+    OnRelational(Natural8, isGreaterThan);
+    OnRelational(Real32, isGreaterThan);
+    OnRelational(Real64, isGreaterThan);
+    OnRelational(Size, isGreaterThan);
+    OnRelational(Void, isGreaterThan);
     case Arcadia_ValueTag_ObjectReference: {
       Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
@@ -447,7 +447,7 @@ Arcadia_Value_isGreaterThan
       Arcadia_ValueStack_pushValue(thread, self);
       Arcadia_ValueStack_pushValue(thread, other);
       Arcadia_ValueStack_pushNatural8Value(thread, 2);
-      operations->greaterThan(thread);
+      operations->isGreaterThan(thread);
       if (Arcadia_ValueStack_getSize(thread) != oldValueStackSize + 1) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
         Arcadia_Thread_jump(thread);
@@ -476,24 +476,24 @@ Arcadia_Value_isGreaterThanOrEqualTo
   )
 {
   switch (self->tag) {
-    OnRelational(Atom, greaterThanOrEqualTo);
-    OnRelational(BigInteger, greaterThanOrEqualTo);
-    OnRelational(Boolean, greaterThanOrEqualTo);
-    OnRelational(ForeignProcedure, greaterThanOrEqualTo);
-    OnRelational(InternalImmutableByteArray, greaterThanOrEqualTo);
-    OnRelational(ImmutableUTF8String, greaterThanOrEqualTo);
-    OnRelational(Integer16, greaterThanOrEqualTo);
-    OnRelational(Integer32, greaterThanOrEqualTo);
-    OnRelational(Integer64, greaterThanOrEqualTo);
-    OnRelational(Integer8, greaterThanOrEqualTo);
-    OnRelational(Natural16, greaterThanOrEqualTo);
-    OnRelational(Natural32, greaterThanOrEqualTo);
-    OnRelational(Natural64, greaterThanOrEqualTo);
-    OnRelational(Natural8, greaterThanOrEqualTo);
-    OnRelational(Real32, greaterThanOrEqualTo);
-    OnRelational(Real64, greaterThanOrEqualTo);
-    OnRelational(Size, greaterThanOrEqualTo);
-    OnRelational(Void, greaterThanOrEqualTo);
+    OnRelational(Atom, isGreaterThanOrEqualTo);
+    OnRelational(BigInteger, isGreaterThanOrEqualTo);
+    OnRelational(Boolean, isGreaterThanOrEqualTo);
+    OnRelational(ForeignProcedure, isGreaterThanOrEqualTo);
+    OnRelational(InternalImmutableByteArray, isGreaterThanOrEqualTo);
+    OnRelational(ImmutableUTF8String, isGreaterThanOrEqualTo);
+    OnRelational(Integer16, isGreaterThanOrEqualTo);
+    OnRelational(Integer32, isGreaterThanOrEqualTo);
+    OnRelational(Integer64, isGreaterThanOrEqualTo);
+    OnRelational(Integer8, isGreaterThanOrEqualTo);
+    OnRelational(Natural16, isGreaterThanOrEqualTo);
+    OnRelational(Natural32, isGreaterThanOrEqualTo);
+    OnRelational(Natural64, isGreaterThanOrEqualTo);
+    OnRelational(Natural8, isGreaterThanOrEqualTo);
+    OnRelational(Real32, isGreaterThanOrEqualTo);
+    OnRelational(Real64, isGreaterThanOrEqualTo);
+    OnRelational(Size, isGreaterThanOrEqualTo);
+    OnRelational(Void, isGreaterThanOrEqualTo);
     case Arcadia_ValueTag_ObjectReference: {
       Arcadia_TypeValue type = Arcadia_Object_getType(thread, self->objectReferenceValue);
       Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type);
@@ -501,7 +501,7 @@ Arcadia_Value_isGreaterThanOrEqualTo
       Arcadia_ValueStack_pushValue(thread, self);
       Arcadia_ValueStack_pushValue(thread, other);
       Arcadia_ValueStack_pushNatural8Value(thread, 2);
-      operations->greaterThanOrEqualTo(thread);
+      operations->isGreaterThanOrEqualTo(thread);
       if (Arcadia_ValueStack_getSize(thread) != oldValueStackSize + 1) {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
         Arcadia_Thread_jump(thread);
@@ -523,7 +523,7 @@ Arcadia_Value_isGreaterThanOrEqualTo
 
 #undef OnRelational
 
-#define OnHash(Type) \
+#define OnGetHash(Type) \
   case Arcadia_ValueTag_##Type: { \
     Arcadia_TypeValue type = _Arcadia_##Type##Value_getType(thread); \
     Arcadia_Type_Operations const* operations = Arcadia_Type_getOperations(type); \
@@ -533,7 +533,7 @@ Arcadia_Value_isGreaterThanOrEqualTo
     Arcadia_ValueStack_pushValue(thread, self); \
     Arcadia_ValueStack_pushNatural8Value(thread, 1); \
 \
-    operations->hash(thread); \
+    operations->getHash(thread); \
     if (n + 1 != Arcadia_ValueStack_getSize(thread)) { \
       Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption); \
       Arcadia_Thread_jump(thread); \
@@ -551,24 +551,24 @@ Arcadia_Value_getHash
   )
 {
   switch (self->tag) {
-    OnHash(Atom);
-    OnHash(BigInteger);
-    OnHash(Boolean);
-    OnHash(ForeignProcedure);
-    OnHash(InternalImmutableByteArray);
-    OnHash(ImmutableUTF8String);
-    OnHash(Integer16);
-    OnHash(Integer32);
-    OnHash(Integer64);
-    OnHash(Integer8);
-    OnHash(Natural16);
-    OnHash(Natural32);
-    OnHash(Natural64);
-    OnHash(Natural8);
-    OnHash(Real32);
-    OnHash(Real64);
-    OnHash(Size);
-    OnHash(Void);
+    OnGetHash(Atom);
+    OnGetHash(BigInteger);
+    OnGetHash(Boolean);
+    OnGetHash(ForeignProcedure);
+    OnGetHash(InternalImmutableByteArray);
+    OnGetHash(ImmutableUTF8String);
+    OnGetHash(Integer16);
+    OnGetHash(Integer32);
+    OnGetHash(Integer64);
+    OnGetHash(Integer8);
+    OnGetHash(Natural16);
+    OnGetHash(Natural32);
+    OnGetHash(Natural64);
+    OnGetHash(Natural8);
+    OnGetHash(Real32);
+    OnGetHash(Real64);
+    OnGetHash(Size);
+    OnGetHash(Void);
     case Arcadia_ValueTag_ObjectReference: {
       return Arcadia_Object_getHash(thread, self->objectReferenceValue);
     } break;
@@ -585,7 +585,7 @@ Arcadia_Value_getHash
   };
 }
 
-#undef OnHash
+#undef OnGetHash
 
 #define OnIsInstanceOf(Type) \
   case Arcadia_ValueTag_##Type: { \

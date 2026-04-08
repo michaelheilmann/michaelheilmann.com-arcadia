@@ -62,12 +62,12 @@ Arcadia_Engine_Visuals_VertexDescriptorBuilder_construct
     Arcadia_Engine_Visuals_VertexDescriptorBuilder* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_VertexDescriptorBuilder_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_VertexDescriptorBuilder);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -75,8 +75,7 @@ Arcadia_Engine_Visuals_VertexDescriptorBuilder_construct
   self->stride = Arcadia_SizeValue_Literal(0);
   self->vertexElementDescriptors = (Arcadia_List*)Arcadia_ArrayList_create(thread);
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_VertexDescriptorBuilder);
 }
 
 static void
@@ -85,7 +84,7 @@ Arcadia_Engine_Visuals_VertexDescriptorBuilder_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_VertexDescriptorBuilderDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_VertexDescriptorBuilder_visit

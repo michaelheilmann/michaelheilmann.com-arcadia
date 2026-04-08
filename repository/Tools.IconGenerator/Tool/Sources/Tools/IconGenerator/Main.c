@@ -28,6 +28,7 @@ main1
     char** argv
   )
 {
+  Arcadia_Log* log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
   Arcadia_Value target;
   Arcadia_Value_setVoidValue(&target, Arcadia_VoidValue_Void);
   Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
@@ -40,15 +41,15 @@ main1
     Arcadia_UTF8StringReader* r = Arcadia_UTF8StringReader_create(thread, argumentString);
     Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r);
     if (argument->syntacticalError) {
-      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString);
+      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString, log);
     }
     if (Arcadia_String_isEqualTo_pn(thread, argument->name, u8"target", sizeof(u8"target") - 1)) {
       if (!argument->value) {
-        Arcadia_CommandLine_raiseNoValueError(thread, argument->name);
+        Arcadia_CommandLine_raiseNoValueError(thread, argument->name, log);
       }
       Arcadia_Value_setObjectReferenceValue(&target, argument->value);
     } else {
-      Arcadia_CommandLine_raiseUnknownArgumentError(thread, argument->name, argument->value);
+      Arcadia_CommandLine_raiseUnknownArgumentError(thread, argument->name, argument->value, log);
     }
     fwrite(Arcadia_String_getBytes(thread, argument->name), 1, Arcadia_String_getNumberOfBytes(thread, argument->name), stdout);
     if (argument->value) {
@@ -58,7 +59,7 @@ main1
     fwrite(u8"\n", 1, sizeof(u8"\n") - 1, stdout);
   }
   if (Arcadia_Value_isVoidValue(&target)) {
-    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, u8"target", sizeof(u8"target") - 1)));
+    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_createFromCxxString(thread, u8"target"), log);
   }
   Arcadia_List* pixelBufferList = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_SizeValue sizes[] = {

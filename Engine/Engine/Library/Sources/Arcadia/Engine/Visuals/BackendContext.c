@@ -60,18 +60,17 @@ Arcadia_Engine_Visuals_BackendContext_constructImpl
     Arcadia_Engine_Visuals_BackendContext* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_BackendContext_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_BackendContext);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->windows = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_BackendContext);
 }
 
 static void
@@ -80,7 +79,7 @@ Arcadia_Engine_Visuals_BackendContext_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_BackendContextDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_BackendContext_visitImpl

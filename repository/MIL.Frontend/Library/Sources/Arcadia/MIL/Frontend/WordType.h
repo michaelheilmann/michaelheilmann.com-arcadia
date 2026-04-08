@@ -44,8 +44,10 @@ enum Arcadia_MIL_WordType {
   Arcadia_MIL_WordType_RightCurlyBracket,
   // The `Left Parenthesis` / `(` / U+0028.
   Arcadia_MIL_WordType_LeftParenthesis,
-  // The `Right Parenthesis`/ `)` / U+0029.
+  // The `Right Parenthesis` / `)` / U+0029.
   Arcadia_MIL_WordType_RightParenthesis,
+  // The `Period` / `.` / U+002E.
+  Arcadia_MIL_WordType_Period,
 
 
   // A name.
@@ -78,6 +80,8 @@ enum Arcadia_MIL_WordType {
   Arcadia_MIL_WordType_Procedure,
   // "method"
   Arcadia_MIL_WordType_Method,
+  // "module",
+  Arcadia_MIL_WordType_Module,
 
   // "invoke"
   Arcadia_MIL_WordType_Invoke,

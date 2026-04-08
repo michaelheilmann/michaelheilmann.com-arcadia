@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/BigInteger/Include.h"
 
 #include "Arcadia/Ring1/Include.h"
@@ -162,7 +162,7 @@ isGreaterThanOrEqualTo
   );
 
 static void
-hash
+getHash
   (
     Arcadia_Thread* thread
   );
@@ -187,13 +187,13 @@ isNotEqualTo
 
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
-  .equalTo = &isEqualTo,
-  .greaterThan = &isGreaterThan,
-  .greaterThanOrEqualTo = &isGreaterThanOrEqualTo,
-  .hash = &hash,
-  .lowerThan = &isLowerThan,
-  .lowerThanOrEqualTo = &isLowerThanOrEqualTo,
-  .notEqualTo = &isNotEqualTo,
+  .isEqualTo = &isEqualTo,
+  .isGreaterThan = &isGreaterThan,
+  .isGreaterThanOrEqualTo = &isGreaterThanOrEqualTo,
+  .getHash = &getHash,
+  .isLowerThan = &isLowerThan,
+  .isLowerThanOrEqualTo = &isLowerThanOrEqualTo,
+  .isNotEqualTo = &isNotEqualTo,
 };
 
 #define BINARY_OPERATION() \
@@ -229,7 +229,7 @@ isEqualTo
 {
   BINARY_OPERATION();
   if (Arcadia_Value_isBigIntegerValue(&y)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_equalTo(thread, Arcadia_Value_getBigIntegerValue(&x),  Arcadia_Value_getBigIntegerValue(&y)));
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_isEqualTo(thread, Arcadia_Value_getBigIntegerValue(&x),  Arcadia_Value_getBigIntegerValue(&y)));
   } else {
     Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BooleanValue_False);
   }
@@ -243,7 +243,7 @@ isGreaterThan
 {
   BINARY_OPERATION();
   if (Arcadia_Value_isBigIntegerValue(&y)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_greaterThan(thread, Arcadia_Value_getBigIntegerValue(&x), Arcadia_Value_getBigIntegerValue(&y)));
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_isGreaterThan(thread, Arcadia_Value_getBigIntegerValue(&x), Arcadia_Value_getBigIntegerValue(&y)));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
@@ -258,7 +258,7 @@ isGreaterThanOrEqualTo
 {
   BINARY_OPERATION();
   if (Arcadia_Value_isBigIntegerValue(&y)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_greaterThanOrEqualTo(thread, Arcadia_Value_getBigIntegerValue(&x), Arcadia_Value_getBigIntegerValue(&y)));
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, Arcadia_Value_getBigIntegerValue(&x), Arcadia_Value_getBigIntegerValue(&y)));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
@@ -266,7 +266,7 @@ isGreaterThanOrEqualTo
 }
 
 static void
-hash
+getHash
   (
     Arcadia_Thread* thread
   )
@@ -283,7 +283,7 @@ isLowerThan
 {
   BINARY_OPERATION();
   if (Arcadia_Value_isBigIntegerValue(&y)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_lowerThan(thread, Arcadia_Value_getBigIntegerValue(&x), Arcadia_Value_getBigIntegerValue(&y)));
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_isLowerThan(thread, Arcadia_Value_getBigIntegerValue(&x), Arcadia_Value_getBigIntegerValue(&y)));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);
@@ -298,7 +298,7 @@ isLowerThanOrEqualTo
 {
   BINARY_OPERATION();
   if (Arcadia_Value_isBigIntegerValue(&y)) {
-    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_lowerThanOrEqualTo(thread, Arcadia_Value_getBigIntegerValue(&x), Arcadia_Value_getBigIntegerValue(&y)));
+    Arcadia_ValueStack_pushBooleanValue(thread, Arcadia_BigInteger_isLowerThanOrEqualTo(thread, Arcadia_Value_getBigIntegerValue(&x), Arcadia_Value_getBigIntegerValue(&y)));
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
     Arcadia_Thread_jump(thread);

@@ -60,9 +60,8 @@ Arcadia_Engine_Visuals_CameraNode_constructImpl
     Arcadia_Engine_Visuals_CameraNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_CameraNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_CameraNode);
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -70,8 +69,7 @@ Arcadia_Engine_Visuals_CameraNode_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_CameraNode);
 }
 
 static void
@@ -80,7 +78,7 @@ Arcadia_Engine_Visuals_CameraNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_CameraNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_CameraNode_destructImpl

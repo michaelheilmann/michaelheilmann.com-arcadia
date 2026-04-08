@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING2_COLLECTIONS_LIST_H_INCLUDED)
 #define ARCADIA_RING2_COLLECTIONS_LIST_H_INCLUDED
 
-#if !defined(ARCADIA_RING2_PRIVATE)
+#if !defined(ARCADIA_RING2_MODULE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 
@@ -100,7 +100,10 @@ Arcadia_List_removeBack
     Arcadia_Thread_setStatus(thread, Arcadia_Status_Empty);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_List_removeAt(thread, self, size - 1 - count, count);
+  if (!count) {
+    return;
+  }
+  Arcadia_List_removeAt(thread, self, size - count, count);
 }
 
 static inline void

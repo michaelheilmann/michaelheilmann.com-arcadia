@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/FileSystem/FilePath.h"
 
 #include "Arcadia/Ring2/Include.h"
@@ -115,6 +115,26 @@ parseGenericFilePath
     Arcadia_ByteBuffer* source
   );
 
+#if defined (_DEBUG)
+
+#include <assert.h>
+
+// invariant:
+// - a path has a root and zero or more components.
+// - a path has one or more components.
+static void
+checkInvariant
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  );
+
+#else
+
+#define checkInvariant(thread, self)
+
+#endif;
+
 static void
 next
   (
@@ -209,6 +229,8 @@ normalize
     Arcadia_FilePath* self
   )
 {
+  Arcadia_Value dot = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_createFromCxxString(thread, u8"."));
+  Arcadia_Value dotdot = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_createFromCxxString(thread, u8".."));
   Arcadia_SizeValue previous = 0, current = 1;
   while (current < Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames)) {
     Arcadia_Value t;
@@ -216,12 +238,12 @@ normalize
     Arcadia_String* previousString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&t);
     t = Arcadia_List_getAt(thread, self->fileNames, current);
     Arcadia_String* currentString = (Arcadia_String*)Arcadia_Value_getObjectReferenceValue(&t);
-    if (!Arcadia_String_isEqualTo_pn(thread, previousString, "..", sizeof("..") - 1) &&
-        !Arcadia_String_isEqualTo_pn(thread, previousString, u8".", sizeof(u8".") - 1) &&
-         Arcadia_String_isEqualTo_pn(thread, currentString, u8"..", sizeof(u8"..") - 1)) {
+    if (!Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)previousString, &dotdot) && !Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)previousString, &dot) &&
+         Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)currentString, &dotdot)) {
       // Remove previous and current.
       Arcadia_List_removeAt(thread, self->fileNames, previous, 2);
-    } else if (Arcadia_String_isEqualTo_pn(thread, currentString, u8".", sizeof(u8".") - 1)) {
+      previous--; current--;
+    } else if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)currentString, &dot)) {
       // Remove current.
       Arcadia_List_removeAt(thread, self->fileNames, current, 1);
     } else {
@@ -459,6 +481,22 @@ Arcadia_defineObjectType(u8"Arcadia.FilePath", Arcadia_FilePath,
                          u8"Arcadia.Object", Arcadia_Object,
                          &_typeOperations);
 
+#if defined (_DEBUG)
+
+static void
+checkInvariant
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  )
+{
+  Arcadia_BooleanValue isValid = Arcadia_BooleanValue_True;
+  isValid &= NULL != self->root || Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames) > 0;
+  assert(isValid);
+}
+
+#endif
+
 static void
 Arcadia_FilePath_constructImpl
   (
@@ -506,8 +544,12 @@ Arcadia_FilePath_visit
     Arcadia_FilePath* self
   )
 {
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->fileNames);
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->root);
+  if (self->fileNames) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->fileNames);
+  }
+  if (self->root) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->root);
+  }
 }
 
 Arcadia_FilePath*
@@ -820,4 +862,80 @@ Arcadia_FilePath_append
     Arcadia_Value v = Arcadia_List_getAt(thread, other->fileNames, i);
     Arcadia_List_insertBack(thread, self->fileNames, v);
   }
+  normalize(thread, self);
+}
+
+Arcadia_FilePath*
+Arcadia_FilePath_getRootPath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  )
+{
+  if (!self->root) {
+    return NULL;
+  }
+  Arcadia_FilePath* clone = Arcadia_FilePath_clone(thread, self);
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)clone->fileNames);
+  return clone;
+}
+
+Arcadia_FilePath*
+Arcadia_FilePath_getRelativePath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  )
+{
+  Arcadia_FilePath* clone = Arcadia_FilePath_clone(thread, self);
+  clone->root = NULL;
+  clone->relative = Arcadia_BooleanValue_True;
+  return clone;
+}
+
+Arcadia_FilePath*
+Arcadia_FilePath_getParent
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  )
+{
+  checkInvariant(thread, self);
+  if (self->root) {
+    if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames)) {
+      // If there are not components, we return NULL.
+      return NULL;
+    } else {
+      Arcadia_FilePath* clone = Arcadia_FilePath_clone(thread, self);
+      Arcadia_List_removeBack(thread, clone->fileNames, 1);
+      return clone;
+    }
+  } else {
+    if (1 == Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames)) {
+      return NULL;
+    } else {
+      Arcadia_FilePath* clone = Arcadia_FilePath_clone(thread, self);
+      Arcadia_List_removeBack(thread, clone->fileNames, 1);
+      return clone;
+    }
+  }
+}
+
+Arcadia_String*
+Arcadia_FilePath_getExtension
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  )
+{
+  if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames)) {
+    return NULL;
+  }
+  Arcadia_String* fileName = (Arcadia_String*)Arcadia_List_getObjectReferenceValueAt(thread, self->fileNames, Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->fileNames) - 1);
+  Arcadia_Value dotPositionValue = Arcadia_String_findLastOccurrence(thread, fileName, '.');
+  if (Arcadia_Value_isVoidValue(&dotPositionValue)) {
+    return NULL;
+  }
+  Arcadia_SizeValue dotPosition = Arcadia_Value_getSizeValue(&dotPositionValue);
+  return Arcadia_String_substring(thread, fileName, dotPosition, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
 }

@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/Strings/UTF8Writer.h"
 
 static void
@@ -52,19 +52,17 @@ Arcadia_UTF8Writer_constructImpl
     Arcadia_UTF8Writer* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_UTF8Writer_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_UTF8Writer);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_UTF8Writer);
 }
-
 
 static void
 Arcadia_UTF8Writer_initializeDispatchImpl
@@ -72,7 +70,7 @@ Arcadia_UTF8Writer_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_UTF8WriterDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 void
 Arcadia_UTF8Writer_writeBytes

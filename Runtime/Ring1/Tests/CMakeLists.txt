@@ -34,4 +34,7 @@ add_subdirectory(StringToNaturalTests)
 add_subdirectory(StringToRealTests)
 add_subdirectory(NextPowerOfTwoTests)
 
-add_subdirectory(WeakReferences)
+add_subdirectory(WeakReferenceTests)
+
+add_subdirectory(UTF8ArrayIteratorTests)
+add_subdirectory(SubStringTests)

@@ -30,8 +30,12 @@ if (NOT TARGET ${MyLibraryName})
 
   OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/Node.c)
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/Node.h)
+  
   OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/ModuleNode.c)
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/ModuleNode.h)
+  OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/CompilationUnitNode.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/CompilationUnitNode.h)
+
   OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/InstructionNode.c)
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/InstructionNode.h)
   OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/StatementNode.c)
@@ -40,6 +44,9 @@ if (NOT TARGET ${MyLibraryName})
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/OperandNode.h)
   OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/DefinitionNode.c)
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/DefinitionNode.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/IdentifierNode.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/IdentifierNode.h)
 
   OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/Literals/BooleanLiteralNode.c)
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/Literals/BooleanLiteralNode.h)
@@ -93,6 +100,8 @@ if (NOT TARGET ${MyLibraryName})
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/Definitions/FieldDefinitionNode.h)
   OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/Definitions/MethodDefinitionNode.c)
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/Definitions/MethodDefinitionNode.h)
+  OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/Definitions/ModuleDefinitionNode.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/Definitions/ModuleDefinitionNode.h)
   OnSourceFile(${MyLibraryName} Arcadia/MIL/AST/Definitions/ProcedureDefinitionNode.c)
   OnHeaderFile(${MyLibraryName} Arcadia/MIL/AST/Definitions/ProcedureDefinitionNode.h)
 

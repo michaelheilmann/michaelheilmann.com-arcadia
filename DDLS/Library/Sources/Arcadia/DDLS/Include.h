@@ -16,8 +16,13 @@
 #if !defined(ARCADIA_DDLS_INCLUDE_H_INCLUDED)
 #define ARCADIA_DDLS_INCLUDE_H_INCLUDED
 
-#pragma push_macro("ARCADIA_DDLS_PRIVATE")
-#define ARCADIA_DDLS_PRIVATE (1)
+// If a file x belongs to a module a and ARCADIA_a_MODULE is not defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_DDLS_MODULE")
+#define ARCADIA_DDLS_MODULE (1)
+
+// If a file x of a module a is not an export file of that module and ARCADIA_a_EXPORT is defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_DDLS_EXPORT")
+#define ARCADIA_DDLS_EXPORT (1)
 
 #include "Arcadia/DDLS/Syntactical/DefaultReader.h"
 #include "Arcadia/DDLS/Symbols/SymbolReader.h"
@@ -26,7 +31,10 @@
 
 #include "Arcadia/DDLS/Implementation/ValidationContext.h"
 
-#undef ARCADIA_DDLS_PRIVATE
-#pragma pop_macro("ARCADIA_DDLS_PRIVATE")
+#undef ARCADIA_DDLS_EXPORT
+#pragma pop_macro("ARCADIA_DDLS_EXPORT")
+
+#undef ARCADIA_DDLS_MODULE
+#pragma pop_macro("ARCADIA_DDLS_MODULE")
 
 #endif // ARCADIA_DDLS_INCLUDE_H_INCLUDED

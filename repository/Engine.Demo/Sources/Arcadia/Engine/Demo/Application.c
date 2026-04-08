@@ -125,12 +125,12 @@ Arcadia_Engine_Demo_Application_construct
     Arcadia_Engine_Demo_Application* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Demo_Application_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Demo_Application);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -139,8 +139,7 @@ Arcadia_Engine_Demo_Application_construct
   self->sceneManager = Arcadia_Engine_Demo_SceneManager_create(thread, ((Arcadia_Engine_Application*)self)->engine);
   self->sceneOnQuitRequestedSlot = NULL;
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Demo_Application);
 }
 
 static void
@@ -152,7 +151,6 @@ Arcadia_Engine_Demo_Application_initializeDispatchImpl
 {
   ((Arcadia_Engine_ApplicationDispatch*)self)->startup = (void (*)(Arcadia_Thread*,Arcadia_Engine_Application*))&Arcadia_Engine_Demo_Application_startupImpl;
   ((Arcadia_Engine_ApplicationDispatch*)self)->shutdown = (void (*)(Arcadia_Thread*, Arcadia_Engine_Application*)) & Arcadia_Engine_Demo_Application_shutdownImpl;
-
 }
 
 static void

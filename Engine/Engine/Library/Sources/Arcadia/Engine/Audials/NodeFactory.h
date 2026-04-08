@@ -35,7 +35,8 @@ struct Arcadia_Engine_Audials_NodeFactoryDispatch {
     (
       Arcadia_Thread* thread,
       Arcadia_Engine_Audials_NodeFactory* self,
-      Arcadia_Engine_Audials_BackendContext* backendContext
+      Arcadia_Engine_Audials_BackendContext* backendContext,
+      Arcadia_ADL_SampleBufferDefinition* sampleBufferDefinition
     );
 };
 
@@ -48,7 +49,8 @@ Arcadia_Engine_Audials_NodeFactory_createSoundSourceNode
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_NodeFactory* self,
-    Arcadia_Engine_Audials_BackendContext* backendContext
+    Arcadia_Engine_Audials_BackendContext* backendContext,
+    Arcadia_ADL_SampleBufferDefinition* sampleBufferDefinition
   );
 
 #endif // ARCADIA_ENGINE_AUDIALS_NODEFACTORY_H_INCLUDED

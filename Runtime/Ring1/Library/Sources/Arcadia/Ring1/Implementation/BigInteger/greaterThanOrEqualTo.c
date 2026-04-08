@@ -13,13 +13,13 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/BigInteger/greaterThan.h"
 
 #include "Arcadia/Ring1/Include.h"
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualTo
+Arcadia_BigInteger_isGreaterThanOrEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -28,7 +28,7 @@ Arcadia_BigInteger_greaterThanOrEqualTo
 { return Arcadia_BigInteger_compareTo(thread, self, other) >= Arcadia_Integer8Value_Literal(0); }
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualToInteger16
+Arcadia_BigInteger_isGreaterThanOrEqualToInteger16
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -37,11 +37,11 @@ Arcadia_BigInteger_greaterThanOrEqualToInteger16
 {
   Arcadia_BigInteger* otherBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger16(thread, otherBigInteger, other);
-  return Arcadia_BigInteger_greaterThanOrEqualTo(thread, self, otherBigInteger);
+  return Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, self, otherBigInteger);
 }
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualToInteger32
+Arcadia_BigInteger_isGreaterThanOrEqualToInteger32
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -50,11 +50,11 @@ Arcadia_BigInteger_greaterThanOrEqualToInteger32
 {
   Arcadia_BigInteger* otherBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger32(thread, otherBigInteger, other);
-  return Arcadia_BigInteger_greaterThanOrEqualTo(thread, self, otherBigInteger);
+  return Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, self, otherBigInteger);
 }
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualToInteger64
+Arcadia_BigInteger_isGreaterThanOrEqualToInteger64
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -63,11 +63,11 @@ Arcadia_BigInteger_greaterThanOrEqualToInteger64
 {
   Arcadia_BigInteger* otherBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger64(thread, otherBigInteger, other);
-  return Arcadia_BigInteger_greaterThanOrEqualTo(thread, self, otherBigInteger);
+  return Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, self, otherBigInteger);
 }
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualToInteger8
+Arcadia_BigInteger_isGreaterThanOrEqualToInteger8
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -76,11 +76,11 @@ Arcadia_BigInteger_greaterThanOrEqualToInteger8
 {
   Arcadia_BigInteger* otherBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setInteger8(thread, otherBigInteger, other);
-  return Arcadia_BigInteger_greaterThanOrEqualTo(thread, self, otherBigInteger);
+  return Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, self, otherBigInteger);
 }
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualToNatural16
+Arcadia_BigInteger_isGreaterThanOrEqualToNatural16
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -89,11 +89,11 @@ Arcadia_BigInteger_greaterThanOrEqualToNatural16
 {
   Arcadia_BigInteger* otherBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setNatural16(thread, otherBigInteger, other);
-  return Arcadia_BigInteger_greaterThanOrEqualTo(thread, self, otherBigInteger);
+  return Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, self, otherBigInteger);
 }
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualToNatural32
+Arcadia_BigInteger_isGreaterThanOrEqualToNatural32
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -102,11 +102,11 @@ Arcadia_BigInteger_greaterThanOrEqualToNatural32
 {
   Arcadia_BigInteger* otherBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setNatural32(thread, otherBigInteger, other);
-  return Arcadia_BigInteger_greaterThanOrEqualTo(thread, self, otherBigInteger);
+  return Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, self, otherBigInteger);
 }
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualToNatural64
+Arcadia_BigInteger_isGreaterThanOrEqualToNatural64
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -115,11 +115,11 @@ Arcadia_BigInteger_greaterThanOrEqualToNatural64
 {
   Arcadia_BigInteger* otherBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setNatural64(thread, otherBigInteger, other);
-  return Arcadia_BigInteger_greaterThanOrEqualTo(thread, self, otherBigInteger);
+  return Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, self, otherBigInteger);
 }
 
 Arcadia_BooleanValue
-Arcadia_BigInteger_greaterThanOrEqualToNatural8
+Arcadia_BigInteger_isGreaterThanOrEqualToNatural8
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -128,5 +128,5 @@ Arcadia_BigInteger_greaterThanOrEqualToNatural8
 {
   Arcadia_BigInteger* otherBigInteger = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_setNatural8(thread, otherBigInteger, other);
-  return Arcadia_BigInteger_greaterThanOrEqualTo(thread, self, otherBigInteger);
+  return Arcadia_BigInteger_isGreaterThanOrEqualTo(thread, self, otherBigInteger);
 }

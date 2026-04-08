@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING2_STRINGS_STRING_H_INCLUDED)
 #define ARCADIA_RING2_STRINGS_STRING_H_INCLUDED
 
-#if !defined(ARCADIA_RING2_PRIVATE)
+#if !defined(ARCADIA_RING2_MODULE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 
@@ -60,7 +60,7 @@ Arcadia_String_endsWith_pn
     Arcadia_SizeValue numberOfBytes
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_startsWith-pn
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_startsWith_pn
 Arcadia_BooleanValue
 Arcadia_String_startsWith_pn
   (
@@ -184,7 +184,7 @@ Arcadia_String_toNatural8
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia-string-toreal32
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_toReal32
 Arcadia_Real32Value
 Arcadia_String_toReal32
   (
@@ -192,7 +192,7 @@ Arcadia_String_toReal32
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#arcadia-string-toreal64
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_toReal64
 Arcadia_Real64Value
 Arcadia_String_toReal64
   (
@@ -200,7 +200,7 @@ Arcadia_String_toReal64
     Arcadia_String const* self
   );
 
-// https://michaelheilmann.com/Arcadia/Ring2/#arcadia-string-void
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_toVoid
 Arcadia_VoidValue
 Arcadia_String_toVoid
   (
@@ -208,6 +208,7 @@ Arcadia_String_toVoid
     Arcadia_String const* self
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromBoolean
 Arcadia_String*
 Arcadia_String_createFromBoolean
   (
@@ -215,6 +216,7 @@ Arcadia_String_createFromBoolean
     Arcadia_BooleanValue booleanValue
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromInteger16
 Arcadia_String*
 Arcadia_String_createFromInteger16
   (
@@ -222,6 +224,7 @@ Arcadia_String_createFromInteger16
     Arcadia_Integer16Value integer16Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromInteger32
 Arcadia_String*
 Arcadia_String_createFromInteger32
   (
@@ -229,6 +232,7 @@ Arcadia_String_createFromInteger32
     Arcadia_Integer32Value integer32Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromInteger64
 Arcadia_String*
 Arcadia_String_createFromInteger64
   (
@@ -236,6 +240,7 @@ Arcadia_String_createFromInteger64
     Arcadia_Integer64Value integer64Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromInteger8
 Arcadia_String*
 Arcadia_String_createFromInteger8
   (
@@ -243,6 +248,7 @@ Arcadia_String_createFromInteger8
     Arcadia_Integer8Value integer8Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromNatural16
 Arcadia_String*
 Arcadia_String_createFromNatural16
   (
@@ -250,6 +256,7 @@ Arcadia_String_createFromNatural16
     Arcadia_Natural16Value natural16Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromNatural32
 Arcadia_String*
 Arcadia_String_createFromNatural32
   (
@@ -257,6 +264,7 @@ Arcadia_String_createFromNatural32
     Arcadia_Natural32Value natural32Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromNatural64
 Arcadia_String*
 Arcadia_String_createFromNatural64
   (
@@ -264,6 +272,7 @@ Arcadia_String_createFromNatural64
     Arcadia_Natural64Value natural64Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromNatural8
 Arcadia_String*
 Arcadia_String_createFromNatural8
   (
@@ -271,6 +280,7 @@ Arcadia_String_createFromNatural8
     Arcadia_Natural8Value natural8Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromReal32
 Arcadia_String*
 Arcadia_String_createFromReal32
   (
@@ -278,6 +288,7 @@ Arcadia_String_createFromReal32
     Arcadia_Real32Value real32Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromReal64
 Arcadia_String*
 Arcadia_String_createFromReal64
   (
@@ -285,6 +296,7 @@ Arcadia_String_createFromReal64
     Arcadia_Real64Value real64Value
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromSize
 Arcadia_String*
 Arcadia_String_createFromSize
   (
@@ -292,11 +304,60 @@ Arcadia_String_createFromSize
     Arcadia_SizeValue sizeValue
   );
 
+// https://michaelheilmann.com/Arcadia/Ring2/#Arcadia_String_createFromVoid
 Arcadia_String*
 Arcadia_String_createFromVoid
   (
     Arcadia_Thread* thread,
     Arcadia_VoidValue voidValue
+  );
+
+/// @brief Get the first occurence of a code point in a string.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
+/// @param codePoint the code point.
+/// @return An Arcadia.Size value denoting the zero-based code point index from the start of the string if the code point was found, Arcadia.Void otherwise.
+Arcadia_Value
+Arcadia_String_findFirstOccurrence
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_Natural32Value codePoint
+  );
+
+/// @brief Get the first occurence of a code point in a string.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
+/// @param codePoint the code point.
+/// @return An Arcadia.Size value denoting the zero-based code point index from the start of the string if the code point was found, Arcadia.Void otherwise.
+Arcadia_Value
+Arcadia_String_findLastOccurrence
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_Natural32Value codePoint
+  );
+
+/// @brief Create an empty string.
+/// @param thread A pointer to this thread.
+/// @return A pointer to the string.
+Arcadia_String*
+Arcadia_String_createEmpty
+  (
+    Arcadia_Thread* thread
+  );
+
+/// @brief Create a string that is a substring of the specified string.
+/// @param start The code point index of at which the substring starts at.
+/// @param length The length, in code points, of the substring as a Arcadia_SizeValue or an Arcadia_Void value.
+/// @return A pointer to the substring.
+Arcadia_String*
+Arcadia_String_substring
+  (
+    Arcadia_Thread* thread,
+    Arcadia_String* self,
+    Arcadia_SizeValue start,
+    Arcadia_Value length
   );
 
 #endif // ARCADIA_RING2_STRINGS_STRING_H_INCLUDED

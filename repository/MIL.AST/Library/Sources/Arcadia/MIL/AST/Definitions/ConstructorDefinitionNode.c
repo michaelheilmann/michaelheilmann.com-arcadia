@@ -64,16 +64,16 @@ Arcadia_MIL_AST_ConstructorDefinitionNode_constructImpl
     Arcadia_MIL_AST_ConstructorDefinitionNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_AST_ConstructorDefinitionNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_AST_ConstructorDefinitionNode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 3 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
+  //
   if (Arcadia_ValueStack_isVoidValue(thread, 3)) {
     self->nativeName = NULL;
   } else {
@@ -87,9 +87,8 @@ Arcadia_MIL_AST_ConstructorDefinitionNode_constructImpl
   } else {
     self->constructorBody = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
   }
-
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 3 + 1);
+  //
+  Arcadia_LeaveConstructor(Arcadia_MIL_AST_ConstructorDefinitionNode);
 }
 
 static void
@@ -98,7 +97,7 @@ Arcadia_MIL_AST_ConstructorDefinitionNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ConstructorDefinitionNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_MIL_AST_ConstructorDefinitionNode_visit

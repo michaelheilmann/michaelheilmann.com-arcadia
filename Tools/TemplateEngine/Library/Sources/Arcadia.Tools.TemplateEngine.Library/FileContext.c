@@ -295,17 +295,12 @@ FileContext_constructImpl
     FileContext* self
   )
 {
-  Arcadia_TypeValue _type = _FileContext_getType(thread);
+  Arcadia_EnterConstructor(FileContext);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (4 != numberOfArgumentValues) {
+  if (4 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -320,8 +315,7 @@ FileContext_constructImpl
 
   self->parser = NULL;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(FileContext);
 }
 
 static void

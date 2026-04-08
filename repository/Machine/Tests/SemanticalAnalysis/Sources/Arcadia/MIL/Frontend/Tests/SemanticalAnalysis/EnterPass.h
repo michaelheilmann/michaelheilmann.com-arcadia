@@ -22,13 +22,23 @@
 typedef struct Arcadia_MIL_CallableContext Arcadia_MIL_CallableContext;
 
 void
+Arcadia_MIL_SemanticalAnalysis_EnterPass_onCompilationUnit
+  (
+    Arcadia_Thread* thread,
+    R_Interpreter_ProcessState* interpreterProcess,
+    Arcadia_Map* symbolTable,
+    Arcadia_Map* foreignProcedures,
+    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode
+  );
+
+void
 Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule
   (
     Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ModuleNode* moduleAst
+    Arcadia_MIL_AST_ModuleNode* modulNode
   );
 
 /// The first pass (enter pass) of the compiler.

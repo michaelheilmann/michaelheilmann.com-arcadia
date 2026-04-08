@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_MATH_PRIVATE (1)
+#define ARCADIA_MATH_MODULE (1)
 #include "Arcadia/Math/Implementation/Matrix@{dimensionality}@{scalarSuffix}.h"
 
 static void
@@ -31,13 +31,13 @@ Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_initializeDispatchImpl
   );
   
 static void
-Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_equalTo
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_isEqualTo
   (
     Arcadia_Thread* thread
   );
 
 static void
-Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_notEqualTo
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_isNotEqualTo
   (
     Arcadia_Thread* thread
   );
@@ -142,12 +142,12 @@ Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_initializeDispatchImpl
     Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}Dispatch* self
   )
 {
-  ((Arcadia_ObjectDispatch*)self)->equalTo = &Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_equalTo;
-  ((Arcadia_ObjectDispatch*)self)->notEqualTo = &Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_notEqualTo;
+  ((Arcadia_ObjectDispatch*)self)->isEqualTo = &Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_isEqualTo;
+  ((Arcadia_ObjectDispatch*)self)->isNotEqualTo = &Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_isNotEqualTo;
 }
 
 static void
-Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_equalTo
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_isEqualTo
   (
     Arcadia_Thread* thread
   )
@@ -184,7 +184,7 @@ Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_equalTo
 }
 
 static void
-Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_notEqualTo
+Arcadia_Math_Matrix@{dimensionality}@{scalarSuffix}_isNotEqualTo
   (
     Arcadia_Thread* thread
   )

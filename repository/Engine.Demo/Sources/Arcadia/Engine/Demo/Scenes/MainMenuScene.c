@@ -122,12 +122,12 @@ Arcadia_Engine_Demo_MainMenuScene_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
-  self->definitions = Arcadia_ADL_Definitions_create(thread);
+  self->definitions = NULL;
   //
   self->cameraNode = NULL;
   self->enterPassNode = NULL;
@@ -228,6 +228,28 @@ Arcadia_Engine_Demo_MainMenuScene_visit
 }
 
 static void
+load
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainMenuScene* self
+  )
+{
+  if (!self->definitions) {
+    Arcadia_ADL_Definitions* definitions = Arcadia_ADL_Definitions_create(thread);
+    Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+    Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
+    Arcadia_List* files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+    Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, "Assets/MainMenuScene")), files);
+    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)files); i < n; ++i) {
+      Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, files, i, _Arcadia_FilePath_getType(thread));
+      Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
+      Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
+    }
+    self->definitions = definitions;
+  }
+}
+
+static void
 Arcadia_Engine_Demo_MainMenuScene_updateAudialsImpl
   (
     Arcadia_Thread* thread,
@@ -237,14 +259,22 @@ Arcadia_Engine_Demo_MainMenuScene_updateAudialsImpl
     Arcadia_Integer32Value height
   )
 {
+  load(thread, self);
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
   if (!self->soundSourceNode) {
+    Arcadia_ADL_SampleBufferDefinition* SAMPLEBUFFERS[] =
+    {
+      getSampleBufferDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, u8"Assets/MainMenuScene/AmbienceSampleBuffer.adl"),
+                                                           Arcadia_String_createFromCxxString(thread, u8"MainMenuScene.AmbienceSampleBuffer")),
+    };
+    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)SAMPLEBUFFERS[0]);
     self->soundSourceNode =
       Arcadia_Engine_Audials_NodeFactory_createSoundSourceNode
         (
           thread,
           (Arcadia_Engine_Audials_NodeFactory*)engine->audialsNodeFactory,
-          (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext
+          (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext,
+          SAMPLEBUFFERS[0]
         );
   }
   Arcadia_Engine_Node_setAudialsBackendContext(thread, (Arcadia_Engine_Node*)self->soundSourceNode, (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext);
@@ -342,18 +372,8 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
     Arcadia_Integer32Value height
   )
 {
+  load(thread, self);
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
-
-  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
-  Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
-  Arcadia_List* files = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, "Assets/LogoScene")), files);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)files); i < n; ++i) {
-    Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, files, i, _Arcadia_FilePath_getType(thread));
-    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
-    Arcadia_ADL_Context_readFromString(thread, context, self->definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
-  }
-
   if (!self->enterPassNode) {
     self->enterPassNode =
       Arcadia_Engine_Visuals_NodeFactory_createEnterPassNode
@@ -419,8 +439,8 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
 
   Arcadia_ADL_ModelDefinition* MODELS[] =
     {
-      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/LogoScene/TextureColorModel.adl"),
-                                                    Arcadia_String_createFromCxxString(thread, "LogoScene.TextureColorModel")),
+      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/MainMenuScene/TextureColorModel.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "MainMenuScene.TextureColorModel")),
     };
 
   if (!self->viewportNode) {

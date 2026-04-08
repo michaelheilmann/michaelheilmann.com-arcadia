@@ -13,13 +13,12 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Atoms.module.h"
 
 #include "Arcadia/Ring1/Include.h"
 #include "Arcadia/Ring1/Implementation/Module.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
-#include "Arcadia/Ring1/Implementation/TypeNameParser.h"
 #include "Arcadia/ARMS/Include.h"
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 
@@ -250,8 +249,9 @@ Arcadia_Atoms_getOrCreateAtom
     Arcadia_Thread_jump(thread);
   }
 
-  if (Arcadia_AtomKind_Name == (flags & Arcadia_AtomKind_Name)) {
-    Arcadia_Names_parseTypeName(thread, bytes, numberOfBytes);
+  if (Arcadia_Unicode_isUTF8(thread, bytes, numberOfBytes, NULL)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
+    Arcadia_Thread_jump(thread);
   }
 
   Arcadia_SizeValue hash = hashBytes(thread, bytes, numberOfBytes);

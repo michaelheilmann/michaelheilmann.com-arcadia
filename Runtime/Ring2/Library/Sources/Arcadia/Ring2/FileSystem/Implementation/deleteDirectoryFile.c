@@ -1,6 +1,6 @@
 // Copyright (c) 2018-2024 Michael Heilmann. All rights reserved.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/FileSystem/Implementation/deleteDirectoryFile.h"
 
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem

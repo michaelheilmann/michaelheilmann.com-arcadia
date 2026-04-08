@@ -17,7 +17,7 @@
 #define ARCADIA_MIL_AST_MODULENODE_H_INCLUDED
 
 #include "Arcadia/MIL/AST/Node.h"
-typedef struct Arcadia_MIL_DefinitionAst Arcadia_MIL_DefinitionAst;
+typedef struct Arcadia_MIL_AST_CompilationUnitNode Arcadia_MIL_AST_CompilationUnitNode;
 
 /// @code
 /// class Arcadia.MIL.AST.ModuleNode extends Arcadia.MIL.AST.Node
@@ -25,7 +25,7 @@ typedef struct Arcadia_MIL_DefinitionAst Arcadia_MIL_DefinitionAst;
 /// @code
 /// module : definition*
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.MIL.ModuleAst", Arcadia_MIL_AST_ModuleNode,
+Arcadia_declareObjectType(u8"Arcadia.MIL.AST.ModuleAst", Arcadia_MIL_AST_ModuleNode,
                           u8"Arcadia.MIL.AST.Node");
 
 struct Arcadia_MIL_AST_ModuleNodeDispatch {
@@ -34,9 +34,11 @@ struct Arcadia_MIL_AST_ModuleNodeDispatch {
 
 struct Arcadia_MIL_AST_ModuleNode {
   Arcadia_MIL_AST_Node _parent;
-  /// The file path of the module or null.
-  Arcadia_FilePath* path;
-  Arcadia_List* definitions;
+  /// The  path of the module directory or null.
+  Arcadia_FilePath* moduleDirectoryPath;
+  /// The compilation units (Arcadia.MIL.AST.CompilationUnit) discovered.
+  /// These comprise any `.mil` file in the `Source` directory and its subdirectories and the `Module.mil` file.
+  Arcadia_List* compilationUnits;
 };
 
 Arcadia_MIL_AST_ModuleNode*
@@ -46,22 +48,22 @@ Arcadia_MIL_AST_ModuleNode_create
   );
 
 void
-Arcadia_MIL_AST_ModuleNode_appendDefinition
+Arcadia_MIL_AST_ModuleNode_appendCompilationUnit
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ModuleNode* self,
-    Arcadia_MIL_DefinitionAst* definition
+    Arcadia_MIL_AST_CompilationUnitNode* compilationUnit
   );
 
 Arcadia_SizeValue
-Arcadia_MIL_AST_ModuleNode_getNumberOfDefinitions
+Arcadia_MIL_AST_ModuleNode_getNumberOfCompilationUnits
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ModuleNode* self
   );
 
-Arcadia_MIL_DefinitionAst*
-Arcadia_MIL_AST_ModuleNode_getDefinitionAt
+Arcadia_MIL_AST_CompilationUnitNode*
+Arcadia_MIL_AST_ModuleNode_getCompilationUnitAt
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ModuleNode* self,

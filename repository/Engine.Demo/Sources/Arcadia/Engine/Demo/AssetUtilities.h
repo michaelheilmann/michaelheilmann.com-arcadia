@@ -109,6 +109,29 @@ getMeshDefinition
   return (Arcadia_ADL_MeshDefinition*)definition;
 }
 
+static inline Arcadia_ADL_SampleBufferDefinition*
+getSampleBufferDefinition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ADL_Definitions* definitions,
+    Arcadia_String* filePath,
+    Arcadia_String* name
+  )
+{
+  Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
+  Arcadia_ADL_Definition* definition = Arcadia_ADL_Definitions_getDefinitionOrNull(thread, definitions, name);
+  if (!definition) {
+    Arcadia_ADL_Context* context = Arcadia_ADL_Context_getOrCreate(thread);
+    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, Arcadia_FilePath_parseGeneric(thread, filePath));
+    definition = Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
+  }
+  if (!Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)definition, _Arcadia_ADL_SampleBufferDefinition_getType(thread))) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  return (Arcadia_ADL_SampleBufferDefinition*)definition;
+}
+
 static inline Arcadia_ADL_ModelDefinition*
 getModelDefinition
   (

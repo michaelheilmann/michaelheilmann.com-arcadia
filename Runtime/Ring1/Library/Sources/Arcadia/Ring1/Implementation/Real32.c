@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Real32.h"
 
 #include "Arcadia/Ring1/Implementation/_defineScalarType.h"
@@ -53,13 +53,13 @@ isGreaterThanOrEqualTo
   );
 
 static void
-hash
+getHash
   (
     Arcadia_Thread* thread
   );
 
 static void
-identical
+isIdenticalTo
   (
     Arcadia_Thread* thread
   );
@@ -104,16 +104,16 @@ static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
   .add = &add,
   .divide = &divide,
-  .equalTo = &isEqualTo,
-  .greaterThan = &isGreaterThan,
-  .greaterThanOrEqualTo = &isGreaterThanOrEqualTo,
-  .hash = &hash,
-  .identical = &identical,
-  .lowerThan = &isLowerThan,
-  .lowerThanOrEqualTo = &isLowerThanOrEqualTo,
+  .isEqualTo = &isEqualTo,
+  .isGreaterThan = &isGreaterThan,
+  .isGreaterThanOrEqualTo = &isGreaterThanOrEqualTo,
+  .getHash = &getHash,
+  .isIdenticalTo = &isIdenticalTo,
+  .isLowerThan = &isLowerThan,
+  .isLowerThanOrEqualTo = &isLowerThanOrEqualTo,
   .multiply = &multiply,
   .negate = &negate,
-  .notEqualTo = &isNotEqualTo,
+  .isNotEqualTo = &isNotEqualTo,
   .subtract = &subtract,
 };
 
@@ -287,7 +287,7 @@ isGreaterThanOrEqualTo
 }
 
 static void
-hash
+getHash
   (
     Arcadia_Thread* thread
   )
@@ -306,7 +306,7 @@ hash
 }
 
 static void
-identical
+isIdenticalTo
   (
     Arcadia_Thread* thread
   )

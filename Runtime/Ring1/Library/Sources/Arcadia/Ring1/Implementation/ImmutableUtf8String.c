@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
 
 #include "Arcadia/Ring1/Include.h"
@@ -38,7 +38,7 @@ typedef struct Context {
 } Context;
 
 static void
-Callback
+callback
   (
     Arcadia_Thread* thread,
     Context* context,
@@ -79,7 +79,7 @@ Arcadia_ImmutableUTF8String_createFromBoolean
   )
 {
   Context context;
-  Arcadia_BooleanValue_toUTF8String(thread, booleanValue, &context, &Callback);
+  Arcadia_BooleanValue_toUTF8String(thread, booleanValue, &context, &callback);
   return context.string;
 }
 
@@ -91,7 +91,7 @@ Arcadia_ImmutableUTF8String_createFromInteger16
   )
 {
   Context context;
-  Arcadia_Integer16Value_toUTF8String(thread, integer16Value, &context, &Callback);
+  Arcadia_Integer16Value_toUTF8String(thread, integer16Value, &context, &callback);
   return context.string;
 }
 
@@ -103,7 +103,7 @@ Arcadia_ImmutableUTF8String_createFromInteger32
   )
 {
   Context context;
-  Arcadia_Integer32Value_toUTF8String(thread, integer32Value, &context, &Callback);
+  Arcadia_Integer32Value_toUTF8String(thread, integer32Value, &context, &callback);
   return context.string;
 }
 
@@ -115,7 +115,7 @@ Arcadia_ImmutableUTF8String_createFromInteger64
   )
 {
   Context context;
-  Arcadia_Integer64Value_toUTF8String(thread, integer64Value, &context, &Callback);
+  Arcadia_Integer64Value_toUTF8String(thread, integer64Value, &context, &callback);
   return context.string;
 }
 
@@ -127,7 +127,7 @@ Arcadia_ImmutableUTF8String_createFromInteger8
   )
 {
   Context context;
-  Arcadia_Integer8Value_toUTF8String(thread, integer8Value, &context, &Callback);
+  Arcadia_Integer8Value_toUTF8String(thread, integer8Value, &context, &callback);
   return context.string;
 }
 
@@ -139,7 +139,7 @@ Arcadia_ImmutableUTF8String_createFromNatural16
   )
 {
   Context context;
-  Arcadia_Natural16Value_toUTF8String(thread, natural16Value, &context, &Callback);
+  Arcadia_Natural16Value_toUTF8String(thread, natural16Value, &context, &callback);
   return context.string;
 }
 
@@ -151,7 +151,7 @@ Arcadia_ImmutableUTF8String_createFromNatural32
   )
 {
   Context context;
-  Arcadia_Natural32Value_toUTF8String(thread, natural32Value, &context, &Callback);
+  Arcadia_Natural32Value_toUTF8String(thread, natural32Value, &context, &callback);
   return context.string;
 }
 
@@ -163,7 +163,7 @@ Arcadia_ImmutableUTF8String_createFromNatural64
   )
 {
   Context context;
-  Arcadia_Natural64Value_toUTF8String(thread, natural64Value, &context, &Callback);
+  Arcadia_Natural64Value_toUTF8String(thread, natural64Value, &context, &callback);
   return context.string;
 }
 
@@ -175,7 +175,7 @@ Arcadia_ImmutableUTF8String_createFromNatural8
   )
 {
   Context context;
-  Arcadia_Natural8Value_toUTF8String(thread, natural8Value, &context, &Callback);
+  Arcadia_Natural8Value_toUTF8String(thread, natural8Value, &context, &callback);
   return context.string;
 }
 
@@ -187,7 +187,7 @@ Arcadia_ImmutableUTF8String_createFromReal32
   )
 {
   Context context;
-  Arcadia_Real32Value_toUTF8String(thread, real32Value, &context, &Callback);
+  Arcadia_Real32Value_toUTF8String(thread, real32Value, &context, &callback);
   return context.string;
 }
 
@@ -199,7 +199,7 @@ Arcadia_ImmutableUTF8String_createFromReal64
   )
 {
   Context context;
-  Arcadia_Real64Value_toUTF8String(thread, real64Value, &context, &Callback);
+  Arcadia_Real64Value_toUTF8String(thread, real64Value, &context, &callback);
   return context.string;
 }
 
@@ -211,7 +211,7 @@ Arcadia_ImmutableUTF8String_createFromSize
   )
 {
   Context context;
-  Arcadia_SizeValue_toUTF8String(thread, sizeValue, &context, &Callback);
+  Arcadia_SizeValue_toUTF8String(thread, sizeValue, &context, &callback);
   return context.string;
 }
 
@@ -223,7 +223,7 @@ Arcadia_ImmutableUTF8String_createFromVoid
   )
 {
   Context context;
-  Arcadia_VoidValue_toUTF8String(thread, voidValue, &context, &Callback);
+  Arcadia_VoidValue_toUTF8String(thread, voidValue, &context, &callback);
   return context.string;
 }
 
@@ -246,6 +246,45 @@ Arcadia_ImmutableUTF8String_ensureGray
 { /*Arcadia_Process_ensureGray(Arcadia_Thread_getProcess(thread), self);*/ }
 
 #endif
+
+Arcadia_BooleanValue
+Arcadia_ImmutableUTF8String_startsWith
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUTF8StringValue self,
+    Arcadia_ImmutableUTF8StringValue other
+  )
+{
+  // "this" cannot start with "other" if the formaer is shorter than the latter is shorter.
+  if (Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, self) < Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, other)) {
+    return Arcadia_BooleanValue_False;
+  }
+  // The length of "other" is smaller than or equal to the length of "this".
+  return !Arcadia_Memory_compare(thread,
+                                 Arcadia_ImmutableUTF8String_getBytes(thread, self),
+                                 Arcadia_ImmutableUTF8String_getBytes(thread, other),
+                                 Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, other));
+}
+
+Arcadia_BooleanValue
+Arcadia_ImmutableUTF8String_endsWith
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUTF8StringValue self,
+    Arcadia_ImmutableUTF8StringValue other
+  )
+{
+  // "this" cannot end with "other" if the formaer is shorter than the latter is shorter.
+  if (Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, self) < Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, other)) {
+    return Arcadia_BooleanValue_False;
+  }
+  // The length of "other" is smaller than or equal to the length of "this".
+  Arcadia_SizeValue d = Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, self) - Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, other);
+  return !Arcadia_Memory_compare(thread,
+                                  Arcadia_ImmutableUTF8String_getBytes(thread, self) + d,
+                                  Arcadia_ImmutableUTF8String_getBytes(thread, other),
+                                  Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, other));
+}
 
 Arcadia_Natural8Value const*
 Arcadia_ImmutableUTF8String_getBytes
@@ -394,7 +433,7 @@ isEqualTo
   );
 
 static void
-hash
+getHash
   (
     Arcadia_Thread* thread
   );
@@ -407,9 +446,9 @@ isNotEqualTo
 
 static const Arcadia_Type_Operations _typeOperations = {
   Arcadia_Type_Operations_Initializer,
-  .equalTo = &isEqualTo,
-  .hash = &hash,
-  .notEqualTo = &isNotEqualTo,
+  .isEqualTo = &isEqualTo,
+  .getHash = &getHash,
+  .isNotEqualTo = &isNotEqualTo,
 };
 
 #define BINARY_OPERATION() \
@@ -462,7 +501,7 @@ isEqualTo
 }
 
 static void
-hash
+getHash
   (
     Arcadia_Thread* thread
   )

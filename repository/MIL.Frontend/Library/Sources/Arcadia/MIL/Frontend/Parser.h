@@ -21,7 +21,8 @@
 /// @code
 /// class Arcadia.MILParser
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.MIL.Parser", Arcadia_MIL_Parser, u8"Arcadia.Object");
+Arcadia_declareObjectType(u8"Arcadia.MIL.Parser", Arcadia_MIL_Parser,
+                          u8"Arcadia.Object");
 
 /// @brief Create a MIL parser.
 /// @return A pointer to this MIL parser.
@@ -34,7 +35,7 @@ Arcadia_MIL_Parser_create
 /// @brief Translate the token stream into an AST.
 /// @param self A pointer to this MIL parser.
 /// @return A pointer to the MIL AST.
-Arcadia_MIL_AST_ModuleNode*
+Arcadia_MIL_AST_CompilationUnitNode*
 Arcadia_MIL_Parser_run
   (
     Arcadia_Thread* thread,

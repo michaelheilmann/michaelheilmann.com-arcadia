@@ -36,12 +36,12 @@ checkPowerOfTwo
   Arcadia_BigInteger_setPowerOfTwoNatural8(thread, temporary, p);
   Arcadia_BigInteger_multiply3(thread, bigIntegerMultipliedValue, bigIntegerValue, temporary);
 
-  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, bigIntegerShiftedValue, bigIntegerMultipliedValue));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_isEqualTo(thread, bigIntegerShiftedValue, bigIntegerMultipliedValue));
 
   Arcadia_BigInteger* bigIntegerBackShiftedValue = Arcadia_BigInteger_create(thread);
   Arcadia_BigInteger_copy(thread, bigIntegerBackShiftedValue, bigIntegerShiftedValue);
   Arcadia_BigInteger_shiftRightNatural64(thread, bigIntegerBackShiftedValue, p);
-  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, bigIntegerBackShiftedValue, bigIntegerValue));
+  Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_isEqualTo(thread, bigIntegerBackShiftedValue, bigIntegerValue));
 }
 
 void

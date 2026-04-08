@@ -67,9 +67,8 @@ Arcadia_Engine_Visuals_PixelBufferNode_constructImpl
     Arcadia_Engine_Visuals_PixelBufferNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_PixelBufferNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_PixelBufferNode);
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -83,8 +82,7 @@ Arcadia_Engine_Visuals_PixelBufferNode_constructImpl
   //
   self->pixelBuffer = makePixelBuffer(thread, (Arcadia_ADL_PixelBufferDefinition*)self->source);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_PixelBufferNode);
 }
 
 static void

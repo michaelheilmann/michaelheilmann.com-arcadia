@@ -45,7 +45,8 @@ normalizationTests
     Arcadia_Thread* thread
   )
 {
-  checkNormalized(thread, u8"Hello/..", ".");
+  checkNormalized(thread, u8"a/..", ".");
+  checkNormalized(thread, u8"a/b/../..", ".");
   checkNormalized(thread, u8".", ".");
   checkNormalized(thread, u8"./", ".");
 }

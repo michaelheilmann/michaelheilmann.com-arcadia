@@ -60,7 +60,7 @@ Arcadia_Engine_Visuals_VertexDescriptor_construct
     Arcadia_Engine_Visuals_VertexDescriptor* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_VertexDescriptor_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_VertexDescriptor);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -73,8 +73,7 @@ Arcadia_Engine_Visuals_VertexDescriptor_construct
   self->stride = Arcadia_ValueStack_getSizeValue(thread, 2);
   self->vertexElementDescriptors = Arcadia_ValueStack_getObjectReferenceValue(thread, 1);
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_VertexDescriptor);
 }
 
 static void
@@ -83,7 +82,7 @@ Arcadia_Engine_Visuals_VertexDescriptor_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_VertexDescriptorDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_VertexDescriptor_visit

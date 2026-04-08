@@ -1,4 +1,4 @@
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/CommandLine/CommandLineArgument.h"
 
 static void
@@ -31,9 +31,9 @@ Arcadia_CommandLineArgument_visitImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_CommandLineArgument_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*) & Arcadia_CommandLineArgument_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*) & Arcadia_CommandLineArgument_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_CommandLineArgument_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_CommandLineArgument_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_CommandLineArgument_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_CommandLineArgument_initializeDispatchImpl,
 };
 

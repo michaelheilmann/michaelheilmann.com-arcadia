@@ -46,7 +46,7 @@
 
 #include "Arcadia/Ring1/Implementation/Size.h"
 
-#include "Arcadia/Ring1/Implementation/Types.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/Include.h"
 
 #include "Arcadia/Ring1/Implementation/Void.h"
 

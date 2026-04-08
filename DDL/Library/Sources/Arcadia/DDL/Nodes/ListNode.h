@@ -46,4 +46,12 @@ Arcadia_DDL_ListNode_getNumberOfElements
     Arcadia_DDL_ListNode* self
   );
 
+Arcadia_DDL_Node*
+Arcadia_DDL_ListNode_getElementAt
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_ListNode* self,
+    Arcadia_SizeValue index
+  );
+
 #endif // ARCADIA_DDL_NODES_LISTNODE_H_INCLUDED

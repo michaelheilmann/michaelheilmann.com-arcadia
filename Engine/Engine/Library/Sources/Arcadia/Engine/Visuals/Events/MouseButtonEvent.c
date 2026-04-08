@@ -52,13 +52,8 @@ Arcadia_Visuals_MouseButtonEvent_constructImpl
     Arcadia_Visuals_MouseButtonEvent* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_MouseButtonEvent_getType(thread);
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (5 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_MouseButtonEvent);
+  if (5 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -73,8 +68,7 @@ Arcadia_Visuals_MouseButtonEvent_constructImpl
   self->x = Arcadia_ValueStack_getInteger32Value(thread, 2);
   self->y = Arcadia_ValueStack_getInteger32Value(thread, 1);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_MouseButtonEvent);
 }
 
 static void
@@ -83,7 +77,7 @@ Arcadia_Visuals_MouseButtonEvent_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_MouseButtonEventDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_Visuals_MouseButtonEvent*
 Arcadia_Visuals_MouseButtonEvent_create

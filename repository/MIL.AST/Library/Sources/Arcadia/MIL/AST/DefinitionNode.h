@@ -17,7 +17,6 @@
 #define ARCADIA_MIL_AST_DEFINITIONNODE_H_INCLUDED
 
 #include "Arcadia/MIL/AST/Node.h"
-typedef struct Arcadia_MIL_DefinitionAst Arcadia_MIL_DefinitionAst;
 
 /// @code
 /// class Arcadia.MIL.AST.DefinitionNode extends Arcadia.MIL.AST.Node

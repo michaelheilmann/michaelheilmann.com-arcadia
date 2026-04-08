@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_ADL_CONTEXT_H_INCLUDED)
 #define ARCADIA_ADL_CONTEXT_H_INCLUDED
 
-#if !defined(ARCADIA_ADL_PRIVATE)
+#if !defined(ARCADIA_ADL_MODULE)
   #error("do not include directly, include `Arcadia/ADL/Include.h` instead")
 #endif
 #include "Arcadia/Ring2/Include.h"

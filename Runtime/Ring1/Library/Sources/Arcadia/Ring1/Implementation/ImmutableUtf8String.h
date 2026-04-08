@@ -13,10 +13,10 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_RING1_IMMUTABLEUTF8STRING_H_INCLUDED)
-#define ARCADIA_RING1_IMMUTABLEUTF8STRING_H_INCLUDED
+#if !defined(ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_H_INCLUDED)
+#define ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_H_INCLUDED
 
-#if !defined(ARCADIA_RING1_PRIVATE)
+#if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
@@ -220,10 +220,8 @@ Arcadia_ImmutableUTF8String_visit
 
 /// @brief
 /// Ensure this Arcadia_ImmutableUTF8String object is gray.
-/// @param thread
-/// A pointer to this Arcadia_Thread object.
-/// @param self
-/// A pointer to this Arcadia_ImmutableUTF8String object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 void
 Arcadia_ImmutableUTF8String_ensureGray
   (
@@ -233,10 +231,40 @@ Arcadia_ImmutableUTF8String_ensureGray
 
 #endif
 
-/// @brief Get a pointer to the Bytes of this immutable UTF8 string object.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
-/// @return A pointer to the Bytes of this immutable UTF8 stirng object.
+/// @brief Get if this string starts with another string.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
+/// @param other A pointer to the other string.
+/// @return
+/// #Arcadia_BooleanValue_True if this string starts with another string.
+/// #Arcadia_BooleanValue_False otherwise.
+Arcadia_BooleanValue
+Arcadia_ImmutableUTF8String_startsWith
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUTF8StringValue self,
+    Arcadia_ImmutableUTF8StringValue other
+  );
+
+/// @brief Get if this string ends with another string.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
+/// @param other A pointer to the other string.
+/// @return
+/// #Arcadia_BooleanValue_True if this string ends with another string.
+/// #Arcadia_BooleanValue_False otherwise.
+Arcadia_BooleanValue
+Arcadia_ImmutableUTF8String_endsWith
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ImmutableUTF8StringValue self,
+    Arcadia_ImmutableUTF8StringValue other
+  );
+
+/// @brief Get a pointer to the Bytes of this string.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string object.
+/// @return A pointer to the Bytes of this string.
 /// @warning The Bytes of the array must not be modified.
 Arcadia_Natural8Value const*
 Arcadia_ImmutableUTF8String_getBytes
@@ -245,10 +273,10 @@ Arcadia_ImmutableUTF8String_getBytes
     Arcadia_ImmutableUTF8StringValue self
   );
 
-/// @brief Get the number of Bytes in this immutable UTF8 string object.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
-/// @return The number of Bytes in this immutable UTF8 string object.
+/// @brief Get the number of Bytes of the UTF8 Byte sequence of this string.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
+/// @return The number of Bytes of the UTF8 Byte sequence of this string.
 Arcadia_SizeValue
 Arcadia_ImmutableUTF8String_getNumberOfBytes
   (
@@ -256,10 +284,10 @@ Arcadia_ImmutableUTF8String_getNumberOfBytes
     Arcadia_ImmutableUTF8StringValue self
   );
 
-/// @brief Get the hash of this immutable UTF8 string object.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
-/// @return The hash of this immutable UTF8 string object.
+/// @brief Get the hash of this string.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
+/// @return The hash of this string.
 Arcadia_SizeValue
 Arcadia_ImmutableUTF8String_getHash
   (
@@ -268,9 +296,9 @@ Arcadia_ImmutableUTF8String_getHash
   );
 
 /// @brief Get the number of code points of this immutable UTF8 string object.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
-/// @return The number of code points of this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
+/// @return The number of code points of this string.
 Arcadia_SizeValue
 Arcadia_ImmutableUTF8String_getNumberOfCodePoints
   (
@@ -279,8 +307,8 @@ Arcadia_ImmutableUTF8String_getNumberOfCodePoints
   );
 
 /// @brief Convert this immutable UTF8 string object into a Boolean value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Boolean value.
 /// @error #Arcadia_Status_ConversionFailed the string is not a Boolean literal
 Arcadia_BooleanValue
@@ -291,8 +319,8 @@ Arcadia_ImmutableUTF8String_toBoolean
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer16 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Integer16 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer16 literal
 Arcadia_Integer16Value
@@ -303,8 +331,8 @@ Arcadia_ImmutableUTF8String_toInteger16
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer32 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Integer32 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer32 literal
 Arcadia_Integer32Value
@@ -315,8 +343,8 @@ Arcadia_ImmutableUTF8String_toInteger32
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer64 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Integer64 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer64 literal
 Arcadia_Integer64Value
@@ -327,8 +355,8 @@ Arcadia_ImmutableUTF8String_toInteger64
   );
 
 /// @brief Convert this immutable UTF8 string object into an Integer8 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Integer8 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Integer8 literal
 Arcadia_Integer8Value
@@ -339,8 +367,8 @@ Arcadia_ImmutableUTF8String_toInteger8
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural16 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Natural16 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural16 literal
 Arcadia_Natural16Value
@@ -351,8 +379,8 @@ Arcadia_ImmutableUTF8String_toNatural16
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural32 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Natural32 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural32 literal
 Arcadia_Natural32Value
@@ -363,8 +391,8 @@ Arcadia_ImmutableUTF8String_toNatural32
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural64 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Natural64 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural64 literal
 Arcadia_Natural64Value
@@ -375,8 +403,8 @@ Arcadia_ImmutableUTF8String_toNatural64
   );
 
 /// @brief Convert this immutable UTF8 string object into an Natural8 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Natural8 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Natural8 literal
 Arcadia_Natural8Value
@@ -387,8 +415,8 @@ Arcadia_ImmutableUTF8String_toNatural8
   );
 
 /// @brief Convert this immutable UTF8 string object into an Real32 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Real32 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Real32 literal
 Arcadia_Real32Value
@@ -399,8 +427,8 @@ Arcadia_ImmutableUTF8String_toReal32
   );
 
 /// @brief Convert this immutable UTF8 string object into an Real64 value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Real64 value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Real64 literal
 Arcadia_Real64Value
@@ -411,8 +439,8 @@ Arcadia_ImmutableUTF8String_toReal64
   );
 
 /// @brief Convert this immutable UTF8 string object into an Size value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Size value.
 /// @error #Arcadia_Status_ConversionFailed the string is not an Size literal
 Arcadia_SizeValue
@@ -423,8 +451,8 @@ Arcadia_ImmutableUTF8String_toSize
   );
 
 /// @brief Convert this immutable UTF8 string object into a Void value.
-/// @param thread A pointer to the Arcadia_Thread object.
-/// @param self A pointer to this immutable UTF8 string object.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string.
 /// @return The Void value.
 /// @error #Arcadia_Status_ConversionFailed the string is not a Void literal
 Arcadia_VoidValue
@@ -441,5 +469,5 @@ _Arcadia_ImmutableUTF8StringValue_getType
     Arcadia_Thread* thread
   );
 
-#endif // ARCADIA_RING1_IMMUTABLEUTF8STRING_H_INCLUDED
+#endif // ARCADIA_RING1_IMPLEMENTATION_IMMUTABLEUTF8STRING_H_INCLUDED
 

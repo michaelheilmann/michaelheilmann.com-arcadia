@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_TYPESYSTEM_TYPE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_TYPESYSTEM_TYPE_H_INCLUDED
 
-#if !defined(ARCADIA_RING1_PRIVATE)
+#if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 #include "Arcadia/Ring1/Implementation/TypeSystem/TypeKind.h"
@@ -25,10 +25,20 @@
 /// @brief The opaque C type representing a type.
 /// Types are not garbage collected. Once a type was added, it remains there until the process terminates.
 typedef void Arcadia_Type;
+
+/// @brief The opaque C type representing an enumeration type.
 typedef void Arcadia_EnumerationType;
+
+/// @brief The opaque C type representing an interface type.
 typedef void Arcadia_InterfaceType;
+
+/// @brief The opaque C type representing an internal type.
 typedef void Arcadia_InternalType;
+
+/// @brief The opaque C type representing an object type.
 typedef void Arcadia_ObjectType;
+
+/// @brief The opaque C type representing a scalar type.
 typedef void Arcadia_ScalarType;
 
 /// @brief A pointer to a type or the null pointer.

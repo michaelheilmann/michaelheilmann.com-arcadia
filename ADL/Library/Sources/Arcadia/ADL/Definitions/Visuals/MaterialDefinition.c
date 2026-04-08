@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_ADL_PRIVATE (1)
+#define ARCADIA_ADL_MODULE (1)
 #include "Arcadia/ADL/Definitions/Visuals/MaterialDefinition.h"
 
 #include "Arcadia/ADL/Context.h"
@@ -104,7 +104,7 @@ Arcadia_ADL_MaterialDefinition_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 5 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (5 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }

@@ -286,18 +286,12 @@ Arcadia_Media_PixelBuffer_constructImpl
     Arcadia_Media_PixelBuffer* self
   )
 {
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
+  Arcadia_EnterConstructor(Arcadia_Media_PixelBuffer);
+  {
+    Arcadia_ValueStack_pushNatural8Value(thread, 0);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Natural8Value numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-
-  if (1 == numberOfArgumentValues1) {
-    Arcadia_TypeValue _type = _Arcadia_Media_PixelBuffer_getType(thread);
-    {
-      Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      Arcadia_superTypeConstructor(thread, _type, self);
-    }
+  if (1 == _numberOfArguments) {
     Arcadia_Media_PixelBuffer* other = (Arcadia_Media_PixelBuffer*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Media_PixelBuffer_getType(thread));
     self->width = Arcadia_Media_PixelBuffer_getNumberOfColumns(thread, other);
     self->height = Arcadia_Media_PixelBuffer_getNumberOfRows(thread, other);
@@ -307,14 +301,8 @@ Arcadia_Media_PixelBuffer_constructImpl
     Arcadia_SizeValue bytes = (bytesPerPixel * self->width + self->linePadding) * self->height;
     self->bytes = Arcadia_Memory_allocateUnmanaged(thread, bytes);
     Arcadia_Memory_copy(thread, self->bytes, other->bytes, bytes);
-    Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-    Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
-  } else if (4 == numberOfArgumentValues1) {
-    Arcadia_TypeValue _type = _Arcadia_Media_PixelBuffer_getType(thread);
-    {
-      Arcadia_ValueStack_pushNatural8Value(thread, 0);
-      Arcadia_superTypeConstructor(thread, _type, self);
-    }
+  } else if (4 == _numberOfArguments) {
+
     self->bytes = NULL;
     self->linePadding = Arcadia_ValueStack_getInteger32Value(thread, 4);
     self->width = Arcadia_ValueStack_getInteger32Value(thread, 3);
@@ -389,12 +377,11 @@ Arcadia_Media_PixelBuffer_constructImpl
         Arcadia_Thread_jump(thread);
       } break;
     };
-    Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-    Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
+  Arcadia_LeaveConstructor(Arcadia_Media_PixelBuffer);
 }
 
 static void
@@ -403,7 +390,7 @@ Arcadia_Media_PixelBuffer_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Media_PixelBufferDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Media_PixelBuffer_destruct

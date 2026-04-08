@@ -60,21 +60,21 @@ Arcadia_DDLS_SchemaReferenceNode_constructImpl
     Arcadia_DDLS_SchemaReferenceNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDLS_SchemaReferenceNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDLS_SchemaReferenceNode);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  //
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
   self->name = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DDLS_SchemaReferenceNode);
 }
 
 static void

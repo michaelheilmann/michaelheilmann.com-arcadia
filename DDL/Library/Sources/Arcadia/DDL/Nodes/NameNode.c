@@ -83,13 +83,13 @@ Arcadia_DDL_NameNode_constructImpl
     Arcadia_DDL_NameNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDL_NameNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDL_NameNode);
   {
     Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDL_NodeType_Name);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -117,8 +117,7 @@ Arcadia_DDL_NameNode_constructImpl
       Arcadia_Thread_jump(thread);
     } break;
   };
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2);
+  Arcadia_LeaveConstructor(Arcadia_DDL_NameNode);
 }
 
 static void
@@ -127,7 +126,7 @@ Arcadia_DDL_NameNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_DDL_NameNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_DDL_NameNode_visitImpl

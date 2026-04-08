@@ -71,23 +71,16 @@ Arcadia_Engine_Audials_Node_constructImpl
     Arcadia_Engine_Audials_Node* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Audials_Node_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Audials_Node);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Audials_Node);
 }
 
 static void
@@ -96,7 +89,7 @@ Arcadia_Engine_Audials_Node_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_NodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Audials_Node_destructImpl

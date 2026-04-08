@@ -13,19 +13,26 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_ADL_PRIVATE (1)
+#define ARCADIA_ADL_MODULE (1)
 #include "Arcadia/ADL/Context.h"
 
 #include "Arcadia/ADL/Definitions.h"
 #include "Arcadia/ADL/Reader.h"
-#include "Arcadia/ADL/Definitions/Visuals/CheckerboardFillOperationReader.h"
-#include "Arcadia/ADL/Definitions/Visuals/ColorReader.h"
-#include "Arcadia/ADL/Definitions/Visuals/FillOperationReader.h"
-#include "Arcadia/ADL/Definitions/Visuals/MaterialReader.h"
-#include "Arcadia/ADL/Definitions/Visuals/ModelReader.h"
-#include "Arcadia/ADL/Definitions/Visuals/MeshReader.h"
-#include "Arcadia/ADL/Definitions/Visuals/PixelBufferReader.h"
-#include "Arcadia/ADL/Definitions/Visuals/TextureReader.h"
+
+#include "Arcadia/ADL/Definitions/Audials/SampleBufferReader.module.h"
+
+#include "Arcadia/ADL/Definitions/DSP/ConstantReader.module.h"
+#include "Arcadia/ADL/Definitions/DSP/SineWaveReader.module.h"
+#include "Arcadia/ADL/Definitions/DSP/WhiteNoiseReader.module.h"
+
+#include "Arcadia/ADL/Definitions/Visuals/CheckerboardFillOperationReader.module.h"
+#include "Arcadia/ADL/Definitions/Visuals/ColorReader.module.h"
+#include "Arcadia/ADL/Definitions/Visuals/FillOperationReader.module.h"
+#include "Arcadia/ADL/Definitions/Visuals/MaterialReader.module.h"
+#include "Arcadia/ADL/Definitions/Visuals/ModelReader.module.h"
+#include "Arcadia/ADL/Definitions/Visuals/MeshReader.module.h"
+#include "Arcadia/ADL/Definitions/Visuals/PixelBufferReader.module.h"
+#include "Arcadia/ADL/Definitions/Visuals/TextureReader.module.h"
 
 static void
 Arcadia_ADL_Context_constructImpl
@@ -85,9 +92,9 @@ readFromNode
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_ADL_Context_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_ADL_Context_constructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_ADL_Context_visitImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*) & Arcadia_ADL_Context_initializeDispatchImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_ADL_Context_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -106,17 +113,35 @@ Arcadia_ADL_Context_constructImpl
     Arcadia_ADL_Context* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_Context_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_Context);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
   self->readers = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
+  //
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_SampleBufferReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  //
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_ConstantReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_SineWaveReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_WhiteNoiseReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
   //
   {
     Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_ColorReader_create(thread);
@@ -152,8 +177,7 @@ Arcadia_ADL_Context_constructImpl
     Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
   }
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_Context);
 }
 
 static void

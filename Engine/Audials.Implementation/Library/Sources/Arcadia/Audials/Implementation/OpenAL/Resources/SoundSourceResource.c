@@ -163,16 +163,17 @@ Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource_constructImpl
   )
 {
   Arcadia_EnterConstructor(Arcadia_Engine_Audials_Implementation_OpenAL_SoundSourceResource);
-  if (2 != _numberOfArguments) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
   {
     Arcadia_Value t;
     t = Arcadia_ValueStack_getValue(thread, 2);
     Arcadia_ValueStack_pushValue(thread, &t);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
+  }
+  //
+  if (2 != _numberOfArguments) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   //
   self->sampleBuffer = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Media_SampleBuffer_getType(thread));

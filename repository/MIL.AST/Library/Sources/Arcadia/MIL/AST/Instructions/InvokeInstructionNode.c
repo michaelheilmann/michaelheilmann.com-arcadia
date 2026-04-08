@@ -64,19 +64,18 @@ Arcadia_MIL_AST_InvokeInstructionNode_constructImpl
     Arcadia_MIL_AST_InvokeInstructionNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_AST_InvokeInstructionNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_AST_InvokeInstructionNode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->callee = (Arcadia_MIL_AST_VariableOperandNode*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_MIL_AST_VariableOperandNode_getType(thread));
   self->operands = (Arcadia_List*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_List_getType(thread));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2 + 1);
+  Arcadia_LeaveConstructor(Arcadia_MIL_AST_InvokeInstructionNode);
 }
 
 static void
@@ -85,7 +84,7 @@ Arcadia_MIL_AST_InvokeInstructionNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_InvokeInstructionNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_MIL_AST_InvokeInstructionNode_visit

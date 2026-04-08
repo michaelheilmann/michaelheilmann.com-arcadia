@@ -754,17 +754,17 @@ onClassDefinition
 }
 
 void
-Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule
+Arcadia_MIL_SemanticalAnalysis_EnterPass_onCompilationUnit
   (
     Arcadia_Thread* thread,
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ModuleNode* moduleAst
+    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_MIL_AST_ModuleNode_getNumberOfDefinitions(thread, moduleAst); i < n; ++i) {
-    Arcadia_MIL_DefinitionAst* definitionAst = Arcadia_MIL_AST_ModuleNode_getDefinitionAt(thread, moduleAst, i);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_MIL_AST_CompilationUnitNode_getNumberOfDefinitions(thread, compilationUnitNode); i < n; ++i) {
+    Arcadia_MIL_AST_DefinitionNode* definitionAst = Arcadia_MIL_AST_CompilationUnitNode_getDefinitionAt(thread, compilationUnitNode, i);
     if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)definitionAst), _Arcadia_MIL_AST_ClassDefinitionNode_getType(thread))) {
       onClassDefinition(thread, interpreterProcess, symbolTable, foreignProcedures, (Arcadia_MIL_AST_ClassDefinitionNode*)definitionAst);
     } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)definitionAst), _Arcadia_MIL_AST_ProcedureDefinitionNode_getType(thread))) {
@@ -773,6 +773,22 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
     }
+  }
+}
+
+void
+Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule
+  (
+    Arcadia_Thread* thread,
+    R_Interpreter_ProcessState* interpreterProcess,
+    Arcadia_Map* symbolTable,
+    Arcadia_Map* foreignProcedures,
+    Arcadia_MIL_AST_ModuleNode* moduleNode
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = Arcadia_MIL_AST_ModuleNode_getNumberOfCompilationUnits(thread, moduleNode); i < n; ++i) {
+    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode = Arcadia_MIL_AST_ModuleNode_getCompilationUnitAt(thread, moduleNode, i);
+    Arcadia_MIL_SemanticalAnalysis_EnterPass_onCompilationUnit(thread, interpreterProcess, symbolTable, foreignProcedures, compilationUnitNode);
   }
 }
 
@@ -820,17 +836,16 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_constructImpl
     Arcadia_MIL_SemanticalAnalysis_EnterPass* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_SemanticalAnalysis_EnterPass_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_SemanticalAnalysis_EnterPass);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1);
+  Arcadia_LeaveConstructor(Arcadia_MIL_SemanticalAnalysis_EnterPass);
 }
 
 static void
@@ -839,7 +854,7 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MIL_SemanticalAnalysis_EnterPassDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_MIL_SemanticalAnalysis_EnterPass_visit
@@ -847,7 +862,7 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_visit
     Arcadia_Thread* thread,
     Arcadia_MIL_SemanticalAnalysis_EnterPass* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_MIL_SemanticalAnalysis_EnterPass*
 Arcadia_MIL_SemanticalAnalysis_EnterPass_create

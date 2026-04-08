@@ -270,13 +270,13 @@ Arcadia_DDLS_SymbolReader_constructImpl
     Arcadia_DDLS_SymbolReader* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDLS_SymbolReader_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDLS_SymbolReader);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -313,8 +313,7 @@ Arcadia_DDLS_SymbolReader_constructImpl
 
 #undef Define
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DDLS_SymbolReader);
 }
 
 static void
@@ -323,7 +322,7 @@ Arcadia_DDLS_SymbolReader_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_DDLS_SymbolReaderDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_DDLS_SymbolReader_visitImpl

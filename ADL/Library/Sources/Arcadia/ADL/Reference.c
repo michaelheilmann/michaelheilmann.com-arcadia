@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_ADL_PRIVATE (1)
+#define ARCADIA_ADL_MODULE (1)
 #include "Arcadia/ADL/Reference.h"
 
 #include "Arcadia/Languages/Include.h"
@@ -81,12 +81,12 @@ Arcadia_ADL_Reference_constructImpl
     Arcadia_ADL_Reference* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ADL_Reference_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ADL_Reference);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -95,8 +95,7 @@ Arcadia_ADL_Reference_constructImpl
   self->definitionName = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_String_getType(thread));
   self->definitions = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_ADL_Definitions_getType(thread));
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2 + 1);
+  Arcadia_LeaveConstructor(Arcadia_ADL_Reference);
 }
 
 static void

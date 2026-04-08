@@ -64,19 +64,18 @@ Arcadia_MIL_AST_ModuleNode_constructImpl
     Arcadia_MIL_AST_ModuleNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_AST_ModuleNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_AST_ModuleNode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  self->path = NULL;
-  self->definitions = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  self->moduleDirectoryPath = NULL;
+  self->compilationUnits = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_LeaveConstructor(Arcadia_MIL_AST_ModuleNode);
 }
 
 static void
@@ -85,7 +84,7 @@ Arcadia_MIL_AST_ModuleNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ModuleNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_MIL_AST_ModuleNode_visit
@@ -94,10 +93,12 @@ Arcadia_MIL_AST_ModuleNode_visit
     Arcadia_MIL_AST_ModuleNode* self
   )
 {
-  if (self->path) {
-    Arcadia_Object_visit(thread, (Arcadia_Object*)self->path);
+  if (self->moduleDirectoryPath) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->moduleDirectoryPath);
   }
-  Arcadia_Object_visit(thread, (Arcadia_Object*)self->definitions);
+  if (self->compilationUnits) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->compilationUnits);
+  }
 }
 
 Arcadia_MIL_AST_ModuleNode*
@@ -112,33 +113,31 @@ Arcadia_MIL_AST_ModuleNode_create
 }
 
 void
-Arcadia_MIL_AST_ModuleNode_appendDefinition
+Arcadia_MIL_AST_ModuleNode_appendCompilationUnit
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ModuleNode* self,
-    Arcadia_MIL_DefinitionAst* definition
+    Arcadia_MIL_AST_CompilationUnitNode* compilationUnit
   )
 {
-  Arcadia_List_insertBackObjectReferenceValue(thread, self->definitions, (Arcadia_ObjectReferenceValue)definition);
+  Arcadia_List_insertBackObjectReferenceValue(thread, self->compilationUnits, (Arcadia_ObjectReferenceValue)compilationUnit);
 }
 
 Arcadia_SizeValue
-Arcadia_MIL_AST_ModuleNode_getNumberOfDefinitions
+Arcadia_MIL_AST_ModuleNode_getNumberOfCompilationUnits
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ModuleNode* self
   )
-{ return Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->definitions); }
+{ return Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->compilationUnits); }
 
-Arcadia_MIL_DefinitionAst*
-Arcadia_MIL_AST_ModuleNode_getDefinitionAt
+Arcadia_MIL_AST_CompilationUnitNode*
+Arcadia_MIL_AST_ModuleNode_getCompilationUnitAt
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_ModuleNode* self,
     Arcadia_SizeValue index
   )
 {
-  Arcadia_Value definitionAstValue = Arcadia_List_getAt(thread, self->definitions, index);
-  Arcadia_MIL_DefinitionAst* definitionAst = Arcadia_Value_getObjectReferenceValue(&definitionAstValue);
-  return definitionAst;
+  return (Arcadia_MIL_AST_CompilationUnitNode*)Arcadia_List_getObjectReferenceValueAt(thread, self->compilationUnits, index);
 }

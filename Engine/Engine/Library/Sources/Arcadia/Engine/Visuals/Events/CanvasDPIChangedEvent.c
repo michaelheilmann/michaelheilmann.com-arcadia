@@ -52,10 +52,8 @@ Arcadia_Visuals_CanvasDPIChangedEvent_constructImpl
     Arcadia_Visuals_CanvasDPIChangedEvent* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_CanvasDPIChangedEvent_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
-  if (3 != numberOfArgumentValues1) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_CanvasDPIChangedEvent);
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -68,8 +66,7 @@ Arcadia_Visuals_CanvasDPIChangedEvent_constructImpl
   self->horizontalDpi = Arcadia_ValueStack_getInteger32Value(thread, 1);
   self->verticalDpi = Arcadia_ValueStack_getInteger32Value(thread, 0);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_CanvasDPIChangedEvent);
 }
 
 static void
@@ -78,7 +75,7 @@ Arcadia_Visuals_CanvasDPIChangedEvent_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_CanvasDPIChangedEventDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_Visuals_CanvasDPIChangedEvent*
 Arcadia_Visuals_CanvasDPIChangedEvent_create

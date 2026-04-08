@@ -211,7 +211,7 @@ isDigit
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*) & Arcadia_MIL_Scanner_constructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MIL_Scanner_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_MIL_Scanner_destructImpl,
   .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_MIL_Scanner_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_MIL_Scanner_initializeDispatchImpl,
@@ -233,14 +233,14 @@ Arcadia_MIL_Scanner_constructImpl
     Arcadia_MIL_Scanner* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_Scanner_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_Scanner);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -281,6 +281,7 @@ Arcadia_MIL_Scanner_constructImpl
   On(u8"extends", Extends);
   On(u8"implements", Implements);
   On(u8"method", Method);
+  On(u8"module", Module);
   On(u8"procedure", Procedure);
   //
   On(u8"native", Native);
@@ -322,8 +323,7 @@ Arcadia_MIL_Scanner_constructImpl
   On(u8"false", BooleanLiteral);
 #undef On
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_MIL_Scanner);
 }
 
 static void
@@ -586,6 +586,11 @@ Arcadia_MIL_Scanner_stepImpl
     saveAndNext(thread, self);
     onEndToken(thread, self, Arcadia_MIL_WordType_EqualsSign);
     return;
+  } else if ('.' == self->symbol) {
+     // <period>
+    saveAndNext(thread, self);
+    onEndToken(thread, self, Arcadia_MIL_WordType_Period);
+    return;
   } else if (':' == self->symbol) {
      // <colon>
     saveAndNext(thread, self);
@@ -723,35 +728,35 @@ Arcadia_MIL_Scanner_stepImpl
       onEndToken(thread, self, Arcadia_MIL_WordType_IntegerLiteral);
     }
   } else if ('/' == self->symbol) {
-    next(thread, self);
+    saveAndNext(thread, self);
     if ('*' == self->symbol) {
       // multi line comment
-      next(thread, self);
+      saveAndNext(thread, self);
       while (true) {
         if (CodePoint_End == self->symbol) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_LexicalError);
           Arcadia_Thread_jump(thread);
         } else if ('\n' == self->symbol) {
-          next(thread, self);
+          saveAndNext(thread, self);
         } else if ('\r' == self->symbol) {
-          next(thread, self);
+          saveAndNext(thread, self);
           if ('\n' == self->symbol) {
-            next(thread, self);
+            saveAndNext(thread, self);
           }
         } else if ('*' == self->symbol) {
-          next(thread, self);
+          saveAndNext(thread, self);
           if ('/' == self->symbol) {
-            next(thread, self);
+            saveAndNext(thread, self);
             break;
-          } else {
-            write(thread, self, '*');
           }
+        } else {
+          saveAndNext(thread, self);
         }
       }
       onEndToken(thread, self, Arcadia_MIL_WordType_MultiLineComment);
     } else if ('/' == self->symbol) {
       // single line comment
-      next(thread, self);
+      saveAndNext(thread, self);
       while (CodePoint_End != self->symbol && '\n' != self->symbol && '\r' != self->symbol) {
         saveAndNext(thread, self);
       }

@@ -62,29 +62,22 @@ Arcadia_Engine_Visuals_WindowPositionChangedEvent_constructImpl
     Arcadia_Engine_Visuals_WindowPositionChangedEvent* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_WindowPositionChangedEvent_getType(thread);
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
-  if (4 != numberOfArgumentValues1) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_WindowPositionChangedEvent);
+  if (4 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 3));
+    Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 4));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  self->window = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Engine_Visuals_Window_getType(thread));
-  self->horizontalPosition = Arcadia_ValueStack_getInteger32Value(thread, 1);
-  self->verticalPosition = Arcadia_ValueStack_getInteger32Value(thread, 0);
+  self->window = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 3, _Arcadia_Engine_Visuals_Window_getType(thread));
+  self->horizontalPosition = Arcadia_ValueStack_getInteger32Value(thread, 2);
+  self->verticalPosition = Arcadia_ValueStack_getInteger32Value(thread, 1);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_WindowPositionChangedEvent);
 }
 
 static void
@@ -93,7 +86,7 @@ Arcadia_Engine_Visuals_WindowPositionChangedEvent_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_WindowPositionChangedEventDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_WindowPositionChangedEvent_visit

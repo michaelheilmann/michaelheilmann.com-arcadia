@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_LANGUAGES_STRINGTABLE_H_INCLUDED)
 #define ARCADIA_LANGUAGES_STRINGTABLE_H_INCLUDED
 
-#if !defined(ARCADIA_LANGUAGES_PRIVATE)
+#if !defined(ARCADIA_LANGUAGES_MODULE)
   #error("do not include directly, include `Arcadia/Languages/Include.h` instead")
 #endif
 

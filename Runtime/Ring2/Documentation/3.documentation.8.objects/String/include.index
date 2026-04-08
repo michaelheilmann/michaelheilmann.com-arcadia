@@ -1,4 +1,22 @@
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String">Arcadia_String</a></li>
+
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromBoolean">Arcadia_String_createFromBoolean</a></li>
+
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromInteger16">Arcadia_String_createFromInteger16</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromInteger32">Arcadia_String_createFromInteger32</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromInteger64">Arcadia_String_createFromInteger64</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromInteger8">Arcadia_String_createFromInteger8</a></li>
+
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromNatural16">Arcadia_String_createFromNatural16</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromNatural32">Arcadia_String_createFromNatural32</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromNatural64">Arcadia_String_createFromNatural64</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromNatural8">Arcadia_String_createFromNatural8</a></li>
+
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromReal32">Arcadia_String_createFromReal32</a></li>
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromReal64">Arcadia_String_createFromReal64</a></li>
+
+<li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_createFromVoid">Arcadia_String_createFromVoid</a></li>
+
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_create_pn">Arcadia_String_create_pn</a></li>
 <li><a href="@{siteAddress}/Arcadia/Ring2/#Arcadia_String_create">Arcadia_String_create</a></li>
 

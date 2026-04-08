@@ -230,9 +230,9 @@ testScanner2
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_EqualsSign, u8"=", sizeof(u8"=") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_SingleLineComment, u8"", sizeof(u8"") - 1);
+  expectAndNext(thread, scanner, Arcadia_MIL_WordType_SingleLineComment, u8"//", sizeof(u8"//") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_MultiLineComment, u8"", sizeof(u8"") - 1);
+  expectAndNext(thread, scanner, Arcadia_MIL_WordType_MultiLineComment, u8"/**/", sizeof(u8"/**/") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_Colon, u8":", sizeof(u8":") - 1);
   expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);

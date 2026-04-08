@@ -16,7 +16,7 @@
 #if !defined(R_INTEGER64VALUE_H_INCLUDED)
 #define R_INTEGER64VALUE_H_INCLUDED
 
-#if !defined(ARCADIA_RING1_PRIVATE)
+#if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 

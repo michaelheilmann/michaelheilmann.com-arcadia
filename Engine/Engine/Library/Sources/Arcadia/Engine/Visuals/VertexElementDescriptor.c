@@ -64,22 +64,21 @@ Arcadia_Engine_Visuals_VertexElementDescriptor_construct
     Arcadia_Engine_Visuals_VertexElementDescriptor* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_VertexElementDescriptor_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_VertexElementDescriptor);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 3 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
+  //
   self->offset = Arcadia_ValueStack_getNatural32Value(thread, 3);
   self->semantics = Arcadia_ValueStack_getInteger32Value(thread, 2);
   self->syntactics = Arcadia_ValueStack_getInteger32Value(thread, 1);
-
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 3 + 1);
+  //
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_VertexElementDescriptor);
 }
 
 static void
@@ -89,8 +88,8 @@ Arcadia_Engine_Visuals_VertexElementDescriptor_initializeDispatchImpl
     Arcadia_Engine_Visuals_VertexElementDescriptorDispatch* self
   )
 {
-  ((Arcadia_ObjectDispatch*)self)->equalTo = &Arcadia_Engine_Visuals_VertexElementDescriptor_isEqualTo;
-  ((Arcadia_ObjectDispatch*)self)->notEqualTo = &Arcadia_Engine_Visuals_VertexElementDescriptor_isNotEqualTo;
+  ((Arcadia_ObjectDispatch*)self)->isEqualTo = &Arcadia_Engine_Visuals_VertexElementDescriptor_isEqualTo;
+  ((Arcadia_ObjectDispatch*)self)->isNotEqualTo = &Arcadia_Engine_Visuals_VertexElementDescriptor_isNotEqualTo;
 }
 
 static void

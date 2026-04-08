@@ -68,9 +68,8 @@ Arcadia_Engine_Visuals_EnterPassNode_constructImpl
     Arcadia_Engine_Visuals_EnterPassNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_EnterPassNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_EnterPassNode);
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -104,8 +103,7 @@ Arcadia_Engine_Visuals_EnterPassNode_constructImpl
   self->canvasSize.width = 320.f;
   self->canvasSize.height = 240.f;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_EnterPassNode);
 }
 
 static void
@@ -114,7 +112,7 @@ Arcadia_Engine_Visuals_EnterPassNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_EnterPassNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_EnterPassNode_destructImpl

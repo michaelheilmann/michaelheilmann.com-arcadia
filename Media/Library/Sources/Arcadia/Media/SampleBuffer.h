@@ -18,6 +18,7 @@
 
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Media/SampleFormat.h"
+typedef struct Arcadia_Media_DSP Arcadia_Media_DSP;
 
 // https://michaelheilmann.com/Arcadia/Media/#Arcadia_Media_SampleBuffer
 Arcadia_declareObjectType(u8"Arcadia.Media.SampleBuffer", Arcadia_Media_SampleBuffer,
@@ -86,6 +87,17 @@ Arcadia_Media_SampleBuffer_createClone
     Arcadia_Media_SampleBuffer* other
   );
 
+/// @brie Fill this sample buffer with a signal (converted to PCM data).
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this sample buffer.
+/// @param dsp A pointer to the DSP.
+void
+Arcadia_Media_SampleBuffer_fill
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Media_SampleBuffer* self,
+    Arcadia_Media_DSP* dsp
+  );
 
 void
 Arcadia_Media_sampleBuffer_setFormat

@@ -16,8 +16,13 @@
 #if !defined(ARCADIA_LANGUAGES_INCLUDE_H_INCLUDED)
 #define ARCADIA_LANGUAGES_INCLUDE_H_INCLUDED
 
-#pragma push_macro("ARCADIA_LANGUAGES_PRIVATE")
-#define ARCADIA_LANGUAGES_PRIVATE (1)
+// If a file x belongs to a module a and ARCADIA_a_MODULE is not defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_LANGUAGES_MODULE")
+#define ARCADIA_LANGUAGES_MODULE (1)
+
+// If a file x of a module a is not an export file of that module and ARCADIA_a_EXPORT is defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_LANGUAGES_EXPORT")
+#define ARCADIA_LANGUAGES_EXPORT (1)
 
 #include "Arcadia/Languages/Diagnostics.h"
 #include "Arcadia/Languages/mangleName.h"
@@ -25,7 +30,10 @@
 #include "Arcadia/Languages/Scope.h"
 #include "Arcadia/Languages/StringTable.h"
 
-#undef ARCADIA_LANGUAGES_PRIVATE
-#pragma pop_macro("ARCADIA_LANGUAGES_PRIVATE")
+#undef ARCADIA_LANGUAGES_EXPORT
+#pragma pop_macro("ARCADIA_LANGUAGES_EXPORT")
+
+#undef ARCADIA_LANGUAGES_MODULE
+#pragma pop_macro("ARCADIA_LANGUAGES_MODULE")
 
 #endif // ARCADIA_LANGUAGES_INCLUDE_H_INCLUDED

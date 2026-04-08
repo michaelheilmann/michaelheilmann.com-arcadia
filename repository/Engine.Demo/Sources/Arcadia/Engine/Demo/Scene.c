@@ -113,20 +113,19 @@ Arcadia_Engine_Demo_Scene_constructImpl
     Arcadia_Engine_Demo_Scene* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Demo_Scene_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Demo_Scene);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->applicationQuitRequestSignal = Arcadia_Signal_create(thread);
   self->engine = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_getType(thread));
   self->sceneManager = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Engine_Demo_SceneManager_getType(thread));
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Demo_Scene);
 }
 
 static void

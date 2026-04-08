@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING2_FILESYSTEM_FILEPATH_H_INCLUDED)
 #define ARCADIA_RING2_FILESYSTEM_FILEPATH_H_INCLUDED
 
-#if !defined(ARCADIA_RING2_PRIVATE)
+#if !defined(ARCADIA_RING2_MODULE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 
@@ -26,18 +26,21 @@
 #include "Arcadia/Ring2/Collections/ArrayList.h"
 #include "Arcadia/Ring2/Strings/String.h"
 
-/// The Generic Path Format
+/// @remarks
+/// A general path consists either
+/// - a root and zero or more components which is called an absolute path
+/// - no root and one or more components which is called a relative path
+/// @remarks
 /// directories are separated by a foward slash
 /// ```
 /// a/b/c
 /// ```
-/// an absolute path is denotated by a leading slash
+/// @remarks
+/// an absolute path is denoted by a leading slash
 /// ```
 /// /a/b/c
 /// ```
-/// trailing slashes are ignored
-/// For Windows, `/a` is translated to `a:\` and `/a(/<dir1>)(/<dir2>)*` is translated to `a:\<dir1>(\<dir2>)*`
-/// For Linux, `/a(/<dir>)* is translated to `/a(/<dir>)*`
+/// For example, under Windows `/C/Windows/Systme` is `CX:\Windows\System` in native format.
 Arcadia_declareObjectType(u8"Arcadia.FilePath", Arcadia_FilePath,
                           u8"Arcadia.Object");
 
@@ -48,7 +51,10 @@ struct Arcadia_FilePathDispatch {
 struct Arcadia_FilePath {
   Arcadia_Object _parent;
   Arcadia_List* fileNames;
+  // @todo Remove this. @a root already indicates if the path is relative or absolute.
   Arcadia_BooleanValue relative;
+  // If this is null, then the file path is relative.
+  // Otherwise is is absolute.
   Arcadia_String* root;
 };
 
@@ -175,7 +181,7 @@ Arcadia_FilePath_append
 /// @brief Return the root path component if any.
 /// @return The root path component if any, null otherwise.
 /// @remarks
-/// For Linux, this is `/`.
+/// For Linux, this is `/` in native form. 
 /// For Windows this is something like `C:\` in native form.
 Arcadia_FilePath*
 Arcadia_FilePath_getRootPath
@@ -185,14 +191,36 @@ Arcadia_FilePath_getRootPath
   );
 
 /// @brief Return the relative path if any.
-/// @return The relative path componetn if any, null otherwise.
+/// @return The relative path component if any, null otherwise.
 /// @remarks
 /// For `C:\` on Windows or for `/` on Linux this function returns null.
 /// For `C:\x` on Windows or for `/x` on Linux this is `x`.
-/// For `C:\x\y` on Windows or for `/x/y` on Linux this is `x\y`.
+/// For `C:\x\y` on Windows or for `/x/y` on Linux this is `x/y`.
 /// For `C:\x\y\a.txt` on Windows or for `/x/y/a.txt` this is `x/y/a.txt`.
 Arcadia_FilePath*
 Arcadia_FilePath_getRelativePath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  );
+
+/// @brief Get the parent path.
+/// @param thread A pointer to this thread.
+/// @param self A poiner to this file path.
+/// @return The parent path if any, null otherwise.
+/// @remarks
+/// - If there is a root and there are no components, this function returns null.
+/// - If there is no root and there is only one component, this function returns null.
+/// - Otherwise we remove the last component..
+Arcadia_FilePath*
+Arcadia_FilePath_getParent
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self
+  );
+
+Arcadia_String*
+Arcadia_FilePath_getExtension
   (
     Arcadia_Thread* thread,
     Arcadia_FilePath* self

@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING1_BIGINTEGER_EQUALTO_H_INCLUDED)
 #define ARCADIA_RING1_BIGINTEGER_EQUALTO_H_INCLUDED
 
-#if !defined(ARCADIA_RING1_PRIVATE)
+#if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
 
@@ -35,7 +35,7 @@ typedef Arcadia_BigInteger* Arcadia_BigIntegerValue;
 
 // Get if this BigInteger is equal to another BigInteger.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalTo
+Arcadia_BigInteger_isEqualTo
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -44,7 +44,7 @@ Arcadia_BigInteger_equalTo
 
 // Get if this BigInteger is equal to an Integer16.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalToInteger16
+Arcadia_BigInteger_isEqualToInteger16
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -53,7 +53,7 @@ Arcadia_BigInteger_equalToInteger16
 
 // Get if this BigInteger is equal to an Integer32.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalToInteger32
+Arcadia_BigInteger_isEqualToInteger32
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -62,7 +62,7 @@ Arcadia_BigInteger_equalToInteger32
 
 // Get if this BigInteger is equal to an Integer64.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalToInteger64
+Arcadia_BigInteger_isEqualToInteger64
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -71,7 +71,7 @@ Arcadia_BigInteger_equalToInteger64
 
 // Get if this BigInteger is equal to an Integer8.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalToInteger8
+Arcadia_BigInteger_isEqualToInteger8
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -80,7 +80,7 @@ Arcadia_BigInteger_equalToInteger8
 
 // Get if this BigInteger is equal to a Natural16.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalToNatural16
+Arcadia_BigInteger_isEqualToNatural16
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -89,7 +89,7 @@ Arcadia_BigInteger_equalToNatural16
 
 // Get if this BigInteger is equal to a Natural32.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalToNatural32
+Arcadia_BigInteger_isEqualToNatural32
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -98,7 +98,7 @@ Arcadia_BigInteger_equalToNatural32
 
 // Get if this BigInteger is equal to a Natural64.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalToNatural64
+Arcadia_BigInteger_isEqualToNatural64
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,
@@ -107,7 +107,7 @@ Arcadia_BigInteger_equalToNatural64
 
 // Get if this BigInteger is equal to a Natural8.
 Arcadia_BooleanValue
-Arcadia_BigInteger_equalToNatural8
+Arcadia_BigInteger_isEqualToNatural8
   (
     Arcadia_Thread* thread,
     Arcadia_BigInteger* self,

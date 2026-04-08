@@ -13,9 +13,10 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Unicode.h"
 
+#include "Arcadia/Ring1/Implementation/Unicode/UTF8ArrayIterator.h"
 #include "Arcadia/Ring1/Include.h"
 
 /// @brief Classify the first Byte of an UTF8 sequence to determine the length of the sequence.
@@ -81,63 +82,6 @@ classifyFirstByte
 #endif
 #undef Version
 #pragma pop_macro("Version")
-}
-
-Arcadia_BooleanValue
-Arcadia_Unicode_isUTF8
-  (
-    Arcadia_Thread* thread,
-    void const* bytes,
-    Arcadia_SizeValue numberOfBytes,
-    Arcadia_SizeValue* numberOfSymbols
-  )
-{
-  Arcadia_SizeValue numberOfSymbols1 = 0;
-  Arcadia_Natural8Value const* start = (Arcadia_Natural8Value const*)bytes;
-  Arcadia_Natural8Value const* end = start + numberOfBytes;
-  Arcadia_Natural8Value const* current = start;
-
-  Arcadia_JumpTarget jumpTarget;
-  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
-  if (Arcadia_JumpTarget_save(&jumpTarget)) {
-    while (current != end) {
-      Arcadia_SizeValue k = classifyFirstByte(thread, (*current));
-      if (end - current < k) {
-        if (numberOfSymbols) {
-          *numberOfSymbols = numberOfSymbols1;
-        }
-        Arcadia_Thread_popJumpTarget(thread);
-        return Arcadia_BooleanValue_False;
-      }
-      current++;
-      for (Arcadia_SizeValue i = 1; i < k; ++i) {
-        if (0x80 != ((*current) & 0xC0)) {
-          if (numberOfSymbols) {
-            *numberOfSymbols = numberOfSymbols1;
-          }
-          Arcadia_Thread_popJumpTarget(thread);
-          return Arcadia_BooleanValue_False;
-        }
-        current++;
-      }
-      numberOfSymbols1++;
-    }
-    Arcadia_Thread_popJumpTarget(thread);
-    if (numberOfSymbols) {
-      *numberOfSymbols = numberOfSymbols1;
-    }
-    return Arcadia_BooleanValue_True;
-  } else {
-    Arcadia_Thread_popJumpTarget(thread);
-    if (Arcadia_Thread_getStatus(thread) == Arcadia_Status_EncodingInvalid) {
-      if (numberOfSymbols) {
-        *numberOfSymbols = numberOfSymbols1;
-      }
-      return Arcadia_BooleanValue_False;
-    } else {
-      Arcadia_Thread_jump(thread);
-    }
-  }
 }
 
 void

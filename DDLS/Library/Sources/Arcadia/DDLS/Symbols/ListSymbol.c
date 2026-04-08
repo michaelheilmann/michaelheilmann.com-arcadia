@@ -61,22 +61,22 @@ Arcadia_DDLS_ListSymbol_constructImpl
     Arcadia_DDLS_ListSymbol* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDLS_ListSymbol_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDLS_ListSymbol);
   //
   {
     Arcadia_ValueStack_pushInteger32Value(thread, Arcadia_DDLS_SymbolKind_List);
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  //
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
   self->entry = (Arcadia_DDLS_Symbol*)Arcadia_DDLS_AnySymbol_create(thread);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DDLS_ListSymbol);
 }
 
 static void

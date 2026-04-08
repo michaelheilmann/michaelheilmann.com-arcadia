@@ -61,12 +61,12 @@ R_Interpreter_Procedure_constructImpl
     R_Interpreter_Procedure* self
   )
 {
-  Arcadia_TypeValue _type = _R_Interpreter_Procedure_getType(thread);
+  Arcadia_EnterConstructor(R_Interpreter_Procedure);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -82,8 +82,7 @@ R_Interpreter_Procedure_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2 + 1);
+  Arcadia_LeaveConstructor(R_Interpreter_Procedure);
 }
 
 static void
@@ -92,7 +91,7 @@ R_Interpreter_Procedure_initializeDispatchImpl
     Arcadia_Thread* thread,
     R_Interpreter_ProcedureDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 R_Interpreter_Procedure_visit

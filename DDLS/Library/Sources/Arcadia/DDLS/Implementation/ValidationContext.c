@@ -70,13 +70,14 @@ Arcadia_DDLS_ValidationContext_constructImpl
     Arcadia_DDLS_ValidationContext* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDLS_ValidationContext_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDLS_ValidationContext);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  //
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -86,8 +87,7 @@ Arcadia_DDLS_ValidationContext_constructImpl
   self->diagnostics = Arcadia_DDLS_Diagnostics_create(thread, self->stringTable);
   self->schemata = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DDLS_ValidationContext);
 }
 
 static void

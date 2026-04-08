@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/TypeSystem/Types.module.h"
 
 #include "Arcadia/Ring1/Include.h"
@@ -24,11 +24,11 @@
 #include <string.h>
 #include <limits.h>
 
-#include "Arcadia/Ring1/Implementation/TypeSystem/EnumerationTypeNode.h"
-#include "Arcadia/Ring1/Implementation/TypeSystem/InterfaceTypeNode.h"
-#include "Arcadia/Ring1/Implementation/TypeSystem/InternalTypeNode.h"
-#include "Arcadia/Ring1/Implementation/TypeSystem/ObjectTypeNode.h"
-#include "Arcadia/Ring1/Implementation/TypeSystem/ScalarTypeNode.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/EnumerationTypeNode.module.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/InterfaceTypeNode.module.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/InternalTypeNode.module.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/ObjectTypeNode.module.h"
+#include "Arcadia/Ring1/Implementation/TypeSystem/ScalarTypeNode.module.h"
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -115,7 +115,7 @@ Arcadia_ObjectType_getParentObjectType
   )
 { return ((ObjectTypeNode*)self)->parentObjectType; }
 
-Arcadia_Type_VisitObjectCallbackFunction*
+Arcadia_Object_VisitCallbackFunction*
 Arcadia_Type_getVisitObjectCallbackFunction
   (
     Arcadia_TypeValue self
@@ -128,7 +128,7 @@ Arcadia_Type_getVisitObjectCallbackFunction
   return typeNode->typeOperations->objectTypeOperations->visit;
 }
 
-Arcadia_Type_DestructObjectCallbackFunction*
+Arcadia_Object_DestructCallbackFunction*
 Arcadia_Type_getDestructObjectCallbackFunction
   (
     Arcadia_TypeValue self
@@ -281,7 +281,6 @@ Arcadia_registerObjectType
     size_t valueSize,
     Arcadia_TypeValue parentObjectType,
     size_t dispatchSize,
-    void (*initializeDispatch)(Arcadia_Thread*, Arcadia_Dispatch*),
     Arcadia_Type_Operations const* typeOperations,
     Arcadia_Type_TypeDestructingCallbackFunction* typeDestructing
   )
@@ -293,6 +292,10 @@ Arcadia_registerObjectType
       Arcadia_Thread_setStatus(thread, Arcadia_Status_TypeExists);
       Arcadia_Thread_jump(thread);
     }
+  }
+  if (!typeOperations->objectTypeOperations) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid); /*@tood Add Arcadia_Status_NoObjectType.*/
+    Arcadia_Thread_jump(thread);
   }
   if (parentObjectType && !Arcadia_Type_isObjectKind(thread, parentObjectType)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid); /*@tood Add Arcadia_Status_NoObjectType.*/
@@ -338,9 +341,9 @@ Arcadia_registerObjectType
       memcpy(((ObjectTypeNode*)typeNode)->dispatch, parentObjectTypeNode->dispatch, parentObjectTypeNode->dispatchSize);
     }
   }
-  if (initializeDispatch) {
-    (*initializeDispatch)(thread, ((ObjectTypeNode*)typeNode)->dispatch);
-    ((Arcadia_Dispatch*)((ObjectTypeNode*)typeNode)->dispatch)->type = typeNode;
+  if (typeOperations->objectTypeOperations->initializeDispatch) {
+    (*typeOperations->objectTypeOperations->initializeDispatch)(thread, ((ObjectTypeNode*)typeNode)->dispatch);
+    ((Arcadia_ObjectDispatch*)((ObjectTypeNode*)typeNode)->dispatch)->type = typeNode;
   }
 
   assert(NULL != typeNode->typeOperations);
@@ -440,7 +443,7 @@ Arcadia_getType
   Arcadia_Thread_jump(thread);
 }
 
-Arcadia_Dispatch*
+Arcadia_ObjectDispatch*
 Arcadia_ObjectType_getDispatch
   (
     Arcadia_ObjectType* type

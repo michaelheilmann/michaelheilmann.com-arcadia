@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_RING2_FILESYSTEM_WINDOWS_GETLOCALFOLDER_H_INCLUDED)
 #define ARCADIA_RING2_FILESYSTEM_WINDOWS_GETLOCALFOLDER_H_INCLUDED
 
-#if !defined(ARCADIA_RING2_PRIVATE)
+#if !defined(ARCADIA_RING2_MODULE)
   #error("do not include directly, include `Arcadia/Ring2/Include.h` instead")
 #endif
 

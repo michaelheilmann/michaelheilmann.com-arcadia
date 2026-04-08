@@ -92,7 +92,7 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_construct
     Arcadia_Engine_Demo_ArcadiaLogoScene* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Demo_ArcadiaLogoScene_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Demo_ArcadiaLogoScene);
   {
     Arcadia_Value engine = Arcadia_ValueStack_getValue(thread, 1),
                   sceneManager = Arcadia_ValueStack_getValue(thread, 2);
@@ -101,7 +101,7 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_construct
     Arcadia_ValueStack_pushNatural8Value(thread, 2);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 2 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -122,8 +122,7 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_construct
   //
   Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS")), self->toLoad);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Demo_ArcadiaLogoScene);
 }
 
 static void

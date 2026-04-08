@@ -80,6 +80,7 @@ main1
     char** argv
   )
 {
+  Arcadia_Log* log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
   Arcadia_ADL_Definitions* definitions = Arcadia_ADL_Definitions_create(thread);
   Arcadia_ADL_Definition* definition = NULL;
 
@@ -97,25 +98,25 @@ main1
     Arcadia_UTF8StringReader *r = Arcadia_UTF8StringReader_create(thread, argumentString);
     Arcadia_CommandLineArgument* argument = Arcadia_CommandLine_parseArgument(thread, (Arcadia_UTF8Reader*)r);
     if (argument->syntacticalError) {
-      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString);
+      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argumentString, log);
     }
     if (Arcadia_String_isEqualTo_pn(thread, argument->name, u8"definition", sizeof(u8"definition") - 1)) {
       if (!argument->value) {
-        Arcadia_CommandLine_raiseNoValueError(thread, argument->name);
+        Arcadia_CommandLine_raiseNoValueError(thread, argument->name, log);
       }
       definition = loadADL(thread, definitions, argument->value);
     } else if (Arcadia_String_isEqualTo_pn(thread, argument->name, u8"target", sizeof(u8"target") - 1)) {
       if (!argument->value) {
-        Arcadia_CommandLine_raiseNoValueError(thread, argument->name);
+        Arcadia_CommandLine_raiseNoValueError(thread, argument->name, log);
       }
       Arcadia_Value_setObjectReferenceValue(&target, argument->value);
     } else if (Arcadia_String_isEqualTo_pn(thread, argument->name, u8"start", sizeof(u8"start") - 1)) {
       if (!argument->value) {
-        Arcadia_CommandLine_raiseNoValueError(thread, argument->name);
+        Arcadia_CommandLine_raiseNoValueError(thread, argument->name, log);
       }
       Arcadia_Value_setObjectReferenceValue(&start, argument->value);
     } else {
-      Arcadia_CommandLine_raiseUnknownArgumentError(thread, argument->name, argument->value);
+      Arcadia_CommandLine_raiseUnknownArgumentError(thread, argument->name, argument->value, log);
     }
     Arcadia_FileHandle* fileHandle = Arcadia_FileSystem_createFileHandle(thread, Arcadia_FileSystem_getOrCreate(thread));
     Arcadia_FileHandle_openStandardOutput(thread, fileHandle);
@@ -131,10 +132,10 @@ main1
     Arcadia_print(thread);
   }
   if (!Arcadia_Value_isInstanceOf(thread, &target,_Arcadia_String_getType(thread))) {
-    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_createFromCxxString(thread, u8"target"));
+    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_createFromCxxString(thread, u8"target"), log);
   }
   if (!Arcadia_Value_isInstanceOf(thread, &start, _Arcadia_String_getType(thread))) {
-    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_createFromCxxString(thread, u8"start"));
+    Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_createFromCxxString(thread, u8"start"), log);
   }
   Arcadia_Media_PixelBuffer* pixelBuffer = NULL;
   Arcadia_ADL_Definitions_link(thread, definitions);

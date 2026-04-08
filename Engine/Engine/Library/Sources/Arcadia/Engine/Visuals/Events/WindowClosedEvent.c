@@ -62,27 +62,20 @@ Arcadia_Engine_Visuals_WindowClosedEvent_constructImpl
     Arcadia_Engine_Visuals_WindowClosedEvent* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_WindowClosedEvent_getType(thread);
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  Arcadia_ValueStack_popValues(thread, 1); // pop number of arguments
-  if (2 != numberOfArgumentValues1) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_WindowClosedEvent);
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
-    Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 1));
+    Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 2));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
   //
-  self->window = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 0, _Arcadia_Engine_Visuals_Window_getType(thread));
+  self->window = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Engine_Visuals_Window_getType(thread));
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_WindowClosedEvent);
 }
 
 static void

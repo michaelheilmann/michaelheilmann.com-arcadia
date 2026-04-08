@@ -16,8 +16,10 @@
 cmake_minimum_required(VERSION 3.29)
 
 add_subdirectory(Machine)
+
 add_subdirectory(MIL.AST)
 add_subdirectory(MIL.Frontend)
+add_subdirectory(MIL.Compiler)
 
 add_subdirectory(Integrations)
 
@@ -25,7 +27,6 @@ add_subdirectory(Engine.Demo)
 
 add_subdirectory(Tools.ConcatenateFiles)
 add_subdirectory(Tools.CompareFiles)
-add_subdirectory(Tools.Compiler)
 
 add_subdirectory(Math)
 add_subdirectory(Visuals.Implementation)

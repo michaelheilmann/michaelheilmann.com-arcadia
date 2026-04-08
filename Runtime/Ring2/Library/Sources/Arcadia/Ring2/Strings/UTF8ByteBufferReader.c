@@ -13,14 +13,10 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/Strings/UTF8ByteBufferReader.h"
 
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"
-
-#define CodePoint_Start (Arcadia_Unicode_CodePoint_Last + 1)
-#define CodePoint_End (Arcadia_Unicode_CodePoint_Last + 2)
-#define CodePoint_Error (Arcadia_Unicode_CodePoint_Last + 3)
 
 /// @code
 /// construct(source:ByteBuffer)
@@ -83,51 +79,7 @@ Arcadia_UTF8ByteBufferReader_nextImpl
     Arcadia_Thread* thread,
     Arcadia_UTF8ByteBufferReader* self
   )
-{
-  if (self->codePoint == CodePoint_End || self->codePoint == CodePoint_Error) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfBytes = Arcadia_ByteBuffer_getSize(thread, self->source);
-  if (self->byteIndex == numberOfBytes) {
-    self->codePoint = CodePoint_End;
-  } else {
-    Arcadia_Natural8Value byte = Arcadia_ByteBuffer_getAt(thread, self->source, self->byteIndex);
-    Arcadia_SizeValue expectedNumberOfBytes = Arcadia_Unicode_UTF8_classifyFirstByte(thread, byte);
-    if (expectedNumberOfBytes == Arcadia_SizeValue_Maximum || numberOfBytes - self->byteIndex < expectedNumberOfBytes) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    // The masks to remove the prefix bits from the first Byte.
-    static const Arcadia_Natural8Value mask[] = {
-      0b11111111,
-      0b00011111,
-      0b00001111,
-      0b00000111,
-    };
-    Arcadia_Natural32Value codePoint = byte & mask[expectedNumberOfBytes - 1];
-    for (Arcadia_SizeValue i = 1; i < expectedNumberOfBytes; ++i) {
-      byte = Arcadia_ByteBuffer_getAt(thread, self->source, self->byteIndex + i);
-      if (0x80 != (byte & 0xc0)) {
-        Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-        Arcadia_Thread_jump(thread);
-      }
-      codePoint <<= 6;
-      codePoint |= (byte & 0b00111111);
-    }
-    if (expectedNumberOfBytes == 1 && codePoint <= 0x7f) {
-    } else if (expectedNumberOfBytes == 2 && 0x80 <= codePoint && codePoint <= 0x7ff) {
-    } else if (expectedNumberOfBytes == 3 && 0x800 <= codePoint && codePoint <= 0xffff) {
-    } else if (expectedNumberOfBytes == 4 && 0x10000 <= codePoint && codePoint > 0x10ffff) {
-    } else {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_EncodingInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    self->byteIndex += expectedNumberOfBytes;
-    self->byteLength = expectedNumberOfBytes;
-    self->codePoint = codePoint;
-  }
-}
+{ _Arcadia_UTF8ArrayIterator_next(thread, &self->iterator); }
 
 static Arcadia_Natural32Value
 Arcadia_UTF8ByteBufferReader_getCodePointImpl
@@ -135,13 +87,7 @@ Arcadia_UTF8ByteBufferReader_getCodePointImpl
     Arcadia_Thread* thread,
     Arcadia_UTF8ByteBufferReader* self
   )
-{
-  if (self->codePoint == CodePoint_Start || self->codePoint == CodePoint_End) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_OperationInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  return self->codePoint;
-}
+{ return _Arcadia_UTF8ArrayIterator_getCodePoint(thread, &self->iterator); }
 
 static Arcadia_BooleanValue
 Arcadia_UTF8ByteBufferReader_hasCodePointImpl
@@ -149,12 +95,7 @@ Arcadia_UTF8ByteBufferReader_hasCodePointImpl
     Arcadia_Thread* thread,
     Arcadia_UTF8ByteBufferReader* self
   )
-{
-  if (self->codePoint == CodePoint_Start) {
-    Arcadia_UTF8ByteBufferReader_nextImpl(thread, self);
-  }
-  return CodePoint_End != self->codePoint;
-}
+{ return _Arcadia_UTF8ArrayIterator_hasCodePoint(thread, &self->iterator); }
 
 static Arcadia_Natural32Value
 Arcadia_UTF8ByteBufferReader_getLengthImpl
@@ -162,7 +103,7 @@ Arcadia_UTF8ByteBufferReader_getLengthImpl
     Arcadia_Thread* thread,
     Arcadia_UTF8ByteBufferReader* self
   )
-{ return self->byteLength; }
+{ return _Arcadia_UTF8ArrayIterator_getNumberOfBytes(thread, &self->iterator); }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
@@ -187,7 +128,7 @@ Arcadia_UTF8ByteBufferReader_constructImpl
     Arcadia_UTF8ByteBufferReader* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_UTF8ByteBufferReader_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_UTF8ByteBufferReader);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -197,10 +138,8 @@ Arcadia_UTF8ByteBufferReader_constructImpl
     Arcadia_Thread_jump(thread);
   }
   self->source = (Arcadia_ByteBuffer*)Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_ByteBuffer_getType(thread));
-  self->byteIndex = 0;
-  self->codePoint = CodePoint_Start;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2);
+  _Arcadia_UTF8ArrayIterator_initialize(thread, &self->iterator, Arcadia_ByteBuffer_getBytes(thread, self->source), Arcadia_ByteBuffer_getNumberOfBytes(thread, self->source));
+  Arcadia_LeaveConstructor(Arcadia_UTF8ByteBufferReader);
 }
 
 static void

@@ -188,8 +188,22 @@ onOperand
     Arcadia_MIL_Parser* self
   );
 
+static Arcadia_MIL_AST_IdentifierNode*
+onIdentifier
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_Parser* self
+  );
+
+static Arcadia_MIL_AST_InvokeInstructionNode*
+onInvokeInstruction
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_Parser* self
+  );
+
 static Arcadia_MIL_AST_InstructionNode*
-onExpression
+onInstruction
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
@@ -258,6 +272,13 @@ onClassDefinition
     Arcadia_MIL_Parser* self
   );
 
+static Arcadia_MIL_AST_ModuleDefinitionNode*
+onModuleDefinition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_Parser* self
+  );
+
 static Arcadia_MIL_AST_ProcedureDefinitionNode*
 onProcedureDefinition
   (
@@ -265,8 +286,8 @@ onProcedureDefinition
     Arcadia_MIL_Parser* self
   );
 
-static Arcadia_MIL_AST_ModuleNode*
-onModule
+static Arcadia_MIL_AST_CompilationUnitNode*
+onCompilationUnit
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
@@ -326,6 +347,33 @@ onOperand
       Arcadia_Thread_jump(thread);
     } break;
   };
+}
+
+static Arcadia_MIL_AST_IdentifierNode*
+onIdentifier
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_Parser* self
+  )
+{
+  if (!is(thread, self, Arcadia_MIL_WordType_Name)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_List* names = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_List_insertBackObjectReferenceValue(thread, names, getText(thread, self));
+  next(thread, self);
+  while (is(thread, self, Arcadia_MIL_WordType_Period)) {
+    next(thread, self);
+    if (!is(thread, self, Arcadia_MIL_WordType_Name)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_List_insertBackObjectReferenceValue(thread, names, getText(thread, self));
+    next(thread, self);
+  }
+  Arcadia_MIL_AST_IdentifierNode* node = Arcadia_MIL_AST_IdentifierNode_create(thread, Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(names)));
+  return node;
 }
 
 static Arcadia_MIL_AST_InvokeInstructionNode*
@@ -1179,6 +1227,48 @@ onClassDefinition
   return classDefinitionAst;
 }
 
+// moduleDefinition : 'module' name moduleBody
+// moduleBody : '{' '}'
+static Arcadia_MIL_AST_ModuleDefinitionNode*
+onModuleDefinition
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MIL_Parser* self
+  )
+{
+  if (!is(thread, self, Arcadia_MIL_WordType_Module)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  next(thread, self);
+  if (!is(thread, self, Arcadia_MIL_WordType_Name)) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+    Arcadia_Thread_jump(thread);
+  }
+  Arcadia_MIL_AST_IdentifierNode* moduleName = onIdentifier(thread, self);
+  Arcadia_List* moduleBody = NULL;
+  while (is(thread, self, Arcadia_MIL_WordType_LineTerminator)) {
+    next(thread, self);
+  }
+  if (is(thread, self, Arcadia_MIL_WordType_LeftCurlyBracket)) {
+    moduleBody = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+    next(thread, self);
+    while (is(thread, self, Arcadia_MIL_WordType_LineTerminator)) {
+      next(thread, self);
+    }
+    if (!is(thread, self, Arcadia_MIL_WordType_RightCurlyBracket)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
+      Arcadia_Thread_jump(thread);
+    }
+    next(thread, self);
+  }
+  while (is(thread, self, Arcadia_MIL_WordType_LineTerminator)) {
+    next(thread, self);
+  }
+  Arcadia_MIL_AST_ModuleDefinitionNode* moduleDefinitionAst = Arcadia_MIL_AST_ModuleDefinitionNode_create(thread, moduleName, moduleBody);
+  return moduleDefinitionAst;
+}
+
 // procedureDefinition : 'procedure' 'entry'? ('native' string)? name procedureParameters? procedureBody?
 // procedureParameters : parameters
 // procedureBody : '{' statements '}'
@@ -1243,15 +1333,15 @@ onProcedureDefinition
   return procedureDefinitionAst;
 }
 
-/// module : (classDefinition|enumerationDefinition|proceduredefinition)*
-static Arcadia_MIL_AST_ModuleNode*
-onModule
+/// compilationUnit : (classDefinition|enumerationDefinition|moduleDefinition|proceduredefinition)*
+static Arcadia_MIL_AST_CompilationUnitNode*
+onCompilationUnit
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
   )
 {
-  Arcadia_MIL_AST_ModuleNode* moduleAst = Arcadia_MIL_AST_ModuleNode_create(thread);
+  Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode = Arcadia_MIL_AST_CompilationUnitNode_create(thread);
   if (!is(thread, self, Arcadia_MIL_WordType_StartOfInput)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
@@ -1261,15 +1351,19 @@ onModule
     while (is(thread, self, Arcadia_MIL_WordType_LineTerminator)) {
       next(thread, self);
     }
-    Arcadia_MIL_DefinitionAst* definitionAst = NULL;
+    Arcadia_MIL_AST_DefinitionNode* definitionNode = NULL;
     switch (getType(thread, self)) {
       case Arcadia_MIL_WordType_Class: {
-        definitionAst = (Arcadia_MIL_DefinitionAst*)onClassDefinition(thread, self);
-        Arcadia_MIL_AST_ModuleNode_appendDefinition(thread, moduleAst, definitionAst);
+        definitionNode = (Arcadia_MIL_AST_DefinitionNode*)onClassDefinition(thread, self);
+        Arcadia_MIL_AST_CompilationUnitNode_appendDefinition(thread, compilationUnitNode, definitionNode);
+      } break;
+      case Arcadia_MIL_WordType_Module: {
+        definitionNode = (Arcadia_MIL_AST_DefinitionNode*)onModuleDefinition(thread, self);
+        Arcadia_MIL_AST_CompilationUnitNode_appendDefinition(thread, compilationUnitNode, definitionNode);
       } break;
       case Arcadia_MIL_WordType_Procedure: {
-        definitionAst = (Arcadia_MIL_DefinitionAst*)onProcedureDefinition(thread, self);
-        Arcadia_MIL_AST_ModuleNode_appendDefinition(thread, moduleAst, definitionAst);
+        definitionNode = (Arcadia_MIL_AST_DefinitionNode*)onProcedureDefinition(thread, self);
+        Arcadia_MIL_AST_CompilationUnitNode_appendDefinition(thread, compilationUnitNode, definitionNode);
       } break;
       default: {
         Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
@@ -1281,18 +1375,18 @@ onModule
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
-  return moduleAst;
+  return compilationUnitNode;
 }
 
-Arcadia_MIL_AST_ModuleNode*
+Arcadia_MIL_AST_CompilationUnitNode*
 Arcadia_MIL_Parser_run
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_Parser* self
   )
 {
-  Arcadia_MIL_AST_ModuleNode* moduleAst = onModule(thread, self);
-  return moduleAst;
+  Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode = onCompilationUnit(thread, self);
+  return compilationUnitNode;
 }
 
 void

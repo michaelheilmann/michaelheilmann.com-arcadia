@@ -1,5 +1,5 @@
 
-#define ARCADIA_RING1_PRIVATE (1)
+#define ARCADIA_RING1_MODULE (1)
 #include "Arcadia/Ring1/Implementation/Diagnostics.h"
 
 #include <stdio.h>

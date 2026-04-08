@@ -166,7 +166,6 @@ Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-
   // Create and lock the list of resources.
   self->resources = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_lock(thread, (Arcadia_Object*)self->resources);

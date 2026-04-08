@@ -16,9 +16,13 @@
 #if !defined(ARCADIA_MATH_INCLUDE_H_INCLUDED)
 #define ARCADIA_MATH_INCLUDE_H_INCLUDED
 
-#pragma push_macro("ARCADIA_MATH_PRIVATE")
-#undef ARCADIA_MATH_PRIVATE
-#define ARCADIA_MATH_PRIVATE (1)
+// If a file x belongs to a module a and ARCADIA_a_MODULE is not defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_MATH_MODULE")
+#define ARCADIA_MATH_MODULE (1)
+
+// If a file x of a module a is not an export file of that module and ARCADIA_a_EXPORT is defined, then that file shall raise a compile-time error.
+#pragma push_macro("ARCADIA_MATH_EXPORT")
+#define ARCADIA_MATH_EXPORT (1)
 
 #include "Arcadia/Math/Implementation/crossProduct.h"
 #include "Arcadia/Math/Implementation/Configure.h"
@@ -35,7 +39,10 @@
 #include "Arcadia/Math/Implementation/Vector3Real32.h"
 #include "Arcadia/Math/Implementation/Vector3Real64.h"
 
-#undef ARCADIA_MATH_PRIVATE
-#pragma pop_macro("ARCADIA_MATH_PRIVATE")
+#undef ARCADIA_MATH_EXPORT
+#pragma pop_macro("ARCADIA_MATH_EXPORT")
+
+#undef ARCADIA_MATH_MODULE
+#pragma pop_macro("ARCADIA_MATH_MODULE")
 
 #endif // ARCADIA_MATH_INCLUDE_H_INCLUDED

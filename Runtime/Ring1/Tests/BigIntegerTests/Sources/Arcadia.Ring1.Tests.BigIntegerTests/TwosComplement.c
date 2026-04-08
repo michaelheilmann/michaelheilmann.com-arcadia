@@ -32,7 +32,7 @@ test
   if (Arcadia_JumpTarget_save(&jt)) {
     Arcadia_BigInteger_toTwosComplement(thread, x, &p, &n);
     Arcadia_BigInteger_fromTwosComplement(thread, y, p, n);
-    Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_equalTo(thread, x, y));
+    Arcadia_Tests_assertTrue(thread, Arcadia_BigInteger_isEqualTo(thread, x, y));
     Arcadia_Memory_deallocateUnmanaged(thread, p);
     p = NULL;
     Arcadia_Thread_popJumpTarget(thread);

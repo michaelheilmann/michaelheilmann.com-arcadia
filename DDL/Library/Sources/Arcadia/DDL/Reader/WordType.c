@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_DDL_PRIVATE (1)
+#define ARCADIA_DDL_MODULE (1)
 #include "Arcadia/DDL/Reader/WordType.h"
 
 static const Arcadia_Type_Operations _typeOperations = {

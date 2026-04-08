@@ -52,19 +52,17 @@ Arcadia_Visuals_ApplicationQuitRequestedEvent_constructImpl
     Arcadia_Visuals_ApplicationQuitRequestedEvent* self
   )
 {
-  Arcadia_TypeValue type = _Arcadia_Visuals_ApplicationQuitRequestedEvent_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_ApplicationQuitRequestedEvent);
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   {
     Arcadia_ValueStack_pushNatural64Value(thread, Arcadia_ValueStack_getNatural64Value(thread, 1));
     Arcadia_ValueStack_pushNatural8Value(thread, 1);
-    Arcadia_superTypeConstructor(thread, type, self);
+    Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_ApplicationQuitRequestedEvent);
 }
 
 static void
@@ -73,7 +71,7 @@ Arcadia_Visuals_ApplicationQuitRequestedEvent_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_ApplicationQuitRequestedEventDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_Visuals_ApplicationQuitRequestedEvent*
 Arcadia_Visuals_ApplicationQuitRequestedEvent_create

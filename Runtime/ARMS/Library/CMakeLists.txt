@@ -27,6 +27,8 @@ if (NOT TARGET ${MyLibraryName})
 
   OnSourceFile(${MyLibraryName} Arcadia/ARMS/Include.c)
   OnHeaderFile(${MyLibraryName} Arcadia/ARMS/Include.h)
+  OnSourceFile(${MyLibraryName} Arcadia/ARMS/ARMS.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ARMS/ARMS.h)
   OnSourceFile(${MyLibraryName} Arcadia/ARMS/MemoryManager.c)
   OnHeaderFile(${MyLibraryName} Arcadia/ARMS/MemoryManager.h)
   OnSourceFile(${MyLibraryName} Arcadia/ARMS/SizeType.c)

@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING2_PRIVATE (1)
+#define ARCADIA_RING2_MODULE (1)
 #include "Arcadia/Ring2/Time/PointInTime.h"
 
 #include <time.h>
@@ -66,18 +66,17 @@ Arcadia_PointInTime_constructImpl
     Arcadia_PointInTime* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_PointInTime_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_PointInTime);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   self->timeStamp = Arcadia_ValueStack_getInteger64Value(thread, 1);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2);
+  Arcadia_LeaveConstructor(Arcadia_PointInTime);
 }
 
 static void
@@ -86,7 +85,7 @@ Arcadia_PointInTime_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_PointInTimeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_PointInTime*
 Arcadia_PointInTime_create

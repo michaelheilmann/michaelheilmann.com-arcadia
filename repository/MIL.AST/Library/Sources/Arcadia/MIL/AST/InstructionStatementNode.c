@@ -53,13 +53,12 @@ Arcadia_MIL_AST_InstructionStatementNode_constructImpl
     Arcadia_MIL_AST_InstructionStatementNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_MIL_AST_InstructionStatementNode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_MIL_AST_InstructionStatementNode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_MIL_AST_InstructionStatementNode);
 }
 
 static void
@@ -68,4 +67,4 @@ Arcadia_MIL_AST_InstructionStatementNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MIL_AST_InstructionStatementNodeDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
