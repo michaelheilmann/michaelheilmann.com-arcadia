@@ -92,9 +92,8 @@ Arcadia_Engine_Visuals_Implementation_ModelNode_constructImpl
     Arcadia_Engine_Visuals_Implementation_ModelNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_Implementation_ModelNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (2 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_ModelNode);
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -114,8 +113,7 @@ Arcadia_Engine_Visuals_Implementation_ModelNode_constructImpl
   //
   self->modelResource = NULL;
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_ModelNode);
 }
 
 static void

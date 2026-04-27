@@ -16,12 +16,6 @@
 #if !defined(ARCADIA_RING1_IMPLEMENTATION_UNICODE_H_INCLUDED)
 #define ARCADIA_RING1_IMPLEMENTATION_UNICODE_H_INCLUDED
 
-#if 0
-#include "Arcadia/Ring1/Implementation/Boolean.h"
-#include "Arcadia/Ring1/Implementation/Natural32.h"
-#include "Arcadia/Ring1/Implementation/Natural8.h"
-#include "Arcadia/Ring1/Implementation/Size.h"
-#endif
 #include "Arcadia/Ring1/Implementation/StaticAssert.h"
 
 #include "Arcadia/Ring1/Implementation/Unicode/Unicode.h"

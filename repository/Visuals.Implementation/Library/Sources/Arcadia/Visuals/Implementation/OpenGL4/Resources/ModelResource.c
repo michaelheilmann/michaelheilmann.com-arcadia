@@ -114,9 +114,8 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_constructImpl
     Arcadia_Visuals_Implementation_OpenGL4_ModelResource* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_ModelResource_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (3 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_ModelResource);
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -170,9 +169,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ModelResource_constructImpl
     }
     Arcadia_Thread_jump(thread);
   }
-
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_ModelResource);
 }
 
 

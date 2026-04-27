@@ -13,21 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/hash.h"
+#if !defined(ARCADIA_RING2_TESTS_LISTTESTS_REMOVEAT_H_INCLUDED)
+#define ARCADIA_RING2_TESTS_LISTTESTS_REMOVEAT_H_INCLUDED
 
-#include "Arcadia/Ring1/Include.h"
+#include "Arcadia/Ring2/Include.h"
 
-Arcadia_SizeValue
-_hashUTF8
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Natural8Value const* bytes,
-    Arcadia_SizeValue numberOfBytes
-  )
-{
-  Arcadia_SizeValue hash = numberOfBytes;
-  for (Arcadia_SizeValue i = 0, n = numberOfBytes; i < n; ++i) {
-    hash = hash * 37 + bytes[i];
-  }
-  return hash;
-}
+void Arcadia_Ring2_Tests_ListTests_removeAt(Arcadia_Thread* thread);
+
+#endif // ARCADIA_RING2_TESTS_LISTTESTS_REMOVEAT_H_INCLUDED

@@ -104,22 +104,20 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_constructImpl
     Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
   self->instanceHandle = NULL;
   self->classAtom = 0;
   self->windowHandle = NULL;
   self->deviceContextHandle = NULL;
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow);
 }
 
 static void
@@ -128,7 +126,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindowDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow*
 Arcadia_Visuals_Implementation_OpenGL4_WGL_SystemWindow_create

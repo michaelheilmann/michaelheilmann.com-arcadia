@@ -139,19 +139,14 @@ Arcadia_WeakReference_constructImpl
     Arcadia_WeakReference* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_WeakReference_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_WeakReference);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 == numberOfArgumentValues) {
+  if (0 == _numberOfArguments) {
     self->value = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
-  } else if (1 == numberOfArgumentValues) {
+  } else if (1 == _numberOfArguments) {
     self->value = Arcadia_ValueStack_getValue(thread, 1);
     switch (Arcadia_Value_getTag(&self->value)) {
       case Arcadia_ValueTag_Atom: {
@@ -204,8 +199,7 @@ Arcadia_WeakReference_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_WeakReference);
 }
 
 static void
@@ -214,7 +208,7 @@ Arcadia_WeakReference_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_WeakReferenceDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_WeakReference*
 Arcadia_WeakReference_create

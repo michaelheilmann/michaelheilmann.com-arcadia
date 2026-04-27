@@ -178,12 +178,12 @@ Arcadia_DefaultFileHandle_constructImpl
     Arcadia_DefaultFileHandle* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DefaultFileHandle_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DefaultFileHandle);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -199,8 +199,7 @@ Arcadia_DefaultFileHandle_constructImpl
 #endif
   self->flags = 0;
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DefaultFileHandle);
 }
 
 

@@ -175,12 +175,12 @@ Arcadia_StringBuffer_constructImpl
     Arcadia_StringBuffer* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_StringBuffer_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_StringBuffer);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -188,8 +188,7 @@ Arcadia_StringBuffer_constructImpl
   self->size = 0;
   self->capacity = 0;
   self->elements = Arcadia_Memory_allocateUnmanaged(thread, 0);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1);
+  Arcadia_LeaveConstructor(Arcadia_StringBuffer);
 }
 
 static void
@@ -574,6 +573,34 @@ Arcadia_StringBuffer_getNumberOfBytes
   )
 { return self->size; }
 
+Arcadia_SizeValue
+Arcadia_StringBuffer_getNumberOfCodePoints
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self
+  )
+{
+  Arcadia_Value index = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
+  // It's still linear time, its fine :)
+  _Arcadia_UTF8ArrayIterator  it;
+  _Arcadia_UTF8ArrayIterator_initialize(thread, &it, self->elements, self->size);
+  Arcadia_JumpTarget jt;
+  Arcadia_Thread_pushJumpTarget(thread, &jt);
+  if (Arcadia_JumpTarget_save(&jt)) {
+    while (_Arcadia_UTF8ArrayIterator_hasCodePoint(thread, &it)) {
+      _Arcadia_UTF8ArrayIterator_next(thread, &it);
+    }
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_SizeValue index = _Arcadia_UTF8ArrayIterator_getNumberOfCodePoints(thread, &it);
+    _Arcadia_UTF8ArrayIterator_uninitialize(thread, &it);
+    return index;
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    _Arcadia_UTF8ArrayIterator_uninitialize(thread, &it);
+    Arcadia_Thread_jump(thread);
+  }
+}
+
 Arcadia_Natural8Value const*
 Arcadia_StringBuffer_getBytes
   (
@@ -581,6 +608,30 @@ Arcadia_StringBuffer_getBytes
     Arcadia_StringBuffer const* self
   )
 { return self->elements; }
+
+void
+Arcadia_StringBuffer_toUpperASCII
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue* index,
+    Arcadia_SizeValue* length
+  )
+{ 
+  Arcadia_Unicode_UTF8_toUpperASCII(thread, self->elements, self->size, index, length);
+}
+
+void
+Arcadia_StringBuffer_toLowerASCII
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue* index,
+    Arcadia_SizeValue* length
+  )
+{
+  Arcadia_Unicode_UTF8_toLowerASCII(thread, self->elements, self->size, index, length);
+}
 
 void
 Arcadia_StringBuffer_removeCodePointsFront

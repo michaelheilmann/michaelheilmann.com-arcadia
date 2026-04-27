@@ -162,7 +162,7 @@ Arcadia_UTF8StringReader_getLengthImpl
     Arcadia_Thread* thread,
     Arcadia_UTF8StringReader* self
   )
-{ return _Arcadia_UTF8ArrayIterator_getNumberOfBytes(thread, &self->iterator); }
+{ return _Arcadia_UTF8ArrayIterator_getCodePointLength(thread, &self->iterator); }
 
 Arcadia_UTF8StringReader*
 Arcadia_UTF8StringReader_create

@@ -122,9 +122,8 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
     Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (2 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_ProgramResource);
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -145,8 +144,7 @@ Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_constructImpl
   self->constantBindings = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   self->fragmentColorOutput = NULL;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_ProgramResource);
 }
 
 static void

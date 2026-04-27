@@ -14,16 +14,16 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 // https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_CullMode
-enum Arcadia.Engine.Visuals.CullMode {
+enumeration Arcadia.Engine.Visuals.CullMode {
 
-  None,
+  None
 
-  Front,
+  Front
 
-  Back,
+  Back
 
-  FrontAndBack,
+  FrontAndBack
 
-  BackAndFront,
+  BackAndFront
 
 }

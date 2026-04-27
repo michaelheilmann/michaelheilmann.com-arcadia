@@ -16,20 +16,20 @@
 // https://michaelheilmann.com/Arcadia/Engine/#Arcadia_Engine_Visuals_DepthCompareFunction
 enumeration Arcadia.Engine.Visuals.DepthCompareFunction {
 
-  Always,
+  Always
 
-  Never,
+  Never
 
-  Equal,
+  Equal
 
-  NotEqual,
+  NotEqual
 
-  LessThan,
+  LessThan
 
-  LessThanOrEqualTo,
+  LessThanOrEqualTo
 
-  GreaterThan,
+  GreaterThan
   
-  GreaterThanOrEqualTo,
+  GreaterThanOrEqualTo
 
 }

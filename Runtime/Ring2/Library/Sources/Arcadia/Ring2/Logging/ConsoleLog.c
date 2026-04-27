@@ -87,12 +87,12 @@ Arcadia_ConsoleLog_constructImpl
     Arcadia_ConsoleLog* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ConsoleLog_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ConsoleLog);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -100,8 +100,7 @@ Arcadia_ConsoleLog_constructImpl
   self->colorEnabled = Arcadia_BooleanValue_True;
   self->fileHandle = Arcadia_FileSystem_createFileHandle(thread, fileSystem);
   Arcadia_FileHandle_openStandardOutput(thread, self->fileHandle);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1);
+  Arcadia_LeaveConstructor(Arcadia_ConsoleLog);
 }
 
 static void

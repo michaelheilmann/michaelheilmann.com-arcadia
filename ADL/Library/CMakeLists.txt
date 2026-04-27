@@ -47,10 +47,17 @@ if (NOT TARGET ${MyLibraryName})
 
   OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/Include.c)
   OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/Include.h)
+
   OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/ConstantDefinition.c)
   OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/ConstantDefinition.h)
   OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/ConstantReader.module.c)
   OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/ConstantReader.module.h)
+  
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/SawtoothWaveDefinition.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/SawtoothWaveDefinition.h)
+  OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/SawtoothWaveReader.module.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/SawtoothWaveReader.module.h)
+  
   OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/SineWaveDefinition.c)
   OnHeaderFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/SineWaveDefinition.h)
   OnSourceFile(${MyLibraryName} Arcadia/ADL/Definitions/DSP/SineWaveReader.module.c)

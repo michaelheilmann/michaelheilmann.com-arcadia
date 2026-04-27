@@ -87,12 +87,12 @@ Arcadia_DirectoryIteratorWindows_constructImpl
   )
 {
   static uint32_t zeroTerminator = '\0';
-  Arcadia_TypeValue _type = _Arcadia_DirectoryIteratorWindows_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DirectoryIteratorWindows);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -122,8 +122,7 @@ Arcadia_DirectoryIteratorWindows_constructImpl
       Arcadia_Thread_jump(thread);
     }
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2);
+  Arcadia_LeaveConstructor(Arcadia_DirectoryIteratorWindows);
 }
 
 static void

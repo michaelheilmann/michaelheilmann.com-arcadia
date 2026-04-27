@@ -37,7 +37,9 @@ struct Arcadia_StringBufferDispatch {
 struct Arcadia_StringBuffer {
   Arcadia_Object _parent;
   Arcadia_Natural8Value* elements;
+  /// @brief The size, in Bytes, of this string buffer.
   Arcadia_SizeValue size;
+  /// @brief The capacity, in Bytes, of this string buffer.
   Arcadia_SizeValue capacity;
 };
 
@@ -101,6 +103,69 @@ Arcadia_StringBuffer_getNumberOfBytes
     Arcadia_StringBuffer const* self
   );
 
+/// @brief Get the number of Unicode code points.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string buffer.
+/// @return The number of Unicode code points.
+Arcadia_SizeValue
+Arcadia_StringBuffer_getNumberOfCodePoints
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self
+  );
+
+/// @brief Convert occurrences of ASCII character a-z to upper case.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string buffer.
+void
+Arcadia_StringBuffer_toUpperASCII
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue* index,
+    Arcadia_SizeValue* length
+  );
+
+/// @brief Convert occurrences of ASCII characters A-Z to lower case.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string buffer.
+void
+Arcadia_StringBuffer_toLowerASCII
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue* index,
+    Arcadia_SizeValue* length
+  );
+
+/// @brief Remove code points from the front of this string buffer.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string buffer.
+/// @param numberOfCodePoints The number of code points to remove.
+/// @error Arcadia_Status_ArgumentValueInvalid @a numberOfCodePoints is greater than the number of code points in this string buffer
+/// @todo Add to official API. Add Arcadia.StringBuffer.removeCodePointsAt.
+void
+Arcadia_StringBuffer_removeCodePointsFront
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue numberOfCodePoints
+  );
+
+/// @brief Remove code points from the back of this string buffer.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this string buffer.
+/// @param numberOfCodePoints The number of code points to remove.
+/// @error Arcadia_Status_ArgumentValueInvalid @a numberOfCodePoints is greater than the number of code points in this string buffer
+/// @todo Add to official API. Add Arcadia.StringBuffer.removeCodePointsAt.
+void
+Arcadia_StringBuffer_removeCodePointsBack
+  (
+    Arcadia_Thread* thread,
+    Arcadia_StringBuffer* self,
+    Arcadia_SizeValue numberOfCodePoints
+  );
+
 /// @brief Get if a sequence of Bytes is a suffix of this string buffer.
 /// @param self A pointer to ths string buffer.
 /// @param bytes A pointer to an array of @a numberOfBytes Bytes.
@@ -131,32 +196,6 @@ Arcadia_StringBuffer_startsWith_pn
     Arcadia_StringBuffer* self,
     void const* bytes,
     Arcadia_SizeValue numberOfBytes
-  );
-
-/// @brief Remove code points from the front of this string buffer.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this string buffer.
-/// @param numberOfCodePoints The number of code points to remove.
-/// @error Arcadia_Status_ArgumentValueInvalid @a numberOfCodePoints is greater than the number of code points in this string buffer
-void
-Arcadia_StringBuffer_removeCodePointsFront
-  (
-    Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
-    Arcadia_SizeValue numberOfCodePoints
-  );
-
-/// @brief Remove code points from the back of this string buffer.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this string buffer.
-/// @param numberOfCodePoints The number of code points to remove.
-/// @error Arcadia_Status_ArgumentValueInvalid @a numberOfCodePoints is greater than the number of code points in this string buffer
-void
-Arcadia_StringBuffer_removeCodePointsBack
-  (
-    Arcadia_Thread* thread,
-    Arcadia_StringBuffer* self,
-    Arcadia_SizeValue numberOfCodePoints
   );
 
 void

@@ -23,6 +23,7 @@
 #include "Arcadia.ADL.Tests.Definitions/Visuals/Texture.h"
 
 #include "Arcadia.ADL.Tests.Definitions/DSP/Constant.h"
+#include "Arcadia.ADL.Tests.Definitions/DSP/SawtoothWave.h"
 #include "Arcadia.ADL.Tests.Definitions/DSP/SineWave.h"
 #include "Arcadia.ADL.Tests.Definitions/DSP/WhiteNoise.h"
 
@@ -77,6 +78,10 @@ main
   }
   //
   if (!Arcadia_Tests_safeExecute(&Arcadia_ADL_Tests_DSP_ConstantDefinitionTest1)) {
+    return EXIT_FAILURE;
+  }
+  //
+  if (!Arcadia_Tests_safeExecute(&Arcadia_ADL_Tests_DSP_SawtoothWaveDefinitionTest1)) {
     return EXIT_FAILURE;
   }
   //

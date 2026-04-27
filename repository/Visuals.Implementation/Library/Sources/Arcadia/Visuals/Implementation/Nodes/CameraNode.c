@@ -123,9 +123,8 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_constructImpl
     Arcadia_Engine_Visuals_Implementation_CameraNode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_Implementation_CameraNode_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_CameraNode);
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -156,8 +155,7 @@ Arcadia_Engine_Visuals_Implementation_CameraNode_constructImpl
   //Arcadia_Math_Matrix4x4Real32* worldToViewMatrix = Arcadia_Math_Matrix4Real32_create(thread);
   Arcadia_Math_Matrix4x4Real32Value_setTranslation(thread, self->worldToViewMatrix, 0.f, 0.f, -1.f);
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_CameraNode);
 }
 
 static void

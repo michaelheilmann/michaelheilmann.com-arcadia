@@ -22,6 +22,7 @@
 #include "Arcadia/ADL/Definitions/Audials/SampleBufferReader.module.h"
 
 #include "Arcadia/ADL/Definitions/DSP/ConstantReader.module.h"
+#include "Arcadia/ADL/Definitions/DSP/SawtoothWaveReader.module.h"
 #include "Arcadia/ADL/Definitions/DSP/SineWaveReader.module.h"
 #include "Arcadia/ADL/Definitions/DSP/WhiteNoiseReader.module.h"
 
@@ -132,6 +133,10 @@ Arcadia_ADL_Context_constructImpl
   //
   {
     Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_ConstantReader_create(thread);
+    Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
+  }
+  {
+    Arcadia_ADL_Reader* reader = (Arcadia_ADL_Reader*)Arcadia_ADL_SawtoothWaveReader_create(thread);
     Arcadia_Map_set(thread, self->readers, Arcadia_Value_makeObjectReferenceValue(Arcadia_ADL_Reader_getTypeName(thread, reader)), Arcadia_Value_makeObjectReferenceValue(reader), NULL, NULL);
   }
   {

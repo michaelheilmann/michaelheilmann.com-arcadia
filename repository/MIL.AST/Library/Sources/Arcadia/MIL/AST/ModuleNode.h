@@ -25,7 +25,7 @@ typedef struct Arcadia_MIL_AST_CompilationUnitNode Arcadia_MIL_AST_CompilationUn
 /// @code
 /// module : definition*
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.MIL.AST.ModuleAst", Arcadia_MIL_AST_ModuleNode,
+Arcadia_declareObjectType(u8"Arcadia.MIL.AST.ModuleNode", Arcadia_MIL_AST_ModuleNode,
                           u8"Arcadia.MIL.AST.Node");
 
 struct Arcadia_MIL_AST_ModuleNodeDispatch {

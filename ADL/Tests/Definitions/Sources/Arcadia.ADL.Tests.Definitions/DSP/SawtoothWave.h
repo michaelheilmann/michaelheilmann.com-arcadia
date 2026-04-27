@@ -13,23 +13,15 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#define ARCADIA_RING1_MODULE (1)
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toSize.h"
+#if !defined(ARCADIA_ADL_TESTS_DSP_SAWTOOTHWAVEDEFINITIONTESTS_H_INCLUDED)
+#define ARCADIA_ADL_TESTS_DSP_SAWTOOTHWAVEDEFINITIONTESTS_H_INCLUDED
 
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toNatural.h"
+#include "Arcadia/Ring2/Include.h"
 
-Arcadia_SizeValue
-_toSize
+void
+Arcadia_ADL_Tests_DSP_SawtoothWaveDefinitionTest1
   (
-    Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
-  )
-{
-#if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
-  return _toNatural64(thread, immutableUTF8StringValue);
-#elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
-  return _toNatural32(thread, immutableUTF8StringValue);
-#else
-  #error("environemnt not (yet) supported");
-#endif
-}
+    Arcadia_Thread* thread
+  );
+
+#endif // ARCADIA_ADL_TESTS_DSP_SAWTOOTHWAVEDEFINITIONTESTS_H_INCLUDED

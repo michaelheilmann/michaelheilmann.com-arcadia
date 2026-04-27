@@ -132,9 +132,8 @@ Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_constructImpl
     Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource);
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -151,9 +150,7 @@ Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_constructImpl
   self->width = 320;
   self->height = 240;
   self->frameBufferID = 0;
-
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource);
 }
 
 static void

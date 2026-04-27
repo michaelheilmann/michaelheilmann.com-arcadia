@@ -61,9 +61,8 @@ Arcadia_Visuals_Implementation_ModelResource_constructImpl
     Arcadia_Visuals_Implementation_ModelResource* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_ModelResource_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_ModelResource);
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -80,8 +79,7 @@ Arcadia_Visuals_Implementation_ModelResource_constructImpl
   self->localToWorldMatrix = Arcadia_Math_Matrix4Real32_create(thread);
   Arcadia_Math_Matrix4Real32_setIdentity(thread, self->localToWorldMatrix);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_ModelResource);
 }
 
 
@@ -91,7 +89,7 @@ Arcadia_Visuals_Implementation_ModelResource_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Implementation_ModelResourceDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Visuals_Implementation_ModelResource_visitImpl

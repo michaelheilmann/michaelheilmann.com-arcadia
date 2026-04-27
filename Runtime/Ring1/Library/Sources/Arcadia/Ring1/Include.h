@@ -41,7 +41,10 @@
 #include "Arcadia/Ring1/Implementation/getTickCount.h"
 
 #include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+
+#include "Arcadia/Ring1/Implementation/Unicode/UTF8/toUpperASCII.h"
+#include "Arcadia/Ring1/Implementation/Unicode/UTF8/toLowerASCII.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String.h"
 #include "Arcadia/Ring1/Implementation/ImmutableUTF8StringExtensions.h"
 
 #include "Arcadia/Ring1/Implementation/Integer16.h"

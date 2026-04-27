@@ -13,29 +13,5 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/type.h"
-
-#include "Arcadia/Ring1/Include.h"
-
-static Arcadia_BooleanValue g_registered = Arcadia_BooleanValue_False;
-
-static void
-_onTypeRemoved
-  (
-    Arcadia_Thread* thread,
-    const uint8_t* bytes,
-    size_t numberOfBytes
-  )
-{ g_registered = Arcadia_BooleanValue_False; }
-
-void
-_ensureTypeRegistered
-  (
-    Arcadia_Thread* thread
-  )
-{
-  if (!g_registered) {
-    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), TypeName, sizeof(TypeName) - 1, thread, &_onTypeRemoved, NULL, NULL);
-    g_registered = Arcadia_BooleanValue_True;
-  }
-}
+#define ARCADIA_RING1_MODULE (1)
+#include "Arcadia/Ring1/Implementation/Unicode/UTF8/mapASCIIToASCII.h"

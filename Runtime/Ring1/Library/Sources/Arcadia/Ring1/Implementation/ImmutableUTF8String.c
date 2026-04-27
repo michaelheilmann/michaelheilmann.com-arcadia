@@ -14,18 +14,18 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING1_MODULE (1)
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/fromBytes.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/hash.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toBoolean.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toInteger.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toNatural.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toReal.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toSize.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toVoid.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/type.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/fromBytes.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/hash.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toBoolean.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toInteger.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toNatural.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toReal.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toSize.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toVoid.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/type.h"
 
 #include "Arcadia/Ring1/Implementation/BooleanToString/Include.h"
 #include "Arcadia/Ring1/Implementation/IntegerToString/Include.h"

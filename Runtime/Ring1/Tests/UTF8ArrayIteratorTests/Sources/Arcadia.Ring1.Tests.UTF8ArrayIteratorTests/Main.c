@@ -23,7 +23,7 @@
 typedef struct Result {
   Arcadia_Natural32Value codePoint;
   Arcadia_SizeValue byteIndex;
-  Arcadia_SizeValue numberOfBytes;
+  Arcadia_SizeValue codePointLength;
   bool error;
 } Result;
 
@@ -95,7 +95,7 @@ testFixture
           Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
           Arcadia_Thread_jump(thread);
         }
-        if (result->numberOfBytes != _Arcadia_UTF8ArrayIterator_getNumberOfBytes(thread, &it)) {
+        if (result->codePointLength != _Arcadia_UTF8ArrayIterator_getCodePointLength(thread, &it)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
           Arcadia_Thread_jump(thread);
         }
@@ -134,7 +134,7 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests1
       0
     };
     Result results[] = {
-      { .byteIndex  = 0, .numberOfBytes = 0, .codePoint = 0, .error = false, },
+      { .byteIndex  = 0, .codePointLength = 0, .codePoint = 0, .error = false, },
     };
     testFixture(thread, &bytes[0], 0, &results[0], 0);
   }
@@ -151,7 +151,7 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       'a'
     };
     Result results[] = {
-      {.byteIndex = 0, .numberOfBytes = 1, .codePoint = 'a', .error = false, },
+      {.byteIndex = 0, .codePointLength = 1, .codePoint = 'a', .error = false, },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result)); 
   }
@@ -160,7 +160,7 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       0xCF, 0x80, // "GREEK SMALL LETTER PI"/U+03C0/https://www.compart.com/de/unicode/U+03C0
     };
     Result results[] = {
-      {.byteIndex = 0, .numberOfBytes = 2, .codePoint = 0x03C0, .error = false, },
+      {.byteIndex = 0, .codePointLength = 2, .codePoint = 0x03C0, .error = false, },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result));
   }
@@ -170,8 +170,8 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       0x62, // "b"/https://www.compart.com/de/unicode/U+0062
     };
     Result results[] = {
-      { .byteIndex = 0, .numberOfBytes = 1, .codePoint = 0x0061, .error = false, },
-      { .byteIndex = 1, .numberOfBytes = 1, .codePoint = 0x0062, .error = false, },
+      { .byteIndex = 0, .codePointLength = 1, .codePoint = 0x0061, .error = false, },
+      { .byteIndex = 1, .codePointLength = 1, .codePoint = 0x0062, .error = false, },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result));
   }
@@ -180,7 +180,7 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       0xE2, 0x80, 0x93, // "EN DASH"/U+2013/https://www.compart.com/de/unicode/U+2013
     };
     Result results[] = {
-      {.byteIndex = 0, .numberOfBytes = 3, .codePoint = 0x2013, .error = false, },
+      {.byteIndex = 0, .codePointLength = 3, .codePoint = 0x2013, .error = false, },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result));
   }
@@ -194,12 +194,12 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       0xE2, 0x80, 0x93, // "EN DASH"/U+2013/https://www.compart.com/de/unicode/U+2013
     };
     Result results[] = {
-      {.byteIndex = 0, .numberOfBytes = 1, .codePoint = 0x0061, .error = false, },
-      {.byteIndex = 1, .numberOfBytes = 1, .codePoint = 0x0062, .error = false, },
-      {.byteIndex = 2, .numberOfBytes = 1, .codePoint = 0x0079, .error = false, },
-      {.byteIndex = 3, .numberOfBytes = 1, .codePoint = 0x007A, .error = false, },
-      {.byteIndex = 4, .numberOfBytes = 2, .codePoint = 0x03C0, .error = false, },
-      {.byteIndex = 6, .numberOfBytes = 3, .codePoint = 0x2013, .error = false, },
+      {.byteIndex = 0, .codePointLength = 1, .codePoint = 0x0061, .error = false, },
+      {.byteIndex = 1, .codePointLength = 1, .codePoint = 0x0062, .error = false, },
+      {.byteIndex = 2, .codePointLength = 1, .codePoint = 0x0079, .error = false, },
+      {.byteIndex = 3, .codePointLength = 1, .codePoint = 0x007A, .error = false, },
+      {.byteIndex = 4, .codePointLength = 2, .codePoint = 0x03C0, .error = false, },
+      {.byteIndex = 6, .codePointLength = 3, .codePoint = 0x2013, .error = false, },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result));
   }
@@ -216,8 +216,8 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       0xBF,
     };
     Result results[] = {
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result));
   }
@@ -235,9 +235,9 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       0xBF,
     };
     Result results[] = {
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result));
   }
@@ -256,10 +256,10 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       0xBF,
     };
     Result results[] = {
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result));
   }
@@ -276,8 +276,8 @@ Arcadia_Ring1_Tests_UTF8ArrayIteratorTests2
       0xA1,
     };
     Result results[] = {
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
-      {.byteIndex = 0, .numberOfBytes = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
+      {.byteIndex = 0, .codePointLength = 0, .codePoint = 0, .error = true },
     };
     testFixture(thread, &bytes[0], sizeof(bytes) / sizeof(Arcadia_Natural8Value), &results[0], sizeof(results) / sizeof(Result));
   }

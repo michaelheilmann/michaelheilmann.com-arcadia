@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 
+#include "Arcadia.Ring2.Tests.ListTests/removeAt.h"
 #include "Arcadia/Ring2/Include.h"
 #include <stdlib.h>
 #include <string.h>
@@ -52,6 +53,9 @@ main
   )
 {
   if (!Arcadia_Tests_safeExecute(&listTest1)) {
+    return EXIT_FAILURE;
+  }
+  if (!Arcadia_Tests_safeExecute(&Arcadia_Ring2_Tests_ListTests_removeAt)) {
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

@@ -21,6 +21,8 @@ set(MyTestName ${MyProjectName}.Ring2.Tests.ListTests)
 BeginProduct(${MyTestName} test)
 
 OnSourceFile(${MyTestName} Main.c)
+OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.ListTests/removeAt.c)
+OnHeaderFile(${MyTestName} Arcadia.Ring2.Tests.ListTests/removeAt.h)
 
 list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring2)
 

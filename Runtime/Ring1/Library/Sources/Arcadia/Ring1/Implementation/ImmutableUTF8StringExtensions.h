@@ -19,7 +19,7 @@
 #if !defined(ARCADIA_RING1_MODULE)
   #error("do not include directly, include `Arcadia/Ring1/Include.h` instead")
 #endif
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String.h"
 #include "Arcadia/Ring1/Implementation/Value.h"
 
 /// @brief Get the first occurence of a code point in a string.

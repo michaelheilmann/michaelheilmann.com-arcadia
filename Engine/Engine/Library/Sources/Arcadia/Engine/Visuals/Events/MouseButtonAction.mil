@@ -16,8 +16,8 @@
 // https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_MouseButtonAction
 enumeration Arcadia.Visuals.MouseButtonAction {
 
-  Pressed = 1,
+  Pressed = 1
 
-  Released,
+  Released
 
-};
+}

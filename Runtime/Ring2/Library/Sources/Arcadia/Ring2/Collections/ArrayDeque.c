@@ -304,18 +304,13 @@ Arcadia_ArrayDeque_constructImpl
     Arcadia_ArrayDeque* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ArrayDeque_getType(thread);
   Arcadia_ArrayDeque_ensureInitialized(thread);
+  Arcadia_EnterConstructor(Arcadia_ArrayDeque);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value nargs = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 == nargs) {
+  if (1 == _numberOfArguments) {
     Arcadia_Deque* other = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Deque_getType(thread));
     Arcadia_SizeValue size = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)other);
     self->elements = Arcadia_Memory_allocateUnmanaged(thread, sizeof(Arcadia_Value) * size);
@@ -325,7 +320,7 @@ Arcadia_ArrayDeque_constructImpl
     self->read = 0;
     self->size = size;
     self->capacity = size;
-  } else if (0 == nargs) {
+  } else if (0 == _numberOfArguments) {
     self->elements = NULL;
     self->read = 0;
     self->size = 0;
@@ -335,8 +330,7 @@ Arcadia_ArrayDeque_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, nargs + 1);
+  Arcadia_LeaveConstructor(Arcadia_ArrayDeque);
 }
 
 static void

@@ -52,17 +52,16 @@ Arcadia_Set_constructImpl
     Arcadia_Set* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Set_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Set);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1);
+  Arcadia_LeaveConstructor(Arcadia_Set);
 }
 
 static void
@@ -71,7 +70,7 @@ Arcadia_Set_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_SetDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 void
 Arcadia_Set_add

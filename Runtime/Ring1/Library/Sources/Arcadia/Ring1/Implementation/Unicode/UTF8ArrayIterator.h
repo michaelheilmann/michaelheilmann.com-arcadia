@@ -42,10 +42,12 @@ typedef struct _Arcadia_UTF8ArrayIterator {
   /// @brief The index of the code point at which the current code point starts at.
   /// @a 0 if codePoint is CodePoint_Start.
   Arcadia_SizeValue codePointIndex;
+  /// The number of code points visisted so far.
+  Arcadia_SizeValue numberOfCodePoints;
   
   /// The length, in Bytes, of the current code point.
   /// @a 0 if codePoint is CodePoint_Start or CodePoint_Error. Not @a 0 otherwise.
-  Arcadia_SizeValue numberOfBytes;
+  Arcadia_SizeValue codePointLength;
   /// The current code point.
   /// If this is CodePoint_Error, then numberOfBytes is 0.
   Arcadia_Natural32Value codePoint;
@@ -90,7 +92,7 @@ _Arcadia_UTF8ArrayIterator_hasCodePoint
   );
 
 static inline Arcadia_SizeValue
-_Arcadia_UTF8ArrayIterator_getNumberOfBytes
+_Arcadia_UTF8ArrayIterator_getCodePointLength
   (
     Arcadia_Thread* thread,
     _Arcadia_UTF8ArrayIterator* self
@@ -118,9 +120,10 @@ _Arcadia_UTF8ArrayIterator_initialize
   }
   self->p = p;
   self->n = n;
+  self->numberOfCodePoints = 0;
   self->codePointIndex = 0;
   self->byteIndex = 0;
-  self->numberOfBytes = 0;
+  self->codePointLength = 0;
   self->codePoint = CodePoint_Start;
 }
 
@@ -148,7 +151,7 @@ _Arcadia_UTF8ArrayIterator_next
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  if (self->byteIndex + self->numberOfBytes == self->n) {
+  if (self->byteIndex + self->codePointLength == self->n) {
     self->codePoint = CodePoint_End;
     return;
   }
@@ -158,39 +161,39 @@ _Arcadia_UTF8ArrayIterator_next
     nextByteIndex = self->byteIndex;
     nextCodePointIndex = self->codePointIndex;
   } else {
-    nextByteIndex = self->byteIndex + self->numberOfBytes;
+    nextByteIndex = self->byteIndex + self->codePointLength;
     nextCodePointIndex = self->codePointIndex + 1;
   }
   Arcadia_Natural8Value byte = self->p[nextByteIndex];
-  Arcadia_SizeValue nextNumberOfBytes = 0;
+  Arcadia_SizeValue nextCodePointLength = 0;
   Arcadia_Natural32Value nextCodePoint = 0;
   if ((byte & 0x80) == 0x00) {
     // To determine if the first Byte is in the range 0xxx xxxx,
     // mask the Byte with 1000 0000 / 0x80. If the result is 0,
     // then the first Byte is in the range 0xxx xxxx.
-    nextNumberOfBytes = 1;
+    nextCodePointLength = 1;
   } else if ((byte & 0xE0) == 0xC0) {
     // To determine if the first Byte is in the range 110x xxxx,
     // mask the Byte with 11100000 / 0xE0. If the result is 1100 0000 / 0xC0,
     // then the first Byte is in the range 110x xxxx.
-    nextNumberOfBytes = 2;
+    nextCodePointLength = 2;
   } else if ((byte & 0xF0) == 0xE0) {
     // To determine if the first Byte is in the range 1110 xxxx,
     // mask the Byte with 1111 0000 / 0xF0. If the result is 1110 0000 / 0xE0,
     // then the first Byte is in the range 1110 xxxx.
-    nextNumberOfBytes = 3;
+    nextCodePointLength = 3;
   } else if ((byte & 0xF8) == 0xF0) {
     // To determine if the first Byte is in the range 1111 0xxx,
     // mask the Byte with 1111 1000 / 0xF8. If the result is 1111 0000 / 0xF0,
     // then the first Byte is in th range 1111 0xxx.
-    nextNumberOfBytes = 4;
+    nextCodePointLength = 4;
   } else {
     nextCodePoint = CodePoint_Error; // (*)
-    nextNumberOfBytes = 0;
+    nextCodePointLength = 0;
   }
-  if (self->n - nextByteIndex < nextNumberOfBytes) {
+  if (self->n - nextByteIndex < nextCodePointLength) {
     nextCodePoint = CodePoint_Error; // (*)
-    nextNumberOfBytes = 0;
+    nextCodePointLength = 0;
   }
 
   // The masks to remove the prefix bits from the first Byte.
@@ -202,12 +205,12 @@ _Arcadia_UTF8ArrayIterator_next
   };
 
   if (nextCodePoint != CodePoint_Error) {
-    nextCodePoint = byte & mask[nextNumberOfBytes - 1]; // Warning that nextNumberOfBytes - 1 might yield -1 can be ignored because of (*). 
-    for (Arcadia_SizeValue i = 1; i < nextNumberOfBytes; ++i) {
+    nextCodePoint = byte & mask[nextCodePointLength - 1]; // Warning that nextNumberOfBytes - 1 might yield -1 can be ignored because of (*). 
+    for (Arcadia_SizeValue i = 1; i < nextCodePointLength; ++i) {
       byte = self->p[nextByteIndex + i]; // We need to mask with 0011 1111
       if (0x80 != (byte & 0xC0)) {
         nextCodePoint = CodePoint_Error;
-        nextNumberOfBytes = 0;
+        nextCodePointLength = 0;
         break;
       }
       byte &= 0x3F;
@@ -215,17 +218,18 @@ _Arcadia_UTF8ArrayIterator_next
       nextCodePoint |= byte;
     }
   }
-  if (nextNumberOfBytes == 1 && nextCodePoint <= 0x7f) {
-  } else if (nextNumberOfBytes == 2 && 0x80 <= nextCodePoint && nextCodePoint <= 0x7ff) {
-  } else if (nextNumberOfBytes == 3 && 0x800 <= nextCodePoint && nextCodePoint <= 0xffff) {
-  } else if (nextNumberOfBytes == 4 && 0x10000 <= nextCodePoint && nextCodePoint > 0x10ffff) {
+  if (nextCodePointLength == 1 && nextCodePoint <= 0x7f) {
+  } else if (nextCodePointLength == 2 && 0x80 <= nextCodePoint && nextCodePoint <= 0x7ff) {
+  } else if (nextCodePointLength == 3 && 0x800 <= nextCodePoint && nextCodePoint <= 0xffff) {
+  } else if (nextCodePointLength == 4 && 0x10000 <= nextCodePoint && nextCodePoint > 0x10ffff) {
   } else {
     nextCodePoint = CodePoint_Error;
-    nextNumberOfBytes = 0;
+    nextCodePointLength = 0;
   }
   
   self->byteIndex = nextByteIndex;
-  self->numberOfBytes = nextNumberOfBytes;
+  self->codePointLength = nextCodePointLength;
+  self->numberOfCodePoints++;
   self->codePointIndex = nextCodePointIndex;
   self->codePoint = nextCodePoint;
 }
@@ -242,6 +246,20 @@ _Arcadia_UTF8ArrayIterator_getCodePointIndex
     Arcadia_Thread_jump(thread);
   }
   return self->codePointIndex;  
+}
+
+static inline Arcadia_SizeValue
+_Arcadia_UTF8ArrayIterator_getNumberOfCodePoints
+  (
+    Arcadia_Thread* thread,
+    _Arcadia_UTF8ArrayIterator* self
+  )
+{
+  if (!self) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+    Arcadia_Thread_jump(thread);
+  }
+  return self->numberOfCodePoints;
 }
 
 static inline Arcadia_SizeValue
@@ -293,7 +311,7 @@ _Arcadia_UTF8ArrayIterator_hasError
 }
 
 static inline Arcadia_SizeValue
-_Arcadia_UTF8ArrayIterator_getNumberOfBytes
+_Arcadia_UTF8ArrayIterator_getCodePointLength
   (
     Arcadia_Thread* thread,
     _Arcadia_UTF8ArrayIterator* self
@@ -303,7 +321,7 @@ _Arcadia_UTF8ArrayIterator_getNumberOfBytes
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
     Arcadia_Thread_jump(thread);
   }
-  return self->numberOfBytes;  
+  return self->codePointLength;
 }
 
 static inline Arcadia_Natural32Value

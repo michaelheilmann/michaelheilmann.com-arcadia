@@ -14,11 +14,11 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING1_MODULE (1)
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/fromBytes.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/fromBytes.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/hash.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/type.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/hash.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/type.h"
 
 Arcadia_ImmutableUTF8String*
 _createFromBytes

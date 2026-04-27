@@ -59,17 +59,12 @@ Arcadia_Engine_Visuals_Windows_Bitmap_constructImpl
     Arcadia_Engine_Visuals_Windows_Bitmap* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_Windows_Bitmap_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Windows_Bitmap);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (2 != numberOfArgumentValues) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -151,8 +146,7 @@ Arcadia_Engine_Visuals_Windows_Bitmap_constructImpl
   DeleteObject(hBrush);
   hBrush = NULL;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Windows_Bitmap);
 }
 
 static void
@@ -161,7 +155,7 @@ Arcadia_Engine_Visuals_Windows_Bitmap_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_Windows_BitmapDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Engine_Visuals_Windows_Bitmap_destruct

@@ -103,7 +103,7 @@ Arcadia_UTF8ByteBufferReader_getLengthImpl
     Arcadia_Thread* thread,
     Arcadia_UTF8ByteBufferReader* self
   )
-{ return _Arcadia_UTF8ArrayIterator_getNumberOfBytes(thread, &self->iterator); }
+{ return _Arcadia_UTF8ArrayIterator_getCodePointLength(thread, &self->iterator); }
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,

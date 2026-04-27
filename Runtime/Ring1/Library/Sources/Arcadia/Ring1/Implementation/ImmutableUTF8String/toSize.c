@@ -14,28 +14,22 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING1_MODULE (1)
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toReal.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toSize.h"
 
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
-#include "Arcadia/Ring1/Implementation/StringToReal/toReal64.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toNatural.h"
 
-Arcadia_Real32Value
-_toReal32
+Arcadia_SizeValue
+_toSize
   (
     Arcadia_Thread* thread,
     Arcadia_ImmutableUTF8String* immutableUTF8StringValue
   )
 {
-  return (Arcadia_Real32Value)Arcadia_toReal64(thread, Arcadia_ImmutableUTF8String_getBytes(thread, immutableUTF8StringValue), Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
-}
-
-Arcadia_Real64Value
-_toReal64
-  (
-    Arcadia_Thread* thread,
-    Arcadia_ImmutableUTF8String* immutableUTF8StringValue
-  )
-{
-  return Arcadia_toReal64(thread, Arcadia_ImmutableUTF8String_getBytes(thread, immutableUTF8StringValue), Arcadia_ImmutableUTF8String_getNumberOfBytes(thread, immutableUTF8StringValue));
-
+#if Arcadia_Configuration_InstructionSetArchitecture_X64 == Arcadia_Configuration_InstructionSetArchitecture
+  return _toNatural64(thread, immutableUTF8StringValue);
+#elif Arcadia_Configuration_InstructionSetArchitecture_X86 == Arcadia_Configuration_InstructionSetArchitecture
+  return _toNatural32(thread, immutableUTF8StringValue);
+#else
+  #error("environemnt not (yet) supported");
+#endif
 }

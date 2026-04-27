@@ -105,12 +105,12 @@ Arcadia_Visuals_Linux_DisplayDevice_constructImpl
     Arcadia_Visuals_Linux_DisplayDevice* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Linux_DisplayDevice_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Visuals_Linux_DisplayDevice);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 3 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -121,8 +121,7 @@ Arcadia_Visuals_Linux_DisplayDevice_constructImpl
   self->output = 0;
   self->mode = 0;
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 3 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Linux_DisplayDevice);
 }
 
 static void

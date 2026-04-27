@@ -97,17 +97,12 @@ Arcadia_Engine_Visuals_Windows_DisplayMode_constructImpl
     Arcadia_Engine_Visuals_Windows_DisplayMode* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Engine_Visuals_Windows_DisplayMode_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Windows_DisplayMode);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (5 != numberOfArgumentValues) {
+  if (5 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -116,8 +111,7 @@ Arcadia_Engine_Visuals_Windows_DisplayMode_constructImpl
   self->verticalResolution = Arcadia_ValueStack_getInteger32Value(thread, 3);
   self->colorDepth = Arcadia_ValueStack_getInteger32Value(thread, 2);
   self->frequency = Arcadia_ValueStack_getInteger32Value(thread, 1);
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Windows_DisplayMode);
 }
 
 static void

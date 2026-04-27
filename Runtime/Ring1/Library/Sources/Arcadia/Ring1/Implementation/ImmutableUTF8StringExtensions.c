@@ -81,8 +81,8 @@ Arcadia_ImmutableUTF8String_findLastOccurrence
   }
 }
 
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/hash.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/type.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/hash.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/type.h"
 
 Arcadia_ImmutableUTF8String*
 Arcadia_ImmutableUTF8String_createEmpty
@@ -117,9 +117,7 @@ Arcadia_ImmutableUTF8String_substring
   Arcadia_JumpTarget jt;
   Arcadia_Thread_pushJumpTarget(thread, &jt);
   if (Arcadia_JumpTarget_save(&jt)) {
-    Arcadia_SizeValue numberOfCodePoints = 0;
     while (_Arcadia_UTF8ArrayIterator_hasCodePoint(thread, &it) && _Arcadia_UTF8ArrayIterator_getCodePointIndex(thread, &it) < start) {
-      numberOfCodePoints++;
       _Arcadia_UTF8ArrayIterator_next(thread, &it);
     }
     // CASE 1:
@@ -135,7 +133,7 @@ Arcadia_ImmutableUTF8String_substring
  
     // So in either case, we count the number of code points visited (n) and test start > n.
     // If start > n, we have an error.
-    if (start > numberOfCodePoints) {
+    if (start > _Arcadia_UTF8ArrayIterator_getNumberOfCodePoints(thread, &it)) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
       Arcadia_Thread_jump(thread);
     }
@@ -146,7 +144,7 @@ Arcadia_ImmutableUTF8String_substring
       Arcadia_SizeValue n = 0, m = Arcadia_Value_getSizeValue(&length);
       while (_Arcadia_UTF8ArrayIterator_hasCodePoint(thread, &it) && n < m) {
         n++;
-        byteLength += _Arcadia_UTF8ArrayIterator_getNumberOfBytes(thread, &it);
+        byteLength += _Arcadia_UTF8ArrayIterator_getCodePointLength(thread, &it);
         _Arcadia_UTF8ArrayIterator_next(thread, &it);
       }
       if (n < m) {
@@ -155,7 +153,7 @@ Arcadia_ImmutableUTF8String_substring
       }
     } else {
       while (_Arcadia_UTF8ArrayIterator_hasCodePoint(thread, &it)) {
-        byteLength += _Arcadia_UTF8ArrayIterator_getNumberOfBytes(thread, &it);
+        byteLength += _Arcadia_UTF8ArrayIterator_getCodePointLength(thread, &it);
         _Arcadia_UTF8ArrayIterator_next(thread, &it);
       }
     }

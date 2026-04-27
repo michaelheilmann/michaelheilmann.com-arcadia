@@ -131,12 +131,12 @@ Arcadia_ImmutableList_constructImpl
     Arcadia_ImmutableList* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_ImmutableList_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_ImmutableList);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -148,8 +148,7 @@ Arcadia_ImmutableList_constructImpl
   for (Arcadia_SizeValue i = 0, n = self->size; i < n; ++i) {
     self->elements[i] = Arcadia_List_getAt(thread, other, i);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2);
+  Arcadia_LeaveConstructor(Arcadia_ImmutableList);
 }
 
 static void

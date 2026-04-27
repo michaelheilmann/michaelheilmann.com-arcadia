@@ -283,17 +283,12 @@ Arcadia_Visuals_Implementation_OpenGL4_BackendContext_constructImpl
     Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_BackendContext);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (0 != numberOfArgumentValues1) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -302,8 +297,7 @@ Arcadia_Visuals_Implementation_OpenGL4_BackendContext_constructImpl
   self->resources = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_lock(thread, (Arcadia_Object*)self->resources);
 
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_BackendContext);
 }
 
 static void

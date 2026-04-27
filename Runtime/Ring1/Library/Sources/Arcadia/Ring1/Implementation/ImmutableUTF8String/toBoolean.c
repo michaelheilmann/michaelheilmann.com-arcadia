@@ -14,11 +14,11 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING1_MODULE (1)
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toBoolean.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toBoolean.h"
 
 #include "Arcadia/Ring1/Include.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/NumeralParser.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/NumeralParser.h"
 
 Arcadia_BooleanValue
 _toBoolean

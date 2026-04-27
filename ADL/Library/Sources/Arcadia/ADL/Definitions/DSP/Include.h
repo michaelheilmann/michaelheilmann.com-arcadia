@@ -22,6 +22,7 @@
 #include "Arcadia/ADL/Definition.h"
 
 #include "Arcadia/ADL/Definitions/DSP/ConstantDefinition.h"
+#include "Arcadia/ADL/Definitions/DSP/SawtoothWaveDefinition.h"
 #include "Arcadia/ADL/Definitions/DSP/SineWaveDefinition.h"
 #include "Arcadia/ADL/Definitions/DSP/WhiteNoiseDefinition.h"
 

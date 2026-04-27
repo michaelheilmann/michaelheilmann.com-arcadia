@@ -16,10 +16,10 @@
 // https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_MousePointerAction
 enumeration Arcadia.Visuals.MousePointerAction {
 
-  Entered = 1,
+  Entered = 1
 
-  Exited,
+  Exited
 
-  Moved,
+  Moved
 
-};
+}

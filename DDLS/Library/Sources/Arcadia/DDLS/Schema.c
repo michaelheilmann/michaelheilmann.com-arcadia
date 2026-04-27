@@ -51,19 +51,18 @@ Arcadia_DDLS_Type_constructImpl
     Arcadia_DDLS_Type* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDLS_Type_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDLS_Type);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DDLS_Type);
 }
 
 static void
@@ -110,21 +109,20 @@ Arcadia_DDLS_ListType_constructImpl
     Arcadia_DDLS_ListType* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDLS_ListType_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDLS_ListType);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
   self->element = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_DDLS_Type_getType(thread));
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 1 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DDLS_ListType);
 }
 
 static void
@@ -188,21 +186,20 @@ Arcadia_DDLS_MapType_constructImpl
     Arcadia_DDLS_MapType* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDLS_MapType_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDLS_MapType);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
   self->entries = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DDLS_MapType);
 }
 
 static void
@@ -264,21 +261,20 @@ Arcadia_DDLS_ScalarType_constructImpl
     Arcadia_DDLS_ScalarType* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_DDLS_ScalarType_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_DDLS_ScalarType);
   //
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
   self->name = NULL;
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_DDLS_ScalarType);
 }
 
 static void

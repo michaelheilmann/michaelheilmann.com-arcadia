@@ -46,6 +46,8 @@ if (NOT TARGET ${MyTestName})
 
   OnSourceFile(${MyTestName} Arcadia.ADL.Tests.Definitions/DSP/Constant.c)
   OnHeaderFile(${MyTestName} Arcadia.ADL.Tests.Definitions/DSP/Constant.h)
+  OnSourceFile(${MyTestName} Arcadia.ADL.Tests.Definitions/DSP/SawtoothWave.c)
+  OnHeaderFile(${MyTestName} Arcadia.ADL.Tests.Definitions/DSP/SawtoothWave.h)
   OnSourceFile(${MyTestName} Arcadia.ADL.Tests.Definitions/DSP/SineWave.c)
   OnHeaderFile(${MyTestName} Arcadia.ADL.Tests.Definitions/DSP/SineWave.h)
   OnSourceFile(${MyTestName} Arcadia.ADL.Tests.Definitions/DSP/WhiteNoise.c)

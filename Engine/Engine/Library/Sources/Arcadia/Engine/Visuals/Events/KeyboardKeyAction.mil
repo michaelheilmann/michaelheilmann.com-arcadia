@@ -16,8 +16,8 @@
 // https://michaelheilmann.com/repository/Arcadia.Visuals/#Arcadia_Visuals_KeyboardKeyAction
 enumeration Arcadia.Visuals.KeyboardKeyAction {
 
-  Pressed = 1,
+  Pressed
 
-  Released,
+  Released
 
 }

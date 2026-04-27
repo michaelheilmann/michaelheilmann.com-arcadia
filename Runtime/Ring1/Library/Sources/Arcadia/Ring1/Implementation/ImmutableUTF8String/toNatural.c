@@ -14,10 +14,10 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #define ARCADIA_RING1_MODULE (1)
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/toNatural.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/toNatural.h"
 
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String/NumeralParser.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String/NumeralParser.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String.h"
 #include "Arcadia/Ring1/Implementation/NumberLiteral.h"
 #include "Arcadia/Ring1/Implementation/Process.h"
 #include "Arcadia/Ring1/Implementation/safeAdd.h"

@@ -28,7 +28,7 @@
 #include "Arcadia/Ring1/Implementation/Enumeration.h"
 #include "Arcadia/Ring1/Implementation/ForeignProcedure.h"
 #include "Arcadia/Ring1/Implementation/ImmutableByteArray.h"
-#include "Arcadia/Ring1/Implementation/ImmutableUtf8String.h"
+#include "Arcadia/Ring1/Implementation/ImmutableUTF8String.h"
 #include "Arcadia/Ring1/Implementation/Integer16.h"
 #include "Arcadia/Ring1/Implementation/Integer32.h"
 #include "Arcadia/Ring1/Implementation/Integer64.h"

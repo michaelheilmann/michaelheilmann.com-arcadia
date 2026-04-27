@@ -97,17 +97,12 @@ Arcadia_Slot_constructImpl
     Arcadia_Slot* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Slot_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Slot);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_Natural8Value numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (3 != numberOfArgumentValues) {
+  if (3 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -116,8 +111,7 @@ Arcadia_Slot_constructImpl
   self->receiver = Arcadia_WeakReference_create(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_ValueStack_getObjectReferenceValue(thread, 2)));
   self->procedure = Arcadia_ValueStack_getForeignProcedureValue(thread, 1);
   //
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Slot);
 }
 
 static void
@@ -126,7 +120,7 @@ Arcadia_Slot_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_SlotDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 Arcadia_Slot*
 Arcadia_Slot_create

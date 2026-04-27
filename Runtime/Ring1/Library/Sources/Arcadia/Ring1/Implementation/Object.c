@@ -151,13 +151,12 @@ Arcadia_Object_constructImpl
     Arcadia_Object* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Object_getType(thread);
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 0 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
+  Arcadia_EnterConstructor(Arcadia_Object);
+  if (0 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_StackCorruption);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, self, _type);
-  Arcadia_ValueStack_popValues(thread, 0 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Object);
 }
 
 static void

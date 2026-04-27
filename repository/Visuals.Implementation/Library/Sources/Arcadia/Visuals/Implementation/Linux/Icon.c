@@ -59,17 +59,12 @@ Arcadia_Visuals_Linux_Icon_constructImpl
     Arcadia_Visuals_Linux_Icon* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Linux_Icon_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_Visuals_Linux_Icon);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (Arcadia_ValueStack_getSize(thread) < 1) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_SizeValue numberOfArgumentValues1 = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues1) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -109,8 +104,7 @@ Arcadia_Visuals_Linux_Icon_constructImpl
            | red << 0;
     }
   }
-  Arcadia_Object_setType(thread, self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues1 + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Linux_Icon);
 }
 
 static void
@@ -119,7 +113,7 @@ Arcadia_Visuals_Linux_Icon_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Visuals_Linux_IconDispatch* self
   )
-{ }
+{/*Intentionally empty.*/}
 
 static void
 Arcadia_Visuals_Linux_Icon_destruct

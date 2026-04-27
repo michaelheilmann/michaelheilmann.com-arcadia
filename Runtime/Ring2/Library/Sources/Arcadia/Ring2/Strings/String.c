@@ -161,14 +161,14 @@ Arcadia_String_constructImpl
     Arcadia_String* self
   )
 {
-  if (Arcadia_ValueStack_getSize(thread) < 1 || 1 != Arcadia_ValueStack_getNatural8Value(thread, 0)) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
-    Arcadia_Thread_jump(thread);
-  }
-  Arcadia_TypeValue _type = _Arcadia_String_getType(thread);
+  Arcadia_EnterConstructor(Arcadia_String);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
+  }
+  if (1 != _numberOfArguments) {
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
+    Arcadia_Thread_jump(thread);
   }
   Arcadia_Value x = Arcadia_ValueStack_getValue(thread, 1);
   if (Arcadia_Value_isBooleanValue(&x)) {
@@ -220,8 +220,7 @@ Arcadia_String_constructImpl
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, 2);
+  Arcadia_LeaveConstructor(Arcadia_String);
 }
 
 static void

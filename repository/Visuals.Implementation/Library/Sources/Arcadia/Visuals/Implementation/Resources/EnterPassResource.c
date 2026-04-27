@@ -138,9 +138,8 @@ Arcadia_Visuals_Implementation_EnterPassResource_constructImpl
     Arcadia_Visuals_Implementation_EnterPassResource* self
   )
 {
-  Arcadia_TypeValue _type = _Arcadia_Visuals_Implementation_EnterPassResource_getType(thread);
-  Arcadia_SizeValue numberOfArgumentValues = Arcadia_ValueStack_getNatural8Value(thread, 0);
-  if (1 != numberOfArgumentValues) {
+  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_EnterPassResource);
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -180,9 +179,7 @@ Arcadia_Visuals_Implementation_EnterPassResource_constructImpl
   self->viewerConstantBuffer = (Arcadia_Visuals_Implementation_ConstantBufferResource*)Arcadia_Visuals_Implementation_BackendContext_createConstantBufferResource(thread, (Arcadia_Visuals_Implementation_BackendContext*)backendContext);
 
   Arcadia_Visuals_Implementation_Resource_ref(thread, (Arcadia_Visuals_Implementation_Resource*)self->viewerConstantBuffer);
-
-  Arcadia_Object_setType(thread, (Arcadia_Object*)self, _type);
-  Arcadia_ValueStack_popValues(thread, numberOfArgumentValues + 1);
+  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_EnterPassResource);
 }
 
 static void
