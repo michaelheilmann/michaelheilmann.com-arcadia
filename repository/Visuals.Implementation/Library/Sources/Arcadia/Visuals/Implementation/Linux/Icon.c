@@ -38,8 +38,8 @@ Arcadia_Visuals_Linux_Icon_destruct
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = &Arcadia_Visuals_Linux_Icon_constructImpl,
-  .destruct = &Arcadia_Visuals_Linux_Icon_destruct,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Linux_Icon_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Linux_Icon_destruct,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Linux_Icon_initializeDispatchImpl,
 };
 

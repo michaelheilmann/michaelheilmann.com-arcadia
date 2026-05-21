@@ -16,7 +16,7 @@
 #include "Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/StatementsContext.h"
 
 #include "Arcadia/Include.h"
-#include "Arcadia/MIL/Frontend/Include.h"
+#include "Arcadia/MILC/Include.h"
 
 static void
 Arcadia_MIL_CallableContext_constructImpl
@@ -128,7 +128,7 @@ Arcadia_MIL_CallableContext_onDefineLabel
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_AST_LabelDefinitionStatementNode* ast,
+    Arcadia_MILC_AST_LabelDefinitionStatementNode* ast,
     Arcadia_Natural32Value instructionIndex
   )
 {
@@ -149,7 +149,7 @@ Arcadia_MIL_CallableContext_onParameterVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_AST_Node* ast
+    Arcadia_MILC_AST_Node* ast
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->variables); i < n; ++i) {
@@ -170,7 +170,7 @@ Arcadia_MIL_CallableContext_onLocalVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* context,
     Arcadia_String* name,
-    Arcadia_MIL_AST_VariableDefinitionStatementNode* ast
+    Arcadia_MILC_AST_VariableDefinitionStatementNode* ast
   )
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)context->variables); i < n; ++i) {

@@ -119,7 +119,8 @@ Arcadia_VPL_ResolvePhase_destruct
 Arcadia_VPL_ResolvePhase*
 Arcadia_VPL_ResolvePhase_create
   (
-    Arcadia_Thread* thread
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Diagnostics* diagnostics
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);

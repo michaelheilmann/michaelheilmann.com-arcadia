@@ -18,7 +18,7 @@
 
 #include "Arcadia/Languages/Include.h"
 #include "Arcadia/VPL/Tree/Include.h"
-#include "Arcadia/VPL/SemanticalAnalysis.h"
+#include "Arcadia/VPL/EnterPhase.h"
 #include "Arcadia/VPL/Symbols/Include.h"
 #include "Arcadia/VPL/TreeBuilder.h"
 #include "Arcadia/VPL/Configure.h"
@@ -544,8 +544,8 @@ Arcadia_VPL_Symbols_Program_createProgram
 {
   Arcadia_VPL_Symbols_Program* program = Arcadia_VPL_Symbols_Program_create(thread, flags);
 
-  // (1) Create the semantical analysis.
-  Arcadia_VPL_SemanticalAnalysis* semanticalAnalysis = Arcadia_VPL_SemanticalAnalysis_create(thread);
+  // (1) Create the enter phase.
+  Arcadia_VPL_EnterPhase* enterPhase = Arcadia_VPL_EnterPhase_create(thread, Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread)));
 
   program->programDefnNode = Arcadia_VPL_Tree_ProgramDefnNode_create(thread);
 
@@ -589,7 +589,7 @@ Arcadia_VPL_Symbols_Program_createProgram
   }
 
   // (3) See description of method for more information.
-  Arcadia_VPL_SemanticalAnalysis_run(thread, semanticalAnalysis, program);
+  Arcadia_VPL_EnterPhase_run(thread, enterPhase, program);
 
   return program;
 }

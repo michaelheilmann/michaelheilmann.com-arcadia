@@ -96,6 +96,13 @@ Arcadia_Stack_peekAt
       Arcadia_Thread* thread, \
       Arcadia_Stack* self, \
       Arcadia_SizeValue index \
+    ); \
+\
+  Type##Value \
+  Arcadia_Stack_peek##Suffix##Value \
+    ( \
+      Arcadia_Thread* thread, \
+      Arcadia_Stack* self \
     );
 
 Define(Arcadia_Boolean, Boolean, boolean)
@@ -113,5 +120,24 @@ Define(Arcadia_Size, Size, size)
 Define(Arcadia_Void, Void, void)
 
 #undef Define
+
+static inline Arcadia_ObjectReferenceValue
+Arcadia_Stack_popObjectReferenceValueChecked
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Stack* self,
+    Arcadia_Type* type
+  )
+{
+  Arcadia_ObjectReferenceValue v = Arcadia_Stack_peekObjectReferenceValue(thread, self);
+  if (type) {
+    if (!Arcadia_Object_isInstanceOf(thread, v, type)) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+  }
+  Arcadia_Stack_pop(thread, self);
+  return v;
+}
 
 #endif // ARCADIA_RING2_COLLECTIONS_STACK_H_INCLUDED

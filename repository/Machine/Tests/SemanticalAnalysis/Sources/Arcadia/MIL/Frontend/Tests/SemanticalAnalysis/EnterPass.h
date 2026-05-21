@@ -18,7 +18,7 @@
 
 #include "Arcadia/Include.h"
 #include "Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/Pass.h"
-#include "Arcadia/MIL/Frontend/Include.h"
+#include "Arcadia/MILC/Include.h"
 typedef struct Arcadia_MIL_CallableContext Arcadia_MIL_CallableContext;
 
 void
@@ -28,7 +28,7 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_onCompilationUnit
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode
+    Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode
   );
 
 void
@@ -38,7 +38,7 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ModuleNode* modulNode
+    Arcadia_MILC_AST_ModuleNode* modulNode
   );
 
 /// The first pass (enter pass) of the compiler.

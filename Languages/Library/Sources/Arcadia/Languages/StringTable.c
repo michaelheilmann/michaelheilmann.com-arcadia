@@ -305,7 +305,7 @@ Arcadia_Languages_StringTable_getOrCreate
 {
   if (!g_instance) {
     Arcadia_Languages_StringTable* instance = Arcadia_Languages_StringTable_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_Languages_StringTable_destroyCallback);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, (void (*)(void*, Arcadia_Object*)) &Arcadia_Languages_StringTable_destroyCallback);
     g_instance = instance;
   }
   return g_instance;

@@ -84,8 +84,8 @@ Arcadia_Visuals_Linux_DisplayDevice_getBoundsImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = &Arcadia_Visuals_Linux_DisplayDevice_constructImpl,
-  .visit = &Arcadia_Visuals_Linux_DisplayDevice_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Linux_DisplayDevice_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Linux_DisplayDevice_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Linux_DisplayDevice_initializeDispatchImpl,
 };
 

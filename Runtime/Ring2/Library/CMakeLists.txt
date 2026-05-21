@@ -66,6 +66,11 @@ if (NOT TARGET ${MyLibraryName})
   OnSourceFile(${MyLibraryName} Arcadia/Ring2/CommandLine/Include.c)
   OnHeaderFile(${MyLibraryName} Arcadia/Ring2/CommandLine/Include.h)
 
+  OnSourceFile(${MyLibraryName} Arcadia/Ring2/Exceptions/Include.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring2/Exceptions/Include.h)
+  OnSourceFile(${MyLibraryName} Arcadia/Ring2/Exceptions/Exception.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring2/Exceptions/Exception.h)
+
   OnSourceFile(${MyLibraryName} Arcadia/Ring2/FileSystem/Include.c)
   OnHeaderFile(${MyLibraryName} Arcadia/Ring2/FileSystem/Include.h)
   OnSourceFile(${MyLibraryName} Arcadia/Ring2/FileSystem/DirectoryIterator.c)

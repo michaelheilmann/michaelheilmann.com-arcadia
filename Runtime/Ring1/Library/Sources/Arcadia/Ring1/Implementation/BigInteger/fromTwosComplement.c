@@ -43,7 +43,7 @@ Arcadia_BigInteger_fromTwosComplement
       Arcadia_BigInteger_setZero(thread, self);
     } else {
       // We can copy the limps.
-      Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps);
+      Arcadia_Memory_reallocateUnmanaged(thread, (void**)&self->limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps);
       #if Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_BigEndian
         Arcadia_Process_copyMemory(Arcadia_Thread_getProcess(thread), self->limps, limps, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps);
         #if Arcadia_Configuration_BigInteger_LimpSize == 1
@@ -82,7 +82,7 @@ Arcadia_BigInteger_fromTwosComplement
       }
       if (p[n - 1] & (1 << (Arcadia_BigInteger_BitsPerLimp - 1)) == 0) {
         n++;
-        Arcadia_Memory_reallocateUnmanaged(thread, &p, sizeof(Arcadia_BigInteger_Limp) * n);
+        Arcadia_Memory_reallocateUnmanaged(thread, (void**)&p, sizeof(Arcadia_BigInteger_Limp) * n);
         p[n - 1] = Arcadia_BigInteger_Limp_Maximum;
       }
     }

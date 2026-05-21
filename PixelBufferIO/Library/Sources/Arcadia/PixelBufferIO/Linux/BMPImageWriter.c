@@ -242,8 +242,8 @@ Arcadia_Imaging_Linux_BMPImageWriter_writeBmpToPathImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = &Arcadia_Imaging_Linux_BMPImageWriter_constructImpl,
-  .visit = &Arcadia_Imaging_Linux_BMPImageWriter_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Imaging_Linux_BMPImageWriter_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Imaging_Linux_BMPImageWriter_visit,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Imaging_Linux_BMPImageWriter_initializeDispatchImpl,
 };
 

@@ -72,7 +72,7 @@ Arcadia_BigInteger_toTwosComplement
   #endif
     if (limps0[numberOfLimps0 - 1] & (1 << (Arcadia_BigInteger_BitsPerLimp - 1)) == 1) {
       numberOfLimps0++;
-      Arcadia_Memory_reallocateUnmanaged(thread, &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+      Arcadia_Memory_reallocateUnmanaged(thread, (void**)&limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
       limps0[numberOfLimps0 - 1] = 0;
     }
     *limps = limps0;
@@ -106,7 +106,7 @@ Arcadia_BigInteger_toTwosComplement
     }
     if (limps0[numberOfLimps0 - 1] & (1 << (Arcadia_BigInteger_BitsPerLimp - 1)) == 0) {
       numberOfLimps0++;
-      Arcadia_Memory_reallocateUnmanaged(thread, &limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
+      Arcadia_Memory_reallocateUnmanaged(thread, (void**)&limps0, sizeof(Arcadia_BigInteger_Limp) * numberOfLimps0);
       limps0[numberOfLimps0 - 1] = Arcadia_BigInteger_Limp_Maximum;
     }
   #elif Arcadia_Configuration_BigInteger_LimpOrder == Arcadia_Configuration_BigInteger_LimpOrder_BigEndian

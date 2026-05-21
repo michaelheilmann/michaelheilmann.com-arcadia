@@ -379,7 +379,7 @@ Arcadia_DefaultFileHandle_openImpl
   // (1) Close existing backend.
   Arcadia_FileHandle_close(thread, (Arcadia_FileHandle*)self);
   // (2) Obtain native path.
-  Arcadia_String* nativePath = Arcadia_FilePath_toNative(thread, path);
+  Arcadia_String* nativePath = Arcadia_FilePath_toNative(thread, path, Arcadia_BooleanValue_True);
 
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
 

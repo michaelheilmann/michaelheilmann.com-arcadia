@@ -25,6 +25,7 @@
 #define ARCADIA_RING2_EXPORT (1)
 
 #include "Arcadia/Ring2/Collections/Include.h"
+#include "Arcadia/Ring2/Exceptions/Include.h"
 
 #include "Arcadia/Ring2/Implementation/ArgumentsValidation.h"
 #include "Arcadia/Ring2/Implementation/ByteBuffer.h"

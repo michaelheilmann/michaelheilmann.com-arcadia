@@ -82,6 +82,6 @@ _setWindowText
   Arcadia_Natural32Value zeroTerminator = 0;
   Arcadia_StringBuffer* buffer = Arcadia_StringBuffer_create(thread);
   Arcadia_StringBuffer_insertBack(thread, buffer, Arcadia_Value_makeObjectReferenceValue(text));
-  Arcadia_StringBuffer_insertCodePointsBack(thread, buffer, &zeroTerminator, 1);
+  Arcadia_StringBuffer_insertBackCodePoints(thread, buffer, &zeroTerminator, 1);
   SendMessageA(hWnd, WM_SETTEXT, (WPARAM)0, (LPARAM)Arcadia_StringBuffer_getBytes(thread, buffer));
 }

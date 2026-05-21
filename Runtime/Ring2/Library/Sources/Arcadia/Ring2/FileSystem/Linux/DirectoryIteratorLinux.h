@@ -33,7 +33,7 @@ Arcadia_declareObjectType(u8"Arcadia.DirectoryIteratorLinux", Arcadia_DirectoryI
                           u8"Arcadia.DirectoryIterator");
 
 struct Arcadia_DirectoryIteratorLinuxDispatch {
-  Arcadia_DirectoryIteratorDispatch _parent
+  Arcadia_DirectoryIteratorDispatch _parent;
 };
 
 struct Arcadia_DirectoryIteratorLinux {

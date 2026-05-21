@@ -163,7 +163,7 @@ Arcadia_ByteBuffer_swap
     Arcadia_ByteBuffer* other
   )
 {
-  Arcadia_swapPointer(thread, &self->p, &other->p);
+  Arcadia_swapPointer(thread, (void**)&self->p, (void**)&other->p);
   Arcadia_swapSize(thread, &self->sz, &other->sz);
   Arcadia_swapSize(thread, &self->cp, &other->cp);
 }

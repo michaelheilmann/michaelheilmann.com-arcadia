@@ -29,7 +29,7 @@ if (NOT TARGET ${MyTool})
   OnSourceFile(${MyTool} Arcadia/MIL/Compiler/HelpSystem.c)
   OnHeaderFile(${MyTool} Arcadia/MIL/Compiler/HelpSystem.h)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.DDL ${MyProjectName}.DDLS ${MyProjectName}.MIL.Compiler.Library ${MyProjectName}.MIL.Frontend ${MyProjectName}.MIL.AST)
+  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.DDL ${MyProjectName}.DDLS ${MyProjectName}.MIL.Frontend)
 
   EndProduct(${MyTool})
 

@@ -31,8 +31,7 @@ doRead
   Arcadia_ByteBuffer* byteBuffer = Arcadia_ByteBuffer_create(thread);
   Arcadia_ByteBuffer_insertBackBytes(thread, byteBuffer, p, n);
   Arcadia_String* input = Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, p, n));
-  Arcadia_DDL_Parser_setInput(thread, parser, input);
-  Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, parser);
+  Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)parser, input), _Arcadia_DDL_Node_getType(thread));
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis_run(thread, semanticalAnalysis, node);
   return node;
 }
@@ -84,7 +83,8 @@ test1
   )
 {
   Arcadia_DataDefinitionLanguage_SemanticalAnalysis* semanticalAnalysis = Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create(thread);
-  Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread);
+  Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
+                                                                                                    Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
   Arcadia_DataDefinitionLanguage_Unparser* unparser = Arcadia_DataDefinitionLanguage_Unparser_create(thread);
   onTest(thread, semanticalAnalysis, parser, unparser,
                  u8"{ prename : \"Michael\", surname: \"Heilmann\",\n}\n",

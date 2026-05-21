@@ -264,7 +264,7 @@ Arcadia_Atoms_getOrCreateAtom
     }
   }
   Arcadia_Atom* atom = NULL;
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &atom, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, sizeof(Arcadia_Atom) + numberOfBytes);
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&atom, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, sizeof(Arcadia_Atom) + numberOfBytes);
   Arcadia_Memory_copy(thread, atom->bytes, bytes, numberOfBytes);
   atom->numberOfBytes = numberOfBytes;
   atom->hash = hash;
@@ -402,15 +402,15 @@ _Arcadia_Atoms_onStartUp
 
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Process_addPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
-      Arcadia_Process_addVisitCallback(process, &_Arcadia_Atoms_onVisit);
-      Arcadia_Process_addFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+      Arcadia_Process_addArenaPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+      Arcadia_Process_addArenaVisitCallback(process, &_Arcadia_Atoms_onVisit);
+      Arcadia_Process_addArenaFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
       Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
     } else {
       Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-      Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-      Arcadia_Process_removeVisitCallback(process, &_Arcadia_Atoms_onVisit);
-      Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+      Arcadia_Process_removeArenaFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+      Arcadia_Process_removeArenaVisitCallback(process, &_Arcadia_Atoms_onVisit);
+      Arcadia_Process_removeArenaPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
       Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), g_singleton->buckets);
       g_singleton->buckets = NULL;
       Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), g_singleton);
@@ -421,13 +421,18 @@ _Arcadia_Atoms_onStartUp
     if (!g_typeRegistered) {
       Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
       if (Arcadia_JumpTarget_save(&jumpTarget)) {
-        Arcadia_Process_registerType(process, u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1, NULL, &typeRemovedCallback, &visitCallback, &finalizeCallback);
+        Arcadia_Process_registerType(process,
+                                     u8"Arcadia.Atom", sizeof(u8"Arcadia.Atom") - 1,
+                                     process,
+                                     (Arcadia_Process_TypeRemovedCallback*)&typeRemovedCallback,
+                                     (Arcadia_Process_VisitCallback*)&visitCallback,
+                                     (Arcadia_Process_FinalizeCallback*)&finalizeCallback);
         Arcadia_Thread_popJumpTarget(thread);
       } else {
         Arcadia_Thread_popJumpTarget(thread);
-        Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-        Arcadia_Process_removeVisitCallback(process, &_Arcadia_Atoms_onVisit);
-        Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+        Arcadia_Process_removeArenaFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+        Arcadia_Process_removeArenaVisitCallback(process, &_Arcadia_Atoms_onVisit);
+        Arcadia_Process_removeArenaPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
         Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), g_singleton->buckets);
         g_singleton->buckets = NULL;
         Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), g_singleton);
@@ -454,9 +459,9 @@ _Arcadia_Atoms_onShutDown
   }
   g_referenceCount--;
   if (0 == g_referenceCount) {
-    Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
-    Arcadia_Process_removeVisitCallback(process, &_Arcadia_Atoms_onVisit);
-    Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
+    Arcadia_Process_removeArenaFinalizeCallback(process, &_Arcadia_Atoms_onFinalize);
+    Arcadia_Process_removeArenaVisitCallback(process, &_Arcadia_Atoms_onVisit);
+    Arcadia_Process_removeArenaPreMarkCallback(process, &_Arcadia_Atoms_onPreMark);
     Arcadia_Memory_deallocateUnmanaged(thread, g_singleton->buckets);
     g_singleton->buckets = NULL;
     Arcadia_Memory_deallocateUnmanaged(thread, g_singleton);

@@ -40,7 +40,16 @@ Arcadia_FileLog_visit
   );
 
 static void
-Arcadia_FileLog_infoImpl
+Arcadia_FileLog_informationImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileLog* self,
+    Arcadia_String* message
+  );
+
+
+static void
+Arcadia_FileLog_warningImpl
   (
     Arcadia_Thread* thread,
     Arcadia_FileLog* self,
@@ -109,8 +118,9 @@ Arcadia_FileLog_initializeDispatchImpl
     Arcadia_FileLogDispatch* self
   )
 {
+  ((Arcadia_LogDispatch*)self)->information = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_FileLog_informationImpl;
+  ((Arcadia_LogDispatch*)self)->warning = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_FileLog_warningImpl;
   ((Arcadia_LogDispatch*)self)->error = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_FileLog_errorImpl;
-  ((Arcadia_LogDispatch*)self)->info = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_FileLog_infoImpl;
 }
 
 static void
@@ -126,7 +136,20 @@ Arcadia_FileLog_visit
 }
 
 static void
-Arcadia_FileLog_infoImpl
+Arcadia_FileLog_informationImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FileLog* self,
+    Arcadia_String* message
+  )
+{
+  const char* p = Arcadia_String_getBytes(thread, message);
+  Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(thread, message);
+  writeBytes(thread, self, p, n);
+}
+
+static void
+Arcadia_FileLog_warningImpl
   (
     Arcadia_Thread* thread,
     Arcadia_FileLog* self,

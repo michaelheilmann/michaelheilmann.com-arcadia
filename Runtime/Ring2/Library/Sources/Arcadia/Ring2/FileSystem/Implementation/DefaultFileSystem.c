@@ -356,7 +356,7 @@ Arcadia_DefaultFileSystem_createDirectoryFileImpl
     Arcadia_FilePath* path
   )
 {
-  Arcadia_String* nativePath = Arcadia_FilePath_toNative(thread, path);
+  Arcadia_String* nativePath = Arcadia_FilePath_toNative(thread, path, Arcadia_BooleanValue_True);
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   if (FALSE == CreateDirectory(Arcadia_String_getBytes(thread, nativePath), NULL)) {
     if (ERROR_ALREADY_EXISTS != GetLastError()) {
@@ -466,7 +466,7 @@ Arcadia_DefaultFileSystem_directoryFileExistsImpl
     Arcadia_FilePath* path
   )
 {
-  Arcadia_String* nativePathString = Arcadia_FilePath_toNative(thread, path);
+  Arcadia_String* nativePathString = Arcadia_FilePath_toNative(thread, path, Arcadia_BooleanValue_True);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(thread, nativePathString));
   return ((dwFileAttributes != INVALID_FILE_ATTRIBUTES) &&
@@ -549,7 +549,7 @@ Arcadia_DefaultFileSystem_getExecutableImpl
           Arcadia_Thread_jump(thread);
         }
         n = lo;
-        Arcadia_Memory_reallocateUnmanaged(thread, &p, n);
+        Arcadia_Memory_reallocateUnmanaged(thread, (void**)&p, n);
       } else {
         Arcadia_FilePath* path = Arcadia_FilePath_parseWindows(thread, Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n))));
         Arcadia_Memory_deallocateUnmanaged(thread, p);
@@ -624,7 +624,7 @@ Arcadia_DefaultFileSystem_getLastWriteTimeImpl
     Arcadia_FilePath* path
   )
 {
-  Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path);
+  Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path, Arcadia_BooleanValue_True);
 #if Arcadia_Configuration_OperatingSystem == Arcadia_Configuration_OperatingSystem_Windows
   HANDLE hFile = CreateFile(Arcadia_String_getBytes(thread, pathString), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_EXISTING, 0, NULL);
   if (INVALID_HANDLE_VALUE == hFile) {
@@ -693,7 +693,7 @@ Arcadia_DefaultFileSystem_getWorkingDirectoryImpl
     Arcadia_Thread_jump(thread);
   }
   char* pBuffer = NULL;
-  if (Arcadia_ARMS_MemoryManager_allocate(Arcadia_ARMS_getSlabMemoryManager(), &pBuffer, dwBufferSize)) {
+  if (Arcadia_ARMS_MemoryManager_allocate(Arcadia_ARMS_getSlabMemoryManager(), (void**)&pBuffer, dwBufferSize)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }
@@ -742,7 +742,7 @@ Arcadia_DefaultFileSystem_regularFileExistsImpl
     Arcadia_FilePath* path
   )
 {
-  Arcadia_String* nativePathString = Arcadia_FilePath_toNative(thread, path);
+  Arcadia_String* nativePathString = Arcadia_FilePath_toNative(thread, path, Arcadia_BooleanValue_True);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   DWORD dwFileAttributes = GetFileAttributes(Arcadia_String_getBytes(thread, nativePathString));
   return ((dwFileAttributes != INVALID_FILE_ATTRIBUTES) &&
@@ -817,7 +817,7 @@ Arcadia_DefaultFileSystem_getOrCreate
 {
   if (!g_instance) {
     Arcadia_DefaultFileSystem* instance = Arcadia_DefaultFileSystem_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_DefaultFileSystem_destroyCallback);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, (void (*)(void*, Arcadia_Object*)) &Arcadia_DefaultFileSystem_destroyCallback);
     g_instance = instance;
   }
   return g_instance;

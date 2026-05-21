@@ -25,7 +25,7 @@ static Arcadia_BooleanValue g_registered = Arcadia_BooleanValue_False;
 static void
 onTypeRemoved
   (
-    Arcadia_Thread* thread,
+    Arcadia_Process* process,
     const uint8_t* bytes,
     size_t numberOfBytes
   )
@@ -48,11 +48,16 @@ Arcadia_InternalImmutableByteArray_create
     Arcadia_Thread_jump(thread);
   }
   if (!g_registered) {
-    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), TypeName, sizeof(TypeName) - 1, thread, &onTypeRemoved, NULL, NULL);
+    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread),
+                                 TypeName, sizeof(TypeName) - 1,
+                                 Arcadia_Thread_getProcess(thread),
+                                 (Arcadia_Process_TypeRemovedCallback*)&onTypeRemoved,
+                                 NULL,
+                                 NULL);
     g_registered = Arcadia_BooleanValue_True;
   }
   Arcadia_InternalImmutableByteArray*array = NULL;
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_InternalImmutableByteArray) + numberOfBytes);
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&array, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_InternalImmutableByteArray) + numberOfBytes);
   Arcadia_Memory_copy(thread, array->bytes, bytes, numberOfBytes);
   array->numberOfBytes = numberOfBytes;
   return array;

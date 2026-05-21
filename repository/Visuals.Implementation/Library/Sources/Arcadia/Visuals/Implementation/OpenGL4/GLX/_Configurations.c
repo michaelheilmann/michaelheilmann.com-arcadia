@@ -114,11 +114,11 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
     for (int majorVersion = 0; majorVersion < 5; majorVersion++) {
       for (int minorVersion = 0; minorVersion < 9; minorVersion++) {
         for (int i = 0, n = glXNumberOfConfigurations; i < n; ++i) {
-          GLXFBConfig* glXConfiguration = glXConfigurations[i];
+          GLXFBConfig* glXConfiguration = &(glXConfigurations[i]);
           int key, value;
 
           key = GLX_DRAWABLE_TYPE;
-          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &value)) {
+          if (glXGetFBConfigAttrib(display, *glXConfiguration, key, &value)) {
             continue;
           }
           if (GLX_WINDOW_BIT != (value & GLX_WINDOW_BIT)) {
@@ -126,7 +126,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
           }
 
           key = GLX_RENDER_TYPE;
-          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &value)) {
+          if (glXGetFBConfigAttrib(display, *glXConfiguration, key, &value)) {
             continue;
           }
           if (GLX_RGBA_BIT != (value & GLX_RGBA_BIT)) {
@@ -134,7 +134,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
           }
 
           key = GLX_X_VISUAL_TYPE;
-          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &value)) {
+          if (glXGetFBConfigAttrib(display, *glXConfiguration, key, &value)) {
             continue;
           }
           if (value != GLX_TRUE_COLOR) {
@@ -143,7 +143,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
 
           key = GLX_RED_SIZE;
           int redBits;
-          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &redBits)) {
+          if (glXGetFBConfigAttrib(display, *glXConfiguration, key, &redBits)) {
             continue;
           }
           if (redBits < 8) {
@@ -151,7 +151,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
           }
           key = GLX_GREEN_SIZE;
           int greenBits;
-          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &greenBits)) {
+          if (glXGetFBConfigAttrib(display, *glXConfiguration, key, &greenBits)) {
             continue;
           }
           if (greenBits < 8) {
@@ -159,7 +159,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
           }
           key = GLX_BLUE_SIZE;
           int blueBits;
-          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &blueBits)) {
+          if (glXGetFBConfigAttrib(display, *glXConfiguration, key, &blueBits)) {
             continue;
           }
           if (blueBits < 8) {
@@ -167,7 +167,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
           }
           key = GLX_ALPHA_SIZE;
           int alphaBits;
-          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &alphaBits)) {
+          if (glXGetFBConfigAttrib(display, *glXConfiguration, key, &alphaBits)) {
             continue;
           }
           if (alphaBits < 8) {
@@ -176,7 +176,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
 
           key = GLX_DEPTH_SIZE;
           int depthBits;
-          if (glXGetFBConfigAttrib(display, glXConfiguration, key, &depthBits)) {
+          if (glXGetFBConfigAttrib(display, *glXConfiguration, key, &depthBits)) {
             continue;
           }
           if (depthBits < 24) {
@@ -209,7 +209,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getConfigurations
           // Replace the original error handler with our error handler.
           g_oldErrorHandler = XSetErrorHandler(&ignoreErrorHandler);
 #endif
-          GLXContext glXContext = glXCreateContextAttribsARB(display, glXConfiguration, 0, True,
+          GLXContext glXContext = glXCreateContextAttribsARB(display, *glXConfiguration, 0, True,
                                                              contextAttributes);
           if (NULL == glXContext || Arcadia_Visuals_Implementation_Linux_hasX11Error(thread)) {
             Arcadia_Visuals_Implementation_Linux_clearX11Error(thread);

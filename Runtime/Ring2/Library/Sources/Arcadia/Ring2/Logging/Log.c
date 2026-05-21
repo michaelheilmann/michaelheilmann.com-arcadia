@@ -91,13 +91,22 @@ Arcadia_Log_visit
 { }
 
 void
-Arcadia_Log_info
+Arcadia_Log_information
   (
     Arcadia_Thread* thread,
     Arcadia_Log* self,
     Arcadia_String* message
   )
-{ Arcadia_VirtualCall(Arcadia_Log, info, self, message); }
+{ Arcadia_VirtualCall(Arcadia_Log, information, self, message); }
+
+void
+Arcadia_Log_warning
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Log* self,
+    Arcadia_String* message
+  )
+{ Arcadia_VirtualCall(Arcadia_Log, warning, self, message); }
 
 void
 Arcadia_Log_error

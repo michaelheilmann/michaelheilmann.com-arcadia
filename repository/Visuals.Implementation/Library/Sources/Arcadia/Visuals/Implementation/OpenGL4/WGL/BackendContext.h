@@ -19,6 +19,7 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/SystemWindow.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Functions.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/WGL/Functions.h"
 typedef struct Arcadia_Visuals_Implementation_NodeFactory Arcadia_Visuals_Implementation_NodeFactory;
 
 #if !defined(WIN32_LEAN_AND_MEAN)
@@ -68,7 +69,9 @@ struct Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext {
   // The WGL/OpenGL driver library handle.That is, the handle to OPENGL32.DLL.
   HANDLE glDriverLibrary;
 
-  /// The OpenGL and WGL functions available to us.
+  /// The WGL functions available to us.
+  _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions _functionsWGL;
+  /// The OpenGL functions available to us.
   _Arcadia_Visuals_Implementation_OpenGL4_Functions _functions;
 };
 

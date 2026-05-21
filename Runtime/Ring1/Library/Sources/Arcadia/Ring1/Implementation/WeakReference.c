@@ -86,7 +86,7 @@ Arcadia_WeakReference_destruct
 {
   switch (Arcadia_Value_getTag(&self->value)) {
     case Arcadia_ValueTag_Atom: {
-      Arcadia_ARMS_removeNotifyDestroy(self->value.atomValue, self, NULL, &callback);
+      Arcadia_ARMS_removeNotifyDestroy(self->value.atomValue, self, NULL, (Arcadia_ARMS_NotifyDestroyCallback*)&callback);
     } break;
     case Arcadia_ValueTag_BigInteger: {
     } break;
@@ -94,10 +94,10 @@ Arcadia_WeakReference_destruct
     case Arcadia_ValueTag_ForeignProcedure: {
     } break;
     case Arcadia_ValueTag_InternalImmutableByteArray: {
-      Arcadia_ARMS_removeNotifyDestroy(self->value.internalImmutableByteArrayValue, self, NULL, &callback);
+      Arcadia_ARMS_removeNotifyDestroy(self->value.internalImmutableByteArrayValue, self, NULL, (Arcadia_ARMS_NotifyDestroyCallback*)&callback);
     } break;
     case Arcadia_ValueTag_ImmutableUTF8String: {
-      Arcadia_ARMS_removeNotifyDestroy(self->value.immutableUTF8StringValue, self, NULL, &callback);
+      Arcadia_ARMS_removeNotifyDestroy(self->value.immutableUTF8StringValue, self, NULL, (Arcadia_ARMS_NotifyDestroyCallback*)&callback);
     } break;
     case Arcadia_ValueTag_Integer16:
     case Arcadia_ValueTag_Integer32:
@@ -109,7 +109,7 @@ Arcadia_WeakReference_destruct
     case Arcadia_ValueTag_Natural8: {
     } break;
     case Arcadia_ValueTag_ObjectReference: {
-      Arcadia_Object_removeNotifyDestroyCallback(thread, self->value.objectReferenceValue, self, &callback);
+      Arcadia_Object_removeNotifyDestroyCallback(thread, self->value.objectReferenceValue, self, (void (*)(void*, Arcadia_Object*))&callback);
     } break;
     case Arcadia_ValueTag_Real32:
     case Arcadia_ValueTag_Real64:
@@ -150,7 +150,7 @@ Arcadia_WeakReference_constructImpl
     self->value = Arcadia_ValueStack_getValue(thread, 1);
     switch (Arcadia_Value_getTag(&self->value)) {
       case Arcadia_ValueTag_Atom: {
-        if (Arcadia_ARMS_addNotifyDestroy(self->value.atomValue, self, NULL, &callback)) {
+        if (Arcadia_ARMS_addNotifyDestroy(self->value.atomValue, self, NULL, (Arcadia_ARMS_NotifyDestroyCallback*)&callback)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
           Arcadia_Thread_jump(thread);
         }
@@ -161,13 +161,13 @@ Arcadia_WeakReference_constructImpl
       case Arcadia_ValueTag_ForeignProcedure: {
       } break;
       case Arcadia_ValueTag_InternalImmutableByteArray: {
-        if (Arcadia_ARMS_addNotifyDestroy(self->value.internalImmutableByteArrayValue, self, NULL, &callback)) {
+        if (Arcadia_ARMS_addNotifyDestroy(self->value.internalImmutableByteArrayValue, self, NULL, (Arcadia_ARMS_NotifyDestroyCallback*)&callback)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
           Arcadia_Thread_jump(thread);
         }
       } break;
       case Arcadia_ValueTag_ImmutableUTF8String: {
-        if (Arcadia_ARMS_addNotifyDestroy(self->value.immutableUTF8StringValue, self, NULL, &callback)) {
+        if (Arcadia_ARMS_addNotifyDestroy(self->value.immutableUTF8StringValue, self, NULL, (Arcadia_ARMS_NotifyDestroyCallback*)&callback)) {
           Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
           Arcadia_Thread_jump(thread);
         }
@@ -182,7 +182,7 @@ Arcadia_WeakReference_constructImpl
       case Arcadia_ValueTag_Natural8: {
       } break;
       case Arcadia_ValueTag_ObjectReference: {
-        Arcadia_Object_addNotifyDestroyCallback(thread, self->value.objectReferenceValue, self, &callback);
+        Arcadia_Object_addNotifyDestroyCallback(thread, self->value.objectReferenceValue, self, (void (*)(void*, Arcadia_Object*)) &callback);
       } break;
       case Arcadia_ValueTag_Real32:
       case Arcadia_ValueTag_Real64:

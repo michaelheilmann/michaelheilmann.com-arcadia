@@ -77,8 +77,8 @@ Arcadia_Visuals_Linux_DisplayMode_applyImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = &Arcadia_Visuals_Linux_DisplayMode_constructImpl,
-  .visit = &Arcadia_Visuals_Linux_DisplayMode_visitImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Linux_DisplayMode_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Linux_DisplayMode_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Linux_DisplayMode_initializeDispatchImpl,
 };
 

@@ -122,7 +122,7 @@ main1
     Arcadia_Engine_Demo_SceneManager_setScene(thread, application->sceneManager, (Arcadia_Engine_Demo_Scene*)Arcadia_Engine_Demo_ArcadiaLogoScene_create(thread, ((Arcadia_Engine_Application*)application)->engine, application->sceneManager));
 
     // One run of the GC before entering the main loop.
-    Arcadia_Process_stepArms(process);
+    Arcadia_Process_stepARMS(process);
 
     // (8) Enter the message loop.
     Arcadia_Natural64Value oldTick, newTick, deltaTick;
@@ -130,7 +130,7 @@ main1
     newTick = oldTick;
     deltaTick = (newTick > oldTick) ? newTick - oldTick : 0;
     while (!Arcadia_Engine_Application_getQuitRequested(thread, (Arcadia_Engine_Application*)application)) {
-      Arcadia_Process_stepArms(process);
+      Arcadia_Process_stepARMS(process);
       Arcadia_Engine_BackendContext_update(thread, (Arcadia_Engine_BackendContext*)((Arcadia_Engine_Application*)application)->engine->audialsBackendContext);
       Arcadia_Engine_BackendContext_update(thread, (Arcadia_Engine_BackendContext*)((Arcadia_Engine_Application*)application)->engine->visualsBackendContext);
       Arcadia_Engine_Demo_Scene_updateLogics(thread, Arcadia_Engine_Demo_SceneManager_getScene(thread, application->sceneManager), deltaTick);

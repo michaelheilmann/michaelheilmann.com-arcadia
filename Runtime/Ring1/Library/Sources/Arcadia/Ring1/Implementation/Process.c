@@ -52,10 +52,10 @@ startupModules
   } else {
     Arcadia_Thread_popJumpTarget(thread);
     while (g_initializedModules > 0) {
-      Arcadia_Process_runArms(process, true);
+      Arcadia_Process_runARMS(process, true);
       g_modules[--g_initializedModules]()->onShutDown(thread);
     }
-    Arcadia_Process_runArms(process, true);
+    Arcadia_Process_runARMS(process, true);
     Arcadia_Thread_jump(thread);
   }
 }
@@ -68,82 +68,20 @@ shutdownModules
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   while (g_initializedModules > 0) {
-    Arcadia_Process_runArms(process, true);
+    Arcadia_Process_runARMS(process, true);
     g_modules[--g_initializedModules]()->onShutDown(thread);
   }
-  Arcadia_Process_runArms(process, true);
+  Arcadia_Process_runARMS(process, true);
 }
 
-typedef struct ArmsCallbackNode ArmsCallbackNode;
+typedef struct ARMSCallbackNode ARMSCallbackNode;
 
-struct ArmsCallbackNode {
-  ArmsCallbackNode* next;
+struct ARMSCallbackNode {
+  ARMSCallbackNode* next;
   void (*onPreMark)(Arcadia_Thread*, bool);
   void (*onVisit)(Arcadia_Thread*);
   void (*onFinalize)(Arcadia_Thread*, size_t*);
 };
-
-static Arcadia_Status
-startupArms
-  (
-  );
-
-static Arcadia_Status
-shutdownArms
-  (
-  );
-
-static Arcadia_Status
-startupArms
-  (
-  )
-{
-  Arcadia_ARMS_Status status = Arcadia_ARMS_startup();
-  switch (status) {
-    case Arcadia_ARMS_Status_Success: {
-      return Arcadia_Status_Success;
-    } break;
-    case Arcadia_ARMS_Status_AllocationFailed: {
-      return Arcadia_Status_AllocationFailed;
-    } break;
-    case Arcadia_ARMS_Status_OperationInvalid:
-    case Arcadia_ARMS_Status_ArgumentValueInvalid:
-    case Arcadia_ARMS_Status_TypeExists:
-    case Arcadia_ARMS_Status_TypeNotExists:
-    default: {
-      // This should not happen.
-      // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
-      // Suggestion is Arcadia_Status_EnvironmentInvalid.
-      return Arcadia_Status_OperationInvalid;
-    } break;
-  };
-}
-
-static Arcadia_Status
-shutdownArms
-  (
-  )
-{
-  Arcadia_ARMS_Status status = Arcadia_ARMS_shutdown();
-  switch (status) {
-    case Arcadia_ARMS_Status_Success: {
-      return Arcadia_Status_Success;
-    } break;
-    case Arcadia_ARMS_Status_AllocationFailed: {
-      return Arcadia_Status_AllocationFailed;
-    } break;
-    case Arcadia_ARMS_Status_OperationInvalid:
-    case Arcadia_ARMS_Status_ArgumentValueInvalid:
-    case Arcadia_ARMS_Status_TypeExists:
-    case Arcadia_ARMS_Status_TypeNotExists:
-    default: {
-      // This should not happen.
-      // @todo A different error code shall be returned if Arms_shutdown returns an unspecified error code.
-      // Suggestion is Arcadia_Status_EnvironmentInvalid.
-      return Arcadia_Status_OperationInvalid;
-    } break;
-  };
-}
 
 /// @brief The type of a reference counter.
 typedef uint32_t ReferenceCount;
@@ -180,10 +118,24 @@ static inline ReferenceCount ReferenceCount_get(ReferenceCount* referenceCount) 
 struct Arcadia_Process {
   ReferenceCount referenceCount;
   Arcadia_Thread thread;
-  ArmsCallbackNode* armsCallbackNodes;
+  ARMSCallbackNode* armsCallbackNodes;
 };
 
 static Arcadia_Process* g_process = NULL;
+
+// @brief Visit the stack and the raised value of the main thread.
+// @remarks There is only one thread, the aforementioned main thread, at the moment.
+static void
+ThreadVisitCallback
+  (
+    Arcadia_Thread* thread
+  )
+{
+  for (Arcadia_SizeValue i = 0, n = thread->stack.size; i < n; ++i) {
+    Arcadia_Value_visit(thread, &thread->stack.elements[i]);
+  }
+  Arcadia_Value_visit(thread, &thread->raisedValue);
+}
 
 Arcadia_Thread*
 Arcadia_Process_getThread
@@ -223,14 +175,14 @@ Arcadia_Process_relinquish
   }
   if (ReferenceCount_Minimum == ReferenceCount_decrement(&process->referenceCount)) {
     if (Arcadia_ValueStack_getSize(&process->thread)) {
-      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: value stack is not empty\n", __FILE__, __LINE__);
+      //Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: value stack is not empty\n", __FILE__, __LINE__);
       process->thread.stack.size = 0;
     }
     if (!Arcadia_Value_isVoidValue(&process->thread.raisedValue)) {
-      Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: exception is not empty\n", __FILE__, __LINE__);
+      //Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: exception is not empty\n", __FILE__, __LINE__);
       process->thread.raisedValue = Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void);
     }
-    Arcadia_Process_runArms(process, true);
+    Arcadia_Process_runARMS(process, true);
     shutdownModules(process);
     Arcadia_Thread_uninitialize(&process->thread);
     Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getDefaultMemoryManager(), g_process);
@@ -255,7 +207,7 @@ Arcadia_Process_get
     if (Arcadia_ARMS_startup()) {
       return Arcadia_ProcessStatus_EnvironmentFailed;
     }
-    if (Arcadia_ARMS_MemoryManager_allocate(Arcadia_ARMS_getDefaultMemoryManager(), &g_process, sizeof(Arcadia_Process))) {
+    if (Arcadia_ARMS_MemoryManager_allocate(Arcadia_ARMS_getDefaultMemoryManager(), (void**)&g_process, sizeof(Arcadia_Process))) {
       if (Arcadia_ARMS_shutdown()) {
         Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: %s failed\n", __FILE__, __LINE__, "Arms_shutdown");
       }
@@ -269,11 +221,13 @@ Arcadia_Process_get
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(&g_process->thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
+      Arcadia_Process_addArenaVisitCallback(g_process, &ThreadVisitCallback);
       startupModules(g_process);
       Arcadia_Thread_popJumpTarget(&g_process->thread);
     } else {
       Arcadia_Thread_popJumpTarget(&g_process->thread);
       shutdownModules(g_process);
+      Arcadia_Process_removeArenaVisitCallback(g_process, &ThreadVisitCallback);
       Arcadia_Thread_uninitialize(&g_process->thread);
       Arcadia_ARMS_MemoryManager_deallocate(Arcadia_ARMS_getDefaultMemoryManager(), g_process);
       g_process = NULL;
@@ -362,7 +316,7 @@ Arcadia_Process_unlockObject
 }
 
 Arcadia_Status
-Arcadia_Process_stepArms
+Arcadia_Process_stepARMS
   (
     Arcadia_Process* process
   )
@@ -388,7 +342,7 @@ Arcadia_Process_stepArms
 }
 
 Arcadia_Status
-Arcadia_Process_runArms
+Arcadia_Process_runARMS
   (
     Arcadia_Process* process,
     bool purgeCaches
@@ -397,7 +351,7 @@ Arcadia_Process_runArms
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
   Arcadia_ARMS_RunStatistics statistics = Arcadia_ARMS_RunStatistics_StaticInitializer();
   do {
-    for (ArmsCallbackNode* node = process->armsCallbackNodes; NULL != node; node = node->next) {
+    for (ARMSCallbackNode* node = process->armsCallbackNodes; NULL != node; node = node->next) {
       if (node->onPreMark) {
         node->onPreMark(thread, purgeCaches);
       }
@@ -419,7 +373,7 @@ Arcadia_Process_runArms
         return Arcadia_Status_OperationInvalid;
       } break;
     };
-    for (ArmsCallbackNode* node = process->armsCallbackNodes; NULL != node; node = node->next) {
+    for (ARMSCallbackNode* node = process->armsCallbackNodes; NULL != node; node = node->next) {
       if (node->onFinalize) {
         size_t finalized;
         node->onFinalize(thread, &finalized);
@@ -435,13 +389,13 @@ Arcadia_Process_runArms
 }
 
 void
-Arcadia_Process_addPreMarkCallback
+Arcadia_Process_addArenaPreMarkCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_PreMarkCallback* callback
+    Arcadia_Process_ArenaPreMarkCallback* callback
   )
 {
-  ArmsCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ArmsCallbackNode));
+  ARMSCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ARMSCallbackNode));
   armsCallbackNode->onFinalize = NULL;
   armsCallbackNode->onPreMark = callback;
   armsCallbackNode->onVisit = NULL;
@@ -450,18 +404,18 @@ Arcadia_Process_addPreMarkCallback
 }
 
 void
-Arcadia_Process_removePreMarkCallback
+Arcadia_Process_removeArenaPreMarkCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_PreMarkCallback* callback
+    Arcadia_Process_ArenaPreMarkCallback* callback
   )
 {
-  ArmsCallbackNode** previous = &process->armsCallbackNodes;
-  ArmsCallbackNode* current = process->armsCallbackNodes;
+  ARMSCallbackNode** previous = &process->armsCallbackNodes;
+  ARMSCallbackNode* current = process->armsCallbackNodes;
   while (current) {
     if (current->onPreMark == callback) {
       *previous = current->next;
-      ArmsCallbackNode* node = current;
+      ARMSCallbackNode* node = current;
       Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), node);
       break;
     } else {
@@ -472,13 +426,13 @@ Arcadia_Process_removePreMarkCallback
 }
 
 void
-Arcadia_Process_addVisitCallback
+Arcadia_Process_addArenaVisitCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_VisitCallback* callback
+    Arcadia_Process_ArenaVisitCallback* callback
   )
 {
-  ArmsCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ArmsCallbackNode));
+  ARMSCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ARMSCallbackNode));
   armsCallbackNode->onFinalize = NULL;
   armsCallbackNode->onPreMark = NULL;
   armsCallbackNode->onVisit = callback;
@@ -487,18 +441,18 @@ Arcadia_Process_addVisitCallback
 }
 
 void
-Arcadia_Process_removeVisitCallback
+Arcadia_Process_removeArenaVisitCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_VisitCallback* callback
+    Arcadia_Process_ArenaVisitCallback* callback
   )
 {
-  ArmsCallbackNode** previous = &process->armsCallbackNodes;
-  ArmsCallbackNode* current = process->armsCallbackNodes;
+  ARMSCallbackNode** previous = &process->armsCallbackNodes;
+  ARMSCallbackNode* current = process->armsCallbackNodes;
   while (current) {
     if (current->onVisit == callback) {
       *previous = current->next;
-      ArmsCallbackNode* node = current;
+      ARMSCallbackNode* node = current;
       Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), node);
       break;
     } else {
@@ -509,13 +463,13 @@ Arcadia_Process_removeVisitCallback
 }
 
 void
-Arcadia_Process_addFinalizeCallback
+Arcadia_Process_addArenaFinalizeCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_FinalizeCallback* callback
+    Arcadia_Process_ArenaFinalizeCallback* callback
   )
 {
-  ArmsCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ArmsCallbackNode));
+  ARMSCallbackNode* armsCallbackNode = Arcadia_Memory_allocateUnmanaged(Arcadia_Process_getThread(process), sizeof(ARMSCallbackNode));
   armsCallbackNode->onFinalize = callback;
   armsCallbackNode->onPreMark = NULL;
   armsCallbackNode->onVisit = NULL;
@@ -524,18 +478,18 @@ Arcadia_Process_addFinalizeCallback
 }
 
 void
-Arcadia_Process_removeFinalizeCallback
+Arcadia_Process_removeArenaFinalizeCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_FinalizeCallback* callback
+    Arcadia_Process_ArenaFinalizeCallback* callback
   )
 {
-  ArmsCallbackNode** previous = &process->armsCallbackNodes;
-  ArmsCallbackNode* current = process->armsCallbackNodes;
+  ARMSCallbackNode** previous = &process->armsCallbackNodes;
+  ARMSCallbackNode* current = process->armsCallbackNodes;
   while (current) {
     if (current->onFinalize == callback) {
       *previous = current->next;
-      ArmsCallbackNode* node = current;
+      ARMSCallbackNode* node = current;
       Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), node);
       break;
     } else {
@@ -552,9 +506,9 @@ Arcadia_Process_registerType
     const char* name,
     size_t nameLength,
     void* context,
-    void (*typeRemoved)(void*, uint8_t const*, size_t),
-    void (*visit)(void*, void*),
-    void (*finalize)(void*, void*)
+    Arcadia_Process_TypeRemovedCallback* typeRemoved,
+    Arcadia_Process_VisitCallback* visit,
+    Arcadia_Process_FinalizeCallback* finalize
   )
 {
   Arcadia_ARMS_Status status = Arcadia_ARMS_addType(name, nameLength, context, typeRemoved, visit, finalize);

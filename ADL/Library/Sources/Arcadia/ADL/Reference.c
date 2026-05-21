@@ -159,7 +159,7 @@ Arcadia_ADL_Reference_resolve
       Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"unable to resolve reference `");
       Arcadia_StringBuffer_insertBackString(thread, message, self->definitionName);
       Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"`");
-      Arcadia_Languages_Diagnostics_emit(thread, message);
+      Arcadia_Languages_DiagnosticsOld_emit(thread, message);
 
       Arcadia_Thread_setStatus(thread, Arcadia_Status_NotFound);
       Arcadia_Thread_jump(thread);

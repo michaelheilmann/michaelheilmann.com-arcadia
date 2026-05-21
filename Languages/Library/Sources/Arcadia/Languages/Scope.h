@@ -25,6 +25,13 @@ Arcadia_Languages_Scope_create
     Arcadia_Languages_Scope* enclosing
   );
 
+void
+Arcadia_Languages_Scope_clear
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Scope* self
+  );
+
 Arcadia_BooleanValue
 Arcadia_Languages_Scope_enter
   (
@@ -40,6 +47,23 @@ Arcadia_Languages_Scope_lookup
     Arcadia_Thread* thread,
     Arcadia_Languages_Scope* self,
     Arcadia_String* name,
+    Arcadia_BooleanValue recursive
+  );
+
+Arcadia_BooleanValue
+Arcadia_Languages_Scope_contains
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Scope* self,
+    Arcadia_String* name,
+    Arcadia_BooleanValue recursive
+  );
+
+Arcadia_SizeValue
+Arcadia_Languages_Scope_count
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Scope* self,
     Arcadia_BooleanValue recursive
   );
 

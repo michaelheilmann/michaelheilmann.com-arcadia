@@ -320,10 +320,11 @@ Arcadia_DDLS_DefaultReader_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  self->parser = Arcadia_DDL_Parser_create(thread);
+  self->parser = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
+                                                                                      Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
   //
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
-  Arcadia_Languages_StringTable* stringTable = Arcadia_DDL_Parser_getStringTable(thread, self->parser);
+  Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_Parser_getStringTable(thread, (Arcadia_Languages_Parser*)self->parser);
 #define Define(Variable, Text) \
   Arcadia_StringBuffer_clear(thread, stringBuffer); \
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, Text); \
@@ -379,8 +380,7 @@ Arcadia_DDLS_DefaultReader_runImpl
   )
 {
   Arcadia_Languages_StringTable* stringTable = Arcadia_Languages_StringTable_getOrCreate(thread);
-  Arcadia_DDL_Parser_setInput(thread, self->parser, input);
-  Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, self->parser);
+  Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->parser, input), _Arcadia_DDL_Node_getType(thread));
   Arcadia_DDLS_SymbolReader* symbolReader = Arcadia_DDLS_SymbolReader_create(thread, stringTable);
   Arcadia_DDLS_Symbol* symbol = Arcadia_DDLS_SymbolReader_run(thread, symbolReader, node);
   if (Arcadia_DDLS_SymbolKind_Schema != symbol->kind) {

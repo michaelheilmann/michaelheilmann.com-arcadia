@@ -14,9 +14,21 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #include "Arcadia/Ring2/Include.h"
-#include "Arcadia/MIL/AST/Include.h"
+#include "Arcadia/MILC/AST/Include.h"
 #include <stdlib.h>
 #include <string.h>
+
+static Arcadia_ImmutableList*
+makeNatural8
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_List* temporary = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+  Arcadia_List_insertBackObjectReferenceValue(thread, temporary, Arcadia_String_createFromCxxString(thread, u8"Arcadia"));
+  Arcadia_List_insertBackObjectReferenceValue(thread, temporary, Arcadia_String_createFromCxxString(thread, u8"Natural8"));
+  return Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(temporary));
+}
 
 static Arcadia_String* mapType(Arcadia_Thread* thread, Arcadia_String* source) {
   Arcadia_Map* map = (Arcadia_Map*)Arcadia_HashMap_create(thread, Arcadia_Value_makeVoidValue(Arcadia_VoidValue_Void));
@@ -35,22 +47,39 @@ main1
   )
 {
   Arcadia_List* constructorParameters = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  Arcadia_List_insertBackObjectReferenceValue(thread, constructorParameters, Arcadia_MIL_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"red"), Arcadia_String_createFromCxxString(thread, u8"Arcadia.Natural8")));
-  Arcadia_List_insertBackObjectReferenceValue(thread, constructorParameters, Arcadia_MIL_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"green"), Arcadia_String_createFromCxxString(thread, u8"Arcadia.Natural8")));
-  Arcadia_List_insertBackObjectReferenceValue(thread, constructorParameters, Arcadia_MIL_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"blue"), Arcadia_String_createFromCxxString(thread, u8"Arcadia.Natural8")));
-  Arcadia_MIL_AST_ConstructorDefinitionNode* constructor = Arcadia_MIL_AST_ConstructorDefinitionNode_create(thread, NULL, constructorParameters, NULL);
+  Arcadia_List_insertBackObjectReferenceValue(thread, constructorParameters, Arcadia_MILC_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"red"), Arcadia_MILC_AST_IdentifierNode_create(thread, makeNatural8(thread))));
+  Arcadia_List_insertBackObjectReferenceValue(thread, constructorParameters, Arcadia_MILC_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"green"), Arcadia_MILC_AST_IdentifierNode_create(thread, makeNatural8(thread))));
+  Arcadia_List_insertBackObjectReferenceValue(thread, constructorParameters, Arcadia_MILC_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"blue"), Arcadia_MILC_AST_IdentifierNode_create(thread, makeNatural8(thread))));
+  Arcadia_MILC_AST_ConstructorDefinitionNode* constructor = Arcadia_MILC_AST_ConstructorDefinitionNode_create(thread, NULL, constructorParameters, NULL);
 
   Arcadia_List* classBody = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_List_insertBackObjectReferenceValue(thread, classBody, constructor);
-  Arcadia_List_insertBackObjectReferenceValue(thread, classBody, Arcadia_MIL_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"red"), Arcadia_String_createFromCxxString(thread, u8"Arcadia.Natural8")));
-  Arcadia_List_insertBackObjectReferenceValue(thread, classBody, Arcadia_MIL_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"green"), Arcadia_String_createFromCxxString(thread, u8"Arcadia.Natural8")));
-  Arcadia_List_insertBackObjectReferenceValue(thread, classBody, Arcadia_MIL_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"blue"), Arcadia_String_createFromCxxString(thread, u8"Arcadia.Natural8")));
+  Arcadia_List_insertBackObjectReferenceValue(thread, classBody, Arcadia_MILC_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"red"), Arcadia_MILC_AST_IdentifierNode_create(thread, makeNatural8(thread))));
+  Arcadia_List_insertBackObjectReferenceValue(thread, classBody, Arcadia_MILC_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"green"), Arcadia_MILC_AST_IdentifierNode_create(thread, makeNatural8(thread))));
+  Arcadia_List_insertBackObjectReferenceValue(thread, classBody, Arcadia_MILC_AST_FieldDefinitionNode_create(thread, Arcadia_String_createFromCxxString(thread, u8"blue"), Arcadia_MILC_AST_IdentifierNode_create(thread, makeNatural8(thread))));
 
-  Arcadia_MIL_AST_ClassDefinitionNode_create
+  Arcadia_ImmutableList* className = NULL,
+                       * extendedClassName = NULL;
+
+  Arcadia_List* temporary = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)temporary);
+  Arcadia_List_insertBackObjectReferenceValue(thread, temporary, Arcadia_String_createFromCxxString(thread, "Arcadia"));
+  Arcadia_List_insertBackObjectReferenceValue(thread, temporary, Arcadia_String_createFromCxxString(thread, "AssetDefinitionLanguage"));
+  Arcadia_List_insertBackObjectReferenceValue(thread, temporary, Arcadia_String_createFromCxxString(thread, "ColorDefinition"));
+  className = Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(temporary));
+
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)temporary);
+  Arcadia_List_insertBackObjectReferenceValue(thread, temporary, Arcadia_String_createFromCxxString(thread, "Arcadia"));
+  Arcadia_List_insertBackObjectReferenceValue(thread, temporary, Arcadia_String_createFromCxxString(thread, "AssetDefinitionLanguage"));
+  Arcadia_List_insertBackObjectReferenceValue(thread, temporary, Arcadia_String_createFromCxxString(thread, "Definition"));
+  extendedClassName = Arcadia_ImmutableList_create(thread, Arcadia_Value_makeObjectReferenceValue(temporary));
+
+  Arcadia_MILC_AST_ClassDefinitionNode_create
     (
       thread,
-      Arcadia_String_createFromCxxString(thread, u8"Arcadia.AssetDefinitionLanguage.ColorDefinition"),
-      Arcadia_String_createFromCxxString(thread, u8"Arcadia.AssetDefinitionLanguage.Definition"),
+      Arcadia_MILC_AST_IdentifierNode_create(thread, className),
+      Arcadia_MILC_AST_IdentifierNode_create(thread, extendedClassName),
       classBody
     );
 }

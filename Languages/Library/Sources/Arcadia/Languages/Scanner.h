@@ -22,6 +22,7 @@
 
 #include "Arcadia/Ring2/Include.h"
 #include "Arcadia/Languages/StringTable.h"
+#include "Arcadia/Languages/Diagnostics.h"
 
 /// @brief The base of all scanners.
 Arcadia_declareObjectType(u8"Arcadia.Languages.Scanner", Arcadia_Languages_Scanner,
@@ -43,6 +44,7 @@ struct Arcadia_Languages_ScannerDispatch {
   Arcadia_String* (*getInput)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 
   Arcadia_Languages_StringTable* (*getStringTable)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
+  Arcadia_Languages_Diagnostics* (*getDiagnostics)(Arcadia_Thread* thread, Arcadia_Languages_Scanner* self);
 };
 
 struct Arcadia_Languages_Scanner {
@@ -132,6 +134,17 @@ Arcadia_Languages_Scanner_getInput
 /// @return A pointer to the string table used by this scanner.
 Arcadia_Languages_StringTable*
 Arcadia_Languages_Scanner_getStringTable
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Scanner* self
+  );
+
+/// @brief Get the diagnostics used by this scanner.
+/// @param thread A pointer to this thread.
+/// @param self A pointer to this scanner.
+/// @return A pointer to the diagnostics used by this scanner.
+Arcadia_Languages_Diagnostics*
+Arcadia_Languages_Scanner_getDiagnostics
   (
     Arcadia_Thread* thread,
     Arcadia_Languages_Scanner* self

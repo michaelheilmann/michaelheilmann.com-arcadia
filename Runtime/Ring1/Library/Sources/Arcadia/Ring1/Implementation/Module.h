@@ -38,7 +38,7 @@ typedef struct ModuleInfo {
   const char* name;
   /// @brief Visit the module.
   /// @warning Internal function.
-  Arcadia_Process_VisitCallback* onVisit;
+  Arcadia_Process_ArenaVisitCallback* onVisit;
   /// @brief Startup the module.
   /// @warning Internal function.
   void (*onStartUp)(Arcadia_Thread* thread);
@@ -47,10 +47,10 @@ typedef struct ModuleInfo {
   void (*onShutDown)(Arcadia_Thread* thread);
   /// @brief Must be invoked in the pre mark phase.
   /// @warning Internal function.
-  Arcadia_Process_PreMarkCallback* onPreMark;
+  Arcadia_Process_ArenaPreMarkCallback* onPreMark;
   /// @brief Must be invoked in the finalize phase.
   /// @warning Internal function.
-  Arcadia_Process_FinalizeCallback* onFinalize;
+  Arcadia_Process_ArenaFinalizeCallback* onFinalize;
 } ModuleInfo;
 
 #define Arcadia_DeclareModule(Name, cName) \

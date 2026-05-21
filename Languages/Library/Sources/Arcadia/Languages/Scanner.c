@@ -168,3 +168,11 @@ Arcadia_Languages_Scanner_getStringTable
     Arcadia_Languages_Scanner* self
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Languages_Scanner, getStringTable, self); }
+
+Arcadia_Languages_Diagnostics*
+Arcadia_Languages_Scanner_getDiagnostics
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Scanner* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Languages_Scanner, getDiagnostics, self); }

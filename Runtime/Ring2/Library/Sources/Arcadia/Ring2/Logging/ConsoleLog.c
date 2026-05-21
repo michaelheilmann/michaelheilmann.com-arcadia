@@ -40,7 +40,15 @@ Arcadia_ConsoleLog_visit
   );
 
 static void
-Arcadia_ConsoleLog_infoImpl
+Arcadia_ConsoleLog_informationImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ConsoleLog* self,
+    Arcadia_String* message
+  );
+
+static void
+Arcadia_ConsoleLog_warningImpl
   (
     Arcadia_Thread* thread,
     Arcadia_ConsoleLog* self,
@@ -110,8 +118,9 @@ Arcadia_ConsoleLog_initializeDispatchImpl
     Arcadia_ConsoleLogDispatch* self
   )
 {
+  ((Arcadia_LogDispatch*)self)->information = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_ConsoleLog_informationImpl;
+  ((Arcadia_LogDispatch*)self)->warning = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_ConsoleLog_warningImpl;
   ((Arcadia_LogDispatch*)self)->error = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_ConsoleLog_errorImpl;
-  ((Arcadia_LogDispatch*)self)->info = (void (*)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*)) & Arcadia_ConsoleLog_infoImpl;
 }
 
 static void
@@ -127,7 +136,26 @@ Arcadia_ConsoleLog_visit
 }
 
 static void
-Arcadia_ConsoleLog_infoImpl
+Arcadia_ConsoleLog_informationImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_ConsoleLog* self,
+    Arcadia_String* message
+  )
+{
+  const char* p = Arcadia_String_getBytes(thread, message);
+  Arcadia_SizeValue n = Arcadia_String_getNumberOfBytes(thread, message);
+  if (self->colorEnabled) {
+    writeBytes(thread, self, u8"\033[38;2;0;255;0m", sizeof(u8"\033[38;2;0;255;0m") - 1);
+  }
+  writeBytes(thread, self, p, n);
+  if (self->colorEnabled) {
+    writeBytes(thread, self, u8"\033[0m", sizeof(u8"\033[0m") - 1);
+  }
+}
+
+static void
+Arcadia_ConsoleLog_warningImpl
   (
     Arcadia_Thread* thread,
     Arcadia_ConsoleLog* self,

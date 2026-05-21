@@ -41,7 +41,7 @@ test
     v = Arcadia_WeakReference_getValue(thread, weakReference);
     Arcadia_Tests_assertTrue(thread, Arcadia_Value_isImmutableUTF8StringValue(&v));
 
-    Arcadia_Process_runArms(Arcadia_Thread_getProcess(thread), false);
+    Arcadia_Process_runARMS(Arcadia_Thread_getProcess(thread), false);
 
     v = Arcadia_WeakReference_getValue(thread, weakReference);
     Arcadia_Tests_assertTrue(thread, Arcadia_Value_isVoidValue(&v));

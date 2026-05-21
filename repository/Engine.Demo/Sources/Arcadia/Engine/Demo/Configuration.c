@@ -448,9 +448,9 @@ Cfg_loadConfiguration
   if (Arcadia_JumpTarget_save(&jumpTarget)) {
     Arcadia_DataDefinitionLanguage_SemanticalAnalysis* semanticalAnalysis = Arcadia_DataDefinitionLanguage_SemanticalAnalysis_create(thread);
     Arcadia_ByteBuffer* byteBuffer = Arcadia_FileSystem_getFileContents(thread, fileSystem, file);
-    Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread);
-    Arcadia_DDL_Parser_setInput(thread, parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(byteBuffer)));
-    Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, parser);
+    Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
+                                                                                                      Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
+    Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(byteBuffer))), _Arcadia_DDL_Node_getType(thread));
     if (!Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)node), _Arcadia_DDL_MapNode_getType(thread))) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);

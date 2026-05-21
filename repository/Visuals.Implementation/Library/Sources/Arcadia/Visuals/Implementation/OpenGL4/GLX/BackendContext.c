@@ -282,9 +282,9 @@ _openContext
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_constructImpl,
-  .destruct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_destruct,
-  .visit = &Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_visit,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_initializeDispatchImpl,
 };
 
@@ -1594,7 +1594,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getOrCreate
 {
   if (!g_instance) {
     Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext* instance = Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &destroyCallback);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, (void (*)(void*, Arcadia_Object*))&destroyCallback);
     g_instance = instance;
   }
   return g_instance;

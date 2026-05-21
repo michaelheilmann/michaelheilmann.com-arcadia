@@ -77,7 +77,7 @@ main
     return EXIT_FAILURE;
   }
   Object* sender = NULL;
-  if (Arcadia_ARMS_allocate(&sender, "Object", strlen("Object"), sizeof(Object))) {
+  if (Arcadia_ARMS_allocate((void**)&sender, "Object", strlen("Object"), sizeof(Object))) {
     Arcadia_ARMS_RunStatistics statistics = Arcadia_ARMS_RunStatistics_StaticInitializer();
     Arcadia_ARMS_run(&statistics);
     Arcadia_ARMS_shutdown();

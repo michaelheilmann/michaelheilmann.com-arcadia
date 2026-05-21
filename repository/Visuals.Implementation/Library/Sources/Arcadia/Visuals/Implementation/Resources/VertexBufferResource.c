@@ -169,7 +169,7 @@ Arcadia_Visuals_Implementation_VertexBufferResource_setDataImpl
     Arcadia_SizeValue numberOfBytes
   )
 {
-  Arcadia_Memory_reallocateUnmanaged(thread, &self->bytes, numberOfBytes);
+  Arcadia_Memory_reallocateUnmanaged(thread, (void**)&self->bytes, numberOfBytes);
   Arcadia_Memory_copy(thread, self->bytes, bytes, numberOfBytes);
   self->vertexDescriptor = vertexDescriptor;
   self->numberOfBytes = numberOfBytes;

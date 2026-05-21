@@ -41,7 +41,7 @@ if (NOT TARGET ${MyLibraryName})
   OnHeaderFile(${MyLibraryName} Arcadia.Tools.TemplateEngine.Library/DependenciesContext.h)
 
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.MIL.AST ${MyProjectName}.DDL ${MyProjectName}.Ring2)
+  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.DDL ${MyProjectName}.Ring2)
 
   EndProduct(${MyLibraryName})
 

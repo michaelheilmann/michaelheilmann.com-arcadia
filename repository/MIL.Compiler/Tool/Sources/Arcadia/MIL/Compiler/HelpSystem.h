@@ -17,13 +17,14 @@
 #define ARCADIA_MIL_COMPILER_HELPSYSTEM_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+#include "Arcadia/MILC/Include.h"
 
 void
 Help_invoke
   (
     Arcadia_Thread* thread,
-    Arcadia_List* arguments,
-    Arcadia_Log* log
+    Arcadia_MILC_Context* context,
+    Arcadia_List* arguments
   );
 
 #endif // ARCADIA_MIL_COMPILER_HELPSYSTEM_H_INCLUDED

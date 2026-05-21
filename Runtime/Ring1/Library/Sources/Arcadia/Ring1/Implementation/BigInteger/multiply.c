@@ -56,7 +56,7 @@ Arcadia_BigInteger_multiply3
   Arcadia_BigInteger* oldResult = result;
   result = Arcadia_BigInteger_create(thread);
   result->sign = a->sign != b->sign ? -1 : +1;
-  Arcadia_Memory_reallocateUnmanaged(thread, &result->limps, sizeof(Arcadia_BigInteger_Limp) * temporaryLength);
+  Arcadia_Memory_reallocateUnmanaged(thread, (void**)&result->limps, sizeof(Arcadia_BigInteger_Limp) * temporaryLength);
   Arcadia_Memory_fill(thread, result->limps, sizeof(Arcadia_BigInteger_Limp) * temporaryLength, 0);
   result->numberOfLimps = temporaryLength;
 

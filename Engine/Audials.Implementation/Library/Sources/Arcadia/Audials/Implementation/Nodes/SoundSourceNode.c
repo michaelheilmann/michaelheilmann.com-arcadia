@@ -181,8 +181,8 @@ Arcadia_Engine_Audials_Implementation_SoundSourceNode_initializeDispatchImpl
   ((Arcadia_Engine_NodeDispatch*)self)->setAudialsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Audials_BackendContext*)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_setAudialsBackendContextImpl;
   //
   ((Arcadia_Engine_Audials_SoundSourceNodeDispatch*)self)->isPlaying = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Engine_Audials_SoundSourceNode*)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_isPlayingImpl;
-  ((Arcadia_Engine_Audials_SoundSourceNodeDispatch*)self)->play = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Engine_Audials_SoundSourceNode*)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_playImpl;
-  ((Arcadia_Engine_Audials_SoundSourceNodeDispatch*)self)->stop = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Engine_Audials_SoundSourceNode*)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_stopImpl;
+  ((Arcadia_Engine_Audials_SoundSourceNodeDispatch*)self)->play = (void(*)(Arcadia_Thread*, Arcadia_Engine_Audials_SoundSourceNode*)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_playImpl;
+  ((Arcadia_Engine_Audials_SoundSourceNodeDispatch*)self)->stop = (void(*)(Arcadia_Thread*, Arcadia_Engine_Audials_SoundSourceNode*)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_stopImpl;
   ((Arcadia_Engine_Audials_SoundSourceNodeDispatch*)self)->setIsLooping = (void(*)(Arcadia_Thread*, Arcadia_Engine_Audials_SoundSourceNode*, Arcadia_BooleanValue)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_setIsLoopingImpl;
   ((Arcadia_Engine_Audials_SoundSourceNodeDispatch*)self)->getIsLooping = (Arcadia_BooleanValue(*)(Arcadia_Thread*, Arcadia_Engine_Audials_SoundSourceNode*)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_getIsLoopingImpl;
   ((Arcadia_Engine_Audials_SoundSourceNodeDispatch*)self)->setVolume = (void(*)(Arcadia_Thread*, Arcadia_Engine_Audials_SoundSourceNode*, Arcadia_Real32Value)) & Arcadia_Engine_Audials_Implementation_SoundSourceNode_setVolumeImpl;

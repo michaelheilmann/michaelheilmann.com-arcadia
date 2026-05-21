@@ -17,8 +17,8 @@
 #define ARCADIA_MIL_CALLABLECONTEXT_H_INCLUDED
 
 #include "Arcadia/Include.h"
-#include "Arcadia/MIL/Frontend/Include.h"
-typedef struct Arcadia_MIL_AST_VariableDefinitionStatementNode Arcadia_MIL_AST_VariableDefinitionStatementNode;
+#include "Arcadia/MILC/Include.h"
+typedef struct Arcadia_MILC_AST_VariableDefinitionStatementNode Arcadia_MILC_AST_VariableDefinitionStatementNode;
 
 /// @brief Context for compiling a sequence of statements.
 Arcadia_declareObjectType("Arcadia.MIL.CallableContext", Arcadia_MIL_CallableContext, "Arcadia.Object");
@@ -63,7 +63,7 @@ Arcadia_MIL_CallableContext_onDefineLabel
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_AST_LabelDefinitionStatementNode* ast,
+    Arcadia_MILC_AST_LabelDefinitionStatementNode* ast,
     Arcadia_Natural32Value instructionIndex
   );
 
@@ -75,7 +75,7 @@ Arcadia_MIL_CallableContext_onParameterVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_AST_Node* ast
+    Arcadia_MILC_AST_Node* ast
   );
 
 /// @param thread A pointer to this thread.
@@ -86,7 +86,7 @@ Arcadia_MIL_CallableContext_onLocalVariableDefinition
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* self,
     Arcadia_String* name,
-    Arcadia_MIL_AST_VariableDefinitionStatementNode* ast
+    Arcadia_MILC_AST_VariableDefinitionStatementNode* ast
   );
 
 #endif // ARCADIA_MIL_CALLABLECONTEXT_H_INCLUDED

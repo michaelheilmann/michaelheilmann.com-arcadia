@@ -150,6 +150,22 @@ Arcadia_Thread_setStatus
   )
 { thread->status = status; }
 
+
+void
+Arcadia_Thread_setRaisedValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value raisedValue
+  )
+{ thread->raisedValue = raisedValue; }
+
+Arcadia_Value
+Arcadia_Thread_getRaisedValue
+  (
+    Arcadia_Thread* thread
+  )
+{ return thread->raisedValue; }
+
 Arcadia_Process*
 Arcadia_Thread_getProcess
   (

@@ -1098,7 +1098,7 @@ Arcadia_Media_PixelBuffer_swap
     Arcadia_swapInteger32(thread, &self->width, &other->width);
     Arcadia_swapInteger32(thread, &self->height, &other->height);
     Arcadia_swapInteger32(thread, &self->linePadding, &other->linePadding);
-    Arcadia_swapPointer(thread, &self->bytes, &other->bytes);
+    Arcadia_swapPointer(thread, (void**)&self->bytes, (void**)&other->bytes);
   }
 }
 
@@ -1115,7 +1115,7 @@ Arcadia_Media_PixelBuffer_assign
   } else {
     Arcadia_SizeValue bytesPerPixel = Arcadia_Media_PixelBuffer_getBytesPerPixel(thread, other);
     Arcadia_SizeValue numberOfBytes = (other->width * bytesPerPixel + other->linePadding) * other->height;
-    Arcadia_Memory_reallocateUnmanaged(thread, &self->bytes, numberOfBytes);
+    Arcadia_Memory_reallocateUnmanaged(thread, (void**)&self->bytes, numberOfBytes);
     Arcadia_Memory_copy(thread, self->bytes, other->bytes, numberOfBytes);
     self->width = other->width;
     self->height = other->height;

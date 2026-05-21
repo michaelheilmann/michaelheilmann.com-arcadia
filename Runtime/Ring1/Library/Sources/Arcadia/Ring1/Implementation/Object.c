@@ -324,7 +324,7 @@ Arcadia_allocateObject
     Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + Arcadia_ObjectType_getValueSize(thread, (Arcadia_ObjectType*)type));
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&tag, ObjectTypeName, sizeof(ObjectTypeName) - 1, sizeof(ObjectTag) + Arcadia_ObjectType_getValueSize(thread, (Arcadia_ObjectType*)type));
   tag->type = memoryType;
   if (Arcadia_Process_lockObject(Arcadia_Thread_getProcess(thread), memoryType)) {
     Arcadia_logf(Arcadia_LogFlags_Error, "%s:%d: <error>\n", __FILE__, __LINE__);
@@ -392,8 +392,12 @@ _Arcadia_Object_getType
   )
 {
   if (!g_objectRegistered) {
-    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), ObjectTypeName, sizeof(ObjectTypeName) - 1, Arcadia_Thread_getProcess(thread),
-                                 &_Arcadia_Object_onObjectTypeRemoved, &_Arcadia_Object_onVisitObject, &_Arcadia_Object_onFinalizeObject);
+    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread),
+                                 ObjectTypeName, sizeof(ObjectTypeName) - 1,
+                                 Arcadia_Thread_getProcess(thread),
+                                 (Arcadia_Process_TypeRemovedCallback*)&_Arcadia_Object_onObjectTypeRemoved,
+                                 (Arcadia_Process_VisitCallback*)&_Arcadia_Object_onVisitObject,
+                                 (Arcadia_Process_FinalizeCallback*)&_Arcadia_Object_onFinalizeObject);
     g_objectRegistered = Arcadia_BooleanValue_True;
   }
   if (!g__Arcadia_Object_type) {
@@ -451,7 +455,7 @@ Arcadia_Object_addNotifyDestroyCallback
   )
 {
   ObjectTag* tag = ((ObjectTag*)self) - 1;
-  Arcadia_ARMS_Status status = Arcadia_ARMS_addNotifyDestroy(tag, observer, self, (void (*)(void*,void*))callback);
+  Arcadia_ARMS_Status status = Arcadia_ARMS_addNotifyDestroy(tag, observer, self, (Arcadia_ARMS_NotifyDestroyCallback*)callback);
   if (status) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);
@@ -468,7 +472,7 @@ Arcadia_Object_removeNotifyDestroyCallback
   )
 {
   ObjectTag* tag = ((ObjectTag*)self) - 1;
-  Arcadia_ARMS_Status status = Arcadia_ARMS_removeNotifyDestroy(tag, observer, self, (void (*)(void*, void*))callback);
+  Arcadia_ARMS_Status status = Arcadia_ARMS_removeNotifyDestroy(tag, observer, self, (Arcadia_ARMS_NotifyDestroyCallback*)callback);
   if (status) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
     Arcadia_Thread_jump(thread);

@@ -146,6 +146,22 @@ Arcadia_Stack_peekAt
       Arcadia_Thread_jump(thread); \
     } \
     return Arcadia_Value_get##Suffix##Value(&v); \
+  } \
+\
+  Type##Value \
+  Arcadia_Stack_peek##Suffix##Value \
+    (\
+      Arcadia_Thread* thread, \
+      Arcadia_Stack* self \
+    ) \
+  { \
+    Arcadia_Value v = Arcadia_Stack_peek(thread, self); \
+    if (!Arcadia_Value_is##Suffix##Value(&v)) { \
+      \
+        Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid); \
+        Arcadia_Thread_jump(thread); \
+    } \
+    return Arcadia_Value_get##Suffix##Value(&v); \
   }
 
 Define(Arcadia_Boolean, Boolean, boolean)

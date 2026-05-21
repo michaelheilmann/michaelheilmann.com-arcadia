@@ -336,7 +336,7 @@ writeConstantScalar
   // Add the VPL constant scalar name to GL uniform scalar name to the map.
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
   Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
-  Arcadia_StringBuffer_insertCodePointBack(thread, stringBuffer, '\0');
+  Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, '\0');
   Arcadia_String* glName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
   Arcadia_Map_set(thread, constantMapping, Arcadia_Value_makeObjectReferenceValue(name), Arcadia_Value_makeObjectReferenceValue(glName), NULL, NULL);
   Arcadia_Map_set(thread, self->symbolNameMapping, Arcadia_Value_makeObjectReferenceValue(constantScalar), Arcadia_Value_makeObjectReferenceValue(name), NULL, NULL);
@@ -385,7 +385,7 @@ writeConstantRecord
   // Add the VPL constant block name to GL uniform block name to the map.
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
   Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
-  Arcadia_StringBuffer_insertCodePointBack(thread, stringBuffer, '\0');
+  Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, '\0');
   Arcadia_String* glName = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
   Arcadia_Map_set(thread, constantMapping, Arcadia_Value_makeObjectReferenceValue(name), Arcadia_Value_makeObjectReferenceValue(glName), NULL, NULL);
 
@@ -767,7 +767,7 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultVertexShader
       writeConstantScalar(thread, self, Context_VertexShader, constantMapping, program, (Arcadia_VPL_Symbols_ConstantScalar*)constant, target);
     }
   }
-  Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread), program);
+  Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread, Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))), program);
   Arcadia_List* procedures = getProcedures(thread, self, Context_VertexShader, program);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)procedures); i < n; ++i) {
     Arcadia_VPL_Symbols_Procedure* procedure = (Arcadia_VPL_Symbols_Procedure*)Arcadia_List_getObjectReferenceValueAt(thread, procedures, i);
@@ -808,7 +808,7 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
       writeConstantScalar(thread, self, Context_FragmentShader, constantMapping, program, (Arcadia_VPL_Symbols_ConstantScalar*)constant, target);
     }
   }
-  Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread), program);
+  Arcadia_VPL_ResolvePhase_run(thread, Arcadia_VPL_ResolvePhase_create(thread, Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))), program);
   Arcadia_List* procedures = getProcedures(thread, self, Context_FragmentShader, program);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)procedures); i < n; ++i) {
     Arcadia_VPL_Symbols_Procedure* procedure = (Arcadia_VPL_Symbols_Procedure*)Arcadia_List_getObjectReferenceValueAt(thread, procedures, i);
@@ -820,6 +820,6 @@ Arcadia_VPL_Backends_GLSL_Transpiler_writeDefaultFragmentShader
 
   Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
   Arcadia_StringBuffer_insertBackCxxString(thread, stringBuffer, u8"_2_fragmentColor");
-  Arcadia_StringBuffer_insertCodePointBack(thread, stringBuffer, '\0');
+  Arcadia_StringBuffer_insertBackCodePoint(thread, stringBuffer, '\0');
   *fragmentColorOutput = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }

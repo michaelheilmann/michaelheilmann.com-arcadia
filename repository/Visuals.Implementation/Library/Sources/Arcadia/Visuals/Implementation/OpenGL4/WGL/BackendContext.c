@@ -185,7 +185,7 @@ createContext
 
     Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
 
-    Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
+    Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
   }
   // (2) Get desired configuration.
   Arcadia_Visuals_Configuration* desiredConfiguration = Arcadia_Visuals_Configuration_create(thread);
@@ -289,7 +289,7 @@ createContext
   Arcadia_StringBuffer_insertBackString(thread, logMessage, desiredConfiguration->opengl.version.minor);
   Arcadia_StringBuffer_insertBackCxxString(thread, logMessage, u8"\n");
 
-  Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
+  Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(logMessage)));
 }
 
 static LRESULT CALLBACK
@@ -1302,7 +1302,7 @@ Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_getOrCreate
 {
   if (!g_instance) {
     Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext* instance = Arcadia_Visuals_Implementation_OpenGL4_WGL_BackendContext_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &destroyCallback);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, (void (*)(void*, Arcadia_Object*)) &destroyCallback);
     g_instance = instance;
   }
   return g_instance;

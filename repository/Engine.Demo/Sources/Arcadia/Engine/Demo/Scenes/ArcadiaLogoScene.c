@@ -212,7 +212,7 @@ Arcadia_Engine_Demo_ArcadiaLogoScene_updateLogics
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(thread);
-      Arcadia_String* temporary = Arcadia_FilePath_toNative(thread, filePath);
+      Arcadia_String* temporary = Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_True);
       Arcadia_logf(Arcadia_LogFlags_Debug, "problem loading asset `%s`\n", Arcadia_String_getBytes(thread, temporary));
       Arcadia_Thread_jump(thread);
     }

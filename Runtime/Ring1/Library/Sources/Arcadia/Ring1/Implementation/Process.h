@@ -115,84 +115,88 @@ Arcadia_Process_unlockObject
   );
 
 Arcadia_Status
-Arcadia_Process_stepArms
+Arcadia_Process_stepARMS
   (
     Arcadia_Process* process
   );
 
 Arcadia_Status
-Arcadia_Process_runArms
+Arcadia_Process_runARMS
   (
     Arcadia_Process* process,
     bool purgeCaches
   );
 
-typedef void (Arcadia_Process_PreMarkCallback)(Arcadia_Thread* thread, bool purgeCaches);
-typedef void (Arcadia_Process_VisitCallback)(Arcadia_Thread* thread);
-typedef void (Arcadia_Process_FinalizeCallback)(Arcadia_Thread* thread, size_t* destroyed);
+typedef void (Arcadia_Process_ArenaPreMarkCallback)(Arcadia_Thread* thread, bool purgeCaches);
+typedef void (Arcadia_Process_ArenaVisitCallback)(Arcadia_Thread* thread);
+typedef void (Arcadia_Process_ArenaFinalizeCallback)(Arcadia_Thread* thread, size_t* destroyed);
 
 /// @brief Add a premark callback to the list of premark callbacks.
 /// @param process A pointer to the process.
 /// @param callback A pointer to the premark callback.
 void
-Arcadia_Process_addPreMarkCallback
+Arcadia_Process_addArenaPreMarkCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_PreMarkCallback* callback
+    Arcadia_Process_ArenaPreMarkCallback* callback
   );
 
-/// @brief Remove a premark callback from the list of premark callbacks.
+/// @brief Remove an arena premark callback from the list of premark callbacks.
 /// @param process A pointer to the process.
-/// @param callback A pointer to the premark callback.
-/// @remark One occurrence of the callback in the list of premark callbacks was removed.
+/// @param callback A pointer to the arena premark callback.
+/// @remark One occurrence of the callback in the list of arena premark callbacks was removed.
 void
-Arcadia_Process_removePreMarkCallback
+Arcadia_Process_removeArenaPreMarkCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_PreMarkCallback* callback
+    Arcadia_Process_ArenaPreMarkCallback* callback
   );
 
-/// @brief Add a visit callback to the list of visit callbacks.
+/// @brief Add an arena visit callback to the list of visit callbacks.
 /// @param process A pointer to the process.
-/// @param callback A pointer to the visit callback.
+/// @param callback A pointer to the arena visit callback.
 void
-Arcadia_Process_addVisitCallback
+Arcadia_Process_addArenaVisitCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_VisitCallback* callback
+    Arcadia_Process_ArenaVisitCallback* callback
   );
 
-/// @brief Remove a visit callback from the list of visit callbacks.
+/// @brief Remove an arena visit callback from the list of visit callbacks.
 /// @param process A pointer to the process.
-/// @param callback A pointer to the visit callback.
-/// @remark One occurrence of the callback in the list of visit callbacks was removed.
+/// @param callback A pointer to the arena visit callback.
+/// @remark One occurrence of the callback in the list of arena visit callbacks was removed.
 void
-Arcadia_Process_removeVisitCallback
+Arcadia_Process_removeArenaVisitCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_VisitCallback* callback
+    Arcadia_Process_ArenaVisitCallback* callback
   );
 
-/// @brief Add a finalize callback to the list of finalize callbacks.
+/// @brief Add an arena finalize callback to the list of finalize callbacks.
+/// @param process A pointer to the process.
+/// @param callback A pointer to the arena finalize callback.
+void
+Arcadia_Process_addArenaFinalizeCallback
+  (
+    Arcadia_Process* process,
+    Arcadia_Process_ArenaFinalizeCallback* callback
+  );
+
+/// @brief Remove an arena finalize callback from the list of finalize callbacks.
 /// @param process A pointer to the process.
 /// @param callback A pointer to the finalize callback.
+/// @remark One occurrence of the callback in the list of arena finalize callbacks was removed.
 void
-Arcadia_Process_addFinalizeCallback
+Arcadia_Process_removeArenaFinalizeCallback
   (
     Arcadia_Process* process,
-    Arcadia_Process_FinalizeCallback* callback
+    Arcadia_Process_ArenaFinalizeCallback* callback
   );
 
-/// @brief Remove a finalize callback from the list of finalize callbacks.
-/// @param process A pointer to the process.
-/// @param callback A pointer to the finalize callback.
-/// @remark One occurrence of the callback in the list of finalize callbacks was removed.
-void
-Arcadia_Process_removeFinalizeCallback
-  (
-    Arcadia_Process* process,
-    Arcadia_Process_FinalizeCallback* callback
-  );
+typedef void (Arcadia_Process_TypeRemovedCallback)(void*, uint8_t const*, size_t);
+typedef void (Arcadia_Process_VisitCallback)(void*, void*);
+typedef void (Arcadia_Process_FinalizeCallback)(void*, void*);
 
 void
 Arcadia_Process_registerType
@@ -201,9 +205,9 @@ Arcadia_Process_registerType
     const char* name,
     size_t nameLength,
     void* context,
-    void (*typeRemoved)(void*, uint8_t const*, size_t),
-    void (*visit)(void*, void*),
-    void (*finalize)(void*, void*)
+    Arcadia_Process_TypeRemovedCallback* typeRemoved,
+    Arcadia_Process_VisitCallback* visit,
+    Arcadia_Process_FinalizeCallback* finalize
   );
 
 /// @brief Allocate managed memory.

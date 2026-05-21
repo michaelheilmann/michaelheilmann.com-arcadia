@@ -21,7 +21,7 @@ main1
   (
     Arcadia_Process* process,
     int argi,
-    const char *argv[]
+    char** argv
   )
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);

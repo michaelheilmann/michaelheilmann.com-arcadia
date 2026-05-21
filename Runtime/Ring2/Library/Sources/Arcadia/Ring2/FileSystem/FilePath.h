@@ -112,7 +112,8 @@ Arcadia_String*
 Arcadia_FilePath_toNative
   (
     Arcadia_Thread* thread,
-    Arcadia_FilePath* self
+    Arcadia_FilePath* self,
+    Arcadia_BooleanValue appendZeroTerminator
   );
 
 // Parse a Generic file path.
@@ -224,6 +225,14 @@ Arcadia_FilePath_getExtension
   (
     Arcadia_Thread* thread,
     Arcadia_FilePath* self
+  );
+
+void
+Arcadia_FilePath_addOrReplaceExtension
+  (
+    Arcadia_Thread* thread,
+    Arcadia_FilePath* self,
+    Arcadia_String* extension
   );
 
 #endif // ARCADIA_RING2_FILESYSTEM_FILEPATH_H_INCLUDED

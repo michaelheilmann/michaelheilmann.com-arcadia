@@ -210,7 +210,7 @@ Arcadia_Engine_getOrCreate
 {
   if (!g_instance) {
     Arcadia_Engine* instance = Arcadia_Engine_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_Engine_destroyCallback);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, (void (*)(void*, Arcadia_Object*)) &Arcadia_Engine_destroyCallback);
     g_instance = instance;
   }
   return g_instance;

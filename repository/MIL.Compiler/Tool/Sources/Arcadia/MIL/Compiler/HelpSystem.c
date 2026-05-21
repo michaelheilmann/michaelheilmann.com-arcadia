@@ -112,8 +112,8 @@ void
 Help_invoke
   (
     Arcadia_Thread* thread,
-    Arcadia_List* arguments,
-    Arcadia_Log* log
+    Arcadia_MILC_Context* context,
+    Arcadia_List* arguments
   )
 {
   Arcadia_String* topicName = NULL;
@@ -122,14 +122,14 @@ Help_invoke
     Arcadia_CommandLineArgument* argument = (Arcadia_CommandLineArgument*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, arguments, i, _Arcadia_CommandLineArgument_getType(thread));
     if (Arcadia_Object_isEqualTo(thread, (Arcadia_Object*)argument->name, &TOPIC)) {
       if (topicName) {
-        Arcadia_CommandLine_raiseAlreadySpecifiedError(thread, argument->name, log);
+        Arcadia_CommandLine_raiseAlreadySpecifiedError(thread, argument->name, context->log);
       }
       if (!argument->value) {
-        Arcadia_CommandLine_raiseNoValueError(thread, argument->name, log);
+        Arcadia_CommandLine_raiseNoValueError(thread, argument->name, context->log);
       }
       topicName = argument->value;
     } else {
-      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argument->name, log);
+      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, argument->name, context->log);
     }
   }
   if (!topicName || Arcadia_String_isEqualTo_pn(thread, topicName, u8"general", sizeof(u8"general") - 1)) {
@@ -140,6 +140,6 @@ Help_invoke
     MIL2MIL_showHelp(thread);
   } else {
     General_showHelp(thread);
-    Arcadia_CommandLine_raiseValueInvalidError(thread, Arcadia_Value_getObjectReferenceValue(&TOPIC), topicName, log);
+    Arcadia_CommandLine_raiseValueInvalidError(thread, Arcadia_Value_getObjectReferenceValue(&TOPIC), topicName, context->log);
   }
 }

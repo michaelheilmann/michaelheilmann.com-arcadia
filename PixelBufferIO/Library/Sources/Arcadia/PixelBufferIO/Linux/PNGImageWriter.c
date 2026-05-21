@@ -348,7 +348,7 @@ Arcadia_Imaging_Linux_PNGImageWriter_writePngToPathImpl
       state->row_pointers[i] = pixels + lineStride * i;
     }
     Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, targetPath);
-    Arcadia_String* filePathString = Arcadia_FilePath_toNative(thread, filePath);
+    Arcadia_String* filePathString = Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_True);
     fp = fopen(Arcadia_String_getBytes(thread, filePathString), "wb");
     if (!fp) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_EnvironmentFailed);
@@ -389,8 +389,8 @@ Arcadia_Imaging_Linux_PNGImageWriter_writePngToPathImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = &Arcadia_Imaging_Linux_PNGImageWriter_constructImpl,
-  .visit = &Arcadia_Imaging_Linux_PNGImageWriter_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Imaging_Linux_PNGImageWriter_constructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Imaging_Linux_PNGImageWriter_visit,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Imaging_Linux_PNGImageWriter_initializeDispatchImpl,
 };
 

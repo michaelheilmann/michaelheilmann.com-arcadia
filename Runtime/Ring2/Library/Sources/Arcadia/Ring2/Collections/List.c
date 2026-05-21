@@ -226,3 +226,20 @@ Arcadia_List_filter
   }
   return result;
 }
+
+void
+Arcadia_List_forEach
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self,
+    Arcadia_Value context,
+    Arcadia_BooleanValue(*predicate)(Arcadia_Thread* thread, Arcadia_Value context, Arcadia_Value value)
+  )
+{ 
+  for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self); i < n; ++i) {
+    Arcadia_Value v = Arcadia_List_getAt(thread, self, i);
+    if (!(*predicate)(thread, context, v)) {
+      break;
+    }
+  }
+}

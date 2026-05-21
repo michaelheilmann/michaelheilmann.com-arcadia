@@ -50,8 +50,8 @@ if (NOT TARGET ${MyLibraryName})
   OnSourceFile(${MyLibraryName} Arcadia/VPL/Symbols/Variable.c)
   OnHeaderFile(${MyLibraryName} Arcadia/VPL/Symbols/Variable.h)
 
-  OnSourceFile(${MyLibraryName} Arcadia/VPL/SemanticalAnalysis.c)
-  OnHeaderFile(${MyLibraryName} Arcadia/VPL/SemanticalAnalysis.h)
+  OnSourceFile(${MyLibraryName} Arcadia/VPL/EnterPhase.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/VPL/EnterPhase.h)
   OnSourceFile(${MyLibraryName} Arcadia/VPL/ModifiersUtilities.c)
   OnHeaderFile(${MyLibraryName} Arcadia/VPL/ModifiersUtilities.h)
   OnSourceFile(${MyLibraryName} Arcadia/VPL/ResolvePhase.c)
@@ -85,10 +85,16 @@ if (NOT TARGET ${MyLibraryName})
   OnHeaderFile(${MyLibraryName} Arcadia/VPL/Include.h)
   OnHeaderFile(${MyLibraryName} Arcadia/VPL/TreeBuilder.h)
 
+  OnSourceFile(${MyLibraryName} Arcadia/VPL/Diagnostics/SymbolAlreadyDefinedDiagnostic.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/VPL/Diagnostics/SymbolAlreadyDefinedDiagnostic.h)
+
   OnSourceFile(${MyLibraryName} Arcadia/VPL/GLSL/Include.c)
   OnHeaderFile(${MyLibraryName} Arcadia/VPL/GLSL/Include.h)
   OnSourceFile(${MyLibraryName} Arcadia/VPL/GLSL/Transpiler.c)
   OnHeaderFile(${MyLibraryName} Arcadia/VPL/GLSL/Transpiler.h)
+
+  OnSourceFile(${MyLibraryName} Arcadia/VPL/Context.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/VPL/Context.h)
 
   list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Math ${MyProjectName}.Languages)
   list(APPEND ${MyLibraryName}.PrivateLibraries ${MyProjectName}.Ring2 ${MyProjectName}.DDL)

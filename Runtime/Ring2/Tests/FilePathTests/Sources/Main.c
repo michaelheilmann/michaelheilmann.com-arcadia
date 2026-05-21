@@ -27,9 +27,9 @@ checkNormalized
 {
   Arcadia_String* filePathStringSource = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, strlen(p))));
   Arcadia_FilePath* filePath = Arcadia_FilePath_parseNative(thread, filePathStringSource);
-  Arcadia_String* filePathStringTarget = Arcadia_FilePath_toNative(thread, filePath);
+  Arcadia_String* filePathStringTarget = Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_False);
 
-  if (Arcadia_String_getNumberOfBytes(thread, filePathStringTarget) != strlen(q) + 1) {
+  if (Arcadia_String_getNumberOfBytes(thread, filePathStringTarget) != strlen(q)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_TestFailed);
     Arcadia_Thread_jump(thread);
   }

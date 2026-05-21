@@ -17,12 +17,50 @@
 #define ARCADIA_LANGUAGES_DIAGNOSTICS_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
+typedef struct Arcadia_Languages_Diagnostic Arcadia_Languages_Diagnostic;
+
+Arcadia_declareObjectType(u8"Arcadia.Languages.Diagnostics", Arcadia_Languages_Diagnostics,
+                          u8"Arcadia.Object");
+
+struct Arcadia_Languages_DiagnosticsDispatch {
+  Arcadia_ObjectDispatch _parent;
+};
+
+struct Arcadia_Languages_Diagnostics {
+  Arcadia_Object _parent;
+  /// @brief List of diagnostics (Arcadia.Languages.Diagnostic or derived type objects).
+  Arcadia_List* diagnostics;
+  /// @brief The log.
+  Arcadia_Log* log;
+};
+
+Arcadia_Languages_Diagnostics*
+Arcadia_Languages_Diagnostics_create
+  (
+    Arcadia_Thread* thread,
+	  Arcadia_Log* log
+  );
+
+Arcadia_BooleanValue
+Arcadia_Languages_Diagnostics_hasErrors
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Diagnostics* self
+  );
+  
+void
+Arcadia_Languages_Diagnostics_add
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Diagnostics* self,
+    Arcadia_Languages_Diagnostic* diagnostic
+  );
 
 void
 Arcadia_Languages_Diagnostics_emit
   (
     Arcadia_Thread* thread,
-    Arcadia_StringBuffer* message
+    Arcadia_Languages_Diagnostics* self
   );
 
 #endif // ARCADIA_LANGUAGES_DIAGNOSTICS_H_INCLUDED

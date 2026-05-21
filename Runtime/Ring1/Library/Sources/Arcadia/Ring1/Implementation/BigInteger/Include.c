@@ -25,12 +25,12 @@ static Arcadia_BooleanValue g_registered = Arcadia_BooleanValue_False;
 static void
 onFinalize
   (
-    Arcadia_Thread* thread,
+    Arcadia_Process* process,
     Arcadia_BigInteger* self
   )
 {
   if (self->limps) {
-    Arcadia_Memory_deallocateUnmanaged(thread, self->limps);
+    Arcadia_Memory_deallocateUnmanaged(Arcadia_Process_getThread(process), self->limps);
     self->limps = NULL;
   }
 }
@@ -38,7 +38,7 @@ onFinalize
 static void
 onTypeRemoved
   (
-    Arcadia_Thread* thread,
+    Arcadia_Process* process,
     const uint8_t* bytes,
     size_t numberOfBytes
   )
@@ -53,11 +53,16 @@ Arcadia_BigInteger_create
   )
 {
   if (!g_registered) {
-    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), TypeName, sizeof(TypeName) - 1, thread, &onTypeRemoved, NULL, &onFinalize);
+    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread),
+                                 TypeName, sizeof(TypeName) - 1,
+                                 Arcadia_Thread_getProcess(thread), 
+                                 (Arcadia_Process_TypeRemovedCallback*)&onTypeRemoved,
+                                 NULL,
+                                 (Arcadia_Process_FinalizeCallback*)&onFinalize);
     g_registered = Arcadia_BooleanValue_True;
   }
   Arcadia_BigInteger* self = NULL;
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &self, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_BigInteger));
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&self, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_BigInteger));
   self->numberOfLimps = 0;
   self->limps = NULL;
   self->sign = 0;
@@ -74,7 +79,7 @@ Arcadia_BigInteger_swap
   )
 {
   if (self != other) {
-    Arcadia_swapPointer(thread, &self->limps, &other->limps);
+    Arcadia_swapPointer(thread, (void**)&self->limps, (void**)&other->limps);
     Arcadia_swapSize(thread, &self->numberOfLimps, &other->numberOfLimps);
     Arcadia_swapInteger8(thread, &self->sign, &other->sign);
   }
@@ -90,7 +95,7 @@ Arcadia_BigInteger_copy
 {
   if (self != other) {
     if (self->numberOfLimps < other->numberOfLimps) {
-      Arcadia_Memory_reallocateUnmanaged(thread, &self->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
+      Arcadia_Memory_reallocateUnmanaged(thread, (void**)&self->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
     }
     Arcadia_Memory_copy(thread, self->limps, other->limps, sizeof(Arcadia_BigInteger_Limp) * other->numberOfLimps);
     self->numberOfLimps = other->numberOfLimps;
@@ -374,7 +379,7 @@ Arcadia_BigInteger_toStdoutDebug
             Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
             Arcadia_Thread_jump(thread);
           }
-          Arcadia_Memory_reallocateUnmanaged(thread, &p, m);
+          Arcadia_Memory_reallocateUnmanaged(thread, (void**)&p, m);
           n = m;
         }
         p[i++] = (char)(digit + '0');

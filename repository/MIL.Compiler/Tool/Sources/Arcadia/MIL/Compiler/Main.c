@@ -13,13 +13,11 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/MIL/Frontend/Include.h"
+#include "Arcadia/MILC/Include.h"
 #include "Arcadia/MIL/Compiler/HelpSystem.h"
 #include "Arcadia/DDLS/Include.h"
-#include <stdlib.h>
-
-#include "Arcadia/MIL/Compiler/Include.h"
 #include "Arcadia/DDL/Include.h"
+#include <stdlib.h>
 #include <string.h>
 
 static const char* SCHEMA = 
@@ -80,16 +78,51 @@ Arcadia_DDL_MapNode_getListByName
   Arcadia_Thread_jump(thread);
 }
 
+/// Parse a path string. If parsing fails, ensure compilation fails.
+static Arcadia_FilePath*
+safeParsePath
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Diagnostics* diagnostics,
+    Arcadia_MILC_FileType fileType,
+    Arcadia_String* pathString
+  )
+{
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_FilePath* path = NULL;
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    path = Arcadia_FilePath_parseNative(thread, pathString);
+    Arcadia_Thread_popJumpTarget(thread);
+    return path;
+  } else {
+    Arcadia_Thread_popJumpTarget(thread);
+    Arcadia_Languages_Diagnostics_add(thread, diagnostics, (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_InvalidPathDiagnostic_create(thread, Arcadia_Languages_DiagnosticType_Error, pathString));
+    Arcadia_Thread_setRaisedValue(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_MILC_CompilationFailedException_create(thread)));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ValueRaised);
+    Arcadia_Thread_jump(thread);
+  }
+  if ((fileType == Arcadia_MILC_FileType_CompilationUnit || fileType == Arcadia_MILC_FileType_ConfigurationFile) && !Arcadia_FileSystem_regularFileExists(thread, Arcadia_FileSystem_getOrCreate(thread), path)) {
+    Arcadia_Languages_Diagnostics_add(thread, diagnostics, (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_FileNotFoundDiagnostic_create(thread, fileType, Arcadia_Languages_DiagnosticType_Error, path));
+    Arcadia_Thread_setRaisedValue(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_MILC_CompilationFailedException_create(thread)));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ValueRaised);
+    Arcadia_Thread_jump(thread);
+  } else if (fileType == Arcadia_MILC_FileType_ModuleDirectory && !Arcadia_FileSystem_directoryFileExists(thread, Arcadia_FileSystem_getOrCreate(thread), path)) {
+    Arcadia_Languages_Diagnostics_add(thread, diagnostics, (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_FileNotFoundDiagnostic_create(thread, fileType, Arcadia_Languages_DiagnosticType_Error, path));
+    Arcadia_Thread_setRaisedValue(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_MILC_CompilationFailedException_create(thread)));
+    Arcadia_Thread_setStatus(thread, Arcadia_Status_ValueRaised);
+    Arcadia_Thread_jump(thread);
+  }
+}
+
 static void
 _invoke
   (
     Arcadia_Thread* thread,
-    Arcadia_Log* log,
+    Arcadia_MILC_Context* context,
     Arcadia_List* arguments
   )
 {
-  // (1) Create the context.
-  Arcadia_MIL_Compiler_Context* context = Arcadia_MIL_Compiler_Context_create(thread, log);
   // @todo The logic from this point on should be part of a method of the compiler context.
   Arcadia_String* configurationFilePathString = NULL;
   Arcadia_Value CONFIGURATION = Arcadia_Value_makeObjectReferenceValue(Arcadia_String_createFromCxxString(thread, u8"configuration"));
@@ -114,71 +147,88 @@ _invoke
     // @todo These errors must integrate with the log of the context.
     Arcadia_CommandLine_raiseRequiredArgumentMissingError(thread, Arcadia_String_createFromCxxString(thread, u8"configuration"), context->log);
   }
-  // (2) Create the path for the configuration file and the working directory.
-  Arcadia_FilePath* configurationFilePath = Arcadia_FilePath_parseGeneric(thread, configurationFilePathString);
-  if (!Arcadia_FileSystem_regularFileExists(thread, Arcadia_FileSystem_getOrCreate(thread), configurationFilePath)) {
-    Arcadia_Log_error(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"unable to find configuration file `"));
-    Arcadia_Log_error(thread, context->log, Arcadia_FilePath_toNative(thread, configurationFilePath));
-    Arcadia_Log_error(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"`"));
+
+  // (1) Create the compilation task.
+  Arcadia_MILC_CompilationTask* compilationTask = Arcadia_MILC_CompilationTask_create(thread, context);
+
+  Arcadia_FilePath* configurationFilePath = NULL;
+  Arcadia_JumpTarget jumpTarget;
+  Arcadia_List* moduleDirectoryPaths = NULL;
+
+  // (2) Search the configuration file.
+  Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
+  configurationFilePath = safeParsePath(thread, context->diagnostics, Arcadia_MILC_FileType_ConfigurationFile, configurationFilePathString);
+  #if defined(Arcadia_MILC_Configuration_ListConfigurationFiles) && 1 == Arcadia_MILC_Configuration_ListConfigurationFiles 
+    Arcadia_Log_information(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"configuration file `"));
+    Arcadia_Log_information(thread, context->log, Arcadia_FilePath_toNative(thread, configurationFilePath, Arcadia_BooleanValue_True));
+    Arcadia_Log_information(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"`\n"));
+  #endif
+  // (3) Load the configuration from the configuration file.
+  if (Arcadia_JumpTarget_save(&jumpTarget)) {
+    /* @todo Add Arcadia.DDL.Reader and derive Arcadia.DDL.DefaultReader from it. */
+    Arcadia_DDL_DefaultReader* readerDDL = (Arcadia_DDL_DefaultReader*)Arcadia_DDL_DefaultReader_create(thread);
+    Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, Arcadia_FileSystem_getOrCreate(thread), configurationFilePath);
+    Arcadia_String* fileString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes));
+    Arcadia_DDL_Node* nodeDDL = Arcadia_DDL_DefaultReader_run(thread, readerDDL, fileString);
+    /* @todo Add Arcadia.DDLS.Reader and derivce Arcadia.DDLS.DefaultReader from it. */
+    Arcadia_DDLS_DefaultReader* readerDDLS = (Arcadia_DDLS_DefaultReader*)Arcadia_DDLS_DefaultReader_create(thread);
+    Arcadia_DDLS_Node* nodeDDLS = Arcadia_DDLS_DefaultReader_run(thread, readerDDLS, Arcadia_String_createFromCxxString(thread, SCHEMA));
+    Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
+    if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)nodeDDLS, _Arcadia_DDLS_ValidationContext_getType(thread))) {
+      Arcadia_Languages_Diagnostics_add(thread, context->diagnostics,
+                                        (Arcadia_Languages_Diagnostic*)Arcadia_MILC_Diagnostics_ConfigurationFileInvalidDiagnostic_create(thread, Arcadia_Languages_DiagnosticType_Error, configurationFilePath));
+      Arcadia_Thread_setRaisedValue(thread, Arcadia_Value_makeObjectReferenceValue(Arcadia_MILC_CompilationFailedException_create(thread)));
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ValueRaised);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_DDLS_ValidationContext_addSchema(thread, validationContext, (Arcadia_DDLS_SchemaNode*)nodeDDLS);
+    Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"Machine Interface Language Compiler Configuration File"), nodeDDL);
+    // (4) Obtain the list of configuration file paths.
+    Arcadia_DDL_ListNode* source = Arcadia_DDL_MapNode_getListByName(thread, (Arcadia_DDL_MapNode*)nodeDDL, Arcadia_String_createFromCxxString(thread, u8"modulePaths"));
+    moduleDirectoryPaths = (Arcadia_List*)Arcadia_ArrayList_create(thread);
+    for (Arcadia_SizeValue i = 0, n = Arcadia_DDL_ListNode_getNumberOfElements(thread, source); i < n; ++i) {
+      Arcadia_DDL_StringNode* x = (Arcadia_DDL_StringNode*)Arcadia_DDL_ListNode_getElementAt(thread, source, i);
+      /* @todo If the specified string is not a generic path, then we need to handle the resulting exception and emit an appropriate error message. */
+      Arcadia_FilePath* y = safeParsePath(thread, context->diagnostics, Arcadia_MILC_FileType_CompilationUnit, x->value);
+      Arcadia_List_insertBackObjectReferenceValue(thread, moduleDirectoryPaths, y);
+    }
+    Arcadia_Thread_popJumpTarget(thread);
   } else {
-    Arcadia_Log_info(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"configuration file `"));
-    Arcadia_Log_info(thread, context->log, Arcadia_FilePath_toNative(thread, configurationFilePath));
-    Arcadia_Log_info(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"`\n"));
-  }
-  Arcadia_FilePath* workingDirectory = Arcadia_FilePath_getParent(thread, configurationFilePath);
-  Arcadia_Log_info(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"working directory `"));
-  Arcadia_Log_info(thread, context->log, Arcadia_FilePath_toNative(thread, workingDirectory));
-  Arcadia_Log_info(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"`\n"));
-  // (3) Read the configuration file.
-  /* @todo Add Arcadia.DDL.Reader and derive Arcadia.DDL.DefaultReader from it. */
-  Arcadia_DDL_DefaultReader* readerDDL = (Arcadia_DDL_DefaultReader*)Arcadia_DDL_DefaultReader_create(thread);
-  Arcadia_ByteBuffer* fileBytes = Arcadia_FileSystem_getFileContents(thread, Arcadia_FileSystem_getOrCreate(thread),
-                                                                             configurationFilePath);
-  Arcadia_String* fileString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes));
-  Arcadia_DDL_Node* nodeDDL = Arcadia_DDL_DefaultReader_run(thread, readerDDL, fileString);
-  /* @todo Add Arcadia.DDLS.Reader and derivce Arcadia.DDLS.DefaultReader from it. */
-  Arcadia_DDLS_DefaultReader* readerDDLS = (Arcadia_DDLS_DefaultReader*)Arcadia_DDLS_DefaultReader_create(thread);
-  Arcadia_DDLS_Node* nodeDDLS = Arcadia_DDLS_DefaultReader_run(thread, readerDDLS, Arcadia_String_createFromCxxString(thread, SCHEMA));
-  Arcadia_DDLS_ValidationContext* validationContext = Arcadia_DDLS_ValidationContext_create(thread);
-  if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)nodeDDLS, _Arcadia_DDLS_ValidationContext_getType(thread))) {
-    Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
+    Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_jump(thread);
   }
-  Arcadia_DDLS_ValidationContext_addSchema(thread, validationContext, (Arcadia_DDLS_SchemaNode*)nodeDDLS);
-  Arcadia_DDLS_ValidationContext_run(thread, validationContext, Arcadia_String_createFromCxxString(thread, u8"Machine Interface Language Compiler Configuration File"), nodeDDL);
-  // (4) Obtain the list of configuration file paths.
-  Arcadia_DDL_ListNode* source = Arcadia_DDL_MapNode_getListByName(thread, (Arcadia_DDL_MapNode*)nodeDDL, Arcadia_String_createFromCxxString(thread, u8"modulePaths"));
-  Arcadia_List* moduleDirectoryPaths = (Arcadia_List*)Arcadia_ArrayList_create(thread);
-  for (Arcadia_SizeValue i = 0, n = Arcadia_DDL_ListNode_getNumberOfElements(thread, source); i < n; ++i) {
-    Arcadia_DDL_StringNode* x = (Arcadia_DDL_StringNode*)Arcadia_DDL_ListNode_getElementAt(thread, source, i);
-    /* @todo If the specified string is not a generic path, then we need to handle the resulting exception and emit an appropriate error message. */
-    Arcadia_FilePath* y = Arcadia_FilePath_parseNative(thread, x->value);
-    Arcadia_List_insertBackObjectReferenceValue(thread, moduleDirectoryPaths, y);
-  }
+  // (4) Get the working directory path.
+  Arcadia_FilePath* workingDirectory = Arcadia_FilePath_getParent(thread, configurationFilePath);
+#if defined(Arcadia_MILC_Configuration_ListWorkingDirectory) && 1 == Arcadia_MILC_Configuration_ListWorkingDirectory
+  Arcadia_Log_information(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"working directory `"));
+  Arcadia_Log_information(thread, context->log, Arcadia_FilePath_toNative(thread, workingDirectory, Arcadia_BooleanValue_True));
+  Arcadia_Log_information(thread, context->log, Arcadia_String_createFromCxxString(thread, u8"`\n"));
+#endif
+
   // (5) Run the compiler.
-  Arcadia_MIL_Compiler_Context_run(thread, context, workingDirectory, moduleDirectoryPaths);
+  Arcadia_MILC_CompilationTask_run(thread, compilationTask, workingDirectory, moduleDirectoryPaths);
 }
 
 static void
 MIL2C_invoke
   (
     Arcadia_Thread* thread,
-    Arcadia_Log* log,
+    Arcadia_MILC_Context* context,
     Arcadia_List* arguments
   )
 {
-  _invoke(thread, log, arguments);
+  _invoke(thread, context, arguments);
 }
 
 static void
 MIL2MIL_invoke
   (
     Arcadia_Thread* thread,
-    Arcadia_Log* log,
+    Arcadia_MILC_Context* context,
     Arcadia_List* arguments
   )
 {
-  _invoke(thread, log, arguments);
+  _invoke(thread, context, arguments);
 }
 
 static void
@@ -189,9 +239,7 @@ main1
     char** argv
   )
 {
-  Arcadia_Log* log = (Arcadia_Log*)Arcadia_ConsoleLog_create(thread);
-  // TODO: Add Arcadia.DDL.Reader and derive Arcadia.DDL.DefaultReader from Arcadia.DDL.Reader. 
-
+  Arcadia_MILC_Context* context1  = Arcadia_MILC_Context_create(thread);
   // (1) Create the native argument to a list of a list of strings.
   Arcadia_List* arguments = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   for (int argi = 1; argi < argc; ++argi) {
@@ -199,7 +247,7 @@ main1
     Arcadia_UTF8Reader* argumentReader = (Arcadia_UTF8Reader*)Arcadia_UTF8StringReader_create(thread, argumentString);
     Arcadia_CommandLineArgument* commandLineArgument = Arcadia_CommandLine_parseArgument(thread, argumentReader);
     if (commandLineArgument->syntacticalError) {
-      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, commandLineArgument->name, log);
+      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, commandLineArgument->name, context1->log);
     }
 
     Arcadia_List_insertBackObjectReferenceValue(thread, arguments, commandLineArgument);
@@ -208,7 +256,7 @@ main1
   // (2) There must be at least one argument `--<tool name>`.
   if (!Arcadia_Collection_getSize(thread, (Arcadia_Collection*)arguments)) {
     /* Invoke help without any arguments. */
-    Help_invoke(thread, (Arcadia_List*)Arcadia_ArrayList_create(thread), log);
+    Help_invoke(thread, context1, (Arcadia_List*)Arcadia_ArrayList_create(thread));
     Arcadia_Thread_popJumpTarget(thread);
     Arcadia_Thread_jump(thread);
   }
@@ -216,23 +264,23 @@ main1
   {
     Arcadia_CommandLineArgument* commandLineArgument = (Arcadia_CommandLineArgument*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, arguments, 0, _Arcadia_CommandLineArgument_getType(thread));
     if (commandLineArgument->syntacticalError) {
-      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, commandLineArgument->name, log);
+      Arcadia_CommandLine_invalidCommandLineArgumentError(thread, commandLineArgument->name, context1->log);
     }
     if (commandLineArgument->value) {
-      Arcadia_CommandLine_raiseValueInvalidError(thread, commandLineArgument->name, commandLineArgument->value, log);
+      Arcadia_CommandLine_raiseValueInvalidError(thread, commandLineArgument->name, commandLineArgument->value, context1->log);
     }
     toolName = commandLineArgument->name;
     Arcadia_List_removeFront(thread, arguments, 1);
   }
   if (Arcadia_String_isEqualTo_pn(thread, toolName, u8"mil2c", sizeof(u8"mil2c") - 1)) {
-    MIL2C_invoke(thread, log, arguments);
+    MIL2C_invoke(thread, context1, arguments);
   } else if (Arcadia_String_isEqualTo_pn(thread, toolName, u8"mil2mil", sizeof(u8"mil2mil") - 1)) {
-    MIL2MIL_invoke(thread, log, arguments);
+    MIL2MIL_invoke(thread, context1, arguments);
   } else if (Arcadia_String_isEqualTo_pn(thread, toolName, u8"help", sizeof(u8"help") - 1)) {
-    Help_invoke(thread, arguments, log);
+    Help_invoke(thread, context1, arguments);
   } else {
     /* Invoke help without any arguments. */
-    Help_invoke(thread, (Arcadia_List*)Arcadia_ArrayList_create(thread), log);
+    Help_invoke(thread, context1, (Arcadia_List*)Arcadia_ArrayList_create(thread));
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }

@@ -48,7 +48,7 @@ Arcadia_BigInteger_and3
       Arcadia_BigInteger_toTwosComplement(thread, a, &x, &xl);
       Arcadia_BigInteger_toTwosComplement(thread, b, &y, &yl);
       zl = Arcadia_maximumSizeValue(thread, xl, yl);
-      Arcadia_Memory_reallocateUnmanaged(thread, &z, sizeof(Arcadia_BigInteger_Limp) * zl);
+      Arcadia_Memory_reallocateUnmanaged(thread, (void**)&z, sizeof(Arcadia_BigInteger_Limp) * zl);
       for (Arcadia_SizeValue i = 0; i < zl; ++i) {
         Arcadia_BigInteger_Limp xu = i < xl ? x[i] : xextension;
         Arcadia_BigInteger_Limp yu = i < yl ? y[i] : yextension;

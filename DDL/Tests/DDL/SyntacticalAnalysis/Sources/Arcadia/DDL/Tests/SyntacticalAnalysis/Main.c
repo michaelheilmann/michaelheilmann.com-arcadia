@@ -44,8 +44,7 @@ parse
   )
 {
   Arcadia_String* input = Arcadia_String_create(thread, Arcadia_Value_makeImmutableUTF8StringValue(Arcadia_ImmutableUTF8String_create(thread, p, n)));
-  Arcadia_DDL_Parser_setInput(thread, parser, input);
-  return Arcadia_DDL_Parser_run(thread, parser);
+  return (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)parser, input), _Arcadia_DDL_Node_getType(thread));
 }
 
 static void
@@ -54,7 +53,8 @@ test1
     Arcadia_Thread* thread
   )
 {
-  Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread);
+  Arcadia_DDL_Parser* parser = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
+                                                                                                    Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
   Arcadia_DDL_Node* node = NULL;
 
 

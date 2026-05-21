@@ -227,9 +227,9 @@ setSizeImpl
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl,
-  .destruct = &Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct,
-  .visit = &Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_initializeDispatchImpl,
 };
 
@@ -342,7 +342,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct
   }
   Arcadia_List_filter(thread, ((Arcadia_Engine_Visuals_BackendContext*)self->backendContext)->windows, Arcadia_Value_makeObjectReferenceValue(self), &filter);
   if (self->backendContext) {
-    Arcadia_Object_unlock(thread, self->backendContext);
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
     self->backendContext = NULL;
   }
   Arcadia_logf(Arcadia_LogFlags_Info, "%s:%d: Leave: Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_destruct\n", __FILE__, __LINE__);
@@ -356,13 +356,13 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_visit
   )
 {
   if (self->backendContext) {
-    Arcadia_Object_visit(thread, self->backendContext);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->backendContext);
   }
   if (self->bigIcon) {
-    Arcadia_Object_visit(thread, self->bigIcon);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->bigIcon);
   }
   if (self->smallIcon) {
-    Arcadia_Object_visit(thread, self->smallIcon);
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->smallIcon);
   }
 }
 
@@ -384,7 +384,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_WindowBackend_constructImpl
   }
 
   self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext_getType(thread));
-  Arcadia_Object_lock(thread, self->backendContext);
+  Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
   self->smallIcon = NULL;
   self->bigIcon = NULL;
   self->screen = NULL;

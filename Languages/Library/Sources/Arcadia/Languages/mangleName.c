@@ -43,7 +43,7 @@ on
     'f', // 15
   };
   Arcadia_StringBuffer* target = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertCodePointBack(thread, target, 'x');
+  Arcadia_StringBuffer_insertBackCodePoint(thread, target, 'x');
   const Arcadia_Natural8Value* start = bytes,
                              * end = bytes + numberOfBytes;
   const Arcadia_Natural8Value* current = start;
@@ -54,8 +54,8 @@ on
     // Get the upper digit.
     Arcadia_Natural8Value upper = value / 16;
 
-    Arcadia_StringBuffer_insertCodePointBack(thread, target, base16DigitCodePoints[upper]);
-    Arcadia_StringBuffer_insertCodePointBack(thread, target, base16DigitCodePoints[lower]);
+    Arcadia_StringBuffer_insertBackCodePoint(thread, target, base16DigitCodePoints[upper]);
+    Arcadia_StringBuffer_insertBackCodePoint(thread, target, base16DigitCodePoints[lower]);
 
     current++;
   }

@@ -309,25 +309,30 @@ _Arcadia_Names_onStartUp
   }
   if (g_referenceCount == 0) {
     if (!g_registered) {
-      Arcadia_Process_registerType(process, u8"Arcadia.Name", sizeof(u8"Arcadia.Name") - 1, process, &Arcadia_Name_typeRemovedCallback, NULL, &Arcadia_Name_finalizeCallback);
+      Arcadia_Process_registerType(process,
+                                   u8"Arcadia.Name", sizeof(u8"Arcadia.Name") - 1,
+                                   process,
+                                   (Arcadia_Process_TypeRemovedCallback*)&Arcadia_Name_typeRemovedCallback,
+                                   NULL,
+                                   (Arcadia_Process_FinalizeCallback*)&Arcadia_Name_finalizeCallback);
       g_registered = Arcadia_BooleanValue_True;
     }
     g_names = Arcadia_Names_create(process);
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Process_addPreMarkCallback(process, &_Arcadia_Names_onPreMark);
-      Arcadia_Process_addVisitCallback(process, &_Arcadia_Names_onVisit);
-      Arcadia_Process_addFinalizeCallback(process, &_Arcadia_Names_onFinalize);
+      Arcadia_Process_addArenaPreMarkCallback(process, &_Arcadia_Names_onPreMark);
+      Arcadia_Process_addArenaVisitCallback(process, &_Arcadia_Names_onVisit);
+      Arcadia_Process_addArenaFinalizeCallback(process, &_Arcadia_Names_onFinalize);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-      Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Names_onFinalize);
-      Arcadia_Process_removeVisitCallback(process, &_Arcadia_Names_onVisit);
-      Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Names_onPreMark);
+      Arcadia_Process_removeArenaFinalizeCallback(process, &_Arcadia_Names_onFinalize);
+      Arcadia_Process_removeArenaVisitCallback(process, &_Arcadia_Names_onVisit);
+      Arcadia_Process_removeArenaPreMarkCallback(process, &_Arcadia_Names_onPreMark);
       Arcadia_Names_destroy(process, g_names);
       g_names = NULL;
-      Arcadia_Status status = Arcadia_Process_runArms(process, true);
+      Arcadia_Status status = Arcadia_Process_runARMS(process, true);
       if (status) {
         /*Intentionally empty.*/
       }
@@ -352,16 +357,16 @@ _Arcadia_Names_onShutDown
   g_referenceCount--;
   if (0 == g_referenceCount) {
     Arcadia_Status status;
-    status = Arcadia_Process_runArms(process, true);
+    status = Arcadia_Process_runARMS(process, true);
     if (status) {
       /* Intentionally empty.*/
     }
     Arcadia_Names_destroy(process, g_names);
     g_names = NULL;
-    Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Names_onFinalize);
-    Arcadia_Process_removeVisitCallback(process, &_Arcadia_Names_onVisit);
-    Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Names_onPreMark);
-    status = Arcadia_Process_runArms(process, true);
+    Arcadia_Process_removeArenaFinalizeCallback(process, &_Arcadia_Names_onFinalize);
+    Arcadia_Process_removeArenaVisitCallback(process, &_Arcadia_Names_onVisit);
+    Arcadia_Process_removeArenaPreMarkCallback(process, &_Arcadia_Names_onPreMark);
+    status = Arcadia_Process_runARMS(process, true);
     if (status) {
       /* Intentionally empty.*/
     }
@@ -394,7 +399,7 @@ Arcadia_Names_getOrCreateName
     Arcadia_Thread_jump(thread);
   }
 
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &name, u8"Arcadia.Name", sizeof(u8"Arcadia.Name") - 1, sizeof(Arcadia_Name) + numberOfBytes);
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&name, u8"Arcadia.Name", sizeof(u8"Arcadia.Name") - 1, sizeof(Arcadia_Name) + numberOfBytes);
   memcpy(name->bytes, bytes, numberOfBytes);
   name->numberOfBytes = numberOfBytes;
   name->hashValue = hashValue;

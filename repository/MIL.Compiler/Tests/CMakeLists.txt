@@ -29,7 +29,7 @@ OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Co
 OnSourceFile(${MyTestName} Arcadia.Compiler.Tests.Test1/Main.c)
 
 # Libraries.
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Compiler.Library ${MyProjectName}.DDL)
+list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.DDL)
 
 EndProduct(${MyTestName})
 # Copy assets.

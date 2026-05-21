@@ -162,7 +162,7 @@ Arcadia_ArrayStack_ensureFreeCapacity
     }
     newAvailableFreeCapacity = newCapacity - self->size;
   }
-  Arcadia_Memory_reallocateUnmanaged(thread, &self->elements, sizeof(Arcadia_Value) * newCapacity);
+  Arcadia_Memory_reallocateUnmanaged(thread, (void**)&self->elements, sizeof(Arcadia_Value) * newCapacity);
   self->capacity = newCapacity;
 }
 

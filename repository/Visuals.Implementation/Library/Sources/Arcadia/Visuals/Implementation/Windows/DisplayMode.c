@@ -182,7 +182,7 @@ Arcadia_Engine_Visuals_Windows_DisplayMode_applyImpl
   Arcadia_StringBuffer* deviceName = Arcadia_StringBuffer_create(thread);
   Arcadia_StringBuffer_insertBack(thread, deviceName, Arcadia_Value_makeObjectReferenceValue(self->device->id));
   Arcadia_Natural32Value zeroTerminator = 0x0;
-  Arcadia_StringBuffer_insertCodePointsBack(thread, deviceName, &zeroTerminator, 1);
+  Arcadia_StringBuffer_insertBackCodePoints(thread, deviceName, &zeroTerminator, 1);
   // Find the corresponding display mode.
   DWORD iModeNum = 0;
   while (true) {

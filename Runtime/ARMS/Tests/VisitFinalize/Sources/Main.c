@@ -99,7 +99,7 @@ main
     return EXIT_FAILURE;
   }
   Sender* sender = NULL;
-  if (Arcadia_ARMS_allocate(&sender, "Sender", strlen("Sender"), sizeof(Sender))) {
+  if (Arcadia_ARMS_allocate((void**)&sender, "Sender", strlen("Sender"), sizeof(Sender))) {
     Arcadia_ARMS_RunStatistics statistics = Arcadia_ARMS_RunStatistics_StaticInitializer();
     Arcadia_ARMS_run(&statistics);
     Arcadia_ARMS_shutdown();
@@ -107,7 +107,7 @@ main
   }
   sender->name = NULL;
   Message* message = NULL;
-  if (Arcadia_ARMS_allocate(&message, "Message", strlen("Message"), sizeof(Message))) {
+  if (Arcadia_ARMS_allocate((void**)&message, "Message", strlen("Message"), sizeof(Message))) {
     Arcadia_ARMS_RunStatistics statistics = Arcadia_ARMS_RunStatistics_StaticInitializer();
     Arcadia_ARMS_run(&statistics);
     Arcadia_ARMS_shutdown();

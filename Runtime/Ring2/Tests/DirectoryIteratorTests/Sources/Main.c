@@ -28,11 +28,11 @@ directoryIteratorTest1
   Arcadia_logf(Arcadia_LogFlags_Info, "directory iterator test 1\n");
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FilePath* filePath = Arcadia_FileSystem_getWorkingDirectory(thread, fileSystem);
-  Arcadia_logf(Arcadia_LogFlags_Info, "  working directory: %s\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath)));
+  Arcadia_logf(Arcadia_LogFlags_Info, "  working directory: %s\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_True)));
   Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Assets/Directory1")));
-  Arcadia_logf(Arcadia_LogFlags_Info, "  iterated directory: %s\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath)));
+  Arcadia_logf(Arcadia_LogFlags_Info, "  iterated directory: %s\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_True)));
   if (Arcadia_FileSystem_directoryFileExists(thread, fileSystem, filePath)) {
-    Arcadia_logf(Arcadia_LogFlags_Info, "  directory %s exists\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath)));
+    Arcadia_logf(Arcadia_LogFlags_Info, "  directory %s exists\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_True)));
   }
   Arcadia_DirectoryIterator* directoryIterator = (Arcadia_DirectoryIterator*)Arcadia_FileSystem_createDirectoryIterator(thread, fileSystem, filePath);
   Arcadia_Integer8Value count = 0;
@@ -57,11 +57,11 @@ directoryIteratorTest2
   Arcadia_logf(Arcadia_LogFlags_Info, "directory iterator test 2\n");
   Arcadia_FileSystem* fileSystem = Arcadia_FileSystem_getOrCreate(thread);
   Arcadia_FilePath* filePath = Arcadia_FileSystem_getWorkingDirectory(thread, fileSystem);
-  Arcadia_logf(Arcadia_LogFlags_Info, "  working directory: %s\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath)));
+  Arcadia_logf(Arcadia_LogFlags_Info, "  working directory: %s\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_True)));
   Arcadia_FilePath_append(thread, filePath, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, u8"Assets/Directory2")));
-  Arcadia_logf(Arcadia_LogFlags_Info, "  iterated directory: %s\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath)));
+  Arcadia_logf(Arcadia_LogFlags_Info, "  iterated directory: %s\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_True)));
   if (Arcadia_FileSystem_directoryFileExists(thread, fileSystem, filePath)) {
-    Arcadia_logf(Arcadia_LogFlags_Info, "  directory %s exists\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath)));
+    Arcadia_logf(Arcadia_LogFlags_Info, "  directory %s exists\n", Arcadia_String_getBytes(thread, Arcadia_FilePath_toNative(thread, filePath, Arcadia_BooleanValue_True)));
   }
   Arcadia_DirectoryIterator* directoryIterator = (Arcadia_DirectoryIterator*)Arcadia_FileSystem_createDirectoryIterator(thread, fileSystem, filePath);
   Arcadia_Integer8Value count = 0;

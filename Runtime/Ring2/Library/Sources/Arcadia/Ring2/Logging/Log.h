@@ -29,7 +29,8 @@ Arcadia_declareObjectType(u8"Arcadia.Log", Arcadia_Log,
 
 struct Arcadia_LogDispatch {
   Arcadia_ObjectDispatch _parent;
-  void (*info)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*);
+  void (*information)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*);
+  void (*warning)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*);
   void (*error)(Arcadia_Thread*, Arcadia_Log*, Arcadia_String*);
 };
 
@@ -39,7 +40,15 @@ struct Arcadia_Log {
 };
 
 void
-Arcadia_Log_info
+Arcadia_Log_information
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Log* self,
+    Arcadia_String* message
+  );
+
+void
+Arcadia_Log_warning
   (
     Arcadia_Thread* thread,
     Arcadia_Log* self,

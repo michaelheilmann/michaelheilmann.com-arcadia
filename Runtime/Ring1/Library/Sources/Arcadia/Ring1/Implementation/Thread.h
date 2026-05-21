@@ -166,6 +166,25 @@ Arcadia_Thread_setStatus
     Arcadia_Status status
   );
 
+/// @brief Set the raised value of this thread.
+/// @param thread A pointer to this Arcadia_Thread object.
+/// @param raisedValue The raised value.
+void
+Arcadia_Thread_setRaisedValue
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Value raisedValue
+  );
+
+/// @brief Get the raised value of this thread.
+/// @param thread A pointer to this Arcadia_Thread object.
+/// @return The raised value.
+Arcadia_Value
+Arcadia_Thread_getRaisedValue
+  (
+    Arcadia_Thread* thread
+  );
+
 /// @brief Get the process of this thread.
 /// @param thread A pointer to this Arcadia_Thread object.
 /// @retur A pointer to the process of this thread.

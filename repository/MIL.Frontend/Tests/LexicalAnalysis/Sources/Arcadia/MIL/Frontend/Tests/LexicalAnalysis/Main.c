@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/MIL/Frontend/Include.h"
+#include "Arcadia/MILC/Include.h"
 
 #include <string.h>
 
@@ -21,8 +21,8 @@ static void
 expectAndNext
   (
     Arcadia_Thread* thread,
-    Arcadia_MIL_Scanner* scanner,
-    Arcadia_MIL_WordType tokenKind,
+    Arcadia_MILC_Scanner* scanner,
+    Arcadia_MILC_WordType tokenKind,
     Arcadia_Natural8Value const* tokenText,
     Arcadia_SizeValue tokenTextLength
   )
@@ -50,24 +50,25 @@ testScanner4
     u8"$512\n"
     u8"$_\n"
     ;
-  Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
+  Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
+  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_create(thread, context);
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
 
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Register, u8"$0", sizeof(u8"$0") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Register, u8"$0", sizeof(u8"$0") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
 
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Register, u8"$1", sizeof(u8"$1") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Register, u8"$1", sizeof(u8"$1") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
 
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Register, u8"$512", sizeof(u8"$512") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Register, u8"$512", sizeof(u8"$512") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
 
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Register, u8"$_", sizeof(u8"$_") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Register, u8"$_", sizeof(u8"$_") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
 
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
 }
 
 static void
@@ -130,65 +131,66 @@ testScanner3
     u8"variable"
     u8"\n"
     ;
-  Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
+  Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
+  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_create(thread, context);
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
   //
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   //
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Multiply, u8"multiply", sizeof(u8"multiply") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Divide, u8"divide", sizeof(u8"divide") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Add, u8"add", sizeof(u8"add") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Subtract, u8"subtract", sizeof(u8"subtract") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Multiply, u8"multiply", sizeof(u8"multiply") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Divide, u8"divide", sizeof(u8"divide") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Add, u8"add", sizeof(u8"add") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Subtract, u8"subtract", sizeof(u8"subtract") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   //
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Negate, u8"negate", sizeof(u8"negate") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Negate, u8"negate", sizeof(u8"negate") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   //
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Concatenate, u8"concatenate", sizeof(u8"concatenate") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Concatenate, u8"concatenate", sizeof(u8"concatenate") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   //
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_IsEqualTo, u8"isEqualTo", sizeof(u8"isEqualTo") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_IsNotEqualTo, u8"isNotEqualTo", sizeof(u8"isNotEqualTo") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_IsLowerThan, u8"isLowerThan", sizeof(u8"isLowerThan") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_IsLowerThanOrEqualTo, u8"isLowerThanOrEqualTo", sizeof(u8"isLowerThanOrEqualTo") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_IsGreaterThan, u8"isGreaterThan", sizeof(u8"isGreaterThan") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_IsGreaterThanOrEqualTo, u8"isGreaterThanOrEqualTo", sizeof(u8"isGreaterThanOrEqualTo") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_IsEqualTo, u8"isEqualTo", sizeof(u8"isEqualTo") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_IsNotEqualTo, u8"isNotEqualTo", sizeof(u8"isNotEqualTo") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_IsLowerThan, u8"isLowerThan", sizeof(u8"isLowerThan") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_IsLowerThanOrEqualTo, u8"isLowerThanOrEqualTo", sizeof(u8"isLowerThanOrEqualTo") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_IsGreaterThan, u8"isGreaterThan", sizeof(u8"isGreaterThan") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_IsGreaterThanOrEqualTo, u8"isGreaterThanOrEqualTo", sizeof(u8"isGreaterThanOrEqualTo") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   //
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Not, u8"not", sizeof(u8"not") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_And, u8"and", sizeof(u8"and") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Or, u8"or", sizeof(u8"or") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Not, u8"not", sizeof(u8"not") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_And, u8"and", sizeof(u8"and") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Or, u8"or", sizeof(u8"or") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   //
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Class, u8"class", sizeof(u8"class") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Extends, u8"extends", sizeof(u8"extends") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Implements, u8"implements", sizeof(u8"implements") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Native, u8"native", sizeof(u8"native") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Procedure, u8"procedure", sizeof(u8"procedure") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Method, u8"method", sizeof(u8"method") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Constructor, u8"constructor", sizeof(u8"constructor") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Variable, u8"variable", sizeof(u8"variable") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Class, u8"class", sizeof(u8"class") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Extends, u8"extends", sizeof(u8"extends") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Implements, u8"implements", sizeof(u8"implements") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Native, u8"native", sizeof(u8"native") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Procedure, u8"procedure", sizeof(u8"procedure") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Method, u8"method", sizeof(u8"method") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Constructor, u8"constructor", sizeof(u8"constructor") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Variable, u8"variable", sizeof(u8"variable") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
   //
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
 }
 
 static void
@@ -216,29 +218,30 @@ testScanner2
     u8","
     u8"\n"
     ;
-  Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
+  Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
+  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_create(thread, context);
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Name, u8"Name", sizeof(u8"Name") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_IntegerLiteral, u8"17", sizeof(u8"17") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_RealLiteral, u8"17.23", sizeof(u8"17.23") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_StringLiteral, u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_EqualsSign, u8"=", sizeof(u8"=") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_SingleLineComment, u8"//", sizeof(u8"//") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_MultiLineComment, u8"/**/", sizeof(u8"/**/") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Colon, u8":", sizeof(u8":") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_Comma, u8",", sizeof(u8",") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Name, u8"Name", sizeof(u8"Name") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_IntegerLiteral, u8"17", sizeof(u8"17") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_RealLiteral, u8"17.23", sizeof(u8"17.23") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_StringLiteral, u8"Hello, World!\n", sizeof(u8"Hello, World!\n") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_EqualsSign, u8"=", sizeof(u8"=") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_SingleLineComment, u8"//", sizeof(u8"//") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_MultiLineComment, u8"/**/", sizeof(u8"/**/") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Colon, u8":", sizeof(u8":") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_Comma, u8",", sizeof(u8",") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_LineTerminator, u8"<line terminator>", sizeof(u8"<line terminator>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
 }
 
 static void
@@ -250,11 +253,12 @@ testScanner1
   static const char* input =
     u8""
     ;
-  Arcadia_MIL_Scanner* scanner = Arcadia_MIL_Scanner_create(thread);
+  Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
+  Arcadia_MILC_Scanner* scanner = Arcadia_MILC_Scanner_create(thread, context);
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
-  expectAndNext(thread, scanner, Arcadia_MIL_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
+  expectAndNext(thread, scanner, Arcadia_MILC_WordType_EndOfInput, u8"<end of input>", sizeof(u8"<end of input>") - 1);
 }
 
 int

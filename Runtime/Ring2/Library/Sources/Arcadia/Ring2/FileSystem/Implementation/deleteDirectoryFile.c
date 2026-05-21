@@ -27,7 +27,7 @@ Arcadia_DefaultFileSystem_deleteDirectoryFileHelper
     Arcadia_FilePath* path
   )
 {
-  Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path);
+  Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path, Arcadia_BooleanValue_True);
 #if Arcadia_Configuration_OperatingSystem_Windows == Arcadia_Configuration_OperatingSystem
   BOOL result = RemoveDirectory(Arcadia_String_getBytes(thread, pathString));
   if (!result) {

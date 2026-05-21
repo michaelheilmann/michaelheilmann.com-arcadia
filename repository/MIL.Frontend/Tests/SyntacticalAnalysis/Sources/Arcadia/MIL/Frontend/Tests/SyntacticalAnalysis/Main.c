@@ -13,7 +13,7 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#include "Arcadia/MIL/Frontend/Include.h"
+#include "Arcadia/MILC/Include.h"
 
 static void
 onTest
@@ -31,9 +31,10 @@ onTest
     absoluteSourceFilePath = sourceFilePath;
   }
   Arcadia_ByteBuffer* sourceFileContents = Arcadia_FileSystem_getFileContents(thread, fileSystem, absoluteSourceFilePath);
-  Arcadia_MIL_Parser* parser = Arcadia_MIL_Parser_create(thread);
-  Arcadia_MIL_Parser_setInput(thread, parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sourceFileContents)));
-  Arcadia_MIL_Parser_run(thread, parser);
+  Arcadia_MILC_Context* context = Arcadia_MILC_Context_create(thread);
+  context->scanner = context->scanner ? context->scanner : Arcadia_MILC_Scanner_create(thread, context);
+  context->parser = context->parser ? context->parser : Arcadia_MILC_Parser_create(thread, context);
+  Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)context->parser, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(sourceFileContents)));
 }
 
 void

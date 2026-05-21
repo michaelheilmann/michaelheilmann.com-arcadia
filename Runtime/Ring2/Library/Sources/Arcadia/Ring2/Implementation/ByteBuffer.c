@@ -198,7 +198,7 @@ Arcadia_ByteBuffer_insertBytes
       Arcadia_Thread_jump(thread);
     }
     Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    Arcadia_Memory_reallocateUnmanaged(thread, &self->p, newCapacity);
+    Arcadia_Memory_reallocateUnmanaged(thread, (void**)&self->p, newCapacity);
     self->cp = newCapacity;
   }
   if (index < self->sz) {

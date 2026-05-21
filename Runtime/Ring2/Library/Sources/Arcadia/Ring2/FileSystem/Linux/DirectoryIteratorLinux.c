@@ -73,8 +73,8 @@ Arcadia_DirectoryIteratorLinux_nextValue
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = &Arcadia_DirectoryIteratorLinux_constructImpl,
-  .destruct = &Arcadia_DirectoryIteratorLinux_destructImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_DirectoryIteratorLinux_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_DirectoryIteratorLinux_destructImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_DirectoryIteratorLinux_initializeDispatchImpl,
 };
 
@@ -106,8 +106,8 @@ Arcadia_DirectoryIteratorLinux_constructImpl
   // Clear errno.
   errno = 0;
   // Open directory.
-  Arcadia_String* path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
-  Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path);
+  Arcadia_FilePath* path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
+  Arcadia_String* pathString = Arcadia_FilePath_toNative(thread, path, Arcadia_BooleanValue_True);
   self->dir = opendir(Arcadia_String_getBytes(thread, pathString));
   if (!self->dir) {
     switch (errno) {

@@ -25,6 +25,9 @@ if (NOT TARGET ${MyLibraryName})
   OnConfigurationTemplateFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Ring1/Implementation/Configure.h.i)
   OnConfigurationFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Ring1/Implementation/Configure.h)
 
+  OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/Random.c)
+  OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/Random.h)
+
   OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/BigInteger/Include.c)
   OnHeaderFile(${MyLibraryName} Arcadia/Ring1/Implementation/BigInteger/Include.h)
   OnSourceFile(${MyLibraryName} Arcadia/Ring1/Implementation/BigInteger/add.c)

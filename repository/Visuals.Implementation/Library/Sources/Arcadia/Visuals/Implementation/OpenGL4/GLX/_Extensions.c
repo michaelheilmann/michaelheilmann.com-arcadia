@@ -12,7 +12,7 @@ Arcadia_Visuals_Implementation_OpenGL4_GLX_getExtensions
 {
   const char *start = glXQueryExtensionsString(display, DefaultScreen(display));
   const char *current = start;
-  Arcadia_Set* set = Arcadia_HashSet_create(thread);
+  Arcadia_Set* set = (Arcadia_Set*)Arcadia_HashSet_create(thread);
 
   // as long as we did not hit the end of the string
   while (*current != '\0') {

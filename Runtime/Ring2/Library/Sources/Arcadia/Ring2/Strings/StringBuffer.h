@@ -199,7 +199,7 @@ Arcadia_StringBuffer_startsWith_pn
   );
 
 void
-Arcadia_StringBuffer_insertCodePointBack
+Arcadia_StringBuffer_insertBackCodePoint
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
@@ -207,7 +207,7 @@ Arcadia_StringBuffer_insertCodePointBack
   );
 
 void
-Arcadia_StringBuffer_insertCodePointsBack
+Arcadia_StringBuffer_insertBackCodePoints
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
@@ -216,7 +216,7 @@ Arcadia_StringBuffer_insertCodePointsBack
   );
 
 void
-Arcadia_StringBuffer_insertCodePointFront
+Arcadia_StringBuffer_insertFrontCodePoint
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
@@ -224,7 +224,7 @@ Arcadia_StringBuffer_insertCodePointFront
   );
 
 void
-Arcadia_StringBuffer_insertCodePointsFront
+Arcadia_StringBuffer_insertFrontCodePoints
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,

@@ -19,6 +19,7 @@
 #include "Arcadia/Languages/Include.h"
 #include "Arcadia/VPL/Symbols/Include.h"
 
+// 2nd phase.
 // Resolve types.
 Arcadia_declareObjectType(u8"Arcadia.VPL.ResolvePhase", Arcadia_VPL_ResolvePhase,
                           Arcadia_Object);
@@ -34,7 +35,8 @@ struct Arcadia_VPL_ResolvePhase {
 Arcadia_VPL_ResolvePhase*
 Arcadia_VPL_ResolvePhase_create
   (
-    Arcadia_Thread* thread
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Diagnostics* diagnostics
   );
 
 void

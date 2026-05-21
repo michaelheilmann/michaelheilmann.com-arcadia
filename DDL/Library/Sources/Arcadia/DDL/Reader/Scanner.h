@@ -28,11 +28,15 @@ Arcadia_declareObjectType(u8"Arcadia.DDL.Scanner", Arcadia_DDL_Scanner,
 
 /// @brief Create a DDL scanner.
 /// @param thread A pointer to this thread.
+/// @param stringTable A pointer to the string table.
+/// @param diagnostics A pointer to the diagnostics.
 /// @return A pointer to the DDL scanner.
 Arcadia_DDL_Scanner*
 Arcadia_DDL_Scanner_create
   (
-    Arcadia_Thread* thread
+    Arcadia_Thread* thread,
+    Arcadia_Languages_StringTable* stringTable,
+    Arcadia_Languages_Diagnostics* diagnostics
   );
 
 #endif // ARCADIA_DDL_READER_SCANNER_H_INCLUDED

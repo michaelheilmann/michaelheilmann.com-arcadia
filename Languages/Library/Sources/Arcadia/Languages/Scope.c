@@ -98,6 +98,16 @@ Arcadia_Languages_Scope_create
   ARCADIA_CREATEOBJECT(Arcadia_Languages_Scope);
 }
 
+void
+Arcadia_Languages_Scope_clear
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Scope* self
+  )
+{ 
+  Arcadia_Collection_clear(thread, (Arcadia_Collection*)self->entries);
+}
+
 Arcadia_BooleanValue
 Arcadia_Languages_Scope_enter
   (
@@ -144,4 +154,29 @@ Arcadia_Languages_Scope_lookup
       return NULL;
     }
   }
+}
+
+Arcadia_BooleanValue
+Arcadia_Languages_Scope_contains
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Scope* self,
+    Arcadia_String* name,
+    Arcadia_BooleanValue recursive
+  )
+{ return NULL != Arcadia_Languages_Scope_lookup(thread, self, name, recursive); }
+
+Arcadia_SizeValue
+Arcadia_Languages_Scope_count
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Languages_Scope* self,
+    Arcadia_BooleanValue recursive
+  )
+{
+  Arcadia_SizeValue count = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)self->entries);
+  if (recursive && self->enclosing) {
+    count += Arcadia_Languages_Scope_count(thread, self->enclosing, recursive);
+  }
+  return count;
 }

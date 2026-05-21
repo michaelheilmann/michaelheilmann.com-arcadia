@@ -118,7 +118,7 @@ Arcadia_BigInteger_shiftLeftNatural64
       Arcadia_Thread_jump(thread);
     }
     Arcadia_Memory_reallocateUnmanaged(thread,
-                                       &self->limps,
+                                       (void**)&self->limps,
                                        sizeof(Arcadia_BigInteger_Limp) * (limpsToAllocate));
     // Shift the limps [0, n) up by limpShift.
     while (sourceIndex > 0) {
@@ -145,7 +145,7 @@ Arcadia_BigInteger_shiftLeftNatural64
       Arcadia_Thread_jump(thread);
     }
     Arcadia_Memory_reallocateUnmanaged(thread,
-                                       &self->limps,
+                                       (void**)&self->limps,
                                        sizeof(Arcadia_BigInteger_Limp) * (limpsToAllocate));
 
     //

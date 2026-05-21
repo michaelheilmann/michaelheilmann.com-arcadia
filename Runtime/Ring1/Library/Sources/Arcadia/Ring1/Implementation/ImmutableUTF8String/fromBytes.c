@@ -42,7 +42,7 @@ _createFromBytes
   }
   _ensureTypeRegistered(thread);
   Arcadia_ImmutableUTF8String* string = NULL;
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUTF8String) + numberOfBytes);
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&string, TypeName, sizeof(TypeName) - 1, sizeof(Arcadia_ImmutableUTF8String) + numberOfBytes);
   Arcadia_Memory_copy(thread, string->bytes, bytes, numberOfBytes);
   string->numberOfBytes = numberOfBytes;
   string->hash = _hashUTF8(thread, string->bytes, string->numberOfBytes);

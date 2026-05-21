@@ -84,12 +84,34 @@ Arcadia_DDL_Parser_onValue
     Arcadia_DDL_Parser* self
   );
 
+static Arcadia_Value
+Arcadia_DDL_Parser_runImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Parser* self,
+    Arcadia_String* input
+  );
+
+static Arcadia_Languages_StringTable*
+Arcadia_DDL_Parser_getStringTableImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Parser* self
+  );
+
+static Arcadia_Languages_Diagnostics*
+Arcadia_DDL_Parser_getDiagnosticsImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Parser* self
+  );
+
 struct Arcadia_DDL_ParserDispatch {
-  Arcadia_ObjectDispatch _parent;
+  Arcadia_Languages_ParserDispatch _parent;
 };
 
 struct Arcadia_DDL_Parser {
-  Arcadia_Object _parent;
+  Arcadia_Languages_Parser _parent;
   Arcadia_DDL_Scanner* scanner;
 };
 
@@ -127,7 +149,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.DDL.Parser", Arcadia_DDL_Parser,
-                         u8"Arcadia.Object", Arcadia_Object,
+                         u8"Arcadia.Languages.Parser", Arcadia_Languages_Parser,
                          &_typeOperations);
 
 static void
@@ -143,12 +165,13 @@ Arcadia_DDL_Parser_constructImpl
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
   }
-  if (0 != _numberOfArguments) {
+  if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
   //
-  self->scanner = Arcadia_DDL_Scanner_create(thread);
+  self->scanner = Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
+                                                     Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread)));
   //
   Arcadia_LeaveConstructor(Arcadia_DDL_Parser);
 }
@@ -159,7 +182,11 @@ Arcadia_DDL_Parser_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_DDL_ParserDispatch* self
   )
-{/*Intentionally empty.*/}
+{
+  ((Arcadia_Languages_ParserDispatch*)self)->run = (Arcadia_Value(*)(Arcadia_Thread*, Arcadia_Languages_Parser*, Arcadia_String*)) & Arcadia_DDL_Parser_runImpl;
+  ((Arcadia_Languages_ParserDispatch*)self)->getStringTable = (Arcadia_Languages_StringTable* (*)(Arcadia_Thread*, Arcadia_Languages_Parser*))&Arcadia_DDL_Parser_getStringTableImpl;
+  ((Arcadia_Languages_ParserDispatch*)self)->getDiagnostics = (Arcadia_Languages_Diagnostics* (*)(Arcadia_Thread*, Arcadia_Languages_Parser*))&Arcadia_DDL_Parser_getDiagnosticsImpl;
+}
 
 static void
 Arcadia_DDL_Parser_visit
@@ -176,11 +203,13 @@ Arcadia_DDL_Parser_visit
 Arcadia_DDL_Parser*
 Arcadia_DDL_Parser_create
   (
-    Arcadia_Thread* thread
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Scanner* scanner
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
-  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  if (scanner) Arcadia_ValueStack_pushObjectReferenceValue(thread, scanner); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 1);
   ARCADIA_CREATEOBJECT(Arcadia_DDL_Parser);
 }
 
@@ -239,7 +268,7 @@ Arcadia_DDL_Parser_onListValue
   if (Arcadia_DDL_WordType_RightSquareBracket != Arcadia_DDL_Parser_getWordType(thread, self)) {
     Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
     Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected right square bracket\n");
-    Arcadia_Languages_Diagnostics_emit(thread, message);
+    Arcadia_Languages_DiagnosticsOld_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
@@ -291,7 +320,7 @@ Arcadia_DDL_Parser_onMapValue
   if (Arcadia_DDL_WordType_RightCurlyBracket != Arcadia_DDL_Parser_getWordType(thread, self)) {
     Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
     Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected right curly bracket\n");
-    Arcadia_Languages_Diagnostics_emit(thread, message);
+    Arcadia_Languages_DiagnosticsOld_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
@@ -309,7 +338,7 @@ Arcadia_DDL_Parser_onName
   if (Arcadia_DDL_WordType_Name != Arcadia_DDL_Parser_getWordType(thread, self)) {
     Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
     Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected name\n");
-    Arcadia_Languages_Diagnostics_emit(thread, message);
+    Arcadia_Languages_DiagnosticsOld_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
@@ -377,20 +406,22 @@ Arcadia_DDL_Parser_onValue
     default: {
       Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
       Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected scalar or aggregate\n");
-      Arcadia_Languages_Diagnostics_emit(thread, message);
+      Arcadia_Languages_DiagnosticsOld_emit(thread, message);
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
       Arcadia_Thread_jump(thread);
     } break;
   };
 }
 
-Arcadia_DDL_Node*
-Arcadia_DDL_Parser_run
+static Arcadia_Value
+Arcadia_DDL_Parser_runImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_DDL_Parser* self
+    Arcadia_DDL_Parser* self,
+    Arcadia_String* input
   )
-{
+{ 
+  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)self->scanner, input);
   if (Arcadia_DDL_WordType_StartOfInput != Arcadia_DDL_Parser_getWordType(thread, self)) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
@@ -403,28 +434,25 @@ Arcadia_DDL_Parser_run
   if (Arcadia_DDL_WordType_EndOfInput != Arcadia_DDL_Parser_getWordType(thread, self)) {
     Arcadia_StringBuffer* message = Arcadia_StringBuffer_create(thread);
     Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"expected end of input\n");
-    Arcadia_Languages_Diagnostics_emit(thread, message);
+    Arcadia_Languages_DiagnosticsOld_emit(thread, message);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SyntacticalError);
     Arcadia_Thread_jump(thread);
   }
-  return valueNode;
+  return Arcadia_Value_makeObjectReferenceValue(valueNode);
 }
 
-void
-Arcadia_DDL_Parser_setInput
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_Parser* self,
-    Arcadia_String* input
-  )
-{
-  Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)self->scanner, input);
-}
-
-Arcadia_Languages_StringTable*
-Arcadia_DDL_Parser_getStringTable
+static Arcadia_Languages_StringTable*
+Arcadia_DDL_Parser_getStringTableImpl
   (
     Arcadia_Thread* thread,
     Arcadia_DDL_Parser* self
   )
 { return Arcadia_Languages_Scanner_getStringTable(thread, (Arcadia_Languages_Scanner*)self->scanner); }
+
+static  Arcadia_Languages_Diagnostics*
+Arcadia_DDL_Parser_getDiagnosticsImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_DDL_Parser* self
+  )
+{ return Arcadia_Languages_Scanner_getDiagnostics(thread, (Arcadia_Languages_Scanner*)self->scanner); }

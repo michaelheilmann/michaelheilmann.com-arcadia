@@ -22,7 +22,7 @@ static Arcadia_BooleanValue g_registered = Arcadia_BooleanValue_False;
 static void
 _onTypeRemoved
   (
-    Arcadia_Thread* thread,
+    Arcadia_Process* process,
     const uint8_t* bytes,
     size_t numberOfBytes
   )
@@ -35,7 +35,12 @@ _ensureTypeRegistered
   )
 {
   if (!g_registered) {
-    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), TypeName, sizeof(TypeName) - 1, thread, &_onTypeRemoved, NULL, NULL);
+    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread),
+                                 TypeName, sizeof(TypeName) - 1,
+                                 Arcadia_Thread_getProcess(thread),
+                                 (Arcadia_Process_TypeRemovedCallback*)&_onTypeRemoved,
+                                 NULL,
+                                 NULL);
     g_registered = Arcadia_BooleanValue_True;
   }
 }

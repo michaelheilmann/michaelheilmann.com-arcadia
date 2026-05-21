@@ -301,7 +301,7 @@ readFromNode
     Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeObjectReferenceValue(Arcadia_String_createFromCxxString(thread, "no reader registered for type `")));
     Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeObjectReferenceValue(entryValue));
     Arcadia_StringBuffer_insertBack(thread, stringBuffer, Arcadia_Value_makeObjectReferenceValue(Arcadia_String_createFromCxxString(thread, "`")));
-    Arcadia_Languages_Diagnostics_emit(thread, stringBuffer);
+    Arcadia_Languages_DiagnosticsOld_emit(thread, stringBuffer);
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
   }
@@ -342,7 +342,7 @@ Arcadia_ADL_Context_getOrCreate
 {
   if (!g_instance) {
     Arcadia_ADL_Context* instance = Arcadia_ADL_Context_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_ADL_Context_destroyCallback);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, (void (*)(void*, Arcadia_Object*)) & Arcadia_ADL_Context_destroyCallback);
     g_instance = instance;
   }
   return g_instance;

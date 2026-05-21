@@ -126,6 +126,15 @@ Arcadia_List_filter
     Arcadia_BooleanValue(*predicate)(Arcadia_Thread* thread, Arcadia_Value context, Arcadia_Value value)
   );
 
+void
+Arcadia_List_forEach
+  (
+    Arcadia_Thread* thread,
+    Arcadia_List* self,
+    Arcadia_Value context,
+    Arcadia_BooleanValue(*predicate)(Arcadia_Thread* thread, Arcadia_Value context, Arcadia_Value value)
+  );
+
 static inline Arcadia_BooleanValue
 Arcadia_List_contains
   (

@@ -49,7 +49,8 @@ testScanner1
   static const char* input =
     u8""
     ;
-  Arcadia_DDL_Scanner* scanner = Arcadia_DDL_Scanner_create(thread);
+  Arcadia_DDL_Scanner* scanner = Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
+                                                                    Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread)));
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
 
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
@@ -79,7 +80,8 @@ testScanner2
     u8"1 "
     u8"6.2831"
     ;
-  Arcadia_DDL_Scanner* scanner = Arcadia_DDL_Scanner_create(thread);
+  Arcadia_DDL_Scanner* scanner = Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
+                                                                    Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread)));
   Arcadia_Languages_Scanner_setInput(thread, (Arcadia_Languages_Scanner*)scanner, Arcadia_String_create_pn(thread, Arcadia_InternalImmutableByteArray_create(thread, input, strlen(input))));
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_StartOfInput, u8"<start of input>", sizeof(u8"<start of input>") - 1);
   expectAndNext(thread, scanner, Arcadia_DDL_WordType_Comma, u8",", sizeof(u8",") - 1);

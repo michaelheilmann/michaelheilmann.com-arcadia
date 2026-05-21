@@ -98,4 +98,4 @@ Arcadia_DefaultFileSystem_getFileTypeHelper
     Arcadia_DefaultFileSystem* self,
     Arcadia_FilePath* path
   )
-{ return getFileType1(thread, self, Arcadia_FilePath_toNative(thread, path)); }
+{ return getFileType1(thread, self, Arcadia_FilePath_toNative(thread, path, Arcadia_BooleanValue_True)); }

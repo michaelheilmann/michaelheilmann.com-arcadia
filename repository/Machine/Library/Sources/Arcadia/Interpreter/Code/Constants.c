@@ -150,7 +150,7 @@ getOrCreate
       return i;
     }
   }
-  Arcadia_Arrays_resizeByFreeCapacity(thread, Arcadia_ARMS_getDefaultMemoryManager(), &self->p, sizeof(Arcadia_Value), self->sz, &self->cp, 1, Arcadia_Arrays_ResizeStrategy_Type4);
+  Arcadia_Arrays_resizeByFreeCapacity(thread, Arcadia_ARMS_getDefaultMemoryManager(), (void**)&self->p, sizeof(Arcadia_Value), self->sz, &self->cp, 1, Arcadia_Arrays_ResizeStrategy_Type4);
   self->p[self->sz++] = *constant;
   return self->sz - 1;
 }

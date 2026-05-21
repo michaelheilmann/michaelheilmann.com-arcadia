@@ -18,48 +18,23 @@
 
 #include "Arcadia/DDL/Nodes/Include.h"
 #include "Arcadia/Languages/Include.h"
+#include "Arcadia/DDL/Reader/Scanner.h"
 
 /// @code
-/// class Arcadia.DDL.Parser
+/// class Arcadia.DDL.Parser {
+///   method run(input : Arcadia.String) : Arcadia.DDL.Node
+/// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.DDL.Parser", Arcadia_DDL_Parser,
-                          u8"Arcadia.Object");
+                          u8"Arcadia.Languages.Parser");
 
 /// @brief Create a Data Definition Language parser.
 /// @return A pointer to the Data Definition Language parser.
 Arcadia_DDL_Parser*
 Arcadia_DDL_Parser_create
   (
-    Arcadia_Thread* thread
-  );
-
-/// @brief Move to next token.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this Data Definition Language parser.
-Arcadia_DDL_Node*
-Arcadia_DDL_Parser_run
-  (
     Arcadia_Thread* thread,
-    Arcadia_DDL_Parser* self
-  );
-
-/// @brief Set the input.
-/// @param thread A pointer to this thread.
-/// @param self A pointer to this Data Definition Language parser.
-/// @param input A pointer to the input string.
-void
-Arcadia_DDL_Parser_setInput
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_Parser* self,
-    Arcadia_String* input
-  );
-
-Arcadia_Languages_StringTable*
-Arcadia_DDL_Parser_getStringTable
-  (
-    Arcadia_Thread* thread,
-    Arcadia_DDL_Parser* self
+    Arcadia_DDL_Scanner* scanner
   );
 
 #endif // ARCADIA_DDL_READER_PARSER_H_INCLUDED

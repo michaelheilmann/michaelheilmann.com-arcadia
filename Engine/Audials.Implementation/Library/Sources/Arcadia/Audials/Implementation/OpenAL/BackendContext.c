@@ -277,7 +277,7 @@ Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_getOrCreate
 {
   if (!g_instance) {
     Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext* instance = Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &destroyCallback);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, (void (*)(void*, Arcadia_Object*))  &destroyCallback);
     g_instance = instance;
   }
   return g_instance;

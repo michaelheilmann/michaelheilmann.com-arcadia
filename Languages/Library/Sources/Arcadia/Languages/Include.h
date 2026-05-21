@@ -24,9 +24,13 @@
 #pragma push_macro("ARCADIA_LANGUAGES_EXPORT")
 #define ARCADIA_LANGUAGES_EXPORT (1)
 
+#include "Arcadia/Languages/Diagnostic.h"
 #include "Arcadia/Languages/Diagnostics.h"
+#include "Arcadia/Languages/DiagnosticsOld.h"
+#include "Arcadia/Languages/DiagnosticType.h"
 #include "Arcadia/Languages/mangleName.h"
 #include "Arcadia/Languages/Scanner.h"
+#include "Arcadia/Languages/Parser.h"
 #include "Arcadia/Languages/Scope.h"
 #include "Arcadia/Languages/StringTable.h"
 

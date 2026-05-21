@@ -613,18 +613,18 @@ _Arcadia_Types_onStartUp
     Arcadia_JumpTarget jumpTarget;
     Arcadia_Thread_pushJumpTarget(thread, &jumpTarget);
     if (Arcadia_JumpTarget_save(&jumpTarget)) {
-      Arcadia_Process_addPreMarkCallback(process, &_Arcadia_Types_onPreMark);
-      Arcadia_Process_addVisitCallback(process, &_Arcadia_Types_onVisit);
-      Arcadia_Process_addFinalizeCallback(process, &_Arcadia_Types_onFinalize);
+      Arcadia_Process_addArenaPreMarkCallback(process, &_Arcadia_Types_onPreMark);
+      Arcadia_Process_addArenaVisitCallback(process, &_Arcadia_Types_onVisit);
+      Arcadia_Process_addArenaFinalizeCallback(process, &_Arcadia_Types_onFinalize);
       Arcadia_Thread_popJumpTarget(thread);
     } else {
       Arcadia_Thread_popJumpTarget(Arcadia_Process_getThread(process));
-      Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Types_onFinalize);
-      Arcadia_Process_removeVisitCallback(process, &_Arcadia_Types_onVisit);
-      Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Types_onPreMark);
+      Arcadia_Process_removeArenaFinalizeCallback(process, &_Arcadia_Types_onFinalize);
+      Arcadia_Process_removeArenaVisitCallback(process, &_Arcadia_Types_onVisit);
+      Arcadia_Process_removeArenaPreMarkCallback(process, &_Arcadia_Types_onPreMark);
       TypeNodes_destroy(process, g_typeNodes);
       g_typeNodes = NULL;
-      Arcadia_Status status = Arcadia_Process_runArms(process, true);
+      Arcadia_Status status = Arcadia_Process_runARMS(process, true);
       if (status) {
         /*Intentionally empty.*/
       }
@@ -650,16 +650,16 @@ _Arcadia_Types_onShutDown
   g_referenceCount--;
   if (0 == g_referenceCount) {
     Arcadia_Status status;
-    status = Arcadia_Process_runArms(process, true);
+    status = Arcadia_Process_runARMS(process, true);
     if (status) {
       /* Intentionally empty.*/
     }
     TypeNodes_destroy(process, g_typeNodes);
     g_typeNodes = NULL;
-    Arcadia_Process_removeFinalizeCallback(process, &_Arcadia_Types_onFinalize);
-    Arcadia_Process_removeVisitCallback(process, &_Arcadia_Types_onVisit);
-    Arcadia_Process_removePreMarkCallback(process, &_Arcadia_Types_onPreMark);
-    status = Arcadia_Process_runArms(process, true);
+    Arcadia_Process_removeArenaFinalizeCallback(process, &_Arcadia_Types_onFinalize);
+    Arcadia_Process_removeArenaVisitCallback(process, &_Arcadia_Types_onVisit);
+    Arcadia_Process_removeArenaPreMarkCallback(process, &_Arcadia_Types_onPreMark);
+    status = Arcadia_Process_runARMS(process, true);
     if (status) {
       /* Intentionally empty.*/
     }

@@ -38,6 +38,7 @@ if (operatingSystem STREQUAL Arcadia_OperatingSystem_Windows)
   # TODO: Make this an option.
   set(MyDependenciesDirectory "C:/arcadia-dependencies")
 endif()
+
 add_subdirectory(Runtime/ARMS)
 add_subdirectory(Runtime/Ring1)
 add_subdirectory(Runtime/Ring2)
@@ -48,6 +49,7 @@ add_subdirectory(ADL)
 add_subdirectory(VPL)
 add_subdirectory(Media)
 add_subdirectory(PixelBufferIO)
+add_subdirectory(SampleBufferIO)
 
 add_subdirectory(Engine/Engine)
 add_subdirectory(Engine/Application)
@@ -56,4 +58,5 @@ add_subdirectory(Engine/Audials.Implementation)
 add_subdirectory(Documentation)
 add_subdirectory(Tools/TemplateEngine)
 add_subdirectory(Tools/PixelBufferGenerator)
+
 add_subdirectory(repository)

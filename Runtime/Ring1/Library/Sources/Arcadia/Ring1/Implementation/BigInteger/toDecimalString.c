@@ -61,7 +61,7 @@ Arcadia_BigInteger_toDecimalString
             Arcadia_Thread_setStatus(thread, Arcadia_Status_AllocationFailed);
             Arcadia_Thread_jump(thread);
           }
-          Arcadia_Memory_reallocateUnmanaged(thread, &p, b);
+          Arcadia_Memory_reallocateUnmanaged(thread, (void**)&p, b);
           n = b;
         }
         p[i++] = digitValue;

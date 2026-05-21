@@ -213,7 +213,7 @@ DependencyContext_onFile
     Arcadia_FilePath* path
   )
 {
-  Arcadia_String* fromString = Arcadia_FilePath_toNative(thread, Arcadia_FilePath_getFullPath(thread, path));
+  Arcadia_String* fromString = Arcadia_FilePath_toNative(thread, Arcadia_FilePath_getFullPath(thread, path), Arcadia_BooleanValue_False);
   Arcadia_Value temporary = Arcadia_Map_get(thread, self->dependencies, Arcadia_Value_makeObjectReferenceValue(fromString));
   if (Arcadia_Value_isVoidValue(&temporary)) {
     Arcadia_Set* toStringSet = (Arcadia_Set*)Arcadia_HashSet_create(thread);
@@ -231,8 +231,8 @@ DependencyContext_onDependency
     Arcadia_FilePath* to
   )
 {
-  Arcadia_String* fromString = Arcadia_FilePath_toNative(thread, Arcadia_FilePath_getFullPath(thread, from));
-  Arcadia_String* toString = Arcadia_FilePath_toNative(thread, Arcadia_FilePath_getFullPath(thread, to));
+  Arcadia_String* fromString = Arcadia_FilePath_toNative(thread, Arcadia_FilePath_getFullPath(thread, from), Arcadia_BooleanValue_False);
+  Arcadia_String* toString = Arcadia_FilePath_toNative(thread, Arcadia_FilePath_getFullPath(thread, to), Arcadia_BooleanValue_False);
   Arcadia_Value temporary = Arcadia_Map_get(thread, self->dependencies, Arcadia_Value_makeObjectReferenceValue(fromString));
   Arcadia_Set* toStringSet = NULL;
   if (Arcadia_Value_isVoidValue(&temporary)) {

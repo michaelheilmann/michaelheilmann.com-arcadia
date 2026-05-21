@@ -19,6 +19,7 @@
 #include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendContext.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/Functions.h"
+#include "Arcadia/Visuals/Implementation/OpenGL4/GLX/Functions.h"
 #include <X11/Xlib.h> // For Atom.
 #include <GL/glx.h> // For XVisualInfo and GLXFBConfig.
 
@@ -66,7 +67,9 @@ struct Arcadia_Visuals_Implementation_OpenGL4_GLX_BackendContext {
   // Default value is NULL.
   GLXContext context;
 
-  /// The OpenGL and GLX functions available to us.
+  /// The GLX functions available to us.
+  _Arcadia_Visuals_Implementation_OpenGL4_GLX_Functions functionsGLX;
+  /// The OpenGL functions available to us.
   _Arcadia_Visuals_Implementation_OpenGL4_Functions _functions;
 };
 

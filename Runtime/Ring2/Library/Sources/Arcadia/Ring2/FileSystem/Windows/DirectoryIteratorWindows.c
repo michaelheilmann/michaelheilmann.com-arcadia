@@ -99,15 +99,14 @@ Arcadia_DirectoryIteratorWindows_constructImpl
   self->path = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 1, _Arcadia_FilePath_getType(thread));
   self->handle = INVALID_HANDLE_VALUE;
   Arcadia_StringBuffer* queryStringBuilder = Arcadia_StringBuffer_create(thread);
-  Arcadia_StringBuffer_insertBack(thread, queryStringBuilder, Arcadia_Value_makeObjectReferenceValue(Arcadia_FilePath_toNative(thread, self->path)));
-  Arcadia_StringBuffer_removeCodePointsBack(thread, queryStringBuilder, 1);
+  Arcadia_StringBuffer_insertBack(thread, queryStringBuilder, Arcadia_Value_makeObjectReferenceValue(Arcadia_FilePath_toNative(thread, self->path, Arcadia_BooleanValue_False)));
   // (1) Append '/' if the path does not end with '/'.
   if (!Arcadia_StringBuffer_endsWith_pn(thread, queryStringBuilder, u8"\\", sizeof(u8"\\") - 1)) {
     Arcadia_StringBuffer_insertBackCxxString(thread, queryStringBuilder, u8"\\");
   }
   // (2) Append '*\0'.
   Arcadia_StringBuffer_insertBackCxxString(thread, queryStringBuilder, u8"*");
-  Arcadia_StringBuffer_insertCodePointsBack(thread, queryStringBuilder, &zeroTerminator, 1);
+  Arcadia_StringBuffer_insertBackCodePoints(thread, queryStringBuilder, &zeroTerminator, 1);
   Arcadia_String* queryString = Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(queryStringBuilder));
   SetLastError(0);
   self->handle = FindFirstFileA(Arcadia_String_getBytes(thread, queryString), &self->data);

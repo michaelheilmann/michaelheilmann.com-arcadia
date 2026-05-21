@@ -229,7 +229,7 @@ ensureFreeCapacityBytes
       Arcadia_Thread_jump(thread);
     }
     Arcadia_SizeValue newCapacity = oldCapacity + additionalCapacity;
-    Arcadia_Memory_reallocateUnmanaged(thread, &self->elements, newCapacity);
+    Arcadia_Memory_reallocateUnmanaged(thread, (void**)&self->elements, newCapacity);
     self->capacity = newCapacity;
   }
 }
@@ -470,16 +470,16 @@ Arcadia_StringBuffer_insertFront
 }
 
 void
-Arcadia_StringBuffer_insertCodePointBack
+Arcadia_StringBuffer_insertBackCodePoint
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_Natural32Value codePoint
   )
-{ Arcadia_StringBuffer_insertCodePointsBack(thread, self, &codePoint, 1); }
+{ Arcadia_StringBuffer_insertBackCodePoints(thread, self, &codePoint, 1); }
 
 void
-Arcadia_StringBuffer_insertCodePointsBack
+Arcadia_StringBuffer_insertBackCodePoints
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
@@ -491,16 +491,16 @@ Arcadia_StringBuffer_insertCodePointsBack
 }
 
 void
-Arcadia_StringBuffer_insertCodePointFront
+Arcadia_StringBuffer_insertFrontCodePoint
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,
     Arcadia_Natural32Value codePoint
   )
-{ Arcadia_StringBuffer_insertCodePointsFront(thread, self, &codePoint, 1); }
+{ Arcadia_StringBuffer_insertFrontCodePoints(thread, self, &codePoint, 1); }
 
 void
-Arcadia_StringBuffer_insertCodePointsFront
+Arcadia_StringBuffer_insertFrontCodePoints
   (
     Arcadia_Thread* thread,
     Arcadia_StringBuffer* self,

@@ -91,11 +91,16 @@ ObjectTypeNode_allocate
   )
 {
   if (!g_registered) {
-    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread), ObjectTypeNodeName, sizeof(ObjectTypeNodeName) - 1, Arcadia_Thread_getProcess(thread), &typeRemovedCallback, &visitCallback, &finalizeCallback);
+    Arcadia_Process_registerType(Arcadia_Thread_getProcess(thread),
+                                 ObjectTypeNodeName, sizeof(ObjectTypeNodeName) - 1,
+                                 Arcadia_Thread_getProcess(thread),
+                                 (Arcadia_Process_TypeRemovedCallback*)&typeRemovedCallback,
+                                 (Arcadia_Process_VisitCallback*)&visitCallback,
+                                 (Arcadia_Process_FinalizeCallback*)&finalizeCallback);
     g_registered = Arcadia_BooleanValue_True;
   }
   ObjectTypeNode* node = NULL;
-  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), &node, ObjectTypeNodeName, sizeof(ObjectTypeNodeName) - 1, sizeof(ObjectTypeNode));
+  Arcadia_Process_allocate(Arcadia_Thread_getProcess(thread), (void**)&node, ObjectTypeNodeName, sizeof(ObjectTypeNodeName) - 1, sizeof(ObjectTypeNode));
   Arcadia_Memory_fillZero(thread, node, sizeof(ObjectTypeNode));
   return node;
 }

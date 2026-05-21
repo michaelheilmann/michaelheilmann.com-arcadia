@@ -146,30 +146,35 @@ Arcadia_NumeralApproximation_fromNumeral
   }
 }
 
-typedef struct RoundDownInfo {
-  Arcadia_Integer32Value shift;
-} RoundDownInfo;
+typedef struct RoundDownInfo RoundDownInfo;
+typedef struct RoundInfo RoundInfo;
+typedef struct RoundNearestTieEvenInfo RoundNearestTieEvenInfo;
 
-typedef struct RoundNearestTieEvenInfo {
+
+struct RoundDownInfo {
+  Arcadia_Integer32Value shift;
+};
+
+struct RoundNearestTieEvenInfo {
   Arcadia_Integer32Value shift;
   Arcadia_BooleanValue truncated;
   Arcadia_BooleanValue isOdd;
   Arcadia_BooleanValue isHalfway;
   Arcadia_BooleanValue isAbove;
   Arcadia_Integer32Value order;
-  Arcadia_BooleanValue (*cb)(Arcadia_Thread*, struct RoundInfo*);
-} RoundNearestTieToEven;
-
-#define Rounding_RoundDown (1)
-#define Rounding_RoundNearestTieToEven (2)
+  Arcadia_BooleanValue (*cb)(Arcadia_Thread*, RoundInfo*);
+};
 
 struct RoundInfo {
   int dummy;
   union {
-    struct RoundDownInfo roundDown;
-    struct RoundNearestTieEvenInfo roundNearestTieEven;
+    RoundDownInfo roundDown;
+    RoundNearestTieEvenInfo roundNearestTieEven;
   };
 };
+
+#define Rounding_RoundDown (1)
+#define Rounding_RoundNearestTieToEven (2)
 
 #define Arcadia_Real64Value_HiddenBitMask (UINT64_C(0x0010000000000000))
 
@@ -216,7 +221,7 @@ static Arcadia_BooleanValue
 doTie1
   (
     Arcadia_Thread* thread,
-    struct RoundInfo* info
+    RoundInfo* info
   )
 {
   return info->roundNearestTieEven.isAbove
@@ -228,7 +233,7 @@ static Arcadia_BooleanValue
 doTie2
   (
     Arcadia_Thread* thread,
-    struct RoundInfo* info
+    RoundInfo* info
   )
 {
   if (info->roundNearestTieEven.order > 0) {
@@ -245,7 +250,7 @@ doRoundNearestTieToEven
   (
     Arcadia_Thread* thread,
     Arcadia_ToReal64_Result* result,
-    struct RoundInfo* info
+    RoundInfo* info
   )
 {
   uint64_t const mask = (info->roundNearestTieEven.shift == 64) ? UINT64_MAX : (UINT64_C(1) << info->roundNearestTieEven.shift) - 1;
@@ -274,7 +279,7 @@ doRoundDown
   (
     Arcadia_Thread* thread,
     Arcadia_ToReal64_Result* result,
-    struct RoundInfo* info
+    RoundInfo* info
   )
 {
   if (info->roundDown.shift == 64) {
@@ -290,10 +295,10 @@ doRound
   (
     Arcadia_Thread* thread,
     Arcadia_ToReal64_Result* result,
-    struct RoundInfo *roundInfo
+    RoundInfo *roundInfo
   )
 {
-  void (*cb)(Arcadia_Thread*, Arcadia_ToReal64_Result*, struct RoundInfo*) = NULL;
+  void (*cb)(Arcadia_Thread*, Arcadia_ToReal64_Result*, RoundInfo*) = NULL;
   switch (roundInfo->dummy) {
     case Rounding_RoundDown: {
       cb = &doRoundDown;
@@ -358,7 +363,7 @@ onRoundNonNegative
   result->exponent = bitLength - 64 + bias;
 
   // round
-  struct RoundInfo roundInfo = { .dummy = Rounding_RoundNearestTieToEven, .roundNearestTieEven.truncated = isTruncated };
+  RoundInfo roundInfo = { .dummy = Rounding_RoundNearestTieToEven, .roundNearestTieEven.truncated = isTruncated };
   roundInfo.roundNearestTieEven.cb = &doTie1;
   doRound(thread, result, &roundInfo);
 #if _DEBUG
@@ -382,7 +387,7 @@ onRoundNegative
 {
   Arcadia_ToReal64_Result resultB = *result;
   // round
-  struct RoundInfo roundInfo = { .dummy = Rounding_RoundDown };
+  RoundInfo roundInfo = { .dummy = Rounding_RoundDown };
   doRound(thread, &resultB, &roundInfo);
 
   Arcadia_Real64Value b;

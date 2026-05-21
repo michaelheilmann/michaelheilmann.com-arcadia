@@ -46,7 +46,7 @@ Arcadia_Visuals_Diagnostics_dumpDeviceBounds
   Arcadia_StringBuffer_insertBackString(thread, message, Arcadia_String_createFromInteger32(thread, bottom));
 
   Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
-  Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
+  Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
 }
 
 static inline void
@@ -90,7 +90,7 @@ Arcadia_Visuals_Diagnostics_dumpModes
 
     Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
   }
-  Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
+  Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
 }
 
 void
@@ -127,7 +127,7 @@ Arcadia_Visuals_Diagnostics_dumpDevices
 
     Arcadia_StringBuffer_insertBackCxxString(thread, message, u8"\n");
 
-    Arcadia_Log_info(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
+    Arcadia_Log_information(thread, log, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(message)));
     Arcadia_StringBuffer_clear(thread, message);
 
     Arcadia_Visuals_Diagnostics_dumpModes(thread, log, displayDevice);

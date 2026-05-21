@@ -75,7 +75,8 @@ Arcadia_DDL_DefaultReader_constructImpl
     Arcadia_Thread_jump(thread);
   }
   //
-  self->parser = Arcadia_DDL_Parser_create(thread);
+  self->parser = Arcadia_DDL_Parser_create(thread, Arcadia_DDL_Scanner_create(thread, Arcadia_Languages_StringTable_getOrCreate(thread),
+                                                                                      Arcadia_Languages_Diagnostics_create(thread, (Arcadia_Log*)Arcadia_ConsoleLog_create(thread))));
   //
   Arcadia_LeaveConstructor(Arcadia_DDL_DefaultReader);
 }
@@ -119,7 +120,6 @@ Arcadia_DDL_DefaultReader_run
     Arcadia_String* input
   )
 {
-  Arcadia_DDL_Parser_setInput(thread, self->parser, input);
-  Arcadia_DDL_Node* node = Arcadia_DDL_Parser_run(thread, self->parser);
+  Arcadia_DDL_Node* node = (Arcadia_DDL_Node*)Arcadia_Value_getObjectReferenceValueChecked(thread, Arcadia_Languages_Parser_run(thread, (Arcadia_Languages_Parser*)self->parser, input), _Arcadia_DDL_Node_getType(thread));
   return node;
 }

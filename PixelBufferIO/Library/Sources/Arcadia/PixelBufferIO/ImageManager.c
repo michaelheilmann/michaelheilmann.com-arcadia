@@ -170,7 +170,7 @@ Arcadia_Imaging_ImageManager_getOrCreate
 {
   if (!g_instance) {
     Arcadia_Imaging_ImageManager* instance = Arcadia_Imaging_ImageManager_create(thread);
-    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, &Arcadia_Imaging_ImageManager_destroyCallback);
+    Arcadia_Object_addNotifyDestroyCallback(thread, (Arcadia_Object*)instance, NULL, (void (*)(void*, Arcadia_Object*)) &Arcadia_Imaging_ImageManager_destroyCallback);
     g_instance = instance;
   }
   return g_instance;

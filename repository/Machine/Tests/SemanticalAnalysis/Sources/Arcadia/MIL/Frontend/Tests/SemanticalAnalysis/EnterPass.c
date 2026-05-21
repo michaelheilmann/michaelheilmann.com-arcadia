@@ -19,8 +19,8 @@
 #include "Arcadia/MIL/Frontend/Tests/SemanticalAnalysis/StatementsContext.h"
 #include "Arcadia/Interpreter/Constructor.h"
 #include "Arcadia/Interpreter/Method.h"
-#include "Arcadia/MIL/AST/Include.h"
-#include "Arcadia/MIL/Frontend/Include.h"
+#include "Arcadia/MILC/AST/Include.h"
+#include "Arcadia/MILC/Include.h"
 #include <limits.h>
 
 static Arcadia_Natural32Value
@@ -28,7 +28,7 @@ getRegisterOfVariable2
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_OperandNode* operand
+    Arcadia_MILC_AST_OperandNode* operand
   );
 
 static void
@@ -38,7 +38,7 @@ onOperand
     R_Interpreter_ProcessState* interpreterState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_OperandNode* operand
+    Arcadia_MILC_AST_OperandNode* operand
   );
 
 static R_Interpreter_Code*
@@ -58,7 +58,7 @@ onConstructorDefinition
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
-    Arcadia_MIL_AST_ConstructorDefinitionNode* definitionAst
+    Arcadia_MILC_AST_ConstructorDefinitionNode* definitionAst
   );
 
 static R_Interpreter_Code*
@@ -78,7 +78,7 @@ onMethodDefinition
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
-    Arcadia_MIL_AST_MethodDefinitionNode* definitionAst
+    Arcadia_MILC_AST_MethodDefinitionNode* definitionAst
   );
 
 static R_Interpreter_Code*
@@ -97,7 +97,7 @@ onProcedureDefinition
     R_Interpreter_ProcessState* interpreterState,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ProcedureDefinitionNode* definitionAst
+    Arcadia_MILC_AST_ProcedureDefinitionNode* definitionAst
   );
 
 static void
@@ -128,7 +128,7 @@ onObjectVariableDefinition
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
-    Arcadia_MIL_AST_FieldDefinitionNode* definitionAst
+    Arcadia_MILC_AST_FieldDefinitionNode* definitionAst
   );
 
 static void
@@ -142,6 +142,13 @@ onClassBodyDefinition
     Arcadia_List* classBodyAst
   );
 
+static Arcadia_String*
+makeIdentifier
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_AST_IdentifierNode* node
+  );
+
 static void
 onClassDefinition
   (
@@ -149,7 +156,7 @@ onClassDefinition
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ClassDefinitionNode* definitionAst
+    Arcadia_MILC_AST_ClassDefinitionNode* definitionAst
   );
 
 // get the register index for a variable operand or a register operand
@@ -158,14 +165,14 @@ getRegisterOfVariable2
   (
     Arcadia_Thread* thread,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_OperandNode* operand
+    Arcadia_MILC_AST_OperandNode* operand
   )
 {
   Arcadia_String* name = NULL;
-  if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)operand, _Arcadia_MIL_AST_VariableOperandNode_getType(thread))) {
-    name = ((Arcadia_MIL_AST_VariableOperandNode*)operand)->value;
-  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)operand, _Arcadia_MIL_AST_RegisterOperandNode_getType(thread))) {
-    name = ((Arcadia_MIL_AST_VariableOperandNode*)operand)->value;
+  if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)operand, _Arcadia_MILC_AST_VariableOperandNode_getType(thread))) {
+    name = ((Arcadia_MILC_AST_VariableOperandNode*)operand)->value;
+  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)operand, _Arcadia_MILC_AST_RegisterOperandNode_getType(thread))) {
+    name = ((Arcadia_MILC_AST_VariableOperandNode*)operand)->value;
   } else {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
     Arcadia_Thread_jump(thread);
@@ -190,32 +197,32 @@ onOperand
     R_Interpreter_ProcessState* interpreterProcessState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_OperandNode* operandAst
+    Arcadia_MILC_AST_OperandNode* operandAst
   )
 {
-  if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)operandAst), _Arcadia_MIL_AST_VariableOperandNode_getType(thread))) {
-    Arcadia_MIL_AST_VariableOperandNode* variableOperandAst = (Arcadia_MIL_AST_VariableOperandNode*)operandAst;
+  if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)operandAst), _Arcadia_MILC_AST_VariableOperandNode_getType(thread))) {
+    Arcadia_MILC_AST_VariableOperandNode* variableOperandAst = (Arcadia_MILC_AST_VariableOperandNode*)operandAst;
     R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
-                                            getRegisterOfVariable2(thread, context, (Arcadia_MIL_AST_OperandNode*)variableOperandAst));
-  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)operandAst, _Arcadia_MIL_AST_LiteralOperandNode_getType(thread))) {
-    Arcadia_MIL_AST_Node* literalNode = ((Arcadia_MIL_AST_LiteralOperandNode*)operandAst)->literal;
-    if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MIL_AST_BooleanLiteralNode_getType(thread))) {
-      Arcadia_MIL_AST_BooleanLiteralNode* booleanLiteralOperandAst = (Arcadia_MIL_AST_BooleanLiteralNode*)literalNode;
+                                            getRegisterOfVariable2(thread, context, (Arcadia_MILC_AST_OperandNode*)variableOperandAst));
+  } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)operandAst, _Arcadia_MILC_AST_LiteralOperandNode_getType(thread))) {
+    Arcadia_MILC_AST_Node* literalNode = ((Arcadia_MILC_AST_LiteralOperandNode*)operandAst)->literal;
+    if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MILC_AST_BooleanLiteralNode_getType(thread))) {
+      Arcadia_MILC_AST_BooleanLiteralNode* booleanLiteralOperandAst = (Arcadia_MILC_AST_BooleanLiteralNode*)literalNode;
       R_Interpreter_Code_Constants_getOrCreateBoolean(thread, R_Interpreter_ProcessState_getConstants(interpreterProcessState), Arcadia_String_toBoolean(thread, booleanLiteralOperandAst->value));
-    } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MIL_AST_IntegerLiteralNode_getType(thread))) {
-      Arcadia_MIL_AST_IntegerLiteralNode* integerLiteralOperandAst = (Arcadia_MIL_AST_IntegerLiteralNode*)literalNode;
+    } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MILC_AST_IntegerLiteralNode_getType(thread))) {
+      Arcadia_MILC_AST_IntegerLiteralNode* integerLiteralOperandAst = (Arcadia_MILC_AST_IntegerLiteralNode*)literalNode;
       R_Interpreter_Code_Constants_getOrCreateInteger64(thread, R_Interpreter_ProcessState_getConstants(interpreterProcessState), Arcadia_String_toInteger64(thread, integerLiteralOperandAst->value));
-    } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MIL_AST_RealLiteralNode_getType(thread))) {
-      Arcadia_MIL_AST_RealLiteralNode* realLiteralOperandAst = (Arcadia_MIL_AST_RealLiteralNode*)literalNode;
+    } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MILC_AST_RealLiteralNode_getType(thread))) {
+      Arcadia_MILC_AST_RealLiteralNode* realLiteralOperandAst = (Arcadia_MILC_AST_RealLiteralNode*)literalNode;
       Arcadia_String_toReal64(thread, realLiteralOperandAst->value);
       /*@todo Support Real64 constants.*/
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
-    } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MIL_AST_StringLiteralNode_getType(thread))) {
-      Arcadia_MIL_AST_StringLiteralNode* stringLiteralOperandAst = (Arcadia_MIL_AST_StringLiteralNode*)literalNode;
+    } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MILC_AST_StringLiteralNode_getType(thread))) {
+      Arcadia_MILC_AST_StringLiteralNode* stringLiteralOperandAst = (Arcadia_MILC_AST_StringLiteralNode*)literalNode;
       R_Interpreter_Code_Constants_getOrCreateString(thread, R_Interpreter_ProcessState_getConstants(interpreterProcessState), stringLiteralOperandAst->value);
-    } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MIL_AST_VoidLiteralNode_getType(thread))) {
-      Arcadia_MIL_AST_VoidLiteralNode* voidLiteralOperandAst = (Arcadia_MIL_AST_VoidLiteralNode*)literalNode;
+    } else if (Arcadia_Object_isInstanceOf(thread, (Arcadia_Object*)literalNode, _Arcadia_MILC_AST_VoidLiteralNode_getType(thread))) {
+      Arcadia_MILC_AST_VoidLiteralNode* voidLiteralOperandAst = (Arcadia_MILC_AST_VoidLiteralNode*)literalNode;
       R_Interpreter_Code_Constants_getOrCreateVoid(thread, R_Interpreter_ProcessState_getConstants(interpreterProcessState), Arcadia_String_toVoid(thread, voidLiteralOperandAst->value));
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
@@ -234,7 +241,7 @@ onLabelDefinitionStatement
     R_Interpreter_ProcessState* interpreterProcessState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_LabelDefinitionStatementNode* labelDefinitionStatement
+    Arcadia_MILC_AST_LabelDefinitionStatementNode* labelDefinitionStatement
   )
 {
   Arcadia_MIL_CallableContext_onDefineLabel(thread, context, labelDefinitionStatement->labelName, labelDefinitionStatement, context->statementIndex);
@@ -248,7 +255,7 @@ onRaiseInstruction
     R_Interpreter_ProcessState* interpreterProcessState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_RaiseInstructionNode* raiseInstructionNode
+    Arcadia_MILC_AST_RaiseInstructionNode* raiseInstructionNode
   )
 {
   Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Raise;
@@ -263,7 +270,7 @@ onReturnInstruction
     R_Interpreter_ProcessState* interpreterProcessState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_ReturnInstructionNode* returnInstructionNode
+    Arcadia_MILC_AST_ReturnInstructionNode* returnInstructionNode
   )
 {
   Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Return;
@@ -279,13 +286,13 @@ onExpressionStatement
     R_Interpreter_ProcessState* interpreterProcessState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_InstructionStatementNode* instructionStatementNode
+    Arcadia_MILC_AST_InstructionStatementNode* instructionStatementNode
   )
 {
-  if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MIL_AST_BinaryInstructionNode_getType(thread))) {
-    Arcadia_MIL_AST_BinaryInstructionNode* binaryExpressionAst = (Arcadia_MIL_AST_BinaryInstructionNode*)instructionStatementNode;
+  if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MILC_AST_BinaryInstructionNode_getType(thread))) {
+    Arcadia_MILC_AST_BinaryInstructionNode* binaryExpressionAst = (Arcadia_MILC_AST_BinaryInstructionNode*)instructionStatementNode;
     switch (binaryExpressionAst->kind) {
-      case Arcadia_MIL_AST_BinaryInstructionKind_Add: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_Add: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Add;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -294,7 +301,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_Subtract: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_Subtract: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Subtract;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -303,7 +310,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_Multiply: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_Multiply: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Multiply;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -312,7 +319,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_Divide: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_Divide: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Divide;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -321,7 +328,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_Concatenate: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_Concatenate: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Concatenate;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -330,7 +337,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_IsEqualTo: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_IsEqualTo: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_IsEqualTo;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -339,7 +346,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_IsNotEqualTo: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_IsNotEqualTo: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_IsNotEqualTo;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -348,7 +355,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_IsLowerThan: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_IsLowerThan: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_IsLowerThan;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -357,7 +364,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_IsLowerThanOrEqualTo: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_IsLowerThanOrEqualTo: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_IsLowerThanOrEqualTo;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -366,7 +373,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_IsGreaterThan: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_IsGreaterThan: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_IsGreaterThan;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -375,7 +382,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, binaryExpressionAst->operand2);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_BinaryInstructionKind_IsGreaterThanOrEqualTo: {
+      case Arcadia_MILC_AST_BinaryInstructionKind_IsGreaterThanOrEqualTo: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_IsGreaterThanOrEqualTo;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -389,17 +396,17 @@ onExpressionStatement
         Arcadia_Thread_jump(thread);
       } break;
     };
-  } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MIL_AST_UnaryInstructionNode_getType(thread))) {
-    Arcadia_MIL_AST_UnaryInstructionNode* unaryExpressionAst = (Arcadia_MIL_AST_UnaryInstructionNode*)instructionStatementNode;
+  } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MILC_AST_UnaryInstructionNode_getType(thread))) {
+    Arcadia_MILC_AST_UnaryInstructionNode* unaryExpressionAst = (Arcadia_MILC_AST_UnaryInstructionNode*)instructionStatementNode;
     switch (unaryExpressionAst->kind) {
-      case Arcadia_MIL_AST_UnaryInstructionKind_Negate: {
+      case Arcadia_MILC_AST_UnaryInstructionKind_Negate: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Negate;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
                                                 getRegisterOfVariable2(thread, context, unaryExpressionAst->target));
         onOperand(thread, interpreterProcessState, code, context, unaryExpressionAst->operand1);
       } break;
-      case Arcadia_MIL_AST_UnaryInstructionKind_Not: {
+      case Arcadia_MILC_AST_UnaryInstructionKind_Not: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Not;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -407,7 +414,7 @@ onExpressionStatement
         onOperand(thread, interpreterProcessState, code, context, unaryExpressionAst->operand1);
         context->statementIndex++;
       } break;
-      case Arcadia_MIL_AST_UnaryInstructionKind_Set: {
+      case Arcadia_MILC_AST_UnaryInstructionKind_Set: {
         Arcadia_Natural8Value opcode = R_Machine_Code_Opcode_Load;
         R_Interpreter_Code_append(thread, code, &opcode, 1);
         R_Interpreter_Code_appendIndexNatural32(thread, code, R_Machine_Code_IndexKind_Register,
@@ -420,10 +427,10 @@ onExpressionStatement
         Arcadia_Thread_jump(thread);
       } break;
     };
-  } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MIL_AST_RaiseInstructionNode_getType(thread))) {
-    onRaiseInstruction(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_RaiseInstructionNode*)instructionStatementNode);
-  } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MIL_AST_ReturnInstructionNode_getType(thread))) {
-    onReturnInstruction(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_ReturnInstructionNode*)instructionStatementNode);
+  } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MILC_AST_RaiseInstructionNode_getType(thread))) {
+    onRaiseInstruction(thread, interpreterProcessState, code, context, (Arcadia_MILC_AST_RaiseInstructionNode*)instructionStatementNode);
+  } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode), _Arcadia_MILC_AST_ReturnInstructionNode_getType(thread))) {
+    onReturnInstruction(thread, interpreterProcessState, code, context, (Arcadia_MILC_AST_ReturnInstructionNode*)instructionStatementNode);
   } else {
     Arcadia_Type* type = Arcadia_Object_getType(thread, (Arcadia_Object*)instructionStatementNode);
     Arcadia_Name* temporary = Arcadia_Type_getName(thread, type);
@@ -442,7 +449,7 @@ onVariableDefinitionStatement
     R_Interpreter_ProcessState* interpreterProcessState,
     R_Interpreter_Code* code,
     Arcadia_MIL_CallableContext* context,
-    Arcadia_MIL_AST_VariableDefinitionStatementNode* variableDefinitionStatement
+    Arcadia_MILC_AST_VariableDefinitionStatementNode* variableDefinitionStatement
   )
 {
   Arcadia_Thread* thread = Arcadia_Process_getThread(process);
@@ -467,13 +474,13 @@ onStatements
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)statements); i < n; ++i) {
     Arcadia_Value elementValue = Arcadia_List_getAt(thread, statements, i);
     Arcadia_ObjectReferenceValue objectElementValue = Arcadia_Value_getObjectReferenceValue(&elementValue);
-    Arcadia_MIL_AST_StatementNode* statement = (Arcadia_MIL_AST_StatementNode*)objectElementValue;
-    if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_InstructionStatementNode_getType(thread))) {
-      onExpressionStatement(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_InstructionStatementNode*)statement);
-    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_VariableDefinitionStatementNode_getType(thread))) {
-      onVariableDefinitionStatement(process, interpreterProcessState, code, context, (Arcadia_MIL_AST_VariableDefinitionStatementNode*)statement);
-    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MIL_AST_LabelDefinitionStatementNode_getType(thread))) {
-      onLabelDefinitionStatement(thread, interpreterProcessState, code, context, (Arcadia_MIL_AST_LabelDefinitionStatementNode*)statement);
+    Arcadia_MILC_AST_StatementNode* statement = (Arcadia_MILC_AST_StatementNode*)objectElementValue;
+    if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MILC_AST_InstructionStatementNode_getType(thread))) {
+      onExpressionStatement(thread, interpreterProcessState, code, context, (Arcadia_MILC_AST_InstructionStatementNode*)statement);
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MILC_AST_VariableDefinitionStatementNode_getType(thread))) {
+      onVariableDefinitionStatement(process, interpreterProcessState, code, context, (Arcadia_MILC_AST_VariableDefinitionStatementNode*)statement);
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)statement), _Arcadia_MILC_AST_LabelDefinitionStatementNode_getType(thread))) {
+      onLabelDefinitionStatement(thread, interpreterProcessState, code, context, (Arcadia_MILC_AST_LabelDefinitionStatementNode*)statement);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
@@ -533,7 +540,7 @@ onProcedureDefinition
     R_Interpreter_ProcessState* interpreterProcessState,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ProcedureDefinitionNode* definitionAst
+    Arcadia_MILC_AST_ProcedureDefinitionNode* definitionAst
   )
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
@@ -545,10 +552,10 @@ onProcedureDefinition
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->procedureParameters); i < n; ++i) {
-    Arcadia_MIL_AST_FieldDefinitionNode* variable = (Arcadia_MIL_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->procedureParameters, i, _Arcadia_MIL_AST_FieldDefinitionNode_getType(thread));
+    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->procedureParameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
                                                               variable->name,
-                                                              (Arcadia_MIL_AST_Node*)definitionAst);
+                                                              (Arcadia_MILC_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {
     if (definitionAst->procedureBody) {
@@ -561,14 +568,14 @@ onProcedureDefinition
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_createForeign(thread, definitionAst->procedureName, Arcadia_Value_getForeignProcedureValue(&v));
+    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_createForeign(thread, makeIdentifier(thread, definitionAst->procedureName), Arcadia_Value_getForeignProcedureValue(&v));
     R_Interpreter_ProcessState_defineGlobalProcedure(process, interpreterProcessState, procedure);
   } else {
     if (!definitionAst->procedureBody) {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
-    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_create(thread, definitionAst->procedureName, onProcedureBody(thread, interpreterProcessState, context, definitionAst->procedureBody));
+    R_Interpreter_Procedure* procedure = R_Interpreter_Procedure_create(thread, makeIdentifier(thread, definitionAst->procedureName), onProcedureBody(thread, interpreterProcessState, context, definitionAst->procedureBody));
     R_Interpreter_ProcessState_defineGlobalProcedure(process, interpreterProcessState, procedure);
   }
 }
@@ -581,7 +588,7 @@ onConstructorDefinition
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
-    Arcadia_MIL_AST_ConstructorDefinitionNode* definitionAst
+    Arcadia_MILC_AST_ConstructorDefinitionNode* definitionAst
   )
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
@@ -594,10 +601,10 @@ onConstructorDefinition
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->constructorParameters); i < n; ++i) {
-    Arcadia_MIL_AST_FieldDefinitionNode* variable = (Arcadia_MIL_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->constructorParameters, i, _Arcadia_MIL_AST_FieldDefinitionNode_getType(thread));
+    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->constructorParameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
                                                               variable->name,
-                                                              (Arcadia_MIL_AST_Node*)definitionAst);
+                                                              (Arcadia_MILC_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {
     if (definitionAst->constructorBody) {
@@ -630,7 +637,7 @@ onMethodDefinition
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
-    Arcadia_MIL_AST_MethodDefinitionNode* definitionAst
+    Arcadia_MILC_AST_MethodDefinitionNode* definitionAst
   )
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
@@ -642,10 +649,10 @@ onMethodDefinition
   }
   Arcadia_MIL_CallableContext* context = Arcadia_MIL_CallableContext_create(thread);
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)definitionAst->methodParameters); i < n; ++i) {
-    Arcadia_MIL_AST_FieldDefinitionNode* variable = (Arcadia_MIL_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->methodParameters, i, _Arcadia_MIL_AST_FieldDefinitionNode_getType(thread));
+    Arcadia_MILC_AST_FieldDefinitionNode* variable = (Arcadia_MILC_AST_FieldDefinitionNode*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, definitionAst->methodParameters, i, _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread));
     Arcadia_MIL_CallableContext_onParameterVariableDefinition(thread, context,
                                                               variable->name,
-                                                              (Arcadia_MIL_AST_Node*)definitionAst);
+                                                              (Arcadia_MILC_AST_Node*)definitionAst);
   }
   if (definitionAst->nativeName) {
     if (definitionAst->methodBody) {
@@ -703,7 +710,7 @@ onObjectVariableDefinition
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
     R_Interpreter_Class* enclosing,
-    Arcadia_MIL_AST_FieldDefinitionNode* definitionAst
+    Arcadia_MILC_AST_FieldDefinitionNode* definitionAst
   )
 { }
 
@@ -720,17 +727,36 @@ onClassBodyDefinition
 {
   for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)classBodyAst); i < n; ++i) {
     Arcadia_ObjectReferenceValue element = Arcadia_List_getObjectReferenceValueAt(thread, classBodyAst, i);
-    if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MIL_AST_ConstructorDefinitionNode_getType(thread))) {
+    if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MILC_AST_ConstructorDefinitionNode_getType(thread))) {
       onConstructorDefinition(thread, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
-    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MIL_AST_MethodDefinitionNode_getType(thread))) {
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MILC_AST_MethodDefinitionNode_getType(thread))) {
       onMethodDefinition(thread, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
-    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MIL_AST_FieldDefinitionNode_getType(thread))) {
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, element), _Arcadia_MILC_AST_FieldDefinitionNode_getType(thread))) {
       onObjectVariableDefinition(thread, interpreterProcessState, symbolTable, foreignProcedures, enclosing, element);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
       Arcadia_Thread_jump(thread);
     }
   }
+}
+
+static Arcadia_String*
+makeIdentifier
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_AST_IdentifierNode* node
+  )
+{
+  Arcadia_StringBuffer* stringBuffer = Arcadia_StringBuffer_create(thread);
+  Arcadia_String* dot = Arcadia_String_createFromCxxString(thread, u8".");
+  Arcadia_String* name = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)node->names, 0, _Arcadia_String_getType(thread));
+  Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
+  for (Arcadia_SizeValue i = 1, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)node->names); i < n; ++i) {
+    Arcadia_StringBuffer_insertBackString(thread, stringBuffer, dot);
+    name = (Arcadia_String*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, (Arcadia_List*)node->names, i, _Arcadia_String_getType(thread));
+    Arcadia_StringBuffer_insertBackString(thread, stringBuffer, name);
+  }
+  return Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(stringBuffer));
 }
 
 static void
@@ -740,11 +766,11 @@ onClassDefinition
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ClassDefinitionNode* definitionAst
+    Arcadia_MILC_AST_ClassDefinitionNode* definitionAst
   )
 {
   Arcadia_Process* process = Arcadia_Thread_getProcess(thread);
-  R_Interpreter_Class* class = R_Interpreter_Class_create(thread, definitionAst->className, definitionAst->extendedClassName);
+  R_Interpreter_Class* class = R_Interpreter_Class_create(thread, makeIdentifier(thread, definitionAst->className), definitionAst->extendedClassName ? makeIdentifier(thread, definitionAst->extendedClassName) : NULL);
   if (!definitionAst->classBody) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_SemanticalError);
     Arcadia_Thread_jump(thread);
@@ -760,15 +786,15 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_onCompilationUnit
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode
+    Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_MIL_AST_CompilationUnitNode_getNumberOfDefinitions(thread, compilationUnitNode); i < n; ++i) {
-    Arcadia_MIL_AST_DefinitionNode* definitionAst = Arcadia_MIL_AST_CompilationUnitNode_getDefinitionAt(thread, compilationUnitNode, i);
-    if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)definitionAst), _Arcadia_MIL_AST_ClassDefinitionNode_getType(thread))) {
-      onClassDefinition(thread, interpreterProcess, symbolTable, foreignProcedures, (Arcadia_MIL_AST_ClassDefinitionNode*)definitionAst);
-    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)definitionAst), _Arcadia_MIL_AST_ProcedureDefinitionNode_getType(thread))) {
-      onProcedureDefinition(thread, interpreterProcess, symbolTable, foreignProcedures, (Arcadia_MIL_AST_ProcedureDefinitionNode*)definitionAst);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_MILC_AST_CompilationUnitNode_getNumberOfDefinitions(thread, compilationUnitNode); i < n; ++i) {
+    Arcadia_MILC_AST_DefinitionNode* definitionAst = Arcadia_MILC_AST_CompilationUnitNode_getDefinitionAt(thread, compilationUnitNode, i);
+    if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)definitionAst), _Arcadia_MILC_AST_ClassDefinitionNode_getType(thread))) {
+      onClassDefinition(thread, interpreterProcess, symbolTable, foreignProcedures, (Arcadia_MILC_AST_ClassDefinitionNode*)definitionAst);
+    } else if (Arcadia_Type_isDescendantType(thread, Arcadia_Object_getType(thread, (Arcadia_Object*)definitionAst), _Arcadia_MILC_AST_ProcedureDefinitionNode_getType(thread))) {
+      onProcedureDefinition(thread, interpreterProcess, symbolTable, foreignProcedures, (Arcadia_MILC_AST_ProcedureDefinitionNode*)definitionAst);
     } else {
       Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentTypeInvalid);
       Arcadia_Thread_jump(thread);
@@ -783,11 +809,11 @@ Arcadia_MIL_SemanticalAnalysis_EnterPass_onModule
     R_Interpreter_ProcessState* interpreterProcess,
     Arcadia_Map* symbolTable,
     Arcadia_Map* foreignProcedures,
-    Arcadia_MIL_AST_ModuleNode* moduleNode
+    Arcadia_MILC_AST_ModuleNode* moduleNode
   )
 {
-  for (Arcadia_SizeValue i = 0, n = Arcadia_MIL_AST_ModuleNode_getNumberOfCompilationUnits(thread, moduleNode); i < n; ++i) {
-    Arcadia_MIL_AST_CompilationUnitNode* compilationUnitNode = Arcadia_MIL_AST_ModuleNode_getCompilationUnitAt(thread, moduleNode, i);
+  for (Arcadia_SizeValue i = 0, n = Arcadia_MILC_AST_ModuleNode_getNumberOfCompilationUnits(thread, moduleNode); i < n; ++i) {
+    Arcadia_MILC_AST_CompilationUnitNode* compilationUnitNode = Arcadia_MILC_AST_ModuleNode_getCompilationUnitAt(thread, moduleNode, i);
     Arcadia_MIL_SemanticalAnalysis_EnterPass_onCompilationUnit(thread, interpreterProcess, symbolTable, foreignProcedures, compilationUnitNode);
   }
 }
