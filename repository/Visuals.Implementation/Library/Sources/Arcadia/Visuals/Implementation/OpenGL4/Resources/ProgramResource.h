@@ -13,22 +13,22 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED
 
-#include "Arcadia/Visuals/Implementation/Resources/ProgramResource.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Visuals_Implementation_OpenGL4_BackendContext;
+typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext;
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ProgramResource", Arcadia_Visuals_Implementation_OpenGL4_ProgramResource,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.ProgramResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource,
                           u8"Arcadia.Visuals.Implementation.ProgramResource");
 
-struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResourceDispatch {
-  Arcadia_Visuals_Implementation_ProgramResourceDispatch _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResourceDispatch {
+  Arcadia_Engine_Visuals_Implementation_ProgramResourceDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResource {
-  Arcadia_Visuals_Implementation_ProgramResource _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource {
+  Arcadia_Engine_Visuals_Implementation_ProgramResource _parent;
   Arcadia_Natural8Value dirty;
   /// The underlaying VPL program.
   Arcadia_VPL_Symbols_Program* program;
@@ -50,12 +50,12 @@ struct Arcadia_Visuals_Implementation_OpenGL4_ProgramResource {
   Arcadia_String* fragmentColorOutput;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*
-Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* backendContext,
     Arcadia_VPL_Symbols_Program* program
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_PROGRAMRESOURCE_H_INCLUDED

@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.ARMS.Tests.TypeNameTest)
+set(this ${MyProjectName}.ARMS.Tests.TypeNameTest)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Main.c)
+OnSourceFile(${this} Main.c)
 
-list(APPEND ${MyTestName}.Libraries ${MyProjectName}.ARMS)
+OnModuleDependency(${this} ${MyProjectName}.ARMS)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "ARMS")
+set_target_properties(${this} PROPERTIES FOLDER "ARMS")

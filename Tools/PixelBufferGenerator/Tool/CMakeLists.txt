@@ -21,17 +21,19 @@ if (NOT TARGET ${MyTool})
 
   BeginProduct(${MyTool} executable)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/PixelBufferGenerator/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/PixelBufferGenerator/Configure.h @ONLY)
-  list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/PixelBufferGenerator/Configure.h.i)
-  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/PixelBufferGenerator/Configure.h)
+  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/PixelBufferGenerator/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/PixelBufferGenerator/Configure.h.i)
 
   OnSourceFile(${MyTool} Tools/PixelBufferGenerator/Main.c)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.ADL ${MyProjectName}.PixelBufferIO ${MyProjectName}.DDL)
+  OnAssetsDirectory(${MyTool} ${CMAKE_CURRENT_SOURCE_DIR}/Assets)
+
+  OnModuleDependency(${MyTool} ${MyProjectName}.ADL PRIVATE)
+  OnModuleDependency(${MyTool} ${MyProjectName}.PixelBufferIO PRIVATE)
+  OnModuleDependency(${MyTool} ${MyProjectName}.DDL PRIVATE)
 
   EndProduct(${MyTool})
 
-  CopyProductAssets(${MyTool}.CopyAssets "Tools/PixelBufferGenerator" ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
+  CopyProductAssets(${MyTool} "Tools/PixelBufferGenerator" ${CMAKE_CURRENT_BINARY_DIR}/Assets)
 
   set(COMMAND_LINE_ARGS)
   list(APPEND COMMAND_LINE_ARGS "--target=\\\"helloworld.png\\\"")

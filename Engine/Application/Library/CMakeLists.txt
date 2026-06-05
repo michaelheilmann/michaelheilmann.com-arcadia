@@ -15,25 +15,26 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyLibraryName ${MyProjectName}.Application)
+set(this ${MyProjectName}.Application)
 
-if (NOT TARGET ${MyLibraryName})
+if (NOT TARGET ${this})
 
-  BeginProduct(${MyLibraryName} library)
+  BeginProduct(${this} library)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Application/Configure.h @ONLY)
-  OnConfigurationTemplateFile(${MyLibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Configure.h.i)
-  OnConfigurationFile(${MyLibraryName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Application/Configure.h)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/Application/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/Application/Configure.h.i)
 
-  OnSourceFile(${MyLibraryName} Arcadia/Application/Include.c)
-  OnHeaderFile(${MyLibraryName} Arcadia/Application/Include.h)
-  OnSourceFile(${MyLibraryName} Arcadia/Application/Application.c)
-  OnHeaderFile(${MyLibraryName} Arcadia/Application/Application.h)
+  OnSourceFile(${this} Arcadia/Application/Include.c)
+  OnHeaderFile(${this} Arcadia/Application/Include.h)
+  OnSourceFile(${this} Arcadia/Application/Application.c)
+  OnHeaderFile(${this} Arcadia/Application/Application.h)
 
-  list(APPEND ${MyLibraryName}.Libraries ${MyProjectName}.Engine ${MyProjectName}.PixelBufferIO ${MyProjectName}.Math ${MyProjectName}.Ring2)
+  OnModuleDependency(${this} ${MyProjectName}.Engine)
+  OnModuleDependency(${this} ${MyProjectName}.PixelBufferIO)
+  OnModuleDependency(${this} ${MyProjectName}.Math)
+  OnModuleDependency(${this} ${MyProjectName}.Ring2)
 
-  EndProduct(${MyLibraryName})
+  EndProduct(${this})
 
-  set_target_properties(${MyLibraryName} PROPERTIES FOLDER "Engine")
+  set_target_properties(${this} PROPERTIES FOLDER "Engine")
 
 endif()

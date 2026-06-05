@@ -32,110 +32,110 @@
 
 #include <assert.h>
 
-static Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource*
 createConstantBufferResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   );
 
-static Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource*
 createFrameBufferResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   );
 
-static Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource*
 createEnterPassResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   );
 
-static Arcadia_Visuals_Implementation_OpenGL4_MaterialResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource*
 createMaterialResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
-    Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* ambientTexture,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* programResource
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* ambientTexture,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* programResource
   );
 
-static Arcadia_Visuals_Implementation_OpenGL4_MeshResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_MeshResource*
 createMeshResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
-    Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBufferResource
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBufferResource
   );
 
-static Arcadia_Visuals_Implementation_OpenGL4_ModelResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_ModelResource*
 createModelResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
-    Arcadia_Visuals_Implementation_OpenGL4_MeshResource* meshResource,
-    Arcadia_Visuals_Implementation_OpenGL4_MaterialResource* materialResource
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_MeshResource* meshResource,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource* materialResource
   );
 
-static Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource*
 createProgramResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self,
     Arcadia_VPL_Symbols_Program* program
   );
 
-static Arcadia_Visuals_Implementation_OpenGL4_TextureResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource*
 createTextureResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   );
 
-static Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResource*
 createVertexBufferResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContextDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContextDispatch* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_destructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_visitImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_BackendContext_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_BackendContext_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_BackendContext_visitImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_BackendContext_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -143,147 +143,147 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.Implementation.OpenGL4.BackendContext", Arcadia_Visuals_Implementation_OpenGL4_BackendContext,
-                         u8"Arcadia.Engine.Visuals.Implementation.BackendContext", Arcadia_Visuals_Implementation_BackendContext,
+Arcadia_defineObjectType(u8"Arcadia.Engine.Visuals.Implementation.OpenGL4.BackendContext", Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext,
+                         u8"Arcadia.Engine.Visuals.BackendContext", Arcadia_Engine_Visuals_BackendContext,
                          &_typeOperations);
 
-static Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource*
 createConstantBufferResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource* resource = Arcadia_Visuals_Implementation_OpenGL4_ConstantBufferResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource* resource = Arcadia_Engine_Visuals_Implementation_OpenGL4_ConstantBufferResource_create(thread, (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)self);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
-static Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource*
 createFrameBufferResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource* resource =
-    Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_create
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource* resource =
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource_create
       (
         thread,
-        (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self
+        (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)self
       );
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
-static Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource*
 createEnterPassResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource* resource = Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource_create(thread, self);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource* resource = Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource_create(thread, self);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
-static Arcadia_Visuals_Implementation_OpenGL4_MaterialResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource*
 createMaterialResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
-    Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* ambientTexture,
-    Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* programResource
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* ambientTexture,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* programResource
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_MaterialResource* resource = Arcadia_Visuals_Implementation_OpenGL4_MaterialResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self, ambientColorSource, ambientTexture, programResource);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource* resource = Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource_create(thread, (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)self, ambientColorSource, ambientTexture, programResource);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
-static Arcadia_Visuals_Implementation_OpenGL4_MeshResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_MeshResource*
 createMeshResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
-    Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBufferResource
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResource* vertexBufferResource
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_MeshResource* resource = Arcadia_Visuals_Implementation_OpenGL4_MeshResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self, vertexBufferResource);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_MeshResource* resource = Arcadia_Engine_Visuals_Implementation_OpenGL4_MeshResource_create(thread, (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)self, vertexBufferResource);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
-static Arcadia_Visuals_Implementation_OpenGL4_ModelResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_ModelResource*
 createModelResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
-    Arcadia_Visuals_Implementation_OpenGL4_MeshResource* meshResource,
-    Arcadia_Visuals_Implementation_OpenGL4_MaterialResource* materialResource
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_MeshResource* meshResource,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_MaterialResource* materialResource
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_ModelResource* resource = Arcadia_Visuals_Implementation_OpenGL4_ModelResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self, meshResource, materialResource);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_ModelResource* resource = Arcadia_Engine_Visuals_Implementation_OpenGL4_ModelResource_create(thread, (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)self, meshResource, materialResource);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
-static Arcadia_Visuals_Implementation_OpenGL4_ProgramResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource*
 createProgramResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self,
     Arcadia_VPL_Symbols_Program* program
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_ProgramResource* resource = Arcadia_Visuals_Implementation_OpenGL4_ProgramResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self, program);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource* resource = Arcadia_Engine_Visuals_Implementation_OpenGL4_ProgramResource_create(thread, (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)self, program);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
-static Arcadia_Visuals_Implementation_OpenGL4_TextureResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource*
 createTextureResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_TextureResource* resource = Arcadia_Visuals_Implementation_OpenGL4_TextureResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* resource = Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_create(thread, (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)self);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
-static Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource*
+static Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResource*
 createVertexBufferResourceImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource* resource = Arcadia_Visuals_Implementation_OpenGL4_VertexBufferResource_create(thread, (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)self);
-  assert(((Arcadia_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResource* resource = Arcadia_Engine_Visuals_Implementation_OpenGL4_VertexBufferResource_create(thread, (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)self);
+  assert(((Arcadia_Engine_Visuals_Implementation_Resource*)resource)->referenceCount == 0);
   Arcadia_List_insertBackObjectReferenceValue(thread, self->resources, (Arcadia_Object*)resource);
   return resource;
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_BackendContext);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext);
   {
     Arcadia_ValueStack_pushNatural8Value(thread, 0);
     Arcadia_superTypeConstructor(thread, _type, self);
@@ -297,34 +297,34 @@ Arcadia_Visuals_Implementation_OpenGL4_BackendContext_constructImpl
   self->resources = (Arcadia_List*)Arcadia_ArrayList_create(thread);
   Arcadia_Object_lock(thread, (Arcadia_Object*)self->resources);
 
-  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_BackendContext);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext);
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContextDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContextDispatch* self
   )
 {
   self->getFunctions = NULL;
 
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createConstantBufferResource = (Arcadia_Visuals_Implementation_ConstantBufferResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createConstantBufferResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createFrameBufferResource = (Arcadia_Visuals_Implementation_FrameBufferResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createFrameBufferResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createEnterPassResource = (Arcadia_Visuals_Implementation_EnterPassResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createEnterPassResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createMaterialResource = (Arcadia_Visuals_Implementation_MaterialResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*, Arcadia_Visuals_Implementation_MaterialResource_AmbientColorSource, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Visuals_Implementation_ProgramResource*)) & createMaterialResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createMeshResource = (Arcadia_Visuals_Implementation_MeshResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*, Arcadia_Visuals_Implementation_VertexBufferResource*)) & createMeshResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createModelResource = (Arcadia_Visuals_Implementation_ModelResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*, Arcadia_Visuals_Implementation_MeshResource*, Arcadia_Visuals_Implementation_MaterialResource*)) & createModelResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createProgramResource = (Arcadia_Visuals_Implementation_ProgramResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*, Arcadia_VPL_Symbols_Program*)) & createProgramResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createTextureResource = (Arcadia_Visuals_Implementation_TextureResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createTextureResourceImpl;
-  ((Arcadia_Visuals_Implementation_BackendContextDispatch*)self)->createVertexBufferResource = (Arcadia_Visuals_Implementation_VertexBufferResource * (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_BackendContext*)) & createVertexBufferResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createConstantBufferResource = (Arcadia_Engine_Visuals_Implementation_ConstantBufferResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*)) & createConstantBufferResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createFrameBufferResource = (Arcadia_Engine_Visuals_Implementation_FrameBufferResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*)) & createFrameBufferResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createEnterPassResource = (Arcadia_Engine_Visuals_Implementation_EnterPassResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*)) & createEnterPassResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createMaterialResource = (Arcadia_Engine_Visuals_Implementation_MaterialResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*, Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource, Arcadia_Engine_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_Implementation_ProgramResource*)) & createMaterialResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createMeshResource = (Arcadia_Engine_Visuals_Implementation_MeshResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*, Arcadia_Engine_Visuals_Implementation_VertexBufferResource*)) & createMeshResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createModelResource = (Arcadia_Engine_Visuals_Implementation_ModelResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*, Arcadia_Engine_Visuals_Implementation_MeshResource*, Arcadia_Engine_Visuals_Implementation_MaterialResource*)) & createModelResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createProgramResource = (Arcadia_Engine_Visuals_Implementation_ProgramResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*, Arcadia_VPL_Symbols_Program*)) & createProgramResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createTextureResource = (Arcadia_Engine_Visuals_Implementation_TextureResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*)) & createTextureResourceImpl;
+  ((Arcadia_Engine_Visuals_BackendContextDispatch*)self)->createVertexBufferResource = (Arcadia_Engine_Visuals_Implementation_VertexBufferResource * (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_BackendContext*)) & createVertexBufferResourceImpl;
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_destructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {
   // Unlock the list of resources.
@@ -333,17 +333,17 @@ Arcadia_Visuals_Implementation_OpenGL4_BackendContext_destructImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_visitImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
 {/*Intentionally empty.*/}
 
-_Arcadia_Visuals_Implementation_OpenGL4_Functions*
-Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* self
   )
-{ Arcadia_VirtualCallWithReturn(Arcadia_Visuals_Implementation_OpenGL4_BackendContext, getFunctions, self); }
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext, getFunctions, self); }

@@ -25,166 +25,166 @@
 #define PixelsDirty (64)
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResourceDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResourceDispatch* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_destructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_visitImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_loadImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_loadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_unloadImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_unloadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_unlinkImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_unlinkImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_renderImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
-    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource* enterPassResource
   );
 
 static Arcadia_Engine_Visuals_TextureAddressMode
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeUImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeUImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static Arcadia_Engine_Visuals_TextureAddressMode
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeVImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeVImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getHeightImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getHeightImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static Arcadia_Engine_Visuals_TextureFilter
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getMagnificationFilterImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getMagnificationFilterImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static Arcadia_Engine_Visuals_TextureFilter
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getMinificationFilterImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getMinificationFilterImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getWidthImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getWidthImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeUImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeUImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Engine_Visuals_TextureAddressMode addressMode
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeVImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeVImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Engine_Visuals_TextureAddressMode addressMode
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setHeightImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setHeightImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Integer32Value height
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setMagnificationFilterImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setMagnificationFilterImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Engine_Visuals_TextureFilter magnificationFilter
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setMinificationFilterImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setMinificationFilterImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Engine_Visuals_TextureFilter minificationFilter
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setWidthImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setWidthImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Integer32Value width
   );
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setPixelBufferImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setPixelBufferImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Media_PixelBuffer* pixelBuffer
   );
 
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_TextureResource_constructImpl,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_TextureResource_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_TextureResource_visitImpl,
-  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Visuals_Implementation_OpenGL4_TextureResource_initializeDispatchImpl,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_destructImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_visitImpl,
+  .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_initializeDispatchImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -192,18 +192,18 @@ static const Arcadia_Type_Operations _typeOperations = {
   .objectTypeOperations = &_objectTypeOperations,
 };
 
-Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.TextureResource", Arcadia_Visuals_Implementation_OpenGL4_TextureResource,
-                         u8"Arcadia.Visuals.Implementation.TextureResource", Arcadia_Visuals_Implementation_TextureResource,
+Arcadia_defineObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.TextureResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource,
+                         u8"Arcadia.Visuals.Implementation.TextureResource", Arcadia_Engine_Visuals_Implementation_TextureResource,
                          &_typeOperations);
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_constructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_constructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 {
-  Arcadia_EnterConstructor(Arcadia_Visuals_Implementation_OpenGL4_TextureResource);
+  Arcadia_EnterConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource);
   if (1 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
@@ -225,53 +225,53 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_constructImpl
   //
   self->pixelBuffer = Arcadia_Media_PixelBuffer_create(thread, 0, 320, 240, Arcadia_Media_PixelFormat_AlphaRedGreenBlueNatural8);
   //
-  Arcadia_LeaveConstructor(Arcadia_Visuals_Implementation_OpenGL4_TextureResource);
+  Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource);
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_initializeDispatchImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResourceDispatch* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResourceDispatch* self
   )
 {
   //
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->getAddressModeU = (Arcadia_Engine_Visuals_TextureAddressMode(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeUImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->getAddressModeV = (Arcadia_Engine_Visuals_TextureAddressMode(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeVImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->getHeight = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getHeightImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->getMagnificationFilter = (Arcadia_Engine_Visuals_TextureFilter(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getMagnificationFilterImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->getMinificationFilter = (Arcadia_Engine_Visuals_TextureFilter(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getMinificationFilterImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->getWidth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getWidthImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->getAddressModeU = (Arcadia_Engine_Visuals_TextureAddressMode(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeUImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->getAddressModeV = (Arcadia_Engine_Visuals_TextureAddressMode(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeVImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->getHeight = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getHeightImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->getMagnificationFilter = (Arcadia_Engine_Visuals_TextureFilter(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getMagnificationFilterImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->getMinificationFilter = (Arcadia_Engine_Visuals_TextureFilter(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getMinificationFilterImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->getWidth = (Arcadia_Integer32Value(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getWidthImpl;
   //
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->setAddressModeU = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_TextureAddressMode)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeUImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->setAddressModeV = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_TextureAddressMode)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeVImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->setHeight = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Integer32Value)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setHeightImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->setMagnificationFilter = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_TextureFilter)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setMagnificationFilterImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->setMinificationFilter = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_TextureFilter)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setMinificationFilterImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->setWidth = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Integer32Value)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setWidthImpl;
-  ((Arcadia_Visuals_Implementation_TextureResourceDispatch*)self)->setPixelBuffer = (void(*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_TextureResource*, Arcadia_Media_PixelBuffer*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setPixelBufferImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->setAddressModeU = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_TextureAddressMode)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeUImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->setAddressModeV = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_TextureAddressMode)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeVImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->setHeight = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*, Arcadia_Integer32Value)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setHeightImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->setMagnificationFilter = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_TextureFilter)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setMagnificationFilterImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->setMinificationFilter = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*, Arcadia_Engine_Visuals_TextureFilter)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setMinificationFilterImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->setWidth = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*, Arcadia_Integer32Value)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setWidthImpl;
+  ((Arcadia_Engine_Visuals_Implementation_TextureResourceDispatch*)self)->setPixelBuffer = (void(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_TextureResource*, Arcadia_Media_PixelBuffer*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setPixelBufferImpl;
   //
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_loadImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_unloadImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_unlinkImpl;
-  ((Arcadia_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Visuals_Implementation_Resource*, Arcadia_Visuals_Implementation_EnterPassResource*)) & Arcadia_Visuals_Implementation_OpenGL4_TextureResource_renderImpl;
+  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->load = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_loadImpl;
+  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->unload = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_unloadImpl;
+  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->unlink = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_unlinkImpl;
+  ((Arcadia_Engine_Visuals_Implementation_ResourceDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_Resource*, Arcadia_Engine_Visuals_Implementation_EnterPassResource*)) & Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_renderImpl;
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_destructImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_destructImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 {
   assert(0 == self->id);
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_visitImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_visitImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 {
   if (self->pixelBuffer) {
@@ -280,14 +280,14 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_visitImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_loadImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_loadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
   if (!self->id) {
     gl->glGenTextures(1, &self->id);
     if (gl->glGetError()) {
@@ -428,14 +428,14 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_loadImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_unloadImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_unloadImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 {
-  Arcadia_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Visuals_Implementation_Resource*)self)->context;
-  _Arcadia_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* context = (Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext*)((Arcadia_Engine_Visuals_Implementation_Resource*)self)->context;
+  _Arcadia_Engine_Visuals_Implementation_OpenGL4_Functions* gl = Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext_getFunctions(thread, context);
   if (self->id) {
     gl->glDeleteTextures(1, &self->id);
     self->id = 0;
@@ -444,75 +444,75 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_unloadImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_unlinkImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_unlinkImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 { }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_renderImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_renderImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
-    Arcadia_Visuals_Implementation_EnterPassResource* renderingContextNode
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_EnterPassResource* enterPassResource
   )
 { }
 
 static Arcadia_Engine_Visuals_TextureAddressMode
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeUImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeUImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 { return self->addressModeU; }
 
 static Arcadia_Engine_Visuals_TextureAddressMode
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeVImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getAddressModeVImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 { return self->addressModeV; }
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getHeightImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getHeightImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 { return Arcadia_Media_PixelBuffer_getHeight(thread, self->pixelBuffer); }
 
 static Arcadia_Engine_Visuals_TextureFilter
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getMagnificationFilterImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getMagnificationFilterImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 { return self->magnificationFilter; }
 
 static Arcadia_Engine_Visuals_TextureFilter
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getMinificationFilterImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getMinificationFilterImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 { return self->minificationFilter; }
 
 static Arcadia_Integer32Value
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_getWidthImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_getWidthImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self
   )
 { return Arcadia_Media_PixelBuffer_getWidth(thread, self->pixelBuffer); }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeUImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeUImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Engine_Visuals_TextureAddressMode addressModeU
   )
 {
@@ -523,10 +523,10 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeUImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeVImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeVImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Engine_Visuals_TextureAddressMode addressModeV
   )
 {
@@ -537,10 +537,10 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setAddressModeVImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setHeightImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setHeightImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Integer32Value height
   )
 {
@@ -551,10 +551,10 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setHeightImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setMagnificationFilterImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setMagnificationFilterImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Engine_Visuals_TextureFilter magnificationFilter
   )
 {
@@ -565,10 +565,10 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setMagnificationFilterImp
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setMinificationFilterImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setMinificationFilterImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Engine_Visuals_TextureFilter minificationFilter
   )
 {
@@ -579,10 +579,10 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setMinificationFilterImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setWidthImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setWidthImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Integer32Value width
   )
 {
@@ -593,10 +593,10 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setWidthImpl
 }
 
 static void
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setPixelBufferImpl
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_setPixelBufferImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_TextureResource* self,
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* self,
     Arcadia_Media_PixelBuffer* pixelBuffer
   )
 {
@@ -604,15 +604,15 @@ Arcadia_Visuals_Implementation_OpenGL4_TextureResource_setPixelBufferImpl
   Arcadia_Media_PixelBuffer_assign(thread, self->pixelBuffer, pixelBuffer);
 }
 
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource*
-Arcadia_Visuals_Implementation_OpenGL4_TextureResource_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* backendContext
   )
 {
   Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
   if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
   Arcadia_ValueStack_pushNatural8Value(thread, 1);
-  ARCADIA_CREATEOBJECT(Arcadia_Visuals_Implementation_OpenGL4_TextureResource);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource);
 }

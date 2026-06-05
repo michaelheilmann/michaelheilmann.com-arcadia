@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Ring2.Tests.StringTests)
+set(this ${MyProjectName}.Ring2.Tests.StringTests)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Main.c)
+OnSourceFile(${this} Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring2)
+OnModuleDependency(${this} ${MyProjectName}.Ring2 PRIVATE)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring2")
+set_target_properties(${this} PROPERTIES FOLDER "Ring2")

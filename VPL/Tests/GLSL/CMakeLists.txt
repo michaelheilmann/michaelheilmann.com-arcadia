@@ -16,25 +16,21 @@
 cmake_minimum_required(VERSION 3.29)
 
 set(MyTestFolder VPL)
-set(MyTestName ${MyProjectName}.VPL.Tests.GLSL)
+set(this ${MyProjectName}.VPL.Tests.GLSL)
 
-if (NOT TARGET ${MyTestName})
+if (NOT TARGET ${this})
 
-  BeginProduct(${MyTestName} test)
+  BeginProduct(${this} test)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h @ONLY)
-  list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h.i)
-  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/VPL/Tests/GLSL/Configure.h.i)
 
-  OnSourceFile(${MyTestName} Arcadia/VPL/Tests/GLSL/Main.c)
+  OnSourceFile(${this} Arcadia/VPL/Tests/GLSL/Main.c)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.VPL ${MyProjectName}.DDL)
+  OnModuleDependency(${this} ${MyProjectName}.VPL PRIVATE)
+  OnModuleDependency(${this} ${MyProjectName}.DDL PRIVATE)
 
-  EndProduct(${MyTestName})
-  target_include_directories(${MyTestName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
-  set_target_properties(${MyTestName} PROPERTIES FOLDER ${MyTestFolder})
-
-  #CopyProductAssets(${MyTestName}.CopyAssets ${MyTestFolder} ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets)
-  #add_dependencies(${MyTestName} ${MyTestName}.CopyAssets)
+  EndProduct(${this})
+  target_include_directories(${this} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Sources ${CMAKE_CURRENT_BINARY_DIR}/Sources)
+  set_target_properties(${this} PROPERTIES FOLDER ${MyTestFolder})
 
 endif()

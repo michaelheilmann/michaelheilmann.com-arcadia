@@ -13,29 +13,29 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_ENTERPASSRESOURCE_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_ENTERPASSRESOURCE_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_ENTERPASSRESOURCE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_ENTERPASSRESOURCE_H_INCLUDED
 
-#include "Arcadia/Visuals/Implementation/Resources/EnterPassResource.h"
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Visuals_Implementation_OpenGL4_BackendContext;
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource;
+#include "Arcadia/Engine/Include.h"
+typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext;
+typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource;
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.EnterPassResource", Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.EnterPassResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource,
                           u8"Arcadia.Visuals.Implementation.EnterPassResource");
 
-struct Arcadia_Visuals_Implementation_OpenGL4_EnterPassResourceDispatch {
-  Arcadia_Visuals_Implementation_EnterPassResourceDispatch _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResourceDispatch {
+  Arcadia_Engine_Visuals_Implementation_EnterPassResourceDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource {
-  Arcadia_Visuals_Implementation_EnterPassResource _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource {
+  Arcadia_Engine_Visuals_Implementation_EnterPassResource _parent;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource*
-Arcadia_Visuals_Implementation_OpenGL4_EnterPassResource_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_EnterPassResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* backendContext
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_ENTERPASSRESOURCE_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_ENTERPASSRESOURCE_H_INCLUDED

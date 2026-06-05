@@ -15,33 +15,32 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyExecutableName ${MyProjectName}.Tools.GenerateRyuLookupTables)
+set(this ${MyProjectName}.Tools.GenerateRyuLookupTables)
 
-if (NOT TARGET ${MyExecutableName})
+if (NOT TARGET ${this})
 
-  BeginProduct(${MyExecutableName} executable)
+  BeginProduct(${this} executable)
 
-  set(${MyExecutableName}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
+  set(${this}.Windows.ResourceFile ${CMAKE_CURRENT_SOURCE_DIR}/Resources.rc)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h @ONLY)
-  list(APPEND ${MyExecutableName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h.i)
-  OnConfigurationFile(${MyExecutableName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.GenerateRyuLookupTables/Configure.h.i)
 
-  OnSourceFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/Main.c)
+  OnSourceFile(${this} Arcadia.Tools.GenerateRyuLookupTables/Main.c)
 
-  OnSourceFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.c)
-  OnHeaderFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.h)
-  OnSourceFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.c)
-  OnHeaderFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.h)
-  OnSourceFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/Common.c)
-  OnHeaderFile(${MyExecutableName} Arcadia.Tools.GenerateRyuLookupTables/Common.h)
+  OnSourceFile(${this} Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.c)
+  OnHeaderFile(${this} Arcadia.Tools.GenerateRyuLookupTables/generateReal64Table.h)
+  OnSourceFile(${this} Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.c)
+  OnHeaderFile(${this} Arcadia.Tools.GenerateRyuLookupTables/generateReal32Table.h)
+  OnSourceFile(${this} Arcadia.Tools.GenerateRyuLookupTables/Common.c)
+  OnHeaderFile(${this} Arcadia.Tools.GenerateRyuLookupTables/Common.h)
 
-  list(APPEND ${MyExecutableName}.PrivateLibraries ${MyProjectName}.Ring2 ${MyProjectName}.Ring1)
+  OnModuleDependency(${this} ${MyProjectName}.Ring2 PRIVATE)
+  OnModuleDependency(${this} ${MyProjectName}.Ring1 PRIVATE)
 
-  EndProduct(${MyExecutableName})
+  EndProduct(${this})
 
-  set_target_properties(${MyExecutableName} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"\"\"${CMAKE_CURRENT_BINARY_DIR}\"\"\"")
+  set_target_properties(${this} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--target=\"\"\"${CMAKE_CURRENT_BINARY_DIR}\"\"\"")
 
-  set_target_properties(${MyExecutableName} PROPERTIES FOLDER "Tools")
+  set_target_properties(${this} PROPERTIES FOLDER "Tools")
 
 endif()

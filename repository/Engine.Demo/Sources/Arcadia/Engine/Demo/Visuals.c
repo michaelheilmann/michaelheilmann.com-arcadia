@@ -147,9 +147,9 @@ Arcadia_Engine_Application_startupVisuals
   Arcadia_String* windowMode = NULL;
   Arcadia_Engine_Visuals_Window* window = NULL;
   // (1.1) Register visuals backends.
-  Arcadia_Visuals_Implementation_registerBackends(thread, engine->visualsBackendTypes);
+  Arcadia_Engine_Visuals_Implementation_registerBackends(thread, engine->visualsBackendTypes);
   // (1.2) Register the visuals node factory.
-  Arcadia_Visuals_Implementation_registerNodeFactories(thread, engine->visualsNodeFactoryTypes);
+  Arcadia_Engine_Visuals_registerNodeFactories(thread, engine->visualsNodeFactoryTypes);
   // (2) Select visuals system.
   {
     char const* path[] = {

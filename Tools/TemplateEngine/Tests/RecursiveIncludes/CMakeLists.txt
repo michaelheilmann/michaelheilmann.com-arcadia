@@ -15,26 +15,24 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Tools.TemplateEngine.Tests.RecursiveIncludes)
+set(this ${MyProjectName}.Tools.TemplateEngine.Tests.RecursiveIncludes)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
 # Configuration files.
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.RecursiveIncludes/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.RecursiveIncludes/Configure.h @ONLY)
-list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.RecursiveIncludes/Configure.h.i)
-OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.RecursiveIncludes/Configure.h)
+OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.RecursiveIncludes/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Tools.TemplateEngine.Tests.RecursiveIncludes/Configure.h.i)
 
 # Source and header files.
-OnSourceFile(${MyTestName} Arcadia.Tools.TemplateEngine.Tests.RecursiveIncludes/Main.c)
+OnSourceFile(${this} Arcadia.Tools.TemplateEngine.Tests.RecursiveIncludes/Main.c)
 
-# Libraries.
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Tools.TemplateEngine.Library)
+# Module dependencies.
+OnModuleDependency(${this} ${MyProjectName}.Tools.TemplateEngine.Library PRIVATE)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 # Copy assets.
-add_custom_command(TARGET ${MyTestName} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${${MyTestName}.WorkingDirectory})
+add_custom_command(TARGET ${this} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${${this}.WorkingDirectory})
 # Adjust working directory.
-set(${MyTestName}.WorkingDirectory $<TARGET_FILE_DIR:${MyTestName}>)
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Tools/TemplateEngine")
+set(${this}.WorkingDirectory $<TARGET_FILE_DIR:${this}>)
+set_target_properties(${this} PROPERTIES FOLDER "Tools/TemplateEngine")

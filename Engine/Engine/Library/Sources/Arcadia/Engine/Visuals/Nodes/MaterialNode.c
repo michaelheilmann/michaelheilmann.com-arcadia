@@ -24,6 +24,13 @@ Arcadia_Engine_Visuals_MaterialNode_constructImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_MaterialNode* self
   );
+  
+static void
+Arcadia_Engine_Visuals_MaterialNode_destructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_MaterialNode* self
+  );
 
 static void
 Arcadia_Engine_Visuals_MaterialNode_initializeDispatchImpl
@@ -33,25 +40,34 @@ Arcadia_Engine_Visuals_MaterialNode_initializeDispatchImpl
   );
 
 static void
-Arcadia_Engine_Visuals_MaterialNode_destructImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_MaterialNode* self
-  );
-
-static void
 Arcadia_Engine_Visuals_MaterialNode_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_MaterialNode* self
   );
 
+static void
+Arcadia_Engine_Visuals_MaterialNode_renderImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_MaterialNode* self,
+    Arcadia_Engine_Visuals_EnterPassNode* enterPassNode
+  );
+
+static void
+Arcadia_Engine_Visuals_MaterialNode_setVisualsBackendContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_MaterialNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_MaterialNode_constructImpl,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_MaterialNode_destructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_MaterialNode_visitImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_MaterialNode_initializeDispatchImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_MaterialNode_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -71,7 +87,7 @@ Arcadia_Engine_Visuals_MaterialNode_constructImpl
   )
 {
   Arcadia_EnterConstructor(Arcadia_Engine_Visuals_MaterialNode);
-  if (1 != _numberOfArguments) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -99,7 +115,33 @@ Arcadia_Engine_Visuals_MaterialNode_constructImpl
   Arcadia_Engine* engine = Arcadia_Engine_getOrCreate(thread);
   self->ambientColorTexture = Arcadia_Engine_Visuals_NodeFactory_createTextureNode(thread, (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory, NULL,
                                                                                    (Arcadia_ADL_TextureDefinition*)self->source->ambientColorTexture->definition);
+  //
+  if (Arcadia_ValueStack_isVoidValue(thread, 2)) {
+    self->backendContext = NULL;
+  } else {
+    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Engine_Visuals_BackendContext_getType(thread));
+    Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
+  }
+  self->materialResource = NULL;
+  //
   Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_MaterialNode);
+}
+
+static void
+Arcadia_Engine_Visuals_MaterialNode_destructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_MaterialNode* self
+  )
+{
+  if (self->backendContext) {
+    if (self->materialResource) {
+      Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->materialResource);
+      self->materialResource = NULL;
+    }
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+    self->backendContext = NULL;
+  }
 }
 
 static void
@@ -108,15 +150,10 @@ Arcadia_Engine_Visuals_MaterialNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_MaterialNodeDispatch* self
   )
-{/*Intentionally empty.*/}
-
-static void
-Arcadia_Engine_Visuals_MaterialNode_destructImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_MaterialNode* self
-  )
-{/*Intentionally empty.*/}
+{
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_MaterialNode_renderImpl;
+  ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_MaterialNode_setVisualsBackendContextImpl;  
+}
 
 static void
 Arcadia_Engine_Visuals_MaterialNode_visitImpl
@@ -134,4 +171,91 @@ Arcadia_Engine_Visuals_MaterialNode_visitImpl
   if (self->program) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->program);
   }
+}
+
+static void
+Arcadia_Engine_Visuals_MaterialNode_renderImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_MaterialNode* self,
+    Arcadia_Engine_Visuals_EnterPassNode* enterPassNode
+  )
+{
+  Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)enterPassNode->backendContext);
+  Arcadia_Engine_Visuals_Node_render(thread, (Arcadia_Engine_Visuals_Node*)((Arcadia_Engine_Visuals_MaterialNode*)self)->ambientColorTexture, (Arcadia_Engine_Visuals_EnterPassNode*)enterPassNode);
+  if (self->backendContext) {
+    if (!self->materialResource) {
+      Arcadia_Engine_Visuals_BackendContext* backendContext = self->backendContext;
+      //
+      Arcadia_Engine_Visuals_Implementation_ProgramResource* programResource =
+        Arcadia_Engine_Visuals_BackendContext_createProgramResource(thread, backendContext,
+                                                                            ((Arcadia_Engine_Visuals_MaterialNode*)self)->program);
+      //
+      Arcadia_Engine_Visuals_Implementation_TextureResource* textureResource =
+        ((Arcadia_Engine_Visuals_TextureNode*)((Arcadia_Engine_Visuals_MaterialNode*)self)->ambientColorTexture)->textureResource;
+
+      Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource = Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource_Mesh;
+      switch (((Arcadia_Engine_Visuals_MaterialNode*)self)->source->ambientColorSource) {
+        case Arcadia_ADL_AmbientColorSource_Mesh: {
+          ambientColorSource = Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource_Mesh;
+        } break;
+        case Arcadia_ADL_AmbientColorSource_Vertex: {
+          ambientColorSource = Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource_Vertex;
+        } break;
+        case Arcadia_ADL_AmbientColorSource_Texture: {
+          ambientColorSource = Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource_Texture;
+        } break;
+        default: {
+          Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+          Arcadia_Thread_jump(thread);
+        } break;
+      };
+
+      self->materialResource = Arcadia_Engine_Visuals_BackendContext_createMaterialResource(thread, (Arcadia_Engine_Visuals_BackendContext*)backendContext, ambientColorSource, textureResource, programResource);
+      Arcadia_Engine_Visuals_Implementation_Resource_ref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->materialResource);
+    }
+  }
+}
+
+static void
+Arcadia_Engine_Visuals_MaterialNode_setVisualsBackendContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_MaterialNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{
+  if (((Arcadia_Engine_Visuals_MaterialNode*)self)->ambientColorTexture) {
+    Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)((Arcadia_Engine_Visuals_MaterialNode*)self)->ambientColorTexture, (Arcadia_Engine_Visuals_BackendContext*)backendContext);
+  }
+  if (backendContext == self->backendContext) {
+    // Only change something if the backend context changes.
+    return;
+  }
+  if (backendContext) {
+    Arcadia_Object_lock(thread, (Arcadia_Object*)backendContext);
+  }
+  if (self->backendContext) {
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+  }
+  if (self->materialResource) {
+    Arcadia_Engine_Visuals_Implementation_Resource_unref(thread, (Arcadia_Engine_Visuals_Implementation_Resource*)self->materialResource);
+    self->materialResource = NULL;
+  }
+  self->backendContext = backendContext;
+}
+
+Arcadia_Engine_Visuals_MaterialNode*
+Arcadia_Engine_Visuals_MaterialNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MaterialDefinition* source
+  )
+{
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  if (source) Arcadia_ValueStack_pushObjectReferenceValue(thread, source); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_MaterialNode);
 }

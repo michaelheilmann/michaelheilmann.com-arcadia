@@ -117,3 +117,82 @@ Arcadia_Engine_Visuals_BackendContext_getDisplayDevices
     Arcadia_Engine_Visuals_BackendContext* self
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, getDisplayDevices, self); }
+
+Arcadia_Engine_Visuals_Implementation_ConstantBufferResource*
+Arcadia_Engine_Visuals_BackendContext_createConstantBufferResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createConstantBufferResource, self); }
+
+Arcadia_Engine_Visuals_Implementation_FrameBufferResource*
+Arcadia_Engine_Visuals_BackendContext_createFrameBufferResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createFrameBufferResource, self); }
+
+Arcadia_Engine_Visuals_Implementation_EnterPassResource*
+Arcadia_Engine_Visuals_BackendContext_createEnterPassResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createEnterPassResource, self); }
+
+Arcadia_Engine_Visuals_Implementation_MaterialResource*
+Arcadia_Engine_Visuals_BackendContext_createMaterialResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
+    Arcadia_Engine_Visuals_Implementation_TextureResource* ambientTexture,
+    Arcadia_Engine_Visuals_Implementation_ProgramResource* program
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createMaterialResource, self, ambientColorSource, ambientTexture, program); }
+
+Arcadia_Engine_Visuals_Implementation_MeshResource*
+Arcadia_Engine_Visuals_BackendContext_createMeshResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_VertexBufferResource* vertexBuffer
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createMeshResource, self, vertexBuffer); }
+
+Arcadia_Engine_Visuals_Implementation_ModelResource*
+Arcadia_Engine_Visuals_BackendContext_createModelResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_MeshResource* mesh,
+    Arcadia_Engine_Visuals_Implementation_MaterialResource* material
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createModelResource, self, mesh, material); }
+
+Arcadia_Engine_Visuals_Implementation_ProgramResource*
+Arcadia_Engine_Visuals_BackendContext_createProgramResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_VPL_Symbols_Program* program
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createProgramResource, self, program); }
+
+Arcadia_Engine_Visuals_Implementation_TextureResource*
+Arcadia_Engine_Visuals_BackendContext_createTextureResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createTextureResource, self); }
+
+Arcadia_Engine_Visuals_Implementation_VertexBufferResource*
+Arcadia_Engine_Visuals_BackendContext_createVertexBufferResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  )
+{ Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_BackendContext, createVertexBufferResource, self); }

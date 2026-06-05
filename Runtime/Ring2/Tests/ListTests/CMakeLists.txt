@@ -15,17 +15,17 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Ring2.Tests.ListTests)
+set(this ${MyProjectName}.Ring2.Tests.ListTests)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Main.c)
-OnSourceFile(${MyTestName} Arcadia.Ring2.Tests.ListTests/removeAt.c)
-OnHeaderFile(${MyTestName} Arcadia.Ring2.Tests.ListTests/removeAt.h)
+OnSourceFile(${this} Main.c)
+OnSourceFile(${this} Arcadia.Ring2.Tests.ListTests/removeAt.c)
+OnHeaderFile(${this} Arcadia.Ring2.Tests.ListTests/removeAt.h)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring2)
+OnModuleDependency(${this} ${MyProjectName}.Ring2 PRIVATE)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring2")
+set_target_properties(${this} PROPERTIES FOLDER "Ring2")

@@ -16,8 +16,17 @@
 #define ARCADIA_ENGINE_PRIVATE (1)
 #include "Arcadia/Engine/Visuals/Nodes/PixelBufferNode.h"
 
+#include "Arcadia/Engine/Include.h"
+
 static void
 Arcadia_Engine_Visuals_PixelBufferNode_constructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_PixelBufferNode* self
+  );
+
+static void
+Arcadia_Engine_Visuals_PixelBufferNode_destructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_PixelBufferNode* self
@@ -37,6 +46,22 @@ Arcadia_Engine_Visuals_PixelBufferNode_visitImpl
     Arcadia_Engine_Visuals_PixelBufferNode* self
   );
 
+static void
+Arcadia_Engine_Visuals_PixelBufferNode_renderImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_PixelBufferNode* self,
+    Arcadia_Engine_Visuals_EnterPassNode* enterPassNode
+  );
+
+static void
+Arcadia_Engine_Visuals_PixelBufferNode_setVisualsBackendContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_PixelBufferNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
+
 static Arcadia_Media_PixelBuffer*
 makePixelBuffer
   (
@@ -47,8 +72,9 @@ makePixelBuffer
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_PixelBufferNode_constructImpl,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_PixelBufferNode_visitImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)Arcadia_Engine_Visuals_PixelBufferNode_destructImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_PixelBufferNode_initializeDispatchImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_PixelBufferNode_visitImpl,
 };
 
 static const Arcadia_Type_Operations _typeOperations = {
@@ -68,7 +94,7 @@ Arcadia_Engine_Visuals_PixelBufferNode_constructImpl
   )
 {
   Arcadia_EnterConstructor(Arcadia_Engine_Visuals_PixelBufferNode);
-  if (1 != _numberOfArguments) {
+  if (2 != _numberOfArguments) {
     Arcadia_Thread_setStatus(thread, Arcadia_Status_NumberOfArgumentsInvalid);
     Arcadia_Thread_jump(thread);
   }
@@ -82,7 +108,27 @@ Arcadia_Engine_Visuals_PixelBufferNode_constructImpl
   //
   self->pixelBuffer = makePixelBuffer(thread, (Arcadia_ADL_PixelBufferDefinition*)self->source);
   //
+  if (Arcadia_ValueStack_isVoidValue(thread, 2)) {
+    self->backendContext = NULL;
+  } else {
+    self->backendContext = Arcadia_ValueStack_getObjectReferenceValueChecked(thread, 2, _Arcadia_Engine_Visuals_BackendContext_getType(thread));
+    Arcadia_Object_lock(thread, (Arcadia_Object*)self->backendContext);
+  }
+  //
   Arcadia_LeaveConstructor(Arcadia_Engine_Visuals_PixelBufferNode);
+}
+
+static void
+Arcadia_Engine_Visuals_PixelBufferNode_destructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_PixelBufferNode* self
+  )
+{
+  if (self->backendContext) {
+    Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+    self->backendContext = NULL;
+  }
 }
 
 static void
@@ -91,7 +137,10 @@ Arcadia_Engine_Visuals_PixelBufferNode_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_PixelBufferNodeDispatch* self
   )
-{/*Intentionally empty.*/}
+{
+  ((Arcadia_Engine_Visuals_NodeDispatch*)self)->render = (void (*)(Arcadia_Thread*, Arcadia_Engine_Visuals_Node*, Arcadia_Engine_Visuals_EnterPassNode*)) & Arcadia_Engine_Visuals_PixelBufferNode_renderImpl;
+  ((Arcadia_Engine_NodeDispatch*)self)->setVisualsBackendContext = (void (*)(Arcadia_Thread*, Arcadia_Engine_Node*, Arcadia_Engine_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_PixelBufferNode_setVisualsBackendContextImpl;
+}
 
 static void
 Arcadia_Engine_Visuals_PixelBufferNode_visitImpl
@@ -136,4 +185,50 @@ makePixelBuffer
   }
 
   return target;
+}
+
+static void
+Arcadia_Engine_Visuals_PixelBufferNode_renderImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_PixelBufferNode* self,
+    Arcadia_Engine_Visuals_EnterPassNode* enterPassNode
+  )
+{
+  Arcadia_Engine_Node_setVisualsBackendContext(thread, (Arcadia_Engine_Node*)self, (Arcadia_Engine_Visuals_BackendContext*)enterPassNode->backendContext);
+}
+
+static void
+Arcadia_Engine_Visuals_PixelBufferNode_setVisualsBackendContextImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_PixelBufferNode* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{
+  Arcadia_BooleanValue backendContextChanged = backendContext != self->backendContext;
+  if (backendContextChanged) {
+    if (backendContext) {
+      Arcadia_Object_lock(thread, (Arcadia_Object*)backendContext);
+    }
+    if (self->backendContext) {
+      Arcadia_Object_unlock(thread, (Arcadia_Object*)self->backendContext);
+    }
+    self->backendContext = backendContext;
+  }
+}
+
+Arcadia_Engine_Visuals_PixelBufferNode*
+Arcadia_Engine_Visuals_PixelBufferNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_PixelBufferDefinition* source
+  )
+{
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  if (backendContext) Arcadia_ValueStack_pushObjectReferenceValue(thread, backendContext); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  if (source) Arcadia_ValueStack_pushObjectReferenceValue(thread, source); else Arcadia_ValueStack_pushVoidValue(thread, Arcadia_VoidValue_Void);
+  Arcadia_ValueStack_pushNatural8Value(thread, 2);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_PixelBufferNode);
 }

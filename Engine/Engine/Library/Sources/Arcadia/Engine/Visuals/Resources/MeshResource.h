@@ -1,0 +1,50 @@
+// The author of this software is Michael Heilmann (contact@michaelheilmann.com).
+//
+// Copyright(c) 2024-2026 Michael Heilmann (contact@michaelheilmann.com).
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose without fee is hereby granted, provided that this entire notice
+// is included in all copies of any software which is or includes a copy
+// or modification of this software and in all copies of the supporting
+// documentation for such software.
+//
+// THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+// WARRANTY.IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
+// REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+// OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+
+#if !defined(ARCADIA_ENGINE_VISUALS_RESOURCES_MESHRESOURCE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_RESOURCES_MESHRESOURCE_H_INCLUDED
+
+#include "Arcadia/Engine/Visuals/Resource.h"
+#include "Arcadia/Math/Include.h"
+
+#define Arcadia_Engine_Visuals_Implementation_MeshResource_MeshAmbientColorDirty (2)
+#define Arcadia_Engine_Visuals_Implementation_MeshResource_VerticesDirty (4)
+
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.MeshResource", Arcadia_Engine_Visuals_Implementation_MeshResource,
+                          u8"Arcadia.Visuals.Implementation.Resource");
+
+struct Arcadia_Engine_Visuals_Implementation_MeshResourceDispatch {
+  Arcadia_Engine_Visuals_Implementation_ResourceDispatch _parent;
+
+  void (*setMeshAmbientColor)(Arcadia_Thread*, Arcadia_Engine_Visuals_Implementation_MeshResource*, Arcadia_Math_Color4Real32*);
+};
+
+struct Arcadia_Engine_Visuals_Implementation_MeshResource {
+  Arcadia_Engine_Visuals_Implementation_Resource _parent;
+  // The dirty flags.
+  Arcadia_Natural8Value dirty;
+  // The mesh-wide ambient color of the mesh.
+  Arcadia_Math_Color4Real32* meshAmbientColor;
+};
+
+void
+Arcadia_Engine_Visuals_Implementation_MeshResource_setMeshAmbientColor
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_Implementation_MeshResource* self,
+    Arcadia_Math_Color4Real32* meshAmbientColor
+  );
+
+#endif // ARCADIA_ENGINE_VISUALS_RESOURCES_MESHRESOURCE_H_INCLUDED

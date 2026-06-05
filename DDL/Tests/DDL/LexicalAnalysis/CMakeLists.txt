@@ -16,21 +16,18 @@
 cmake_minimum_required(VERSION 3.29)
 
 set(MyTestFolder DDL)
-set(MyTestName ${MyProjectName}.DDL.Tests.LexicalAnalysis)
+set(this ${MyProjectName}.DDL.Tests.LexicalAnalysis)
 
-if (NOT TARGET ${MyTestName})
+if (NOT TARGET ${this})
 
-  BeginProduct(${MyTestName} test)
+  BeginProduct(${this} test)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDL/Tests/LexicalAnalysis/Configure.h.i
-                 ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDL/Tests/LexicalAnalysis/Configure.h @ONLY)
-  list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDL/Tests/LexicalAnalysis/Configure.h.i)
-  OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDL/Tests/LexicalAnalysis/Configure.h)
+  OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia/DDL/Tests/LexicalAnalysis/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia/DDL/Tests/LexicalAnalysis/Configure.h.i)
 
-  OnSourceFile(${MyTestName} Arcadia/DDL/Tests/LexicalAnalysis/Main.c)
+  OnSourceFile(${this} Arcadia/DDL/Tests/LexicalAnalysis/Main.c)
 
-  list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.DDL)
+  OnModuleDependency(${this} ${MyProjectName}.DDL PRIVATE)
 
-  EndProduct(${MyTestName})
-  set_target_properties(${MyTestName} PROPERTIES FOLDER ${MyTestFolder})
+  EndProduct(${this})
+  set_target_properties(${this} PROPERTIES FOLDER ${MyTestFolder})
 endif()

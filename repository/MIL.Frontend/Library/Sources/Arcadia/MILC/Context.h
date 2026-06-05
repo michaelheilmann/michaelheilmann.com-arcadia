@@ -20,6 +20,8 @@
 typedef struct Arcadia_MILC_Scanner Arcadia_MILC_Scanner;
 typedef struct Arcadia_MILC_Parser Arcadia_MILC_Parser;
 typedef struct Arcadia_MILC_EnterPhase Arcadia_MILC_EnterPhase;
+typedef struct Arcadia_MILC_MemberEnterPhase Arcadia_MILC_MemberEnterPhase;
+typedef struct Arcadia_MILC_Completer Arcadia_MILC_Completer;
 
 Arcadia_declareObjectType(u8"Arcadia.MILC.Context", Arcadia_MILC_Context,
                           Arcadia_Object);
@@ -35,13 +37,20 @@ struct Arcadia_MILC_Context {
   Arcadia_Languages_Diagnostics* diagnostics;
   Arcadia_MILC_Scanner* scanner;
   Arcadia_MILC_Parser* parser;
+  /// @brief Phase 1: Enter top level symbols.
   Arcadia_MILC_EnterPhase* enterPhase;
+  /// @brief Phase 2: Enter member symbols.
+  Arcadia_MILC_MemberEnterPhase* memberEnterPhase;
   /// @brief The working directory.
   Arcadia_FilePath* workingDirectoryPath;
   /// @brief The list of module nodes (objects of Arcadia.MILC.AST.ModuleNode or derived type).
   Arcadia_List* moduleNodes;
   /// @brief The root scope.
   Arcadia_Languages_Scope* scope;
+  /// The completer for classes.
+  Arcadia_MILC_Completer* classCompleter;
+  /// The completer for enumerations.
+  Arcadia_MILC_Completer* enumerationCompleter;
 };
 
 Arcadia_MILC_Context*

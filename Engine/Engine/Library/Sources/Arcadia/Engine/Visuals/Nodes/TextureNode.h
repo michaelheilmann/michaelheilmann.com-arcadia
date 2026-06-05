@@ -72,9 +72,25 @@ struct Arcadia_Engine_Visuals_TextureNode {
   // @default 320.
   Arcadia_Integer32Value width;
 
-  // Bitmask indicating what aspects of the texture are dirty.
+  // Bitmask of the dirty properties, that is, properties which were not uploaded.
   Arcadia_Natural8Value dirtyBits;
+  // The backend context.
+  Arcadia_Engine_Visuals_BackendContext* backendContext;
+  // The texture resource.
+  Arcadia_Engine_Visuals_Implementation_TextureResource* textureResource;
 };
+
+/// @brief Create a texture node.
+/// @param thread A pointer to this thread.
+/// @param backendContext A pointer to the backend context or a null pointer.
+/// @return A pointer to the texture node.
+Arcadia_Engine_Visuals_TextureNode*
+Arcadia_Engine_Visuals_TextureNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_TextureDefinition* source
+  );
 
 /* Get the address mode of this texture for the u axis. */
 Arcadia_Engine_Visuals_TextureAddressMode

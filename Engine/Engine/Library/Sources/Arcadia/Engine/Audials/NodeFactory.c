@@ -17,7 +17,14 @@
 #include "Arcadia/Engine/Audials/NodeFactory.h"
 
 static void
-Arcadia_Engine_Audials_NodeFactory_construct
+Arcadia_Engine_Audials_NodeFactory_constructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_NodeFactory* self
+  );
+
+static void
+Arcadia_Engine_Audials_NodeFactory_destructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_NodeFactory* self
@@ -31,25 +38,27 @@ Arcadia_Engine_Audials_NodeFactory_initializeDispatchImpl
   );
 
 static void
-Arcadia_Engine_Audials_NodeFactory_destruct
+Arcadia_Engine_Audials_NodeFactory_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_NodeFactory* self
   );
 
-static void
-Arcadia_Engine_Audials_NodeFactory_visit
+static Arcadia_Engine_Audials_SoundSourceNode*
+Arcadia_Engine_Audials_NodeFactory_createSoundSourceNodeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Audials_NodeFactory* self
+    Arcadia_Engine_Audials_NodeFactory* self,
+    Arcadia_Engine_Audials_BackendContext* backendContext,
+    Arcadia_ADL_SampleBufferDefinition* source
   );
 
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_Audials_NodeFactory_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
-  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_NodeFactory_construct,
-  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Audials_NodeFactory_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Audials_NodeFactory_visit,
+  .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Audials_NodeFactory_constructImpl,
+  .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Audials_NodeFactory_destructImpl,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Audials_NodeFactory_initializeDispatchImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Audials_NodeFactory_visitImpl,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Engine_Audials_NodeFactory_typeOperations = {
@@ -62,7 +71,7 @@ Arcadia_defineObjectType(u8"Arcadia.Engine.Audials.NodeFactory", Arcadia_Engine_
                          &_Arcadia_Engine_Audials_NodeFactory_typeOperations);
 
 static void
-Arcadia_Engine_Audials_NodeFactory_construct
+Arcadia_Engine_Audials_NodeFactory_constructImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_NodeFactory* self
@@ -81,28 +90,51 @@ Arcadia_Engine_Audials_NodeFactory_construct
 }
 
 static void
+Arcadia_Engine_Audials_NodeFactory_destructImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Audials_NodeFactory* self
+  )
+{/*Intentionally empty.*/}
+
+static void
 Arcadia_Engine_Audials_NodeFactory_initializeDispatchImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_NodeFactoryDispatch* self
   )
-{/*Intentionally empty.*/}
+{
+  ((Arcadia_Engine_Audials_NodeFactoryDispatch*)self)->createSoundSourceNode = (Arcadia_Engine_Audials_SoundSourceNode * (*)(Arcadia_Thread*, Arcadia_Engine_Audials_NodeFactory*, Arcadia_Engine_Audials_BackendContext*, Arcadia_ADL_SampleBufferDefinition*)) & Arcadia_Engine_Audials_NodeFactory_createSoundSourceNodeImpl;
+}
 
 static void
-Arcadia_Engine_Audials_NodeFactory_destruct
+Arcadia_Engine_Audials_NodeFactory_visitImpl
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Audials_NodeFactory* self
   )
 {/*Intentionally empty.*/}
 
-static void
-Arcadia_Engine_Audials_NodeFactory_visit
+static Arcadia_Engine_Audials_SoundSourceNode*
+Arcadia_Engine_Audials_NodeFactory_createSoundSourceNodeImpl
   (
     Arcadia_Thread* thread,
-    Arcadia_Engine_Audials_NodeFactory* self
+    Arcadia_Engine_Audials_NodeFactory* self,
+    Arcadia_Engine_Audials_BackendContext* backendContext,
+    Arcadia_ADL_SampleBufferDefinition* source
   )
-{/*Intentionally empty.*/}
+{ return Arcadia_Engine_Audials_SoundSourceNode_create(thread, backendContext, source); }
+
+Arcadia_Engine_Audials_NodeFactory*
+Arcadia_Engine_Audials_NodeFactory_create
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Audials_NodeFactory);
+}
 
 Arcadia_Engine_Audials_SoundSourceNode*
 Arcadia_Engine_Audials_NodeFactory_createSoundSourceNode

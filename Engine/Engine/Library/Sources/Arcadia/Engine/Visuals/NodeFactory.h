@@ -47,7 +47,7 @@ struct Arcadia_Engine_Visuals_NodeFactoryDispatch {
       Arcadia_Visuals_BackendContext* backendContext
     );
 
-  Arcadia_Visuals_FrameBufferNode*
+  Arcadia_Engine_Visuals_FrameBufferNode*
   (*createFrameBufferNode)
     (
       Arcadia_Thread* thread,
@@ -122,6 +122,12 @@ struct Arcadia_Engine_Visuals_NodeFactory {
   Arcadia_Engine_NodeFactory parent;
 };
 
+Arcadia_Engine_Visuals_NodeFactory*
+Arcadia_Engine_Visuals_NodeFactory_create
+  (
+    Arcadia_Thread* thread
+  );
+
 Arcadia_Engine_Visuals_CameraNode*
 Arcadia_Engine_Visuals_NodeFactory_createCameraNode
   (
@@ -130,7 +136,7 @@ Arcadia_Engine_Visuals_NodeFactory_createCameraNode
     Arcadia_Visuals_BackendContext* backendContext
   );
 
-Arcadia_Visuals_FrameBufferNode*
+Arcadia_Engine_Visuals_FrameBufferNode*
 Arcadia_Engine_Visuals_NodeFactory_createFrameBufferNode
   (
     Arcadia_Thread* thread,

@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.SampleBufferIO.Tests.WriteFLACTests)
+set(this ${MyProjectName}.SampleBufferIO.Tests.WriteFLACTests)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Arcadia.SampleBufferIO.Tests.WriteFLACTests/Main.c)
+OnSourceFile(${this} Arcadia.SampleBufferIO.Tests.WriteFLACTests/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.SampleBufferIO)
+OnModuleDependency(${this} ${MyProjectName}.SampleBufferIO PRIVATE)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "SampleBufferIO")
+set_target_properties(${this} PROPERTIES FOLDER "SampleBufferIO")

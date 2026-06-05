@@ -44,6 +44,14 @@ Arcadia_MILC_ClassCompleter_destruct
     Arcadia_MILC_ClassCompleter* self
   );
 
+static void
+completeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_ClassCompleter* self,
+    Arcadia_MILC_Symbol* symbol
+  );
+
 static const Arcadia_ObjectType_Operations _objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_MILC_ClassCompleter_constructImpl,
@@ -86,7 +94,9 @@ Arcadia_MILC_ClassCompleter_initializeDispatchImpl
     Arcadia_Thread* thread,
     Arcadia_MILC_ClassCompleterDispatch* self
   )
-{/*Intentionally empty.*/}
+{
+  ((Arcadia_MILC_CompleterDispatch*)self)->complete = (void (*)(Arcadia_Thread*, Arcadia_MILC_Completer*, Arcadia_MILC_Symbol*)) & completeImpl;
+}
 
 static void
 Arcadia_MILC_ClassCompleter_visit
@@ -103,3 +113,23 @@ Arcadia_MILC_ClassCompleter_destruct
     Arcadia_MILC_ClassCompleter* self
   )
 {/*Intentionally empty.*/}
+
+static void
+completeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_MILC_ClassCompleter* self,
+    Arcadia_MILC_Symbol* symbol
+  )
+{ }
+
+Arcadia_MILC_ClassCompleter*
+Arcadia_MILC_ClassCompleter_create
+  (
+    Arcadia_Thread* thread
+  )
+{ 
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_MILC_ClassCompleter);
+}

@@ -20,5 +20,14 @@
 #include "Arcadia/Engine/Audials/BackendContext.h"
 #include "Arcadia/Engine/Audials/Node.h"
 #include "Arcadia/Engine/Audials/NodeFactory.h"
+#include "Arcadia/Engine/Audials/Resource.h"
+#include "Arcadia/Engine/Audials/Resources/SoundSourceResource.h"
+
+void
+Arcadia_Engine_Audials_registerNodeFactories
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Set* types
+  );
 
 #endif // ARCADIA_ENGINE_AUDIALS_INCLUDE2_H_INCLUDED

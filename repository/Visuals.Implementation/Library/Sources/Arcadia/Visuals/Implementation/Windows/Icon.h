@@ -13,8 +13,8 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_WINDOWS_ICON_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_WINDOWS_ICON_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_WINDOWS_ICON_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_WINDOWS_ICON_H_INCLUDED
 
 #include "Arcadia/Engine/Include.h"
 
@@ -33,23 +33,23 @@
 ///   construct(width:Integer32, height:Integer32, red:Natural8, green:Natural8, blue:Natural8, alpha:Natural8)
 /// }
 /// @endcode
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Windows.Icon", Arcadia_Visuals_Implementation_Windows_Icon,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.Windows.Icon", Arcadia_Engine_Visuals_Implementation_Windows_Icon,
                           u8"Arcadia.Visuals.Icon");
 
-struct Arcadia_Visuals_Implementation_Windows_IconDispatch {
+struct Arcadia_Engine_Visuals_Implementation_Windows_IconDispatch {
   Arcadia_Engine_Visuals_IconDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_Windows_Icon {
+struct Arcadia_Engine_Visuals_Implementation_Windows_Icon {
   Arcadia_Engine_Visuals_Icon _parent;
   HICON hIcon;
 };
 
-Arcadia_Visuals_Implementation_Windows_Icon*
-Arcadia_Visuals_Implementation_Windows_Icon_create
+Arcadia_Engine_Visuals_Implementation_Windows_Icon*
+Arcadia_Engine_Visuals_Implementation_Windows_Icon_create
   (
     Arcadia_Thread* thread,
     Arcadia_Media_PixelBuffer* pixelBuffer
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_WINDOWS_ICON_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_WINDOWS_ICON_H_INCLUDED

@@ -47,7 +47,22 @@ struct Arcadia_Engine_Visuals_MeshNode {
   Arcadia_SizeValue numberOfVertices;
   /// Pointers to the positions of the vertices of this mesh.
   void* vertices;
+  
+  Arcadia_Engine_Visuals_BackendContext* backendContext;
+  Arcadia_Engine_Visuals_Implementation_MeshResource* meshResource;
 };
+
+/// @brief Create a mesh node.
+/// @param thread A pointer to this thread.
+/// @param backendContext A pointer to the backend context or a null pointer.
+/// @return A pointer to the mesh node.
+Arcadia_Engine_Visuals_MeshNode*
+Arcadia_Engine_Visuals_MeshNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MeshDefinition* source
+  );
 
 void
 Arcadia_Engine_Visuals_MeshNode_getNumberOfVertices

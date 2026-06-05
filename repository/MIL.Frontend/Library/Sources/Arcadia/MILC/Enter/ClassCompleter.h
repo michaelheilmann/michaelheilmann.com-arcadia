@@ -29,4 +29,10 @@ struct Arcadia_MILC_ClassCompleter {
   Arcadia_MILC_Completer _parent;
 };
 
+Arcadia_MILC_ClassCompleter*
+Arcadia_MILC_ClassCompleter_create
+  (
+    Arcadia_Thread* thread
+  );
+
 #endif // ARCADIA_MILC_CLASSCOMPLETER_H_INCLUDED

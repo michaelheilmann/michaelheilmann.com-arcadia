@@ -41,6 +41,18 @@ struct Arcadia_Engine_Visuals_ModelNode {
   Arcadia_Engine_Visuals_MeshNode* mesh;
   /// The material of this model.
   Arcadia_Engine_Visuals_MaterialNode* material;
+  /// The backend context.
+  Arcadia_Engine_Visuals_BackendContext* backendContext;
+  /// The model resource.
+  Arcadia_Engine_Visuals_Implementation_ModelResource* modelResource;
 };
+
+Arcadia_Engine_Visuals_ModelNode*
+Arcadia_Engine_Visuals_ModelNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_ModelDefinition* source
+  );
 
 #endif // ARCADIA_ENGINE_VISUALS_NODES_MODELNODE_H_INCLUDED

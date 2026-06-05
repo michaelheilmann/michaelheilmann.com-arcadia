@@ -156,6 +156,8 @@ Arcadia_Engine_Demo_MainMenuScene_constructImpl
   self->viewer.pitch = 0.f;
   self->viewer.roll = 0.f;
   //
+  self->uiCanvasNode = NULL;
+  //
   self->latches[0] = Arcadia_BooleanValue_False;
   self->latches[1] = Arcadia_BooleanValue_False;
   self->latches[2] = Arcadia_BooleanValue_False;
@@ -225,6 +227,10 @@ Arcadia_Engine_Demo_MainMenuScene_visit
   if (self->soundSourceNode) {
     Arcadia_Object_visit(thread, (Arcadia_Object*)self->soundSourceNode);
   }
+
+  if (self->uiCanvasNode) {
+    Arcadia_Object_visit(thread, (Arcadia_Object*)self->uiCanvasNode);
+  }
 }
 
 static void
@@ -245,21 +251,16 @@ load
       Arcadia_ByteArrayBuilder* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
       Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
     }
+    Arcadia_Engine_Demo_AssetUtilities_enumerateFiles(thread, Arcadia_FilePath_parseGeneric(thread, Arcadia_String_createFromCxxString(thread, "Assets/Colors")), files);
+    for (Arcadia_SizeValue i = 0, n = Arcadia_Collection_getSize(thread, (Arcadia_Collection*)files); i < n; ++i) {
+      Arcadia_FilePath* filePath = (Arcadia_FilePath*)Arcadia_List_getObjectReferenceValueCheckedAt(thread, files, i, _Arcadia_FilePath_getType(thread));
+      Arcadia_ByteArrayBuilder* fileBytes = Arcadia_FileSystem_getFileContents(thread, fileSystem, filePath);
+      Arcadia_ADL_Context_readFromString(thread, context, definitions, Arcadia_String_create(thread, Arcadia_Value_makeObjectReferenceValue(fileBytes)), Arcadia_BooleanValue_True);
+    }
+
     self->definitions = definitions;
   }
-}
 
-static void
-Arcadia_Engine_Demo_MainMenuScene_updateAudialsImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Demo_MainMenuScene* self,
-    Arcadia_Real64Value tick,
-    Arcadia_Integer32Value width,
-    Arcadia_Integer32Value height
-  )
-{
-  load(thread, self);
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
   if (!self->soundSourceNode) {
     Arcadia_ADL_SampleBufferDefinition* SAMPLEBUFFERS[] =
@@ -277,6 +278,102 @@ Arcadia_Engine_Demo_MainMenuScene_updateAudialsImpl
           SAMPLEBUFFERS[0]
         );
   }
+
+  if (!self->uiCanvasNode) {
+    self->uiCanvasNode = Arcadia_Engine_UI_CanvasNode_create(thread);
+    Arcadia_ADL_ModelDefinition* modelDefinition =
+      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/MainMenuScene/NewGameButton/NewGameButtonModel.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "MainMenuScene.NewGameButtonModel"));
+    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
+    Arcadia_Engine_Visuals_ModelNode* modelNode =
+      (Arcadia_Engine_Visuals_ModelNode*)
+      Arcadia_Engine_Visuals_NodeFactory_createModelNode
+        (
+          thread,
+          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
+          modelDefinition
+        );
+    Arcadia_List_insertBackObjectReferenceValue(thread, self->uiCanvasNode->rectangles, (Arcadia_Object*)modelNode);
+  }
+
+  if (!self->enterPassNode) {
+    self->enterPassNode =
+      Arcadia_Engine_Visuals_NodeFactory_createEnterPassNode
+        (
+          thread,
+          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+        );
+  }
+
+  if (!self->viewportNode) {
+    Arcadia_ADL_ColorDefinition* CLEARCOLORS[] =
+    {
+      getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Red.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "Colors.Red")),
+    };
+
+    Arcadia_ADL_ColorDefinition* d = CLEARCOLORS[0];
+    self->viewportNode =
+      (Arcadia_Engine_Visuals_ViewportNode*)
+      Arcadia_Engine_Visuals_NodeFactory_createViewportNode
+        (
+          thread,
+          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+        );
+    Arcadia_Engine_Visuals_ViewportNode_setClearColor(thread, self->viewportNode, Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
+    Arcadia_Engine_Visuals_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNode, 0.f, 0.f, 1.f, 1.f);
+  }
+
+  if (!self->cameraNode) {
+    self->cameraNode =
+      (Arcadia_Engine_Visuals_CameraNode*)
+      Arcadia_Engine_Visuals_NodeFactory_createCameraNode
+        (
+          thread,
+          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
+          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
+        );
+  }
+
+  if (!self->modelNode) {
+    Arcadia_ADL_ModelDefinition* MODELS[] =
+    {
+      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/MainMenuScene/TextureColorModel.adl"),
+                                                    Arcadia_String_createFromCxxString(thread, "MainMenuScene.TextureColorModel")),
+    };
+    Arcadia_ADL_ModelDefinition* modelDefinition = MODELS[0];
+    if (NULL == modelDefinition) {
+      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
+      Arcadia_Thread_jump(thread);
+    }
+    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
+    self->modelNode =
+      (Arcadia_Engine_Visuals_ModelNode*)
+      Arcadia_Engine_Visuals_NodeFactory_createModelNode
+      (
+        thread,
+        (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
+        (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
+        modelDefinition
+      );
+  }
+}
+
+static void
+Arcadia_Engine_Demo_MainMenuScene_updateAudialsImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Demo_MainMenuScene* self,
+    Arcadia_Real64Value tick,
+    Arcadia_Integer32Value width,
+    Arcadia_Integer32Value height
+  )
+{
+  load(thread, self);
+  Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
   Arcadia_Engine_Node_setAudialsBackendContext(thread, (Arcadia_Engine_Node*)self->soundSourceNode, (Arcadia_Engine_Audials_BackendContext*)engine->audialsBackendContext);
   Arcadia_Engine_Audials_Node_render(thread, (Arcadia_Engine_Audials_Node*)self->soundSourceNode);
   Arcadia_Engine_Audials_SoundSourceNode_setVolume(thread, self->soundSourceNode, 0.125f);
@@ -374,26 +471,7 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
 {
   load(thread, self);
   Arcadia_Engine* engine = ((Arcadia_Engine_Demo_Scene*)self)->engine;
-  if (!self->enterPassNode) {
-    self->enterPassNode =
-      Arcadia_Engine_Visuals_NodeFactory_createEnterPassNode
-        (
-          thread,
-          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-        );
-  }
 
-  if (!self->cameraNode) {
-    self->cameraNode =
-      (Arcadia_Engine_Visuals_CameraNode*)
-      Arcadia_Engine_Visuals_NodeFactory_createCameraNode
-        (
-          thread,
-          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-        );
-  }
   // We use a right-handed coordinate system.
   // -negative z-axis forward, positive z-axis backward
   // -negative y-axis down, positive y-axis up
@@ -431,57 +509,19 @@ Arcadia_Engine_Demo_MainMenuScene_updateVisualsImpl
   Arcadia_Math_Matrix4Real32* worldToViewMatrix = tmp;
   Arcadia_Engine_Visuals_CameraNode_setWorldToViewMatrix(thread, self->cameraNode, worldToViewMatrix);
 
-  Arcadia_ADL_ColorDefinition* CLEARCOLORS[] =
-    {
-      getColorDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/Colors/CSS/Red.adl"),
-                                                    Arcadia_String_createFromCxxString(thread, "Colors.Red")),
-    };
-
-  Arcadia_ADL_ModelDefinition* MODELS[] =
-    {
-      getModelDefinition(thread, self->definitions, Arcadia_String_createFromCxxString(thread, "Assets/MainMenuScene/TextureColorModel.adl"),
-                                                    Arcadia_String_createFromCxxString(thread, "MainMenuScene.TextureColorModel")),
-    };
-
-  if (!self->viewportNode) {
-    Arcadia_ADL_ColorDefinition* d = CLEARCOLORS[0];
-    self->viewportNode =
-      (Arcadia_Engine_Visuals_ViewportNode*)
-      Arcadia_Engine_Visuals_NodeFactory_createViewportNode
-        (
-          thread,
-          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext
-        );
-    Arcadia_Engine_Visuals_ViewportNode_setClearColor(thread, self->viewportNode, Arcadia_Math_Color4Real32_create4(thread, d->red / 255.f, d->green / 255.f, d->blue / 255.f, 1.f));
-    Arcadia_Engine_Visuals_ViewportNode_setRelativeViewportRectangle(thread, self->viewportNode, 0.f, 0.f, 1.f, 1.f);
-  }
-
-  Arcadia_Engine_Visuals_ViewportNode_setCanvasSize(thread, self->viewportNode, width, height);
-
-  if (!self->modelNode) {
-    Arcadia_ADL_ModelDefinition* modelDefinition = MODELS[0];
-    if (NULL == modelDefinition) {
-      Arcadia_Thread_setStatus(thread, Arcadia_Status_ArgumentValueInvalid);
-      Arcadia_Thread_jump(thread);
-    }
-    Arcadia_ADL_Definition_link(thread, (Arcadia_ADL_Definition*)modelDefinition);
-    self->modelNode =
-      (Arcadia_Engine_Visuals_ModelNode*)
-      Arcadia_Engine_Visuals_NodeFactory_createModelNode
-        (
-          thread,
-          (Arcadia_Engine_Visuals_NodeFactory*)engine->visualsNodeFactory,
-          (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext,
-          modelDefinition
-        );
-  }
   Arcadia_Engine_Visuals_ViewportNode_setCanvasSize(thread, self->viewportNode, width, height);
   // Assign the "viewport" node and "camera" node to the "enter pass" node.
   Arcadia_Engine_Visuals_EnterPassNode_setViewportNode(thread, self->enterPassNode, self->viewportNode);
   Arcadia_Engine_Visuals_EnterPassNode_setCameraNode(thread, self->enterPassNode, self->cameraNode);
   // Render the models.
   Arcadia_Engine_Visuals_renderScene(thread, self->enterPassNode, self->modelNode, (Arcadia_Visuals_BackendContext*)engine->visualsBackendContext);
+
+  // Tell the UI canvas the size of the visuals canvas.
+  Arcadia_Engine_UI_CanvasNode_setVisualsCanvasSize(thread, self->uiCanvasNode, width, height);
+  // The position and the size of the UI canvas.
+  Arcadia_Engine_UI_WidgetNode_setPosition(thread, (Arcadia_Engine_UI_WidgetNode*)self->uiCanvasNode, 0, 0);
+  Arcadia_Engine_UI_WidgetNode_setSize(thread, (Arcadia_Engine_UI_WidgetNode*)self->uiCanvasNode, width, height);
+  Arcadia_Engine_UI_CanvasNode_updateVisuals(thread, self->uiCanvasNode, self->enterPassNode);
 }
 
 static void

@@ -15,26 +15,25 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.MIL.Compiler.Tests.Test1)
+set(this ${MyProjectName}.MIL.Compiler.Tests.Test1)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
 # Configuration files.
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Compiler.Tests.Test1/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Compiler.Tests.Test1/Configure.h @ONLY)
-list(APPEND ${MyTestName}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Compiler.Tests.Test1/Configure.h.i)
-OnConfigurationFile(${MyTestName} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Compiler.Tests.Test1/Configure.h)
+OnConfigurationFile(${this} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Arcadia.Compiler.Tests.Test1/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Arcadia.Compiler.Tests.Test1/Configure.h.i)
 
 # Source and header files.
-OnSourceFile(${MyTestName} Arcadia.Compiler.Tests.Test1/Main.c)
+OnSourceFile(${this} Arcadia.Compiler.Tests.Test1/Main.c)
 
 # Libraries.
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.MIL.Frontend ${MyProjectName}.DDL)
+OnModuleDependency(${this} ${MyProjectName}.MIL.Frontend PRIVATE)
+OnModuleDependency(${this} ${MyProjectName}.DDL PRIVATE)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 # Copy assets.
-add_custom_command(TARGET ${MyTestName} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${${MyTestName}.WorkingDirectory})
+add_custom_command(TARGET ${this} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${${this}.WorkingDirectory})
 # Adjust working directory.
-set(${MyTestName}.WorkingDirectory $<TARGET_FILE_DIR:${MyTestName}>)
-set_target_properties(${MyTestName} PROPERTIES FOLDER "MIL")
+set(${this}.WorkingDirectory $<TARGET_FILE_DIR:${this}>)
+set_target_properties(${this} PROPERTIES FOLDER "MIL")

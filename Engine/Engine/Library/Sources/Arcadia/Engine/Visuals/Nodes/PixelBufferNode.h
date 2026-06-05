@@ -37,6 +37,20 @@ struct Arcadia_Engine_Visuals_PixelBufferNode {
   Arcadia_ADL_PixelBufferDefinition* source;
   // The pixel buffer.
   Arcadia_Media_PixelBuffer* pixelBuffer;
+  // The backend context.
+  Arcadia_Engine_Visuals_BackendContext* backendContext;
 };
+
+/// @brief Create pixel buffer node.
+/// @param thread A pointer to this thread.
+/// @param backendContext A pointer to the backend context or a null pointer.
+/// @return A pointer to the pixel buffer node.
+Arcadia_Engine_Visuals_PixelBufferNode*
+Arcadia_Engine_Visuals_PixelBufferNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_PixelBufferDefinition* source
+  );
 
 #endif // ARCADIA_ENGINE_VISUALS_NODES_PIXELBUFFERNODE_H_INCLUDED

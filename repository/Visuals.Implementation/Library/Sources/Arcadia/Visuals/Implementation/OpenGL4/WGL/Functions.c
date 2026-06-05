@@ -16,17 +16,17 @@
 #include "Arcadia/Visuals/Implementation/OpenGL4/WGL/Functions.h"
 
 void
-_Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions_initialize
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions_initialize
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions* functions
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions* functions
   )
 { }
 
 void
-_Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions_uninitialize
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions_uninitialize
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions* functions
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions* functions
   )
 { }

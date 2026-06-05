@@ -80,4 +80,21 @@
 #include "Arcadia/Engine/Visuals/DisplayMode.h"
 //}
 
+#include "Arcadia/Engine/Visuals/Resources/ConstantBufferResource.h"
+#include "Arcadia/Engine/Visuals/Resources/FrameBufferResource.h"
+#include "Arcadia/Engine/Visuals/Resources/EnterPassResource.h"
+#include "Arcadia/Engine/Visuals/Resources/MaterialResource.h"
+#include "Arcadia/Engine/Visuals/Resources/MeshResource.h"
+#include "Arcadia/Engine/Visuals/Resources/ModelResource.h"
+#include "Arcadia/Engine/Visuals/Resources/ProgramResource.h"
+#include "Arcadia/Engine/Visuals/Resources/TextureResource.h"
+#include "Arcadia/Engine/Visuals/Resources/VertexBufferResource.h"
+
+void
+Arcadia_Engine_Visuals_registerNodeFactories
+  ( 
+    Arcadia_Thread* thread,
+    Arcadia_Set* types
+  );
+
 #endif // ARCADIA_ENGINE_VISUALS_INCLUDE_H_INCLUDED

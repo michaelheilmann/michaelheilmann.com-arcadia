@@ -13,28 +13,27 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_FRAMEBUFFERRESOURCE_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_FRAMEBUFFERRESOURCE_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_FRAMEBUFFERRESOURCE_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_FRAMEBUFFERRESOURCE_H_INCLUDED
 
-#include "Arcadia/Visuals/Implementation/Resources/FrameBufferResource.h"
-#include "Arcadia/Visuals/Implementation/Resources/TextureResource.h"
+#include "Arcadia/Engine/Include.h"
 #include "Arcadia/Visuals/Implementation/OpenGL4/BackendIncludes.h"
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Visuals_Implementation_OpenGL4_BackendContext;
-typedef struct Arcadia_Visuals_Implementation_OpenGL4_TextureResource Arcadia_Visuals_Implementation_OpenGL4_TextureResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext;
+typedef struct Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource;
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.FrameBufferResource", Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.FrameBufferResource", Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource,
                           u8"Arcadia.Visuals.Implementation.FrameBufferResource")
 
-#define Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_Default (1)
+#define Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource_Default (1)
 
-struct Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResourceDispatch {
-  Arcadia_Visuals_Implementation_FrameBufferResourceDispatch _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResourceDispatch {
+  Arcadia_Engine_Visuals_Implementation_FrameBufferResourceDispatch _parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource {
-  Arcadia_Visuals_Implementation_FrameBufferResource _parent;
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource {
+  Arcadia_Engine_Visuals_Implementation_FrameBufferResource _parent;
   // A pointer to the backing texture.
-  Arcadia_Visuals_Implementation_OpenGL4_TextureResource* texture;
+  Arcadia_Engine_Visuals_Implementation_OpenGL4_TextureResource* texture;
   Arcadia_BooleanValue dirty;
   // @brief The width, in pixels, of the frame buffer.
   // @default 320.
@@ -46,11 +45,11 @@ struct Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource {
   GLuint frameBufferID;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource*
-Arcadia_Visuals_Implementation_OpenGL4_FrameBufferResource_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_FrameBufferResource_create
   (
     Arcadia_Thread* thread,
-    Arcadia_Visuals_Implementation_OpenGL4_BackendContext* backendContext
+    Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendContext* backendContext
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_FRAMEBUFFERRESOURCE_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_RESOURCES_FRAMEBUFFERRESOURCE_H_INCLUDED

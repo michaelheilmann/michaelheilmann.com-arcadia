@@ -24,17 +24,17 @@ Arcadia_Engine_Visuals_NodeFactory_construct
   );
 
 static void
-Arcadia_Engine_Visuals_NodeFactory_initializeDispatchImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_NodeFactoryDispatch* self
-  );
-
-static void
 Arcadia_Engine_Visuals_NodeFactory_destruct
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self
+  );
+
+static void
+Arcadia_Engine_Visuals_NodeFactory_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactoryDispatch* self
   );
 
 static void
@@ -44,12 +44,89 @@ Arcadia_Engine_Visuals_NodeFactory_visit
     Arcadia_Engine_Visuals_NodeFactory* self
   );
 
+static Arcadia_Engine_Visuals_CameraNode*
+Arcadia_Engine_Visuals_NodeFactory_createCameraNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
+
+static Arcadia_Engine_Visuals_FrameBufferNode*
+Arcadia_Engine_Visuals_NodeFactory_createFrameBufferNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
+
+static Arcadia_Engine_Visuals_MaterialNode*
+Arcadia_Engine_Visuals_NodeFactory_createMaterialNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MaterialDefinition* source
+  );
+
+static Arcadia_Engine_Visuals_MeshNode*
+Arcadia_Engine_Visuals_NodeFactory_createMeshNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MeshDefinition* source
+  );
+
+static Arcadia_Engine_Visuals_ModelNode*
+Arcadia_Engine_Visuals_NodeFactory_createModelNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_ModelDefinition* source
+  );
+
+static Arcadia_Engine_Visuals_PixelBufferNode*
+Arcadia_Engine_Visuals_NodeFactory_createPixelBufferNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_PixelBufferDefinition* source
+  );
+
+static Arcadia_Engine_Visuals_EnterPassNode*
+Arcadia_Engine_Visuals_NodeFactory_createEnterPassNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
+
+static Arcadia_Engine_Visuals_TextureNode*
+Arcadia_Engine_Visuals_NodeFactory_createTextureNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_TextureDefinition* source
+  );
+
+static Arcadia_Engine_Visuals_ViewportNode*
+Arcadia_Engine_Visuals_NodeFactory_createViewportNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
+
 static const Arcadia_ObjectType_Operations _Arcadia_Engine_Visuals_NodeFactory_objectTypeOperations = {
   Arcadia_ObjectType_Operations_Initializer,
   .construct = (Arcadia_Object_ConstructCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_construct,
   .destruct = (Arcadia_Object_DestructCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_destruct,
-  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_visit,
   .initializeDispatch = (Arcadia_ObjectDispatch_InitializeCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_initializeDispatchImpl,
+  .visit = (Arcadia_Object_VisitCallbackFunction*)&Arcadia_Engine_Visuals_NodeFactory_visit,
 };
 
 static const Arcadia_Type_Operations _Arcadia_Engine_Visuals_NodeFactory_typeOperations = {
@@ -81,14 +158,6 @@ Arcadia_Engine_Visuals_NodeFactory_construct
 }
 
 static void
-Arcadia_Engine_Visuals_NodeFactory_initializeDispatchImpl
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Engine_Visuals_NodeFactoryDispatch* self
-  )
-{/*Intentionally empty.*/}
-
-static void
 Arcadia_Engine_Visuals_NodeFactory_destruct
   (
     Arcadia_Thread* thread,
@@ -97,12 +166,127 @@ Arcadia_Engine_Visuals_NodeFactory_destruct
 {/*Intentionally empty.*/}
 
 static void
+Arcadia_Engine_Visuals_NodeFactory_initializeDispatchImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactoryDispatch* self
+  )
+{
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createCameraNode = (Arcadia_Engine_Visuals_CameraNode *(*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_NodeFactory_createCameraNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createFrameBufferNode = (Arcadia_Engine_Visuals_FrameBufferNode *(*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_NodeFactory_createFrameBufferNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createEnterPassNode = (Arcadia_Engine_Visuals_EnterPassNode * (*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_NodeFactory_createEnterPassNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createMaterialNode = (Arcadia_Engine_Visuals_MaterialNode *(*)(Arcadia_Thread*, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_MaterialDefinition*)) & Arcadia_Engine_Visuals_NodeFactory_createMaterialNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createMeshNode = (Arcadia_Engine_Visuals_MeshNode *(*)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_MeshDefinition*)) & Arcadia_Engine_Visuals_NodeFactory_createMeshNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createModelNode = (Arcadia_Engine_Visuals_ModelNode * (*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_ModelDefinition*)) & Arcadia_Engine_Visuals_NodeFactory_createModelNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createPixelBufferNode = (Arcadia_Engine_Visuals_PixelBufferNode * (*)(Arcadia_Thread * thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_PixelBufferDefinition*)) & Arcadia_Engine_Visuals_NodeFactory_createPixelBufferNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createTextureNode = (Arcadia_Engine_Visuals_TextureNode *(*)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*, Arcadia_ADL_TextureDefinition*)) & Arcadia_Engine_Visuals_NodeFactory_createTextureNodeImpl;
+  ((Arcadia_Engine_Visuals_NodeFactoryDispatch*)self)->createViewportNode = (Arcadia_Engine_Visuals_ViewportNode * (*)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_NodeFactory*, Arcadia_Visuals_BackendContext*)) & Arcadia_Engine_Visuals_NodeFactory_createViewportNodeImpl;
+}
+
+static void
 Arcadia_Engine_Visuals_NodeFactory_visit
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_NodeFactory* self
   )
 {/*Intentionally empty.*/}
+
+static Arcadia_Engine_Visuals_CameraNode*
+Arcadia_Engine_Visuals_NodeFactory_createCameraNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{ return Arcadia_Engine_Visuals_CameraNode_create(thread, backendContext); }
+
+static Arcadia_Engine_Visuals_FrameBufferNode*
+Arcadia_Engine_Visuals_NodeFactory_createFrameBufferNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{ return Arcadia_Engine_Visuals_FrameBufferNode_create(thread, backendContext); }
+
+static Arcadia_Engine_Visuals_MaterialNode*
+Arcadia_Engine_Visuals_NodeFactory_createMaterialNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MaterialDefinition* source
+  )
+{ return Arcadia_Engine_Visuals_MaterialNode_create(thread, backendContext, source); }
+
+static Arcadia_Engine_Visuals_MeshNode*
+Arcadia_Engine_Visuals_NodeFactory_createMeshNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MeshDefinition* source
+  )
+{ return Arcadia_Engine_Visuals_MeshNode_create(thread, backendContext, source); }
+
+static Arcadia_Engine_Visuals_ModelNode*
+Arcadia_Engine_Visuals_NodeFactory_createModelNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_ModelDefinition* source
+  )
+{ return Arcadia_Engine_Visuals_ModelNode_create(thread, backendContext, source); }
+
+static Arcadia_Engine_Visuals_PixelBufferNode*
+Arcadia_Engine_Visuals_NodeFactory_createPixelBufferNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_PixelBufferDefinition* source
+  )
+{ return Arcadia_Engine_Visuals_PixelBufferNode_create(thread, backendContext, source); }
+
+static Arcadia_Engine_Visuals_EnterPassNode*
+Arcadia_Engine_Visuals_NodeFactory_createEnterPassNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{ return Arcadia_Engine_Visuals_EnterPassNode_create(thread, backendContext); }
+
+static Arcadia_Engine_Visuals_TextureNode*
+Arcadia_Engine_Visuals_NodeFactory_createTextureNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_TextureDefinition* source
+  )
+{ return Arcadia_Engine_Visuals_TextureNode_create(thread, backendContext, source); }
+
+static Arcadia_Engine_Visuals_ViewportNode*
+Arcadia_Engine_Visuals_NodeFactory_createViewportNodeImpl
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_NodeFactory* self,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  )
+{ return Arcadia_Engine_Visuals_ViewportNode_create(thread, backendContext); }
+
+Arcadia_Engine_Visuals_NodeFactory*
+Arcadia_Engine_Visuals_NodeFactory_create
+  (
+    Arcadia_Thread* thread
+  )
+{
+  Arcadia_SizeValue oldValueStackSize = Arcadia_ValueStack_getSize(thread);
+  Arcadia_ValueStack_pushNatural8Value(thread, 0);
+  ARCADIA_CREATEOBJECT(Arcadia_Engine_Visuals_NodeFactory);
+}
 
 Arcadia_Engine_Visuals_CameraNode*
 Arcadia_Engine_Visuals_NodeFactory_createCameraNode
@@ -113,7 +297,7 @@ Arcadia_Engine_Visuals_NodeFactory_createCameraNode
   )
 { Arcadia_VirtualCallWithReturn(Arcadia_Engine_Visuals_NodeFactory, createCameraNode, self, backendContext); }
 
-Arcadia_Visuals_FrameBufferNode*
+Arcadia_Engine_Visuals_FrameBufferNode*
 Arcadia_Engine_Visuals_NodeFactory_createFrameBufferNode
   (
     Arcadia_Thread* thread,

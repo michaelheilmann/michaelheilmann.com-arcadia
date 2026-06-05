@@ -1,0 +1,5 @@
+{
+  type : "PixelBufferOperations.FillOperation",
+  name : "MainMenuScene.NewGameButtonPixelBufferFillOperation",
+  color : "Colors.AliceBlue",
+}

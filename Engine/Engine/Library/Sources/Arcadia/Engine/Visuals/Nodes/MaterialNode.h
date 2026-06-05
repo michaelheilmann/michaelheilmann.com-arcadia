@@ -21,6 +21,7 @@
 #endif
 #include "Arcadia/Engine/Visuals/Node.h"
 #include "Arcadia/ADL/Include.h"
+typedef struct Arcadia_Engine_Visuals_Implementation_MaterialResource Arcadia_Engine_Visuals_Implementation_MaterialResource;
 typedef struct Arcadia_Engine_Visuals_NodeFactory Arcadia_Engine_Visuals_NodeFactory;
 typedef struct Arcadia_Engine_Visuals_TextureNode Arcadia_Engine_Visuals_TextureNode;
 typedef struct Arcadia_VPL_Symbols_Program Arcadia_VPL_Symbols_Program;
@@ -37,6 +38,21 @@ struct Arcadia_Engine_Visuals_MaterialNode {
   Arcadia_ADL_MaterialDefinition* source;
   Arcadia_Engine_Visuals_TextureNode* ambientColorTexture;
   Arcadia_VPL_Symbols_Program* program;
+  /// The material resource of this material node.
+  Arcadia_Engine_Visuals_Implementation_MaterialResource* materialResource;
+  /// The backend context of this material node.
+  Arcadia_Engine_Visuals_BackendContext* backendContext;
 };
+
+// @brief Create a material node.
+// @param backendContext A pointer to the backend context or the null pointer.
+// @return A pointer to the material node.
+Arcadia_Engine_Visuals_MaterialNode*
+Arcadia_Engine_Visuals_MaterialNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext,
+    Arcadia_ADL_MaterialDefinition* source
+  );
 
 #endif  // ARCADIA_ENGINE_VISUALS_NODES_MATERIALNODE_H_INCLUDED

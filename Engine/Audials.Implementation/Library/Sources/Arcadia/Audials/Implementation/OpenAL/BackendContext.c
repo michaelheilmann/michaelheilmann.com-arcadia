@@ -93,7 +93,7 @@ static const Arcadia_Type_Operations _typeOperations = {
 };
 
 Arcadia_defineObjectType(u8"Arcadia.Engine.Audials.Implementation.OpenAL.BackendContext", Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext,
-                         u8"Arcadia.Engine.Audials.Implementation.BackendContext", Arcadia_Engine_Audials_Implementation_BackendContext,
+                         u8"Arcadia.Engine.Audials.BackendContext", Arcadia_Engine_Audials_BackendContext,
                          &_typeOperations);
 
 static Arcadia_SizeValue
@@ -205,7 +205,7 @@ Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_initializeDispatchIm
     Arcadia_Engine_Audials_Implementation_OpenAL_BackendContextDispatch* self
   )
 {
-  ((Arcadia_Engine_Audials_Implementation_BackendContextDispatch*)self)->createSoundSourceResource = (Arcadia_Engine_Audials_Implementation_SoundSourceResource * (*)(Arcadia_Thread*, Arcadia_Engine_Audials_Implementation_BackendContext*,Arcadia_Media_SampleBuffer*)) & Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_createSoundSourceResouceImpl;
+  ((Arcadia_Engine_Audials_BackendContextDispatch*)self)->createSoundSourceResource = (Arcadia_Engine_Audials_Implementation_SoundSourceResource * (*)(Arcadia_Thread*, Arcadia_Engine_Audials_BackendContext*,Arcadia_Media_SampleBuffer*)) & Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_createSoundSourceResouceImpl;
   ((Arcadia_Engine_BackendContextDispatch*)self)->update = (void(*)(Arcadia_Thread*, Arcadia_Engine_BackendContext*)) & Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext_updateImpl;
 }
 

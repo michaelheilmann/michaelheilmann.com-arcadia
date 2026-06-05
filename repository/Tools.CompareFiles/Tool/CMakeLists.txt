@@ -21,13 +21,11 @@ if (NOT TARGET ${MyTool})
 
   BeginProduct(${MyTool} executable)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/CompareFiles/Configure.h.i ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/CompareFiles/Configure.h @ONLY)
-  list(APPEND ${MyTool}.ConfigurationTemplateFiles ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/CompareFiles/Configure.h.i)
-  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/CompareFiles/Configure.h)
+  OnConfigurationFile(${MyTool} ${CMAKE_CURRENT_BINARY_DIR}/Sources/Tools/CompareFiles/Configure.h ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Tools/CompareFiles/Configure.h.i)
 
   OnSourceFile(${MyTool} Tools/CompareFiles/Main.c)
 
-  list(APPEND ${MyTool}.PrivateLibraries ${MyProjectName}.Ring2)
+  OnModuleDependency(${MyTool} ${MyProjectName}.Ring2 PRIVATE)
 
   EndProduct(${MyTool})
 

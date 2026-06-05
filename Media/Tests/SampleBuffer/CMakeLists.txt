@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Media.Tests.SampleBuffer)
+set(this ${MyProjectName}.Media.Tests.SampleBuffer)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Arcadia.Media.Tests.SampleBuffer/Main.c)
+OnSourceFile(${this} Arcadia.Media.Tests.SampleBuffer/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Media)
+OnModuleDependency(${this} ${MyProjectName}.Media PRIVATE)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Media")
+set_target_properties(${this} PROPERTIES FOLDER "Media")

@@ -22,8 +22,31 @@
 
 #include "Arcadia/Engine/BackendContext.h"
 #include "Arcadia/PixelBufferIO/Include.h"
+
+//#include "Arcadia/Engine/Visuals/Resources/ConstantBufferResource.h"
+//#include "Arcadia/Engine/Visuals/Resources/EnterPassResource.h"
+//#include "Arcadia/Engine/Visuals/Resources/FrameBufferResource.h"
+#include "Arcadia/Engine/Visuals/Resources/MaterialResource.h"
+//#include "Arcadia/Engine/Visuals/Resources/MeshResource.h"
+//#include "Arcadia/Engine/Visuals/Resources/ModelResource.h"
+//#include "Arcadia/Engine/Visuals/Resources/ProgramResource.h"
+//#include "Arcadia/Engine/Visuals/Resources/TextureResource.h"
+//#include "Arcadia/Engine/Visuals/Resources/VertexBufferResource.h"
+#include "Arcadia/ADL/Include.h"
+#include "Arcadia/VPL/Include.h"
+
 typedef struct Arcadia_Engine_Visuals_Icon Arcadia_Engine_Visuals_Icon;
 typedef struct Arcadia_Engine_Visuals_Window Arcadia_Engine_Visuals_Window;
+
+typedef struct Arcadia_Engine_Visuals_Implementation_ConstantBufferResource Arcadia_Engine_Visuals_Implementation_ConstantBufferResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_EnterPassResource Arcadia_Engine_Visuals_Implementation_EnterPassResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_FrameBufferResource Arcadia_Engine_Visuals_Implementation_FrameBufferResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_MaterialResource Arcadia_Engine_Visuals_Implementation_MaterialResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_MeshResource Arcadia_Engine_Visuals_Implementation_MeshResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_ModelResource Arcadia_Engine_Visuals_Implementation_ModelResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_ProgramResource Arcadia_Engine_Visuals_Implementation_ProgramResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_TextureResource Arcadia_Engine_Visuals_Implementation_TextureResource;
+typedef struct Arcadia_Engine_Visuals_Implementation_VertexBufferResource Arcadia_Engine_Visuals_Implementation_VertexBufferResource;
 
 /// @code
 /// class Arcadia.Engine.Visuals.BackendContextBase extends Arcadia.Engine.Visuals.BackendContext {
@@ -64,9 +87,97 @@ Arcadia_declareObjectType(u8"Arcadia.Engine.Visuals.BackendContext", Arcadia_Eng
 struct Arcadia_Engine_Visuals_BackendContextDispatch {
   Arcadia_Engine_BackendContextDispatch _parent;
 
-  Arcadia_Engine_Visuals_Icon* (*createIcon)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self, Arcadia_Media_PixelBuffer* pixelBuffer);
-  Arcadia_Engine_Visuals_Window* (*createWindow)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self);
-  Arcadia_List* (*getDisplayDevices)(Arcadia_Thread* thread, Arcadia_Engine_Visuals_BackendContext* self);
+  Arcadia_Engine_Visuals_Icon*
+  (*createIcon)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self,
+      Arcadia_Media_PixelBuffer* pixelBuffer
+    );
+  
+  Arcadia_Engine_Visuals_Window*
+  (*createWindow)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self
+    );
+  
+  Arcadia_List*
+  (*getDisplayDevices)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self
+    );
+
+  Arcadia_Engine_Visuals_Implementation_ConstantBufferResource*
+  (*createConstantBufferResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self
+    );
+
+  Arcadia_Engine_Visuals_Implementation_FrameBufferResource*
+  (*createFrameBufferResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self
+    );
+
+  Arcadia_Engine_Visuals_Implementation_EnterPassResource*
+  (*createEnterPassResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self
+    );
+
+  Arcadia_Engine_Visuals_Implementation_MaterialResource*
+  (*createMaterialResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self,
+      Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
+      Arcadia_Engine_Visuals_Implementation_TextureResource* ambientTexture,
+      Arcadia_Engine_Visuals_Implementation_ProgramResource* program
+   );
+
+  Arcadia_Engine_Visuals_Implementation_MeshResource*
+  (*createMeshResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self,
+      Arcadia_Engine_Visuals_Implementation_VertexBufferResource* vertexBuffer
+    );
+
+  Arcadia_Engine_Visuals_Implementation_ModelResource*
+  (*createModelResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self,
+      Arcadia_Engine_Visuals_Implementation_MeshResource* mesh,
+      Arcadia_Engine_Visuals_Implementation_MaterialResource* material
+    );
+
+  Arcadia_Engine_Visuals_Implementation_ProgramResource*
+  (*createProgramResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self,
+      Arcadia_VPL_Symbols_Program* program
+    );
+
+  Arcadia_Engine_Visuals_Implementation_TextureResource*
+  (*createTextureResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self
+    );
+
+  Arcadia_Engine_Visuals_Implementation_VertexBufferResource*
+  (*createVertexBufferResource)
+    (
+      Arcadia_Thread* thread,
+      Arcadia_Engine_Visuals_BackendContext* self
+    );
 };
 
 struct Arcadia_Engine_Visuals_BackendContext {
@@ -96,6 +207,94 @@ Arcadia_Engine_Visuals_BackendContext_createWindow
 /// @param self A pointer to this backend context.
 Arcadia_List*
 Arcadia_Engine_Visuals_BackendContext_getDisplayDevices
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  );
+
+// Create a constant buffer resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_ConstantBufferResource*
+Arcadia_Engine_Visuals_BackendContext_createConstantBufferResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  );
+
+// Create a frame buffer resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_FrameBufferResource*
+Arcadia_Engine_Visuals_BackendContext_createFrameBufferResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  );
+
+// Create a rendering context resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_EnterPassResource*
+Arcadia_Engine_Visuals_BackendContext_createEnterPassResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  );
+
+// Create a material resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_MaterialResource*
+Arcadia_Engine_Visuals_BackendContext_createMaterialResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_MaterialResource_AmbientColorSource ambientColorSource,
+    Arcadia_Engine_Visuals_Implementation_TextureResource* ambientTexture,
+    Arcadia_Engine_Visuals_Implementation_ProgramResource* program
+  );
+
+// Create a mesh resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_MeshResource*
+Arcadia_Engine_Visuals_BackendContext_createMeshResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_VertexBufferResource* vertexBuffer
+  );
+
+// Create a model resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_ModelResource*
+Arcadia_Engine_Visuals_BackendContext_createModelResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_Engine_Visuals_Implementation_MeshResource* mesh,
+    Arcadia_Engine_Visuals_Implementation_MaterialResource* material
+  );
+
+// Create a program resource
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_ProgramResource*
+Arcadia_Engine_Visuals_BackendContext_createProgramResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self,
+    Arcadia_VPL_Symbols_Program* program
+  );
+
+// Create a texture resource
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_TextureResource*
+Arcadia_Engine_Visuals_BackendContext_createTextureResource
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* self
+  );
+
+// Create a vertex buffer resource.
+// The initial reference count of the created resource is @a 0, hence it would be destroyed at the next update of the backend.
+Arcadia_Engine_Visuals_Implementation_VertexBufferResource*
+Arcadia_Engine_Visuals_BackendContext_createVertexBufferResource
   (
     Arcadia_Thread* thread,
     Arcadia_Engine_Visuals_BackendContext* self

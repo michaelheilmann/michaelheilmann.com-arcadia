@@ -34,7 +34,7 @@ struct Arcadia_Engine_Demo_ArcadiaLogoScene {
   // @todo This is should be inter-scene not intra-scene.
   Arcadia_ADL_Definitions* definitions;
   // A framebuffer node.
-  Arcadia_Visuals_FrameBufferNode* frameBufferNode;
+  Arcadia_Engine_Visuals_FrameBufferNode* frameBufferNode;
   // One viewport.
   Arcadia_Engine_Visuals_ViewportNode* viewportNode;
   // A single camera.

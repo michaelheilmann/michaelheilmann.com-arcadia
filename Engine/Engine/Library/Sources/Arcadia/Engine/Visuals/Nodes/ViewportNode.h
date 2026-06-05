@@ -130,7 +130,54 @@ struct Arcadia_Engine_Visuals_ViewportNodeDispatch {
 
 struct Arcadia_Engine_Visuals_ViewportNode {
   Arcadia_Engine_Visuals_Node _parent;
+
+  Arcadia_Natural8Value dirtyBits;
+
+  Arcadia_Engine_Visuals_BackendContext* backendContext;
+
+  // If the color buffer should be cleared.
+  // Default value is #Arcadia_BooleanValue_True.
+  Arcadia_BooleanValue clearColorBuffer;
+  // Default value is 193, 216, 195, 255.
+  Arcadia_Math_Color4Real32* clearColor;
+
+  // If the depth buffer should be cleared.
+  // Default value is #Arcadia_BooleanValue_True.
+  Arcadia_BooleanValue clearDepthBuffer;
+  // Default is 1.
+  Arcadia_Real32Value clearDepth;
+
+  struct {
+    // Default is 0.
+    Arcadia_Real32Value left;
+    // Default is 0.
+    Arcadia_Real32Value bottom;
+    // Default is 1.
+    Arcadia_Real32Value right;
+    // Default is 1.
+    Arcadia_Real32Value top;
+  } relativeViewportRectangle;
+
+  struct {
+    // The width of the canvas.
+    // Default is 320.
+    Arcadia_Real32Value width;
+    // The height of the canvas.
+    // Default is 240.
+    Arcadia_Real32Value height;
+  } canvasSize;
 };
+
+/// @brief Create a viewport node.
+/// @param thread A pointer to this thread.
+/// @param backendContext A pointer to the backend context or a null pointer.
+/// @return A pointer to the viewport node.
+Arcadia_Engine_Visuals_ViewportNode*
+Arcadia_Engine_Visuals_ViewportNode_create
+  (
+    Arcadia_Thread* thread,
+    Arcadia_Engine_Visuals_BackendContext* backendContext
+  );
 
 Arcadia_BooleanValue
 Arcadia_Engine_Visuals_ViewportNode_getClearColorBuffer

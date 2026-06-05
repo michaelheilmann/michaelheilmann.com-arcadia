@@ -24,13 +24,6 @@
 #endif
 
 void
-Arcadia_Engine_Audials_Implementation_registerNodeFactories
-  (
-    Arcadia_Thread* thread,
-    Arcadia_Set* types
-  );
-
-void
 Arcadia_Engine_Audials_Implementation_registerBackends
   (
     Arcadia_Thread* thread,

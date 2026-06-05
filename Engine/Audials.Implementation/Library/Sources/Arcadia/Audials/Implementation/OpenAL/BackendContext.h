@@ -16,7 +16,7 @@
 #if !defined(ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_BACKENDCONTEXT_H_INCLUDED)
 #define ARCADIA_ENGINE_AUDIALS_IMPLEMENTATION_OPENAL_BACKENDCONTEXT_H_INCLUDED
 
-#include "Arcadia/Audials/Implementation/BackendContext.h"
+#include "Arcadia/Engine/Include.h"
 
 #define AL_LIBTYPE_STATIC
 #include <AL/al.h>
@@ -24,19 +24,19 @@
 #include <math.h>
 
 /// @code
-/// class Arcadia.Engine.Audials.Implementation.OpenAL.BackendContext extends Arcadia.Audials.BackendContext {
+/// class Arcadia.Engine.Audials.Implementation.OpenAL.BackendContext extends Arcadia.Engine.Audials.BackendContext {
 ///   constructor()
 /// }
 /// @endcode
 Arcadia_declareObjectType(u8"Arcadia.Engine.Audials.Implementation.OpenAL.BackendContext", Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext,
-                          u8"Arcadia.Engine.Audials.Implementation.BackendContext");
+                          u8"Arcadia.Engine.Audials.BackendContext");
 
 struct Arcadia_Engine_Audials_Implementation_OpenAL_BackendContextDispatch {
-  Arcadia_Engine_Audials_Implementation_BackendContextDispatch _parent;
+  Arcadia_Engine_Audials_BackendContextDispatch _parent;
 };
 
 struct Arcadia_Engine_Audials_Implementation_OpenAL_BackendContext {
-  Arcadia_Engine_Audials_Implementation_BackendContext _parent;
+  Arcadia_Engine_Audials_BackendContext _parent;
 
   // The list of resources.
   Arcadia_List* resources;

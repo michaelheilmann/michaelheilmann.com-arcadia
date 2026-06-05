@@ -13,14 +13,14 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_FUNCTIONS_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_FUNCTIONS_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_FUNCTIONS_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_FUNCTIONS_H_INCLUDED
 
 #include "Arcadia/Ring2/Include.h"
 
-typedef struct _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions;
+typedef struct _Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions _Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions;
 
-struct _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions {
+struct _Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions {
   int dummy;
 #define Define(Type, Name) \
   Type Name;
@@ -30,18 +30,18 @@ struct _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions {
 
 /// @error functions is a null pointer
 void
-_Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions_initialize
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions_initialize
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions* functions
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions* functions
   );
 
 /// @error functions is a null pointer
 void
-_Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions_uninitialize
+_Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions_uninitialize
   (
     Arcadia_Thread* thread,
-    _Arcadia_Visuals_Implementation_OpenGL4_WGL_Functions* functions
+    _Arcadia_Engine_Visuals_Implementation_OpenGL4_WGL_Functions* functions
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_WGL_FUNCTIONS_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_WGL_FUNCTIONS_H_INCLUDED

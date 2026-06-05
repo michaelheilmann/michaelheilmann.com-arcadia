@@ -15,15 +15,15 @@
 
 cmake_minimum_required(VERSION 3.29)
 
-set(MyTestName ${MyProjectName}.Ring1.Tests.CountTrailingZeroesTests)
+set(this ${MyProjectName}.Ring1.Tests.CountTrailingZeroesTests)
 
 # Create test executable.
-BeginProduct(${MyTestName} test)
+BeginProduct(${this} test)
 
-OnSourceFile(${MyTestName} Arcadia.Ring1.Tests.CountTrailingZeroesTests/Main.c)
+OnSourceFile(${this} Arcadia.Ring1.Tests.CountTrailingZeroesTests/Main.c)
 
-list(APPEND ${MyTestName}.PrivateLibraries ${MyProjectName}.Ring1)
+OnModuleDependency(${this} ${MyProjectName}.Ring1 PRIVATE)
 
-EndProduct(${MyTestName})
+EndProduct(${this})
 
-set_target_properties(${MyTestName} PROPERTIES FOLDER "Ring1")
+set_target_properties(${this} PROPERTIES FOLDER "Ring1")

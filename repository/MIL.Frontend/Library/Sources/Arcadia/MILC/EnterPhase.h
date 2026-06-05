@@ -17,6 +17,7 @@
 #define ARCADIA_MILC_ENTERPHASE_H_INCLUDED
 
 #include "Arcadia/MILC/Context.h"
+#include "Arcadia/MILC/AST/Include.h"
 #include "Arcadia/MILC/Symbols/ModuleSymbol.h"
 
 /// @brief The enter phase.
@@ -24,21 +25,21 @@
 /// @remarks
 /// step 1:
 /// for each module node
-/// - find all module definition nodes and enter the symbols
-/// - in particular, ensure that there are no two module symbols under a module node
+/// - find all module definition nodes and enter the module symbols
 /// - associate the module symbol with the module node
+/// - ensure that there are no two module definitions nodes / module symbols under a module node / module symbol
 /// step 2:
 /// for each module node
-/// - find all (class|enumeration|procedure) nodes and enter the symbols 
+/// - find all (class|enumeration|procedure) nodes and enter the symbols
 Arcadia_declareObjectType(u8"Arcadia.MILC.EnterPhase", Arcadia_MILC_EnterPhase,
-                          u8"Arcadia.Object");
+                          u8"Arcadia.MILC.AST.Visitor");
 
 struct Arcadia_MILC_EnterPhaseDispatch {
-  Arcadia_ObjectDispatch _parent;
+  Arcadia_MILC_AST_VisitorDispatch _parent;
 };
 
 struct Arcadia_MILC_EnterPhase {
-  Arcadia_Object _parent;
+  Arcadia_MILC_AST_Visitor _parent;
   /// @brief The context.
   Arcadia_MILC_Context* context;
   /// @brief The last module symbol discovered for the current module node.

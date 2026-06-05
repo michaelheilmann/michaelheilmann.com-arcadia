@@ -13,26 +13,26 @@
 // REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
-#if !defined(ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_BACKEND_H_INCLUDED)
-#define ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_BACKEND_H_INCLUDED
+#if !defined(ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_BACKEND_H_INCLUDED)
+#define ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_BACKEND_H_INCLUDED
 
 #include "Arcadia/Engine/Include.h"
 
-Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.Backend", Arcadia_Visuals_Implementation_OpenGL4_Backend,
+Arcadia_declareObjectType(u8"Arcadia.Visuals.Implementation.OpenGL4.Backend", Arcadia_Engine_Visuals_Implementation_OpenGL4_Backend,
                           Arcadia_Engine_Visuals_Backend);
 
-struct Arcadia_Visuals_Implementation_OpenGL4_BackendDispatch {
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_BackendDispatch {
   Arcadia_Engine_Visuals_BackendDispatch parent;
 };
 
-struct Arcadia_Visuals_Implementation_OpenGL4_Backend {
+struct Arcadia_Engine_Visuals_Implementation_OpenGL4_Backend {
   Arcadia_Engine_Visuals_Backend parent;
 };
 
-Arcadia_Visuals_Implementation_OpenGL4_Backend*
-Arcadia_Visuals_Implementation_OpenGL4_Backend_create
+Arcadia_Engine_Visuals_Implementation_OpenGL4_Backend*
+Arcadia_Engine_Visuals_Implementation_OpenGL4_Backend_create
   (
     Arcadia_Thread* thread
   );
 
-#endif // ARCADIA_VISUALS_IMPLEMENTATION_OPENGL4_BACKEND_H_INCLUDED
+#endif // ARCADIA_ENGINE_VISUALS_IMPLEMENTATION_OPENGL4_BACKEND_H_INCLUDED
